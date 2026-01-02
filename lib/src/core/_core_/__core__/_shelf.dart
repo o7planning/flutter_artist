@@ -521,7 +521,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showActiveUiComponentsDialog() async {
+  Future<void> showDebugFaUIComponentsViewerDialog() async {
     BuildContext context =
         FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     await DebugUiComponentsViewerDialog.open(

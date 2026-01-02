@@ -6,7 +6,7 @@ class StringValueFilterCriteria extends FilterCriteria {
   const StringValueFilterCriteria({required this.stringValue});
 
   @override
-  List<String> getDebugInfos() {
+  List<String> getDebugCriterionInfos() {
     return ["stringValue: $stringValue"];
   }
 

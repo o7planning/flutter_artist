@@ -73,16 +73,16 @@ class LocationInfoDialog extends StatelessWidget {
   }
 }
 
-Future<void> open({
-  required BuildContext context,
-  required String locationInfo,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return LocationInfoDialog(
-        locationInfo: locationInfo,
-      );
-    },
-  );
-}
+// Future<void> open({
+//   required BuildContext context,
+//   required String locationInfo,
+// }) async {
+//   await showDialog(
+//     context: context,
+//     builder: (BuildContext context) {
+//       return LocationInfoDialog(
+//         locationInfo: locationInfo,
+//       );
+//     },
+//   );
+// }

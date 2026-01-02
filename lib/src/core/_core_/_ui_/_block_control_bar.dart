@@ -322,8 +322,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
         if (widget.config.allowDebugFilterCriteriaViewerButton &&
             widget.block.canShowFilterCriteria())
           _ControlBarButton(
-            tooltip:
-                "Current Filter Criteria of ${getClassNameWithoutGenerics(widget.block)}",
+            tooltip: "Debug Filter Criteria Viewer",
             iconData: FaIconConstants.filterCriteriaIconData,
             onAction: false,
             onPressed: widget.config.allowDebugFilterCriteriaViewerButton
@@ -336,9 +335,10 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
                   }
                 : null,
           ),
-        if (widget.config.allowDebugFormModelViewerButton && formInfoActionable.yes)
+        if (widget.config.allowDebugFormModelViewerButton &&
+            formInfoActionable.yes)
           _ControlBarButton(
-            tooltip: "Form Data",
+            tooltip: "Debug Form Model Viewer",
             iconData: FaIconConstants.blockIconData,
             onAction: false,
             onPressed: widget.config.allowDebugFormModelViewerButton

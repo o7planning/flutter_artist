@@ -72,7 +72,8 @@ class __DebugMenuState extends State<DebugMenu> implements ILogListener {
                       onTab: _showLogViewerDialog,
                     ),
                   if (isSystemUser && hasLogs) _divider(),
-                  if (isSystemUser && FlutterArtist.canShowDebugShelfStructureViewerDialog())
+                  if (isSystemUser &&
+                      FlutterArtist.canShowDebugShelfStructureViewerDialog())
                     _buildPopupMenuItem(
                       iconData: FaIconConstants.shelfStructureIconData,
                       title: 'Shelf Structure Viewer',
@@ -156,7 +157,7 @@ class __DebugMenuState extends State<DebugMenu> implements ILogListener {
 
   Future<void> _showUiComponentsDialog() async {
     Navigator.pop(context, null);
-    await FlutterArtist.showUiComponentsDialog();
+    await FlutterArtist.storage.showDebugFaUIComponentsViewerDialog();
   }
 
   Future<void> _showRestDebugViewerDialog() async {

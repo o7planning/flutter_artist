@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/core/icon/icon_constants.dart';
 import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
@@ -52,9 +53,15 @@ class _DebugFormModelViewerDialogState
 
     // Set up the AlertDialog
     dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
+      icon: Icon(
+        showFormData
+            ? FaIconConstants.formModelIconData
+            : FaIconConstants.shelfStructureIconData,
+        size: 18,
+      ),
       titleText: showFormData
-          ? "${getClassName(widget.formModel)} - Debug Form Model Viewer"
-          : "${getClassName(widget.formModel.block.shelf)} - Structure",
+          ? "Debug Form Model Viewer - ${getClassName(widget.formModel)}"
+          : "Debug Shelf Structure Viewer - ${getClassName(widget.formModel.block.shelf)}",
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(
         context,

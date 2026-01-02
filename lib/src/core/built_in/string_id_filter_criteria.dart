@@ -6,7 +6,7 @@ class StringIdFilterCriteria extends FilterCriteria {
   const StringIdFilterCriteria({required this.idValue});
 
   @override
-  List<String> getDebugInfos() {
+  List<String> getDebugCriterionInfos() {
     return ["idValue: $idValue"];
   }
 

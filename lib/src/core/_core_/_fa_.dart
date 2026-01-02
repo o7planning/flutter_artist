@@ -349,14 +349,6 @@ class _FlutterArtist extends _Core {
     _notificationListeners.remove(listener);
   }
 
-  Future<void> showUiComponentsDialog() async {
-    Shelf? shelf = storage._recentShelf();
-    if (shelf == null) {
-      return;
-    }
-    await shelf.showActiveUiComponentsDialog();
-  }
-
   Future<dynamic> _executeTask({
     bool showOverlay = true,
     required Future<dynamic> Function() asyncFunction,

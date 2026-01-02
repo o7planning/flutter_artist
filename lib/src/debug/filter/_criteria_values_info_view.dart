@@ -24,7 +24,7 @@ class CriteriaValuesView extends StatelessWidget {
     final FilterCriteria? filterCriteria = xFilterCriteria?.filterCriteria;
     final Map<String, dynamic>? filterCriteriaMap =
         xFilterCriteria?.filterCriteriaMap;
-    List<String> criteriaValueInfos = filterCriteria?.getDebugInfos() ?? [];
+    List<String> criteriaValueInfos = filterCriteria?.getDebugCriterionInfos() ?? [];
     final oneLevelJson = MapUtils.toOneLevelJson(filterCriteriaMap ?? {});
     //
     return Column(
@@ -41,7 +41,7 @@ class CriteriaValuesView extends StatelessWidget {
           HtmlInfoView(
             showIcon: false,
             infoAsHtml: "(This debug information is returned from the "
-                "<b>${getClassNameWithoutGenerics(filterCriteria)}.getDebugInfos()</b> method).",
+                "<b>${getClassNameWithoutGenerics(filterCriteria)}.getDebugCriterionInfos()</b> method).",
             style: TextStyle(
               fontSize: 11,
               fontStyle: FontStyle.normal,

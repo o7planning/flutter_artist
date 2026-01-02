@@ -10,7 +10,7 @@ class EmptyFilterCriteria extends FilterCriteria {
   factory EmptyFilterCriteria() => EmptyFilterCriteria._();
 
   @override
-  List<String> getDebugInfos() {
+  List<String> getDebugCriterionInfos() {
     return [];
   }
 

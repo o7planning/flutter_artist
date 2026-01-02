@@ -2,14 +2,12 @@ enum TipDocument {
   config(enabled: true),
   logViewer(enabled: true),
   codeFlowViewer(enabled: true),
-
   debugStorageViewer(enabled: true),
   debugShelfStructureViewer(enabled: true),
   debugFilterCriteriaViewer(enabled: true),
   debugFilterModelViewer(enabled: true),
   debugFormModelViewer(enabled: true),
   debugUiComponentsViewer(enabled: true),
-
   debugMenu(enabled: true),
   storageStructure(enabled: true),
   coreFeaturesAdapter(enabled: true),

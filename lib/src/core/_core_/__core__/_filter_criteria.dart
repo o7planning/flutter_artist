@@ -4,7 +4,7 @@ part of '../core.dart';
 abstract class FilterCriteria extends Equatable {
   const FilterCriteria();
 
-  List<String> getDebugInfos();
+  List<String> getDebugCriterionInfos();
 }
 
 class XFilterCriteria<FILTER_CRITERIA extends FilterCriteria>

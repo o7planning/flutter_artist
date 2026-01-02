@@ -10,12 +10,10 @@ class SearchTextFilterCriteria extends FilterCriteria {
   const SearchTextFilterCriteria({required this.searchText});
 
   @override
-  List<String> getDebugInfos() {
+  List<String> getDebugCriterionInfos() {
     return ["searchText: $searchText"];
   }
 
   @override
-  List<Object?> get props => [
-        StrUtils.stringToNullIfEmpty(searchText),
-      ];
+  List<Object?> get props => [StrUtils.stringToNullIfEmpty(searchText)];
 }

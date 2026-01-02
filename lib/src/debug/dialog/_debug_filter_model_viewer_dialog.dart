@@ -52,8 +52,8 @@ class _DebugFilterModelViewerDialogState
     // Set up the AlertDialog
     FaAlertDialog alert = FaAlertDialog(
       titleText: showFormData
-          ? "${getClassName(widget.filterModel)} - Debug Filter Model Viewer"
-          : "${getClassName(widget.filterModel.shelf)} - Structure",
+          ? "Debug Filter Model Viewer - ${getClassName(widget.filterModel)}"
+          : "Debug Shelf Structure Viewer - ${getClassName(widget.filterModel.shelf)}",
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(
         context,
