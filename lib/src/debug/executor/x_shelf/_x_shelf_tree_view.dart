@@ -189,7 +189,7 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
             rootVip = false;
           } else {
             prefixIconData = FaIconConstants.uknownIconData;
-            title = "UKNOWN";
+            title = "UNKNOWN";
           }
           return Material(
             child: ListTile(

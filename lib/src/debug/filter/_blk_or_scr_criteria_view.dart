@@ -21,7 +21,7 @@ abstract class BlkOrScrCriteriaView extends StatelessWidget {
     XFilterCriteria? xFilterCriteria = getXFilterCriteria();
     String? criteriaClassName = xFilterCriteria == null
         ? null
-        : getClassNameWithoutGenerics(xFilterCriteria!.filterCriteria);
+        : getClassNameWithoutGenerics(xFilterCriteria.filterCriteria);
     //
     return Padding(
       padding: EdgeInsets.all(5),

@@ -116,11 +116,11 @@ abstract class FormModel<
   ///     simplePropModels: [],
   ///     multiOptPropModels: [
   ///       // Multi Options Single Selection Property.
-  ///       MultiOptSsProp(
+  ///       MultiOptMsFormPropModel<CompanyInfo>(
   ///         propName: "company",
   ///         children: [
   ///           // Multi Options Multi Selections Property.
-  ///           MultiOptMsProp(
+  ///           MultiOptMsFormPropModel<DepartmentInfo>(
   ///              propName: "department",
   ///           ),
   ///         ],

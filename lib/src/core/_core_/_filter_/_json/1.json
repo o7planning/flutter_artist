@@ -1,0 +1,35 @@
+{
+  "conjunction": "AND",
+  "filters": [
+    {
+      "field": "category",
+      "operator": "equals",
+      "value": "electronics"
+    },
+    {
+      "conjunction": "OR",
+      "filters": [
+        {
+          "field": "price",
+          "operator": "less_than",
+          "value": 500
+        },
+        {
+          "field": "rating",
+          "operator": "greater_than_or_equal_to",
+          "value": 4.5
+        },
+        {
+          "field": "details.brand.name",
+          "operator": "contains",
+          "value": "Samsung"
+        }
+      ]
+    },
+    {
+      "field": "stock_status",
+      "operator": "equals",
+      "value": "in_stock"
+    }
+  ]
+}

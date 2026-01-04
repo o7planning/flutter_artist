@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
-
 import '../_core_/core.dart';
 
 // No subclasses allowed.
-@immutable
+// @immutable
 class EmptyFilterCriteria extends FilterCriteria {
-  const EmptyFilterCriteria._();
+  EmptyFilterCriteria._()
+      : super(
+            conditionStructure: ConditionStructureDetail.empty(),
+            criteria: const []);
 
   factory EmptyFilterCriteria() => EmptyFilterCriteria._();
 
@@ -13,7 +14,4 @@ class EmptyFilterCriteria extends FilterCriteria {
   List<String> getDebugCriterionInfos() {
     return [];
   }
-
-  @override
-  List<Object?> get props => [];
 }

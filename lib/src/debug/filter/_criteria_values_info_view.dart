@@ -26,7 +26,10 @@ class CriteriaValuesView extends StatelessWidget {
         xFilterCriteria?.filterCriteriaMap;
     List<String> criteriaValueInfos =
         filterCriteria?.getDebugCriterionInfos() ?? [];
-    final oneLevelJson = MapUtils.toOneLevelJson(filterCriteriaMap ?? {});
+    final oneLevelJson = MapUtils.toOneLevelJson(map: filterCriteriaMap ?? {});
+
+    final Map<String, dynamic>? criteriaMap = filterCriteria?.toMap();
+    final criteriaMapJson = MapUtils.toOneLevelJson(map: criteriaMap ?? {});
     //
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -89,7 +92,7 @@ class CriteriaValuesView extends StatelessWidget {
           SizedBox(height: 5),
         if (filterCriteriaMap != null && filterCriteriaMap.isNotEmpty)
           JsonView(
-            json: oneLevelJson,
+            json: criteriaMapJson,
           ),
       ],
     );

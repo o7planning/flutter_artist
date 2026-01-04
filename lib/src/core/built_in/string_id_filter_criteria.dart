@@ -3,13 +3,13 @@ import '../_core_/core.dart';
 class StringIdFilterCriteria extends FilterCriteria {
   final String? idValue;
 
-  const StringIdFilterCriteria({required this.idValue});
+  StringIdFilterCriteria({required this.idValue})
+      // TODO: Xem lai.
+      : super(
+            conditionStructure: ConditionStructureDetail.empty(), criteria: []);
 
   @override
   List<String> getDebugCriterionInfos() {
     return ["idValue: $idValue"];
   }
-
-  @override
-  List<Object?> get props => [idValue];
 }

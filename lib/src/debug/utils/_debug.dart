@@ -39,7 +39,7 @@ String __debugObjHtml(Object? obj, bool asHtml) {
   } else if (obj is FormPropModel) {
     return "${b1}${getClassName(obj)}('${obj.propName}')${b2}";
   } else if (obj is FilterCriterionModel) {
-    return "${b1}${getClassName(obj)}('${obj.criterionName}')${b2}";
+    return "${b1}${getClassName(obj)}('${obj.criterionNamePlus}')${b2}";
   } else if (obj is XData) {
     return "${b1}${getClassName(obj)}${b2}";
   } else if (obj is OptValueWrap) {

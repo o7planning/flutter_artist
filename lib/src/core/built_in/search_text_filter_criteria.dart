@@ -1,5 +1,4 @@
 import '../_core_/core.dart';
-import '../utils/_string_utils.dart';
 
 ///
 /// An empty or null searchText is considered the same.
@@ -7,13 +6,13 @@ import '../utils/_string_utils.dart';
 class SearchTextFilterCriteria extends FilterCriteria {
   final String? searchText;
 
-  const SearchTextFilterCriteria({required this.searchText});
+  SearchTextFilterCriteria({required this.searchText})
+      // TODO: Xem lai.
+      : super(
+            conditionStructure: ConditionStructureDetail.empty(), criteria: []);
 
   @override
   List<String> getDebugCriterionInfos() {
     return ["searchText: $searchText"];
   }
-
-  @override
-  List<Object?> get props => [StrUtils.stringToNullIfEmpty(searchText)];
 }

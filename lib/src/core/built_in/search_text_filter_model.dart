@@ -6,29 +6,39 @@ import 'search_text_filter_input.dart';
 
 class SearchTextFilterModel
     extends FilterModel<SearchTextFilterInput, SearchTextFilterCriteria> {
-  final FilterCriterionOperator criterionOperator;
+  final CriterionOperator criterionOperator;
   final String? _searchText;
 
   SearchTextFilterModel({
     required String? searchText,
-    this.criterionOperator = FilterCriterionOperator.containsIgnoreCase,
+    this.criterionOperator = CriterionOperator.containsIgnoreCase,
   }) : _searchText = searchText;
 
   @override
   FilterModelStructure registerFilterModelStructure() {
     return FilterModelStructure(
-      simpleCriterionModels: [
-        SimpleFilterCriterionModel<String>(
-          criterionName: "searchText",
-          operator: FilterCriterionOperator.equalTo,
+      simpleCriterionDefs: [
+        SimpleFilterCriterionDef<String>(
+          criterionBaseName: "searchText",
         ),
       ],
-      multiOptCriterionModels: [],
+      multiOptCriterionDefs: [],
+      filterCriteriaGroupDef: FilterCriteriaGroupDef(
+        groupName: 'rootCriteriaGroup',
+        conjunction: Conjunction.and,
+        members: [
+          FilterConditionDef(
+            criterionNamePlus: "searchText+",
+            operator: CriterionOperator.containsIgnoreCase,
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
+    required String criteriaGroupName,
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required SearchTextFilterInput? filterInput,
@@ -39,6 +49,7 @@ class SearchTextFilterModel
 
   @override
   OptValueWrap? getUpdatedValueForMultiOptCriterion({
+    required String criteriaGroupName,
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -50,6 +61,7 @@ class SearchTextFilterModel
 
   @override
   Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleCriteria({
+    required String criteriaGroupName,
     required SearchTextFilterInput filterInput,
   }) {
     return {
@@ -59,6 +71,7 @@ class SearchTextFilterModel
 
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
+    required String criteriaGroupName,
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -68,7 +81,9 @@ class SearchTextFilterModel
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
+  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria({
+    required String criteriaGroupName,
+  }) {
     return {
       "searchText": _searchText,
     };
@@ -77,6 +92,8 @@ class SearchTextFilterModel
   @override
   SearchTextFilterCriteria toFilterCriteriaObject({
     required Map<String, dynamic> criteriaMap,
+    required FilterCriteriaGroupModel filterCriteriaGroup,
+    required List<FilterCriterion> filterCriteria,
   }) {
     return SearchTextFilterCriteria(searchText: criteriaMap["searchText"]);
   }

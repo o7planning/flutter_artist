@@ -188,10 +188,10 @@ class _FlutterArtist extends _Core {
     int maxStoredLogEntryCount = 20,
     int codeFlowRetentionPeriodInSeconds = 20,
   }) async {
-    if (__coreFeaturesAdapter != null) {
-      throw DebugUtils.getFatalError(
-          "${getClassName(__coreFeaturesAdapter)} already registered!");
-    }
+    // if (__coreFeaturesAdapter != null) {
+    //   throw DebugUtils.getFatalError(
+    //       "${getClassName(__coreFeaturesAdapter)} already registered!");
+    // }
     //
     logger = Logger(maxStoredLogEntryCount: maxStoredLogEntryCount);
     // IMPORTANT: Call this before using MasterFlowItem.

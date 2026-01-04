@@ -30,7 +30,8 @@ abstract class SortModel<ITEM extends Object> {
     if (sortModelBuilder != null) {
       SortModelStructure structure =
           sortModelBuilder!.registerSortModelStructure();
-      for (SortCriterionModel criterionDef in structure._sortCriterionModelMap.values) {
+      for (SortCriterionModel criterionDef
+          in structure._sortCriterionModelMap.values) {
         SortDirection? sortDirection = sortingSide == SortingSide.server
             ? criterionDef.initialServerSideSortingDirection
             : criterionDef.initialClientSideSortingDirection;

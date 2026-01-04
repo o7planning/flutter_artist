@@ -1,0 +1,35 @@
+{
+  "conjunction": "AND",
+  "groups": [
+    {
+      "conjunction": "OR",
+      "conditions": [
+        {
+          "field": "color",
+          "operator": "eq",
+          "value": "Red"
+        },
+        {
+          "field": "color",
+          "operator": "eq",
+          "value": "Blue"
+        }
+      ]
+    },
+    {
+      "conjunction": "AND",
+      "conditions": [
+        {
+          "field": "type",
+          "operator": "eq",
+          "value": "Sedan"
+        },
+        {
+          "field": "price",
+          "operator": "lt",
+          "value": 25000
+        }
+      ]
+    }
+  ]
+}

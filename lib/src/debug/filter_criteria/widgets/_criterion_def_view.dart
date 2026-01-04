@@ -6,15 +6,11 @@ import '../../../core/enums/_selection_type.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/utils/_class_utils.dart';
 import '../../../core/widgets/_custom_app_container.dart';
-import '../../../core/widgets/_simple_accordion.dart';
-import '../../../core/widgets/_simple_accordion_section.dart';
-import '../../widgets/_dynamic_value_view.dart';
-import '../../widgets/_xdata_view.dart';
 
-class FilterCriterionModelView extends StatelessWidget {
-  final FilterCriterionModel criterion;
+class FilterCriterionDefView extends StatelessWidget {
+  final FilterCriterionDef criterion;
 
-  const FilterCriterionModelView({
+  const FilterCriterionDefView({
     super.key,
     required this.criterion,
   });
@@ -37,28 +33,35 @@ class FilterCriterionModelView extends StatelessWidget {
             minLeadingWidth: 40,
             minTileHeight: 0,
             leading: Icon(
-              criterion is SimpleFilterCriterionModel
+              criterion is SimpleFilterCriterionDef
                   ? FaIconConstants.simplePropOrCriterionIconData
                   : FaIconConstants.optPropOrCriterionIconData,
               size: 20,
             ),
-            title: IconLabelText(
-              label: criterion is SimpleFilterCriterionModel
-                  ? 'Criterion Name: '
-                  : 'Multi Opt Criterion Name: ',
-              text: criterion.criterionName,
+            title: IconLabelSelectableText(
+              label: criterion is SimpleFilterCriterionDef
+                  ? 'Criterion Base Name: '
+                  : 'Multi Opt Criterion Base Name: ',
+              text: criterion.criterionBaseName,
               textStyle: TextStyle(color: Colors.indigo),
             ),
-            subtitle: IconLabelText(
-              label: getClassNameWithoutGenerics(criterion),
-              text: "<${criterion.dataType.toString()}>",
-              labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              textStyle: TextStyle(fontSize: 12, color: Colors.blue),
+            subtitle: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconLabelSelectableText(
+                  label: getClassNameWithoutGenerics(criterion),
+                  text: "<${criterion.dataType.toString()}>",
+                  labelStyle:
+                      TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  textStyle: TextStyle(fontSize: 12, color: Colors.blue),
+                ),
+              ],
             ),
           ),
           Divider(),
-          if (criterion is MultiOptFilterCriterionModel) SizedBox(height: 5),
-          if (criterion is MultiOptFilterCriterionModel)
+          if (criterion is MultiOptFilterCriterionDef) SizedBox(height: 5),
+          if (criterion is MultiOptFilterCriterionDef)
             LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return Row(
@@ -68,7 +71,7 @@ class FilterCriterionModelView extends StatelessWidget {
                     Tooltip(
                       message: "Single Selection",
                       child: Radio(
-                        value: (criterion as MultiOptFilterCriterionModel)
+                        value: (criterion as MultiOptFilterCriterionDef)
                                 .selectionType ==
                             SelectionType.single,
                         onChanged: null,
@@ -87,7 +90,7 @@ class FilterCriterionModelView extends StatelessWidget {
                     Tooltip(
                       message: "Multi Selection",
                       child: Radio(
-                        value: (criterion as MultiOptFilterCriterionModel)
+                        value: (criterion as MultiOptFilterCriterionDef)
                                 .selectionType ==
                             SelectionType.multi,
                         onChanged: null,
@@ -123,69 +126,7 @@ class FilterCriterionModelView extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SimpleAccordion(
-          children: [
-            SimpleAccordionSection(
-              initiallyExpanded: true,
-              headerTitle: Text(
-                "Initial Value:",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              headerSubtitle: _headerSubtitle(criterion.initialValue),
-              content: DynamicValueView(value: criterion.initialValue),
-            ),
-            SimpleAccordionSection(
-              initiallyExpanded: true,
-              headerTitle: Text(
-                "Current Value:",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              headerSubtitle: _headerSubtitle(criterion.currentValue),
-              content: DynamicValueView(value: criterion.currentValue),
-            ),
-            if (criterion is MultiOptFilterCriterionModel)
-              SimpleAccordionSection(
-                initiallyExpanded: true,
-                headerTitle: Text(
-                  "Initial XData:",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                headerSubtitle: _headerSubtitle(criterion.initialXData),
-                content: XDataView(xData: criterion.initialXData),
-              ),
-            if (criterion is MultiOptFilterCriterionModel)
-              SimpleAccordionSection(
-                initiallyExpanded: true,
-                headerTitle: Text(
-                  "Current XData:",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                headerSubtitle: _headerSubtitle(criterion.currentXData),
-                content: XDataView(xData: criterion.currentXData),
-              ),
-          ],
-        ),
-      ],
+      children: [],
     );
-  }
-
-  Text? _headerSubtitle(dynamic value) {
-    return value == null
-        ? null
-        : Text(
-            " - ${value!.runtimeType.toString()}",
-            style: TextStyle(
-              fontSize: 12,
-            ),
-          );
   }
 }

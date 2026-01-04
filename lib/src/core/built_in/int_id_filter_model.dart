@@ -15,18 +15,28 @@ class IntIdFilterModel
   @override
   FilterModelStructure registerFilterModelStructure() {
     return FilterModelStructure(
-      simpleCriterionModels: [
-        SimpleFilterCriterionModel<int>(
-          criterionName: "id",
-          operator: FilterCriterionOperator.equalTo,
+      simpleCriterionDefs: [
+        SimpleFilterCriterionDef<int>(
+          criterionBaseName: "id",
         ),
       ],
-      multiOptCriterionModels: [],
+      multiOptCriterionDefs: [],
+      filterCriteriaGroupDef: FilterCriteriaGroupDef(
+        groupName: 'rootCriteriaGroup',
+        conjunction: Conjunction.and,
+        members: [
+          FilterConditionDef(
+            criterionNamePlus: "id+",
+            operator: CriterionOperator.equalTo,
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
+    required String criteriaGroupName,
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required Object? parentMultiOptCriterionValue,
@@ -37,6 +47,7 @@ class IntIdFilterModel
 
   @override
   OptValueWrap? getUpdatedValueForMultiOptCriterion({
+    required String criteriaGroupName,
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -48,6 +59,7 @@ class IntIdFilterModel
 
   @override
   Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleCriteria({
+    required String criteriaGroupName,
     required IntIdFilterInput filterInput,
   }) {
     return {
@@ -57,6 +69,7 @@ class IntIdFilterModel
 
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
+    required String criteriaGroupName,
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -66,7 +79,9 @@ class IntIdFilterModel
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
+  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria({
+    required String criteriaGroupName,
+  }) {
     return {
       "id": _idValue,
     };
@@ -75,6 +90,8 @@ class IntIdFilterModel
   @override
   IntIdFilterCriteria toFilterCriteriaObject({
     required Map<String, dynamic> criteriaMap,
+    required FilterCriteriaGroupModel filterCriteriaGroup,
+    required List<FilterCriterion> filterCriteria,
   }) {
     return IntIdFilterCriteria(idValue: criteriaMap["id"]);
   }

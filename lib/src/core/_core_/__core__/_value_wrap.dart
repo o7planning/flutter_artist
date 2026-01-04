@@ -5,9 +5,9 @@ class OptValueWrap<VALUE extends Object> {
 
   OptValueWrap.single(VALUE? value) {
     if (value == null) {
-      this.values = [];
+      values = [];
     } else {
-      this.values = [value];
+      values = [value];
     }
   }
 

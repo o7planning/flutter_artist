@@ -3,31 +3,30 @@ import 'package:animated_tree_view/tree_view/tree_view.dart';
 import 'package:animated_tree_view/tree_view/widgets/expansion_indicator.dart';
 import 'package:animated_tree_view/tree_view/widgets/indent.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/flutter_artist.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
-import '../../core/_core_/core.dart';
-import '../../core/enums/_selection_type.dart';
 import '../../core/icon/icon_constants.dart';
-import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '_filter_model_debug_view.dart';
-import 'widgets/_criteria_view.dart';
+import 'widgets/_criterion_model_view.dart';
 
-class FilterModelStructureView extends StatefulWidget {
+class FilterModelStructureCriteriaPlusView extends StatefulWidget {
   final FilterModel filterModel;
 
-  const FilterModelStructureView({
+  const FilterModelStructureCriteriaPlusView({
     required super.key,
     required this.filterModel,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return FilterModelStructureViewState();
+    return FilterModelStructureCriteriaPlusViewState();
   }
 }
 
-class FilterModelStructureViewState extends State<FilterModelStructureView> {
+class FilterModelStructureCriteriaPlusViewState
+    extends State<FilterModelStructureCriteriaPlusView> {
   final MultiSplitViewController _splitViewController =
       MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
@@ -68,19 +67,21 @@ class FilterModelStructureViewState extends State<FilterModelStructureView> {
     rootTreeNode = TreeNode.root()..add(filterModelNode);
     //
     FilterModelStructure structure = widget.filterModel.filterModelStructure;
+    //
+    List<MultiOptFilterCriterionModel> rootOptCriterionModels =
+        structure.rootOptCriterionModels;
 
-    List<MultiOptFilterCriterionModel> rootMultiOptCriterion =
-        structure.debugRootOptCriteria;
     for (MultiOptFilterCriterionModel multiOptCriterion
-        in rootMultiOptCriterion) {
+        in rootOptCriterionModels) {
       _addMultiOptCriterionCascade(filterModelNode, multiOptCriterion);
     }
-    List<SimpleFilterCriterionModel> simpleCriterionModels =
-        structure.debugSimpleCriteria;
-    for (SimpleFilterCriterionModel simpleCriterion in simpleCriterionModels) {
+
+    List<SimpleFilterCriterionModel> simpleCriteria =
+        structure.simpleCriterionModels;
+    for (SimpleFilterCriterionModel simpleCriterion in simpleCriteria) {
       _addSimpleCriterion(filterModelNode, simpleCriterion);
     }
-
+    //
     return rootTreeNode;
   }
 
@@ -93,7 +94,7 @@ class FilterModelStructureViewState extends State<FilterModelStructureView> {
       );
     } else if (_currentNode!.data is FilterCriterionModel) {
       return FilterCriterionModelView(
-        criterion: _currentNode!.data,
+        criterionModel: _currentNode!.data,
       );
     } else {
       return Text("TODO");
@@ -133,18 +134,19 @@ class FilterModelStructureViewState extends State<FilterModelStructureView> {
         showRootNode: false,
         expansionBehavior: ExpansionBehavior.none,
         expansionIndicatorBuilder: (context, node) {
-          return ChevronIndicator.upDown(
+          return PlusMinusIndicator(
             tree: node,
-            color: Colors.grey[700],
+            color: Colors.grey[600],
             alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.fromLTRB(0, 8, 20, 8),
-            icon: Icons.keyboard_arrow_down_outlined,
+            padding: EdgeInsets.zero,
+            // icon: Icons.keyboard_arrow_down_outlined,
+            curve: Curves.linear,
           );
         },
         indentation: const Indentation(
           style: IndentStyle.squareJoint,
           thickness: 1,
-          width: 10,
+          width: 15,
         ),
         onTreeReady: (
           TreeViewController<dynamic, TreeNode<dynamic>> controller,
@@ -164,24 +166,24 @@ class FilterModelStructureViewState extends State<FilterModelStructureView> {
             title = getClassName(data);
             prefixIconData = FaIconConstants.filterModelIconData;
           } else if (data is SimpleFilterCriterionModel) {
-            title = data.criterionName;
+            title = data.criterionNamePlus;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionName}";
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionNamePlus}";
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
             isMultiSelection = false;
           } else if (data is MultiOptFilterCriterionModel) {
-            title = data.criterionName;
+            title = data.criterionNamePlus;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionName}";
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionNamePlus}";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
             isMultiSelection = data.selectionType == SelectionType.multi;
           } else {
             prefixIconData = FaIconConstants.uknownIconData;
-            title = "UKNOWN";
+            title = "UNKNOWN";
           }
           return Material(
             child: ListTile(
@@ -245,7 +247,6 @@ class FilterModelStructureViewState extends State<FilterModelStructureView> {
   void _addMultiOptCriterionCascade(
       TreeNode currentNode, MultiOptFilterCriterionModel multiOptCriterion) {
     TreeNode childNode = TreeNode(
-      key: "MultiOptCriterion-${multiOptCriterion.criterionName}",
       data: multiOptCriterion,
     );
     //
@@ -259,12 +260,8 @@ class FilterModelStructureViewState extends State<FilterModelStructureView> {
   void _addSimpleCriterion(
       TreeNode currentNode, SimpleFilterCriterionModel simpleCriterion) {
     TreeNode childNode = TreeNode(
-      key: "SimpleCriterion-${simpleCriterion.criterionName}",
       data: simpleCriterion,
     );
-    // if (simpleCriterion == widget.selectedCriterion) {
-    //   _currentNode = childNode;
-    // }
     currentNode.add(childNode);
   }
 

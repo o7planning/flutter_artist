@@ -8,28 +8,38 @@ import 'string_value_filter_input.dart';
 class StringValueFilterModel
     extends FilterModel<StringValueFilterInput, StringValueFilterCriteria> {
   final String? _stringValue;
-  final FilterCriterionOperator criterionOperator;
+  final CriterionOperator criterionOperator;
 
   StringValueFilterModel({
     required String? stringValue,
-    this.criterionOperator = FilterCriterionOperator.contains,
+    this.criterionOperator = CriterionOperator.contains,
   }) : _stringValue = stringValue;
 
   @override
   FilterModelStructure registerFilterModelStructure() {
     return FilterModelStructure(
-      simpleCriterionModels: [
-        SimpleFilterCriterionModel<String>(
-          criterionName: "string",
-          operator: criterionOperator,
+      simpleCriterionDefs: [
+        SimpleFilterCriterionDef<String>(
+          criterionBaseName: "string",
         ),
       ],
-      multiOptCriterionModels: [],
+      multiOptCriterionDefs: [],
+      filterCriteriaGroupDef: FilterCriteriaGroupDef(
+        groupName: 'rootCriteriaGroup',
+        conjunction: Conjunction.and,
+        members: [
+          FilterConditionDef(
+            criterionNamePlus: "string+",
+            operator: CriterionOperator.containsIgnoreCase,
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
+    required String criteriaGroupName,
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required StringValueFilterInput? filterInput,
@@ -40,6 +50,7 @@ class StringValueFilterModel
 
   @override
   OptValueWrap? getUpdatedValueForMultiOptCriterion({
+    required String criteriaGroupName,
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required StringValueFilterInput filterInput,
@@ -51,6 +62,7 @@ class StringValueFilterModel
 
   @override
   Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleCriteria({
+    required String criteriaGroupName,
     required StringValueFilterInput filterInput,
   }) {
     return {
@@ -60,6 +72,7 @@ class StringValueFilterModel
 
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
+    required String criteriaGroupName,
     required String multiOptCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -69,7 +82,9 @@ class StringValueFilterModel
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
+  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria({
+    required String criteriaGroupName,
+  }) {
     return {
       "string": _stringValue,
     };
@@ -78,6 +93,8 @@ class StringValueFilterModel
   @override
   StringValueFilterCriteria toFilterCriteriaObject({
     required Map<String, dynamic> criteriaMap,
+    required FilterCriteriaGroupModel filterCriteriaGroup,
+    required List<FilterCriterion> filterCriteria,
   }) {
     return StringValueFilterCriteria(
       stringValue: criteriaMap["string"],

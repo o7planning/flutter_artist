@@ -6,9 +6,8 @@ part of '../core.dart';
 class MultiOptMsFilterCriterionModel<V>
     extends MultiOptFilterCriterionModel<V> {
   MultiOptMsFilterCriterionModel({
-    required super.criterionName,
-    required super.operator,
-  }) : super._(selectionType: SelectionType.multi, children: const []);
+    required super.criterionNamePlus,
+  }) : super._(selectionType: SelectionType.multi);
 
   @override
   List<V>? get currentValue => _currentValue;

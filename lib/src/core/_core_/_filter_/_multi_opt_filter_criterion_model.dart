@@ -17,25 +17,23 @@ abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
   final SelectionType selectionType;
-  final List<MultiOptFilterCriterionModel> _children;
+  final List<MultiOptFilterCriterionModel> _children = [];
 
   List<MultiOptFilterCriterionModel> get children =>
       List.unmodifiable(_children);
 
   MultiOptFilterCriterionModel._({
-    required super.criterionName,
-    required List<MultiOptFilterCriterionModel> children,
+    required super.criterionNamePlus,
     required this.selectionType,
-    required super.operator,
     super.description,
-  }) : _children = children;
+  });
 
   void _updateTempValueCascade({
     required Map<String, dynamic> updateValues,
   }) {
     if (!_valueUpdated && _markTempDirty) {
       final dynamic oldValue = _tempCurrentValue;
-      final dynamic newValue = updateValues[criterionName];
+      final dynamic newValue = updateValues[criterionNamePlus];
       //
       _candidateUpdateValue = newValue;
       _valueUpdated = true;
@@ -60,7 +58,7 @@ abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
       if (_tempCurrentXData == null || newValue == null || !isSame) {
         for (MultiOptFilterCriterionModel childItem in children) {
           childItem._tempCurrentXData = null;
-          updateValues[childItem.criterionName] = null;
+          updateValues[childItem.criterionNamePlus] = null;
           childItem._markTempDirty = true;
         }
       }
@@ -70,14 +68,6 @@ abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
       childItem._updateTempValueCascade(
         updateValues: updateValues,
       );
-    }
-  }
-
-  void _printTempInfoCascade({required int indentFactor}) {
-    print(
-        "${("- - - " * indentFactor)} $criterionName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
-    for (var child in children) {
-      child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }
   }
 }

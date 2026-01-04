@@ -8,7 +8,9 @@ import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
-import '../filter_criteria/_filter_criteria_structure_view.dart';
+import '../filter_criteria/_filter_criteria_structure_criteria_base_view.dart';
+import '../filter_criteria/_filter_criteria_structure_criteria_plus_view.dart';
+import '../filter_criteria/_filter_criteria_structure_groups_view.dart';
 import '../shelf/widget/_shelf_block_scalar_type_widget.dart';
 import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';
@@ -76,29 +78,83 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
     Map<String, dynamic> initial1Value =
         filterModelStructure.debugInitialCriteriaValues;
 
-    Map<String, dynamic> instantValue = filterModelStructure.debugInstantValues;
+    Map<String, dynamic> instantValue = {"TODO-3": "TODO-3"};
 
     Map<String, dynamic> currentValue =
         filterModelStructure.debugCurrentCriteriaValues;
 
-    String initial1Json = MapUtils.toOneLevelJson(initial1Value);
-    String instantJson = MapUtils.toOneLevelJson(instantValue);
-    String currentJson = MapUtils.toOneLevelJson(currentValue);
+    String initial1Json = MapUtils.toOneLevelJson(
+      map: initial1Value,
+      indent: 4,
+    );
+    String instantJson = MapUtils.toOneLevelJson(
+      map: instantValue,
+      indent: 4,
+    );
+    String currentJson = MapUtils.toOneLevelJson(
+      map: currentValue,
+      indent: 4,
+    );
+    final FilterCriteriaGroupModel filterCriteriaGroup =
+        widget.filterModel.filterModelStructure.rootFilterCriteriaGroupModel;
+    String conditionJson = MapUtils.toJson(
+      map: filterCriteriaGroup.toConditionMap(),
+      indent: 4,
+    );
 
-    //
+    // final List<CriterionStructureDetail> criterionStructureDetails =
+    //     widget.filterModel.filterModelStructure.toCriterionStructureDetails();
+    final List<CriterionStructureDetail> criterionStructureDetails = [];
+
+    Map<String, dynamic> map = {
+      for (var csd in criterionStructureDetails)
+        csd.criterionName: {
+          "operator": csd.operator.text,
+          "supportedOperators":
+              csd.supportedOperators.map((o) => o.text).toList()
+        }
+    };
+    String jsonCriterionStructures = MapUtils.toOneLevelJson(
+      map: map,
+      indent: 4,
+    );
 
     List<TabData> tabs = [];
 
     tabs.add(
       TabData(
-        text: ' Filter Criteria Structure',
+        text: ' Base',
         closable: false,
         leading: (context, status) => Icon(
           FaIconConstants.formValueIconData,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
-        content: _buildTabFilterModelStructure(),
+        content: _buildTabFilterModelStructureBase(),
+      ),
+    );
+    tabs.add(
+      TabData(
+        text: ' Plus',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.formValueIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
+        content: _buildTabFilterModelStructurePlus(),
+      ),
+    );
+    tabs.add(
+      TabData(
+        text: ' Groups',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.formValueIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
+        content: _buildTabFilterModelStructureGroupsView(),
       ),
     );
     tabs.add(
@@ -132,6 +188,36 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
         ),
       ),
     );
+    tabs.add(
+      TabData(
+        text: ' Condition Structure',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.formValueIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
+        content: _buildTabContent(
+          infoAsHtml: "<b>Filter Condition Structure.</b>.",
+          json: conditionJson,
+        ),
+      ),
+    );
+    tabs.add(
+      TabData(
+        text: ' Criterion Structures',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.formValueIconData,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
+        content: _buildTabContent(
+          infoAsHtml: "<b>Criterion Structures</b>",
+          json: jsonCriterionStructures,
+        ),
+      ),
+    );
 
     tabs.add(
       TabData(
@@ -160,9 +246,23 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
     return tabbedViewTheme;
   }
 
-  Widget _buildTabFilterModelStructure() {
-    return FilterModelStructureView(
-      key: Key("FilterModelStructureView"),
+  Widget _buildTabFilterModelStructureGroupsView() {
+    return FilterModelStructureGroupsView(
+      key: Key("FilterModelStructureGroupsView"),
+      filterModel: widget.filterModel,
+    );
+  }
+
+  Widget _buildTabFilterModelStructureBase() {
+    return FilterModelStructureCriteriaBaseView(
+      key: Key("FilterModelStructureCriteriaBaseView"),
+      filterModel: widget.filterModel,
+    );
+  }
+
+  Widget _buildTabFilterModelStructurePlus() {
+    return FilterModelStructureCriteriaPlusView(
+      key: Key("FilterModelStructureCriteriaPlusView"),
       filterModel: widget.filterModel,
     );
   }

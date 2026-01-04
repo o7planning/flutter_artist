@@ -24,7 +24,8 @@ abstract class SortModelBuilder<ITEM extends Object> {
   // ***************************************************************************
 
   String _getText({required String criterionName}) {
-    SortCriterionModel? criterion = _structure._sortCriterionModelMap[criterionName];
+    SortCriterionModel? criterion =
+        _structure._sortCriterionModelMap[criterionName];
     if (criterion == null) {
       return criterionName;
     }
