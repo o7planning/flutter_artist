@@ -1,3 +1,5 @@
+import 'package:flutter_artist/src/core/enums/_filter_criterion_operator.dart';
+
 import '../_core_/core.dart';
 import '../enums/_selection_type.dart';
 import 'int_id_filter_criteria.dart';
@@ -11,12 +13,15 @@ class IntIdFilterModel
   IntIdFilterModel({int? idValue}) : _idValue = idValue;
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
-      simpleCriteria: [
-        SimpleFilterCriterion<int>(criterionName: "id"),
+  FilterModelStructure registerFilterModelStructure() {
+    return FilterModelStructure(
+      simpleCriterionModels: [
+        SimpleFilterCriterionModel<int>(
+          criterionName: "id",
+          operator: FilterCriterionOperator.equalTo,
+        ),
       ],
-      multiOptCriteria: [],
+      multiOptCriterionModels: [],
     );
   }
 

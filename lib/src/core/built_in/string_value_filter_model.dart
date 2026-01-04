@@ -1,3 +1,5 @@
+import 'package:flutter_artist/src/core/enums/_filter_criterion_operator.dart';
+
 import '../_core_/core.dart';
 import '../enums/_selection_type.dart';
 import 'string_value_filter_criteria.dart';
@@ -6,17 +8,23 @@ import 'string_value_filter_input.dart';
 class StringValueFilterModel
     extends FilterModel<StringValueFilterInput, StringValueFilterCriteria> {
   final String? _stringValue;
+  final FilterCriterionOperator criterionOperator;
 
-  StringValueFilterModel({required String? stringValue})
-      : _stringValue = stringValue;
+  StringValueFilterModel({
+    required String? stringValue,
+    this.criterionOperator = FilterCriterionOperator.contains,
+  }) : _stringValue = stringValue;
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
-      simpleCriteria: [
-        SimpleFilterCriterion<String>(criterionName: "string"),
+  FilterModelStructure registerFilterModelStructure() {
+    return FilterModelStructure(
+      simpleCriterionModels: [
+        SimpleFilterCriterionModel<String>(
+          criterionName: "string",
+          operator: criterionOperator,
+        ),
       ],
-      multiOptCriteria: [],
+      multiOptCriterionModels: [],
     );
   }
 

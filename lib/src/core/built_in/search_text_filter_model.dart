@@ -1,22 +1,29 @@
 import '../_core_/core.dart';
+import '../enums/_filter_criterion_operator.dart';
 import '../enums/_selection_type.dart';
 import 'search_text_filter_criteria.dart';
 import 'search_text_filter_input.dart';
 
 class SearchTextFilterModel
     extends FilterModel<SearchTextFilterInput, SearchTextFilterCriteria> {
+  final FilterCriterionOperator criterionOperator;
   final String? _searchText;
 
-  SearchTextFilterModel({required String? searchText})
-      : _searchText = searchText;
+  SearchTextFilterModel({
+    required String? searchText,
+    this.criterionOperator = FilterCriterionOperator.containsIgnoreCase,
+  }) : _searchText = searchText;
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
-      simpleCriteria: [
-        SimpleFilterCriterion<String>(criterionName: "searchText"),
+  FilterModelStructure registerFilterModelStructure() {
+    return FilterModelStructure(
+      simpleCriterionModels: [
+        SimpleFilterCriterionModel<String>(
+          criterionName: "searchText",
+          operator: FilterCriterionOperator.equalTo,
+        ),
       ],
-      multiOptCriteria: [],
+      multiOptCriterionModels: [],
     );
   }
 

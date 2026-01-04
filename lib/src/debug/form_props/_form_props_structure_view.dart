@@ -14,21 +14,21 @@ import '../../core/widgets/_custom_app_container.dart';
 import '_form_model_debug_view.dart';
 import 'widgets/_prop_view.dart';
 
-class FormPropsStructureView extends StatefulWidget {
+class FormModelStructureView extends StatefulWidget {
   final FormModel formModel;
 
-  const FormPropsStructureView({
+  const FormModelStructureView({
     required super.key,
     required this.formModel,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _FormPropsStructureViewState();
+    return _FormModelStructureViewState();
   }
 }
 
-class _FormPropsStructureViewState extends State<FormPropsStructureView> {
+class _FormModelStructureViewState extends State<FormModelStructureView> {
   final MultiSplitViewController _splitViewController =
       MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
@@ -47,14 +47,14 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     _currentNode = formModelNode;
     rootTreeNode = TreeNode.root()..add(formModelNode);
     //
-    FormPropsStructure structure = widget.formModel.formPropsStructure;
+    FormModelStructure structure = widget.formModel.formModelStructure;
 
-    List<MultiOptFormProp> rootMultiOptProp = structure.debugRootOptProps;
-    for (MultiOptFormProp multiOptProp in rootMultiOptProp) {
+    List<MultiOptFormPropModel> rootMultiOptProp = structure.debugRootOptProps;
+    for (MultiOptFormPropModel multiOptProp in rootMultiOptProp) {
       _addMultiOptPropCascade(formModelNode, multiOptProp);
     }
-    List<SimpleFormProp> simpleProps = structure.simpleProps;
-    for (SimpleFormProp simpleProp in simpleProps) {
+    List<SimpleFormPropModel> simplePropModels = structure.simplePropModels;
+    for (SimpleFormPropModel simpleProp in simplePropModels) {
       _addSimpleProp(formModelNode, simpleProp);
     }
     //
@@ -83,8 +83,8 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
       return FormModelDebugView(
         formModel: _currentNode.data,
       );
-    } else if (_currentNode.data is FormProp) {
-      return FormPropView(
+    } else if (_currentNode.data is FormPropModel) {
+      return FormPropModelView(
         formInitialDataReady: widget.formModel.formInitialDataReady,
         prop: _currentNode.data,
       );
@@ -156,7 +156,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
             title = getClassName(data);
             prefixIconData = FaIconConstants.formModelIconData;
             isError = data.dataState == DataState.error;
-          } else if (data is SimpleFormProp) {
+          } else if (data is SimpleFormPropModel) {
             title = data.propName;
             tooltip =
                 "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.propName}";
@@ -166,7 +166,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
             isMultiSelection = false;
             isDirty = data.isDirty();
             isError = data.formErrorInfo != null;
-          } else if (data is MultiOptFormProp) {
+          } else if (data is MultiOptFormPropModel) {
             title = data.propName;
             tooltip =
                 "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.propName}";
@@ -238,7 +238,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
               onTap: () {
                 setState(() {
                   _currentNode = node;
-                  if (node.data is FormProp) {
+                  if (node.data is FormPropModel) {
                     _onPressProp(node.data);
                   }
                 });
@@ -251,7 +251,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
   }
 
   void _addMultiOptPropCascade(
-      TreeNode currentNode, MultiOptFormProp multiOptProp) {
+      TreeNode currentNode, MultiOptFormPropModel multiOptProp) {
     TreeNode childNode = TreeNode(
       key: "MultiOptProp-${multiOptProp.propName}",
       data: multiOptProp,
@@ -260,12 +260,12 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     //   _currentNode = childNode;
     // }
     currentNode.add(childNode);
-    for (MultiOptFormProp childMultiOptProp in multiOptProp.children) {
+    for (MultiOptFormPropModel childMultiOptProp in multiOptProp.children) {
       _addMultiOptPropCascade(childNode, childMultiOptProp);
     }
   }
 
-  void _addSimpleProp(TreeNode currentNode, SimpleFormProp simpleProp) {
+  void _addSimpleProp(TreeNode currentNode, SimpleFormPropModel simpleProp) {
     TreeNode childNode = TreeNode(
       key: "SimpleProp-${simpleProp.propName}",
       data: simpleProp,
@@ -276,7 +276,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     currentNode.add(childNode);
   }
 
-  void _onPressProp(FormProp prop) {
+  void _onPressProp(FormPropModel prop) {
     print("Prop: $prop");
   }
 }

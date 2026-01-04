@@ -52,6 +52,7 @@ import '../enums/_action_confirmation_type.dart';
 import '../enums/_action_result_state.dart';
 import '../enums/_activity_hidden_behavior.dart';
 import '../enums/_client_side_sort_mode.dart';
+import '../enums/_filter_criterion_operator.dart';
 import '../enums/_filter_error_method.dart';
 import '../enums/_hook_hidden_behavior.dart';
 import '../enums/_block_control_action_type.dart';
@@ -375,37 +376,37 @@ part '_core_state_/_force_reload_state.dart';
 
 part '_fa_.dart';
 
-part '_filtering_/__filter_criterion.dart';
+part '_filter_/__filter_criterion_model.dart';
 
-part '_filtering_/_calculated_filter_criterion.dart';
+part '_filter_/_calculated_filter_criterion_model.dart';
 
-part '_filtering_/_filter_criteria_structure.dart';
+part '_filter_/_filter_model_structure.dart';
 
 part '_sorting_/_sort_criterion_def.dart';
 
 part '_sorting_/_sort_criteria_structure.dart';
 
-part '_filtering_/_multi_opt_filter_criterion.dart';
+part '_filter_/_multi_opt_filter_criterion_model.dart';
 
-part '_filtering_/_multi_opt_ss_filter_criterion.dart';
+part '_filter_/_multi_opt_ss_filter_criterion_model.dart';
 
-part '_filtering_/_multi_opt_ms_filter_criterion.dart';
+part '_filter_/_multi_opt_ms_filter_criterion_model.dart';
 
-part '_filtering_/_simple_filter_criterion.dart';
+part '_filter_/_simple_filter_criterion_model.dart';
 
-part '_form_/__form_prop.dart';
+part '_form_/__form_prop_model.dart';
 
-part '_form_/_calculated_form_prop.dart';
+part '_form_/_calculated_form_prop_model.dart';
 
-part '_form_/_form_props_structure.dart';
+part '_form_/_form_model_structure.dart';
 
-part '_form_/_multi_opt_form_prop.dart';
+part '_form_/_multi_opt_form_prop_model.dart';
 
-part '_form_/_multi_opt_ss_form_prop.dart';
+part '_form_/_multi_opt_ss_form_prop_model.dart';
 
-part '_form_/_multi_opt_ms_form_prop.dart';
+part '_form_/_multi_opt_ms_form_prop_model.dart';
 
-part '_form_/_simple_form_prop.dart';
+part '_form_/_simple_form_prop_model.dart';
 
 part '__core__/_value_wrap.dart';
 

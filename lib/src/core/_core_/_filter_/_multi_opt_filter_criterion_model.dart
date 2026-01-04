@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-abstract class MultiOptFilterCriterion<V> extends FilterCriterion<V> {
-  late final MultiOptFilterCriterion? parent;
+abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
+  late final MultiOptFilterCriterionModel? parent;
 
   int _loadCount = 0;
 
@@ -17,14 +17,17 @@ abstract class MultiOptFilterCriterion<V> extends FilterCriterion<V> {
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
   final SelectionType selectionType;
-  final List<MultiOptFilterCriterion> _children;
+  final List<MultiOptFilterCriterionModel> _children;
 
-  List<MultiOptFilterCriterion> get children => List.unmodifiable(_children);
+  List<MultiOptFilterCriterionModel> get children =>
+      List.unmodifiable(_children);
 
-  MultiOptFilterCriterion._({
+  MultiOptFilterCriterionModel._({
     required super.criterionName,
-    required List<MultiOptFilterCriterion> children,
+    required List<MultiOptFilterCriterionModel> children,
     required this.selectionType,
+    required super.operator,
+    super.description,
   }) : _children = children;
 
   void _updateTempValueCascade({
@@ -55,7 +58,7 @@ abstract class MultiOptFilterCriterion<V> extends FilterCriterion<V> {
       }
       //
       if (_tempCurrentXData == null || newValue == null || !isSame) {
-        for (MultiOptFilterCriterion childItem in children) {
+        for (MultiOptFilterCriterionModel childItem in children) {
           childItem._tempCurrentXData = null;
           updateValues[childItem.criterionName] = null;
           childItem._markTempDirty = true;
@@ -63,7 +66,7 @@ abstract class MultiOptFilterCriterion<V> extends FilterCriterion<V> {
       }
     }
     //
-    for (MultiOptFilterCriterion childItem in children) {
+    for (MultiOptFilterCriterionModel childItem in children) {
       childItem._updateTempValueCascade(
         updateValues: updateValues,
       );

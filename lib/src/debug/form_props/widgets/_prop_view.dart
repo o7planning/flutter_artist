@@ -12,11 +12,11 @@ import '../../widgets/_dynamic_value_view.dart';
 import '../../widgets/_xdata_view.dart';
 import '_prop_error_view.dart';
 
-class FormPropView extends StatelessWidget {
+class FormPropModelView extends StatelessWidget {
   final bool formInitialDataReady;
-  final FormProp prop;
+  final FormPropModel prop;
 
-  const FormPropView({
+  const FormPropModelView({
     super.key,
     required this.prop,
     required this.formInitialDataReady,
@@ -40,13 +40,13 @@ class FormPropView extends StatelessWidget {
             minLeadingWidth: 40,
             minTileHeight: 0,
             leading: Icon(
-              prop is SimpleFormProp
+              prop is SimpleFormPropModel
                   ? FaIconConstants.simplePropOrCriterionIconData
                   : FaIconConstants.optPropOrCriterionIconData,
               size: 20,
             ),
             title: IconLabelText(
-              label: prop is SimpleFormProp
+              label: prop is SimpleFormPropModel
                   ? 'Prop Name: '
                   : 'Multi Opt Prop Name: ',
               text: prop.propName,
@@ -60,8 +60,8 @@ class FormPropView extends StatelessWidget {
             ),
           ),
           Divider(),
-          if (prop is MultiOptFormProp) SizedBox(height: 5),
-          if (prop is MultiOptFormProp)
+          if (prop is MultiOptFormPropModel) SizedBox(height: 5),
+          if (prop is MultiOptFormPropModel)
             LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return Row(
@@ -71,7 +71,7 @@ class FormPropView extends StatelessWidget {
                     Tooltip(
                       message: "Single Selection",
                       child: Radio(
-                        value: (prop as MultiOptFormProp).selectionType ==
+                        value: (prop as MultiOptFormPropModel).selectionType ==
                             SelectionType.single,
                         onChanged: null,
                         groupValue: true,
@@ -89,7 +89,7 @@ class FormPropView extends StatelessWidget {
                     Tooltip(
                       message: "Multi Selection",
                       child: Radio(
-                        value: (prop as MultiOptFormProp).selectionType ==
+                        value: (prop as MultiOptFormPropModel).selectionType ==
                             SelectionType.multi,
                         onChanged: null,
                         groupValue: true,
@@ -164,7 +164,7 @@ class FormPropView extends StatelessWidget {
               headerSubtitle: _headerSubtitle(prop.currentValue),
               content: DynamicValueView(value: prop.currentValue),
             ),
-            if (prop is MultiOptFormProp)
+            if (prop is MultiOptFormPropModel)
               SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(
@@ -176,7 +176,7 @@ class FormPropView extends StatelessWidget {
                 headerSubtitle: _headerSubtitle(prop.initialXData),
                 content: XDataView(xData: prop.initialXData),
               ),
-            if (prop is MultiOptFormProp)
+            if (prop is MultiOptFormPropModel)
               SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(

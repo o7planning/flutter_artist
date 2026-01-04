@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-abstract class FormProp<V> {
-  late final FormPropsStructure _structure;
+abstract class FormPropModel<V> {
+  late final FormModelStructure _structure;
 
   //
   final String propName;
@@ -49,7 +49,7 @@ abstract class FormProp<V> {
 
   // ---------------------------------------------------------------------------
 
-  FormProp({
+  FormPropModel({
     required this.propName,
   });
 

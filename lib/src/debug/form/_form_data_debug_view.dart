@@ -90,10 +90,10 @@ class _FormDataViewState extends State<FormDataView> {
   }
 
   Widget _buildTabContainer() {
-    FormPropsStructure formPropsStructure = widget.formModel.formPropsStructure;
+    FormModelStructure formModelStructure = widget.formModel.formModelStructure;
     //
-    Map<String, dynamic> initial1Value = formPropsStructure.initialFormData;
-    Map<String, dynamic> instantValue = formPropsStructure.currentFormData;
+    Map<String, dynamic> initial1Value = formModelStructure.initialFormData;
+    Map<String, dynamic> instantValue = formModelStructure.currentFormData;
 
     //
     String initial1Json = toJson(initial1Value);
@@ -111,7 +111,7 @@ class _FormDataViewState extends State<FormDataView> {
           color: _getTabIconColor(status),
           size: iconSize,
         ),
-        content: _buildTabFormPropsStructure(),
+        content: _buildTabFormModelStructure(),
       ),
     );
     tabs.add(
@@ -174,9 +174,9 @@ class _FormDataViewState extends State<FormDataView> {
     return tabbedViewTheme;
   }
 
-  Widget _buildTabFormPropsStructure() {
-    return FormPropsStructureView(
-      key: Key("FormPropsStructureTreeView"),
+  Widget _buildTabFormModelStructure() {
+    return FormModelStructureView(
+      key: Key("FormModelStructureTreeView"),
       formModel: widget.formModel,
     );
   }

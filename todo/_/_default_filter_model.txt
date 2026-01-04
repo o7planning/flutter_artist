@@ -11,10 +11,10 @@ class _DefaultFilterModel
   }
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
-      simpleCriteria: [],
-      multiOptCriteria: [],
+  FilterModelStructure registerFilterModelStructure() {
+    return FilterModelStructure(
+      simpleCriterionModels: [],
+      multiOptCriterionModels: [],
     );
   }
 
@@ -75,10 +75,10 @@ class StringIdFilterModel
   StringIdFilterModel({required this.idValue});
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
-      simpleCriteria: [],
-      multiOptCriteria: [],
+  FilterModelStructure registerFilterModelStructure() {
+    return FilterModelStructure(
+      simpleCriterionModels: [],
+      multiOptCriterionModels: [],
     );
   }
 
@@ -139,10 +139,10 @@ class StringValueFilterModel
   StringValueFilterModel({required this.stringValue});
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
-      simpleCriteria: [],
-      multiOptCriteria: [],
+  FilterModelStructure registerFilterModelStructure() {
+    return FilterModelStructure(
+      simpleCriterionModels: [],
+      multiOptCriterionModels: [],
     );
   }
 
@@ -203,10 +203,10 @@ class SearchTextFilterModel
   SearchTextFilterModel({required this.searchText});
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
-      simpleCriteria: [],
-      multiOptCriteria: [],
+  FilterModelStructure registerFilterModelStructure() {
+    return FilterModelStructure(
+      simpleCriterionModels: [],
+      multiOptCriterionModels: [],
     );
   }
 
@@ -267,10 +267,10 @@ class IntIdFilterModel
   IntIdFilterModel({required this.idValue});
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
-      simpleCriteria: [],
-      multiOptCriteria: [],
+  FilterModelStructure registerFilterModelStructure() {
+    return FilterModelStructure(
+      simpleCriterionModels: [],
+      multiOptCriterionModels: [],
     );
   }
 

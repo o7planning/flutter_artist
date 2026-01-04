@@ -1,8 +1,8 @@
 part of '../core.dart';
 
-class SimpleFilterCriterion<V> extends FilterCriterion<V> {
-  SimpleFilterCriterion({
-    required super.criterionName,
+class SimpleFormPropModel<V> extends FormPropModel<V> {
+  SimpleFormPropModel({
+    required super.propName,
   });
 
   @override
@@ -16,7 +16,7 @@ class SimpleFilterCriterion<V> extends FilterCriterion<V> {
   }) {
     if (!_valueUpdated && _markTempDirty) {
       // final dynamic oldValue = _tempCurrentValue;
-      final dynamic newValue = updateValues[criterionName];
+      final dynamic newValue = updateValues[propName];
       //
       _candidateUpdateValue = newValue;
       _valueUpdated = true;

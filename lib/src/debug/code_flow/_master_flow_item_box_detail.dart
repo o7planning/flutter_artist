@@ -117,8 +117,7 @@ class _MasterFlowItemDetailViewState extends State<MasterFlowItemDetailView> {
       ),
       items: LineFlowType.values
           .map(
-            (lineFlowType) =>
-            BreadCrumbItem(
+            (lineFlowType) => BreadCrumbItem(
               content: Tooltip(
                 message: lineFlowType.desc,
                 child: IconedCheckbox(
@@ -136,7 +135,7 @@ class _MasterFlowItemDetailViewState extends State<MasterFlowItemDetailView> {
                 ),
               ),
             ),
-      )
+          )
           .toList(),
     );
   }
@@ -184,14 +183,13 @@ class _MasterFlowItemDetailViewState extends State<MasterFlowItemDetailView> {
           SizedBox(height: 10),
         ...lineFlowItems
             .map(
-              (e) =>
-              LineFlowItemBox(
+              (e) => LineFlowItemBox(
                 lineFlowItem: e,
               ),
-        )
+            )
             .expand(
               (w) => [w, SizedBox(height: 5)],
-        ),
+            ),
       ],
     );
   }

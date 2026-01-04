@@ -29,7 +29,7 @@ abstract class SortModel<ITEM extends Object> {
     int optCount = 0;
     if (sortModelBuilder != null) {
       SortCriteriaStructure structure =
-          sortModelBuilder!.registerCriteriaStructure();
+          sortModelBuilder!.registerFilterModelStructure();
       for (SortCriterionDef criterionDef in structure._sortCriteriaMap.values) {
         SortDirection? sortDirection = sortingSide == SortingSide.server
             ? criterionDef.initialServerSideSortingDirection

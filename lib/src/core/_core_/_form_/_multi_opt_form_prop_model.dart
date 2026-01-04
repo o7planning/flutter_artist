@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-abstract class MultiOptFormProp<V> extends FormProp<V> {
-  late final MultiOptFormProp? parent;
+abstract class MultiOptFormPropModel<V> extends FormPropModel<V> {
+  late final MultiOptFormPropModel? parent;
   final MultiOptPropReload reloadCondition;
 
   bool _markToReload = false;
@@ -19,16 +19,16 @@ abstract class MultiOptFormProp<V> extends FormProp<V> {
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
   final SelectionType selectionType;
-  final List<MultiOptFormProp> _children;
+  final List<MultiOptFormPropModel> _children;
 
   bool get isRoot => parent == null;
 
-  List<MultiOptFormProp> get children => List.unmodifiable(_children);
+  List<MultiOptFormPropModel> get children => List.unmodifiable(_children);
 
-  MultiOptFormProp._({
+  MultiOptFormPropModel._({
     required super.propName,
     required this.reloadCondition,
-    required List<MultiOptFormProp> children,
+    required List<MultiOptFormPropModel> children,
     required this.selectionType,
   }) : _children = children;
 
@@ -60,7 +60,7 @@ abstract class MultiOptFormProp<V> extends FormProp<V> {
       }
       //
       if (_tempCurrentXData == null || newValue == null || !isSame) {
-        for (MultiOptFormProp childItem in _children) {
+        for (MultiOptFormPropModel childItem in _children) {
           childItem._tempCurrentXData = null;
           updateValues[childItem.propName] = null;
           childItem._markTempDirty = true;
@@ -68,7 +68,7 @@ abstract class MultiOptFormProp<V> extends FormProp<V> {
       }
     }
     //
-    for (MultiOptFormProp childItem in _children) {
+    for (MultiOptFormPropModel childItem in _children) {
       childItem._updateTempValueCascade(
         updateValues: updateValues,
       );

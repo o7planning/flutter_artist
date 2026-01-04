@@ -70,17 +70,16 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
   }
 
   Widget _buildTabContainer() {
-    FilterCriteriaStructure filterCriteriaStructure =
-        widget.filterModel.filterCriteriaStructure;
+    FilterModelStructure filterModelStructure =
+        widget.filterModel.filterModelStructure;
 
     Map<String, dynamic> initial1Value =
-        filterCriteriaStructure.debugInitialCriteriaValues;
+        filterModelStructure.debugInitialCriteriaValues;
 
-    Map<String, dynamic> instantValue =
-        filterCriteriaStructure.debugInstantValues;
+    Map<String, dynamic> instantValue = filterModelStructure.debugInstantValues;
 
     Map<String, dynamic> currentValue =
-        filterCriteriaStructure.debugCurrentCriteriaValues;
+        filterModelStructure.debugCurrentCriteriaValues;
 
     String initial1Json = MapUtils.toOneLevelJson(initial1Value);
     String instantJson = MapUtils.toOneLevelJson(instantValue);
@@ -99,7 +98,7 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
           color: _getTabIconColor(status),
           size: iconSize,
         ),
-        content: _buildTabFilterCriteriaStructure(),
+        content: _buildTabFilterModelStructure(),
       ),
     );
     tabs.add(
@@ -161,9 +160,9 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
     return tabbedViewTheme;
   }
 
-  Widget _buildTabFilterCriteriaStructure() {
-    return FilterCriteriaStructureView(
-      key: Key("FilterCriteriaStructureView"),
+  Widget _buildTabFilterModelStructure() {
+    return FilterModelStructureView(
+      key: Key("FilterModelStructureView"),
       filterModel: widget.filterModel,
     );
   }

@@ -11,14 +11,14 @@ abstract class SortModelBuilder<ITEM extends Object> {
     required this.clientSideMultiSort,
     required this.serverSideMultiSort,
   }) {
-    _structure = registerCriteriaStructure();
+    _structure = registerFilterModelStructure();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  SortCriteriaStructure registerCriteriaStructure();
+  SortCriteriaStructure registerFilterModelStructure();
 
   // ***************************************************************************
   // ***************************************************************************

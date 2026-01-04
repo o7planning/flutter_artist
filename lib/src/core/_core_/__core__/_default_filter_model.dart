@@ -12,10 +12,10 @@ class _DefaultFilterModel
   }
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
-      simpleCriteria: [],
-      multiOptCriteria: [],
+  FilterModelStructure registerFilterModelStructure() {
+    return FilterModelStructure(
+      simpleCriterionModels: [],
+      multiOptCriterionModels: [],
     );
   }
 
