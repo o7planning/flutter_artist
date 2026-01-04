@@ -5,26 +5,26 @@ abstract class SortModelBuilder<ITEM extends Object> {
   final bool clientSideMultiSort;
   final bool serverSideMultiSort;
 
-  late final SortCriteriaStructure _structure;
+  late final SortModelStructure _structure;
 
   SortModelBuilder({
     required this.clientSideMultiSort,
     required this.serverSideMultiSort,
   }) {
-    _structure = registerFilterModelStructure();
+    _structure = registerSortModelStructure();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  SortCriteriaStructure registerFilterModelStructure();
+  SortModelStructure registerSortModelStructure();
 
   // ***************************************************************************
   // ***************************************************************************
 
   String _getText({required String criterionName}) {
-    SortCriterionDef? criterion = _structure._sortCriteriaMap[criterionName];
+    SortCriterionModel? criterion = _structure._sortCriterionModelMap[criterionName];
     if (criterion == null) {
       return criterionName;
     }

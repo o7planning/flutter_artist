@@ -28,9 +28,9 @@ abstract class SortModel<ITEM extends Object> {
             : sortModelBuilder?.clientSideMultiSort ?? false {
     int optCount = 0;
     if (sortModelBuilder != null) {
-      SortCriteriaStructure structure =
-          sortModelBuilder!.registerFilterModelStructure();
-      for (SortCriterionDef criterionDef in structure._sortCriteriaMap.values) {
+      SortModelStructure structure =
+          sortModelBuilder!.registerSortModelStructure();
+      for (SortCriterionModel criterionDef in structure._sortCriterionModelMap.values) {
         SortDirection? sortDirection = sortingSide == SortingSide.server
             ? criterionDef.initialServerSideSortingDirection
             : criterionDef.initialClientSideSortingDirection;

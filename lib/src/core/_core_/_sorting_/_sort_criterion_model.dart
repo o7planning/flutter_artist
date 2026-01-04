@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class SortCriterionDef {
+class SortCriterionModel {
   final String criterionName;
   final String text;
   final String? translationKey;
@@ -9,7 +9,7 @@ class SortCriterionDef {
   final SortDirection? initialServerSideSortingDirection;
   final SortDirection? initialClientSideSortingDirection;
 
-  SortCriterionDef({
+  SortCriterionModel({
     required this.criterionName,
     required this.text,
     this.translationKey,

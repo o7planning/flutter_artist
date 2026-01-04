@@ -382,9 +382,9 @@ part '_filter_/_calculated_filter_criterion_model.dart';
 
 part '_filter_/_filter_model_structure.dart';
 
-part '_sorting_/_sort_criterion_def.dart';
+part '_sorting_/_sort_criterion_model.dart';
 
-part '_sorting_/_sort_criteria_structure.dart';
+part '_sorting_/_sort_model_structure.dart';
 
 part '_filter_/_multi_opt_filter_criterion_model.dart';
 
