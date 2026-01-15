@@ -436,6 +436,7 @@ abstract class FilterModel<
         // May throw ApiError.
         //
         await _loadMultiOptCriterionDataCascade(
+          masterFlowItem: masterFlowItem,
           filterInput: filterInput,
           parentMultiOptCriterionValue: null,
           multiOptCriterion: multiOptCriterion,
@@ -656,6 +657,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   Future<void> _loadMultiOptCriterionDataCascade({
+    required MasterFlowItem masterFlowItem,
     required FILTER_INPUT? filterInput,
     required Object? parentMultiOptCriterionValue,
     required MultiOptFilterCriterion multiOptCriterion,
@@ -664,6 +666,19 @@ abstract class FilterModel<
   }) async {
     final String multiOptCriterionName = multiOptCriterion.criterionName;
     final SelectionType selectionType = multiOptCriterion.selectionType;
+
+    masterFlowItem._addLineFlowItem(
+      codeId: "#82000",
+      shortDesc:
+          "Begin of ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method.",
+      parameters: {
+        "filterInput": filterInput,
+        "parentMultiOptCriterionValue": parentMultiOptCriterionValue,
+        "multiOptCriterion": multiOptCriterion,
+        "activityType": activityType,
+      },
+      lineFlowType: LineFlowType.debug,
+    );
 
     final MultiOptFilterCriterion? multiOptCriterionParent =
         multiOptCriterion.parent;
@@ -696,6 +711,16 @@ abstract class FilterModel<
         itemOrItemList2: newSelectedValue,
       );
     }
+    masterFlowItem._addLineFlowItem(
+      codeId: "#82100",
+      shortDesc: "Debug:",
+      parameters: {
+        "tempCurrentMultiOptValue": tempCurrentMultiOptValue,
+        "newSelectedValue": newSelectedValue,
+        "valueChanged": valueChanged,
+      },
+      lineFlowType: LineFlowType.debug,
+    );
     //
     multiOptCriterion._tempCurrentValue = newSelectedValue;
     //
@@ -748,6 +773,18 @@ abstract class FilterModel<
       multiOptCriterion._loadCount++;
       //
       try {
+        masterFlowItem._addLineFlowItem(
+          codeId: "#82300",
+          shortDesc:
+          "Calling ${debugObjHtml(this)}.callApiLoadMultiOptCriterionXData():",
+          parameters: {
+            "filterInput": filterInput,
+            "parentMultiOptCriterionValue": parentMultiOptCriterionValue,
+            "multiOptCriterionName": multiOptCriterionName,
+            "selectionType": selectionType,
+          },
+          lineFlowType: LineFlowType.debug,
+        );
         // May throw AppError, ApiError or others.
         //
         // Load OptCriterion data from Rest API.
@@ -770,6 +807,14 @@ abstract class FilterModel<
         );
       }
     }
+    masterFlowItem._addLineFlowItem(
+      codeId: "#82400",
+      shortDesc: "Debug. Return value: ",
+      parameters: {
+        "tempMultiOptCriterionXData": tempMultiOptCriterionXData,
+      },
+      lineFlowType: LineFlowType.debug,
+    );
     //
     // IMPORTANT: Do not use empty list here
     // to avoid cast Error (List<dynamic> to List<ITEM>)
@@ -790,11 +835,31 @@ abstract class FilterModel<
         );
       } else {
         if (!__initiatedAtLeastOnce) {
+          masterFlowItem._addLineFlowItem(
+            codeId: "#82460",
+            shortDesc:
+            "Calling ${debugObjHtml(this)}.__specifyDefaultValueForMultiOptCriterion():",
+            parameters: {
+              "parentMultiOptCriterionValue": parentMultiOptCriterionValue,
+              "multiOptCriterionName": multiOptCriterionName,
+              "selectionType": selectionType,
+            },
+            lineFlowType: LineFlowType.nonControllableCalling,
+          );
+
           inputValueWrap = __specifyDefaultValueForMultiOptCriterion(
             parentMultiOptCriterionValue: parentMultiOptCriterionValue,
             multiOptCriterionXData: tempMultiOptCriterionXData,
             multiOptCriterionName: multiOptCriterionName,
             selectionType: selectionType,
+          );
+          masterFlowItem._addLineFlowItem(
+            codeId: "#82470",
+            shortDesc: "Debug",
+            parameters: {
+              "inputValueWrap": inputValueWrap,
+            },
+            lineFlowType: LineFlowType.debug,
           );
         }
       }
@@ -834,6 +899,16 @@ abstract class FilterModel<
       candidateSelectedItems = null;
     }
     //
+    masterFlowItem._addLineFlowItem(
+      codeId: "#82600",
+      shortDesc:
+      "Calling ${debugObjHtml(this)}._setTempMultiOptCriterionXData():",
+      parameters: {
+        "multiOptCriterionName": multiOptCriterionName,
+        "multiOptXData": tempMultiOptCriterionXData,
+      },
+      lineFlowType: LineFlowType.nonControllableCalling,
+    );
     _filterCriteriaStructure._setTempMultiOptCriterionXData(
       multiOptCriterionName: multiOptCriterionName,
       multiOptXData: tempMultiOptCriterionXData,
@@ -872,10 +947,20 @@ abstract class FilterModel<
         _filterCriteriaStructure._getTempCurrentCriterionValue(
       criterionName: multiOptCriterionName,
     );
+    masterFlowItem._addLineFlowItem(
+      codeId: "#82800",
+      shortDesc: "Debug:",
+      parameters: {
+        "criterionName": multiOptCriterionName,
+        "tempSelectedCriterionValue": tempSelectedCriterionValue,
+      },
+      lineFlowType: LineFlowType.debug,
+    );
 
     if (tempSelectedCriterionValue != null) {
       for (MultiOptFilterCriterion child in multiOptCriterion.children) {
         await _loadMultiOptCriterionDataCascade(
+          masterFlowItem:masterFlowItem,
           filterInput: filterInput,
           parentMultiOptCriterionValue: tempSelectedCriterionValue,
           multiOptCriterion: child,
