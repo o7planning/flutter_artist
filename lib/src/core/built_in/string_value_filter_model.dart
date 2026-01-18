@@ -14,7 +14,7 @@ class StringValueFilterModel
   FilterModelStructure registerCriteriaStructure() {
     return FilterModelStructure(
       simpleCriteria: [
-        SimpleFilterCriterion<String>(criterionNameX: "string"),
+        SimpleFilterCriterionModel<String>(criterionNameX: "string"),
       ],
       multiOptCriteria: [],
     );

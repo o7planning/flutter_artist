@@ -1,6 +1,6 @@
 part of '../../core.dart';
 
-abstract class FilterCriterion<V> {
+abstract class FilterCriterionModel<V> {
   late final FilterModelStructure _structure;
 
   //
@@ -43,7 +43,7 @@ abstract class FilterCriterion<V> {
 
   Type get dataType => V;
 
-  FilterCriterion({required this.criterionNameX});
+  FilterCriterionModel({required this.criterionNameX});
 
   bool isDirty() {
     return !ComparisonUtils.compareDynamicAndDynamic(

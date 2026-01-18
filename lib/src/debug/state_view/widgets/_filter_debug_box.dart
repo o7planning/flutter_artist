@@ -18,7 +18,8 @@ class FilterDebugBox extends BaseDebugBox {
   @override
   List<Widget> getChildIconLabelTexts() {
     FilterModelStructure structure = filterModel.filterCriteriaStructure;
-    List<MultiOptFilterCriterion> optCriteria = structure.allMultiOptCriteria;
+    List<MultiOptFilterCriterionModel> optCriteria =
+        structure.allMultiOptCriteria;
     //
     List<Widget> list1 = [
       if (options.showFilterUIActive)

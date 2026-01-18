@@ -52,6 +52,7 @@ import '../enums/_action_confirmation_type.dart';
 import '../enums/_action_result_state.dart';
 import '../enums/_activity_hidden_behavior.dart';
 import '../enums/_client_side_sort_mode.dart';
+import '../enums/_filter_criterion_operator.dart.dart';
 import '../enums/_filter_error_method.dart';
 import '../enums/_hook_hidden_behavior.dart';
 import '../enums/_block_control_action_type.dart';
@@ -188,6 +189,8 @@ part '_form_/_form_related_data.dart';
 part '_filter_/_filter_criteria.dart';
 
 part '_filter_/_def_/_filter_criterion_def.dart';
+
+part '_filter_/_def_/_filter_condition_def.dart';
 
 part '_filter_/_filter_input.dart';
 
@@ -377,9 +380,9 @@ part '_core_state_/_force_reload_state.dart';
 
 part '_fa_.dart';
 
-part '_filter_/_model_/__filter_criterion.dart';
+part '_filter_/_model_/__filter_criterion_model.dart';
 
-part '_filter_/_model_/_calculated_filter_criterion.dart';
+part '_filter_/_model_/_calculated_filter_criterion_model.dart';
 
 part '_filter_/_filter_model_structure.dart';
 
@@ -387,13 +390,13 @@ part '_sorting_/_sort_criterion_def.dart';
 
 part '_sorting_/_sort_criteria_structure.dart';
 
-part '_filter_/_model_/_multi_opt_filter_criterion.dart';
+part '_filter_/_model_/_multi_opt_filter_criterion_model.dart';
 
-part '_filter_/_model_/_multi_opt_ss_filter_criterion.dart';
+part '_filter_/_model_/_multi_opt_ss_filter_criterion_model.dart';
 
-part '_filter_/_model_/_multi_opt_ms_filter_criterion.dart';
+part '_filter_/_model_/_multi_opt_ms_filter_criterion_model.dart';
 
-part '_filter_/_model_/_simple_filter_criterion.dart';
+part '_filter_/_model_/_simple_filter_criterion_model.dart';
 
 part '_form_/_model_/__form_prop.dart';
 

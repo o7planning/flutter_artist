@@ -38,7 +38,7 @@ String __debugObjHtml(Object? obj, bool asHtml) {
     return "${b1}${getClassNameWithoutGenerics(obj)}(${obj.shelf.name})${b2}";
   } else if (obj is FormProp) {
     return "${b1}${getClassName(obj)}('${obj.propName}')${b2}";
-  } else if (obj is FilterCriterion) {
+  } else if (obj is FilterCriterionModel) {
     return "${b1}${getClassName(obj)}('${obj.criterionNameX}')${b2}";
   } else if (obj is XData) {
     return "${b1}${getClassName(obj)}${b2}";

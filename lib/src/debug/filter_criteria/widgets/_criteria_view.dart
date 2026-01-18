@@ -12,7 +12,7 @@ import '../../widgets/_dynamic_value_view.dart';
 import '../../widgets/_xdata_view.dart';
 
 class FilterCriterionView extends StatelessWidget {
-  final FilterCriterion criterion;
+  final FilterCriterionModel criterion;
 
   const FilterCriterionView({
     super.key,
@@ -37,13 +37,13 @@ class FilterCriterionView extends StatelessWidget {
             minLeadingWidth: 40,
             minTileHeight: 0,
             leading: Icon(
-              criterion is SimpleFilterCriterion
+              criterion is SimpleFilterCriterionModel
                   ? FaIconConstants.simplePropOrCriterionIconData
                   : FaIconConstants.optPropOrCriterionIconData,
               size: 20,
             ),
             title: IconLabelText(
-              label: criterion is SimpleFilterCriterion
+              label: criterion is SimpleFilterCriterionModel
                   ? 'Criterion Name: '
                   : 'Multi Opt Criterion Name: ',
               text: criterion.criterionNameX,
@@ -57,8 +57,8 @@ class FilterCriterionView extends StatelessWidget {
             ),
           ),
           Divider(),
-          if (criterion is MultiOptFilterCriterion) SizedBox(height: 5),
-          if (criterion is MultiOptFilterCriterion)
+          if (criterion is MultiOptFilterCriterionModel) SizedBox(height: 5),
+          if (criterion is MultiOptFilterCriterionModel)
             LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return Row(
@@ -68,7 +68,7 @@ class FilterCriterionView extends StatelessWidget {
                     Tooltip(
                       message: "Single Selection",
                       child: Radio(
-                        value: (criterion as MultiOptFilterCriterion)
+                        value: (criterion as MultiOptFilterCriterionModel)
                                 .selectionType ==
                             SelectionType.single,
                         onChanged: null,
@@ -87,7 +87,7 @@ class FilterCriterionView extends StatelessWidget {
                     Tooltip(
                       message: "Multi Selection",
                       child: Radio(
-                        value: (criterion as MultiOptFilterCriterion)
+                        value: (criterion as MultiOptFilterCriterionModel)
                                 .selectionType ==
                             SelectionType.multi,
                         onChanged: null,
@@ -148,7 +148,7 @@ class FilterCriterionView extends StatelessWidget {
               headerSubtitle: _headerSubtitle(criterion.currentValue),
               content: DynamicValueView(value: criterion.currentValue),
             ),
-            if (criterion is MultiOptFilterCriterion)
+            if (criterion is MultiOptFilterCriterionModel)
               SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(
@@ -160,7 +160,7 @@ class FilterCriterionView extends StatelessWidget {
                 headerSubtitle: _headerSubtitle(criterion.initialXData),
                 content: XDataView(xData: criterion.initialXData),
               ),
-            if (criterion is MultiOptFilterCriterion)
+            if (criterion is MultiOptFilterCriterionModel)
               SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(

@@ -416,7 +416,7 @@ abstract class FilterModel<
     // Load OptProp Data:
     //
     try {
-      for (MultiOptFilterCriterion multiOptCriterion
+      for (MultiOptFilterCriterionModel multiOptCriterion
           in _filterCriteriaStructure._rootOptCriteria) {
         masterFlowItem._addLineFlowItem(
           codeId: "#31040",
@@ -662,7 +662,7 @@ abstract class FilterModel<
     required MasterFlowItem masterFlowItem,
     required FILTER_INPUT? filterInput,
     required Object? parentMultiOptCriterionValue,
-    required MultiOptFilterCriterion multiOptCriterion,
+    required MultiOptFilterCriterionModel multiOptCriterion,
     required Map<String, dynamic> formKeyInstantValues,
     required FilterActivityType activityType,
   }) async {
@@ -682,7 +682,7 @@ abstract class FilterModel<
       lineFlowType: LineFlowType.debug,
     );
 
-    final MultiOptFilterCriterion? multiOptCriterionParent =
+    final MultiOptFilterCriterionModel? multiOptCriterionParent =
         multiOptCriterion.parent;
 
     // Get current OptCriterion data:
@@ -963,7 +963,7 @@ abstract class FilterModel<
     );
 
     if (tempSelectedCriterionValue != null) {
-      for (MultiOptFilterCriterion child in multiOptCriterion.children) {
+      for (MultiOptFilterCriterionModel child in multiOptCriterion.children) {
         await _loadMultiOptCriterionDataCascade(
           masterFlowItem: masterFlowItem,
           filterInput: filterInput,
@@ -985,10 +985,10 @@ abstract class FilterModel<
     required String methodName,
     required String multiOptCriterionNameX,
   }) {
-    MultiOptFilterCriterion? multiOptCriterion = _filterCriteriaStructure
+    MultiOptFilterCriterionModel? multiOptCriterion = _filterCriteriaStructure
         ._getMultiOptFilterCriterion(multiOptCriterionNameX);
     if (multiOptCriterion == null) {
-      throw "The '$multiOptCriterionNameX' is not $MultiOptFilterCriterion";
+      throw "The '$multiOptCriterionNameX' is not $MultiOptFilterCriterionModel";
     }
     String message =
         "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptCriterionNameX '$multiOptCriterionNameX'. ";
@@ -999,7 +999,7 @@ abstract class FilterModel<
           "$OptValueWrap.multi([null]) or $OptValueWrap.multi([value]). ";
     }
     message +=
-        "And return null for not $MultiOptFilterCriterion. See the specification of this method for more information.";
+        "And return null for not $MultiOptFilterCriterionModel. See the specification of this method for more information.";
     // throw AppError(errorMessage: message);
   }
 
@@ -1013,7 +1013,7 @@ abstract class FilterModel<
     if (_filterCriteriaStructure._isMultiOptFilterCriterion(criterionNameX)) {
       throw DevError(
         errorMessage:
-            '$criterionNameX is not a ${getTypeNameWithoutGenerics(SimpleFilterCriterion)}',
+            '$criterionNameX is not a ${getTypeNameWithoutGenerics(SimpleFilterCriterionModel)}',
         errorDetails: [
           "See ${getClassNameWithoutGenerics(this)}.${getClassNameWithoutGenerics(filterErrorMethod)}() method."
         ],
@@ -1281,7 +1281,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   // SAME-AS: #0009 (form)
-  MultiOptFilterCriterion? findMultiOptFilterCriterion({
+  MultiOptFilterCriterionModel? findMultiOptFilterCriterion({
     required String multiOptCriterionNameX,
   }) {
     return _filterCriteriaStructure._findMultiOptFilterCriterion(

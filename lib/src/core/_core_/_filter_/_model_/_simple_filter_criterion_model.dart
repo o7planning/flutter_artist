@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
-class SimpleFilterCriterion<V> extends FilterCriterion<V> {
-  SimpleFilterCriterion({
+class SimpleFilterCriterionModel<V> extends FilterCriterionModel<V> {
+  SimpleFilterCriterionModel({
     required super.criterionNameX,
   });
 
