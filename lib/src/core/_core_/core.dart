@@ -181,19 +181,19 @@ part '__core__/_log_listener.dart';
 
 part '__core__/_executor.dart';
 
-part '__core__/_extra_form_input.dart';
+part '_form_/_form_input.dart';
 
-part '__core__/_form_related_data.dart';
+part '_form_/_form_related_data.dart';
 
-part '__core__/_filter_criteria.dart';
+part '_filter_/_filter_criteria.dart';
 
-part '__core__/_filter_input.dart';
+part '_filter_/_filter_input.dart';
 
-part '__core__/_filter_model.dart';
+part '_filter_/_filter_model.dart';
 
-part '__core__/_form_leave_safely.dart';
+part '_form_/_form_leave_safely.dart';
 
-part '__core__/_form_model.dart';
+part '_form_/_form_model.dart';
 
 part '_sorting_/_client_side_sort_model.dart';
 
@@ -375,23 +375,23 @@ part '_core_state_/_force_reload_state.dart';
 
 part '_fa_.dart';
 
-part '_filtering_/__filter_criterion.dart';
+part '_filter_/__filter_criterion.dart';
 
-part '_filtering_/_calculated_filter_criterion.dart';
+part '_filter_/_calculated_filter_criterion.dart';
 
-part '_filtering_/_filter_criteria_structure.dart';
+part '_filter_/_filter_criteria_structure.dart';
 
 part '_sorting_/_sort_criterion_def.dart';
 
 part '_sorting_/_sort_criteria_structure.dart';
 
-part '_filtering_/_multi_opt_filter_criterion.dart';
+part '_filter_/_multi_opt_filter_criterion.dart';
 
-part '_filtering_/_multi_opt_ss_filter_criterion.dart';
+part '_filter_/_multi_opt_ss_filter_criterion.dart';
 
-part '_filtering_/_multi_opt_ms_filter_criterion.dart';
+part '_filter_/_multi_opt_ms_filter_criterion.dart';
 
-part '_filtering_/_simple_filter_criterion.dart';
+part '_filter_/_simple_filter_criterion.dart';
 
 part '_form_/__form_prop.dart';
 
