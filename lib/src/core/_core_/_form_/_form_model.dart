@@ -78,9 +78,9 @@ abstract class FormModel<
 
   // ***************************************************************************
 
-  late final FormPropsStructure _formPropsStructure;
+  late final FormModelStructure _formPropsStructure;
 
-  FormPropsStructure get formPropsStructure => _formPropsStructure;
+  FormModelStructure get formPropsStructure => _formPropsStructure;
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
@@ -131,7 +131,7 @@ abstract class FormModel<
   /// ```
   ///
   @_AbstractMethodAnnotation()
-  FormPropsStructure registerPropsStructure();
+  FormModelStructure registerPropsStructure();
 
   // ***************************************************************************
   // ***************************************************************************

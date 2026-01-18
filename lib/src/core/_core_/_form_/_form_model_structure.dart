@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class FormPropsStructure {
+class FormModelStructure {
   final Map<String, FormProp> _allPropMap = {};
   final List<MultiOptFormProp> _rootOptProps;
   final List<SimpleFormProp> _simpleProps = [];
@@ -30,7 +30,7 @@ class FormPropsStructure {
 
   bool get isNew => _formMode == FormMode.creation;
 
-  FormPropsStructure({
+  FormModelStructure({
     required List<SimpleFormProp> simpleProps,
     required List<MultiOptFormProp> multiOptProps,
     List<CalculatedFormProp> calculatedProps = const [],

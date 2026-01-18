@@ -397,7 +397,7 @@ part '_form_/__form_prop.dart';
 
 part '_form_/_calculated_form_prop.dart';
 
-part '_form_/_form_props_structure.dart';
+part '_form_/_form_model_structure.dart';
 
 part '_form_/_multi_opt_form_prop.dart';
 

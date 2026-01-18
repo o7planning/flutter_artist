@@ -90,7 +90,7 @@ class _FormDataViewState extends State<FormDataView> {
   }
 
   Widget _buildTabContainer() {
-    FormPropsStructure formPropsStructure = widget.formModel.formPropsStructure;
+    FormModelStructure formPropsStructure = widget.formModel.formPropsStructure;
     //
     Map<String, dynamic> initial1Value = formPropsStructure.initialFormData;
     Map<String, dynamic> instantValue = formPropsStructure.currentFormData;
