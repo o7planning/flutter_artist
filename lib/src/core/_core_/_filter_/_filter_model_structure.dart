@@ -18,9 +18,9 @@ class FilterModelStructure {
       __standardizeCascade(rootOptCriterion, null);
     }
     for (SimpleFilterCriterion sc in simpleCriteria) {
-      if (_allCriteriaMap.containsKey(sc.criterionName)) {
+      if (_allCriteriaMap.containsKey(sc.criterionNameX)) {
         throw DuplicateFilterCriterionError(
-          criterionName: sc.criterionName,
+          criterionNameX: sc.criterionNameX,
         );
       }
       __initSimpleCriterion(
@@ -29,9 +29,9 @@ class FilterModelStructure {
       );
     }
     for (CalculatedFilterCriterion cc in calculatedCriteria) {
-      if (_allCriteriaMap.containsKey(cc.criterionName)) {
+      if (_allCriteriaMap.containsKey(cc.criterionNameX)) {
         throw DuplicateFilterCriterionError(
-          criterionName: cc.criterionName,
+          criterionNameX: cc.criterionNameX,
         );
       }
       __initCalculatedCriterion(
@@ -48,12 +48,12 @@ class FilterModelStructure {
     multiOptCriterion.parent = parent;
     multiOptCriterion._structure = this;
     //
-    if (_allCriteriaMap.containsKey(multiOptCriterion.criterionName)) {
+    if (_allCriteriaMap.containsKey(multiOptCriterion.criterionNameX)) {
       throw DuplicateFilterCriterionError(
-        criterionName: multiOptCriterion.criterionName,
+        criterionNameX: multiOptCriterion.criterionNameX,
       );
     }
-    _allCriteriaMap[multiOptCriterion.criterionName] = multiOptCriterion;
+    _allCriteriaMap[multiOptCriterion.criterionNameX] = multiOptCriterion;
     //
     for (MultiOptFilterCriterion child in multiOptCriterion.children) {
       __standardizeCascade(child, multiOptCriterion);
@@ -74,8 +74,8 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  dynamic _getCurrentCriterionValue({required String criterionName}) {
-    FilterCriterion? criterion = _allCriteriaMap[criterionName];
+  dynamic _getCurrentCriterionValue({required String criterionNameX}) {
+    FilterCriterion? criterion = _allCriteriaMap[criterionNameX];
     if (criterion != null) {
       return criterion._currentValue;
     }
@@ -136,8 +136,8 @@ class FilterModelStructure {
   // ***************************************************************************
 
   MultiOptFilterCriterion? _getMultiOptFilterCriterion(
-      String multiOptCriterionName) {
-    FilterCriterion? criterion = _allCriteriaMap[multiOptCriterionName];
+      String multiOptCriterionNameX) {
+    FilterCriterion? criterion = _allCriteriaMap[multiOptCriterionNameX];
     if (criterion is MultiOptFilterCriterion) {
       return criterion;
     }
@@ -147,8 +147,8 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  SimpleFilterCriterion? _getSimpleFilterCriterion(String criterionName) {
-    FilterCriterion? criterion = _allCriteriaMap[criterionName];
+  SimpleFilterCriterion? _getSimpleFilterCriterion(String criterionNameX) {
+    FilterCriterion? criterion = _allCriteriaMap[criterionNameX];
     if (criterion is SimpleFilterCriterion) {
       return criterion;
     }
@@ -158,8 +158,8 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isMultiOptFilterCriterion(String criterionName) {
-    return _getMultiOptFilterCriterion(criterionName) != null;
+  bool _isMultiOptFilterCriterion(String criterionNameX) {
+    return _getMultiOptFilterCriterion(criterionNameX) != null;
   }
 
   // ***************************************************************************
@@ -171,7 +171,7 @@ class FilterModelStructure {
     required FilterInput? filterInput,
   }) {
     __addCriteriaIfNeed(
-      criterionNames: formKeyInstantValues.keys.toList(),
+      criterionNameXs: formKeyInstantValues.keys.toList(),
     );
     //
     for (FilterCriterion criterion in _allCriteriaMap.values) {
@@ -188,10 +188,10 @@ class FilterModelStructure {
             criterion._tempInitialValue = criterion._initialValue;
             criterion._tempInitialXData = criterion._initialXData;
             //
-            if (formKeyInstantValues.containsKey(criterion.criterionName)) {
+            if (formKeyInstantValues.containsKey(criterion.criterionNameX)) {
               if (criterion is SimpleFilterCriterion) {
                 criterion._tempCurrentValue =
-                    formKeyInstantValues[criterion.criterionName];
+                    formKeyInstantValues[criterion.criterionNameX];
               }
             }
           }
@@ -201,10 +201,10 @@ class FilterModelStructure {
           criterion._tempInitialValue = criterion._initialValue;
           criterion._tempInitialXData = criterion._initialXData;
           //
-          if (formKeyInstantValues.containsKey(criterion.criterionName)) {
+          if (formKeyInstantValues.containsKey(criterion.criterionNameX)) {
             if (criterion is SimpleFilterCriterion) {
               criterion._tempCurrentValue =
-                  formKeyInstantValues[criterion.criterionName];
+                  formKeyInstantValues[criterion.criterionNameX];
             }
           }
       }
@@ -214,8 +214,8 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  dynamic _getTempCurrentCriterionValue({required String criterionName}) {
-    FilterCriterion? criterion = _allCriteriaMap[criterionName];
+  dynamic _getTempCurrentCriterionValue({required String criterionNameX}) {
+    FilterCriterion? criterion = _allCriteriaMap[criterionNameX];
     if (criterion == null) {
       return null;
     }
@@ -242,8 +242,8 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  XData? _getTempMultiOptCriterionXData(String criterionName) {
-    FilterCriterion? criterion = _allCriteriaMap[criterionName];
+  XData? _getTempMultiOptCriterionXData(String criterionNameX) {
+    FilterCriterion? criterion = _allCriteriaMap[criterionNameX];
     if (criterion == null) {
       return null;
     }
@@ -256,8 +256,8 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  XData? _getMultiOptCriterionXData(String criterionName) {
-    FilterCriterion? criterion = _allCriteriaMap[criterionName];
+  XData? _getMultiOptCriterionXData(String criterionNameX) {
+    FilterCriterion? criterion = _allCriteriaMap[criterionNameX];
     if (criterion == null) {
       return null;
     }
@@ -272,7 +272,7 @@ class FilterModelStructure {
 
   void _updateCriteriaTempValues(Map<String, dynamic> criterionValues) {
     __addCriteriaIfNeed(
-      criterionNames: criterionValues.keys.toList(),
+      criterionNameXs: criterionValues.keys.toList(),
     );
     //
     final candidateUpdateValues = {...criterionValues};
@@ -288,8 +288,8 @@ class FilterModelStructure {
       criterion._markTempDirty = false;
     }
     //
-    for (String criterionName in candidateUpdateValues.keys) {
-      FilterCriterion? criterion = _allCriteriaMap[criterionName];
+    for (String criterionNameX in candidateUpdateValues.keys) {
+      FilterCriterion? criterion = _allCriteriaMap[criterionNameX];
       if (criterion != null) {
         criterion._markTempDirty = true;
       }
@@ -316,18 +316,18 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __addCriteriaIfNeed({required List<String> criterionNames}) {
-    for (String criterionName in criterionNames) {
-      FilterCriterion? criterion = _allCriteriaMap[criterionName];
+  void __addCriteriaIfNeed({required List<String> criterionNameXs}) {
+    for (String criterionNameX in criterionNameXs) {
+      FilterCriterion? criterion = _allCriteriaMap[criterionNameX];
       if (criterion == null) {
         print("""\n
             ****************************************************************************************************
-            *** WARNING ***: You should declare criterion '$criterionName' explicitly in ${getClassName(filterModel)}.
+            *** WARNING ***: You should declare criterion '$criterionNameX' explicitly in ${getClassName(filterModel)}.
             ****************************************************************************************************
             """);
         //
         _createAndAddNewSimpleCriterion(
-          criterionName: criterionName,
+          criterionNameX: criterionNameX,
           markTempDirty: false,
         );
       }
@@ -338,14 +338,14 @@ class FilterModelStructure {
   // ***************************************************************************
 
   void _createAndAddNewSimpleCriterion({
-    required String criterionName,
+    required String criterionNameX,
     required bool markTempDirty,
   }) {
-    if (_allCriteriaMap.containsKey(criterionName)) {
+    if (_allCriteriaMap.containsKey(criterionNameX)) {
       return;
     }
     SimpleFilterCriterion? newSimpleCriterion = SimpleFilterCriterion(
-      criterionName: criterionName,
+      criterionNameX: criterionNameX,
     );
     __initSimpleCriterion(
       newSimpleCriterion: newSimpleCriterion,
@@ -359,7 +359,7 @@ class FilterModelStructure {
   }) {
     newSimpleCriterion._structure = this;
     newSimpleCriterion._markTempDirty = markTempDirty;
-    _allCriteriaMap[newSimpleCriterion.criterionName] = newSimpleCriterion;
+    _allCriteriaMap[newSimpleCriterion.criterionNameX] = newSimpleCriterion;
     _simpleCriteria.add(newSimpleCriterion);
   }
 
@@ -372,7 +372,7 @@ class FilterModelStructure {
   }) {
     newCalculatedCriterion._structure = this;
     newCalculatedCriterion._markTempDirty = markTempDirty;
-    _allCriteriaMap[newCalculatedCriterion.criterionName] =
+    _allCriteriaMap[newCalculatedCriterion.criterionNameX] =
         newCalculatedCriterion;
     _calculatedCriteria.add(newCalculatedCriterion);
   }
@@ -381,19 +381,19 @@ class FilterModelStructure {
   // ***************************************************************************
 
   void _setTempMultiOptCriterionXData({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
     required XData? multiOptXData,
   }) {
-    FilterCriterion? criterion = _allCriteriaMap[multiOptCriterionName];
+    FilterCriterion? criterion = _allCriteriaMap[multiOptCriterionNameX];
     if (criterion == null) {
-      throw AppError(errorMessage: 'No Criterion "$multiOptCriterionName"');
+      throw AppError(errorMessage: 'No Criterion "$multiOptCriterionNameX"');
     }
     if (criterion is MultiOptFilterCriterion) {
       criterion._tempCurrentXData = multiOptXData;
     } else {
       throw AppError(
           errorMessage:
-              'Invalid Criterion "$multiOptCriterionName", it must be $MultiOptFilterCriterion');
+              'Invalid Criterion "$multiOptCriterionNameX", it must be $MultiOptFilterCriterion');
     }
   }
 
@@ -401,18 +401,18 @@ class FilterModelStructure {
   // ***************************************************************************
 
   void _setTempSimpleCriterionValue({
-    required String criterionName,
+    required String criterionNameX,
     required Object? value,
   }) {
-    FilterCriterion? criterion = _allCriteriaMap[criterionName];
+    FilterCriterion? criterion = _allCriteriaMap[criterionNameX];
     if (criterion == null) {
       throw AppError(
-        errorMessage: 'No criterionName "$criterionName"',
+        errorMessage: 'No criterionNameX "$criterionNameX"',
         errorDetails: null,
       );
     } else if (criterion is! SimpleFilterCriterion) {
       throw AppError(
-        errorMessage: '"$criterionName" is not $SimpleFilterCriterion',
+        errorMessage: '"$criterionNameX" is not $SimpleFilterCriterion',
         errorDetails: null,
       );
     }
@@ -457,10 +457,10 @@ class FilterModelStructure {
   }
 
   int _debugGetMultiOptCriterionLoadCount({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
   }) {
     MultiOptFilterCriterion? criterion =
-        _findMultiOptFilterCriterion(multiOptCriterionName);
+        _findMultiOptFilterCriterion(multiOptCriterionNameX);
     return criterion?._loadCount ?? 0;
   }
 }

@@ -5,7 +5,7 @@ abstract class FilterCriterion<V> {
 
   //
 
-  final String criterionName;
+  final String criterionNameX;
 
   // IMPORTANT: Do not change type (dynamic).
   dynamic _candidateUpdateValue;
@@ -43,7 +43,7 @@ abstract class FilterCriterion<V> {
 
   Type get dataType => V;
 
-  FilterCriterion({required this.criterionName});
+  FilterCriterion({required this.criterionNameX});
 
   bool isDirty() {
     return !ComparisonUtils.compareDynamicAndDynamic(

@@ -1,5 +1,5 @@
 class DuplicateFilterCriterionError {
-  final String criterionName;
+  final String criterionNameX;
 
-  DuplicateFilterCriterionError({required this.criterionName});
+  DuplicateFilterCriterionError({required this.criterionNameX});
 }

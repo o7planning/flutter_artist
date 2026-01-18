@@ -5,7 +5,7 @@ part of '../core.dart';
 ///
 class MultiOptSsFilterCriterion<V> extends MultiOptFilterCriterion<V> {
   MultiOptSsFilterCriterion({
-    required super.criterionName,
+    required super.criterionNameX,
     super.children = const [],
   }) : super._(selectionType: SelectionType.single);
 

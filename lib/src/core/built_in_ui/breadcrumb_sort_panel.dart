@@ -104,15 +104,15 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
       content: DragTarget<SortCriterion>(
         hitTestBehavior: HitTestBehavior.deferToChild,
         onWillAcceptWithDetails: (DragTargetDetails<SortCriterion> details) {
-          if (details.data.criterionName == criterion.criterionName) {
+          if (details.data.criterionNameX == criterion.criterionNameX) {
             return false;
           }
           return true;
         },
         onAcceptWithDetails: (DragTargetDetails<SortCriterion> details) {
           sortModel.moveCriterion(
-            movingCriterionName: details.data.criterionName,
-            destCriterionName: criterion.criterionName,
+            movingCriterionName: details.data.criterionNameX,
+            destCriterionName: criterion.criterionNameX,
           );
         },
         builder: (

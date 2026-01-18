@@ -23,10 +23,10 @@ abstract class SortModelBuilder<ITEM extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
-  String _getText({required String criterionName}) {
-    SortCriterionDef? criterion = _structure._sortCriteriaMap[criterionName];
+  String _getText({required String criterionNameX}) {
+    SortCriterionDef? criterion = _structure._sortCriteriaMap[criterionNameX];
     if (criterion == null) {
-      return criterionName;
+      return criterionNameX;
     }
     String? translationKey = criterion.translationKey;
     if (translationKey == null) {
@@ -43,7 +43,7 @@ abstract class SortModelBuilder<ITEM extends Object> {
   ///
   dynamic getCriterionValueForClientSideSorting({
     required ITEM item,
-    required String criterionName,
+    required String criterionNameX,
   });
 
   String? getTranslationText({required String translationKey});

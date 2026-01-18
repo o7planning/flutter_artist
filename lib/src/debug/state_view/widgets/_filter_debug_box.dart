@@ -83,7 +83,7 @@ class FilterDebugBox extends BaseDebugBox {
       if (options.showFilterCriteria && optCriteria.isNotEmpty)
         ...optCriteria.map(
           (optCriterion) => IconLabelText(
-            label: "Load Count (${optCriterion.criterionName}): ",
+            label: "Load Count (${optCriterion.criterionNameX}): ",
             text: optCriterion.loadCount.toString(),
             labelStyle: labelStyle0,
             textStyle: textStyle0,

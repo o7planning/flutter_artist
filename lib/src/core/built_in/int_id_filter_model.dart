@@ -14,7 +14,7 @@ class IntIdFilterModel
   FilterModelStructure registerCriteriaStructure() {
     return FilterModelStructure(
       simpleCriteria: [
-        SimpleFilterCriterion<int>(criterionName: "id"),
+        SimpleFilterCriterion<int>(criterionNameX: "id"),
       ],
       multiOptCriteria: [],
     );
@@ -22,7 +22,7 @@ class IntIdFilterModel
 
   @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required Object? parentMultiOptCriterionValue,
     required IntIdFilterInput? filterInput,
@@ -32,7 +32,7 @@ class IntIdFilterModel
 
   @override
   OptValueWrap? getUpdatedValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required IntIdFilterInput filterInput,
@@ -52,7 +52,7 @@ class IntIdFilterModel
 
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,

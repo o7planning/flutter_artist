@@ -22,7 +22,7 @@ abstract class MultiOptFilterCriterion<V> extends FilterCriterion<V> {
   List<MultiOptFilterCriterion> get children => List.unmodifiable(_children);
 
   MultiOptFilterCriterion._({
-    required super.criterionName,
+    required super.criterionNameX,
     required List<MultiOptFilterCriterion> children,
     required this.selectionType,
   }) : _children = children;
@@ -32,7 +32,7 @@ abstract class MultiOptFilterCriterion<V> extends FilterCriterion<V> {
   }) {
     if (!_valueUpdated && _markTempDirty) {
       final dynamic oldValue = _tempCurrentValue;
-      final dynamic newValue = updateValues[criterionName];
+      final dynamic newValue = updateValues[criterionNameX];
       //
       _candidateUpdateValue = newValue;
       _valueUpdated = true;
@@ -57,7 +57,7 @@ abstract class MultiOptFilterCriterion<V> extends FilterCriterion<V> {
       if (_tempCurrentXData == null || newValue == null || !isSame) {
         for (MultiOptFilterCriterion childItem in children) {
           childItem._tempCurrentXData = null;
-          updateValues[childItem.criterionName] = null;
+          updateValues[childItem.criterionNameX] = null;
           childItem._markTempDirty = true;
         }
       }
@@ -72,7 +72,7 @@ abstract class MultiOptFilterCriterion<V> extends FilterCriterion<V> {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $criterionName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
+        "${("- - - " * indentFactor)} $criterionNameX >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
     for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }

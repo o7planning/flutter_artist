@@ -84,11 +84,11 @@ abstract class FilterModel<
   ///     multiOptCriteria: [
   ///       // Multi Options Single Selection Criterion:
   ///       MultiOptSsCriterion(
-  ///         criterionName: "company",
+  ///         criterionNameX: "company",
   ///         children: [
   ///           // Multi Options Multi Selections Criterion:
   ///           MultiOptMsCriterion(
-  ///              criterionName: "department",
+  ///              criterionNameX: "department",
   ///           ),
   ///         ],
   ///       ),
@@ -108,7 +108,7 @@ abstract class FilterModel<
   ///
   @_AbstractMethodAnnotation()
   Future<XData?> callApiLoadMultiOptCriterionXData({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required FILTER_INPUT? filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -120,7 +120,7 @@ abstract class FilterModel<
 
   @_AbstractMethodAnnotation()
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
@@ -142,13 +142,13 @@ abstract class FilterModel<
   /// ```dart
   /// @override
   /// ValueWrap? getUpdatedValueForMultiOptCriterion({
-  ///     required String multiOptCriterionName,
+  ///     required String multiOptCriterionNameX,
   ///     required SelectionType selectionType,
   ///     required ExampleFilterInput filterInput,
   ///     required XData multiOptCriterionXData,
   ///     required Object? parentMultiOptCriterionValue,
   /// }) {
-  ///    if(multiOptCriterionName == "company") {
+  ///    if(multiOptCriterionNameX == "company") {
   ///       int inputCompanyId = filterInput.filterInput;
   ///       CompanyInfo? inputCompany = materPropData?.getItemById(inputCompanyId);
   ///       return ValueWrap.single(inputCompany)
@@ -160,7 +160,7 @@ abstract class FilterModel<
   // OLD: getMultiOptCriterionValueFromFilterInput
   @_AbstractMethodAnnotation()
   OptValueWrap? getUpdatedValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required FILTER_INPUT filterInput,
@@ -295,7 +295,7 @@ abstract class FilterModel<
       _filterCriteriaStructure.filterModel = this;
     } on DuplicateFilterCriterionError catch (e) {
       String message =
-          "Duplicate criterion '${e.criterionName}' in ${getClassName(this)}";
+          "Duplicate criterion '${e.criterionNameX}' in ${getClassName(this)}";
       throw _createFatalAppError(message);
     } catch (e, stackTrace) {
       print(stackTrace);
@@ -327,24 +327,24 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  dynamic getCriterionValue(String criterionName) {
+  dynamic getCriterionValue(String criterionNameX) {
     return _filterCriteriaStructure._getCurrentCriterionValue(
-      criterionName: criterionName,
+      criterionNameX: criterionNameX,
     );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  XData? getMultiOptCriterionXData(String multiOptCriterionName) {
+  XData? getMultiOptCriterionXData(String multiOptCriterionNameX) {
     return _filterCriteriaStructure._getMultiOptCriterionXData(
-      multiOptCriterionName,
+      multiOptCriterionNameX,
     );
   }
 
-  dynamic getMultiOptCriterionData(String multiOptCriterionName) {
+  dynamic getMultiOptCriterionData(String multiOptCriterionNameX) {
     XData? multiOptCriterionXData = getMultiOptCriterionXData(
-      multiOptCriterionName,
+      multiOptCriterionNameX,
     );
     //
     dynamic data = multiOptCriterionXData?.data;
@@ -482,19 +482,19 @@ abstract class FilterModel<
                   filterInput: filterInput,
                 ) ??
                 {};
-        for (String criterionName in updatedSimpleCriterionValues.keys) {
-          // Check and throw error if 'criterionName' is not a SimpleFilterCriterion:
+        for (String criterionNameX in updatedSimpleCriterionValues.keys) {
+          // Check and throw error if 'criterionNameX' is not a SimpleFilterCriterion:
           __throwErrorIfNotASimpleCriterionName(
-            criterionName: criterionName,
+            criterionNameX: criterionNameX,
             filterErrorMethod:
                 FilterErrorMethod.getUpdatedValuesForSimpleCriteria,
           );
           SimpleValueWrap? valueWrap =
-              updatedSimpleCriterionValues[criterionName];
+              updatedSimpleCriterionValues[criterionNameX];
           // SAME-AS: #0012 (formModel)
           if (valueWrap != null) {
             _filterCriteriaStructure._setTempSimpleCriterionValue(
-              criterionName: criterionName,
+              criterionNameX: criterionNameX,
               value: valueWrap.value,
             );
           }
@@ -537,17 +537,17 @@ abstract class FilterModel<
           final Map<String, dynamic> defaultSimpleCriterionValues =
               specifyDefaultValuesForSimpleCriteria() ?? {};
 
-          for (String criterionName in defaultSimpleCriterionValues.keys) {
-            // Check and throw error if 'criterionName' is not a SimpleFilterCriterion:
+          for (String criterionNameX in defaultSimpleCriterionValues.keys) {
+            // Check and throw error if 'criterionNameX' is not a SimpleFilterCriterion:
             __throwErrorIfNotASimpleCriterionName(
-              criterionName: criterionName,
+              criterionNameX: criterionNameX,
               filterErrorMethod:
                   FilterErrorMethod.specifyDefaultValuesForSimpleCriteria,
             );
             //
-            dynamic value = defaultSimpleCriterionValues[criterionName];
+            dynamic value = defaultSimpleCriterionValues[criterionNameX];
             _filterCriteriaStructure._setTempSimpleCriterionValue(
-              criterionName: criterionName,
+              criterionNameX: criterionNameX,
               value: value,
             );
           }
@@ -664,7 +664,7 @@ abstract class FilterModel<
     required Map<String, dynamic> formKeyInstantValues,
     required FilterActivityType activityType,
   }) async {
-    final String multiOptCriterionName = multiOptCriterion.criterionName;
+    final String multiOptCriterionNameX = multiOptCriterion.criterionNameX;
     final SelectionType selectionType = multiOptCriterion.selectionType;
 
     masterFlowItem._addLineFlowItem(
@@ -686,19 +686,19 @@ abstract class FilterModel<
     // Get current OptCriterion data:
     XData? tempMultiOptCriterionXData =
         _filterCriteriaStructure._getTempMultiOptCriterionXData(
-      multiOptCriterionName,
+      multiOptCriterionNameX,
     );
     final dynamic tempCurrentMultiOptValue = _filterCriteriaStructure
-        ._getTempCurrentCriterionValue(criterionName: multiOptCriterionName);
+        ._getTempCurrentCriterionValue(criterionNameX: multiOptCriterionNameX);
 
     //
     dynamic newSelectedValue =
         _filterCriteriaStructure._getTempCurrentCriterionValue(
-      criterionName: multiOptCriterionName,
+      criterionNameX: multiOptCriterionNameX,
     );
     if (activityType == FilterActivityType.updateFromFilterPanel) {
-      if (formKeyInstantValues.containsKey(multiOptCriterionName)) {
-        newSelectedValue = formKeyInstantValues[multiOptCriterionName];
+      if (formKeyInstantValues.containsKey(multiOptCriterionNameX)) {
+        newSelectedValue = formKeyInstantValues[multiOptCriterionNameX];
       }
     }
     //
@@ -733,14 +733,14 @@ abstract class FilterModel<
     if (multiOptCriterionParent != null) {
       XData? tempMultiOptXDataParent =
           _filterCriteriaStructure._getTempMultiOptCriterionXData(
-        multiOptCriterionParent.criterionName,
+        multiOptCriterionParent.criterionNameX,
       );
       //
       if (tempMultiOptXDataParent != null) {
         // Item or Item List (Multi Selection):
         Object? parentOptCriterionValueOLD =
             _filterCriteriaStructure._getCurrentCriterionValue(
-          criterionName: multiOptCriterionParent.criterionName,
+          criterionNameX: multiOptCriterionParent.criterionNameX,
         );
         // Parent Value change?
         bool isSame = tempMultiOptXDataParent.isSameItemOrItemList(
@@ -757,14 +757,14 @@ abstract class FilterModel<
     //
     if (tempMultiOptCriterionXData == null) {
       _filterCriteriaStructure._setTempMultiOptCriterionXData(
-        multiOptCriterionName: multiOptCriterionName,
+        multiOptCriterionNameX: multiOptCriterionNameX,
         multiOptXData: null,
       );
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
       _filterCriteriaStructure._updateCriteriaTempValues({
-        multiOptCriterionName: null,
+        multiOptCriterionNameX: null,
       });
     }
 
@@ -780,7 +780,7 @@ abstract class FilterModel<
           parameters: {
             "filterInput": filterInput,
             "parentMultiOptCriterionValue": parentMultiOptCriterionValue,
-            "multiOptCriterionName": multiOptCriterionName,
+            "multiOptCriterionNameX": multiOptCriterionNameX,
             "selectionType": selectionType,
           },
           lineFlowType: LineFlowType.debug,
@@ -793,13 +793,13 @@ abstract class FilterModel<
         tempMultiOptCriterionXData = await callApiLoadMultiOptCriterionXData(
           filterInput: filterInput,
           parentMultiOptCriterionValue: parentMultiOptCriterionValue,
-          multiOptCriterionName: multiOptCriterionName,
+          multiOptCriterionNameX: multiOptCriterionNameX,
           selectionType: selectionType,
         );
       } catch (e, stackTrace) {
         // TODO: Test Case??
         throw FilterTempError(
-          propName: multiOptCriterionName,
+          propName: multiOptCriterionNameX,
           filterErrorMethod:
               FilterErrorMethod.callApiLoadMultiOptCriterionXData,
           error: e, // May be AppError, ApiError or others.
@@ -830,7 +830,7 @@ abstract class FilterModel<
           filterInput: filterInput,
           parentMultiOptCriterionValue: parentMultiOptCriterionValue,
           multiOptCriterionXData: tempMultiOptCriterionXData,
-          multiOptCriterionName: multiOptCriterionName,
+          multiOptCriterionNameX: multiOptCriterionNameX,
           selectionType: selectionType,
         );
       } else {
@@ -841,7 +841,7 @@ abstract class FilterModel<
             "Calling ${debugObjHtml(this)}.__specifyDefaultValueForMultiOptCriterion():",
             parameters: {
               "parentMultiOptCriterionValue": parentMultiOptCriterionValue,
-              "multiOptCriterionName": multiOptCriterionName,
+              "multiOptCriterionNameX": multiOptCriterionNameX,
               "selectionType": selectionType,
             },
             lineFlowType: LineFlowType.nonControllableCalling,
@@ -850,7 +850,7 @@ abstract class FilterModel<
           inputValueWrap = __specifyDefaultValueForMultiOptCriterion(
             parentMultiOptCriterionValue: parentMultiOptCriterionValue,
             multiOptCriterionXData: tempMultiOptCriterionXData,
-            multiOptCriterionName: multiOptCriterionName,
+            multiOptCriterionNameX: multiOptCriterionNameX,
             selectionType: selectionType,
           );
           masterFlowItem._addLineFlowItem(
@@ -869,7 +869,7 @@ abstract class FilterModel<
       //
       final dynamic tempCurrentValue =
           _filterCriteriaStructure._getTempCurrentCriterionValue(
-        criterionName: multiOptCriterionName,
+        criterionNameX: multiOptCriterionNameX,
       );
       //
       if (tempCurrentValue != null) {
@@ -904,13 +904,13 @@ abstract class FilterModel<
       shortDesc:
       "Calling ${debugObjHtml(this)}._setTempMultiOptCriterionXData():",
       parameters: {
-        "multiOptCriterionName": multiOptCriterionName,
+        "multiOptCriterionNameX": multiOptCriterionNameX,
         "multiOptXData": tempMultiOptCriterionXData,
       },
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     _filterCriteriaStructure._setTempMultiOptCriterionXData(
-      multiOptCriterionName: multiOptCriterionName,
+      multiOptCriterionNameX: multiOptCriterionNameX,
       multiOptXData: tempMultiOptCriterionXData,
     );
     //
@@ -923,7 +923,7 @@ abstract class FilterModel<
         //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
         _filterCriteriaStructure._updateCriteriaTempValues({
-          multiOptCriterionName: candidateSelectedItem,
+          multiOptCriterionNameX: candidateSelectedItem,
         });
       } else {
         // IMPORTANT:
@@ -931,7 +931,7 @@ abstract class FilterModel<
         //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
         _filterCriteriaStructure._updateCriteriaTempValues({
-          multiOptCriterionName: candidateSelectedItems,
+          multiOptCriterionNameX: candidateSelectedItems,
         });
       }
     } else {
@@ -939,19 +939,19 @@ abstract class FilterModel<
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
       _filterCriteriaStructure._updateCriteriaTempValues({
-        multiOptCriterionName: null,
+        multiOptCriterionNameX: null,
       });
     }
     //
     Object? tempSelectedCriterionValue =
         _filterCriteriaStructure._getTempCurrentCriterionValue(
-      criterionName: multiOptCriterionName,
+      criterionNameX: multiOptCriterionNameX,
     );
     masterFlowItem._addLineFlowItem(
       codeId: "#82800",
       shortDesc: "Debug:",
       parameters: {
-        "criterionName": multiOptCriterionName,
+        "criterionNameX": multiOptCriterionNameX,
         "tempSelectedCriterionValue": tempSelectedCriterionValue,
       },
       lineFlowType: LineFlowType.debug,
@@ -978,15 +978,15 @@ abstract class FilterModel<
 
   void __createNullValueWrapAppError({
     required String methodName,
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
   }) {
     MultiOptFilterCriterion? multiOptCriterion = _filterCriteriaStructure
-        ._getMultiOptFilterCriterion(multiOptCriterionName);
+        ._getMultiOptFilterCriterion(multiOptCriterionNameX);
     if (multiOptCriterion == null) {
-      throw "The '$multiOptCriterionName' is not $MultiOptFilterCriterion";
+      throw "The '$multiOptCriterionNameX' is not $MultiOptFilterCriterion";
     }
     String message =
-        "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptCriterionName '$multiOptCriterionName'. ";
+        "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptCriterionNameX '$multiOptCriterionNameX'. ";
     if (multiOptCriterion.selectionType == SelectionType.single) {
       message += "$OptValueWrap.single(null) or $OptValueWrap.single(value). ";
     } else {
@@ -1002,13 +1002,13 @@ abstract class FilterModel<
   // ***************************************************************************
 
   void __throwErrorIfNotASimpleCriterionName({
-    required String criterionName,
+    required String criterionNameX,
     required FilterErrorMethod filterErrorMethod,
   }) {
-    if (_filterCriteriaStructure._isMultiOptFilterCriterion(criterionName)) {
+    if (_filterCriteriaStructure._isMultiOptFilterCriterion(criterionNameX)) {
       throw DevError(
         errorMessage:
-            '$criterionName is not a ${getTypeNameWithoutGenerics(SimpleFilterCriterion)}',
+            '$criterionNameX is not a ${getTypeNameWithoutGenerics(SimpleFilterCriterion)}',
         errorDetails: [
           "See ${getClassNameWithoutGenerics(this)}.${getClassNameWithoutGenerics(filterErrorMethod)}() method."
         ],
@@ -1020,7 +1020,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   OptValueWrap? __getUpdatedValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required FILTER_INPUT filterInput,
@@ -1030,13 +1030,13 @@ abstract class FilterModel<
       filterInput: filterInput,
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionXData: multiOptCriterionXData,
-      multiOptCriterionName: multiOptCriterionName,
+      multiOptCriterionNameX: multiOptCriterionNameX,
       selectionType: selectionType,
     );
     if (valueWrap == null) {
       __createNullValueWrapAppError(
         methodName: "getUpdatedValueForMultiOptCriterion",
-        multiOptCriterionName: multiOptCriterionName,
+        multiOptCriterionNameX: multiOptCriterionNameX,
       );
       return null;
     }
@@ -1051,7 +1051,7 @@ abstract class FilterModel<
   }
 
   OptValueWrap? __specifyDefaultValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
@@ -1059,13 +1059,13 @@ abstract class FilterModel<
     OptValueWrap? valueWrap = specifyDefaultValueForMultiOptCriterion(
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionXData: multiOptCriterionXData,
-      multiOptCriterionName: multiOptCriterionName,
+      multiOptCriterionNameX: multiOptCriterionNameX,
       selectionType: selectionType,
     );
     if (valueWrap == null) {
       __createNullValueWrapAppError(
         methodName: "specifyDefaultValueForMultiOptCriterion",
-        multiOptCriterionName: multiOptCriterionName,
+        multiOptCriterionNameX: multiOptCriterionNameX,
       );
     }
     List? value = valueWrap?.values ?? [];
@@ -1273,17 +1273,17 @@ abstract class FilterModel<
 
   // SAME-AS: #0009 (form)
   MultiOptFilterCriterion? findMultiOptFilterCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
   }) {
     return _filterCriteriaStructure._findMultiOptFilterCriterion(
-      multiOptCriterionName,
+      multiOptCriterionNameX,
     );
   }
 
   // SAME-AS: #0008 (formModel.debugGetMultiOptPropLoadCount())
-  int debugGetMultiOptCriteriaLoadCount(String multiOptCriterionName) {
+  int debugGetMultiOptCriteriaLoadCount(String multiOptCriterionNameX) {
     return _filterCriteriaStructure._debugGetMultiOptCriterionLoadCount(
-      multiOptCriterionName: multiOptCriterionName,
+      multiOptCriterionNameX: multiOptCriterionNameX,
     );
   }
 

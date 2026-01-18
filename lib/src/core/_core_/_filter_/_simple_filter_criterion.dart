@@ -2,7 +2,7 @@ part of '../core.dart';
 
 class SimpleFilterCriterion<V> extends FilterCriterion<V> {
   SimpleFilterCriterion({
-    required super.criterionName,
+    required super.criterionNameX,
   });
 
   @override
@@ -16,7 +16,7 @@ class SimpleFilterCriterion<V> extends FilterCriterion<V> {
   }) {
     if (!_valueUpdated && _markTempDirty) {
       // final dynamic oldValue = _tempCurrentValue;
-      final dynamic newValue = updateValues[criterionName];
+      final dynamic newValue = updateValues[criterionNameX];
       //
       _candidateUpdateValue = newValue;
       _valueUpdated = true;

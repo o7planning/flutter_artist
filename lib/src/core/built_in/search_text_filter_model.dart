@@ -14,7 +14,7 @@ class SearchTextFilterModel
   FilterModelStructure registerCriteriaStructure() {
     return FilterModelStructure(
       simpleCriteria: [
-        SimpleFilterCriterion<String>(criterionName: "searchText"),
+        SimpleFilterCriterion<String>(criterionNameX: "searchText"),
       ],
       multiOptCriteria: [],
     );
@@ -22,7 +22,7 @@ class SearchTextFilterModel
 
   @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required SearchTextFilterInput? filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -32,7 +32,7 @@ class SearchTextFilterModel
 
   @override
   OptValueWrap? getUpdatedValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required SearchTextFilterInput filterInput,
@@ -52,7 +52,7 @@ class SearchTextFilterModel
 
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,

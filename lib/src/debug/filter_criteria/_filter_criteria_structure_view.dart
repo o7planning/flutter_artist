@@ -164,17 +164,17 @@ class FilterCriteriaStructureViewState
             title = getClassName(data);
             prefixIconData = FaIconConstants.filterModelIconData;
           } else if (data is SimpleFilterCriterion) {
-            title = data.criterionName;
+            title = data.criterionNameX;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionName}";
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionNameX}";
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
             isMultiSelection = false;
           } else if (data is MultiOptFilterCriterion) {
-            title = data.criterionName;
+            title = data.criterionNameX;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionName}";
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionNameX}";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
@@ -245,7 +245,7 @@ class FilterCriteriaStructureViewState
   void _addMultiOptCriterionCascade(
       TreeNode currentNode, MultiOptFilterCriterion multiOptCriterion) {
     TreeNode childNode = TreeNode(
-      key: "MultiOptCriterion-${multiOptCriterion.criterionName}",
+      key: "MultiOptCriterion-${multiOptCriterion.criterionNameX}",
       data: multiOptCriterion,
     );
     //
@@ -259,7 +259,7 @@ class FilterCriteriaStructureViewState
   void _addSimpleCriterion(
       TreeNode currentNode, SimpleFilterCriterion simpleCriterion) {
     TreeNode childNode = TreeNode(
-      key: "SimpleCriterion-${simpleCriterion.criterionName}",
+      key: "SimpleCriterion-${simpleCriterion.criterionNameX}",
       data: simpleCriterion,
     );
     // if (simpleCriterion == widget.selectedCriterion) {

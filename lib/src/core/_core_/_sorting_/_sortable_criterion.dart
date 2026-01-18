@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class SortableCriterion extends Equatable {
-  final String criterionName;
+  final String criterionNameX;
 
   SortDirection _direction;
 
@@ -9,7 +9,7 @@ class SortableCriterion extends Equatable {
 
   SortableCriterion._({
     required SortDirection direction,
-    required this.criterionName,
+    required this.criterionNameX,
   }) : _direction = direction;
 
   bool isAscending() {
@@ -21,14 +21,14 @@ class SortableCriterion extends Equatable {
   }
 
   String toCriterionString() {
-    return "${_direction.sign}$criterionName";
+    return "${_direction.sign}$criterionNameX";
   }
 
   @override
-  List<Object?> get props => [criterionName, _direction];
+  List<Object?> get props => [criterionNameX, _direction];
 
   @override
   String toString() {
-    return "${_direction.sign}$criterionName";
+    return "${_direction.sign}$criterionNameX";
   }
 }

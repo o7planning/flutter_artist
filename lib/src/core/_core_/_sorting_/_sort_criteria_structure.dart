@@ -8,6 +8,6 @@ class SortCriteriaStructure {
   SortCriteriaStructure({
     required List<SortCriterionDef> sortCriteriaDef,
   }) {
-    _sortCriteriaMap = {for (var e in sortCriteriaDef) e.criterionName: e};
+    _sortCriteriaMap = {for (var e in sortCriteriaDef) e.criterionNameX: e};
   }
 }
