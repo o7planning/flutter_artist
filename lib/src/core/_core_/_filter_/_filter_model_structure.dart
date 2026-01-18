@@ -1,6 +1,9 @@
 part of '../core.dart';
 
 class FilterModelStructure {
+  final ConditionConnector connector;
+  final List<ConditionDef> conditions;
+  //
   final Map<String, FilterCriterionModel> _allCriteriaMap = {};
   final List<MultiOptFilterCriterionModel> _rootOptCriteria;
   final List<SimpleFilterCriterionModel> _simpleCriteria = [];
@@ -13,6 +16,9 @@ class FilterModelStructure {
     required List<SimpleFilterCriterionModel> simpleCriteria,
     required List<MultiOptFilterCriterionModel> multiOptCriteria,
     List<CalculatedFilterCriterionModel> calculatedCriteria = const [],
+    //
+    required this.connector,
+    required this.conditions,
   }) : _rootOptCriteria = List.unmodifiable(multiOptCriteria) {
     for (MultiOptFilterCriterionModel rootOptCriterion in multiOptCriteria) {
       __standardizeCascade(rootOptCriterion, null);
@@ -38,6 +44,34 @@ class FilterModelStructure {
         newCalculatedCriterion: cc,
         markTempDirty: false,
       );
+    }
+    //
+    for (ConditionDef conditionDef in conditions) {
+      __initConditionCascade(
+        conditionDef: conditionDef,
+        parentGroup: null,
+      );
+    }
+  }
+
+  void __initConditionCascade({
+    required ConditionDef conditionDef,
+    required _ConditionGroupDef? parentGroup,
+  }) {
+    if (conditionDef is _ConditionDef) {
+      // LAZY Initial.
+      conditionDef.__group = parentGroup;
+    } else if (conditionDef is _ConditionGroupDef) {
+      // LAZY Initial.
+      conditionDef.__group = parentGroup;
+      for (ConditionDef childConditionDef in conditionDef.conditions) {
+        __initConditionCascade(
+          conditionDef: childConditionDef,
+          parentGroup: conditionDef,
+        );
+      }
+    } else {
+      throw "Never Run";
     }
   }
 

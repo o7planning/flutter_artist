@@ -20,11 +20,11 @@ enum CriterionOperator {
   const CriterionOperator(this.text);
 }
 
-enum FilterConnector {
+enum ConditionConnector {
   and("AND"),
   or("OR");
 
   final String text;
 
-  const FilterConnector(this.text);
+  const ConditionConnector(this.text);
 }

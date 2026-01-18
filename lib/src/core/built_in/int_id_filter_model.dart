@@ -1,4 +1,5 @@
 import '../_core_/core.dart';
+import '../enums/_filter_criterion_operator.dart';
 import '../enums/_selection_type.dart';
 import 'int_id_filter_criteria.dart';
 import 'int_id_filter_input.dart';
@@ -17,6 +18,8 @@ class IntIdFilterModel
         SimpleFilterCriterionModel<int>(criterionNameX: "id"),
       ],
       multiOptCriteria: [],
+      connector: ConditionConnector.and,
+      conditions: [],
     );
   }
 

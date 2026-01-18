@@ -16,6 +16,8 @@ class _DefaultFilterModel
     return FilterModelStructure(
       simpleCriteria: [],
       multiOptCriteria: [],
+      connector: ConditionConnector.and,
+      conditions: [],
     );
   }
 
