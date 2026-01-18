@@ -1,8 +1,32 @@
+class DuplicateCriterionDefError {
+  final String criterionName;
+
+  DuplicateCriterionDefError({required this.criterionName});
+}
+
+
 class DuplicateFilterCriterionError {
   final String criterionNameX;
 
   DuplicateFilterCriterionError({required this.criterionNameX});
 }
+
+
+class DuplicateFilterCriterionXError {
+  final String criterionNameX;
+  final String? groupName;
+
+  DuplicateFilterCriterionXError({
+    required this.criterionNameX,
+    required this.groupName,
+  });
+
+  @override
+  String toString() {
+    return "Duplicated Criterion Name X: $criterionNameX";
+  }
+}
+
 
 class DuplicateFilterCriteriaGroupError {
   final String groupName;

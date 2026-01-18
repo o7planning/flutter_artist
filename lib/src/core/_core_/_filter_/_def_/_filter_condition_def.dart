@@ -33,6 +33,10 @@ class _ConditionDef implements ConditionDef {
   final CriterionX _criterionX;
   final CriterionOperator operator;
   late final List<CriterionOperator> _supportedOperators;
+  //
+  String get criterionName => _criterionX.criterionName;
+  String get criterionNameX => _criterionX.criterionNameX;
+  String get suffix => _criterionX.suffix!;
 
   late final _ConditionGroupDef? __group;
 

@@ -2,7 +2,17 @@ part of '../core.dart';
 
 class FilterModelStructure {
   final ConditionConnector connector;
-  final List<ConditionDef> conditions;
+  final List<ConditionDef> conditionDefs;
+
+  final Map<String, _ConditionDef> __conditionDefMap = {};
+  final Map<String, _ConditionGroupDef> __conditionGroupDefMap = {};
+  //
+  final List<SimpleCriterionDef> simpleCriterionDefs;
+  final List<MultiOptCriterionDef> multiOptCriterionDefs;
+
+  final Map<String, CriterionDef> __allCriterionDefMap = {};
+  final Map<String, SimpleCriterionDef> __simpleCriterionDefMap = {};
+  final Map<String, MultiOptCriterionDef> __multiOptCriterionDefMap = {};
   //
   final Map<String, FilterCriterionModel> _allCriteriaMap = {};
   final List<MultiOptFilterCriterionModel> _rootOptCriteria;
@@ -13,12 +23,15 @@ class FilterModelStructure {
   DataState _filterDataState = DataState.pending;
 
   FilterModelStructure({
+    required this.simpleCriterionDefs,
+    required this.multiOptCriterionDefs,
+    //
     required List<SimpleFilterCriterionModel> simpleCriteria,
     required List<MultiOptFilterCriterionModel> multiOptCriteria,
     List<CalculatedFilterCriterionModel> calculatedCriteria = const [],
     //
     required this.connector,
-    required this.conditions,
+    required this.conditionDefs,
   }) : _rootOptCriteria = List.unmodifiable(multiOptCriteria) {
     for (MultiOptFilterCriterionModel rootOptCriterion in multiOptCriteria) {
       __standardizeCascade(rootOptCriterion, null);
@@ -46,11 +59,55 @@ class FilterModelStructure {
       );
     }
     //
-    for (ConditionDef conditionDef in conditions) {
+    for (SimpleCriterionDef simpleCriterionDef in simpleCriterionDefs) {
+      __initSimpleCriterionDef(simpleCriterionDef: simpleCriterionDef);
+    }
+    //
+    for (MultiOptCriterionDef multiOptCriterionDef in multiOptCriterionDefs) {
+      __initMultiOptCriterionDefCascade(
+        multiOptCriterionDef: multiOptCriterionDef,
+      );
+    }
+    //
+    for (ConditionDef conditionDef in conditionDefs) {
       __initConditionCascade(
         conditionDef: conditionDef,
         parentGroup: null,
       );
+    }
+  }
+
+  void __initSimpleCriterionDef({
+    required SimpleCriterionDef simpleCriterionDef,
+  }) {
+    if (__allCriterionDefMap
+        .containsKey(simpleCriterionDef.criterionBaseName)) {
+      throw DuplicateCriterionDefError(
+        criterionName: simpleCriterionDef.criterionBaseName,
+      );
+    }
+    __allCriterionDefMap[simpleCriterionDef.criterionBaseName] =
+        simpleCriterionDef;
+    __simpleCriterionDefMap[simpleCriterionDef.criterionBaseName] =
+        simpleCriterionDef;
+  }
+
+  void __initMultiOptCriterionDefCascade({
+    required MultiOptCriterionDef multiOptCriterionDef,
+  }) {
+    if (__allCriterionDefMap
+        .containsKey(multiOptCriterionDef.criterionBaseName)) {
+      throw DuplicateCriterionDefError(
+        criterionName: multiOptCriterionDef.criterionBaseName,
+      );
+    }
+    __allCriterionDefMap[multiOptCriterionDef.criterionBaseName] =
+        multiOptCriterionDef;
+    __multiOptCriterionDefMap[multiOptCriterionDef.criterionBaseName] =
+        multiOptCriterionDef;
+    //
+    for (MultiOptCriterionDef child in multiOptCriterionDef._children) {
+      __initMultiOptCriterionDefCascade(multiOptCriterionDef: child);
     }
   }
 
@@ -61,9 +118,23 @@ class FilterModelStructure {
     if (conditionDef is _ConditionDef) {
       // LAZY Initial.
       conditionDef.__group = parentGroup;
+      if (__conditionDefMap.containsKey(conditionDef.criterionNameX)) {
+        throw DuplicateFilterCriterionXError(
+          criterionNameX: conditionDef.criterionNameX,
+          groupName: parentGroup?.groupName,
+        );
+      }
+      __conditionDefMap[conditionDef.criterionNameX] = conditionDef;
     } else if (conditionDef is _ConditionGroupDef) {
       // LAZY Initial.
       conditionDef.__group = parentGroup;
+      if (__conditionGroupDefMap.containsKey(conditionDef.groupName)) {
+        throw DuplicateFilterCriteriaGroupError(
+          groupName: conditionDef.groupName,
+        );
+      }
+      __conditionGroupDefMap[conditionDef.groupName] = conditionDef;
+      //
       for (ConditionDef childConditionDef in conditionDef.conditions) {
         __initConditionCascade(
           conditionDef: childConditionDef,

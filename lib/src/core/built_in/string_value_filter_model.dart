@@ -14,12 +14,17 @@ class StringValueFilterModel
   @override
   FilterModelStructure registerCriteriaStructure() {
     return FilterModelStructure(
+      simpleCriterionDefs: [
+        SimpleCriterionDef<String>(criterionBaseName: 'string'),
+      ],
+      multiOptCriterionDefs: [],
+      //
       simpleCriteria: [
         SimpleFilterCriterionModel<String>(criterionNameX: "string"),
       ],
       multiOptCriteria: [],
       connector: ConditionConnector.and,
-      conditions: [],
+      conditionDefs: [],
     );
   }
 

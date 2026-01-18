@@ -16,7 +16,7 @@ abstract class CriterionDef<V> {
 }
 
 class SimpleCriterionDef<V> extends CriterionDef<V> {
-  SimpleCriterionDef._({
+  SimpleCriterionDef({
     required super.criterionBaseName,
     super.description,
   }) : super._();
@@ -49,8 +49,8 @@ class MultiOptCriterionDef<V> extends CriterionDef<V> {
 
   factory MultiOptCriterionDef.singleSelection({
     required String criterionBaseName,
-    required String? description,
-    required List<MultiOptCriterionDef> children,
+      String? description,
+      List<MultiOptCriterionDef> children = const [],
   }) {
     return MultiOptCriterionDef._(
       criterionBaseName: criterionBaseName,

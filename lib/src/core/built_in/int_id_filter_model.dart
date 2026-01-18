@@ -14,12 +14,17 @@ class IntIdFilterModel
   @override
   FilterModelStructure registerCriteriaStructure() {
     return FilterModelStructure(
+      simpleCriterionDefs: [
+        SimpleCriterionDef<int>(criterionBaseName: 'id'),
+      ],
+      multiOptCriterionDefs: [],
+      //
       simpleCriteria: [
         SimpleFilterCriterionModel<int>(criterionNameX: "id"),
       ],
       multiOptCriteria: [],
       connector: ConditionConnector.and,
-      conditions: [],
+      conditionDefs: [],
     );
   }
 

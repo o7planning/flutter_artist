@@ -295,7 +295,7 @@ abstract class FilterModel<
     try {
       _filterCriteriaStructure = registerCriteriaStructure();
       _filterCriteriaStructure.filterModel = this;
-    } on DuplicateFilterCriterionError catch (e) {
+    } on DuplicateFilterCriterionXError catch (e) {
       String message =
           "Duplicate criterion '${e.criterionNameX}' in ${getClassName(this)}";
       throw _createFatalAppError(message);

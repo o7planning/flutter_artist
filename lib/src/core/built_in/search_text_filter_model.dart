@@ -14,12 +14,17 @@ class SearchTextFilterModel
   @override
   FilterModelStructure registerCriteriaStructure() {
     return FilterModelStructure(
+      simpleCriterionDefs: [
+        SimpleCriterionDef<String>(criterionBaseName: 'searchText'),
+      ],
+      multiOptCriterionDefs: [],
+      //
       simpleCriteria: [
         SimpleFilterCriterionModel<String>(criterionNameX: "searchText"),
       ],
       multiOptCriteria: [],
       connector: ConditionConnector.and,
-      conditions: [],
+      conditionDefs: [],
     );
   }
 

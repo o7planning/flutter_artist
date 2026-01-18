@@ -14,10 +14,13 @@ class _DefaultFilterModel
   @override
   FilterModelStructure registerCriteriaStructure() {
     return FilterModelStructure(
+      simpleCriterionDefs: [],
+      multiOptCriterionDefs: [],
+      //
       simpleCriteria: [],
       multiOptCriteria: [],
       connector: ConditionConnector.and,
-      conditions: [],
+      conditionDefs: [],
     );
   }
 
