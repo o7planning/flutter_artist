@@ -55,8 +55,7 @@ abstract class FilterModel<
 
   late final FilterModelStructure _filterCriteriaStructure;
 
-  FilterModelStructure get filterCriteriaStructure =>
-      _filterCriteriaStructure;
+  FilterModelStructure get filterCriteriaStructure => _filterCriteriaStructure;
 
   DataState get dataState => _filterCriteriaStructure._filterDataState;
 
@@ -108,6 +107,7 @@ abstract class FilterModel<
   ///
   @_AbstractMethodAnnotation()
   Future<XData?> callApiLoadMultiOptCriterionXData({
+    required String multiOptCriterionName,
     required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required FILTER_INPUT? filterInput,
@@ -120,6 +120,7 @@ abstract class FilterModel<
 
   @_AbstractMethodAnnotation()
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
+    required String multiOptCriterionName,
     required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -160,6 +161,7 @@ abstract class FilterModel<
   // OLD: getMultiOptCriterionValueFromFilterInput
   @_AbstractMethodAnnotation()
   OptValueWrap? getUpdatedValueForMultiOptCriterion({
+    required String multiOptCriterionName,
     required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -776,7 +778,7 @@ abstract class FilterModel<
         masterFlowItem._addLineFlowItem(
           codeId: "#82300",
           shortDesc:
-          "Calling ${debugObjHtml(this)}.callApiLoadMultiOptCriterionXData():",
+              "Calling ${debugObjHtml(this)}.callApiLoadMultiOptCriterionXData():",
           parameters: {
             "filterInput": filterInput,
             "parentMultiOptCriterionValue": parentMultiOptCriterionValue,
@@ -793,6 +795,7 @@ abstract class FilterModel<
         tempMultiOptCriterionXData = await callApiLoadMultiOptCriterionXData(
           filterInput: filterInput,
           parentMultiOptCriterionValue: parentMultiOptCriterionValue,
+          multiOptCriterionName: "@@XXX@@",
           multiOptCriterionNameX: multiOptCriterionNameX,
           selectionType: selectionType,
         );
@@ -830,6 +833,7 @@ abstract class FilterModel<
           filterInput: filterInput,
           parentMultiOptCriterionValue: parentMultiOptCriterionValue,
           multiOptCriterionXData: tempMultiOptCriterionXData,
+          multiOptCriterionName: "@@XXX@@",
           multiOptCriterionNameX: multiOptCriterionNameX,
           selectionType: selectionType,
         );
@@ -838,7 +842,7 @@ abstract class FilterModel<
           masterFlowItem._addLineFlowItem(
             codeId: "#82460",
             shortDesc:
-            "Calling ${debugObjHtml(this)}.__specifyDefaultValueForMultiOptCriterion():",
+                "Calling ${debugObjHtml(this)}.__specifyDefaultValueForMultiOptCriterion():",
             parameters: {
               "parentMultiOptCriterionValue": parentMultiOptCriterionValue,
               "multiOptCriterionNameX": multiOptCriterionNameX,
@@ -848,6 +852,7 @@ abstract class FilterModel<
           );
 
           inputValueWrap = __specifyDefaultValueForMultiOptCriterion(
+            multiOptCriterionName: "@@XXX@@",
             parentMultiOptCriterionValue: parentMultiOptCriterionValue,
             multiOptCriterionXData: tempMultiOptCriterionXData,
             multiOptCriterionNameX: multiOptCriterionNameX,
@@ -902,7 +907,7 @@ abstract class FilterModel<
     masterFlowItem._addLineFlowItem(
       codeId: "#82600",
       shortDesc:
-      "Calling ${debugObjHtml(this)}._setTempMultiOptCriterionXData():",
+          "Calling ${debugObjHtml(this)}._setTempMultiOptCriterionXData():",
       parameters: {
         "multiOptCriterionNameX": multiOptCriterionNameX,
         "multiOptXData": tempMultiOptCriterionXData,
@@ -960,7 +965,7 @@ abstract class FilterModel<
     if (tempSelectedCriterionValue != null) {
       for (MultiOptFilterCriterion child in multiOptCriterion.children) {
         await _loadMultiOptCriterionDataCascade(
-          masterFlowItem:masterFlowItem,
+          masterFlowItem: masterFlowItem,
           filterInput: filterInput,
           parentMultiOptCriterionValue: tempSelectedCriterionValue,
           multiOptCriterion: child,
@@ -1020,6 +1025,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   OptValueWrap? __getUpdatedValueForMultiOptCriterion({
+    required String multiOptCriterionName,
     required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -1030,6 +1036,7 @@ abstract class FilterModel<
       filterInput: filterInput,
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionXData: multiOptCriterionXData,
+      multiOptCriterionName: multiOptCriterionName,
       multiOptCriterionNameX: multiOptCriterionNameX,
       selectionType: selectionType,
     );
@@ -1051,15 +1058,17 @@ abstract class FilterModel<
   }
 
   OptValueWrap? __specifyDefaultValueForMultiOptCriterion({
+    required String multiOptCriterionName,
     required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
   }) {
     OptValueWrap? valueWrap = specifyDefaultValueForMultiOptCriterion(
+      multiOptCriterionName: multiOptCriterionName,
+      multiOptCriterionNameX: multiOptCriterionNameX,
       parentMultiOptCriterionValue: parentMultiOptCriterionValue,
       multiOptCriterionXData: multiOptCriterionXData,
-      multiOptCriterionNameX: multiOptCriterionNameX,
       selectionType: selectionType,
     );
     if (valueWrap == null) {

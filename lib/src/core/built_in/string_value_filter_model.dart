@@ -22,6 +22,7 @@ class StringValueFilterModel
 
   @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
+    required String multiOptCriterionName,
     required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required StringValueFilterInput? filterInput,
@@ -32,6 +33,7 @@ class StringValueFilterModel
 
   @override
   OptValueWrap? getUpdatedValueForMultiOptCriterion({
+    required String multiOptCriterionName,
     required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required StringValueFilterInput filterInput,
@@ -52,6 +54,7 @@ class StringValueFilterModel
 
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
+    required String multiOptCriterionName,
     required String multiOptCriterionNameX,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
