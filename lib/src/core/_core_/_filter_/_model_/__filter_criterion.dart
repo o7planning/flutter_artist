@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 abstract class FilterCriterion<V> {
   late final FilterModelStructure _structure;

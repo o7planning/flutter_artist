@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 class SimpleFormProp<V> extends FormProp<V> {
   SimpleFormProp({

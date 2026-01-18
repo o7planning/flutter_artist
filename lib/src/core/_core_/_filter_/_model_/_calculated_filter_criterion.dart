@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 class CalculatedFilterCriterion<V> extends FilterCriterion<V> {
   final V Function() calculate;

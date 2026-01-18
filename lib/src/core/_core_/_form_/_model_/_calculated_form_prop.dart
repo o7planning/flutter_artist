@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 class CalculatedFormProp<V> extends FormProp {
   final V Function() calculate;
