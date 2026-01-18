@@ -4,15 +4,19 @@ class FilterModelStructure {
   final ConditionConnector connector;
   final List<ConditionDef> conditionDefs;
 
+  // String criterionNameX.
   final Map<String, _ConditionDef> __conditionDefMap = {};
+  // String groupName.
   final Map<String, _ConditionGroupDef> __conditionGroupDefMap = {};
   //
-  final List<SimpleCriterionDef> simpleCriterionDefs;
-  final List<MultiOptCriterionDef> multiOptCriterionDefs;
+  final List<SimpleCriterionDef> __simpleCriterionDefs;
+  final List<MultiOptCriterionDef> __rootMultiOptCriterionDefs;
 
   final Map<String, CriterionDef> __allCriterionDefMap = {};
   final Map<String, SimpleCriterionDef> __simpleCriterionDefMap = {};
   final Map<String, MultiOptCriterionDef> __multiOptCriterionDefMap = {};
+  //
+  final Map<String, MultiOptCriterionDef> __missingSuffixMap = {};
   //
   final Map<String, FilterCriterionModel> _allCriteriaMap = {};
   final List<MultiOptFilterCriterionModel> _rootOptCriteria;
@@ -22,9 +26,11 @@ class FilterModelStructure {
   late final FilterModel filterModel;
   DataState _filterDataState = DataState.pending;
 
+  // ***************************************************************************
+
   FilterModelStructure({
-    required this.simpleCriterionDefs,
-    required this.multiOptCriterionDefs,
+    required List<SimpleCriterionDef> simpleCriterionDefs,
+    required List<MultiOptCriterionDef> multiOptCriterionDefs,
     //
     required List<SimpleFilterCriterionModel> simpleCriteria,
     required List<MultiOptFilterCriterionModel> multiOptCriteria,
@@ -32,7 +38,9 @@ class FilterModelStructure {
     //
     required this.connector,
     required this.conditionDefs,
-  }) : _rootOptCriteria = List.unmodifiable(multiOptCriteria) {
+  })  : _rootOptCriteria = List.unmodifiable(multiOptCriteria),
+        __simpleCriterionDefs = [...simpleCriterionDefs],
+        __rootMultiOptCriterionDefs = [...multiOptCriterionDefs] {
     for (MultiOptFilterCriterionModel rootOptCriterion in multiOptCriteria) {
       __standardizeCascade(rootOptCriterion, null);
     }
@@ -66,6 +74,7 @@ class FilterModelStructure {
     for (MultiOptCriterionDef multiOptCriterionDef in multiOptCriterionDefs) {
       __initMultiOptCriterionDefCascade(
         multiOptCriterionDef: multiOptCriterionDef,
+        parent: null,
       );
     }
     //
@@ -75,7 +84,16 @@ class FilterModelStructure {
         parentGroup: null,
       );
     }
+    // Patch:
+    for (String suffix in __missingSuffixMap.keys) {
+      __patchOptConditionBySuffix(
+        suffix: suffix,
+        multiOptCriterionDef: __missingSuffixMap[suffix]!,
+      );
+    }
   }
+
+  // ***************************************************************************
 
   void __initSimpleCriterionDef({
     required SimpleCriterionDef simpleCriterionDef,
@@ -91,9 +109,12 @@ class FilterModelStructure {
     __simpleCriterionDefMap[simpleCriterionDef.criterionBaseName] =
         simpleCriterionDef;
   }
+ 
+  // ***************************************************************************
 
   void __initMultiOptCriterionDefCascade({
     required MultiOptCriterionDef multiOptCriterionDef,
+    required MultiOptCriterionDef? parent,
   }) {
     if (__allCriterionDefMap
         .containsKey(multiOptCriterionDef.criterionBaseName)) {
@@ -101,15 +122,22 @@ class FilterModelStructure {
         criterionName: multiOptCriterionDef.criterionBaseName,
       );
     }
+    // Init LAZY Property.
+    multiOptCriterionDef.parent = parent;
     __allCriterionDefMap[multiOptCriterionDef.criterionBaseName] =
         multiOptCriterionDef;
     __multiOptCriterionDefMap[multiOptCriterionDef.criterionBaseName] =
         multiOptCriterionDef;
     //
     for (MultiOptCriterionDef child in multiOptCriterionDef._children) {
-      __initMultiOptCriterionDefCascade(multiOptCriterionDef: child);
+      __initMultiOptCriterionDefCascade(
+        multiOptCriterionDef: child,
+        parent: multiOptCriterionDef,
+      );
     }
   }
+
+  // ***************************************************************************
 
   void __initConditionCascade({
     required ConditionDef conditionDef,
@@ -118,6 +146,17 @@ class FilterModelStructure {
     if (conditionDef is _ConditionDef) {
       // LAZY Initial.
       conditionDef.__group = parentGroup;
+      //
+      final CriterionDef? criterionDef =
+          __allCriterionDefMap[conditionDef.criterionName];
+      if (criterionDef == null) {
+        throw FilterCriterionNotFoundError(
+          criterionName: conditionDef.criterionName,
+        );
+      } else if (criterionDef is MultiOptCriterionDef) {
+        __missingSuffixMap[conditionDef.suffix] = criterionDef;
+      }
+      //
       if (__conditionDefMap.containsKey(conditionDef.criterionNameX)) {
         throw DuplicateFilterCriterionXError(
           criterionNameX: conditionDef.criterionNameX,
@@ -145,6 +184,38 @@ class FilterModelStructure {
       throw "Never Run";
     }
   }
+
+  // ***************************************************************************
+
+  void __patchOptConditionBySuffix({
+    required String suffix,
+    required MultiOptCriterionDef multiOptCriterionDef,
+  }) {
+    MultiOptCriterionDef? multiOptCriterionDefParent =
+        multiOptCriterionDef.parent;
+    if (multiOptCriterionDefParent == null) {
+      return;
+    }
+    String criterionNameXParent =
+        "${multiOptCriterionDefParent.criterionBaseName}${CriterionX.symbol}$suffix";
+    ConditionDef? conditionDefParent = __conditionDefMap[criterionNameXParent];
+    if (conditionDefParent != null) {
+      return;
+    }
+    conditionDefParent = _ConditionDef(
+      criterionNameX: criterionNameXParent,
+      operator: CriterionOperator.equalTo,
+    );
+    __conditionDefMap[criterionNameXParent] =
+        conditionDefParent as _ConditionDef;
+    //
+    __patchOptConditionBySuffix(
+      suffix: suffix,
+      multiOptCriterionDef: multiOptCriterionDefParent,
+    );
+  }
+
+  // ***************************************************************************
 
   void __standardizeCascade(
     MultiOptFilterCriterionModel multiOptCriterion,
