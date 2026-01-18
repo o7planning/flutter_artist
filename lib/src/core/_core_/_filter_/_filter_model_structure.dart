@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class FilterCriteriaStructure {
+class FilterModelStructure {
   final Map<String, FilterCriterion> _allCriteriaMap = {};
   final List<MultiOptFilterCriterion> _rootOptCriteria;
   final List<SimpleFilterCriterion> _simpleCriteria = [];
@@ -9,7 +9,7 @@ class FilterCriteriaStructure {
   late final FilterModel filterModel;
   DataState _filterDataState = DataState.pending;
 
-  FilterCriteriaStructure({
+  FilterModelStructure({
     required List<SimpleFilterCriterion> simpleCriteria,
     required List<MultiOptFilterCriterion> multiOptCriteria,
     List<CalculatedFilterCriterion> calculatedCriteria = const [],

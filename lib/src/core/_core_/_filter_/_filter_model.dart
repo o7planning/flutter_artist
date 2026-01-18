@@ -53,9 +53,9 @@ abstract class FilterModel<
 
   bool get isDefaultFilterModel => _isDefaultFilterModel;
 
-  late final FilterCriteriaStructure _filterCriteriaStructure;
+  late final FilterModelStructure _filterCriteriaStructure;
 
-  FilterCriteriaStructure get filterCriteriaStructure =>
+  FilterModelStructure get filterCriteriaStructure =>
       _filterCriteriaStructure;
 
   DataState get dataState => _filterCriteriaStructure._filterDataState;
@@ -98,7 +98,7 @@ abstract class FilterModel<
   /// ```
   ///
   @_AbstractMethodAnnotation()
-  FilterCriteriaStructure registerCriteriaStructure();
+  FilterModelStructure registerCriteriaStructure();
 
   // ***************************************************************************
   // ***************************************************************************

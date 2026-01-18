@@ -11,8 +11,8 @@ class IntIdFilterModel
   IntIdFilterModel({int? idValue}) : _idValue = idValue;
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
+  FilterModelStructure registerCriteriaStructure() {
+    return FilterModelStructure(
       simpleCriteria: [
         SimpleFilterCriterion<int>(criterionName: "id"),
       ],

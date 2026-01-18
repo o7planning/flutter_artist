@@ -11,8 +11,8 @@ class StringValueFilterModel
       : _stringValue = stringValue;
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
+  FilterModelStructure registerCriteriaStructure() {
+    return FilterModelStructure(
       simpleCriteria: [
         SimpleFilterCriterion<String>(criterionName: "string"),
       ],

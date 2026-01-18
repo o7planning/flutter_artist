@@ -10,8 +10,8 @@ class StringIdFilterModel
   StringIdFilterModel({required String? idValue}) : _idValue = idValue;
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
+  FilterModelStructure registerCriteriaStructure() {
+    return FilterModelStructure(
       simpleCriteria: [
         SimpleFilterCriterion<String>(criterionName: "id"),
       ],

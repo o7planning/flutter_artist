@@ -70,7 +70,7 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
   }
 
   Widget _buildTabContainer() {
-    FilterCriteriaStructure filterCriteriaStructure =
+    FilterModelStructure filterCriteriaStructure =
         widget.filterModel.filterCriteriaStructure;
 
     Map<String, dynamic> initial1Value =

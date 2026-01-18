@@ -379,7 +379,7 @@ part '_filter_/__filter_criterion.dart';
 
 part '_filter_/_calculated_filter_criterion.dart';
 
-part '_filter_/_filter_criteria_structure.dart';
+part '_filter_/_filter_model_structure.dart';
 
 part '_sorting_/_sort_criterion_def.dart';
 

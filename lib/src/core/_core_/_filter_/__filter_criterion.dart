@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 abstract class FilterCriterion<V> {
-  late final FilterCriteriaStructure _structure;
+  late final FilterModelStructure _structure;
 
   //
 

@@ -68,7 +68,7 @@ class FilterCriteriaStructureViewState
     _currentNode = filterModelNode;
     rootTreeNode = TreeNode.root()..add(filterModelNode);
     //
-    FilterCriteriaStructure structure =
+    FilterModelStructure structure =
         widget.filterModel.filterCriteriaStructure;
 
     List<MultiOptFilterCriterion> rootMultiOptCriterion =
@@ -122,7 +122,7 @@ class FilterCriteriaStructureViewState
   // ***************************************************************************
 
   Widget buildTreeView(BuildContext context) {
-    FilterCriteriaStructure filterCriteriaStructure =
+    FilterModelStructure filterCriteriaStructure =
         widget.filterModel.filterCriteriaStructure;
     //
     return CustomAppContainer(

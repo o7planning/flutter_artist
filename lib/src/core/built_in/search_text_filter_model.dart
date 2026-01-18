@@ -11,8 +11,8 @@ class SearchTextFilterModel
       : _searchText = searchText;
 
   @override
-  FilterCriteriaStructure registerCriteriaStructure() {
-    return FilterCriteriaStructure(
+  FilterModelStructure registerCriteriaStructure() {
+    return FilterModelStructure(
       simpleCriteria: [
         SimpleFilterCriterion<String>(criterionName: "searchText"),
       ],
