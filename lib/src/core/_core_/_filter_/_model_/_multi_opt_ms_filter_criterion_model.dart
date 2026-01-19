@@ -8,6 +8,7 @@ class MultiOptMsFilterCriterionModel<V>
   MultiOptMsFilterCriterionModel({
     required super.parent,
     required super.criterionNameX,
+    required super.criterionName,
   }) : super._(selectionType: SelectionType.multi, children: const []);
 
   @override

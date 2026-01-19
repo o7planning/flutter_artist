@@ -188,7 +188,7 @@ abstract class FilterModel<
   /// calling [callApiLoadMultiOptCriterionXData]
   /// methods if there are no errors.
   ///
-  /// ```
+  /// ```dart
   ///  MyFilterCriteria toFilterCriteriaObject({
   ///     required Map<String, dynamic> criteriaMap,
   ///  }) {
@@ -667,6 +667,7 @@ abstract class FilterModel<
     required FilterActivityType activityType,
   }) async {
     final String multiOptCriterionNameX = multiOptCriterion.criterionNameX;
+    final String multiOptCriterionBaseName = multiOptCriterion.criterionName;
     final SelectionType selectionType = multiOptCriterion.selectionType;
 
     masterFlowItem._addLineFlowItem(
@@ -795,7 +796,7 @@ abstract class FilterModel<
         tempMultiOptCriterionXData = await callApiLoadMultiOptCriterionXData(
           filterInput: filterInput,
           parentMultiOptCriterionValue: parentMultiOptCriterionValue,
-          multiOptCriterionName: "@@XXX@@",
+          multiOptCriterionName: multiOptCriterionBaseName,
           multiOptCriterionNameX: multiOptCriterionNameX,
           selectionType: selectionType,
         );
@@ -833,7 +834,7 @@ abstract class FilterModel<
           filterInput: filterInput,
           parentMultiOptCriterionValue: parentMultiOptCriterionValue,
           multiOptCriterionXData: tempMultiOptCriterionXData,
-          multiOptCriterionName: "@@XXX@@",
+          multiOptCriterionName: multiOptCriterionBaseName,
           multiOptCriterionNameX: multiOptCriterionNameX,
           selectionType: selectionType,
         );
@@ -852,10 +853,10 @@ abstract class FilterModel<
           );
 
           inputValueWrap = __specifyDefaultValueForMultiOptCriterion(
-            multiOptCriterionName: "@@XXX@@",
+            multiOptCriterionName: multiOptCriterionBaseName,
+            multiOptCriterionNameX: multiOptCriterionNameX,
             parentMultiOptCriterionValue: parentMultiOptCriterionValue,
             multiOptCriterionXData: tempMultiOptCriterionXData,
-            multiOptCriterionNameX: multiOptCriterionNameX,
             selectionType: selectionType,
           );
           masterFlowItem._addLineFlowItem(

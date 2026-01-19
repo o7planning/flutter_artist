@@ -4,7 +4,7 @@ abstract class FilterCriterionModel<V> {
   late final FilterModelStructure _structure;
 
   //
-
+  final String criterionName;
   final String criterionNameX;
 
   // IMPORTANT: Do not change type (dynamic).
@@ -43,7 +43,10 @@ abstract class FilterCriterionModel<V> {
 
   Type get dataType => V;
 
-  FilterCriterionModel({required this.criterionNameX});
+  FilterCriterionModel({
+    required this.criterionNameX,
+    required this.criterionName,
+  });
 
   bool isDirty() {
     return !ComparisonUtils.compareDynamicAndDynamic(

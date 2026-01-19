@@ -25,6 +25,7 @@ abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
   MultiOptFilterCriterionModel._({
     required this.parent,
     required super.criterionNameX,
+    required super.criterionName,
     required List<MultiOptFilterCriterionModel> children,
     required this.selectionType,
   }) : _children = [...children];

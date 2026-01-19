@@ -25,9 +25,11 @@ class SimpleCriterionDef<V> extends CriterionDef<V> {
 
   SimpleFilterCriterionModel<V> createModel({
     required String criterionNameX,
+    required String criterionName,
   }) {
     return SimpleFilterCriterionModel<V>(
       criterionNameX: criterionNameX,
+      criterionName: criterionName,
     );
   }
 }
@@ -78,14 +80,17 @@ class MultiOptCriterionDef<V> extends CriterionDef<V> {
   MultiOptFilterCriterionModel<V> createModel({
     required MultiOptFilterCriterionModel? parent,
     required String criterionNameX,
+    required String criterionName,
   }) {
     return selectionType == SelectionType.single
         ? MultiOptSsFilterCriterionModel<V>(
             criterionNameX: criterionNameX,
+            criterionName: criterionName,
             parent: parent,
           )
         : MultiOptMsFilterCriterionModel<V>(
             criterionNameX: criterionNameX,
+            criterionName: criterionName,
             parent: parent,
           );
   }
@@ -102,9 +107,11 @@ class CalculatedCriterionDef<V> extends CriterionDef<V> {
 
   CalculatedFilterCriterionModel<V> createModel({
     required String criterionNameX,
+    required String criterionName,
   }) {
     return CalculatedFilterCriterionModel<V>(
       criterionNameX: criterionNameX,
+      criterionName: criterionName,
       calculate: () {
         throw UnimplementedError();
       },

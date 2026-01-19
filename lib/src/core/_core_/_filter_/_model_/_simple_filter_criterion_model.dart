@@ -3,6 +3,7 @@ part of '../../core.dart';
 class SimpleFilterCriterionModel<V> extends FilterCriterionModel<V> {
   SimpleFilterCriterionModel({
     required super.criterionNameX,
+    required super.criterionName,
   });
 
   @override

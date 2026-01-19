@@ -112,6 +112,7 @@ class FilterModelStructure {
     );
     final model = simpleCriterionDef.createModel(
       criterionNameX: criterionNameX,
+      criterionName: simpleCriterionDef.criterionBaseName,
     );
     _simpleCriterionModels.add(model);
     _allCriterionModelMapX[criterionNameX] = model;
@@ -133,6 +134,7 @@ class FilterModelStructure {
     );
     final model = optCriterionDef.createModel(
       criterionNameX: criterionNameX,
+      criterionName: optCriterionDef.criterionBaseName,
       parent: parentOptModel,
     );
     if (parentOptModel == null) {
@@ -534,10 +536,11 @@ class FilterModelStructure {
             ****************************************************************************************************
             """);
         //
-        _createAndAddNewSimpleCriterion(
-          criterionNameX: criterionNameX,
-          markTempDirty: false,
-        );
+        // _createAndAddNewSimpleCriterion(
+        //   criterionNameX: criterionNameX,
+        //   criterionName: criterionName,
+        //   markTempDirty: false,
+        // );
       }
     }
   }
@@ -547,6 +550,7 @@ class FilterModelStructure {
 
   void _createAndAddNewSimpleCriterion({
     required String criterionNameX,
+    required String criterionName,
     required bool markTempDirty,
   }) {
     if (_allCriterionModelMapX.containsKey(criterionNameX)) {
@@ -554,6 +558,7 @@ class FilterModelStructure {
     }
     SimpleFilterCriterionModel? newSimpleCriterion = SimpleFilterCriterionModel(
       criterionNameX: criterionNameX,
+      criterionName: criterionName,
     );
     __initSimpleCriterion(
       newSimpleCriterion: newSimpleCriterion,

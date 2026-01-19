@@ -8,6 +8,7 @@ class MultiOptSsFilterCriterionModel<V>
   MultiOptSsFilterCriterionModel({
     required super.parent,
     required super.criterionNameX,
+    required super.criterionName,
     super.children = const [],
   }) : super._(selectionType: SelectionType.single);
 
