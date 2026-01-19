@@ -66,13 +66,13 @@ class MultiOptCriterionDef<V> extends CriterionDef<V> {
 
   factory MultiOptCriterionDef.multiSelection({
     required String criterionBaseName,
-    required String? description,
+    String? description,
   }) {
     return MultiOptCriterionDef._(
       criterionBaseName: criterionBaseName,
       description: description,
       children: [],
-      selectionType: SelectionType.single,
+      selectionType: SelectionType.multi,
     );
   }
 

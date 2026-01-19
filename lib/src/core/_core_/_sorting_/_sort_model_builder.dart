@@ -43,7 +43,7 @@ abstract class SortModelBuilder<ITEM extends Object> {
   ///
   dynamic getCriterionValueForClientSideSorting({
     required ITEM item,
-    required String criterionNameX,
+    required String criterionName,
   });
 
   String? getTranslationText({required String translationKey});

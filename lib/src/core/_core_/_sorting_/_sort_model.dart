@@ -35,11 +35,11 @@ abstract class SortModel<ITEM extends Object> {
             ? criterionDef.initialServerSideSortingDirection
             : criterionDef.initialClientSideSortingDirection;
         String text = sortModelBuilder!._getText(
-          criterionNameX: criterionDef.criterionNameX,
+          criterionNameX: criterionDef.criterionName,
         );
         SortCriterion criterion = SortCriterion._(
           direction: sortDirection,
-          criterionNameX: criterionDef.criterionNameX,
+          criterionNameX: criterionDef.criterionName,
           skipNonDirectionWhileSelecting: sortingSide == SortingSide.server
               ? criterionDef.serverSideSkipNonDirectionWhileSelecting
               : criterionDef.clientSideSkipNonDirectionWhileSelecting,
@@ -259,11 +259,11 @@ abstract class SortModel<ITEM extends Object> {
       //
       dynamic aValue = getCriterionValueForClientSideSorting(
         item: a,
-        criterionNameX: sc.criterionNameX,
+        criterionName: sc.criterionNameX,
       );
       dynamic bValue = getCriterionValueForClientSideSorting(
         item: b,
-        criterionNameX: sc.criterionNameX,
+        criterionName: sc.criterionNameX,
       );
       //
       if (aValue == null && bValue == null) {
@@ -317,11 +317,11 @@ abstract class SortModel<ITEM extends Object> {
 
   dynamic getCriterionValueForClientSideSorting({
     required ITEM item,
-    required String criterionNameX,
+    required String criterionName,
   }) {
     return sortModelBuilder?.getCriterionValueForClientSideSorting(
       item: item,
-      criterionNameX: criterionNameX,
+      criterionName: criterionName,
     );
   }
 

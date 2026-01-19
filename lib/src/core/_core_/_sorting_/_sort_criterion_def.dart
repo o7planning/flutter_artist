@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class SortCriterionDef {
-  final String criterionNameX;
+  final String criterionName;
   final String text;
   final String? translationKey;
   final bool serverSideSkipNonDirectionWhileSelecting;
@@ -10,7 +10,7 @@ class SortCriterionDef {
   final SortDirection? initialClientSideSortingDirection;
 
   SortCriterionDef({
-    required this.criterionNameX,
+    required this.criterionName,
     required this.text,
     this.translationKey,
     this.serverSideSkipNonDirectionWhileSelecting = false,
