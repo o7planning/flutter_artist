@@ -1,27 +1,36 @@
 part of '../core.dart';
 
 class FilterModelStructure {
-  final ConditionConnector connector;
-  final List<ConditionDef> conditionDefs;
-
-  // String criterionNameX.
-  final Map<String, _ConditionDef> __conditionDefMap = {};
-  // String groupName.
-  final Map<String, _ConditionGroupDef> __conditionGroupDefMap = {};
+  //
+  // Criterion Defs:
   //
   final List<SimpleCriterionDef> __simpleCriterionDefs;
   final List<MultiOptCriterionDef> __rootMultiOptCriterionDefs;
-
+  //
   final Map<String, CriterionDef> __allCriterionDefMap = {};
   final Map<String, SimpleCriterionDef> __simpleCriterionDefMap = {};
   final Map<String, MultiOptCriterionDef> __multiOptCriterionDefMap = {};
+
   //
-  final Map<String, MultiOptCriterionDef> __missingSuffixMap = {};
+  // Condition Defs:
   //
-  final Map<String, FilterCriterionModel> _allCriteriaMap = {};
-  final List<MultiOptFilterCriterionModel> _rootOptCriteria;
-  final List<SimpleFilterCriterionModel> _simpleCriteria = [];
-  final List<CalculatedFilterCriterionModel> _calculatedCriteria = [];
+  final ConditionConnector connector;
+  final List<ConditionDef> conditionDefs;
+
+  // String groupName.
+  final Map<String, _ConditionGroupDef> __conditionGroupDefMap = {};
+
+  //
+  // Condition Models:
+  //
+  // String criterionNameX.
+  final Map<String, FilterCriterionModel> _allCriterionModelMapX = {};
+  final Map<String, MultiOptFilterCriterionModel> _allOptCriterionModelMapX =
+      {};
+
+  final List<MultiOptFilterCriterionModel> _rootOptCriterionModels = [];
+  final List<SimpleFilterCriterionModel> _simpleCriterionModels = [];
+  final List<CalculatedFilterCriterionModel> _calculatedCriterionModels = [];
 
   late final FilterModel filterModel;
   DataState _filterDataState = DataState.pending;
@@ -32,41 +41,14 @@ class FilterModelStructure {
     required List<SimpleCriterionDef> simpleCriterionDefs,
     required List<MultiOptCriterionDef> multiOptCriterionDefs,
     //
-    required List<SimpleFilterCriterionModel> simpleCriteria,
-    required List<MultiOptFilterCriterionModel> multiOptCriteria,
-    List<CalculatedFilterCriterionModel> calculatedCriteria = const [],
+    // required List<SimpleFilterCriterionModel> simpleCriteria,
+    // required List<MultiOptFilterCriterionModel> multiOptCriteria,
+    // List<CalculatedFilterCriterionModel> calculatedCriteria = const [],
     //
     required this.connector,
     required this.conditionDefs,
-  })  : _rootOptCriteria = List.unmodifiable(multiOptCriteria),
-        __simpleCriterionDefs = [...simpleCriterionDefs],
+  })  : __simpleCriterionDefs = [...simpleCriterionDefs],
         __rootMultiOptCriterionDefs = [...multiOptCriterionDefs] {
-    for (MultiOptFilterCriterionModel rootOptCriterion in multiOptCriteria) {
-      __standardizeCascade(rootOptCriterion, null);
-    }
-    for (SimpleFilterCriterionModel sc in simpleCriteria) {
-      if (_allCriteriaMap.containsKey(sc.criterionNameX)) {
-        throw DuplicateFilterCriterionError(
-          criterionNameX: sc.criterionNameX,
-        );
-      }
-      __initSimpleCriterion(
-        newSimpleCriterion: sc,
-        markTempDirty: false,
-      );
-    }
-    for (CalculatedFilterCriterionModel cc in calculatedCriteria) {
-      if (_allCriteriaMap.containsKey(cc.criterionNameX)) {
-        throw DuplicateFilterCriterionError(
-          criterionNameX: cc.criterionNameX,
-        );
-      }
-      __initCalculatedCriterion(
-        newCalculatedCriterion: cc,
-        markTempDirty: false,
-      );
-    }
-    //
     for (SimpleCriterionDef simpleCriterionDef in simpleCriterionDefs) {
       __initSimpleCriterionDef(simpleCriterionDef: simpleCriterionDef);
     }
@@ -84,11 +66,75 @@ class FilterModelStructure {
         parentGroup: null,
       );
     }
-    // Patch:
-    for (String suffix in __missingSuffixMap.keys) {
-      __patchOptConditionBySuffix(
+    //
+    // Create Criterion Models:
+    //
+    for (SimpleCriterionDef criterionDef in __simpleCriterionDefs) {
+      for (String suffix in criterionDef._suffixes) {
+        __createSimpleFilterCriterionModel(
+          simpleCriterionDef: criterionDef,
+          suffix: suffix,
+        );
+      }
+    }
+    for (MultiOptCriterionDef rootOptDef in __rootMultiOptCriterionDefs) {
+      for (String suffix in rootOptDef._suffixes) {
+        __createMultiOptFilterCriterionModelCascade(
+          optCriterionDef: rootOptDef,
+          suffix: suffix,
+          parentOptModel: null,
+        );
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __createSimpleFilterCriterionModel({
+    required SimpleCriterionDef simpleCriterionDef,
+    required String suffix,
+  }) {
+    final String criterionNameX = CriterionX.getNameX(
+      baseName: simpleCriterionDef.criterionBaseName,
+      suffix: suffix,
+    );
+    final model = simpleCriterionDef.createModel(
+      criterionNameX: criterionNameX,
+    );
+    _simpleCriterionModels.add(model);
+    _allCriterionModelMapX[criterionNameX] = model;
+  }
+
+  // ***************************************************************************
+
+  void __createMultiOptFilterCriterionModelCascade({
+    required MultiOptCriterionDef optCriterionDef,
+    required String suffix,
+    required MultiOptFilterCriterionModel? parentOptModel,
+  }) {
+    if (!optCriterionDef._suffixes.contains(suffix)) {
+      return;
+    }
+    final String criterionNameX = CriterionX.getNameX(
+      baseName: optCriterionDef.criterionBaseName,
+      suffix: suffix,
+    );
+    final model = optCriterionDef.createModel(
+      criterionNameX: criterionNameX,
+      parent: parentOptModel,
+    );
+    if (parentOptModel == null) {
+      _rootOptCriterionModels.add(model);
+    }
+    parentOptModel?._children.add(model);
+    //
+    _allCriterionModelMapX[criterionNameX] = model;
+    for (MultiOptCriterionDef childDef in optCriterionDef._children) {
+      __createMultiOptFilterCriterionModelCascade(
+        optCriterionDef: childDef,
         suffix: suffix,
-        multiOptCriterionDef: __missingSuffixMap[suffix]!,
+        parentOptModel: model,
       );
     }
   }
@@ -109,7 +155,7 @@ class FilterModelStructure {
     __simpleCriterionDefMap[simpleCriterionDef.criterionBaseName] =
         simpleCriterionDef;
   }
- 
+
   // ***************************************************************************
 
   void __initMultiOptCriterionDefCascade({
@@ -139,9 +185,12 @@ class FilterModelStructure {
 
   // ***************************************************************************
 
+  final Map<String, MultiOptConditionModel> __multiOptConditionModelMapX = {};
+  final Map<String, SimpleConditionModel> __simpleConditionModelMapX = {};
+
   void __initConditionCascade({
-    required ConditionDef conditionDef,
-    required _ConditionGroupDef? parentGroup,
+    required final ConditionDef conditionDef,
+    required final _ConditionGroupDef? parentGroup,
   }) {
     if (conditionDef is _ConditionDef) {
       // LAZY Initial.
@@ -153,17 +202,19 @@ class FilterModelStructure {
         throw FilterCriterionNotFoundError(
           criterionName: conditionDef.criterionName,
         );
-      } else if (criterionDef is MultiOptCriterionDef) {
-        __missingSuffixMap[conditionDef.suffix] = criterionDef;
       }
+      criterionDef._suffixes.add(conditionDef.suffix);
       //
-      if (__conditionDefMap.containsKey(conditionDef.criterionNameX)) {
-        throw DuplicateFilterCriterionXError(
-          criterionNameX: conditionDef.criterionNameX,
-          groupName: parentGroup?.groupName,
-        );
+      if (criterionDef is MultiOptCriterionDef) {
+        MultiOptCriterionDef? p = criterionDef;
+        while (true) {
+          p = p?.parent;
+          if (p == null) {
+            break;
+          }
+          p._suffixes.add(conditionDef.suffix);
+        }
       }
-      __conditionDefMap[conditionDef.criterionNameX] = conditionDef;
     } else if (conditionDef is _ConditionGroupDef) {
       // LAZY Initial.
       conditionDef.__group = parentGroup;
@@ -186,62 +237,11 @@ class FilterModelStructure {
   }
 
   // ***************************************************************************
-
-  void __patchOptConditionBySuffix({
-    required String suffix,
-    required MultiOptCriterionDef multiOptCriterionDef,
-  }) {
-    MultiOptCriterionDef? multiOptCriterionDefParent =
-        multiOptCriterionDef.parent;
-    if (multiOptCriterionDefParent == null) {
-      return;
-    }
-    String criterionNameXParent =
-        "${multiOptCriterionDefParent.criterionBaseName}${CriterionX.symbol}$suffix";
-    ConditionDef? conditionDefParent = __conditionDefMap[criterionNameXParent];
-    if (conditionDefParent != null) {
-      return;
-    }
-    conditionDefParent = _ConditionDef(
-      criterionNameX: criterionNameXParent,
-      operator: CriterionOperator.equalTo,
-    );
-    __conditionDefMap[criterionNameXParent] =
-        conditionDefParent as _ConditionDef;
-    //
-    __patchOptConditionBySuffix(
-      suffix: suffix,
-      multiOptCriterionDef: multiOptCriterionDefParent,
-    );
-  }
-
-  // ***************************************************************************
-
-  void __standardizeCascade(
-    MultiOptFilterCriterionModel multiOptCriterion,
-    MultiOptFilterCriterionModel? parent,
-  ) {
-    multiOptCriterion.parent = parent;
-    multiOptCriterion._structure = this;
-    //
-    if (_allCriteriaMap.containsKey(multiOptCriterion.criterionNameX)) {
-      throw DuplicateFilterCriterionError(
-        criterionNameX: multiOptCriterion.criterionNameX,
-      );
-    }
-    _allCriteriaMap[multiOptCriterion.criterionNameX] = multiOptCriterion;
-    //
-    for (MultiOptFilterCriterionModel child in multiOptCriterion.children) {
-      __standardizeCascade(child, multiOptCriterion);
-    }
-  }
-
-  // ***************************************************************************
   // ***************************************************************************
 
   // SAME-AS: #0007 (formPropsStructure.allMultiOptProps)
   List<MultiOptFilterCriterionModel> get allMultiOptCriteria {
-    return _allCriteriaMap.values
+    return _allCriterionModelMapX.values
         .whereType<MultiOptFilterCriterionModel>()
         .cast<MultiOptFilterCriterionModel>()
         .toList();
@@ -251,7 +251,7 @@ class FilterModelStructure {
   // ***************************************************************************
 
   dynamic _getCurrentCriterionValue({required String criterionNameX}) {
-    FilterCriterionModel? criterion = _allCriteriaMap[criterionNameX];
+    FilterCriterionModel? criterion = _allCriterionModelMapX[criterionNameX];
     if (criterion != null) {
       return criterion._currentValue;
     }
@@ -262,15 +262,16 @@ class FilterModelStructure {
   // ***************************************************************************
 
   Map<String, dynamic> get _initialCriteriaValues {
-    return _allCriteriaMap.map((k, v) => MapEntry(k, v._initialValue));
+    return _allCriterionModelMapX.map((k, v) => MapEntry(k, v._initialValue));
   }
 
   Map<String, dynamic> get _currentCriteriaValues {
-    return _allCriteriaMap.map((k, v) => MapEntry(k, v._currentValue));
+    return _allCriterionModelMapX.map((k, v) => MapEntry(k, v._currentValue));
   }
 
   Map<String, dynamic> get _tempCriteriaValues {
-    return _allCriteriaMap.map((k, v) => MapEntry(k, v._tempCurrentValue));
+    return _allCriterionModelMapX
+        .map((k, v) => MapEntry(k, v._tempCurrentValue));
   }
 
   @DebugMethodAnnotation()
@@ -286,11 +287,11 @@ class FilterModelStructure {
 
   @DebugMethodAnnotation()
   List<MultiOptFilterCriterionModel> get debugRootOptCriteria =>
-      _rootOptCriteria;
+      _rootOptCriterionModels;
 
   @DebugMethodAnnotation()
   List<SimpleFilterCriterionModel<dynamic>> get debugSimpleCriteria =>
-      _simpleCriteria;
+      _simpleCriterionModels;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -303,7 +304,7 @@ class FilterModelStructure {
   // ***************************************************************************
 
   void _updateTempToReal() {
-    for (FilterCriterionModel criterion in _allCriteriaMap.values) {
+    for (FilterCriterionModel criterion in _allCriterionModelMapX.values) {
       criterion._currentValue = criterion._tempCurrentValue;
       criterion._currentXData = criterion._tempCurrentXData;
     }
@@ -314,7 +315,8 @@ class FilterModelStructure {
 
   MultiOptFilterCriterionModel? _getMultiOptFilterCriterion(
       String multiOptCriterionNameX) {
-    FilterCriterionModel? criterion = _allCriteriaMap[multiOptCriterionNameX];
+    FilterCriterionModel? criterion =
+        _allCriterionModelMapX[multiOptCriterionNameX];
     if (criterion is MultiOptFilterCriterionModel) {
       return criterion;
     }
@@ -325,7 +327,7 @@ class FilterModelStructure {
   // ***************************************************************************
 
   SimpleFilterCriterionModel? _getSimpleFilterCriterion(String criterionNameX) {
-    FilterCriterionModel? criterion = _allCriteriaMap[criterionNameX];
+    FilterCriterionModel? criterion = _allCriterionModelMapX[criterionNameX];
     if (criterion is SimpleFilterCriterionModel) {
       return criterion;
     }
@@ -351,7 +353,7 @@ class FilterModelStructure {
       criterionNameXs: formKeyInstantValues.keys.toList(),
     );
     //
-    for (FilterCriterionModel criterion in _allCriteriaMap.values) {
+    for (FilterCriterionModel criterion in _allCriterionModelMapX.values) {
       switch (activityType) {
         case FilterActivityType.newFilt:
           if (filterInput != null && filterInput is! EmptyFilterInput) {
@@ -392,7 +394,7 @@ class FilterModelStructure {
   // ***************************************************************************
 
   dynamic _getTempCurrentCriterionValue({required String criterionNameX}) {
-    FilterCriterionModel? criterion = _allCriteriaMap[criterionNameX];
+    FilterCriterionModel? criterion = _allCriterionModelMapX[criterionNameX];
     if (criterion == null) {
       return null;
     }
@@ -420,7 +422,7 @@ class FilterModelStructure {
   // ***************************************************************************
 
   XData? _getTempMultiOptCriterionXData(String criterionNameX) {
-    FilterCriterionModel? criterion = _allCriteriaMap[criterionNameX];
+    FilterCriterionModel? criterion = _allCriterionModelMapX[criterionNameX];
     if (criterion == null) {
       return null;
     }
@@ -434,7 +436,7 @@ class FilterModelStructure {
   // ***************************************************************************
 
   XData? _getMultiOptCriterionXData(String criterionNameX) {
-    FilterCriterionModel? criterion = _allCriteriaMap[criterionNameX];
+    FilterCriterionModel? criterion = _allCriterionModelMapX[criterionNameX];
     if (criterion == null) {
       return null;
     }
@@ -459,31 +461,32 @@ class FilterModelStructure {
     // (***):
     // And Update children-OptCriterion data to null if parent-Value is null or not selected.
     //
-    for (FilterCriterionModel criterion in _allCriteriaMap.values) {
+    for (FilterCriterionModel criterion in _allCriterionModelMapX.values) {
       criterion._candidateUpdateValue = null;
       criterion._valueUpdated = false;
       criterion._markTempDirty = false;
     }
     //
     for (String criterionNameX in candidateUpdateValues.keys) {
-      FilterCriterionModel? criterion = _allCriteriaMap[criterionNameX];
+      FilterCriterionModel? criterion = _allCriterionModelMapX[criterionNameX];
       if (criterion != null) {
         criterion._markTempDirty = true;
       }
     }
     //
-    for (MultiOptFilterCriterionModel rootCriterion in _rootOptCriteria) {
+    for (MultiOptFilterCriterionModel rootCriterion
+        in _rootOptCriterionModels) {
       rootCriterion._updateTempValueCascade(
         updateValues: candidateUpdateValues,
       );
     }
-    for (SimpleFilterCriterionModel simpleCriterion in _simpleCriteria) {
+    for (SimpleFilterCriterionModel simpleCriterion in _simpleCriterionModels) {
       simpleCriterion._updateTempValue(
         updateValues: candidateUpdateValues,
       );
     }
     // Apply to all _markTempDirty Criterion:
-    for (FilterCriterionModel criterion in _allCriteriaMap.values) {
+    for (FilterCriterionModel criterion in _allCriterionModelMapX.values) {
       if (criterion._markTempDirty) {
         criterion._tempCurrentValue = criterion._candidateUpdateValue;
       }
@@ -495,7 +498,7 @@ class FilterModelStructure {
 
   void __addCriteriaIfNeed({required List<String> criterionNameXs}) {
     for (String criterionNameX in criterionNameXs) {
-      FilterCriterionModel? criterion = _allCriteriaMap[criterionNameX];
+      FilterCriterionModel? criterion = _allCriterionModelMapX[criterionNameX];
       if (criterion == null) {
         print("""\n
             ****************************************************************************************************
@@ -518,7 +521,7 @@ class FilterModelStructure {
     required String criterionNameX,
     required bool markTempDirty,
   }) {
-    if (_allCriteriaMap.containsKey(criterionNameX)) {
+    if (_allCriterionModelMapX.containsKey(criterionNameX)) {
       return;
     }
     SimpleFilterCriterionModel? newSimpleCriterion = SimpleFilterCriterionModel(
@@ -536,8 +539,9 @@ class FilterModelStructure {
   }) {
     newSimpleCriterion._structure = this;
     newSimpleCriterion._markTempDirty = markTempDirty;
-    _allCriteriaMap[newSimpleCriterion.criterionNameX] = newSimpleCriterion;
-    _simpleCriteria.add(newSimpleCriterion);
+    _allCriterionModelMapX[newSimpleCriterion.criterionNameX] =
+        newSimpleCriterion;
+    _simpleCriterionModels.add(newSimpleCriterion);
   }
 
   // ***************************************************************************
@@ -549,9 +553,9 @@ class FilterModelStructure {
   }) {
     newCalculatedCriterion._structure = this;
     newCalculatedCriterion._markTempDirty = markTempDirty;
-    _allCriteriaMap[newCalculatedCriterion.criterionNameX] =
+    _allCriterionModelMapX[newCalculatedCriterion.criterionNameX] =
         newCalculatedCriterion;
-    _calculatedCriteria.add(newCalculatedCriterion);
+    _calculatedCriterionModels.add(newCalculatedCriterion);
   }
 
   // ***************************************************************************
@@ -561,7 +565,8 @@ class FilterModelStructure {
     required String multiOptCriterionNameX,
     required XData? multiOptXData,
   }) {
-    FilterCriterionModel? criterion = _allCriteriaMap[multiOptCriterionNameX];
+    FilterCriterionModel? criterion =
+        _allCriterionModelMapX[multiOptCriterionNameX];
     if (criterion == null) {
       throw AppError(errorMessage: 'No Criterion "$multiOptCriterionNameX"');
     }
@@ -581,7 +586,7 @@ class FilterModelStructure {
     required String criterionNameX,
     required Object? value,
   }) {
-    FilterCriterionModel? criterion = _allCriteriaMap[criterionNameX];
+    FilterCriterionModel? criterion = _allCriterionModelMapX[criterionNameX];
     if (criterion == null) {
       throw AppError(
         errorMessage: 'No criterionNameX "$criterionNameX"',
@@ -600,7 +605,7 @@ class FilterModelStructure {
   // ***************************************************************************
 
   bool _isDirty() {
-    for (FilterCriterionModel criterion in _allCriteriaMap.values) {
+    for (FilterCriterionModel criterion in _allCriterionModelMapX.values) {
       bool dirty = criterion.isDirty();
       if (dirty) {
         return true;
@@ -615,7 +620,7 @@ class FilterModelStructure {
   void _printTemporaryInfo(String prefix) {
     print("\n\n--------------------------------------------------------------");
     print(" ---> $prefix");
-    for (MultiOptFilterCriterionModel rootItem in _rootOptCriteria) {
+    for (MultiOptFilterCriterionModel rootItem in _rootOptCriterionModels) {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }
     print("--------------------------------------------------------------\n\n");
@@ -626,7 +631,8 @@ class FilterModelStructure {
 
   MultiOptFilterCriterionModel? _findMultiOptFilterCriterion(
       String multiOptFilterCriterion) {
-    FilterCriterionModel? criterion = _allCriteriaMap[multiOptFilterCriterion];
+    FilterCriterionModel? criterion =
+        _allCriterionModelMapX[multiOptFilterCriterion];
     if (criterion is MultiOptFilterCriterionModel) {
       return criterion;
     }

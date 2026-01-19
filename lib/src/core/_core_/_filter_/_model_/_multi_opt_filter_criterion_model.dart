@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
 abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
-  late final MultiOptFilterCriterionModel? parent;
+   final MultiOptFilterCriterionModel? parent;
 
   int _loadCount = 0;
 
@@ -23,10 +23,11 @@ abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
       List.unmodifiable(_children);
 
   MultiOptFilterCriterionModel._({
+    required this. parent,
     required super.criterionNameX,
     required List<MultiOptFilterCriterionModel> children,
     required this.selectionType,
-  }) : _children = children;
+  }) : _children = [...children];
 
   void _updateTempValueCascade({
     required Map<String, dynamic> updateValues,

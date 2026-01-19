@@ -19,12 +19,13 @@ class IntIdFilterModel
       ],
       multiOptCriterionDefs: [],
       //
-      simpleCriteria: [
-        SimpleFilterCriterionModel<int>(criterionNameX: "id"),
-      ],
-      multiOptCriteria: [],
       connector: ConditionConnector.and,
-      conditionDefs: [],
+      conditionDefs: [
+        ConditionDef.single(
+          criterionNameX: "id${CriterionX.symbol}",
+          operator: CriterionOperator.equalTo,
+        ),
+      ],
     );
   }
 

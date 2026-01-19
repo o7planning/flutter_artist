@@ -1,6 +1,8 @@
 part of '../../core.dart';
 
 abstract class CriterionDef<V> {
+  final Set<String> _suffixes = {};
+
   final String criterionBaseName;
   final String? description;
 
@@ -49,8 +51,8 @@ class MultiOptCriterionDef<V> extends CriterionDef<V> {
 
   factory MultiOptCriterionDef.singleSelection({
     required String criterionBaseName,
-      String? description,
-      List<MultiOptCriterionDef> children = const [],
+    String? description,
+    List<MultiOptCriterionDef> children = const [],
   }) {
     return MultiOptCriterionDef._(
       criterionBaseName: criterionBaseName,
@@ -74,11 +76,18 @@ class MultiOptCriterionDef<V> extends CriterionDef<V> {
 
   @override
   MultiOptFilterCriterionModel<V> createModel({
+    required MultiOptFilterCriterionModel? parent,
     required String criterionNameX,
   }) {
     return selectionType == SelectionType.single
-        ? MultiOptSsFilterCriterionModel<V>(criterionNameX: criterionNameX)
-        : MultiOptMsFilterCriterionModel<V>(criterionNameX: criterionNameX);
+        ? MultiOptSsFilterCriterionModel<V>(
+            criterionNameX: criterionNameX,
+            parent: parent,
+          )
+        : MultiOptMsFilterCriterionModel<V>(
+            criterionNameX: criterionNameX,
+            parent: parent,
+          );
   }
 }
 
@@ -124,6 +133,13 @@ class CriterionX {
     }
     criterionName = cn;
     suffix = sf;
+  }
+
+  static String getNameX({
+    required String baseName,
+    required String suffix,
+  }) {
+    return "$baseName$symbol$suffix";
   }
 }
 

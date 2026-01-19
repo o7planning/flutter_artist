@@ -19,12 +19,13 @@ class SearchTextFilterModel
       ],
       multiOptCriterionDefs: [],
       //
-      simpleCriteria: [
-        SimpleFilterCriterionModel<String>(criterionNameX: "searchText"),
-      ],
-      multiOptCriteria: [],
       connector: ConditionConnector.and,
-      conditionDefs: [],
+      conditionDefs: [
+        ConditionDef.single(
+          criterionNameX: "searchText${CriterionX.symbol}",
+          operator: CriterionOperator.containsIgnoreCase,
+        ),
+      ],
     );
   }
 

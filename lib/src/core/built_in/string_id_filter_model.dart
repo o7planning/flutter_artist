@@ -18,12 +18,13 @@ class StringIdFilterModel
       ],
       multiOptCriterionDefs: [],
       //
-      simpleCriteria: [
-        SimpleFilterCriterionModel<String>(criterionNameX: "id"),
-      ],
-      multiOptCriteria: [],
       connector: ConditionConnector.and,
-      conditionDefs: [],
+      conditionDefs: [
+        ConditionDef.single(
+          criterionNameX: "id${CriterionX.symbol}",
+          operator: CriterionOperator.equalTo,
+        ),
+      ],
     );
   }
 

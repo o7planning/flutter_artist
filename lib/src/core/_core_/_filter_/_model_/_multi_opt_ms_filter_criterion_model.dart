@@ -6,6 +6,7 @@ part of '../../core.dart';
 class MultiOptMsFilterCriterionModel<V>
     extends MultiOptFilterCriterionModel<V> {
   MultiOptMsFilterCriterionModel({
+    required super.parent,
     required super.criterionNameX,
   }) : super._(selectionType: SelectionType.multi, children: const []);
 

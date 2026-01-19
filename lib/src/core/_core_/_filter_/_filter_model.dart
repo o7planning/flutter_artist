@@ -417,7 +417,7 @@ abstract class FilterModel<
     //
     try {
       for (MultiOptFilterCriterionModel multiOptCriterion
-          in _filterCriteriaStructure._rootOptCriteria) {
+          in _filterCriteriaStructure._rootOptCriterionModels) {
         masterFlowItem._addLineFlowItem(
           codeId: "#31040",
           shortDesc:

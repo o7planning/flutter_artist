@@ -19,12 +19,13 @@ class StringValueFilterModel
       ],
       multiOptCriterionDefs: [],
       //
-      simpleCriteria: [
-        SimpleFilterCriterionModel<String>(criterionNameX: "string"),
-      ],
-      multiOptCriteria: [],
       connector: ConditionConnector.and,
-      conditionDefs: [],
+      conditionDefs: [
+        ConditionDef.single(
+          criterionNameX: "string${CriterionX.symbol}",
+          operator: CriterionOperator.equalTo,
+        ),
+      ],
     );
   }
 
