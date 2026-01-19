@@ -17,7 +17,7 @@ class _DefaultFilterModel
       simpleCriterionDefs: [],
       multiOptCriterionDefs: [],
       //
-      connector: ConditionConnector.and,
+      conditionConnector: ConditionConnector.and,
       conditionDefs: [],
     );
   }

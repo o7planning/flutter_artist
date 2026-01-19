@@ -1,11 +1,19 @@
 part of '../core.dart';
 
 class FilterModelStructure {
+  static const rootGroupName = "#root-group";
+
   //
   // Criterion Defs:
   //
   final List<SimpleCriterionDef> __simpleCriterionDefs;
   final List<MultiOptCriterionDef> __rootMultiOptCriterionDefs;
+
+  List<SimpleCriterionDef> get simpleCriterionDefs => __simpleCriterionDefs;
+
+  List<MultiOptCriterionDef> get rootMultiOptCriterionDefs =>
+      __rootMultiOptCriterionDefs;
+
   //
   final Map<String, CriterionDef> __allCriterionDefMap = {};
   final Map<String, SimpleCriterionDef> __simpleCriterionDefMap = {};
@@ -14,15 +22,17 @@ class FilterModelStructure {
   //
   // Condition Defs:
   //
-  final ConditionConnector connector;
+  final ConditionConnector conditionConnector;
   final List<ConditionDef> conditionDefs;
 
   // String groupName.
-  final Map<String, _ConditionGroupDef> __conditionGroupDefMap = {};
+  final Map<String, ConditionGroupDefImpl> __conditionGroupDefMap = {};
 
   //
   // Condition Models:
   //
+  late final ConditionGroupModelImpl rootConditionGroupModel;
+
   // String criterionNameX.
   final Map<String, FilterCriterionModel> _allCriterionModelMapX = {};
   final Map<String, MultiOptFilterCriterionModel> _allOptCriterionModelMapX =
@@ -40,12 +50,7 @@ class FilterModelStructure {
   FilterModelStructure({
     required List<SimpleCriterionDef> simpleCriterionDefs,
     required List<MultiOptCriterionDef> multiOptCriterionDefs,
-    //
-    // required List<SimpleFilterCriterionModel> simpleCriteria,
-    // required List<MultiOptFilterCriterionModel> multiOptCriteria,
-    // List<CalculatedFilterCriterionModel> calculatedCriteria = const [],
-    //
-    required this.connector,
+    required this.conditionConnector,
     required this.conditionDefs,
   })  : __simpleCriterionDefs = [...simpleCriterionDefs],
         __rootMultiOptCriterionDefs = [...multiOptCriterionDefs] {
@@ -59,11 +64,17 @@ class FilterModelStructure {
         parent: null,
       );
     }
-    //
+    // LAZY Property:
+    rootConditionGroupModel = ConditionGroupModelImpl(
+      groupName: rootGroupName,
+      structure: this,
+      connector: conditionConnector,
+    );
     for (ConditionDef conditionDef in conditionDefs) {
       __initConditionCascade(
         conditionDef: conditionDef,
-        parentGroup: null,
+        parentGroupDef: null,
+        parentGroupModel: rootConditionGroupModel,
       );
     }
     //
@@ -185,16 +196,17 @@ class FilterModelStructure {
 
   // ***************************************************************************
 
-  final Map<String, MultiOptConditionModel> __multiOptConditionModelMapX = {};
-  final Map<String, SimpleConditionModel> __simpleConditionModelMapX = {};
+  // final Map<String, MultiOptConditionModel> __multiOptConditionModelMapX = {};
+  // final Map<String, SimpleConditionModel> __simpleConditionModelMapX = {};
 
   void __initConditionCascade({
     required final ConditionDef conditionDef,
-    required final _ConditionGroupDef? parentGroup,
+    required final ConditionGroupDefImpl? parentGroupDef,
+    required final ConditionGroupModelImpl parentGroupModel,
   }) {
-    if (conditionDef is _ConditionDef) {
+    if (conditionDef is ConditionDefImpl) {
       // LAZY Initial.
-      conditionDef.__group = parentGroup;
+      conditionDef.__group = parentGroupDef;
       //
       final CriterionDef? criterionDef =
           __allCriterionDefMap[conditionDef.criterionName];
@@ -215,20 +227,36 @@ class FilterModelStructure {
           p._suffixes.add(conditionDef.suffix);
         }
       }
-    } else if (conditionDef is _ConditionGroupDef) {
+      //
+      ConditionModelImpl conditionModel = ConditionModelImpl(
+        structure: this,
+        criterionName: conditionDef.criterionName,
+        criterionNameX: conditionDef.criterionNameX,
+        operator: conditionDef.operator,
+        supportedOperators: conditionDef._supportedOperators,
+      );
+      parentGroupModel._conditions.add(conditionModel);
+    } else if (conditionDef is ConditionGroupDefImpl) {
       // LAZY Initial.
-      conditionDef.__group = parentGroup;
+      conditionDef.__group = parentGroupDef;
       if (__conditionGroupDefMap.containsKey(conditionDef.groupName)) {
         throw DuplicateFilterCriteriaGroupError(
           groupName: conditionDef.groupName,
         );
       }
       __conditionGroupDefMap[conditionDef.groupName] = conditionDef;
+      ConditionGroupModelImpl conditionGroupModel = ConditionGroupModelImpl(
+        structure: this,
+        groupName: conditionDef.groupName,
+        connector: conditionDef.connector,
+      );
+      parentGroupModel._conditions.add(conditionGroupModel);
       //
       for (ConditionDef childConditionDef in conditionDef.conditions) {
         __initConditionCascade(
           conditionDef: childConditionDef,
-          parentGroup: conditionDef,
+          parentGroupDef: conditionDef,
+          parentGroupModel: conditionGroupModel,
         );
       }
     } else {

@@ -19,7 +19,7 @@ class StringValueFilterModel
       ],
       multiOptCriterionDefs: [],
       //
-      connector: ConditionConnector.and,
+      conditionConnector: ConditionConnector.and,
       conditionDefs: [
         ConditionDef.single(
           criterionNameX: "string${CriterionX.symbol}",

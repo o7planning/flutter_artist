@@ -120,7 +120,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  // SAME-AS: #0007 (filterCriteriaStructure.allMultiOptCriteria)
+  // SAME-AS: #0007 (filterModelStructure.allMultiOptCriteria)
   List<MultiOptFormProp> get allMultiOptProps {
     return _allPropMap.values
         .whereType<MultiOptFormProp>()

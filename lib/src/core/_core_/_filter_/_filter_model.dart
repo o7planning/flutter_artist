@@ -53,11 +53,11 @@ abstract class FilterModel<
 
   bool get isDefaultFilterModel => _isDefaultFilterModel;
 
-  late final FilterModelStructure _filterCriteriaStructure;
+  late final FilterModelStructure _filterModelStructure;
 
-  FilterModelStructure get filterCriteriaStructure => _filterCriteriaStructure;
+  FilterModelStructure get filterModelStructure => _filterModelStructure;
 
-  DataState get dataState => _filterCriteriaStructure._filterDataState;
+  DataState get dataState => _filterModelStructure._filterDataState;
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
@@ -277,7 +277,7 @@ abstract class FilterModel<
       lineFlowType: LineFlowType.debug,
     );
     //
-    _filterCriteriaStructure._setFilterDataState(DataState.pending);
+    _filterModelStructure._setFilterDataState(DataState.pending);
     //
     XFilterCriteria<FILTER_CRITERIA>? xFilterCriteria =
         await _startNewFilterActivity(
@@ -293,8 +293,8 @@ abstract class FilterModel<
 
   void __registerCriteriaStructure() {
     try {
-      _filterCriteriaStructure = registerCriteriaStructure();
-      _filterCriteriaStructure.filterModel = this;
+      _filterModelStructure = registerCriteriaStructure();
+      _filterModelStructure.filterModel = this;
     } on DuplicateFilterCriterionXError catch (e) {
       String message =
           "Duplicate criterion '${e.criterionNameX}' in ${getClassName(this)}";
@@ -311,26 +311,26 @@ abstract class FilterModel<
 
   // TODO: Rename?
   Map<String, dynamic> get initialCriteriaValues {
-    return _filterCriteriaStructure._initialCriteriaValues;
+    return _filterModelStructure._initialCriteriaValues;
   }
 
   // TODO: Rename?
   Map<String, dynamic> get criteriaValues {
-    return _filterCriteriaStructure._currentCriteriaValues;
+    return _filterModelStructure._currentCriteriaValues;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   bool isDirty() {
-    return _filterCriteriaStructure._isDirty();
+    return _filterModelStructure._isDirty();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   dynamic getCriterionValue(String criterionNameX) {
-    return _filterCriteriaStructure._getCurrentCriterionValue(
+    return _filterModelStructure._getCurrentCriterionValue(
       criterionNameX: criterionNameX,
     );
   }
@@ -339,7 +339,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   XData? getMultiOptCriterionXData(String multiOptCriterionNameX) {
-    return _filterCriteriaStructure._getMultiOptCriterionXData(
+    return _filterModelStructure._getMultiOptCriterionXData(
       multiOptCriterionNameX,
     );
   }
@@ -361,7 +361,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   void _printStructureAndTempData(String prefix) {
-    _filterCriteriaStructure._printTemporaryInfo(prefix);
+    _filterModelStructure._printTemporaryInfo(prefix);
   }
 
   // ***************************************************************************
@@ -403,11 +403,11 @@ abstract class FilterModel<
       masterFlowItem._addLineFlowItem(
         codeId: "#31020",
         shortDesc:
-            "Calling <b>_filterCriteriaStructure._initTemporaryForNewActivity()</b>..",
+            "Calling <b>_filterModelStructure._initTemporaryForNewActivity()</b>..",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
     }
-    _filterCriteriaStructure._initTemporaryForNewActivity(
+    _filterModelStructure._initTemporaryForNewActivity(
       activityType: activityType,
       formKeyInstantValues: formKeyInstantValues,
       filterInput: filterInput,
@@ -417,7 +417,7 @@ abstract class FilterModel<
     //
     try {
       for (MultiOptFilterCriterionModel multiOptCriterion
-          in _filterCriteriaStructure._rootOptCriterionModels) {
+          in _filterModelStructure._rootOptCriterionModels) {
         masterFlowItem._addLineFlowItem(
           codeId: "#31040",
           shortDesc:
@@ -462,7 +462,7 @@ abstract class FilterModel<
         errorInfo: errorInfo,
       );
       //
-      _filterCriteriaStructure._setFilterDataState(DataState.error);
+      _filterModelStructure._setFilterDataState(DataState.error);
       _xFilterCriteria = null;
       return _xFilterCriteria;
     }
@@ -495,7 +495,7 @@ abstract class FilterModel<
               updatedSimpleCriterionValues[criterionNameX];
           // SAME-AS: #0012 (formModel)
           if (valueWrap != null) {
-            _filterCriteriaStructure._setTempSimpleCriterionValue(
+            _filterModelStructure._setTempSimpleCriterionValue(
               criterionNameX: criterionNameX,
               value: valueWrap.value,
             );
@@ -518,7 +518,7 @@ abstract class FilterModel<
           errorInfo: errorInfo,
         );
         //
-        _filterCriteriaStructure._setFilterDataState(DataState.error);
+        _filterModelStructure._setFilterDataState(DataState.error);
         _xFilterCriteria = null;
         return _xFilterCriteria;
       }
@@ -548,7 +548,7 @@ abstract class FilterModel<
             );
             //
             dynamic value = defaultSimpleCriterionValues[criterionNameX];
-            _filterCriteriaStructure._setTempSimpleCriterionValue(
+            _filterModelStructure._setTempSimpleCriterionValue(
               criterionNameX: criterionNameX,
               value: value,
             );
@@ -570,7 +570,7 @@ abstract class FilterModel<
           errorInfo: errorInfo,
         );
         //
-        _filterCriteriaStructure._setFilterDataState(DataState.error);
+        _filterModelStructure._setFilterDataState(DataState.error);
         _xFilterCriteria = null;
         return _xFilterCriteria;
       }
@@ -584,7 +584,7 @@ abstract class FilterModel<
               "Calling ${debugObjHtml(this)}.toFilterCriteriaObject() method "
               "to convert criteria in type of Map to a Dart object.",
           parameters: {
-            "dataMap": _filterCriteriaStructure._tempCriteriaValues,
+            "dataMap": _filterModelStructure._tempCriteriaValues,
           },
           lineFlowType: LineFlowType.controllableCalling,
           tipDocument: TipDocument.filterCriteria,
@@ -592,7 +592,7 @@ abstract class FilterModel<
       }
       //
       final Map<String, dynamic> newCriteriaMap = {
-        ..._filterCriteriaStructure._tempCriteriaValues
+        ..._filterModelStructure._tempCriteriaValues
       };
       // Convert Map Data to FilterCriteria Object.
       final XFilterCriteria<FILTER_CRITERIA> newCriteriaCouple =
@@ -614,16 +614,16 @@ abstract class FilterModel<
       //
       // Update Real FromData from Temporary FormData:
       //
-      _filterCriteriaStructure._updateTempToReal();
+      _filterModelStructure._updateTempToReal();
       //
       // IMPORTANT:
       //
       _formKeyPatchValue(
-        newCurrentValue: _filterCriteriaStructure._currentCriteriaValues,
+        newCurrentValue: _filterModelStructure._currentCriteriaValues,
       );
       //
       __initiatedAtLeastOnce = true;
-      _filterCriteriaStructure._setFilterDataState(DataState.ready);
+      _filterModelStructure._setFilterDataState(DataState.ready);
       //
       _xFilterCriteria = newCriteriaCouple;
       return _xFilterCriteria;
@@ -636,12 +636,12 @@ abstract class FilterModel<
         showSnackBar: true,
         tipDocument: null,
       );
-      _filterCriteriaStructure._setFilterDataState(DataState.error);
+      _filterModelStructure._setFilterDataState(DataState.error);
       //
       // IMPORTANT:
       //
       _formKeyPatchValue(
-        newCurrentValue: _filterCriteriaStructure._currentCriteriaValues,
+        newCurrentValue: _filterModelStructure._currentCriteriaValues,
       );
       //
       _xFilterCriteria = null;
@@ -687,15 +687,15 @@ abstract class FilterModel<
 
     // Get current OptCriterion data:
     XData? tempMultiOptCriterionXData =
-        _filterCriteriaStructure._getTempMultiOptCriterionXData(
+        _filterModelStructure._getTempMultiOptCriterionXData(
       multiOptCriterionNameX,
     );
-    final dynamic tempCurrentMultiOptValue = _filterCriteriaStructure
+    final dynamic tempCurrentMultiOptValue = _filterModelStructure
         ._getTempCurrentCriterionValue(criterionNameX: multiOptCriterionNameX);
 
     //
     dynamic newSelectedValue =
-        _filterCriteriaStructure._getTempCurrentCriterionValue(
+        _filterModelStructure._getTempCurrentCriterionValue(
       criterionNameX: multiOptCriterionNameX,
     );
     if (activityType == FilterActivityType.updateFromFilterPanel) {
@@ -727,21 +727,21 @@ abstract class FilterModel<
     multiOptCriterion._tempCurrentValue = newSelectedValue;
     //
     if (valueChanged) {
-      _filterCriteriaStructure._updateChildrenMultiOptValueToNullCascade(
+      _filterModelStructure._updateChildrenMultiOptValueToNullCascade(
         multiOptCriterion: multiOptCriterion,
       );
     }
     //
     if (multiOptCriterionParent != null) {
       XData? tempMultiOptXDataParent =
-          _filterCriteriaStructure._getTempMultiOptCriterionXData(
+          _filterModelStructure._getTempMultiOptCriterionXData(
         multiOptCriterionParent.criterionNameX,
       );
       //
       if (tempMultiOptXDataParent != null) {
         // Item or Item List (Multi Selection):
         Object? parentOptCriterionValueOLD =
-            _filterCriteriaStructure._getCurrentCriterionValue(
+            _filterModelStructure._getCurrentCriterionValue(
           criterionNameX: multiOptCriterionParent.criterionNameX,
         );
         // Parent Value change?
@@ -758,14 +758,14 @@ abstract class FilterModel<
     }
     //
     if (tempMultiOptCriterionXData == null) {
-      _filterCriteriaStructure._setTempMultiOptCriterionXData(
+      _filterModelStructure._setTempMultiOptCriterionXData(
         multiOptCriterionNameX: multiOptCriterionNameX,
         multiOptXData: null,
       );
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
-      _filterCriteriaStructure._updateCriteriaTempValues({
+      _filterModelStructure._updateCriteriaTempValues({
         multiOptCriterionNameX: null,
       });
     }
@@ -873,7 +873,7 @@ abstract class FilterModel<
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-          _filterCriteriaStructure._getTempCurrentCriterionValue(
+          _filterModelStructure._getTempCurrentCriterionValue(
         criterionNameX: multiOptCriterionNameX,
       );
       //
@@ -914,7 +914,7 @@ abstract class FilterModel<
       },
       lineFlowType: LineFlowType.nonControllableCalling,
     );
-    _filterCriteriaStructure._setTempMultiOptCriterionXData(
+    _filterModelStructure._setTempMultiOptCriterionXData(
       multiOptCriterionNameX: multiOptCriterionNameX,
       multiOptXData: tempMultiOptCriterionXData,
     );
@@ -927,7 +927,7 @@ abstract class FilterModel<
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
-        _filterCriteriaStructure._updateCriteriaTempValues({
+        _filterModelStructure._updateCriteriaTempValues({
           multiOptCriterionNameX: candidateSelectedItem,
         });
       } else {
@@ -935,7 +935,7 @@ abstract class FilterModel<
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
-        _filterCriteriaStructure._updateCriteriaTempValues({
+        _filterModelStructure._updateCriteriaTempValues({
           multiOptCriterionNameX: candidateSelectedItems,
         });
       }
@@ -943,13 +943,13 @@ abstract class FilterModel<
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
-      _filterCriteriaStructure._updateCriteriaTempValues({
+      _filterModelStructure._updateCriteriaTempValues({
         multiOptCriterionNameX: null,
       });
     }
     //
     Object? tempSelectedCriterionValue =
-        _filterCriteriaStructure._getTempCurrentCriterionValue(
+        _filterModelStructure._getTempCurrentCriterionValue(
       criterionNameX: multiOptCriterionNameX,
     );
     masterFlowItem._addLineFlowItem(
@@ -985,7 +985,7 @@ abstract class FilterModel<
     required String methodName,
     required String multiOptCriterionNameX,
   }) {
-    MultiOptFilterCriterionModel? multiOptCriterion = _filterCriteriaStructure
+    MultiOptFilterCriterionModel? multiOptCriterion = _filterModelStructure
         ._getMultiOptFilterCriterion(multiOptCriterionNameX);
     if (multiOptCriterion == null) {
       throw "The '$multiOptCriterionNameX' is not $MultiOptFilterCriterionModel";
@@ -1010,7 +1010,7 @@ abstract class FilterModel<
     required String criterionNameX,
     required FilterErrorMethod filterErrorMethod,
   }) {
-    if (_filterCriteriaStructure._isMultiOptFilterCriterion(criterionNameX)) {
+    if (_filterModelStructure._isMultiOptFilterCriterion(criterionNameX)) {
       throw DevError(
         errorMessage:
             '$criterionNameX is not a ${getTypeNameWithoutGenerics(SimpleFilterCriterionModel)}',
@@ -1094,7 +1094,7 @@ abstract class FilterModel<
   /// Used for FilterPanel.
   ///
   Map<String, dynamic> _initialValuesForFilterPanel() {
-    return _filterCriteriaStructure._currentCriteriaValues;
+    return _filterModelStructure._currentCriteriaValues;
   }
 
   // ***************************************************************************
@@ -1284,14 +1284,14 @@ abstract class FilterModel<
   MultiOptFilterCriterionModel? findMultiOptFilterCriterion({
     required String multiOptCriterionNameX,
   }) {
-    return _filterCriteriaStructure._findMultiOptFilterCriterion(
+    return _filterModelStructure._findMultiOptFilterCriterion(
       multiOptCriterionNameX,
     );
   }
 
   // SAME-AS: #0008 (formModel.debugGetMultiOptPropLoadCount())
   int debugGetMultiOptCriteriaLoadCount(String multiOptCriterionNameX) {
-    return _filterCriteriaStructure._debugGetMultiOptCriterionLoadCount(
+    return _filterModelStructure._debugGetMultiOptCriterionLoadCount(
       multiOptCriterionNameX: multiOptCriterionNameX,
     );
   }

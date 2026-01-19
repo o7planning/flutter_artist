@@ -188,8 +188,14 @@ part '_form_/_form_related_data.dart';
 
 part '_filter_/_filter_criteria.dart';
 
+part '_filter_/_val_/__filter_x_val.dart';
+
+part '_filter_/_val_/__filter_val.dart';
+
 part '_filter_/_def_/_filter_criterion_def.dart';
-part '_filter_/_def_/_filter_condition_model.dart';
+
+part '_filter_/_model_/_filter_condition_model.dart';
+
 part '_filter_/_def_/_filter_condition_def.dart';
 
 part '_filter_/_filter_input.dart';

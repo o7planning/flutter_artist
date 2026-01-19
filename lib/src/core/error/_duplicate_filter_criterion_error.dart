@@ -4,13 +4,11 @@ class DuplicateCriterionDefError {
   DuplicateCriterionDefError({required this.criterionName});
 }
 
-
 class DuplicateFilterCriterionError {
   final String criterionNameX;
 
   DuplicateFilterCriterionError({required this.criterionNameX});
 }
-
 
 class DuplicateFilterCriterionXError {
   final String criterionNameX;
@@ -26,7 +24,6 @@ class DuplicateFilterCriterionXError {
     return "Duplicated Criterion Name X: $criterionNameX";
   }
 }
-
 
 class DuplicateFilterCriteriaGroupError {
   final String groupName;

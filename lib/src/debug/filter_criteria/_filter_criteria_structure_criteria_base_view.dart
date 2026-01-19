@@ -11,24 +11,24 @@ import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '_filter_model_debug_view.dart';
-import 'widgets/_criteria_view.dart';
+import 'widgets/_criterion_def_view.dart';
 
-class FilterCriteriaStructureView extends StatefulWidget {
+class FilterModelStructureCriteriaBaseView extends StatefulWidget {
   final FilterModel filterModel;
 
-  const FilterCriteriaStructureView({
+  const FilterModelStructureCriteriaBaseView({
     required super.key,
     required this.filterModel,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return FilterCriteriaStructureViewState();
+    return FilterModelStructureCriteriaBaseViewState();
   }
 }
 
-class FilterCriteriaStructureViewState
-    extends State<FilterCriteriaStructureView> {
+class FilterModelStructureCriteriaBaseViewState
+    extends State<FilterModelStructureCriteriaBaseView> {
   final MultiSplitViewController _splitViewController =
       MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
@@ -69,19 +69,17 @@ class FilterCriteriaStructureViewState
     rootTreeNode = TreeNode.root()..add(filterModelNode);
     //
     FilterModelStructure structure = widget.filterModel.filterModelStructure;
-
-    List<MultiOptFilterCriterionModel> rootMultiOptCriterion =
-        structure.debugRootOptCriteria;
-    for (MultiOptFilterCriterionModel multiOptCriterion
-        in rootMultiOptCriterion) {
+    //
+    List<MultiOptCriterionDef> rootMultiOptCriterion =
+        structure.rootMultiOptCriterionDefs;
+    for (MultiOptCriterionDef multiOptCriterion in rootMultiOptCriterion) {
       _addMultiOptCriterionCascade(filterModelNode, multiOptCriterion);
     }
-    List<SimpleFilterCriterionModel> simpleCriteria =
-        structure.debugSimpleCriteria;
-    for (SimpleFilterCriterionModel simpleCriterion in simpleCriteria) {
+    List<SimpleCriterionDef> simpleCriteria = structure.simpleCriterionDefs;
+    for (SimpleCriterionDef simpleCriterion in simpleCriteria) {
       _addSimpleCriterion(filterModelNode, simpleCriterion);
     }
-
+    //
     return rootTreeNode;
   }
 
@@ -92,8 +90,8 @@ class FilterCriteriaStructureViewState
       return FilterModelDebugView(
         filterModel: _currentNode!.data,
       );
-    } else if (_currentNode!.data is FilterCriterionModel) {
-      return FilterCriterionView(
+    } else if (_currentNode!.data is CriterionDef) {
+      return FilterCriterionDefView(
         criterion: _currentNode!.data,
       );
     } else {
@@ -139,13 +137,14 @@ class FilterCriteriaStructureViewState
             color: Colors.grey[600],
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.zero,
+            // icon: Icons.keyboard_arrow_down_outlined,
             curve: Curves.linear,
           );
         },
         indentation: const Indentation(
           style: IndentStyle.squareJoint,
           thickness: 1,
-          width: 10,
+          width: 15,
         ),
         onTreeReady: (
           TreeViewController<dynamic, TreeNode<dynamic>> controller,
@@ -164,25 +163,25 @@ class FilterCriteriaStructureViewState
           if (data is FilterModel) {
             title = getClassName(data);
             prefixIconData = FaIconConstants.filterModelIconData;
-          } else if (data is SimpleFilterCriterionModel) {
-            title = data.criterionNameX;
+          } else if (data is SimpleCriterionDef) {
+            title = data.criterionBaseName;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionNameX}";
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionBaseName}";
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
             isMultiSelection = false;
-          } else if (data is MultiOptFilterCriterionModel) {
-            title = data.criterionNameX;
+          } else if (data is MultiOptCriterionDef) {
+            title = data.criterionBaseName;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionNameX}";
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionBaseName}";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
             isMultiSelection = data.selectionType == SelectionType.multi;
           } else {
             prefixIconData = FaIconConstants.uknownIconData;
-            title = "UKNOWN";
+            title = "UNKNOWN";
           }
           return Material(
             child: ListTile(
@@ -244,28 +243,25 @@ class FilterCriteriaStructureViewState
   }
 
   void _addMultiOptCriterionCascade(
-      TreeNode currentNode, MultiOptFilterCriterionModel multiOptCriterion) {
+      TreeNode currentNode, MultiOptCriterionDef multiOptCriterion) {
     TreeNode childNode = TreeNode(
-      key: "MultiOptCriterion-${multiOptCriterion.criterionNameX}",
+      key: "MultiOptCriterion-${multiOptCriterion.criterionBaseName}",
       data: multiOptCriterion,
     );
     //
     currentNode.add(childNode);
-    for (MultiOptFilterCriterionModel childMultiOptCriterion
+    for (MultiOptCriterionDef childMultiOptCriterion
         in multiOptCriterion.children) {
       _addMultiOptCriterionCascade(childNode, childMultiOptCriterion);
     }
   }
 
   void _addSimpleCriterion(
-      TreeNode currentNode, SimpleFilterCriterionModel simpleCriterion) {
+      TreeNode currentNode, SimpleCriterionDef simpleCriterion) {
     TreeNode childNode = TreeNode(
-      key: "SimpleCriterion-${simpleCriterion.criterionNameX}",
+      key: "SimpleCriterion-${simpleCriterion.criterionBaseName}",
       data: simpleCriterion,
     );
-    // if (simpleCriterion == widget.selectedCriterion) {
-    //   _currentNode = childNode;
-    // }
     currentNode.add(childNode);
   }
 

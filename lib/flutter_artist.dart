@@ -29,8 +29,6 @@ export 'src/core/built_in/string_value_filter_input.dart';
 export 'src/core/built_in/string_value_filter_model.dart';
 export 'src/core/built_in_ui/breadcrumb_sort_panel.dart';
 export 'src/core/built_in_ui/dropdown_sort_panel.dart';
-
-export 'src/core/enums/_filter_criterion_operator.dart';
 export 'src/core/enums/_action_confirmation_type.dart';
 export 'src/core/enums/_action_result_state.dart';
 export 'src/core/enums/_after_query_action.dart';
@@ -43,6 +41,7 @@ export 'src/core/enums/_data_mode.dart';
 export 'src/core/enums/_data_state.dart';
 export 'src/core/enums/_debug_cat.dart';
 export 'src/core/enums/_filter_activity_type.dart';
+export 'src/core/enums/_filter_criterion_operator.dart';
 export 'src/core/enums/_force_type.dart';
 export 'src/core/enums/_form_action.dart';
 export 'src/core/enums/_form_activity_type.dart';

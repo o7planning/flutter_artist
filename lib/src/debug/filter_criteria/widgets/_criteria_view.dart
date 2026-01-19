@@ -44,8 +44,8 @@ class FilterCriterionView extends StatelessWidget {
             ),
             title: IconLabelText(
               label: criterion is SimpleFilterCriterionModel
-                  ? 'Criterion Name: '
-                  : 'Multi Opt Criterion Name: ',
+                  ? 'Criterion Name X: '
+                  : 'Multi Opt Criterion Name X: ',
               text: criterion.criterionNameX,
               textStyle: TextStyle(color: Colors.indigo),
             ),

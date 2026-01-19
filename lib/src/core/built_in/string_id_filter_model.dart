@@ -18,7 +18,7 @@ class StringIdFilterModel
       ],
       multiOptCriterionDefs: [],
       //
-      connector: ConditionConnector.and,
+      conditionConnector: ConditionConnector.and,
       conditionDefs: [
         ConditionDef.single(
           criterionNameX: "id${CriterionX.symbol}",

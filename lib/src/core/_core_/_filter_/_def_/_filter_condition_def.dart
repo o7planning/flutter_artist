@@ -1,7 +1,10 @@
 part of '../../core.dart';
 
 abstract interface class ConditionDef {
+  FilterModelStructure get structure;
+
   ConditionDef? get group;
+
   List<ConditionDef> get conditions;
 
   factory ConditionDef.single({
@@ -9,7 +12,7 @@ abstract interface class ConditionDef {
     required CriterionOperator operator,
     List<CriterionOperator>? supportedOperators,
   }) {
-    return _ConditionDef(
+    return ConditionDefImpl._(
       criterionNameX: criterionNameX,
       operator: operator,
       supportedOperators: supportedOperators,
@@ -21,7 +24,7 @@ abstract interface class ConditionDef {
     required ConditionConnector connector,
     required List<ConditionDef> conditions,
   }) {
-    return _ConditionGroupDef(
+    return ConditionGroupDefImpl._(
       groupName: groupName,
       connector: connector,
       conditions: conditions,
@@ -29,16 +32,24 @@ abstract interface class ConditionDef {
   }
 }
 
-class _ConditionDef implements ConditionDef {
+class ConditionDefImpl implements ConditionDef {
+  late final FilterModelStructure _structure;
+
+  @override
+  FilterModelStructure get structure => _structure;
+
   final CriterionX _criterionX;
   final CriterionOperator operator;
   late final List<CriterionOperator> _supportedOperators;
+
   //
   String get criterionName => _criterionX.criterionName;
+
   String get criterionNameX => _criterionX.criterionNameX;
+
   String get suffix => _criterionX.suffix!;
 
-  late final _ConditionGroupDef? __group;
+  late final ConditionGroupDefImpl? __group;
 
   @override
   ConditionDef? get group => __group;
@@ -46,7 +57,7 @@ class _ConditionDef implements ConditionDef {
   @override
   List<ConditionDef> get conditions => [];
 
-  _ConditionDef({
+  ConditionDefImpl._({
     required String criterionNameX,
     required this.operator,
     List<CriterionOperator>? supportedOperators,
@@ -57,11 +68,15 @@ class _ConditionDef implements ConditionDef {
   }
 }
 
-class _ConditionGroupDef implements ConditionDef {
+class ConditionGroupDefImpl implements ConditionDef {
+  late final FilterModelStructure _structure;
+
+  @override
+  FilterModelStructure get structure => _structure;
   final String groupName;
   final ConditionConnector connector;
 
-  late final _ConditionGroupDef? __group;
+  late final ConditionGroupDefImpl? __group;
 
   @override
   ConditionDef? get group => __group;
@@ -69,7 +84,7 @@ class _ConditionGroupDef implements ConditionDef {
   @override
   final List<ConditionDef> conditions;
 
-  _ConditionGroupDef({
+  ConditionGroupDefImpl._({
     required this.groupName,
     required this.connector,
     required this.conditions,
