@@ -47,9 +47,9 @@ class FilterConditionModelView extends StatelessWidget {
             ),
             title: IconLabelSelectableText(
               label: criterionModel is SimpleFilterCriterionModel
-                  ? 'Criterion Name X: '
-                  : 'Multi Opt Criterion Name X: ',
-              text: conditionModel.criterionNameX,
+                  ? 'Criterion Name Tilde: '
+                  : 'Multi Opt Criterion Name Tilde: ',
+              text: conditionModel.criterionNameTilde,
               textStyle: TextStyle(color: Colors.indigo),
             ),
             subtitle: Column(

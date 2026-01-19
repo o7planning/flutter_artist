@@ -165,17 +165,17 @@ class FilterCriteriaStructureViewState
             title = getClassName(data);
             prefixIconData = FaIconConstants.filterModelIconData;
           } else if (data is SimpleFilterCriterionModel) {
-            title = data.criterionNameX;
+            title = data.criterionNameTilde;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionNameX}";
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionNameTilde}";
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
             isMultiSelection = false;
           } else if (data is MultiOptFilterCriterionModel) {
-            title = data.criterionNameX;
+            title = data.criterionNameTilde;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionNameX}";
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionNameTilde}";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
@@ -246,7 +246,7 @@ class FilterCriteriaStructureViewState
   void _addMultiOptCriterionCascade(
       TreeNode currentNode, MultiOptFilterCriterionModel multiOptCriterion) {
     TreeNode childNode = TreeNode(
-      key: "MultiOptCriterion-${multiOptCriterion.criterionNameX}",
+      key: "MultiOptCriterion-${multiOptCriterion.criterionNameTilde}",
       data: multiOptCriterion,
     );
     //
@@ -260,7 +260,7 @@ class FilterCriteriaStructureViewState
   void _addSimpleCriterion(
       TreeNode currentNode, SimpleFilterCriterionModel simpleCriterion) {
     TreeNode childNode = TreeNode(
-      key: "SimpleCriterion-${simpleCriterion.criterionNameX}",
+      key: "SimpleCriterion-${simpleCriterion.criterionNameTilde}",
       data: simpleCriterion,
     );
     // if (simpleCriterion == widget.selectedCriterion) {

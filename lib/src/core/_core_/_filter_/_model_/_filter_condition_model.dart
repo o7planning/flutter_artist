@@ -14,7 +14,7 @@ class ConditionModelImpl extends ConditionModel {
   @override
   final FilterModelStructure structure;
   final String criterionName;
-  final String criterionNameX;
+  final String criterionNameTilde;
   final CriterionOperator operator;
 
   final List<CriterionOperator> _supportedOperators;
@@ -23,13 +23,13 @@ class ConditionModelImpl extends ConditionModel {
       List.unmodifiable(_supportedOperators);
 
   FilterCriterionModel get filterCriterionModel {
-    return structure._allCriterionModelMapX[criterionNameX]!;
+    return structure._allCriterionModelMapX[criterionNameTilde]!;
   }
 
   ConditionModelImpl({
     required this.structure,
     required this.criterionName,
-    required this.criterionNameX,
+    required this.criterionNameTilde,
     required this.operator,
     required List<CriterionOperator> supportedOperators,
   })  : _supportedOperators = supportedOperators,
@@ -47,7 +47,7 @@ class ConditionModelImpl extends ConditionModel {
   @override
   IConditionXVal toFilterRuleXVal() {
     return FilterConditionXVal(
-      criterionNameX: criterionNameX,
+      criterionNameTilde: criterionNameTilde,
       operator: operator,
       value: filterCriterionModel.currentValue,
     );

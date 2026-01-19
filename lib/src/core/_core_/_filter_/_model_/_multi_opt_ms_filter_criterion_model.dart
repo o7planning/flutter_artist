@@ -7,7 +7,7 @@ class MultiOptMsFilterCriterionModel<V>
     extends MultiOptFilterCriterionModel<V> {
   MultiOptMsFilterCriterionModel({
     required super.parent,
-    required super.criterionNameX,
+    required super.criterionNameTilde,
     required super.criterionName,
   }) : super._(selectionType: SelectionType.multi, children: const []);
 

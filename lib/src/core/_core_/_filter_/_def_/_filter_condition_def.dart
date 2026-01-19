@@ -8,12 +8,12 @@ abstract interface class ConditionDef {
   List<ConditionDef> get conditions;
 
   factory ConditionDef.single({
-    required String criterionNameX,
+    required String criterionNameTilde,
     required CriterionOperator operator,
     List<CriterionOperator>? supportedOperators,
   }) {
     return ConditionDefImpl._(
-      criterionNameX: criterionNameX,
+      criterionNameTilde: criterionNameTilde,
       operator: operator,
       supportedOperators: supportedOperators,
     );
@@ -38,14 +38,14 @@ class ConditionDefImpl implements ConditionDef {
   @override
   FilterModelStructure get structure => _structure;
 
-  final CriterionX _criterionX;
+  final CriterionTilde _criterionX;
   final CriterionOperator operator;
   late final List<CriterionOperator> _supportedOperators;
 
   //
   String get criterionName => _criterionX.criterionName;
 
-  String get criterionNameX => _criterionX.criterionNameX;
+  String get criterionNameTilde => _criterionX.criterionNameTilde;
 
   String get suffix => _criterionX.suffix!;
 
@@ -58,10 +58,10 @@ class ConditionDefImpl implements ConditionDef {
   List<ConditionDef> get conditions => [];
 
   ConditionDefImpl._({
-    required String criterionNameX,
+    required String criterionNameTilde,
     required this.operator,
     List<CriterionOperator>? supportedOperators,
-  }) : _criterionX = CriterionX.parse(criterionNameX: criterionNameX) {
+  }) : _criterionX = CriterionTilde.parse(criterionNameTilde: criterionNameTilde) {
     _supportedOperators = supportedOperators == null
         ? [operator]
         : {...supportedOperators, operator}.toList();

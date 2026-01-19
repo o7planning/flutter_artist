@@ -33,12 +33,12 @@ class FilterConditionGroupXVal implements IConditionXVal {
 }
 
 class FilterConditionXVal implements IConditionXVal {
-  final String criterionNameX;
+  final String criterionNameTilde;
   final CriterionOperator operator;
   final dynamic value;
 
   FilterConditionXVal({
-    required this.criterionNameX,
+    required this.criterionNameTilde,
     required this.operator,
     required this.value,
   });
@@ -46,7 +46,7 @@ class FilterConditionXVal implements IConditionXVal {
   @override
   Map<String, dynamic> _toMapData() {
     return {
-      "criterionNameX": criterionNameX,
+      "criterionNameTilde": criterionNameTilde,
       "value": value,
       "operator": operator.text,
     };

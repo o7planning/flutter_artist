@@ -12,7 +12,7 @@ class StringValueFilterModel
       : _stringValue = stringValue;
 
   @override
-  FilterModelStructure registerCriteriaStructure() {
+  FilterModelStructure registerFilterModelStructure() {
     return FilterModelStructure(
       simpleCriterionDefs: [
         SimpleCriterionDef<String>(criterionBaseName: 'string'),
@@ -22,7 +22,7 @@ class StringValueFilterModel
       conditionConnector: ConditionConnector.and,
       conditionDefs: [
         ConditionDef.single(
-          criterionNameX: "string${CriterionX.symbol}",
+          criterionNameTilde: "string${CriterionTilde.symbol}",
           operator: CriterionOperator.equalTo,
         ),
       ],
@@ -32,7 +32,7 @@ class StringValueFilterModel
   @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionName,
-    required String multiOptCriterionNameX,
+    required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required StringValueFilterInput? filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -43,7 +43,7 @@ class StringValueFilterModel
   @override
   OptValueWrap? getUpdatedValueForMultiOptCriterion({
     required String multiOptCriterionName,
-    required String multiOptCriterionNameX,
+    required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required StringValueFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -64,7 +64,7 @@ class StringValueFilterModel
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
     required String multiOptCriterionName,
-    required String multiOptCriterionNameX,
+    required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,

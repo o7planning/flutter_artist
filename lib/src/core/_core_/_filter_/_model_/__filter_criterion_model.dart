@@ -5,7 +5,7 @@ abstract class FilterCriterionModel<V> {
 
   //
   final String criterionName;
-  final String criterionNameX;
+  final String criterionNameTilde;
 
   // IMPORTANT: Do not change type (dynamic).
   dynamic _candidateUpdateValue;
@@ -44,7 +44,7 @@ abstract class FilterCriterionModel<V> {
   Type get dataType => V;
 
   FilterCriterionModel({
-    required this.criterionNameX,
+    required this.criterionNameTilde,
     required this.criterionName,
   });
 

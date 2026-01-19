@@ -11,22 +11,22 @@ abstract class SortModelBuilder<ITEM extends Object> {
     required this.clientSideMultiSort,
     required this.serverSideMultiSort,
   }) {
-    _structure = registerCriteriaStructure();
+    _structure = registerFilterModelStructure();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  SortCriteriaStructure registerCriteriaStructure();
+  SortCriteriaStructure registerFilterModelStructure();
 
   // ***************************************************************************
   // ***************************************************************************
 
-  String _getText({required String criterionNameX}) {
-    SortCriterionDef? criterion = _structure._sortCriteriaMap[criterionNameX];
+  String _getText({required String criterionNameTilde}) {
+    SortCriterionDef? criterion = _structure._sortCriteriaMap[criterionNameTilde];
     if (criterion == null) {
-      return criterionNameX;
+      return criterionNameTilde;
     }
     String? translationKey = criterion.translationKey;
     if (translationKey == null) {

@@ -5,23 +5,23 @@ class DuplicateCriterionDefError {
 }
 
 class DuplicateFilterCriterionError {
-  final String criterionNameX;
+  final String criterionNameTilde;
 
-  DuplicateFilterCriterionError({required this.criterionNameX});
+  DuplicateFilterCriterionError({required this.criterionNameTilde});
 }
 
 class DuplicateFilterCriterionXError {
-  final String criterionNameX;
+  final String criterionNameTilde;
   final String? groupName;
 
   DuplicateFilterCriterionXError({
-    required this.criterionNameX,
+    required this.criterionNameTilde,
     required this.groupName,
   });
 
   @override
   String toString() {
-    return "Duplicated Criterion Name X: $criterionNameX";
+    return "Duplicated Criterion Name Tilde: $criterionNameTilde";
   }
 }
 
@@ -47,14 +47,14 @@ class FilterCriterionNotFoundError {
   }
 }
 
-class CriterionNameXError {
-  final String criterionNameX;
+class CriterionNameTildeError {
+  final String criterionNameTilde;
 
-  CriterionNameXError({required this.criterionNameX});
+  CriterionNameTildeError({required this.criterionNameTilde});
 
   @override
   String toString() {
-    return "Invalid Criterion Name X: $criterionNameX";
+    return "Invalid Criterion Name Tilde: $criterionNameTilde";
   }
 }
 

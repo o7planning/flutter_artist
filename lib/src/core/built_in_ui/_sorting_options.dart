@@ -19,7 +19,7 @@ Widget buildSortBtn({
         ? () {
             SortDirection? nextDirection = sortCriterion.getNextDirection();
             sortModel.updateSortingCriterionByName(
-              criterionNameX: sortCriterion.criterionNameX,
+              criterionNameTilde: sortCriterion.criterionNameTilde,
               direction: nextDirection,
               moveToFirst: false,
             );

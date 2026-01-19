@@ -12,7 +12,7 @@ class _DefaultFilterModel
   }
 
   @override
-  FilterModelStructure registerCriteriaStructure() {
+  FilterModelStructure registerFilterModelStructure() {
     return FilterModelStructure(
       simpleCriterionDefs: [],
       multiOptCriterionDefs: [],
@@ -25,7 +25,7 @@ class _DefaultFilterModel
   @override
   Future<ListXData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionName,
-    required String multiOptCriterionNameX,
+    required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required Object? parentMultiOptCriterionValue,
     required EmptyFilterInput? filterInput,
@@ -36,7 +36,7 @@ class _DefaultFilterModel
   @override
   OptValueWrap? getUpdatedValueForMultiOptCriterion({
     required String multiOptCriterionName,
-    required String multiOptCriterionNameX,
+    required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required EmptyFilterInput filterInput,
@@ -55,7 +55,7 @@ class _DefaultFilterModel
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
     required String multiOptCriterionName,
-    required String multiOptCriterionNameX,
+    required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,

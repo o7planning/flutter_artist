@@ -172,17 +172,17 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
             FilterCriterionModel criterionModel = data.filterCriterionModel;
 
             if (criterionModel is SimpleFilterCriterionModel) {
-              title = data.criterionNameX;
+              title = data.criterionNameTilde;
               tooltip =
-                  "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType.toString()}> ${data.criterionNameX}";
+                  "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType.toString()}> ${data.criterionNameTilde}";
               prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
               //
               isMultiOpt = false;
               isMultiSelection = false;
             } else if (criterionModel is MultiOptFilterCriterionModel) {
-              title = data.criterionNameX;
+              title = data.criterionNameTilde;
               tooltip =
-                  "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType.toString()}> ${data.criterionNameX}";
+                  "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType.toString()}> ${data.criterionNameTilde}";
               prefixIconData = FaIconConstants.optPropOrCriterionIconData;
               //
               isMultiOpt = true;
@@ -286,7 +286,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
     required ConditionModelImpl criterionConditionModel,
   }) {
     TreeNode childNode = TreeNode(
-      // key: "FilterCriterionConditionModel-${multiOptCriterionModel.criterionNameX}",
+      // key: "FilterCriterionConditionModel-${multiOptCriterionModel.criterionNameTilde}",
       data: criterionConditionModel,
     );
     //

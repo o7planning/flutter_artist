@@ -23,7 +23,7 @@ class SortCriteria extends Equatable {
   /// ```
   ///
   Map<String, String> toCriteriaMap() {
-    return {for (var e in _criteria) e.criterionNameX: e.direction.sqlKeyword};
+    return {for (var e in _criteria) e.criterionNameTilde: e.direction.sqlKeyword};
   }
 
   ///

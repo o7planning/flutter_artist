@@ -4,7 +4,7 @@ class CalculatedFilterCriterionModel<V> extends FilterCriterionModel<V> {
   final V Function() calculate;
 
   CalculatedFilterCriterionModel({
-    required super.criterionNameX,
+    required super.criterionNameTilde,
     required super.criterionName,
     required this.calculate,
   });

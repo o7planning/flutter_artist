@@ -24,11 +24,11 @@ class SimpleCriterionDef<V> extends CriterionDef<V> {
   }) : super._();
 
   SimpleFilterCriterionModel<V> createModel({
-    required String criterionNameX,
+    required String criterionNameTilde,
     required String criterionName,
   }) {
     return SimpleFilterCriterionModel<V>(
-      criterionNameX: criterionNameX,
+      criterionNameTilde: criterionNameTilde,
       criterionName: criterionName,
     );
   }
@@ -79,17 +79,17 @@ class MultiOptCriterionDef<V> extends CriterionDef<V> {
   @override
   MultiOptFilterCriterionModel<V> createModel({
     required MultiOptFilterCriterionModel? parent,
-    required String criterionNameX,
+    required String criterionNameTilde,
     required String criterionName,
   }) {
     return selectionType == SelectionType.single
         ? MultiOptSsFilterCriterionModel<V>(
-            criterionNameX: criterionNameX,
+            criterionNameTilde: criterionNameTilde,
             criterionName: criterionName,
             parent: parent,
           )
         : MultiOptMsFilterCriterionModel<V>(
-            criterionNameX: criterionNameX,
+            criterionNameTilde: criterionNameTilde,
             criterionName: criterionName,
             parent: parent,
           );
@@ -106,11 +106,11 @@ class CalculatedCriterionDef<V> extends CriterionDef<V> {
   }) : super._();
 
   CalculatedFilterCriterionModel<V> createModel({
-    required String criterionNameX,
+    required String criterionNameTilde,
     required String criterionName,
   }) {
     return CalculatedFilterCriterionModel<V>(
-      criterionNameX: criterionNameX,
+      criterionNameTilde: criterionNameTilde,
       criterionName: criterionName,
       calculate: () {
         throw UnimplementedError();
@@ -119,30 +119,30 @@ class CalculatedCriterionDef<V> extends CriterionDef<V> {
   }
 }
 
-class CriterionX {
+class CriterionTilde {
   static const String symbol = "~";
-  final String criterionNameX;
+  final String criterionNameTilde;
   late final String criterionName;
   late final String? suffix;
 
-  CriterionX.parse({required this.criterionNameX}) {
-    List<String> ss = criterionNameX.split(symbol);
+  CriterionTilde.parse({required this.criterionNameTilde}) {
+    List<String> ss = criterionNameTilde.split(symbol);
     if (ss.length != 2) {
-      throw CriterionNameXError(criterionNameX: criterionNameX);
+      throw CriterionNameTildeError(criterionNameTilde: criterionNameTilde);
     }
     String cn = ss[0];
     String sf = ss[1];
     if (sf.trim() != sf) {
-      throw CriterionNameXError(criterionNameX: criterionNameX);
+      throw CriterionNameTildeError(criterionNameTilde: criterionNameTilde);
     }
     if (cn.trim() != cn || cn.trim().isEmpty) {
-      throw CriterionNameXError(criterionNameX: criterionNameX);
+      throw CriterionNameTildeError(criterionNameTilde: criterionNameTilde);
     }
     criterionName = cn;
     suffix = sf;
   }
 
-  static String getNameX({
+  static String getNameTilde({
     required String baseName,
     required String suffix,
   }) {
@@ -154,7 +154,7 @@ class CriterionBaseName {
   final String criterionBaseName;
 
   CriterionBaseName.parse({required this.criterionBaseName}) {
-    List<String> ss = criterionBaseName.split(CriterionX.symbol);
+    List<String> ss = criterionBaseName.split(CriterionTilde.symbol);
     if (ss.length != 1) {
       throw CriterionBaseNameError(criterionBaseName: criterionBaseName);
     }
