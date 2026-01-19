@@ -92,7 +92,7 @@ abstract class FormModel<
     FormModelConfig config = const FormModelConfig(),
   })  : config = config.copy(),
         _autovalidateMode = config.autovalidateMode {
-    __registerPropsStructure();
+    __registerFormModelStructure();
   }
 
   // ***************************************************************************
@@ -111,7 +111,7 @@ abstract class FormModel<
 
   ///
   /// ```dart
-  /// FormPropsStructure registerPropsStructure() {
+  /// FormPropsStructure registerFormModelStructure() {
   ///   return FormPropsStructure(
   ///     simpleProps: [],
   ///     multiOptProps: [
@@ -131,7 +131,7 @@ abstract class FormModel<
   /// ```
   ///
   @_AbstractMethodAnnotation()
-  FormModelStructure registerPropsStructure();
+  FormModelStructure registerFormModelStructure();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -669,9 +669,9 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __registerPropsStructure() {
+  void __registerFormModelStructure() {
     try {
-      _formPropsStructure = registerPropsStructure();
+      _formPropsStructure = registerFormModelStructure();
       _formPropsStructure.formModel = this;
     } on DuplicateFormPropError catch (e) {
       String message =
