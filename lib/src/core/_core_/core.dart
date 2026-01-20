@@ -182,19 +182,29 @@ part '__core__/_log_listener.dart';
 
 part '__core__/_executor.dart';
 
-part '__core__/_extra_form_input.dart';
+part '_form_/_form_input.dart';
 
-part '__core__/_form_related_data.dart';
+part '_form_/_form_related_data.dart';
 
-part '__core__/_filter_criteria.dart';
+part '_filter_/_filter_criteria.dart';
 
-part '__core__/_filter_input.dart';
+part '_filter_/_val_/__filter_x_val.dart';
 
-part '__core__/_filter_model.dart';
+part '_filter_/_val_/__filter_val.dart';
 
-part '__core__/_form_leave_safely.dart';
+part '_filter_/_def_/_filter_criterion_def.dart';
 
-part '__core__/_form_model.dart';
+part '_filter_/_model_/_filter_condition_model.dart';
+
+part '_filter_/_def_/_filter_condition_def.dart';
+
+part '_filter_/_filter_input.dart';
+
+part '_filter_/_filter_model.dart';
+
+part '_form_/_form_leave_safely.dart';
+
+part '_form_/_form_model.dart';
 
 part '_sorting_/_client_side_sort_model.dart';
 
@@ -376,37 +386,37 @@ part '_core_state_/_force_reload_state.dart';
 
 part '_fa_.dart';
 
-part '_filter_/__filter_criterion_model.dart';
+part '_filter_/_model_/__filter_criterion_model.dart';
 
-part '_filter_/_calculated_filter_criterion_model.dart';
+part '_filter_/_model_/_calculated_filter_criterion_model.dart';
 
 part '_filter_/_filter_model_structure.dart';
 
-part '_sorting_/_sort_criterion_model.dart';
+part '_sorting_/_sort_criterion_def.dart';
 
-part '_sorting_/_sort_model_structure.dart';
+part '_sorting_/_sort_criteria_structure.dart';
 
-part '_filter_/_multi_opt_filter_criterion_model.dart';
+part '_filter_/_model_/_multi_opt_filter_criterion_model.dart';
 
-part '_filter_/_multi_opt_ss_filter_criterion_model.dart';
+part '_filter_/_model_/_multi_opt_ss_filter_criterion_model.dart';
 
-part '_filter_/_multi_opt_ms_filter_criterion_model.dart';
+part '_filter_/_model_/_multi_opt_ms_filter_criterion_model.dart';
 
-part '_filter_/_simple_filter_criterion_model.dart';
+part '_filter_/_model_/_simple_filter_criterion_model.dart';
 
-part '_form_/__form_prop_model.dart';
+part '_form_/_model_/__form_prop.dart';
 
-part '_form_/_calculated_form_prop_model.dart';
+part '_form_/_model_/_calculated_form_prop.dart';
 
 part '_form_/_form_model_structure.dart';
 
-part '_form_/_multi_opt_form_prop_model.dart';
+part '_form_/_model_/_multi_opt_form_prop.dart';
 
-part '_form_/_multi_opt_ss_form_prop_model.dart';
+part '_form_/_model_/_multi_opt_ss_form_prop.dart';
 
-part '_form_/_multi_opt_ms_form_prop_model.dart';
+part '_form_/_model_/_multi_opt_ms_form_prop.dart';
 
-part '_form_/_simple_form_prop_model.dart';
+part '_form_/_model_/_simple_form_prop.dart';
 
 part '__core__/_value_wrap.dart';
 

@@ -11,10 +11,10 @@ import '../../../core/widgets/_simple_accordion_section.dart';
 import '../../widgets/_dynamic_value_view.dart';
 import '../../widgets/_xdata_view.dart';
 
-class FilterCriterionModelView extends StatelessWidget {
+class FilterCriterionView extends StatelessWidget {
   final FilterCriterionModel criterion;
 
-  const FilterCriterionModelView({
+  const FilterCriterionView({
     super.key,
     required this.criterion,
   });
@@ -44,9 +44,9 @@ class FilterCriterionModelView extends StatelessWidget {
             ),
             title: IconLabelText(
               label: criterion is SimpleFilterCriterionModel
-                  ? 'Criterion Name: '
-                  : 'Multi Opt Criterion Name: ',
-              text: criterion.criterionName,
+                  ? 'Criterion Name Tilde: '
+                  : 'Multi Opt Criterion Name Tilde: ',
+              text: criterion.criterionNameTilde,
               textStyle: TextStyle(color: Colors.indigo),
             ),
             subtitle: IconLabelText(

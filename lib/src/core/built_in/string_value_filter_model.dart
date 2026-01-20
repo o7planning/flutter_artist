@@ -1,6 +1,5 @@
-import 'package:flutter_artist/src/core/enums/_filter_criterion_operator.dart';
-
 import '../_core_/core.dart';
+import '../enums/_filter_criterion_operator.dart';
 import '../enums/_selection_type.dart';
 import 'string_value_filter_criteria.dart';
 import 'string_value_filter_input.dart';
@@ -8,29 +7,32 @@ import 'string_value_filter_input.dart';
 class StringValueFilterModel
     extends FilterModel<StringValueFilterInput, StringValueFilterCriteria> {
   final String? _stringValue;
-  final FilterCriterionOperator criterionOperator;
 
-  StringValueFilterModel({
-    required String? stringValue,
-    this.criterionOperator = FilterCriterionOperator.contains,
-  }) : _stringValue = stringValue;
+  StringValueFilterModel({required String? stringValue})
+      : _stringValue = stringValue;
 
   @override
   FilterModelStructure registerFilterModelStructure() {
     return FilterModelStructure(
-      simpleCriterionModels: [
-        SimpleFilterCriterionModel<String>(
-          criterionName: "string",
-          operator: criterionOperator,
+      simpleCriterionDefs: [
+        SimpleCriterionDef<String>(criterionBaseName: 'string'),
+      ],
+      multiOptCriterionDefs: [],
+      //
+      conditionConnector: ConditionConnector.and,
+      conditionDefs: [
+        ConditionDef.single(
+          criterionNameTilde: "string${CriterionTilde.symbol}",
+          operator: CriterionOperator.equalTo,
         ),
       ],
-      multiOptCriterionModels: [],
     );
   }
 
   @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required StringValueFilterInput? filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -41,6 +43,7 @@ class StringValueFilterModel
   @override
   OptValueWrap? getUpdatedValueForMultiOptCriterion({
     required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required StringValueFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -61,6 +64,7 @@ class StringValueFilterModel
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
     required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,

@@ -1503,7 +1503,7 @@ abstract class Block<
         shortDesc:
             "${debugObjHtml(formModel)} -> set <b>manualDirty</b> to ${debugObjHtml(manualDirty)}.",
       );
-      formModel?._formModelStructure._setManualDirty(manualDirty);
+      formModel?._formPropsStructure._setManualDirty(manualDirty);
     }
     //
     if (thisXBlock.candidateCurrItem != null) {
@@ -3087,7 +3087,7 @@ abstract class Block<
       codeId: "#04060",
       shortDesc: "${debugObjHtml(formModel)} set formMode to creation.",
     );
-    formModel!._formModelStructure._setFormMode_TODO_DELETE(
+    formModel!._formPropsStructure._setFormMode_TODO_DELETE(
       formMode: FormMode.creation,
       formDataState: DataState.ready,
     );
@@ -3133,7 +3133,7 @@ abstract class Block<
           shortDesc:
               "${debugObjHtml(formModel)} manually set dirty to $initDirty.",
         );
-        formModel!._formModelStructure._setManualDirty(initDirty);
+        formModel!._formPropsStructure._setManualDirty(initDirty);
       }
     } finally {
       __refreshPreparingFormCreationState(

@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 ///
 /// Multi Options Criterion with Single Selection.
@@ -6,8 +6,9 @@ part of '../core.dart';
 class MultiOptSsFilterCriterionModel<V>
     extends MultiOptFilterCriterionModel<V> {
   MultiOptSsFilterCriterionModel({
+    required super.parent,
+    required super.criterionNameTilde,
     required super.criterionName,
-    required super.operator,
     super.children = const [],
   }) : super._(selectionType: SelectionType.single);
 

@@ -28,18 +28,18 @@ abstract class SortModel<ITEM extends Object> {
             : sortModelBuilder?.clientSideMultiSort ?? false {
     int optCount = 0;
     if (sortModelBuilder != null) {
-      SortModelStructure structure =
-          sortModelBuilder!.registerSortModelStructure();
-      for (SortCriterionModel criterionDef in structure._sortCriterionModelMap.values) {
+      SortCriteriaStructure structure =
+          sortModelBuilder!.registerFilterModelStructure();
+      for (SortCriterionDef criterionDef in structure._sortCriteriaMap.values) {
         SortDirection? sortDirection = sortingSide == SortingSide.server
             ? criterionDef.initialServerSideSortingDirection
             : criterionDef.initialClientSideSortingDirection;
         String text = sortModelBuilder!._getText(
-          criterionName: criterionDef.criterionName,
+          criterionNameTilde: criterionDef.criterionName,
         );
         SortCriterion criterion = SortCriterion._(
           direction: sortDirection,
-          criterionName: criterionDef.criterionName,
+          criterionNameTilde: criterionDef.criterionName,
           skipNonDirectionWhileSelecting: sortingSide == SortingSide.server
               ? criterionDef.serverSideSkipNonDirectionWhileSelecting
               : criterionDef.clientSideSkipNonDirectionWhileSelecting,
@@ -54,9 +54,9 @@ abstract class SortModel<ITEM extends Object> {
           }
         }
         //
-        if (!_criteriaMap.containsKey(criterion.criterionName)) {
+        if (!_criteriaMap.containsKey(criterion.criterionNameTilde)) {
           _criteria.add(criterion);
-          _criteriaMap[criterion.criterionName] = criterion;
+          _criteriaMap[criterion.criterionNameTilde] = criterion;
         }
       }
     }
@@ -81,7 +81,7 @@ abstract class SortModel<ITEM extends Object> {
         .map(
           (sc) => SortableCriterion._(
             direction: sc.direction!,
-            criterionName: sc.criterionName,
+            criterionNameTilde: sc.criterionNameTilde,
           ),
         )
         .toList();
@@ -120,7 +120,7 @@ abstract class SortModel<ITEM extends Object> {
     SortCriterion? dest = _criteriaMap[destCriterionName];
     if (moving == null || dest == null) {
       return;
-    } else if (moving.criterionName == dest.criterionName) {
+    } else if (moving.criterionNameTilde == dest.criterionNameTilde) {
       return;
     }
     int movingIdx = _criteria.indexOf(moving);
@@ -144,11 +144,11 @@ abstract class SortModel<ITEM extends Object> {
   // ***************************************************************************
 
   Future<void> updateSortingCriterionByName({
-    required String criterionName,
+    required String criterionNameTilde,
     required SortDirection? direction,
     required bool moveToFirst, // TODO-XXX: Do it!!
   }) async {
-    SortCriterion? criterion = _criteriaMap[criterionName];
+    SortCriterion? criterion = _criteriaMap[criterionNameTilde];
     if (criterion == null) {
       return;
     }
@@ -176,7 +176,7 @@ abstract class SortModel<ITEM extends Object> {
     required List<String> newArrangementCriterionNames,
   }) async {
     final List<String> oldArrangementCn =
-        _criteria.map((c) => c.criterionName).toList();
+        _criteria.map((c) => c.criterionNameTilde).toList();
     //
     final List<String> newArrangementCn = [
       ...{...newArrangementCriterionNames, ...oldArrangementCn}
@@ -190,8 +190,8 @@ abstract class SortModel<ITEM extends Object> {
     int optCount = 0;
     List<SortCriterion> newArrangementCriteria = [];
     //
-    for (String criterionName in newArrangementCn) {
-      SortCriterion? criterion = _criteriaMap[criterionName];
+    for (String criterionNameTilde in newArrangementCn) {
+      SortCriterion? criterion = _criteriaMap[criterionNameTilde];
       if (criterion == null) {
         continue;
       }
@@ -259,11 +259,11 @@ abstract class SortModel<ITEM extends Object> {
       //
       dynamic aValue = getCriterionValueForClientSideSorting(
         item: a,
-        criterionName: sc.criterionName,
+        criterionName: sc.criterionNameTilde,
       );
       dynamic bValue = getCriterionValueForClientSideSorting(
         item: b,
-        criterionName: sc.criterionName,
+        criterionName: sc.criterionNameTilde,
       );
       //
       if (aValue == null && bValue == null) {
@@ -306,7 +306,7 @@ abstract class SortModel<ITEM extends Object> {
         return sc.isAscending() ? x : -x;
       } else {
         throw Exception(
-            "Method SortModel.getValue(item,criterionName) must be return int, double, bool, null or String");
+            "Method SortModel.getValue(item,criterionNameTilde) must be return int, double, bool, null or String");
       }
     }
     return 0;

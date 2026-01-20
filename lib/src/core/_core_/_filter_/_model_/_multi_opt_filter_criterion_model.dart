@@ -1,10 +1,8 @@
-part of '../core.dart';
+part of '../../core.dart';
 
-abstract class MultiOptFormPropModel<V> extends FormPropModel<V> {
-  late final MultiOptFormPropModel? parent;
-  final MultiOptPropReload reloadCondition;
+abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
+  final MultiOptFilterCriterionModel? parent;
 
-  bool _markToReload = false;
   int _loadCount = 0;
 
   int get loadCount => _loadCount;
@@ -19,25 +17,25 @@ abstract class MultiOptFormPropModel<V> extends FormPropModel<V> {
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
   final SelectionType selectionType;
-  final List<MultiOptFormPropModel> _children;
+  final List<MultiOptFilterCriterionModel> _children;
 
-  bool get isRoot => parent == null;
+  List<MultiOptFilterCriterionModel> get children =>
+      List.unmodifiable(_children);
 
-  List<MultiOptFormPropModel> get children => List.unmodifiable(_children);
-
-  MultiOptFormPropModel._({
-    required super.propName,
-    required this.reloadCondition,
-    required List<MultiOptFormPropModel> children,
+  MultiOptFilterCriterionModel._({
+    required this.parent,
+    required super.criterionNameTilde,
+    required super.criterionName,
+    required List<MultiOptFilterCriterionModel> children,
     required this.selectionType,
-  }) : _children = children;
+  }) : _children = [...children];
 
   void _updateTempValueCascade({
     required Map<String, dynamic> updateValues,
   }) {
     if (!_valueUpdated && _markTempDirty) {
       final dynamic oldValue = _tempCurrentValue;
-      final dynamic newValue = updateValues[propName];
+      final dynamic newValue = updateValues[criterionNameTilde];
       //
       _candidateUpdateValue = newValue;
       _valueUpdated = true;
@@ -60,15 +58,15 @@ abstract class MultiOptFormPropModel<V> extends FormPropModel<V> {
       }
       //
       if (_tempCurrentXData == null || newValue == null || !isSame) {
-        for (MultiOptFormPropModel childItem in _children) {
+        for (MultiOptFilterCriterionModel childItem in children) {
           childItem._tempCurrentXData = null;
-          updateValues[childItem.propName] = null;
+          updateValues[childItem.criterionNameTilde] = null;
           childItem._markTempDirty = true;
         }
       }
     }
     //
-    for (MultiOptFormPropModel childItem in _children) {
+    for (MultiOptFilterCriterionModel childItem in children) {
       childItem._updateTempValueCascade(
         updateValues: updateValues,
       );
@@ -77,8 +75,8 @@ abstract class MultiOptFormPropModel<V> extends FormPropModel<V> {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $propName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
-    for (var child in _children) {
+        "${("- - - " * indentFactor)} $criterionNameTilde >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
+    for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }
   }

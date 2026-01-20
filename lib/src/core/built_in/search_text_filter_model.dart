@@ -6,30 +6,33 @@ import 'search_text_filter_input.dart';
 
 class SearchTextFilterModel
     extends FilterModel<SearchTextFilterInput, SearchTextFilterCriteria> {
-  final FilterCriterionOperator criterionOperator;
   final String? _searchText;
 
-  SearchTextFilterModel({
-    required String? searchText,
-    this.criterionOperator = FilterCriterionOperator.containsIgnoreCase,
-  }) : _searchText = searchText;
+  SearchTextFilterModel({required String? searchText})
+      : _searchText = searchText;
 
   @override
   FilterModelStructure registerFilterModelStructure() {
     return FilterModelStructure(
-      simpleCriterionModels: [
-        SimpleFilterCriterionModel<String>(
-          criterionName: "searchText",
-          operator: FilterCriterionOperator.equalTo,
+      simpleCriterionDefs: [
+        SimpleCriterionDef<String>(criterionBaseName: 'searchText'),
+      ],
+      multiOptCriterionDefs: [],
+      //
+      conditionConnector: ConditionConnector.and,
+      conditionDefs: [
+        ConditionDef.single(
+          criterionNameTilde: "searchText${CriterionTilde.symbol}",
+          operator: CriterionOperator.containsIgnoreCase,
         ),
       ],
-      multiOptCriterionModels: [],
     );
   }
 
   @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required SearchTextFilterInput? filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -40,6 +43,7 @@ class SearchTextFilterModel
   @override
   OptValueWrap? getUpdatedValueForMultiOptCriterion({
     required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required SearchTextFilterInput filterInput,
@@ -60,6 +64,7 @@ class SearchTextFilterModel
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
     required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,

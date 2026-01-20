@@ -1,11 +1,10 @@
-enum FilterCriterionOperator {
+enum CriterionOperator {
   equalTo("equalTo"),
   notEqualTo("notEqualTo"),
   greaterThan("greaterThan"),
   greaterThanOrEqualTo("greaterThanOrEqualTo"),
   lessThan("lessThan"),
   lessThanOrEqualTo("lessThanOrEqualTo"),
-  between("between"),
   contains("contains"),
   containsIgnoreCase("containsIgnoreCase"),
   startsWith("startsWith"),
@@ -13,20 +12,19 @@ enum FilterCriterionOperator {
   endsWith("endsWith"),
   endsWithIgnoreCase("endsWithIgnoreCase"),
   isEmpty("isEmpty"),
-  isNull("isNull"),
   isEmptyOrNull("isEmptyOrNull"),
   inCollection("in");
 
   final String text;
 
-  const FilterCriterionOperator(this.text);
+  const CriterionOperator(this.text);
 }
 
-enum FilterCriteriaOperator {
-  and("and"),
-  or("or");
+enum ConditionConnector {
+  and("AND"),
+  or("OR");
 
   final String text;
 
-  const FilterCriteriaOperator(this.text);
+  const ConditionConnector(this.text);
 }

@@ -1,7 +1,7 @@
-part of '../core.dart';
+part of '../../core.dart';
 
-class MultiOptSsFormPropModel<V> extends MultiOptFormPropModel<V> {
-  MultiOptSsFormPropModel({
+class MultiOptSsFormProp<V> extends MultiOptFormProp<V> {
+  MultiOptSsFormProp({
     required super.propName,
     super.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
     super.children = const [],

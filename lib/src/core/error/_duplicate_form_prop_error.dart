@@ -1,5 +1,5 @@
-class DuplicateFormPropModelError {
+class DuplicateFormPropError {
   final String propName;
 
-  DuplicateFormPropModelError({required this.propName});
+  DuplicateFormPropError({required this.propName});
 }

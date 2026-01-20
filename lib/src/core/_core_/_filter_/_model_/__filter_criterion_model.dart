@@ -1,18 +1,16 @@
-part of '../core.dart';
+part of '../../core.dart';
 
-abstract class FormPropModel<V> {
-  late final FormModelStructure _structure;
+abstract class FilterCriterionModel<V> {
+  late final FilterModelStructure _structure;
 
   //
-  final String propName;
+  final String criterionName;
+  final String criterionNameTilde;
 
   // IMPORTANT: Do not change type (dynamic).
   dynamic _candidateUpdateValue;
   bool _valueUpdated = false;
   bool _markTempDirty = false;
-
-  //
-  Type get dataType => V;
 
   //
   // IMPORTANT: Do not change type (dynamic).
@@ -31,26 +29,23 @@ abstract class FormPropModel<V> {
   dynamic _initialValue;
   XData? _initialXData;
 
-  // IMPORTANT: Do not change type (dynamic).
-  dynamic get initialValue => _initialValue;
+  //
 
-  XData? get initialXData => _initialXData;
+  XData? get currentXData => _currentXData;
 
   // IMPORTANT: Do not change type (dynamic).
   dynamic get currentValue => _currentValue;
 
-  XData? get currentXData => _currentXData;
+  XData? get initialXData => _initialXData;
 
-  // ------------ Error: -------------------------------------------------------
+  // IMPORTANT: Do not change type (dynamic).
+  dynamic get initialValue => _initialValue;
 
-  FormErrorInfo? _formErrorInfo;
+  Type get dataType => V;
 
-  FormErrorInfo? get formErrorInfo => _formErrorInfo;
-
-  // ---------------------------------------------------------------------------
-
-  FormPropModel({
-    required this.propName,
+  FilterCriterionModel({
+    required this.criterionNameTilde,
+    required this.criterionName,
   });
 
   bool isDirty() {

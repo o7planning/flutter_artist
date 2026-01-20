@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 ///
 /// Multi Options Criterion with Multi Selections.
@@ -6,8 +6,9 @@ part of '../core.dart';
 class MultiOptMsFilterCriterionModel<V>
     extends MultiOptFilterCriterionModel<V> {
   MultiOptMsFilterCriterionModel({
+    required super.parent,
+    required super.criterionNameTilde,
     required super.criterionName,
-    required super.operator,
   }) : super._(selectionType: SelectionType.multi, children: const []);
 
   @override

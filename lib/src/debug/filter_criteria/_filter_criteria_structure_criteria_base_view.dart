@@ -6,58 +6,39 @@ import 'package:flutter/material.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/_data_state.dart';
 import '../../core/enums/_selection_type.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
-import '_form_model_debug_view.dart';
-import 'widgets/_prop_view.dart';
+import '_filter_model_debug_view.dart';
+import 'widgets/_criterion_def_view.dart';
 
-class FormPropsStructureView extends StatefulWidget {
-  final FormModel formModel;
+class FilterModelStructureCriteriaBaseView extends StatefulWidget {
+  final FilterModel filterModel;
 
-  const FormPropsStructureView({
+  const FilterModelStructureCriteriaBaseView({
     required super.key,
-    required this.formModel,
+    required this.filterModel,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _FormPropsStructureViewState();
+    return FilterModelStructureCriteriaBaseViewState();
   }
 }
 
-class _FormPropsStructureViewState extends State<FormPropsStructureView> {
+class FilterModelStructureCriteriaBaseViewState
+    extends State<FilterModelStructureCriteriaBaseView> {
   final MultiSplitViewController _splitViewController =
       MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
-  late TreeNode<dynamic> _currentNode;
+  TreeNode<dynamic>? _currentNode;
 
   @override
   void initState() {
     super.initState();
-    //
-    TreeNode formModelNode = TreeNode(
-      key: "FormModel-${getClassName(widget.formModel)}",
-      data: widget.formModel,
-      parent: null,
-    );
-    _currentNode = formModelNode;
-    rootTreeNode = TreeNode.root()..add(formModelNode);
-    //
-    FormModelStructure structure = widget.formModel.formPropsStructure;
-
-    List<MultiOptFormProp> rootMultiOptProp = structure.debugRootOptProps;
-    for (MultiOptFormProp multiOptProp in rootMultiOptProp) {
-      _addMultiOptPropCascade(formModelNode, multiOptProp);
-    }
-    List<SimpleFormProp> simpleProps = structure.simpleProps;
-    for (SimpleFormProp simpleProp in simpleProps) {
-      _addSimpleProp(formModelNode, simpleProp);
-    }
-    //
+    rootTreeNode = _getRootWithChildren();
     _splitViewController.areas = [
       Area(
         size: 320,
@@ -78,15 +59,40 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     _splitViewController.addListener(_refresh);
   }
 
+  TreeNode _getRootWithChildren() {
+    TreeNode filterModelNode = TreeNode(
+      key: "FilterModel-${getClassName(widget.filterModel)}",
+      data: widget.filterModel,
+      parent: null,
+    );
+    _currentNode = filterModelNode;
+    rootTreeNode = TreeNode.root()..add(filterModelNode);
+    //
+    FilterModelStructure structure = widget.filterModel.filterModelStructure;
+    //
+    List<MultiOptCriterionDef> rootMultiOptCriterion =
+        structure.rootMultiOptCriterionDefs;
+    for (MultiOptCriterionDef multiOptCriterion in rootMultiOptCriterion) {
+      _addMultiOptCriterionCascade(filterModelNode, multiOptCriterion);
+    }
+    List<SimpleCriterionDef> simpleCriteria = structure.simpleCriterionDefs;
+    for (SimpleCriterionDef simpleCriterion in simpleCriteria) {
+      _addSimpleCriterion(filterModelNode, simpleCriterion);
+    }
+    //
+    return rootTreeNode;
+  }
+
   Widget _buildRight() {
-    if (_currentNode.data is FormModel) {
-      return FormModelDebugView(
-        formModel: _currentNode.data,
+    if (_currentNode == null) {
+      return Text("Null");
+    } else if (_currentNode!.data is FilterModel) {
+      return FilterModelDebugView(
+        filterModel: _currentNode!.data,
       );
-    } else if (_currentNode.data is FormProp) {
-      return FormPropView(
-        formInitialDataReady: widget.formModel.formInitialDataReady,
-        prop: _currentNode.data,
+    } else if (_currentNode!.data is CriterionDef) {
+      return FilterCriterionDefView(
+        criterion: _currentNode!.data,
       );
     } else {
       return Text("TODO");
@@ -115,6 +121,9 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
   // ***************************************************************************
 
   Widget buildTreeView(BuildContext context) {
+    FilterModelStructure filterModelStructure =
+        widget.filterModel.filterModelStructure;
+    //
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(5),
@@ -123,18 +132,19 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
         showRootNode: false,
         expansionBehavior: ExpansionBehavior.none,
         expansionIndicatorBuilder: (context, node) {
-          return ChevronIndicator.upDown(
+          return PlusMinusIndicator(
             tree: node,
-            color: Colors.grey[700],
+            color: Colors.grey[600],
             alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.fromLTRB(0, 8, 20, 8),
-            icon: Icons.keyboard_arrow_down_outlined,
+            padding: EdgeInsets.zero,
+            // icon: Icons.keyboard_arrow_down_outlined,
+            curve: Curves.linear,
           );
         },
         indentation: const Indentation(
           style: IndentStyle.squareJoint,
           thickness: 1,
-          width: 10,
+          width: 15,
         ),
         onTreeReady: (
           TreeViewController<dynamic, TreeNode<dynamic>> controller,
@@ -149,33 +159,26 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           bool isMultiOpt = false;
           bool isMultiSelection = false;
           IconData prefixIconData;
-          bool isDirty = false;
-          bool isError = false;
 
-          if (data is FormModel) {
+          if (data is FilterModel) {
             title = getClassName(data);
-            prefixIconData = FaIconConstants.formModelIconData;
-            isError = data.dataState == DataState.error;
-          } else if (data is SimpleFormProp) {
-            title = data.propName;
+            prefixIconData = FaIconConstants.filterModelIconData;
+          } else if (data is SimpleCriterionDef) {
+            title = data.criterionBaseName;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.propName}";
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionBaseName}";
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
             isMultiSelection = false;
-            isDirty = data.isDirty();
-            isError = data.formErrorInfo != null;
-          } else if (data is MultiOptFormProp) {
-            title = data.propName;
+          } else if (data is MultiOptCriterionDef) {
+            title = data.criterionBaseName;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.propName}";
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.criterionBaseName}";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
             isMultiSelection = data.selectionType == SelectionType.multi;
-            isDirty = data.isDirty();
-            isError = data.formErrorInfo != null;
           } else {
             prefixIconData = FaIconConstants.uknownIconData;
             title = "UNKNOWN";
@@ -192,13 +195,9 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Tooltip(
-                    message: isError ? 'Error' : '',
-                    child: Icon(
-                      prefixIconData,
-                      size: 16,
-                      color: isError ? Colors.red : Colors.black,
-                    ),
+                  Icon(
+                    prefixIconData,
+                    size: 16,
                   ),
                   SizedBox(width: 5),
                   Expanded(
@@ -218,19 +217,12 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
                   ),
                   if (isMultiOpt && isMultiSelection) const SizedBox(width: 5),
                   if (isMultiOpt && isMultiSelection)
-                    const Icon(
-                      FaIconConstants.multiSelectionIconData,
-                      size: 16,
-                      color: Colors.red,
-                    ),
-                  if (isDirty) const SizedBox(width: 5),
-                  if (isDirty)
                     Tooltip(
-                      message: "Dirty",
+                      message: "Multi Selection",
                       child: const Icon(
-                        FaIconConstants.formPropDirtyIconData,
+                        FaIconConstants.multiSelectionIconData,
                         size: 16,
-                        color: Colors.indigo,
+                        color: Colors.red,
                       ),
                     ),
                 ],
@@ -238,8 +230,8 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
               onTap: () {
                 setState(() {
                   _currentNode = node;
-                  if (node.data is FormProp) {
-                    _onPressProp(node.data);
+                  if (node.data is FilterCriterionModel) {
+                    _onPressCriterion(node.data);
                   }
                 });
               },
@@ -250,33 +242,30 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     );
   }
 
-  void _addMultiOptPropCascade(
-      TreeNode currentNode, MultiOptFormProp multiOptProp) {
+  void _addMultiOptCriterionCascade(
+      TreeNode currentNode, MultiOptCriterionDef multiOptCriterion) {
     TreeNode childNode = TreeNode(
-      key: "MultiOptProp-${multiOptProp.propName}",
-      data: multiOptProp,
+      key: "MultiOptCriterion-${multiOptCriterion.criterionBaseName}",
+      data: multiOptCriterion,
     );
-    // if (multiOptProp == widget.selectedProp) {
-    //   _currentNode = childNode;
-    // }
+    //
     currentNode.add(childNode);
-    for (MultiOptFormProp childMultiOptProp in multiOptProp.children) {
-      _addMultiOptPropCascade(childNode, childMultiOptProp);
+    for (MultiOptCriterionDef childMultiOptCriterion
+        in multiOptCriterion.children) {
+      _addMultiOptCriterionCascade(childNode, childMultiOptCriterion);
     }
   }
 
-  void _addSimpleProp(TreeNode currentNode, SimpleFormProp simpleProp) {
+  void _addSimpleCriterion(
+      TreeNode currentNode, SimpleCriterionDef simpleCriterion) {
     TreeNode childNode = TreeNode(
-      key: "SimpleProp-${simpleProp.propName}",
-      data: simpleProp,
+      key: "SimpleCriterion-${simpleCriterion.criterionBaseName}",
+      data: simpleCriterion,
     );
-    // if (simpleProp == widget.selectedProp) {
-    //   _currentNode = childNode;
-    // }
     currentNode.add(childNode);
   }
 
-  void _onPressProp(FormProp prop) {
-    print("Prop: $prop");
+  void _onPressCriterion(FilterCriterionModel criterion) {
+    print("Criterion: $criterion");
   }
 }

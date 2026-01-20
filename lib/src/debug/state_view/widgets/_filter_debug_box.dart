@@ -19,7 +19,7 @@ class FilterDebugBox extends BaseDebugBox {
   List<Widget> getChildIconLabelTexts() {
     FilterModelStructure structure = filterModel.filterModelStructure;
     List<MultiOptFilterCriterionModel> optCriteria =
-        structure.allMultiOptCriterionModels;
+        structure.allMultiOptCriteria;
     //
     List<Widget> list1 = [
       if (options.showFilterUIActive)
@@ -84,7 +84,7 @@ class FilterDebugBox extends BaseDebugBox {
       if (options.showFilterCriteria && optCriteria.isNotEmpty)
         ...optCriteria.map(
           (optCriterion) => IconLabelText(
-            label: "Load Count (${optCriterion.criterionName}): ",
+            label: "Load Count (${optCriterion.criterionNameTilde}): ",
             text: optCriterion.loadCount.toString(),
             labelStyle: labelStyle0,
             textStyle: textStyle0,
