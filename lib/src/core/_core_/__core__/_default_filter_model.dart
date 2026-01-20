@@ -24,7 +24,7 @@ class _DefaultFilterModel
 
   @override
   Future<ListXData?> callApiLoadMultiOptCriterionXData({
-    required String multiOptCriterionName,
+    required String multiOptCriterionBaseName,
     required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required Object? parentMultiOptCriterionValue,
@@ -34,8 +34,8 @@ class _DefaultFilterModel
   }
 
   @override
-  OptValueWrap? getUpdatedValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+  OptValueWrap? extractUpdateValueForMultiOptCriterion({
+    required String multiOptCriterionBaseName,
     required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
@@ -46,7 +46,7 @@ class _DefaultFilterModel
   }
 
   @override
-  Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleCriteria({
+  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleCriteria({
     required EmptyFilterInput filterInput,
   }) {
     return null;
@@ -54,7 +54,7 @@ class _DefaultFilterModel
 
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionBaseName,
     required String multiOptCriterionNameTilde,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,

@@ -10,15 +10,15 @@ queryAndPrepareToEdit ==> queryThenPrepareToEdit
 queryAndPrepareToCreate ==> queryThenPrepareToCreate
 queryEmptyAndPrepareToCreate ==> queryEmptyThenPrepareToCreate
 
-getMultiOptPropValueFromFormInput ==> getUpdatedValueForMultiOptProp
-getSimplePropValuesFromFormInput  ==> getUpdatedValuesForSimpleProps
+getMultiOptPropValueFromFormInput ==> extractUpdateValueForMultiOptProp
+getSimplePropValuesFromFormInput  ==> extractUpdateValuesForSimpleProps
 
   specifyDefaultSimpleProp Values  ==> specifyDefaultValuesForSimpleProps
   specifyDefaultMultiOptProp Value  ==> specifyDefaultValueForMultiOptProp
 
 
-getSimpleCriterionValuesFromFilterInput ==> getUpdatedValuesForSimpleCriteria
-getMultiOptCriterionValueFromFilterInput ==> getUpdatedValueForMultiOptCriterion
+getSimpleCriterionValuesFromFilterInput ==> extractUpdateValuesForSimpleCriteria
+getMultiOptCriterionValueFromFilterInput ==> extractUpdateValueForMultiOptCriterion
 
 
   specifyDefaultSimpleCriterion Values  ==> specifyDefaultValuesForSimpleCriteria
