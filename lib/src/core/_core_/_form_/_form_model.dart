@@ -281,7 +281,7 @@ abstract class FormModel<
 
   // OLD: getMultiOptPropValueFromFormInput.
   @_AbstractMethodAnnotation()
-  OptValueWrap? getUpdatedValueForMultiOptProp({
+  OptValueWrap? extractUpdateValueForMultiOptProp({
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
@@ -297,7 +297,7 @@ abstract class FormModel<
   ///
   ///
   /// ```dart
-  ///  Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleProps({
+  ///  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
   ///     required Object? parentBlockCurrentItemId,
   ///     required FORM_RELATED_DATA formRelatedData,
   ///     required DepartmentFormInput formInput,
@@ -310,10 +310,10 @@ abstract class FormModel<
   /// ```
   /// Note: In your design, [FormInput] should not include the ID of the parent Block's [currentItem].
   ///
-  // OLD: getUpdatedValuesForSimpleProps.
-  // SAME-AS: #0010 (filter - getUpdatedValuesForSimpleCriteria)
+  // OLD: extractUpdateValuesForSimpleProps.
+  // SAME-AS: #0010 (filter - extractUpdateValuesForSimpleCriteria)
   @_AbstractMethodAnnotation()
-  Map<String, SimpleValueWrap?>? getUpdatedValuesForSimpleProps({
+  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
     required Object? parentBlockCurrentItemId,
     required FORM_RELATED_DATA formRelatedData,
     required FORM_INPUT formInput,
@@ -967,7 +967,7 @@ abstract class FormModel<
             masterFlowItem._addLineFlowItem(
               codeId: "#06620",
               shortDesc:
-                  "Calling ${debugObjHtml(this)}.getUpdatedValuesForSimpleProps().",
+                  "Calling ${debugObjHtml(this)}.extractUpdateValuesForSimpleProps().",
               parameters: {
                 "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
                 "formInput": formInput,
@@ -976,7 +976,7 @@ abstract class FormModel<
               lineFlowType: LineFlowType.controllableCalling,
             );
             final Map<String, SimpleValueWrap?> updatedSimplePropValues =
-                getUpdatedValuesForSimpleProps(
+                extractUpdateValuesForSimpleProps(
                       parentBlockCurrentItemId: block.parentBlockCurrentItemId,
                       formRelatedData: formRelatedData,
                       formInput: formInput!,
@@ -987,7 +987,7 @@ abstract class FormModel<
               // Check and throw error if 'propName' is not a SimpleFormProp:
               __throwErrorIfNotASimplePropName(
                 propName: propName,
-                formErrorMethod: FormErrorMethod.getUpdatedValuesForSimpleProps,
+                formErrorMethod: FormErrorMethod.extractUpdateValuesForSimpleProps,
               );
               //
               // In (ItemFirstLoad + formInput != null).
@@ -1006,7 +1006,7 @@ abstract class FormModel<
             final formErrorInfo = FormErrorInfo(
               activityType: activityType,
               propName: null,
-              formErrorMethod: FormErrorMethod.getUpdatedValuesForSimpleProps,
+              formErrorMethod: FormErrorMethod.extractUpdateValuesForSimpleProps,
               error: e,
               errorStackTrace: stackTrace,
             );
@@ -1030,7 +1030,7 @@ abstract class FormModel<
             masterFlowItem._addLineFlowItem(
               codeId: "#06660",
               shortDesc:
-                  "The ${debugObjHtml(this)}.getUpdatedValuesForSimpleProps() method was called with an error!",
+                  "The ${debugObjHtml(this)}.extractUpdateValuesForSimpleProps() method was called with an error!",
               errorInfo: errorInfo,
             );
             return false;
@@ -1052,7 +1052,7 @@ abstract class FormModel<
           masterFlowItem._addLineFlowItem(
             codeId: "#06720",
             shortDesc:
-                "Calling ${debugObjHtml(this)}.getUpdatedValuesForSimpleProps() with parameters:",
+                "Calling ${debugObjHtml(this)}.extractUpdateValuesForSimpleProps() with parameters:",
             parameters: {
               "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               "formInput": formInput,
@@ -1061,7 +1061,7 @@ abstract class FormModel<
             lineFlowType: LineFlowType.controllableCalling,
           );
           final Map<String, SimpleValueWrap?> updatedSimplePropValues =
-              getUpdatedValuesForSimpleProps(
+              extractUpdateValuesForSimpleProps(
                     parentBlockCurrentItemId: block.parentBlockCurrentItemId,
                     formRelatedData: formRelatedData,
                     formInput: formInput,
@@ -1072,7 +1072,7 @@ abstract class FormModel<
             // Check and throw error if 'propName' is not a SimpleFormProp:
             __throwErrorIfNotASimplePropName(
               propName: propName,
-              formErrorMethod: FormErrorMethod.getUpdatedValuesForSimpleProps,
+              formErrorMethod: FormErrorMethod.extractUpdateValuesForSimpleProps,
             );
             //
             // In (autoEnterFormFields + formInput != null)
@@ -1090,7 +1090,7 @@ abstract class FormModel<
           final formErrorInfo = FormErrorInfo(
             activityType: activityType,
             propName: null,
-            formErrorMethod: FormErrorMethod.getUpdatedValuesForSimpleProps,
+            formErrorMethod: FormErrorMethod.extractUpdateValuesForSimpleProps,
             error: e,
             errorStackTrace: stackTrace,
           );
@@ -1113,7 +1113,7 @@ abstract class FormModel<
           masterFlowItem._addLineFlowItem(
             codeId: "#06760",
             shortDesc:
-                "The ${debugObjHtml(this)}.getUpdatedValuesForSimpleProps() method was called with an error!",
+                "The ${debugObjHtml(this)}.extractUpdateValuesForSimpleProps() method was called with an error!",
             errorInfo: errorInfo,
           );
           return false;
@@ -1506,7 +1506,7 @@ abstract class FormModel<
           }
           if (formInput != null && formInput is! EmptyFormInput) {
             // May throw FormTempError.
-            initialValueWrap = __getUpdatedValueForMultiOptProp(
+            initialValueWrap = __extractUpdateValueForMultiOptProp(
               masterFlowItem: masterFlowItem,
               formRelatedData: formRelatedData,
               formInput: formInput,
@@ -1565,7 +1565,7 @@ abstract class FormModel<
             lineFlowType: LineFlowType.debug,
           );
           // May throw FormTempError.
-          initialValueWrap = __getUpdatedValueForMultiOptProp(
+          initialValueWrap = __extractUpdateValueForMultiOptProp(
             masterFlowItem: masterFlowItem,
             formRelatedData: formRelatedData,
             formInput: formInput,
@@ -1889,7 +1889,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_MayThrowFormTempErrorAnnotation()
-  OptValueWrap? __getUpdatedValueForMultiOptProp({
+  OptValueWrap? __extractUpdateValueForMultiOptProp({
     required MasterFlowItem masterFlowItem,
     required String multiOptPropName,
     required SelectionType selectionType,
@@ -1905,7 +1905,7 @@ abstract class FormModel<
       masterFlowItem._addLineFlowItem(
         codeId: "#18000",
         shortDesc:
-            "Calling ${debugObjHtml(this)}.getUpdatedValueForMultiOptProp() for <b>'$multiOptPropName'</b>.",
+            "Calling ${debugObjHtml(this)}.extractUpdateValueForMultiOptProp() for <b>'$multiOptPropName'</b>.",
         parameters: {
           "multiOptPropName": multiOptPropName,
           "multiOptPropXData": multiOptPropXData,
@@ -1917,7 +1917,7 @@ abstract class FormModel<
         },
         lineFlowType: LineFlowType.controllableCalling,
       );
-      OptValueWrap? valueWrap = getUpdatedValueForMultiOptProp(
+      OptValueWrap? valueWrap = extractUpdateValueForMultiOptProp(
         multiOptPropName: multiOptPropName,
         multiOptPropXData: multiOptPropXData,
         selectionType: selectionType,
@@ -1928,7 +1928,7 @@ abstract class FormModel<
       );
       if (valueWrap == null) {
         __createNullValueWrapAppError(
-          methodName: "getUpdatedValueForMultiOptProp",
+          methodName: "extractUpdateValueForMultiOptProp",
           multiOptPropName: multiOptPropName,
         );
       }
@@ -1943,7 +1943,7 @@ abstract class FormModel<
     } catch (e, stackTrace) {
       throw FormTempError(
         propName: multiOptPropName,
-        formErrorMethod: FormErrorMethod.getUpdatedValueForMultiOptProp,
+        formErrorMethod: FormErrorMethod.extractUpdateValueForMultiOptProp,
         error: e,
         stackTrace: stackTrace,
       );

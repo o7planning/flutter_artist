@@ -6,10 +6,10 @@ enum FilterErrorMethod {
   specifyDefaultValueForMultiOptCriterion,
 
   // OLD: getSimpleCriterionValuesFromFilterInput
-  getUpdatedValuesForSimpleCriteria,
+  extractUpdateValuesForSimpleCriteria,
 
   // OLD: getMultiOptCriterionValueFromFilterInput
-  getUpdatedValueForMultiOptCriterion,
+  extractUpdateValueForMultiOptCriterion,
   toFilterCriteriaObject,
   callApiLoadMultiOptCriterionXData,
   //

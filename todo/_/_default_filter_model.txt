@@ -35,7 +35,7 @@ class _DefaultFilterModel
   }
 
   @override
-  ValueWrap? getUpdatedValueForMultiOptCriterion({
+  ValueWrap? extractUpdateValueForMultiOptCriterion({
     required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required EmptyFilterInput filterInput,
@@ -45,7 +45,7 @@ class _DefaultFilterModel
   }
 
   @override
-  Map<String, dynamic>? getUpdatedValuesForSimpleCriteria({
+  Map<String, dynamic>? extractUpdateValuesForSimpleCriteria({
     required EmptyFilterInput filterInput,
   }) async {
     return null;
@@ -99,7 +99,7 @@ class StringIdFilterModel
   }
 
   @override
-  ValueWrap? getUpdatedValueForMultiOptCriterion({
+  ValueWrap? extractUpdateValueForMultiOptCriterion({
     required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required StringIdFilterInput filterInput,
@@ -109,7 +109,7 @@ class StringIdFilterModel
   }
 
   @override
-  Map<String, dynamic>? getUpdatedValuesForSimpleCriteria({
+  Map<String, dynamic>? extractUpdateValuesForSimpleCriteria({
     required StringIdFilterInput filterInput,
   }) async {
     return null;
@@ -163,7 +163,7 @@ class StringValueFilterModel
   }
 
   @override
-  ValueWrap? getUpdatedValueForMultiOptCriterion({
+  ValueWrap? extractUpdateValueForMultiOptCriterion({
     required String multiOptCriterionNameTilde,
     required StringValueFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -173,7 +173,7 @@ class StringValueFilterModel
   }
 
   @override
-  Map<String, dynamic>? getUpdatedValuesForSimpleCriteria({
+  Map<String, dynamic>? extractUpdateValuesForSimpleCriteria({
     required StringValueFilterInput filterInput,
   }) async {
     return null;
@@ -227,7 +227,7 @@ class SearchTextFilterModel
   }
 
   @override
-  ValueWrap? getUpdatedValueForMultiOptCriterion({
+  ValueWrap? extractUpdateValueForMultiOptCriterion({
     required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required SearchTextFilterInput filterInput,
@@ -237,7 +237,7 @@ class SearchTextFilterModel
   }
 
   @override
-  Map<String, dynamic>? getUpdatedValuesForSimpleCriteria({
+  Map<String, dynamic>? extractUpdateValuesForSimpleCriteria({
     required SearchTextFilterInput filterInput,
   }) async {
     return null;
@@ -291,7 +291,7 @@ class IntIdFilterModel
   }
 
   @override
-  ValueWrap? getUpdatedValueForMultiOptCriterion({
+  ValueWrap? extractUpdateValueForMultiOptCriterion({
     required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required IntIdFilterInput filterInput,
@@ -301,7 +301,7 @@ class IntIdFilterModel
   }
 
   @override
-  Map<String, dynamic>? getUpdatedValuesForSimpleCriteria({
+  Map<String, dynamic>? extractUpdateValuesForSimpleCriteria({
     required IntIdFilterInput filterInput,
   }) async {
     return null;

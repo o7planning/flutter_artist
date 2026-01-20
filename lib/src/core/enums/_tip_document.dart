@@ -157,7 +157,7 @@ enum TipDocument {
       case TipDocument.formModelCallApiUpdateItem:
         return "FormModel.callApiUpdateItem()";
       case TipDocument.formModelGetUpdatedValuesForSimpleProps:
-        return "FormModel.getUpdatedValuesForSimpleProps()";
+        return "FormModel.extractUpdateValuesForSimpleProps()";
       case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
         return "FormModel.specifyDefaultValuesForSimpleProps()";
       case TipDocument.filterModelCallApiLoadMultiOptCriterionXData:
@@ -261,7 +261,7 @@ enum TipDocument {
       case TipDocument.formModelCallApiUpdateItem:
         return "FormModel.callApiUpdateItem()";
       case TipDocument.formModelGetUpdatedValuesForSimpleProps:
-        return "FormModel.getUpdatedValuesForSimpleProps()";
+        return "FormModel.extractUpdateValuesForSimpleProps()";
       case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
         return "FormModel.specifyDefaultValuesForSimpleProps()";
       case TipDocument.filterModelCallApiLoadMultiOptCriterionXData:
