@@ -36,7 +36,7 @@ enum BlockFormResetPrecheck implements Precheck {
   checkAllowMethodError(
     precheckCode: PrecheckCode.checkAllowMethodError,
     message: "Form Resetting is disabled.",
-    details: ["The isAllowResetForm() method error.."],
+    details: ["The isFormResetAllowed() method error.."],
   );
 
   @override

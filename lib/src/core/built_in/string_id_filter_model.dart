@@ -56,7 +56,7 @@ class StringIdFilterModel
     required StringIdFilterInput filterInput,
   }) {
     return {
-      "id": SimpleValueWrap(filterInput.idValue),
+      "id${CriterionTilde.symbol}": SimpleValueWrap(filterInput.idValue),
     };
   }
 
@@ -74,7 +74,7 @@ class StringIdFilterModel
   @override
   Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
     return {
-      "id": _idValue,
+      "id${CriterionTilde.symbol}": _idValue,
     };
   }
 
@@ -82,6 +82,8 @@ class StringIdFilterModel
   StringIdFilterCriteria toFilterCriteriaObject({
     required Map<String, dynamic> criteriaMap,
   }) {
-    return StringIdFilterCriteria(idValue: criteriaMap["id"]);
+    return StringIdFilterCriteria(
+      idValue: criteriaMap["id${CriterionTilde.symbol}"],
+    );
   }
 }

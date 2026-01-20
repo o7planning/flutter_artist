@@ -57,7 +57,8 @@ class StringValueFilterModel
     required StringValueFilterInput filterInput,
   }) {
     return {
-      "string": SimpleValueWrap(filterInput.stringValue),
+      "string${CriterionTilde.symbol}":
+          SimpleValueWrap(filterInput.stringValue),
     };
   }
 
@@ -75,7 +76,7 @@ class StringValueFilterModel
   @override
   Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
     return {
-      "string": _stringValue,
+      "string${CriterionTilde.symbol}": _stringValue,
     };
   }
 
@@ -84,7 +85,7 @@ class StringValueFilterModel
     required Map<String, dynamic> criteriaMap,
   }) {
     return StringValueFilterCriteria(
-      stringValue: criteriaMap["string"],
+      stringValue: criteriaMap["string${CriterionTilde.symbol}"],
     );
   }
 }

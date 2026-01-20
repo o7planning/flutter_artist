@@ -17,7 +17,7 @@ enum BlockItemDeletionPrecheck implements Precheck {
   checkAllowMethodError(
     precheckCode: PrecheckCode.checkAllowMethodError,
     message: "Can not delete the item",
-    details: ["The isAllowDeleteItem() method is error."],
+    details: ["The isItemDeletionAllowed() method is error."],
   ),
   // Test Cases: [03a].
   ///

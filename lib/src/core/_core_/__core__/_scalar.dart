@@ -1189,7 +1189,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isAllowQuery() {
+  bool isQueryAllowed() {
     return true;
   }
 
@@ -1200,7 +1200,7 @@ abstract class Scalar<
   /// Do not override
   ///
   bool canQuery() {
-    return isAllowQuery();
+    return isQueryAllowed();
   }
 
   // ***************************************************************************

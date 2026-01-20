@@ -57,7 +57,8 @@ class SearchTextFilterModel
     required SearchTextFilterInput filterInput,
   }) {
     return {
-      "searchText": SimpleValueWrap(filterInput.searchText),
+      "searchText${CriterionTilde.symbol}":
+          SimpleValueWrap(filterInput.searchText),
     };
   }
 
@@ -75,7 +76,7 @@ class SearchTextFilterModel
   @override
   Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
     return {
-      "searchText": _searchText,
+      "searchText${CriterionTilde.symbol}": _searchText,
     };
   }
 
@@ -83,6 +84,8 @@ class SearchTextFilterModel
   SearchTextFilterCriteria toFilterCriteriaObject({
     required Map<String, dynamic> criteriaMap,
   }) {
-    return SearchTextFilterCriteria(searchText: criteriaMap["searchText"]);
+    return SearchTextFilterCriteria(
+      searchText: criteriaMap["searchText${CriterionTilde.symbol}"],
+    );
   }
 }
