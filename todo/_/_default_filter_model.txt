@@ -11,10 +11,10 @@ class _DefaultFilterModel
   }
 
   @override
-  FilterModelStructure registerFilterModelStructure() {
-    return FilterModelStructure(
-      simpleCriterionModels: [],
-      multiOptCriterionModels: [],
+  FilterCriteriaStructure registerFilterModelStructure() {
+    return FilterCriteriaStructure(
+      simpleCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -27,7 +27,7 @@ class _DefaultFilterModel
 
   @override
   Future<XList?> callApiLoadMultiOptCriterionXData({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required Object? parentMultiOptCriterionValue,
     required EmptyFilterInput? filterInput,
   }) async {
@@ -36,7 +36,7 @@ class _DefaultFilterModel
 
   @override
   ValueWrap? getUpdatedValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required EmptyFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -53,7 +53,7 @@ class _DefaultFilterModel
 
   @override
   ValueWrap? specifyDefaultValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
   }) {
@@ -75,10 +75,10 @@ class StringIdFilterModel
   StringIdFilterModel({required this.idValue});
 
   @override
-  FilterModelStructure registerFilterModelStructure() {
-    return FilterModelStructure(
-      simpleCriterionModels: [],
-      multiOptCriterionModels: [],
+  FilterCriteriaStructure registerFilterModelStructure() {
+    return FilterCriteriaStructure(
+      simpleCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -91,7 +91,7 @@ class StringIdFilterModel
 
   @override
   Future<XList?> callApiLoadMultiOptCriterionXData({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required Object? parentMultiOptCriterionValue,
     required StringIdFilterInput? filterInput,
   }) async {
@@ -100,7 +100,7 @@ class StringIdFilterModel
 
   @override
   ValueWrap? getUpdatedValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required StringIdFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -117,7 +117,7 @@ class StringIdFilterModel
 
   @override
   ValueWrap? specifyDefaultValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
   }) {
@@ -139,10 +139,10 @@ class StringValueFilterModel
   StringValueFilterModel({required this.stringValue});
 
   @override
-  FilterModelStructure registerFilterModelStructure() {
-    return FilterModelStructure(
-      simpleCriterionModels: [],
-      multiOptCriterionModels: [],
+  FilterCriteriaStructure registerFilterModelStructure() {
+    return FilterCriteriaStructure(
+      simpleCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -155,7 +155,7 @@ class StringValueFilterModel
 
   @override
   Future<XList?> callApiLoadMultiOptCriterionXData({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required StringValueFilterInput? filterInput,
     required Object? parentMultiOptCriterionValue,
   }) async {
@@ -164,7 +164,7 @@ class StringValueFilterModel
 
   @override
   ValueWrap? getUpdatedValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required StringValueFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
     required XData multiOptCriterionXData,
@@ -181,7 +181,7 @@ class StringValueFilterModel
 
   @override
   ValueWrap? specifyDefaultValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
   }) {
@@ -203,10 +203,10 @@ class SearchTextFilterModel
   SearchTextFilterModel({required this.searchText});
 
   @override
-  FilterModelStructure registerFilterModelStructure() {
-    return FilterModelStructure(
-      simpleCriterionModels: [],
-      multiOptCriterionModels: [],
+  FilterCriteriaStructure registerFilterModelStructure() {
+    return FilterCriteriaStructure(
+      simpleCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -219,7 +219,7 @@ class SearchTextFilterModel
 
   @override
   Future<XList?> callApiLoadMultiOptCriterionXData({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required SearchTextFilterInput? filterInput,
     required Object? parentMultiOptCriterionValue,
   }) async {
@@ -228,7 +228,7 @@ class SearchTextFilterModel
 
   @override
   ValueWrap? getUpdatedValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required SearchTextFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -245,7 +245,7 @@ class SearchTextFilterModel
 
   @override
   ValueWrap? specifyDefaultValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
   }) {
@@ -267,10 +267,10 @@ class IntIdFilterModel
   IntIdFilterModel({required this.idValue});
 
   @override
-  FilterModelStructure registerFilterModelStructure() {
-    return FilterModelStructure(
-      simpleCriterionModels: [],
-      multiOptCriterionModels: [],
+  FilterCriteriaStructure registerFilterModelStructure() {
+    return FilterCriteriaStructure(
+      simpleCriteria: [],
+      multiOptCriteria: [],
     );
   }
 
@@ -283,7 +283,7 @@ class IntIdFilterModel
 
   @override
   Future<XList?> callApiLoadMultiOptCriterionXData({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required Object? parentMultiOptCriterionValue,
     required IntIdFilterInput? filterInput,
   }) async {
@@ -292,7 +292,7 @@ class IntIdFilterModel
 
   @override
   ValueWrap? getUpdatedValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required IntIdFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -309,7 +309,7 @@ class IntIdFilterModel
 
   @override
   ValueWrap? specifyDefaultValueForMultiOptCriterion({
-    required String multiOptCriterionName,
+    required String multiOptCriterionNameTilde,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
   }) {
