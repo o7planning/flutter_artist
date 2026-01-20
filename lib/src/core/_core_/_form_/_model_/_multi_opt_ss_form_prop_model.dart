@@ -1,10 +1,10 @@
 part of '../../core.dart';
 
-class MultiOptSsFormProp<V> extends MultiOptFormProp<V> {
-  MultiOptSsFormProp({
+class MultiOptSsFormPropModel<V> extends MultiOptFormPropModel<V> {
+  MultiOptSsFormPropModel({
+    required super.parent,
     required super.propName,
-    super.reloadCondition = MultiOptPropReload.ifCriteriaChanged,
-    super.children = const [],
+    required super.reloadCondition,
   }) : super._(selectionType: SelectionType.single);
 
   @override

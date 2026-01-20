@@ -206,13 +206,13 @@ part '_form_/_form_leave_safely.dart';
 
 part '_form_/_form_model.dart';
 
-part '_sorting_/_client_side_sort_model.dart';
+part '_sort_/_model_/_client_side_sort_model.dart';
 
-part '_sorting_/_server_side_sort_model.dart';
+part '_sort_/_model_/_server_side_sort_model.dart';
 
-part '_sorting_/_sort_model.dart';
+part '_sort_/_sort_model.dart';
 
-part '_sorting_/_sort_model_builder.dart';
+part '_sort_/_sort_model_builder.dart';
 
 part '__core__/_storage_core.dart';
 
@@ -244,13 +244,13 @@ part '__core__/_shelf_structure.dart';
 
 part '__core__/_single_item_block.dart';
 
-part '_sorting_/_sortable_criteria.dart';
+part '_sort_/_sortable_criteria.dart';
 
-part '_sorting_/_sort_criterion.dart';
+part '_sort_/_sort_criterion.dart';
 
-part '_sorting_/_sortable_criterion.dart';
+part '_sort_/_sortable_criterion.dart';
 
-part '_sorting_/_sort_criteria.dart';
+part '_sort_/_sort_criteria.dart';
 
 part '__core__/_storage.dart';
 
@@ -392,9 +392,9 @@ part '_filter_/_model_/_calculated_filter_criterion_model.dart';
 
 part '_filter_/_filter_model_structure.dart';
 
-part '_sorting_/_sort_criterion_def.dart';
+part '_sort_/_def_/_sort_criterion_def.dart';
 
-part '_sorting_/_sort_criteria_structure.dart';
+part '_sort_/_sort_model_structure.dart';
 
 part '_filter_/_model_/_multi_opt_filter_criterion_model.dart';
 
@@ -404,19 +404,21 @@ part '_filter_/_model_/_multi_opt_ms_filter_criterion_model.dart';
 
 part '_filter_/_model_/_simple_filter_criterion_model.dart';
 
-part '_form_/_model_/__form_prop.dart';
+part '_form_/_model_/__form_prop_model.dart';
 
-part '_form_/_model_/_calculated_form_prop.dart';
+part '_form_/_def_/_form_prop_def.dart';
+
+part '_form_/_model_/_calculated_form_prop_model.dart';
 
 part '_form_/_form_model_structure.dart';
 
-part '_form_/_model_/_multi_opt_form_prop.dart';
+part '_form_/_model_/_multi_opt_form_prop_model.dart';
 
-part '_form_/_model_/_multi_opt_ss_form_prop.dart';
+part '_form_/_model_/_multi_opt_ss_form_prop_model.dart';
 
-part '_form_/_model_/_multi_opt_ms_form_prop.dart';
+part '_form_/_model_/_multi_opt_ms_form_prop_model.dart';
 
-part '_form_/_model_/_simple_form_prop.dart';
+part '_form_/_model_/_simple_form_prop_model.dart';
 
 part '__core__/_value_wrap.dart';
 

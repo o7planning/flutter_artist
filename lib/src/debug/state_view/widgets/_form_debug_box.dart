@@ -18,7 +18,7 @@ class FormDebugBox extends BaseDebugBox {
   @override
   List<Widget> getChildIconLabelTexts() {
     FormModelStructure structure = formModel.formPropsStructure;
-    List<MultiOptFormProp> optProps = structure.allMultiOptProps;
+    List<MultiOptFormPropModel> optProps = structure.allMultiOptProps;
     //
     List<Widget> list1 = [
       if (options.showFormUIActive)

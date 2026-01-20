@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
-class SimpleFormProp<V> extends FormProp<V> {
-  SimpleFormProp({
+class SimpleFormPropModel<V> extends FormPropModel<V> {
+  SimpleFormPropModel({
     required super.propName,
   });
 

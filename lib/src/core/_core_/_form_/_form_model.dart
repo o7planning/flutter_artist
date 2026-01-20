@@ -987,7 +987,8 @@ abstract class FormModel<
               // Check and throw error if 'propName' is not a SimpleFormProp:
               __throwErrorIfNotASimplePropName(
                 propName: propName,
-                formErrorMethod: FormErrorMethod.extractUpdateValuesForSimpleProps,
+                formErrorMethod:
+                    FormErrorMethod.extractUpdateValuesForSimpleProps,
               );
               //
               // In (ItemFirstLoad + formInput != null).
@@ -1006,7 +1007,8 @@ abstract class FormModel<
             final formErrorInfo = FormErrorInfo(
               activityType: activityType,
               propName: null,
-              formErrorMethod: FormErrorMethod.extractUpdateValuesForSimpleProps,
+              formErrorMethod:
+                  FormErrorMethod.extractUpdateValuesForSimpleProps,
               error: e,
               errorStackTrace: stackTrace,
             );
@@ -1072,7 +1074,8 @@ abstract class FormModel<
             // Check and throw error if 'propName' is not a SimpleFormProp:
             __throwErrorIfNotASimplePropName(
               propName: propName,
-              formErrorMethod: FormErrorMethod.extractUpdateValuesForSimpleProps,
+              formErrorMethod:
+                  FormErrorMethod.extractUpdateValuesForSimpleProps,
             );
             //
             // In (autoEnterFormFields + formInput != null)
@@ -1124,7 +1127,8 @@ abstract class FormModel<
     // Load MultiOptProp Data (All cases of activityType).
     //
     try {
-      for (MultiOptFormProp multiOptProp in _formPropsStructure._rootOptProps) {
+      for (MultiOptFormPropModel multiOptProp
+          in _formPropsStructure._rootOptPropModels) {
         masterFlowItem._addLineFlowItem(
           codeId: "#06780",
           shortDesc:
@@ -1219,7 +1223,7 @@ abstract class FormModel<
     if (_formPropsStructure._isMultiOptFormProp(propName)) {
       throw DevError(
         errorMessage:
-            '$propName is not a ${getTypeNameWithoutGenerics(SimpleFormProp)}',
+            '$propName is not a ${getTypeNameWithoutGenerics(SimpleFormPropModel)}',
         errorDetails: [
           "See ${getClassNameWithoutGenerics(this)}.${getClassNameWithoutGenerics(formErrorMethod)}() method."
         ],
@@ -1334,7 +1338,7 @@ abstract class FormModel<
     required final FORM_RELATED_DATA formRelatedData,
     required final FORM_INPUT? formInput,
     required final Object? parentMultiOptPropValue,
-    required final MultiOptFormProp multiOptProp,
+    required final MultiOptFormPropModel multiOptProp,
     required final bool parentValueIsInitialValue,
     required final Map<String, dynamic> formKeyInstantValues,
   }) async {
@@ -1683,7 +1687,7 @@ abstract class FormModel<
     );
 
     if (tempSelectedPropValue != null) {
-      for (MultiOptFormProp child in multiOptProp._children) {
+      for (MultiOptFormPropModel child in multiOptProp._children) {
         await _loadMultiOptPropDataCascade(
           masterFlowItem: masterFlowItem,
           formRelatedData: formRelatedData,
@@ -1814,10 +1818,10 @@ abstract class FormModel<
     required String methodName,
     required String multiOptPropName,
   }) {
-    MultiOptFormProp? multiOptProp =
+    MultiOptFormPropModel? multiOptProp =
         _formPropsStructure._getMultiOptFormProp(multiOptPropName);
     if (multiOptProp == null) {
-      throw "The '$multiOptPropName' is not $MultiOptFormProp";
+      throw "The '$multiOptPropName' is not $MultiOptFormPropModel";
     }
     String message =
         "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptPropName '$multiOptPropName'. ";
@@ -1828,7 +1832,7 @@ abstract class FormModel<
           "$OptValueWrap.multi([null]) or $OptValueWrap.multi([value]). ";
     }
     message +=
-        "And return null for not $MultiOptFormProp. See the specification of this method for more information.";
+        "And return null for not $MultiOptFormPropModel. See the specification of this method for more information.";
     // throw AppError(errorMessage: message);
   }
 
@@ -2289,7 +2293,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   // SAME-AS: #0009 (filter)
-  MultiOptFormProp? findMultiOptFormProp({
+  MultiOptFormPropModel? findMultiOptFormProp({
     required String multiOptPropName,
   }) {
     return _formPropsStructure._findMultiOptFormProp(
