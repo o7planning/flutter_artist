@@ -63,7 +63,7 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
 
     Size preferredSize = calculatePreferredDialogSize(
       context,
-      preferredWidth: 640,
+      preferredWidth: 760,
       preferredHeight: 380,
     );
 

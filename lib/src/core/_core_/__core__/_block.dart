@@ -2290,7 +2290,7 @@ abstract class Block<
         "errorIfItemNotInTheBlock": errorIfItemNotInTheBlock,
       },
       note: "Call this method to check before deleting an item. "
-          "(**) You can override ${debugObjHtml(this)}.isAllowDeleteItem() method.",
+          "(**) You can override ${debugObjHtml(this)}.isItemDeletionAllowed() method.",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     //
@@ -5904,7 +5904,7 @@ abstract class Block<
   ///
   /// Allows reset the Form or not according to the application logic.
   ///
-  bool isAllowResetForm() {
+  bool isFormResetAllowed() {
     return true;
   }
 
@@ -5914,7 +5914,7 @@ abstract class Block<
   ///
   /// Allows querying the block or not according to the application logic.
   ///
-  bool isAllowQuery() {
+  bool isQueryAllowed() {
     return true;
   }
 
@@ -5924,7 +5924,7 @@ abstract class Block<
   ///
   /// Allows creating a new Item or not according to the application logic.
   ///
-  bool isAllowCreateItem() {
+  bool isItemCreationAllowed() {
     return true;
   }
 
@@ -5935,7 +5935,8 @@ abstract class Block<
   /// Allows edit an Item or not according to the application logic.
   ///
   // TODO: Rename to isAllowToEditItem()
-  bool isAllowUpdateItem({required ITEM item}) {
+  // --> isCreationAllowed
+  bool isItemUpdateAllowed({required ITEM item}) {
     return true;
   }
 
@@ -5945,30 +5946,30 @@ abstract class Block<
   ///
   /// Allows deleting an Item or not according to the application logic.
   ///
-  bool isAllowDeleteItem({required ITEM item}) {
+  bool isItemDeletionAllowed({required ITEM item}) {
     return true;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isAllowUpdateCurrentItem() {
+  bool isCurrentItemUpdateAllowed() {
     ITEM? currentItem = this.currentItem;
     if (currentItem == null) {
       return false;
     }
-    return isAllowUpdateItem(item: currentItem);
+    return isItemUpdateAllowed(item: currentItem);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isAllowDeleteCurrentItem() {
+  bool isCurrentItemDeletionAllowed() {
     ITEM? currentItem = this.currentItem;
     if (currentItem == null) {
       return false;
     }
-    return isAllowDeleteItem(item: currentItem);
+    return isItemDeletionAllowed(item: currentItem);
   }
 
   // ***************************************************************************
@@ -5979,9 +5980,9 @@ abstract class Block<
   /// Allows to Query the Block.
   ///
   @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult __isAllowQuery() {
+  CheckAllowResult __isQueryAllowed() {
     try {
-      bool allow = isAllowQuery();
+      bool allow = isQueryAllowed();
       return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
@@ -5997,9 +5998,9 @@ abstract class Block<
   /// Allows edit current item or not according to the application logic.
   ///
   @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult __isAllowResetForm() {
+  CheckAllowResult __isFormResetAllowed() {
     try {
-      bool allow = isAllowResetForm();
+      bool allow = isFormResetAllowed();
       return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
@@ -6018,11 +6019,11 @@ abstract class Block<
   /// Allows updating an Item or not according to the application logic.
   ///
   @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult _isAllowUpdateItem({
+  CheckAllowResult _isItemUpdateAllowed({
     required ITEM item,
   }) {
     try {
-      bool allow = isAllowUpdateItem(item: item);
+      bool allow = isItemUpdateAllowed(item: item);
       return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
@@ -6041,9 +6042,9 @@ abstract class Block<
   /// Allows creating a new Item or not according to the application logic.
   ///
   @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult __isAllowCreateItem() {
+  CheckAllowResult __isItemCreationAllowed() {
     try {
-      bool allow = isAllowCreateItem();
+      bool allow = isItemCreationAllowed();
       return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
@@ -6062,9 +6063,9 @@ abstract class Block<
   /// Allows deleting an Item or not according to the application logic.
   ///
   @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult __isAllowDeleteItem({required ITEM item}) {
+  CheckAllowResult __isItemDeletionAllowed({required ITEM item}) {
     try {
-      bool allow = isAllowDeleteItem(item: item);
+      bool allow = isItemDeletionAllowed(item: item);
       return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
@@ -6108,7 +6109,7 @@ abstract class Block<
     }
     //
     if (checkAllow) {
-      CheckAllowResult result = __isAllowQuery();
+      CheckAllowResult result = __isQueryAllowed();
       switch (result.result) {
         case CheckAllow.allow:
           return Actionable<BlockQueryPrecheck>.yes();
@@ -6165,7 +6166,7 @@ abstract class Block<
     }
     //
     if (checkAllow) {
-      CheckAllowResult result = __isAllowDeleteItem(item: item);
+      CheckAllowResult result = __isItemDeletionAllowed(item: item);
       switch (result.result) {
         case CheckAllow.allow:
           return Actionable<BlockItemDeletionPrecheck>.yes();
@@ -6214,7 +6215,7 @@ abstract class Block<
         }
         //
         if (checkAllow) {
-          CheckAllowResult result = __isAllowDeleteItem(item: item);
+          CheckAllowResult result = __isItemDeletionAllowed(item: item);
           switch (result.result) {
             case CheckAllow.allow:
               continue;
@@ -6298,7 +6299,7 @@ abstract class Block<
     }
     //
     if (checkAllow) {
-      CheckAllowResult result = __isAllowCreateItem();
+      CheckAllowResult result = __isItemCreationAllowed();
       switch (result.result) {
         case CheckAllow.allow:
           return Actionable<BlockMultiItemsCreationPrecheck>.yes();
@@ -6356,7 +6357,7 @@ abstract class Block<
     }
     //
     if (checkAllow) {
-      CheckAllowResult result = __isAllowCreateItem();
+      CheckAllowResult result = __isItemCreationAllowed();
       switch (result.result) {
         case CheckAllow.allow:
           return Actionable<BlockItemCreationPrecheck>.yes();
@@ -6431,7 +6432,7 @@ abstract class Block<
     }
     //
     if (checkAllow) {
-      CheckAllowResult result = _isAllowUpdateItem(item: item);
+      CheckAllowResult result = _isItemUpdateAllowed(item: item);
       switch (result.result) {
         case CheckAllow.allow:
           return Actionable<BlockItemEditPrecheck>.yes();
@@ -6491,7 +6492,7 @@ abstract class Block<
     }
     //
     if (checkAllow) {
-      CheckAllowResult result = _isAllowUpdateItem(item: item);
+      CheckAllowResult result = _isItemUpdateAllowed(item: item);
       switch (result.result) {
         case CheckAllow.allow:
           return Actionable<BlockQuickItemUpdatePrecheck>.yes();
@@ -6541,7 +6542,7 @@ abstract class Block<
     }
     //
     if (checkAllow) {
-      CheckAllowResult result = __isAllowCreateItem();
+      CheckAllowResult result = __isItemCreationAllowed();
       switch (result.result) {
         case CheckAllow.allow:
           return Actionable<BlockQuickItemCreationPrecheck>.yes();
@@ -6599,7 +6600,7 @@ abstract class Block<
         break; // Do nothing.
     }
     if (checkAllow) {
-      CheckAllowResult result = __isAllowResetForm();
+      CheckAllowResult result = __isFormResetAllowed();
       switch (result.result) {
         case CheckAllow.allow:
           return Actionable<BlockFormResetPrecheck>.yes();
@@ -6696,7 +6697,7 @@ abstract class Block<
     }
     //
     if (checkAllow) {
-      CheckAllowResult result = _isAllowUpdateItem(item: item);
+      CheckAllowResult result = _isItemUpdateAllowed(item: item);
       switch (result.result) {
         case CheckAllow.allow:
           return Actionable<BlockItemEditPrecheck>.yes();
@@ -6837,7 +6838,7 @@ abstract class Block<
           }
         }
         if (checkAllow) {
-          CheckAllowResult result = _isAllowUpdateItem(item: currentItem!);
+          CheckAllowResult result = _isItemUpdateAllowed(item: currentItem!);
           switch (result.result) {
             case CheckAllow.allow:
               return Actionable<BlockFormEnablementPrecheckCode>.yes();

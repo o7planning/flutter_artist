@@ -35,7 +35,7 @@ enum BlockMultiItemsCreationPrecheck implements Precheck {
   checkAllowMethodError(
     precheckCode: PrecheckCode.checkAllowMethodError,
     message: "Not allow to create item.",
-    details: ["The isAllowCreateItem() method error."],
+    details: ["The isItemCreationAllowed() method error."],
   ),
   //
   cancelled(

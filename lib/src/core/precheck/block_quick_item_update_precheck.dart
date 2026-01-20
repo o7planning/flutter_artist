@@ -42,7 +42,7 @@ enum BlockQuickItemUpdatePrecheck implements Precheck {
   checkAllowMethodError(
     precheckCode: PrecheckCode.checkAllowMethodError,
     message: "Not allow to update the item.",
-    details: ["The isAllowUpdateItem() method error."],
+    details: ["The isItemUpdateAllowed() method error."],
   ),
   // TODO: Not Use?
   noTarget(

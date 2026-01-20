@@ -27,7 +27,7 @@ enum BlockFormEnablementPrecheckCode implements Precheck {
   checkAllowMethodError(
     precheckCode: PrecheckCode.checkAllowMethodError,
     message: "The Form is disabled.",
-    details: ["The isAllowUpdateItem() method error."],
+    details: ["The isItemUpdateAllowed() method error."],
   ),
   ;
 

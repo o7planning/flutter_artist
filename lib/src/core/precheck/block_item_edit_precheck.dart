@@ -47,7 +47,7 @@ enum BlockItemEditPrecheck implements Precheck {
   checkAllowMethodError(
     precheckCode: PrecheckCode.checkAllowMethodError,
     message: "Not allow to edit the item.",
-    details: ["The isAllowUpdateItem() method error."],
+    details: ["The isItemUpdateAllowed() method error."],
   ),
   noTarget(
     precheckCode: PrecheckCode.noTarget,

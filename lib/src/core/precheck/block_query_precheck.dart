@@ -42,7 +42,7 @@ enum BlockQueryPrecheck implements Precheck {
   checkAllowMethodError(
     precheckCode: PrecheckCode.checkAllowMethodError,
     message: "The Block querying is disabled.",
-    details: ["The isAllowQuery() method error."],
+    details: ["The isQueryAllowed() method error."],
   ),
   ;
 

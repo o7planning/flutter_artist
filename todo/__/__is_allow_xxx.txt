@@ -7,3 +7,13 @@ Block.isAllowQuery()
 Block.isAllowCreateItem()
 Block.isAllowUpdateItem()
 Block.isAllowDeleteItem()
+
+
+isAllowUpdateItem  ==>   (isItemUpdateAllowed)
+isAllowCreateItem ==>    (isItemCreationAllowed)
+isAllowDeleteItem   ==>    (isItemDeletionAllowed)
+isAllowUpdateCurrentItem   ==>  (isCurrentItemUpdateAllowed)
+isAllowDeleteCurrentItem    ==>  (isCurrentItemDeletionAllowed)
+isAllowResetForm   ==>   (isFormResetAllowed)
+isAllowQuery    ==>   (isQueryAllowed)
+

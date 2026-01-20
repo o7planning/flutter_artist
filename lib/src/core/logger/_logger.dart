@@ -90,7 +90,7 @@ class Logger {
     __totalErrorCount++;
     final errorInfo = ErrorInfo(
       errorMessage: errorMessage,
-      errorDetails: [],
+      errorDetails: errorDetails,
       stackTrace: stackTrace,
     );
     final logEntry = LogEntry.error(
