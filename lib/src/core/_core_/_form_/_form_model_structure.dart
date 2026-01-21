@@ -1,10 +1,25 @@
 part of '../core.dart';
 
 class FormModelStructure {
-  final Map<String, FormProp> _allPropMap = {};
-  final List<MultiOptFormProp> _rootOptProps;
-  final List<SimpleFormProp> _simpleProps = [];
-  final List<CalculatedFormProp> _calculatedProps = [];
+  //
+  // Prop Defs:
+  //
+  final List<SimplePropDef> __simplePropDefs;
+  final List<MultiOptPropDef> __rootMultiOptPropDefs;
+
+  final Map<String, PropDef> __allPropDefMap = {};
+  final Map<String, SimplePropDef> __simplePropDefMap = {};
+  final Map<String, MultiOptPropDef> __multiOptPropDefMap = {};
+
+  //
+  // FormPropModels:
+  //
+  final Map<String, FormPropModel> _allPropModelMapX = {};
+  final List<MultiOptFormPropModel> _rootOptPropModels = [];
+  final List<SimpleFormPropModel> _simplePropModels = [];
+  final List<CalculatedFormPropModel> _calculatedPropModels = [];
+
+  //
 
   bool __manualDirty = false;
 
@@ -31,33 +46,70 @@ class FormModelStructure {
   bool get isNew => _formMode == FormMode.creation;
 
   FormModelStructure({
-    required List<SimpleFormProp> simpleProps,
-    required List<MultiOptFormProp> multiOptProps,
-    List<CalculatedFormProp> calculatedProps = const [],
-  }) : _rootOptProps = List.unmodifiable(multiOptProps) {
-    for (MultiOptFormProp rootOptProp in multiOptProps) {
-      __standardizeCascade(rootOptProp, null);
+    required List<SimplePropDef> simplePropDefs,
+    required List<MultiOptPropDef> multiOptPropDefs,
+  })  : __simplePropDefs = [...simplePropDefs],
+        __rootMultiOptPropDefs = [...multiOptPropDefs] {
+    for (SimplePropDef simplePropDef in simplePropDefs) {
+      __initSimplePropDef(simplePropDef: simplePropDef);
     }
-    for (SimpleFormProp sp in simpleProps) {
-      if (_allPropMap.containsKey(sp.propName)) {
-        throw DuplicateFormPropError(
-          propName: sp.propName,
-        );
-      }
-      __initSimpleProp(
-        newSimpleProp: sp,
-        markTempDirty: false,
+    //
+    for (MultiOptPropDef multiOptPropDef in multiOptPropDefs) {
+      __initMultiOptPropDefCascade(
+        multiOptPropDef: multiOptPropDef,
+        parent: null,
       );
     }
-    for (CalculatedFormProp cp in calculatedProps) {
-      if (_allPropMap.containsKey(cp.propName)) {
-        throw DuplicateFormPropError(
-          propName: cp.propName,
-        );
-      }
-      __initCalculatedProp(
-        newCalculatedProp: cp,
-        markTempDirty: false,
+    //
+    // Create Prop Models:
+    //
+    for (SimplePropDef propDef in __simplePropDefs) {
+      __createSimpleFormPropModel(
+        simplePropDef: propDef,
+      );
+    }
+    for (MultiOptPropDef rootOptDef in __rootMultiOptPropDefs) {
+      __createMultiOptFormPropModelCascade(
+        optPropDef: rootOptDef,
+        parentOptModel: null,
+      );
+    }
+  }
+
+  // ***************************************************************************
+
+  void __initSimplePropDef({
+    required SimplePropDef simplePropDef,
+  }) {
+    if (__allPropDefMap.containsKey(simplePropDef.propName)) {
+      throw DuplicateFormPropError(
+        propName: simplePropDef.propName,
+      );
+    }
+    __allPropDefMap[simplePropDef.propName] = simplePropDef;
+    __simplePropDefMap[simplePropDef.propName] = simplePropDef;
+  }
+
+  // ***************************************************************************
+
+  void __initMultiOptPropDefCascade({
+    required MultiOptPropDef multiOptPropDef,
+    required MultiOptPropDef? parent,
+  }) {
+    if (__allPropDefMap.containsKey(multiOptPropDef.propName)) {
+      throw DuplicateFormPropError(
+        propName: multiOptPropDef.propName,
+      );
+    }
+    // Init LAZY Property.
+    multiOptPropDef.parent = parent;
+    __allPropDefMap[multiOptPropDef.propName] = multiOptPropDef;
+    __multiOptPropDefMap[multiOptPropDef.propName] = multiOptPropDef;
+    //
+    for (MultiOptPropDef child in multiOptPropDef._children) {
+      __initMultiOptPropDefCascade(
+        multiOptPropDef: child,
+        parent: multiOptPropDef,
       );
     }
   }
@@ -65,22 +117,37 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __standardizeCascade(
-    MultiOptFormProp optProp,
-    MultiOptFormProp? parent,
-  ) {
-    optProp.parent = parent;
-    optProp._structure = this;
-    //
-    if (_allPropMap.containsKey(optProp.propName)) {
-      throw DuplicateFormPropError(
-        propName: optProp.propName,
-      );
+  void __createSimpleFormPropModel({
+    required SimplePropDef simplePropDef,
+  }) {
+    final model = simplePropDef.createModel(
+      propName: simplePropDef.propName,
+    );
+    _simplePropModels.add(model);
+    _allPropModelMapX[simplePropDef.propName] = model;
+  }
+
+  // ***************************************************************************
+
+  void __createMultiOptFormPropModelCascade({
+    required MultiOptPropDef optPropDef,
+    required MultiOptFormPropModel? parentOptModel,
+  }) {
+    final model = optPropDef.createModel(
+      propName: optPropDef.propName,
+      parent: parentOptModel,
+    );
+    if (parentOptModel == null) {
+      _rootOptPropModels.add(model);
     }
-    _allPropMap[optProp.propName] = optProp;
+    parentOptModel?._children.add(model);
     //
-    for (MultiOptFormProp child in optProp._children) {
-      __standardizeCascade(child, optProp);
+    _allPropModelMapX[optPropDef.propName] = model;
+    for (MultiOptPropDef childDef in optPropDef._children) {
+      __createMultiOptFormPropModelCascade(
+        optPropDef: childDef,
+        parentOptModel: model,
+      );
     }
   }
 
@@ -88,8 +155,8 @@ class FormModelStructure {
   // ***************************************************************************
 
   FormErrorInfo? get formErrorInfo {
-    for (String propName in _allPropMap.keys) {
-      FormProp prop = _allPropMap[propName]!;
+    for (String propName in _allPropModelMapX.keys) {
+      FormPropModel prop = _allPropModelMapX[propName]!;
       if (prop._formErrorInfo != null) {
         return prop._formErrorInfo;
       }
@@ -101,8 +168,8 @@ class FormModelStructure {
   // ***************************************************************************
 
   void _clearFormError() {
-    for (String propName in _allPropMap.keys) {
-      FormProp prop = _allPropMap[propName]!;
+    for (String propName in _allPropModelMapX.keys) {
+      FormPropModel prop = _allPropModelMapX[propName]!;
       prop._formErrorInfo = null;
     }
     __formErrorInfo = null;
@@ -112,7 +179,7 @@ class FormModelStructure {
     if (formErrorInfo.propName == null) {
       __formErrorInfo = formErrorInfo;
     } else {
-      FormProp? prop = _allPropMap[formErrorInfo.propName!];
+      FormPropModel? prop = _allPropModelMapX[formErrorInfo.propName!];
       prop?._formErrorInfo = formErrorInfo;
     }
   }
@@ -121,10 +188,10 @@ class FormModelStructure {
   // ***************************************************************************
 
   // SAME-AS: #0007 (filterModelStructure.allMultiOptCriteria)
-  List<MultiOptFormProp> get allMultiOptProps {
-    return _allPropMap.values
-        .whereType<MultiOptFormProp>()
-        .cast<MultiOptFormProp>()
+  List<MultiOptFormPropModel> get allMultiOptProps {
+    return _allPropModelMapX.values
+        .whereType<MultiOptFormPropModel>()
+        .cast<MultiOptFormPropModel>()
         .toList();
   }
 
@@ -132,7 +199,7 @@ class FormModelStructure {
   // ***************************************************************************
 
   void _triggerFilterCriteriaChanged() {
-    for (var rootMultiOptProp in _rootOptProps) {
+    for (var rootMultiOptProp in _rootOptPropModels) {
       if (rootMultiOptProp.reloadCondition ==
           MultiOptPropReload.ifCriteriaChanged) {
         rootMultiOptProp._markToReload = true;
@@ -141,7 +208,7 @@ class FormModelStructure {
   }
 
   void _triggerItemIdChanged() {
-    for (var rootMultiOptProp in _rootOptProps) {
+    for (var rootMultiOptProp in _rootOptPropModels) {
       if (rootMultiOptProp.reloadCondition ==
           MultiOptPropReload.ifItemIdChanged) {
         rootMultiOptProp._markToReload = true;
@@ -186,7 +253,7 @@ class FormModelStructure {
     if (__manualDirty) {
       return true;
     }
-    for (FormProp prop in _allPropMap.values) {
+    for (FormPropModel prop in _allPropModelMapX.values) {
       bool dirty = prop.isDirty();
       if (dirty) {
         return true;
@@ -201,10 +268,10 @@ class FormModelStructure {
   ///
   /// For the first load of an Item, update "Initial Form Data".
   /// IMPORTANT:
-  /// - Other Initial [MultiOptFormProp] data will be update later...
+  /// - Other Initial [MultiOptFormPropModel] data will be update later...
   ///
   void _setInitialFormDataForItemFirstLoad() {
-    for (FormProp prop in _allPropMap.values) {
+    for (FormPropModel prop in _allPropModelMapX.values) {
       prop._initialValue = prop._currentValue;
       prop._initialXData = prop._currentXData;
     }
@@ -214,14 +281,14 @@ class FormModelStructure {
   /// After save successful, update "Initial Form Data".
   ///
   void _updateInitialFormDataAfterSaveSuccess() {
-    for (FormProp prop in _allPropMap.values) {
+    for (FormPropModel prop in _allPropModelMapX.values) {
       prop._initialValue = prop._currentValue;
       prop._initialXData = prop._currentXData;
     }
   }
 
   void _updateTempToReal() {
-    for (FormProp prop in _allPropMap.values) {
+    for (FormPropModel prop in _allPropModelMapX.values) {
       prop._currentValue = prop._tempCurrentValue;
       prop._currentXData = prop._tempCurrentXData;
     }
@@ -232,7 +299,7 @@ class FormModelStructure {
   ///
   void _resetFormData() {
     __manualDirty = false;
-    for (FormProp prop in _allPropMap.values) {
+    for (FormPropModel prop in _allPropModelMapX.values) {
       prop._currentValue = prop._initialValue;
       prop._currentXData = prop._initialXData;
     }
@@ -244,10 +311,10 @@ class FormModelStructure {
     _formMode = FormMode.none;
     __manualDirty = false;
     //
-    for (FormProp prop in _allPropMap.values) {
+    for (FormPropModel prop in _allPropModelMapX.values) {
       prop._currentValue = null;
       prop._initialValue = null;
-      if (prop is MultiOptFormProp) {
+      if (prop is MultiOptFormPropModel) {
         if (prop._markToReload) {
           prop._initialXData = null;
           prop._currentXData = null;
@@ -263,14 +330,14 @@ class FormModelStructure {
     required String propName,
     required dynamic value,
   }) {
-    FormProp? prop = _allPropMap[propName];
+    FormPropModel? prop = _allPropModelMapX[propName];
     if (prop != null) {
       prop._currentValue = value;
     }
   }
 
   dynamic _getCurrentPropValue({required String propName}) {
-    FormProp? prop = _allPropMap[propName];
+    FormPropModel? prop = _allPropModelMapX[propName];
     if (prop != null) {
       return prop._currentValue;
     }
@@ -286,19 +353,19 @@ class FormModelStructure {
   }
 
   Map<String, dynamic> get initialFormData {
-    return _allPropMap.map((k, v) => MapEntry(k, v._initialValue));
+    return _allPropModelMapX.map((k, v) => MapEntry(k, v._initialValue));
   }
 
   Map<String, dynamic> get currentFormData {
-    return _allPropMap.map((k, v) => MapEntry(k, v._currentValue));
+    return _allPropModelMapX.map((k, v) => MapEntry(k, v._currentValue));
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  MultiOptFormProp? _getMultiOptFormProp(String multiOptPropName) {
-    FormProp? prop = _allPropMap[multiOptPropName];
-    if (prop is MultiOptFormProp) {
+  MultiOptFormPropModel? _getMultiOptFormProp(String multiOptPropName) {
+    FormPropModel? prop = _allPropModelMapX[multiOptPropName];
+    if (prop is MultiOptFormPropModel) {
       return prop;
     }
     return null;
@@ -307,9 +374,9 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  SimpleFormProp? _getSimpleFormProp(String propName) {
-    FormProp? prop = _allPropMap[propName];
-    if (prop is SimpleFormProp) {
+  SimpleFormPropModel? _getSimpleFormProp(String propName) {
+    FormPropModel? prop = _allPropModelMapX[propName];
+    if (prop is SimpleFormPropModel) {
       return prop;
     }
     return null;
@@ -334,16 +401,16 @@ class FormModelStructure {
       propNames: formKeyInstantValues.keys.toList(),
     );
     //
-    for (FormProp prop in _allPropMap.values) {
+    for (FormPropModel prop in _allPropModelMapX.values) {
       switch (activityType) {
         case FormActivityType.startCreatingOrEditing:
           _formInitialDataReady = false;
-          if (prop is SimpleFormProp) {
+          if (prop is SimpleFormPropModel) {
             prop._tempCurrentValue = null;
             prop._tempCurrentXData = null;
             prop._tempInitialValue = null;
             prop._tempInitialXData = null;
-          } else if (prop is MultiOptFormProp) {
+          } else if (prop is MultiOptFormPropModel) {
             if (prop._markToReload && prop.parent == null) {
               prop._tempCurrentValue = null;
               prop._tempCurrentXData = null;
@@ -371,7 +438,7 @@ class FormModelStructure {
           prop._tempInitialXData = prop._initialXData;
           //
           if (formKeyInstantValues.containsKey(prop.propName)) {
-            if (prop is SimpleFormProp) {
+            if (prop is SimpleFormPropModel) {
               prop._tempCurrentValue = formKeyInstantValues[prop.propName];
             }
           }
@@ -388,7 +455,7 @@ class FormModelStructure {
   // ***************************************************************************
 
   dynamic _getTempCurrentPropValue({required String propName}) {
-    FormProp? prop = _allPropMap[propName];
+    FormPropModel? prop = _allPropModelMapX[propName];
     return prop?._tempCurrentValue;
   }
 
@@ -396,7 +463,7 @@ class FormModelStructure {
   // ***************************************************************************
 
   dynamic _getTempInitialPropValue({required String propName}) {
-    FormProp? prop = _allPropMap[propName];
+    FormPropModel? prop = _allPropModelMapX[propName];
     return prop?._tempInitialValue;
   }
 
@@ -404,7 +471,7 @@ class FormModelStructure {
   // ***************************************************************************
 
   dynamic _getInitialPropValue({required String propName}) {
-    FormProp? prop = _allPropMap[propName];
+    FormPropModel? prop = _allPropModelMapX[propName];
     return prop?._initialValue;
   }
 
@@ -412,16 +479,16 @@ class FormModelStructure {
   // ***************************************************************************
 
   XData? _getTempMultiOptPropXData({required String propName}) {
-    FormProp? prop = _allPropMap[propName];
-    if (prop is MultiOptFormProp) {
+    FormPropModel? prop = _allPropModelMapX[propName];
+    if (prop is MultiOptFormPropModel) {
       return prop._tempCurrentXData;
     }
     return null;
   }
 
   XData? _getCurrentMultiOptPropXData({required String propName}) {
-    FormProp? prop = _allPropMap[propName];
-    if (prop is MultiOptFormProp) {
+    FormPropModel? prop = _allPropModelMapX[propName];
+    if (prop is MultiOptFormPropModel) {
       return prop._currentXData;
     }
     return null;
@@ -435,9 +502,9 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  MultiOptFormProp? _findMultiOptFormProp(String multiOptPropName) {
-    FormProp? prop = _allPropMap[multiOptPropName];
-    if (prop is MultiOptFormProp) {
+  MultiOptFormPropModel? _findMultiOptFormProp(String multiOptPropName) {
+    FormPropModel? prop = _allPropModelMapX[multiOptPropName];
+    if (prop is MultiOptFormPropModel) {
       return prop;
     }
     return null;
@@ -446,7 +513,7 @@ class FormModelStructure {
   int _debugGetMultiOptPropLoadCount({
     required String multiOptPropName,
   }) {
-    MultiOptFormProp? prop = _findMultiOptFormProp(multiOptPropName);
+    MultiOptFormPropModel? prop = _findMultiOptFormProp(multiOptPropName);
     return prop?._loadCount ?? 0;
   }
 
@@ -454,9 +521,9 @@ class FormModelStructure {
   // ***************************************************************************
 
   void _updateChildrenMultiOptValueToNullCascade({
-    required MultiOptFormProp multiOptProp,
+    required MultiOptFormPropModel multiOptProp,
   }) {
-    for (MultiOptFormProp child in multiOptProp._children) {
+    for (MultiOptFormPropModel child in multiOptProp._children) {
       child._tempCurrentValue = null;
       child._tempCurrentXData = null;
       //
@@ -477,33 +544,33 @@ class FormModelStructure {
     // IMPORTANT:
     // Update data for FormPropsStructure. From ROOTs to LEAVES.
     // (***):
-    // And Update children-OptCriterion data to null if parent-Value is null or not selected.
+    // And Update children-OptProp data to null if parent-Value is null or not selected.
     //
-    for (FormProp prop in _allPropMap.values) {
+    for (FormPropModel prop in _allPropModelMapX.values) {
       prop._candidateUpdateValue = null;
       prop._valueUpdated = false;
       prop._markTempDirty = false;
     }
     //
     for (String propName in candidateUpdateValues.keys) {
-      FormProp? prop = _allPropMap[propName];
+      FormPropModel? prop = _allPropModelMapX[propName];
       if (prop != null) {
         prop._markTempDirty = true;
       }
     }
     //
-    for (MultiOptFormProp rootProp in _rootOptProps) {
+    for (MultiOptFormPropModel rootProp in _rootOptPropModels) {
       rootProp._updateTempValueCascade(
         updateValues: candidateUpdateValues,
       );
     }
-    for (SimpleFormProp commonItem in _simpleProps) {
+    for (SimpleFormPropModel commonItem in _simplePropModels) {
       commonItem._updateTempValue(
         updateValues: candidateUpdateValues,
       );
     }
     // Apply to all _markTempDirty Prop:
-    for (FormProp prop in _allPropMap.values) {
+    for (FormPropModel prop in _allPropModelMapX.values) {
       if (prop._markTempDirty) {
         prop._tempCurrentValue = prop._candidateUpdateValue;
       }
@@ -515,7 +582,7 @@ class FormModelStructure {
 
   void __addPropsIfNeed({required List<String> propNames}) {
     for (String propName in propNames) {
-      FormProp? prop = _allPropMap[propName];
+      FormPropModel? prop = _allPropModelMapX[propName];
       if (prop == null) {
         print("""\n
             ****************************************************************************************************
@@ -538,10 +605,10 @@ class FormModelStructure {
     required String propName,
     required bool markTempDirty,
   }) {
-    if (_allPropMap.containsKey(propName)) {
+    if (_allPropModelMapX.containsKey(propName)) {
       return;
     }
-    SimpleFormProp newSimpleProp = SimpleFormProp(
+    SimpleFormPropModel newSimpleProp = SimpleFormPropModel(
       propName: propName,
     );
     __initSimpleProp(
@@ -551,26 +618,26 @@ class FormModelStructure {
   }
 
   void __initSimpleProp({
-    required SimpleFormProp newSimpleProp,
+    required SimpleFormPropModel newSimpleProp,
     required bool markTempDirty,
   }) {
     newSimpleProp._structure = this;
     newSimpleProp._markTempDirty = markTempDirty;
-    _allPropMap[newSimpleProp.propName] = newSimpleProp;
-    _simpleProps.add(newSimpleProp);
+    _allPropModelMapX[newSimpleProp.propName] = newSimpleProp;
+    _simplePropModels.add(newSimpleProp);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void __initCalculatedProp({
-    required CalculatedFormProp newCalculatedProp,
+    required CalculatedFormPropModel newCalculatedProp,
     required bool markTempDirty,
   }) {
     newCalculatedProp._structure = this;
     newCalculatedProp._markTempDirty = markTempDirty;
-    _allPropMap[newCalculatedProp.propName] = newCalculatedProp;
-    _calculatedProps.add(newCalculatedProp);
+    _allPropModelMapX[newCalculatedProp.propName] = newCalculatedProp;
+    _calculatedPropModels.add(newCalculatedProp);
   }
 
   // ***************************************************************************
@@ -580,16 +647,16 @@ class FormModelStructure {
     required String multiOptPropName,
     required XData? multiOptPropXData,
   }) {
-    FormProp? prop = _allPropMap[multiOptPropName];
+    FormPropModel? prop = _allPropModelMapX[multiOptPropName];
     if (prop == null) {
       throw AppError(errorMessage: 'No Prop "$multiOptPropName"');
     }
-    if (prop is MultiOptFormProp) {
+    if (prop is MultiOptFormPropModel) {
       prop._tempCurrentXData = multiOptPropXData;
     } else {
       throw AppError(
         errorMessage:
-            'Invalid Prop "$multiOptPropName", it must be $MultiOptFormProp',
+            'Invalid Prop "$multiOptPropName", it must be $MultiOptFormPropModel',
       );
     }
   }
@@ -602,15 +669,15 @@ class FormModelStructure {
     required Object? value,
     required bool setForInitial,
   }) {
-    FormProp? prop = _allPropMap[propName];
+    FormPropModel? prop = _allPropModelMapX[propName];
     if (prop == null) {
       throw AppError(
         errorMessage: 'No propName "$propName"',
         errorDetails: null,
       );
-    } else if (prop is! SimpleFormProp) {
+    } else if (prop is! SimpleFormPropModel) {
       throw AppError(
-        errorMessage: '"$propName" is not $SimpleFormProp',
+        errorMessage: '"$propName" is not $SimpleFormPropModel',
         errorDetails: null,
       );
     }
@@ -624,10 +691,10 @@ class FormModelStructure {
   // ***************************************************************************
 
   @DebugMethodAnnotation()
-  List<MultiOptFormProp> get debugRootOptProps => _rootOptProps;
+  List<MultiOptFormPropModel> get debugRootOptProps => _rootOptPropModels;
 
   @DebugMethodAnnotation()
-  List<SimpleFormProp> get simpleProps => _simpleProps;
+  List<SimpleFormPropModel> get simpleProps => _simplePropModels;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -637,7 +704,7 @@ class FormModelStructure {
       print(
           "\n\n--------------------------------------------------------------");
       print(" ---> $prefix");
-      for (MultiOptFormProp rootItem in _rootOptProps) {
+      for (MultiOptFormPropModel rootItem in _rootOptPropModels) {
         rootItem._printTempInfoCascade(indentFactor: 1);
       }
       print("--------------------------------------------------------------");

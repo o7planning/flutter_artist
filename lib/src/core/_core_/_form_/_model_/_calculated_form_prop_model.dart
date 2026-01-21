@@ -1,9 +1,9 @@
 part of '../../core.dart';
 
-class CalculatedFormProp<V> extends FormProp {
+class CalculatedFormPropModel<V> extends FormPropModel {
   final V Function() calculate;
 
-  CalculatedFormProp({
+  CalculatedFormPropModel({
     required super.propName,
     required this.calculate,
   });

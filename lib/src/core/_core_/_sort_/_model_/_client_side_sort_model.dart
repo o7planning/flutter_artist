@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 class _ClientSideSortModel<ITEM extends Object> extends SortModel<ITEM> {
   _ClientSideSortModel({

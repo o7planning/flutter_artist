@@ -61,7 +61,8 @@ class ConditionDefImpl implements ConditionDef {
     required String criterionNameTilde,
     required this.operator,
     List<CriterionOperator>? supportedOperators,
-  }) : _criterionX = CriterionTilde.parse(criterionNameTilde: criterionNameTilde) {
+  }) : _criterionX =
+            CriterionTilde.parse(criterionNameTilde: criterionNameTilde) {
     _supportedOperators = supportedOperators == null
         ? [operator]
         : {...supportedOperators, operator}.toList();
