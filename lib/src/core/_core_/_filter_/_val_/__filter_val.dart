@@ -4,7 +4,8 @@ part of '../../core.dart';
 /// [FilterConditionGroupVal], [FilterConditionVal].
 ///
 abstract interface class IConditionVal {
-  Map<String, dynamic> _toMapData();
+  Map<String, dynamic> _toMapData(
+      {Map<String, Criterionable>? criterionableMap});
 }
 
 class FilterConditionVal implements IConditionVal {
@@ -19,12 +20,22 @@ class FilterConditionVal implements IConditionVal {
   });
 
   @override
-  Map<String, dynamic> _toMapData() {
-    return {
-      "criterionName": criterionName,
-      "value": value,
-      "operator": operator.text,
-    };
+  Map<String, dynamic> _toMapData(
+      {Map<String, Criterionable>? criterionableMap}) {
+    if (criterionableMap == null) {
+      return {
+        "criterionName": criterionName,
+        "value": value,
+        "operator": operator.text,
+      };
+    } else {
+      Criterionable? cri = criterionableMap[criterionName];
+      return {
+        "criterionName": cri?.jsonCriterionName ?? criterionName,
+        "value": cri?.converter(value),
+        "operator": operator.text,
+      };
+    }
   }
 }
 
@@ -45,14 +56,17 @@ class FilterConditionGroupVal implements IConditionVal {
         conditions = const [];
 
   @override
-  Map<String, dynamic> _toMapData() {
+  Map<String, dynamic> _toMapData(
+      {Map<String, Criterionable>? criterionableMap}) {
     return {
       "connector": connector.text,
-      "conditions": conditions.map((m) => m._toMapData()).toList(),
+      "conditions": conditions
+          .map((m) => m._toMapData(criterionableMap: criterionableMap))
+          .toList(),
     };
   }
 
-  String toJson() {
+  String toJson({List<Criterionable>? criterionableList}) {
     final Map<String, dynamic> map = _toMapData();
     return MapUtils.toJson(map: map);
   }

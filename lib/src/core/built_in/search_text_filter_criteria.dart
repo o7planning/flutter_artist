@@ -7,7 +7,14 @@ import '../utils/_string_utils.dart';
 class SearchTextFilterCriteria extends FilterCriteria {
   final String? searchText;
 
-  const SearchTextFilterCriteria({required this.searchText});
+  SearchTextFilterCriteria({
+    required this.searchText,
+  });
+
+  @override
+  List<Criterionable<Object>> registerSupportedCriteria() {
+    return [];
+  }
 
   @override
   List<String> getDebugCriterionInfos() {

@@ -70,6 +70,7 @@ class BlockConfig {
 
   BlockConfig copy() {
     return BlockConfig(
+      uniformItemRefreshMode: uniformItemRefreshMode,
       nonItemRepresentativeBehavior: nonItemRepresentativeBehavior,
       leaveTheFormSafely: leaveTheFormSafely,
       hiddenBehavior: hiddenBehavior,
