@@ -1,6 +1,6 @@
 part of '../../core.dart';
 
-abstract class CriterionDef<V> {
+abstract class CriterionDef<V extends Object> {
   final Set<String> _suffixes = {};
 
   final String criterionBaseName;
@@ -17,7 +17,7 @@ abstract class CriterionDef<V> {
   }
 }
 
-class SimpleCriterionDef<V> extends CriterionDef<V> {
+class SimpleCriterionDef<V extends Object> extends CriterionDef<V> {
   SimpleCriterionDef({
     required super.criterionBaseName,
     super.description,
@@ -34,7 +34,7 @@ class SimpleCriterionDef<V> extends CriterionDef<V> {
   }
 }
 
-class MultiOptCriterionDef<V> extends CriterionDef<V> {
+class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
   late final MultiOptCriterionDef? parent;
 
   final SelectionType selectionType;
@@ -96,7 +96,7 @@ class MultiOptCriterionDef<V> extends CriterionDef<V> {
   }
 }
 
-class CalculatedCriterionDef<V> extends CriterionDef<V> {
+class CalculatedCriterionDef<V extends Object> extends CriterionDef<V> {
   final V Function() calculate;
 
   CalculatedCriterionDef({

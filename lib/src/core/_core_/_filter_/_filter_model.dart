@@ -206,10 +206,12 @@ abstract class FilterModel<
 
   XFilterCriteria<FILTER_CRITERIA> _toXFilterCriteria({
     required Map<String, dynamic> criteriaMap,
+    required FilterConditionGroupVal baseCriteria,
   }) {
     FILTER_CRITERIA filterCriteria = toFilterCriteriaObject(
       criteriaMap: criteriaMap,
     );
+    filterCriteria._initFilterCriteria(baseCriteria: baseCriteria);
     return XFilterCriteria(
       filterCriteria: filterCriteria,
       filterCriteriaMap: criteriaMap,
@@ -594,10 +596,16 @@ abstract class FilterModel<
       final Map<String, dynamic> newCriteriaMap = {
         ..._filterModelStructure._tempCriteriaValues
       };
+
+      FilterConditionGroupVal baseCriteria = _filterModelStructure
+          .rootConditionGroupModel
+          .toFilterCriteriaGroupVal();
+
       // Convert Map Data to FilterCriteria Object.
-      final XFilterCriteria<FILTER_CRITERIA> newCriteriaCouple =
+      final XFilterCriteria<FILTER_CRITERIA> newXFilterCriteria =
           _toXFilterCriteria(
         criteriaMap: newCriteriaMap,
+        baseCriteria: baseCriteria,
       );
       // _filterCriteria = newCriteria; // has moved down.
       //
@@ -605,7 +613,7 @@ abstract class FilterModel<
         masterFlowItem._addLineFlowItem(
           codeId: "#31460",
           shortDesc:
-              "Got an instance of ${debugObjHtml(newCriteriaCouple)} (Dart object).\n"
+              "Got an instance of ${debugObjHtml(newXFilterCriteria)} (Dart object).\n"
               "This object will be passed to the <b>@filterCriteria</b> parameter "
               "of the <b>Block.query()</b> or <b>Scalar.query</b> method.",
           tipDocument: TipDocument.filterCriteria,
@@ -625,7 +633,7 @@ abstract class FilterModel<
       __initiatedAtLeastOnce = true;
       _filterModelStructure._setFilterDataState(DataState.ready);
       //
-      _xFilterCriteria = newCriteriaCouple;
+      _xFilterCriteria = newXFilterCriteria;
       return _xFilterCriteria;
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(

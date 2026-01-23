@@ -194,6 +194,8 @@ part '_filter_/_val_/__filter_val.dart';
 
 part '_filter_/_def_/_filter_criterion_def.dart';
 
+part '_filter_/_def_/_filter_criteria_def.dart';
+
 part '_filter_/_model_/_filter_condition_model.dart';
 
 part '_filter_/_def_/_filter_condition_def.dart';
@@ -201,6 +203,8 @@ part '_filter_/_def_/_filter_condition_def.dart';
 part '_filter_/_filter_input.dart';
 
 part '_filter_/_filter_model.dart';
+
+part '_filter_/_x_filter_criteria.dart';
 
 part '_form_/_form_leave_safely.dart';
 
