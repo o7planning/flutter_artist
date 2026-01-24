@@ -8,8 +8,16 @@ class IntIdFilterCriteria extends FilterCriteria {
   });
 
   @override
-  List<Criterionable<Object>> registerSupportedCriteria() {
-    return [];
+  List<Criterionable> registerSupportedCriteria() {
+    return [
+      Criterionable<int>(
+        criterionBaseName: 'id',
+        jsonCriterionName: 'id',
+        converter: (int? baseValue) {
+          return SimpleVal.ofInt(baseValue);
+        },
+      ),
+    ];
   }
 
   @override

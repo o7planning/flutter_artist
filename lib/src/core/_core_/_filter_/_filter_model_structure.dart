@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class FilterModelStructure {
-  static const rootGroupName = "#root-group";
+  static const rootGroupName = "#ROOT-GROUP";
 
   //
   // Criterion Defs:

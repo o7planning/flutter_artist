@@ -593,6 +593,16 @@ abstract class FilterModel<
         );
       }
       //
+      // Update Real FromData from Temporary FormData:
+      //
+      _filterModelStructure._updateTempToReal();
+      //
+      // IMPORTANT:
+      //
+      _formKeyPatchValue(
+        newCurrentValue: _filterModelStructure._currentCriteriaValues,
+      );
+      //
       final Map<String, dynamic> newCriteriaMap = {
         ..._filterModelStructure._tempCriteriaValues
       };
@@ -620,20 +630,11 @@ abstract class FilterModel<
         );
       }
       //
-      // Update Real FromData from Temporary FormData:
-      //
-      _filterModelStructure._updateTempToReal();
-      //
-      // IMPORTANT:
-      //
-      _formKeyPatchValue(
-        newCurrentValue: _filterModelStructure._currentCriteriaValues,
-      );
+      _xFilterCriteria = newXFilterCriteria;
       //
       __initiatedAtLeastOnce = true;
       _filterModelStructure._setFilterDataState(DataState.ready);
       //
-      _xFilterCriteria = newXFilterCriteria;
       return _xFilterCriteria;
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
@@ -1270,7 +1271,7 @@ abstract class FilterModel<
     BuildContext context =
         FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
-    await DebugFilterModelViewerDialog.open(
+    await DebugViewerDialog.openDebugFilterModelViewer(
       context: context,
       locationInfo: "locationInfo", // TODO: Remove.
       filterModel: this,
@@ -1284,8 +1285,9 @@ abstract class FilterModel<
     BuildContext context =
         FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
-    await DebugFilterCriteriaViewerDialog.showFilterCriteriaViewerDialog(
+    await DebugViewerDialog.openDebugFilterCriteriaViewer(
       context: context,
+      locationInfo: '',
       filterModel: this,
     );
   }

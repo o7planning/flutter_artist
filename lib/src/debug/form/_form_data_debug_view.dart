@@ -191,7 +191,10 @@ class _FormDataViewState extends State<FormDataView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          HtmlInfoView(infoAsHtml: infoAsHtml),
+          HtmlInfoView(
+            infoAsHtml: infoAsHtml,
+            style: TextStyle(fontSize: 13),
+          ),
           const Divider(height: 10),
           Expanded(
             child: JsonView(json: json),
@@ -210,11 +213,13 @@ class _FormDataViewState extends State<FormDataView> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             HtmlInfoView(
-                infoAsHtml:
-                    "When you successfully add or modify a record on the '${getClassName(widget.formModel.block)}' block, "
-                    "the listening blocks will be switched to the 'pending' state, "
-                    "they will be lazily queried again when they are visible on the screen.\n"
-                    "Here is a list of affected blocks or scalars:"),
+              infoAsHtml:
+                  "When you successfully add or modify a record on the '${getClassName(widget.formModel.block)}' block, "
+                  "the listening blocks will be switched to the 'pending' state, "
+                  "they will be lazily queried again when they are visible on the screen.\n"
+                  "Here is a list of affected blocks or scalars:",
+              style: TextStyle(fontSize: 13),
+            ),
             const Divider(height: 10),
             ...listeners.map(
               (listener) => ShelfBlockScalarTypeWidget(

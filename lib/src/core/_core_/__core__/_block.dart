@@ -7896,9 +7896,10 @@ abstract class Block<
     BuildContext context =
         FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
-    await DebugFilterCriteriaViewerDialog.showBlockFilterCriteriaDialog(
+    await DebugViewerDialog.openDebugFilterCriteriaViewer(
       context: context,
-      block: this,
+      locationInfo: '',
+      filterModel: registeredOrDefaultFilterModel,
     );
   }
 

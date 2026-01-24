@@ -1231,9 +1231,10 @@ abstract class Scalar<
     BuildContext context =
         FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     //
-    await DebugFilterCriteriaViewerDialog.showScalarFilterCriteriaDialog(
+    await DebugViewerDialog.openDebugFilterCriteriaViewer(
       context: context,
-      scalar: this,
+      locationInfo: '',
+      filterModel: registeredOrDefaultFilterModel,
     );
   }
 

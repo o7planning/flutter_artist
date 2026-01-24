@@ -15,15 +15,37 @@ class SimpleVal extends Equatable {
   List<Object?> get props => [value];
 }
 
-class Criterionable<BASE_VALUE extends Object> {
+typedef Converter<BASE_VALUE> = SimpleVal Function(BASE_VALUE? baseValue);
+
+class Criterionable<BASE_VALUE> {
   final String criterionBaseName;
   final String jsonCriterionName;
 
-  final SimpleVal Function(BASE_VALUE? baseValue) converter;
+  final Converter<BASE_VALUE> __converter;
+
+  Type get baseDataType {
+    return BASE_VALUE;
+  }
+
+  String get baseDataTypeName {
+    return getTypeNameWithoutGenerics(BASE_VALUE);
+  }
 
   Criterionable({
     required this.criterionBaseName,
     required this.jsonCriterionName,
-    required this.converter,
-  });
+    required Converter<BASE_VALUE> converter,
+  }) : __converter = converter;
+
+  dynamic _convert(BASE_VALUE? baseValue) {
+    try {
+      return __converter(baseValue).value;
+    } catch (e, stackTrace) {
+      print(stackTrace);
+      throw AppError(
+          errorMessage:
+              "The ${getTypeNameWithoutGenerics(Criterionable)}.convert() "
+              "method of criterionBaseName('$criterionBaseName') was called with error. $e");
+    }
+  }
 }

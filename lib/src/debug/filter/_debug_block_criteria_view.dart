@@ -1,0 +1,59 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_artist/flutter_artist.dart';
+
+import '../widgets/_html_info_view.dart';
+
+class DebugBlockCriteriaView extends StatelessWidget {
+  final Block block;
+
+  const DebugBlockCriteriaView({super.key, required this.block});
+
+  @override
+  Widget build(BuildContext context) {
+    FilterModel filterModel = block.registeredOrDefaultFilterModel;
+    String blockClassName = getClassNameWithoutGenerics(block);
+    String filterClassName = getClassNameWithoutGenerics(filterModel);
+    //
+    return Padding(
+      padding: EdgeInsets.all(5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildCriteriaShortDocument(
+            filterClassName: filterClassName,
+            blockClassName: blockClassName,
+          ),
+          SizedBox(height: 10),
+          Expanded(
+            child: SingleChildScrollView(
+              child: DebugBlockStateView(
+                block: block,
+                vertical: false,
+                debugBlockOptions: DebugBlockOptions(),
+                debugFormOptions: DebugFormOptions(),
+                debugPaginationOptions: DebugPaginationOptions(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCriteriaShortDocument({
+    required String filterClassName,
+    required String blockClassName,
+  }) {
+    return HtmlInfoView(
+      infoAsHtml:
+          "The <b>$filterClassName.filterCriteria</b> is used as a parameter to query the <b>$blockClassName</b>. "
+          "If successful, it will be assigned to <b>$blockClassName.filterCriteria</b>. "
+          "Otherwise, the <b>$blockClassName.filterCriteria</b> can be set to <b>null</b>, "
+          "except in the case of <b>queryNextPage()</b>, <b>queryPreviousPage()</b> or <b>queryMore()</b>. "
+          "The <b>$blockClassName.filterCriteria</b> can also be <b>null</b> "
+          "if the <b>$blockClassName</b> is in the <b>'none'</b> or <b>'pending'</b> state.",
+      style: TextStyle(fontSize: 13),
+    );
+  }
+}

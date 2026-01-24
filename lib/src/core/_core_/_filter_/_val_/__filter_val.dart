@@ -4,8 +4,11 @@ part of '../../core.dart';
 /// [FilterConditionGroupVal], [FilterConditionVal].
 ///
 abstract interface class IConditionVal {
-  Map<String, dynamic> _toMapData(
-      {Map<String, Criterionable>? criterionableMap});
+  Map<String, dynamic> _toMapData();
+
+  Map<String, dynamic> _toMapDataForBackend({
+    required Map<String, Criterionable> criterionableMap,
+  });
 }
 
 class FilterConditionVal implements IConditionVal {
@@ -20,22 +23,34 @@ class FilterConditionVal implements IConditionVal {
   });
 
   @override
-  Map<String, dynamic> _toMapData(
-      {Map<String, Criterionable>? criterionableMap}) {
-    if (criterionableMap == null) {
-      return {
-        "criterionName": criterionName,
-        "value": value,
-        "operator": operator.text,
-      };
+  Map<String, dynamic> _toMapData() {
+    return {
+      "criterionName": criterionName,
+      "value": value,
+      "operator": operator.text,
+    };
+  }
+
+  @override
+  Map<String, dynamic> _toMapDataForBackend({
+    required Map<String, Criterionable> criterionableMap,
+  }) {
+    Criterionable? cri = criterionableMap[criterionName];
+    dynamic simpleValue;
+    if (value is List) {
+      simpleValue = [];
+      for (dynamic val in value) {
+        var simValue = cri?._convert(val);
+        simpleValue.add(simValue);
+      }
     } else {
-      Criterionable? cri = criterionableMap[criterionName];
-      return {
-        "criterionName": cri?.jsonCriterionName ?? criterionName,
-        "value": cri?.converter(value),
-        "operator": operator.text,
-      };
+      simpleValue = cri?._convert(value);
     }
+    return {
+      "criterionName": cri?.jsonCriterionName ?? criterionName,
+      "value": simpleValue,
+      "operator": operator.text,
+    };
   }
 }
 
@@ -56,18 +71,39 @@ class FilterConditionGroupVal implements IConditionVal {
         conditions = const [];
 
   @override
-  Map<String, dynamic> _toMapData(
-      {Map<String, Criterionable>? criterionableMap}) {
+  Map<String, dynamic> _toMapData() {
+    return {
+      "connector": connector.text,
+      "conditions": conditions.map((m) => m._toMapData()).toList(),
+    };
+  }
+
+  @override
+  Map<String, dynamic> _toMapDataForBackend({
+    required Map<String, Criterionable> criterionableMap,
+  }) {
     return {
       "connector": connector.text,
       "conditions": conditions
-          .map((m) => m._toMapData(criterionableMap: criterionableMap))
+          .map(
+              (m) => m._toMapDataForBackend(criterionableMap: criterionableMap))
           .toList(),
     };
   }
 
-  String toJson({List<Criterionable>? criterionableList}) {
+  String toJson({
+    Map<String, Criterionable>? criterionableMap,
+  }) {
     final Map<String, dynamic> map = _toMapData();
+    return MapUtils.toJson(map: map);
+  }
+
+  String toJsonForBackend({
+    required Map<String, Criterionable> criterionableMap,
+  }) {
+    final Map<String, dynamic> map = _toMapDataForBackend(
+      criterionableMap: criterionableMap,
+    );
     return MapUtils.toJson(map: map);
   }
 

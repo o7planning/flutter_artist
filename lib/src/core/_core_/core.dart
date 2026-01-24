@@ -17,12 +17,11 @@ import 'package:number_pagination/number_pagination.dart' as number_pagination;
 
 import '../../debug/code_flow/__task_flow_const.dart';
 import '../../debug/dialog/_block_error_viewer_dialog.dart';
+import '../../debug/dialog/_debug_viewer_dialog.dart';
 import '../../debug/dialog/_debug_shelf_structure_viewer_dialog.dart';
 import '../../debug/dialog/_task_flow_viewer_dialog.dart';
 import '../../debug/dialog/_log_viewer_dialog.dart';
 import '../../debug/dialog/_executor_dialog.dart';
-import '../../debug/dialog/_debug_filter_criteria_viewer_dialog.dart';
-import '../../debug/dialog/_debug_filter_model_viewer_dialog.dart';
 import '../../debug/dialog/_form_error_viewer_dialog.dart';
 import '../../debug/dialog/_debug_form_model_viewer_dialog.dart';
 import '../../debug/dialog/_root_debug_dialog.dart';
