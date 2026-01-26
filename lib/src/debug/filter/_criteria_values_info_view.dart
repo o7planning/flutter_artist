@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/debug/widgets/_json_view.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 import '../../core/_core_/core.dart';
+import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
-import '../constants/_debug_constants.dart';
+import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';
 
+@Deprecated("Xoa di")
 class CriteriaValuesView extends StatelessWidget {
   final String filterCriteriaPath;
   final XFilterCriteria? xFilterCriteria;
@@ -36,62 +38,40 @@ class CriteriaValuesView extends StatelessWidget {
           showIcon: false,
           infoAsHtml:
               "Data of <b>$filterCriteriaPath</b> (<b>${getClassNameWithoutGenerics(filterCriteria)}</b>):",
+          style: TextStyle(fontSize: 13),
         ),
         SizedBox(height: 5),
-        if (filterCriteria != null)
-          HtmlInfoView(
-            showIcon: false,
-            infoAsHtml: "(This debug information is returned from the "
-                "<b>${getClassNameWithoutGenerics(filterCriteria)}.getDebugCriterionInfos()</b> method).",
-            style: TextStyle(
-              fontSize: 11,
-              fontStyle: FontStyle.normal,
-            ),
-          ),
-        SizedBox(height: 10),
-        ...criteriaValueInfos.map(
-          (line) => ListTile(
-            minLeadingWidth: 0,
-            minVerticalPadding: 0,
-            minTileHeight: 0,
-            dense: true,
-            visualDensity: VisualDensity(vertical: -3, horizontal: -3),
-            contentPadding: EdgeInsets.zero,
-            leading: Icon(
-              Icons.arrow_circle_right_outlined,
-              size: 14,
-            ),
-            title: Text(
-              line,
-              style: TextStyle(fontSize: DebugConstants.debugFontSize),
-            ),
-          ),
-        ),
-        if (filterCriteria == null)
-          Text(
-            "Filter Criteria is null",
-            style: TextStyle(
-              fontSize: DebugConstants.debugFontSize,
-              fontStyle: FontStyle.normal,
-            ),
-          ),
-        if (filterCriteriaMap != null && filterCriteriaMap.isNotEmpty)
-          Divider(),
-        if (filterCriteriaMap != null && filterCriteriaMap.isNotEmpty)
-          Text(
-            "Original Filter Criteria as Map<String,dynamic>:",
-            style: TextStyle(
-              fontSize: DebugConstants.debugFontSize,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        if (filterCriteriaMap != null && filterCriteriaMap.isNotEmpty)
-          SizedBox(height: 5),
-        if (filterCriteriaMap != null && filterCriteriaMap.isNotEmpty)
-          JsonView(
-            json: oneLevelJson,
-          ),
+        Expanded(child: _buildTabs()),
       ],
     );
+  }
+
+  Widget _buildTabs() {
+    List<TabData> tabs = [];
+
+    tabs.add(
+      TabData(
+        text: ' Form Props Structure',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.formValueIconData,
+          color: Colors.black,
+          size: 16,
+        ),
+        content: Text("Test"),
+      ),
+    );
+    //
+    TabbedViewController _controller = TabbedViewController(tabs);
+    TabbedView tabbedView = TabbedView(controller: _controller);
+
+    TabbedViewThemeData themeData = TabThemeUtils.getTabbedViewThemeData();
+
+    TabbedViewTheme tabbedViewTheme = TabbedViewTheme(
+      data: themeData,
+      child: tabbedView,
+    );
+    //
+    return tabbedViewTheme;
   }
 }

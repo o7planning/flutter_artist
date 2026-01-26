@@ -1,0 +1,56 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_artist/flutter_artist.dart';
+
+import '../widgets/_html_info_view.dart';
+
+class DebugScalarCriteriaView extends StatelessWidget {
+  final Scalar scalar;
+
+  const DebugScalarCriteriaView({super.key, required this.scalar});
+
+  @override
+  Widget build(BuildContext context) {
+    FilterModel filterModel = scalar.registeredOrDefaultFilterModel;
+    String scalarClassName = getClassNameWithoutGenerics(scalar);
+    String filterClassName = getClassNameWithoutGenerics(filterModel);
+    //
+    return Padding(
+      padding: EdgeInsets.all(5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildCriteriaShortDocument(
+            filterClassName: filterClassName,
+            scalarClassName: scalarClassName,
+          ),
+          SizedBox(height: 10),
+          Expanded(
+            child: SingleChildScrollView(
+              child: DebugScalarStateView(
+                scalar: scalar,
+                vertical: false,
+                debugScalarOptions: DebugScalarOptions(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCriteriaShortDocument({
+    required String filterClassName,
+    required String scalarClassName,
+  }) {
+    return HtmlInfoView(
+      infoAsHtml:
+          "The <b>$filterClassName.filterCriteria</b> is used as a parameter to query the <b>$scalarClassName</b>. "
+          "If successful, it will be assigned to <b>$scalarClassName.filterCriteria</b>. "
+          "Otherwise, the <b>$scalarClassName.filterCriteria</b> can be set to <b>null</b>. "
+          "The <b>$scalarClassName.filterCriteria</b> can also be <b>null</b> "
+          "if the <b>$scalarClassName</b> is in the <b>'none'</b> or <b>'pending'</b> state.",
+      style: TextStyle(fontSize: 13),
+    );
+  }
+}

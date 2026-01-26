@@ -327,10 +327,10 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
             onAction: false,
             onPressed: widget.config.allowDebugFilterCriteriaViewerButton
                 ? () {
-                    DebugFilterCriteriaViewerDialog
-                        .showBlockFilterCriteriaDialog(
+                    DebugViewerDialog.openDebugFilterCriteriaViewer(
                       context: context,
-                      block: widget.block,
+                      locationInfo: '',
+                      filterModel: widget.block.registeredOrDefaultFilterModel,
                     );
                   }
                 : null,

@@ -7,7 +7,12 @@ abstract class FilterCriteria extends Equatable {
   late final List<Criterionable> criterionableList;
 
   bool __ready = false;
+
   bool get ready => __ready;
+
+  String get jsonCriteria {
+    return __jsonCriteria;
+  }
 
   FilterCriteria();
 
@@ -35,22 +40,11 @@ abstract class FilterCriteria extends Equatable {
       baseNameCriterionableMap[criterionable.criterionBaseName] = criterionable;
       set2.add(criterionable.jsonCriterionName);
     }
-    __jsonCriteria = "";
+    __jsonCriteria = baseCriteria.toJsonForBackend(
+      criterionableMap: baseNameCriterionableMap,
+    );
+    print("@@@:JSON: $__jsonCriteria");
     __ready = true;
-  }
-
-  void cascade({
-    required IConditionVal conditionVal,
-    required Map<String, Criterionable> baseNameCriterionableMap,
-  }) {
-    if (conditionVal is FilterConditionVal) {
-      // Map<String, dynamic> conditionVal._toJsonMapData({
-      //   required String jsonCriterionName,
-      //   required   dynamic simpleValue,
-      // })
-    } else if (conditionVal is FilterConditionGroupVal) {
-      //
-    }
   }
 
   List<Criterionable> registerSupportedCriteria();

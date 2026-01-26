@@ -59,6 +59,9 @@ class ConditionGroupModelImpl extends ConditionModel {
   final FilterModelStructure structure;
   final String groupName;
   final ConditionConnector connector;
+
+  List<ConditionConnector> get supportedConnectors=> [connector];
+
   final List<ConditionModel> _conditions = [];
 
   List<ConditionModel> get conditions => _conditions;

@@ -8,8 +8,16 @@ class StringValueFilterCriteria extends FilterCriteria {
   });
 
   @override
-  List<Criterionable<Object>> registerSupportedCriteria() {
-    return [];
+  List<Criterionable> registerSupportedCriteria() {
+    return [
+      Criterionable<String>(
+        criterionBaseName: 'string',
+        jsonCriterionName: 'string',
+        converter: (String? baseValue) {
+          return SimpleVal.ofString(baseValue);
+        },
+      ),
+    ];
   }
 
   @override

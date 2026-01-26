@@ -12,7 +12,7 @@ class EmptyFilterCriteria extends FilterCriteria {
   }
 
   @override
-  List<Criterionable<Object>> registerSupportedCriteria() {
+  List<Criterionable> registerSupportedCriteria() {
     return [];
   }
 

@@ -3,6 +3,7 @@ import 'package:animated_tree_view/tree_view/tree_view.dart';
 import 'package:animated_tree_view/tree_view/widgets/expansion_indicator.dart';
 import 'package:animated_tree_view/tree_view/widgets/indent.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/debug/filter_criteria/widgets/_condition_group_view.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
 import '../../core/_core_/core.dart';
@@ -87,7 +88,9 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
         filterModel: _currentNode!.data,
       );
     } else if (_currentNode!.data is ConditionGroupModelImpl) {
-      return Text("TODO-3");
+      return ConditionGroupView(
+        conditionGroupModel: _currentNode!.data,
+      );
     } else if (_currentNode!.data is ConditionModelImpl) {
       return FilterConditionModelView(
         conditionModel: _currentNode!.data,

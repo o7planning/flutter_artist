@@ -16,21 +16,23 @@ import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';
 import '../widgets/_json_view.dart';
 
-class FilterDataDebugView extends StatefulWidget {
+class DebugFilterModelView extends StatefulWidget {
   final FilterModel filterModel;
-  final Function() onPressedShelf;
+  final Function() onPressedShelfStructure;
+  final Function() onPressedFilterCriteria;
 
-  const FilterDataDebugView({
+  const DebugFilterModelView({
     required this.filterModel,
-    required this.onPressedShelf,
+    required this.onPressedShelfStructure,
+    required this.onPressedFilterCriteria,
     super.key,
   });
 
   @override
-  State<FilterDataDebugView> createState() => _FilterDataDebugViewState();
+  State<DebugFilterModelView> createState() => _DebugFilterModelViewState();
 }
 
-class _FilterDataDebugViewState extends State<FilterDataDebugView> {
+class _DebugFilterModelViewState extends State<DebugFilterModelView> {
   static const double iconSize = 18;
   static const double fontSize = 13;
 
@@ -44,10 +46,6 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
   @override
   void initState() {
     super.initState();
-    //
-    // listeners = FlutterArtist.storage._getListenerShelfBlockScalarTypes(
-    //   eventBlockOrScalar: BlockOrScalar.block(widget.filterModel.block),
-    // );
     listeners = [];
   }
 
@@ -58,7 +56,7 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildFilterModelInfo(context),
+        _buildFilterModelBar(context),
         const SizedBox(height: 5),
         Expanded(
           child: _buildTabContainer(),
@@ -256,7 +254,10 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          HtmlInfoView(infoAsHtml: infoAsHtml),
+          HtmlInfoView(
+            infoAsHtml: infoAsHtml,
+            style: TextStyle(fontSize: 13),
+          ),
           const Divider(height: 10),
           Expanded(
             child: JsonView(json: json),
@@ -275,11 +276,13 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             HtmlInfoView(
-                infoAsHtml:
-                    "When you successfully add or modify a record on the '${getClassName(widget.filterModel)}' block, "
-                    "the listening blocks will be switched to the 'pending' state, "
-                    "they will be lazily queried again when they are visible on the screen.\n"
-                    "Here is a list of affected blocks or scalars:"),
+              infoAsHtml:
+                  "When you successfully add or modify a record on the '${getClassName(widget.filterModel)}' block, "
+                  "the listening blocks will be switched to the 'pending' state, "
+                  "they will be lazily queried again when they are visible on the screen.\n"
+                  "Here is a list of affected blocks or scalars:",
+              style: TextStyle(fontSize: 13),
+            ),
             const Divider(height: 10),
             ...listeners.map(
               (listener) => ShelfBlockScalarTypeWidget(
@@ -295,53 +298,64 @@ class _FilterDataDebugViewState extends State<FilterDataDebugView> {
     );
   }
 
-  Widget _buildFilterModelInfo(BuildContext context) {
+  Widget _buildFilterModelBar(BuildContext context) {
     return CustomAppContainer(
       width: double.maxFinite,
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BreadCrumb(
-            divider: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 3),
-              child: Icon(
-                Icons.arrow_forward_ios,
-                size: 12,
+          Expanded(
+            child: BreadCrumb(
+              divider: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 3),
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 12,
+                ),
               ),
-            ),
-            overflow: ScrollableOverflow(
-              keepLastDivider: false,
-              reverse: false,
-              direction: Axis.horizontal,
-            ),
-            items: [
-              BreadCrumbItem(
-                content: InkWell(
-                  onTap: widget.onPressedShelf,
-                  child: IconLabelText(
+              overflow: ScrollableOverflow(
+                keepLastDivider: false,
+                reverse: false,
+                direction: Axis.horizontal,
+              ),
+              items: [
+                BreadCrumbItem(
+                  content: InkWell(
+                    onTap: widget.onPressedShelfStructure,
+                    child: IconLabelText(
+                      style: const TextStyle(fontSize: fontSize),
+                      icon: Image.asset(
+                        "packages/flutter_artist/static-rs/shelf.png",
+                        width: 24,
+                        height: 20,
+                      ),
+                      label: '',
+                      text: getClassName(widget.filterModel.shelf),
+                    ),
+                  ),
+                ),
+                BreadCrumbItem(
+                  content: IconLabelText(
                     style: const TextStyle(fontSize: fontSize),
-                    icon: Image.asset(
-                      "packages/flutter_artist/static-rs/shelf.png",
-                      width: 24,
-                      height: 20,
+                    icon: const Icon(
+                      FaIconConstants.filterModelIconData,
+                      size: iconSize,
                     ),
                     label: '',
-                    text: getClassName(widget.filterModel.shelf),
+                    text: getClassName(widget.filterModel),
                   ),
                 ),
-              ),
-              BreadCrumbItem(
-                content: IconLabelText(
-                  style: const TextStyle(fontSize: fontSize),
-                  icon: const Icon(
-                    FaIconConstants.filterModelIconData,
-                    size: iconSize,
-                  ),
-                  label: '',
-                  text: getClassName(widget.filterModel),
-                ),
-              ),
-            ],
+              ],
+            ),
+          ),
+          SizedBox(width: 10),
+          Tooltip(
+            message: "Debug Filter Criteria Viewer",
+            child: SimpleSmallIconButton(
+              iconData: FaIconConstants.filterCriteriaIconData,
+              iconSize: 18,
+              onPressed: widget.onPressedFilterCriteria,
+            ),
           ),
         ],
       ),
