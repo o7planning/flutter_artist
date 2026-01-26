@@ -189,7 +189,7 @@ abstract class FilterModel<
   /// methods if there are no errors.
   ///
   /// ```dart
-  ///  MyFilterCriteria toFilterCriteriaObject({
+  ///  MyFilterCriteria createFilterCriteria({
   ///     required Map<String, dynamic> criteriaMap,
   ///  }) {
   ///      return MyFilterCriteria(
@@ -200,15 +200,15 @@ abstract class FilterModel<
   /// ```
   ///
   @_AbstractMethodAnnotation()
-  FILTER_CRITERIA toFilterCriteriaObject({
+  FILTER_CRITERIA createFilterCriteria({
     required Map<String, dynamic> criteriaMap,
   });
 
-  XFilterCriteria<FILTER_CRITERIA> _toXFilterCriteria({
+  XFilterCriteria<FILTER_CRITERIA> __createXFilterCriteria({
     required Map<String, dynamic> criteriaMap,
     required FilterConditionGroupVal baseCriteria,
   }) {
-    FILTER_CRITERIA filterCriteria = toFilterCriteriaObject(
+    FILTER_CRITERIA filterCriteria = createFilterCriteria(
       criteriaMap: criteriaMap,
     );
     filterCriteria._initFilterCriteria(baseCriteria: baseCriteria);
@@ -583,7 +583,7 @@ abstract class FilterModel<
         masterFlowItem._addLineFlowItem(
           codeId: "#31420",
           shortDesc:
-              "Calling ${debugObjHtml(this)}.toFilterCriteriaObject() method "
+              "Calling ${debugObjHtml(this)}.createFilterCriteria() method "
               "to convert criteria in type of Map to a Dart object.",
           parameters: {
             "dataMap": _filterModelStructure._tempCriteriaValues,
@@ -613,7 +613,7 @@ abstract class FilterModel<
 
       // Convert Map Data to FilterCriteria Object.
       final XFilterCriteria<FILTER_CRITERIA> newXFilterCriteria =
-          _toXFilterCriteria(
+          __createXFilterCriteria(
         criteriaMap: newCriteriaMap,
         baseCriteria: baseCriteria,
       );
@@ -639,7 +639,7 @@ abstract class FilterModel<
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: "toFilterCriteriaObject",
+        methodName: "createFilterCriteria",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -657,7 +657,7 @@ abstract class FilterModel<
       masterFlowItem._addLineFlowItem(
         codeId: "#31500",
         shortDesc:
-            "The ${debugObjHtml(this)}.toFilterCriteriaObject() method was called with an error!",
+            "The ${debugObjHtml(this)}.createFilterCriteria() method was called with an error!",
         errorInfo: errorInfo,
       );
       return _xFilterCriteria;

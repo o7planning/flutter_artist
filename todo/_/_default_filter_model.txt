@@ -19,7 +19,7 @@ class _DefaultFilterModel
   }
 
   @override
-  EmptyFilterCriteria toFilterCriteriaObject({
+  EmptyFilterCriteria createFilterCriteria({
     required Map<String, dynamic> criteriaMap,
   }) {
     return EmptyFilterCriteria();
@@ -83,7 +83,7 @@ class StringIdFilterModel
   }
 
   @override
-  StringIdFilterCriteria toFilterCriteriaObject({
+  StringIdFilterCriteria createFilterCriteria({
     required Map<String, dynamic> criteriaMap,
   }) {
     return StringIdFilterCriteria(idValue: idValue);
@@ -147,7 +147,7 @@ class StringValueFilterModel
   }
 
   @override
-  StringValueFilterCriteria toFilterCriteriaObject({
+  StringValueFilterCriteria createFilterCriteria({
     required Map<String, dynamic> criteriaMap,
   }) {
     return StringValueFilterCriteria(stringValue: stringValue);
@@ -211,7 +211,7 @@ class SearchTextFilterModel
   }
 
   @override
-  SearchTextFilterCriteria toFilterCriteriaObject({
+  SearchTextFilterCriteria createFilterCriteria({
     required Map<String, dynamic> criteriaMap,
   }) {
     return SearchTextFilterCriteria(searchText: searchText);
@@ -275,7 +275,7 @@ class IntIdFilterModel
   }
 
   @override
-  IntIdFilterCriteria toFilterCriteriaObject({
+  IntIdFilterCriteria createFilterCriteria({
     required Map<String, dynamic> criteriaMap,
   }) {
     return IntIdFilterCriteria(idValue: idValue);

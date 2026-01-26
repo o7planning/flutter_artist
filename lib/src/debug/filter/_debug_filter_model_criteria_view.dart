@@ -43,7 +43,7 @@ class DebugFilterModelCriteriaView extends StatelessWidget {
   }) {
     return HtmlInfoView(
       infoAsHtml: "The <b>$criteriaClassName</b> object is created by the "
-          "<b>$filterModelClassName.toFilterCriteriaObject()</b> method, and can be retrieved via the "
+          "<b>$filterModelClassName.createFilterCriteria()</b> method, and can be retrieved via the "
           "<b>$filterModelClassName.filterCriteria</b> property. "
           "It is used as criteria to query data on the following blocks and scalars:",
       style: TextStyle(fontSize: 13),
