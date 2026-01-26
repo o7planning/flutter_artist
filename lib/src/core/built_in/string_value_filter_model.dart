@@ -81,7 +81,7 @@ class StringValueFilterModel
   }
 
   @override
-  StringValueFilterCriteria toFilterCriteriaObject({
+  StringValueFilterCriteria createFilterCriteria({
     required Map<String, dynamic> criteriaMap,
   }) {
     return StringValueFilterCriteria(

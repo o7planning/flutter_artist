@@ -160,7 +160,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         ),
         content: _buildTabContent(
           infoAsHtml: "The current values of the filter (Will be passed to the "
-              "<b>${getClassName(widget.filterModel)}.toFilterCriteriaObject()</b> method).",
+              "<b>${getClassName(widget.filterModel)}.createFilterCriteria()</b> method).",
           json: currentJson,
         ),
       ),

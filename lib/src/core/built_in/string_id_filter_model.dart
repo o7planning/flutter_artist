@@ -79,7 +79,7 @@ class StringIdFilterModel
   }
 
   @override
-  StringIdFilterCriteria toFilterCriteriaObject({
+  StringIdFilterCriteria createFilterCriteria({
     required Map<String, dynamic> criteriaMap,
   }) {
     return StringIdFilterCriteria(

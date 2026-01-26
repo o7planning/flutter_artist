@@ -69,7 +69,7 @@ class _DefaultFilterModel
   }
 
   @override
-  EmptyFilterCriteria toFilterCriteriaObject({
+  EmptyFilterCriteria createFilterCriteria({
     required Map<String, dynamic> criteriaMap,
   }) {
     return EmptyFilterCriteria();

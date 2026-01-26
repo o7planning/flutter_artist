@@ -80,7 +80,7 @@ class IntIdFilterModel
   }
 
   @override
-  IntIdFilterCriteria toFilterCriteriaObject({
+  IntIdFilterCriteria createFilterCriteria({
     required Map<String, dynamic> criteriaMap,
   }) {
     return IntIdFilterCriteria(

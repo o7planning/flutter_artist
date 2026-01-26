@@ -65,7 +65,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
   }) {
     return HtmlInfoView(
       infoAsHtml: "The <b>$criteriaClassName</b> object is created by the "
-          "<b>$filterModelClassName.toFilterCriteriaObject()</b> method, and can be retrieved via the "
+          "<b>$filterModelClassName.createFilterCriteria()</b> method, and can be retrieved via the "
           "<b>$filterModelClassName.filterCriteria</b> property. "
           "Note: This property can be <b>null</b> if there is an error in the <b>$filterModelClassName</b>.",
       style: TextStyle(fontSize: 13),
