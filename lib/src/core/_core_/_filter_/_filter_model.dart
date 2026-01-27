@@ -211,7 +211,10 @@ abstract class FilterModel<
     FILTER_CRITERIA filterCriteria = createNewFilterCriteria(
       criteriaMap: criteriaMap,
     );
-    filterCriteria._initFilterCriteria(baseCriteria: baseCriteria);
+    filterCriteria._initFilterCriteria(
+      baseCriteria: baseCriteria,
+      forReal: true,
+    );
     return XFilterCriteria(
       filterCriteria: filterCriteria,
       filterCriteriaMap: criteriaMap,
@@ -617,7 +620,6 @@ abstract class FilterModel<
         criteriaMap: newCriteriaMap,
         baseCriteria: baseCriteria,
       );
-      // _filterCriteria = newCriteria; // has moved down.
       //
       if (this is! _DefaultFilterModel) {
         masterFlowItem._addLineFlowItem(
@@ -625,7 +627,7 @@ abstract class FilterModel<
           shortDesc:
               "Got an instance of ${debugObjHtml(newXFilterCriteria)} (Dart object).\n"
               "This object will be passed to the <b>@filterCriteria</b> parameter "
-              "of the <b>Block.query()</b> or <b>Scalar.query</b> method.",
+              "of the <b>Block.query()</b> or <b>Scalar.query()</b> method.",
           tipDocument: TipDocument.filterCriteria,
         );
       }
@@ -695,7 +697,6 @@ abstract class FilterModel<
 
     final MultiOptFilterCriterionModel? multiOptCriterionParent =
         multiOptCriterion.parent;
-
     // Get current OptCriterion data:
     XData? tempMultiOptCriterionXData =
         _filterModelStructure._getTempMultiOptCriterionXData(
@@ -704,7 +705,6 @@ abstract class FilterModel<
     final dynamic tempCurrentMultiOptValue =
         _filterModelStructure._getTempCurrentCriterionValue(
             criterionNameTilde: multiOptCriterionNameTilde);
-
     //
     dynamic newSelectedValue =
         _filterModelStructure._getTempCurrentCriterionValue(

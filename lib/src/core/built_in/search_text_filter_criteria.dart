@@ -12,7 +12,7 @@ class SearchTextFilterCriteria extends FilterCriteria {
   });
 
   @override
-  List<Criterionable> registerSupportedCriteria() {
+  List<Criterionable<Object>> registerSupportedCriteria() {
     return [
       Criterionable<String>(
         criterionBaseName: 'searchText',

@@ -17,7 +17,7 @@ class SimpleVal extends Equatable {
 
 typedef Converter<BASE_VALUE> = SimpleVal Function(BASE_VALUE? baseValue);
 
-class Criterionable<BASE_VALUE> {
+class Criterionable<BASE_VALUE extends Object> {
   final String criterionBaseName;
   final String jsonCriterionName;
 
@@ -37,7 +37,7 @@ class Criterionable<BASE_VALUE> {
     required Converter<BASE_VALUE> converter,
   }) : __converter = converter;
 
-  dynamic _convert(BASE_VALUE? baseValue) {
+  Object? _convert(BASE_VALUE? baseValue) {
     try {
       return __converter(baseValue).value;
     } catch (e, stackTrace) {
