@@ -21,7 +21,7 @@ class IntIdFilterModel
       //
       conditionConnector: ConditionConnector.and,
       conditionDefs: [
-        ConditionDef.single(
+        ConditionDef.condition(
           criterionNameTilde: "id${CriterionTilde.symbol}",
           operator: CriterionOperator.equalTo,
         ),

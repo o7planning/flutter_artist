@@ -7,7 +7,7 @@ abstract interface class ConditionDef {
 
   List<ConditionDef> get conditions;
 
-  factory ConditionDef.single({
+  factory ConditionDef.condition({
     required String criterionNameTilde,
     required CriterionOperator operator,
     List<CriterionOperator>? supportedOperators,

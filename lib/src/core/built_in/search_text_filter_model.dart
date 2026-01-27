@@ -21,7 +21,7 @@ class SearchTextFilterModel
       //
       conditionConnector: ConditionConnector.and,
       conditionDefs: [
-        ConditionDef.single(
+        ConditionDef.condition(
           criterionNameTilde: "searchText${CriterionTilde.symbol}",
           operator: CriterionOperator.containsIgnoreCase,
         ),

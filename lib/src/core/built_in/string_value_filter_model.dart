@@ -21,7 +21,7 @@ class StringValueFilterModel
       //
       conditionConnector: ConditionConnector.and,
       conditionDefs: [
-        ConditionDef.single(
+        ConditionDef.condition(
           criterionNameTilde: "string${CriterionTilde.symbol}",
           operator: CriterionOperator.equalTo,
         ),
