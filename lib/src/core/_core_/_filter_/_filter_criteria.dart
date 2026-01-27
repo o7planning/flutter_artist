@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-abstract class FilterCriteria extends Equatable {
+abstract class FilterCriteria {
   late final String __jsonCriteria;
 
   late final FilterConditionGroupVal baseCriteria;
@@ -43,13 +43,10 @@ abstract class FilterCriteria extends Equatable {
     __jsonCriteria = baseCriteria.toJsonForBackend(
       criterionableMap: baseNameCriterionableMap,
     );
-    print("@@@:JSON: $__jsonCriteria");
     __ready = true;
   }
 
   List<Criterionable> registerSupportedCriteria();
-
-  List<String> getDebugCriterionInfos();
 
   @override
   bool operator ==(Object other) {

@@ -19,12 +19,4 @@ class StringValueFilterCriteria extends FilterCriteria {
       ),
     ];
   }
-
-  @override
-  List<String> getDebugCriterionInfos() {
-    return ["stringValue: $stringValue"];
-  }
-
-  @override
-  List<Object?> get props => [stringValue];
 }

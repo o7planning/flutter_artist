@@ -65,7 +65,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
   }) {
     return HtmlInfoView(
       infoAsHtml: "The <b>$criteriaClassName</b> object is created by the "
-          "<b>$filterModelClassName.createFilterCriteria()</b> method, and can be retrieved via the "
+          "<b>$filterModelClassName.createNewFilterCriteria()</b> method, and can be retrieved via the "
           "<b>$filterModelClassName.filterCriteria</b> property. "
           "Note: This property can be <b>null</b> if there is an error in the <b>$filterModelClassName</b>.",
       style: TextStyle(fontSize: 13),
@@ -136,7 +136,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         SizedBox(height: 15),
         SizedBox(
           width: double.maxFinite,
-          child: ElevatedButton(
+          child: ElevatedButton.icon(
             onPressed: widget.onDebugFilterModelPressed,
             style: ElevatedButton.styleFrom(
               minimumSize: Size.zero,
@@ -145,7 +145,11 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            child: Text(
+            icon: Icon(
+              FaIconConstants.filterModelDebugIconData,
+              size: 15,
+            ),
+            label: Text(
               "Debug Filter Model Viewer",
               style: TextStyle(fontSize: 13),
             ),
@@ -163,7 +167,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         text: ' Supported Criteria',
         closable: false,
         leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
+          Icons.policy_outlined,
           color: Colors.black,
           size: 16,
         ),
@@ -175,7 +179,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         text: ' Backendable JSON Criteria',
         closable: false,
         leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
+          Icons.data_object,
           color: Colors.black,
           size: 16,
         ),

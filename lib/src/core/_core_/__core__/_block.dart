@@ -51,7 +51,7 @@ part of '../core.dart';
 ///
 /// When the [Block.query] or [Scalar.query] method is called,
 /// this [FilterCriteria] is created automatically by the [FilterModel]
-/// via the [FilterModel.createFilterCriteria] method
+/// via the [FilterModel.createNewFilterCriteria] method
 /// and passed to the [Block.callApiQuery] or [Scalar.callApiQuery] method.
 /// ```
 /// class EmployeeFilterCriteria extends FilterCriteria {
