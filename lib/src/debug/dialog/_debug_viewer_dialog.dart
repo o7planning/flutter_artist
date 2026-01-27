@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/core/icon/icon_constants.dart';
 import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
@@ -77,6 +78,10 @@ class _DebugViewerDialogState extends State<DebugViewerDialog> {
 
     // Set up the AlertDialog
     FaAlertDialog alert = FaAlertDialog(
+      icon: Icon(
+        FaIconConstants.filterModelDebugIconData,
+        size: 18,
+      ),
       titleText: filterViewType.title,
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(

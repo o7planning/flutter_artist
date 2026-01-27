@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist/flutter_artist.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../widgets/_html_info_view.dart';
 
@@ -23,6 +24,20 @@ class DebugBlockCriteriaView extends StatelessWidget {
           _buildCriteriaShortDocument(
             filterClassName: filterClassName,
             blockClassName: blockClassName,
+          ),
+          SizedBox(height: 10),
+          IconLabelSelectableText(
+            icon: Icon(
+              Icons.arrow_circle_right_outlined,
+              size: 14,
+            ),
+            label: "$blockClassName.filterCriteria: ",
+            text: block.filterCriteria == null ? "null" : "not null",
+            labelStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+            textStyle: TextStyle(
+              fontSize: 13,
+              color: block.filterCriteria == null ? Colors.red : Colors.indigo,
+            ),
           ),
           SizedBox(height: 10),
           Expanded(

@@ -35,7 +35,7 @@ class CriterionableView extends StatelessWidget {
         horizontalTitleGap: 10,
         contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
         leading: SimpleSmallIconButton(
-          iconData: Icons.details,
+          iconData: Icons.verified,
           iconSize: 16,
         ),
         title: Text(

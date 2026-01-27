@@ -60,7 +60,7 @@ class ConditionGroupModelImpl extends ConditionModel {
   final String groupName;
   final ConditionConnector connector;
 
-  List<ConditionConnector> get supportedConnectors=> [connector];
+  List<ConditionConnector> get supportedConnectors => [connector];
 
   final List<ConditionModel> _conditions = [];
 

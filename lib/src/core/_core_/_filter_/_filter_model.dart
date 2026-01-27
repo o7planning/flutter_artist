@@ -189,7 +189,7 @@ abstract class FilterModel<
   /// methods if there are no errors.
   ///
   /// ```dart
-  ///  MyFilterCriteria createFilterCriteria({
+  ///  MyFilterCriteria createNewFilterCriteria({
   ///     required Map<String, dynamic> criteriaMap,
   ///  }) {
   ///      return MyFilterCriteria(
@@ -200,7 +200,7 @@ abstract class FilterModel<
   /// ```
   ///
   @_AbstractMethodAnnotation()
-  FILTER_CRITERIA createFilterCriteria({
+  FILTER_CRITERIA createNewFilterCriteria({
     required Map<String, dynamic> criteriaMap,
   });
 
@@ -208,7 +208,7 @@ abstract class FilterModel<
     required Map<String, dynamic> criteriaMap,
     required FilterConditionGroupVal baseCriteria,
   }) {
-    FILTER_CRITERIA filterCriteria = createFilterCriteria(
+    FILTER_CRITERIA filterCriteria = createNewFilterCriteria(
       criteriaMap: criteriaMap,
     );
     filterCriteria._initFilterCriteria(baseCriteria: baseCriteria);
@@ -583,7 +583,7 @@ abstract class FilterModel<
         masterFlowItem._addLineFlowItem(
           codeId: "#31420",
           shortDesc:
-              "Calling ${debugObjHtml(this)}.createFilterCriteria() method "
+              "Calling ${debugObjHtml(this)}.createNewFilterCriteria() method "
               "to convert criteria in type of Map to a Dart object.",
           parameters: {
             "dataMap": _filterModelStructure._tempCriteriaValues,
@@ -639,7 +639,7 @@ abstract class FilterModel<
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: "createFilterCriteria",
+        methodName: "createNewFilterCriteria",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -657,7 +657,7 @@ abstract class FilterModel<
       masterFlowItem._addLineFlowItem(
         codeId: "#31500",
         shortDesc:
-            "The ${debugObjHtml(this)}.createFilterCriteria() method was called with an error!",
+            "The ${debugObjHtml(this)}.createNewFilterCriteria() method was called with an error!",
         errorInfo: errorInfo,
       );
       return _xFilterCriteria;

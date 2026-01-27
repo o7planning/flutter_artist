@@ -81,9 +81,8 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
     Map<String, dynamic> currentValue =
         filterModelStructure.debugCurrentCriteriaValues;
 
-    String initial1Json = MapUtils.toOneLevelJson(initial1Value);
-    String instantJson = MapUtils.toOneLevelJson(instantValue);
-    String currentJson = MapUtils.toOneLevelJson(currentValue);
+    String initial1Json = MapUtils.toJson(map: initial1Value);
+    String currentJson = MapUtils.toJson(map: currentValue);
 
     final ConditionGroupModelImpl rootFilterCriteriaGroupModel =
         widget.filterModel.filterModelStructure.rootConditionGroupModel;
@@ -103,7 +102,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         text: ' Base',
         closable: false,
         leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
+          Icons.shopping_bag_outlined,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
@@ -115,7 +114,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         text: ' ~',
         closable: false,
         leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
+          Icons.shopping_bag_outlined,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
@@ -127,7 +126,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         text: ' Groups',
         closable: false,
         leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
+          FaIconConstants.conditionGroupIconData,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
@@ -139,7 +138,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         text: ' Initial',
         closable: false,
         leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
+          Icons.list,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
@@ -154,13 +153,13 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         text: ' Current',
         closable: false,
         leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
+          Icons.list,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
         content: _buildTabContent(
           infoAsHtml: "The current values of the filter (Will be passed to the "
-              "<b>${getClassName(widget.filterModel)}.createFilterCriteria()</b> method).",
+              "<b>${getClassName(widget.filterModel)}.createNewFilterCriteria()</b> method).",
           json: currentJson,
         ),
       ),
@@ -171,7 +170,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         text: ' JSON~',
         closable: false,
         leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
+          Icons.data_object,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
@@ -186,7 +185,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         text: ' JSON',
         closable: false,
         leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
+          Icons.data_object,
           color: _getTabIconColor(status),
           size: iconSize,
         ),

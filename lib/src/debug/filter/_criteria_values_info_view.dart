@@ -24,11 +24,6 @@ class CriteriaValuesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final FilterCriteria? filterCriteria = xFilterCriteria?.filterCriteria;
-    final Map<String, dynamic>? filterCriteriaMap =
-        xFilterCriteria?.filterCriteriaMap;
-    List<String> criteriaValueInfos =
-        filterCriteria?.getDebugCriterionInfos() ?? [];
-    final oneLevelJson = MapUtils.toOneLevelJson(filterCriteriaMap ?? {});
     //
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,

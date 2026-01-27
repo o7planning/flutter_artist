@@ -23,12 +23,4 @@ class SearchTextFilterCriteria extends FilterCriteria {
       ),
     ];
   }
-
-  @override
-  List<String> getDebugCriterionInfos() {
-    return ["searchText: $searchText"];
-  }
-
-  @override
-  List<Object?> get props => [StrUtils.stringToNullIfEmpty(searchText)];
 }

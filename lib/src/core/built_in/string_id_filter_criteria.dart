@@ -19,12 +19,4 @@ class StringIdFilterCriteria extends FilterCriteria {
       ),
     ];
   }
-
-  @override
-  List<String> getDebugCriterionInfos() {
-    return ["idValue: $idValue"];
-  }
-
-  @override
-  List<Object?> get props => [idValue];
 }

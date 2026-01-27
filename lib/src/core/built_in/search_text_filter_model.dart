@@ -81,7 +81,7 @@ class SearchTextFilterModel
   }
 
   @override
-  SearchTextFilterCriteria createFilterCriteria({
+  SearchTextFilterCriteria createNewFilterCriteria({
     required Map<String, dynamic> criteriaMap,
   }) {
     return SearchTextFilterCriteria(
