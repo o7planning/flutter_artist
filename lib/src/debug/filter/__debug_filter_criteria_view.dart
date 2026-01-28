@@ -27,7 +27,7 @@ class FilterCriteriaView extends StatefulWidget {
 }
 
 class _FilterCriteriaViewState extends State<FilterCriteriaView> {
-  Criterionable? _selectedCriterionable;
+  Criterionable<Object>? _selectedCriterionable;
   FilterCriteria? filterCriteria;
 
   @override
@@ -87,7 +87,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
                 criterionable: c,
                 selected: c.criterionBaseName ==
                     _selectedCriterionable?.criterionBaseName,
-                onPressed: (Criterionable<dynamic> criterionable) {
+                onPressed: (Criterionable<Object> criterionable) {
                   setState(() {
                     _selectedCriterionable = criterionable;
                   });
@@ -125,7 +125,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         ),
         Divider(),
         Text(
-          "Json Criterion Name:",
+          "Field Name:",
           style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 5),

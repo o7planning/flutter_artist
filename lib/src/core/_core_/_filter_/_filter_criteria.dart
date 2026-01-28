@@ -17,9 +17,13 @@ abstract class FilterCriteria {
   FilterCriteria();
 
   // Called from outside.
-  void _initFilterCriteria({required FilterConditionGroupVal baseCriteria}) {
+  void _initFilterCriteria({
+    required FilterConditionGroupVal baseCriteria,
+    required bool forReal,
+  }) {
     // LAZY Property:
     criterionableList = registerSupportedCriteria();
+    // LAZY Property:
     this.baseCriteria = baseCriteria;
     Map<String, Criterionable> baseNameCriterionableMap = {};
     Set<String> set2 = {};
@@ -40,6 +44,7 @@ abstract class FilterCriteria {
       baseNameCriterionableMap[criterionable.criterionBaseName] = criterionable;
       set2.add(criterionable.jsonCriterionName);
     }
+    // LAZY Property:
     __jsonCriteria = baseCriteria.toJsonForBackend(
       criterionableMap: baseNameCriterionableMap,
     );

@@ -47,9 +47,9 @@ class FilterConditionVal implements IConditionVal {
       simpleValue = cri?._convert(value);
     }
     return {
-      "criterionName": cri?.jsonCriterionName ?? criterionName,
-      "value": simpleValue,
+      "field": cri?.jsonCriterionName ?? criterionName,
       "operator": operator.text,
+      "value": simpleValue,
     };
   }
 }

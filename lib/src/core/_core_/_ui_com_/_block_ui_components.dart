@@ -80,16 +80,14 @@ class _BlockUIComponents extends _UIComponents {
   bool hasActiveUIComponentBlockRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = _findActiveUIComponentWithRepresentativeType(
-      representativeType: RepresentativeType.blockRepresentative,
+    String? componentName = findActiveUIComponentBlockRepresentative(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
   bool hasActiveUIComponentFormRepresentative() {
-    String? componentName = _findActiveUIComponentWithRepresentativeType(
-      representativeType: RepresentativeType.formRepresentative,
+    String? componentName = findActiveUIComponentFormRepresentative(
       alsoCheckChildren: false,
     );
     return componentName != null;
@@ -98,8 +96,7 @@ class _BlockUIComponents extends _UIComponents {
   bool hasActiveUIComponentItemRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = _findActiveUIComponentWithRepresentativeType(
-      representativeType: RepresentativeType.itemRepresentative,
+    String? componentName = findActiveUIComponentItemRepresentative(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
@@ -113,7 +110,7 @@ class _BlockUIComponents extends _UIComponents {
   }
 
   String? findActiveUIComponent({bool alsoCheckChildren = false}) {
-    return _findActiveUIComponentWithRepresentativeType(
+    return __activeUIComponentsWithRepresentativeType(
       representativeType: null,
       alsoCheckChildren: alsoCheckChildren,
     );
@@ -122,31 +119,63 @@ class _BlockUIComponents extends _UIComponents {
   String? findActiveUIComponentBlockRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    return _findActiveUIComponentWithRepresentativeType(
+    String? componentName = __activeUIComponentsWithRepresentativeType(
       representativeType: RepresentativeType.blockRepresentative,
       alsoCheckChildren: alsoCheckChildren,
     );
+    if (componentName != null) {
+      return componentName;
+    }
+    if (!alsoCheckChildren) {
+      return null;
+    }
+    for (Block childBlock in block._childBlocks) {
+      componentName = childBlock.ui.__activeUIComponentsWithRepresentativeType(
+        representativeType: RepresentativeType.itemRepresentative,
+        alsoCheckChildren: alsoCheckChildren,
+      );
+      if (componentName != null) {
+        return componentName;
+      }
+    }
+    return null;
   }
 
   String? findActiveUIComponentItemRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    return _findActiveUIComponentWithRepresentativeType(
+    String? componentName = __activeUIComponentsWithRepresentativeType(
       representativeType: RepresentativeType.itemRepresentative,
       alsoCheckChildren: alsoCheckChildren,
     );
+    if (componentName != null) {
+      return componentName;
+    }
+    if (!alsoCheckChildren) {
+      return null;
+    }
+    for (Block childBlock in block._childBlocks) {
+      componentName = childBlock.ui.__activeUIComponentsWithRepresentativeType(
+        representativeType: RepresentativeType.blockRepresentative,
+        alsoCheckChildren: alsoCheckChildren,
+      );
+      if (componentName != null) {
+        return componentName;
+      }
+    }
+    return null;
   }
 
   String? findActiveUIComponentFormRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    return _findActiveUIComponentWithRepresentativeType(
+    return __activeUIComponentsWithRepresentativeType(
       representativeType: RepresentativeType.formRepresentative,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? _findActiveUIComponentWithRepresentativeType({
+  String? __activeUIComponentsWithRepresentativeType({
     required RepresentativeType? representativeType,
     bool alsoCheckChildren = false,
   }) {
@@ -236,7 +265,7 @@ class _BlockUIComponents extends _UIComponents {
     if (alsoCheckChildren) {
       for (Block childBlock in block._childBlocks) {
         componentName =
-            childBlock.ui._findActiveUIComponentWithRepresentativeType(
+            childBlock.ui.__activeUIComponentsWithRepresentativeType(
           representativeType: representativeType,
           alsoCheckChildren: alsoCheckChildren,
         );
