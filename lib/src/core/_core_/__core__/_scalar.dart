@@ -303,7 +303,7 @@ abstract class Scalar<
   List<Event> getOutsideDataTypesToListen() {
     final List<Event> list = [];
     //
-    list.addAll(config.executeScalarLevelReactionToEvents);
+    list.addAll(config.onExternalShelfEvents.scalarLevelReactionTo);
     //
     return list.toSet().toList();
   }

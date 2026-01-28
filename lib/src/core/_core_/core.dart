@@ -269,6 +269,8 @@ part '_code_flow_/_line_flow_item.dart';
 
 part '_code_flow_/_func_call_info.dart';
 
+part '_config_/_event_configs.dart';
+
 part '_config_/_hook_config.dart';
 
 part '_config_/_activity_config.dart';

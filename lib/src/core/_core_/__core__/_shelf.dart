@@ -178,15 +178,18 @@ abstract class Shelf extends _Core {
     for (String blockName in __blockMap.keys) {
       Block listenerBlock = __blockMap[blockName]!;
       //
-      if (listenerBlock.config.selfReQueryable) {
+      if (listenerBlock
+          .config.onInternalShelfEvents.blockLevelSelfReactionEnabled) {
         listenerBlock._internalEffectedShelfMembers
             ._addReQueryBlock(listenerBlock);
       }
-      if (listenerBlock.config.currentItemSelfRefreshable) {
+      if (listenerBlock
+          .config.onInternalShelfEvents.currentItemSelfReactionEnabled) {
         listenerBlock._internalEffectedShelfMembers
             ._addRefreshCurrItmBlock(listenerBlock);
       }
-      for (Evt evt in listenerBlock.config.executeBlockLevelReactionToEvts) {
+      for (Evt evt
+          in listenerBlock.config.onInternalShelfEvents.blockLevelReactionTo) {
         // BLOCK EVENT:
         if (evt.srcType == SrcType.block) {
           Block? eventBlock = __blockMap[evt.srcName];
@@ -223,7 +226,8 @@ abstract class Shelf extends _Core {
         }
       }
       //
-      for (Evt evt in listenerBlock.config.executeItemLevelReactionToEvts) {
+      for (Evt evt
+          in listenerBlock.config.onInternalShelfEvents.itemLevelReactionTo) {
         // BLOCK EVENT:
         if (evt.srcType == SrcType.block) {
           Block? eventBlock = __blockMap[evt.srcName];
@@ -263,11 +267,13 @@ abstract class Shelf extends _Core {
     //
     for (String scalarName in __scalarMap.keys) {
       Scalar listenerScalar = __scalarMap[scalarName]!;
-      if (listenerScalar.config.selfReQueryable) {
+      if (listenerScalar
+          .config.onInternalShelfEvents.scalarLevelSelfReactionEnabled) {
         listenerScalar._internalEffectedShelfMembers
             ._addReQueryScalar(listenerScalar);
       }
-      for (Evt evt in listenerScalar.config.executeScalarLevelReactionToEvts) {
+      for (Evt evt in listenerScalar
+          .config.onInternalShelfEvents.scalarLevelReactionTo) {
         // BLOCK EVENT:
         if (evt.srcType == SrcType.block) {
           Block? eventBlock = __blockMap[evt.srcName];

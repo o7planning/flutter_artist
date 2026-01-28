@@ -8,6 +8,10 @@ class BlockOrScalar extends Equatable {
   final Block? block;
   final Scalar? scalar;
 
+  const BlockOrScalar.block(this.block) : scalar = null;
+
+  const BlockOrScalar.scalar(this.scalar) : block = null;
+
   Shelf get shelf {
     if (block != null) {
       return block!.shelf;
@@ -110,6 +114,14 @@ class BlockOrScalar extends Equatable {
     }
   }
 
+  FilterCriteria? get filterCriteria {
+    if (block != null) {
+      return block!.filterCriteria;
+    } else {
+      return scalar!.filterCriteria;
+    }
+  }
+
   List<Event> getListenItemTypes() {
     if (block != null) {
       return block!.getOutsideDataTypesToListen();
@@ -132,10 +144,6 @@ class BlockOrScalar extends Equatable {
           .toList();
     }
   }
-
-  const BlockOrScalar.block(this.block) : scalar = null;
-
-  const BlockOrScalar.scalar(this.scalar) : block = null;
 
   bool hasActiveUIComponent() {
     if (block != null) {
