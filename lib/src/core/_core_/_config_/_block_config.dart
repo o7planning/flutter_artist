@@ -8,31 +8,15 @@ class BlockConfig {
 
   final Pageable pageable;
 
-  //
-  final bool selfReQueryable;
-  final bool currentItemSelfRefreshable;
-
-  final List<Event> outsideBroadcastEvents;
-
   ///
-  /// Reaction to External Events.
-  ///
-  // final List<Event> executeItemLevelReactionToEvents;
+  final List<Event> fireExternalShelfEvents;
 
   ///
   /// Reaction to External Events. Docs: 14769/27a
   ///
-  final List<Event> executeBlockLevelReactionToEvents;
+  final ExternalShelfEventB onExternalShelfEvents;
 
-  ///
-  /// Reaction to Internal Events.
-  ///
-  final List<Evt> executeItemLevelReactionToEvts;
-
-  ///
-  /// Reaction to Internal Events.
-  ///
-  final List<Evt> executeBlockLevelReactionToEvts;
+  final InternalShelfEventB onInternalShelfEvents;
 
   final ClientSideSortMode clientSideSortMode;
 
@@ -42,31 +26,24 @@ class BlockConfig {
     this.uniformItemRefreshMode = UniformItemRefreshMode.auto,
     this.leaveTheFormSafely = true,
     this.hiddenBehavior = BlockHiddenBehavior.none,
-    List<Event>? outsideBroadcastEvents,
+    List<Event>? fireExternalShelfEvents,
     //
     List<Event>? executeItemLevelReactionToEvents,
-    List<Event>? executeBlockLevelReactionToEvents,
-    //
-    this.selfReQueryable = false,
-    this.currentItemSelfRefreshable = false,
-    List<Evt>? executeItemLevelReactionToEvts,
-    List<Evt>? executeBlockLevelReactionToEvts,
+    this.onExternalShelfEvents = const ExternalShelfEventB(
+      blockLevelReactionTo: [],
+    ),
+    this.onInternalShelfEvents = const InternalShelfEventB(
+      blockLevelReactionTo: [],
+      itemLevelReactionTo: [],
+    ),
     //
     this.pageable = const Pageable(
       page: 1,
       pageSize: 20,
     ),
     this.clientSideSortMode = ClientSideSortMode.none,
-  })  : outsideBroadcastEvents =
-            List.unmodifiable(outsideBroadcastEvents?.toSet() ?? []),
-        // executeItemLevelReactionToEvents = //
-        //     List.unmodifiable(executeItemLevelReactionToEvents?.toSet() ?? []),
-        executeBlockLevelReactionToEvents =
-            List.unmodifiable(executeBlockLevelReactionToEvents?.toSet() ?? []),
-        executeItemLevelReactionToEvts = //
-            List.unmodifiable(executeItemLevelReactionToEvts?.toSet() ?? []),
-        executeBlockLevelReactionToEvts =
-            List.unmodifiable(executeBlockLevelReactionToEvts?.toSet() ?? []);
+  }) : fireExternalShelfEvents =
+            List.unmodifiable(fireExternalShelfEvents?.toSet() ?? []);
 
   BlockConfig copy() {
     return BlockConfig(
@@ -76,15 +53,10 @@ class BlockConfig {
       hiddenBehavior: hiddenBehavior,
       pageable: pageable.copy(),
       //
-      selfReQueryable: selfReQueryable,
-      outsideBroadcastEvents: outsideBroadcastEvents,
+      fireExternalShelfEvents: fireExternalShelfEvents,
       //
-      currentItemSelfRefreshable: currentItemSelfRefreshable,
-      executeItemLevelReactionToEvts: executeItemLevelReactionToEvts,
-      executeBlockLevelReactionToEvts: executeBlockLevelReactionToEvts,
-      //
-      // executeItemLevelReactionToEvents: executeItemLevelReactionToEvents,
-      executeBlockLevelReactionToEvents: executeBlockLevelReactionToEvents,
+      onExternalShelfEvents: onExternalShelfEvents,
+      onInternalShelfEvents: onInternalShelfEvents,
       //
       clientSideSortMode: clientSideSortMode,
     );

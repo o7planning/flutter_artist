@@ -54,6 +54,8 @@ class FaIconConstants {
   static const IconData effectIconData =
       cupertino.CupertinoIcons.arrow_right_arrow_left_square;
 
+  static const IconData usageIconData = Icons.data_usage;
+
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 

@@ -11,10 +11,11 @@ import '../../core/widgets/_custom_app_container.dart';
 import '../filter_criteria/_filter_condition_groups_view.dart';
 import '../filter_criteria/_filter_criteria_structure_criteria_base_view.dart';
 import '../filter_criteria/_filter_criteria_structure_view.dart';
-import '../shelf/widget/_shelf_block_scalar_type_widget.dart';
+import '../storage/_block_or_scalar.dart';
 import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';
 import '../widgets/_json_view.dart';
+import 'widgets/_block_or_scalar_criteria_view.dart';
 
 class DebugFilterModelView extends StatefulWidget {
   final FilterModel filterModel;
@@ -200,7 +201,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         text: ' ',
         closable: false,
         leading: (context, status) => Icon(
-          FaIconConstants.effectIconData,
+          FaIconConstants.usageIconData,
           color: _getTabIconColor(status),
           size: iconSize,
         ),
@@ -276,21 +277,18 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
           children: [
             HtmlInfoView(
               infoAsHtml:
-                  "When you successfully add or modify a record on the '${getClassName(widget.filterModel)}' block, "
-                  "the listening blocks will be switched to the 'pending' state, "
-                  "they will be lazily queried again when they are visible on the screen.\n"
-                  "Here is a list of affected blocks or scalars:",
+                  "List and status of <b>Block(s)</b> and <b>Scalar(s)</b> using this filter:",
               style: TextStyle(fontSize: 13),
             ),
             const Divider(height: 10),
-            ...listeners.map(
-              (listener) => ShelfBlockScalarTypeWidget(
-                shelfBlockScalarType: listener,
-                isListener: true,
-                isEventSource: false,
-                onTap: null,
-              ),
-            ),
+            ...widget.filterModel.blocks
+                .map((block) => BlockOrScalarCriteriaView(
+                      blockOrScalar: BlockOrScalar.block(block),
+                    )),
+            ...widget.filterModel.scalars
+                .map((scalar) => BlockOrScalarCriteriaView(
+                      blockOrScalar: BlockOrScalar.scalar(scalar),
+                    )),
           ],
         ),
       ),

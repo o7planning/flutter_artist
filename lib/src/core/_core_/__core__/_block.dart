@@ -505,8 +505,7 @@ abstract class Block<
   List<Event> getOutsideDataTypesToListen() {
     List<Event> itemTypeEvents = [];
     //
-    // itemTypeEvents.addAll(config.executeItemLevelReactionToEvents);
-    itemTypeEvents.addAll(config.executeBlockLevelReactionToEvents);
+    itemTypeEvents.addAll(config.onExternalShelfEvents.blockLevelReactionTo);
     //
     return itemTypeEvents.toSet().toList();
   }
