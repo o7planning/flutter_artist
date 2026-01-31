@@ -9,8 +9,8 @@ _ForceReloadItemState _calculateBlockState({
   required final bool hasBlockXRepresentative,
   required final bool hasItemXRepresentative,
   required final bool hasFormRepresentative,
-  required final NonItemRepresentativeBehavior nonItemRepresentativeBehavior,
-  required final UniformItemRefreshMode uniformItemRefreshMode,
+  required final ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy,
+  required final UniformItemRefreshPolicy uniformItemRefreshPolicy,
   required final CurrentItemSettingType currentItemSettingType,
   required final bool isCandidateCurrentItemInNewQueriedList,
   required final bool currentItemIdChanged,
@@ -56,7 +56,7 @@ _ForceReloadItemState _calculateBlockState({
   final bool isSpecialUniformITEM;
   // ITEM == ITEM_DETAIL
   if (block.getItemType() == block.getItemDetailType()) {
-    if (uniformItemRefreshMode == UniformItemRefreshMode.always) {
+    if (uniformItemRefreshPolicy == UniformItemRefreshPolicy.always) {
       hasItemXRepresentativeExt = true;
       isSpecialUniformITEM = false;
     } else {
@@ -72,8 +72,8 @@ _ForceReloadItemState _calculateBlockState({
   }
   //
   if (!hasItemXRepresentative) {
-    if (nonItemRepresentativeBehavior ==
-        NonItemRepresentativeBehavior.trySetAnItemAsCurrent) {
+    if (itemAbsentRepresentativePolicy ==
+        ItemAbsentRepresentativePolicy.trySetAnItemAsCurrent) {
       hasItemXRepresentativeExt = true;
     }
   }

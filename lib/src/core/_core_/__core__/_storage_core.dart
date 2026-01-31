@@ -269,7 +269,7 @@ abstract class _StorageCore extends _Core {
     bool hasMountedUIComponent = shelf.ui.hasMountedUIComponent();
     if (!hasMountedUIComponent) {
       print(">>>>>>>>>>> Shelf: ${getClassName(shelf)} dispose all component");
-      if (shelf.config.hiddenBehavior == ShelfHiddenBehavior.clear) {
+      if (shelf.config.onHideAction == ShelfHiddenAction.clear) {
         print(
             "  ---------> Remove ${getClassName(shelf)} from FlutterArtist Storage");
         _shelfMap.remove(shelf.name);

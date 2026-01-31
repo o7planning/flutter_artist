@@ -43,8 +43,8 @@ abstract class Hook extends _Core {
   // ***************************************************************************
 
   void _fireHookHidden() {
-    switch (config.hiddenBehavior) {
-      case HookHiddenBehavior.none:
+    switch (config.onHideAction) {
+      case HookHiddenAction.none:
         break;
     }
   }

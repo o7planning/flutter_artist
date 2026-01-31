@@ -1,13 +1,13 @@
 part of '../core.dart';
 
 class HookConfig {
-  final HookHiddenBehavior hiddenBehavior;
+  final HookHiddenAction onHideAction;
 
   const HookConfig({
-    this.hiddenBehavior = HookHiddenBehavior.none,
+    this.onHideAction = HookHiddenAction.none,
   });
 
   HookConfig copy() {
-    return HookConfig(hiddenBehavior: hiddenBehavior);
+    return HookConfig(onHideAction: onHideAction);
   }
 }

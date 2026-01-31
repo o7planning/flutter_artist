@@ -22,11 +22,16 @@ class FilterModelStructure {
   //
   // Condition Defs:
   //
-  final ConditionConnector conditionConnector;
-  final List<ConditionDef> conditionDefs;
+  // final ConditionConnector conditionConnector;
+  // final List<ConditionDef> conditionDefs;
 
   // String groupName.
   final Map<String, ConditionGroupDefImpl> __conditionGroupDefMap = {};
+
+  //
+  // Condition Models:
+  //
+  late final ConditionGroupDefImpl rootConditionGroupDef;
 
   //
   // Condition Models:
@@ -50,8 +55,10 @@ class FilterModelStructure {
   FilterModelStructure({
     required List<SimpleCriterionDef> simpleCriterionDefs,
     required List<MultiOptCriterionDef> multiOptCriterionDefs,
-    required this.conditionConnector,
-    required this.conditionDefs,
+    // required this.conditionConnector,
+    // required this.conditionDefs,
+    required ConditionConnector conditionConnector,
+    required List<ConditionDef> conditionDefs,
   })  : __simpleCriterionDefs = [...simpleCriterionDefs],
         __rootMultiOptCriterionDefs = [...multiOptCriterionDefs] {
     for (SimpleCriterionDef simpleCriterionDef in simpleCriterionDefs) {
@@ -65,6 +72,12 @@ class FilterModelStructure {
       );
     }
     // LAZY Property:
+    rootConditionGroupDef = ConditionGroupDefImpl._(
+      groupName: rootGroupName,
+      connector: conditionConnector,
+      conditions: conditionDefs,
+    );
+    // LAZY Property:
     rootConditionGroupModel = ConditionGroupModelImpl(
       groupName: rootGroupName,
       structure: this,
@@ -73,7 +86,7 @@ class FilterModelStructure {
     for (ConditionDef conditionDef in conditionDefs) {
       __initConditionCascade(
         conditionDef: conditionDef,
-        parentGroupDef: null,
+        parentGroupDef: rootConditionGroupDef,
         parentGroupModel: rootConditionGroupModel,
       );
     }
@@ -160,7 +173,7 @@ class FilterModelStructure {
     if (__allCriterionDefMap
         .containsKey(simpleCriterionDef.criterionBaseName)) {
       throw DuplicateCriterionDefError(
-        criterionName: simpleCriterionDef.criterionBaseName,
+        criterionBaseName: simpleCriterionDef.criterionBaseName,
       );
     }
     __allCriterionDefMap[simpleCriterionDef.criterionBaseName] =
@@ -178,7 +191,7 @@ class FilterModelStructure {
     if (__allCriterionDefMap
         .containsKey(multiOptCriterionDef.criterionBaseName)) {
       throw DuplicateCriterionDefError(
-        criterionName: multiOptCriterionDef.criterionBaseName,
+        criterionBaseName: multiOptCriterionDef.criterionBaseName,
       );
     }
     // Init LAZY Property.
@@ -198,12 +211,9 @@ class FilterModelStructure {
 
   // ***************************************************************************
 
-  // final Map<String, MultiOptConditionModel> __multiOptConditionModelMapX = {};
-  // final Map<String, SimpleConditionModel> __simpleConditionModelMapX = {};
-
   void __initConditionCascade({
     required final ConditionDef conditionDef,
-    required final ConditionGroupDefImpl? parentGroupDef,
+    required final ConditionGroupDefImpl parentGroupDef,
     required final ConditionGroupModelImpl parentGroupModel,
   }) {
     if (conditionDef is ConditionDefImpl) {
@@ -214,7 +224,8 @@ class FilterModelStructure {
           __allCriterionDefMap[conditionDef.criterionName];
       if (criterionDef == null) {
         throw FilterCriterionNotFoundError(
-          criterionName: conditionDef.criterionName,
+          criterionBaseName: conditionDef.criterionName,
+          criterionNameTilde: conditionDef.criterionNameTilde,
         );
       }
       criterionDef._suffixes.add(conditionDef.suffix);
@@ -242,7 +253,7 @@ class FilterModelStructure {
       // LAZY Initial.
       conditionDef.__group = parentGroupDef;
       if (__conditionGroupDefMap.containsKey(conditionDef.groupName)) {
-        throw DuplicateFilterCriteriaGroupError(
+        throw DuplicateConditionGroupDefError(
           groupName: conditionDef.groupName,
         );
       }

@@ -1,15 +1,15 @@
 part of '../core.dart';
 
 class ShelfConfig {
-  final ShelfHiddenBehavior hiddenBehavior;
+  final ShelfHiddenAction onHideAction;
 
   const ShelfConfig({
-    this.hiddenBehavior = ShelfHiddenBehavior.none,
+    this.onHideAction = ShelfHiddenAction.none,
   });
 
   ShelfConfig copy() {
     return ShelfConfig(
-      hiddenBehavior: hiddenBehavior,
+      onHideAction: onHideAction,
     );
   }
 }

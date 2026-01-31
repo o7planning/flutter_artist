@@ -655,7 +655,7 @@ abstract class Block<
     //   event: "Block '${getClassName(this)}' just hides all UI Components!",
     //   isLibCode: true,
     // );
-    if (config.hiddenBehavior == BlockHiddenBehavior.clear) {
+    if (config.onHideAction == BlockHiddenAction.clear) {
       Future.delayed(
         const Duration(seconds: 0),
         () {
@@ -1798,8 +1798,8 @@ abstract class Block<
         "hasBlockXRepresentative": hasBlockXRepresentative,
         "hasItemXRepresentative": hasItemXRepresentative,
         "hasFormRepresentative": hasFormRepresentative,
-        "nonItemRepresentativeBehavior": config.nonItemRepresentativeBehavior,
-        "uniformItemRefreshMode": config.uniformItemRefreshMode,
+        "itemAbsentRepresentativePolicy": config.itemAbsentRepresentativePolicy,
+        "uniformItemRefreshPolicy": config.uniformItemRefreshPolicy,
         "currentItemSettingType": currentItemSettingType,
         "isCandidateCurrentItemInNewQueriedList":
             isCandidateCurrentItemInNewQueriedList,
@@ -1817,8 +1817,8 @@ abstract class Block<
       hasBlockXRepresentative: hasBlockXRepresentative,
       hasItemXRepresentative: hasItemXRepresentative,
       hasFormRepresentative: hasFormRepresentative,
-      nonItemRepresentativeBehavior: config.nonItemRepresentativeBehavior,
-      uniformItemRefreshMode: config.uniformItemRefreshMode,
+      itemAbsentRepresentativePolicy: config.itemAbsentRepresentativePolicy,
+      uniformItemRefreshPolicy: config.uniformItemRefreshPolicy,
       currentItemSettingType: currentItemSettingType,
       isCandidateCurrentItemInNewQueriedList:
           isCandidateCurrentItemInNewQueriedList,
@@ -1873,7 +1873,7 @@ abstract class Block<
         "isCandidateIsCurrent": isCandidateIsCurrent,
         "isCandidateCurrentItemInNewQueriedList":
             isCandidateCurrentItemInNewQueriedList,
-        "nonItemRepresentativeBehavior": config.nonItemRepresentativeBehavior,
+        "itemAbsentRepresentativePolicy": config.itemAbsentRepresentativePolicy,
       },
       lineFlowType: LineFlowType.debug,
     );

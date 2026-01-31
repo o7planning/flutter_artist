@@ -1,4 +1,0 @@
-enum ScalarHiddenBehavior {
-  none,
-  clear;
-}

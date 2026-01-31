@@ -1,0 +1,4 @@
+enum ShelfHiddenAction {
+  none,
+  clear;
+}

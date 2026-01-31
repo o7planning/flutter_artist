@@ -1,0 +1,4 @@
+enum ScalarHiddenAction {
+  none,
+  clear;
+}

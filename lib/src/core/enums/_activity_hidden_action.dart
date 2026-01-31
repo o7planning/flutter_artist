@@ -1,0 +1,4 @@
+enum ActivityHiddenAction {
+  none,
+  clear;
+}

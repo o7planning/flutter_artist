@@ -19,7 +19,7 @@ abstract class FilterCriteria {
   // Called from outside.
   void _initFilterCriteria({
     required FilterConditionGroupVal baseCriteria,
-    required bool forReal,
+    required bool isPrecheck,
   }) {
     // LAZY Property:
     criterionableList = registerSupportedCriteria();
@@ -30,16 +30,32 @@ abstract class FilterCriteria {
     for (Criterionable criterionable in criterionableList) {
       if (baseNameCriterionableMap
           .containsKey(criterionable.criterionBaseName)) {
-        throw AppError(
+        if (isPrecheck) {
+          throw DuplicateCriterionableDefError(
+            criterionBaseName: criterionable.criterionBaseName,
+            filterCriteriaClassName: getClassNameWithoutGenerics(this),
+          );
+        } else {
+          throw AppError(
             errorMessage:
                 "Duplicated criterionBaseName '${criterionable.criterionBaseName}'. "
-                "@see the ${getClassNameWithoutGenerics(this)}.registerSupportedCriteria() method.");
+                "@see the ${getClassNameWithoutGenerics(this)}.registerSupportedCriteria() method for details.",
+          );
+        }
       }
       if (set2.contains(criterionable.jsonCriterionName)) {
-        throw AppError(
+        if (isPrecheck) {
+          throw DuplicateCriterionableFieldError(
+            field: criterionable.jsonCriterionName,
+            filterCriteriaClassName: getClassNameWithoutGenerics(this),
+          );
+        } else {
+          throw AppError(
             errorMessage:
                 "Duplicated jsonCriterionName '${criterionable.jsonCriterionName}'. "
-                "@see the ${getClassNameWithoutGenerics(this)}.registerSupportedCriteria() method.");
+                "@see the ${getClassNameWithoutGenerics(this)}.registerSupportedCriteria() method for details.",
+          );
+        }
       }
       baseNameCriterionableMap[criterionable.criterionBaseName] = criterionable;
       set2.add(criterionable.jsonCriterionName);

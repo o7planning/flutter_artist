@@ -1,4 +1,4 @@
-enum NonItemRepresentativeBehavior {
+enum ItemAbsentRepresentativePolicy {
   ///
   /// (Default Behavior). When the Block does not have a UI Component representing the "item" displayed on the interface.
   /// Block will not try to find an Item to set as current.
@@ -13,7 +13,7 @@ enum NonItemRepresentativeBehavior {
   trySetAnItemAsCurrent;
 }
 
-enum UniformItemRefreshMode {
+enum UniformItemRefreshPolicy {
   always,
   auto;
 }

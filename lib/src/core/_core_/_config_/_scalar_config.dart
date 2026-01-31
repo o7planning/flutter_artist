@@ -1,13 +1,13 @@
 part of '../core.dart';
 
 class ScalarConfig {
-  final ScalarHiddenBehavior hiddenBehavior;
+  final ScalarHiddenAction onHideAction;
 
   final ExternalShelfEventS onExternalShelfEvents;
   final InternalShelfEventS onInternalShelfEvents;
 
   ScalarConfig({
-    this.hiddenBehavior = ScalarHiddenBehavior.none,
+    this.onHideAction = ScalarHiddenAction.none,
     //
     this.onExternalShelfEvents = const ExternalShelfEventS(
       scalarLevelReactionTo: [],
@@ -19,7 +19,7 @@ class ScalarConfig {
 
   ScalarConfig copy() {
     return ScalarConfig(
-      hiddenBehavior: hiddenBehavior,
+      onHideAction: onHideAction,
       //
       onExternalShelfEvents: onExternalShelfEvents,
       onInternalShelfEvents: onInternalShelfEvents,

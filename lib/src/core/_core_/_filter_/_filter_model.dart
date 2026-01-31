@@ -4,6 +4,8 @@ abstract class FilterModel<
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     > extends _Core {
+  bool _filterCriteriaPrechecked = false;
+
   late final Shelf shelf;
 
   late final String name;
@@ -207,18 +209,43 @@ abstract class FilterModel<
   XFilterCriteria<FILTER_CRITERIA> __createXFilterCriteria({
     required Map<String, dynamic> criteriaMap,
     required FilterConditionGroupVal baseCriteria,
+    required bool isPrecheck,
   }) {
     FILTER_CRITERIA filterCriteria = createNewFilterCriteria(
       criteriaMap: criteriaMap,
     );
     filterCriteria._initFilterCriteria(
       baseCriteria: baseCriteria,
-      forReal: true,
+      isPrecheck: isPrecheck,
     );
-    return XFilterCriteria(
+    return XFilterCriteria<FILTER_CRITERIA>(
       filterCriteria: filterCriteria,
       filterCriteriaMap: criteriaMap,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __filterCriteriaPrecheck() {
+    if (_filterCriteriaPrechecked) {
+      return;
+    }
+    try {
+      final xFilterCriteria = __createXFilterCriteria(
+        criteriaMap: {},
+        baseCriteria: FilterConditionGroupVal.empty(),
+        isPrecheck: true,
+      );
+      FILTER_CRITERIA filterCriteria = xFilterCriteria.filterCriteria;
+    } on FilterCriterionRegisterError catch (e) {
+      rethrow;
+    }
+    // IMPORTANT: If can not initial FilterCriteria,..
+    catch (e) {
+      // Do nothing.
+    }
+    _filterCriteriaPrechecked = true;
   }
 
   // ***************************************************************************
@@ -300,13 +327,63 @@ abstract class FilterModel<
     try {
       _filterModelStructure = registerFilterModelStructure();
       _filterModelStructure.filterModel = this;
-    } on DuplicateFilterCriterionXError catch (e) {
-      String message =
-          "Duplicate Criterion Name Tilde '${e.criterionNameTilde}' in ${getClassName(this)}";
+      __filterCriteriaPrecheck();
+    }
+    // criterionBaseName is not valid:
+    on CriterionBaseNameError catch (e) {
+      String message = "Invalid criterionBaseName '${e.criterionBaseName}'.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
-    } catch (e, stackTrace) {
+    }
+    // criterionNameTilde is not valid:
+    on CriterionNameTildeError catch (e) {
+      String message = "Invalid criterionNameTilde '${e.criterionNameTilde}'.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+      throw _createFatalAppError(message);
+    }
+    // criterionBaseName not found:
+    on FilterCriterionNotFoundError catch (e) {
+      String message =
+          "There is no criterionBaseName '${e.criterionBaseName}' corresponding to criterionNameTilde '${e.criterionNameTilde}'.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+      throw _createFatalAppError(message);
+    }
+    // Duplicate criterionBaseName
+    on DuplicateCriterionDefError catch (e) {
+      String message = "Duplicate criterionBaseName '${e.criterionBaseName}'.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+      throw _createFatalAppError(message);
+    }
+    // Duplicate criterionNameTilde in a Group:
+    on DuplicateFilterConditionDefError catch (e) {
+      String message =
+          "Duplicate criterionNameTilde '${e.criterionNameTilde}' in '${e.groupName}' group.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+      throw _createFatalAppError(message);
+    }
+    // Duplicate groupName:
+    on DuplicateConditionGroupDefError catch (e) {
+      String message = "Duplicate groupName '${e.groupName}'.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+      throw _createFatalAppError(message);
+    }
+    // Duplicate filterCriteriaClassName in FilterCriteria class.
+    on DuplicateCriterionableDefError catch (e) {
+      String message = "Duplicate criterionBaseName '${e.criterionBaseName}'.\n"
+          "@see the '${e.filterCriteriaClassName}.registerSupportedCriteria()' method for details.";
+      throw _createFatalAppError(message);
+    }
+    // Duplicate field in FilterCriteria class.
+    on DuplicateCriterionableFieldError catch (e) {
+      String message = "Duplicate field '${e.field}'.\n"
+          "@see the '${e.filterCriteriaClassName}.registerSupportedCriteria()' method for details.";
+      throw _createFatalAppError(message);
+    }
+    // Other Error:
+    catch (e, stackTrace) {
       print(stackTrace);
-      String message = "Unknown Error $e in ${getClassName(this)}";
+      String message =
+          "Unknown Error $e in ${getClassNameWithoutGenerics(this)}";
       throw _createFatalAppError(message);
     }
   }
@@ -619,6 +696,7 @@ abstract class FilterModel<
           __createXFilterCriteria(
         criteriaMap: newCriteriaMap,
         baseCriteria: baseCriteria,
+        isPrecheck: false,
       );
       //
       if (this is! _DefaultFilterModel) {
