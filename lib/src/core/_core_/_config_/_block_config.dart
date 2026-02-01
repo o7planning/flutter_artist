@@ -2,9 +2,9 @@ part of '../core.dart';
 
 class BlockConfig {
   final bool leaveTheFormSafely;
-  final NonItemRepresentativeBehavior nonItemRepresentativeBehavior;
-  final UniformItemRefreshMode uniformItemRefreshMode;
-  final BlockHiddenBehavior hiddenBehavior;
+  final ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy;
+  final UniformItemRefreshPolicy uniformItemRefreshPolicy;
+  final BlockHiddenAction onHideAction;
 
   final Pageable pageable;
 
@@ -21,11 +21,11 @@ class BlockConfig {
   final ClientSideSortMode clientSideSortMode;
 
   BlockConfig({
-    this.nonItemRepresentativeBehavior =
-        NonItemRepresentativeBehavior.tryNotSetAnItemAsCurrent,
-    this.uniformItemRefreshMode = UniformItemRefreshMode.auto,
+    this.itemAbsentRepresentativePolicy =
+        ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
+    this.uniformItemRefreshPolicy = UniformItemRefreshPolicy.auto,
     this.leaveTheFormSafely = true,
-    this.hiddenBehavior = BlockHiddenBehavior.none,
+    this.onHideAction = BlockHiddenAction.none,
     List<Event>? fireExternalShelfEvents,
     //
     List<Event>? executeItemLevelReactionToEvents,
@@ -47,10 +47,10 @@ class BlockConfig {
 
   BlockConfig copy() {
     return BlockConfig(
-      uniformItemRefreshMode: uniformItemRefreshMode,
-      nonItemRepresentativeBehavior: nonItemRepresentativeBehavior,
+      uniformItemRefreshPolicy: uniformItemRefreshPolicy,
+      itemAbsentRepresentativePolicy: itemAbsentRepresentativePolicy,
       leaveTheFormSafely: leaveTheFormSafely,
-      hiddenBehavior: hiddenBehavior,
+      onHideAction: onHideAction,
       pageable: pageable.copy(),
       //
       fireExternalShelfEvents: fireExternalShelfEvents,

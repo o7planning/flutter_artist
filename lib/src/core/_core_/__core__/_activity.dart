@@ -92,7 +92,7 @@ abstract class Activity extends _Core {
   // ***************************************************************************
 
   void _fireActivityHidden() {
-    // switch (config.hiddenBehavior) {
+    // switch (config.onHideAction) {
     //   case ActivityHiddenBehavior.none:
     //     break;
     //   case ActivityHiddenBehavior.clear:

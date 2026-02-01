@@ -1,0 +1,4 @@
+enum BlockHiddenAction {
+  none,
+  clear;
+}

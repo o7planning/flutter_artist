@@ -141,13 +141,13 @@ abstract class Shelf extends _Core {
       _allFilterModels.add(filterModel);
     }
     //
-    // Activity:
+    // Hook:
     //
     final List<Hook> hooks = _shelfStruct.hooks;
     for (Hook hook in hooks) {
       if (__hookMap.containsKey(hook.name)) {
         throw ___registerError(
-            "Duplicated Activity '${hook.name}' in '${getClassName(this)}'"
+            "Duplicated Hook '${hook.name}' in '${getClassName(this)}'"
             "\nDouble-check ${getClassName(this)}.registerStructure() method");
       } else {
         __hookMap[hook.name] = hook;

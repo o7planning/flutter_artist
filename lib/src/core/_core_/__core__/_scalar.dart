@@ -1178,10 +1178,10 @@ abstract class Scalar<
     //   event: "Scalar '${getClassName(this)}' just hides all UI Components!",
     //   isLibCode: true,
     // );
-    switch (config.hiddenBehavior) {
-      case ScalarHiddenBehavior.none:
+    switch (config.onHideAction) {
+      case ScalarHiddenAction.none:
         break;
-      case ScalarHiddenBehavior.clear:
+      case ScalarHiddenAction.clear:
         break;
     }
   }

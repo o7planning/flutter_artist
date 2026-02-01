@@ -1,13 +1,13 @@
 part of '../core.dart';
 
 class ActivityConfig {
-  final ActivityHiddenBehavior hiddenBehavior;
+  final ActivityHiddenAction onHideAction;
 
   const ActivityConfig({
-    this.hiddenBehavior = ActivityHiddenBehavior.none,
+    this.onHideAction = ActivityHiddenAction.none,
   });
 
   ActivityConfig copy() {
-    return ActivityConfig(hiddenBehavior: hiddenBehavior);
+    return ActivityConfig(onHideAction: onHideAction);
   }
 }

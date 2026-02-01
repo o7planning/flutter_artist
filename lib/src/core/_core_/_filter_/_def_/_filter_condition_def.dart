@@ -1,5 +1,8 @@
 part of '../../core.dart';
 
+///
+/// [ConditionDefImpl], [ConditionGroupDefImpl],
+///
 abstract interface class ConditionDef {
   FilterModelStructure get structure;
 
@@ -89,5 +92,19 @@ class ConditionGroupDefImpl implements ConditionDef {
     required this.groupName,
     required this.connector,
     required this.conditions,
-  });
+  }) {
+    final Map<String, ConditionDef> map = {};
+    for (ConditionDef def in conditions) {
+      if (def is ConditionDefImpl) {
+        final nameTilde = def._criterionX.criterionNameTilde;
+        if (map.containsKey(nameTilde)) {
+          throw DuplicateFilterConditionDefError(
+            criterionNameTilde: nameTilde,
+            groupName: groupName,
+          );
+        }
+        map[nameTilde] = def;
+      }
+    }
+  }
 }

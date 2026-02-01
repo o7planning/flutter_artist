@@ -1,4 +1,0 @@
-enum ShelfHiddenBehavior {
-  none,
-  clear;
-}
