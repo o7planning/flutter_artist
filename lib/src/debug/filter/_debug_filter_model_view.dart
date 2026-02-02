@@ -91,9 +91,13 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
     String conditionJsonX =
         rootFilterCriteriaGroupModel.toFilterCriteriaGroupXVal().toJson();
 
-    String conditionJsonBase =
-        rootFilterCriteriaGroupModel.toFilterCriteriaGroupVal().toJson();
+    String conditionJsonBase = rootFilterCriteriaGroupModel
+        .toFilterCriteriaGroupVal()
+        .toCriterionBasedJson();
 
+    String conditionJsonField = rootFilterCriteriaGroupModel
+        .toFilterCriteriaGroupVal()
+        .toFieldBasedJson(throwIfError: false);
     //
 
     List<TabData> tabs = [];
@@ -176,8 +180,25 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
           size: iconSize,
         ),
         content: _buildTabContent(
-          infoAsHtml: "<b>Filter Condition Structure.</b>.",
+          infoAsHtml:
+              "This <b>JSON</b> is a combination of the conditional structure and the current values of the <b>criterionNameTilde(s)</b>.",
           json: conditionJsonX,
+        ),
+      ),
+    );
+    tabs.add(
+      TabData(
+        text: ' JSON*',
+        closable: false,
+        leading: (context, status) => Icon(
+          Icons.data_object,
+          color: _getTabIconColor(status),
+          size: iconSize,
+        ),
+        content: _buildTabContent(
+          infoAsHtml:
+              "This <b>JSON</b> is a combination of the conditional structure and the current values of the criteria.",
+          json: conditionJsonBase,
         ),
       ),
     );
@@ -191,8 +212,10 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
           size: iconSize,
         ),
         content: _buildTabContent(
-          infoAsHtml: "<b>Criterion Structures</b>",
-          json: conditionJsonBase,
+          infoAsHtml:
+              "This <b>JSON</b> is a combination of the conditional structure and the current values of the filter fields. "
+              "It can be sent to the server for data filtering.",
+          json: conditionJsonField,
         ),
       ),
     );

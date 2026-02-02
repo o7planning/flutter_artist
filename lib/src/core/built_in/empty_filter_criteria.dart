@@ -7,7 +7,7 @@ class EmptyFilterCriteria extends FilterCriteria {
   factory EmptyFilterCriteria() => EmptyFilterCriteria._();
 
   @override
-  List<Criterionable> registerSupportedCriteria() {
+  List<FilterCriterion> registerSupportedCriteria() {
     return [];
   }
 }

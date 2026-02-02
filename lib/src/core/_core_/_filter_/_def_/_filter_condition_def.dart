@@ -53,6 +53,7 @@ class ConditionDefImpl implements ConditionDef {
   String get suffix => _criterionX.suffix!;
 
   late final ConditionGroupDefImpl? __group;
+  late final CriterionDef criterionDef;
 
   @override
   ConditionDef? get group => __group;

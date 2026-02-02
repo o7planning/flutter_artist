@@ -16,6 +16,7 @@ class ConditionModelImpl extends ConditionModel {
   final String criterionName;
   final String criterionNameTilde;
   final CriterionOperator operator;
+  final CriterionDef criterionDef;
 
   final List<CriterionOperator> _supportedOperators;
 
@@ -30,6 +31,7 @@ class ConditionModelImpl extends ConditionModel {
     required this.structure,
     required this.criterionName,
     required this.criterionNameTilde,
+    required this.criterionDef,
     required this.operator,
     required List<CriterionOperator> supportedOperators,
   })  : _supportedOperators = supportedOperators,
@@ -39,6 +41,7 @@ class ConditionModelImpl extends ConditionModel {
   IConditionVal toFilterRuleVal() {
     return FilterConditionVal(
       criterionName: criterionName,
+      criterionDef: criterionDef,
       operator: operator,
       value: filterCriterionModel.currentValue,
     );

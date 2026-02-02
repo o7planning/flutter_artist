@@ -2,21 +2,31 @@ abstract class FilterCriterionRegisterError {
   //
 }
 
-class DuplicateCriterionableDefError extends FilterCriterionRegisterError {
+class FilterFieldNoConverterError extends FilterCriterionRegisterError {
+  final String criterionBaseName;
+  final Type dataType;
+
+  FilterFieldNoConverterError({
+    required this.criterionBaseName,
+    required this.dataType,
+  });
+}
+
+class DuplicateFilterCriterionError extends FilterCriterionRegisterError {
   final String criterionBaseName;
   final String filterCriteriaClassName;
 
-  DuplicateCriterionableDefError({
+  DuplicateFilterCriterionError({
     required this.criterionBaseName,
     required this.filterCriteriaClassName,
   });
 }
 
-class DuplicateCriterionableFieldError extends FilterCriterionRegisterError {
+class DuplicateFilterFieldError extends FilterCriterionRegisterError {
   final String field;
   final String filterCriteriaClassName;
 
-  DuplicateCriterionableFieldError({
+  DuplicateFilterFieldError({
     required this.field,
     required this.filterCriteriaClassName,
   });
@@ -26,6 +36,16 @@ class DuplicateCriterionDefError extends FilterCriterionRegisterError {
   final String criterionBaseName;
 
   DuplicateCriterionDefError({required this.criterionBaseName});
+}
+
+class DuplicateCriterionFieldDefError extends FilterCriterionRegisterError {
+  final String criterionBaseName;
+  final String fieldName;
+
+  DuplicateCriterionFieldDefError({
+    required this.criterionBaseName,
+    required this.fieldName,
+  });
 }
 
 class DuplicateFilterConditionDefError extends FilterCriterionRegisterError {
@@ -88,5 +108,16 @@ class CriterionBaseNameError extends FilterCriterionRegisterError {
   @override
   String toString() {
     return "Invalid Criterion Base Name: $criterionBaseName";
+  }
+}
+
+class FilterFieldNameError extends FilterCriterionRegisterError {
+  final String fieldName;
+
+  FilterFieldNameError({required this.fieldName});
+
+  @override
+  String toString() {
+    return "Invalid Field Name: $fieldName";
   }
 }

@@ -132,4 +132,13 @@ class Logger {
     FlutterArtist.internalNotifyLog();
     return logEntry;
   }
+
+  LogEntry? findLogEntry({required int logEntryId}) {
+    for (LogEntry entry in __logEntries) {
+      if (entry.id == logEntryId) {
+        return entry;
+      }
+    }
+    return null;
+  }
 }

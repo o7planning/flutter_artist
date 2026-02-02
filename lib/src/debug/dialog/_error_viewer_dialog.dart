@@ -19,7 +19,7 @@ class ErrorViewerDialog extends StatelessWidget {
     Size preferredSize = calculatePreferredDialogSize(
       context,
       preferredWidth: 620,
-      preferredHeight: 400,
+      preferredHeight: 360,
     );
 
     FaAlertDialog alert = FaAlertDialog(
@@ -36,7 +36,7 @@ class ErrorViewerDialog extends StatelessWidget {
 
   static Future<void> open({
     required BuildContext context,
-    required String title,
+    String title = "Error Viewer",
     required ErrorInfo errorInfo,
   }) async {
     await showDialog(

@@ -111,7 +111,7 @@ class FilterCriterionDefView extends StatelessWidget {
                 );
               },
             ),
-          SizedBox(height: 10),
+          if (criterion is MultiOptCriterionDef) Divider(),
           Expanded(
             child: SingleChildScrollView(
               child: _buildDetails(),
@@ -126,7 +126,69 @@ class FilterCriterionDefView extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [],
+      children: [
+        IconLabelSelectableText(
+          label: "Field Name: ",
+          text: criterion.fieldName,
+          labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          textStyle: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue,
+          ),
+        ),
+        SizedBox(height: 5),
+        IconLabelSelectableText(
+          label: "toFieldValue(): ",
+          text:
+              criterion.toFieldValueProvided ? "[Provided]" : "[Not Provided]",
+          labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          textStyle: TextStyle(
+            fontSize: 12,
+            fontWeight:
+                criterion.isSimpleDataType || criterion.toFieldValueProvided
+                    ? FontWeight.normal
+                    : FontWeight.bold,
+            color: criterion.isSimpleDataType || criterion.toFieldValueProvided
+                ? Colors.black
+                : Colors.deepOrange,
+          ),
+        ),
+        SizedBox(height: 5),
+        Container(
+          padding: EdgeInsets.only(left: 10),
+          child: criterion.isSimpleDataType
+              ? SelectableText(
+                  "The data type of this criterion is <${criterion.dataType}> (Simple data type), "
+                  "so a conversion function is not necessary.",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                  ),
+                )
+              : SelectableText(
+                  "The data type of this criterion is <${criterion.dataType}> (Not a simple data type), "
+                  "so you need to provide a conversion function.",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: criterion.isSimpleDataType ||
+                            criterion.toFieldValueProvided
+                        ? Colors.grey
+                        : Colors.black,
+                  ),
+                ),
+        ),
+        SizedBox(height: 10),
+        IconLabelSelectableText(
+          label: "Description: ",
+          text: criterion.description ?? "",
+          labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          textStyle: TextStyle(
+            fontSize: 12,
+            color: Colors.grey,
+          ),
+        ),
+      ],
     );
   }
 }

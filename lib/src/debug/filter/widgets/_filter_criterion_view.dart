@@ -3,14 +3,14 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../../core/_core_/core.dart';
 
-class CriterionableView extends StatelessWidget {
-  final Criterionable criterionable;
+class FilterCriterionView extends StatelessWidget {
+  final FilterCriterion filterCriterion;
   final bool selected;
-  final Function(Criterionable criterionable) onPressed;
+  final Function(FilterCriterion filterCriterion) onPressed;
 
-  const CriterionableView({
+  const FilterCriterionView({
     super.key,
-    required this.criterionable,
+    required this.filterCriterion,
     required this.selected,
     required this.onPressed,
   });
@@ -25,7 +25,7 @@ class CriterionableView extends StatelessWidget {
       ),
       child: ListTile(
         onTap: () {
-          onPressed(criterionable);
+          onPressed(filterCriterion);
         },
         dense: true,
         visualDensity: VisualDensity(vertical: -3, horizontal: -3),
@@ -39,14 +39,14 @@ class CriterionableView extends StatelessWidget {
           iconSize: 16,
         ),
         title: Text(
-          "${criterionable.criterionBaseName} <${criterionable.baseDataType}>",
+          "${filterCriterion.filterCriterionName} <${filterCriterion.baseDataType}>",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 13,
           ),
         ),
         subtitle: Text(
-          criterionable.jsonCriterionName,
+          filterCriterion.filterFieldName,
           style: TextStyle(
             fontSize: 12,
           ),

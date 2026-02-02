@@ -1,18 +1,16 @@
 part of '../core.dart';
 
 abstract class FilterCriteria {
-  late final String __jsonCriteria;
+  late final String __fieldBasedJSON;
 
-  late final FilterConditionGroupVal baseCriteria;
-  late final List<Criterionable> criterionableList;
+  String get fieldBasedJSON => __fieldBasedJSON;
+
+  late final FilterConditionGroupVal __baseCriteria;
+  late final List<FilterCriterion> filterCriterionList;
 
   bool __ready = false;
 
   bool get ready => __ready;
-
-  String get jsonCriteria {
-    return __jsonCriteria;
-  }
 
   FilterCriteria();
 
@@ -22,61 +20,60 @@ abstract class FilterCriteria {
     required bool isPrecheck,
   }) {
     // LAZY Property:
-    criterionableList = registerSupportedCriteria();
+    __baseCriteria = baseCriteria;
+    __fieldBasedJSON = baseCriteria.toFieldBasedJson(throwIfError: true);
     // LAZY Property:
-    this.baseCriteria = baseCriteria;
-    Map<String, Criterionable> baseNameCriterionableMap = {};
+    filterCriterionList = registerSupportedCriteria();
+
+    Map<String, FilterCriterion> baseNameFilterCriterionMap = {};
     Set<String> set2 = {};
-    for (Criterionable criterionable in criterionableList) {
-      if (baseNameCriterionableMap
-          .containsKey(criterionable.criterionBaseName)) {
+    for (FilterCriterion filterCriterion in filterCriterionList) {
+      if (baseNameFilterCriterionMap
+          .containsKey(filterCriterion.filterCriterionName)) {
         if (isPrecheck) {
-          throw DuplicateCriterionableDefError(
-            criterionBaseName: criterionable.criterionBaseName,
+          throw DuplicateFilterCriterionError(
+            criterionBaseName: filterCriterion.filterCriterionName,
             filterCriteriaClassName: getClassNameWithoutGenerics(this),
           );
         } else {
           throw AppError(
             errorMessage:
-                "Duplicated criterionBaseName '${criterionable.criterionBaseName}'. "
+                "Duplicated criterionBaseName '${filterCriterion.filterCriterionName}'. "
                 "@see the ${getClassNameWithoutGenerics(this)}.registerSupportedCriteria() method for details.",
           );
         }
       }
-      if (set2.contains(criterionable.jsonCriterionName)) {
+      if (set2.contains(filterCriterion.filterFieldName)) {
         if (isPrecheck) {
-          throw DuplicateCriterionableFieldError(
-            field: criterionable.jsonCriterionName,
+          throw DuplicateFilterFieldError(
+            field: filterCriterion.filterFieldName,
             filterCriteriaClassName: getClassNameWithoutGenerics(this),
           );
         } else {
           throw AppError(
             errorMessage:
-                "Duplicated jsonCriterionName '${criterionable.jsonCriterionName}'. "
+                "Duplicated jsonCriterionName '${filterCriterion.filterFieldName}'. "
                 "@see the ${getClassNameWithoutGenerics(this)}.registerSupportedCriteria() method for details.",
           );
         }
       }
-      baseNameCriterionableMap[criterionable.criterionBaseName] = criterionable;
-      set2.add(criterionable.jsonCriterionName);
+      baseNameFilterCriterionMap[filterCriterion.filterCriterionName] =
+          filterCriterion;
+      set2.add(filterCriterion.filterFieldName);
     }
-    // LAZY Property:
-    __jsonCriteria = baseCriteria.toJsonForBackend(
-      criterionableMap: baseNameCriterionableMap,
-    );
     __ready = true;
   }
 
-  List<Criterionable> registerSupportedCriteria();
+  List<FilterCriterion> registerSupportedCriteria();
 
   @override
   bool operator ==(Object other) {
     if (other is! FilterCriteria) {
       return false;
     }
-    return __jsonCriteria == other.__jsonCriteria;
+    return __fieldBasedJSON == other.__fieldBasedJSON;
   }
 
   @override
-  int get hashCode => __jsonCriteria.hashCode;
+  int get hashCode => __fieldBasedJSON.hashCode;
 }

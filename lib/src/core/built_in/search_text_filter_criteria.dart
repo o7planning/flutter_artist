@@ -11,11 +11,11 @@ class SearchTextFilterCriteria extends FilterCriteria {
   });
 
   @override
-  List<Criterionable<Object>> registerSupportedCriteria() {
+  List<FilterCriterion<Object>> registerSupportedCriteria() {
     return [
-      Criterionable<String>(
-        criterionBaseName: 'searchText',
-        jsonCriterionName: 'searchText',
+      FilterCriterion<String>(
+        filterCriterionName: 'searchText',
+        filterFieldName: 'searchText',
         converter: (String? baseValue) {
           return SimpleVal.ofString(baseValue);
         },

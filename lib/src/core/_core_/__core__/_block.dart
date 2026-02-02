@@ -3908,15 +3908,22 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   void showBlockErrorViewerDialog(BuildContext context) {
-    if (dataState != DataState.error ||
-        _blockErrorInfo == null ||
-        _blockErrorInfo!.blockErrorMethod != BlockErrorMethod.callApiQuery) {
-      return;
+    if (dataState == DataState.error) {
+      if (_blockErrorInfo != null) {
+        BlockErrorViewerDialog.open(
+          context: context,
+          blockErrorInfo: _blockErrorInfo!,
+        );
+      } else if (filterModel != null) {
+        if (filterModel!.dataState == DataState.error &&
+            filterModel!._errorInfo != null) {
+          ErrorViewerDialog.open(
+            context: context,
+            errorInfo: filterModel!._errorInfo!,
+          );
+        }
+      }
     }
-    BlockErrorViewerDialog.open(
-      context: context,
-      blockErrorInfo: _blockErrorInfo!,
-    );
   }
 
   // ***************************************************************************
