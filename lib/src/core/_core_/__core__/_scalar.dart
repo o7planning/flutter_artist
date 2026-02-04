@@ -794,15 +794,22 @@ abstract class Scalar<
 
   @_RootMethodAnnotation()
   void showScalarErrorViewerDialog(BuildContext context) {
-    if (dataState != DataState.error ||
-        _scalarErrorInfo == null ||
-        _scalarErrorInfo!.scalarErrorMethod != ScalarErrorMethod.callApiQuery) {
-      return;
+    if (dataState == DataState.error) {
+      if (_scalarErrorInfo != null) {
+        ScalarErrorViewerDialog.open(
+          context: context,
+          scalarErrorInfo: _scalarErrorInfo!,
+        );
+      } else if (filterModel != null) {
+        if (filterModel!.dataState == DataState.error &&
+            filterModel!._errorInfo != null) {
+          ErrorViewerDialog.open(
+            context: context,
+            errorInfo: filterModel!._errorInfo!,
+          );
+        }
+      }
     }
-    ScalarErrorViewerDialog.open(
-      context: context,
-      scalarErrorInfo: _scalarErrorInfo!,
-    );
   }
 
   // ***************************************************************************

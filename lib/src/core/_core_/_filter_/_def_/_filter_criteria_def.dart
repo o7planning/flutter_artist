@@ -11,15 +11,35 @@ class SimpleVal extends Equatable {
 
   const SimpleVal.ofBool(bool? this.value);
 
+  static bool isSimpleValue(Object? baseValue) {
+    if (baseValue is String? ||
+        baseValue is double? ||
+        baseValue is int? ||
+        baseValue is bool?) {
+      return true;
+    }
+    return false;
+  }
+
+  static bool isSimpleDataType(Type dataType) {
+    if (dataType == String ||
+        dataType == double ||
+        dataType == int ||
+        dataType == bool) {
+      return true;
+    }
+    return false;
+  }
+
   @override
   List<Object?> get props => [value];
 }
 
 typedef Converter<BASE_VALUE> = SimpleVal Function(BASE_VALUE? baseValue);
 
-class Criterionable<BASE_VALUE extends Object> {
-  final String criterionBaseName;
-  final String jsonCriterionName;
+class FilterCriterion<BASE_VALUE extends Object> {
+  final String filterCriterionName;
+  final String filterFieldName;
 
   final Converter<BASE_VALUE> __converter;
 
@@ -31,9 +51,9 @@ class Criterionable<BASE_VALUE extends Object> {
     return getTypeNameWithoutGenerics(BASE_VALUE);
   }
 
-  Criterionable({
-    required this.criterionBaseName,
-    required this.jsonCriterionName,
+  FilterCriterion({
+    required this.filterCriterionName,
+    required this.filterFieldName,
     required Converter<BASE_VALUE> converter,
   }) : __converter = converter;
 
@@ -44,8 +64,8 @@ class Criterionable<BASE_VALUE extends Object> {
       print(stackTrace);
       throw AppError(
           errorMessage:
-              "The ${getTypeNameWithoutGenerics(Criterionable)}.convert() "
-              "method of criterionBaseName('$criterionBaseName') was called with error. $e");
+              "The ${getTypeNameWithoutGenerics(FilterCriterion)}.convert() "
+              "method of criterionBaseName('$filterCriterionName') was called with error. $e");
     }
   }
 }

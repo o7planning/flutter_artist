@@ -8,11 +8,11 @@ class StringIdFilterCriteria extends FilterCriteria {
   });
 
   @override
-  List<Criterionable> registerSupportedCriteria() {
+  List<FilterCriterion> registerSupportedCriteria() {
     return [
-      Criterionable<String>(
-        criterionBaseName: 'id',
-        jsonCriterionName: 'id',
+      FilterCriterion<String>(
+        filterCriterionName: 'id',
+        filterFieldName: 'id',
         converter: (String? baseValue) {
           return SimpleVal.ofString(baseValue);
         },

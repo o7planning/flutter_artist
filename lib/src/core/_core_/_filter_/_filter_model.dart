@@ -61,6 +61,8 @@ abstract class FilterModel<
 
   DataState get dataState => _filterModelStructure._filterDataState;
 
+  ErrorInfo? _errorInfo;
+
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   late final ui = _FilterUIComponents(filterModel: this);
@@ -72,6 +74,17 @@ abstract class FilterModel<
     FilterModelConfig config = const FilterModelConfig(),
   }) : config = config.copy() {
     __registerFilterModelStructure();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __clearFilterError() {
+    _errorInfo = null;
+  }
+
+  void __setErrorInfo(ErrorInfo? errorInfo) {
+    _errorInfo = errorInfo;
   }
 
   // ***************************************************************************
@@ -335,6 +348,20 @@ abstract class FilterModel<
           "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
+    // fieldName is not valid:
+    on FilterFieldNameError catch (e) {
+      String message = "Invalid fieldName '${e.fieldName}'.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+      throw _createFatalAppError(message);
+    }
+    // No Field Converter:
+    on FilterFieldNoConverterError catch (e) {
+      String message =
+          "Data type of '${e.criterionBaseName}' is '${e.dataType}' (Not simple data type).\n"
+          "So you need to provide toFieldValue() function.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+      throw _createFatalAppError(message);
+    }
     // criterionNameTilde is not valid:
     on CriterionNameTildeError catch (e) {
       String message = "Invalid criterionNameTilde '${e.criterionNameTilde}'.\n"
@@ -354,6 +381,13 @@ abstract class FilterModel<
           "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
+    // Duplicate fieldName
+    on DuplicateCriterionFieldDefError catch (e) {
+      String message =
+          "Duplicate fieldName '${e.fieldName}' (criterionBaseName: ${e.criterionBaseName}).\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+      throw _createFatalAppError(message);
+    }
     // Duplicate criterionNameTilde in a Group:
     on DuplicateFilterConditionDefError catch (e) {
       String message =
@@ -368,13 +402,13 @@ abstract class FilterModel<
       throw _createFatalAppError(message);
     }
     // Duplicate filterCriteriaClassName in FilterCriteria class.
-    on DuplicateCriterionableDefError catch (e) {
+    on DuplicateFilterCriterionError catch (e) {
       String message = "Duplicate criterionBaseName '${e.criterionBaseName}'.\n"
           "@see the '${e.filterCriteriaClassName}.registerSupportedCriteria()' method for details.";
       throw _createFatalAppError(message);
     }
     // Duplicate field in FilterCriteria class.
-    on DuplicateCriterionableFieldError catch (e) {
+    on DuplicateFilterFieldError catch (e) {
       String message = "Duplicate field '${e.field}'.\n"
           "@see the '${e.filterCriteriaClassName}.registerSupportedCriteria()' method for details.";
       throw _createFatalAppError(message);
@@ -477,6 +511,7 @@ abstract class FilterModel<
     //
     if (activityType == FilterActivityType.newFilt) {
       __loadCount++;
+      __clearFilterError();
     }
     final Map<String, dynamic> formKeyInstantValues =
         _formKey.currentState?.instantValue ?? {};
@@ -725,7 +760,9 @@ abstract class FilterModel<
         showSnackBar: true,
         tipDocument: null,
       );
+      //
       _filterModelStructure._setFilterDataState(DataState.error);
+      __setErrorInfo(errorInfo);
       //
       // IMPORTANT:
       //

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/flutter_artist.dart';
 import 'package:flutter_artist/src/core/icon/icon_constants.dart';
 import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
@@ -7,7 +6,9 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
+import '../../core/_core_/core.dart';
 import '../../core/enums/_tip_document.dart';
+import '../../core/logger/_logger.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../section/_error_info_viewer.dart';
 import '../section/_warn_info_viewer.dart';
@@ -15,10 +16,12 @@ import '../section/_warn_info_viewer.dart';
 class LogViewerDialog extends StatefulWidget {
   final String title;
   final Logger logger;
+  final int? logEntryId;
 
   const LogViewerDialog({
     this.title = 'Log Viewer',
     required this.logger,
+    this.logEntryId,
     super.key,
   });
 
@@ -30,12 +33,14 @@ class LogViewerDialog extends StatefulWidget {
   static Future<void> open({
     required BuildContext context,
     required Logger logger,
+    int? logEntryId,
   }) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
         return LogViewerDialog(
           logger: logger,
+          logEntryId: logEntryId,
         );
       },
     );
@@ -48,7 +53,11 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
   @override
   void initState() {
     super.initState();
-    _logEntry = widget.logger.lastEntry;
+    if (widget.logEntryId != null) {
+      _logEntry = widget.logger.findLogEntry(logEntryId: widget.logEntryId!);
+    } else {
+      _logEntry = widget.logger.lastEntry;
+    }
   }
 
   @override

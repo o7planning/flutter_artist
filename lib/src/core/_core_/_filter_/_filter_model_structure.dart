@@ -16,6 +16,7 @@ class FilterModelStructure {
 
   //
   final Map<String, CriterionDef> __allCriterionDefMap = {};
+  final Map<String, CriterionDef> __allFieldDefMap = {};
   final Map<String, SimpleCriterionDef> __simpleCriterionDefMap = {};
   final Map<String, MultiOptCriterionDef> __multiOptCriterionDefMap = {};
 
@@ -176,8 +177,15 @@ class FilterModelStructure {
         criterionBaseName: simpleCriterionDef.criterionBaseName,
       );
     }
+    if (__allFieldDefMap.containsKey(simpleCriterionDef.fieldName)) {
+      throw DuplicateCriterionFieldDefError(
+        criterionBaseName: simpleCriterionDef.criterionBaseName,
+        fieldName: simpleCriterionDef.fieldName,
+      );
+    }
     __allCriterionDefMap[simpleCriterionDef.criterionBaseName] =
         simpleCriterionDef;
+    __allFieldDefMap[simpleCriterionDef.fieldName] = simpleCriterionDef;
     __simpleCriterionDefMap[simpleCriterionDef.criterionBaseName] =
         simpleCriterionDef;
   }
@@ -194,10 +202,17 @@ class FilterModelStructure {
         criterionBaseName: multiOptCriterionDef.criterionBaseName,
       );
     }
+    if (__allFieldDefMap.containsKey(multiOptCriterionDef.fieldName)) {
+      throw DuplicateCriterionFieldDefError(
+        criterionBaseName: multiOptCriterionDef.criterionBaseName,
+        fieldName: multiOptCriterionDef.fieldName,
+      );
+    }
     // Init LAZY Property.
     multiOptCriterionDef.parent = parent;
     __allCriterionDefMap[multiOptCriterionDef.criterionBaseName] =
         multiOptCriterionDef;
+    __allFieldDefMap[multiOptCriterionDef.fieldName] = multiOptCriterionDef;
     __multiOptCriterionDefMap[multiOptCriterionDef.criterionBaseName] =
         multiOptCriterionDef;
     //
@@ -228,6 +243,8 @@ class FilterModelStructure {
           criterionNameTilde: conditionDef.criterionNameTilde,
         );
       }
+      // LAZY Property:
+      conditionDef.criterionDef = criterionDef;
       criterionDef._suffixes.add(conditionDef.suffix);
       //
       if (criterionDef is MultiOptCriterionDef) {
@@ -245,6 +262,7 @@ class FilterModelStructure {
         structure: this,
         criterionName: conditionDef.criterionName,
         criterionNameTilde: conditionDef.criterionNameTilde,
+        criterionDef: conditionDef.criterionDef,
         operator: conditionDef.operator,
         supportedOperators: conditionDef._supportedOperators,
       );
@@ -550,11 +568,11 @@ class FilterModelStructure {
       FilterCriterionModel? criterion =
           _allCriterionModelMapX[criterionNameTilde];
       if (criterion == null) {
-        print("""\n
-            ****************************************************************************************************
-            *** WARNING ***: You should declare criterion '$criterionNameTilde' explicitly in ${getClassName(filterModel)}.
-            ****************************************************************************************************
-            """);
+        // print("""\n
+        //     ****************************************************************************************************
+        //     *** WARNING ***: You should declare criterion '$criterionNameTilde' explicitly in ${getClassName(filterModel)}.
+        //     ****************************************************************************************************
+        //     """);
         //
         // _createAndAddNewSimpleCriterion(
         //   criterionNameTilde: criterionNameTilde,

@@ -422,12 +422,13 @@ class _FlutterArtist extends _Core {
     return shelf != null;
   }
 
-  Future<void> showLogViewerDialog() async {
+  Future<void> showLogViewerDialog({int? logEntryId}) async {
     BuildContext context = coreFeaturesAdapter.getCurrentContext();
     //
     await LogViewerDialog.open(
       context: context,
       logger: logger,
+      logEntryId: logEntryId,
     );
   }
 
@@ -466,5 +467,17 @@ class _FlutterArtist extends _Core {
   bool debugCanShowUiComponentDialog() {
     Shelf? shelf = storage._recentShelf();
     return shelf != null;
+  }
+
+  void showDebugMenu({
+    required BuildContext context,
+    RelativeRect? position,
+    PopupMenuPositionBuilder? positionBuilder,
+  }) {
+    DebugMenuBuilder.build().show(
+      context: context,
+      position: position,
+      positionBuilder: positionBuilder,
+    );
   }
 }

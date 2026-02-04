@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/flutter_artist.dart';
-import 'package:flutter_artist/src/debug/filter/widgets/_criterionable_view.dart';
+import 'package:flutter_artist/src/debug/filter/widgets/_filter_criterion_view.dart';
 import 'package:flutter_artist/src/debug/widgets/_json_view.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_left_right_container/left_right_container.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
+import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
+import '../../core/utils/_class_utils.dart';
 import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';
 
@@ -27,14 +28,14 @@ class FilterCriteriaView extends StatefulWidget {
 }
 
 class _FilterCriteriaViewState extends State<FilterCriteriaView> {
-  Criterionable<Object>? _selectedCriterionable;
+  FilterCriterion<Object>? _selectedFilterCriterion;
   FilterCriteria? filterCriteria;
 
   @override
   void initState() {
     super.initState();
     filterCriteria = widget.filterModel.filterCriteria;
-    _selectedCriterionable = filterCriteria?.criterionableList.firstOrNull;
+    _selectedFilterCriterion = filterCriteria?.filterCriterionList.firstOrNull;
   }
 
   @override
@@ -72,7 +73,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
     );
   }
 
-  Widget _buildLeftRightCriterionable() {
+  Widget _buildLeftRightFilterCriterion() {
     return LeftRightContainer(
       startPadding: EdgeInsets.all(5),
       endPadding: EdgeInsets.all(5),
@@ -81,26 +82,26 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
       minSideWidth: 240,
       fixedSide: FixedSide.end,
       start: ListView(
-        children: (filterCriteria?.criterionableList ?? [])
+        children: (filterCriteria?.filterCriterionList ?? [])
             .map(
-              (c) => CriterionableView(
-                criterionable: c,
-                selected: c.criterionBaseName ==
-                    _selectedCriterionable?.criterionBaseName,
-                onPressed: (Criterionable<Object> criterionable) {
+              (c) => FilterCriterionView(
+                filterCriterion: c,
+                selected: c.filterCriterionName ==
+                    _selectedFilterCriterion?.filterCriterionName,
+                onPressed: (FilterCriterion<Object> filterCriterion) {
                   setState(() {
-                    _selectedCriterionable = criterionable;
+                    _selectedFilterCriterion = filterCriterion;
                   });
                 },
               ),
             )
             .toList(),
       ),
-      end: _buildCriterionableValue(),
+      end: _buildFilterCriterionValue(),
     );
   }
 
-  Widget _buildCriterionableValue() {
+  Widget _buildFilterCriterionValue() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,15 +112,15 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         ),
         SizedBox(height: 5),
         Text(
-          _selectedCriterionable?.criterionBaseName ?? "-",
+          _selectedFilterCriterion?.filterCriterionName ?? "-",
           style: TextStyle(fontSize: 13),
         ),
         SizedBox(height: 10),
         IconLabelSelectableText(
           label: "Data Type: ",
-          text: _selectedCriterionable == null
+          text: _selectedFilterCriterion == null
               ? "-"
-              : "<${_selectedCriterionable!.baseDataTypeName}>",
+              : "<${_selectedFilterCriterion!.baseDataTypeName}>",
           labelStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
           textStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
         ),
@@ -130,7 +131,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         ),
         SizedBox(height: 5),
         Text(
-          _selectedCriterionable?.jsonCriterionName ?? "-",
+          _selectedFilterCriterion?.filterFieldName ?? "-",
           style: TextStyle(fontSize: 13),
         ),
         SizedBox(height: 15),
@@ -171,7 +172,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
           color: Colors.black,
           size: 16,
         ),
-        content: _buildLeftRightCriterionable(),
+        content: _buildLeftRightFilterCriterion(),
       ),
     );
     tabs.add(
@@ -199,6 +200,6 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
   }
 
   Widget _buildJsonContent() {
-    return JsonView(json: filterCriteria?.jsonCriteria ?? "");
+    return JsonView(json: filterCriteria?.fieldBasedJSON ?? "");
   }
 }

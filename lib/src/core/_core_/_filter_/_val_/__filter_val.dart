@@ -4,26 +4,26 @@ part of '../../core.dart';
 /// [FilterConditionGroupVal], [FilterConditionVal].
 ///
 abstract interface class IConditionVal {
-  Map<String, dynamic> _toMapData();
+  Map<String, dynamic> _toCriterionBasedMapData();
 
-  Map<String, dynamic> _toMapDataForBackend({
-    required Map<String, Criterionable> criterionableMap,
-  });
+  Map<String, dynamic> _toFieldBasedMapData({required bool throwIfError});
 }
 
 class FilterConditionVal implements IConditionVal {
   final String criterionName;
+  final CriterionDef criterionDef;
   final CriterionOperator operator;
   final dynamic value;
 
   FilterConditionVal({
     required this.criterionName,
+    required this.criterionDef,
     required this.operator,
     required this.value,
   });
 
   @override
-  Map<String, dynamic> _toMapData() {
+  Map<String, dynamic> _toCriterionBasedMapData() {
     return {
       "criterionName": criterionName,
       "value": value,
@@ -32,24 +32,20 @@ class FilterConditionVal implements IConditionVal {
   }
 
   @override
-  Map<String, dynamic> _toMapDataForBackend({
-    required Map<String, Criterionable> criterionableMap,
-  }) {
-    Criterionable? cri = criterionableMap[criterionName];
-    dynamic simpleValue;
-    if (value is List) {
-      simpleValue = [];
-      for (dynamic val in value) {
-        var simValue = cri?._convert(val);
-        simpleValue.add(simValue);
+  Map<String, dynamic> _toFieldBasedMapData({required bool throwIfError}) {
+    dynamic fieldValue;
+    try {
+      fieldValue = criterionDef._convert(value);
+    } catch (e) {
+      if (throwIfError) {
+        rethrow;
       }
-    } else {
-      simpleValue = cri?._convert(value);
+      fieldValue = "The toFieldValue() method called with error: $e";
     }
     return {
-      "field": cri?.jsonCriterionName ?? criterionName,
+      "field": criterionDef.fieldName,
       "operator": operator.text,
-      "value": simpleValue,
+      "value": fieldValue,
     };
   }
 }
@@ -71,38 +67,36 @@ class FilterConditionGroupVal implements IConditionVal {
         conditions = const [];
 
   @override
-  Map<String, dynamic> _toMapData() {
+  Map<String, dynamic> _toCriterionBasedMapData() {
     return {
       "connector": connector.text,
-      "conditions": conditions.map((m) => m._toMapData()).toList(),
+      "conditions":
+          conditions.map((m) => m._toCriterionBasedMapData()).toList(),
     };
   }
 
   @override
-  Map<String, dynamic> _toMapDataForBackend({
-    required Map<String, Criterionable> criterionableMap,
-  }) {
+  Map<String, dynamic> _toFieldBasedMapData({required bool throwIfError}) {
     return {
       "connector": connector.text,
       "conditions": conditions
           .map(
-              (m) => m._toMapDataForBackend(criterionableMap: criterionableMap))
+            (m) => m._toFieldBasedMapData(
+              throwIfError: throwIfError,
+            ),
+          )
           .toList(),
     };
   }
 
-  String toJson({
-    Map<String, Criterionable>? criterionableMap,
-  }) {
-    final Map<String, dynamic> map = _toMapData();
+  String toCriterionBasedJson() {
+    final Map<String, dynamic> map = _toCriterionBasedMapData();
     return MapUtils.toJson(map: map);
   }
 
-  String toJsonForBackend({
-    required Map<String, Criterionable> criterionableMap,
-  }) {
-    final Map<String, dynamic> map = _toMapDataForBackend(
-      criterionableMap: criterionableMap,
+  String toFieldBasedJson({required bool throwIfError}) {
+    final Map<String, dynamic> map = _toFieldBasedMapData(
+      throwIfError: throwIfError,
     );
     return MapUtils.toJson(map: map);
   }

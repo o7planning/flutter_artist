@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/flutter_artist.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
+import '../../core/_core_/core.dart';
+import '../../core/utils/_class_utils.dart';
+import '../state_view/_debug_scalar_state_view.dart';
+import '../state_view/options/_debug_scalar_options.dart';
 import '../widgets/_html_info_view.dart';
 
 class DebugScalarCriteriaView extends StatelessWidget {

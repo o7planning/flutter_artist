@@ -123,7 +123,7 @@ class FaIconConstants {
   static const IconData formModelNoneIconData =
       cupertino.CupertinoIcons.capsule;
 
-  static const IconData conditionGroupIconData = Icons.folder_shared;
+  static const IconData conditionGroupIconData = Icons.folder_shared_outlined;
 
   static const IconData filterCriteriaGroupIconData = Icons.group_work_rounded;
 
