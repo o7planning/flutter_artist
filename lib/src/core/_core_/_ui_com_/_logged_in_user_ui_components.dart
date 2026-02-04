@@ -21,7 +21,7 @@ class _LoggedInUserUIComponents extends _UIComponents {
 
   void updateAllUIComponents() {
     for (_RefreshableWidgetState widgetState
-    in _loggedInUserWidgetStates.keys) {
+        in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

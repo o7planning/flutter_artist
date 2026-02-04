@@ -140,6 +140,10 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
             parent: parent,
           );
   }
+
+  void printDebugSuffixes() {
+    print("criterionBaseName: $criterionBaseName --> $_suffixes");
+  }
 }
 
 class CalculatedCriterionDef<V extends Object> extends CriterionDef<V> {
@@ -171,7 +175,7 @@ class CriterionTilde {
   static const String symbol = "~";
   final String criterionNameTilde;
   late final String criterionName;
-  late final String? suffix;
+  late final String suffix;
 
   CriterionTilde.parse({required this.criterionNameTilde}) {
     List<String> ss = criterionNameTilde.split(symbol);
