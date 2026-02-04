@@ -3,7 +3,6 @@ import 'package:flutter_artist/src/debug/menu/_debug_menu_builder.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/icon/icon_constants.dart';
 
 // Docs: [14857] - Debug Menu.
 class DebugMenu extends StatefulWidget {

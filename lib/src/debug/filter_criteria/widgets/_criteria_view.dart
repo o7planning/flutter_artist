@@ -49,11 +49,18 @@ class FilterCriterionView extends StatelessWidget {
               text: criterion.criterionNameTilde,
               textStyle: TextStyle(color: Colors.indigo),
             ),
-            subtitle: IconLabelText(
-              label: getClassNameWithoutGenerics(criterion),
-              text: "<${criterion.dataType.toString()}>",
-              labelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              textStyle: TextStyle(fontSize: 12, color: Colors.blue),
+            subtitle: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconLabelText(
+                  label: getClassNameWithoutGenerics(criterion),
+                  text: "<${criterion.dataType.toString()}>",
+                  labelStyle:
+                      TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  textStyle: TextStyle(fontSize: 12, color: Colors.blue),
+                ),
+              ],
             ),
           ),
           Divider(),

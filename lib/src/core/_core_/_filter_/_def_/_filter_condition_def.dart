@@ -12,11 +12,13 @@ abstract interface class ConditionDef {
 
   factory ConditionDef.condition({
     required String criterionNameTilde,
+    String? parentModelSuffix,
     required CriterionOperator operator,
     List<CriterionOperator>? supportedOperators,
   }) {
     return ConditionDefImpl._(
       criterionNameTilde: criterionNameTilde,
+      parentModelSuffix: parentModelSuffix,
       operator: operator,
       supportedOperators: supportedOperators,
     );
@@ -41,6 +43,7 @@ class ConditionDefImpl implements ConditionDef {
   @override
   FilterModelStructure get structure => _structure;
 
+  late final String parentModelSuffix;
   final CriterionTilde _criterionX;
   final CriterionOperator operator;
   late final List<CriterionOperator> _supportedOperators;
@@ -50,7 +53,7 @@ class ConditionDefImpl implements ConditionDef {
 
   String get criterionNameTilde => _criterionX.criterionNameTilde;
 
-  String get suffix => _criterionX.suffix!;
+  String get suffix => _criterionX.suffix;
 
   late final ConditionGroupDefImpl? __group;
   late final CriterionDef criterionDef;
@@ -63,10 +66,13 @@ class ConditionDefImpl implements ConditionDef {
 
   ConditionDefImpl._({
     required String criterionNameTilde,
+    String? parentModelSuffix,
     required this.operator,
     List<CriterionOperator>? supportedOperators,
-  }) : _criterionX =
-            CriterionTilde.parse(criterionNameTilde: criterionNameTilde) {
+  }) : _criterionX = CriterionTilde.parse(
+          criterionNameTilde: criterionNameTilde,
+        ) {
+    this.parentModelSuffix = parentModelSuffix ?? _criterionX.suffix;
     _supportedOperators = supportedOperators == null
         ? [operator]
         : {...supportedOperators, operator}.toList();
