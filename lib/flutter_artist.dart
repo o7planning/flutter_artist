@@ -40,6 +40,7 @@ export 'src/core/enums/_current_item_setting_type.dart';
 export 'src/core/enums/_data_mode.dart';
 export 'src/core/enums/_data_state.dart';
 export 'src/core/enums/_debug_cat.dart';
+export 'src/core/enums/_default_setting_policy.dart';
 export 'src/core/enums/_filter_activity_type.dart';
 export 'src/core/enums/_filter_criterion_operator.dart';
 export 'src/core/enums/_force_type.dart';

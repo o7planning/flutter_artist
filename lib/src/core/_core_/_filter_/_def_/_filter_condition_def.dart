@@ -15,12 +15,15 @@ abstract interface class ConditionDef {
     String? parentModelSuffix,
     required CriterionOperator operator,
     List<CriterionOperator>? supportedOperators,
+    DefaultSettingPolicy defaultSettingPolicy =
+        DefaultSettingPolicy.onInitialOnly,
   }) {
     return ConditionDefImpl._(
       criterionNameTilde: criterionNameTilde,
       parentModelSuffix: parentModelSuffix,
       operator: operator,
       supportedOperators: supportedOperators,
+      defaultSettingPolicy: defaultSettingPolicy,
     );
   }
 
@@ -44,6 +47,7 @@ class ConditionDefImpl implements ConditionDef {
   FilterModelStructure get structure => _structure;
 
   late final String parentModelSuffix;
+  final DefaultSettingPolicy defaultSettingPolicy;
   final CriterionTilde _criterionX;
   final CriterionOperator operator;
   late final List<CriterionOperator> _supportedOperators;
@@ -69,6 +73,7 @@ class ConditionDefImpl implements ConditionDef {
     String? parentModelSuffix,
     required this.operator,
     List<CriterionOperator>? supportedOperators,
+    required this.defaultSettingPolicy,
   }) : _criterionX = CriterionTilde.parse(
           criterionNameTilde: criterionNameTilde,
         ) {
