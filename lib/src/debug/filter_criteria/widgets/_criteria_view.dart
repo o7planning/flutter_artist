@@ -72,6 +72,27 @@ class FilterCriterionView extends StatelessWidget {
                         TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     textStyle: TextStyle(fontSize: 12, color: Colors.blue),
                   ),
+                if (criterion is MultiOptFilterCriterionModel)
+                  SizedBox(height: 3),
+                if (criterion is MultiOptFilterCriterionModel)
+                  IconLabelText(
+                    label: "Parent Match Suffix: ",
+                    text: (criterion as MultiOptFilterCriterionModel)
+                            .parentMatchSuffix ??
+                        "null",
+                    labelStyle: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textStyle: TextStyle(
+                      fontSize: 12,
+                      color: (criterion as MultiOptFilterCriterionModel)
+                                  .parentMatchSuffix ==
+                              null
+                          ? Colors.grey
+                          : Colors.blue,
+                    ),
+                  ),
               ],
             ),
           ),

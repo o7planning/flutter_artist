@@ -368,6 +368,13 @@ abstract class FilterModel<
           "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
+    // parentMatchSuffix is not valid:
+    on TildeSuffixError catch (e) {
+      String message =
+          "Invalid parentMatchSuffix '${e.tildeSuffix}' (The correct examples: '~', '~1', '~min').\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+      throw _createFatalAppError(message);
+    }
     // criterionBaseName not found:
     on FilterCriterionNotFoundError catch (e) {
       String message =

@@ -46,7 +46,10 @@ class ConditionDefImpl implements ConditionDef {
   @override
   FilterModelStructure get structure => _structure;
 
+  // Example: "~min", "~max".
   late final String parentMatchSuffix;
+  late final String _parentSuffixWithoutTilde;
+
   final DefaultSettingPolicy defaultSettingPolicy;
   final NameTilde _nameTilde;
   final CriterionOperator operator;
@@ -77,7 +80,14 @@ class ConditionDefImpl implements ConditionDef {
   }) : _nameTilde = NameTilde.parse(
           criterionNameTilde: criterionNameTilde,
         ) {
-    this.parentMatchSuffix = parentMatchSuffix ?? _nameTilde.afterTildeSuffix;
+    final String tildeSuffix = parentMatchSuffix ?? _nameTilde.tildeSuffix;
+    // May throw error:
+    final tildeObj = TildeSuffix.parse(tildeSuffix: tildeSuffix);
+    // LAZY Final Property:
+    this.parentMatchSuffix = tildeObj.tildeSuffix;
+    // LAZY Final Property:
+    _parentSuffixWithoutTilde = tildeObj.suffixWithoutTilde;
+    //
     _supportedOperators = supportedOperators == null
         ? [operator]
         : {...supportedOperators, operator}.toList();
