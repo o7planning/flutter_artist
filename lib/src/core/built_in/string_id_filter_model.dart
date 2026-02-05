@@ -21,7 +21,7 @@ class StringIdFilterModel
       conditionConnector: ConditionConnector.and,
       conditionDefs: [
         ConditionDef.condition(
-          criterionNameTilde: "id${CriterionTilde.symbol}",
+          criterionNameTilde: "id${NameTilde.symbol}",
           operator: CriterionOperator.equalTo,
         ),
       ],
@@ -56,7 +56,7 @@ class StringIdFilterModel
     required StringIdFilterInput filterInput,
   }) {
     return {
-      "id${CriterionTilde.symbol}": SimpleValueWrap(filterInput.idValue),
+      "id${NameTilde.symbol}": SimpleValueWrap(filterInput.idValue),
     };
   }
 
@@ -74,7 +74,7 @@ class StringIdFilterModel
   @override
   Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
     return {
-      "id${CriterionTilde.symbol}": _idValue,
+      "id${NameTilde.symbol}": _idValue,
     };
   }
 
@@ -83,7 +83,7 @@ class StringIdFilterModel
     required Map<String, dynamic> criteriaMap,
   }) {
     return StringIdFilterCriteria(
-      idValue: criteriaMap["id${CriterionTilde.symbol}"],
+      idValue: criteriaMap["id${NameTilde.symbol}"],
     );
   }
 }

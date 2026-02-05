@@ -23,7 +23,7 @@ abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
       List.unmodifiable(_children);
 
   late final DefaultSettingPolicy defaultSettingPolicy;
-  late final String? parentModelSuffix;
+  late final String? parentMatchSuffix;
 
   MultiOptFilterCriterionModel._({
     required this.parent,

@@ -22,7 +22,7 @@ class SearchTextFilterModel
       conditionConnector: ConditionConnector.and,
       conditionDefs: [
         ConditionDef.condition(
-          criterionNameTilde: "searchText${CriterionTilde.symbol}",
+          criterionNameTilde: "searchText${NameTilde.symbol}",
           operator: CriterionOperator.containsIgnoreCase,
         ),
       ],
@@ -57,7 +57,7 @@ class SearchTextFilterModel
     required SearchTextFilterInput filterInput,
   }) {
     return {
-      "searchText${CriterionTilde.symbol}":
+      "searchText${NameTilde.symbol}":
           SimpleValueWrap(filterInput.searchText),
     };
   }
@@ -76,7 +76,7 @@ class SearchTextFilterModel
   @override
   Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
     return {
-      "searchText${CriterionTilde.symbol}": _searchText,
+      "searchText${NameTilde.symbol}": _searchText,
     };
   }
 
@@ -85,7 +85,7 @@ class SearchTextFilterModel
     required Map<String, dynamic> criteriaMap,
   }) {
     return SearchTextFilterCriteria(
-      searchText: criteriaMap["searchText${CriterionTilde.symbol}"],
+      searchText: criteriaMap["searchText${NameTilde.symbol}"],
     );
   }
 }

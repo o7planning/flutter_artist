@@ -12,7 +12,7 @@ abstract interface class ConditionDef {
 
   factory ConditionDef.condition({
     required String criterionNameTilde,
-    String? parentModelSuffix,
+    String? parentMatchSuffix,
     required CriterionOperator operator,
     List<CriterionOperator>? supportedOperators,
     DefaultSettingPolicy defaultSettingPolicy =
@@ -20,7 +20,7 @@ abstract interface class ConditionDef {
   }) {
     return ConditionDefImpl._(
       criterionNameTilde: criterionNameTilde,
-      parentModelSuffix: parentModelSuffix,
+      parentMatchSuffix: parentMatchSuffix,
       operator: operator,
       supportedOperators: supportedOperators,
       defaultSettingPolicy: defaultSettingPolicy,
@@ -46,18 +46,18 @@ class ConditionDefImpl implements ConditionDef {
   @override
   FilterModelStructure get structure => _structure;
 
-  late final String parentModelSuffix;
+  late final String parentMatchSuffix;
   final DefaultSettingPolicy defaultSettingPolicy;
-  final CriterionTilde _criterionX;
+  final NameTilde _nameTilde;
   final CriterionOperator operator;
   late final List<CriterionOperator> _supportedOperators;
 
   //
-  String get criterionName => _criterionX.criterionName;
+  String get criterionName => _nameTilde.criterionName;
 
-  String get criterionNameTilde => _criterionX.criterionNameTilde;
+  String get criterionNameTilde => _nameTilde.criterionNameTilde;
 
-  String get suffix => _criterionX.suffix;
+  String get afterTildeSuffix => _nameTilde.afterTildeSuffix;
 
   late final ConditionGroupDefImpl? __group;
   late final CriterionDef criterionDef;
@@ -70,14 +70,14 @@ class ConditionDefImpl implements ConditionDef {
 
   ConditionDefImpl._({
     required String criterionNameTilde,
-    String? parentModelSuffix,
+    String? parentMatchSuffix,
     required this.operator,
     List<CriterionOperator>? supportedOperators,
     required this.defaultSettingPolicy,
-  }) : _criterionX = CriterionTilde.parse(
+  }) : _nameTilde = NameTilde.parse(
           criterionNameTilde: criterionNameTilde,
         ) {
-    this.parentModelSuffix = parentModelSuffix ?? _criterionX.suffix;
+    this.parentMatchSuffix = parentMatchSuffix ?? _nameTilde.afterTildeSuffix;
     _supportedOperators = supportedOperators == null
         ? [operator]
         : {...supportedOperators, operator}.toList();
@@ -108,7 +108,7 @@ class ConditionGroupDefImpl implements ConditionDef {
     final Map<String, ConditionDef> map = {};
     for (ConditionDef def in conditions) {
       if (def is ConditionDefImpl) {
-        final nameTilde = def._criterionX.criterionNameTilde;
+        final nameTilde = def._nameTilde.criterionNameTilde;
         if (map.containsKey(nameTilde)) {
           throw DuplicateFilterConditionDefError(
             criterionNameTilde: nameTilde,

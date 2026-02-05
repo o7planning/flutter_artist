@@ -966,7 +966,7 @@ abstract class FilterModel<
           selectionType: selectionType,
         );
       } else {
-        final parentModelSuffix = multiOptCriterion.parentModelSuffix;
+        final parentMatchSuffix = multiOptCriterion.parentMatchSuffix;
         final defaultSettingPolicy = multiOptCriterion.defaultSettingPolicy;
         if ((!__initiatedAtLeastOnce &&
                 defaultSettingPolicy == DefaultSettingPolicy.onInitialOnly) ||

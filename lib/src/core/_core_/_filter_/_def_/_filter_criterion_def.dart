@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
 abstract class CriterionDef<V extends Object> {
-  final Set<String> _suffixes = {};
+  final Set<String> _afterTildeSuffixes = {};
 
   final String criterionBaseName;
   final String fieldName;
@@ -142,7 +142,7 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
   }
 
   void printDebugSuffixes() {
-    print("criterionBaseName: $criterionBaseName --> $_suffixes");
+    print("criterionBaseName: $criterionBaseName --> $_afterTildeSuffixes");
   }
 }
 
@@ -171,13 +171,13 @@ class CalculatedCriterionDef<V extends Object> extends CriterionDef<V> {
   }
 }
 
-class CriterionTilde {
+class NameTilde {
   static const String symbol = "~";
   final String criterionNameTilde;
   late final String criterionName;
-  late final String suffix;
+  late final String afterTildeSuffix;
 
-  CriterionTilde.parse({required this.criterionNameTilde}) {
+  NameTilde.parse({required this.criterionNameTilde}) {
     List<String> ss = criterionNameTilde.split(symbol);
     if (ss.length != 2) {
       throw CriterionNameTildeError(criterionNameTilde: criterionNameTilde);
@@ -191,14 +191,14 @@ class CriterionTilde {
       throw CriterionNameTildeError(criterionNameTilde: criterionNameTilde);
     }
     criterionName = cn;
-    suffix = sf;
+    afterTildeSuffix = sf;
   }
 
   static String getNameTilde({
     required String baseName,
-    required String suffix,
+    required String afterTildeSuffix,
   }) {
-    return "$baseName$symbol$suffix";
+    return "$baseName$symbol$afterTildeSuffix";
   }
 }
 
@@ -206,7 +206,7 @@ class CriterionBaseName {
   final String criterionBaseName;
 
   CriterionBaseName.parse({required this.criterionBaseName}) {
-    List<String> ss = criterionBaseName.split(CriterionTilde.symbol);
+    List<String> ss = criterionBaseName.split(NameTilde.symbol);
     if (ss.length != 1) {
       throw CriterionBaseNameError(criterionBaseName: criterionBaseName);
     }
@@ -221,7 +221,7 @@ class FieldName {
   final String fieldName;
 
   FieldName.parse({required this.fieldName}) {
-    List<String> ss = fieldName.split(CriterionTilde.symbol);
+    List<String> ss = fieldName.split(NameTilde.symbol);
     if (ss.length != 1) {
       throw FilterFieldNameError(fieldName: fieldName);
     }

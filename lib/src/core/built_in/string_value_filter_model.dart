@@ -22,7 +22,7 @@ class StringValueFilterModel
       conditionConnector: ConditionConnector.and,
       conditionDefs: [
         ConditionDef.condition(
-          criterionNameTilde: "string${CriterionTilde.symbol}",
+          criterionNameTilde: "string${NameTilde.symbol}",
           operator: CriterionOperator.equalTo,
         ),
       ],
@@ -57,7 +57,7 @@ class StringValueFilterModel
     required StringValueFilterInput filterInput,
   }) {
     return {
-      "string${CriterionTilde.symbol}":
+      "string${NameTilde.symbol}":
           SimpleValueWrap(filterInput.stringValue),
     };
   }
@@ -76,7 +76,7 @@ class StringValueFilterModel
   @override
   Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
     return {
-      "string${CriterionTilde.symbol}": _stringValue,
+      "string${NameTilde.symbol}": _stringValue,
     };
   }
 
@@ -85,7 +85,7 @@ class StringValueFilterModel
     required Map<String, dynamic> criteriaMap,
   }) {
     return StringValueFilterCriteria(
-      stringValue: criteriaMap["string${CriterionTilde.symbol}"],
+      stringValue: criteriaMap["string${NameTilde.symbol}"],
     );
   }
 }
