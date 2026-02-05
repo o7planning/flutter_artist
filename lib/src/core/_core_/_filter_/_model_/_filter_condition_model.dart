@@ -24,7 +24,6 @@ class ConditionModelImpl extends ConditionModel {
       List.unmodifiable(_supportedOperators);
 
   FilterCriterionModel get filterCriterionModel {
-    print("^^^^^^^^^^^^^^^^^^ criterionNameTilde: $criterionNameTilde");
     return structure._allCriterionModelMapX[criterionNameTilde]!;
   }
 

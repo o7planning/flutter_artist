@@ -966,7 +966,11 @@ abstract class FilterModel<
           selectionType: selectionType,
         );
       } else {
-        if (!__initiatedAtLeastOnce) {
+        final parentModelSuffix = multiOptCriterion.parentModelSuffix;
+        final defaultSettingPolicy = multiOptCriterion.defaultSettingPolicy;
+        if ((!__initiatedAtLeastOnce &&
+                defaultSettingPolicy == DefaultSettingPolicy.onInitialOnly) ||
+            defaultSettingPolicy == DefaultSettingPolicy.onEveryLoad) {
           masterFlowItem._addLineFlowItem(
             codeId: "#82460",
             shortDesc:
@@ -1415,7 +1419,7 @@ abstract class FilterModel<
     required String multiOptCriterionNameTilde,
   }) {
     return _filterModelStructure._findMultiOptFilterCriterion(
-      multiOptCriterionNameTilde,
+      multiOptCriterionNameTilde: multiOptCriterionNameTilde,
     );
   }
 

@@ -1,0 +1,4 @@
+enum DefaultSettingPolicy {
+  onInitialOnly,
+  onEveryLoad;
+}

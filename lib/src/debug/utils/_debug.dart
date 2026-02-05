@@ -40,6 +40,8 @@ String __debugObjHtml(Object? obj, bool asHtml) {
     return "${b1}${getClassName(obj)}('${obj.propName}')${b2}";
   } else if (obj is FilterCriterionModel) {
     return "${b1}${getClassName(obj)}('${obj.criterionNameTilde}')${b2}";
+  } else if (obj is ListXData) {
+    return "${b1}${getClassName(obj)}(${obj.items.length} items)${b2}";
   } else if (obj is XData) {
     return "${b1}${getClassName(obj)}${b2}";
   } else if (obj is OptValueWrap) {
@@ -64,6 +66,14 @@ String __debugObjHtml(Object? obj, bool asHtml) {
     return "${b1}${getClassName(obj)}(${obj.languageCode}, ${obj.countryCode})${b2}";
   } else if (obj is Type) {
     return "${b1}$obj${b2}";
+  } else if (obj is Block) {
+    return "${b1}${getClassNameWithoutGenerics(obj)}${b2}";
+  } else if (obj is Scalar) {
+    return "${b1}${getClassNameWithoutGenerics(obj)}${b2}";
+  } else if (obj is FilterModel) {
+    return "${b1}${getClassNameWithoutGenerics(obj)}${b2}";
+  } else if (obj is FilterCriteria) {
+    return "${b1}${getClassNameWithoutGenerics(obj)}${b2}";
   }
   return "${b1}${getClassNameWithoutGenerics(obj)}${b2}";
 }
