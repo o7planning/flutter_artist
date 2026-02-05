@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
 ///
-/// [ConditionDefImpl], [ConditionGroupDefImpl],
+/// [ConditionDefImpl], [ConditionGroupDefImpl].
 ///
 abstract interface class ConditionDef {
   FilterModelStructure get structure;
@@ -12,18 +12,13 @@ abstract interface class ConditionDef {
 
   factory ConditionDef.condition({
     required String criterionNameTilde,
-    String? parentMatchSuffix,
     required CriterionOperator operator,
     List<CriterionOperator>? supportedOperators,
-    DefaultSettingPolicy defaultSettingPolicy =
-        DefaultSettingPolicy.onInitialOnly,
   }) {
     return ConditionDefImpl._(
       criterionNameTilde: criterionNameTilde,
-      parentMatchSuffix: parentMatchSuffix,
       operator: operator,
       supportedOperators: supportedOperators,
-      defaultSettingPolicy: defaultSettingPolicy,
     );
   }
 
@@ -46,21 +41,18 @@ class ConditionDefImpl implements ConditionDef {
   @override
   FilterModelStructure get structure => _structure;
 
-  // Example: "~min", "~max".
-  late final String parentMatchSuffix;
-  late final String _parentSuffixWithoutTilde;
-
-  final DefaultSettingPolicy defaultSettingPolicy;
-  final NameTilde _nameTilde;
+  final NameTilde _tildeObj;
   final CriterionOperator operator;
   late final List<CriterionOperator> _supportedOperators;
 
   //
-  String get criterionName => _nameTilde.criterionName;
+  String get criterionName => _tildeObj.criterionName;
 
-  String get criterionNameTilde => _nameTilde.criterionNameTilde;
+  String get criterionNameTilde => _tildeObj.criterionNameTilde;
 
-  String get afterTildeSuffix => _nameTilde.afterTildeSuffix;
+  String get afterTildeSuffix => _tildeObj.afterTildeSuffix;
+
+  String get tildeSuffix => _tildeObj.tildeSuffix;
 
   late final ConditionGroupDefImpl? __group;
   late final CriterionDef criterionDef;
@@ -73,21 +65,9 @@ class ConditionDefImpl implements ConditionDef {
 
   ConditionDefImpl._({
     required String criterionNameTilde,
-    String? parentMatchSuffix,
     required this.operator,
     List<CriterionOperator>? supportedOperators,
-    required this.defaultSettingPolicy,
-  }) : _nameTilde = NameTilde.parse(
-          criterionNameTilde: criterionNameTilde,
-        ) {
-    final String tildeSuffix = parentMatchSuffix ?? _nameTilde.tildeSuffix;
-    // May throw error:
-    final tildeObj = TildeSuffix.parse(tildeSuffix: tildeSuffix);
-    // LAZY Final Property:
-    this.parentMatchSuffix = tildeObj.tildeSuffix;
-    // LAZY Final Property:
-    _parentSuffixWithoutTilde = tildeObj.suffixWithoutTilde;
-    //
+  }) : _tildeObj = NameTilde.parse(criterionNameTilde: criterionNameTilde) {
     _supportedOperators = supportedOperators == null
         ? [operator]
         : {...supportedOperators, operator}.toList();
@@ -118,7 +98,7 @@ class ConditionGroupDefImpl implements ConditionDef {
     final Map<String, ConditionDef> map = {};
     for (ConditionDef def in conditions) {
       if (def is ConditionDefImpl) {
-        final nameTilde = def._nameTilde.criterionNameTilde;
+        final nameTilde = def._tildeObj.criterionNameTilde;
         if (map.containsKey(nameTilde)) {
           throw DuplicateFilterConditionDefError(
             criterionNameTilde: nameTilde,

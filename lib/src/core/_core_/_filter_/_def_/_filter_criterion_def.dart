@@ -1,7 +1,10 @@
 part of '../../core.dart';
 
+///
+/// [SimpleCriterionDef], [MultiOptCriterionDef]
+///
 abstract class CriterionDef<V extends Object> {
-  final Set<String> _afterTildeSuffixes = {};
+  final Set<String> _tildeSuffixes = {};
 
   final String criterionBaseName;
   final String fieldName;
@@ -75,25 +78,69 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
 
   final SelectionType selectionType;
 
+  final List<CriterionTildeDef> criterionTildeDefs;
+
+  // String tildeSuffix -> CriterionTildeDef.
+  final Map<String, CriterionTildeDef> __criterionTildeDefMap = {};
+
   final List<MultiOptCriterionDef> _children;
 
   List<MultiOptCriterionDef> get children => List.unmodifiable(_children);
+
+  CriterionTildeDef findCriterionTildeDef({
+    required String tildeSuffix,
+  }) {
+    CriterionTildeDef? def = __criterionTildeDefMap[tildeSuffix];
+    if (def == null) {
+      def = CriterionTildeDef(suffix: tildeSuffix);
+      __criterionTildeDefMap[tildeSuffix] = def;
+    }
+    return def;
+  }
 
   MultiOptCriterionDef._({
     required super.criterionBaseName,
     required super.fieldName,
     required super.toFieldValue,
     required super.description,
+    required this.criterionTildeDefs,
     required List<MultiOptCriterionDef> children,
     required this.selectionType,
   })  : _children = children,
-        super._();
+        super._() {
+    for (CriterionTildeDef def in criterionTildeDefs) {
+      bool value1 = NameUtils.isValidTildeSuffix(def.suffix);
+      if (!value1) {
+        throw CriterionTildeDefInvalidSuffixError(
+          tildeSuffix: def.suffix,
+          criterionBaseName: criterionBaseName,
+        );
+      }
+      if (def.parentMatchSuffix != null) {
+        bool value2 = NameUtils.isValidTildeSuffix(def.parentMatchSuffix!);
+        if (!value2) {
+          throw CriterionTildeDefInvalidSuffixError(
+            tildeSuffix: def.parentMatchSuffix!,
+            criterionBaseName: criterionBaseName,
+          );
+        }
+      }
+      if (__criterionTildeDefMap.containsKey(def.suffix)) {
+        throw CriterionTildeDefDuplicationError(
+          tildeSuffix: def.suffix,
+          criterionBaseName: criterionBaseName,
+        );
+      }
+      __criterionTildeDefMap[def.suffix] = def;
+    }
+  }
 
   factory MultiOptCriterionDef.singleSelection({
     required String criterionBaseName,
     String? description,
     required String? fieldName,
     required Converter<V>? toFieldValue,
+    List<CriterionTildeDef> criterionTildeDefs = const [],
     List<MultiOptCriterionDef> children = const [],
   }) {
     return MultiOptCriterionDef._(
@@ -101,6 +148,7 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
       fieldName: fieldName,
       toFieldValue: toFieldValue,
       description: description,
+      criterionTildeDefs: criterionTildeDefs,
       children: children,
       selectionType: SelectionType.single,
     );
@@ -111,6 +159,7 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
     String? description,
     required String? fieldName,
     required Converter<V>? toFieldValue,
+    List<CriterionTildeDef> criterionTildeDefs = const [],
   }) {
     return MultiOptCriterionDef._(
       criterionBaseName: criterionBaseName,
@@ -119,6 +168,7 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
       description: description,
       children: [],
       selectionType: SelectionType.multi,
+      criterionTildeDefs: criterionTildeDefs,
     );
   }
 
@@ -142,7 +192,7 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
   }
 
   void printDebugSuffixes() {
-    print("criterionBaseName: $criterionBaseName --> $_afterTildeSuffixes");
+    print("criterionBaseName: $criterionBaseName --> $_tildeSuffixes");
   }
 }
 
@@ -194,6 +244,13 @@ class NameTilde {
     required String afterTildeSuffix,
   }) {
     return "$baseName$tildeSymbol$afterTildeSuffix";
+  }
+
+  static String createNameTilde({
+    required String baseName,
+    required String tildeSuffix,
+  }) {
+    return "$baseName$tildeSuffix";
   }
 }
 
