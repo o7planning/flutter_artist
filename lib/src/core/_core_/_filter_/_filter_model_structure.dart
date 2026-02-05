@@ -167,6 +167,7 @@ class FilterModelStructure {
       );
       // LAZY Property:
       model.defaultSettingPolicy = defaultSettingPolicy;
+      // LAZY Property:
       model.parentMatchSuffix = parentMatchSuffix;
       //
       if (parentOptModel == null) {
@@ -309,12 +310,12 @@ class FilterModelStructure {
           }
           String nameTildeParent = NameTilde.getNameTilde(
             baseName: p.criterionBaseName,
-            afterTildeSuffix: conditionDef.parentMatchSuffix,
+            afterTildeSuffix: conditionDef._parentSuffixWithoutTilde,
           );
           if (allDefinedCriterionNameTildes.contains(nameTildeParent)) {
             break;
           }
-          p._afterTildeSuffixes.add(conditionDef.parentMatchSuffix);
+          p._afterTildeSuffixes.add(conditionDef._parentSuffixWithoutTilde);
         }
       }
       //

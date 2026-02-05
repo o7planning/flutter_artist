@@ -22,7 +22,7 @@ class IntIdFilterModel
       conditionConnector: ConditionConnector.and,
       conditionDefs: [
         ConditionDef.condition(
-          criterionNameTilde: "id${NameTilde.symbol}",
+          criterionNameTilde: "id$tildeSymbol",
           operator: CriterionOperator.equalTo,
         ),
       ],
@@ -57,7 +57,7 @@ class IntIdFilterModel
     required IntIdFilterInput filterInput,
   }) {
     return {
-      "id${NameTilde.symbol}": SimpleValueWrap(filterInput.idValue),
+      "id$tildeSymbol": SimpleValueWrap(filterInput.idValue),
     };
   }
 
@@ -75,7 +75,7 @@ class IntIdFilterModel
   @override
   Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
     return {
-      "id${NameTilde.symbol}": _idValue,
+      "id$tildeSymbol": _idValue,
     };
   }
 
@@ -84,7 +84,7 @@ class IntIdFilterModel
     required Map<String, dynamic> criteriaMap,
   }) {
     return IntIdFilterCriteria(
-      idValue: criteriaMap["id${NameTilde.symbol}"],
+      idValue: criteriaMap["id$tildeSymbol"],
     );
   }
 }

@@ -171,34 +171,42 @@ class CalculatedCriterionDef<V extends Object> extends CriterionDef<V> {
   }
 }
 
+const String tildeSymbol = "~";
+
 class NameTilde {
-  static const String symbol = "~";
   final String criterionNameTilde;
   late final String criterionName;
   late final String afterTildeSuffix;
+  late final String tildeSuffix;
 
   NameTilde.parse({required this.criterionNameTilde}) {
-    List<String> ss = criterionNameTilde.split(symbol);
-    if (ss.length != 2) {
+    if (!NameUtils.isValidFilterCriterionNameTilde(criterionNameTilde)) {
       throw CriterionNameTildeError(criterionNameTilde: criterionNameTilde);
     }
-    String cn = ss[0];
-    String sf = ss[1];
-    if (sf.trim() != sf) {
-      throw CriterionNameTildeError(criterionNameTilde: criterionNameTilde);
-    }
-    if (cn.trim() != cn || cn.trim().isEmpty) {
-      throw CriterionNameTildeError(criterionNameTilde: criterionNameTilde);
-    }
-    criterionName = cn;
-    afterTildeSuffix = sf;
+    List<String> ss = criterionNameTilde.split(tildeSymbol);
+    criterionName = ss[0];
+    afterTildeSuffix = ss[1];
+    tildeSuffix = tildeSymbol + ss[1];
   }
 
   static String getNameTilde({
     required String baseName,
     required String afterTildeSuffix,
   }) {
-    return "$baseName$symbol$afterTildeSuffix";
+    return "$baseName$tildeSymbol$afterTildeSuffix";
+  }
+}
+
+class TildeSuffix {
+  final String tildeSuffix;
+  late final String suffixWithoutTilde;
+
+  TildeSuffix.parse({required this.tildeSuffix}) {
+    if (!NameUtils.isValidTildeSuffix(tildeSuffix)) {
+      throw TildeSuffixError(tildeSuffix: tildeSuffix);
+    }
+    List<String> ss = tildeSuffix.split(tildeSymbol);
+    suffixWithoutTilde = ss[1];
   }
 }
 
@@ -206,12 +214,7 @@ class CriterionBaseName {
   final String criterionBaseName;
 
   CriterionBaseName.parse({required this.criterionBaseName}) {
-    List<String> ss = criterionBaseName.split(NameTilde.symbol);
-    if (ss.length != 1) {
-      throw CriterionBaseNameError(criterionBaseName: criterionBaseName);
-    }
-    String cn = ss[0];
-    if (cn.trim() != cn || cn.trim().isEmpty) {
+    if (!NameUtils.isValidFilterCriterionName(criterionBaseName)) {
       throw CriterionBaseNameError(criterionBaseName: criterionBaseName);
     }
   }
@@ -221,12 +224,7 @@ class FieldName {
   final String fieldName;
 
   FieldName.parse({required this.fieldName}) {
-    List<String> ss = fieldName.split(NameTilde.symbol);
-    if (ss.length != 1) {
-      throw FilterFieldNameError(fieldName: fieldName);
-    }
-    String cn = ss[0];
-    if (cn.trim() != cn || cn.trim().isEmpty) {
+    if (!NameUtils.isValidFilterFieldName(fieldName)) {
       throw FilterFieldNameError(fieldName: fieldName);
     }
   }

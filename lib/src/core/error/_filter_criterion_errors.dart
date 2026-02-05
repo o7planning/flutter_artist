@@ -100,6 +100,17 @@ class CriterionNameTildeError extends FilterCriterionRegisterError {
   }
 }
 
+class TildeSuffixError extends FilterCriterionRegisterError {
+  final String tildeSuffix;
+
+  TildeSuffixError({required this.tildeSuffix});
+
+  @override
+  String toString() {
+    return "Invalid Tilde Suffix: $tildeSuffix";
+  }
+}
+
 class CriterionBaseNameError extends FilterCriterionRegisterError {
   final String criterionBaseName;
 
