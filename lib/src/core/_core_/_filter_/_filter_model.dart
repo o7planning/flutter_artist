@@ -395,6 +395,21 @@ abstract class FilterModel<
           "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
+    // CriterionTildeDef - Invalid Suffix.
+    on CriterionTildeDefInvalidSuffixError catch (e) {
+      String message =
+          "Invalid CriterionTildeDef(suffix: '${e.tildeSuffix}') (criterionBaseName: ${e.criterionBaseName}).\n"
+          "The correct examples: '~', '~1', '~min'.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+      throw _createFatalAppError(message);
+    }
+    // CriterionTildeDef - Duplicate Suffix.
+    on CriterionTildeDefDuplicationError catch (e) {
+      String message =
+          "Duplicate CriterionTildeDef(suffix: '${e.tildeSuffix}') (criterionBaseName: ${e.criterionBaseName}).\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+      throw _createFatalAppError(message);
+    }
     // Duplicate criterionNameTilde in a Group:
     on DuplicateFilterConditionDefError catch (e) {
       String message =

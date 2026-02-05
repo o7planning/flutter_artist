@@ -48,6 +48,30 @@ class DuplicateCriterionFieldDefError extends FilterCriterionRegisterError {
   });
 }
 
+// ????
+class CriterionTildeDefInvalidSuffixError
+    extends FilterCriterionRegisterError {
+  final String criterionBaseName;
+  final String tildeSuffix;
+
+  CriterionTildeDefInvalidSuffixError({
+    required this.tildeSuffix,
+    required this.criterionBaseName,
+  });
+}
+
+// ????
+class CriterionTildeDefDuplicationError
+    extends FilterCriterionRegisterError {
+  final String criterionBaseName;
+  final String tildeSuffix;
+
+  CriterionTildeDefDuplicationError({
+    required this.tildeSuffix,
+    required this.criterionBaseName,
+  });
+}
+
 class DuplicateFilterConditionDefError extends FilterCriterionRegisterError {
   final String criterionNameTilde;
   final String? groupName;

@@ -200,6 +200,8 @@ part '_filter_/_def_/_filter_criterion_def.dart';
 
 part '_filter_/_def_/_filter_criteria_def.dart';
 
+part '_filter_/_def_/_filter_criterion_tilde_def.dart';
+
 part '_filter_/_model_/_filter_condition_model.dart';
 
 part '_filter_/_def_/_filter_condition_def.dart';

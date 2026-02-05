@@ -101,10 +101,10 @@ class FilterModelStructure {
     // Create Criterion Models:
     //
     for (SimpleCriterionDef criterionDef in __simpleCriterionDefs) {
-      for (String afterTildeSuffix in criterionDef._afterTildeSuffixes) {
+      for (String tildeSuffix in criterionDef._tildeSuffixes) {
         __createSimpleFilterCriterionModel(
           simpleCriterionDef: criterionDef,
-          afterTildeSuffix: afterTildeSuffix,
+          tildeSuffix: tildeSuffix,
         );
       }
     }
@@ -122,11 +122,11 @@ class FilterModelStructure {
 
   void __createSimpleFilterCriterionModel({
     required SimpleCriterionDef simpleCriterionDef,
-    required String afterTildeSuffix,
+    required String tildeSuffix,
   }) {
-    final String criterionNameTilde = NameTilde.getNameTilde(
+    final String criterionNameTilde = NameTilde.createNameTilde(
       baseName: simpleCriterionDef.criterionBaseName,
-      afterTildeSuffix: afterTildeSuffix,
+      tildeSuffix: tildeSuffix,
     );
     final model = simpleCriterionDef.createModel(
       criterionNameTilde: criterionNameTilde,
@@ -143,18 +143,24 @@ class FilterModelStructure {
     required MultiOptFilterCriterionModel? parentOptModel,
     required Map<String, ConditionDef> allDefinedConditionDefMap,
   }) {
-    for (String afterTildeSuffix in optCriterionDef._afterTildeSuffixes) {
-      final String criterionNameTilde = NameTilde.getNameTilde(
+    for (String tildeSuffix in optCriterionDef._tildeSuffixes) {
+      final String criterionNameTilde = NameTilde.createNameTilde(
         baseName: optCriterionDef.criterionBaseName,
-        afterTildeSuffix: afterTildeSuffix,
+        tildeSuffix: tildeSuffix,
       );
       final ConditionDef? definedConditionDef =
           allDefinedConditionDefMap[criterionNameTilde];
+      //
       final DefaultSettingPolicy defaultSettingPolicy;
       final String? parentMatchSuffix;
       if (definedConditionDef is ConditionDefImpl) {
-        defaultSettingPolicy = definedConditionDef.defaultSettingPolicy;
-        parentMatchSuffix = definedConditionDef.parentMatchSuffix;
+        MultiOptCriterionDef criterionDef =
+            definedConditionDef.criterionDef as MultiOptCriterionDef;
+        CriterionTildeDef criterionTildeDef =
+            criterionDef.findCriterionTildeDef(tildeSuffix: tildeSuffix);
+
+        defaultSettingPolicy = criterionTildeDef.defaultSettingPolicy;
+        parentMatchSuffix = criterionTildeDef.parentMatchSuffix;
       } else {
         defaultSettingPolicy = DefaultSettingPolicy.onInitialOnly;
         parentMatchSuffix = null;
@@ -299,23 +305,27 @@ class FilterModelStructure {
       }
       // LAZY Property:
       conditionDef.criterionDef = criterionDef;
-      criterionDef._afterTildeSuffixes.add(conditionDef.afterTildeSuffix);
+      criterionDef._tildeSuffixes.add(conditionDef.tildeSuffix);
       //
       if (criterionDef is MultiOptCriterionDef) {
+        CriterionTildeDef criterionTildeDef =
+            criterionDef.findCriterionTildeDef(
+          tildeSuffix: conditionDef.tildeSuffix,
+        );
         MultiOptCriterionDef? p = criterionDef;
         while (true) {
           p = p?.parent;
           if (p == null) {
             break;
           }
-          String nameTildeParent = NameTilde.getNameTilde(
+          String nameTildeParent = NameTilde.createNameTilde(
             baseName: p.criterionBaseName,
-            afterTildeSuffix: conditionDef._parentSuffixWithoutTilde,
+            tildeSuffix: criterionTildeDef.parentMatchSuffix,
           );
           if (allDefinedCriterionNameTildes.contains(nameTildeParent)) {
             break;
           }
-          p._afterTildeSuffixes.add(conditionDef._parentSuffixWithoutTilde);
+          p._tildeSuffixes.add(criterionTildeDef.parentMatchSuffix);
         }
       }
       //
