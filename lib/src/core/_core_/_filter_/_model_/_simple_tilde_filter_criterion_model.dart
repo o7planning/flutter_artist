@@ -1,7 +1,6 @@
 part of '../../core.dart';
 
-class SimpleTildeFilterCriterionModel<V>
-    extends TildeFilterCriterionModel<V> {
+class SimpleTildeFilterCriterionModel<V> extends TildeFilterCriterionModel<V> {
   SimpleTildeFilterCriterionModel({
     required super.tildeCriterionName,
     required super.criterionName,

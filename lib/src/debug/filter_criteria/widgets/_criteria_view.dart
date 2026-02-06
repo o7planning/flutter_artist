@@ -86,12 +86,11 @@ class FilterCriterionView extends StatelessWidget {
                     ),
                     textStyle: TextStyle(
                       fontSize: 12,
-                      color:
-                          (criterion as MultiOptTildeFilterCriterionModel)
-                                      .parentMatchSuffix ==
-                                  null
-                              ? Colors.grey
-                              : Colors.blue,
+                      color: (criterion as MultiOptTildeFilterCriterionModel)
+                                  .parentMatchSuffix ==
+                              null
+                          ? Colors.grey
+                          : Colors.blue,
                     ),
                   ),
               ],
@@ -110,10 +109,9 @@ class FilterCriterionView extends StatelessWidget {
                     Tooltip(
                       message: "Single Selection",
                       child: Radio(
-                        value:
-                            (criterion as MultiOptTildeFilterCriterionModel)
-                                    .selectionType ==
-                                SelectionType.single,
+                        value: (criterion as MultiOptTildeFilterCriterionModel)
+                                .selectionType ==
+                            SelectionType.single,
                         onChanged: null,
                         groupValue: true,
                       ),
@@ -130,10 +128,9 @@ class FilterCriterionView extends StatelessWidget {
                     Tooltip(
                       message: "Multi Selection",
                       child: Radio(
-                        value:
-                            (criterion as MultiOptTildeFilterCriterionModel)
-                                    .selectionType ==
-                                SelectionType.multi,
+                        value: (criterion as MultiOptTildeFilterCriterionModel)
+                                .selectionType ==
+                            SelectionType.multi,
                         onChanged: null,
                         groupValue: true,
                       ),

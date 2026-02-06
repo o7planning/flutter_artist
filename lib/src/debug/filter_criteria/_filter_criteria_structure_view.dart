@@ -78,8 +78,7 @@ class FilterCriteriaStructureViewState
     }
     List<SimpleTildeFilterCriterionModel> simpleCriteria =
         structure.debugSimpleCriteria;
-    for (SimpleTildeFilterCriterionModel simpleCriterion
-        in simpleCriteria) {
+    for (SimpleTildeFilterCriterionModel simpleCriterion in simpleCriteria) {
       _addSimpleCriterion(filterModelNode, simpleCriterion);
     }
 
@@ -258,8 +257,8 @@ class FilterCriteriaStructureViewState
     }
   }
 
-  void _addSimpleCriterion(TreeNode currentNode,
-      SimpleTildeFilterCriterionModel simpleCriterion) {
+  void _addSimpleCriterion(
+      TreeNode currentNode, SimpleTildeFilterCriterionModel simpleCriterion) {
     TreeNode childNode = TreeNode(
       key: "SimpleCriterion-${simpleCriterion.tildeCriterionName}",
       data: simpleCriterion,

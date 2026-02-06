@@ -5,7 +5,7 @@ class NameUtils {
   static final formPropNameRegex = _nameRegex;
 
   //
-  static final filterCriterionNameTildeRegex =
+  static final tildeFilterCriterionNameRegex =
       RegExp(r'^[a-zA-Z_][a-zA-Z0-9_-]*~[a-zA-Z0-9]*$');
   static final tildeSuffixRegex = RegExp(r'~[a-zA-Z0-9]*$');
 
@@ -21,8 +21,8 @@ class NameUtils {
     return tildeSuffixRegex.hasMatch(suffix);
   }
 
-  static bool isValidFilterCriterionNameTilde(String name) {
-    return filterCriterionNameTildeRegex.hasMatch(name);
+  static bool isValidTildeFilterCriterionName(String name) {
+    return tildeFilterCriterionNameRegex.hasMatch(name);
   }
 
   static bool isValidFormPropName(String name) {

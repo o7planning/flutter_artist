@@ -49,22 +49,24 @@ class DuplicateCriterionFieldDefError extends FilterCriterionRegisterError {
 }
 
 // ????
-class CriterionTildeDefInvalidSuffixError extends FilterCriterionRegisterError {
+class TildeCriterionConfigInvalidSuffixError
+    extends FilterCriterionRegisterError {
   final String criterionBaseName;
   final String tildeSuffix;
 
-  CriterionTildeDefInvalidSuffixError({
+  TildeCriterionConfigInvalidSuffixError({
     required this.tildeSuffix,
     required this.criterionBaseName,
   });
 }
 
 // ????
-class CriterionTildeDefDuplicationError extends FilterCriterionRegisterError {
+class TildeCriterionConfigDuplicationError
+    extends FilterCriterionRegisterError {
   final String criterionBaseName;
   final String tildeSuffix;
 
-  CriterionTildeDefDuplicationError({
+  TildeCriterionConfigDuplicationError({
     required this.tildeSuffix,
     required this.criterionBaseName,
   });
@@ -111,10 +113,10 @@ class FilterCriterionNotFoundError extends FilterCriterionRegisterError {
   }
 }
 
-class CriterionNameTildeError extends FilterCriterionRegisterError {
+class TildeCriterionNameError extends FilterCriterionRegisterError {
   final String tildeCriterionName;
 
-  CriterionNameTildeError({required this.tildeCriterionName});
+  TildeCriterionNameError({required this.tildeCriterionName});
 
   @override
   String toString() {

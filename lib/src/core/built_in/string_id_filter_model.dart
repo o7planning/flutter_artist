@@ -29,9 +29,9 @@ class StringIdFilterModel
   }
 
   @override
-  Future<XData?> callApiLoadMultiOptCriterionXData({
-    required String multiOptCriterionBaseName,
+  Future<XData?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
+    required String multiOptCriterionBaseName,
     required SelectionType selectionType,
     required Object? parentMultiOptCriterionValue,
     required StringIdFilterInput? filterInput,
@@ -40,9 +40,9 @@ class StringIdFilterModel
   }
 
   @override
-  OptValueWrap? extractUpdateValueForMultiOptCriterion({
-    required String multiOptCriterionBaseName,
+  OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
+    required String multiOptCriterionBaseName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required StringIdFilterInput filterInput,
@@ -52,7 +52,7 @@ class StringIdFilterModel
   }
 
   @override
-  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleCriteria({
+  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleTildeCriteria({
     required StringIdFilterInput filterInput,
   }) {
     return {
@@ -61,9 +61,9 @@ class StringIdFilterModel
   }
 
   @override
-  OptValueWrap? specifyDefaultValueForMultiOptCriterion({
-    required String multiOptCriterionBaseName,
+  OptValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
+    required String multiOptCriterionBaseName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
@@ -72,7 +72,7 @@ class StringIdFilterModel
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria() {
+  Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria() {
     return {
       "id$tildeSymbol": _idValue,
     };

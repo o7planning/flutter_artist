@@ -78,22 +78,22 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
 
   final SelectionType selectionType;
 
-  final List<CriterionTildeDef> criterionTildeDefs;
+  final List<TildeCriterionConfig> tildeCriterionConfigs;
 
-  // String tildeSuffix -> CriterionTildeDef.
-  final Map<String, CriterionTildeDef> __criterionTildeDefMap = {};
+  // String tildeSuffix -> TildeCriterionConfig.
+  final Map<String, TildeCriterionConfig> __tildeCriterionConfigMap = {};
 
   final List<MultiOptCriterionDef> _children;
 
   List<MultiOptCriterionDef> get children => List.unmodifiable(_children);
 
-  CriterionTildeDef findCriterionTildeDef({
+  TildeCriterionConfig findOrCreateTildeCriterionConfig({
     required String tildeSuffix,
   }) {
-    CriterionTildeDef? def = __criterionTildeDefMap[tildeSuffix];
+    TildeCriterionConfig? def = __tildeCriterionConfigMap[tildeSuffix];
     if (def == null) {
-      def = CriterionTildeDef(suffix: tildeSuffix);
-      __criterionTildeDefMap[tildeSuffix] = def;
+      def = TildeCriterionConfig(suffix: tildeSuffix);
+      __tildeCriterionConfigMap[tildeSuffix] = def;
     }
     return def;
   }
@@ -103,15 +103,15 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
     required super.fieldName,
     required super.toFieldValue,
     required super.description,
-    required this.criterionTildeDefs,
+    required this.tildeCriterionConfigs,
     required List<MultiOptCriterionDef> children,
     required this.selectionType,
   })  : _children = children,
         super._() {
-    for (CriterionTildeDef def in criterionTildeDefs) {
+    for (TildeCriterionConfig def in tildeCriterionConfigs) {
       bool value1 = NameUtils.isValidTildeSuffix(def.suffix);
       if (!value1) {
-        throw CriterionTildeDefInvalidSuffixError(
+        throw TildeCriterionConfigInvalidSuffixError(
           tildeSuffix: def.suffix,
           criterionBaseName: criterionBaseName,
         );
@@ -119,19 +119,19 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
       if (def.parentMatchSuffix != null) {
         bool value2 = NameUtils.isValidTildeSuffix(def.parentMatchSuffix!);
         if (!value2) {
-          throw CriterionTildeDefInvalidSuffixError(
+          throw TildeCriterionConfigInvalidSuffixError(
             tildeSuffix: def.parentMatchSuffix!,
             criterionBaseName: criterionBaseName,
           );
         }
       }
-      if (__criterionTildeDefMap.containsKey(def.suffix)) {
-        throw CriterionTildeDefDuplicationError(
+      if (__tildeCriterionConfigMap.containsKey(def.suffix)) {
+        throw TildeCriterionConfigDuplicationError(
           tildeSuffix: def.suffix,
           criterionBaseName: criterionBaseName,
         );
       }
-      __criterionTildeDefMap[def.suffix] = def;
+      __tildeCriterionConfigMap[def.suffix] = def;
     }
   }
 
@@ -140,7 +140,7 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
     String? description,
     required String? fieldName,
     required Converter<V>? toFieldValue,
-    List<CriterionTildeDef> criterionTildeDefs = const [],
+    List<TildeCriterionConfig> tildeCriterionConfigs = const [],
     List<MultiOptCriterionDef> children = const [],
   }) {
     return MultiOptCriterionDef._(
@@ -148,7 +148,7 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
       fieldName: fieldName,
       toFieldValue: toFieldValue,
       description: description,
-      criterionTildeDefs: criterionTildeDefs,
+      tildeCriterionConfigs: tildeCriterionConfigs,
       children: children,
       selectionType: SelectionType.single,
     );
@@ -159,7 +159,7 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
     String? description,
     required String? fieldName,
     required Converter<V>? toFieldValue,
-    List<CriterionTildeDef> criterionTildeDefs = const [],
+    List<TildeCriterionConfig> tildeCriterionConfigs = const [],
   }) {
     return MultiOptCriterionDef._(
       criterionBaseName: criterionBaseName,
@@ -168,7 +168,7 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
       description: description,
       children: [],
       selectionType: SelectionType.multi,
-      criterionTildeDefs: criterionTildeDefs,
+      tildeCriterionConfigs: tildeCriterionConfigs,
     );
   }
 
@@ -230,8 +230,8 @@ class NameTilde {
   late final String tildeSuffix;
 
   NameTilde.parse({required this.tildeCriterionName}) {
-    if (!NameUtils.isValidFilterCriterionNameTilde(tildeCriterionName)) {
-      throw CriterionNameTildeError(tildeCriterionName: tildeCriterionName);
+    if (!NameUtils.isValidTildeFilterCriterionName(tildeCriterionName)) {
+      throw TildeCriterionNameError(tildeCriterionName: tildeCriterionName);
     }
     List<String> ss = tildeCriterionName.split(tildeSymbol);
     criterionName = ss[0];
@@ -254,11 +254,11 @@ class NameTilde {
   }
 }
 
-class TildeSuffix {
+class TildeSuffixObj {
   final String tildeSuffix;
   late final String suffixWithoutTilde;
 
-  TildeSuffix.parse({required this.tildeSuffix}) {
+  TildeSuffixObj.parse({required this.tildeSuffix}) {
     if (!NameUtils.isValidTildeSuffix(tildeSuffix)) {
       throw TildeSuffixError(tildeSuffix: tildeSuffix);
     }

@@ -26,7 +26,7 @@ class _DefaultFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadMultiOptCriterionXData({
+  Future<XList?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required Object? parentMultiOptCriterionValue,
     required EmptyFilterInput? filterInput,
@@ -35,7 +35,7 @@ class _DefaultFilterModel
   }
 
   @override
-  ValueWrap? extractUpdateValueForMultiOptCriterion({
+  ValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required XData multiOptCriterionXData,
     required EmptyFilterInput filterInput,
@@ -45,14 +45,14 @@ class _DefaultFilterModel
   }
 
   @override
-  Map<String, dynamic>? extractUpdateValuesForSimpleCriteria({
+  Map<String, dynamic>? extractUpdateValuesForSimpleTildeCriteria({
     required EmptyFilterInput filterInput,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? specifyDefaultValueForMultiOptCriterion({
+  ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
@@ -61,7 +61,7 @@ class _DefaultFilterModel
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria()  {
+  Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria()  {
     return null;
   }
 }
@@ -90,7 +90,7 @@ class StringIdFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadMultiOptCriterionXData({
+  Future<XList?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required Object? parentMultiOptCriterionValue,
     required StringIdFilterInput? filterInput,
@@ -99,7 +99,7 @@ class StringIdFilterModel
   }
 
   @override
-  ValueWrap? extractUpdateValueForMultiOptCriterion({
+  ValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required XData multiOptCriterionXData,
     required StringIdFilterInput filterInput,
@@ -109,14 +109,14 @@ class StringIdFilterModel
   }
 
   @override
-  Map<String, dynamic>? extractUpdateValuesForSimpleCriteria({
+  Map<String, dynamic>? extractUpdateValuesForSimpleTildeCriteria({
     required StringIdFilterInput filterInput,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? specifyDefaultValueForMultiOptCriterion({
+  ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
@@ -125,7 +125,7 @@ class StringIdFilterModel
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria()  {
+  Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria()  {
     return null;
   }
 }
@@ -154,7 +154,7 @@ class StringValueFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadMultiOptCriterionXData({
+  Future<XList?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required StringValueFilterInput? filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -163,7 +163,7 @@ class StringValueFilterModel
   }
 
   @override
-  ValueWrap? extractUpdateValueForMultiOptCriterion({
+  ValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required StringValueFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -173,14 +173,14 @@ class StringValueFilterModel
   }
 
   @override
-  Map<String, dynamic>? extractUpdateValuesForSimpleCriteria({
+  Map<String, dynamic>? extractUpdateValuesForSimpleTildeCriteria({
     required StringValueFilterInput filterInput,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? specifyDefaultValueForMultiOptCriterion({
+  ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
@@ -189,7 +189,7 @@ class StringValueFilterModel
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria()  {
+  Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria()  {
     return null;
   }
 }
@@ -218,7 +218,7 @@ class SearchTextFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadMultiOptCriterionXData({
+  Future<XList?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required SearchTextFilterInput? filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -227,7 +227,7 @@ class SearchTextFilterModel
   }
 
   @override
-  ValueWrap? extractUpdateValueForMultiOptCriterion({
+  ValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required XData multiOptCriterionXData,
     required SearchTextFilterInput filterInput,
@@ -237,14 +237,14 @@ class SearchTextFilterModel
   }
 
   @override
-  Map<String, dynamic>? extractUpdateValuesForSimpleCriteria({
+  Map<String, dynamic>? extractUpdateValuesForSimpleTildeCriteria({
     required SearchTextFilterInput filterInput,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? specifyDefaultValueForMultiOptCriterion({
+  ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
@@ -253,7 +253,7 @@ class SearchTextFilterModel
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria()  {
+  Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria()  {
     return null;
   }
 }
@@ -282,7 +282,7 @@ class IntIdFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadMultiOptCriterionXData({
+  Future<XList?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required Object? parentMultiOptCriterionValue,
     required IntIdFilterInput? filterInput,
@@ -291,7 +291,7 @@ class IntIdFilterModel
   }
 
   @override
-  ValueWrap? extractUpdateValueForMultiOptCriterion({
+  ValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required XData multiOptCriterionXData,
     required IntIdFilterInput filterInput,
@@ -301,14 +301,14 @@ class IntIdFilterModel
   }
 
   @override
-  Map<String, dynamic>? extractUpdateValuesForSimpleCriteria({
+  Map<String, dynamic>? extractUpdateValuesForSimpleTildeCriteria({
     required IntIdFilterInput filterInput,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? specifyDefaultValueForMultiOptCriterion({
+  ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,
@@ -317,7 +317,7 @@ class IntIdFilterModel
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleCriteria()  {
+  Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria()  {
     return null;
   }
 }

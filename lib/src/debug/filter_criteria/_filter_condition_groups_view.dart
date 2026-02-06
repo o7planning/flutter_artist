@@ -183,8 +183,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
               //
               isMultiOpt = false;
               isMultiSelection = false;
-            } else if (criterionModel
-                is MultiOptTildeFilterCriterionModel) {
+            } else if (criterionModel is MultiOptTildeFilterCriterionModel) {
               title = data.tildeCriterionName;
               tooltip =
                   "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType.toString()}> ${data.tildeCriterionName}";
