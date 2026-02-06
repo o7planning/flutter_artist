@@ -1,11 +1,11 @@
 part of '../../core.dart';
 
-abstract class FilterCriterionModel<V> {
+abstract class TildeFilterCriterionModel<V> {
   late final FilterModelStructure _structure;
 
   //
   final String criterionName;
-  final String criterionNameTilde;
+  final String tildeCriterionName;
 
   // IMPORTANT: Do not change type (dynamic).
   dynamic _candidateUpdateValue;
@@ -43,8 +43,8 @@ abstract class FilterCriterionModel<V> {
 
   Type get dataType => V;
 
-  FilterCriterionModel({
-    required this.criterionNameTilde,
+  TildeFilterCriterionModel({
+    required this.tildeCriterionName,
     required this.criterionName,
   });
 

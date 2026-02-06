@@ -49,8 +49,7 @@ class DuplicateCriterionFieldDefError extends FilterCriterionRegisterError {
 }
 
 // ????
-class CriterionTildeDefInvalidSuffixError
-    extends FilterCriterionRegisterError {
+class CriterionTildeDefInvalidSuffixError extends FilterCriterionRegisterError {
   final String criterionBaseName;
   final String tildeSuffix;
 
@@ -61,8 +60,7 @@ class CriterionTildeDefInvalidSuffixError
 }
 
 // ????
-class CriterionTildeDefDuplicationError
-    extends FilterCriterionRegisterError {
+class CriterionTildeDefDuplicationError extends FilterCriterionRegisterError {
   final String criterionBaseName;
   final String tildeSuffix;
 
@@ -73,17 +71,17 @@ class CriterionTildeDefDuplicationError
 }
 
 class DuplicateFilterConditionDefError extends FilterCriterionRegisterError {
-  final String criterionNameTilde;
+  final String tildeCriterionName;
   final String? groupName;
 
   DuplicateFilterConditionDefError({
-    required this.criterionNameTilde,
+    required this.tildeCriterionName,
     required this.groupName,
   });
 
   @override
   String toString() {
-    return "Duplicated ConditionDef Criterion Name Tilde: $criterionNameTilde";
+    return "Duplicated ConditionDef Criterion Name Tilde: $tildeCriterionName";
   }
 }
 
@@ -100,11 +98,11 @@ class DuplicateConditionGroupDefError extends FilterCriterionRegisterError {
 
 class FilterCriterionNotFoundError extends FilterCriterionRegisterError {
   final String criterionBaseName;
-  final String criterionNameTilde;
+  final String tildeCriterionName;
 
   FilterCriterionNotFoundError({
     required this.criterionBaseName,
-    required this.criterionNameTilde,
+    required this.tildeCriterionName,
   });
 
   @override
@@ -114,13 +112,13 @@ class FilterCriterionNotFoundError extends FilterCriterionRegisterError {
 }
 
 class CriterionNameTildeError extends FilterCriterionRegisterError {
-  final String criterionNameTilde;
+  final String tildeCriterionName;
 
-  CriterionNameTildeError({required this.criterionNameTilde});
+  CriterionNameTildeError({required this.tildeCriterionName});
 
   @override
   String toString() {
-    return "Invalid Criterion Name Tilde: $criterionNameTilde";
+    return "Invalid Criterion Name Tilde: $tildeCriterionName";
   }
 }
 

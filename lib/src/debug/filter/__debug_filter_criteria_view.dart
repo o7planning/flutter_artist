@@ -177,7 +177,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
     );
     tabs.add(
       TabData(
-        text: ' Backendable JSON Criteria',
+        text: ' Field-Based JSON',
         closable: false,
         leading: (context, status) => Icon(
           Icons.data_object,

@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class SortCriterion extends Equatable {
-  final String criterionNameTilde;
+  final String tildeCriterionName;
   final String _text;
   final String? translationKey;
   final bool skipNonDirectionWhileSelecting;
@@ -20,7 +20,7 @@ class SortCriterion extends Equatable {
 
   SortCriterion._({
     required SortDirection? direction,
-    required this.criterionNameTilde,
+    required this.tildeCriterionName,
     required this.skipNonDirectionWhileSelecting,
     required this.translationKey,
     required String text,
@@ -46,12 +46,12 @@ class SortCriterion extends Equatable {
   }
 
   String toCriterionString() {
-    return "${_direction == null ? '' : _direction!.sign}$criterionNameTilde";
+    return "${_direction == null ? '' : _direction!.sign}$tildeCriterionName";
   }
 
   SortCriterion copyWith({required SortDirection direction}) {
     return SortCriterion._(
-      criterionNameTilde: criterionNameTilde,
+      tildeCriterionName: tildeCriterionName,
       skipNonDirectionWhileSelecting: skipNonDirectionWhileSelecting,
       translationKey: translationKey,
       text: text,
@@ -61,7 +61,7 @@ class SortCriterion extends Equatable {
 
   SortCriterion copy() {
     return SortCriterion._(
-      criterionNameTilde: criterionNameTilde,
+      tildeCriterionName: tildeCriterionName,
       skipNonDirectionWhileSelecting: skipNonDirectionWhileSelecting,
       translationKey: translationKey,
       text: text,
@@ -81,10 +81,10 @@ class SortCriterion extends Equatable {
   }
 
   @override
-  List<Object?> get props => [criterionNameTilde, _direction];
+  List<Object?> get props => [tildeCriterionName, _direction];
 
   @override
   String toString() {
-    return "${direction == null ? '' : direction!.sign}$criterionNameTilde";
+    return "${direction == null ? '' : direction!.sign}$tildeCriterionName";
   }
 }

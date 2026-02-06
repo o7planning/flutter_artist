@@ -22,7 +22,7 @@ class IntIdFilterModel
       conditionConnector: ConditionConnector.and,
       conditionDefs: [
         ConditionDef.condition(
-          criterionNameTilde: "id$tildeSymbol",
+          tildeCriterionName: "id$tildeSymbol",
           operator: CriterionOperator.equalTo,
         ),
       ],
@@ -32,7 +32,7 @@ class IntIdFilterModel
   @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionBaseName,
-    required String multiOptCriterionNameTilde,
+    required String multiOptTildeCriterionName,
     required SelectionType selectionType,
     required Object? parentMultiOptCriterionValue,
     required IntIdFilterInput? filterInput,
@@ -43,7 +43,7 @@ class IntIdFilterModel
   @override
   OptValueWrap? extractUpdateValueForMultiOptCriterion({
     required String multiOptCriterionBaseName,
-    required String multiOptCriterionNameTilde,
+    required String multiOptTildeCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required IntIdFilterInput filterInput,
@@ -64,7 +64,7 @@ class IntIdFilterModel
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
     required String multiOptCriterionBaseName,
-    required String multiOptCriterionNameTilde,
+    required String multiOptTildeCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,

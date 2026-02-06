@@ -11,12 +11,12 @@ abstract interface class ConditionDef {
   List<ConditionDef> get conditions;
 
   factory ConditionDef.condition({
-    required String criterionNameTilde,
+    required String tildeCriterionName,
     required CriterionOperator operator,
     List<CriterionOperator>? supportedOperators,
   }) {
     return ConditionDefImpl._(
-      criterionNameTilde: criterionNameTilde,
+      tildeCriterionName: tildeCriterionName,
       operator: operator,
       supportedOperators: supportedOperators,
     );
@@ -48,7 +48,7 @@ class ConditionDefImpl implements ConditionDef {
   //
   String get criterionName => _tildeObj.criterionName;
 
-  String get criterionNameTilde => _tildeObj.criterionNameTilde;
+  String get tildeCriterionName => _tildeObj.tildeCriterionName;
 
   String get afterTildeSuffix => _tildeObj.afterTildeSuffix;
 
@@ -64,10 +64,10 @@ class ConditionDefImpl implements ConditionDef {
   List<ConditionDef> get conditions => [];
 
   ConditionDefImpl._({
-    required String criterionNameTilde,
+    required String tildeCriterionName,
     required this.operator,
     List<CriterionOperator>? supportedOperators,
-  }) : _tildeObj = NameTilde.parse(criterionNameTilde: criterionNameTilde) {
+  }) : _tildeObj = NameTilde.parse(tildeCriterionName: tildeCriterionName) {
     _supportedOperators = supportedOperators == null
         ? [operator]
         : {...supportedOperators, operator}.toList();
@@ -98,10 +98,10 @@ class ConditionGroupDefImpl implements ConditionDef {
     final Map<String, ConditionDef> map = {};
     for (ConditionDef def in conditions) {
       if (def is ConditionDefImpl) {
-        final nameTilde = def._tildeObj.criterionNameTilde;
+        final nameTilde = def._tildeObj.tildeCriterionName;
         if (map.containsKey(nameTilde)) {
           throw DuplicateFilterConditionDefError(
-            criterionNameTilde: nameTilde,
+            tildeCriterionName: nameTilde,
             groupName: groupName,
           );
         }

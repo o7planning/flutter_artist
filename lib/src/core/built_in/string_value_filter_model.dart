@@ -22,7 +22,7 @@ class StringValueFilterModel
       conditionConnector: ConditionConnector.and,
       conditionDefs: [
         ConditionDef.condition(
-          criterionNameTilde: "string$tildeSymbol",
+          tildeCriterionName: "string$tildeSymbol",
           operator: CriterionOperator.equalTo,
         ),
       ],
@@ -32,7 +32,7 @@ class StringValueFilterModel
   @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionBaseName,
-    required String multiOptCriterionNameTilde,
+    required String multiOptTildeCriterionName,
     required SelectionType selectionType,
     required StringValueFilterInput? filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -43,7 +43,7 @@ class StringValueFilterModel
   @override
   OptValueWrap? extractUpdateValueForMultiOptCriterion({
     required String multiOptCriterionBaseName,
-    required String multiOptCriterionNameTilde,
+    required String multiOptTildeCriterionName,
     required SelectionType selectionType,
     required StringValueFilterInput filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -64,7 +64,7 @@ class StringValueFilterModel
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
     required String multiOptCriterionBaseName,
-    required String multiOptCriterionNameTilde,
+    required String multiOptTildeCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,

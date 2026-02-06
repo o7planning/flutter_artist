@@ -23,11 +23,11 @@ abstract class SortModelBuilder<ITEM extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
-  String _getText({required String criterionNameTilde}) {
+  String _getText({required String tildeCriterionName}) {
     SortCriterionDef? criterion =
-        _structure._sortCriteriaMap[criterionNameTilde];
+        _structure._sortCriteriaMap[tildeCriterionName];
     if (criterion == null) {
-      return criterionNameTilde;
+      return tildeCriterionName;
     }
     String? translationKey = criterion.translationKey;
     if (translationKey == null) {

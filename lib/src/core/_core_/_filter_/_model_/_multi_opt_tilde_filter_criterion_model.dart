@@ -1,7 +1,8 @@
 part of '../../core.dart';
 
-abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
-  final MultiOptFilterCriterionModel? parent;
+abstract class MultiOptTildeFilterCriterionModel<V>
+    extends TildeFilterCriterionModel<V> {
+  final MultiOptTildeFilterCriterionModel? parent;
 
   int _loadCount = 0;
 
@@ -17,19 +18,19 @@ abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
   final SelectionType selectionType;
-  final List<MultiOptFilterCriterionModel> _children;
+  final List<MultiOptTildeFilterCriterionModel> _children;
 
-  List<MultiOptFilterCriterionModel> get children =>
+  List<MultiOptTildeFilterCriterionModel> get children =>
       List.unmodifiable(_children);
 
   late final DefaultSettingPolicy defaultSettingPolicy;
   late final String? parentMatchSuffix;
 
-  MultiOptFilterCriterionModel._({
+  MultiOptTildeFilterCriterionModel._({
     required this.parent,
-    required super.criterionNameTilde,
+    required super.tildeCriterionName,
     required super.criterionName,
-    required List<MultiOptFilterCriterionModel> children,
+    required List<MultiOptTildeFilterCriterionModel> children,
     required this.selectionType,
   }) : _children = [...children];
 
@@ -38,7 +39,7 @@ abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
   }) {
     if (!_valueUpdated && _markTempDirty) {
       final dynamic oldValue = _tempCurrentValue;
-      final dynamic newValue = updateValues[criterionNameTilde];
+      final dynamic newValue = updateValues[tildeCriterionName];
       //
       _candidateUpdateValue = newValue;
       _valueUpdated = true;
@@ -61,15 +62,15 @@ abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
       }
       //
       if (_tempCurrentXData == null || newValue == null || !isSame) {
-        for (MultiOptFilterCriterionModel childItem in children) {
+        for (MultiOptTildeFilterCriterionModel childItem in children) {
           childItem._tempCurrentXData = null;
-          updateValues[childItem.criterionNameTilde] = null;
+          updateValues[childItem.tildeCriterionName] = null;
           childItem._markTempDirty = true;
         }
       }
     }
     //
-    for (MultiOptFilterCriterionModel childItem in children) {
+    for (MultiOptTildeFilterCriterionModel childItem in children) {
       childItem._updateTempValueCascade(
         updateValues: updateValues,
       );
@@ -78,7 +79,7 @@ abstract class MultiOptFilterCriterionModel<V> extends FilterCriterionModel<V> {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $criterionNameTilde >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
+        "${("- - - " * indentFactor)} $tildeCriterionName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
     for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }
