@@ -172,20 +172,22 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
             isMultiOpt = false;
             isMultiSelection = false;
           } else if (data is ConditionModelImpl) {
-            FilterCriterionModel criterionModel = data.filterCriterionModel;
+            TildeFilterCriterionModel criterionModel =
+                data.filterCriterionModel;
 
-            if (criterionModel is SimpleFilterCriterionModel) {
-              title = data.criterionNameTilde;
+            if (criterionModel is SimpleTildeFilterCriterionModel) {
+              title = data.tildeCriterionName;
               tooltip =
-                  "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType.toString()}> ${data.criterionNameTilde}";
+                  "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType.toString()}> ${data.tildeCriterionName}";
               prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
               //
               isMultiOpt = false;
               isMultiSelection = false;
-            } else if (criterionModel is MultiOptFilterCriterionModel) {
-              title = data.criterionNameTilde;
+            } else if (criterionModel
+                is MultiOptTildeFilterCriterionModel) {
+              title = data.tildeCriterionName;
               tooltip =
-                  "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType.toString()}> ${data.criterionNameTilde}";
+                  "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType.toString()}> ${data.tildeCriterionName}";
               prefixIconData = FaIconConstants.optPropOrCriterionIconData;
               //
               isMultiOpt = true;
@@ -245,7 +247,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
               onTap: () {
                 setState(() {
                   _currentNode = node;
-                  if (node.data is FilterCriterionModel) {
+                  if (node.data is TildeFilterCriterionModel) {
                     _onPressCriterion(node.data);
                   }
                 });
@@ -289,14 +291,14 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
     required ConditionModelImpl criterionConditionModel,
   }) {
     TreeNode childNode = TreeNode(
-      // key: "FilterCriterionConditionModel-${multiOptCriterionModel.criterionNameTilde}",
+      // key: "FilterCriterionConditionModel-${multiOptCriterionModel.tildeCriterionName}",
       data: criterionConditionModel,
     );
     //
     currentNode.add(childNode);
   }
 
-  void _onPressCriterion(FilterCriterionModel criterion) {
+  void _onPressCriterion(TildeFilterCriterionModel criterion) {
     print("Criterion: $criterion");
   }
 }

@@ -77,7 +77,7 @@ class ConditionGroupView extends StatelessWidget {
     );
   }
 
-  Widget _buildDetails(FilterCriterionModel criterionModel) {
+  Widget _buildDetails(TildeFilterCriterionModel criterionModel) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,7 +106,7 @@ class ConditionGroupView extends StatelessWidget {
               headerSubtitle: _headerSubtitle(criterionModel.currentValue),
               content: DynamicValueView(value: criterionModel.currentValue),
             ),
-            if (criterionModel is MultiOptFilterCriterionModel)
+            if (criterionModel is MultiOptTildeFilterCriterionModel)
               SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(
@@ -118,7 +118,7 @@ class ConditionGroupView extends StatelessWidget {
                 headerSubtitle: _headerSubtitle(criterionModel.initialXData),
                 content: XDataView(xData: criterionModel.initialXData),
               ),
-            if (criterionModel is MultiOptFilterCriterionModel)
+            if (criterionModel is MultiOptTildeFilterCriterionModel)
               SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(

@@ -1,13 +1,13 @@
 part of '../../core.dart';
 
 ///
-/// Multi Options Criterion with Multi Selections.
+/// Multi Options TildeCriterion with Multi Selections.
 ///
-class MultiOptMsFilterCriterionModel<V>
-    extends MultiOptFilterCriterionModel<V> {
-  MultiOptMsFilterCriterionModel({
+class MultiOptMsTildeFilterCriterionModel<V>
+    extends MultiOptTildeFilterCriterionModel<V> {
+  MultiOptMsTildeFilterCriterionModel({
     required super.parent,
-    required super.criterionNameTilde,
+    required super.tildeCriterionName,
     required super.criterionName,
   }) : super._(selectionType: SelectionType.multi, children: const []);
 

@@ -38,8 +38,8 @@ String __debugObjHtml(Object? obj, bool asHtml) {
     return "${b1}${getClassNameWithoutGenerics(obj)}(${obj.shelf.name})${b2}";
   } else if (obj is FormPropModel) {
     return "${b1}${getClassName(obj)}('${obj.propName}')${b2}";
-  } else if (obj is FilterCriterionModel) {
-    return "${b1}${getClassName(obj)}('${obj.criterionNameTilde}')${b2}";
+  } else if (obj is TildeFilterCriterionModel) {
+    return "${b1}${getClassName(obj)}('${obj.tildeCriterionName}')${b2}";
   } else if (obj is ListXData) {
     return "${b1}${getClassName(obj)}(${obj.items.length} items)${b2}";
   } else if (obj is XData) {

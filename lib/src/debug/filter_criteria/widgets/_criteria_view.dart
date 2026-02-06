@@ -12,7 +12,7 @@ import '../../widgets/_dynamic_value_view.dart';
 import '../../widgets/_xdata_view.dart';
 
 class FilterCriterionView extends StatelessWidget {
-  final FilterCriterionModel criterion;
+  final TildeFilterCriterionModel criterion;
 
   const FilterCriterionView({
     super.key,
@@ -37,16 +37,16 @@ class FilterCriterionView extends StatelessWidget {
             minLeadingWidth: 40,
             minTileHeight: 0,
             leading: Icon(
-              criterion is SimpleFilterCriterionModel
+              criterion is SimpleTildeFilterCriterionModel
                   ? FaIconConstants.simplePropOrCriterionIconData
                   : FaIconConstants.optPropOrCriterionIconData,
               size: 20,
             ),
             title: IconLabelText(
-              label: criterion is SimpleFilterCriterionModel
+              label: criterion is SimpleTildeFilterCriterionModel
                   ? 'Criterion Name Tilde: '
                   : 'Multi Opt Criterion Name Tilde: ',
-              text: criterion.criterionNameTilde,
+              text: criterion.tildeCriterionName,
               textStyle: TextStyle(color: Colors.indigo),
             ),
             subtitle: Column(
@@ -60,24 +60,24 @@ class FilterCriterionView extends StatelessWidget {
                       TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                   textStyle: TextStyle(fontSize: 12, color: Colors.blue),
                 ),
-                if (criterion is MultiOptFilterCriterionModel)
+                if (criterion is MultiOptTildeFilterCriterionModel)
                   SizedBox(height: 3),
-                if (criterion is MultiOptFilterCriterionModel)
+                if (criterion is MultiOptTildeFilterCriterionModel)
                   IconLabelText(
                     label: "Default Setting Policy: ",
-                    text: (criterion as MultiOptFilterCriterionModel)
+                    text: (criterion as MultiOptTildeFilterCriterionModel)
                         .defaultSettingPolicy
                         .name,
                     labelStyle:
                         TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     textStyle: TextStyle(fontSize: 12, color: Colors.blue),
                   ),
-                if (criterion is MultiOptFilterCriterionModel)
+                if (criterion is MultiOptTildeFilterCriterionModel)
                   SizedBox(height: 3),
-                if (criterion is MultiOptFilterCriterionModel)
+                if (criterion is MultiOptTildeFilterCriterionModel)
                   IconLabelText(
                     label: "Parent Match Suffix: ",
-                    text: (criterion as MultiOptFilterCriterionModel)
+                    text: (criterion as MultiOptTildeFilterCriterionModel)
                             .parentMatchSuffix ??
                         "null",
                     labelStyle: TextStyle(
@@ -86,19 +86,21 @@ class FilterCriterionView extends StatelessWidget {
                     ),
                     textStyle: TextStyle(
                       fontSize: 12,
-                      color: (criterion as MultiOptFilterCriterionModel)
-                                  .parentMatchSuffix ==
-                              null
-                          ? Colors.grey
-                          : Colors.blue,
+                      color:
+                          (criterion as MultiOptTildeFilterCriterionModel)
+                                      .parentMatchSuffix ==
+                                  null
+                              ? Colors.grey
+                              : Colors.blue,
                     ),
                   ),
               ],
             ),
           ),
           Divider(),
-          if (criterion is MultiOptFilterCriterionModel) SizedBox(height: 5),
-          if (criterion is MultiOptFilterCriterionModel)
+          if (criterion is MultiOptTildeFilterCriterionModel)
+            SizedBox(height: 5),
+          if (criterion is MultiOptTildeFilterCriterionModel)
             LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return Row(
@@ -108,9 +110,10 @@ class FilterCriterionView extends StatelessWidget {
                     Tooltip(
                       message: "Single Selection",
                       child: Radio(
-                        value: (criterion as MultiOptFilterCriterionModel)
-                                .selectionType ==
-                            SelectionType.single,
+                        value:
+                            (criterion as MultiOptTildeFilterCriterionModel)
+                                    .selectionType ==
+                                SelectionType.single,
                         onChanged: null,
                         groupValue: true,
                       ),
@@ -127,9 +130,10 @@ class FilterCriterionView extends StatelessWidget {
                     Tooltip(
                       message: "Multi Selection",
                       child: Radio(
-                        value: (criterion as MultiOptFilterCriterionModel)
-                                .selectionType ==
-                            SelectionType.multi,
+                        value:
+                            (criterion as MultiOptTildeFilterCriterionModel)
+                                    .selectionType ==
+                                SelectionType.multi,
                         onChanged: null,
                         groupValue: true,
                       ),
@@ -188,7 +192,7 @@ class FilterCriterionView extends StatelessWidget {
               headerSubtitle: _headerSubtitle(criterion.currentValue),
               content: DynamicValueView(value: criterion.currentValue),
             ),
-            if (criterion is MultiOptFilterCriterionModel)
+            if (criterion is MultiOptTildeFilterCriterionModel)
               SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(
@@ -200,7 +204,7 @@ class FilterCriterionView extends StatelessWidget {
                 headerSubtitle: _headerSubtitle(criterion.initialXData),
                 content: XDataView(xData: criterion.initialXData),
               ),
-            if (criterion is MultiOptFilterCriterionModel)
+            if (criterion is MultiOptTildeFilterCriterionModel)
               SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(

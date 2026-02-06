@@ -202,7 +202,7 @@ part '_filter_/_def_/_filter_criteria_def.dart';
 
 part '_filter_/_def_/_filter_criterion_tilde_def.dart';
 
-part '_filter_/_model_/_filter_condition_model.dart';
+part '_filter_/_model_/__filter_condition_model.dart';
 
 part '_filter_/_def_/_filter_condition_def.dart';
 
@@ -398,9 +398,9 @@ part '_core_state_/_force_reload_state.dart';
 
 part '_fa_.dart';
 
-part '_filter_/_model_/__filter_criterion_model.dart';
+part '_filter_/_model_/_tilde_filter_criterion_model.dart';
 
-part '_filter_/_model_/_calculated_filter_criterion_model.dart';
+part '_filter_/_model_/_calculated_tilde_filter_criterion_model.dart';
 
 part '_filter_/_filter_model_structure.dart';
 
@@ -408,13 +408,13 @@ part '_sort_/_def_/_sort_criterion_def.dart';
 
 part '_sort_/_sort_model_structure.dart';
 
-part '_filter_/_model_/_multi_opt_filter_criterion_model.dart';
+part '_filter_/_model_/_multi_opt_tilde_filter_criterion_model.dart';
 
-part '_filter_/_model_/_multi_opt_ss_filter_criterion_model.dart';
+part '_filter_/_model_/_multi_opt_ss_tilde_filter_criterion_model.dart';
 
-part '_filter_/_model_/_multi_opt_ms_filter_criterion_model.dart';
+part '_filter_/_model_/_multi_opt_ms_tilde_filter_criterion_model.dart';
 
-part '_filter_/_model_/_simple_filter_criterion_model.dart';
+part '_filter_/_model_/_simple_tilde_filter_criterion_model.dart';
 
 part '_form_/_model_/__form_prop_model.dart';
 

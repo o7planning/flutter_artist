@@ -1,8 +1,9 @@
 part of '../../core.dart';
 
-class SimpleFilterCriterionModel<V> extends FilterCriterionModel<V> {
-  SimpleFilterCriterionModel({
-    required super.criterionNameTilde,
+class SimpleTildeFilterCriterionModel<V>
+    extends TildeFilterCriterionModel<V> {
+  SimpleTildeFilterCriterionModel({
+    required super.tildeCriterionName,
     required super.criterionName,
   });
 
@@ -17,7 +18,7 @@ class SimpleFilterCriterionModel<V> extends FilterCriterionModel<V> {
   }) {
     if (!_valueUpdated && _markTempDirty) {
       // final dynamic oldValue = _tempCurrentValue;
-      final dynamic newValue = updateValues[criterionNameTilde];
+      final dynamic newValue = updateValues[tildeCriterionName];
       //
       _candidateUpdateValue = newValue;
       _valueUpdated = true;

@@ -21,7 +21,7 @@ class FilterConditionModelView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FilterCriterionModel criterionModel =
+    final TildeFilterCriterionModel criterionModel =
         conditionModel.filterCriterionModel;
     //
     return CustomAppContainer(
@@ -40,16 +40,16 @@ class FilterConditionModelView extends StatelessWidget {
             minLeadingWidth: 40,
             minTileHeight: 0,
             leading: Icon(
-              criterionModel is SimpleFilterCriterionModel
+              criterionModel is SimpleTildeFilterCriterionModel
                   ? FaIconConstants.simplePropOrCriterionIconData
                   : FaIconConstants.optPropOrCriterionIconData,
               size: 20,
             ),
             title: IconLabelSelectableText(
-              label: criterionModel is SimpleFilterCriterionModel
+              label: criterionModel is SimpleTildeFilterCriterionModel
                   ? 'Criterion Name Tilde: '
                   : 'Multi Opt Criterion Name Tilde: ',
-              text: conditionModel.criterionNameTilde,
+              text: conditionModel.tildeCriterionName,
               textStyle: TextStyle(color: Colors.indigo),
             ),
             subtitle: Column(
@@ -94,9 +94,9 @@ class FilterConditionModelView extends StatelessWidget {
             ),
           ),
           Divider(),
-          if (criterionModel is MultiOptFilterCriterionModel)
+          if (criterionModel is MultiOptTildeFilterCriterionModel)
             SizedBox(height: 5),
-          if (criterionModel is MultiOptFilterCriterionModel)
+          if (criterionModel is MultiOptTildeFilterCriterionModel)
             LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return RadioGroup(
@@ -153,7 +153,7 @@ class FilterConditionModelView extends StatelessWidget {
     );
   }
 
-  Widget _buildDetails(FilterCriterionModel criterionModel) {
+  Widget _buildDetails(TildeFilterCriterionModel criterionModel) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,7 +182,7 @@ class FilterConditionModelView extends StatelessWidget {
               headerSubtitle: _headerSubtitle(criterionModel.currentValue),
               content: DynamicValueView(value: criterionModel.currentValue),
             ),
-            if (criterionModel is MultiOptFilterCriterionModel)
+            if (criterionModel is MultiOptTildeFilterCriterionModel)
               SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(
@@ -194,7 +194,7 @@ class FilterConditionModelView extends StatelessWidget {
                 headerSubtitle: _headerSubtitle(criterionModel.initialXData),
                 content: XDataView(xData: criterionModel.initialXData),
               ),
-            if (criterionModel is MultiOptFilterCriterionModel)
+            if (criterionModel is MultiOptTildeFilterCriterionModel)
               SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(

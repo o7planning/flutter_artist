@@ -62,12 +62,12 @@ class SimpleCriterionDef<V extends Object> extends CriterionDef<V> {
     super.description,
   }) : super._();
 
-  SimpleFilterCriterionModel<V> createModel({
-    required String criterionNameTilde,
+  SimpleTildeFilterCriterionModel<V> createModel({
+    required String tildeCriterionName,
     required String criterionName,
   }) {
-    return SimpleFilterCriterionModel<V>(
-      criterionNameTilde: criterionNameTilde,
+    return SimpleTildeFilterCriterionModel<V>(
+      tildeCriterionName: tildeCriterionName,
       criterionName: criterionName,
     );
   }
@@ -173,19 +173,19 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
   }
 
   @override
-  MultiOptFilterCriterionModel<V> createModel({
-    required MultiOptFilterCriterionModel? parent,
-    required String criterionNameTilde,
+  MultiOptTildeFilterCriterionModel<V> createModel({
+    required MultiOptTildeFilterCriterionModel? parent,
+    required String tildeCriterionName,
     required String criterionName,
   }) {
     return selectionType == SelectionType.single
-        ? MultiOptSsFilterCriterionModel<V>(
-            criterionNameTilde: criterionNameTilde,
+        ? MultiOptSsTildeFilterCriterionModel<V>(
+            tildeCriterionName: tildeCriterionName,
             criterionName: criterionName,
             parent: parent,
           )
-        : MultiOptMsFilterCriterionModel<V>(
-            criterionNameTilde: criterionNameTilde,
+        : MultiOptMsTildeFilterCriterionModel<V>(
+            tildeCriterionName: tildeCriterionName,
             criterionName: criterionName,
             parent: parent,
           );
@@ -207,12 +207,12 @@ class CalculatedCriterionDef<V extends Object> extends CriterionDef<V> {
     super.description,
   }) : super._();
 
-  CalculatedFilterCriterionModel<V> createModel({
-    required String criterionNameTilde,
+  CalculatedTildeFilterCriterionModel<V> createModel({
+    required String tildeCriterionName,
     required String criterionName,
   }) {
-    return CalculatedFilterCriterionModel<V>(
-      criterionNameTilde: criterionNameTilde,
+    return CalculatedTildeFilterCriterionModel<V>(
+      tildeCriterionName: tildeCriterionName,
       criterionName: criterionName,
       calculate: () {
         throw UnimplementedError();
@@ -224,16 +224,16 @@ class CalculatedCriterionDef<V extends Object> extends CriterionDef<V> {
 const String tildeSymbol = "~";
 
 class NameTilde {
-  final String criterionNameTilde;
+  final String tildeCriterionName;
   late final String criterionName;
   late final String afterTildeSuffix;
   late final String tildeSuffix;
 
-  NameTilde.parse({required this.criterionNameTilde}) {
-    if (!NameUtils.isValidFilterCriterionNameTilde(criterionNameTilde)) {
-      throw CriterionNameTildeError(criterionNameTilde: criterionNameTilde);
+  NameTilde.parse({required this.tildeCriterionName}) {
+    if (!NameUtils.isValidFilterCriterionNameTilde(tildeCriterionName)) {
+      throw CriterionNameTildeError(tildeCriterionName: tildeCriterionName);
     }
-    List<String> ss = criterionNameTilde.split(tildeSymbol);
+    List<String> ss = tildeCriterionName.split(tildeSymbol);
     criterionName = ss[0];
     afterTildeSuffix = ss[1];
     tildeSuffix = tildeSymbol + ss[1];

@@ -22,7 +22,7 @@ class SearchTextFilterModel
       conditionConnector: ConditionConnector.and,
       conditionDefs: [
         ConditionDef.condition(
-          criterionNameTilde: "searchText$tildeSymbol",
+          tildeCriterionName: "searchText$tildeSymbol",
           operator: CriterionOperator.containsIgnoreCase,
         ),
       ],
@@ -32,7 +32,7 @@ class SearchTextFilterModel
   @override
   Future<XData?> callApiLoadMultiOptCriterionXData({
     required String multiOptCriterionBaseName,
-    required String multiOptCriterionNameTilde,
+    required String multiOptTildeCriterionName,
     required SelectionType selectionType,
     required SearchTextFilterInput? filterInput,
     required Object? parentMultiOptCriterionValue,
@@ -43,7 +43,7 @@ class SearchTextFilterModel
   @override
   OptValueWrap? extractUpdateValueForMultiOptCriterion({
     required String multiOptCriterionBaseName,
-    required String multiOptCriterionNameTilde,
+    required String multiOptTildeCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required SearchTextFilterInput filterInput,
@@ -64,7 +64,7 @@ class SearchTextFilterModel
   @override
   OptValueWrap? specifyDefaultValueForMultiOptCriterion({
     required String multiOptCriterionBaseName,
-    required String multiOptCriterionNameTilde,
+    required String multiOptTildeCriterionName,
     required SelectionType selectionType,
     required XData multiOptCriterionXData,
     required Object? parentMultiOptCriterionValue,

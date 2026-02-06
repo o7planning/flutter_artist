@@ -230,7 +230,7 @@ class FilterModelStructureCriteriaBaseViewState
               onTap: () {
                 setState(() {
                   _currentNode = node;
-                  if (node.data is FilterCriterionModel) {
+                  if (node.data is TildeFilterCriterionModel) {
                     _onPressCriterion(node.data);
                   }
                 });
@@ -265,7 +265,7 @@ class FilterModelStructureCriteriaBaseViewState
     currentNode.add(childNode);
   }
 
-  void _onPressCriterion(FilterCriterionModel criterion) {
+  void _onPressCriterion(TildeFilterCriterionModel criterion) {
     print("Criterion: $criterion");
   }
 }

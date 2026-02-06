@@ -254,7 +254,7 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
               onTap: () {
                 setState(() {
                   _currentNode = node;
-                  if (node.data is FilterCriterionModel) {
+                  if (node.data is TildeFilterCriterionModel) {
                     // _onPressCriterion(node.data);
                   }
                 });
