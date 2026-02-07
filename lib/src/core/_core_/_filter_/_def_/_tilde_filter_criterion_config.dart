@@ -1,6 +1,6 @@
 part of '../../core.dart';
 
-class CriterionTildeDef {
+class TildeCriterionConfig {
   final String suffix;
   final String parentMatchSuffix;
   final DefaultSettingPolicy defaultSettingPolicy;
@@ -8,15 +8,16 @@ class CriterionTildeDef {
   late final String afterTildeSuffix;
   late final String parentMatchAfterTildeSuffix;
 
-  CriterionTildeDef({
+  TildeCriterionConfig({
     required this.suffix,
     String? parentMatchSuffix,
     this.defaultSettingPolicy = DefaultSettingPolicy.onInitialOnly,
   }) : parentMatchSuffix = parentMatchSuffix ?? suffix {
-    TildeSuffix tsObj = TildeSuffix.parse(tildeSuffix: suffix);
+    TildeSuffixObj tsObj = TildeSuffixObj.parse(tildeSuffix: suffix);
     afterTildeSuffix = tsObj.suffixWithoutTilde;
     //
-    TildeSuffix ptsObj = TildeSuffix.parse(tildeSuffix: this.parentMatchSuffix);
+    TildeSuffixObj ptsObj =
+        TildeSuffixObj.parse(tildeSuffix: this.parentMatchSuffix);
     parentMatchAfterTildeSuffix = ptsObj.suffixWithoutTilde;
   }
 }

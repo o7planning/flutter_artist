@@ -1,17 +1,17 @@
 enum FilterErrorMethod {
   // OLD: specifyDefaultSimpleCriterion Values
-  specifyDefaultValuesForSimpleCriteria,
+  specifyDefaultValuesForSimpleTildeCriteria,
 
-  // OLD: specifyDefaultValueForMultiOptCriterion
-  specifyDefaultValueForMultiOptCriterion,
+  // OLD: specifyDefaultValueForMultiOptTildeCriterion
+  specifyDefaultValueForMultiOptTildeCriterion,
 
   // OLD: getSimpleCriterionValuesFromFilterInput
-  extractUpdateValuesForSimpleCriteria,
+  extractUpdateValuesForSimpleTildeCriteria,
 
   // OLD: getMultiOptCriterionValueFromFilterInput
-  extractUpdateValueForMultiOptCriterion,
+  extractUpdateValueForMultiOptTildeCriterion,
   createNewFilterCriteria,
-  callApiLoadMultiOptCriterionXData,
+  callApiLoadMultiOptTildeCriterionXData,
   //
   unknown;
 }

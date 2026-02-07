@@ -17,12 +17,12 @@ getSimplePropValuesFromFormInput  ==> extractUpdateValuesForSimpleProps
   specifyDefaultMultiOptProp Value  ==> specifyDefaultValueForMultiOptProp
 
 
-getSimpleCriterionValuesFromFilterInput ==> extractUpdateValuesForSimpleCriteria
-getMultiOptCriterionValueFromFilterInput ==> extractUpdateValueForMultiOptCriterion
+getSimpleCriterionValuesFromFilterInput ==> extractUpdateValuesForSimpleTildeCriteria
+getMultiOptCriterionValueFromFilterInput ==> extractUpdateValueForMultiOptTildeCriterion
 
 
-  specifyDefaultSimpleCriterion Values  ==> specifyDefaultValuesForSimpleCriteria
-  specifyDefaultMultiOptCriterion Value   ==> specifyDefaultValueForMultiOptCriterion
+  specifyDefaultSimpleCriterion Values  ==> specifyDefaultValuesForSimpleTildeCriteria
+  specifyDefaultMultiOptCriterion Value   ==> specifyDefaultValueForMultiOptTildeCriterion
 
 RENAME:
  severSideAcceptNonDirection --> serverSideSkipNonDirectionWhileSelecting

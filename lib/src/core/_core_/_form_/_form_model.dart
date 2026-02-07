@@ -216,7 +216,7 @@ abstract class FormModel<
   ///  }
   /// ```
   ///
-  // SAME-AS: #0011 (filter - specifyDefaultValuesForSimpleCriteria)
+  // SAME-AS: #0011 (filter - specifyDefaultValuesForSimpleTildeCriteria)
   @_AbstractMethodAnnotation()
   Map<String, dynamic>? specifyDefaultValuesForSimpleProps({
     required Object? parentBlockCurrentItemId,
@@ -311,7 +311,7 @@ abstract class FormModel<
   /// Note: In your design, [FormInput] should not include the ID of the parent Block's [currentItem].
   ///
   // OLD: extractUpdateValuesForSimpleProps.
-  // SAME-AS: #0010 (filter - extractUpdateValuesForSimpleCriteria)
+  // SAME-AS: #0010 (filter - extractUpdateValuesForSimpleTildeCriteria)
   @_AbstractMethodAnnotation()
   Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
     required Object? parentBlockCurrentItemId,

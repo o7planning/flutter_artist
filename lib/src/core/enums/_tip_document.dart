@@ -161,7 +161,7 @@ enum TipDocument {
       case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
         return "FormModel.specifyDefaultValuesForSimpleProps()";
       case TipDocument.filterModelCallApiLoadMultiOptCriterionXData:
-        return "FilterModel.callApiLoadMultiOptCriterionXData()";
+        return "FilterModel.callApiLoadMultiOptTildeCriterionXData()";
       case TipDocument.storageCallApi:
         return "Storage.callApi()";
       case TipDocument.backgroundActionRun:
@@ -265,7 +265,7 @@ enum TipDocument {
       case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
         return "FormModel.specifyDefaultValuesForSimpleProps()";
       case TipDocument.filterModelCallApiLoadMultiOptCriterionXData:
-        return "FilterModel.callApiLoadMultiOptCriterionXData()";
+        return "FilterModel.callApiLoadMultiOptTildeCriterionXData()";
       case TipDocument.storageCallApi:
         return "Storage.callApi()";
       case TipDocument.backgroundActionRun:

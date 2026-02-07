@@ -181,7 +181,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         ),
         content: _buildTabContent(
           infoAsHtml:
-              "This <b>JSON</b> is a combination of the conditional structure and the current values of the <b>tildeCriterionName(s)</b>.",
+              "This <b>JSON</b> is a combination of the conditional structure and the current values of the <b>TildeCriterion(s)</b>.",
           json: conditionJsonX,
         ),
       ),
