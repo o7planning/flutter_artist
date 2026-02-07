@@ -27,7 +27,7 @@ class _DefaultFilterModel
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required SelectionType selectionType,
-    required Object? parentMultiOptCriterionValue,
+    required Object? parentMultiOptTildeCriterionValue,
     required EmptyFilterInput? filterInput,
   }) async {
     return null;
@@ -38,9 +38,9 @@ class _DefaultFilterModel
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required SelectionType selectionType,
-    required XData multiOptCriterionXData,
+    required XData multiOptTildeCriterionXData,
     required EmptyFilterInput filterInput,
-    required Object? parentMultiOptCriterionValue,
+    required Object? parentMultiOptTildeCriterionValue,
   }) {
     return null;
   }
@@ -57,8 +57,8 @@ class _DefaultFilterModel
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required SelectionType selectionType,
-    required XData multiOptCriterionXData,
-    required Object? parentMultiOptCriterionValue,
+    required XData multiOptTildeCriterionXData,
+    required Object? parentMultiOptTildeCriterionValue,
   }) {
     return null;
   }
@@ -70,7 +70,7 @@ class _DefaultFilterModel
 
   @override
   EmptyFilterCriteria createNewFilterCriteria({
-    required Map<String, dynamic> criteriaMap,
+    required Map<String, dynamic> tildeCriteriaMap,
   }) {
     return EmptyFilterCriteria();
   }

@@ -4,6 +4,7 @@ class SimpleTildeFilterCriterionModel<V> extends TildeFilterCriterionModel<V> {
   SimpleTildeFilterCriterionModel({
     required super.tildeCriterionName,
     required super.criterionName,
+    required super.tildeSuffix,
   });
 
   @override

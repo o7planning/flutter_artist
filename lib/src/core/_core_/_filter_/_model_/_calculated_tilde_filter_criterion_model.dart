@@ -7,6 +7,7 @@ class CalculatedTildeFilterCriterionModel<V>
   CalculatedTildeFilterCriterionModel({
     required super.tildeCriterionName,
     required super.criterionName,
+    required super.tildeSuffix,
     required this.calculate,
   });
 }

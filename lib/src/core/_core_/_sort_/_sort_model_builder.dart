@@ -23,11 +23,10 @@ abstract class SortModelBuilder<ITEM extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
-  String _getText({required String tildeCriterionName}) {
-    SortCriterionDef? criterion =
-        _structure._sortCriteriaMap[tildeCriterionName];
+  String _getText({required String criterionName}) {
+    SortCriterionDef? criterion = _structure._sortCriteriaMap[criterionName];
     if (criterion == null) {
-      return tildeCriterionName;
+      return criterionName;
     }
     String? translationKey = criterion.translationKey;
     if (translationKey == null) {
@@ -42,7 +41,7 @@ abstract class SortModelBuilder<ITEM extends Object> {
   ///
   /// The return type must be int, double, bool, null or String.
   ///
-  dynamic getCriterionValueForClientSideSorting({
+  Comparable? getComparisonValue({
     required ITEM item,
     required String criterionName,
   });

@@ -9,6 +9,9 @@ class MultiOptSsTildeFilterCriterionModel<V>
     required super.parent,
     required super.tildeCriterionName,
     required super.criterionName,
+    required super.tildeSuffix,
+    required super. defaultSettingPolicy ,
+    required  super.parentMatchSuffix,
     super.children = const [],
   }) : super._(selectionType: SelectionType.single);
 

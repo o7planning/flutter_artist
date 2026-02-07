@@ -68,7 +68,7 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
         SortDirection.asc;
 
     sortModel.updateSortingCriterionByName(
-      tildeCriterionName: selectedSortCriterion.tildeCriterionName,
+      criterionName: selectedSortCriterion.criterionName,
       direction: direction,
       moveToFirst: false,
     );
@@ -92,8 +92,8 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
           sortModel: sortModel,
           sortCriterion: sortCriterion,
           isDragging: false,
-          enabled: sortCriterion.tildeCriterionName ==
-              selectedSortingCriterion?.tildeCriterionName,
+          enabled: sortCriterion.criterionName ==
+              selectedSortingCriterion?.criterionName,
         ),
       ],
     );

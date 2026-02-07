@@ -52,6 +52,20 @@ abstract class CriterionDef<V extends Object> {
     }
     return __toFieldValue.call(baseValue).value;
   }
+
+  void _printDebugTildeSuffixes() {
+    print("@@ criterionName: $criterionBaseName --> $_tildeSuffixes");
+  }
+
+  void _printDebugTildeSuffixesCascade() {
+    _printDebugTildeSuffixes();
+    if (this is MultiOptCriterionDef) {
+      MultiOptCriterionDef _this = this as MultiOptCriterionDef;
+      for (CriterionDef childDef in _this._children) {
+        childDef._printDebugTildeSuffixesCascade();
+      }
+    }
+  }
 }
 
 class SimpleCriterionDef<V extends Object> extends CriterionDef<V> {
@@ -62,13 +76,15 @@ class SimpleCriterionDef<V extends Object> extends CriterionDef<V> {
     super.description,
   }) : super._();
 
-  SimpleTildeFilterCriterionModel<V> createModel({
+  SimpleTildeFilterCriterionModel<V> createTildeCriterionModel({
     required String tildeCriterionName,
     required String criterionName,
+    required String tildeSuffix,
   }) {
     return SimpleTildeFilterCriterionModel<V>(
       tildeCriterionName: tildeCriterionName,
       criterionName: criterionName,
+      tildeSuffix: tildeSuffix,
     );
   }
 }
@@ -172,21 +188,29 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
     );
   }
 
-  @override
-  MultiOptTildeFilterCriterionModel<V> createModel({
+  MultiOptTildeFilterCriterionModel<V> createTildeCriterionModel({
     required MultiOptTildeFilterCriterionModel? parent,
     required String tildeCriterionName,
     required String criterionName,
+    required String tildeSuffix,
+    required DefaultSettingPolicy defaultSettingPolicy,
+    required String parentMatchSuffix,
   }) {
     return selectionType == SelectionType.single
         ? MultiOptSsTildeFilterCriterionModel<V>(
             tildeCriterionName: tildeCriterionName,
             criterionName: criterionName,
+            tildeSuffix: tildeSuffix,
+            defaultSettingPolicy: defaultSettingPolicy,
+            parentMatchSuffix: parentMatchSuffix,
             parent: parent,
           )
         : MultiOptMsTildeFilterCriterionModel<V>(
             tildeCriterionName: tildeCriterionName,
             criterionName: criterionName,
+            tildeSuffix: tildeSuffix,
+            defaultSettingPolicy: defaultSettingPolicy,
+            parentMatchSuffix: parentMatchSuffix,
             parent: parent,
           );
   }
@@ -210,10 +234,12 @@ class CalculatedCriterionDef<V extends Object> extends CriterionDef<V> {
   CalculatedTildeFilterCriterionModel<V> createModel({
     required String tildeCriterionName,
     required String criterionName,
+    required String tildeSuffix,
   }) {
     return CalculatedTildeFilterCriterionModel<V>(
       tildeCriterionName: tildeCriterionName,
       criterionName: criterionName,
+      tildeSuffix: tildeSuffix,
       calculate: () {
         throw UnimplementedError();
       },

@@ -64,7 +64,7 @@ class FilterCriterionView extends StatelessWidget {
                   SizedBox(height: 3),
                 if (criterion is MultiOptTildeFilterCriterionModel)
                   IconLabelText(
-                    label: "Default Setting Policy: ",
+                    label: "Default Value Setting Policy: ",
                     text: (criterion as MultiOptTildeFilterCriterionModel)
                         .defaultSettingPolicy
                         .name,

@@ -23,13 +23,16 @@ abstract class MultiOptTildeFilterCriterionModel<V>
   List<MultiOptTildeFilterCriterionModel> get children =>
       List.unmodifiable(_children);
 
-  late final DefaultSettingPolicy defaultSettingPolicy;
-  late final String? parentMatchSuffix;
+  final DefaultSettingPolicy defaultSettingPolicy;
+  final String? parentMatchSuffix;
 
   MultiOptTildeFilterCriterionModel._({
     required this.parent,
     required super.tildeCriterionName,
     required super.criterionName,
+    required super.tildeSuffix,
+    required this.defaultSettingPolicy,
+    required this.parentMatchSuffix,
     required List<MultiOptTildeFilterCriterionModel> children,
     required this.selectionType,
   }) : _children = [...children];

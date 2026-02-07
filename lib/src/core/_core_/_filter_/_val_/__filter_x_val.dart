@@ -34,7 +34,7 @@ class FilterConditionGroupXVal implements IConditionXVal {
 
 class FilterConditionXVal implements IConditionXVal {
   final String tildeCriterionName;
-  final CriterionOperator operator;
+  final FilterOperator operator;
   final dynamic value;
 
   FilterConditionXVal({

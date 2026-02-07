@@ -1,10 +1,10 @@
 part of '../core.dart';
 
 class SortCriterion extends Equatable {
-  final String tildeCriterionName;
+  final String criterionName;
   final String _text;
   final String? translationKey;
-  final bool skipNonDirectionWhileSelecting;
+  final bool directionalSelectionOnly;
   SortDirection? _direction;
 
   SortDirection? _initialDirection;
@@ -20,8 +20,8 @@ class SortCriterion extends Equatable {
 
   SortCriterion._({
     required SortDirection? direction,
-    required this.tildeCriterionName,
-    required this.skipNonDirectionWhileSelecting,
+    required this.criterionName,
+    required this.directionalSelectionOnly,
     required this.translationKey,
     required String text,
   })  : _text = text,
@@ -46,13 +46,13 @@ class SortCriterion extends Equatable {
   }
 
   String toCriterionString() {
-    return "${_direction == null ? '' : _direction!.sign}$tildeCriterionName";
+    return "${_direction == null ? '' : _direction!.sign}$criterionName";
   }
 
   SortCriterion copyWith({required SortDirection direction}) {
     return SortCriterion._(
-      tildeCriterionName: tildeCriterionName,
-      skipNonDirectionWhileSelecting: skipNonDirectionWhileSelecting,
+      criterionName: criterionName,
+      directionalSelectionOnly: directionalSelectionOnly,
       translationKey: translationKey,
       text: text,
       direction: direction,
@@ -61,8 +61,8 @@ class SortCriterion extends Equatable {
 
   SortCriterion copy() {
     return SortCriterion._(
-      tildeCriterionName: tildeCriterionName,
-      skipNonDirectionWhileSelecting: skipNonDirectionWhileSelecting,
+      criterionName: criterionName,
+      directionalSelectionOnly: directionalSelectionOnly,
       translationKey: translationKey,
       text: text,
       direction: _direction,
@@ -74,17 +74,17 @@ class SortCriterion extends Equatable {
       case SortDirection.asc:
         return SortDirection.desc;
       case SortDirection.desc:
-        return skipNonDirectionWhileSelecting ? SortDirection.asc : null;
+        return directionalSelectionOnly ? SortDirection.asc : null;
       case null:
         return SortDirection.asc;
     }
   }
 
   @override
-  List<Object?> get props => [tildeCriterionName, _direction];
+  List<Object?> get props => [criterionName, _direction];
 
   @override
   String toString() {
-    return "${direction == null ? '' : direction!.sign}$tildeCriterionName";
+    return "${direction == null ? '' : direction!.sign}$criterionName";
   }
 }

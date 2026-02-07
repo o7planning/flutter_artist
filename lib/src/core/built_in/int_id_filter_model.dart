@@ -1,5 +1,5 @@
 import '../_core_/core.dart';
-import '../enums/_filter_criterion_operator.dart';
+import '../enums/_filter_operator.dart';
 import '../enums/_selection_type.dart';
 import 'int_id_filter_criteria.dart';
 import 'int_id_filter_input.dart';
@@ -23,7 +23,7 @@ class IntIdFilterModel
       conditionDefs: [
         ConditionDef.condition(
           tildeCriterionName: "id$tildeSymbol",
-          operator: CriterionOperator.equalTo,
+          operator: FilterOperator.equalTo,
         ),
       ],
     );
@@ -33,8 +33,8 @@ class IntIdFilterModel
   Future<XData?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
-    required Object? parentMultiOptCriterionValue,
     required IntIdFilterInput? filterInput,
   }) async {
     return null;
@@ -44,10 +44,10 @@ class IntIdFilterModel
   OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
-    required XData multiOptCriterionXData,
+    required XData multiOptTildeCriterionXData,
     required IntIdFilterInput filterInput,
-    required Object? parentMultiOptCriterionValue,
   }) {
     return null;
   }
@@ -65,9 +65,9 @@ class IntIdFilterModel
   OptValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
-    required XData multiOptCriterionXData,
-    required Object? parentMultiOptCriterionValue,
+    required XData multiOptTildeCriterionXData,
   }) {
     return null;
   }
@@ -81,10 +81,10 @@ class IntIdFilterModel
 
   @override
   IntIdFilterCriteria createNewFilterCriteria({
-    required Map<String, dynamic> criteriaMap,
+    required Map<String, dynamic> tildeCriteriaMap,
   }) {
     return IntIdFilterCriteria(
-      idValue: criteriaMap["id$tildeSymbol"],
+      idValue: tildeCriteriaMap["id$tildeSymbol"],
     );
   }
 }
