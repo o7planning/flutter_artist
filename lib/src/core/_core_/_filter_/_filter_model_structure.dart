@@ -155,8 +155,6 @@ class FilterModelStructure {
     required MultiOptCriterionDef optCriterionDef,
     required MultiOptTildeFilterCriterionModel? parentOptTildeCriterionModel,
   }) {
-    optCriterionDef._printDebugTildeSuffixes();
-    //
     for (String tildeSuffix in optCriterionDef._tildeSuffixes) {
       final String tildeCriterionName = NameTilde.createNameTilde(
         baseName: optCriterionDef.criterionBaseName,
