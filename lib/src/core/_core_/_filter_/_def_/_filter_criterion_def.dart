@@ -50,6 +50,12 @@ abstract class CriterionDef<V extends Object> {
             "you need to provide the toFieldValue() function to convert it to a simple data type.",
       );
     }
+    if (baseValue == null) {
+      return null;
+    }
+    if (baseValue is List) {
+      return baseValue.map((e) => __toFieldValue.call(e).value).toList();
+    }
     return __toFieldValue.call(baseValue).value;
   }
 
