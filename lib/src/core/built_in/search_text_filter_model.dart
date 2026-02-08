@@ -1,5 +1,5 @@
 import '../_core_/core.dart';
-import '../enums/_filter_criterion_operator.dart';
+import '../enums/_filter_operator.dart';
 import '../enums/_selection_type.dart';
 import 'search_text_filter_criteria.dart';
 import 'search_text_filter_input.dart';
@@ -23,7 +23,7 @@ class SearchTextFilterModel
       conditionDefs: [
         ConditionDef.condition(
           tildeCriterionName: "searchText$tildeSymbol",
-          operator: CriterionOperator.containsIgnoreCase,
+          operator: FilterOperator.containsIgnoreCase,
         ),
       ],
     );
@@ -33,9 +33,9 @@ class SearchTextFilterModel
   Future<XData?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
     required SearchTextFilterInput? filterInput,
-    required Object? parentMultiOptCriterionValue,
   }) async {
     return null;
   }
@@ -44,10 +44,10 @@ class SearchTextFilterModel
   OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
-    required XData multiOptCriterionXData,
+    required XData multiOptTildeCriterionXData,
     required SearchTextFilterInput filterInput,
-    required Object? parentMultiOptCriterionValue,
   }) {
     return null;
   }
@@ -65,9 +65,9 @@ class SearchTextFilterModel
   OptValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
-    required XData multiOptCriterionXData,
-    required Object? parentMultiOptCriterionValue,
+    required XData multiOptTildeCriterionXData,
   }) {
     return null;
   }
@@ -81,10 +81,10 @@ class SearchTextFilterModel
 
   @override
   SearchTextFilterCriteria createNewFilterCriteria({
-    required Map<String, dynamic> criteriaMap,
+    required Map<String, dynamic> tildeCriteriaMap,
   }) {
     return SearchTextFilterCriteria(
-      searchText: criteriaMap["searchText$tildeSymbol"],
+      searchText: tildeCriteriaMap["searchText$tildeSymbol"],
     );
   }
 }

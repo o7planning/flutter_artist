@@ -15,12 +15,12 @@ class ConditionModelImpl extends ConditionModel {
   final FilterModelStructure structure;
   final String criterionName;
   final String tildeCriterionName;
-  final CriterionOperator operator;
+  final FilterOperator operator;
   final CriterionDef criterionDef;
 
-  final List<CriterionOperator> _supportedOperators;
+  final List<FilterOperator> _supportedOperators;
 
-  List<CriterionOperator> get supportedOperators =>
+  List<FilterOperator> get supportedOperators =>
       List.unmodifiable(_supportedOperators);
 
   TildeFilterCriterionModel get filterCriterionModel {
@@ -33,7 +33,7 @@ class ConditionModelImpl extends ConditionModel {
     required this.tildeCriterionName,
     required this.criterionDef,
     required this.operator,
-    required List<CriterionOperator> supportedOperators,
+    required List<FilterOperator> supportedOperators,
   })  : _supportedOperators = supportedOperators,
         super._();
 

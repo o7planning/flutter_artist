@@ -12,8 +12,8 @@ abstract interface class ConditionDef {
 
   factory ConditionDef.condition({
     required String tildeCriterionName,
-    required CriterionOperator operator,
-    List<CriterionOperator>? supportedOperators,
+    required FilterOperator operator,
+    List<FilterOperator>? supportedOperators,
   }) {
     return ConditionDefImpl._(
       tildeCriterionName: tildeCriterionName,
@@ -42,8 +42,8 @@ class ConditionDefImpl implements ConditionDef {
   FilterModelStructure get structure => _structure;
 
   final NameTilde _tildeObj;
-  final CriterionOperator operator;
-  late final List<CriterionOperator> _supportedOperators;
+  final FilterOperator operator;
+  late final List<FilterOperator> _supportedOperators;
 
   //
   String get criterionName => _tildeObj.criterionName;
@@ -66,7 +66,7 @@ class ConditionDefImpl implements ConditionDef {
   ConditionDefImpl._({
     required String tildeCriterionName,
     required this.operator,
-    List<CriterionOperator>? supportedOperators,
+    List<FilterOperator>? supportedOperators,
   }) : _tildeObj = NameTilde.parse(tildeCriterionName: tildeCriterionName) {
     _supportedOperators = supportedOperators == null
         ? [operator]

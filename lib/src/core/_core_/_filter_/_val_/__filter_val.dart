@@ -12,7 +12,7 @@ abstract interface class IConditionVal {
 class FilterConditionVal implements IConditionVal {
   final String criterionName;
   final CriterionDef criterionDef;
-  final CriterionOperator operator;
+  final FilterOperator operator;
   final dynamic value;
 
   FilterConditionVal({

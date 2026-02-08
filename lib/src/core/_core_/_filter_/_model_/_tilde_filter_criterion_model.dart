@@ -6,6 +6,7 @@ abstract class TildeFilterCriterionModel<V> {
   //
   final String criterionName;
   final String tildeCriterionName;
+  final String tildeSuffix;
 
   // IMPORTANT: Do not change type (dynamic).
   dynamic _candidateUpdateValue;
@@ -46,6 +47,7 @@ abstract class TildeFilterCriterionModel<V> {
   TildeFilterCriterionModel({
     required this.tildeCriterionName,
     required this.criterionName,
+    required this.tildeSuffix,
   });
 
   bool isDirty() {

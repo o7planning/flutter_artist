@@ -9,6 +9,9 @@ class MultiOptMsTildeFilterCriterionModel<V>
     required super.parent,
     required super.tildeCriterionName,
     required super.criterionName,
+    required super.tildeSuffix,
+    required super.defaultSettingPolicy,
+    required super.parentMatchSuffix,
   }) : super._(selectionType: SelectionType.multi, children: const []);
 
   @override

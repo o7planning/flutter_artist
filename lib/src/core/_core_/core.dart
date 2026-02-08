@@ -54,7 +54,7 @@ import '../enums/_action_result_state.dart';
 import '../enums/_activity_hidden_action.dart';
 import '../enums/_client_side_sort_mode.dart';
 import '../enums/_default_setting_policy.dart';
-import '../enums/_filter_criterion_operator.dart';
+import '../enums/_filter_operator.dart';
 import '../enums/_filter_error_method.dart';
 import '../enums/_hook_hidden_action.dart';
 import '../enums/_block_control_action_type.dart';
@@ -405,6 +405,8 @@ part '_filter_/_model_/_calculated_tilde_filter_criterion_model.dart';
 part '_filter_/_filter_model_structure.dart';
 
 part '_sort_/_def_/_sort_criterion_def.dart';
+
+part '_sort_/_sortable_value.dart';
 
 part '_sort_/_sort_model_structure.dart';
 

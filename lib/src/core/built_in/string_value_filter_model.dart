@@ -1,5 +1,5 @@
 import '../_core_/core.dart';
-import '../enums/_filter_criterion_operator.dart';
+import '../enums/_filter_operator.dart';
 import '../enums/_selection_type.dart';
 import 'string_value_filter_criteria.dart';
 import 'string_value_filter_input.dart';
@@ -23,7 +23,7 @@ class StringValueFilterModel
       conditionDefs: [
         ConditionDef.condition(
           tildeCriterionName: "string$tildeSymbol",
-          operator: CriterionOperator.equalTo,
+          operator: FilterOperator.equalTo,
         ),
       ],
     );
@@ -33,9 +33,9 @@ class StringValueFilterModel
   Future<XData?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
     required StringValueFilterInput? filterInput,
-    required Object? parentMultiOptCriterionValue,
   }) async {
     return null;
   }
@@ -44,10 +44,10 @@ class StringValueFilterModel
   OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
     required StringValueFilterInput filterInput,
-    required Object? parentMultiOptCriterionValue,
-    required XData multiOptCriterionXData,
+    required XData multiOptTildeCriterionXData,
   }) {
     return null;
   }
@@ -65,9 +65,9 @@ class StringValueFilterModel
   OptValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
-    required XData multiOptCriterionXData,
-    required Object? parentMultiOptCriterionValue,
+    required XData multiOptTildeCriterionXData,
   }) {
     return null;
   }
@@ -81,10 +81,10 @@ class StringValueFilterModel
 
   @override
   StringValueFilterCriteria createNewFilterCriteria({
-    required Map<String, dynamic> criteriaMap,
+    required Map<String, dynamic> tildeCriteriaMap,
   }) {
     return StringValueFilterCriteria(
-      stringValue: criteriaMap["string$tildeSymbol"],
+      stringValue: tildeCriteriaMap["string$tildeSymbol"],
     );
   }
 }

@@ -1,4 +1,4 @@
-enum CriterionOperator {
+enum FilterOperator {
   equalTo("equalTo"),
   notEqualTo("notEqualTo"),
   greaterThan("greaterThan"),
@@ -17,7 +17,7 @@ enum CriterionOperator {
 
   final String text;
 
-  const CriterionOperator(this.text);
+  const FilterOperator(this.text);
 }
 
 enum ConditionConnector {

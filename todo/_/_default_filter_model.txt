@@ -20,7 +20,7 @@ class _DefaultFilterModel
 
   @override
   EmptyFilterCriteria createNewFilterCriteria({
-    required Map<String, dynamic> criteriaMap,
+    required Map<String, dynamic> tildeCriteriaMap,
   }) {
     return EmptyFilterCriteria();
   }
@@ -28,7 +28,7 @@ class _DefaultFilterModel
   @override
   Future<XList?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
-    required Object? parentMultiOptCriterionValue,
+    required Object? parentMultiOptTildeCriterionValue,
     required EmptyFilterInput? filterInput,
   }) async {
     return null;
@@ -37,9 +37,9 @@ class _DefaultFilterModel
   @override
   ValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
-    required XData multiOptCriterionXData,
+    required XData multiOptTildeCriterionXData,
     required EmptyFilterInput filterInput,
-    required Object? parentMultiOptCriterionValue,
+    required Object? parentMultiOptTildeCriterionValue,
   }) {
     return null;
   }
@@ -54,8 +54,8 @@ class _DefaultFilterModel
   @override
   ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
-    required XData multiOptCriterionXData,
-    required Object? parentMultiOptCriterionValue,
+    required XData multiOptTildeCriterionXData,
+    required Object? parentMultiOptTildeCriterionValue,
   }) {
     return null;
   }
@@ -84,7 +84,7 @@ class StringIdFilterModel
 
   @override
   StringIdFilterCriteria createNewFilterCriteria({
-    required Map<String, dynamic> criteriaMap,
+    required Map<String, dynamic> tildeCriteriaMap,
   }) {
     return StringIdFilterCriteria(idValue: idValue);
   }
@@ -92,7 +92,7 @@ class StringIdFilterModel
   @override
   Future<XList?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
-    required Object? parentMultiOptCriterionValue,
+    required Object? parentMultiOptTildeCriterionValue,
     required StringIdFilterInput? filterInput,
   }) async {
     return null;
@@ -101,9 +101,9 @@ class StringIdFilterModel
   @override
   ValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
-    required XData multiOptCriterionXData,
+    required XData multiOptTildeCriterionXData,
     required StringIdFilterInput filterInput,
-    required Object? parentMultiOptCriterionValue,
+    required Object? parentMultiOptTildeCriterionValue,
   }) {
     return null;
   }
@@ -118,8 +118,8 @@ class StringIdFilterModel
   @override
   ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
-    required XData multiOptCriterionXData,
-    required Object? parentMultiOptCriterionValue,
+    required XData multiOptTildeCriterionXData,
+    required Object? parentMultiOptTildeCriterionValue,
   }) {
     return null;
   }
@@ -148,7 +148,7 @@ class StringValueFilterModel
 
   @override
   StringValueFilterCriteria createNewFilterCriteria({
-    required Map<String, dynamic> criteriaMap,
+    required Map<String, dynamic> tildeCriteriaMap,
   }) {
     return StringValueFilterCriteria(stringValue: stringValue);
   }
@@ -157,7 +157,7 @@ class StringValueFilterModel
   Future<XList?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required StringValueFilterInput? filterInput,
-    required Object? parentMultiOptCriterionValue,
+    required Object? parentMultiOptTildeCriterionValue,
   }) async {
     return null;
   }
@@ -166,8 +166,8 @@ class StringValueFilterModel
   ValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required StringValueFilterInput filterInput,
-    required Object? parentMultiOptCriterionValue,
-    required XData multiOptCriterionXData,
+    required Object? parentMultiOptTildeCriterionValue,
+    required XData multiOptTildeCriterionXData,
   }) {
     return null;
   }
@@ -182,8 +182,8 @@ class StringValueFilterModel
   @override
   ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
-    required XData multiOptCriterionXData,
-    required Object? parentMultiOptCriterionValue,
+    required XData multiOptTildeCriterionXData,
+    required Object? parentMultiOptTildeCriterionValue,
   }) {
     return null;
   }
@@ -212,7 +212,7 @@ class SearchTextFilterModel
 
   @override
   SearchTextFilterCriteria createNewFilterCriteria({
-    required Map<String, dynamic> criteriaMap,
+    required Map<String, dynamic> tildeCriteriaMap,
   }) {
     return SearchTextFilterCriteria(searchText: searchText);
   }
@@ -221,7 +221,7 @@ class SearchTextFilterModel
   Future<XList?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required SearchTextFilterInput? filterInput,
-    required Object? parentMultiOptCriterionValue,
+    required Object? parentMultiOptTildeCriterionValue,
   }) async {
     return null;
   }
@@ -229,9 +229,9 @@ class SearchTextFilterModel
   @override
   ValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
-    required XData multiOptCriterionXData,
+    required XData multiOptTildeCriterionXData,
     required SearchTextFilterInput filterInput,
-    required Object? parentMultiOptCriterionValue,
+    required Object? parentMultiOptTildeCriterionValue,
   }) {
     return null;
   }
@@ -246,8 +246,8 @@ class SearchTextFilterModel
   @override
   ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
-    required XData multiOptCriterionXData,
-    required Object? parentMultiOptCriterionValue,
+    required XData multiOptTildeCriterionXData,
+    required Object? parentMultiOptTildeCriterionValue,
   }) {
     return null;
   }
@@ -276,7 +276,7 @@ class IntIdFilterModel
 
   @override
   IntIdFilterCriteria createNewFilterCriteria({
-    required Map<String, dynamic> criteriaMap,
+    required Map<String, dynamic> tildeCriteriaMap,
   }) {
     return IntIdFilterCriteria(idValue: idValue);
   }
@@ -284,7 +284,7 @@ class IntIdFilterModel
   @override
   Future<XList?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
-    required Object? parentMultiOptCriterionValue,
+    required Object? parentMultiOptTildeCriterionValue,
     required IntIdFilterInput? filterInput,
   }) async {
     return null;
@@ -293,9 +293,9 @@ class IntIdFilterModel
   @override
   ValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
-    required XData multiOptCriterionXData,
+    required XData multiOptTildeCriterionXData,
     required IntIdFilterInput filterInput,
-    required Object? parentMultiOptCriterionValue,
+    required Object? parentMultiOptTildeCriterionValue,
   }) {
     return null;
   }
@@ -310,8 +310,8 @@ class IntIdFilterModel
   @override
   ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
-    required XData multiOptCriterionXData,
-    required Object? parentMultiOptCriterionValue,
+    required XData multiOptTildeCriterionXData,
+    required Object? parentMultiOptTildeCriterionValue,
   }) {
     return null;
   }

@@ -124,9 +124,9 @@ abstract class FilterModel<
   Future<XData?> callApiLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
     required FILTER_INPUT? filterInput,
-    required Object? parentMultiOptCriterionValue,
   });
 
   // ***************************************************************************
@@ -137,9 +137,9 @@ abstract class FilterModel<
   OptValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
+    required XData multiOptTildeCriterionXData,
     required SelectionType selectionType,
-    required XData multiOptCriterionXData,
-    required Object? parentMultiOptCriterionValue,
   });
 
   // ***************************************************************************
@@ -159,10 +159,11 @@ abstract class FilterModel<
   /// @override
   /// ValueWrap? extractUpdateValueForMultiOptTildeCriterion({
   ///     required String multiOptTildeCriterionName,
+  ///     required String multiOptCriterionBaseName,
+  ///     required Object? parentMultiOptTildeCriterionValue,
   ///     required SelectionType selectionType,
   ///     required ExampleFilterInput filterInput,
-  ///     required XData multiOptCriterionXData,
-  ///     required Object? parentMultiOptCriterionValue,
+  ///     required XData multiOptTildeCriterionXData,
   /// }) {
   ///    if(multiOptTildeCriterionName == "company") {
   ///       int inputCompanyId = filterInput.filterInput;
@@ -178,10 +179,10 @@ abstract class FilterModel<
   OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
-    required XData multiOptCriterionXData,
+    required XData multiOptTildeCriterionXData,
     required FILTER_INPUT filterInput,
-    required Object? parentMultiOptCriterionValue,
   });
 
   // ***************************************************************************
@@ -205,27 +206,27 @@ abstract class FilterModel<
   ///
   /// ```dart
   ///  MyFilterCriteria createNewFilterCriteria({
-  ///     required Map<String, dynamic> criteriaMap,
+  ///     required Map<String, dynamic> tildeCriteriaMap,
   ///  }) {
   ///      return MyFilterCriteria(
-  ///         company: criteriaMap["company"],
-  ///         department: criteriaMap["department"],
+  ///         company: tildeCriteriaMap["company"],
+  ///         department: tildeCriteriaMap["department"],
   ///      );
   ///  }
   /// ```
   ///
   @_AbstractMethodAnnotation()
   FILTER_CRITERIA createNewFilterCriteria({
-    required Map<String, dynamic> criteriaMap,
+    required Map<String, dynamic> tildeCriteriaMap,
   });
 
   XFilterCriteria<FILTER_CRITERIA> __createXFilterCriteria({
-    required Map<String, dynamic> criteriaMap,
+    required Map<String, dynamic> tildeCriteriaMap,
     required FilterConditionGroupVal baseCriteria,
     required bool isPrecheck,
   }) {
     FILTER_CRITERIA filterCriteria = createNewFilterCriteria(
-      criteriaMap: criteriaMap,
+      tildeCriteriaMap: tildeCriteriaMap,
     );
     filterCriteria._initFilterCriteria(
       baseCriteria: baseCriteria,
@@ -233,7 +234,7 @@ abstract class FilterModel<
     );
     return XFilterCriteria<FILTER_CRITERIA>(
       filterCriteria: filterCriteria,
-      filterCriteriaMap: criteriaMap,
+      filterCriteriaMap: tildeCriteriaMap,
     );
   }
 
@@ -246,7 +247,7 @@ abstract class FilterModel<
     }
     try {
       final xFilterCriteria = __createXFilterCriteria(
-        criteriaMap: {},
+        tildeCriteriaMap: {},
         baseCriteria: FilterConditionGroupVal.empty(),
         isPrecheck: true,
       );
@@ -483,11 +484,11 @@ abstract class FilterModel<
   }
 
   dynamic getMultiOptTildeCriterionData(String multiOptTildeCriterionName) {
-    XData? multiOptCriterionXData = getMultiOptTildeCriterionXData(
+    XData? multiOptTildeCriterionXData = getMultiOptTildeCriterionXData(
       multiOptTildeCriterionName,
     );
     //
-    dynamic data = multiOptCriterionXData?.data;
+    dynamic data = multiOptTildeCriterionXData?.data;
     if (data != null) {
       return data;
     } else {
@@ -565,7 +566,7 @@ abstract class FilterModel<
           parameters: {
             "activityType": activityType,
             "filterInput": filterInput,
-            "parentMultiOptCriterionValue": null,
+            "parentMultiOptTildeCriterionValue": null,
             "multiOptCriterion": multiOptCriterion,
             "formKeyInstantValues": formKeyInstantValues,
           },
@@ -579,7 +580,7 @@ abstract class FilterModel<
         await _loadMultiOptCriterionDataCascade(
           masterFlowItem: masterFlowItem,
           filterInput: filterInput,
-          parentMultiOptCriterionValue: null,
+          parentMultiOptTildeCriterionValue: null,
           multiOptCriterion: multiOptCriterion,
           formKeyInstantValues: formKeyInstantValues,
           activityType: activityType,
@@ -751,7 +752,7 @@ abstract class FilterModel<
       // Convert Map Data to FilterCriteria Object.
       final XFilterCriteria<FILTER_CRITERIA> newXFilterCriteria =
           __createXFilterCriteria(
-        criteriaMap: newCriteriaMap,
+        tildeCriteriaMap: newCriteriaMap,
         baseCriteria: baseCriteria,
         isPrecheck: false,
       );
@@ -809,7 +810,7 @@ abstract class FilterModel<
   Future<void> _loadMultiOptCriterionDataCascade({
     required MasterFlowItem masterFlowItem,
     required FILTER_INPUT? filterInput,
-    required Object? parentMultiOptCriterionValue,
+    required Object? parentMultiOptTildeCriterionValue,
     required MultiOptTildeFilterCriterionModel multiOptCriterion,
     required Map<String, dynamic> formKeyInstantValues,
     required FilterActivityType activityType,
@@ -825,7 +826,7 @@ abstract class FilterModel<
           "Begin of ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method.",
       parameters: {
         "filterInput": filterInput,
-        "parentMultiOptCriterionValue": parentMultiOptCriterionValue,
+        "parentMultiOptTildeCriterionValue": parentMultiOptTildeCriterionValue,
         "multiOptCriterion": multiOptCriterion,
         "activityType": activityType,
       },
@@ -896,7 +897,7 @@ abstract class FilterModel<
         // Parent Value change?
         bool isSame = tempMultiOptXDataParent.isSameItemOrItemList(
           itemOrItemList1: parentOptCriterionValueOLD,
-          itemOrItemList2: parentMultiOptCriterionValue,
+          itemOrItemList2: parentMultiOptTildeCriterionValue,
         );
         if (!isSame) {
           tempMultiOptCriterionXData = null;
@@ -930,7 +931,8 @@ abstract class FilterModel<
               "Calling ${debugObjHtml(this)}.callApiLoadMultiOptTildeCriterionXData():",
           parameters: {
             "filterInput": filterInput,
-            "parentMultiOptCriterionValue": parentMultiOptCriterionValue,
+            "parentMultiOptTildeCriterionValue":
+                parentMultiOptTildeCriterionValue,
             "multiOptCriterionBaseName": multiOptCriterionBaseName,
             "multiOptTildeCriterionName": multiOptTildeCriterionName,
             "selectionType": selectionType,
@@ -945,7 +947,7 @@ abstract class FilterModel<
         tempMultiOptCriterionXData =
             await callApiLoadMultiOptTildeCriterionXData(
           filterInput: filterInput,
-          parentMultiOptCriterionValue: parentMultiOptCriterionValue,
+          parentMultiOptTildeCriterionValue: parentMultiOptTildeCriterionValue,
           multiOptCriterionBaseName: multiOptCriterionBaseName,
           multiOptTildeCriterionName: multiOptTildeCriterionName,
           selectionType: selectionType,
@@ -982,8 +984,8 @@ abstract class FilterModel<
         // Test Case: [20c], [20d].
         inputValueWrap = __extractUpdateValueForMultiOptTildeCriterion(
           filterInput: filterInput,
-          parentMultiOptCriterionValue: parentMultiOptCriterionValue,
-          multiOptCriterionXData: tempMultiOptCriterionXData,
+          parentMultiOptTildeCriterionValue: parentMultiOptTildeCriterionValue,
+          multiOptTildeCriterionXData: tempMultiOptCriterionXData,
           multiOptCriterionBaseName: multiOptCriterionBaseName,
           multiOptTildeCriterionName: multiOptTildeCriterionName,
           selectionType: selectionType,
@@ -999,19 +1001,20 @@ abstract class FilterModel<
             shortDesc:
                 "Calling ${debugObjHtml(this)}.__specifyDefaultValueForMultiOptTildeCriterion():",
             parameters: {
-              "parentMultiOptCriterionValue": parentMultiOptCriterionValue,
+              "parentMultiOptTildeCriterionValue":
+                  parentMultiOptTildeCriterionValue,
               "multiOptCriterionBaseName": multiOptCriterionBaseName,
               "multiOptTildeCriterionName": multiOptTildeCriterionName,
               "selectionType": selectionType,
             },
             lineFlowType: LineFlowType.nonControllableCalling,
           );
-
           inputValueWrap = __specifyDefaultValueForMultiOptTildeCriterion(
             multiOptCriterionBaseName: multiOptCriterionBaseName,
             multiOptTildeCriterionName: multiOptTildeCriterionName,
-            parentMultiOptCriterionValue: parentMultiOptCriterionValue,
-            multiOptCriterionXData: tempMultiOptCriterionXData,
+            parentMultiOptTildeCriterionValue:
+                parentMultiOptTildeCriterionValue,
+            multiOptTildeCriterionXData: tempMultiOptCriterionXData,
             selectionType: selectionType,
           );
           masterFlowItem._addLineFlowItem(
@@ -1124,7 +1127,7 @@ abstract class FilterModel<
         await _loadMultiOptCriterionDataCascade(
           masterFlowItem: masterFlowItem,
           filterInput: filterInput,
-          parentMultiOptCriterionValue: tempSelectedCriterionValue,
+          parentMultiOptTildeCriterionValue: tempSelectedCriterionValue,
           multiOptCriterion: child,
           activityType: activityType,
           formKeyInstantValues: formKeyInstantValues,
@@ -1184,15 +1187,15 @@ abstract class FilterModel<
   OptValueWrap? __extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
-    required XData multiOptCriterionXData,
+    required XData multiOptTildeCriterionXData,
     required FILTER_INPUT filterInput,
-    required Object? parentMultiOptCriterionValue,
   }) {
     OptValueWrap? valueWrap = extractUpdateValueForMultiOptTildeCriterion(
       filterInput: filterInput,
-      parentMultiOptCriterionValue: parentMultiOptCriterionValue,
-      multiOptCriterionXData: multiOptCriterionXData,
+      parentMultiOptTildeCriterionValue: parentMultiOptTildeCriterionValue,
+      multiOptTildeCriterionXData: multiOptTildeCriterionXData,
       multiOptCriterionBaseName: multiOptCriterionBaseName,
       multiOptTildeCriterionName: multiOptTildeCriterionName,
       selectionType: selectionType,
@@ -1206,7 +1209,7 @@ abstract class FilterModel<
     }
     List? value = valueWrap.values;
     return OptValueWrap.multi(
-      multiOptCriterionXData._findInternalItemsByDynamics(
+      multiOptTildeCriterionXData._findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,
         removeCurrentNotFoundItems: true,
@@ -1217,15 +1220,15 @@ abstract class FilterModel<
   OptValueWrap? __specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
+    required Object? parentMultiOptTildeCriterionValue,
     required SelectionType selectionType,
-    required XData multiOptCriterionXData,
-    required Object? parentMultiOptCriterionValue,
+    required XData multiOptTildeCriterionXData,
   }) {
     OptValueWrap? valueWrap = specifyDefaultValueForMultiOptTildeCriterion(
       multiOptCriterionBaseName: multiOptCriterionBaseName,
       multiOptTildeCriterionName: multiOptTildeCriterionName,
-      parentMultiOptCriterionValue: parentMultiOptCriterionValue,
-      multiOptCriterionXData: multiOptCriterionXData,
+      parentMultiOptTildeCriterionValue: parentMultiOptTildeCriterionValue,
+      multiOptTildeCriterionXData: multiOptTildeCriterionXData,
       selectionType: selectionType,
     );
     if (valueWrap == null) {
@@ -1236,7 +1239,7 @@ abstract class FilterModel<
     }
     List? value = valueWrap?.values ?? [];
     return OptValueWrap.multi(
-      multiOptCriterionXData._findInternalItemsByDynamics(
+      multiOptTildeCriterionXData._findInternalItemsByDynamics(
         dynamicValues: value,
         addToInternalIfNotFound: false,
         removeCurrentNotFoundItems: true,
