@@ -35,7 +35,14 @@ class FilterConditionVal implements IConditionVal {
   Map<String, dynamic> _toFieldBasedMapData({required bool throwIfError}) {
     dynamic fieldValue;
     try {
-      fieldValue = criterionDef._convert(value);
+      if (value == null) {
+        fieldValue = null;
+      } else if (value is List) {
+        fieldValue =
+            (value as List).map((v) => criterionDef._convert(v)).toList();
+      } else {
+        fieldValue = criterionDef._convert(value);
+      }
     } catch (e) {
       if (throwIfError) {
         rethrow;

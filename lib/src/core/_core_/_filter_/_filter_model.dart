@@ -775,6 +775,7 @@ abstract class FilterModel<
       //
       return _xFilterCriteria;
     } catch (e, stackTrace) {
+      print(stackTrace);
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: "createNewFilterCriteria",
@@ -919,10 +920,11 @@ abstract class FilterModel<
         multiOptTildeCriterionName: null,
       });
     }
-
+    bool newLoaded = false;
     if (tempMultiOptCriterionXData == null) {
       // Always increase "_loadCount" value regardless of error.
       multiOptCriterion._loadCount++;
+      newLoaded = true;
       //
       try {
         masterFlowItem._addLineFlowItem(
@@ -952,6 +954,14 @@ abstract class FilterModel<
           multiOptTildeCriterionName: multiOptTildeCriterionName,
           selectionType: selectionType,
         );
+        masterFlowItem._addLineFlowItem(
+          codeId: "#82400",
+          shortDesc: "Debug. Return value: ",
+          parameters: {
+            "tempMultiOptCriterionXData": tempMultiOptCriterionXData,
+          },
+          lineFlowType: LineFlowType.debug,
+        );
       } catch (e, stackTrace) {
         // TODO: Test Case??
         throw FilterTempError(
@@ -963,14 +973,6 @@ abstract class FilterModel<
         );
       }
     }
-    masterFlowItem._addLineFlowItem(
-      codeId: "#82400",
-      shortDesc: "Debug. Return value: ",
-      parameters: {
-        "tempMultiOptCriterionXData": tempMultiOptCriterionXData,
-      },
-      lineFlowType: LineFlowType.debug,
-    );
     //
     // IMPORTANT: Do not use empty list here
     // to avoid cast Error (List<dynamic> to List<ITEM>)
@@ -995,7 +997,9 @@ abstract class FilterModel<
         final defaultSettingPolicy = multiOptCriterion.defaultSettingPolicy;
         if ((!__initiatedAtLeastOnce &&
                 defaultSettingPolicy == DefaultSettingPolicy.onInitialOnly) ||
-            defaultSettingPolicy == DefaultSettingPolicy.onEveryLoad) {
+            (newLoaded &&
+                multiOptCriterion._tempCurrentValue == null &&
+                defaultSettingPolicy == DefaultSettingPolicy.onEveryLoad)) {
           masterFlowItem._addLineFlowItem(
             codeId: "#82460",
             shortDesc:
