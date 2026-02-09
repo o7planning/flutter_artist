@@ -22,7 +22,7 @@ class FilterConditionModelView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TildeFilterCriterionModel criterionModel =
-        conditionModel.filterCriterionModel;
+        conditionModel.tildeFilterCriterionModel;
     //
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),

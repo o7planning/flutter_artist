@@ -104,7 +104,7 @@ class _FlutterArtist extends _Core {
     if (__coreFeaturesAdapter == null) {
       throw DebugUtils.getFatalError(
           " >>>>>> $ICoreFeaturesAdapter is not registered!. "
-          "\n >>>>>> You need to call $FlutterArtist.config() in main.dart");
+              "\n >>>>>> You need to call $FlutterArtist.config() in main.dart");
     }
     return __coreFeaturesAdapter!;
   }
@@ -199,7 +199,7 @@ class _FlutterArtist extends _Core {
         codeFlowRetentionPeriodInSeconds: codeFlowRetentionPeriodInSeconds);
     //
     final masterFlowItem =
-        FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
+    FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
 
     masterFlowItem._addLineFlowItem(
       codeId: "#S0000",
@@ -257,7 +257,7 @@ class _FlutterArtist extends _Core {
       codeId: "#S0500",
       shortDesc: "Calling <b>globalsManager._init()</b>...",
       note:
-          "This method will read all the user data that was previously stored in <b>Local</b>.",
+      "This method will read all the user data that was previously stored in <b>Local</b>.",
       lineFlowType: LineFlowType.nonControllableCalling,
       tipDocument: TipDocument.globalData,
     );
@@ -283,7 +283,7 @@ class _FlutterArtist extends _Core {
       masterFlowItem._addLineFlowItem(
         codeId: "#S0560",
         shortDesc:
-            "Calling <b>localeManager._readStoredLocale()</b> to read saved locale from <b>Local</b>...",
+        "Calling <b>localeManager._readStoredLocale()</b> to read saved locale from <b>Local</b>...",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       final Locale? locale = localeManager._readStoredLocale(
@@ -378,14 +378,15 @@ class _FlutterArtist extends _Core {
     showOverlay(
       asyncFunction: () async {
         await Future.doWhile(
-          () => Future.delayed(
-            // Default?
-            const Duration(milliseconds: 0),
-          ).then(
-            (_) {
-              return __futureTaskList.isNotEmpty;
-            },
-          ),
+              () =>
+              Future.delayed(
+                // Default?
+                const Duration(milliseconds: 0),
+              ).then(
+                    (_) {
+                  return __futureTaskList.isNotEmpty;
+                },
+              ),
         );
       },
     );
@@ -436,7 +437,7 @@ class _FlutterArtist extends _Core {
   void internalNotifyLog() {
     Future.delayed(
       Duration.zero,
-      () {
+          () {
         for (ILogListener listener in [..._logListeners]) {
           if (listener is State) {
             State state = listener as State;

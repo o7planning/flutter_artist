@@ -173,7 +173,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
             isMultiSelection = false;
           } else if (data is ConditionModelImpl) {
             TildeFilterCriterionModel criterionModel =
-                data.filterCriterionModel;
+                data.tildeFilterCriterionModel;
 
             if (criterionModel is SimpleTildeFilterCriterionModel) {
               title = data.tildeCriterionName;

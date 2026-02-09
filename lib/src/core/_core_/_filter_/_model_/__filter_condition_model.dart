@@ -5,9 +5,9 @@ abstract class ConditionModel {
 
   ConditionModel._();
 
-  IConditionVal toFilterRuleVal();
+  IConditionVal toFilterConditionVal();
 
-  IConditionXVal toFilterRuleXVal();
+  IConditionTildeVal toFilterConditionTildeVal();
 }
 
 class ConditionModelImpl extends ConditionModel {
@@ -23,7 +23,7 @@ class ConditionModelImpl extends ConditionModel {
   List<FilterOperator> get supportedOperators =>
       List.unmodifiable(_supportedOperators);
 
-  TildeFilterCriterionModel get filterCriterionModel {
+  TildeFilterCriterionModel get tildeFilterCriterionModel {
     return structure._allCriterionModelMapX[tildeCriterionName]!;
   }
 
@@ -38,21 +38,23 @@ class ConditionModelImpl extends ConditionModel {
         super._();
 
   @override
-  IConditionVal toFilterRuleVal() {
+  IConditionVal toFilterConditionVal() {
+    dynamic value = tildeFilterCriterionModel.currentValue;
+    //
     return FilterConditionVal(
       criterionName: criterionName,
       criterionDef: criterionDef,
       operator: operator,
-      value: filterCriterionModel.currentValue,
+      value: value,
     );
   }
 
   @override
-  IConditionXVal toFilterRuleXVal() {
-    return FilterConditionXVal(
+  IConditionTildeVal toFilterConditionTildeVal() {
+    return FilterConditionTildeVal(
       tildeCriterionName: tildeCriterionName,
       operator: operator,
-      value: filterCriterionModel.currentValue,
+      value: tildeFilterCriterionModel.currentValue,
     );
   }
 }
@@ -79,28 +81,29 @@ class ConditionGroupModelImpl extends ConditionModel {
   // ***************************************************************************
 
   FilterConditionGroupVal toFilterCriteriaGroupVal() {
-    return toFilterRuleVal() as FilterConditionGroupVal;
+    return toFilterConditionVal() as FilterConditionGroupVal;
   }
 
-  FilterConditionGroupXVal toFilterCriteriaGroupXVal() {
-    return toFilterRuleXVal() as FilterConditionGroupXVal;
+  FilterConditionGroupTildeVal toFilterCriteriaGroupXVal() {
+    return toFilterConditionTildeVal() as FilterConditionGroupTildeVal;
   }
 
   @override
-  IConditionVal toFilterRuleVal() {
+  IConditionVal toFilterConditionVal() {
     return FilterConditionGroupVal(
       groupName: groupName,
       connector: connector,
-      conditions: _conditions.map((m) => m.toFilterRuleVal()).toList(),
+      conditions: _conditions.map((m) => m.toFilterConditionVal()).toList(),
     );
   }
 
   @override
-  IConditionXVal toFilterRuleXVal() {
-    return FilterConditionGroupXVal(
+  IConditionTildeVal toFilterConditionTildeVal() {
+    return FilterConditionGroupTildeVal(
       groupName: groupName,
       connector: connector,
-      conditions: _conditions.map((m) => m.toFilterRuleXVal()).toList(),
+      conditions:
+          _conditions.map((m) => m.toFilterConditionTildeVal()).toList(),
     );
   }
 }

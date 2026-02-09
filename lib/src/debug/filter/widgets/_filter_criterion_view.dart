@@ -39,7 +39,7 @@ class FilterCriterionView extends StatelessWidget {
           iconSize: 16,
         ),
         title: Text(
-          "${filterCriterion.filterCriterionName} <${filterCriterion.baseDataType}>",
+          "${filterCriterion.filterCriterionName} <${filterCriterion.rawDataType}>",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 13,
