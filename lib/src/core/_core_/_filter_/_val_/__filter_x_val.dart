@@ -1,18 +1,18 @@
 part of '../../core.dart';
 
 ///
-/// [FilterConditionGroupXVal], [FilterConditionXVal].
+/// [FilterConditionGroupTildeVal], [FilterConditionTildeVal].
 ///
-abstract interface class IConditionXVal {
+abstract interface class IConditionTildeVal {
   Map<String, dynamic> _toMapData();
 }
 
-class FilterConditionGroupXVal implements IConditionXVal {
+class FilterConditionGroupTildeVal implements IConditionTildeVal {
   final String groupName;
   final ConditionConnector connector;
-  final List<IConditionXVal> conditions;
+  final List<IConditionTildeVal> conditions;
 
-  const FilterConditionGroupXVal({
+  const FilterConditionGroupTildeVal({
     required this.groupName,
     required this.connector,
     required this.conditions,
@@ -32,12 +32,12 @@ class FilterConditionGroupXVal implements IConditionXVal {
   }
 }
 
-class FilterConditionXVal implements IConditionXVal {
+class FilterConditionTildeVal implements IConditionTildeVal {
   final String tildeCriterionName;
   final FilterOperator operator;
   final dynamic value;
 
-  FilterConditionXVal({
+  FilterConditionTildeVal({
     required this.tildeCriterionName,
     required this.operator,
     required this.value,

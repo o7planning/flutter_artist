@@ -35,31 +35,31 @@ class SimpleVal extends Equatable {
   List<Object?> get props => [value];
 }
 
-typedef Converter<BASE_VALUE> = SimpleVal Function(BASE_VALUE? baseValue);
+typedef Converter<RAW_VALUE> = SimpleVal Function(RAW_VALUE? rawValue);
 
-class FilterCriterion<BASE_VALUE extends Object> {
+class FilterCriterion<RAW_VALUE extends Object> {
   final String filterCriterionName;
   final String filterFieldName;
 
-  final Converter<BASE_VALUE> __converter;
+  final Converter<RAW_VALUE> __converter;
 
-  Type get baseDataType {
-    return BASE_VALUE;
+  Type get rawDataType {
+    return RAW_VALUE;
   }
 
-  String get baseDataTypeName {
-    return getTypeNameWithoutGenerics(BASE_VALUE);
+  String get rawDataTypeName {
+    return getTypeNameWithoutGenerics(RAW_VALUE);
   }
 
   FilterCriterion({
     required this.filterCriterionName,
     required this.filterFieldName,
-    required Converter<BASE_VALUE> converter,
+    required Converter<RAW_VALUE> converter,
   }) : __converter = converter;
 
-  Object? _convert(BASE_VALUE? baseValue) {
+  Object? _convert(RAW_VALUE? rawValue) {
     try {
-      return __converter(baseValue).value;
+      return __converter(rawValue).value;
     } catch (e, stackTrace) {
       print(stackTrace);
       throw AppError(

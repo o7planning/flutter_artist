@@ -138,14 +138,12 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
           criterionBaseName: criterionBaseName,
         );
       }
-      if (def.parentMatchSuffix != null) {
-        bool value2 = NameUtils.isValidTildeSuffix(def.parentMatchSuffix!);
-        if (!value2) {
-          throw TildeCriterionConfigInvalidSuffixError(
-            tildeSuffix: def.parentMatchSuffix!,
-            criterionBaseName: criterionBaseName,
-          );
-        }
+      bool value2 = NameUtils.isValidTildeSuffix(def.parentMatchSuffix);
+      if (!value2) {
+        throw TildeCriterionConfigInvalidSuffixError(
+          tildeSuffix: def.parentMatchSuffix,
+          criterionBaseName: criterionBaseName,
+        );
       }
       if (__tildeCriterionConfigMap.containsKey(def.suffix)) {
         throw TildeCriterionConfigDuplicationError(

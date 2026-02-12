@@ -120,7 +120,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
           label: "Data Type: ",
           text: _selectedFilterCriterion == null
               ? "-"
-              : "<${_selectedFilterCriterion!.baseDataTypeName}>",
+              : "<${_selectedFilterCriterion!.rawDataTypeName}>",
           labelStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
           textStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
         ),
