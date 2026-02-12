@@ -543,15 +543,48 @@ abstract class FilterModel<
       masterFlowItem._addLineFlowItem(
         codeId: "#31020",
         shortDesc:
-            "Calling <b>_filterModelStructure._initTemporaryForNewActivity()</b>..",
+            "Calling <b>_filterModelStructure._setupTemporaryStateForNewActivity()</b>..",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
     }
-    _filterModelStructure._initTemporaryForNewActivity(
-      activityType: activityType,
-      formKeyInstantValues: formKeyInstantValues,
-      filterInput: filterInput,
-    );
+    try {
+      _filterModelStructure._setupTemporaryStateForNewActivity(
+        activityType: activityType,
+        formKeyInstantValues: formKeyInstantValues,
+        filterInput: filterInput,
+      );
+    } catch (e, stackTrace) {
+      dynamic error = e;
+      if (e is FilterCriterionTypeMismatchError) {
+        // Bug: #Bug#002
+        error = e.toAppError(
+          filterModelName: getClassNameWithoutGenerics(this),
+        );
+      } else if(e is FilterMultiOptMsMismatchError) {
+        // Bug: #Bug#003
+        error = e.toAppError(
+          filterModelName: getClassNameWithoutGenerics(this),
+        );
+      }
+      final ErrorInfo errorInfo = _handleError(
+        shelf: shelf,
+        methodName: "_setupTemporaryStateForNewActivity",
+        error: error,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+      masterFlowItem._addLineFlowItem(
+        codeId: "#31030",
+        shortDesc:
+            "The ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() was called with an error.",
+        errorInfo: errorInfo,
+      );
+      //
+      _filterModelStructure._setFilterDataState(DataState.error);
+      _xFilterCriteria = null;
+      return _xFilterCriteria;
+    }
     //
     // Load OptProp Data:
     //
@@ -587,10 +620,17 @@ abstract class FilterModel<
         );
       }
     } catch (e, stackTrace) {
+      dynamic error = e;
+      if (e is FilterCriterionTypeMismatchError) {
+        // Bug: #Bug#001
+        error = e.toAppError(
+          filterModelName: getClassNameWithoutGenerics(this),
+        );
+      }
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: "callApiLoadMultiOptTildeCriterionXData",
-        error: e,
+        error: error,
         stackTrace: stackTrace,
         showSnackBar: true,
         tipDocument: TipDocument.filterModelCallApiLoadMultiOptCriterionXData,
@@ -874,7 +914,7 @@ abstract class FilterModel<
       },
       lineFlowType: LineFlowType.debug,
     );
-    //
+    // May throw Type error here!
     multiOptCriterion._tempCurrentValue = newSelectedValue;
     //
     if (valueChanged) {

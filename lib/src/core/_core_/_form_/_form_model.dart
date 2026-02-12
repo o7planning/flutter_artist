@@ -786,7 +786,7 @@ abstract class FormModel<
     final Map<String, dynamic> formKeyInstantValues =
         _formKey.currentState?.instantValue ?? {};
     //
-    _formPropsStructure._initTemporaryForNewActivity(
+    _formPropsStructure._setupTemporaryStateForNewActivity(
       activityType: activityType,
       // Data from FormView:
       formKeyInstantValues: formKeyInstantValues,

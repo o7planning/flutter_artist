@@ -477,7 +477,7 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _initTemporaryForNewActivity({
+  void _setupTemporaryStateForNewActivity({
     required FilterActivityType activityType,
     required Map<String, dynamic> formKeyInstantValues,
     required FilterInput? filterInput,

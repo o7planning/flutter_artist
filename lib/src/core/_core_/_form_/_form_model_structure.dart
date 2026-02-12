@@ -392,7 +392,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _initTemporaryForNewActivity({
+  void _setupTemporaryStateForNewActivity({
     required FormActivityType activityType,
     required Map<String, dynamic> formKeyInstantValues,
   }) {
