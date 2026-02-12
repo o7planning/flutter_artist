@@ -23,7 +23,7 @@ abstract class FilterCriteria {
     __baseCriteria = baseCriteria;
     __fieldBasedJSON = baseCriteria.toFieldBasedJson(throwIfError: true);
     // LAZY Property:
-    filterCriterionList = registerSupportedCriteria();
+    filterCriterionList = []; // registerSupportedCriteria();
 
     Map<String, FilterCriterion> baseNameFilterCriterionMap = {};
     Set<String> set2 = {};
@@ -64,7 +64,7 @@ abstract class FilterCriteria {
     __ready = true;
   }
 
-  List<FilterCriterion> registerSupportedCriteria();
+  // List<FilterCriterion> registerSupportedCriteria();
 
   @override
   bool operator ==(Object other) {

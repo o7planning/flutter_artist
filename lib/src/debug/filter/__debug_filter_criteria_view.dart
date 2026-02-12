@@ -165,18 +165,6 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
 
     tabs.add(
       TabData(
-        text: ' Supported Criteria',
-        closable: false,
-        leading: (context, status) => Icon(
-          Icons.policy_outlined,
-          color: Colors.black,
-          size: 16,
-        ),
-        content: _buildLeftRightFilterCriterion(),
-      ),
-    );
-    tabs.add(
-      TabData(
         text: ' Field-Based JSON',
         closable: false,
         leading: (context, status) => Icon(
@@ -187,6 +175,19 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         content: _buildJsonContent(),
       ),
     );
+    tabs.add(
+      TabData(
+        text: ' Supported Criteria',
+        closable: false,
+        leading: (context, status) => Icon(
+          Icons.policy_outlined,
+          color: Colors.black,
+          size: 16,
+        ),
+        content: _buildLeftRightFilterCriterion(),
+      ),
+    );
+
     TabbedViewController _controller = TabbedViewController(tabs);
     TabbedView tabbedView = TabbedView(controller: _controller);
 
