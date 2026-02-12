@@ -72,10 +72,10 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isVisible}) {
     widget.block.ui._addControlBarWidgetState(
       widgetState: this,
-      isShowing: isShowing,
+      isVisible: isVisible,
     );
   }
 

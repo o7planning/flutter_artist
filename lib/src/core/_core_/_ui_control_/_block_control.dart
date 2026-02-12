@@ -178,10 +178,10 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isVisible}) {
     widget.block.ui._addControlWidgetState(
       widgetState: this,
-      isShowing: isShowing,
+      isVisible: isVisible,
     );
   }
 

@@ -120,7 +120,7 @@ class DebugMenuBuilder {
 
   Future<void> _showUiComponentsDialog(BuildContext context) async {
     Navigator.pop(context, null);
-    await FlutterArtist.storage.showDebugFaUIComponentsViewerDialog();
+    await FlutterArtist.storage.showDebugFaUiComponentsViewerDialog();
   }
 
   Future<void> _showRestDebugViewerDialog(BuildContext context) async {

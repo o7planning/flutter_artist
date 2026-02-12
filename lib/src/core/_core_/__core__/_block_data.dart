@@ -29,7 +29,7 @@ class _BlockData<
   // ***************************************************************************
 
   void _backupManualArrangementBeforeQueryIfNeed() {
-    if (block.config.clientSideSortMode == ClientSideSortMode.manualSorting) {
+    if (block.config.clientSideSortStrategy == SortStrategy.manual) {
       __itemsManualArrangementBk
         ..clear()
         ..addAll(_items);
@@ -37,7 +37,7 @@ class _BlockData<
   }
 
   void __restoreManualArrangementIfNeed() {
-    if (block.config.clientSideSortMode == ClientSideSortMode.manualSorting) {
+    if (block.config.clientSideSortStrategy == SortStrategy.manual) {
       // TODO...
     }
   }
@@ -250,22 +250,22 @@ class _BlockData<
 
   void _clientSideSortItems() {
     try {
-      switch (block.config.clientSideSortMode) {
-        case ClientSideSortMode.none:
+      switch (block.config.clientSideSortStrategy) {
+        case SortStrategy.none:
           // Do nothing
           break;
-        case ClientSideSortMode.modelBasedSorting:
+        case SortStrategy.modelBased:
           SortModel<ITEM>? sortModel = block.clientSideSortModel;
           if (sortModel != null) {
             _items.sort((a, b) => sortModel._compare(a, b));
           }
-        case ClientSideSortMode.manualSorting:
+        case SortStrategy.manual:
           // TODO
           break;
       }
     } catch (e, stackTrace) {
       print("Sort Error: $e");
-      print(stackTrace);
+      rethrow;
     }
   }
 
@@ -362,14 +362,14 @@ class _BlockData<
 
   void _updateData({
     required MasterFlowItem masterFlowItem,
-    required ItemListMode forceItemListMode,
+    required ListUpdateStrategy forceListUpdateStrategy,
     required _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA>
         processedQueryResult,
   }) {
     _lastQueryResultState = processedQueryResult.queryResultState;
     bool cleared = false;
     // Check if filterCriteria changed.
-    if (forceItemListMode == ItemListMode.replace ||
+    if (forceListUpdateStrategy == ListUpdateStrategy.replace ||
         _parentBlockCurrentItemId !=
             processedQueryResult.parentBlockCurrentItemId ||
         _xFilterCriteria != processedQueryResult.usedXFilterCriteria) {

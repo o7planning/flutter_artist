@@ -4,7 +4,7 @@ abstract class Activity extends _Core {
   // TODO: Remove in next version!
   // MasterFlowItem? _masterFlowItem;
 
-  late final ui = _ActivityUIComponents(activity: this);
+  late final ui = _ActivityUiComponents(activity: this);
 
   Activity();
 
@@ -36,7 +36,8 @@ abstract class Activity extends _Core {
     masterFlowItem._addLineFlowItem(
       codeId: "#23000",
       shortDesc:
-          "Creating <b>XActivity</b> for ${debugObjHtml(this)} and add it to <b>RootQueue</b>.",
+      "Creating <b>XActivity</b> for ${debugObjHtml(
+          this)} and add it to <b>RootQueue</b>.",
       lineFlowType: LineFlowType.info,
     );
     XActivity xActivity = _createXActivity();
@@ -57,8 +58,9 @@ abstract class Activity extends _Core {
     masterFlowItem._addLineFlowItem(
       codeId: "#19000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} > ${taskType.asDebugTaskUnit()}.\n"
-          "Note: This is called because you called the ${debugObjHtml(this)}.executeActivity() method.",
+      "Begin ${debugObjHtml(this)} > ${taskType.asDebugTaskUnit()}.\n"
+          "Note: This is called because you called the ${debugObjHtml(
+          this)}.executeActivity() method.",
       lineFlowType: LineFlowType.debug,
     );
     //
@@ -82,7 +84,8 @@ abstract class Activity extends _Core {
       masterFlowItem._addLineFlowItem(
         codeId: "#19200",
         shortDesc:
-            "The ${debugObjHtml(this)}.callApiLogic() method was called with an error!",
+        "The ${debugObjHtml(
+            this)}.callApiLogic() method was called with an error!",
         errorInfo: errorInfo,
       );
     }

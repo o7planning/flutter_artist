@@ -63,10 +63,10 @@ class _SortPanelBuilderState
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isVisible}) {
     widget.sortModel.ui._addSortFragmentWidgetState(
       widgetState: this,
-      isShowing: true,
+      isVisible: true,
     );
   }
 

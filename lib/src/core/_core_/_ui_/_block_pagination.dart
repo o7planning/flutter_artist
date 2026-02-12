@@ -53,10 +53,10 @@ class _BlockPaginationState extends _RefreshableWidgetState<BlockPagination> {
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isVisible}) {
     widget.block.ui._addPaginationWidgetState(
       widgetState: this,
-      isShowing: isShowing,
+      isVisible: isVisible,
     );
   }
 

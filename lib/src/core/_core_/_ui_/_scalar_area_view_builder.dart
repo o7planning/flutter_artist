@@ -1,11 +1,11 @@
 part of '../core.dart';
 
-class ScalarFragmentViewBuilder extends _RefreshableWidget {
+class ScalarAreaViewBuilder extends _RefreshableWidget {
   final Scalar scalar;
   final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
 
-  const ScalarFragmentViewBuilder({
+  const ScalarAreaViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -16,12 +16,12 @@ class ScalarFragmentViewBuilder extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _ScalarFragmentViewBuilderState();
+    return _ScalarAreaViewBuilderState();
   }
 }
 
-class _ScalarFragmentViewBuilderState
-    extends _RefreshableWidgetState<ScalarFragmentViewBuilder> {
+class _ScalarAreaViewBuilderState
+    extends _RefreshableWidgetState<ScalarAreaViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.scalar);
@@ -94,16 +94,16 @@ class _ScalarFragmentViewBuilderState
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
-    widget.scalar.ui._addScalarPieceWidgetState(
+  void addWidgetState({required bool isVisible}) {
+    widget.scalar.ui._addScalarBaseViewWidgetState(
       widgetState: this,
-      isShowing: isShowing,
+      isVisible: isVisible,
     );
   }
 
   @override
   void removeWidgetState() {
-    widget.scalar.ui._removeScalarPieceWidgetState(
+    widget.scalar.ui._removeScalarBaseViewWidgetState(
       widgetState: this,
     );
   }

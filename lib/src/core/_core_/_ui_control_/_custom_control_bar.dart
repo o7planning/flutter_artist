@@ -59,7 +59,7 @@ class _CustomControlBarState extends _RefreshableWidgetState<CustomControlBar> {
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isVisible}) {
     // TODO: implement addWidgetState
   }
 

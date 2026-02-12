@@ -45,7 +45,7 @@ class XBlock<
 
   QueryType get queryType => __queryType;
 
-  ItemListMode? __itemListMode;
+  ListUpdateStrategy? __listUpdateStrategy;
   SuggestedSelection? __suggestedSelection;
   AfterQueryAction? __afterQueryAction;
   Pageable? __pageable;
@@ -223,9 +223,9 @@ class XBlock<
     __currentItemSettingType = currentItemSettingType;
   }
 
-  ItemListMode get itemListMode {
+  ListUpdateStrategy get listUpdateStrategy {
     // TODO: Xem lai gia tri mac dinh
-    return __itemListMode ?? ItemListMode.replace;
+    return __listUpdateStrategy ?? ListUpdateStrategy.replace;
   }
 
   set suggestedSelection(value) {
@@ -238,13 +238,13 @@ class XBlock<
 
   void setOptions({
     required QueryType queryType,
-    required ItemListMode? itemListMode,
+    required ListUpdateStrategy? listUpdateStrategy,
     required SuggestedSelection? suggestedSelection,
     required AfterQueryAction? afterQueryAction,
     required Pageable? pageable,
   }) {
     __queryType = queryType;
-    __itemListMode = itemListMode;
+    __listUpdateStrategy = listUpdateStrategy;
     __suggestedSelection = suggestedSelection;
     __afterQueryAction = afterQueryAction;
     __pageable = pageable;
@@ -272,7 +272,7 @@ class XBlock<
 
   void printInfoCascade() {
     bool hasBlockRepresentative =
-        block.ui.hasActiveUIComponentBlockRepresentative(
+        block.ui.hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: false,
     );
     String msg = "${getClassName(this)}(${getClassName(block)}"

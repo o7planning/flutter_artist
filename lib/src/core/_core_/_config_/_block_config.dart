@@ -18,7 +18,7 @@ class BlockConfig {
 
   final InternalShelfEventB onInternalShelfEvents;
 
-  final ClientSideSortMode clientSideSortMode;
+  final SortStrategy clientSideSortStrategy;
 
   BlockConfig({
     this.itemAbsentRepresentativePolicy =
@@ -41,7 +41,7 @@ class BlockConfig {
       page: 1,
       pageSize: 20,
     ),
-    this.clientSideSortMode = ClientSideSortMode.none,
+    this.clientSideSortStrategy = SortStrategy.none,
   }) : fireExternalShelfEvents =
             List.unmodifiable(fireExternalShelfEvents?.toSet() ?? []);
 
@@ -58,7 +58,7 @@ class BlockConfig {
       onExternalShelfEvents: onExternalShelfEvents,
       onInternalShelfEvents: onInternalShelfEvents,
       //
-      clientSideSortMode: clientSideSortMode,
+      clientSideSortStrategy: clientSideSortStrategy,
     );
   }
 }

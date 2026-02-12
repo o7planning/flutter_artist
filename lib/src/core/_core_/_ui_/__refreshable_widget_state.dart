@@ -73,7 +73,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
 
   void executeAfterBuild();
 
-  void addWidgetState({required bool isShowing});
+  void addWidgetState({required bool isVisible});
 
   void removeWidgetState();
 
@@ -118,8 +118,8 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
           );
   }
 
-  void __addWidgetState({required bool isShowing}) {
-    addWidgetState(isShowing: isShowing);
+  void __addWidgetState({required bool isVisible}) {
+    addWidgetState(isVisible: isVisible);
   }
 
   void __removeWidgetState() {
@@ -160,7 +160,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
       // Do nothing!
     } else {
       if (__modelRouteName == topRouteName) {
-        __addWidgetState(isShowing: true);
+        __addWidgetState(isVisible: true);
         //
         DebugPrinter.printDebug(
           DebugCat.routeAware,
@@ -169,7 +169,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
         );
       } else {
         if (modalRoute is! DialogRoute) {
-          __addWidgetState(isShowing: false);
+          __addWidgetState(isVisible: false);
           //
           DebugPrinter.printDebug(
             DebugCat.routeAware,
@@ -203,7 +203,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   // You can infer this is the current route when this method is called.
   @override
   void didPush() {
-    __addWidgetState(isShowing: true);
+    __addWidgetState(isVisible: true);
     //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
@@ -215,7 +215,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   // This route has been popped off the navigator.
   @override
   void didPop() {
-    __addWidgetState(isShowing: false);
+    __addWidgetState(isVisible: false);
     //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
@@ -227,7 +227,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   // A new route has been pushed on top of this one.
   @override
   void didPushNext() {
-    // __addWidgetState(isShowing: false);
+    // __addWidgetState(isVisible: false);
     //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
@@ -239,7 +239,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   // Another route was popped off, and this route is now the current one.
   @override
   void didPopNext() {
-    // __addWidgetState(isShowing: true);
+    // __addWidgetState(isVisible: true);
     //
     DebugPrinter.printDebug(
       DebugCat.routeAware,

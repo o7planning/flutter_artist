@@ -328,7 +328,7 @@ abstract class Block<
 
   BlockErrorInfo? get blockErrorInfo => _blockErrorInfo;
 
-  late final ui = _BlockUIComponents(block: this);
+  late final ui = _BlockUiComponents(block: this);
 
   // ***************************************************************************
   // *** DATA STATE ************************************************************
@@ -479,7 +479,7 @@ abstract class Block<
     //
     __serverSideSortModel = sortModelBuilder?.createServerSideSortModel();
     __clientSideSortModel =
-        config.clientSideSortMode != ClientSideSortMode.modelBasedSorting
+        config.clientSideSortStrategy != SortStrategy.modelBased
             ? null
             : sortModelBuilder?.createClientSideSortModel();
     __serverSideSortModel?.block = this;
@@ -781,7 +781,7 @@ abstract class Block<
       lineFlowType: LineFlowType.debug,
     );
     //
-    bool hasBlockRepresentative = ui.hasActiveUIComponentBlockRepresentative(
+    bool hasBlockRepresentative = ui.hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
     //
@@ -790,7 +790,7 @@ abstract class Block<
       shortDesc:
           "@hasBlockRepresentative: ${debugObjHtml(hasBlockRepresentative)}.",
       lineFlowType: LineFlowType.debug,
-      tipDocument: TipDocument.blockActiveUIComponents,
+      tipDocument: TipDocument.blockActiveUiComponents,
     );
     //
     QryHint queryHint = thisXBlock.queryHint;
@@ -988,7 +988,7 @@ abstract class Block<
     //
     ActionResultState queryResultState;
     //
-    ItemListMode realItemListMode;
+    ListUpdateStrategy realListUpdateStrategy;
     //
     final Pageable? usedPageable;
     //
@@ -1115,21 +1115,21 @@ abstract class Block<
               // @FaCode-002.
               // Test Case: [42a].
               // Replace by empty items.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.error;
             case DataState.pending:
               // Replace by empty items.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.error;
             case DataState.error:
               // @FaCode-003.
               // Test Case: [42a].
               // Replace by empty items.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.error;
             case DataState.none:
               // Replace by empty items.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.error;
           }
         }
@@ -1141,20 +1141,20 @@ abstract class Block<
               // Append empty items (No items got from Server).
               // Test Case: [42a].
               // @FaCode-001.
-              realItemListMode = ItemListMode.expand;
+              realListUpdateStrategy = ListUpdateStrategy.merge;
               newBlockDataState = DataState.ready;
             case DataState.pending:
               // Replace by empty items.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.error;
             case DataState.error:
               // @FaCode-004.
               // Replace by empty items.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.error;
             case DataState.none:
               // Replace by empty items.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.error;
           }
         }
@@ -1166,19 +1166,19 @@ abstract class Block<
           switch (dataState) {
             case DataState.ready:
               // Replace.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.ready;
             case DataState.pending:
               // Replace.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.ready;
             case DataState.error:
               // Replace.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.ready;
             case DataState.none:
               // Replace.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.ready;
           }
         }
@@ -1187,26 +1187,26 @@ abstract class Block<
           switch (dataState) {
             case DataState.ready:
               // Replace or Expand:
-              realItemListMode = thisXBlock.itemListMode;
+              realListUpdateStrategy = thisXBlock.listUpdateStrategy;
               newBlockDataState = DataState.ready;
             case DataState.pending:
               // Replace.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.ready;
             case DataState.error:
               // Replace.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.ready;
             case DataState.none:
               // Replace.
-              realItemListMode = ItemListMode.replace;
+              realListUpdateStrategy = ListUpdateStrategy.replace;
               newBlockDataState = DataState.ready;
           }
         }
       }
       if (queryTypeChanged) {
         // Replace:
-        realItemListMode = ItemListMode.replace;
+        realListUpdateStrategy = ListUpdateStrategy.replace;
       }
     }
     // Query Empty:
@@ -1217,7 +1217,7 @@ abstract class Block<
       );
       usedPageable = __blockData._emptyPageable;
       __lastQueryType = thisXBlock.queryType;
-      realItemListMode = ItemListMode.replace;
+      realListUpdateStrategy = ListUpdateStrategy.replace;
       newBlockDataState = DataState.ready;
       queriedPageData = PageData.empty();
       queryResultState = ActionResultState.success;
@@ -1227,7 +1227,7 @@ abstract class Block<
       codeId: "#03520",
       shortDesc: "Calculated:",
       parameters: {
-        "realItemListMode": realItemListMode,
+        "realListUpdateStrategy": realListUpdateStrategy,
       },
       lineFlowType: LineFlowType.debug,
     );
@@ -1260,7 +1260,7 @@ abstract class Block<
       //
       __blockData._updateData(
         masterFlowItem: masterFlowItem,
-        forceItemListMode: realItemListMode,
+        forceListUpdateStrategy: realListUpdateStrategy,
         processedQueryResult: processedQueryResult,
       );
     } catch (e, stackTrace) {
@@ -1603,7 +1603,7 @@ abstract class Block<
       if (candidateCurrItem == null) {
         // If UI Component Active need an ITEM-load.
         final String? itemRepComponent =
-            ui.findActiveUIComponentItemRepresentative(
+            ui.findActiveUiComponentItemRepresentative(
           alsoCheckChildren: true,
         );
         final bool hasItemRep = itemRepComponent != null;
@@ -1615,7 +1615,7 @@ abstract class Block<
           parameters: {
             "itemRepComponent": itemRepComponent,
           },
-          tipDocument: TipDocument.blockActiveUIComponents,
+          tipDocument: TipDocument.blockActiveUiComponents,
         );
         //
         ITEM? candidateCurrItem2;
@@ -1762,15 +1762,15 @@ abstract class Block<
     // This block has UI Active (Or child block has UI Active).
     //
     final bool hasBlockXRepresentative =
-        ui.hasActiveUIComponentBlockRepresentative(
+        ui.hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
     final bool hasItemXRepresentative =
-        ui.hasActiveUIComponentItemRepresentative(
+        ui.hasActiveUiComponentItemRepresentative(
       alsoCheckChildren: true,
     );
     final bool hasFormRepresentative =
-        ui.hasActiveUIComponentFormRepresentative();
+        ui.hasActiveUiComponentFormRepresentative();
     //
     final bool inputForceReloadItem = thisXBlock.forceReloadCurrItem;
     //
@@ -2402,7 +2402,7 @@ abstract class Block<
       return;
     }
     //
-    final String? itemRepComponent = ui.findActiveUIComponentItemRepresentative(
+    final String? itemRepComponent = ui.findActiveUiComponentItemRepresentative(
       alsoCheckChildren: true,
     );
     masterFlowItem._addLineFlowItem(
@@ -2412,7 +2412,7 @@ abstract class Block<
         "itemRepComponent": itemRepComponent,
       },
       lineFlowType: LineFlowType.debug,
-      tipDocument: TipDocument.blockActiveUIComponents,
+      tipDocument: TipDocument.blockActiveUiComponents,
     );
     final ITEM? siblingItem;
     if (itemRepComponent != null) {
@@ -2840,7 +2840,7 @@ abstract class Block<
     //
     final String methodName = "callApiDeleteItemById";
     //
-    final String? itemRepComponent = ui.findActiveUIComponentItemRepresentative(
+    final String? itemRepComponent = ui.findActiveUiComponentItemRepresentative(
       alsoCheckChildren: true,
     );
     masterFlowItem._addLineFlowItem(
@@ -2850,7 +2850,7 @@ abstract class Block<
         "itemRepComponent": itemRepComponent,
       },
       lineFlowType: LineFlowType.debug,
-      tipDocument: TipDocument.blockActiveUIComponents,
+      tipDocument: TipDocument.blockActiveUiComponents,
     );
     for (ITEM delItem in [...items]) {
       ApiResult<void> result;
@@ -4376,7 +4376,7 @@ abstract class Block<
     return await __queryBlock(
       masterFlowItem: masterFlowItem,
       qryMethod: qryMethod,
-      itemListMode: ItemListMode.replace,
+      suggestedListUpdateStrategy: ListUpdateStrategy.replace,
       filterInput: null,
       afterQueryAction: afterQueryAction,
       suggestedSelection: null,
@@ -4417,7 +4417,7 @@ abstract class Block<
     return await __queryBlock(
       masterFlowItem: masterFlowItem,
       qryMethod: qryMethod,
-      itemListMode: ItemListMode.replace,
+      suggestedListUpdateStrategy: ListUpdateStrategy.replace,
       filterInput: null,
       afterQueryAction: afterQueryAction,
       suggestedSelection: null,
@@ -4458,7 +4458,7 @@ abstract class Block<
     return await __queryBlock(
       masterFlowItem: masterFlowItem,
       qryMethod: qryMethod,
-      itemListMode: ItemListMode.expand,
+      suggestedListUpdateStrategy: ListUpdateStrategy.merge,
       afterQueryAction: afterQueryAction,
       filterInput: null,
       suggestedSelection: null,
@@ -4545,7 +4545,7 @@ abstract class Block<
   @_BlockQueryAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> query({
-    ItemListMode itemListMode = ItemListMode.replace,
+    ListUpdateStrategy suggestedListUpdateStrategy = ListUpdateStrategy.replace,
     AfterQueryAction afterQueryAction =
         AfterQueryAction.setAnItemAsCurrentIfNeed,
     FILTER_INPUT? filterInput,
@@ -4564,7 +4564,7 @@ abstract class Block<
       methodName: "query",
       parameters: {
         "afterQueryAction": afterQueryAction,
-        "itemListMode": itemListMode,
+        "suggestedListUpdateStrategy": suggestedListUpdateStrategy,
         "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
@@ -4577,7 +4577,7 @@ abstract class Block<
     return await __queryBlock(
       masterFlowItem: masterFlowItem,
       qryMethod: qryMethod,
-      itemListMode: itemListMode,
+      suggestedListUpdateStrategy: suggestedListUpdateStrategy,
       afterQueryAction: afterQueryAction,
       filterInput: filterInput,
       suggestedSelection: suggestedSelection,
@@ -4600,7 +4600,7 @@ abstract class Block<
   // TODO: @Rename --> queryThenPrepareToEdit (queryThenSetAnItemAsCurrentThenEdit).
   Future<BlockQueryResult> queryAndPrepareToEdit({
     FILTER_INPUT? filterInput,
-    ItemListMode itemListMode = ItemListMode.replace,
+    ListUpdateStrategy suggestedListUpdateStrategy = ListUpdateStrategy.replace,
     SuggestedSelection<ID>? suggestedSelection,
     Pageable? pageable,
     Function()? navigate,
@@ -4610,7 +4610,7 @@ abstract class Block<
       methodName: "queryAndPrepareToEdit",
       parameters: {
         "filterInput": filterInput,
-        "itemListMode": itemListMode,
+        "suggestedListUpdateStrategy": suggestedListUpdateStrategy,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
         "navigate": navigate,
@@ -4623,7 +4623,7 @@ abstract class Block<
       block: this,
       filterInput: filterInput,
       pageable: null,
-      itemListMode: itemListMode,
+      suggestedListUpdateStrategy: suggestedListUpdateStrategy,
       afterQueryAction: AfterQueryAction.setAnItemAsCurrentThenLoadForm,
       suggestedSelection: suggestedSelection,
     );
@@ -4674,7 +4674,7 @@ abstract class Block<
       block: this,
       filterInput: filterInput,
       pageable: null,
-      itemListMode: ItemListMode.replace,
+      listUpdateStrategy: ListUpdateStrategy.replace,
       afterQueryAction: AfterQueryAction.createNewItem,
       suggestedSelection: null,
     );
@@ -5803,7 +5803,7 @@ abstract class Block<
   Future<BlockQueryResult> __queryBlock({
     required MasterFlowItem masterFlowItem,
     required BlockQryMethodName qryMethod,
-    required ItemListMode itemListMode,
+    required ListUpdateStrategy suggestedListUpdateStrategy,
     required AfterQueryAction afterQueryAction,
     required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
@@ -5840,7 +5840,7 @@ abstract class Block<
       block: this,
       filterInput: filterInput,
       pageable: usedPageable,
-      itemListMode: itemListMode,
+      listUpdateStrategy: suggestedListUpdateStrategy,
       afterQueryAction: afterQueryAction,
       suggestedSelection: suggestedSelection,
     );
@@ -5879,7 +5879,7 @@ abstract class Block<
       block: this,
       filterInput: filterInput,
       pageable: pageable,
-      itemListMode: ItemListMode.replace,
+      listUpdateStrategy: ListUpdateStrategy.replace,
       afterQueryAction: prepareFormToCreateItem
           ? AfterQueryAction.createNewItem
           : AfterQueryAction.setAnItemAsCurrent,
@@ -6394,7 +6394,7 @@ abstract class Block<
         errCode: BlockClearancePrecheck.busy,
       );
     }
-    bool hasBlockRep = ui.hasActiveUIComponentBlockRepresentative(
+    bool hasBlockRep = ui.hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
     if (hasBlockRep) {
@@ -7150,8 +7150,8 @@ abstract class Block<
   // ************* ITEM SELECTION/CHECK METHOD *********************************
   // ***************************************************************************
 
-  void __updateUIComponentAfterCheckedOrSelected() {
-    ui.updateAllUIComponents(
+  void __updateUiComponentAfterCheckedOrSelected() {
+    ui.updateAllUiComponents(
       withoutFilters: false,
       force: true,
     );
@@ -7160,7 +7160,7 @@ abstract class Block<
   void clientSideSort({required bool refresh}) {
     __blockData._clientSideSortItems();
     if (refresh) {
-      shelf.ui.updateAllUIComponents();
+      shelf.ui.updateAllUiComponents();
     }
   }
 
@@ -7333,7 +7333,7 @@ abstract class Block<
 
   void setSelectedItem({required ITEM item, required bool selected}) {
     __setSelectedItem(item: item, selected: selected);
-    __updateUIComponentAfterCheckedOrSelected();
+    __updateUiComponentAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7341,7 +7341,7 @@ abstract class Block<
 
   void toggleSelectItem({required ITEM item}) {
     __toggleSelectItem(item: item);
-    __updateUIComponentAfterCheckedOrSelected();
+    __updateUiComponentAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7571,12 +7571,12 @@ abstract class Block<
 
   void toggleCheckItem({required ITEM item}) {
     __toggleCheckItem(item: item);
-    __updateUIComponentAfterCheckedOrSelected();
+    __updateUiComponentAfterCheckedOrSelected();
   }
 
   void setCheckedItem({required ITEM item, required bool checked}) {
     __setCheckedItem(item: item, checked: checked);
-    __updateUIComponentAfterCheckedOrSelected();
+    __updateUiComponentAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7592,12 +7592,12 @@ abstract class Block<
 
   void setCheckedItems({required List<ITEM> items}) {
     __setCheckedItems(items: items);
-    __updateUIComponentAfterCheckedOrSelected();
+    __updateUiComponentAfterCheckedOrSelected();
   }
 
   void checkAllItems() {
     __setCheckedItems(items: __blockData._items);
-    __updateUIComponentAfterCheckedOrSelected();
+    __updateUiComponentAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7605,7 +7605,7 @@ abstract class Block<
 
   void setSelectedItems({required List<ITEM> items}) {
     __setSelectedItems(items: items);
-    __updateUIComponentAfterCheckedOrSelected();
+    __updateUiComponentAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7613,7 +7613,7 @@ abstract class Block<
 
   void uncheckAllItems() {
     __blockData._checkedItems.clear();
-    __updateUIComponentAfterCheckedOrSelected();
+    __updateUiComponentAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7625,7 +7625,7 @@ abstract class Block<
 
   void selectAllItems() {
     __selectAllItems();
-    __updateUIComponentAfterCheckedOrSelected();
+    __updateUiComponentAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7633,7 +7633,7 @@ abstract class Block<
 
   void deselectAllItems() {
     __blockData._selectedItems.clear();
-    __updateUIComponentAfterCheckedOrSelected();
+    __updateUiComponentAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7651,11 +7651,11 @@ abstract class Block<
   // ***************************************************************************
 
   bool __checkBeforeChangeTheItemPositionManually() {
-    if (config.clientSideSortMode != ClientSideSortMode.manualSorting) {
+    if (config.clientSideSortStrategy != SortStrategy.manual) {
       showErrorSnackBar(
         message: "Can not change the position",
         errorDetails: [
-          "You need to set block.config.clientSideSortMode to ${ClientSideSortMode.manualSorting}"
+          "You need to set block.config.clientSideSortStrategy to ${SortStrategy.manual}"
         ],
       );
       return false;
@@ -7695,7 +7695,7 @@ abstract class Block<
       getItemId: _getItemIdInternal,
     );
     if (success) {
-      ui.updateAllUIComponents(withoutFilters: true);
+      ui.updateAllUiComponents(withoutFilters: true);
     }
     return success;
   }
@@ -7717,7 +7717,7 @@ abstract class Block<
       getItemId: _getItemIdInternal,
     );
     if (success) {
-      ui.updateAllUIComponents(withoutFilters: true);
+      ui.updateAllUiComponents(withoutFilters: true);
     }
     return success;
   }
@@ -7808,7 +7808,7 @@ abstract class Block<
   void __refreshQueryingState({required bool isQuerying}) {
     try {
       __isQuerying = isQuerying;
-      ui.updateControlBarWidgets(force: true);
+      ui.updateControlBars(force: true);
     } catch (e) {}
   }
 
@@ -7818,7 +7818,7 @@ abstract class Block<
   void __refreshDeletingState({required bool isDeleting}) {
     try {
       __isDeleting = isDeleting;
-      ui.updateControlBarWidgets(force: true);
+      ui.updateControlBars(force: true);
     } catch (e) {}
   }
 
@@ -7828,7 +7828,7 @@ abstract class Block<
   void _refreshSavingState({required bool isSaving}) {
     try {
       __isSaving = isSaving;
-      ui.updateControlBarWidgets(force: true);
+      ui.updateControlBars(force: true);
     } catch (e) {}
   }
 
@@ -7840,7 +7840,7 @@ abstract class Block<
   }) {
     try {
       __isRefreshingCurrentItem = isRefreshingCurrentItem;
-      ui.updateControlBarWidgets(force: true);
+      ui.updateControlBars(force: true);
     } catch (e) {}
   }
 
@@ -7852,7 +7852,7 @@ abstract class Block<
   }) {
     try {
       __isPreparingFormCreation = isPreparingFormCreation;
-      ui.updateControlBarWidgets(force: true);
+      ui.updateControlBars(force: true);
     } catch (e) {}
   }
 
@@ -7873,7 +7873,7 @@ abstract class Block<
       getItemId: _getItemIdInternal,
     );
     if (success) {
-      ui.updateAllUIComponents(withoutFilters: true);
+      ui.updateAllUiComponents(withoutFilters: true);
     }
     return success;
   }

@@ -1,23 +1,23 @@
 part of '../core.dart';
 
-class _FilterUIComponents extends _UIComponents {
+class _FilterUiComponents extends _UiComponents {
   final FilterModel filterModel;
 
-  final Map<_RefreshableWidgetState, XState> _filterFragmentWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> _filterBaseViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
 
-  _FilterUIComponents({required this.filterModel});
+  _FilterUiComponents({required this.filterModel});
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedPieceWidgetStates({
+  Map<_RefreshableWidgetState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
-      widgetStates: _filterFragmentWidgetStates,
+      widgetStates: _filterBaseViewWidgetStates,
       activeOnly: activeOnly,
     );
   }
@@ -26,29 +26,29 @@ class _FilterUIComponents extends _UIComponents {
   // ***************************************************************************
 
   @override
-  bool hasMountedUIComponent() {
-    return _filterFragmentWidgetStates.isNotEmpty;
+  bool hasMountedUiComponent() {
+    return _filterBaseViewWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUIComponent() {
-    return hasActiveUIComponentWithRepresentativeType(
+  bool hasActiveUiComponent() {
+    return hasActiveUiComponentWithRepresentativeType(
       representativeType: null,
     );
   }
 
-  bool hasActiveUIComponentWithRepresentativeType({
+  bool hasActiveUiComponentWithRepresentativeType({
     required RepresentativeType? representativeType,
   }) {
     for (_RefreshableWidgetState widgetState
-        in _filterFragmentWidgetStates.keys) {
+        in _filterBaseViewWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
       bool visible =
-          _filterFragmentWidgetStates[widgetState]?.isShowing ?? false;
+          _filterBaseViewWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
@@ -63,9 +63,20 @@ class _FilterUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUIComponents({bool force = true}) {
+  void updateFilterBaseViews({bool force = true}) {
+    for (_RefreshableWidgetState state in _filterBaseViewWidgetStates.keys) {
+      if (state.mounted) {
+        state.refreshState(force: force);
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void updateAllUiComponents({bool force = true}) {
     for (_RefreshableWidgetState widgetState in [
-      ..._filterFragmentWidgetStates.keys
+      ..._filterBaseViewWidgetStates.keys
     ]) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
@@ -77,14 +88,14 @@ class _FilterUIComponents extends _UIComponents {
   // ***************************************************************************
 
   bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
-    return _filterFragmentWidgetStates[widgetState]?.isBuilding ?? false;
+    return _filterBaseViewWidgetStates[widgetState]?.isBuilding ?? false;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   bool _isBuilding() {
-    for (XState xState in _filterFragmentWidgetStates.values) {
+    for (XState xState in _filterBaseViewWidgetStates.values) {
       if (xState.isBuilding) {
         return true;
       }
@@ -99,7 +110,7 @@ class _FilterUIComponents extends _UIComponents {
     required _RefreshableWidgetState widgetState,
     required bool isBuilding,
   }) {
-    _filterFragmentWidgetStates.update(
+    _filterBaseViewWidgetStates.update(
       widgetState,
       (xState) => xState.._setBuilding(isBuilding),
       ifAbsent: () => XState().._setBuilding(isBuilding),
@@ -111,23 +122,23 @@ class _FilterUIComponents extends _UIComponents {
 
   void _addFilterFragmentWidgetState({
     required _RefreshableWidgetState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
-    bool activeOLD = hasActiveUIComponent();
-    _filterFragmentWidgetStates.update(
+    bool activeOLD = hasActiveUiComponent();
+    _filterBaseViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool activeCURRENT = hasActiveUIComponent();
+    bool activeCURRENT = hasActiveUiComponent();
 
-    if (isShowing) {
+    if (isVisible) {
       FlutterArtist.storage._addRecentShelf(filterModel.shelf);
     }
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      // filterModel.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // filterModel.shelf._startLoadDataForLazyUiComponentsIfNeed();
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(filterModel.shelf);
     } else if (activeOLD && !activeCURRENT) {
@@ -142,6 +153,6 @@ class _FilterUIComponents extends _UIComponents {
   void _removeFilterFragmentWidgetState({
     required State widgetState,
   }) {
-    _filterFragmentWidgetStates.remove(widgetState);
+    _filterBaseViewWidgetStates.remove(widgetState);
   }
 }

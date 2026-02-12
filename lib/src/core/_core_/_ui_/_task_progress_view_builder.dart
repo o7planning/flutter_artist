@@ -94,10 +94,10 @@ class _TaskProgressBuilderState
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isVisible}) {
     FlutterArtist.executor._addTaskProgressViewWidgetState(
       widgetState: this,
-      isShowing: isShowing,
+      isVisible: isVisible,
     );
   }
 

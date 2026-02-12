@@ -89,7 +89,7 @@ class _DebugUiComponentsViewerDialogState
       return widget.block!.ui.debugFindMountedWidgetStates(
         activeOnly: false,
         withPagination: true,
-        withBlockPiece: true,
+        withBlockBaseView: true,
         withFilter: true,
         withSort: true,
         withForm: true,
@@ -100,7 +100,7 @@ class _DebugUiComponentsViewerDialogState
       return widget.scalar!.ui.debugFindMountedWidgetStates(
         activeOnly: false,
         withPagination: true,
-        withScalarPiece: true,
+        withScalarBaseView: true,
         withFilter: true,
         withScalarControlBar: true,
       );
@@ -188,7 +188,7 @@ class _DebugUiComponentsViewerDialogState
           padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
             border: Border.all(width: 0.5),
-            color: widgetStateEntry.value.isShowing
+            color: widgetStateEntry.value.isVisible
                 ? Colors.green.withAlpha(30)
                 : Colors.grey[200],
           ),

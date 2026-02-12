@@ -74,7 +74,7 @@ abstract class FormModel<
     return _autovalidateMode;
   }
 
-  late final ui = _FormUIComponents(formModel: this);
+  late final ui = _FormUiComponents(formModel: this);
 
   // ***************************************************************************
 
@@ -439,7 +439,7 @@ abstract class FormModel<
         forceReloadForm = true;
       case ForceType.decidedAtRuntime:
         // forceReloadForm =
-        //     formDataState != DataState.ready && hasActiveUIComponent();
+        //     formDataState != DataState.ready && hasActiveUiComponent();
         forceReloadForm = false;
     }
     //
@@ -840,12 +840,19 @@ abstract class FormModel<
             );
           }
         } catch (e, stackTrace) {
+          dynamic error = e;
+          if (e is FormPropTypeMismatchError) {
+            // Bug: #Bug#004
+            error = e.toAppError(
+              formModelName: getClassNameWithoutGenerics(this),
+            );
+          }
           final formErrorInfo = FormErrorInfo(
             activityType: activityType,
             propName: null,
             formErrorMethod:
                 FormErrorMethod.extractSimplePropValuesFromItemDetail,
-            error: e,
+            error: error,
             errorStackTrace: stackTrace,
           );
           _formPropsStructure._setFormError(formErrorInfo);
@@ -1171,7 +1178,17 @@ abstract class FormModel<
           error: e.error,
           errorStackTrace: e.stackTrace,
         );
-        _formPropsStructure._setFormError(formErrorInfo);
+      } else if (e is FormPropTypeMismatchError) {
+        // Bug: #Bug#005
+        formErrorInfo = FormErrorInfo(
+          activityType: activityType,
+          propName: null,
+          formErrorMethod: FormErrorMethod.unknown,
+          error: e.toAppError(
+            formModelName: getClassNameWithoutGenerics(this),
+          ),
+          errorStackTrace: stackTrace,
+        );
       } else {
         formErrorInfo = FormErrorInfo(
           activityType: activityType,
@@ -1180,8 +1197,8 @@ abstract class FormModel<
           error: e,
           errorStackTrace: stackTrace,
         );
-        _formPropsStructure._setFormError(formErrorInfo);
       }
+      _formPropsStructure._setFormError(formErrorInfo);
       //
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
@@ -1732,7 +1749,7 @@ abstract class FormModel<
       propName: propertyName,
       value: value,
     );
-    ui.updateAllUIComponents();
+    ui.updateAllUiComponents();
   }
 
   dynamic getPropValue(String propName) {
@@ -1980,7 +1997,7 @@ abstract class FormModel<
       //
       this.__clearFormKey();
       //
-      block.ui.updateControlBarWidgets();
+      block.ui.updateControlBars();
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -2046,7 +2063,7 @@ abstract class FormModel<
       }
       _formKey.currentState?.patchValue(initData);
       //
-      shelf.ui.updateAllUIComponents();
+      shelf.ui.updateAllUiComponents();
     } finally {
       _changeEventLocked = false;
     }

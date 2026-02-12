@@ -20,24 +20,24 @@ class BlockDebugBox extends BaseDebugBox {
   @override
   List<Widget> getChildIconLabelTexts() {
     String? activeUIBlockRep =
-        block.ui.findActiveUIComponentBlockRepresentative();
+        block.ui.findActiveUiComponentBlockRepresentative();
     String? xActiveUIIBlockRep =
-        block.ui.findActiveUIComponentBlockRepresentative(
+        block.ui.findActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
     //
 
     String? activeUIItemRep =
-        block.ui.findActiveUIComponentItemRepresentative();
-    String? xActiveUIItemRep = block.ui.findActiveUIComponentItemRepresentative(
+        block.ui.findActiveUiComponentItemRepresentative();
+    String? xActiveUIItemRep = block.ui.findActiveUiComponentItemRepresentative(
       alsoCheckChildren: true,
     );
     return [
       if (options.showUIActive)
         ActiveInfoWidget(
           activeElementType: ActiveElementType.block,
-          activeUIComponentName: activeUIBlockRep,
-          xActiveUIComponentName: xActiveUIIBlockRep,
+          activeUiComponentName: activeUIBlockRep,
+          xActiveUiComponentName: xActiveUIIBlockRep,
           labelStyle: labelStyle0,
           textStyle: textStyle0,
           checkAgain: () {
@@ -47,8 +47,8 @@ class BlockDebugBox extends BaseDebugBox {
       if (options.showUIActive)
         ActiveInfoWidget(
           activeElementType: ActiveElementType.item,
-          activeUIComponentName: activeUIItemRep,
-          xActiveUIComponentName: xActiveUIItemRep,
+          activeUiComponentName: activeUIItemRep,
+          xActiveUiComponentName: xActiveUIItemRep,
           labelStyle: labelStyle0,
           textStyle: textStyle0,
           checkAgain: () {

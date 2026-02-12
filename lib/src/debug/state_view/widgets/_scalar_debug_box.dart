@@ -18,19 +18,19 @@ class ScalarDebugBox extends BaseDebugBox {
 
   @override
   List<Widget> getChildIconLabelTexts() {
-    String? activeUI = scalar.ui.findActiveUIComponent();
+    String? activeUI = scalar.ui.findActiveUiComponent();
     String? xActiveUI =
-        scalar.ui.findActiveUIComponent(alsoCheckChildren: true);
+        scalar.ui.findActiveUiComponent(alsoCheckChildren: true);
     return [
       if (options.showUIActive)
         ActiveInfoWidget(
           activeElementType: ActiveElementType.scalar,
-          activeUIComponentName: activeUI,
-          xActiveUIComponentName: xActiveUI,
+          activeUiComponentName: activeUI,
+          xActiveUiComponentName: xActiveUI,
           labelStyle: labelStyle0,
           textStyle: textStyle0,
           checkAgain: () {
-            String? activeUI = scalar.ui.findActiveUIComponent();
+            String? activeUI = scalar.ui.findActiveUiComponent();
             print("Check again: $activeUI");
           },
         ),

@@ -11,7 +11,7 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
         if (xScalar == null) {
           break;
         }
-        bool hasXActiveUI = xScalar.scalar.ui.hasActiveScalarPiece(
+        bool hasXActiveUI = xScalar.scalar.ui.hasActiveScalarBaseView(
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
@@ -32,7 +32,7 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
         }
         // @@@hasActiveBlockFragment
         bool blockXBlockRep =
-            xBlock.block.ui.hasActiveUIComponentBlockRepresentative(
+            xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
         if (blockXBlockRep) {
@@ -43,7 +43,7 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
         }
         XFormModel? xFormModel = xBlock.xFormModel;
         if (xFormModel != null &&
-            xFormModel.formModel.ui.hasActiveUIComponent()) {
+            xFormModel.formModel.ui.hasActiveUiComponent()) {
           if (xFormModel.formModel.dataState == DataState.pending ||
               xFormModel.formModel.dataState == DataState.error ||
               xFormModel.formModel.dataState == DataState.none) {

@@ -59,11 +59,11 @@ class _RefreshableNeutralViewState
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isVisible}) {
     for (Shelf shelf in widget.shelves) {
       shelf.ui._addShelfWidgetState(
         widgetState: this,
-        isShowing: isShowing,
+        isVisible: isVisible,
       );
     }
   }

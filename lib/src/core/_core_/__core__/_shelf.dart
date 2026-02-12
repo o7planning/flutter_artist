@@ -80,7 +80,7 @@ abstract class Shelf extends _Core {
 
   String get name => FlutterArtist.storage._getShelfName(runtimeType);
 
-  late final ui = _ShelfUIComponents(shelf: this);
+  late final ui = _ShelfUiComponents(shelf: this);
 
   late final _shelfExternalUtils = _ShelfExternalUtils(this);
 
@@ -527,7 +527,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showDebugFaUIComponentsViewerDialog() async {
+  Future<void> showDebugFaUiComponentsViewerDialog() async {
     BuildContext context =
         FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     await DebugUiComponentsViewerDialog.open(
@@ -593,7 +593,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   // LOGIC: #0000
-  Future<void> _startLoadDataForLazyUIComponentsIfNeed({
+  Future<void> _startLoadDataForLazyUiComponentsIfNeed({
     required MasterFlowItem masterFlowItem,
   }) async {
     __lazyLoadId++;
@@ -614,11 +614,11 @@ abstract class Shelf extends _Core {
         codeId: "#02020",
         shortDesc:
             "No lazy model-components found. Just update All UI components and nothing else. "
-            "Calling ${debugObjHtml(this)}.ui.updateAllUIComponents().",
+            "Calling ${debugObjHtml(this)}.ui.updateAllUiComponents().",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
-      // IMPORTANT: No Lazy entities, but need to refresh UIComponents:
-      ui.updateAllUIComponents();
+      // IMPORTANT: No Lazy entities, but need to refresh UiComponents:
+      ui.updateAllUiComponents();
       return;
     }
     masterFlowItem._addLineFlowItem(

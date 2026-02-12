@@ -266,8 +266,8 @@ abstract class _StorageCore extends _Core {
   }
 
   void _checkToRemoveShelf(Shelf shelf) {
-    bool hasMountedUIComponent = shelf.ui.hasMountedUIComponent();
-    if (!hasMountedUIComponent) {
+    bool hasMountedUiComponent = shelf.ui.hasMountedUiComponent();
+    if (!hasMountedUiComponent) {
       print(">>>>>>>>>>> Shelf: ${getClassName(shelf)} dispose all component");
       if (shelf.config.onHideAction == ShelfHiddenAction.clear) {
         print(
@@ -293,7 +293,7 @@ abstract class _StorageCore extends _Core {
         continue;
       }
       if (visibleOnly) {
-        if (!shelf.ui.hasMountedUIComponent()) {
+        if (!shelf.ui.hasMountedUiComponent()) {
           continue;
         }
       }

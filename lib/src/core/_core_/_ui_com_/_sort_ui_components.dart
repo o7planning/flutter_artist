@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class _SortUIComponents extends _UIComponents {
+class _SortUiComponents extends _UiComponents {
   final SortModel sortModel;
 
   final Map<_RefreshableWidgetState, XState> _sortWidgetStates = {};
@@ -8,12 +8,12 @@ class _SortUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  _SortUIComponents({required this.sortModel});
+  _SortUiComponents({required this.sortModel});
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedPieceWidgetStates({
+  Map<_RefreshableWidgetState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
@@ -26,27 +26,27 @@ class _SortUIComponents extends _UIComponents {
   // ***************************************************************************
 
   @override
-  bool hasMountedUIComponent() {
+  bool hasMountedUiComponent() {
     return _sortWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUIComponent() {
-    return hasActiveUIComponentWithRepresentativeType(
+  bool hasActiveUiComponent() {
+    return hasActiveUiComponentWithRepresentativeType(
       representativeType: null,
     );
   }
 
-  bool hasActiveUIComponentWithRepresentativeType({
+  bool hasActiveUiComponentWithRepresentativeType({
     required RepresentativeType? representativeType,
   }) {
     for (_RefreshableWidgetState widgetState in _sortWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = _sortWidgetStates[widgetState]?.isShowing ?? false;
+      bool visible = _sortWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
@@ -61,7 +61,7 @@ class _SortUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUIComponents({bool force = true}) {
+  void updateAllUiComponents({bool force = true}) {
     for (_RefreshableWidgetState widgetState in [..._sortWidgetStates.keys]) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
@@ -107,23 +107,23 @@ class _SortUIComponents extends _UIComponents {
 
   void _addSortFragmentWidgetState({
     required _RefreshableWidgetState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
-    bool activeOLD = hasActiveUIComponent();
+    bool activeOLD = hasActiveUiComponent();
     _sortWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool activeCURRENT = hasActiveUIComponent();
+    bool activeCURRENT = hasActiveUiComponent();
 
-    if (isShowing) {
+    if (isVisible) {
       FlutterArtist.storage._addRecentShelf(sortModel.shelf);
     }
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      // sortModel.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // sortModel.shelf._startLoadDataForLazyUiComponentsIfNeed();
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(sortModel.shelf);
     } else if (activeOLD && !activeCURRENT) {

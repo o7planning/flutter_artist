@@ -42,7 +42,7 @@ class GlobalsManager extends _Core {
 
   final Map<String, dynamic> __extraPropMap = {};
 
-  final ui = _LoggedInUserUIComponents();
+  final ui = _LoggedInUserUiComponents();
 
   GlobalsManager._({
     required this.loginLogoutAdapter,
@@ -554,7 +554,7 @@ class GlobalsManager extends _Core {
     }
     //
     try {
-      ui.updateAllUIComponents();
+      ui.updateAllUiComponents();
     } catch (e, stackTrace) {
       print(stackTrace);
     }
@@ -567,6 +567,6 @@ class GlobalsManager extends _Core {
     Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
     await hiveBox.delete(__hiveKeyLoggedInUser);
     await hiveBox.close();
-    ui.updateAllUIComponents();
+    ui.updateAllUiComponents();
   }
 }

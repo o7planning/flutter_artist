@@ -94,16 +94,16 @@ class _ScalarValueViewBuilderState
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
-    widget.scalar.ui._addScalarPieceWidgetState(
+  void addWidgetState({required bool isVisible}) {
+    widget.scalar.ui._addScalarBaseViewWidgetState(
       widgetState: this,
-      isShowing: isShowing,
+      isVisible: isVisible,
     );
   }
 
   @override
   void removeWidgetState() {
-    widget.scalar.ui._removeScalarPieceWidgetState(
+    widget.scalar.ui._removeScalarBaseViewWidgetState(
       widgetState: this,
     );
   }

@@ -52,7 +52,7 @@ class XBlockView extends StatelessWidget {
         SizedBox(height: 10),
         IconLabelText(
           label: "List Behavior: ",
-          text: xBlock.itemListMode.name,
+          text: xBlock.listUpdateStrategy.name,
         ),
         SizedBox(height: 10),
         IconLabelText(

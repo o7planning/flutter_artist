@@ -27,7 +27,10 @@ class MultiOptMsTildeFilterCriterionModel<V>
     }
     value as List;
     for (dynamic v in value) {
-      if (v is! V?) {
+      if (v == null) {
+        continue;
+      }
+      if (v is! V) {
         throw FilterCriterionTypeMismatchError(
           tildeCriterionName: tildeCriterionName,
           definedTildeCriterionType: V,

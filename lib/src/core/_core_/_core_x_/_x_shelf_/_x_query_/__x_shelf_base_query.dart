@@ -33,7 +33,7 @@ class _XShelfSbQuery extends XShelf {
       srcXBlock.setQueryHintToGreater(QryHint.force);
       srcXBlock.setOptions(
         queryType: srcBlockAndOptions.queryType,
-        itemListMode: srcBlockAndOptions.itemListMode,
+        listUpdateStrategy: srcBlockAndOptions.listUpdateStrategy,
         suggestedSelection: srcBlockAndOptions.suggestedSelection,
         afterQueryAction: srcBlockAndOptions.afterQueryAction,
         pageable: srcBlockAndOptions.pageable,
@@ -65,7 +65,7 @@ class _XShelfSbQuery extends XShelf {
           queryHint = QryHint.force;
         }
       }
-      bool hasXBlockRep = block.ui.hasActiveUIComponentBlockRepresentative(
+      bool hasXBlockRep = block.ui.hasActiveUiComponentBlockRepresentative(
         alsoCheckChildren: true,
       );
       if (hasXBlockRep) {
@@ -76,7 +76,7 @@ class _XShelfSbQuery extends XShelf {
       // Set Default Options. They will be replaced if need.
       xBlock.setOptions(
         queryType: QueryType.realQuery,
-        itemListMode: ItemListMode.replace,
+        listUpdateStrategy: ListUpdateStrategy.replace,
         suggestedSelection: null,
         afterQueryAction: null,
         pageable: null,
@@ -90,7 +90,7 @@ class _XShelfSbQuery extends XShelf {
           }
           // @@@hasActiveBlockFragment
           final hasXBlockRep =
-              parentXBlock.block.ui.hasActiveUIComponentBlockRepresentative(
+              parentXBlock.block.ui.hasActiveUiComponentBlockRepresentative(
             alsoCheckChildren: true,
           );
           if (hasXBlockRep) {
@@ -102,7 +102,7 @@ class _XShelfSbQuery extends XShelf {
           // TODO: Need? Remove this code?
           // XFormModel? parentXFormModel = parentXBlock.xFormModel;
           // if (parentXFormModel != null &&
-          //     parentXFormModel.formModel.ui.hasActiveUIComponent()) {
+          //     parentXFormModel.formModel.ui.hasActiveUiComponent()) {
           //   if (parentXFormModel.formModel.dataState == DataState.pending ||
           //       parentXFormModel.formModel.dataState == DataState.error ||
           //       parentXFormModel.formModel.dataState == DataState.none) {
@@ -129,7 +129,7 @@ class _XShelfSbQuery extends XShelf {
           queryHint = QryHint.force;
         }
       }
-      bool hasXActiveUI = scalar.ui.hasActiveUIComponent(
+      bool hasXActiveUI = scalar.ui.hasActiveUiComponent(
         alsoCheckChildren: true,
       );
       if (hasXActiveUI) {
@@ -149,7 +149,7 @@ class _XShelfSbQuery extends XShelf {
             break;
           }
           //
-          final hasXActiveUI = parentXScalar.scalar.ui.hasActiveScalarPiece(
+          final hasXActiveUI = parentXScalar.scalar.ui.hasActiveScalarBaseView(
             alsoCheckChildren: true,
           );
           if (hasXActiveUI) {

@@ -1,22 +1,22 @@
 part of '../core.dart';
 
-class _ActivityUIComponents extends _UIComponents {
+class _ActivityUiComponents extends _UiComponents {
   final Activity activity;
 
-  // Piece: Fragment.
-  final Map<_RefreshableWidgetState, XState> __activityPieceWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> __activityBaseViewWidgetStates =
+      {};
 
   // ***************************************************************************
   // ***************************************************************************
 
-  _ActivityUIComponents({required this.activity});
+  _ActivityUiComponents({required this.activity});
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateActivityPieceWidgets({bool force = false}) {
+  void updateActivityBaseViews({bool force = false}) {
     for (_RefreshableWidgetState widgetState
-        in __activityPieceWidgetStates.keys) {
+        in __activityBaseViewWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -27,55 +27,55 @@ class _ActivityUIComponents extends _UIComponents {
   // ***************************************************************************
 
   @override
-  bool hasMountedUIComponent() {
-    return __activityPieceWidgetStates.isNotEmpty;
+  bool hasMountedUiComponent() {
+    return __activityBaseViewWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUIComponentActivityRepresentative({
+  bool hasActiveUiComponentActivityRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = _findActiveUIComponentWithRepresentativeType(
+    String? componentName = _findActiveUiComponentWithRepresentativeType(
       representativeType: RepresentativeType.activityRepresentative,
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
-  bool hasActiveUIComponent({bool alsoCheckChildren = false}) {
-    String? componentName = findActiveUIComponent(
+  bool hasActiveUiComponent({bool alsoCheckChildren = false}) {
+    String? componentName = findActiveUiComponent(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
-  String? findActiveUIComponent({bool alsoCheckChildren = false}) {
-    return _findActiveUIComponentWithRepresentativeType(
+  String? findActiveUiComponent({bool alsoCheckChildren = false}) {
+    return _findActiveUiComponentWithRepresentativeType(
       representativeType: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveUIComponentActivityRepresentative({
+  String? findActiveUiComponentActivityRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    return _findActiveUIComponentWithRepresentativeType(
+    return _findActiveUiComponentWithRepresentativeType(
       representativeType: RepresentativeType.activityRepresentative,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? _findActiveUIComponentWithRepresentativeType({
+  String? _findActiveUiComponentWithRepresentativeType({
     required RepresentativeType? representativeType,
     bool alsoCheckChildren = false,
   }) {
     bool has = false;
     //
-    // Activity Piece:
+    // Activity Base View:
     //
-    String? componentName = findActiveActivityPieceWithRepresentativeType(
+    String? componentName = findActiveActivityBaseViewWithRepresentativeType(
       representativeType: representativeType,
       alsoCheckChildren: false,
     );
@@ -88,30 +88,30 @@ class _ActivityUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveActivityPiece({required bool alsoCheckChildren}) {
-    String? componentName = findActiveActivityPiece(
+  bool hasActiveActivityBaseView({required bool alsoCheckChildren}) {
+    String? componentName = findActiveActivityBaseView(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
-  String? findActiveActivityPiece({required bool alsoCheckChildren}) {
-    return findActiveActivityPieceWithRepresentativeType(
+  String? findActiveActivityBaseView({required bool alsoCheckChildren}) {
+    return findActiveActivityBaseViewWithRepresentativeType(
       representativeType: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveActivityPieceWithRepresentativeType({
+  String? findActiveActivityBaseViewWithRepresentativeType({
     required RepresentativeType? representativeType,
     required bool alsoCheckChildren,
   }) {
-    var map = {...__activityPieceWidgetStates};
+    var map = {...__activityBaseViewWidgetStates};
     for (_RefreshableWidgetState widgetState in map.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = map[widgetState]?.isShowing ?? false;
+      bool visible = map[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
@@ -126,20 +126,20 @@ class _ActivityUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUIComponents({
+  void updateAllUiComponents({
     bool force = true,
   }) {
-    updateActivityPieceWidgets(force: force);
+    updateActivityBaseViews(force: force);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedPieceWidgetStates({
+  Map<_RefreshableWidgetState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
-      widgetStates: __activityPieceWidgetStates,
+      widgetStates: __activityBaseViewWidgetStates,
       activeOnly: activeOnly,
     );
   }
@@ -147,29 +147,29 @@ class _ActivityUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addActivityPieceWidgetState({
+  void _addActivityBaseViewWidgetState({
     required _RefreshableWidgetState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
-    bool hasXActivityRepOLD = hasActiveUIComponentActivityRepresentative(
+    bool hasXActivityRepOLD = hasActiveUiComponentActivityRepresentative(
       alsoCheckChildren: true,
     );
-    __activityPieceWidgetStates.update(
+    __activityBaseViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool hasXActivityRepCURRENT = hasActiveUIComponentActivityRepresentative(
+    bool hasXActivityRepCURRENT = hasActiveUiComponentActivityRepresentative(
       alsoCheckChildren: true,
     );
     //
-    if (isShowing) {
+    if (isVisible) {
       FlutterArtist.storage._addRecentActivity(activity);
     }
     //
     if (!hasXActivityRepOLD && hasXActivityRepCURRENT) {
       // Fire event:
-      // activity.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // activity.shelf._startLoadDataForLazyUiComponentsIfNeed();
       // LOGIC: #0000
       // FlutterArtist.storage._naturalQueryQueue.addShelf(activity.shelf);
     } else if (hasXActivityRepOLD && !hasXActivityRepCURRENT) {
@@ -180,10 +180,10 @@ class _ActivityUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _removeActivityPieceWidgetState({required State widgetState}) {
-    bool activeOLD = hasActiveUIComponent();
-    __activityPieceWidgetStates.remove(widgetState);
-    bool activeCURRENT = hasActiveUIComponent();
+  void _removeActivityBaseViewWidgetState({required State widgetState}) {
+    bool activeOLD = hasActiveUiComponent();
+    __activityBaseViewWidgetStates.remove(widgetState);
+    bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
       activity._fireActivityHidden();
@@ -194,14 +194,14 @@ class _ActivityUIComponents extends _UIComponents {
   // ***************************************************************************
 
   Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
-    required bool withActivityPiece,
+    required bool withActivityBaseView,
     required bool activeOnly,
   }) {
     Map<_RefreshableWidgetState, XState> ret = {};
     //
-    if (withActivityPiece) {
+    if (withActivityBaseView) {
       ret.addAll(
-        _findMountedPieceWidgetStates(activeOnly: activeOnly),
+        _findMountedBaseViewWidgetStates(activeOnly: activeOnly),
       );
     }
     //
@@ -213,11 +213,11 @@ class _ActivityUIComponents extends _UIComponents {
 
   @DebugMethodAnnotation()
   Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
-    required bool withActivityPiece,
+    required bool withActivityBaseView,
     required bool activeOnly,
   }) {
     return _findMountedWidgetStates(
-      withActivityPiece: withActivityPiece,
+      withActivityBaseView: withActivityBaseView,
       activeOnly: activeOnly,
     );
   }

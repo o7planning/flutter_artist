@@ -52,7 +52,7 @@ import '../built_in/empty_filter_input.dart';
 import '../enums/_action_confirmation_type.dart';
 import '../enums/_action_result_state.dart';
 import '../enums/_activity_hidden_action.dart';
-import '../enums/_client_side_sort_mode.dart';
+import '../enums/_sort_strategy.dart';
 import '../enums/_default_setting_policy.dart';
 import '../enums/_filter_operator.dart';
 import '../enums/_filter_error_method.dart';
@@ -76,7 +76,7 @@ import '../enums/_form_error_method.dart';
 import '../enums/_form_mode.dart';
 import '../enums/_freeze_type.dart';
 import '../enums/_item_creation_type.dart';
-import '../enums/_item_list_mode.dart';
+import '../enums/_list_update_strategy.dart';
 import '../enums/_multi_opt_prop_reload.dart';
 import '../enums/_after_query_action.dart';
 import '../enums/_qry_hint.dart';
@@ -92,6 +92,7 @@ import '../enums/_selection_type.dart';
 import '../enums/_shelf_hidden_action.dart';
 import '../enums/_show_mode.dart';
 import '../enums/_sort_direction.dart';
+import '../enums/_sort_mode.dart';
 import '../enums/_sorting_side.dart';
 import '../enums/_task_type.dart';
 import '../enums/_tip_document.dart';
@@ -99,14 +100,32 @@ import '../enums/_x_shelf_type.dart';
 import '../enums/after_silent_action.dart';
 import '../error/_block_error_info.dart';
 import '../error/_dev_error.dart';
-import '../error/_filter_criterion_errors.dart';
 import '../error/_filter_error_info.dart';
-import '../error/_form_prop_errors.dart';
+import '../error/filter/filter_temp_error.dart';
+import '../error/form/form_temp_error.dart';
+import '../error/form_register/duplicate_form_prop_error.dart';
 import '../error/_fatal_app_error.dart';
-import '../error/_filter_temp_error.dart';
 import '../error/_form_error_info.dart';
-import '../error/_form_temp_error.dart';
 import '../error/_scalar_error_info.dart';
+import '../error/filter/filter_criterion_type_mismatch_error.dart';
+import '../error/filter/filter_multi_opt_ms_mismatch_error.dart';
+import '../error/filter_register/filter_criterion_not_found_error.dart';
+import '../error/filter_register/criterion_base_name_error.dart';
+import '../error/filter_register/duplicate_condition_group_def_error.dart';
+import '../error/filter_register/duplicate_criterion_def_error.dart';
+import '../error/filter_register/duplicate_criterion_field_def_error.dart';
+import '../error/filter_register/duplicate_filter_condition_def_error.dart';
+import '../error/filter_register/duplicate_filter_criterion_error.dart';
+import '../error/filter_register/duplicate_filter_field_error.dart';
+import '../error/filter_register/filter_criterion_register_error.dart';
+import '../error/filter_register/filter_field_name_error.dart';
+import '../error/filter_register/filter_field_no_converter_error.dart';
+import '../error/filter_register/tilde_criterion_config_duplication_error.dart';
+import '../error/filter_register/tilde_criterion_config_invalid_suffix_error.dart';
+import '../error/filter_register/tilde_criterion_name_error.dart';
+import '../error/filter_register/tilde_suffix_error.dart';
+import '../error/form/form_multi_opt_ms_mismatch_error.dart';
+import '../error/form/form_prop_type_mismatch_error.dart';
 import '../global/_global_data.dart';
 import '../icon/icon_constants.dart';
 import '../logger/_logger.dart';
@@ -546,21 +565,21 @@ part '_ui_/__refreshable_widget.dart';
 
 part '_ui_/__refreshable_widget_state.dart';
 
-part '_ui_/_activity_fragment_view.dart';
+part '_ui_/_activity_area_view.dart';
 
-part '_ui_/_activity_fragment_view_builder.dart';
+part '_ui_/_activity_area_view_builder.dart';
 
-part '_ui_/_hook_fragment_view.dart';
+part '_ui_/_hook_area_view.dart';
 
-part '_ui_/_hook_fragment_view_builder.dart';
+part '_ui_/_hook_area_view_builder.dart';
 
 part '_ui_/_block_control_bar.dart';
 
 part '_ui_/_block_control_bar_config.dart';
 
-part '_ui_/_block_fragment_view.dart';
+part '_ui_/_block_area_view.dart';
 
-part '_ui_/_block_fragment_view_builder.dart';
+part '_ui_/_block_area_view_builder.dart';
 
 part '_ui_/_block_item_detail_view.dart';
 
@@ -606,9 +625,9 @@ part '_ui_/_scalar_value_view.dart';
 
 part '_ui_/_scalar_value_view_builder.dart';
 
-part '_ui_/_scalar_fragment_view.dart';
+part '_ui_/_scalar_area_view.dart';
 
-part '_ui_/_scalar_fragment_view_builder.dart';
+part '_ui_/_scalar_area_view_builder.dart';
 
 part '_ui_/_task_progress_view_builder.dart';
 
