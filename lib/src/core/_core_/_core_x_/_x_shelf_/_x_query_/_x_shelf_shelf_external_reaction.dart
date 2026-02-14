@@ -12,7 +12,7 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
       }
       // @@@hasActiveBlockFragment
       bool blockXBlockRep =
-          xBlk.block.ui.hasActiveUIComponentBlockRepresentative(
+          xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
         alsoCheckChildren: true,
       );
       print(
@@ -41,7 +41,7 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
         }
         // @@@hasActiveBlockFragment
         bool blockXBlockRep =
-            xBlock.block.ui.hasActiveUIComponentBlockRepresentative(
+            xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
         if (blockXBlockRep) {
@@ -72,7 +72,7 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
         XFormModel? xFormModel = xBlock.xFormModel;
         // Current: forShelfExternalReaction
         if (xFormModel != null &&
-            xFormModel.formModel.ui.hasActiveUIComponent()) {
+            xFormModel.formModel.ui.hasActiveUiComponent()) {
           if (xFormModel.formModel.dataState == DataState.pending ||
               xFormModel.formModel.dataState == DataState.error ||
               xFormModel.formModel.dataState == DataState.none) {
@@ -92,7 +92,7 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
       if (xScalar._scalarReQryCon == null) {
         continue;
       }
-      bool scalarXVisible = xScalar.scalar.ui.hasActiveUIComponent(
+      bool scalarXVisible = xScalar.scalar.ui.hasActiveUiComponent(
         alsoCheckChildren: true,
       );
       //
@@ -113,7 +113,7 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
         if (xScalar == null) {
           break;
         }
-        bool hasXActiveUI = xScalar.scalar.ui.hasActiveScalarPiece(
+        bool hasXActiveUI = xScalar.scalar.ui.hasActiveScalarBaseView(
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {

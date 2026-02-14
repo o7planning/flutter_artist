@@ -28,7 +28,7 @@ class XFilterModel {
     if (isDefaultFilterModel) {
       return false;
     }
-    if (!filterModel.ui.hasActiveUIComponent()) {
+    if (!filterModel.ui.hasActiveUiComponent()) {
       return false;
     }
     if (filterModel.dataState == DataState.ready) {

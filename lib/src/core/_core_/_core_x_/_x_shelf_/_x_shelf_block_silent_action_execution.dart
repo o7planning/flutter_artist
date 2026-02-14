@@ -32,7 +32,7 @@ class _XShelfBlockSilentActionExecution extends XShelf {
     //
     thisXBlock.setOptions(
       queryType: QueryType.realQuery,
-      itemListMode: null,
+      listUpdateStrategy: null,
       suggestedSelection: null,
       afterQueryAction: null,
       pageable: null,

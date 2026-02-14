@@ -1,32 +1,32 @@
 part of '../core.dart';
 
-class HookFragmentViewBuilder extends _RefreshableWidget {
-  final Hook hook;
+class ActivityAreaViewBuilder extends _RefreshableWidget {
+  final Activity activity;
   final Widget Function() build;
 
-  const HookFragmentViewBuilder({
+  const ActivityAreaViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
-    required this.hook,
+    required this.activity,
     required this.build,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _HookFragmentViewBuilderState();
+    return _ActivityAreaViewBuilderState();
   }
 }
 
-class _HookFragmentViewBuilderState
-    extends _RefreshableWidgetState<HookFragmentViewBuilder> {
+class _ActivityAreaViewBuilderState
+    extends _RefreshableWidgetState<ActivityAreaViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
-    return getClassName(widget.hook);
+    return getClassName(widget.activity);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.hookFragment;
+  RefreshableWidgetType get type => RefreshableWidgetType.activityFragment;
 
   @override
   bool get isScalarRepresentative {
@@ -49,6 +49,11 @@ class _HookFragmentViewBuilderState
   }
 
   @override
+  bool get isActivityRepresentative {
+    return false;
+  }
+
+  @override
   bool get isHookRepresentative {
     return false;
   }
@@ -59,23 +64,23 @@ class _HookFragmentViewBuilderState
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
-    widget.hook.ui._addHookPieceWidgetState(
+  void addWidgetState({required bool isVisible}) {
+    widget.activity.ui._addActivityBaseViewWidgetState(
       widgetState: this,
-      isShowing: isShowing,
+      isVisible: isVisible,
     );
   }
 
   @override
   void removeWidgetState() {
-    widget.hook.ui._removeHookPieceWidgetState(
+    widget.activity.ui._removeActivityBaseViewWidgetState(
       widgetState: this,
     );
   }
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.storage._checkToRemoveShelf(widget.hook.shelf);
+    FlutterArtist.storage._checkToRemoveActivity(widget.activity);
   }
 
   @override

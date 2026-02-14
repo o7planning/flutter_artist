@@ -1,21 +1,21 @@
 part of '../core.dart';
 
-class _HookUIComponents extends _UIComponents {
+class _HookUiComponents extends _UiComponents {
   final Hook hook;
 
-  // Piece: Fragment.
-  final Map<_RefreshableWidgetState, XState> __hookPieceWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> __hookBaseViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
 
-  _HookUIComponents({required this.hook});
+  _HookUiComponents({required this.hook});
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateHookPieceWidgets({bool force = false}) {
-    for (_RefreshableWidgetState widgetState in __hookPieceWidgetStates.keys) {
+  void updateHookBaseViews({bool force = false}) {
+    for (_RefreshableWidgetState widgetState
+        in __hookBaseViewWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -26,55 +26,55 @@ class _HookUIComponents extends _UIComponents {
   // ***************************************************************************
 
   @override
-  bool hasMountedUIComponent() {
-    return __hookPieceWidgetStates.isNotEmpty;
+  bool hasMountedUiComponent() {
+    return __hookBaseViewWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUIComponentHookRepresentative({
+  bool hasActiveUiComponentHookRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = _findActiveUIComponentWithRepresentativeType(
+    String? componentName = _findActiveUiComponentWithRepresentativeType(
       representativeType: RepresentativeType.hookRepresentative,
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
-  bool hasActiveUIComponent({bool alsoCheckChildren = false}) {
-    String? componentName = findActiveUIComponent(
+  bool hasActiveUiComponent({bool alsoCheckChildren = false}) {
+    String? componentName = findActiveUiComponent(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
-  String? findActiveUIComponent({bool alsoCheckChildren = false}) {
-    return _findActiveUIComponentWithRepresentativeType(
+  String? findActiveUiComponent({bool alsoCheckChildren = false}) {
+    return _findActiveUiComponentWithRepresentativeType(
       representativeType: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveUIComponentHookRepresentative({
+  String? findActiveUiComponentHookRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    return _findActiveUIComponentWithRepresentativeType(
+    return _findActiveUiComponentWithRepresentativeType(
       representativeType: RepresentativeType.hookRepresentative,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? _findActiveUIComponentWithRepresentativeType({
+  String? _findActiveUiComponentWithRepresentativeType({
     required RepresentativeType? representativeType,
     bool alsoCheckChildren = false,
   }) {
     bool has = false;
     //
-    // Hook Piece:
+    // Hook Base View:
     //
-    String? componentName = findActiveHookPieceWithRepresentativeType(
+    String? componentName = findActiveHookBaseViewWithRepresentativeType(
       representativeType: representativeType,
       alsoCheckChildren: false,
     );
@@ -87,30 +87,30 @@ class _HookUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveHookPiece({required bool alsoCheckChildren}) {
-    String? componentName = findActiveHookPiece(
+  bool hasActiveHookBaseView({required bool alsoCheckChildren}) {
+    String? componentName = findActiveHookBaseView(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
-  String? findActiveHookPiece({required bool alsoCheckChildren}) {
-    return findActiveHookPieceWithRepresentativeType(
+  String? findActiveHookBaseView({required bool alsoCheckChildren}) {
+    return findActiveHookBaseViewWithRepresentativeType(
       representativeType: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveHookPieceWithRepresentativeType({
+  String? findActiveHookBaseViewWithRepresentativeType({
     required RepresentativeType? representativeType,
     required bool alsoCheckChildren,
   }) {
-    var map = {...__hookPieceWidgetStates};
+    var map = {...__hookBaseViewWidgetStates};
     for (_RefreshableWidgetState widgetState in map.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = map[widgetState]?.isShowing ?? false;
+      bool visible = map[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
@@ -125,20 +125,20 @@ class _HookUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUIComponents({
+  void updateAllUiComponents({
     bool force = true,
   }) {
-    updateHookPieceWidgets(force: force);
+    updateHookBaseViews(force: force);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedPieceWidgetStates({
+  Map<_RefreshableWidgetState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
-      widgetStates: __hookPieceWidgetStates,
+      widgetStates: __hookBaseViewWidgetStates,
       activeOnly: activeOnly,
     );
   }
@@ -146,29 +146,29 @@ class _HookUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addHookPieceWidgetState({
+  void _addHookBaseViewWidgetState({
     required _RefreshableWidgetState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
-    bool hasXHookRepOLD = hasActiveUIComponentHookRepresentative(
+    bool hasXHookRepOLD = hasActiveUiComponentHookRepresentative(
       alsoCheckChildren: true,
     );
-    __hookPieceWidgetStates.update(
+    __hookBaseViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool hasXHookRepCURRENT = hasActiveUIComponentHookRepresentative(
+    bool hasXHookRepCURRENT = hasActiveUiComponentHookRepresentative(
       alsoCheckChildren: true,
     );
     //
-    if (isShowing) {
+    if (isVisible) {
       FlutterArtist.storage._addRecentShelf(hook.shelf);
     }
     //
     if (!hasXHookRepOLD && hasXHookRepCURRENT) {
       // Fire event:
-      // hook.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // hook.shelf._startLoadDataForLazyUiComponentsIfNeed();
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(hook.shelf);
     } else if (hasXHookRepOLD && !hasXHookRepCURRENT) {
@@ -179,10 +179,10 @@ class _HookUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _removeHookPieceWidgetState({required State widgetState}) {
-    bool activeOLD = hasActiveUIComponent();
-    __hookPieceWidgetStates.remove(widgetState);
-    bool activeCURRENT = hasActiveUIComponent();
+  void _removeHookBaseViewWidgetState({required State widgetState}) {
+    bool activeOLD = hasActiveUiComponent();
+    __hookBaseViewWidgetStates.remove(widgetState);
+    bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
       hook._fireHookHidden();
@@ -193,14 +193,14 @@ class _HookUIComponents extends _UIComponents {
   // ***************************************************************************
 
   Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
-    required bool withHookPiece,
+    required bool withHookBaseView,
     required bool activeOnly,
   }) {
     Map<_RefreshableWidgetState, XState> ret = {};
     //
-    if (withHookPiece) {
+    if (withHookBaseView) {
       ret.addAll(
-        _findMountedPieceWidgetStates(activeOnly: activeOnly),
+        _findMountedBaseViewWidgetStates(activeOnly: activeOnly),
       );
     }
     //
@@ -212,11 +212,11 @@ class _HookUIComponents extends _UIComponents {
 
   @DebugMethodAnnotation()
   Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
-    required bool withHookPiece,
+    required bool withHookBaseView,
     required bool activeOnly,
   }) {
     return _findMountedWidgetStates(
-      withHookPiece: withHookPiece,
+      withHookBaseView: withHookBaseView,
       activeOnly: activeOnly,
     );
   }

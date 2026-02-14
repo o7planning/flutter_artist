@@ -22,15 +22,15 @@ class ActiveInfoWidget extends StatelessWidget {
   final TextStyle labelStyle;
   final TextStyle textStyle;
   final ActiveElementType activeElementType;
-  final String? activeUIComponentName;
-  final String? xActiveUIComponentName;
+  final String? activeUiComponentName;
+  final String? xActiveUiComponentName;
   final Function() checkAgain;
 
   const ActiveInfoWidget({
     super.key,
     required this.activeElementType,
-    required this.activeUIComponentName,
-    required this.xActiveUIComponentName,
+    required this.activeUiComponentName,
+    required this.xActiveUiComponentName,
     required this.labelStyle,
     required this.textStyle,
     required this.checkAgain,
@@ -44,15 +44,15 @@ class ActiveInfoWidget extends StatelessWidget {
       children: [
         Expanded(
           child: Tooltip(
-            message: activeUIComponentName != null
-                ? "Active UI: $activeUIComponentName"
-                : xActiveUIComponentName != null
-                    ? "Active UI: $xActiveUIComponentName"
+            message: activeUiComponentName != null
+                ? "Active UI: $activeUiComponentName"
+                : xActiveUiComponentName != null
+                    ? "Active UI: $xActiveUiComponentName"
                     : "",
             child: IconLabelText(
               label: "UI A/XActive? (${activeElementType.shortInf()}): ",
               text:
-                  "${activeUIComponentName != null} / ${xActiveUIComponentName != null}",
+                  "${activeUiComponentName != null} / ${xActiveUiComponentName != null}",
               labelStyle: labelStyle,
               textStyle: textStyle,
             ),
@@ -61,7 +61,7 @@ class ActiveInfoWidget extends StatelessWidget {
         SimpleSmallIconButton(
           iconData: Icons.view_agenda,
           iconSize: 14,
-          onPressed: activeUIComponentName == null
+          onPressed: activeUiComponentName == null
               ? null
               : () {
                   checkAgain();

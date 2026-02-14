@@ -67,10 +67,10 @@ class _FilterPanelBuilderState
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isVisible}) {
     widget.filterModel.ui._addFilterFragmentWidgetState(
       widgetState: this,
-      isShowing: true,
+      isVisible: true,
     );
   }
 

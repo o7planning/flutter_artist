@@ -145,11 +145,11 @@ class BlockOrScalar extends Equatable {
     }
   }
 
-  bool hasActiveUIComponent() {
+  bool hasActiveUiComponent() {
     if (block != null) {
-      return block!.ui.hasActiveUIComponent();
+      return block!.ui.hasActiveUiComponent();
     } else {
-      return scalar!.ui.hasActiveUIComponent();
+      return scalar!.ui.hasActiveUiComponent();
     }
   }
 

@@ -20,10 +20,10 @@ enum TipDocument {
   locale(enabled: true),
   naturalQuery(enabled: true),
   filterCriteria(enabled: true),
-  blockActiveUIComponents(enabled: true),
+  blockActiveUiComponents(enabled: true),
   blockQueryType(enabled: true),
   sorting(enabled: true),
-  scalarActiveUIComponents(enabled: true),
+  scalarActiveUiComponents(enabled: true),
   dataState(enabled: true),
   eventReactionFreezing(enabled: true),
   debugState(enabled: true),
@@ -111,9 +111,9 @@ enum TipDocument {
         return "Natural Query";
       case TipDocument.filterCriteria:
         return "Filter Criteria";
-      case TipDocument.scalarActiveUIComponents:
+      case TipDocument.scalarActiveUiComponents:
         return "Scalar's Active UI Components";
-      case TipDocument.blockActiveUIComponents:
+      case TipDocument.blockActiveUiComponents:
         return "Block's Active UI Components";
       case TipDocument.blockQueryType:
         return "Block's QueryType";
@@ -215,9 +215,9 @@ enum TipDocument {
         return "Natural Query";
       case TipDocument.filterCriteria:
         return "Filter Criteria";
-      case TipDocument.scalarActiveUIComponents:
+      case TipDocument.scalarActiveUiComponents:
         return "Scalar's Active UI Components";
-      case TipDocument.blockActiveUIComponents:
+      case TipDocument.blockActiveUiComponents:
         return "Block's Active UI Components";
       case TipDocument.blockQueryType:
         return "Block's QueryType";
@@ -351,11 +351,11 @@ enum TipDocument {
           "http://51.195.44.134:8080/vi/11111/config1",
           "http://51.195.44.134:8080/vi/11112/config2",
         ];
-      case TipDocument.scalarActiveUIComponents:
+      case TipDocument.scalarActiveUiComponents:
         return [
           "http://51.195.44.134:8080/vi/14827/xxx",
         ];
-      case TipDocument.blockActiveUIComponents:
+      case TipDocument.blockActiveUiComponents:
         return [
           "http://51.195.44.134:8080/vi/14829/xxx",
         ];

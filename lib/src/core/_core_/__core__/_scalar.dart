@@ -226,7 +226,7 @@ abstract class Scalar<
   late final __scalarData =
       _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
-  late final ui = _ScalarUIComponents(scalar: this);
+  late final ui = _ScalarUiComponents(scalar: this);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -326,7 +326,7 @@ abstract class Scalar<
       lineFlowType: LineFlowType.debug,
     );
     //
-    bool hasXActiveUI = ui.hasActiveUIComponent(alsoCheckChildren: true);
+    bool hasXActiveUI = ui.hasActiveUiComponent(alsoCheckChildren: true);
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#12020",
@@ -784,7 +784,7 @@ abstract class Scalar<
       case AfterScalarLoadExtraDataQuickAction.none:
         break;
       case AfterScalarLoadExtraDataQuickAction.update:
-        ui.updateAllUIComponents(withoutFilters: true);
+        ui.updateAllUiComponents(withoutFilters: true);
     }
     return success2;
   }
@@ -1172,7 +1172,7 @@ abstract class Scalar<
   void __refreshQueryingState({required bool isQuerying}) {
     try {
       __isQuerying = isQuerying;
-      ui.updateControlBarWidgets();
+      ui.updateControlBars();
     } catch (e) {}
   }
 
@@ -1222,7 +1222,7 @@ abstract class Scalar<
         errCode: ScalarClearancePrecheck.busy,
       );
     }
-    // bool hasActiveUI = ui.hasActiveUIComponent(alsoCheckChildren: true);
+    // bool hasActiveUI = ui.hasActiveUiComponent(alsoCheckChildren: true);
     // if (hasActiveUI) {
     //   return Actionable<ScalarClearancePrecheck>.no(
     //     errCode: ScalarClearancePrecheck.hasActiveUI,

@@ -4,7 +4,7 @@ abstract class Activity extends _Core {
   // TODO: Remove in next version!
   // MasterFlowItem? _masterFlowItem;
 
-  late final ui = _ActivityUIComponents(activity: this);
+  late final ui = _ActivityUiComponents(activity: this);
 
   Activity();
 

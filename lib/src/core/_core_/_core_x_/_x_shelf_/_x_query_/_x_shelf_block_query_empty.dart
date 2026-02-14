@@ -5,7 +5,7 @@ class _XShelfBlockQueryEmpty extends _XShelfSbQuery {
     required Block block,
     required FilterInput? filterInput,
     required Pageable? pageable,
-    required ItemListMode? itemListMode,
+    required ListUpdateStrategy? listUpdateStrategy,
     required AfterQueryAction? afterQueryAction,
     required SuggestedSelection<dynamic>? suggestedSelection,
   }) : super(
@@ -18,7 +18,7 @@ class _XShelfBlockQueryEmpty extends _XShelfSbQuery {
       srcBlockAndOptions: SrcBlockAndOptions(
         block: block,
         queryType: QueryType.emptyQuery,
-        itemListMode: itemListMode,
+        listUpdateStrategy: listUpdateStrategy,
         suggestedSelection: suggestedSelection,
         afterQueryAction: afterQueryAction,
         pageable: pageable,

@@ -25,7 +25,7 @@ class FormDebugBox extends BaseDebugBox {
         IconLabelText(
           label: "Form UI Active?: ",
           text:
-              "${formModel.ui.hasActiveUIComponent()}/${formModel.loadTimeUIActive}*",
+              "${formModel.ui.hasActiveUiComponent()}/${formModel.loadTimeUIActive}*",
           labelStyle: labelStyle0,
           textStyle: textStyle0,
         ),

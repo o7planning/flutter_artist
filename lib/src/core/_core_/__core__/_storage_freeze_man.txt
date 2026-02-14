@@ -51,10 +51,10 @@ class _StorageFreezeMan {
 
   void _onVisibilityChanged({
     required _RefreshableWidgetState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
     if (_freezingAgentWidgetStateMap.containsKey(widgetState)) {
-      _freezingAgentWidgetStateMap[widgetState] = isShowing;
+      _freezingAgentWidgetStateMap[widgetState] = isVisible;
       __checkFreezeByUIAndResumeReactionIfCan();
     }
   }
@@ -217,7 +217,7 @@ class _StorageFreezeMan {
     required bool findBlockFragment,
     required bool findForm,
     required bool findScalarFragment,
-    required bool highlightUIComponents,
+    required bool highlightUiComponents,
     required int waitForUIReadyInMilliseconds,
   }) async {
     if (!__ensureFreezeTypeIsNull()) {
@@ -255,10 +255,10 @@ class _StorageFreezeMan {
       ..clear()
       ..addAll(
         map.map(
-          (k, v) => MapEntry<_RefreshableWidgetState, bool>(k, v.isShowing),
+          (k, v) => MapEntry<_RefreshableWidgetState, bool>(k, v.isVisible),
         ),
       );
-    if (highlightUIComponents) {
+    if (highlightUiComponents) {
       for (_RefreshableWidgetState ws in map.keys) {
         ws.showMode == ShowMode.dev;
         ws.refreshState(force: true);

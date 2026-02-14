@@ -1,0 +1,4 @@
+enum ListUpdateStrategy {
+  replace,
+  merge,
+}

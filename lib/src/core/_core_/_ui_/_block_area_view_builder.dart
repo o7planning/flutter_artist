@@ -1,11 +1,11 @@
 part of '../core.dart';
 
-class BlockFragmentViewBuilder extends _RefreshableWidget {
+class BlockAreaViewBuilder extends _RefreshableWidget {
   final Block block;
   final bool itemRepresentative;
   final Widget Function() build;
 
-  const BlockFragmentViewBuilder({
+  const BlockAreaViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -16,12 +16,12 @@ class BlockFragmentViewBuilder extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _BlockFragmentViewBuilderState();
+    return _BlockAreaViewBuilderState();
   }
 }
 
-class _BlockFragmentViewBuilderState
-    extends _RefreshableWidgetState<BlockFragmentViewBuilder> {
+class _BlockAreaViewBuilderState
+    extends _RefreshableWidgetState<BlockAreaViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
@@ -56,16 +56,16 @@ class _BlockFragmentViewBuilderState
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
-    widget.block.ui._addBlockPieceWidgetState(
+  void addWidgetState({required bool isVisible}) {
+    widget.block.ui._addBlockBaseViewWidgetState(
       widgetState: this,
-      isShowing: isShowing,
+      isVisible: isVisible,
     );
   }
 
   @override
   void removeWidgetState() {
-    widget.block.ui._removeBlockPieceWidgetState(
+    widget.block.ui._removeBlockBaseViewWidgetState(
       widgetState: this,
     );
   }

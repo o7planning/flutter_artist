@@ -250,7 +250,7 @@ abstract class XShelf extends XRootQueueItem {
       //
       if (reQryBlock != null) {
         // @@@hasActiveBlockFragment
-        hasXBlockRep = reQryBlock.ui.hasActiveUIComponentBlockRepresentative(
+        hasXBlockRep = reQryBlock.ui.hasActiveUiComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
         queryHint = hasXBlockRep ? QryHint.force : QryHint.markAsPending;
@@ -258,7 +258,7 @@ abstract class XShelf extends XRootQueueItem {
       if (refreshCurrBlock != null) {
         // @@@hasActiveBlockFragment
         hasXItemRep =
-            refreshCurrBlock.ui.hasActiveUIComponentItemRepresentative(
+            refreshCurrBlock.ui.hasActiveUiComponentItemRepresentative(
           alsoCheckChildren: true,
         );
         forceReloadCurrItem = true;
@@ -277,7 +277,7 @@ abstract class XShelf extends XRootQueueItem {
       String scalarName = s.name;
       XScalar xScalar = xScalarMap[scalarName]!;
       //
-      bool hasActiveUI = s.ui.hasActiveUIComponent();
+      bool hasActiveUI = s.ui.hasActiveUiComponent();
       if (hasActiveUI) {
         //
         xScalar.setQueryHintToGreater(QryHint.force);
@@ -295,7 +295,7 @@ abstract class XShelf extends XRootQueueItem {
         }
         // @@@hasActiveBlockFragment
         bool hasXBlockRep =
-            xBlock.block.ui.hasActiveUIComponentBlockRepresentative(
+            xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
         if (hasXBlockRep) {
@@ -308,7 +308,7 @@ abstract class XShelf extends XRootQueueItem {
 
         // Current: updateInternalReactionByEvtBlock.
         if (xFormModel != null &&
-            xFormModel.formModel.ui.hasActiveUIComponent()) {
+            xFormModel.formModel.ui.hasActiveUiComponent()) {
           if (xFormModel.formModel.dataState == DataState.pending ||
               xFormModel.formModel.dataState == DataState.error ||
               xFormModel.formModel.dataState == DataState.none) {

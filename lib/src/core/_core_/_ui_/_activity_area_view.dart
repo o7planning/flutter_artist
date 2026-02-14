@@ -1,20 +1,20 @@
 part of '../core.dart';
 
-abstract class HookFragmentView extends StatelessWidget {
-  final Hook hook;
+abstract class ActivityAreaView extends StatelessWidget {
+  final Activity activity;
 
-  const HookFragmentView({
-    required this.hook,
+  const ActivityAreaView({
+    required this.activity,
     super.key,
   });
 
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return HookFragmentViewBuilder(
+    return ActivityAreaViewBuilder(
       ownerClassInstance: this,
       description: '',
-      hook: hook,
+      activity: activity,
       build: () {
         return buildContent(context);
       },

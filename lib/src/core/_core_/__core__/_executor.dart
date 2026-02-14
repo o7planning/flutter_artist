@@ -76,7 +76,7 @@ class _Executor {
           rethrow;
         } finally {
           for (Shelf shelf in shelfMap.values) {
-            shelf.ui.updateAllUIComponents();
+            shelf.ui.updateAllUiComponents();
           }
           //
           __executingXShelfId = null;
@@ -345,9 +345,9 @@ class _Executor {
 
   void _addTaskProgressViewWidgetState({
     required _TaskProgressBuilderState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
-    _taskProgressViewWidgetStates[widgetState] = isShowing;
+    _taskProgressViewWidgetStates[widgetState] = isVisible;
   }
 
   void _removeTaskProgressViewWidgetState({

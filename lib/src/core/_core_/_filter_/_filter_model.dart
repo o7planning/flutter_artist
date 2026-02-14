@@ -65,7 +65,7 @@ abstract class FilterModel<
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
-  late final ui = _FilterUIComponents(filterModel: this);
+  late final ui = _FilterUiComponents(filterModel: this);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -560,7 +560,7 @@ abstract class FilterModel<
         error = e.toAppError(
           filterModelName: getClassNameWithoutGenerics(this),
         );
-      } else if(e is FilterMultiOptMsMismatchError) {
+      } else if (e is FilterMultiOptMsMismatchError) {
         // Bug: #Bug#003
         error = e.toAppError(
           filterModelName: getClassNameWithoutGenerics(this),

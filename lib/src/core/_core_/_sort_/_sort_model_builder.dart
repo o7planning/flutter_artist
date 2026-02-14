@@ -1,15 +1,14 @@
 part of '../core.dart';
 
 abstract class SortModelBuilder<ITEM extends Object> {
-  // Multi-sort criteria selection
-  final bool clientSideMultiSort;
-  final bool serverSideMultiSort;
+  final SortMode clientSideSortMode;
+  final SortMode serverSideSortMode;
 
   late final SortModelStructure _structure;
 
   SortModelBuilder({
-    required this.clientSideMultiSort,
-    required this.serverSideMultiSort,
+    required this.clientSideSortMode,
+    required this.serverSideSortMode,
   }) {
     _structure = registerSortModelStructure();
   }

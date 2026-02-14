@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class _FormUIComponents extends _UIComponents {
+class _FormUiComponents extends _UiComponents {
   final FormModel formModel;
 
   final Map<_RefreshableWidgetState, XState> __formWidgetStates = {};
@@ -8,12 +8,12 @@ class _FormUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  _FormUIComponents({required this.formModel});
+  _FormUiComponents({required this.formModel});
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUIComponents({bool force = false}) {
+  void updateAllUiComponents({bool force = false}) {
     __updateFormWidgets(force: force);
   }
 
@@ -21,27 +21,27 @@ class _FormUIComponents extends _UIComponents {
   // ***************************************************************************
 
   @override
-  bool hasMountedUIComponent() {
+  bool hasMountedUiComponent() {
     return __formWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUIComponent() {
-    return hasActiveUIComponentWithRepresentativeType(
+  bool hasActiveUiComponent() {
+    return hasActiveUiComponentWithRepresentativeType(
       representativeType: null,
     );
   }
 
-  bool hasActiveUIComponentWithRepresentativeType({
+  bool hasActiveUiComponentWithRepresentativeType({
     required RepresentativeType? representativeType,
   }) {
     for (_RefreshableWidgetState widgetState in __formWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = __formWidgetStates[widgetState]?.isShowing ?? false;
+      bool visible = __formWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
@@ -84,20 +84,20 @@ class _FormUIComponents extends _UIComponents {
 
   void _addFormWidgetState({
     required _RefreshableWidgetState widgetState,
-    required final bool isShowing,
+    required final bool isVisible,
   }) {
-    bool isShowingOLD = __formWidgetStates[widgetState]?.isShowing ?? false;
+    bool isVisibleOLD = __formWidgetStates[widgetState]?.isVisible ?? false;
     __formWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    if (!isShowingOLD && isShowing) {
-      // formModel.shelf._startLoadDataForLazyUIComponentsIfNeed();
+    if (!isVisibleOLD && isVisible) {
+      // formModel.shelf._startLoadDataForLazyUiComponentsIfNeed();
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(formModel.shelf);
     }
-    if (isShowing) {
+    if (isVisible) {
       FlutterArtist.storage._addRecentShelf(formModel.shelf);
     }
   }

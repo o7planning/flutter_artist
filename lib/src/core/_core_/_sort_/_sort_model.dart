@@ -6,26 +6,24 @@ abstract class SortModel<ITEM extends Object> {
 
   Shelf get shelf => block.shelf;
 
-  final bool multiSort;
-
-  bool get singleSort => !multiSort;
+  final SortMode sortMode;
 
   final SortingSide sortingSide;
   final List<SortCriterion> _criteria = [];
-  final Map<String, SortCriterion> _tildeCriteriaMap = {};
+  final Map<String, SortCriterion> _sortCriteriaMap = {};
 
   List<SortCriterion> get criteria => List.unmodifiable(_criteria);
 
-  late final ui = _SortUIComponents(sortModel: this);
+  late final ui = _SortUiComponents(sortModel: this);
 
   SortCriterion? get firstOrNullCriterion => _criteria.firstOrNull;
 
   SortModel._({
     required this.sortModelBuilder,
     required this.sortingSide,
-  }) : multiSort = sortingSide == SortingSide.server
-            ? sortModelBuilder?.serverSideMultiSort ?? false
-            : sortModelBuilder?.clientSideMultiSort ?? false {
+  }) : sortMode = sortingSide == SortingSide.server
+            ? sortModelBuilder?.serverSideSortMode ?? SortMode.single
+            : sortModelBuilder?.clientSideSortMode ?? SortMode.single {
     int optCount = 0;
     if (sortModelBuilder != null) {
       SortModelStructure structure =
@@ -49,14 +47,14 @@ abstract class SortModel<ITEM extends Object> {
         //
         if (criterion.direction != null) {
           optCount++;
-          if (optCount > 1 && !multiSort) {
+          if (optCount > 1 && sortMode == SortMode.single) {
             criterion._direction = null;
           }
         }
         //
-        if (!_tildeCriteriaMap.containsKey(criterion.criterionName)) {
+        if (!_sortCriteriaMap.containsKey(criterion.criterionName)) {
           _criteria.add(criterion);
-          _tildeCriteriaMap[criterion.criterionName] = criterion;
+          _sortCriteriaMap[criterion.criterionName] = criterion;
         }
       }
     }
@@ -86,7 +84,7 @@ abstract class SortModel<ITEM extends Object> {
         )
         .toList();
     //
-    if (singleSort) {
+    if (sortMode == SortMode.single) {
       if (list.isEmpty) {
         return SortableCriteria._([]);
       } else {
@@ -116,8 +114,8 @@ abstract class SortModel<ITEM extends Object> {
     required String movingCriterionName,
     required String destCriterionName,
   }) async {
-    SortCriterion? moving = _tildeCriteriaMap[movingCriterionName];
-    SortCriterion? dest = _tildeCriteriaMap[destCriterionName];
+    SortCriterion? moving = _sortCriteriaMap[movingCriterionName];
+    SortCriterion? dest = _sortCriteriaMap[destCriterionName];
     if (moving == null || dest == null) {
       return;
     } else if (moving.criterionName == dest.criterionName) {
@@ -148,11 +146,13 @@ abstract class SortModel<ITEM extends Object> {
     required SortDirection? direction,
     required bool moveToFirst, // TODO-XXX: Do it!!
   }) async {
-    SortCriterion? criterion = _tildeCriteriaMap[criterionName];
+    print("criterionName: $criterionName");
+    SortCriterion? criterion = _sortCriteriaMap[criterionName];
+    print("criterion: $criterion");
     if (criterion == null) {
       return;
     }
-    if (singleSort) {
+    if (sortMode == SortMode.single) {
       for (SortCriterion sc in _criteria) {
         if (sc._direction != null) {
           // Backup Direction.
@@ -161,6 +161,7 @@ abstract class SortModel<ITEM extends Object> {
         sc._direction = null;
       }
     }
+    print("direction: $direction");
     criterion._direction = direction;
     if (direction != null) {
       criterion._lastUsedDirection = direction;
@@ -191,7 +192,7 @@ abstract class SortModel<ITEM extends Object> {
     List<SortCriterion> newArrangementCriteria = [];
     //
     for (String criterionName in newArrangementCn) {
-      SortCriterion? criterion = _tildeCriteriaMap[criterionName];
+      SortCriterion? criterion = _sortCriteriaMap[criterionName];
       if (criterion == null) {
         continue;
       }
@@ -200,7 +201,7 @@ abstract class SortModel<ITEM extends Object> {
       //
       if (criterion.direction != null) {
         optCount++;
-        if (optCount > 1 && singleSort) {
+        if (optCount > 1 && sortMode == SortMode.single) {
           criterion._direction = null;
         }
       }
@@ -232,7 +233,7 @@ abstract class SortModel<ITEM extends Object> {
   Future<void> __applyChanges() async {
     if (sortingSide == SortingSide.client) {
       block.clientSideSort(refresh: false);
-      block.ui.updateAllUIComponents(
+      block.ui.updateAllUiComponents(
         withoutFilters: true,
         force: true,
       );
@@ -252,10 +253,11 @@ abstract class SortModel<ITEM extends Object> {
       if (sc.direction == null) {
         continue;
       }
-      if (singleSort && criterionSortedCount >= 1) {
+      if (sortMode == SortMode.single && criterionSortedCount >= 1) {
         break;
       }
       criterionSortedCount++;
+      final int directionValue = sc.direction == SortDirection.asc ? 1 : -1;
       //
       Comparable? aValue = getComparisonValue(
         item: a,
@@ -267,13 +269,13 @@ abstract class SortModel<ITEM extends Object> {
       );
       if (aValue != null) {
         int x = aValue.compareTo(bValue);
-        if (x != null) {
-          return x;
+        if (x != 0) {
+          return x * directionValue;
         }
       } else if (bValue != null) {
         int x = -bValue.compareTo(aValue);
-        if (x != null) {
-          return x;
+        if (x != 0) {
+          return x * directionValue;
         }
       }
     }
@@ -298,6 +300,6 @@ abstract class SortModel<ITEM extends Object> {
 
   @override
   String toString() {
-    return "multiSort: $multiSort ${_criteria.toString()}";
+    return "sortMode: $sortMode ${_criteria.toString()}";
   }
 }

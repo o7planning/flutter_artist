@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/_form_error_method.dart';
+import '../../enums/_form_error_method.dart';
 
 class FormTempError {
   final FormErrorMethod formErrorMethod;

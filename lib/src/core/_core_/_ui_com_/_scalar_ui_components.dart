@@ -1,59 +1,59 @@
 part of '../core.dart';
 
-class _ScalarUIComponents extends _UIComponents {
+class _ScalarUiComponents extends _UiComponents {
   final Scalar scalar;
 
-  final Map<_RefreshableWidgetState, XState> __scalarPieceWidgetStates = {};
+  final Map<_RefreshableWidgetState, XState> __scalarBaseViewWidgetStates = {};
   final Map<_RefreshableWidgetState, XState> __scalarControlBarWidgetStates =
       {};
 
   // ***************************************************************************
   // ***************************************************************************
 
-  _ScalarUIComponents({required this.scalar});
+  _ScalarUiComponents({required this.scalar});
 
   // ***************************************************************************
   // ***************************************************************************
 
   @override
-  bool hasMountedUIComponent() {
-    return __scalarPieceWidgetStates.isNotEmpty ||
+  bool hasMountedUiComponent() {
+    return __scalarBaseViewWidgetStates.isNotEmpty ||
         __scalarControlBarWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUIComponent({bool alsoCheckChildren = false}) {
-    String? componentName = findActiveUIComponent(
+  bool hasActiveUiComponent({bool alsoCheckChildren = false}) {
+    String? componentName = findActiveUiComponent(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
-  String? findActiveUIComponent({bool alsoCheckChildren = false}) {
+  String? findActiveUiComponent({bool alsoCheckChildren = false}) {
     bool active = false;
     // Filter
     // if (block.filterModel != null) {
-    //   active = block.filterModel!.ui.hasActiveUIComponent();
+    //   active = block.filterModel!.ui.hasActiveUiComponent();
     //   if (active) {
     //     return true;
     //   }
     // }
-    // Scalar Piece:
-    String? componentName = findActiveScalarPiece(alsoCheckChildren: false);
+    // Scalar Base View:
+    String? componentName = findActiveScalarBaseView(alsoCheckChildren: false);
     if (componentName != null) {
       return componentName;
     }
     // ControlBar:
-    active = hasActiveControlBarWidget();
+    active = hasActiveControlBar();
     if (active) {
       return "ScalarControlBar";
     }
     //
     if (alsoCheckChildren) {
       for (Scalar childScalar in scalar._childScalars) {
-        componentName = childScalar.ui.findActiveUIComponent(
+        componentName = childScalar.ui.findActiveUiComponent(
           alsoCheckChildren: alsoCheckChildren,
         );
         if (componentName != null) {
@@ -68,7 +68,7 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
 
   Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
-    required bool withScalarPiece,
+    required bool withScalarBaseView,
     required bool withFilter,
     required bool withScalarControlBar,
     required bool activeOnly,
@@ -78,13 +78,13 @@ class _ScalarUIComponents extends _UIComponents {
     if (withFilter) {
       final FilterModel filterModel = scalar._registeredOrDefaultFilterModel;
       ret.addAll(
-        filterModel.ui._findMountedPieceWidgetStates(activeOnly: activeOnly),
+        filterModel.ui._findMountedBaseViewWidgetStates(activeOnly: activeOnly),
       );
     }
     //
-    if (withScalarPiece) {
+    if (withScalarBaseView) {
       ret.addAll(
-        _findMountedPieceWidgetStates(activeOnly: activeOnly),
+        _findMountedBaseViewWidgetStates(activeOnly: activeOnly),
       );
     }
     //
@@ -100,7 +100,7 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateControlBarWidgets({bool force = false}) {
+  void updateControlBars({bool force = false}) {
     for (_RefreshableWidgetState widgetState
         in __scalarControlBarWidgetStates.keys) {
       if (widgetState.mounted) {
@@ -112,8 +112,8 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updatePieceWidgets({bool force = true}) {
-    for (_RefreshableWidgetState state in __scalarPieceWidgetStates.keys) {
+  void updateScalarBaseViews({bool force = true}) {
+    for (_RefreshableWidgetState state in __scalarBaseViewWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -123,22 +123,22 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUIComponents({
+  void updateAllUiComponents({
     required bool withoutFilters,
     bool force = true,
   }) {
     if (!withoutFilters) {
-      scalar.filterModel?.ui.updateAllUIComponents();
+      scalar.filterModel?.ui.updateAllUiComponents();
     }
-    updateControlBarWidgets(force: force);
-    updatePieceWidgets(force: force);
+    updateControlBars(force: force);
+    updateScalarBaseViews(force: force);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveScalarPiece({required bool alsoCheckChildren}) {
-    String? componentName = findActiveScalarPiece(
+  bool hasActiveScalarBaseView({required bool alsoCheckChildren}) {
+    String? componentName = findActiveScalarBaseView(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
@@ -147,22 +147,23 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  String? findActiveScalarPiece({required bool alsoCheckChildren}) {
-    return findActiveScalarPieceWithRepresentativeType(
+  String? findActiveScalarBaseView({required bool alsoCheckChildren}) {
+    return findActiveScalarBaseViewWithRepresentativeType(
       representativeType: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveScalarPieceWithRepresentativeType({
+  String? findActiveScalarBaseViewWithRepresentativeType({
     required RepresentativeType? representativeType,
     required bool alsoCheckChildren,
   }) {
-    for (State widgetState in __scalarPieceWidgetStates.keys) {
+    for (State widgetState in __scalarBaseViewWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = __scalarPieceWidgetStates[widgetState]?.isShowing ?? false;
+      bool visible =
+          __scalarBaseViewWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
@@ -171,7 +172,7 @@ class _ScalarUIComponents extends _UIComponents {
     if (alsoCheckChildren) {
       for (Scalar childScalar in scalar._childScalars) {
         String? componentName =
-            childScalar.ui.findActiveScalarPieceWithRepresentativeType(
+            childScalar.ui.findActiveScalarBaseViewWithRepresentativeType(
           representativeType: representativeType,
           alsoCheckChildren: true,
         );
@@ -186,13 +187,13 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveControlBarWidget() {
-    return hasActiveControlBarWidgetWithRepresentativeType(
+  bool hasActiveControlBar() {
+    return hasActiveControlBarWithRepresentativeType(
       representativeType: null,
     );
   }
 
-  bool hasActiveControlBarWidgetWithRepresentativeType({
+  bool hasActiveControlBarWithRepresentativeType({
     required RepresentativeType? representativeType,
   }) {
     for (_RefreshableWidgetState widgetState
@@ -201,7 +202,7 @@ class _ScalarUIComponents extends _UIComponents {
         continue;
       }
       bool visible =
-          __scalarControlBarWidgetStates[widgetState]?.isShowing ?? false;
+          __scalarControlBarWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
@@ -216,11 +217,11 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedPieceWidgetStates({
+  Map<_RefreshableWidgetState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
-      widgetStates: __scalarPieceWidgetStates,
+      widgetStates: __scalarBaseViewWidgetStates,
       activeOnly: activeOnly,
     );
   }
@@ -239,23 +240,23 @@ class _ScalarUIComponents extends _UIComponents {
 
   void _addControlWidgetState({
     required _RefreshableWidgetState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
-    bool activeOLD = hasActiveUIComponent();
+    bool activeOLD = hasActiveUiComponent();
     __scalarControlBarWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool activeCURRENT = hasActiveUIComponent();
+    bool activeCURRENT = hasActiveUiComponent();
     //
-    if (isShowing) {
+    if (isVisible) {
       FlutterArtist.storage._addRecentShelf(scalar.shelf);
     }
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      // scalar.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // scalar.shelf._startLoadDataForLazyUiComponentsIfNeed();
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
     } else if (activeOLD && !activeCURRENT) {
@@ -267,9 +268,9 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
 
   void _removeControlWidgetState({required State widgetState}) {
-    bool activeOLD = hasActiveUIComponent();
+    bool activeOLD = hasActiveUiComponent();
     __scalarControlBarWidgetStates.remove(widgetState);
-    bool activeCURRENT = hasActiveUIComponent();
+    bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
       scalar._fireScalarHidden();
@@ -279,25 +280,25 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addScalarPieceWidgetState({
+  void _addScalarBaseViewWidgetState({
     required _RefreshableWidgetState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
-    bool activeOLD = hasActiveUIComponent();
-    __scalarPieceWidgetStates.update(
+    bool activeOLD = hasActiveUiComponent();
+    __scalarBaseViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool activeCURRENT = hasActiveUIComponent();
+    bool activeCURRENT = hasActiveUiComponent();
     //
-    if (isShowing) {
+    if (isVisible) {
       FlutterArtist.storage._addRecentShelf(scalar.shelf);
     }
     //
     if (!activeOLD && activeCURRENT) {
       // Fire event:
-      // scalar.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // scalar.shelf._startLoadDataForLazyUiComponentsIfNeed();
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
     } else if (activeOLD && !activeCURRENT) {
@@ -308,10 +309,10 @@ class _ScalarUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _removeScalarPieceWidgetState({required State widgetState}) {
-    bool activeOLD = hasActiveUIComponent();
-    __scalarPieceWidgetStates.remove(widgetState);
-    bool activeCURRENT = hasActiveUIComponent();
+  void _removeScalarBaseViewWidgetState({required State widgetState}) {
+    bool activeOLD = hasActiveUiComponent();
+    __scalarBaseViewWidgetStates.remove(widgetState);
+    bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
       scalar._fireScalarHidden();
@@ -324,13 +325,13 @@ class _ScalarUIComponents extends _UIComponents {
   @DebugMethodAnnotation()
   Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
     required bool withPagination,
-    required bool withScalarPiece,
+    required bool withScalarBaseView,
     required bool withFilter,
     required bool withScalarControlBar,
     required bool activeOnly,
   }) {
     return _findMountedWidgetStates(
-      withScalarPiece: withScalarPiece,
+      withScalarBaseView: withScalarBaseView,
       withFilter: withFilter,
       withScalarControlBar: withScalarControlBar,
       activeOnly: activeOnly,

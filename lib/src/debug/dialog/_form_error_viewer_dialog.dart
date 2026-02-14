@@ -30,7 +30,7 @@ class FormErrorViewerDialog extends StatelessWidget {
     //
     final Size size = calculatePreferredDialogSize(
       context,
-      preferredWidth: 440,
+      preferredWidth: 560,
       preferredHeight:
           exception.errorDetails == null || exception.errorDetails!.isEmpty
               ? 200
@@ -74,7 +74,7 @@ class FormErrorViewerDialog extends StatelessWidget {
             ),
             title: Text(
               exception.errorMessage,
-              maxLines: 3,
+              maxLines: 4,
               style: const TextStyle(
                 fontSize: 13,
                 overflow: TextOverflow.ellipsis,

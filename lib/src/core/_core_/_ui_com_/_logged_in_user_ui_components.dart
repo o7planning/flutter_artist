@@ -1,25 +1,25 @@
 part of '../core.dart';
 
-class _LoggedInUserUIComponents extends _UIComponents {
+class _LoggedInUserUiComponents extends _UiComponents {
   final Map<_RefreshableWidgetState, bool> _loggedInUserWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
 
-  _LoggedInUserUIComponents();
+  _LoggedInUserUiComponents();
 
   // ***************************************************************************
   // ***************************************************************************
 
   @override
-  bool hasMountedUIComponent() {
+  bool hasMountedUiComponent() {
     return _loggedInUserWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUIComponents() {
+  void updateAllUiComponents() {
     for (_RefreshableWidgetState widgetState
         in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {
@@ -33,9 +33,9 @@ class _LoggedInUserUIComponents extends _UIComponents {
 
   void _addLoggedInUserWidgetState({
     required _RefreshableWidgetState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
-    _loggedInUserWidgetStates[widgetState] = isShowing;
+    _loggedInUserWidgetStates[widgetState] = isVisible;
   }
 
   // ***************************************************************************

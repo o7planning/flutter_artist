@@ -5,7 +5,7 @@ class _XShelfBlockQueryThenPrepareToEdit extends _XShelfSbQuery {
     required Block block,
     required FilterInput? filterInput,
     required Pageable? pageable,
-    required ItemListMode? itemListMode,
+    required ListUpdateStrategy? suggestedListUpdateStrategy,
     required AfterQueryAction? afterQueryAction,
     required SuggestedSelection<dynamic>? suggestedSelection,
   }) : super(
@@ -18,7 +18,7 @@ class _XShelfBlockQueryThenPrepareToEdit extends _XShelfSbQuery {
       srcBlockAndOptions: SrcBlockAndOptions(
         block: block,
         queryType: QueryType.realQuery,
-        itemListMode: itemListMode,
+        listUpdateStrategy: suggestedListUpdateStrategy,
         suggestedSelection: suggestedSelection,
         afterQueryAction: afterQueryAction,
         pageable: pageable,

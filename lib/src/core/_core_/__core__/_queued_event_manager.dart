@@ -114,7 +114,7 @@ class _QueuedEventManager {
         outsideEvents: polymorphismEvents.toList(),
       );
       if (listenerShelf._hasReactionBookmark()) {
-        if (listenerShelf.ui.hasActiveUIComponent()) {
+        if (listenerShelf.ui.hasActiveUiComponent()) {
           visibleReactionShelves.add(listenerShelf);
         } else {
           invisibleReactionShelves.add(listenerShelf);

@@ -1,15 +1,15 @@
 part of '../core.dart';
 
 class XState {
-  bool _isShowing = false;
+  bool _isVisible = false;
   bool _isBuilding = false;
 
-  bool get isShowing => _isShowing;
+  bool get isVisible => _isVisible;
 
   bool get isBuilding => _isBuilding;
 
-  void _setShowing(bool isShowing) {
-    _isShowing = isShowing;
+  void _setShowing(bool isVisible) {
+    _isVisible = isVisible;
   }
 
   void _setBuilding(bool isBuilding) {

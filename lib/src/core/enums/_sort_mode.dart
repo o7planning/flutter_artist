@@ -1,0 +1,4 @@
+enum SortMode {
+  single,
+  multi;
+}

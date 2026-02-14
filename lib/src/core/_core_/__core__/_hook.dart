@@ -6,7 +6,7 @@ abstract class Hook extends _Core {
   final String name;
   final HookConfig config;
 
-  late final ui = _HookUIComponents(hook: this);
+  late final ui = _HookUiComponents(hook: this);
 
   Hook({
     required this.name,

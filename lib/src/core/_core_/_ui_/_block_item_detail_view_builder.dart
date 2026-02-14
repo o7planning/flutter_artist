@@ -54,16 +54,16 @@ class _BlockItemDetailViewBuilderState
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
-    widget.block.ui._addBlockPieceWidgetState(
+  void addWidgetState({required bool isVisible}) {
+    widget.block.ui._addBlockBaseViewWidgetState(
       widgetState: this,
-      isShowing: isShowing,
+      isVisible: isVisible,
     );
   }
 
   @override
   void removeWidgetState() {
-    widget.block.ui._removeBlockPieceWidgetState(
+    widget.block.ui._removeBlockBaseViewWidgetState(
       widgetState: this,
     );
   }

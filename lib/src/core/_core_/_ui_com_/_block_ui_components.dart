@@ -1,10 +1,10 @@
 part of '../core.dart';
 
-class _BlockUIComponents extends _UIComponents {
+class _BlockUiComponents extends _UiComponents {
   final Block block;
 
-  // Piece: ItemsView - ItemDetailView - Fragment.
-  final Map<_RefreshableWidgetState, XState> __blockPieceWidgetStates = {};
+  // Fragments: BlockItemsView - BlockItemDetailView - BlockAreaView.
+  final Map<_RefreshableWidgetState, XState> __blockBaseViewWidgetStates = {};
   final Map<_RefreshableWidgetState, XState> __blockControlBarWidgetStates = {};
   final Map<_RefreshableWidgetState, XState> __controlWidgetStates = {};
   final Map<_RefreshableWidgetState, XState> __paginationWidgetStates = {};
@@ -12,12 +12,12 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  _BlockUIComponents({required this.block});
+  _BlockUiComponents({required this.block});
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void updatePaginationWidgets({bool force = false}) {
+  void updatePaginationViews({bool force = false}) {
     for (_RefreshableWidgetState widgetState in __paginationWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
@@ -28,8 +28,9 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateBlockPieceWidgets({bool force = false}) {
-    for (_RefreshableWidgetState widgetState in __blockPieceWidgetStates.keys) {
+  void updateBlockBaseViews({bool force = false}) {
+    for (_RefreshableWidgetState widgetState
+        in __blockBaseViewWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -39,7 +40,7 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateControlBarWidgets({bool force = false}) {
+  void updateControlBars({bool force = false}) {
     for (_RefreshableWidgetState widgetState
         in __blockControlBarWidgetStates.keys) {
       if (widgetState.mounted) {
@@ -51,7 +52,7 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateControlWidgets({bool force = false}) {
+  void updateControlButtons({bool force = false}) {
     for (_RefreshableWidgetState widgetState in __controlWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
@@ -63,63 +64,63 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
 
   @override
-  bool hasMountedUIComponent() {
-    return (block.filterModel?.ui.hasMountedUIComponent() ?? false) ||
-        (block.serverSideSortModel?.ui.hasMountedUIComponent() ?? false) ||
-        (block.clientSideSortModel?.ui.hasMountedUIComponent() ?? false) ||
-        __blockPieceWidgetStates.isNotEmpty ||
+  bool hasMountedUiComponent() {
+    return (block.filterModel?.ui.hasMountedUiComponent() ?? false) ||
+        (block.serverSideSortModel?.ui.hasMountedUiComponent() ?? false) ||
+        (block.clientSideSortModel?.ui.hasMountedUiComponent() ?? false) ||
+        __blockBaseViewWidgetStates.isNotEmpty ||
         __blockControlBarWidgetStates.isNotEmpty ||
         __controlWidgetStates.isNotEmpty ||
         __paginationWidgetStates.isNotEmpty ||
-        (block.formModel?.ui.hasMountedUIComponent() ?? false);
+        (block.formModel?.ui.hasMountedUiComponent() ?? false);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUIComponentBlockRepresentative({
+  bool hasActiveUiComponentBlockRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = findActiveUIComponentBlockRepresentative(
+    String? componentName = findActiveUiComponentBlockRepresentative(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
-  bool hasActiveUIComponentFormRepresentative() {
-    String? componentName = findActiveUIComponentFormRepresentative(
+  bool hasActiveUiComponentFormRepresentative() {
+    String? componentName = findActiveUiComponentFormRepresentative(
       alsoCheckChildren: false,
     );
     return componentName != null;
   }
 
-  bool hasActiveUIComponentItemRepresentative({
+  bool hasActiveUiComponentItemRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = findActiveUIComponentItemRepresentative(
+    String? componentName = findActiveUiComponentItemRepresentative(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
-  bool hasActiveUIComponent({bool alsoCheckChildren = false}) {
-    String? componentName = findActiveUIComponent(
+  bool hasActiveUiComponent({bool alsoCheckChildren = false}) {
+    String? componentName = findActiveUiComponent(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
-  String? findActiveUIComponent({bool alsoCheckChildren = false}) {
-    return __activeUIComponentsWithRepresentativeType(
+  String? findActiveUiComponent({bool alsoCheckChildren = false}) {
+    return __activeUiComponentsWithRepresentativeType(
       representativeType: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveUIComponentBlockRepresentative({
+  String? findActiveUiComponentBlockRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = __activeUIComponentsWithRepresentativeType(
+    String? componentName = __activeUiComponentsWithRepresentativeType(
       representativeType: RepresentativeType.blockRepresentative,
       alsoCheckChildren: alsoCheckChildren,
     );
@@ -130,7 +131,7 @@ class _BlockUIComponents extends _UIComponents {
       return null;
     }
     for (Block childBlock in block._childBlocks) {
-      componentName = childBlock.ui.__activeUIComponentsWithRepresentativeType(
+      componentName = childBlock.ui.__activeUiComponentsWithRepresentativeType(
         representativeType: RepresentativeType.itemRepresentative,
         alsoCheckChildren: alsoCheckChildren,
       );
@@ -141,10 +142,10 @@ class _BlockUIComponents extends _UIComponents {
     return null;
   }
 
-  String? findActiveUIComponentItemRepresentative({
+  String? findActiveUiComponentItemRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = __activeUIComponentsWithRepresentativeType(
+    String? componentName = __activeUiComponentsWithRepresentativeType(
       representativeType: RepresentativeType.itemRepresentative,
       alsoCheckChildren: alsoCheckChildren,
     );
@@ -155,7 +156,7 @@ class _BlockUIComponents extends _UIComponents {
       return null;
     }
     for (Block childBlock in block._childBlocks) {
-      componentName = childBlock.ui.__activeUIComponentsWithRepresentativeType(
+      componentName = childBlock.ui.__activeUiComponentsWithRepresentativeType(
         representativeType: RepresentativeType.blockRepresentative,
         alsoCheckChildren: alsoCheckChildren,
       );
@@ -166,16 +167,16 @@ class _BlockUIComponents extends _UIComponents {
     return null;
   }
 
-  String? findActiveUIComponentFormRepresentative({
+  String? findActiveUiComponentFormRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    return __activeUIComponentsWithRepresentativeType(
+    return __activeUiComponentsWithRepresentativeType(
       representativeType: RepresentativeType.formRepresentative,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? __activeUIComponentsWithRepresentativeType({
+  String? __activeUiComponentsWithRepresentativeType({
     required RepresentativeType? representativeType,
     bool alsoCheckChildren = false,
   }) {
@@ -184,7 +185,7 @@ class _BlockUIComponents extends _UIComponents {
     // Filter
     //
     // if (block.filterModel != null) {
-    //   has = block.filterModel!.ui.hasActiveUIComponentWithRepresentativeType(
+    //   has = block.filterModel!.ui.hasActiveUiComponentWithRepresentativeType(
     //     representativeType: representativeType,
     //   );
     //   if (has) {
@@ -196,7 +197,7 @@ class _BlockUIComponents extends _UIComponents {
     //
     if (block.serverSideSortModel != null) {
       has = block.serverSideSortModel!.ui
-          .hasActiveUIComponentWithRepresentativeType(
+          .hasActiveUiComponentWithRepresentativeType(
         representativeType: representativeType,
       );
       if (has) {
@@ -206,7 +207,7 @@ class _BlockUIComponents extends _UIComponents {
     //
     if (block.clientSideSortModel != null) {
       has = block.clientSideSortModel!.ui
-          .hasActiveUIComponentWithRepresentativeType(
+          .hasActiveUiComponentWithRepresentativeType(
         representativeType: representativeType,
       );
       if (has) {
@@ -217,7 +218,7 @@ class _BlockUIComponents extends _UIComponents {
     // Form
     //
     if (block.formModel != null) {
-      has = block.formModel!.ui.hasActiveUIComponentWithRepresentativeType(
+      has = block.formModel!.ui.hasActiveUiComponentWithRepresentativeType(
         representativeType: representativeType,
       );
       if (has) {
@@ -225,9 +226,9 @@ class _BlockUIComponents extends _UIComponents {
       }
     }
     //
-    // Block Piece:
+    // Block Base Views:
     //
-    String? componentName = findActiveBlockPieceWithRepresentativeType(
+    String? componentName = findActiveBlockBaseViewWithRepresentativeType(
       representativeType: representativeType,
       alsoCheckChildren: false,
     );
@@ -265,7 +266,7 @@ class _BlockUIComponents extends _UIComponents {
     if (alsoCheckChildren) {
       for (Block childBlock in block._childBlocks) {
         componentName =
-            childBlock.ui.__activeUIComponentsWithRepresentativeType(
+            childBlock.ui.__activeUiComponentsWithRepresentativeType(
           representativeType: representativeType,
           alsoCheckChildren: alsoCheckChildren,
         );
@@ -280,30 +281,30 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveBlockPiece({required bool alsoCheckChildren}) {
-    String? componentName = findActiveBlockPiece(
+  bool hasActiveBlockBaseView({required bool alsoCheckChildren}) {
+    String? componentName = findActiveBlockBaseView(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
-  String? findActiveBlockPiece({required bool alsoCheckChildren}) {
-    return findActiveBlockPieceWithRepresentativeType(
+  String? findActiveBlockBaseView({required bool alsoCheckChildren}) {
+    return findActiveBlockBaseViewWithRepresentativeType(
       representativeType: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveBlockPieceWithRepresentativeType({
+  String? findActiveBlockBaseViewWithRepresentativeType({
     required RepresentativeType? representativeType,
     required bool alsoCheckChildren,
   }) {
-    var map = {...__blockPieceWidgetStates};
+    var map = {...__blockBaseViewWidgetStates};
     for (_RefreshableWidgetState widgetState in map.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = map[widgetState]?.isShowing ?? false;
+      bool visible = map[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
@@ -315,7 +316,7 @@ class _BlockUIComponents extends _UIComponents {
     if (alsoCheckChildren) {
       for (Block childBlock in block._childBlocks) {
         String? componentName =
-            childBlock.ui.findActiveBlockPieceWithRepresentativeType(
+            childBlock.ui.findActiveBlockBaseViewWithRepresentativeType(
           representativeType: representativeType,
           alsoCheckChildren: true,
         );
@@ -343,7 +344,7 @@ class _BlockUIComponents extends _UIComponents {
         continue;
       }
       bool visible =
-          __blockControlBarWidgetStates[widgetState]?.isShowing ?? false;
+          __blockControlBarWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
@@ -371,7 +372,7 @@ class _BlockUIComponents extends _UIComponents {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = __controlWidgetStates[widgetState]?.isShowing ?? false;
+      bool visible = __controlWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
@@ -397,7 +398,7 @@ class _BlockUIComponents extends _UIComponents {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = __paginationWidgetStates[widgetState]?.isShowing ?? false;
+      bool visible = __paginationWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
@@ -412,30 +413,31 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUIComponents({
+  void updateAllUiComponents({
     required bool withoutFilters,
     bool force = true,
   }) {
     if (!withoutFilters) {
-      block.filterModel?.ui.updateAllUIComponents();
+      block.filterModel?.ui.updateAllUiComponents();
     }
     //
-    block.serverSideSortModel?.ui.updateAllUIComponents(force: force);
-    block.clientSideSortModel?.ui.updateAllUIComponents(force: force);
+    block.serverSideSortModel?.ui.updateAllUiComponents(force: force);
+    block.clientSideSortModel?.ui.updateAllUiComponents(force: force);
     //
-    updateBlockPieceWidgets(force: force);
-    updatePaginationWidgets(force: force);
-    updateControlBarWidgets(force: force);
-    updateControlWidgets(force: force);
+    updateBlockBaseViews(force: force);
+    updatePaginationViews(force: force);
+    updateControlBars(force: force);
+    updateControlButtons(force: force);
     //
-    block.formModel?.ui.updateAllUIComponents(force: force);
+    block.formModel?.ui.updateAllUiComponents(force: force);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void updateItemsView() {
-    for (_RefreshableWidgetState widgetState in __blockPieceWidgetStates.keys) {
+    for (_RefreshableWidgetState widgetState
+        in __blockBaseViewWidgetStates.keys) {
       if (widgetState.mounted &&
           widgetState.type == RefreshableWidgetType.blockItemsView) {
         widgetState.refreshState();
@@ -446,11 +448,11 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedPieceWidgetStates({
+  Map<_RefreshableWidgetState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
-      widgetStates: __blockPieceWidgetStates,
+      widgetStates: __blockBaseViewWidgetStates,
       activeOnly: activeOnly,
     );
   }
@@ -478,15 +480,15 @@ class _BlockUIComponents extends _UIComponents {
 
   void _addPaginationWidgetState({
     required _RefreshableWidgetState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
     __paginationWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
     //
-    if (isShowing) {
+    if (isVisible) {
       FlutterArtist.storage._addRecentShelf(block.shelf);
     }
   }
@@ -505,27 +507,27 @@ class _BlockUIComponents extends _UIComponents {
 
   void _addControlBarWidgetState({
     required _RefreshableWidgetState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
-    bool blockXBlockRepOLD = hasActiveUIComponentBlockRepresentative(
+    bool blockXBlockRepOLD = hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
     __blockControlBarWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool blockXBlockRepCURRENT = hasActiveUIComponentBlockRepresentative(
+    bool blockXBlockRepCURRENT = hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
     //
-    if (isShowing) {
+    if (isVisible) {
       FlutterArtist.storage._addRecentShelf(block.shelf);
     }
     //
     if (!blockXBlockRepOLD && blockXBlockRepCURRENT) {
       // Fire event:
-      // block.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // block.shelf._startLoadDataForLazyUiComponentsIfNeed();
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
     } else if (blockXBlockRepOLD && !blockXBlockRepCURRENT) {
@@ -547,27 +549,27 @@ class _BlockUIComponents extends _UIComponents {
 
   void _addControlWidgetState({
     required _RefreshableWidgetState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
-    bool blockXBlockRepOLD = hasActiveUIComponentBlockRepresentative(
+    bool blockXBlockRepOLD = hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
     __controlWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool blockXBlockRepCURRENT = hasActiveUIComponentBlockRepresentative(
+    bool blockXBlockRepCURRENT = hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
     //
-    if (isShowing) {
+    if (isVisible) {
       FlutterArtist.storage._addRecentShelf(block.shelf);
     }
     //
     if (!blockXBlockRepOLD && blockXBlockRepCURRENT) {
       // Fire event:
-      // block.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // block.shelf._startLoadDataForLazyUiComponentsIfNeed();
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
     } else if (blockXBlockRepOLD && !blockXBlockRepCURRENT) {
@@ -587,29 +589,29 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addBlockPieceWidgetState({
+  void _addBlockBaseViewWidgetState({
     required _RefreshableWidgetState widgetState,
-    required bool isShowing,
+    required bool isVisible,
   }) {
-    bool hasXBlockRepOLD = hasActiveUIComponentBlockRepresentative(
+    bool hasXBlockRepOLD = hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
-    __blockPieceWidgetStates.update(
+    __blockBaseViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isShowing),
-      ifAbsent: () => XState().._setShowing(isShowing),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool hasXBlockRepCURRENT = hasActiveUIComponentBlockRepresentative(
+    bool hasXBlockRepCURRENT = hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
     //
-    if (isShowing) {
+    if (isVisible) {
       FlutterArtist.storage._addRecentShelf(block.shelf);
     }
     //
     if (!hasXBlockRepOLD && hasXBlockRepCURRENT) {
       // Fire event:
-      // block.shelf._startLoadDataForLazyUIComponentsIfNeed();
+      // block.shelf._startLoadDataForLazyUiComponentsIfNeed();
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
     } else if (hasXBlockRepOLD && !hasXBlockRepCURRENT) {
@@ -620,10 +622,10 @@ class _BlockUIComponents extends _UIComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _removeBlockPieceWidgetState({required State widgetState}) {
-    bool activeOLD = hasActiveUIComponent();
-    __blockPieceWidgetStates.remove(widgetState);
-    bool activeCURRENT = hasActiveUIComponent();
+  void _removeBlockBaseViewWidgetState({required State widgetState}) {
+    bool activeOLD = hasActiveUiComponent();
+    __blockBaseViewWidgetStates.remove(widgetState);
+    bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
       block._fireBlockHidden();
@@ -635,7 +637,7 @@ class _BlockUIComponents extends _UIComponents {
 
   Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
     required bool withPagination,
-    required bool withBlockPiece,
+    required bool withBlockBaseView,
     required bool withFilter,
     required bool withSort,
     required bool withForm,
@@ -648,7 +650,7 @@ class _BlockUIComponents extends _UIComponents {
     if (withFilter) {
       final FilterModel filterModel = block._registeredOrDefaultFilterModel;
       ret.addAll(
-        filterModel.ui._findMountedPieceWidgetStates(
+        filterModel.ui._findMountedBaseViewWidgetStates(
           activeOnly: true,
         ),
       );
@@ -658,7 +660,7 @@ class _BlockUIComponents extends _UIComponents {
       final SortModel? serverSortModel = block.serverSideSortModel;
       if (serverSortModel != null) {
         ret.addAll(
-          serverSortModel.ui._findMountedPieceWidgetStates(
+          serverSortModel.ui._findMountedBaseViewWidgetStates(
             activeOnly: true,
           ),
         );
@@ -667,16 +669,16 @@ class _BlockUIComponents extends _UIComponents {
       final SortModel? clientSortModel = block.clientSideSortModel;
       if (clientSortModel != null) {
         ret.addAll(
-          clientSortModel.ui._findMountedPieceWidgetStates(
+          clientSortModel.ui._findMountedBaseViewWidgetStates(
             activeOnly: true,
           ),
         );
       }
     }
     //
-    if (withBlockPiece) {
+    if (withBlockBaseView) {
       ret.addAll(
-        _findMountedPieceWidgetStates(activeOnly: activeOnly),
+        _findMountedBaseViewWidgetStates(activeOnly: activeOnly),
       );
     }
     //
@@ -711,7 +713,7 @@ class _BlockUIComponents extends _UIComponents {
   @DebugMethodAnnotation()
   Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
     required bool withPagination,
-    required bool withBlockPiece,
+    required bool withBlockBaseView,
     required bool withFilter,
     required bool withSort,
     required bool withForm,
@@ -721,7 +723,7 @@ class _BlockUIComponents extends _UIComponents {
   }) {
     return _findMountedWidgetStates(
       withPagination: withPagination,
-      withBlockPiece: withBlockPiece,
+      withBlockBaseView: withBlockBaseView,
       withFilter: withFilter,
       withSort: withSort,
       withForm: withForm,

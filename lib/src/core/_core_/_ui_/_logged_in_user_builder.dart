@@ -59,10 +59,10 @@ class _LoggedInUserBuilderState
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isVisible}) {
     FlutterArtist.globalsManager.ui._addLoggedInUserWidgetState(
       widgetState: this,
-      isShowing: isShowing,
+      isVisible: isVisible,
     );
   }
 

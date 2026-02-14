@@ -98,10 +98,10 @@ class _ControlButtonState extends _RefreshableWidgetState<ScalarControl> {
   }
 
   @override
-  void addWidgetState({required bool isShowing}) {
+  void addWidgetState({required bool isVisible}) {
     widget.scalar.ui._addControlWidgetState(
       widgetState: this,
-      isShowing: isShowing,
+      isVisible: isVisible,
     );
   }
 

@@ -1,4 +1,0 @@
-enum ItemListMode {
-  replace,
-  expand,
-}

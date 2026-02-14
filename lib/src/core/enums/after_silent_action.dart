@@ -10,6 +10,6 @@ enum AfterStorageSilentAction {
 
 enum AfterScalarLoadExtraDataQuickAction {
   none,
-  // TODO: Change to updateUIComponents.
+  // TODO: Change to updateUiComponents.
   update;
 }
