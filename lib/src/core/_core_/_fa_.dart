@@ -480,4 +480,8 @@ class _FlutterArtist extends _Core {
       positionBuilder: positionBuilder,
     );
   }
+
+  void showStartupError({required Object error}) {
+    runApp(_AppErrorViewer(error: error));
+  }
 }

@@ -165,6 +165,8 @@ import '../utils/_name_utils.dart';
 import '../widgets/_custom_app_container.dart';
 import '../event/fire_silent_events_action.dart';
 
+part '../../startup_error_handler.dart';
+
 part '__core__/___core.dart';
 
 part '__core__/_hook.dart';
