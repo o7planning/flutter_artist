@@ -12,8 +12,3 @@ enum ItemAbsentRepresentativePolicy {
   ///
   trySetAnItemAsCurrent;
 }
-
-enum UniformItemRefreshPolicy {
-  always,
-  auto;
-}

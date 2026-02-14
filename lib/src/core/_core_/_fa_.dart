@@ -192,15 +192,53 @@ class _FlutterArtist extends _Core {
       throw DebugUtils.getFatalError(
           "${getClassName(__coreFeaturesAdapter)} already registered!");
     }
-    //
-    logger = Logger(maxStoredLogEntryCount: maxStoredLogEntryCount);
     // IMPORTANT: Call this before using MasterFlowItem.
     codeFlowLogger = CodeFlowLogger(
         codeFlowRetentionPeriodInSeconds: codeFlowRetentionPeriodInSeconds);
-    //
+
     final masterFlowItem =
         FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
+    try {
+      await __config(
+        masterFlowItem: masterFlowItem,
+        storageStructure: storageStructure,
+        debugOptions: debugOptions,
+        consoleDebugOptions: consoleDebugOptions,
+        coreFeaturesAdapter: coreFeaturesAdapter,
+        notificationAdapter: notificationAdapter,
+        loginLogoutAdapter: loginLogoutAdapter,
+        globalDataAdapter: globalDataAdapter,
+        localeAdapter: localeAdapter,
+        showRestDebugDialog: showRestDebugDialog,
+        notificationFetchPeriodInSeconds: notificationFetchPeriodInSeconds,
+        maxStoredLogEntryCount: maxStoredLogEntryCount,
+        codeFlowRetentionPeriodInSeconds: codeFlowRetentionPeriodInSeconds,
+      );
+    } catch (e, stackTrace) {
+      masterFlowItem.printToConsole();
+      print("\n\n");
+      __showStartupError(masterFlowItem: masterFlowItem, error: e);
+      rethrow;
+    }
+  }
 
+  Future<void> __config({
+    required MasterFlowItem masterFlowItem,
+    required StorageStructure storageStructure,
+    required DebugOptions? debugOptions,
+    required ConsoleDebugOptions? consoleDebugOptions,
+    required ICoreFeaturesAdapter coreFeaturesAdapter,
+    required INotificationAdapter? notificationAdapter,
+    required ILoginLogoutAdapter loginLogoutAdapter,
+    required IGlobalDataAdapter globalDataAdapter,
+    required ILocaleAdapter localeAdapter,
+    required Function(BuildContext context)? showRestDebugDialog,
+    required int notificationFetchPeriodInSeconds,
+    required int maxStoredLogEntryCount,
+    required int codeFlowRetentionPeriodInSeconds,
+  }) async {
+    logger = Logger(maxStoredLogEntryCount: maxStoredLogEntryCount);
+    //
     masterFlowItem._addLineFlowItem(
       codeId: "#S0000",
       shortDesc: "Begin FlutterArtist Config...\n"
@@ -481,7 +519,10 @@ class _FlutterArtist extends _Core {
     );
   }
 
-  void showStartupError({required Object error}) {
-    runApp(_AppErrorViewer(error: error));
+  void __showStartupError({
+    required MasterFlowItem masterFlowItem,
+    required Object error,
+  }) {
+    runApp(_StartupErrorViewer(masterFlowItem: masterFlowItem, error: error));
   }
 }

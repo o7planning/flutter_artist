@@ -73,6 +73,7 @@ export 'src/core/enums/_sort_strategy.dart';
 export 'src/core/enums/_sorting_side.dart';
 export 'src/core/enums/_task_flow_type.dart';
 export 'src/core/enums/_task_type.dart';
+export 'src/core/enums/_unified_item_refresh_policy.dart';
 export 'src/core/enums/after_silent_action.dart';
 export 'src/core/event/fire_silent_events_action.dart';
 export 'src/core/global/_global_data.dart';

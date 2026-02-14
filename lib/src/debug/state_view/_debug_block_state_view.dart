@@ -35,10 +35,9 @@ class DebugBlockStateView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const double minBoxWidth = 200;
-    return RefreshableNeutralViewBuilder(
+    return StorageAreaViewBuilder(
       ownerClassInstance: this,
       description: null,
-      shelves: [block.shelf],
       build: () {
         List<Widget> children = [];
         if (debugFilterOptions != null && block.filterModel != null) {

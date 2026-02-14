@@ -619,6 +619,7 @@ abstract class Shelf extends _Core {
       );
       // IMPORTANT: No Lazy entities, but need to refresh UiComponents:
       ui.updateAllUiComponents();
+      FlutterArtist.storage.ui.updateAllUiComponents();
       return;
     }
     masterFlowItem._addLineFlowItem(

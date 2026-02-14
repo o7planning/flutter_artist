@@ -1799,7 +1799,7 @@ abstract class Block<
         "hasItemXRepresentative": hasItemXRepresentative,
         "hasFormRepresentative": hasFormRepresentative,
         "itemAbsentRepresentativePolicy": config.itemAbsentRepresentativePolicy,
-        "uniformItemRefreshPolicy": config.uniformItemRefreshPolicy,
+        "unifiedItemRefreshPolicy": config.unifiedItemRefreshPolicy,
         "currentItemSettingType": currentItemSettingType,
         "isCandidateCurrentItemInNewQueriedList":
             isCandidateCurrentItemInNewQueriedList,
@@ -1818,7 +1818,7 @@ abstract class Block<
       hasItemXRepresentative: hasItemXRepresentative,
       hasFormRepresentative: hasFormRepresentative,
       itemAbsentRepresentativePolicy: config.itemAbsentRepresentativePolicy,
-      uniformItemRefreshPolicy: config.uniformItemRefreshPolicy,
+      unifiedItemRefreshPolicy: config.unifiedItemRefreshPolicy,
       currentItemSettingType: currentItemSettingType,
       isCandidateCurrentItemInNewQueriedList:
           isCandidateCurrentItemInNewQueriedList,

@@ -1,19 +1,15 @@
 part of '../core.dart';
 
-abstract class RefreshableNeutralView extends StatelessWidget {
-  final List<Shelf> shelves;
-
-  const RefreshableNeutralView({
+abstract class StorageAreaView extends StatelessWidget {
+  const StorageAreaView({
     super.key,
-    required this.shelves,
-  }) : assert(shelves.length > 0);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return RefreshableNeutralViewBuilder(
+    return StorageAreaViewBuilder(
       ownerClassInstance: this,
       description: null,
-      shelves: shelves,
       build: () {
         return buildContent(context);
       },

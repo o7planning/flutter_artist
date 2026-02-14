@@ -10,7 +10,7 @@ _ForceReloadItemState _calculateBlockState({
   required final bool hasItemXRepresentative,
   required final bool hasFormRepresentative,
   required final ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy,
-  required final UniformItemRefreshPolicy uniformItemRefreshPolicy,
+  required final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy,
   required final CurrentItemSettingType currentItemSettingType,
   required final bool isCandidateCurrentItemInNewQueriedList,
   required final bool currentItemIdChanged,
@@ -56,7 +56,7 @@ _ForceReloadItemState _calculateBlockState({
   final bool isSpecialUniformITEM;
   // ITEM == ITEM_DETAIL
   if (block.getItemType() == block.getItemDetailType()) {
-    if (uniformItemRefreshPolicy == UniformItemRefreshPolicy.always) {
+    if (unifiedItemRefreshPolicy == UnifiedItemRefreshPolicy.always) {
       hasItemXRepresentativeExt = true;
       isSpecialUniformITEM = false;
     } else {
