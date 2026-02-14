@@ -5,6 +5,8 @@ class _Storage extends _StorageCore {
   late final drawerState = _DrawerState(this);
   late final endDrawerState = _EndDrawerState(this);
 
+  late final ui = _StorageUiComponents(storage: this);
+
   late final _polymorphismManager = _PolymorphismManager(this);
   late final ev = _StorageEventHandler(this);
   final _naturalQueryQueue = _StorageNaturalQueryQueue();
@@ -23,48 +25,41 @@ class _Storage extends _StorageCore {
     required MasterFlowItem masterFlowItem,
     required StorageStructure storageStructure,
   }) {
-    try {
-      LineFlowItem item = masterFlowItem._addLineFlowItem(
-        codeId: "#SS000",
-        shortDesc:
-            "${debugObjHtml(storageStructure)}.registerPolymorphismFamilies().",
-        lineFlowType: LineFlowType.controllableCalling,
-        tipDocument: TipDocument.polymorphism,
-      );
-      final List<PolymorphismFamily> polymorphismFamilies =
-          storageStructure.registerPolymorphismFamilies();
-      // This method may throw Fatal Error cause stop app.
-      _polymorphismManager._init(
-        masterFlowItem: masterFlowItem,
-        polymorphismFamilies: polymorphismFamilies,
-      );
-      //
-      item._extraInfos = FlutterArtist.debugRegister.debugRegisterPolymorphisms
-        ..sort();
-      item = masterFlowItem._addLineFlowItem(
-        codeId: "#SS040",
-        shortDesc: "${debugObjHtml(storageStructure)}.registerActivities().",
-        lineFlowType: LineFlowType.controllableCalling,
-        tipDocument: TipDocument.activity,
-      );
-      storageStructure.registerActivities();
-      item._extraInfos = FlutterArtist.debugRegister.debugRegisterActivities
-        ..sort();
-      //
-      item = masterFlowItem._addLineFlowItem(
-        codeId: "#SS060",
-        shortDesc: "${debugObjHtml(storageStructure)}.registerShelves().",
-        lineFlowType: LineFlowType.controllableCalling,
-        tipDocument: TipDocument.shelf,
-      );
-      storageStructure.registerShelves();
-      item._extraInfos = FlutterArtist.debugRegister.debugRegisterShelves
-        ..sort();
-    } catch (e) {
-      masterFlowItem.printToConsole();
-      print("\n\n");
-      rethrow;
-    }
+    LineFlowItem item = masterFlowItem._addLineFlowItem(
+      codeId: "#SS000",
+      shortDesc:
+          "${debugObjHtml(storageStructure)}.registerPolymorphismFamilies().",
+      lineFlowType: LineFlowType.controllableCalling,
+      tipDocument: TipDocument.polymorphism,
+    );
+    final List<PolymorphismFamily> polymorphismFamilies =
+        storageStructure.registerPolymorphismFamilies();
+    // This method may throw Fatal Error cause stop app.
+    _polymorphismManager._init(
+      masterFlowItem: masterFlowItem,
+      polymorphismFamilies: polymorphismFamilies,
+    );
+    //
+    item._extraInfos = FlutterArtist.debugRegister.debugRegisterPolymorphisms
+      ..sort();
+    item = masterFlowItem._addLineFlowItem(
+      codeId: "#SS040",
+      shortDesc: "${debugObjHtml(storageStructure)}.registerActivities().",
+      lineFlowType: LineFlowType.controllableCalling,
+      tipDocument: TipDocument.activity,
+    );
+    storageStructure.registerActivities();
+    item._extraInfos = FlutterArtist.debugRegister.debugRegisterActivities
+      ..sort();
+    //
+    item = masterFlowItem._addLineFlowItem(
+      codeId: "#SS060",
+      shortDesc: "${debugObjHtml(storageStructure)}.registerShelves().",
+      lineFlowType: LineFlowType.controllableCalling,
+      tipDocument: TipDocument.shelf,
+    );
+    storageStructure.registerShelves();
+    item._extraInfos = FlutterArtist.debugRegister.debugRegisterShelves..sort();
   }
 
   // ***************************************************************************

@@ -65,7 +65,7 @@ class BlockDebugBox extends BaseDebugBox {
       if (block.getItemType() == block.getItemDetailType())
         IconLabelText(
           label: "RefreshMode (*): ",
-          text: block.config.uniformItemRefreshPolicy.name,
+          text: block.config.unifiedItemRefreshPolicy.name,
           labelStyle: labelStyle1,
           textStyle: textStyle0,
         ),

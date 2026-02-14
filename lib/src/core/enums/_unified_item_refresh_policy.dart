@@ -1,0 +1,4 @@
+enum UnifiedItemRefreshPolicy {
+  always,
+  auto;
+}

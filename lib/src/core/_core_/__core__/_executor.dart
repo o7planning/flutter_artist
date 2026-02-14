@@ -78,6 +78,7 @@ class _Executor {
           for (Shelf shelf in shelfMap.values) {
             shelf.ui.updateAllUiComponents();
           }
+          FlutterArtist.storage.ui.updateAllUiComponents();
           //
           __executingXShelfId = null;
           FlutterArtist.storage.__freeze._resetFreezeTemporarilyOnce();

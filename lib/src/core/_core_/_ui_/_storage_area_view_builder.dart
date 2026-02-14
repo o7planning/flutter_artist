@@ -1,28 +1,26 @@
 part of '../core.dart';
 
-class RefreshableNeutralViewBuilder extends _RefreshableWidget {
-  final List<Shelf> shelves;
+class StorageAreaViewBuilder extends _RefreshableWidget {
   final Widget Function() build;
 
-  const RefreshableNeutralViewBuilder({
+  const StorageAreaViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
-    required this.shelves,
     required this.build,
-  }) : assert(shelves.length > 0);
+  });
 
   @override
   State<StatefulWidget> createState() {
-    return _RefreshableNeutralViewState();
+    return _StorageAreaViewState();
   }
 }
 
-class _RefreshableNeutralViewState
-    extends _RefreshableWidgetState<RefreshableNeutralViewBuilder> {
+class _StorageAreaViewState
+    extends _RefreshableWidgetState<StorageAreaViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
-    return "RefreshableNeutralView";
+    return "StorageAreaView";
   }
 
   @override
@@ -60,28 +58,24 @@ class _RefreshableNeutralViewState
 
   @override
   void addWidgetState({required bool isVisible}) {
-    for (Shelf shelf in widget.shelves) {
-      shelf.ui._addShelfWidgetState(
-        widgetState: this,
-        isVisible: isVisible,
-      );
-    }
+    FlutterArtist.storage.ui._addShelfWidgetState(
+      widgetState: this,
+      isVisible: isVisible,
+    );
   }
 
   @override
   void removeWidgetState() {
-    for (Shelf shelf in widget.shelves) {
-      shelf.ui._removeShelfWidgetState(
-        widgetState: this,
-      );
-    }
+    FlutterArtist.storage.ui._removeShelfWidgetState(
+      widgetState: this,
+    );
   }
 
   @override
   void checkAndFreeMemory() {
-    for (Shelf shelf in widget.shelves) {
-      FlutterArtist.storage._checkToRemoveShelf(shelf);
-    }
+    // for (Shelf shelf in widget.shelves) {
+    //   FlutterArtist.storage._checkToRemoveShelf(shelf);
+    // }
   }
 
   @override

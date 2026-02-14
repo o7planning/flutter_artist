@@ -3,7 +3,7 @@ part of '../core.dart';
 class BlockConfig {
   final bool leaveTheFormSafely;
   final ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy;
-  final UniformItemRefreshPolicy uniformItemRefreshPolicy;
+  final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy;
   final BlockHiddenAction onHideAction;
 
   final Pageable pageable;
@@ -23,7 +23,7 @@ class BlockConfig {
   BlockConfig({
     this.itemAbsentRepresentativePolicy =
         ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
-    this.uniformItemRefreshPolicy = UniformItemRefreshPolicy.auto,
+    this.unifiedItemRefreshPolicy = UnifiedItemRefreshPolicy.auto,
     this.leaveTheFormSafely = true,
     this.onHideAction = BlockHiddenAction.none,
     List<Event>? fireExternalShelfEvents,
@@ -47,7 +47,7 @@ class BlockConfig {
 
   BlockConfig copy() {
     return BlockConfig(
-      uniformItemRefreshPolicy: uniformItemRefreshPolicy,
+      unifiedItemRefreshPolicy: unifiedItemRefreshPolicy,
       itemAbsentRepresentativePolicy: itemAbsentRepresentativePolicy,
       leaveTheFormSafely: leaveTheFormSafely,
       onHideAction: onHideAction,
