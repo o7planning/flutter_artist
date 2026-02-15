@@ -153,7 +153,7 @@ abstract class Block<
   final String? description;
 
   ///
-  /// FilterModel Name registered in [Shelf.registerStructure()] method.
+  /// FilterModel Name registered in [Shelf.registerShelfStructure()] method.
   ///
   final String? registerFilterModelName;
 
@@ -172,7 +172,7 @@ abstract class Block<
       get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   ///
-  /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
+  /// Returns a FilterModel declared in the [Shelf.registerShelfStructure()] method.
   /// The return value may be null.
   ///
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>? get filterModel {
@@ -3907,17 +3907,17 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  void showBlockErrorViewerDialog(BuildContext context) {
+  Future<void> showBlockErrorViewerDialog(BuildContext context) async {
     if (dataState == DataState.error) {
       if (_blockErrorInfo != null) {
-        BlockErrorViewerDialog.open(
+        await BlockErrorViewerDialog.open(
           context: context,
           blockErrorInfo: _blockErrorInfo!,
         );
       } else if (filterModel != null) {
         if (filterModel!.dataState == DataState.error &&
             filterModel!._errorInfo != null) {
-          ErrorViewerDialog.open(
+          await ErrorViewerDialog.open(
             context: context,
             errorInfo: filterModel!._errorInfo!,
           );

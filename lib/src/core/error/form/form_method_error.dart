@@ -2,13 +2,13 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../enums/_form_error_method.dart';
 
-class FormTempError {
+class FormMethodError {
   final FormErrorMethod formErrorMethod;
   final AppError error;
   final StackTrace stackTrace;
   final String? propName;
 
-  FormTempError({
+  FormMethodError({
     required this.propName,
     required this.formErrorMethod,
     required Object error,

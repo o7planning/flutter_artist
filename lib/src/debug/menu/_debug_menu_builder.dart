@@ -13,16 +13,16 @@ class DebugMenuBuilder {
     this.menuItemIconColor,
   });
 
-  void show({
+  Future<void> show({
     required BuildContext context,
     RelativeRect? position,
     PopupMenuPositionBuilder? positionBuilder,
-  }) {
+  }) async {
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     bool hasLogs = FlutterArtist.logger.hasLogEntries();
     bool isSystemUser = loggedInUser?.isSystemUser ?? false;
     //
-    showMenu(
+    await showMenu(
       context: context,
       position: position,
       positionBuilder: positionBuilder,
