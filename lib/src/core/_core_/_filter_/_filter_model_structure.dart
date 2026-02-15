@@ -64,7 +64,7 @@ class FilterModelStructure {
     rootConditionGroupDef = FilterConditionGroupDef._(
       groupName: rootGroupName,
       connector: conditionStructure.connector,
-      conditions: conditionStructure.conditionDefs,
+      conditionDefs: conditionStructure.conditionDefs,
     );
     // LAZY Property:
     rootConditionGroupModel = ConditionGroupModelImpl(
@@ -241,7 +241,7 @@ class FilterModelStructure {
     required FilterConditionGroupDef conditionGroupDef,
     required Set<String> allDefinedTildeCriterionNames,
   }) {
-    for (FilterConditionDef conditionDef in conditionGroupDef.conditions) {
+    for (FilterConditionDef conditionDef in conditionGroupDef.conditionDefs) {
       if (conditionDef is FilterSimpleConditionDef) {
         allDefinedTildeCriterionNames.add(conditionDef.tildeCriterionName);
       } else if (conditionDef is FilterConditionGroupDef) {
@@ -335,7 +335,7 @@ class FilterModelStructure {
       );
       parentGroupModel._conditions.add(conditionGroupModel);
       //
-      for (FilterConditionDef childConditionDef in conditionDef.conditions) {
+      for (FilterConditionDef childConditionDef in conditionDef.conditionDefs) {
         __initConditionCascade(
           allDefinedTildeCriterionNames: allDefinedTildeCriterionNames,
           conditionDef: childConditionDef,

@@ -8,7 +8,7 @@ abstract interface class FilterConditionDef {
 
   FilterConditionDef? get group;
 
-  List<FilterConditionDef> get conditions;
+  List<FilterConditionDef> get conditionDefs;
 
   factory FilterConditionDef.simple({
     required String tildeCriterionName,
@@ -25,12 +25,12 @@ abstract interface class FilterConditionDef {
   factory FilterConditionDef.group({
     required String groupName,
     required FilterConnector connector,
-    required List<FilterConditionDef> conditions,
+    required List<FilterConditionDef> conditionDefs,
   }) {
     return FilterConditionGroupDef._(
       groupName: groupName,
       connector: connector,
-      conditions: conditions,
+      conditionDefs: conditionDefs,
     );
   }
 }
@@ -61,7 +61,7 @@ class FilterSimpleConditionDef implements FilterConditionDef {
   FilterConditionDef? get group => __group;
 
   @override
-  List<FilterConditionDef> get conditions => [];
+  List<FilterConditionDef> get conditionDefs => [];
 
   FilterSimpleConditionDef._({
     required String tildeCriterionName,
@@ -88,15 +88,15 @@ class FilterConditionGroupDef implements FilterConditionDef {
   FilterConditionDef? get group => __group;
 
   @override
-  final List<FilterConditionDef> conditions;
+  final List<FilterConditionDef> conditionDefs;
 
   FilterConditionGroupDef._({
     required this.groupName,
     required this.connector,
-    required this.conditions,
+    required this.conditionDefs,
   }) {
     final Map<String, FilterConditionDef> map = {};
-    for (FilterConditionDef def in conditions) {
+    for (FilterConditionDef def in conditionDefs) {
       if (def is FilterSimpleConditionDef) {
         final nameTilde = def._tildeObj.tildeCriterionName;
         if (map.containsKey(nameTilde)) {
