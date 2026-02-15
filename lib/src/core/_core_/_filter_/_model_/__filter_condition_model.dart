@@ -16,7 +16,7 @@ class ConditionModelImpl extends ConditionModel {
   final String criterionName;
   final String tildeCriterionName;
   final FilterOperator operator;
-  final CriterionDef criterionDef;
+  final FilterCriterionDef criterionDef;
 
   final List<FilterOperator> _supportedOperators;
 
@@ -63,9 +63,9 @@ class ConditionGroupModelImpl extends ConditionModel {
   @override
   final FilterModelStructure structure;
   final String groupName;
-  final ConditionConnector connector;
+  final FilterConnector connector;
 
-  List<ConditionConnector> get supportedConnectors => [connector];
+  List<FilterConnector> get supportedConnectors => [connector];
 
   final List<ConditionModel> _conditions = [];
 

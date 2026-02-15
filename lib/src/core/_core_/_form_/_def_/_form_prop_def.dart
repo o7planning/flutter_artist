@@ -1,12 +1,12 @@
 part of '../../core.dart';
 
-abstract class PropDef<V> {
+abstract class FormPropDef<V> {
   final String propName;
   final String? description;
 
   Type get dataType => V;
 
-  PropDef._({
+  FormPropDef._({
     required this.propName,
     required this.description,
   }) {
@@ -15,8 +15,10 @@ abstract class PropDef<V> {
   }
 }
 
-class SimplePropDef<V> extends PropDef<V> {
-  SimplePropDef({
+// *****************************************************************************
+
+class SimpleFormPropDef<V> extends FormPropDef<V> {
+  SimpleFormPropDef({
     required super.propName,
     super.description,
   }) : super._();
@@ -30,33 +32,35 @@ class SimplePropDef<V> extends PropDef<V> {
   }
 }
 
-class MultiOptPropDef<V> extends PropDef<V> {
-  late final MultiOptPropDef? parent;
+// *****************************************************************************
+
+class MultiOptFormPropDef<V> extends FormPropDef<V> {
+  late final MultiOptFormPropDef? parent;
 
   final MultiOptPropReload reloadCondition;
 
   final SelectionType selectionType;
 
-  final List<MultiOptPropDef> _children;
+  final List<MultiOptFormPropDef> _children;
 
-  List<MultiOptPropDef> get children => List.unmodifiable(_children);
+  List<MultiOptFormPropDef> get children => List.unmodifiable(_children);
 
-  MultiOptPropDef._({
+  MultiOptFormPropDef._({
     required super.propName,
     required super.description,
-    required List<MultiOptPropDef> children,
+    required List<MultiOptFormPropDef> children,
     required this.selectionType,
     required this.reloadCondition,
   })  : _children = [...children],
         super._();
 
-  factory MultiOptPropDef.singleSelection({
+  factory MultiOptFormPropDef.singleSelection({
     required String propName,
     String? description,
-    List<MultiOptPropDef> children = const [],
+    List<MultiOptFormPropDef> children = const [],
     MultiOptPropReload reloadCondition = MultiOptPropReload.ifCriteriaChanged,
   }) {
-    return MultiOptPropDef._(
+    return MultiOptFormPropDef._(
       propName: propName,
       description: description,
       children: children,
@@ -65,12 +69,12 @@ class MultiOptPropDef<V> extends PropDef<V> {
     );
   }
 
-  factory MultiOptPropDef.multiSelection({
+  factory MultiOptFormPropDef.multiSelection({
     required String propName,
     String? description,
     MultiOptPropReload reloadCondition = MultiOptPropReload.ifCriteriaChanged,
   }) {
-    return MultiOptPropDef._(
+    return MultiOptFormPropDef._(
       propName: propName,
       description: description,
       children: [],
@@ -98,7 +102,9 @@ class MultiOptPropDef<V> extends PropDef<V> {
   }
 }
 
-class CalculatedPropDef<V> extends PropDef<V> {
+// *****************************************************************************
+
+class CalculatedPropDef<V> extends FormPropDef<V> {
   final V Function() calculate;
 
   CalculatedPropDef({

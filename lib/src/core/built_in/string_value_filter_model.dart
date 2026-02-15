@@ -1,4 +1,5 @@
 import '../_core_/core.dart';
+import '../enums/_filter_connector.dart';
 import '../enums/_filter_operator.dart';
 import '../enums/_selection_type.dart';
 import 'string_value_filter_criteria.dart';
@@ -14,18 +15,21 @@ class StringValueFilterModel
   @override
   FilterModelStructure registerFilterModelStructure() {
     return FilterModelStructure(
-      simpleCriterionDefs: [
-        SimpleCriterionDef<String>(criterionBaseName: 'string'),
-      ],
-      multiOptCriterionDefs: [],
-      //
-      conditionConnector: ConditionConnector.and,
-      conditionDefs: [
-        ConditionDef.condition(
-          tildeCriterionName: "string$tildeSymbol",
-          operator: FilterOperator.equalTo,
-        ),
-      ],
+      criteriaStructure: FilterCriteriaStructure(
+        simpleCriterionDefs: [
+          SimpleFilterCriterionDef<String>(criterionBaseName: 'string'),
+        ],
+        multiOptCriterionDefs: [],
+      ),
+      conditionStructure: FilterConditionStructure(
+        connector: FilterConnector.and,
+        conditionDefs: [
+          FilterConditionDef.simple(
+            tildeCriterionName: "string$tildeSymbol",
+            operator: FilterOperator.equalTo,
+          ),
+        ],
+      ),
     );
   }
 

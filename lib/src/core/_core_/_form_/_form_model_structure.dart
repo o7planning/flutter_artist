@@ -4,12 +4,12 @@ class FormModelStructure {
   //
   // Prop Defs:
   //
-  final List<SimplePropDef> __simplePropDefs;
-  final List<MultiOptPropDef> __rootMultiOptPropDefs;
+  final List<SimpleFormPropDef> __simplePropDefs;
+  final List<MultiOptFormPropDef> __rootMultiOptPropDefs;
 
-  final Map<String, PropDef> __allPropDefMap = {};
-  final Map<String, SimplePropDef> __simplePropDefMap = {};
-  final Map<String, MultiOptPropDef> __multiOptPropDefMap = {};
+  final Map<String, FormPropDef> __allPropDefMap = {};
+  final Map<String, SimpleFormPropDef> __simplePropDefMap = {};
+  final Map<String, MultiOptFormPropDef> __multiOptPropDefMap = {};
 
   //
   // FormPropModels:
@@ -46,15 +46,15 @@ class FormModelStructure {
   bool get isNew => _formMode == FormMode.creation;
 
   FormModelStructure({
-    required List<SimplePropDef> simplePropDefs,
-    required List<MultiOptPropDef> multiOptPropDefs,
+    required List<SimpleFormPropDef> simplePropDefs,
+    required List<MultiOptFormPropDef> multiOptPropDefs,
   })  : __simplePropDefs = [...simplePropDefs],
         __rootMultiOptPropDefs = [...multiOptPropDefs] {
-    for (SimplePropDef simplePropDef in simplePropDefs) {
+    for (SimpleFormPropDef simplePropDef in simplePropDefs) {
       __initSimplePropDef(simplePropDef: simplePropDef);
     }
     //
-    for (MultiOptPropDef multiOptPropDef in multiOptPropDefs) {
+    for (MultiOptFormPropDef multiOptPropDef in multiOptPropDefs) {
       __initMultiOptPropDefCascade(
         multiOptPropDef: multiOptPropDef,
         parent: null,
@@ -63,12 +63,12 @@ class FormModelStructure {
     //
     // Create Prop Models:
     //
-    for (SimplePropDef propDef in __simplePropDefs) {
+    for (SimpleFormPropDef propDef in __simplePropDefs) {
       __createSimpleFormPropModel(
         simplePropDef: propDef,
       );
     }
-    for (MultiOptPropDef rootOptDef in __rootMultiOptPropDefs) {
+    for (MultiOptFormPropDef rootOptDef in __rootMultiOptPropDefs) {
       __createMultiOptFormPropModelCascade(
         optPropDef: rootOptDef,
         parentOptModel: null,
@@ -79,7 +79,7 @@ class FormModelStructure {
   // ***************************************************************************
 
   void __initSimplePropDef({
-    required SimplePropDef simplePropDef,
+    required SimpleFormPropDef simplePropDef,
   }) {
     if (__allPropDefMap.containsKey(simplePropDef.propName)) {
       throw DuplicateFormPropError(
@@ -93,8 +93,8 @@ class FormModelStructure {
   // ***************************************************************************
 
   void __initMultiOptPropDefCascade({
-    required MultiOptPropDef multiOptPropDef,
-    required MultiOptPropDef? parent,
+    required MultiOptFormPropDef multiOptPropDef,
+    required MultiOptFormPropDef? parent,
   }) {
     if (__allPropDefMap.containsKey(multiOptPropDef.propName)) {
       throw DuplicateFormPropError(
@@ -106,7 +106,7 @@ class FormModelStructure {
     __allPropDefMap[multiOptPropDef.propName] = multiOptPropDef;
     __multiOptPropDefMap[multiOptPropDef.propName] = multiOptPropDef;
     //
-    for (MultiOptPropDef child in multiOptPropDef._children) {
+    for (MultiOptFormPropDef child in multiOptPropDef._children) {
       __initMultiOptPropDefCascade(
         multiOptPropDef: child,
         parent: multiOptPropDef,
@@ -118,7 +118,7 @@ class FormModelStructure {
   // ***************************************************************************
 
   void __createSimpleFormPropModel({
-    required SimplePropDef simplePropDef,
+    required SimpleFormPropDef simplePropDef,
   }) {
     final model = simplePropDef.createModel(
       propName: simplePropDef.propName,
@@ -130,7 +130,7 @@ class FormModelStructure {
   // ***************************************************************************
 
   void __createMultiOptFormPropModelCascade({
-    required MultiOptPropDef optPropDef,
+    required MultiOptFormPropDef optPropDef,
     required MultiOptFormPropModel? parentOptModel,
   }) {
     final model = optPropDef.createModel(
@@ -143,7 +143,7 @@ class FormModelStructure {
     parentOptModel?._children.add(model);
     //
     _allPropModelMapX[optPropDef.propName] = model;
-    for (MultiOptPropDef childDef in optPropDef._children) {
+    for (MultiOptFormPropDef childDef in optPropDef._children) {
       __createMultiOptFormPropModelCascade(
         optPropDef: childDef,
         parentOptModel: model,

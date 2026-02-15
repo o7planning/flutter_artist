@@ -9,7 +9,7 @@ abstract interface class IConditionTildeVal {
 
 class FilterConditionGroupTildeVal implements IConditionTildeVal {
   final String groupName;
-  final ConditionConnector connector;
+  final FilterConnector connector;
   final List<IConditionTildeVal> conditions;
 
   const FilterConditionGroupTildeVal({

@@ -1,4 +1,5 @@
 import '../_core_/core.dart';
+import '../enums/_filter_connector.dart';
 import '../enums/_filter_operator.dart';
 import '../enums/_selection_type.dart';
 import 'search_text_filter_criteria.dart';
@@ -14,18 +15,21 @@ class SearchTextFilterModel
   @override
   FilterModelStructure registerFilterModelStructure() {
     return FilterModelStructure(
-      simpleCriterionDefs: [
-        SimpleCriterionDef<String>(criterionBaseName: 'searchText'),
-      ],
-      multiOptCriterionDefs: [],
-      //
-      conditionConnector: ConditionConnector.and,
-      conditionDefs: [
-        ConditionDef.condition(
-          tildeCriterionName: "searchText$tildeSymbol",
-          operator: FilterOperator.containsIgnoreCase,
-        ),
-      ],
+      criteriaStructure: FilterCriteriaStructure(
+        simpleCriterionDefs: [
+          SimpleFilterCriterionDef<String>(criterionBaseName: 'searchText'),
+        ],
+        multiOptCriterionDefs: [],
+      ),
+      conditionStructure: FilterConditionStructure(
+        connector: FilterConnector.and,
+        conditionDefs: [
+          FilterConditionDef.simple(
+            tildeCriterionName: "searchText$tildeSymbol",
+            operator: FilterOperator.containsIgnoreCase,
+          ),
+        ],
+      ),
     );
   }
 

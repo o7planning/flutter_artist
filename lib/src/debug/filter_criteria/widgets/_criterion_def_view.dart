@@ -8,7 +8,7 @@ import '../../../core/utils/_class_utils.dart';
 import '../../../core/widgets/_custom_app_container.dart';
 
 class FilterCriterionDefView extends StatelessWidget {
-  final CriterionDef criterion;
+  final FilterCriterionDef criterion;
 
   const FilterCriterionDefView({
     super.key,
@@ -33,13 +33,13 @@ class FilterCriterionDefView extends StatelessWidget {
             minLeadingWidth: 40,
             minTileHeight: 0,
             leading: Icon(
-              criterion is SimpleCriterionDef
+              criterion is SimpleFilterCriterionDef
                   ? FaIconConstants.simplePropOrCriterionIconData
                   : FaIconConstants.optPropOrCriterionIconData,
               size: 20,
             ),
             title: IconLabelSelectableText(
-              label: criterion is SimpleCriterionDef
+              label: criterion is SimpleFilterCriterionDef
                   ? 'Criterion Base Name: '
                   : 'Multi Opt Criterion Base Name: ',
               text: criterion.criterionBaseName,
@@ -60,8 +60,8 @@ class FilterCriterionDefView extends StatelessWidget {
             ),
           ),
           Divider(),
-          if (criterion is MultiOptCriterionDef) SizedBox(height: 5),
-          if (criterion is MultiOptCriterionDef)
+          if (criterion is MultiOptFilterCriterionDef) SizedBox(height: 5),
+          if (criterion is MultiOptFilterCriterionDef)
             LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return Row(
@@ -72,7 +72,7 @@ class FilterCriterionDefView extends StatelessWidget {
                       message: "Single Selection",
                       child: Radio(
                         value:
-                            (criterion as MultiOptCriterionDef).selectionType ==
+                            (criterion as MultiOptFilterCriterionDef).selectionType ==
                                 SelectionType.single,
                         onChanged: null,
                         groupValue: true,
@@ -91,7 +91,7 @@ class FilterCriterionDefView extends StatelessWidget {
                       message: "Multi Selection",
                       child: Radio(
                         value:
-                            (criterion as MultiOptCriterionDef).selectionType ==
+                            (criterion as MultiOptFilterCriterionDef).selectionType ==
                                 SelectionType.multi,
                         onChanged: null,
                         groupValue: true,
@@ -111,7 +111,7 @@ class FilterCriterionDefView extends StatelessWidget {
                 );
               },
             ),
-          if (criterion is MultiOptCriterionDef) Divider(),
+          if (criterion is MultiOptFilterCriterionDef) Divider(),
           Expanded(
             child: SingleChildScrollView(
               child: _buildDetails(),

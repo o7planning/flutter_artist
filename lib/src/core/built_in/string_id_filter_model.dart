@@ -1,4 +1,5 @@
 import '../_core_/core.dart';
+import '../enums/_filter_connector.dart';
 import '../enums/_filter_operator.dart';
 import '../enums/_selection_type.dart';
 import 'string_id_filter_criteria.dart';
@@ -13,18 +14,21 @@ class StringIdFilterModel
   @override
   FilterModelStructure registerFilterModelStructure() {
     return FilterModelStructure(
-      simpleCriterionDefs: [
-        SimpleCriterionDef<String>(criterionBaseName: 'id'),
-      ],
-      multiOptCriterionDefs: [],
-      //
-      conditionConnector: ConditionConnector.and,
-      conditionDefs: [
-        ConditionDef.condition(
-          tildeCriterionName: "id$tildeSymbol",
-          operator: FilterOperator.equalTo,
-        ),
-      ],
+      criteriaStructure: FilterCriteriaStructure(
+        simpleCriterionDefs: [
+          SimpleFilterCriterionDef<String>(criterionBaseName: 'id'),
+        ],
+        multiOptCriterionDefs: [],
+      ),
+      conditionStructure: FilterConditionStructure(
+        connector: FilterConnector.and,
+        conditionDefs: [
+          FilterConditionDef.simple(
+            tildeCriterionName: "id$tildeSymbol",
+            operator: FilterOperator.equalTo,
+          ),
+        ],
+      ),
     );
   }
 

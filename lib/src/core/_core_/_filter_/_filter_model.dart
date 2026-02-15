@@ -92,8 +92,8 @@ abstract class FilterModel<
 
   ///
   /// ```dart
-  /// FilterCriteriaStructure registerFilterModelStructure() {
-  ///   return FilterCriteriaStructure(
+  /// FilterModelStructure registerFilterModelStructure() {
+  ///   return FilterModelStructure(
   ///     simpleCriteria: [],
   ///     multiOptCriteria: [
   ///       // Multi Options Single Selection Criterion:

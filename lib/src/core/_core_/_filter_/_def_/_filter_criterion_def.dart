@@ -1,9 +1,9 @@
 part of '../../core.dart';
 
 ///
-/// [SimpleCriterionDef], [MultiOptCriterionDef]
+/// [SimpleFilterCriterionDef], [MultiOptFilterCriterionDef]
 ///
-abstract class CriterionDef<V extends Object> {
+abstract class FilterCriterionDef<V extends Object> {
   final Set<String> _tildeSuffixes = {};
 
   final String criterionBaseName;
@@ -17,7 +17,7 @@ abstract class CriterionDef<V extends Object> {
 
   bool get isSimpleDataType => SimpleVal.isSimpleDataType(V);
 
-  CriterionDef._({
+  FilterCriterionDef._({
     required this.criterionBaseName,
     required this.description,
     required String? fieldName,
@@ -65,17 +65,19 @@ abstract class CriterionDef<V extends Object> {
 
   void _printDebugTildeSuffixesCascade() {
     _printDebugTildeSuffixes();
-    if (this is MultiOptCriterionDef) {
-      MultiOptCriterionDef _this = this as MultiOptCriterionDef;
-      for (CriterionDef childDef in _this._children) {
+    if (this is MultiOptFilterCriterionDef) {
+      MultiOptFilterCriterionDef _this = this as MultiOptFilterCriterionDef;
+      for (FilterCriterionDef childDef in _this._children) {
         childDef._printDebugTildeSuffixesCascade();
       }
     }
   }
 }
 
-class SimpleCriterionDef<V extends Object> extends CriterionDef<V> {
-  SimpleCriterionDef({
+// *****************************************************************************
+
+class SimpleFilterCriterionDef<V extends Object> extends FilterCriterionDef<V> {
+  SimpleFilterCriterionDef({
     required super.criterionBaseName,
     super.fieldName,
     super.toFieldValue,
@@ -95,8 +97,11 @@ class SimpleCriterionDef<V extends Object> extends CriterionDef<V> {
   }
 }
 
-class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
-  late final MultiOptCriterionDef? parent;
+// *****************************************************************************
+
+class MultiOptFilterCriterionDef<V extends Object>
+    extends FilterCriterionDef<V> {
+  late final MultiOptFilterCriterionDef? parent;
 
   final SelectionType selectionType;
 
@@ -105,9 +110,9 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
   // String tildeSuffix -> TildeCriterionConfig.
   final Map<String, TildeCriterionConfig> __tildeCriterionConfigMap = {};
 
-  final List<MultiOptCriterionDef> _children;
+  final List<MultiOptFilterCriterionDef> _children;
 
-  List<MultiOptCriterionDef> get children => List.unmodifiable(_children);
+  List<MultiOptFilterCriterionDef> get children => List.unmodifiable(_children);
 
   TildeCriterionConfig findOrCreateTildeCriterionConfig({
     required String tildeSuffix,
@@ -120,50 +125,50 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
     return def;
   }
 
-  MultiOptCriterionDef._({
+  MultiOptFilterCriterionDef._({
     required super.criterionBaseName,
     required super.fieldName,
     required super.toFieldValue,
     required super.description,
     required this.tildeCriterionConfigs,
-    required List<MultiOptCriterionDef> children,
+    required List<MultiOptFilterCriterionDef> children,
     required this.selectionType,
   })  : _children = children,
         super._() {
-    for (TildeCriterionConfig def in tildeCriterionConfigs) {
-      bool value1 = NameUtils.isValidTildeSuffix(def.suffix);
+    for (TildeCriterionConfig config in tildeCriterionConfigs) {
+      bool value1 = NameUtils.isValidTildeSuffix(config.suffix);
       if (!value1) {
         throw TildeCriterionConfigInvalidSuffixError(
-          tildeSuffix: def.suffix,
+          tildeSuffix: config.suffix,
           criterionBaseName: criterionBaseName,
         );
       }
-      bool value2 = NameUtils.isValidTildeSuffix(def.parentMatchSuffix);
+      bool value2 = NameUtils.isValidTildeSuffix(config.parentMatchSuffix);
       if (!value2) {
         throw TildeCriterionConfigInvalidSuffixError(
-          tildeSuffix: def.parentMatchSuffix,
+          tildeSuffix: config.parentMatchSuffix,
           criterionBaseName: criterionBaseName,
         );
       }
-      if (__tildeCriterionConfigMap.containsKey(def.suffix)) {
+      if (__tildeCriterionConfigMap.containsKey(config.suffix)) {
         throw TildeCriterionConfigDuplicationError(
-          tildeSuffix: def.suffix,
+          tildeSuffix: config.suffix,
           criterionBaseName: criterionBaseName,
         );
       }
-      __tildeCriterionConfigMap[def.suffix] = def;
+      __tildeCriterionConfigMap[config.suffix] = config;
     }
   }
 
-  factory MultiOptCriterionDef.singleSelection({
+  factory MultiOptFilterCriterionDef.singleSelection({
     required String criterionBaseName,
     String? description,
     required String? fieldName,
     required Converter<V>? toFieldValue,
     List<TildeCriterionConfig> tildeCriterionConfigs = const [],
-    List<MultiOptCriterionDef> children = const [],
+    List<MultiOptFilterCriterionDef> children = const [],
   }) {
-    return MultiOptCriterionDef._(
+    return MultiOptFilterCriterionDef._(
       criterionBaseName: criterionBaseName,
       fieldName: fieldName,
       toFieldValue: toFieldValue,
@@ -174,14 +179,14 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
     );
   }
 
-  factory MultiOptCriterionDef.multiSelection({
+  factory MultiOptFilterCriterionDef.multiSelection({
     required String criterionBaseName,
     String? description,
     required String? fieldName,
     required Converter<V>? toFieldValue,
     List<TildeCriterionConfig> tildeCriterionConfigs = const [],
   }) {
-    return MultiOptCriterionDef._(
+    return MultiOptFilterCriterionDef._(
       criterionBaseName: criterionBaseName,
       fieldName: fieldName,
       toFieldValue: toFieldValue,
@@ -224,7 +229,7 @@ class MultiOptCriterionDef<V extends Object> extends CriterionDef<V> {
   }
 }
 
-class CalculatedCriterionDef<V extends Object> extends CriterionDef<V> {
+class CalculatedCriterionDef<V extends Object> extends FilterCriterionDef<V> {
   final V Function() calculate;
 
   CalculatedCriterionDef({
@@ -253,13 +258,13 @@ class CalculatedCriterionDef<V extends Object> extends CriterionDef<V> {
 
 const String tildeSymbol = "~";
 
-class NameTilde {
+class TildeObj {
   final String tildeCriterionName;
   late final String criterionName;
   late final String afterTildeSuffix;
   late final String tildeSuffix;
 
-  NameTilde.parse({required this.tildeCriterionName}) {
+  TildeObj.parse({required this.tildeCriterionName}) {
     if (!NameUtils.isValidTildeFilterCriterionName(tildeCriterionName)) {
       throw TildeCriterionNameError(tildeCriterionName: tildeCriterionName);
     }
