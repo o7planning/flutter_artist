@@ -19,12 +19,3 @@ enum FilterOperator {
 
   const FilterOperator(this.text);
 }
-
-enum ConditionConnector {
-  and("AND"),
-  or("OR");
-
-  final String text;
-
-  const ConditionConnector(this.text);
-}

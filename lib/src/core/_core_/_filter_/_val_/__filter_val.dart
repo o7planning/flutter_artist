@@ -11,7 +11,7 @@ abstract interface class IConditionVal {
 
 class FilterConditionVal implements IConditionVal {
   final String criterionName;
-  final CriterionDef criterionDef;
+  final FilterCriterionDef criterionDef;
   final FilterOperator operator;
   final dynamic value;
 
@@ -59,7 +59,7 @@ class FilterConditionVal implements IConditionVal {
 
 class FilterConditionGroupVal implements IConditionVal {
   final String groupName;
-  final ConditionConnector connector;
+  final FilterConnector connector;
   final List<IConditionVal> conditions;
 
   const FilterConditionGroupVal({
@@ -70,7 +70,7 @@ class FilterConditionGroupVal implements IConditionVal {
 
   const FilterConditionGroupVal.empty()
       : groupName = "root-criteria-group",
-        connector = ConditionConnector.and,
+        connector = FilterConnector.and,
         conditions = const [];
 
   @override

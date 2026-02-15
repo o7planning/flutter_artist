@@ -3,34 +3,26 @@ part of '../core.dart';
 class FilterModelStructure {
   static const rootGroupName = "#ROOT-GROUP";
 
-  //
-  // Criterion Defs:
-  //
-  final List<SimpleCriterionDef> __simpleCriterionDefs;
-  final List<MultiOptCriterionDef> __rootMultiOptCriterionDefs;
-
-  List<SimpleCriterionDef> get simpleCriterionDefs => __simpleCriterionDefs;
-
-  List<MultiOptCriterionDef> get rootMultiOptCriterionDefs =>
-      __rootMultiOptCriterionDefs;
+  final FilterCriteriaStructure criteriaStructure;
+  final FilterConditionStructure conditionStructure;
 
   //
-  final Map<String, CriterionDef> __allCriterionDefMap = {};
-  final Map<String, CriterionDef> __allFieldDefMap = {};
-  final Map<String, SimpleCriterionDef> __simpleCriterionDefMap = {};
-  final Map<String, MultiOptCriterionDef> __multiOptCriterionDefMap = {};
+  final Map<String, FilterCriterionDef> __allCriterionDefMap = {};
+  final Map<String, FilterCriterionDef> __allFieldDefMap = {};
+  final Map<String, SimpleFilterCriterionDef> __simpleCriterionDefMap = {};
+  final Map<String, MultiOptFilterCriterionDef> __multiOptCriterionDefMap = {};
 
   //
   // Condition Defs:
   //
 
   // String groupName.
-  final Map<String, ConditionGroupDefImpl> __conditionGroupDefMap = {};
+  final Map<String, FilterConditionGroupDef> __conditionGroupDefMap = {};
 
   //
   // Condition Models:
   //
-  late final ConditionGroupDefImpl rootConditionGroupDef;
+  late final FilterConditionGroupDef rootConditionGroupDef;
 
   //
   // Condition Models:
@@ -53,33 +45,32 @@ class FilterModelStructure {
   // ***************************************************************************
 
   FilterModelStructure({
-    required List<SimpleCriterionDef> simpleCriterionDefs,
-    required List<MultiOptCriterionDef> multiOptCriterionDefs,
-    required ConditionConnector conditionConnector,
-    required List<ConditionDef> conditionDefs,
-  })  : __simpleCriterionDefs = [...simpleCriterionDefs],
-        __rootMultiOptCriterionDefs = [...multiOptCriterionDefs] {
-    for (SimpleCriterionDef simpleCriterionDef in simpleCriterionDefs) {
+    required this.criteriaStructure,
+    required this.conditionStructure,
+  }) {
+    for (SimpleFilterCriterionDef simpleCriterionDef
+        in criteriaStructure.simpleCriterionDefs) {
       __initSimpleCriterionDef(simpleCriterionDef: simpleCriterionDef);
     }
     //
-    for (MultiOptCriterionDef multiOptCriterionDef in multiOptCriterionDefs) {
-      __initMultiOptCriterionDefCascade(
+    for (MultiOptFilterCriterionDef multiOptCriterionDef
+        in criteriaStructure.multiOptCriterionDefs) {
+      __initMultiOptFilterCriterionDefCascade(
         multiOptCriterionDef: multiOptCriterionDef,
         parent: null,
       );
     }
     // LAZY Property:
-    rootConditionGroupDef = ConditionGroupDefImpl._(
+    rootConditionGroupDef = FilterConditionGroupDef._(
       groupName: rootGroupName,
-      connector: conditionConnector,
-      conditions: conditionDefs,
+      connector: conditionStructure.connector,
+      conditions: conditionStructure.conditionDefs,
     );
     // LAZY Property:
     rootConditionGroupModel = ConditionGroupModelImpl(
       groupName: rootGroupName,
       structure: this,
-      connector: conditionConnector,
+      connector: conditionStructure.connector,
     );
     // All Defined tildeCriterionName(s).
     // String tildeCriterionName.
@@ -89,7 +80,7 @@ class FilterModelStructure {
       allDefinedTildeCriterionNames: allDefinedTildeCriterionNames,
     );
     //
-    for (ConditionDef conditionDef in conditionDefs) {
+    for (FilterConditionDef conditionDef in conditionStructure.conditionDefs) {
       __initConditionCascade(
         allDefinedTildeCriterionNames: allDefinedTildeCriterionNames,
         conditionDef: conditionDef,
@@ -102,7 +93,8 @@ class FilterModelStructure {
     //
     // Create Criterion Models:
     //
-    for (SimpleCriterionDef criterionDef in __simpleCriterionDefs) {
+    for (SimpleFilterCriterionDef criterionDef
+        in criteriaStructure.simpleCriterionDefs) {
       for (String tildeSuffix in criterionDef._tildeSuffixes) {
         __createSimpleTildeCriterionModel(
           simpleCriterionDef: criterionDef,
@@ -110,7 +102,8 @@ class FilterModelStructure {
         );
       }
     }
-    for (MultiOptCriterionDef rootOptDef in __rootMultiOptCriterionDefs) {
+    for (MultiOptFilterCriterionDef rootOptDef
+        in criteriaStructure.multiOptCriterionDefs) {
       __createMultiOptTildeCriterionModelCascade(
         optCriterionDef: rootOptDef,
         parentOptTildeCriterionModel: null,
@@ -118,25 +111,14 @@ class FilterModelStructure {
     }
   }
 
-  void _printDebug() {
-    print("------------------------------------------------------------------");
-    for (SimpleCriterionDef criterionDef in __simpleCriterionDefs) {
-      criterionDef._printDebugTildeSuffixesCascade();
-    }
-    for (MultiOptCriterionDef rootOptDef in __rootMultiOptCriterionDefs) {
-      rootOptDef._printDebugTildeSuffixesCascade();
-    }
-    print("------------------------------------------------------------------");
-  }
-
   // ***************************************************************************
   // ***************************************************************************
 
   void __createSimpleTildeCriterionModel({
-    required SimpleCriterionDef simpleCriterionDef,
+    required SimpleFilterCriterionDef simpleCriterionDef,
     required String tildeSuffix,
   }) {
-    final String tildeCriterionName = NameTilde.createNameTilde(
+    final String tildeCriterionName = TildeObj.createNameTilde(
       baseName: simpleCriterionDef.criterionBaseName,
       tildeSuffix: tildeSuffix,
     );
@@ -152,11 +134,11 @@ class FilterModelStructure {
   // ***************************************************************************
 
   void __createMultiOptTildeCriterionModelCascade({
-    required MultiOptCriterionDef optCriterionDef,
+    required MultiOptFilterCriterionDef optCriterionDef,
     required MultiOptTildeFilterCriterionModel? parentOptTildeCriterionModel,
   }) {
     for (String tildeSuffix in optCriterionDef._tildeSuffixes) {
-      final String tildeCriterionName = NameTilde.createNameTilde(
+      final String tildeCriterionName = TildeObj.createNameTilde(
         baseName: optCriterionDef.criterionBaseName,
         tildeSuffix: tildeSuffix,
       );
@@ -186,7 +168,7 @@ class FilterModelStructure {
       //
       _allCriterionModelMapX[tildeCriterionName] = tildeCriterionModel;
       //
-      for (MultiOptCriterionDef childDef in optCriterionDef._children) {
+      for (MultiOptFilterCriterionDef childDef in optCriterionDef._children) {
         __createMultiOptTildeCriterionModelCascade(
           optCriterionDef: childDef,
           parentOptTildeCriterionModel: tildeCriterionModel,
@@ -198,7 +180,7 @@ class FilterModelStructure {
   // ***************************************************************************
 
   void __initSimpleCriterionDef({
-    required SimpleCriterionDef simpleCriterionDef,
+    required SimpleFilterCriterionDef simpleCriterionDef,
   }) {
     if (__allCriterionDefMap
         .containsKey(simpleCriterionDef.criterionBaseName)) {
@@ -221,9 +203,9 @@ class FilterModelStructure {
 
   // ***************************************************************************
 
-  void __initMultiOptCriterionDefCascade({
-    required MultiOptCriterionDef multiOptCriterionDef,
-    required MultiOptCriterionDef? parent,
+  void __initMultiOptFilterCriterionDefCascade({
+    required MultiOptFilterCriterionDef multiOptCriterionDef,
+    required MultiOptFilterCriterionDef? parent,
   }) {
     if (__allCriterionDefMap
         .containsKey(multiOptCriterionDef.criterionBaseName)) {
@@ -245,8 +227,8 @@ class FilterModelStructure {
     __multiOptCriterionDefMap[multiOptCriterionDef.criterionBaseName] =
         multiOptCriterionDef;
     //
-    for (MultiOptCriterionDef child in multiOptCriterionDef._children) {
-      __initMultiOptCriterionDefCascade(
+    for (MultiOptFilterCriterionDef child in multiOptCriterionDef._children) {
+      __initMultiOptFilterCriterionDefCascade(
         multiOptCriterionDef: child,
         parent: multiOptCriterionDef,
       );
@@ -256,13 +238,13 @@ class FilterModelStructure {
   // ***************************************************************************
 
   void __calcAllDefinedTildeCriterionNames({
-    required ConditionGroupDefImpl conditionGroupDef,
+    required FilterConditionGroupDef conditionGroupDef,
     required Set<String> allDefinedTildeCriterionNames,
   }) {
-    for (ConditionDef conditionDef in conditionGroupDef.conditions) {
-      if (conditionDef is ConditionDefImpl) {
+    for (FilterConditionDef conditionDef in conditionGroupDef.conditions) {
+      if (conditionDef is FilterSimpleConditionDef) {
         allDefinedTildeCriterionNames.add(conditionDef.tildeCriterionName);
-      } else if (conditionDef is ConditionGroupDefImpl) {
+      } else if (conditionDef is FilterConditionGroupDef) {
         __calcAllDefinedTildeCriterionNames(
           conditionGroupDef: conditionDef,
           allDefinedTildeCriterionNames: allDefinedTildeCriterionNames,
@@ -274,10 +256,10 @@ class FilterModelStructure {
   }
 
   void __debugTildeCriterionNames({
-    required MultiOptCriterionDef multiOptCriterionDef,
+    required MultiOptFilterCriterionDef multiOptCriterionDef,
   }) {
     multiOptCriterionDef.printDebugSuffixes();
-    for (MultiOptCriterionDef child in multiOptCriterionDef._children) {
+    for (MultiOptFilterCriterionDef child in multiOptCriterionDef._children) {
       __debugTildeCriterionNames(multiOptCriterionDef: child);
     }
   }
@@ -286,15 +268,15 @@ class FilterModelStructure {
 
   void __initConditionCascade({
     required Set<String> allDefinedTildeCriterionNames,
-    required final ConditionDef conditionDef,
-    required final ConditionGroupDefImpl parentGroupDef,
+    required final FilterConditionDef conditionDef,
+    required final FilterConditionGroupDef parentGroupDef,
     required final ConditionGroupModelImpl parentGroupModel,
   }) {
-    if (conditionDef is ConditionDefImpl) {
+    if (conditionDef is FilterSimpleConditionDef) {
       // LAZY Initial.
       conditionDef.__group = parentGroupDef;
       //
-      final CriterionDef? criterionDef =
+      final FilterCriterionDef? criterionDef =
           __allCriterionDefMap[conditionDef.criterionName];
       if (criterionDef == null) {
         throw FilterCriterionNotFoundError(
@@ -306,18 +288,18 @@ class FilterModelStructure {
       conditionDef.criterionDef = criterionDef;
       criterionDef._tildeSuffixes.add(conditionDef.tildeSuffix);
       //
-      if (criterionDef is MultiOptCriterionDef) {
+      if (criterionDef is MultiOptFilterCriterionDef) {
         TildeCriterionConfig tildeCriterionConfig =
             criterionDef.findOrCreateTildeCriterionConfig(
           tildeSuffix: conditionDef.tildeSuffix,
         );
-        MultiOptCriterionDef? p = criterionDef;
+        MultiOptFilterCriterionDef? p = criterionDef;
         while (true) {
           p = p?.parent;
           if (p == null) {
             break;
           }
-          String nameTildeParent = NameTilde.createNameTilde(
+          String nameTildeParent = TildeObj.createNameTilde(
             baseName: p.criterionBaseName,
             tildeSuffix: tildeCriterionConfig.parentMatchSuffix,
           );
@@ -337,7 +319,7 @@ class FilterModelStructure {
         supportedOperators: conditionDef._supportedOperators,
       );
       parentGroupModel._conditions.add(conditionModel);
-    } else if (conditionDef is ConditionGroupDefImpl) {
+    } else if (conditionDef is FilterConditionGroupDef) {
       // LAZY Initial.
       conditionDef.__group = parentGroupDef;
       if (__conditionGroupDefMap.containsKey(conditionDef.groupName)) {
@@ -353,7 +335,7 @@ class FilterModelStructure {
       );
       parentGroupModel._conditions.add(conditionGroupModel);
       //
-      for (ConditionDef childConditionDef in conditionDef.conditions) {
+      for (FilterConditionDef childConditionDef in conditionDef.conditions) {
         __initConditionCascade(
           allDefinedTildeCriterionNames: allDefinedTildeCriterionNames,
           conditionDef: childConditionDef,
@@ -595,7 +577,7 @@ class FilterModelStructure {
     final candidateUpdateValues = {...criterionValues};
     //
     // IMPORTANT:
-    // Update data for FilterCriteriaStructure. From ROOTs to LEAVES.
+    // Update data for FilterModelStructure. From ROOTs to LEAVES.
     // (***):
     // And Update children-OptCriterion data to null if parent-Value is null or not selected.
     //

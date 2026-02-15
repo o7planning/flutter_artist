@@ -53,6 +53,7 @@ import '../built_in/empty_filter_input.dart';
 import '../enums/_action_confirmation_type.dart';
 import '../enums/_action_result_state.dart';
 import '../enums/_activity_hidden_action.dart';
+import '../enums/_filter_connector.dart';
 import '../enums/_sort_strategy.dart';
 import '../enums/_default_setting_policy.dart';
 import '../enums/_filter_operator.dart';
@@ -220,6 +221,8 @@ part '_filter_/_val_/__filter_x_val.dart';
 part '_filter_/_val_/__filter_val.dart';
 
 part '_filter_/_def_/_filter_criterion_def.dart';
+
+part '_filter_/_def_/_simple_val.dart';
 
 part '_filter_/_def_/_filter_criteria_def.dart';
 
@@ -426,6 +429,10 @@ part '_filter_/_model_/_tilde_filter_criterion_model.dart';
 part '_filter_/_model_/_calculated_tilde_filter_criterion_model.dart';
 
 part '_filter_/_filter_model_structure.dart';
+
+part '_filter_/_filter_condition_structure.dart';
+
+part '_filter_/_filter_criteria_structure.dart';
 
 part '_sort_/_def_/_sort_criterion_def.dart';
 

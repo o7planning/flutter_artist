@@ -1,33 +1,33 @@
 part of '../../core.dart';
 
 ///
-/// [ConditionDefImpl], [ConditionGroupDefImpl].
+/// [FilterSimpleConditionDef], [FilterConditionGroupDef].
 ///
-abstract interface class ConditionDef {
+abstract interface class FilterConditionDef {
   FilterModelStructure get structure;
 
-  ConditionDef? get group;
+  FilterConditionDef? get group;
 
-  List<ConditionDef> get conditions;
+  List<FilterConditionDef> get conditions;
 
-  factory ConditionDef.condition({
+  factory FilterConditionDef.simple({
     required String tildeCriterionName,
     required FilterOperator operator,
     List<FilterOperator>? supportedOperators,
   }) {
-    return ConditionDefImpl._(
+    return FilterSimpleConditionDef._(
       tildeCriterionName: tildeCriterionName,
       operator: operator,
       supportedOperators: supportedOperators,
     );
   }
 
-  factory ConditionDef.group({
+  factory FilterConditionDef.group({
     required String groupName,
-    required ConditionConnector connector,
-    required List<ConditionDef> conditions,
+    required FilterConnector connector,
+    required List<FilterConditionDef> conditions,
   }) {
-    return ConditionGroupDefImpl._(
+    return FilterConditionGroupDef._(
       groupName: groupName,
       connector: connector,
       conditions: conditions,
@@ -35,13 +35,13 @@ abstract interface class ConditionDef {
   }
 }
 
-class ConditionDefImpl implements ConditionDef {
+class FilterSimpleConditionDef implements FilterConditionDef {
   late final FilterModelStructure _structure;
 
   @override
   FilterModelStructure get structure => _structure;
 
-  final NameTilde _tildeObj;
+  final TildeObj _tildeObj;
   final FilterOperator operator;
   late final List<FilterOperator> _supportedOperators;
 
@@ -54,50 +54,50 @@ class ConditionDefImpl implements ConditionDef {
 
   String get tildeSuffix => _tildeObj.tildeSuffix;
 
-  late final ConditionGroupDefImpl? __group;
-  late final CriterionDef criterionDef;
+  late final FilterConditionGroupDef? __group;
+  late final FilterCriterionDef criterionDef;
 
   @override
-  ConditionDef? get group => __group;
+  FilterConditionDef? get group => __group;
 
   @override
-  List<ConditionDef> get conditions => [];
+  List<FilterConditionDef> get conditions => [];
 
-  ConditionDefImpl._({
+  FilterSimpleConditionDef._({
     required String tildeCriterionName,
     required this.operator,
     List<FilterOperator>? supportedOperators,
-  }) : _tildeObj = NameTilde.parse(tildeCriterionName: tildeCriterionName) {
+  }) : _tildeObj = TildeObj.parse(tildeCriterionName: tildeCriterionName) {
     _supportedOperators = supportedOperators == null
         ? [operator]
         : {...supportedOperators, operator}.toList();
   }
 }
 
-class ConditionGroupDefImpl implements ConditionDef {
+class FilterConditionGroupDef implements FilterConditionDef {
   late final FilterModelStructure _structure;
 
   @override
   FilterModelStructure get structure => _structure;
   final String groupName;
-  final ConditionConnector connector;
+  final FilterConnector connector;
 
-  late final ConditionGroupDefImpl? __group;
-
-  @override
-  ConditionDef? get group => __group;
+  late final FilterConditionGroupDef? __group;
 
   @override
-  final List<ConditionDef> conditions;
+  FilterConditionDef? get group => __group;
 
-  ConditionGroupDefImpl._({
+  @override
+  final List<FilterConditionDef> conditions;
+
+  FilterConditionGroupDef._({
     required this.groupName,
     required this.connector,
     required this.conditions,
   }) {
-    final Map<String, ConditionDef> map = {};
-    for (ConditionDef def in conditions) {
-      if (def is ConditionDefImpl) {
+    final Map<String, FilterConditionDef> map = {};
+    for (FilterConditionDef def in conditions) {
+      if (def is FilterSimpleConditionDef) {
         final nameTilde = def._tildeObj.tildeCriterionName;
         if (map.containsKey(nameTilde)) {
           throw DuplicateFilterConditionDefError(

@@ -7,7 +7,7 @@ import 'package:flutter_artist/src/debug/filter_criteria/widgets/_condition_grou
 import 'package:multi_split_view/multi_split_view.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/_filter_operator.dart';
+import '../../core/enums/_filter_connector.dart';
 import '../../core/enums/_selection_type.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
@@ -162,7 +162,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
             title = getClassName(data);
             prefixIconData = FaIconConstants.filterModelIconData;
           } else if (data is ConditionGroupModelImpl) {
-            title = data.connector == ConditionConnector.and
+            title = data.connector == FilterConnector.and
                 ? "AND - ${data.groupName}"
                 : "OR - ${data.groupName}";
             tooltip =
