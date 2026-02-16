@@ -29,33 +29,33 @@ enum TipDocument {
   debugState(enabled: true),
   canDoAction(enabled: true),
   //
-  blockCallApiDeleteItemById(enabled: false),
-  blockCallApiQuery(enabled: false),
+  blockPerformDeleteItemById(enabled: false),
+  blockPerformQuery(enabled: false),
   blockConvertItemDetailToItem(enabled: false),
-  blockCallApiLoadItemDetailById(enabled: false),
+  blockPerformLoadItemDetailById(enabled: false),
   blockExtractParentBlockItemId(enabled: true),
   blockInitFormRelatedData(enabled: false),
   //
-  blockSilentActionCallApi(enabled: false),
+  blockSilentActionPerformAction(enabled: false),
   //
-  blockQuickItemUpdateActionCallApiQuickUpdateItem(enabled: false),
-  blockQuickMultiItemsCreationActionCallApiQuickCreateMultiItems(
+  blockQuickItemUpdateActionPerformQuickUpdateItem(enabled: false),
+  blockBulkItemsCreationActionPerformBulkCreateItems(
       enabled: false),
-  blockQuickItemCreationActionCallApiQuickCreateItem(enabled: false),
+  blockQuickItemCreationActionPerformQuickCreateItem(enabled: false),
   //
-  scalarCallApiQuery(enabled: false),
+  scalarPerformQuery(enabled: false),
   //
-  formModelCallApiCreateItem(enabled: false),
-  formModelCallApiUpdateItem(enabled: false),
+  formModelPerformCreateItem(enabled: false),
+  formModelPerformUpdateItem(enabled: false),
   formModelGetUpdatedValuesForSimpleProps(enabled: false),
   formModelSpecifyDefaultValuesForSimpleProps(enabled: false),
   //
-  filterModelCallApiLoadMultiOptCriterionXData(enabled: false),
+  filterModelPerformLoadMultiOptCriterionXData(enabled: false),
   //
-  storageCallApi(enabled: false),
+  storagePerformAction(enabled: false),
   //
   backgroundActionRun(enabled: false),
-  loginActivityCallApiLogin(enabled: false),
+  loginActivityPerformLogin(enabled: false),
   coordinatorCoordinationLogic(enabled: false),
   ;
 
@@ -131,43 +131,43 @@ enum TipDocument {
         return "Can Do Action";
       case TipDocument.blockExtractParentBlockItemId:
         return "Block.extractParentBlockItemId()";
-      case TipDocument.blockCallApiDeleteItemById:
-        return "Block.callApiDeleteItemById()";
-      case TipDocument.blockCallApiQuery:
-        return "Block.callApiQuery()";
+      case TipDocument.blockPerformDeleteItemById:
+        return "Block.performDeleteItemById()";
+      case TipDocument.blockPerformQuery:
+        return "Block.performQuery()";
       case TipDocument.blockConvertItemDetailToItem:
         return "Block.convertItemDetailToItem()";
-      case TipDocument.blockCallApiLoadItemDetailById:
-        return "Block.callApiLoadItemDetailById()";
+      case TipDocument.blockPerformLoadItemDetailById:
+        return "Block.performLoadItemDetailById()";
       case TipDocument.blockInitFormRelatedData:
-        return "Block.initFormRelatedData()";
-      case TipDocument.blockSilentActionCallApi:
-        return "BlockSilentAction.callApi()";
-      case TipDocument.blockQuickItemUpdateActionCallApiQuickUpdateItem:
-        return "BlockQuickItemUpdateAction.callApiQuickUpdateItem()";
+        return "Block.performLoadFormRelatedData()";
+      case TipDocument.blockSilentActionPerformAction:
+        return "BlockSilentAction.performAction()";
+      case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
+        return "BlockQuickItemUpdateAction.performQuickUpdateItem()";
       case TipDocument
-            .blockQuickMultiItemsCreationActionCallApiQuickCreateMultiItems:
-        return "BlockQuickMultiItemsCreationAction.callApiQuickCreateMultiItems()";
-      case TipDocument.blockQuickItemCreationActionCallApiQuickCreateItem:
-        return "BlockQuickItemCreationAction.callApiQuickCreateItem()";
-      case TipDocument.scalarCallApiQuery:
-        return "Scalar.callApiQuery()";
-      case TipDocument.formModelCallApiCreateItem:
-        return "FormModel.callApiCreateItem()";
-      case TipDocument.formModelCallApiUpdateItem:
-        return "FormModel.callApiUpdateItem()";
+            .blockBulkItemsCreationActionPerformBulkCreateItems:
+        return "BlockBulkItemsCreationAction.performBulkCreateItems()";
+      case TipDocument.blockQuickItemCreationActionPerformQuickCreateItem:
+        return "BlockQuickItemCreationAction.performQuickCreateItem()";
+      case TipDocument.scalarPerformQuery:
+        return "Scalar.performQuery()";
+      case TipDocument.formModelPerformCreateItem:
+        return "FormModel.performCreateItem()";
+      case TipDocument.formModelPerformUpdateItem:
+        return "FormModel.performUpdateItem()";
       case TipDocument.formModelGetUpdatedValuesForSimpleProps:
         return "FormModel.extractUpdateValuesForSimpleProps()";
       case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
         return "FormModel.specifyDefaultValuesForSimpleProps()";
-      case TipDocument.filterModelCallApiLoadMultiOptCriterionXData:
-        return "FilterModel.callApiLoadMultiOptTildeCriterionXData()";
-      case TipDocument.storageCallApi:
-        return "Storage.callApi()";
+      case TipDocument.filterModelPerformLoadMultiOptCriterionXData:
+        return "FilterModel.performLoadMultiOptTildeCriterionXData()";
+      case TipDocument.storagePerformAction:
+        return "Storage.performAction()";
       case TipDocument.backgroundActionRun:
         return "BackgroundAction.run()";
-      case TipDocument.loginActivityCallApiLogin:
-        return "LoginActivity.callApiLogin()";
+      case TipDocument.loginActivityPerformLogin:
+        return "LoginActivity.performLogin()";
       case TipDocument.coordinatorCoordinationLogic:
         return "Coordinator.coordinationLogic()";
       case TipDocument.logViewer:
@@ -235,43 +235,43 @@ enum TipDocument {
         return "Can Do Action";
       case TipDocument.blockExtractParentBlockItemId:
         return "Block.extractParentBlockItemId() method.";
-      case TipDocument.blockCallApiDeleteItemById:
-        return "Block.callApiDeleteItemById()";
-      case TipDocument.blockCallApiQuery:
-        return "Block.callApiQuery()";
+      case TipDocument.blockPerformDeleteItemById:
+        return "Block.performDeleteItemById()";
+      case TipDocument.blockPerformQuery:
+        return "Block.performQuery()";
       case TipDocument.blockConvertItemDetailToItem:
         return "Block.convertItemDetailToItem()";
-      case TipDocument.blockCallApiLoadItemDetailById:
-        return "Block.callApiLoadItemDetailById()";
+      case TipDocument.blockPerformLoadItemDetailById:
+        return "Block.performLoadItemDetailById()";
       case TipDocument.blockInitFormRelatedData:
-        return "Block.initFormRelatedData()";
-      case TipDocument.blockSilentActionCallApi:
-        return "BlockSilentAction.callApi()";
-      case TipDocument.blockQuickItemUpdateActionCallApiQuickUpdateItem:
-        return "BlockQuickItemUpdateAction.callApiQuickUpdateItem()";
+        return "Block.performLoadFormRelatedData()";
+      case TipDocument.blockSilentActionPerformAction:
+        return "BlockSilentAction.performAction()";
+      case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
+        return "BlockQuickItemUpdateAction.performQuickUpdateItem()";
       case TipDocument
-            .blockQuickMultiItemsCreationActionCallApiQuickCreateMultiItems:
-        return "BlockQuickMultiItemsCreationAction.callApiQuickCreateMultiItems()";
-      case TipDocument.blockQuickItemCreationActionCallApiQuickCreateItem:
-        return "BlockQuickItemCreationAction.callApiQuickCreateItem()";
-      case TipDocument.scalarCallApiQuery:
-        return "Scalar.callApiQuery()";
-      case TipDocument.formModelCallApiCreateItem:
-        return "FormModel.callApiCreateItem()";
-      case TipDocument.formModelCallApiUpdateItem:
-        return "FormModel.callApiUpdateItem()";
+            .blockBulkItemsCreationActionPerformBulkCreateItems:
+        return "BlockBulkItemsCreationAction.performBulkCreateItems()";
+      case TipDocument.blockQuickItemCreationActionPerformQuickCreateItem:
+        return "BlockQuickItemCreationAction.performQuickCreateItem()";
+      case TipDocument.scalarPerformQuery:
+        return "Scalar.performQuery()";
+      case TipDocument.formModelPerformCreateItem:
+        return "FormModel.performCreateItem()";
+      case TipDocument.formModelPerformUpdateItem:
+        return "FormModel.performUpdateItem()";
       case TipDocument.formModelGetUpdatedValuesForSimpleProps:
         return "FormModel.extractUpdateValuesForSimpleProps()";
       case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
         return "FormModel.specifyDefaultValuesForSimpleProps()";
-      case TipDocument.filterModelCallApiLoadMultiOptCriterionXData:
-        return "FilterModel.callApiLoadMultiOptTildeCriterionXData()";
-      case TipDocument.storageCallApi:
-        return "Storage.callApi()";
+      case TipDocument.filterModelPerformLoadMultiOptCriterionXData:
+        return "FilterModel.performLoadMultiOptTildeCriterionXData()";
+      case TipDocument.storagePerformAction:
+        return "Storage.performAction()";
       case TipDocument.backgroundActionRun:
         return "BackgroundAction.run()";
-      case TipDocument.loginActivityCallApiLogin:
-        return "LoginActivity.callApiLogin()";
+      case TipDocument.loginActivityPerformLogin:
+        return "LoginActivity.performLogin()";
       case TipDocument.coordinatorCoordinationLogic:
         return "Coordinator.coordinationLogic()";
       case TipDocument.logViewer:
@@ -429,42 +429,42 @@ enum TipDocument {
         return [
           "http://51.195.44.134:8080/vi/14857/flutterartist-debugmenu",
         ];
-      case TipDocument.blockCallApiDeleteItemById:
+      case TipDocument.blockPerformDeleteItemById:
         return [];
-      case TipDocument.blockCallApiQuery:
+      case TipDocument.blockPerformQuery:
         return [];
       case TipDocument.blockConvertItemDetailToItem:
         return [];
-      case TipDocument.blockCallApiLoadItemDetailById:
+      case TipDocument.blockPerformLoadItemDetailById:
         return [];
       case TipDocument.blockInitFormRelatedData:
         return [];
-      case TipDocument.blockSilentActionCallApi:
+      case TipDocument.blockSilentActionPerformAction:
         return [];
-      case TipDocument.blockQuickItemUpdateActionCallApiQuickUpdateItem:
+      case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
         return [];
       case TipDocument
-            .blockQuickMultiItemsCreationActionCallApiQuickCreateMultiItems:
+            .blockBulkItemsCreationActionPerformBulkCreateItems:
         return [];
-      case TipDocument.blockQuickItemCreationActionCallApiQuickCreateItem:
+      case TipDocument.blockQuickItemCreationActionPerformQuickCreateItem:
         return [];
-      case TipDocument.scalarCallApiQuery:
+      case TipDocument.scalarPerformQuery:
         return [];
-      case TipDocument.formModelCallApiCreateItem:
+      case TipDocument.formModelPerformCreateItem:
         return [];
-      case TipDocument.formModelCallApiUpdateItem:
+      case TipDocument.formModelPerformUpdateItem:
         return [];
       case TipDocument.formModelGetUpdatedValuesForSimpleProps:
         return [];
       case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
         return [];
-      case TipDocument.filterModelCallApiLoadMultiOptCriterionXData:
+      case TipDocument.filterModelPerformLoadMultiOptCriterionXData:
         return [];
-      case TipDocument.storageCallApi:
+      case TipDocument.storagePerformAction:
         return [];
       case TipDocument.backgroundActionRun:
         return [];
-      case TipDocument.loginActivityCallApiLogin:
+      case TipDocument.loginActivityPerformLogin:
         return [];
       case TipDocument.coordinatorCoordinationLogic:
         return [];

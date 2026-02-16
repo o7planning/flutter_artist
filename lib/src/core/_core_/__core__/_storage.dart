@@ -206,21 +206,21 @@ class _Storage extends _StorageCore {
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#35100",
-        shortDesc: "Calling ${debugObjHtml(action)}.callApi().",
+        shortDesc: "Calling ${debugObjHtml(action)}.performAction().",
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
-      result = await action.callApi();
+      result = await action.performAction();
       // Throw ApiError.
       result.throwIfError();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: null,
-        methodName: '${getClassName(action)}.callApi',
+        methodName: '${getClassName(action)}.performAction',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument: TipDocument.storageCallApi,
+        tipDocument: TipDocument.storagePerformAction,
       );
       //
       taskResult._setErrorInfo(
@@ -229,7 +229,7 @@ class _Storage extends _StorageCore {
       masterFlowItem._addLineFlowItem(
         codeId: "#35200",
         shortDesc:
-            "The ${debugObjHtml(action)}.callApi() method was called with an error!",
+            "The ${debugObjHtml(action)}.performAction() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;

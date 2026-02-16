@@ -16,7 +16,7 @@ abstract class StorageSilentAction extends Action {
 
   StorageSilentActionConfig initDefaultConfig();
 
-  Future<ApiResult<void>> callApi();
+  Future<ApiResult<void>> performAction();
 }
 
 class StorageSilentActionConfig {

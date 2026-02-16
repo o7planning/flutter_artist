@@ -3,16 +3,16 @@ part of '../core.dart';
 abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
   LoginActivity();
 
-  Future<ApiResult<USER>> callApiLogin();
+  Future<ApiResult<USER>> performLogin();
 
   Future<void> navigateToSuccessScreen();
 
   @override
-  Future<void> callApiLogic() async {
+  Future<void> performExecuteLogic() async {
     ApiResult<USER> result;
     final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "callApiLogic",
+      methodName: "performExecuteLogic",
       parameters: null,
       navigate: null,
       isLibMethod: true,
@@ -20,25 +20,25 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#20000",
-        shortDesc: "Calling ${debugObjHtml(this)}.callApiLogin()...",
+        shortDesc: "Calling ${debugObjHtml(this)}.performLogin()...",
         lineFlowType: LineFlowType.controllableCalling,
       );
-      result = await callApiLogin();
+      result = await performLogin();
       // Throw if Error.
       result.throwIfError();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: null,
-        methodName: "callApiLogin",
+        methodName: "performLogin",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument: TipDocument.loginActivityCallApiLogin,
+        tipDocument: TipDocument.loginActivityPerformLogin,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#20040",
         shortDesc:
-            "The ${debugObjHtml(this)}.callApiLogin() method was called with an error!",
+            "The ${debugObjHtml(this)}.performLogin() method was called with an error!",
         errorInfo: errorInfo,
       );
       return;
@@ -46,7 +46,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     final USER? loggedInUser = result.data;
     if (loggedInUser == null) {
       final message =
-          "No data from ${getClassNameWithoutGenerics(this)}.callApiLogin().";
+          "No data from ${getClassNameWithoutGenerics(this)}.performLogin().";
       //
       masterFlowItem._addLineFlowItem(
         codeId: "#20060",

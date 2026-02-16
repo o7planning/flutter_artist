@@ -33,7 +33,7 @@ class BlockDebugBox extends BaseDebugBox {
       alsoCheckChildren: true,
     );
     return [
-      if (options.showUIActive)
+      if (options.showUiActive)
         ActiveInfoWidget(
           activeElementType: ActiveElementType.block,
           activeUiComponentName: activeUIBlockRep,
@@ -44,7 +44,7 @@ class BlockDebugBox extends BaseDebugBox {
             //
           },
         ),
-      if (options.showUIActive)
+      if (options.showUiActive)
         ActiveInfoWidget(
           activeElementType: ActiveElementType.item,
           activeUiComponentName: activeUIItemRep,
@@ -90,17 +90,17 @@ class BlockDebugBox extends BaseDebugBox {
           labelStyle: labelStyle,
           textStyle: textStyle0,
         ),
-      if (options.showCallApiQueryCount)
+      if (options.showPerformQueryCount)
         IconLabelText(
           label: "Query Count: ",
-          text: block.callApiQueryCount.toString(),
+          text: block.performQueryCount.toString(),
           labelStyle: labelStyle,
           textStyle: textStyle,
         ),
-      if (options.showCallApiRefreshItemCount)
+      if (options.showPerformLoadItemCount)
         IconLabelText(
           label: "Item Refresh Count: ",
-          text: block.callApiLoadItemDetailByIdCount.toString(),
+          text: block.performLoadItemDetailByIdCount.toString(),
           labelStyle: labelStyle,
           textStyle: textStyle,
         ),

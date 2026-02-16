@@ -1,10 +1,10 @@
 class DebugBlockOptions {
   final bool showLastQueryType;
-  final bool showUIActive;
+  final bool showUiActive;
   final bool showBlockDataState;
   final bool showLastQueryResultState;
-  final bool showCallApiQueryCount;
-  final bool showCallApiRefreshItemCount;
+  final bool showPerformQueryCount;
+  final bool showPerformLoadItemCount;
   final bool showItemCount;
   final bool showCurrentItemChangeCount;
   final bool showFilterCriteriaChangeCount;
@@ -13,10 +13,10 @@ class DebugBlockOptions {
 
   const DebugBlockOptions({
     this.showLastQueryType = true,
-    this.showUIActive = true,
+    this.showUiActive = true,
     this.showBlockDataState = true,
-    this.showCallApiQueryCount = true,
-    this.showCallApiRefreshItemCount = true,
+    this.showPerformQueryCount = true,
+    this.showPerformLoadItemCount = true,
     this.showItemCount = true,
     this.showCurrentItemChangeCount = true,
     this.showFilterCriteriaChangeCount = true,
@@ -27,10 +27,10 @@ class DebugBlockOptions {
 
   const DebugBlockOptions.custom({
     this.showLastQueryType = false,
-    this.showUIActive = false,
+    this.showUiActive = false,
     this.showBlockDataState = false,
-    this.showCallApiQueryCount = false,
-    this.showCallApiRefreshItemCount = false,
+    this.showPerformQueryCount = false,
+    this.showPerformLoadItemCount = false,
     this.showItemCount = false,
     this.showCurrentItemChangeCount = false,
     this.showFilterCriteria = false,

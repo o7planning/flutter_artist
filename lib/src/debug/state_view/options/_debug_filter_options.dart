@@ -1,5 +1,5 @@
 class DebugFilterOptions {
-  final bool showFilterUIActive;
+  final bool showFilterUiActive;
   final bool showInitiatedAtLeastOnce;
   final bool showFilterDataState;
   final bool showFilterLoadCount;
@@ -7,7 +7,7 @@ class DebugFilterOptions {
   final bool showFilterCriteria;
 
   const DebugFilterOptions({
-    this.showFilterUIActive = true,
+    this.showFilterUiActive = true,
     this.showInitiatedAtLeastOnce = true,
     this.showFilterDataState = true,
     this.showFilterLoadCount = true,
@@ -16,7 +16,7 @@ class DebugFilterOptions {
   });
 
   const DebugFilterOptions.custom({
-    this.showFilterUIActive = false,
+    this.showFilterUiActive = false,
     this.showInitiatedAtLeastOnce = false,
     this.showFilterDataState = false,
     this.showFilterLoadCount = false,

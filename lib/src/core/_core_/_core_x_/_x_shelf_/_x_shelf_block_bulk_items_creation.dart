@@ -1,9 +1,9 @@
 part of '../../core.dart';
 
-class _XShelfBlockQuickMuliItemsCreation extends XShelf {
-  _XShelfBlockQuickMuliItemsCreation({required Block block})
+class _XShelfBlockBulkItemsCreationAction extends XShelf {
+  _XShelfBlockBulkItemsCreationAction({required Block block})
       : super(
-          xShelfType: XShelfType.blockQuickMultiItemsCreation,
+          xShelfType: XShelfType.blockBulkItemsCreation,
           shelf: block.shelf,
         ) {
     //

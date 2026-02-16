@@ -39,7 +39,7 @@ import '../../debug/utils/_debug.dart';
 import '../action/_background_action.dart';
 import '../action/_action.dart';
 import '../action/block_silent_action.dart';
-import '../action/block_quick_multi_items_creation_action.dart';
+import '../action/block_bulk_items_creation_action.dart';
 import '../action/block_quick_item_creation_action.dart';
 import '../action/block_quick_item_update_action.dart';
 import '../action/scalar_quick_extra_data_load_action.dart';
@@ -388,7 +388,7 @@ part '_core_x_/_x_shelf_/_x_shelf_prepare_form_to_create_item.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_clear_current_item.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_block_quick_multi_items_creation.dart';
+part '_core_x_/_x_shelf_/_x_shelf_block_bulk_items_creation.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_quick_item_update.dart';
 
@@ -506,7 +506,7 @@ part '_task_result_/_block_quick_item_creation_result.dart';
 
 part '_task_result_/_block_quick_item_update_result.dart';
 
-part '_task_result_/_block_quick_multi_items_creation_result.dart';
+part '_task_result_/_block_bulk_items_creation_result.dart';
 
 part '_task_result_/_form_model_data_load_result.dart';
 
@@ -548,7 +548,7 @@ part '_task_unit_/_block_silent_action_task_unit.dart';
 
 part '_task_unit_/_block_quick_item_creation_task_unit.dart';
 
-part '_task_unit_/_block_quick_multi_items_creation_task_unit.dart';
+part '_task_unit_/_block_bulk_items_creation_task_unit.dart';
 
 part '_task_unit_/_block_quick_item_update_task_unit.dart';
 
@@ -909,8 +909,8 @@ class _BlockQuickItemCreationActionAnnotation {
   const _BlockQuickItemCreationActionAnnotation();
 }
 
-class _BlockQuickCreateMultiItemsActionAnnotation {
-  const _BlockQuickCreateMultiItemsActionAnnotation();
+class _BlockBlockBulkItemsCreationActionAnnotation {
+  const _BlockBlockBulkItemsCreationActionAnnotation();
 }
 
 class _BlockQuickItemUpdateActionAnnotation {

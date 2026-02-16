@@ -1,10 +1,10 @@
 
 
-Block.callApiQuickCreateItem()
-Block.callApiQuickUpdateItem()
+Block.performQuickCreateItem()
+Block.performQuickUpdateItem()
 
-callApiQuickUpdateItem ==> Deprecated.
-callApiQuickCreateItem ==> Deprecated.
+performQuickUpdateItem ==> Deprecated.
+performQuickCreateItem ==> Deprecated.
 callApiQuickAction ==> Deprecated.
 
 

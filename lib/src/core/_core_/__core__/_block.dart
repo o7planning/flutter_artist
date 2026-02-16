@@ -52,7 +52,7 @@ part of '../core.dart';
 /// When the [Block.query] or [Scalar.query] method is called,
 /// this [FilterCriteria] is created automatically by the [FilterModel]
 /// via the [FilterModel.createNewFilterCriteria] method
-/// and passed to the [Block.callApiQuery] or [Scalar.callApiQuery] method.
+/// and passed to the [Block.performQuery] or [Scalar.performQuery] method.
 /// ```
 /// class EmployeeFilterCriteria extends FilterCriteria {
 ///    String? searchText,
@@ -300,13 +300,13 @@ abstract class Block<
     return ascendingAncestorBlocks.reversed.toList();
   }
 
-  int __callApiLoadItemDetailByIdCount = 0;
+  int __performLoadItemDetailByIdCount = 0;
 
-  int get callApiLoadItemDetailByIdCount => __callApiLoadItemDetailByIdCount;
+  int get performLoadItemDetailByIdCount => __performLoadItemDetailByIdCount;
 
-  int __callApiQueryCount = 0;
+  int __performQueryCount = 0;
 
-  int get callApiQueryCount => __callApiQueryCount;
+  int get performQueryCount => __performQueryCount;
 
   QueryType __lastQueryType = QueryType.realQuery;
 
@@ -808,7 +808,7 @@ abstract class Block<
     //
     thisXBlock._printParameters(hasBlockRepresentative: hasBlockRepresentative);
     //
-    final callApiQueryMethod = BlockErrorMethod.callApiQuery;
+    final performQueryMethod = BlockErrorMethod.performQuery;
     DataState newBlockDataState = dataState;
     PageData<ITEM>? queriedPageData;
     final ITEM? candidateCurrItem;
@@ -1040,7 +1040,7 @@ abstract class Block<
         //
         masterFlowItem._addLineFlowItem(
           codeId: "#03340",
-          shortDesc: "Calling ${debugObjHtml(this)}.callApiQuery()...",
+          shortDesc: "Calling ${debugObjHtml(this)}.performQuery()...",
           parameters: {
             "parentBlockCurrentItem": parent?.currentItem,
             "filterCriteria": xFilterCriteriaOfFilterModel.filterCriteria,
@@ -1049,8 +1049,8 @@ abstract class Block<
           },
           lineFlowType: LineFlowType.controllableCalling,
         );
-        __callApiQueryCount++;
-        final ApiResult<PageData<ITEM>?> result = await callApiQuery(
+        __performQueryCount++;
+        final ApiResult<PageData<ITEM>?> result = await performQuery(
           parentBlockCurrentItem: parent?.currentItem,
           filterCriteria: xFilterCriteriaOfFilterModel.filterCriteria,
           sortableCriteria: sortableCriteria,
@@ -1078,7 +1078,7 @@ abstract class Block<
         //
         final blockErrorInfo = BlockErrorInfo(
           blockDataState: dataState,
-          blockErrorMethod: callApiQueryMethod,
+          blockErrorMethod: performQueryMethod,
           error: e, // AppError, ApiError or others.
           errorStackTrace: stackTrace,
         );
@@ -1086,12 +1086,12 @@ abstract class Block<
         //
         final errorInfo = _handleError(
           shelf: shelf,
-          methodName: callApiQueryMethod.name,
+          methodName: performQueryMethod.name,
           // AppError, ApiError or others.
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
-          tipDocument: TipDocument.blockCallApiQuery,
+          tipDocument: TipDocument.blockPerformQuery,
         );
         thisXBlock.queryResult._setErrorInfo(
           errorInfo: errorInfo,
@@ -1100,7 +1100,7 @@ abstract class Block<
         masterFlowItem._addLineFlowItem(
           codeId: "#03400",
           shortDesc:
-              "The ${debugObjHtml(this)}.callApiQuery() method was called with an error!",
+              "The ${debugObjHtml(this)}.performQuery() method was called with an error!",
           errorInfo: errorInfo,
         );
       } finally {
@@ -1917,7 +1917,7 @@ abstract class Block<
       refreshedCurrentItemDetail = loadedCoupleItem?._itemDetail;
 
       if (refreshedCurrentItemDetail == null) {
-        methodName = "callApiLoadItemDetailById";
+        methodName = "performLoadItemDetailById";
         try {
           __refreshRefreshingCurrentItemState(
             isRefreshingCurrentItem: true,
@@ -1933,8 +1933,8 @@ abstract class Block<
             lineFlowType: LineFlowType.controllableCalling,
           );
           //
-          __callApiLoadItemDetailByIdCount++;
-          ApiResult<ITEM_DETAIL> result = await callApiLoadItemDetailById(
+          __performLoadItemDetailByIdCount++;
+          ApiResult<ITEM_DETAIL> result = await performLoadItemDetailById(
             itemId: itemId,
           );
           // Throw ApiError:
@@ -1955,7 +1955,7 @@ abstract class Block<
             error: e,
             stackTrace: stackTrace,
             showSnackBar: true,
-            tipDocument: TipDocument.blockCallApiLoadItemDetailById,
+            tipDocument: TipDocument.blockPerformLoadItemDetailById,
           );
           //
           blockCurrentItemSettingResult._setErrorInfo(
@@ -2322,7 +2322,7 @@ abstract class Block<
       lineFlowType: LineFlowType.info,
     );
     //
-    final String methodName = "callApiDeleteItemById";
+    final String methodName = "performDeleteItemById";
     ApiResult<void> result;
     try {
       final ID itemId = __getItemIdShowErr(item, showErr: true);
@@ -2338,7 +2338,7 @@ abstract class Block<
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
-      result = await callApiDeleteItemById(itemId: itemId);
+      result = await performDeleteItemById(itemId: itemId);
       // Throw ApiError:
       result.throwIfError();
       //
@@ -2362,7 +2362,7 @@ abstract class Block<
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument: TipDocument.blockCallApiDeleteItemById,
+        tipDocument: TipDocument.blockPerformDeleteItemById,
       );
       //
       deletionResult._setFailedItem(
@@ -2838,7 +2838,7 @@ abstract class Block<
     //
     bool currentItemDeleted = false;
     //
-    final String methodName = "callApiDeleteItemById";
+    final String methodName = "performDeleteItemById";
     //
     final String? itemRepComponent = ui.findActiveUiComponentItemRepresentative(
       alsoCheckChildren: true,
@@ -2876,7 +2876,7 @@ abstract class Block<
           lineFlowType: LineFlowType.controllableCalling,
         );
         //
-        result = await callApiDeleteItemById(itemId: deletingItemId);
+        result = await performDeleteItemById(itemId: deletingItemId);
         // Throw ApiError:
         result.throwIfError();
         //
@@ -2951,7 +2951,7 @@ abstract class Block<
           error: e,
           stackTrace: stackTrace,
           showSnackBar: false,
-          tipDocument: TipDocument.blockCallApiDeleteItemById,
+          tipDocument: TipDocument.blockPerformDeleteItemById,
         );
         //
         deletionResult._addFailedItem(
@@ -3102,7 +3102,7 @@ abstract class Block<
         shortDesc: "${debugObjHtml(formModel)} set formMode to creation.",
       );
       FORM_RELATED_DATA? formRelatedData =
-          await _initFormRelatedData(masterFlowItem);
+          await _performLoadFormRelatedData(masterFlowItem);
       if (formRelatedData == null) {
         return false;
       }
@@ -3180,7 +3180,7 @@ abstract class Block<
     FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
     ApiResult<ITEM_DETAIL> result;
-    final String methodName = "callApiQuickCreateItem";
+    final String methodName = "performQuickCreateItem";
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#09100",
@@ -3188,7 +3188,7 @@ abstract class Block<
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
-      result = await action.callApiQuickCreateItem(
+      result = await action.performQuickCreateItem(
         parentBlockItem: parent?.currentItem,
         filterCriteria: blockCurrentFilterCriteria,
       );
@@ -3201,7 +3201,7 @@ abstract class Block<
         stackTrace: stackTrace,
         showSnackBar: true,
         tipDocument:
-            TipDocument.blockQuickItemCreationActionCallApiQuickCreateItem,
+            TipDocument.blockQuickItemCreationActionPerformQuickCreateItem,
       );
       //
       taskResult._setErrorInfo(
@@ -3241,7 +3241,7 @@ abstract class Block<
         stackTrace: stackTrace,
         showSnackBar: true,
         tipDocument:
-            TipDocument.blockQuickItemCreationActionCallApiQuickCreateItem,
+            TipDocument.blockQuickItemCreationActionPerformQuickCreateItem,
       );
       //
       taskResult._setErrorInfo(
@@ -3261,12 +3261,12 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockQuickCreateMultiItemsActionAnnotation()
+  @_BlockBlockBulkItemsCreationActionAnnotation()
   Future<bool> _unitQuickCreateMultiItems({
     required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockQuickMultiItemsCreationAction<ID, ITEM, ITEM_DETAIL,
+    required BlockBulkItemsCreationAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
   }) async {
@@ -3284,8 +3284,7 @@ abstract class Block<
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#44100",
-        shortDesc:
-            "Calling ${debugObjHtml(action)}.callApiQuickCreateMultiItems().",
+        shortDesc: "Calling ${debugObjHtml(action)}.performBulkCreateItems().",
         parameters: {
           "parentBlockItem": parent?.currentItem,
           "filterCriteria": blockCurrentFilterCriteria,
@@ -3293,7 +3292,7 @@ abstract class Block<
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
-      result = await action.callApiQuickCreateMultiItems(
+      result = await action.performBulkCreateItems(
         parentBlockItem: parent?.currentItem,
         filterCriteria: blockCurrentFilterCriteria,
       );
@@ -3301,17 +3300,17 @@ abstract class Block<
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: '${getClassName(action)}.callApiQuickCreateMultiItems',
+        methodName: '${getClassName(action)}.performBulkCreateItems',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument: TipDocument
-            .blockQuickMultiItemsCreationActionCallApiQuickCreateMultiItems,
+        tipDocument:
+            TipDocument.blockBulkItemsCreationActionPerformBulkCreateItems,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#44200",
         shortDesc:
-            "The ${debugObjHtml(action)}.callApiQuickCreateMultiItems() method was called with an error!",
+            "The ${debugObjHtml(action)}.performBulkCreateItems() method was called with an error!",
         errorInfo: errorInfo,
       );
       //
@@ -3329,19 +3328,18 @@ abstract class Block<
         masterFlowItem: masterFlowItem,
         thisXBlock: thisXBlock,
         blockCurrentFilterCriteria: blockCurrentFilterCriteria,
-        calledMethodName:
-            "${getClassName(action)}.callApiQuickCreateMultiItems",
+        calledMethodName: "${getClassName(action)}.performBulkCreateItems",
         result: result,
       );
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: "${getClassName(action)}.callApiQuickCreateMultiItems",
+        methodName: "${getClassName(action)}.performBulkCreateItems",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument: TipDocument
-            .blockQuickMultiItemsCreationActionCallApiQuickCreateMultiItems,
+        tipDocument:
+            TipDocument.blockBulkItemsCreationActionPerformBulkCreateItems,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#44400",
@@ -3380,12 +3378,12 @@ abstract class Block<
     FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
     ApiResult<ITEM_DETAIL> result;
-    final String methodName = "callApiQuickUpdateItem";
+    final String methodName = "performQuickUpdateItem";
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#14020",
         shortDesc:
-            "Calling ${debugObjHtml(action)}.callApiQuickUpdateItem()...",
+            "Calling ${debugObjHtml(action)}.performQuickUpdateItem()...",
         parameters: {
           "parentBlockItem": parent?.currentItem,
           "filterCriteria": blockCurrentFilterCriteria,
@@ -3393,7 +3391,7 @@ abstract class Block<
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
-      result = await action.callApiQuickUpdateItem(
+      result = await action.performQuickUpdateItem(
         parentBlockItem: parent?.currentItem,
         filterCriteria: blockCurrentFilterCriteria,
       );
@@ -3407,7 +3405,7 @@ abstract class Block<
         stackTrace: stackTrace,
         showSnackBar: true,
         tipDocument:
-            TipDocument.blockQuickItemUpdateActionCallApiQuickUpdateItem,
+            TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem,
       );
       //
       taskResult._setErrorInfo(
@@ -3417,7 +3415,7 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#14060",
         shortDesc:
-            "The ${debugObjHtml(action)}.callApiQuickUpdateItem() method was called with an error.",
+            "The ${debugObjHtml(action)}.performQuickUpdateItem() method was called with an error.",
         errorInfo: errorInfo,
       );
       return;
@@ -3447,7 +3445,7 @@ abstract class Block<
         stackTrace: stackTrace,
         showSnackBar: true,
         tipDocument:
-            TipDocument.blockQuickItemUpdateActionCallApiQuickUpdateItem,
+            TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem,
       );
       //
       taskResult._setErrorInfo(
@@ -3489,21 +3487,21 @@ abstract class Block<
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#45100",
-        shortDesc: "Calling ${debugObjHtml(action)}.callApi().",
+        shortDesc: "Calling ${debugObjHtml(action)}.performAction().",
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
-      result = await action.callApi();
+      result = await action.performAction();
       // Throw ApiError.
       result.throwIfError();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: '${getClassName(action)}.callApi',
+        methodName: '${getClassName(action)}.performAction',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument: TipDocument.blockSilentActionCallApi,
+        tipDocument: TipDocument.blockSilentActionPerformAction,
       );
       //
       taskResult._setErrorInfo(
@@ -3512,7 +3510,7 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#45200",
         shortDesc:
-            "The ${debugObjHtml(action)}.callApi() method was called with an error!",
+            "The ${debugObjHtml(action)}.performAction() method was called with an error!",
         errorInfo: errorInfo,
       );
       return;
@@ -4709,7 +4707,7 @@ abstract class Block<
       if (showErr) {
         _handleError(
           shelf: shelf,
-          methodName: "callApiLoadItemDetailById",
+          methodName: "performLoadItemDetailById",
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
@@ -4732,7 +4730,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Future<ApiResult<void>> callApiDeleteItemById({
+  Future<ApiResult<void>> performDeleteItemById({
     required ID itemId,
   });
 
@@ -4740,7 +4738,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Future<ApiResult<ITEM_DETAIL>> callApiLoadItemDetailById({
+  Future<ApiResult<ITEM_DETAIL>> performLoadItemDetailById({
     required ID itemId,
   });
 
@@ -4757,7 +4755,8 @@ abstract class Block<
   /// This method is called before calling a Form to create.
   ///
   @_AbstractMethodAnnotation()
-  FORM_INPUT initInputForCreationForm({
+  // buildInputForCreationForm (OLD initInputForCreationForm)
+  FORM_INPUT buildInputForCreationForm({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
   });
@@ -4766,7 +4765,8 @@ abstract class Block<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Future<FORM_RELATED_DATA> initFormRelatedData({
+  // performLoadFormRelatedData (OLD initFormRelatedData)
+  Future<FORM_RELATED_DATA> performLoadFormRelatedData({
     required Object? parentBlockCurrentItem,
     required ITEM_DETAIL? currentItemDetail,
     required FILTER_CRITERIA filterCriteria,
@@ -4775,7 +4775,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  FORM_INPUT __initInputForCreationForm(MasterFlowItem masterFlowItem) {
+  FORM_INPUT __buildInputForCreationForm(MasterFlowItem masterFlowItem) {
     final Object? parentBlockCurrentItem = parent?.currentItem;
     final FILTER_CRITERIA? currentFilterCriteria = filterCriteria;
 
@@ -4786,20 +4786,20 @@ abstract class Block<
     }
     masterFlowItem._addLineFlowItem(
       codeId: "#05100",
-      shortDesc: "Calling ${debugObjHtml(this)}.initInputForCreationForm().",
+      shortDesc: "Calling ${debugObjHtml(this)}.buildInputForCreationForm().",
       parameters: {
         "parentBlockCurrentItem": parentBlockCurrentItem,
         "filterCriteria": currentFilterCriteria,
       },
       lineFlowType: LineFlowType.controllableCalling,
     );
-    return initInputForCreationForm(
+    return buildInputForCreationForm(
       parentBlockCurrentItem: parentBlockCurrentItem,
       filterCriteria: currentFilterCriteria,
     );
   }
 
-  Future<FORM_RELATED_DATA?> _initFormRelatedData(
+  Future<FORM_RELATED_DATA?> _performLoadFormRelatedData(
     MasterFlowItem masterFlowItem,
   ) async {
     try {
@@ -4813,7 +4813,7 @@ abstract class Block<
       }
       masterFlowItem._addLineFlowItem(
         codeId: "#05000",
-        shortDesc: "Calling ${debugObjHtml(this)}.initFormRelatedData()...",
+        shortDesc: "Calling ${debugObjHtml(this)}.performLoadFormRelatedData()...",
         parameters: {
           "parentBlockCurrentItem": parentBlockCurrentItem,
           "currentItemDetail": currentItemDetail,
@@ -4821,7 +4821,7 @@ abstract class Block<
         },
         lineFlowType: LineFlowType.controllableCalling,
       );
-      return await initFormRelatedData(
+      return await performLoadFormRelatedData(
         parentBlockCurrentItem: parentBlockCurrentItem,
         currentItemDetail: currentItemDetail,
         filterCriteria: currentFilterCriteria,
@@ -4829,7 +4829,7 @@ abstract class Block<
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: "initFormRelatedData",
+        methodName: "performLoadFormRelatedData",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -4838,7 +4838,7 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#05020",
         shortDesc:
-            "The ${debugObjHtml(this)}.initFormRelatedData() method was called with an error!",
+            "The ${debugObjHtml(this)}.performLoadFormRelatedData() method was called with an error!",
         errorInfo: errorInfo,
       );
       return null;
@@ -4897,7 +4897,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Future<ApiResult<PageData<ITEM>?>> callApiQuery({
+  Future<ApiResult<PageData<ITEM>?>> performQuery({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
     required SortableCriteria sortableCriteria,
@@ -5200,10 +5200,9 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_BlockQuickCreateMultiItemsActionAnnotation()
-  Future<BlockQuickMultiItemsCreationResult>
-      executeQuickMultiItemsCreationAction({
-    required BlockQuickMultiItemsCreationAction<
+  @_BlockBlockBulkItemsCreationActionAnnotation()
+  Future<BlockBulkItemsCreationResult> executeBulkItemsCreationAction({
+    required BlockBulkItemsCreationAction<
             ID, //
             ITEM,
             ITEM_DETAIL,
@@ -5212,7 +5211,7 @@ abstract class Block<
   }) async {
     final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "executeQuickMultiItemsCreationAction",
+      methodName: "executeBulkItemsCreationAction",
       parameters: {
         "action": action,
       },
@@ -5235,7 +5234,7 @@ abstract class Block<
     //
     // @Same-Code-Precheck-01
     //
-    Actionable<BlockMultiItemsCreationPrecheck> actionable =
+    Actionable<BlockBulkItemsCreationPrecheck> actionable =
         __canCreateMultiItems(
       checkBusy: checkBusyTrue,
       checkAllow: checkAllowTrue,
@@ -5254,7 +5253,7 @@ abstract class Block<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return BlockQuickMultiItemsCreationResult(
+      return BlockBulkItemsCreationResult(
         precheck: actionable.errCode,
         errorInfo: actionable.errorInfo,
       );
@@ -5271,21 +5270,21 @@ abstract class Block<
       );
     }
     if (!confirm) {
-      return BlockQuickMultiItemsCreationResult(
-        precheck: BlockMultiItemsCreationPrecheck.cancelled,
+      return BlockBulkItemsCreationResult(
+        precheck: BlockBulkItemsCreationPrecheck.cancelled,
       );
     }
     //
-    final XShelf xShelf = _XShelfBlockQuickMuliItemsCreation(block: this);
+    final XShelf xShelf = _XShelfBlockBulkItemsCreationAction(block: this);
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#74340",
-      shortDesc: "Creating <b>_BlockQuickMultiItemsCreationTaskUnit</b>.",
+      shortDesc: "Creating <b>_BlockBulkItemsCreationTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
     );
-    final _ResultedSTaskUnit taskUnit = _BlockQuickMultiItemsCreationTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockBulkItemsCreationTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -6278,27 +6277,27 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<BlockMultiItemsCreationPrecheck> __canCreateMultiItems({
+  Actionable<BlockBulkItemsCreationPrecheck> __canCreateMultiItems({
     required bool checkBusy,
     required bool checkAllow,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockMultiItemsCreationPrecheck>.no(
-        errCode: BlockMultiItemsCreationPrecheck.busy,
+      return Actionable<BlockBulkItemsCreationPrecheck>.no(
+        errCode: BlockBulkItemsCreationPrecheck.busy,
       );
     }
     switch (dataState) {
       case DataState.pending:
-        return Actionable<BlockMultiItemsCreationPrecheck>.no(
-          errCode: BlockMultiItemsCreationPrecheck.blockInPendingState,
+        return Actionable<BlockBulkItemsCreationPrecheck>.no(
+          errCode: BlockBulkItemsCreationPrecheck.blockInPendingState,
         );
       case DataState.error:
-        return Actionable<BlockMultiItemsCreationPrecheck>.no(
-          errCode: BlockMultiItemsCreationPrecheck.blockInErrorState,
+        return Actionable<BlockBulkItemsCreationPrecheck>.no(
+          errCode: BlockBulkItemsCreationPrecheck.blockInErrorState,
         );
       case DataState.none:
-        return Actionable<BlockMultiItemsCreationPrecheck>.no(
-          errCode: BlockMultiItemsCreationPrecheck.blockInNoneState,
+        return Actionable<BlockBulkItemsCreationPrecheck>.no(
+          errCode: BlockBulkItemsCreationPrecheck.blockInNoneState,
         );
       case DataState.ready:
         break;
@@ -6308,20 +6307,20 @@ abstract class Block<
       CheckAllowResult result = __isItemCreationAllowed();
       switch (result.result) {
         case CheckAllow.allow:
-          return Actionable<BlockMultiItemsCreationPrecheck>.yes();
+          return Actionable<BlockBulkItemsCreationPrecheck>.yes();
         case CheckAllow.notAllow:
-          return Actionable<BlockMultiItemsCreationPrecheck>.no(
-            errCode: BlockMultiItemsCreationPrecheck.notAllow,
+          return Actionable<BlockBulkItemsCreationPrecheck>.no(
+            errCode: BlockBulkItemsCreationPrecheck.notAllow,
           );
         case CheckAllow.error:
-          return Actionable<BlockMultiItemsCreationPrecheck>.no(
-            errCode: BlockMultiItemsCreationPrecheck.checkAllowMethodError,
+          return Actionable<BlockBulkItemsCreationPrecheck>.no(
+            errCode: BlockBulkItemsCreationPrecheck.checkAllowMethodError,
             errorInfo: result.errorInfo,
           );
       }
     }
     //
-    return Actionable<BlockMultiItemsCreationPrecheck>.yes();
+    return Actionable<BlockBulkItemsCreationPrecheck>.yes();
   }
 
   // ***************************************************************************

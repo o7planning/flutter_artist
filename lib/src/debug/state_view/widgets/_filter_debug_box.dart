@@ -22,7 +22,7 @@ class FilterDebugBox extends BaseDebugBox {
         structure.allMultiOptCriteria;
     //
     List<Widget> list1 = [
-      if (options.showFilterUIActive)
+      if (options.showFilterUiActive)
         IconLabelText(
           label: "Filter UI Active?: ",
           text: "${filterModel.ui.hasActiveUiComponent()}",

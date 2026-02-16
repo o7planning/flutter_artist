@@ -1,13 +1,13 @@
 
-Scalar.callApiQuery()
+Scalar.performQuery()
 
-Block.callApiQuery()
-Block.callApiQuerySingleItem()
+Block.performQuery()
+Block.performQuerySingleItem()
 
-Block.callApiCreateItem()
-Block.callApiUpdateItem()
-Block.callApiDeleteItemById()
+Block.performCreateItem()
+Block.performUpdateItem()
+Block.performDeleteItemById()
 
-Block.callApiLoadItemDetailById()
+Block.performLoadItemDetailById()
 
 Block.callApiFindItemById()

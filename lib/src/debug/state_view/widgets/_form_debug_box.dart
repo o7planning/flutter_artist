@@ -21,11 +21,11 @@ class FormDebugBox extends BaseDebugBox {
     List<MultiOptFormPropModel> optProps = structure.allMultiOptProps;
     //
     List<Widget> list1 = [
-      if (options.showFormUIActive)
+      if (options.showFormUiActive)
         IconLabelText(
           label: "Form UI Active?: ",
           text:
-              "${formModel.ui.hasActiveUiComponent()}/${formModel.loadTimeUIActive}*",
+              "${formModel.ui.hasActiveUiComponent()}/${formModel.loadTimeUiActive}*",
           labelStyle: labelStyle0,
           textStyle: textStyle0,
         ),

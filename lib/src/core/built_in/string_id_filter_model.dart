@@ -33,7 +33,7 @@ class StringIdFilterModel
   }
 
   @override
-  Future<XData?> callApiLoadMultiOptTildeCriterionXData({
+  Future<XData?> performLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,

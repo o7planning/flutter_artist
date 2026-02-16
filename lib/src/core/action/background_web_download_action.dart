@@ -15,11 +15,11 @@ abstract class BackgroundWebDownloadAction extends BackgroundAction {
     required super.actionInfo,
   });
 
-  Future<ApiResult<List<int>?>> callApiDownload();
+  Future<ApiResult<List<int>?>> performDownload();
 
   @override
   Future<ApiResult<void>> run() async {
-    ApiResult<List<int>?> result = await callApiDownload();
+    ApiResult<List<int>?> result = await performDownload();
     if (result.isError()) {
       return result;
     }

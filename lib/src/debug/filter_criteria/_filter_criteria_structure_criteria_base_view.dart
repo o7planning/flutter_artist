@@ -72,7 +72,8 @@ class FilterModelStructureCriteriaBaseViewState
     //
     List<MultiOptFilterCriterionDef> rootMultiOptCriterion =
         structure.criteriaStructure.multiOptCriterionDefs;
-    for (MultiOptFilterCriterionDef multiOptCriterion in rootMultiOptCriterion) {
+    for (MultiOptFilterCriterionDef multiOptCriterion
+        in rootMultiOptCriterion) {
       _addMultiOptCriterionCascade(filterModelNode, multiOptCriterion);
     }
     List<SimpleFilterCriterionDef> simpleCriteria =

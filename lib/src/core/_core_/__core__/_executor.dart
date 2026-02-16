@@ -235,7 +235,7 @@ class _Executor {
       );
     }
     // Block QuickCreateMultiItems:
-    else if (taskUnit is _BlockQuickMultiItemsCreationTaskUnit) {
+    else if (taskUnit is _BlockBulkItemsCreationTaskUnit) {
       await taskUnit.xBlock.block._unitQuickCreateMultiItems(
         masterFlowItem: masterFlowItem,
         taskType: taskUnit.taskType,

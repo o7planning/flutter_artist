@@ -22,7 +22,7 @@ class ScalarDebugBox extends BaseDebugBox {
     String? xActiveUI =
         scalar.ui.findActiveUiComponent(alsoCheckChildren: true);
     return [
-      if (options.showUIActive)
+      if (options.showUiActive)
         ActiveInfoWidget(
           activeElementType: ActiveElementType.scalar,
           activeUiComponentName: activeUI,
@@ -55,10 +55,10 @@ class ScalarDebugBox extends BaseDebugBox {
           labelStyle: labelStyle,
           textStyle: textStyle0,
         ),
-      if (options.showCallApiQueryCount)
+      if (options.showPerformQueryCount)
         IconLabelText(
           label: "Query Count: ",
-          text: scalar.callApiQueryCount.toString(),
+          text: scalar.performQueryCount.toString(),
           labelStyle: labelStyle,
           textStyle: textStyle,
         ),

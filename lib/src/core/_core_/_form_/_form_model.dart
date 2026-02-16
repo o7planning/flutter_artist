@@ -33,9 +33,9 @@ abstract class FormModel<
 
   bool _changeEventLocked = false;
 
-  bool _loadTimeUIActive = false;
+  bool _loadTimeUiActive = false;
 
-  bool get loadTimeUIActive => _loadTimeUIActive;
+  bool get loadTimeUiActive => _loadTimeUiActive;
 
   FormMode get formMode => _formPropsStructure.formMode;
 
@@ -168,7 +168,7 @@ abstract class FormModel<
   /// ```
   ///
   @_AbstractMethodAnnotation()
-  Future<XData?> callApiLoadMultiOptPropXData({
+  Future<XData?> performLoadMultiOptPropXData({
     required String multiOptPropName,
     required SelectionType selectionType,
     required Object? parentMultiOptPropValue,
@@ -323,7 +323,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Future<ApiResult<ITEM_DETAIL>> callApiCreateItem({
+  Future<ApiResult<ITEM_DETAIL>> performCreateItem({
     required Map<String, dynamic> formMapData,
   });
 
@@ -331,7 +331,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Future<ApiResult<ITEM_DETAIL>> callApiUpdateItem({
+  Future<ApiResult<ITEM_DETAIL>> performUpdateItem({
     required Map<String, dynamic> formMapData,
   });
 
@@ -468,11 +468,11 @@ abstract class FormModel<
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#37160",
-      shortDesc: "Calling ${debugObjHtml(block)}._initFormRelatedData().",
+      shortDesc: "Calling ${debugObjHtml(block)}._performLoadFormRelatedData().",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     FORM_RELATED_DATA? formRelatedData =
-        await block._initFormRelatedData(masterFlowItem);
+        await block._performLoadFormRelatedData(masterFlowItem);
     if (formRelatedData == null) {
       return false;
     }
@@ -575,8 +575,8 @@ abstract class FormModel<
         _formPropsStructure.currentFormData;
     //
     String calledMethodName = _formPropsStructure.isNew //
-        ? 'callApiCreateItem'
-        : 'callApiUpdateItem';
+        ? 'performCreateItem'
+        : 'performUpdateItem';
     //
     ApiResult<ITEM_DETAIL> result;
     bool saveError = false;
@@ -594,8 +594,8 @@ abstract class FormModel<
       );
       //
       result = isNew
-          ? await callApiCreateItem(formMapData: formMapData)
-          : await callApiUpdateItem(formMapData: formMapData);
+          ? await performCreateItem(formMapData: formMapData)
+          : await performUpdateItem(formMapData: formMapData);
     } catch (e, stackTrace) {
       saveError = true;
       //
@@ -606,8 +606,8 @@ abstract class FormModel<
           stackTrace: stackTrace,
           showSnackBar: true,
           tipDocument: isNew
-              ? TipDocument.formModelCallApiCreateItem
-              : TipDocument.formModelCallApiUpdateItem);
+              ? TipDocument.formModelPerformCreateItem
+              : TipDocument.formModelPerformUpdateItem);
       //
       taskResult._setErrorInfo(
         errorInfo: errorInfo,
@@ -968,7 +968,7 @@ abstract class FormModel<
         // In Condition: startCreatingOrEditing && itemDetail == null.
         // TODO: Handle Error:
         //
-        formInput ??= block.__initInputForCreationForm(masterFlowItem);
+        formInput ??= block.__buildInputForCreationForm(masterFlowItem);
         if (formInput != null) {
           try {
             masterFlowItem._addLineFlowItem(
@@ -1452,7 +1452,7 @@ abstract class FormModel<
         masterFlowItem._addLineFlowItem(
           codeId: "#17400",
           shortDesc:
-              "Calling ${debugObjHtml(this)}.callApiLoadMultiOptPropXData().",
+              "Calling ${debugObjHtml(this)}.performLoadMultiOptPropXData().",
           parameters: {
             "multiOptPropName": multiOptPropName,
             "parentMultiOptPropValue": parentMultiOptPropValue,
@@ -1464,7 +1464,7 @@ abstract class FormModel<
           lineFlowType: LineFlowType.controllableCalling,
         );
         // May throw AppError, ApiError or others.
-        tempMultiOptPropXData = await callApiLoadMultiOptPropXData(
+        tempMultiOptPropXData = await performLoadMultiOptPropXData(
           formInput: formInput,
           itemDetail: block.currentItemDetail,
           formRelatedData: formRelatedData,
@@ -1475,7 +1475,7 @@ abstract class FormModel<
       } catch (e, stackTrace) {
         throw FormMethodError(
           propName: multiOptPropName,
-          formErrorMethod: FormErrorMethod.callApiLoadMultiOptPropXData,
+          formErrorMethod: FormErrorMethod.performLoadMultiOptPropXData,
           error: e, // May be AppError, ApiError or others.
           stackTrace: stackTrace,
         );

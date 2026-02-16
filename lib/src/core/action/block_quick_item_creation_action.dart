@@ -13,7 +13,7 @@ abstract class BlockQuickItemCreationAction<
     required super.actionInfo,
   });
 
-  Future<ApiResult<ITEM_DETAIL>> callApiQuickCreateItem({
+  Future<ApiResult<ITEM_DETAIL>> performQuickCreateItem({
     required Object? parentBlockItem,
     required FILTER_CRITERIA filterCriteria,
   });

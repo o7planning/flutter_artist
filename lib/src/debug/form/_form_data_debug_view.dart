@@ -140,8 +140,8 @@ class _FormDataViewState extends State<FormDataView> {
         ),
         content: _buildTabContent(
           infoAsHtml: "The current values of the form (Will be passed to the "
-              "<b>${getClassName(widget.formModel)}.callApiCreateItem()</b> or "
-              "<b>${getClassName(widget.formModel)}.callApiUpdateItem()</b> method).",
+              "<b>${getClassName(widget.formModel)}.performCreateItem()</b> or "
+              "<b>${getClassName(widget.formModel)}.performUpdateItem()</b> method).",
           json: instantJson,
         ),
       ),

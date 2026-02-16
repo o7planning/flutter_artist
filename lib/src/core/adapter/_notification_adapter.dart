@@ -6,11 +6,11 @@ import '../notification/_notification_summary.dart';
 ///
 ///
 interface class INotificationAdapter {
-  Future<ApiResult<INotificationSummary>> callApiGetNotificationSummary() {
+  Future<ApiResult<INotificationSummary>> performLoadNotificationSummary() {
     throw UnimplementedError();
   }
 
-  Future<ApiResult<INotification>> callApiGetNotifications() {
+  Future<ApiResult<INotification>> performLoadNotifications() {
     throw UnimplementedError();
   }
 
