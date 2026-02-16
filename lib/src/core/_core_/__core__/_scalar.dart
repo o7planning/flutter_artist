@@ -181,7 +181,7 @@ abstract class Scalar<
   }
 
   ///
-  /// FilterModel Name registered in [Shelf.registerStructure()] method.
+  /// FilterModel Name registered in [Shelf.registerShelfStructure()] method.
   ///
   final String? registerFilterModelName;
 
@@ -212,7 +212,7 @@ abstract class Scalar<
       get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   ///
-  /// Returns a FilterModel declared in the [Shelf.registerStructure()] method.
+  /// Returns a FilterModel declared in the [Shelf.registerShelfStructure()] method.
   /// The return value may be null.
   ///
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>? get filterModel {

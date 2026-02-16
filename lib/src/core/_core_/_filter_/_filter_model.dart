@@ -61,6 +61,7 @@ abstract class FilterModel<
 
   DataState get dataState => _filterModelStructure._filterDataState;
 
+  // TODO: Test case.
   ErrorInfo? _errorInfo;
 
   GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
@@ -620,18 +621,45 @@ abstract class FilterModel<
         );
       }
     } catch (e, stackTrace) {
-      dynamic error = e;
+      final FilterErrorInfo filterErrorInfo;
+      final dataStateError = DataState.error;
       if (e is FilterCriterionTypeMismatchError) {
         // Bug: #Bug#001
-        error = e.toAppError(
-          filterModelName: getClassNameWithoutGenerics(this),
+        filterErrorInfo = FilterErrorInfo(
+          filterDataState: dataStateError,
+          filterErrorMethod: FilterErrorMethod.unknown,
+          activityType: activityType,
+          tildeCriterionName: null,
+          error: e.toAppError(
+            filterModelName: getClassNameWithoutGenerics(this),
+          ),
+          errorStackTrace: stackTrace,
+        );
+      } else if (e is FilterMethodError) {
+        // TODO-xxx
+        filterErrorInfo = FilterErrorInfo(
+          filterDataState: dataStateError,
+          filterErrorMethod: e.filterErrorMethod,
+          activityType: activityType,
+          tildeCriterionName: e.tildeCriterionName,
+          error: e.error,
+          errorStackTrace: e.errorStackTrace,
+        );
+      } else {
+        filterErrorInfo = FilterErrorInfo(
+          filterDataState: dataStateError,
+          filterErrorMethod: FilterErrorMethod.unknown,
+          activityType: activityType,
+          tildeCriterionName: null,
+          error: e,
+          errorStackTrace: stackTrace,
         );
       }
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: "callApiLoadMultiOptTildeCriterionXData",
-        error: error,
-        stackTrace: stackTrace,
+        methodName: filterErrorInfo.methodName,
+        error: filterErrorInfo.error,
+        stackTrace: filterErrorInfo.errorStackTrace,
         showSnackBar: true,
         tipDocument: TipDocument.filterModelCallApiLoadMultiOptCriterionXData,
       );
@@ -642,7 +670,8 @@ abstract class FilterModel<
         errorInfo: errorInfo,
       );
       //
-      _filterModelStructure._setFilterDataState(DataState.error);
+      _filterModelStructure._setFilterDataState(dataStateError);
+      __setErrorInfo(errorInfo);
       _xFilterCriteria = null;
       return _xFilterCriteria;
     }
@@ -1004,12 +1033,12 @@ abstract class FilterModel<
         );
       } catch (e, stackTrace) {
         // TODO: Test Case??
-        throw FilterTempError(
-          propName: multiOptTildeCriterionName,
+        throw FilterMethodError(
+          tildeCriterionName: multiOptTildeCriterionName,
           filterErrorMethod:
               FilterErrorMethod.callApiLoadMultiOptTildeCriterionXData,
           error: e, // May be AppError, ApiError or others.
-          stackTrace: stackTrace,
+          errorStackTrace: stackTrace,
         );
       }
     }

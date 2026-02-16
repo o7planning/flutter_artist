@@ -363,11 +363,11 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void showFormErrorViewerDialog(BuildContext context) {
+  Future<void> showFormErrorViewerDialog(BuildContext context) async {
     if (dataState != DataState.error) {
       return;
     }
-    FormErrorViewerDialog.open(
+    await FormErrorViewerDialog.open(
       context: context,
       formErrorInfo: formErrorInfo!,
       formInitialDataReady: formInitialDataReady,
@@ -1170,7 +1170,7 @@ abstract class FormModel<
       }
     } catch (e, stackTrace) {
       final FormErrorInfo formErrorInfo;
-      if (e is FormTempError) {
+      if (e is FormMethodError) {
         formErrorInfo = FormErrorInfo(
           activityType: activityType,
           propName: e.propName,
@@ -1473,7 +1473,7 @@ abstract class FormModel<
           selectionType: selectionType,
         );
       } catch (e, stackTrace) {
-        throw FormTempError(
+        throw FormMethodError(
           propName: multiOptPropName,
           formErrorMethod: FormErrorMethod.callApiLoadMultiOptPropXData,
           error: e, // May be AppError, ApiError or others.
@@ -1819,7 +1819,7 @@ abstract class FormModel<
         ),
       );
     } catch (e, stackTrace) {
-      throw FormTempError(
+      throw FormMethodError(
         propName: multiOptPropName,
         formErrorMethod: FormErrorMethod.specifyDefaultValueForMultiOptProp,
         error: e,
@@ -1897,7 +1897,7 @@ abstract class FormModel<
       }
       return valueWrap;
     } catch (e, stackTrace) {
-      throw FormTempError(
+      throw FormMethodError(
         propName: multiOptPropName,
         formErrorMethod: FormErrorMethod.extractMultiOptPropValueFromItemDetail,
         error: e,
@@ -1962,7 +1962,7 @@ abstract class FormModel<
         ),
       );
     } catch (e, stackTrace) {
-      throw FormTempError(
+      throw FormMethodError(
         propName: multiOptPropName,
         formErrorMethod: FormErrorMethod.extractUpdateValueForMultiOptProp,
         error: e,
