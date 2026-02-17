@@ -153,7 +153,7 @@ import '../precheck/block_query_precheck.dart';
 import '../precheck/block_silent_action_precheck.dart';
 import '../precheck/block_quick_item_creation_precheck.dart';
 import '../precheck/block_quick_item_update_precheck.dart';
-import '../precheck/enter_form_fields_precheck.dart';
+import '../precheck/patch_form_fields_precheck.dart';
 import '../precheck/form_model_data_load_precheck.dart';
 import '../precheck/scalar_query_precheck.dart';
 import '../precheck/scalar_quick_action_precheck.dart';
@@ -378,7 +378,7 @@ part '_core_x_/_x_shelf_/_x_query_/_x_shelf_filter_model_query.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_form_model_save.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_form_model_enter_fields.dart';
+part '_core_x_/_x_shelf_/_x_shelf_form_model_patch_form_fields.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_multi_items_deletion.dart';
 
@@ -482,7 +482,7 @@ part '_task_result_/__task_result.dart';
 
 part '_task_result_/_shelf_delayed_reaction_execution_result.dart';
 
-part '_task_result_/_form_model_enter_form_fields_result.dart';
+part '_task_result_/_form_model_patch_form_fields_result.dart';
 
 part '_task_result_/_background_action_result.dart';
 
@@ -556,7 +556,7 @@ part '_task_unit_/_block_set_item_as_current_task_unit.dart';
 
 part '_task_unit_/_filter_panel_change_task_unit.dart';
 
-part '_task_unit_/_form_model_auto_enter_form_fields_task_unit.dart';
+part '_task_unit_/_form_model_patch_form_fields_task_unit.dart';
 
 part '_task_unit_/_filter_model_load_data_task_unit.dart';
 
@@ -851,8 +851,8 @@ class _BlockRefreshCurrentItemAnnotation {
   const _BlockRefreshCurrentItemAnnotation();
 }
 
-class _FormModelEnterFormFieldsAnnotation {
-  const _FormModelEnterFormFieldsAnnotation();
+class _FormModelPatchFormFieldsAnnotation {
+  const _FormModelPatchFormFieldsAnnotation();
 }
 
 class _FormModelSaveFormAnnotation {

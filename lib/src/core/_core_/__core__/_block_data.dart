@@ -67,7 +67,7 @@ class _BlockData<
   // ***************************************************************************
 
   List<ITEM> getCheckedItems({
-    required CurrentItemChkInclusion currentItemInclusion,
+    required CurrentItemInclusion currentItemInclusion,
   }) {
     ITEM? currItem = __current._item;
     bool contains = isCurrentItemChecked;
@@ -77,13 +77,13 @@ class _BlockData<
       List<ITEM> chkItems =
           _checkedItems.where((it) => it != currItem).toList();
       switch (currentItemInclusion) {
-        case CurrentItemChkInclusion.withoutCurrentItem:
+        case CurrentItemInclusion.exclude: // withoutCurrentItem
           break;
-        case CurrentItemChkInclusion.withCurrentIfChecked:
+        case CurrentItemInclusion.ifMatch: // withCurrentIfChecked
           if (contains) {
             chkItems.add(currItem);
           }
-        case CurrentItemChkInclusion.withCurrentItem:
+        case CurrentItemInclusion.include: // withCurrentItem
           chkItems.add(currItem);
       }
       return chkItems;
@@ -96,7 +96,7 @@ class _BlockData<
   // ***************************************************************************
 
   List<ITEM> getSelectedItems({
-    required CurrentItemSelInclusion currentItemInclusion,
+    required CurrentItemInclusion currentItemInclusion,
   }) {
     ITEM? currItem = __current._item;
     bool contains = isCurrentItemSelected;
@@ -105,13 +105,13 @@ class _BlockData<
       List<ITEM> selItems =
           _selectedItems.where((it) => it != currItem).toList();
       switch (currentItemInclusion) {
-        case CurrentItemSelInclusion.withoutCurrentItem:
+        case CurrentItemInclusion.exclude: // withoutCurrentItem
           break;
-        case CurrentItemSelInclusion.withCurrentIfSelected:
+        case CurrentItemInclusion.ifMatch: // withCurrentIfSelected
           if (contains) {
             selItems.add(currItem);
           }
-        case CurrentItemSelInclusion.withCurrentItem:
+        case CurrentItemInclusion.include: // withCurrentItem
           selItems.add(currItem);
       }
       return selItems;

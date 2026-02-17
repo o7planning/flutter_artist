@@ -1284,7 +1284,7 @@ abstract class Block<
     }
     //
     final bool currentItemInList =
-        currItem != null && containsItem(item: currItem);
+        currItem != null && containsItem(currItem);
     candidateCurrItem = currentItemInList ? currItem : null;
     //
     masterFlowItem._addLineFlowItem(
@@ -1570,7 +1570,7 @@ abstract class Block<
     ITEM? candidateCurrItem = inputCandidateCurrItem;
     //
     if (candidateCurrItem != null) {
-      if (!containsItem(item: candidateCurrItem)) {
+      if (!containsItem(candidateCurrItem)) {
         masterFlowItem._addLineFlowItem(
           codeId: "#28120",
           shortDesc:
@@ -1583,7 +1583,7 @@ abstract class Block<
     final ITEM? currItemOrigin = currentItem;
     final ITEM? currItem;
     if (currItemOrigin != null) {
-      if (containsItem(item: currItemOrigin)) {
+      if (containsItem(currItemOrigin)) {
         currItem = currItemOrigin;
       } else {
         currItem = null;
@@ -1860,9 +1860,7 @@ abstract class Block<
       lineFlowType: LineFlowType.debug,
     );
     //
-    final bool isCandidateIsCurrent = isCurrentItem(
-      item: candidateCurrItem,
-    );
+    final bool isCandidateIsCurrent = isCurrentItem(candidateCurrItem);
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#28720",
@@ -2312,7 +2310,7 @@ abstract class Block<
     //
     deletionResult._setCandidateItem(candidateItem: item);
     //
-    final bool isCurrent = isCurrentItem(item: item);
+    final bool isCurrent = isCurrentItem(item);
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#08060",
@@ -2777,7 +2775,7 @@ abstract class Block<
         //
         bool isCurrInternalEV = currItemInternalEVT == null
             ? false // Will be decided laster.
-            : isCurrentItem(item: currItemInternalEVT);
+            : isCurrentItem(currItemInternalEVT);
         final bool forceReloadItem = isCurrInternalEV;
         masterFlowItem._addLineFlowItem(
           codeId: "#70880",
@@ -3747,7 +3745,7 @@ abstract class Block<
         //
         // removeItem != null
         //
-        bool isCurrent = isCurrentItem(item: removeItem);
+        bool isCurrent = isCurrentItem(removeItem);
         if (!isCurrent) {
           masterFlowItem._addLineFlowItem(
             codeId: "#16560",
@@ -4813,7 +4811,8 @@ abstract class Block<
       }
       masterFlowItem._addLineFlowItem(
         codeId: "#05000",
-        shortDesc: "Calling ${debugObjHtml(this)}.performLoadFormRelatedData()...",
+        shortDesc:
+            "Calling ${debugObjHtml(this)}.performLoadFormRelatedData()...",
         parameters: {
           "parentBlockCurrentItem": parentBlockCurrentItem,
           "currentItemDetail": currentItemDetail,
@@ -5596,7 +5595,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockDeleteSelectedItemsAnnotation()
   Future<BlockItemsDeletionResult<ITEM>> deleteSelectedItems({
-    required CurrentItemSelInclusion currentItemInclusion,
+    required CurrentItemInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
     final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5632,7 +5631,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockDeleteCheckedItemsAnnotation()
   Future<BlockItemsDeletionResult> deleteCheckedItems({
-    required CurrentItemChkInclusion currentItemInclusion,
+    required CurrentItemInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
     final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5939,8 +5938,6 @@ abstract class Block<
   ///
   /// Allows edit an Item or not according to the application logic.
   ///
-  // TODO: Rename to isAllowToEditItem()
-  // --> isCreationAllowed
   bool isItemUpdateAllowed({required ITEM item}) {
     return true;
   }
@@ -7216,9 +7213,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isCurrentItem({
-    required ITEM item,
-  }) {
+  bool isCurrentItem(ITEM item) {
     final ID? currItemId = currentItemId;
     return _getItemIdInternal(item) == currItemId;
   }
@@ -7226,29 +7221,29 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isCurrentIndex({required int index}) {
+  bool isCurrentIndex(int index) {
     ITEM? item = findItemByIndex(index);
     if (item == null) {
       return false;
     }
-    return isCurrentItem(item: item);
+    return isCurrentItem(item);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isSelectedIndex({required int index}) {
+  bool isSelectedIndex(int index) {
     ITEM? item = findItemByIndex(index);
     if (item == null) {
       return false;
     }
-    return isSelectedItem(item: item);
+    return isSelectedItem(item);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isSelectedItem({required ITEM item}) {
+  bool isSelectedItem(ITEM item) {
     return ItemsUtils.isListContainItem(
       targetList: __blockData._selectedItems,
       item: item,
@@ -7259,10 +7254,10 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isCurrentAndSelectedItem({required ITEM item}) {
-    bool c = isCurrentItem(item: item);
+  bool isCurrentAndSelectedItem(ITEM item) {
+    bool c = isCurrentItem(item);
     if (c) {
-      return isSelectedItem(item: item);
+      return isSelectedItem(item);
     }
     return false;
   }
@@ -7270,10 +7265,10 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isCurrentAndCheckedItem({required ITEM item}) {
-    bool c = isCurrentItem(item: item);
+  bool isCurrentAndCheckedItem(ITEM item) {
+    bool c = isCurrentItem(item);
     if (c) {
-      return isCheckedItem(item: item);
+      return isCheckedItem(item);
     }
     return false;
   }
@@ -7281,29 +7276,29 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isCurrentItemSelected() {
+  bool get isCurrentItemSelected {
     ITEM? c = currentItem;
     if (c == null) {
       return false;
     }
-    return isSelectedItem(item: c);
+    return isSelectedItem(c);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isCurrentItemChecked() {
+  bool get isCurrentItemChecked {
     ITEM? c = currentItem;
     if (c == null) {
       return false;
     }
-    return isCheckedItem(item: c);
+    return isCheckedItem(c);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void __setSelectedItem({required ITEM item, required bool selected}) {
+  void __setSelectedItem(ITEM item, {required bool selected}) {
     if (selected) {
       ItemsUtils.insertOrReplaceItemInList(
         item: item,
@@ -7322,24 +7317,24 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __toggleSelectItem({required ITEM item}) {
-    bool selected = isSelectedItem(item: item);
-    __setSelectedItem(item: item, selected: !selected);
+  void __toggleSelectItem(ITEM item) {
+    bool selected = isSelectedItem(item);
+    __setSelectedItem(item, selected: !selected);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void setSelectedItem({required ITEM item, required bool selected}) {
-    __setSelectedItem(item: item, selected: selected);
+  void setSelectedItem(ITEM item, {required bool selected}) {
+    __setSelectedItem(item, selected: selected);
     __updateUiComponentAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void toggleSelectItem({required ITEM item}) {
-    __toggleSelectItem(item: item);
+  void toggleSelectItem(ITEM item) {
+    __toggleSelectItem(item);
     __updateUiComponentAfterCheckedOrSelected();
   }
 
@@ -7402,7 +7397,7 @@ abstract class Block<
   ///
   /// Check if the first item is current item.
   ///
-  bool get isFirstItemCurrent {
+  bool get isCurrentItemAtStart {
     ITEM? first = firstItem;
     ITEM? current = currentItem;
     if (first == null || current == null) {
@@ -7417,7 +7412,7 @@ abstract class Block<
   ///
   /// Check if the last item is current item.
   ///
-  bool get isLastItemCurrent {
+  bool get isCurrentItemAtEnd {
     ITEM? last = lastItem;
     ITEM? current = currentItem;
     if (last == null || current == null) {
@@ -7517,7 +7512,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool containsItem({required ITEM item}) {
+  bool containsItem(ITEM item) {
     return ItemsUtils.isListContainItem(
       targetList: __blockData._items,
       item: item,
@@ -7525,7 +7520,7 @@ abstract class Block<
     );
   }
 
-  bool isCheckedItem({required ITEM item}) {
+  bool isCheckedItem(ITEM item) {
     return ItemsUtils.isListContainItem(
       targetList: __blockData._checkedItems,
       item: item,
@@ -7536,18 +7531,18 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isCheckedIndex({required int index}) {
+  bool isCheckedIndex(int index) {
     ITEM? item = findItemByIndex(index);
     if (item == null) {
       return false;
     }
-    return isCheckedItem(item: item);
+    return isCheckedItem(item);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void __setCheckedItem({required ITEM item, required bool checked}) {
+  void __setCheckedItem(ITEM item, {required bool checked}) {
     if (checked) {
       ItemsUtils.insertOrReplaceItemInList(
         item: item,
@@ -7563,25 +7558,25 @@ abstract class Block<
     }
   }
 
-  void __toggleCheckItem({required ITEM item}) {
-    bool checked = isCheckedItem(item: item);
-    __setCheckedItem(item: item, checked: !checked);
+  void __toggleCheckItem(ITEM item) {
+    bool checked = isCheckedItem(item);
+    __setCheckedItem(item, checked: !checked);
   }
 
-  void toggleCheckItem({required ITEM item}) {
-    __toggleCheckItem(item: item);
+  void toggleCheckItem(ITEM item) {
+    __toggleCheckItem(item);
     __updateUiComponentAfterCheckedOrSelected();
   }
 
-  void setCheckedItem({required ITEM item, required bool checked}) {
-    __setCheckedItem(item: item, checked: checked);
+  void setCheckedItem(ITEM item, {required bool checked}) {
+    __setCheckedItem(item, checked: checked);
     __updateUiComponentAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void __setCheckedItems({required List<ITEM> items}) {
+  void __setCheckedItems(List<ITEM> items) {
     ItemsUtils.insertOrReplaceItemsInList(
       items: items,
       targetList: __blockData._checkedItems,
@@ -7589,20 +7584,20 @@ abstract class Block<
     );
   }
 
-  void setCheckedItems({required List<ITEM> items}) {
-    __setCheckedItems(items: items);
+  void setCheckedItems(List<ITEM> items) {
+    __setCheckedItems(items);
     __updateUiComponentAfterCheckedOrSelected();
   }
 
   void checkAllItems() {
-    __setCheckedItems(items: __blockData._items);
+    __setCheckedItems(__blockData._items);
     __updateUiComponentAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void setSelectedItems({required List<ITEM> items}) {
+  void setSelectedItems(List<ITEM> items) {
     __setSelectedItems(items: items);
     __updateUiComponentAfterCheckedOrSelected();
   }

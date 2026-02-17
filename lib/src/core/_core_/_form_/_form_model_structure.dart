@@ -442,7 +442,7 @@ class FormModelStructure {
               prop._tempCurrentValue = formKeyInstantValues[prop.propName];
             }
           }
-        case FormActivityType.autoEnterFormFields:
+        case FormActivityType.patchFormFields:
           prop._tempCurrentValue = prop._currentValue;
           prop._tempCurrentXData = prop._currentXData;
           prop._tempInitialValue = prop._initialValue;

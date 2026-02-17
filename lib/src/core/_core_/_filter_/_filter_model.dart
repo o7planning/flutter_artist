@@ -93,21 +93,37 @@ abstract class FilterModel<
 
   ///
   /// ```dart
+  /// @override
   /// FilterModelStructure registerFilterModelStructure() {
   ///   return FilterModelStructure(
-  ///     simpleCriteria: [],
-  ///     multiOptCriteria: [
-  ///       // Multi Options Single Selection Criterion:
-  ///       MultiOptSsCriterion(
-  ///         tildeCriterionName: "company",
-  ///         children: [
-  ///           // Multi Options Multi Selections Criterion:
-  ///           MultiOptMsCriterion(
-  ///              tildeCriterionName: "department",
-  ///           ),
-  ///         ],
-  ///       ),
-  ///     ],
+  ///     criteriaStructure: FilterCriteriaStructure(
+  ///       simpleCriterionDefs: [
+  ///         SimpleFilterCriterionDef<String>(criterionBaseName: "searchText"),
+  ///       ],
+  ///       multiOptCriterionDefs: [
+  ///         // Multi Options Single Selection Criterion.
+  ///         MultiOptFilterCriterionDef<AlbumInfo>.singleSelection(
+  ///           criterionBaseName: "album",
+  ///           fieldName: 'albumId',
+  ///           toFieldValue: (AlbumInfo? rawValue) {
+  ///             return SimpleVal.ofInt(rawValue?.id);
+  ///           },
+  ///         ),
+  ///       ],
+  ///     ),
+  ///     conditionStructure: FilterConditionStructure(
+  ///       connector: FilterConnector.and,
+  ///       conditionDefs: [
+  ///         FilterConditionDef.simple(
+  ///           tildeCriterionName: "searchText~",
+  ///           operator: FilterOperator.containsIgnoreCase,
+  ///         ),
+  ///         FilterConditionDef.simple(
+  ///           tildeCriterionName: "album~",
+  ///           operator: FilterOperator.equalTo,
+  ///         ),
+  ///       ],
+  ///     ),
   ///   );
   /// }
   /// ```

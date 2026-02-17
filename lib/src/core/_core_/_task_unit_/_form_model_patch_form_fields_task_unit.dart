@@ -1,16 +1,16 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-@_FormModelEnterFormFieldsAnnotation()
-class _FormModelAutoEnterFormFieldsTaskUnit<FORM_INPUT extends FormInput>
+@_FormModelPatchFormFieldsAnnotation()
+class _FormModelPatchFormFieldsTaskUnit<FORM_INPUT extends FormInput>
     extends _ResultedSTaskUnit {
   XFormModel xFormModel;
   FORM_INPUT formInput;
 
-  _FormModelAutoEnterFormFieldsTaskUnit({
+  _FormModelPatchFormFieldsTaskUnit({
     required this.xFormModel,
     required this.formInput,
-  }) : super(taskType: TaskType.formModelEnterFormFields);
+  }) : super(taskType: TaskType.formModelPatchFormFields);
 
   @override
   XShelf get xShelf => xFormModel.xShelf;

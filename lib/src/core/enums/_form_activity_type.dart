@@ -1,5 +1,5 @@
 enum FormActivityType {
   startCreatingOrEditing,
   updateFromFormView,
-  autoEnterFormFields;
+  patchFormFields;
 }

@@ -39,8 +39,7 @@ enum TipDocument {
   blockSilentActionPerformAction(enabled: false),
   //
   blockQuickItemUpdateActionPerformQuickUpdateItem(enabled: false),
-  blockBulkItemsCreationActionPerformBulkCreateItems(
-      enabled: false),
+  blockBulkItemsCreationActionPerformBulkCreateItems(enabled: false),
   blockQuickItemCreationActionPerformQuickCreateItem(enabled: false),
   //
   scalarPerformQuery(enabled: false),
@@ -145,8 +144,7 @@ enum TipDocument {
         return "BlockSilentAction.performAction()";
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
         return "BlockQuickItemUpdateAction.performQuickUpdateItem()";
-      case TipDocument
-            .blockBulkItemsCreationActionPerformBulkCreateItems:
+      case TipDocument.blockBulkItemsCreationActionPerformBulkCreateItems:
         return "BlockBulkItemsCreationAction.performBulkCreateItems()";
       case TipDocument.blockQuickItemCreationActionPerformQuickCreateItem:
         return "BlockQuickItemCreationAction.performQuickCreateItem()";
@@ -249,8 +247,7 @@ enum TipDocument {
         return "BlockSilentAction.performAction()";
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
         return "BlockQuickItemUpdateAction.performQuickUpdateItem()";
-      case TipDocument
-            .blockBulkItemsCreationActionPerformBulkCreateItems:
+      case TipDocument.blockBulkItemsCreationActionPerformBulkCreateItems:
         return "BlockBulkItemsCreationAction.performBulkCreateItems()";
       case TipDocument.blockQuickItemCreationActionPerformQuickCreateItem:
         return "BlockQuickItemCreationAction.performQuickCreateItem()";
@@ -443,8 +440,7 @@ enum TipDocument {
         return [];
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
         return [];
-      case TipDocument
-            .blockBulkItemsCreationActionPerformBulkCreateItems:
+      case TipDocument.blockBulkItemsCreationActionPerformBulkCreateItems:
         return [];
       case TipDocument.blockQuickItemCreationActionPerformQuickCreateItem:
         return [];
