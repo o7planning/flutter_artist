@@ -10,7 +10,7 @@ abstract class ScalarQuickExtraDataLoadAction<DATA extends Object>
     required super.actionInfo,
   });
 
-  Future<ApiResult<DATA>?> callApiLoadExtraData();
+  Future<ApiResult<DATA>?> performLoadExtraData();
 
   Future<void> doWithExtraData(
     BuildContext context, {

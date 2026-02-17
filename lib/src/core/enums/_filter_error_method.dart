@@ -11,7 +11,7 @@ enum FilterErrorMethod {
   // OLD: getMultiOptCriterionValueFromFilterInput
   extractUpdateValueForMultiOptTildeCriterion,
   createNewFilterCriteria,
-  callApiLoadMultiOptTildeCriterionXData,
+  performLoadMultiOptTildeCriterionXData,
   //
   unknown;
 }

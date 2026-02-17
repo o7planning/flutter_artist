@@ -40,9 +40,9 @@ abstract class Scalar<
 
   int get lazyLoadCount => _lazyLoadCount;
 
-  int __callApiQueryCount = 0;
+  int __performQueryCount = 0;
 
-  int get callApiQueryCount => __callApiQueryCount;
+  int get performQueryCount => __performQueryCount;
 
   int get filterCriteriaChangeCount => __scalarData._filterCriteriaChangeCount;
 
@@ -464,7 +464,7 @@ abstract class Scalar<
       newXFilterCriteria: xFilterCriteriaOfFilterModel,
     );
     //
-    final callApiQueryMethod = ScalarErrorMethod.callApiQuery;
+    final performQueryMethod = ScalarErrorMethod.performQuery;
     bool isQueryError = false;
     final String? oldValueId = __scalarData.current._id;
     String? valueId;
@@ -473,17 +473,17 @@ abstract class Scalar<
       __clearScalarError();
       __refreshQueryingState(isQuerying: true);
       //
-      __callApiQueryCount++;
+      __performQueryCount++;
       masterFlowItem._addLineFlowItem(
         codeId: "#12400",
-        shortDesc: "Calling ${debugObjHtml(this)}.callApiQuery()...",
+        shortDesc: "Calling ${debugObjHtml(this)}.performQuery()...",
         parameters: {
           "parentScalarValue": parent?.value,
           "filterCriteria": xFilterCriteriaOfFilterModel.filterCriteria,
         },
         lineFlowType: LineFlowType.controllableCalling,
       );
-      ApiResult<VALUE> result = await callApiQuery(
+      ApiResult<VALUE> result = await performQuery(
         parentScalarValue: parent?.value,
         filterCriteria: xFilterCriteriaOfFilterModel.filterCriteria,
       );
@@ -506,7 +506,7 @@ abstract class Scalar<
       //
       final scalarErrorInfo = ScalarErrorInfo(
         scalarDataState: DataState.error,
-        scalarErrorMethod: callApiQueryMethod,
+        scalarErrorMethod: performQueryMethod,
         error: e, // AppError, ApiError or others.
         errorStackTrace: stackTrace,
       );
@@ -514,12 +514,12 @@ abstract class Scalar<
       //
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: callApiQueryMethod.name,
+        methodName: performQueryMethod.name,
         // AppError, ApiError or others.
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument: TipDocument.scalarCallApiQuery,
+        tipDocument: TipDocument.scalarPerformQuery,
       );
       //
       thisXScalar.queryResult._setErrorInfo(
@@ -529,7 +529,7 @@ abstract class Scalar<
       masterFlowItem._addLineFlowItem(
         codeId: "#12440",
         shortDesc:
-            "The ${debugObjHtml(this)}.callApiQuery() was called with an error!",
+            "The ${debugObjHtml(this)}.performQuery() was called with an error!",
         errorInfo: errorInfo,
       );
       isQueryError = true;
@@ -689,15 +689,15 @@ abstract class Scalar<
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#40100",
-        shortDesc: "Calling ${debugObjHtml(action)}.callApiLoadExtraData().",
+        shortDesc: "Calling ${debugObjHtml(action)}.performLoadExtraData().",
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
-      result = await action.callApiLoadExtraData();
+      result = await action.performLoadExtraData();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: '${getClassName(action)}.callApiLoadExtraData',
+        methodName: '${getClassName(action)}.performLoadExtraData',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -706,7 +706,7 @@ abstract class Scalar<
       masterFlowItem._addLineFlowItem(
         codeId: "#40200",
         shortDesc:
-            "The ${debugObjHtml(action)}.callApiLoadExtraData() method was called with an error!",
+            "The ${debugObjHtml(action)}.performLoadExtraData() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -718,7 +718,7 @@ abstract class Scalar<
       //
       final ErrorInfo errorInfo = _handleRestError(
         shelf: shelf,
-        methodName: "${getClassName(action)}.callApiLoadExtraData",
+        methodName: "${getClassName(action)}.performLoadExtraData",
         message: result.error!.errorMessage,
         errorDetails: result.error!.errorDetails,
         showSnackBar: true,
@@ -727,7 +727,7 @@ abstract class Scalar<
       masterFlowItem._addLineFlowItem(
         codeId: "#40300",
         shortDesc:
-            "The ${debugObjHtml(action)}.callApiLoadExtraData() method was called with an error!",
+            "The ${debugObjHtml(action)}.performLoadExtraData() method was called with an error!",
         errorInfo: errorInfo,
       );
     }
@@ -944,7 +944,7 @@ abstract class Scalar<
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  Future<ApiResult<VALUE>> callApiQuery({
+  Future<ApiResult<VALUE>> performQuery({
     required Object? parentScalarValue,
     required FILTER_CRITERIA filterCriteria,
   });

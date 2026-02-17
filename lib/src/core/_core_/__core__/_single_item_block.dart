@@ -46,13 +46,13 @@ abstract class SingleItemBlock<
 
   @override
   @nonVirtual
-  Future<ApiResult<PageData<ITEM_DETAIL>?>> callApiQuery({
+  Future<ApiResult<PageData<ITEM_DETAIL>?>> performQuery({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
     required SortableCriteria? sortableCriteria,
     required Pageable? pageable,
   }) async {
-    ApiResult<ITEM_DETAIL>? result = await callApiQuerySingleItem(
+    ApiResult<ITEM_DETAIL>? result = await performQuerySingleItem(
       parentBlockCurrentItem: parentBlockCurrentItem,
       filterCriteria: filterCriteria,
     );
@@ -63,7 +63,7 @@ abstract class SingleItemBlock<
   /// The query return zero or single Item. For Example:
   ///
   /// ```dart
-  /// Future<ApiResult<DepartmentData>> callApiQuerySingleItem({
+  /// Future<ApiResult<DepartmentData>> performQuerySingleItem({
   ///     required DepartmentIdCriteria filterCriteria,
   /// }) {
   ///    if(filterCriteria.id == null) {
@@ -73,7 +73,7 @@ abstract class SingleItemBlock<
   /// }
   /// ```
   ///
-  Future<ApiResult<ITEM_DETAIL>> callApiQuerySingleItem({
+  Future<ApiResult<ITEM_DETAIL>> performQuerySingleItem({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
   });

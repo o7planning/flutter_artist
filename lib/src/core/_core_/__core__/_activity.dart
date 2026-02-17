@@ -19,7 +19,7 @@ abstract class Activity extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> callApiLogic();
+  Future<void> performExecuteLogic();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -65,14 +65,14 @@ abstract class Activity extends _Core {
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#19100",
-        shortDesc: "Calling ${debugObjHtml(this)}.callApiLogic()...",
+        shortDesc: "Calling ${debugObjHtml(this)}.performExecuteLogic()...",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
-      await callApiLogic();
+      await performExecuteLogic();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: null,
-        methodName: "callApiLogic",
+        methodName: "performExecuteLogic",
         // AppError, ApiError or others.
         error: e,
         stackTrace: stackTrace,
@@ -82,7 +82,7 @@ abstract class Activity extends _Core {
       masterFlowItem._addLineFlowItem(
         codeId: "#19200",
         shortDesc:
-            "The ${debugObjHtml(this)}.callApiLogic() method was called with an error!",
+            "The ${debugObjHtml(this)}.performExecuteLogic() method was called with an error!",
         errorInfo: errorInfo,
       );
     }

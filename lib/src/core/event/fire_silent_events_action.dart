@@ -23,7 +23,7 @@ class FireSilentEventsAction extends StorageSilentAction {
   }
 
   @override
-  Future<ApiResult<void>> callApi() async {
+  Future<ApiResult<void>> performAction() async {
     return ApiResult.success();
   }
 

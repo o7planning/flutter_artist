@@ -1,3 +1,3 @@
 enum ScalarErrorMethod {
-  callApiQuery,
+  performQuery,
 }

@@ -1,19 +1,19 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-@_BlockQuickCreateMultiItemsActionAnnotation()
-class _BlockQuickMultiItemsCreationTaskUnit
-    extends _ResultedSTaskUnit<BlockQuickMultiItemsCreationResult> {
+@_BlockBlockBulkItemsCreationActionAnnotation()
+class _BlockBulkItemsCreationTaskUnit
+    extends _ResultedSTaskUnit<BlockBulkItemsCreationResult> {
   XBlock xBlock;
 
-  BlockQuickMultiItemsCreationAction action;
+  BlockBulkItemsCreationAction action;
 
-  _BlockQuickMultiItemsCreationTaskUnit({
+  _BlockBulkItemsCreationTaskUnit({
     required this.xBlock,
     required this.action,
   }) : super(
-          taskType: TaskType.blockQuickCreateMultiItems,
-          taskResult: BlockQuickMultiItemsCreationResult(),
+          taskType: TaskType.blockBulkItemsCreation,
+          taskResult: BlockBulkItemsCreationResult(),
         );
 
   @override

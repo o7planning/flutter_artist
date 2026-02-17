@@ -71,9 +71,9 @@ class FilterCriterionDefView extends StatelessWidget {
                     Tooltip(
                       message: "Single Selection",
                       child: Radio(
-                        value:
-                            (criterion as MultiOptFilterCriterionDef).selectionType ==
-                                SelectionType.single,
+                        value: (criterion as MultiOptFilterCriterionDef)
+                                .selectionType ==
+                            SelectionType.single,
                         onChanged: null,
                         groupValue: true,
                       ),
@@ -90,9 +90,9 @@ class FilterCriterionDefView extends StatelessWidget {
                     Tooltip(
                       message: "Multi Selection",
                       child: Radio(
-                        value:
-                            (criterion as MultiOptFilterCriterionDef).selectionType ==
-                                SelectionType.multi,
+                        value: (criterion as MultiOptFilterCriterionDef)
+                                .selectionType ==
+                            SelectionType.multi,
                         onChanged: null,
                         groupValue: true,
                       ),

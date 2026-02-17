@@ -20,7 +20,7 @@ abstract class BlockQuickItemReplacementAction<
     required super.actionInfo,
   });
 
-  Future<ApiResult<ITEM_DETAIL>> callApiQuickReplaceItem({
+  Future<ApiResult<ITEM_DETAIL>> performQuickReplaceItem({
     required Object? parentBlockItem,
     required FILTER_CRITERIA filterCriteria,
   });

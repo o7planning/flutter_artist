@@ -26,7 +26,7 @@ class _DefaultFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadMultiOptTildeCriterionXData({
+  Future<XList?> performLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required Object? parentMultiOptTildeCriterionValue,
     required EmptyFilterInput? filterInput,
@@ -90,7 +90,7 @@ class StringIdFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadMultiOptTildeCriterionXData({
+  Future<XList?> performLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required Object? parentMultiOptTildeCriterionValue,
     required StringIdFilterInput? filterInput,
@@ -154,7 +154,7 @@ class StringValueFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadMultiOptTildeCriterionXData({
+  Future<XList?> performLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required StringValueFilterInput? filterInput,
     required Object? parentMultiOptTildeCriterionValue,
@@ -218,7 +218,7 @@ class SearchTextFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadMultiOptTildeCriterionXData({
+  Future<XList?> performLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required SearchTextFilterInput? filterInput,
     required Object? parentMultiOptTildeCriterionValue,
@@ -282,7 +282,7 @@ class IntIdFilterModel
   }
 
   @override
-  Future<XList?> callApiLoadMultiOptTildeCriterionXData({
+  Future<XList?> performLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required Object? parentMultiOptTildeCriterionValue,
     required IntIdFilterInput? filterInput,

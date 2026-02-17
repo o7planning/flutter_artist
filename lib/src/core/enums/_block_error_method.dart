@@ -2,7 +2,7 @@ enum BlockErrorMethod {
   getItemId,
   convertItemDetailToItem,
   needToKeepItemInList,
-  callApiQuery,
-  callApiDeleteItemById,
-  callApiLoadItemDetailById,
+  performQuery,
+  performDeleteItemById,
+  performLoadItemDetailById,
 }

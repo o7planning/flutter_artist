@@ -26,7 +26,7 @@ class _DefaultFilterModel
   }
 
   @override
-  Future<ListXData?> callApiLoadMultiOptTildeCriterionXData({
+  Future<ListXData?> performLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required SelectionType selectionType,

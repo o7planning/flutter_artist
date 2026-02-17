@@ -18,7 +18,7 @@ abstract class BlockQuickItemUpdateAction<
     required super.actionInfo,
   });
 
-  Future<ApiResult<ITEM_DETAIL>> callApiQuickUpdateItem({
+  Future<ApiResult<ITEM_DETAIL>> performQuickUpdateItem({
     required Object? parentBlockItem,
     required FILTER_CRITERIA filterCriteria,
   });

@@ -1,19 +1,17 @@
 class DebugScalarOptions {
   final bool showLastQueryType;
-  final bool showUIActive;
+  final bool showUiActive;
   final bool showScalarDataState;
   final bool showLastQueryResultState;
-  final bool showCallApiQueryCount;
-  final bool showCallApiRefreshItemCount;
+  final bool showPerformQueryCount;
   final bool showFilterCriteriaChangeCount;
   final bool showFilterCriteria;
 
   const DebugScalarOptions({
     this.showLastQueryType = true,
-    this.showUIActive = true,
+    this.showUiActive = true,
     this.showScalarDataState = true,
-    this.showCallApiQueryCount = true,
-    this.showCallApiRefreshItemCount = true,
+    this.showPerformQueryCount = true,
     this.showFilterCriteriaChangeCount = true,
     this.showFilterCriteria = true,
     this.showLastQueryResultState = true,
@@ -21,10 +19,9 @@ class DebugScalarOptions {
 
   const DebugScalarOptions.custom({
     this.showLastQueryType = false,
-    this.showUIActive = false,
+    this.showUiActive = false,
     this.showScalarDataState = false,
-    this.showCallApiQueryCount = false,
-    this.showCallApiRefreshItemCount = false,
+    this.showPerformQueryCount = false,
     this.showFilterCriteria = false,
     this.showFilterCriteriaChangeCount = false,
     this.showLastQueryResultState = false,

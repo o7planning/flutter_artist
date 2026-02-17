@@ -1,28 +1,28 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
-enum BlockMultiItemsCreationPrecheck implements Precheck {
+enum BlockBulkItemsCreationPrecheck implements Precheck {
   busy(
     precheckCode: PrecheckCode.busy,
-    message: "Multi Items creation is disabled.",
+    message: "Bulk Items creation is disabled.",
     details: ["The executor is busy."],
   ),
   //
   blockInPendingState(
     precheckCode: PrecheckCode.inPendingState,
-    message: "Multi Items creation is disabled.",
+    message: "Bulk Items creation is disabled.",
     details: ["The block is in a 'pending' state."],
   ),
   //
   blockInErrorState(
     precheckCode: PrecheckCode.inErrorState,
-    message: "Multi Items creation is disabled.",
+    message: "Bulk Items creation is disabled.",
     details: ["The block is in an 'error' state."],
   ),
   //
   blockInNoneState(
     precheckCode: PrecheckCode.inNoneState,
-    message: "Multi Items creation is disabled.",
+    message: "Bulk Items creation is disabled.",
     details: ["The block is in a 'none' state."],
   ),
   //
@@ -40,7 +40,7 @@ enum BlockMultiItemsCreationPrecheck implements Precheck {
   //
   cancelled(
     precheckCode: PrecheckCode.cancelled,
-    message: "Quick Create Item Action Cancelled.",
+    message: "Bulk Items Creation Action Cancelled.",
     details: null,
   );
 
@@ -53,7 +53,7 @@ enum BlockMultiItemsCreationPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const BlockMultiItemsCreationPrecheck({
+  const BlockBulkItemsCreationPrecheck({
     required this.precheckCode,
     required this.message,
     required this.details,

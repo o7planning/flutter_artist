@@ -39,9 +39,9 @@ abstract class FilterModel<
 
   int get filterActivityCount => __filterActivityCount;
 
-  bool _loadTimeUIActive = false;
+  bool _loadTimeUiActive = false;
 
-  bool get loadTimeUIActive => _loadTimeUIActive;
+  bool get loadTimeUiActive => _loadTimeUiActive;
 
   bool __initiatedAtLeastOnce = false;
 
@@ -122,7 +122,7 @@ abstract class FilterModel<
   /// Abstract method:
   ///
   @_AbstractMethodAnnotation()
-  Future<XData?> callApiLoadMultiOptTildeCriterionXData({
+  Future<XData?> performLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
@@ -202,7 +202,7 @@ abstract class FilterModel<
 
   ///
   /// This method is called immediately after
-  /// calling [callApiLoadMultiOptTildeCriterionXData]
+  /// calling [performLoadMultiOptTildeCriterionXData]
   /// methods if there are no errors.
   ///
   /// ```dart
@@ -661,7 +661,7 @@ abstract class FilterModel<
         error: filterErrorInfo.error,
         stackTrace: filterErrorInfo.errorStackTrace,
         showSnackBar: true,
-        tipDocument: TipDocument.filterModelCallApiLoadMultiOptCriterionXData,
+        tipDocument: TipDocument.filterModelPerformLoadMultiOptCriterionXData,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#31080",
@@ -999,7 +999,7 @@ abstract class FilterModel<
         masterFlowItem._addLineFlowItem(
           codeId: "#82300",
           shortDesc:
-              "Calling ${debugObjHtml(this)}.callApiLoadMultiOptTildeCriterionXData():",
+              "Calling ${debugObjHtml(this)}.performLoadMultiOptTildeCriterionXData():",
           parameters: {
             "filterInput": filterInput,
             "parentMultiOptTildeCriterionValue":
@@ -1016,7 +1016,7 @@ abstract class FilterModel<
         // May throw ApiError.
         //
         tempMultiOptCriterionXData =
-            await callApiLoadMultiOptTildeCriterionXData(
+            await performLoadMultiOptTildeCriterionXData(
           filterInput: filterInput,
           parentMultiOptTildeCriterionValue: parentMultiOptTildeCriterionValue,
           multiOptCriterionBaseName: multiOptCriterionBaseName,
@@ -1036,7 +1036,7 @@ abstract class FilterModel<
         throw FilterMethodError(
           tildeCriterionName: multiOptTildeCriterionName,
           filterErrorMethod:
-              FilterErrorMethod.callApiLoadMultiOptTildeCriterionXData,
+              FilterErrorMethod.performLoadMultiOptTildeCriterionXData,
           error: e, // May be AppError, ApiError or others.
           errorStackTrace: stackTrace,
         );

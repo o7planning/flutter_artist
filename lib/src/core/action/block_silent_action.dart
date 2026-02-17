@@ -17,7 +17,7 @@ abstract class BlockSilentAction<ID extends Object, DATA> extends Action {
 
   BlockSilentActionConfig initDefaultConfig();
 
-  Future<ApiResult<DATA>> callApi();
+  Future<ApiResult<DATA>> performAction();
 
   ID? extractIdToSetAsCurrent({required DATA data});
 }

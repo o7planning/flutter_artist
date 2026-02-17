@@ -1,5 +1,5 @@
 enum FormErrorMethod {
-  callApiLoadMultiOptPropXData,
+  performLoadMultiOptPropXData,
   //
   extractSimplePropValuesFromItemDetail,
   extractMultiOptPropValueFromItemDetail,
