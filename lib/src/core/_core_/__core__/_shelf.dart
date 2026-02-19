@@ -509,6 +509,28 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
+  ///
+  /// ```dart
+  /// @override
+  /// ShelfStructure registerShelfStructure() {
+  ///   return ShelfStructure(
+  ///     filterModels: {
+  ///       Song02aFilterModel.filterName: Song02aFilterModel(),
+  ///     },
+  ///     blocks: [
+  ///       Song02aBlock(
+  ///         name: Song02aBlock.blkName,
+  ///         description: null,
+  ///         config: BlockConfig(),
+  ///         filterModelName: Song02aFilterModel.filterName,
+  ///         formModel: null,
+  ///         childBlocks: [],
+  ///       ),
+  ///     ],
+  ///   );
+  /// }
+  /// ```
+  ///
   ShelfStructure registerShelfStructure();
 
   // ***************************************************************************

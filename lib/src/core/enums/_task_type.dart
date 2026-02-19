@@ -22,7 +22,7 @@ enum TaskType {
   filterModelLoadData,
   filterModelFilterPanelChanged,
   //
-  formModelEnterFormFields,
+  formModelPatchFormFields,
   formModelLoadData,
   formModelSaveForm,
   formModelFormViewChanged,

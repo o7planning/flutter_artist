@@ -59,6 +59,7 @@ class TabThemeUtils {
           ),
         );
       }
+      ..padding = EdgeInsets.symmetric(vertical: 3, horizontal: 2)
       ..hoveredButtonColor = Colors.indigo.withAlpha(40)
       ..hoveredStatus.hoveredButtonBackground = boxDecoTabSelected
       ..selectedStatus = selectedStatus

@@ -5,14 +5,20 @@ enum CurrentItemSettingType {
   refresh;
 }
 
-enum CurrentItemSelInclusion {
-  withoutCurrentItem,
-  withCurrentIfSelected,
-  withCurrentItem;
+enum CurrentItemInclusion {
+  exclude,
+  ifMatch,
+  include,
 }
 
-enum CurrentItemChkInclusion {
-  withoutCurrentItem,
-  withCurrentIfChecked,
-  withCurrentItem;
-}
+// enum CurrentItemSelInclusion {
+//   withoutCurrentItem,
+//   withCurrentIfSelected,
+//   withCurrentItem;
+// }
+
+// enum CurrentItemChkInclusion {
+//   withoutCurrentItem,
+//   withCurrentIfChecked,
+//   withCurrentItem;
+// }

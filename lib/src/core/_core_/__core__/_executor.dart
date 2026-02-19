@@ -282,8 +282,8 @@ class _Executor {
       );
     }
     // FormModel QuickFormInputAction:
-    else if (taskUnit is _FormModelAutoEnterFormFieldsTaskUnit) {
-      await taskUnit.xFormModel.formModel._unitEnterFormFields(
+    else if (taskUnit is _FormModelPatchFormFieldsTaskUnit) {
+      await taskUnit.xFormModel.formModel._unitPatchFormFields(
         masterFlowItem: masterFlowItem,
         taskType: taskUnit.taskType,
         thisXFormModel: taskUnit.xFormModel,

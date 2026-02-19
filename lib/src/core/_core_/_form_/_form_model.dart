@@ -111,19 +111,24 @@ abstract class FormModel<
 
   ///
   /// ```dart
-  /// FormPropsStructure registerFormModelStructure() {
-  ///   return FormPropsStructure(
-  ///     simpleProps: [],
-  ///     multiOptProps: [
-  ///       // Multi Options Single Selection Property.
-  ///       MultiOptSsProp(
-  ///         propName: "company",
-  ///         children: [
-  ///           // Multi Options Multi Selections Property.
-  ///           MultiOptMsProp(
-  ///              propName: "department",
-  ///           ),
-  ///         ],
+  /// @override
+  /// FormModelStructure registerFormModelStructure() {
+  ///   return FormModelStructure(
+  ///     simplePropDefs: [
+  ///       SimpleFormPropDef<int>(propName: "id"),
+  ///       SimpleFormPropDef<String>(propName: "name"),
+  ///       SimpleFormPropDef<String>(propName: "email"),
+  ///       SimpleFormPropDef<String>(propName: "address"),
+  ///       SimpleFormPropDef<String>(propName: "phone"),
+  ///       SimpleFormPropDef<bool>(propName: "active"),
+  ///       SimpleFormPropDef<String>(propName: "description"),
+  ///       // dynamic or List<XFile>
+  ///       SimpleFormPropDef<dynamic>(propName: "xFiles"),
+  ///     ],
+  ///     multiOptPropDefs: [
+  ///       // Multi Option Single Selection Prop.
+  ///       MultiOptFormPropDef<SupplierTypeInfo>.singleSelection(
+  ///         propName: 'supplierType',
   ///       ),
   ///     ],
   ///   );
@@ -150,7 +155,7 @@ abstract class FormModel<
   ///         - @itemDetail     --> Not Null.
   ///         - @formInput --> Null or Not null.
   ///
-  /// Case FormActivityType.enterFormFields:
+  /// Case FormActivityType.patchFormFields:
   ///     - @formMode = FormMode.creation:
   ///         - @itemDetail     --> Null.
   ///         - @formInput --> Not null.
@@ -468,7 +473,8 @@ abstract class FormModel<
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#37160",
-      shortDesc: "Calling ${debugObjHtml(block)}._performLoadFormRelatedData().",
+      shortDesc:
+          "Calling ${debugObjHtml(block)}._performLoadFormRelatedData().",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     FORM_RELATED_DATA? formRelatedData =
@@ -503,8 +509,8 @@ abstract class FormModel<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_FormModelEnterFormFieldsAnnotation()
-  Future<bool> _unitEnterFormFields({
+  @_FormModelPatchFormFieldsAnnotation()
+  Future<bool> _unitPatchFormFields({
     required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XFormModel thisXFormModel,
@@ -520,7 +526,7 @@ abstract class FormModel<
     );
     //
     final FORM_RELATED_DATA? formRelatedData = null;
-    final activityType = FormActivityType.autoEnterFormFields;
+    final activityType = FormActivityType.patchFormFields;
 
     masterFlowItem._addLineFlowItem(
       codeId: "#38100",
@@ -755,19 +761,19 @@ abstract class FormModel<
         if (currentFormMode == FormMode.creation) {
           formInput = __creationFormInput;
         }
-      case FormActivityType.autoEnterFormFields:
+      case FormActivityType.patchFormFields:
         currentFormMode = formMode;
         if (formRelatedData != null) {
           throw DevError(
             errorMessage:
-                "Dev Error. formRelatedData must be null if FormModel.activityType = autoEnterFormFields.",
+                "Dev Error. formRelatedData must be null if FormModel.activityType = patchFormFields.",
           );
         }
         formRelatedData = __formRelatedData!;
         if (formInput == null) {
           throw DevError(
             errorMessage:
-                "Dev Error. formInput must be not null if FormModel.activityType = autoEnterFormFields.",
+                "Dev Error. formInput must be not null if FormModel.activityType = patchFormFields.",
           );
         }
     }
@@ -1047,8 +1053,8 @@ abstract class FormModel<
         }
       }
     } // end of "startCreatingOrEditing".
-    // Begin of 'autoEnterFormFields'.
-    else if (activityType == FormActivityType.autoEnterFormFields) {
+    // Begin of 'patchFormFields'.
+    else if (activityType == FormActivityType.patchFormFields) {
       masterFlowItem._addLineFlowItem(
         codeId: "#06700",
         shortDesc: "Enter Form Fields."
@@ -1085,7 +1091,7 @@ abstract class FormModel<
                   FormErrorMethod.extractUpdateValuesForSimpleProps,
             );
             //
-            // In (autoEnterFormFields + formInput != null)
+            // In (patchFormFields + formInput != null)
             //
             SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
             if (valueWrap != null) {
@@ -1129,7 +1135,7 @@ abstract class FormModel<
           return false;
         }
       }
-    } // End of 'autoEnterFormFields'.
+    } // End of 'patchFormFields'.
     //
     // Load MultiOptProp Data (All cases of activityType).
     //
@@ -1572,7 +1578,7 @@ abstract class FormModel<
         }
       } // end of 'startCreatingOrEditing'.
       // Auto Enter Form Fields:
-      else if (activityType == FormActivityType.autoEnterFormFields) {
+      else if (activityType == FormActivityType.patchFormFields) {
         if (formInput != null && formInput is! EmptyFormInput) {
           masterFlowItem._addLineFlowItem(
             codeId: "#17600",
@@ -2102,33 +2108,33 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<EnterFormFieldsPrecheck> __canEnterFormFields({
+  Actionable<PatchFormFieldsPrecheck> __canPatchFormFields({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<EnterFormFieldsPrecheck>.no(
-        errCode: EnterFormFieldsPrecheck.busy,
+      return Actionable<PatchFormFieldsPrecheck>.no(
+        errCode: PatchFormFieldsPrecheck.busy,
       );
     }
     if (formMode == FormMode.none) {
-      return Actionable<EnterFormFieldsPrecheck>.no(
-        errCode: EnterFormFieldsPrecheck.formInNoneMode,
+      return Actionable<PatchFormFieldsPrecheck>.no(
+        errCode: PatchFormFieldsPrecheck.formInNoneMode,
       );
     }
     if (dataState == DataState.error) {
-      return Actionable<EnterFormFieldsPrecheck>.no(
-        errCode: EnterFormFieldsPrecheck.formInErrorState,
+      return Actionable<PatchFormFieldsPrecheck>.no(
+        errCode: PatchFormFieldsPrecheck.formInErrorState,
       );
     }
-    return Actionable<EnterFormFieldsPrecheck>.yes();
+    return Actionable<PatchFormFieldsPrecheck>.yes();
   }
 
-  bool __checkBeforeEnterFormFields({
+  bool __checkBeforePatchFormFields({
     required bool checkBusy,
     required bool addErrorLog,
     required bool showErrSnackBar,
   }) {
-    Actionable createActionable = __canEnterFormFields(
+    Actionable createActionable = __canPatchFormFields(
       checkBusy: checkBusy,
     );
     if (!createActionable.yes) {
@@ -2150,13 +2156,13 @@ abstract class FormModel<
 
   // Test Case: [26a]
   @_RootMethodAnnotation()
-  @_FormModelEnterFormFieldsAnnotation()
-  Future<FormModelEnterFormFieldsResult> enterFormFields({
+  @_FormModelPatchFormFieldsAnnotation()
+  Future<FormModelPatchFormFieldsResult> patchFormFields({
     required FORM_INPUT formInput,
   }) async {
     final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "enterFormFields",
+      methodName: "patchFormFields",
       parameters: {
         "formInput": formInput,
       },
@@ -2170,13 +2176,13 @@ abstract class FormModel<
     masterFlowItem._addLineFlowItem(
       codeId: "#78000",
       shortDesc:
-          "Calling ${debugObjHtml(this)}.__canEnterFormFields() to check before execute the action.",
+          "Calling ${debugObjHtml(this)}.__canPatchFormFields() to check before execute the action.",
       parameters: {
         "checkBusy": checkBusyTrue,
       },
     );
     //
-    final Actionable<EnterFormFieldsPrecheck> actionable = __canEnterFormFields(
+    final Actionable<PatchFormFieldsPrecheck> actionable = __canPatchFormFields(
       checkBusy: checkBusyTrue,
     );
     if (!actionable.yes) {
@@ -2193,22 +2199,22 @@ abstract class FormModel<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return FormModelEnterFormFieldsResult(
+      return FormModelPatchFormFieldsResult(
         precheck: actionable.errCode,
       );
     }
     //
-    final XShelf xShelf = _XShelfFormModelEnterFields(formModel: this);
+    final XShelf xShelf = _XShelfFormModelPatchFormFields(formModel: this);
     //
     XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
     XFormModel xFormModel = xBlock.xFormModel!;
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#78340",
-      shortDesc: "Creating <b>_FormModelAutoEnterFormFieldsTaskUnit</b>.",
+      shortDesc: "Creating <b>_FormModelPatchFormFieldsTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
     );
-    _ResultedSTaskUnit taskUnit = _FormModelAutoEnterFormFieldsTaskUnit(
+    _ResultedSTaskUnit taskUnit = _FormModelPatchFormFieldsTaskUnit(
       xFormModel: xFormModel,
       formInput: formInput,
     );

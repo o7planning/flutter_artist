@@ -104,7 +104,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
 
     tabs.add(
       TabData(
-        text: ' Base',
+        text: ' Criteria',
         closable: false,
         leading: (context, status) => Icon(
           Icons.shopping_bag_outlined,
@@ -116,7 +116,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
     );
     tabs.add(
       TabData(
-        text: ' ~',
+        text: ' Tildes',
         closable: false,
         leading: (context, status) => Icon(
           Icons.shopping_bag_outlined,
@@ -128,7 +128,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
     );
     tabs.add(
       TabData(
-        text: ' Groups',
+        text: ' Conditions',
         closable: false,
         leading: (context, status) => Icon(
           FaIconConstants.conditionGroupIconData,
@@ -172,7 +172,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
 
     tabs.add(
       TabData(
-        text: ' JSON~',
+        text: ' Tilde-Based',
         closable: false,
         leading: (context, status) => Icon(
           Icons.data_object,
@@ -188,7 +188,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
     );
     tabs.add(
       TabData(
-        text: ' JSON*',
+        text: ' Criteria-Based',
         closable: false,
         leading: (context, status) => Icon(
           Icons.data_object,
@@ -204,7 +204,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
     );
     tabs.add(
       TabData(
-        text: ' JSON',
+        text: ' Field-Based',
         closable: false,
         leading: (context, status) => Icon(
           Icons.data_object,

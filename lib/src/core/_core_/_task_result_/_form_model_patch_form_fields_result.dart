@@ -1,8 +1,8 @@
 part of '../core.dart';
 
-class FormModelEnterFormFieldsResult
-    extends TaskResult<EnterFormFieldsPrecheck> {
-  FormModelEnterFormFieldsResult({super.precheck});
+class FormModelPatchFormFieldsResult
+    extends TaskResult<PatchFormFieldsPrecheck> {
+  FormModelPatchFormFieldsResult({super.precheck});
 
   @override
   bool get successForFirst {

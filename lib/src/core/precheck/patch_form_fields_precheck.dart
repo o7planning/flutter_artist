@@ -1,10 +1,10 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
-enum EnterFormFieldsPrecheck implements Precheck {
+enum PatchFormFieldsPrecheck implements Precheck {
   busy(
     precheckCode: PrecheckCode.busy,
-    message: "Enter-form-fields feature is disabled",
+    message: "Patch-form-fields feature is disabled",
     details: [
       "The executor is busy.",
     ],
@@ -33,7 +33,7 @@ enum EnterFormFieldsPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const EnterFormFieldsPrecheck({
+  const PatchFormFieldsPrecheck({
     required this.precheckCode,
     required this.message,
     required this.details,
