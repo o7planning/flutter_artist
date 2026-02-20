@@ -78,6 +78,8 @@ class FaIconConstants {
   // static const IconData storageIconData = cupertino.CupertinoIcons.globe;
   // static const IconData shelfIconData = cupertino.CupertinoIcons.layers_alt;
 
+  static const IconData routeStackIconData = Icons.layers_outlined;
+
   static const IconData polymorphismIconData = Icons.grain;
 
   static const IconData shelfIconData = Icons.shelves;
