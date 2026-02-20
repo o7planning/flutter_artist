@@ -31,7 +31,7 @@ abstract class FilterCriteria {
       if (baseNameFilterCriterionMap
           .containsKey(filterCriterion.filterCriterionName)) {
         if (isPrecheck) {
-          throw DuplicateFilterCriterionError(
+          throw FilterCriteriaDuplicateCriterionError(
             criterionBaseName: filterCriterion.filterCriterionName,
             filterCriteriaClassName: getClassNameWithoutGenerics(this),
           );
@@ -45,7 +45,7 @@ abstract class FilterCriteria {
       }
       if (set2.contains(filterCriterion.filterFieldName)) {
         if (isPrecheck) {
-          throw DuplicateFilterFieldError(
+          throw FilterCriteriaDuplicateFieldError(
             field: filterCriterion.filterFieldName,
             filterCriteriaClassName: getClassNameWithoutGenerics(this),
           );

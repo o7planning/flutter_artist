@@ -56,10 +56,10 @@ class _XRootQueue {
     }
   }
 
-  void _addStorageSilentActionTaskUnit(
-    _StorageSilentActionTaskUnit storageSilentActionTaskUnit,
+  void _addStorageBackendActionTaskUnit(
+    _StorageBackendActionTaskUnit storageBackendActionTaskUnit,
   ) {
-    _xStorage._addStorageSilentActionTaskUnit(storageSilentActionTaskUnit);
+    _xStorage._addStorageBackendActionTaskUnit(storageBackendActionTaskUnit);
   }
 
   void _addXRootQueueItem({required XRootQueueItem xRootQueueItem}) {

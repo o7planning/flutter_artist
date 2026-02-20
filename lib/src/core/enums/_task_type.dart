@@ -2,20 +2,20 @@ enum TaskType {
   shelfQuery,
   shelfInternalReact,
   //
-  storageSilentAction,
+  storageBackendAction,
   //
   blockClearCurrentItem,
   blockDeleteItem,
   blockDeleteItems,
   blockPrepareToCreateItem,
   blockQuery,
-  blockSilentAction,
+  blockBackendAction,
   blockQuickChildBlockItems,
   blockQuickCreateItem,
-  blockSilentCreateItem,
-  blockBulkItemsCreation,
+  blockBackendCreateItem,
+  blockQuickMultiItemCreation,
   blockQuickUpdateItem,
-  blockSilentUpdateItem,
+  blockBackendUpdateItem,
   blockSetItemAsCurrent,
   blockClearance,
   //
@@ -29,7 +29,7 @@ enum TaskType {
   //
   scalarQuery,
   scalarClearance,
-  scalarSilentAction,
+  scalarBackendAction,
   scalarLoadExtraData,
   //
   hook,

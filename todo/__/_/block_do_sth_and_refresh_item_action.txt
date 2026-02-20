@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../enums/after_silent_action.dart';
+import '../../enums/after_backend_action.dart';
 import '../_action.dart';
 
 ///
@@ -27,7 +27,7 @@ abstract class BlockDoSthAndRefreshItemAction<ITEM> extends Action {
 }
 
 class BlockUpdateItemAndRefreshActionConfig {
-  final AfterBlockSilentAction afterQuickAction;
+  final AfterBlockBackendAction afterQuickAction;
   final List<Type> affectedItemTypes;
 
   const BlockUpdateItemAndRefreshActionConfig({

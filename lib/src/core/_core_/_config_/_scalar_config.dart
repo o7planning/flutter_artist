@@ -3,17 +3,17 @@ part of '../core.dart';
 class ScalarConfig {
   final ScalarHiddenAction onHideAction;
 
-  final ExternalShelfEventS onExternalShelfEvents;
-  final InternalShelfEventS onInternalShelfEvents;
+  final ExternalShelfEventScalarRecipient onExternalShelfEvents;
+  final InternalShelfEventScalarRecipient onInternalShelfEvents;
 
   ScalarConfig({
     this.onHideAction = ScalarHiddenAction.none,
     //
-    this.onExternalShelfEvents = const ExternalShelfEventS(
-      scalarLevelReactionTo: [],
+    this.onExternalShelfEvents = const ExternalShelfEventScalarRecipient(
+      scalarLevelReactionOn: [],
     ),
-    this.onInternalShelfEvents = const InternalShelfEventS(
-      scalarLevelReactionTo: [],
+    this.onInternalShelfEvents = const InternalShelfEventScalarRecipient(
+      scalarLevelReactionOn: [],
     ),
   });
 

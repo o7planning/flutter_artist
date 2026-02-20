@@ -1,8 +1,6 @@
 part of '../core.dart';
 
 abstract class Activity extends _Core {
-  // TODO: Remove in next version!
-  // MasterFlowItem? _masterFlowItem;
 
   late final ui = _ActivityUiComponents(activity: this);
 
@@ -19,7 +17,8 @@ abstract class Activity extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> performExecuteLogic();
+  @protected
+  Future<void> performActivityOperation();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -65,14 +64,14 @@ abstract class Activity extends _Core {
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#19100",
-        shortDesc: "Calling ${debugObjHtml(this)}.performExecuteLogic()...",
+        shortDesc: "Calling ${debugObjHtml(this)}.performActivityOperation()...",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
-      await performExecuteLogic();
+      await performActivityOperation();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: null,
-        methodName: "performExecuteLogic",
+        methodName: "performActivityOperation",
         // AppError, ApiError or others.
         error: e,
         stackTrace: stackTrace,
@@ -82,7 +81,7 @@ abstract class Activity extends _Core {
       masterFlowItem._addLineFlowItem(
         codeId: "#19200",
         shortDesc:
-            "The ${debugObjHtml(this)}.performExecuteLogic() method was called with an error!",
+            "The ${debugObjHtml(this)}.performActivityOperation() method was called with an error!",
         errorInfo: errorInfo,
       );
     }

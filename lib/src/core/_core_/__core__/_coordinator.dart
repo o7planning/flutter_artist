@@ -12,12 +12,12 @@ abstract class Coordinator extends _Core {
   Future<bool> execute(BuildContext context) async {
     bool success;
     try {
-      success = await coordinationLogic();
+      success = await performSetupOperation();
     } catch (e, stackTrace) {
       // Test Cases: [90a].
       _handleError(
         shelf: null,
-        methodName: "coordinationLogic",
+        methodName: "performSetupOperation",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -54,7 +54,8 @@ abstract class Coordinator extends _Core {
   ///
   /// Do not call this method. Call execute() instead.
   ///
-  Future<bool> coordinationLogic();
+  @protected
+  Future<bool> performSetupOperation();
 
   Future<void> defaultNavigate(BuildContext context, bool success);
 }

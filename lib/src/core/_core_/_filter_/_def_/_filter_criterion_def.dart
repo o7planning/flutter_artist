@@ -25,13 +25,13 @@ abstract class FilterCriterionDef<V extends Object> {
   })  : fieldName = fieldName ?? criterionBaseName,
         __toFieldValue = toFieldValue {
     // Check the validity of the name:
-    CriterionBaseName.parse(criterionBaseName: criterionBaseName);
+    FilterCriterionNameObj.parse(criterionBaseName: criterionBaseName);
     if (fieldName != null) {
       // Check the validity of the name:
-      FieldName.parse(fieldName: fieldName);
+      FilterFieldNameObj.parse(fieldName: fieldName);
     }
     if (!SimpleVal.isSimpleDataType(V) && toFieldValue == null) {
-      throw FilterFieldNoConverterError(
+      throw FilterCriterionNoFieldValueConverterError(
         criterionBaseName: criterionBaseName,
         dataType: dataType,
       );
@@ -151,7 +151,7 @@ class MultiOptFilterCriterionDef<V extends Object>
         );
       }
       if (__tildeCriterionConfigMap.containsKey(config.suffix)) {
-        throw TildeCriterionConfigDuplicationError(
+        throw TildeCriterionConfigDuplicationSuffixError(
           tildeSuffix: config.suffix,
           criterionBaseName: criterionBaseName,
         );
@@ -253,71 +253,5 @@ class CalculatedCriterionDef<V extends Object> extends FilterCriterionDef<V> {
         throw UnimplementedError();
       },
     );
-  }
-}
-
-const String tildeSymbol = "~";
-
-class TildeObj {
-  final String tildeCriterionName;
-  late final String criterionName;
-  late final String afterTildeSuffix;
-  late final String tildeSuffix;
-
-  TildeObj.parse({required this.tildeCriterionName}) {
-    if (!NameUtils.isValidTildeFilterCriterionName(tildeCriterionName)) {
-      throw TildeCriterionNameError(tildeCriterionName: tildeCriterionName);
-    }
-    List<String> ss = tildeCriterionName.split(tildeSymbol);
-    criterionName = ss[0];
-    afterTildeSuffix = ss[1];
-    tildeSuffix = tildeSymbol + ss[1];
-  }
-
-  static String getNameTilde({
-    required String baseName,
-    required String afterTildeSuffix,
-  }) {
-    return "$baseName$tildeSymbol$afterTildeSuffix";
-  }
-
-  static String createNameTilde({
-    required String baseName,
-    required String tildeSuffix,
-  }) {
-    return "$baseName$tildeSuffix";
-  }
-}
-
-class TildeSuffixObj {
-  final String tildeSuffix;
-  late final String suffixWithoutTilde;
-
-  TildeSuffixObj.parse({required this.tildeSuffix}) {
-    if (!NameUtils.isValidTildeSuffix(tildeSuffix)) {
-      throw TildeSuffixError(tildeSuffix: tildeSuffix);
-    }
-    List<String> ss = tildeSuffix.split(tildeSymbol);
-    suffixWithoutTilde = ss[1];
-  }
-}
-
-class CriterionBaseName {
-  final String criterionBaseName;
-
-  CriterionBaseName.parse({required this.criterionBaseName}) {
-    if (!NameUtils.isValidFilterCriterionName(criterionBaseName)) {
-      throw CriterionBaseNameError(criterionBaseName: criterionBaseName);
-    }
-  }
-}
-
-class FieldName {
-  final String fieldName;
-
-  FieldName.parse({required this.fieldName}) {
-    if (!NameUtils.isValidFilterFieldName(fieldName)) {
-      throw FilterFieldNameError(fieldName: fieldName);
-    }
   }
 }

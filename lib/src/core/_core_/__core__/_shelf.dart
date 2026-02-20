@@ -189,7 +189,7 @@ abstract class Shelf extends _Core {
             ._addRefreshCurrItmBlock(listenerBlock);
       }
       for (Evt evt
-          in listenerBlock.config.onInternalShelfEvents.blockLevelReactionTo) {
+          in listenerBlock.config.onInternalShelfEvents.blockLevelReactionOn) {
         // BLOCK EVENT:
         if (evt.srcType == SrcType.block) {
           Block? eventBlock = __blockMap[evt.srcName];
@@ -227,7 +227,7 @@ abstract class Shelf extends _Core {
       }
       //
       for (Evt evt
-          in listenerBlock.config.onInternalShelfEvents.itemLevelReactionTo) {
+          in listenerBlock.config.onInternalShelfEvents.itemLevelReactionOn) {
         // BLOCK EVENT:
         if (evt.srcType == SrcType.block) {
           Block? eventBlock = __blockMap[evt.srcName];
@@ -273,7 +273,7 @@ abstract class Shelf extends _Core {
             ._addReQueryScalar(listenerScalar);
       }
       for (Evt evt in listenerScalar
-          .config.onInternalShelfEvents.scalarLevelReactionTo) {
+          .config.onInternalShelfEvents.scalarLevelReactionOn) {
         // BLOCK EVENT:
         if (evt.srcType == SrcType.block) {
           Block? eventBlock = __blockMap[evt.srcName];

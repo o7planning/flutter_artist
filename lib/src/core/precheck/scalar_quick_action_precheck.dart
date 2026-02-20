@@ -1,16 +1,16 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
-enum StorageSilentActionPrecheck implements Precheck {
+enum StorageBackendActionPrecheck implements Precheck {
   busy(
     precheckCode: PrecheckCode.busy,
-    message: "Silent Action is disabled.",
+    message: "Backend Action is disabled.",
     details: ["The executor is busy."],
   ),
   //
   cancelled(
     precheckCode: PrecheckCode.cancelled,
-    message: "Silent Action Cancelled.",
+    message: "Backend Action Cancelled.",
     details: null,
   );
 
@@ -23,7 +23,7 @@ enum StorageSilentActionPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const StorageSilentActionPrecheck({
+  const StorageBackendActionPrecheck({
     required this.precheckCode,
     required this.message,
     required this.details,

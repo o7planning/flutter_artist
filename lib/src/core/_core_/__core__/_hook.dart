@@ -25,7 +25,7 @@ abstract class Hook extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> performExecuteLogic() async {
+  Future<void> performActivityOperation() async {
     // Override me.
   }
 

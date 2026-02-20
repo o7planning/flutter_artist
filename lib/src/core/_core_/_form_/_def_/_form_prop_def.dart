@@ -1,5 +1,8 @@
 part of '../../core.dart';
 
+///
+/// [SimpleFormPropDef], [MultiOptFormPropDef].
+///
 abstract class FormPropDef<V> {
   final String propName;
   final String? description;
@@ -11,7 +14,7 @@ abstract class FormPropDef<V> {
     required this.description,
   }) {
     // Check the validity of the name:
-    // CriterionBaseName.parse(propName: propName);
+    FormPropNameObj.parse(propName: propName);
   }
 }
 
