@@ -184,12 +184,12 @@ class FilterModelStructure {
   }) {
     if (__allCriterionDefMap
         .containsKey(simpleCriterionDef.criterionBaseName)) {
-      throw DuplicateCriterionDefError(
+      throw FilterCriterionDuplicateNameError(
         criterionBaseName: simpleCriterionDef.criterionBaseName,
       );
     }
     if (__allFieldDefMap.containsKey(simpleCriterionDef.fieldName)) {
-      throw DuplicateCriterionFieldDefError(
+      throw FilterCriterionDuplicateFieldNameError(
         criterionBaseName: simpleCriterionDef.criterionBaseName,
         fieldName: simpleCriterionDef.fieldName,
       );
@@ -209,12 +209,12 @@ class FilterModelStructure {
   }) {
     if (__allCriterionDefMap
         .containsKey(multiOptCriterionDef.criterionBaseName)) {
-      throw DuplicateCriterionDefError(
+      throw FilterCriterionDuplicateNameError(
         criterionBaseName: multiOptCriterionDef.criterionBaseName,
       );
     }
     if (__allFieldDefMap.containsKey(multiOptCriterionDef.fieldName)) {
-      throw DuplicateCriterionFieldDefError(
+      throw FilterCriterionDuplicateFieldNameError(
         criterionBaseName: multiOptCriterionDef.criterionBaseName,
         fieldName: multiOptCriterionDef.fieldName,
       );
@@ -279,7 +279,7 @@ class FilterModelStructure {
       final FilterCriterionDef? criterionDef =
           __allCriterionDefMap[conditionDef.criterionName];
       if (criterionDef == null) {
-        throw FilterCriterionNotFoundError(
+        throw TildeFilterCriterionBaseCriterionNotFoundError(
           criterionBaseName: conditionDef.criterionName,
           tildeCriterionName: conditionDef.tildeCriterionName,
         );
@@ -323,7 +323,7 @@ class FilterModelStructure {
       // LAZY Initial.
       conditionDef.__group = parentGroupDef;
       if (__conditionGroupDefMap.containsKey(conditionDef.groupName)) {
-        throw DuplicateConditionGroupDefError(
+        throw FilterConditionGroupDuplicateNameError(
           groupName: conditionDef.groupName,
         );
       }

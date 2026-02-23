@@ -679,9 +679,17 @@ abstract class FormModel<
     try {
       _formPropsStructure = registerFormModelStructure();
       _formPropsStructure.formModel = this;
-    } on DuplicateFormPropError catch (e) {
-      String message =
-          "Duplicate prop '${e.propName}' in ${getClassName(this)}";
+    }
+    // Invalid Form Prop.
+    on FormPropInvalidNameError catch (e) {
+      String message = "Invalid Form propName '${e.propName}'.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.registerFormModelStructure()' method for details.";
+      throw _createFatalAppError(message);
+    }
+    // Duplicate Form Prop.
+    on FormPropDuplicateNameError catch (e) {
+      String message = "Duplicate Form propName '${e.propName}'.\n";
+      "@see the '${getClassNameWithoutGenerics(this)}.registerFormModelStructure()' method for details.";
       throw _createFatalAppError(message);
     } catch (e, stackTrace) {
       print(stackTrace);

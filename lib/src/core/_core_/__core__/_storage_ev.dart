@@ -15,12 +15,12 @@ class _StorageEventHandler {
     required Block eventBlock,
     required String? itemIdString,
   }) {
-    List<Event> events = eventBlock.config.fireExternalShelfEvents;
+    List<Event> events = eventBlock.config.emitExternalShelfEvents;
     if (events.isEmpty) {
       masterFlowItem._addLineFlowItem(
         codeId: "#25000",
         shortDesc:
-            "${debugObjHtml(eventBlock)}.config.fireExternalShelfEvents is empty! --> This event will be ignored.",
+            "${debugObjHtml(eventBlock)}.config.emitExternalShelfEvents is empty! --> This event will be ignored.",
         lineFlowType: LineFlowType.debug,
       );
       return;
@@ -30,7 +30,7 @@ class _StorageEventHandler {
       masterFlowItem: masterFlowItem,
       eventType: eventType,
       srcEventBlock: eventBlock,
-      events: eventBlock.config.fireExternalShelfEvents,
+      events: eventBlock.config.emitExternalShelfEvents,
       itemIdString: itemIdString,
     );
   }
@@ -142,7 +142,7 @@ class _StorageEventHandler {
   List<Scalar> __getListenerScalarsByBlock({
     required Block eventBlock,
   }) {
-    List<Event> itemTypeEvents = eventBlock.config.fireExternalShelfEvents;
+    List<Event> itemTypeEvents = eventBlock.config.emitExternalShelfEvents;
     if (itemTypeEvents.isEmpty) {
       return [];
     }
@@ -183,7 +183,7 @@ class _StorageEventHandler {
   List<Block> __getListenerBlocksByBlock({
     required Block eventBlock,
   }) {
-    List<Event> itemTypeEvents = eventBlock.config.fireExternalShelfEvents;
+    List<Event> itemTypeEvents = eventBlock.config.emitExternalShelfEvents;
     if (itemTypeEvents.isEmpty) {
       return [];
     }
@@ -271,7 +271,7 @@ class _StorageEventHandler {
     for (Shelf shelf in storage.getAllShelves()) {
       List<Block> allBlocks = shelf.blocks;
       for (Block blk in allBlocks) {
-        if (blk.config.fireExternalShelfEvents.isEmpty) {
+        if (blk.config.emitExternalShelfEvents.isEmpty) {
           continue;
         }
         final List<Event> listenToDataTypes =
@@ -345,11 +345,11 @@ class _StorageEventHandler {
 
     for (Shelf shelf in storage.getAllShelves()) {
       for (Block blk in shelf.blocks) {
-        if (blk.config.fireExternalShelfEvents.isEmpty) {
+        if (blk.config.emitExternalShelfEvents.isEmpty) {
           continue;
         }
         List<Event> listenerTypes =
-            listenerScalar.config.onExternalShelfEvents.scalarLevelReactionTo;
+            listenerScalar.config.onExternalShelfEvents.scalarLevelReactionOn;
         if (listenerTypes.isEmpty) {
           continue;
         }

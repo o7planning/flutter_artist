@@ -8,63 +8,63 @@ part of '../core.dart';
 // final List<Evt> executeBlockLevelReactionToEvts;
 
 // blockConfig: {
-//     fireExternalShelfEvents: [], // outsideBroadcastEvents
-//     onExternalShelfEvents: ExternalShelfEventB (
-//         blockLevelReactionTo: [], // executeBlockLevelReactionToEvents; (**)
+//     emitExternalShelfEvents: [], // outsideBroadcastEvents
+//     onExternalShelfEvents: ExternalShelfEventBlockRecipient (
+//         blockLevelReactionOn: [], // executeBlockLevelReactionToEvents; (**)
 //     );
-//     onInternalShelfEvents: InternalShelfEventB (
+//     onInternalShelfEvents: InternalShelfEventBlockRecipient (
 //         selfReQueryable: false,
 //         itemLevelSelfReactionEnabled: false,
-//         blockLevelReactionTo: [], // executeBlockLevelReactionToEvts
-//         itemLevelReactionTo: [], // executeItemLevelReactionToEvts
+//         blockLevelReactionOn: [], // executeBlockLevelReactionToEvts
+//         itemLevelReactionOn: [], // executeItemLevelReactionToEvts
 //     ),
 // }
 
 // scalarConfig: {
-//     onExternalShelfEvents: ExternalShelfEventS (
-//         scalarLevelReactionTo: [],
+//     onExternalShelfEvents: ExternalShelfEventScalarRecipient (
+//         scalarLevelReactionOn: [],
 //     );
-//     onInternalShelfEvents: InternalShelfEventS (
-//         scalarLevelReactionTo: [],
+//     onInternalShelfEvents: InternalShelfEventScalarRecipient (
+//         scalarLevelReactionOn: [],
 //     ),
 // }
 
-class ExternalShelfEventS {
-  final List<Event> scalarLevelReactionTo;
+class ExternalShelfEventScalarRecipient {
+  final List<Event> scalarLevelReactionOn;
 
-  const ExternalShelfEventS({
-    required this.scalarLevelReactionTo,
+  const ExternalShelfEventScalarRecipient({
+    required this.scalarLevelReactionOn,
   });
 }
 
-class InternalShelfEventS {
+class InternalShelfEventScalarRecipient {
   final bool scalarLevelSelfReactionEnabled;
-  final List<Evt> scalarLevelReactionTo;
+  final List<Evt> scalarLevelReactionOn;
 
-  const InternalShelfEventS({
+  const InternalShelfEventScalarRecipient({
     this.scalarLevelSelfReactionEnabled = false,
-    required this.scalarLevelReactionTo,
+    required this.scalarLevelReactionOn,
   });
 }
 
-class ExternalShelfEventB {
-  final List<Event> blockLevelReactionTo;
+class ExternalShelfEventBlockRecipient {
+  final List<Event> blockLevelReactionOn;
 
-  const ExternalShelfEventB({
-    required this.blockLevelReactionTo,
+  const ExternalShelfEventBlockRecipient({
+    required this.blockLevelReactionOn,
   });
 }
 
-class InternalShelfEventB {
+class InternalShelfEventBlockRecipient {
   final bool blockLevelSelfReactionEnabled;
   final bool currentItemSelfReactionEnabled;
-  final List<Evt> blockLevelReactionTo;
-  final List<Evt> itemLevelReactionTo;
+  final List<Evt> blockLevelReactionOn;
+  final List<Evt> itemLevelReactionOn;
 
-  const InternalShelfEventB({
+  const InternalShelfEventBlockRecipient({
     this.blockLevelSelfReactionEnabled = false,
     this.currentItemSelfReactionEnabled = false,
-    this.blockLevelReactionTo = const [],
-    this.itemLevelReactionTo = const [],
+    this.blockLevelReactionOn = const [],
+    this.itemLevelReactionOn = const [],
   });
 }

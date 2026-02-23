@@ -37,10 +37,10 @@ enum TipDocument {
   blockExtractParentBlockItemId(enabled: true),
   blockInitFormRelatedData(enabled: false),
   //
-  blockSilentActionPerformAction(enabled: false),
+  blockBackendActionPerformAction(enabled: false),
   //
   blockQuickItemUpdateActionPerformQuickUpdateItem(enabled: false),
-  blockBulkItemsCreationActionPerformBulkCreateItems(enabled: false),
+  blockQuickMultiItemCreationActionPerformBulkCreateItems(enabled: false),
   blockQuickItemCreationActionPerformQuickCreateItem(enabled: false),
   //
   scalarPerformQuery(enabled: false),
@@ -143,12 +143,12 @@ enum TipDocument {
         return "Block.performLoadItemDetailById()";
       case TipDocument.blockInitFormRelatedData:
         return "Block.performLoadFormRelatedData()";
-      case TipDocument.blockSilentActionPerformAction:
-        return "BlockSilentAction.performAction()";
+      case TipDocument.blockBackendActionPerformAction:
+        return "BlockBackendAction.performBackendOperation()";
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
         return "BlockQuickItemUpdateAction.performQuickUpdateItem()";
-      case TipDocument.blockBulkItemsCreationActionPerformBulkCreateItems:
-        return "BlockBulkItemsCreationAction.performBulkCreateItems()";
+      case TipDocument.blockQuickMultiItemCreationActionPerformBulkCreateItems:
+        return "BlockQuickMultiItemCreationAction.performQuickCreateMultiItems()";
       case TipDocument.blockQuickItemCreationActionPerformQuickCreateItem:
         return "BlockQuickItemCreationAction.performQuickCreateItem()";
       case TipDocument.scalarPerformQuery:
@@ -164,13 +164,13 @@ enum TipDocument {
       case TipDocument.filterModelPerformLoadMultiOptCriterionXData:
         return "FilterModel.performLoadMultiOptTildeCriterionXData()";
       case TipDocument.storagePerformAction:
-        return "Storage.performAction()";
+        return "Storage.performBackendOperation()";
       case TipDocument.backgroundActionRun:
         return "BackgroundAction.run()";
       case TipDocument.loginActivityPerformLogin:
         return "LoginActivity.performLogin()";
       case TipDocument.coordinatorCoordinationLogic:
-        return "Coordinator.coordinationLogic()";
+        return "Coordinator.performSetupOperation()";
       case TipDocument.logViewer:
         return "Log Viewer";
       case TipDocument.codeFlowViewer:
@@ -248,12 +248,12 @@ enum TipDocument {
         return "Block.performLoadItemDetailById()";
       case TipDocument.blockInitFormRelatedData:
         return "Block.performLoadFormRelatedData()";
-      case TipDocument.blockSilentActionPerformAction:
-        return "BlockSilentAction.performAction()";
+      case TipDocument.blockBackendActionPerformAction:
+        return "BlockBackendAction.performBackendOperation()";
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
         return "BlockQuickItemUpdateAction.performQuickUpdateItem()";
-      case TipDocument.blockBulkItemsCreationActionPerformBulkCreateItems:
-        return "BlockBulkItemsCreationAction.performBulkCreateItems()";
+      case TipDocument.blockQuickMultiItemCreationActionPerformBulkCreateItems:
+        return "BlockQuickMultiItemCreationAction.performQuickCreateMultiItems()";
       case TipDocument.blockQuickItemCreationActionPerformQuickCreateItem:
         return "BlockQuickItemCreationAction.performQuickCreateItem()";
       case TipDocument.scalarPerformQuery:
@@ -269,13 +269,13 @@ enum TipDocument {
       case TipDocument.filterModelPerformLoadMultiOptCriterionXData:
         return "FilterModel.performLoadMultiOptTildeCriterionXData()";
       case TipDocument.storagePerformAction:
-        return "Storage.performAction()";
+        return "Storage.performBackendOperation()";
       case TipDocument.backgroundActionRun:
         return "BackgroundAction.run()";
       case TipDocument.loginActivityPerformLogin:
         return "LoginActivity.performLogin()";
       case TipDocument.coordinatorCoordinationLogic:
-        return "Coordinator.coordinationLogic()";
+        return "Coordinator.performSetupOperation()";
       case TipDocument.logViewer:
         return "Log Viewer";
       case TipDocument.codeFlowViewer:
@@ -446,11 +446,11 @@ enum TipDocument {
         return [];
       case TipDocument.blockInitFormRelatedData:
         return [];
-      case TipDocument.blockSilentActionPerformAction:
+      case TipDocument.blockBackendActionPerformAction:
         return [];
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
         return [];
-      case TipDocument.blockBulkItemsCreationActionPerformBulkCreateItems:
+      case TipDocument.blockQuickMultiItemCreationActionPerformBulkCreateItems:
         return [];
       case TipDocument.blockQuickItemCreationActionPerformQuickCreateItem:
         return [];

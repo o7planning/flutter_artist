@@ -38,12 +38,12 @@ import '../../debug/storage/_block_or_scalar.dart';
 import '../../debug/utils/_debug.dart';
 import '../action/_background_action.dart';
 import '../action/_action.dart';
-import '../action/block_silent_action.dart';
-import '../action/block_bulk_items_creation_action.dart';
+import '../action/block_backend_action.dart';
+import '../action/block_quick_multi_item_creation_action.dart';
 import '../action/block_quick_item_creation_action.dart';
 import '../action/block_quick_item_update_action.dart';
 import '../action/scalar_quick_extra_data_load_action.dart';
-import '../action/storage_silent_action.dart';
+import '../action/storage_backend_action.dart';
 import '../adapter/_global_data_adapter.dart';
 import '../adapter/_notification_adapter.dart';
 import '../annotation/annotation.dart';
@@ -100,35 +100,36 @@ import '../enums/_task_type.dart';
 import '../enums/_tip_document.dart';
 import '../enums/_unified_item_refresh_policy.dart';
 import '../enums/_x_shelf_type.dart';
-import '../enums/after_silent_action.dart';
+import '../enums/after_backend_action.dart';
 import '../error/_block_error_info.dart';
 import '../error/_dev_error.dart';
 import '../error/_filter_error_info.dart';
 import '../error/filter/filter_method_error.dart';
+import '../error/filter_register/filter_criterion_invalid_base_name_error.dart';
 import '../error/form/form_method_error.dart';
-import '../error/form_register/duplicate_form_prop_error.dart';
+import '../error/form_register/form_prop_duplicate_name_error.dart';
 import '../error/_fatal_app_error.dart';
 import '../error/_form_error_info.dart';
 import '../error/_scalar_error_info.dart';
 import '../error/filter/filter_criterion_type_mismatch_error.dart';
 import '../error/filter/filter_multi_opt_ms_mismatch_error.dart';
-import '../error/filter_register/filter_criterion_not_found_error.dart';
-import '../error/filter_register/criterion_base_name_error.dart';
-import '../error/filter_register/duplicate_condition_group_def_error.dart';
-import '../error/filter_register/duplicate_criterion_def_error.dart';
-import '../error/filter_register/duplicate_criterion_field_def_error.dart';
-import '../error/filter_register/duplicate_filter_condition_def_error.dart';
-import '../error/filter_register/duplicate_filter_criterion_error.dart';
-import '../error/filter_register/duplicate_filter_field_error.dart';
-import '../error/filter_register/filter_criterion_register_error.dart';
-import '../error/filter_register/filter_field_name_error.dart';
-import '../error/filter_register/filter_field_no_converter_error.dart';
-import '../error/filter_register/tilde_criterion_config_duplication_error.dart';
+import '../error/filter_register/tilde_filter_criterion_base_criterion_not_found_error.dart';
+import '../error/filter_register/filter_condition_group_duplicate_name_error.dart';
+import '../error/filter_register/filter_criterion_duplicate_name_error.dart';
+import '../error/filter_register/filter_criterion_duplicate_field_name_error.dart';
+import '../error/filter_register/filter_condition_group_duplicate_tilde_error.dart';
+import '../error/filter_register/filter_criteria_duplicate_criterion_error.dart';
+import '../error/filter_register/filter_criteria_duplicate_field_error.dart';
+import '../error/filter_register/_filter_model_register_error.dart';
+import '../error/filter_register/filter_criterion_field_name_invalid_error.dart';
+import '../error/filter_register/filter_criterion_no_field_value_converter_error.dart';
+import '../error/filter_register/tilde_criterion_config_duplicate_suffix_error.dart';
 import '../error/filter_register/tilde_criterion_config_invalid_suffix_error.dart';
-import '../error/filter_register/tilde_criterion_name_error.dart';
-import '../error/filter_register/tilde_suffix_error.dart';
+import '../error/filter_register/tilde_filter_criterion_name_invalid_error.dart';
+import '../error/filter_register/tilde_filter_criterion_suffix_invalid_error.dart';
 import '../error/form/form_multi_opt_ms_mismatch_error.dart';
 import '../error/form/form_prop_type_mismatch_error.dart';
+import '../error/form_register/form_prop_invalid_name_error.dart';
 import '../global/_global_data.dart';
 import '../icon/icon_constants.dart';
 import '../logger/_logger.dart';
@@ -148,9 +149,9 @@ import '../precheck/block_current_item_setting_precheck.dart';
 import '../precheck/block_item_deletion_precheck.dart';
 import '../precheck/block_item_edit_precheck.dart';
 import '../precheck/block_items_deletion_precheck.dart';
-import '../precheck/block_multi_items_creation_precheck.dart';
+import '../precheck/block_quick_multi_item_creation_precheck.dart';
 import '../precheck/block_query_precheck.dart';
-import '../precheck/block_silent_action_precheck.dart';
+import '../precheck/block_backend_action_precheck.dart';
 import '../precheck/block_quick_item_creation_precheck.dart';
 import '../precheck/block_quick_item_update_precheck.dart';
 import '../precheck/patch_form_fields_precheck.dart';
@@ -166,7 +167,7 @@ import '../utils/_hive_utils.dart';
 import '../utils/_html_utils.dart';
 import '../utils/_name_utils.dart';
 import '../widgets/_custom_app_container.dart';
-import '../event/fire_silent_events_action.dart';
+import '../event/fire_backend_events_action.dart';
 
 part '../../startup_error_viewer.dart';
 
@@ -222,7 +223,7 @@ part '_filter_/_val_/__filter_val.dart';
 
 part '_filter_/_def_/_filter_criterion_def.dart';
 
-part '_filter_/_def_/_simple_val.dart';
+part '_filter_/_val_/_simple_val.dart';
 
 part '_filter_/_def_/_filter_criteria_def.dart';
 
@@ -231,6 +232,14 @@ part '_filter_/_def_/_tilde_filter_criterion_config.dart';
 part '_filter_/_model_/__filter_condition_model.dart';
 
 part '_filter_/_def_/_filter_condition_def.dart';
+
+part '_filter_/_name_/_tilde_obj.dart';
+
+part '_filter_/_name_/_tilde_suffix_obj.dart';
+
+part '_filter_/_name_/_filter_criterion_name_obj.dart';
+
+part '_filter_/_name_/_filter_field_name_obj.dart';
 
 part '_filter_/_filter_input.dart';
 
@@ -380,7 +389,7 @@ part '_core_x_/_x_shelf_/_x_shelf_form_model_save.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_form_model_patch_form_fields.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_block_multi_items_deletion.dart';
+part '_core_x_/_x_shelf_/_x_shelf_block_multi_item_deletion.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_item_deletion.dart';
 
@@ -388,13 +397,13 @@ part '_core_x_/_x_shelf_/_x_shelf_prepare_form_to_create_item.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_clear_current_item.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_block_bulk_items_creation.dart';
+part '_core_x_/_x_shelf_/_x_shelf_block_quick_multi_item_creation.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_quick_item_update.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_quick_item_creation.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_block_silent_action_execution.dart';
+part '_core_x_/_x_shelf_/_x_shelf_block_backend_action_execution.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_set_item_as_current.dart';
 
@@ -402,7 +411,7 @@ part '_core_x_/_x_shelf_/_x_shelf_block_clearance.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_scalar_clearance.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_scalar_silent_action.dart';
+part '_core_x_/_x_shelf_/_x_shelf_scalar_backend_action.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_scalar_quick_extra_data_load_action.dart';
 
@@ -452,6 +461,8 @@ part '_form_/_model_/__form_prop_model.dart';
 
 part '_form_/_def_/_form_prop_def.dart';
 
+part '_form_/_name_/_form_prop_name_obj.dart';
+
 part '_form_/_model_/_calculated_form_prop_model.dart';
 
 part '_form_/_form_model_structure.dart';
@@ -500,13 +511,13 @@ part '_task_result_/_block_items_deletion_result.dart';
 
 part '_task_result_/_block_query_result.dart';
 
-part '_task_result_/_block_silent_action_result.dart';
+part '_task_result_/_block_backend_action_result.dart';
 
 part '_task_result_/_block_quick_item_creation_result.dart';
 
 part '_task_result_/_block_quick_item_update_result.dart';
 
-part '_task_result_/_block_bulk_items_creation_result.dart';
+part '_task_result_/_block_quick_multi_item_creation_result.dart';
 
 part '_task_result_/_form_model_data_load_result.dart';
 
@@ -516,7 +527,7 @@ part '_task_result_/_form_save_result.dart';
 
 part '_task_result_/_scalar_query_result.dart';
 
-part '_task_result_/_storage_silent_action_result.dart';
+part '_task_result_/_storage_backend_action_result.dart';
 
 part '_task_unit_/_hook_task_unit.dart';
 
@@ -538,17 +549,17 @@ part '_task_unit_/_block_item_deletion_task_unit.dart';
 
 part '_task_unit_/_activity_task_unit.dart';
 
-part '_task_unit_/_block_multi_items_deletion_task_unit.dart';
+part '_task_unit_/_block_multi_item_deletion_task_unit.dart';
 
 part '_task_unit_/_block_prepare_form_to_create_item_task_unit.dart';
 
 part '_task_unit_/_block_query_task_unit.dart';
 
-part '_task_unit_/_block_silent_action_task_unit.dart';
+part '_task_unit_/_block_backend_action_task_unit.dart';
 
 part '_task_unit_/_block_quick_item_creation_task_unit.dart';
 
-part '_task_unit_/_block_bulk_items_creation_task_unit.dart';
+part '_task_unit_/_block_quick_multi_item_creation_task_unit.dart';
 
 part '_task_unit_/_block_quick_item_update_task_unit.dart';
 
@@ -570,7 +581,7 @@ part '_task_unit_/_scalar_load_extra_data_quick_action_task_unit.dart';
 
 part '_task_unit_/_scalar_query_task_unit.dart';
 
-part '_task_unit_/_storage_silent_action_task_unit.dart';
+part '_task_unit_/_storage_backend_action_task_unit.dart';
 
 part '_ui_/__refreshable_widget.dart';
 
@@ -889,8 +900,8 @@ class _ScalarClearanceAnnotation {
 
 // ******* Scalar QuickAction (START) ******************************************
 
-class _StorageSilentActionAnnotation {
-  const _StorageSilentActionAnnotation();
+class _StorageBackendActionAnnotation {
+  const _StorageBackendActionAnnotation();
 }
 
 class _ScalarLoadExtraDataQuickActionAnnotation {
@@ -901,16 +912,16 @@ class _ScalarLoadExtraDataQuickActionAnnotation {
 
 // ******* Block QuickAction (START) *******************************************
 
-class _BlockSilentActionAnnotation {
-  const _BlockSilentActionAnnotation();
+class _BlockBackendActionAnnotation {
+  const _BlockBackendActionAnnotation();
 }
 
 class _BlockQuickItemCreationActionAnnotation {
   const _BlockQuickItemCreationActionAnnotation();
 }
 
-class _BlockBlockBulkItemsCreationActionAnnotation {
-  const _BlockBlockBulkItemsCreationActionAnnotation();
+class _BlockQuickMultiItemCreationActionAnnotation {
+  const _BlockQuickMultiItemCreationActionAnnotation();
 }
 
 class _BlockQuickItemUpdateActionAnnotation {

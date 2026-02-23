@@ -82,7 +82,7 @@ class FormModelStructure {
     required SimpleFormPropDef simplePropDef,
   }) {
     if (__allPropDefMap.containsKey(simplePropDef.propName)) {
-      throw DuplicateFormPropError(
+      throw FormPropDuplicateNameError(
         propName: simplePropDef.propName,
       );
     }
@@ -97,7 +97,7 @@ class FormModelStructure {
     required MultiOptFormPropDef? parent,
   }) {
     if (__allPropDefMap.containsKey(multiOptPropDef.propName)) {
-      throw DuplicateFormPropError(
+      throw FormPropDuplicateNameError(
         propName: multiOptPropDef.propName,
       );
     }

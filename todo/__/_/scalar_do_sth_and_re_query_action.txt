@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../enums/after_silent_action.dart';
+import '../../enums/after_backend_action.dart';
 import '../_action.dart';
 
 ///
@@ -24,7 +24,7 @@ abstract class ScalarDoSthAndReQueryAction extends Action {
 }
 
 class ScalarDoSthAndReQueryActionConfig {
-  final AfterStorageSilentAction afterQuickAction;
+  final AfterStorageBackendAction afterQuickAction;
   final List<Type> affectedItemTypes;
 
   const ScalarDoSthAndReQueryActionConfig({

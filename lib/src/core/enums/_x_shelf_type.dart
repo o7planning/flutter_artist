@@ -8,12 +8,12 @@ enum XShelfType {
   blockCurrItemClearance,
   blockClearance,
   blockItemDeletion,
-  blockMultiItemsDeletion,
+  blockMultiItemDeletion,
   blockCurrItemSelection,
-  blockSilentActionExecution,
+  blockBackendActionExecution,
   blockQuickItemCreation,
   blockQuickItemUpdate,
-  blockBulkItemsCreation,
+  blockQuickMultiItemCreation,
   //
   shelfExternalReaction,
   //
@@ -25,7 +25,7 @@ enum XShelfType {
   //
   scalarQuery,
   scalarClearance,
-  scalarSilentAction,
+  scalarBackendAction,
   scalarQuickExtraDataLoadAction,
   //
   hook;

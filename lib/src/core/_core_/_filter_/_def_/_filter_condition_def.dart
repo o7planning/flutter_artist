@@ -100,7 +100,7 @@ class FilterConditionGroupDef implements FilterConditionDef {
       if (def is FilterSimpleConditionDef) {
         final nameTilde = def._tildeObj.tildeCriterionName;
         if (map.containsKey(nameTilde)) {
-          throw DuplicateFilterConditionDefError(
+          throw FilterConditionGroupDuplicateTildeError(
             tildeCriterionName: nameTilde,
             groupName: groupName,
           );

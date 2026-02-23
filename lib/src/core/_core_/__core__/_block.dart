@@ -505,7 +505,7 @@ abstract class Block<
   List<Event> getOutsideDataTypesToListen() {
     List<Event> itemTypeEvents = [];
     //
-    itemTypeEvents.addAll(config.onExternalShelfEvents.blockLevelReactionTo);
+    itemTypeEvents.addAll(config.onExternalShelfEvents.blockLevelReactionOn);
     //
     return itemTypeEvents.toSet().toList();
   }
@@ -1283,8 +1283,7 @@ abstract class Block<
       return;
     }
     //
-    final bool currentItemInList =
-        currItem != null && containsItem(currItem);
+    final bool currentItemInList = currItem != null && containsItem(currItem);
     candidateCurrItem = currentItemInList ? currItem : null;
     //
     masterFlowItem._addLineFlowItem(
@@ -3259,12 +3258,12 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockBlockBulkItemsCreationActionAnnotation()
-  Future<bool> _unitQuickCreateMultiItems({
+  @_BlockQuickMultiItemCreationActionAnnotation()
+  Future<bool> _unitQuickCreateMultiItem({
     required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockBulkItemsCreationAction<ID, ITEM, ITEM_DETAIL,
+    required BlockQuickMultiItemCreationAction<ID, ITEM, ITEM_DETAIL,
             FILTER_CRITERIA>
         action,
   }) async {
@@ -3282,7 +3281,8 @@ abstract class Block<
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#44100",
-        shortDesc: "Calling ${debugObjHtml(action)}.performBulkCreateItems().",
+        shortDesc:
+            "Calling ${debugObjHtml(action)}.performQuickCreateMultiItems().",
         parameters: {
           "parentBlockItem": parent?.currentItem,
           "filterCriteria": blockCurrentFilterCriteria,
@@ -3290,7 +3290,7 @@ abstract class Block<
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
-      result = await action.performBulkCreateItems(
+      result = await action.performQuickCreateMultiItems(
         parentBlockItem: parent?.currentItem,
         filterCriteria: blockCurrentFilterCriteria,
       );
@@ -3298,17 +3298,17 @@ abstract class Block<
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: '${getClassName(action)}.performBulkCreateItems',
+        methodName: '${getClassName(action)}.performQuickCreateMultiItems',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
         tipDocument:
-            TipDocument.blockBulkItemsCreationActionPerformBulkCreateItems,
+            TipDocument.blockQuickMultiItemCreationActionPerformBulkCreateItems,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#44200",
         shortDesc:
-            "The ${debugObjHtml(action)}.performBulkCreateItems() method was called with an error!",
+            "The ${debugObjHtml(action)}.performQuickCreateMultiItems() method was called with an error!",
         errorInfo: errorInfo,
       );
       //
@@ -3319,30 +3319,31 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#44300",
         shortDesc:
-            "Calling ${debugObjHtml(this)}._processCreateMultiItemsActionResult()..",
+            "Calling ${debugObjHtml(this)}._processCreateMultiItemActionResult()..",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
-      return await _processCreateMultiItemsActionResult(
+      return await _processCreateMultiItemActionResult(
         masterFlowItem: masterFlowItem,
         thisXBlock: thisXBlock,
         blockCurrentFilterCriteria: blockCurrentFilterCriteria,
-        calledMethodName: "${getClassName(action)}.performBulkCreateItems",
+        calledMethodName:
+            "${getClassName(action)}.performQuickCreateMultiItems",
         result: result,
       );
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: "${getClassName(action)}.performBulkCreateItems",
+        methodName: "${getClassName(action)}.performQuickCreateMultiItems",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
         tipDocument:
-            TipDocument.blockBulkItemsCreationActionPerformBulkCreateItems,
+            TipDocument.blockQuickMultiItemCreationActionPerformBulkCreateItems,
       );
       masterFlowItem._addLineFlowItem(
         codeId: "#44400",
         shortDesc:
-            "The ${debugObjHtml(this)}._processCreateMultiItemsActionResult() method was called with an error!",
+            "The ${debugObjHtml(this)}._processCreateMultiItemActionResult() method was called with an error!",
         errorInfo: errorInfo,
       );
       //
@@ -3464,13 +3465,13 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockSilentActionAnnotation()
-  Future<void> _unitSilentAction({
+  @_BlockBackendActionAnnotation()
+  Future<void> _unitBackendAction({
     required MasterFlowItem masterFlowItem,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockSilentAction action,
-    required BlockSilentActionResult taskResult,
+    required BlockBackendAction action,
+    required BlockBackendActionResult taskResult,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -3485,21 +3486,21 @@ abstract class Block<
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#45100",
-        shortDesc: "Calling ${debugObjHtml(action)}.performAction().",
+        shortDesc: "Calling ${debugObjHtml(action)}.performBackendOperation().",
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
-      result = await action.performAction();
+      result = await action.performBackendOperation();
       // Throw ApiError.
       result.throwIfError();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: '${getClassName(action)}.performAction',
+        methodName: '${getClassName(action)}.performBackendOperation',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument: TipDocument.blockSilentActionPerformAction,
+        tipDocument: TipDocument.blockBackendActionPerformAction,
       );
       //
       taskResult._setErrorInfo(
@@ -3508,7 +3509,7 @@ abstract class Block<
       masterFlowItem._addLineFlowItem(
         codeId: "#45200",
         shortDesc:
-            "The ${debugObjHtml(action)}.performAction() method was called with an error!",
+            "The ${debugObjHtml(action)}.performBackendOperation() method was called with an error!",
         errorInfo: errorInfo,
       );
       return;
@@ -3517,7 +3518,7 @@ abstract class Block<
     masterFlowItem._addLineFlowItem(
       codeId: "#45300",
       shortDesc:
-          "${debugObjHtml(this)} > Fire event after execute silent action.",
+          "${debugObjHtml(this)} > Fire event after execute backend action.",
       lineFlowType: LineFlowType.fireEvent,
     );
     __fireEventFromBlockToOtherShelves(
@@ -3542,7 +3543,7 @@ abstract class Block<
       masterFlowItem: masterFlowItem,
       thisXBlock: thisXBlock,
       forceReQuery:
-          action.config.afterSilentAction == AfterBlockSilentAction.query,
+          action.config.afterBackendAction == AfterBlockBackendAction.query,
       candidateCurrItem: candidateCurrItem,
     );
   }
@@ -3842,7 +3843,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> _processCreateMultiItemsActionResult({
+  Future<bool> _processCreateMultiItemActionResult({
     required MasterFlowItem masterFlowItem,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required FILTER_CRITERIA blockCurrentFilterCriteria,
@@ -4127,7 +4128,7 @@ abstract class Block<
     final taskResult = _createEmptyItemsDeletionResult(
       candidateItems: candidateDeleteItems,
     );
-    final _ResultedSTaskUnit taskUnit = _BlockMultiItemsDeletionTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockMultiItemDeletionTaskUnit(
       xBlock: thisXBlock,
       items: candidateDeleteItems,
       stopIfError: stopIfError,
@@ -4996,25 +4997,25 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_BlockSilentActionAnnotation()
+  @_BlockBackendActionAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  Future<BlockSilentActionResult> executeSilentAction({
+  Future<BlockBackendActionResult> executeBackendAction({
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
-    required BlockSilentAction<ID, dynamic> action,
+    required BlockBackendAction<ID, dynamic> action,
     required Function(BuildContext context)? navigate,
   }) async {
     final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "executeSilentAction",
+      methodName: "executeBackendAction",
       parameters: null,
       navigate: null,
       isLibMethod: true,
     );
     masterFlowItem._addLineFlowItem(
       codeId: "#71000",
-      shortDesc: "Calling ${debugObjHtml(this)}.__canSilentAction()",
+      shortDesc: "Calling ${debugObjHtml(this)}.__canBackendAction()",
       parameters: {
         "checkBusy": true,
       },
@@ -5024,7 +5025,8 @@ abstract class Block<
     //
     // @Same-Code-Precheck-01
     //
-    final Actionable<BlockSilentActionPrecheck> actionable = __canSilentAction(
+    final Actionable<BlockBackendActionPrecheck> actionable =
+        __canBackendAction(
       checkBusy: true,
     );
     //
@@ -5042,7 +5044,7 @@ abstract class Block<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return BlockSilentActionResult(
+      return BlockBackendActionResult(
         precheck: actionable.errCode,
         errorInfo: actionable.errorInfo,
       );
@@ -5060,26 +5062,26 @@ abstract class Block<
     }
     //
     if (!confirm) {
-      return BlockSilentActionResult(
-        precheck: BlockSilentActionPrecheck.cancelled,
+      return BlockBackendActionResult(
+        precheck: BlockBackendActionPrecheck.cancelled,
       );
     }
     //
     //
-    final XShelf xShelf = _XShelfBlockSilentActionExecution(
+    final XShelf xShelf = _XShelfBlockBackendActionExecution(
       block: this,
       filterInput: filterInput,
-      afterSilentAction: action.config.afterSilentAction,
+      afterBackendAction: action.config.afterBackendAction,
     );
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#71340",
-      shortDesc: "Creating <b>_BlockSilentActionTaskUnit</b>.",
+      shortDesc: "Creating <b>_BlockBackendActionTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
     );
-    final _ResultedSTaskUnit taskUnit = _BlockSilentActionTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockBackendActionTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -5197,9 +5199,10 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_BlockBlockBulkItemsCreationActionAnnotation()
-  Future<BlockBulkItemsCreationResult> executeBulkItemsCreationAction({
-    required BlockBulkItemsCreationAction<
+  @_BlockQuickMultiItemCreationActionAnnotation()
+  Future<BlockQuickMultiItemCreationResult>
+      executeQuickMultiItemCreationAction({
+    required BlockQuickMultiItemCreationAction<
             ID, //
             ITEM,
             ITEM_DETAIL,
@@ -5208,7 +5211,7 @@ abstract class Block<
   }) async {
     final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "executeBulkItemsCreationAction",
+      methodName: "executeQuickMultiItemCreationAction",
       parameters: {
         "action": action,
       },
@@ -5222,7 +5225,7 @@ abstract class Block<
     masterFlowItem._addLineFlowItem(
       codeId: "#74000",
       shortDesc:
-          "Calling ${debugObjHtml(this)}.__canCreateMultiItems() to check before execute the action.",
+          "Calling ${debugObjHtml(this)}.__canCreateMultiItem() to check before execute the action.",
       parameters: {
         "checkBusy": checkBusyTrue,
         "checkAllow": checkAllowTrue,
@@ -5231,8 +5234,8 @@ abstract class Block<
     //
     // @Same-Code-Precheck-01
     //
-    Actionable<BlockBulkItemsCreationPrecheck> actionable =
-        __canCreateMultiItems(
+    Actionable<BlockQuickMultiItemCreationPrecheck> actionable =
+        __canCreateMultiItem(
       checkBusy: checkBusyTrue,
       checkAllow: checkAllowTrue,
     );
@@ -5250,7 +5253,7 @@ abstract class Block<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return BlockBulkItemsCreationResult(
+      return BlockQuickMultiItemCreationResult(
         precheck: actionable.errCode,
         errorInfo: actionable.errorInfo,
       );
@@ -5267,21 +5270,21 @@ abstract class Block<
       );
     }
     if (!confirm) {
-      return BlockBulkItemsCreationResult(
-        precheck: BlockBulkItemsCreationPrecheck.cancelled,
+      return BlockQuickMultiItemCreationResult(
+        precheck: BlockQuickMultiItemCreationPrecheck.cancelled,
       );
     }
     //
-    final XShelf xShelf = _XShelfBlockBulkItemsCreationAction(block: this);
+    final XShelf xShelf = _XShelfBlockQuickMultiItemCreationAction(block: this);
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#74340",
-      shortDesc: "Creating <b>_BlockBulkItemsCreationTaskUnit</b>.",
+      shortDesc: "Creating <b>_BlockQuickMultiItemCreationTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
     );
-    final _ResultedSTaskUnit taskUnit = _BlockBulkItemsCreationTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockQuickMultiItemCreationTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -6240,59 +6243,59 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<BlockSilentActionPrecheck> __canSilentAction({
+  Actionable<BlockBackendActionPrecheck> __canBackendAction({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockSilentActionPrecheck>.no(
-        errCode: BlockSilentActionPrecheck.busy,
+      return Actionable<BlockBackendActionPrecheck>.no(
+        errCode: BlockBackendActionPrecheck.busy,
       );
     }
     switch (dataState) {
       case DataState.pending:
-        return Actionable<BlockSilentActionPrecheck>.no(
-          errCode: BlockSilentActionPrecheck.blockInPendingState,
+        return Actionable<BlockBackendActionPrecheck>.no(
+          errCode: BlockBackendActionPrecheck.blockInPendingState,
         );
       case DataState.error:
-        return Actionable<BlockSilentActionPrecheck>.no(
-          errCode: BlockSilentActionPrecheck.blockInErrorState,
+        return Actionable<BlockBackendActionPrecheck>.no(
+          errCode: BlockBackendActionPrecheck.blockInErrorState,
         );
       case DataState.none:
-        return Actionable<BlockSilentActionPrecheck>.no(
-          errCode: BlockSilentActionPrecheck.blockInNoneState,
+        return Actionable<BlockBackendActionPrecheck>.no(
+          errCode: BlockBackendActionPrecheck.blockInNoneState,
         );
       case DataState.ready:
         break;
     }
     //
-    return Actionable<BlockSilentActionPrecheck>.yes();
+    return Actionable<BlockBackendActionPrecheck>.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<BlockBulkItemsCreationPrecheck> __canCreateMultiItems({
+  Actionable<BlockQuickMultiItemCreationPrecheck> __canCreateMultiItem({
     required bool checkBusy,
     required bool checkAllow,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockBulkItemsCreationPrecheck>.no(
-        errCode: BlockBulkItemsCreationPrecheck.busy,
+      return Actionable<BlockQuickMultiItemCreationPrecheck>.no(
+        errCode: BlockQuickMultiItemCreationPrecheck.busy,
       );
     }
     switch (dataState) {
       case DataState.pending:
-        return Actionable<BlockBulkItemsCreationPrecheck>.no(
-          errCode: BlockBulkItemsCreationPrecheck.blockInPendingState,
+        return Actionable<BlockQuickMultiItemCreationPrecheck>.no(
+          errCode: BlockQuickMultiItemCreationPrecheck.blockInPendingState,
         );
       case DataState.error:
-        return Actionable<BlockBulkItemsCreationPrecheck>.no(
-          errCode: BlockBulkItemsCreationPrecheck.blockInErrorState,
+        return Actionable<BlockQuickMultiItemCreationPrecheck>.no(
+          errCode: BlockQuickMultiItemCreationPrecheck.blockInErrorState,
         );
       case DataState.none:
-        return Actionable<BlockBulkItemsCreationPrecheck>.no(
-          errCode: BlockBulkItemsCreationPrecheck.blockInNoneState,
+        return Actionable<BlockQuickMultiItemCreationPrecheck>.no(
+          errCode: BlockQuickMultiItemCreationPrecheck.blockInNoneState,
         );
       case DataState.ready:
         break;
@@ -6302,20 +6305,20 @@ abstract class Block<
       CheckAllowResult result = __isItemCreationAllowed();
       switch (result.result) {
         case CheckAllow.allow:
-          return Actionable<BlockBulkItemsCreationPrecheck>.yes();
+          return Actionable<BlockQuickMultiItemCreationPrecheck>.yes();
         case CheckAllow.notAllow:
-          return Actionable<BlockBulkItemsCreationPrecheck>.no(
-            errCode: BlockBulkItemsCreationPrecheck.notAllow,
+          return Actionable<BlockQuickMultiItemCreationPrecheck>.no(
+            errCode: BlockQuickMultiItemCreationPrecheck.notAllow,
           );
         case CheckAllow.error:
-          return Actionable<BlockBulkItemsCreationPrecheck>.no(
-            errCode: BlockBulkItemsCreationPrecheck.checkAllowMethodError,
+          return Actionable<BlockQuickMultiItemCreationPrecheck>.no(
+            errCode: BlockQuickMultiItemCreationPrecheck.checkAllowMethodError,
             errorInfo: result.errorInfo,
           );
       }
     }
     //
-    return Actionable<BlockBulkItemsCreationPrecheck>.yes();
+    return Actionable<BlockQuickMultiItemCreationPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -6899,8 +6902,8 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckMethod()
-  Actionable<BlockSilentActionPrecheck> canQuickAction() {
-    return __canSilentAction(
+  Actionable<BlockBackendActionPrecheck> canQuickAction() {
+    return __canBackendAction(
       checkBusy: true,
     );
   }

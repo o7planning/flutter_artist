@@ -81,15 +81,15 @@ class _Storage extends _StorageCore {
   // =============== @@@@@@@@@@@@@@@@@@ ========================================
 
   @_RootMethodAnnotation()
-  @_StorageSilentActionAnnotation()
-  Future<StorageSilentActionResult> executeSilentAction({
+  @_StorageBackendActionAnnotation()
+  Future<StorageBackendActionResult> executeBackendAction({
     required ActionConfirmationType actionConfirmationType,
-    required StorageSilentAction action,
+    required StorageBackendAction action,
     required Function(BuildContext context)? navigate,
   }) async {
     final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "executeSilentAction",
+      methodName: "executeBackendAction",
       parameters: {
         "action": action,
       },
@@ -102,7 +102,7 @@ class _Storage extends _StorageCore {
     masterFlowItem._addLineFlowItem(
       codeId: "#75000",
       shortDesc:
-          "Calling ${debugObjHtml(this)}.__canSilentAction() to check before execute the action.",
+          "Calling ${debugObjHtml(this)}.__canBackendAction() to check before execute the action.",
       parameters: {
         "checkBusy": checkBusyTrue,
       },
@@ -110,8 +110,8 @@ class _Storage extends _StorageCore {
     //
     // @Same-Code-Precheck-01
     //
-    final Actionable<StorageSilentActionPrecheck> actionable =
-        __canSilentAction(
+    final Actionable<StorageBackendActionPrecheck> actionable =
+        __canBackendAction(
       checkBusy: checkBusyTrue,
     );
     //
@@ -129,7 +129,7 @@ class _Storage extends _StorageCore {
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return StorageSilentActionResult(
+      return StorageBackendActionResult(
         precheck: actionable.errCode,
         errorInfo: actionable.errorInfo,
       );
@@ -147,21 +147,21 @@ class _Storage extends _StorageCore {
     }
     //
     if (!confirm) {
-      return StorageSilentActionResult(
-        precheck: StorageSilentActionPrecheck.cancelled,
+      return StorageBackendActionResult(
+        precheck: StorageBackendActionPrecheck.cancelled,
       );
     }
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#75340",
-      shortDesc: "Creating <b>_StorageSilentActionTaskUnit</b>.",
+      shortDesc: "Creating <b>_StorageBackendActionTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
     );
-    final taskUnit = _StorageSilentActionTaskUnit(
+    final taskUnit = _StorageBackendActionTaskUnit(
       action: action,
     );
     //
-    FlutterArtist._rootQueue._addStorageSilentActionTaskUnit(taskUnit);
+    FlutterArtist._rootQueue._addStorageBackendActionTaskUnit(taskUnit);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     return taskUnit.taskResult;
@@ -171,28 +171,28 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<StorageSilentActionPrecheck> __canSilentAction({
+  Actionable<StorageBackendActionPrecheck> __canBackendAction({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<StorageSilentActionPrecheck>.no(
-        errCode: StorageSilentActionPrecheck.busy,
+      return Actionable<StorageBackendActionPrecheck>.no(
+        errCode: StorageBackendActionPrecheck.busy,
       );
     }
     //
-    return Actionable<StorageSilentActionPrecheck>.yes();
+    return Actionable<StorageBackendActionPrecheck>.yes();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_StorageSilentActionAnnotation()
-  Future<bool> _unitSilentAction({
+  @_StorageBackendActionAnnotation()
+  Future<bool> _unitBackendAction({
     required MasterFlowItem masterFlowItem,
     required TaskType taskType,
-    required StorageSilentAction action,
-    required StorageSilentActionResult taskResult,
+    required StorageBackendAction action,
+    required StorageBackendActionResult taskResult,
   }) async {
     ApiResult<void>? result;
     //
@@ -206,17 +206,17 @@ class _Storage extends _StorageCore {
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#35100",
-        shortDesc: "Calling ${debugObjHtml(action)}.performAction().",
+        shortDesc: "Calling ${debugObjHtml(action)}.performBackendOperation().",
         lineFlowType: LineFlowType.controllableCalling,
       );
       //
-      result = await action.performAction();
+      result = await action.performBackendOperation();
       // Throw ApiError.
       result.throwIfError();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: null,
-        methodName: '${getClassName(action)}.performAction',
+        methodName: '${getClassName(action)}.performBackendOperation',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -229,7 +229,7 @@ class _Storage extends _StorageCore {
       masterFlowItem._addLineFlowItem(
         codeId: "#35200",
         shortDesc:
-            "The ${debugObjHtml(action)}.performAction() method was called with an error!",
+            "The ${debugObjHtml(action)}.performBackendOperation() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -237,7 +237,7 @@ class _Storage extends _StorageCore {
     //
     masterFlowItem._addLineFlowItem(
       codeId: "#35300",
-      shortDesc: "${debugObjHtml(this)} > Fire event after silent action.",
+      shortDesc: "${debugObjHtml(this)} > Fire event after backend action.",
       lineFlowType: LineFlowType.fireEvent,
     );
     FlutterArtist.storage.ev._fireEventFromShelfToOtherShelves(
@@ -253,17 +253,17 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<StorageSilentActionResult> fireSilentEventsAction({
+  Future<StorageBackendActionResult> fireBackendActionEvents({
     required List<Event> events,
     required bool needToConfirm,
     String? actionInfo,
   }) async {
-    StorageSilentAction action = FireSilentEventsAction(
+    StorageBackendAction action = FireBackendEventsAction(
       needToConfirm: needToConfirm,
       events: events,
       actionInfo: actionInfo,
     );
-    return await executeSilentAction(
+    return await executeBackendAction(
       actionConfirmationType: ActionConfirmationType.custom,
       action: action,
       navigate: null,

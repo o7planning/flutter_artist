@@ -303,7 +303,7 @@ abstract class Scalar<
   List<Event> getOutsideDataTypesToListen() {
     final List<Event> list = [];
     //
-    list.addAll(config.onExternalShelfEvents.scalarLevelReactionTo);
+    list.addAll(config.onExternalShelfEvents.scalarLevelReactionOn);
     //
     return list.toSet().toList();
   }
@@ -756,14 +756,14 @@ abstract class Scalar<
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#41000",
-        shortDesc: "Calling ${debugObjHtml(action)}.doWithExtraData().",
+        shortDesc: "Calling ${debugObjHtml(action)}.onExtraDataLoaded().",
         parameters: {
           "success": success,
           "extraData": extraData,
         },
         lineFlowType: LineFlowType.controllableCalling,
       );
-      await action.doWithExtraData(
+      await action.onExtraDataLoaded(
         context,
         success: success,
         extraData: extraData,
@@ -775,7 +775,7 @@ abstract class Scalar<
       masterFlowItem._addLineFlowItem(
         codeId: "#41300",
         shortDesc:
-            "The ${debugObjHtml(action)}.doWithExtraData() method was called with an error!",
+            "The ${debugObjHtml(action)}.onExtraDataLoaded() method was called with an error!",
         errorInfo: errorInfo,
       );
       success2 = false;

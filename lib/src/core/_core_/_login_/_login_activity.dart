@@ -8,11 +8,11 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
   Future<void> navigateToSuccessScreen();
 
   @override
-  Future<void> performExecuteLogic() async {
+  Future<void> performActivityOperation() async {
     ApiResult<USER> result;
     final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "performExecuteLogic",
+      methodName: "performActivityOperation",
       parameters: null,
       navigate: null,
       isLibMethod: true,

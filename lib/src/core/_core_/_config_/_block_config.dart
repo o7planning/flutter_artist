@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class BlockConfig {
-  final bool leaveTheFormSafely;
+  final bool preventUnsavedChangesLoss;
   final ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy;
   final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy;
   final BlockHiddenAction onHideAction;
@@ -9,14 +9,14 @@ class BlockConfig {
   final Pageable pageable;
 
   ///
-  final List<Event> fireExternalShelfEvents;
+  final List<Event> emitExternalShelfEvents;
 
   ///
   /// Reaction to External Events. Docs: 14769/27a
   ///
-  final ExternalShelfEventB onExternalShelfEvents;
+  final ExternalShelfEventBlockRecipient onExternalShelfEvents;
 
-  final InternalShelfEventB onInternalShelfEvents;
+  final InternalShelfEventBlockRecipient onInternalShelfEvents;
 
   final SortStrategy clientSideSortStrategy;
 
@@ -24,17 +24,17 @@ class BlockConfig {
     this.itemAbsentRepresentativePolicy =
         ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
     this.unifiedItemRefreshPolicy = UnifiedItemRefreshPolicy.auto,
-    this.leaveTheFormSafely = true,
+    this.preventUnsavedChangesLoss = true,
     this.onHideAction = BlockHiddenAction.none,
-    List<Event>? fireExternalShelfEvents,
+    List<Event>? emitExternalShelfEvents,
     //
     List<Event>? executeItemLevelReactionToEvents,
-    this.onExternalShelfEvents = const ExternalShelfEventB(
-      blockLevelReactionTo: [],
+    this.onExternalShelfEvents = const ExternalShelfEventBlockRecipient(
+      blockLevelReactionOn: [],
     ),
-    this.onInternalShelfEvents = const InternalShelfEventB(
-      blockLevelReactionTo: [],
-      itemLevelReactionTo: [],
+    this.onInternalShelfEvents = const InternalShelfEventBlockRecipient(
+      blockLevelReactionOn: [],
+      itemLevelReactionOn: [],
     ),
     //
     this.pageable = const Pageable(
@@ -42,18 +42,18 @@ class BlockConfig {
       pageSize: 20,
     ),
     this.clientSideSortStrategy = SortStrategy.none,
-  }) : fireExternalShelfEvents =
-            List.unmodifiable(fireExternalShelfEvents?.toSet() ?? []);
+  }) : emitExternalShelfEvents =
+            List.unmodifiable(emitExternalShelfEvents?.toSet() ?? []);
 
   BlockConfig copy() {
     return BlockConfig(
       unifiedItemRefreshPolicy: unifiedItemRefreshPolicy,
       itemAbsentRepresentativePolicy: itemAbsentRepresentativePolicy,
-      leaveTheFormSafely: leaveTheFormSafely,
+      preventUnsavedChangesLoss: preventUnsavedChangesLoss,
       onHideAction: onHideAction,
       pageable: pageable.copy(),
       //
-      fireExternalShelfEvents: fireExternalShelfEvents,
+      emitExternalShelfEvents: emitExternalShelfEvents,
       //
       onExternalShelfEvents: onExternalShelfEvents,
       onInternalShelfEvents: onInternalShelfEvents,
