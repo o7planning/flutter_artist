@@ -253,7 +253,7 @@ abstract class MasterFlowItem {
 
   LineFlowItem? getLineFlowEvent() {
     for (LineFlowItem item in __lineFlowItems) {
-      if (item.lineFlowType == LineFlowType.fireEvent) {
+      if (item.lineFlowType == LineFlowType.emitEvent) {
         return item;
       }
     }

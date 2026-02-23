@@ -167,7 +167,7 @@ import '../utils/_hive_utils.dart';
 import '../utils/_html_utils.dart';
 import '../utils/_name_utils.dart';
 import '../widgets/_custom_app_container.dart';
-import '../event/fire_backend_events_action.dart';
+import '../event/emit_backend_events_action.dart';
 
 part '../../startup_error_viewer.dart';
 

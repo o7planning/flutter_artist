@@ -238,9 +238,9 @@ class _Storage extends _StorageCore {
     masterFlowItem._addLineFlowItem(
       codeId: "#35300",
       shortDesc: "${debugObjHtml(this)} > Fire event after backend action.",
-      lineFlowType: LineFlowType.fireEvent,
+      lineFlowType: LineFlowType.emitEvent,
     );
-    FlutterArtist.storage.ev._fireEventFromShelfToOtherShelves(
+    FlutterArtist.storage.ev._emitEventFromShelfToOtherShelves(
       masterFlowItem: masterFlowItem,
       eventType: EventType.unknown,
       eventShelf: null,
@@ -253,7 +253,7 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<StorageBackendActionResult> fireBackendActionEvents({
+  Future<StorageBackendActionResult> emitBackendActionEvents({
     required List<Event> events,
     required bool needToConfirm,
     String? actionInfo,

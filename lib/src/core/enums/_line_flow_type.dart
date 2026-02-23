@@ -7,7 +7,7 @@ enum LineFlowType {
   addTaskUnit,
   controllableCalling,
   nonControllableCalling,
-  fireEvent,
+  emitEvent,
   eventInfo,
   separator;
 
@@ -30,7 +30,7 @@ enum LineFlowType {
       case LineFlowType.debug:
         return Icons.bug_report_outlined;
 
-      case LineFlowType.fireEvent:
+      case LineFlowType.emitEvent:
         return Icons.electric_bolt_outlined;
       case LineFlowType.eventInfo:
         return Icons.electric_bolt_outlined;
@@ -53,7 +53,7 @@ enum LineFlowType {
         return Colors.orange;
       case LineFlowType.debug:
         return Colors.deepPurpleAccent;
-      case LineFlowType.fireEvent:
+      case LineFlowType.emitEvent:
         return Colors.deepOrange;
       case LineFlowType.eventInfo:
         return Colors.purpleAccent;

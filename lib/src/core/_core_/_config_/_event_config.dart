@@ -17,9 +17,9 @@ class Evt extends Equatable {
   final SrcType srcType;
   final String srcName;
 
-  const Evt.insideBlock(this.srcName) : srcType = SrcType.block;
+  const Evt.ofBlock(this.srcName) : srcType = SrcType.block;
 
-  const Evt.insideScalar(this.srcName) : srcType = SrcType.scalar;
+  const Evt.ofScalar(this.srcName) : srcType = SrcType.scalar;
 
   // IMPORTANT:
   @override

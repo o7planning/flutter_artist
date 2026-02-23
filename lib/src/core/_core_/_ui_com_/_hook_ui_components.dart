@@ -172,7 +172,7 @@ class _HookUiComponents extends _UiComponents {
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(hook.shelf);
     } else if (hasXHookRepOLD && !hasXHookRepCURRENT) {
-      hook._fireHookHidden();
+      hook._emitHookHidden();
     }
   }
 
@@ -185,7 +185,7 @@ class _HookUiComponents extends _UiComponents {
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      hook._fireHookHidden();
+      hook._emitHookHidden();
     }
   }
 

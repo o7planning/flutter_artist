@@ -173,7 +173,7 @@ class _ActivityUiComponents extends _UiComponents {
       // LOGIC: #0000
       // FlutterArtist.storage._naturalQueryQueue.addShelf(activity.shelf);
     } else if (hasXActivityRepOLD && !hasXActivityRepCURRENT) {
-      activity._fireActivityHidden();
+      activity._emitActivityHidden();
     }
   }
 
@@ -186,7 +186,7 @@ class _ActivityUiComponents extends _UiComponents {
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      activity._fireActivityHidden();
+      activity._emitActivityHidden();
     }
   }
 

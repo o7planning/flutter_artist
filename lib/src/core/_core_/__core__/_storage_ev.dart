@@ -9,7 +9,7 @@ class _StorageEventHandler {
   // ***************************************************************************
 
   @_ImportantMethodAnnotation("Called after saving or deleting in the Block")
-  void _fireEventFromBlockToOtherShelves({
+  void _emitEventFromBlockToOtherShelves({
     required MasterFlowItem masterFlowItem,
     required EventType eventType,
     required Block eventBlock,
@@ -26,7 +26,7 @@ class _StorageEventHandler {
       return;
     }
     // Appends TaskUnits to QUEUE (No need to call execute).
-    ___fireEventFromBlockToOtherShelves(
+    ___emitEventFromBlockToOtherShelves(
       masterFlowItem: masterFlowItem,
       eventType: eventType,
       srcEventBlock: eventBlock,
@@ -39,7 +39,7 @@ class _StorageEventHandler {
   // ***************************************************************************
 
   // PRIVATE METHOD.
-  void ___fireEventFromBlockToOtherShelves({
+  void ___emitEventFromBlockToOtherShelves({
     required MasterFlowItem masterFlowItem,
     required EventType eventType,
     required Block? srcEventBlock,
@@ -91,7 +91,7 @@ class _StorageEventHandler {
 
   @_ImportantMethodAnnotation(
       "Called after executing QuickAction in the Block or Scalar")
-  void _fireEventFromShelfToOtherShelves({
+  void _emitEventFromShelfToOtherShelves({
     required MasterFlowItem masterFlowItem,
     required EventType eventType,
     required Shelf? eventShelf,
