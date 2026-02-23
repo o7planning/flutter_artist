@@ -260,7 +260,7 @@ class _ScalarUiComponents extends _UiComponents {
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
     } else if (activeOLD && !activeCURRENT) {
-      scalar._fireScalarHidden();
+      scalar._emitScalarHidden();
     }
   }
 
@@ -273,7 +273,7 @@ class _ScalarUiComponents extends _UiComponents {
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      scalar._fireScalarHidden();
+      scalar._emitScalarHidden();
     }
   }
 
@@ -302,7 +302,7 @@ class _ScalarUiComponents extends _UiComponents {
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
     } else if (activeOLD && !activeCURRENT) {
-      scalar._fireScalarHidden();
+      scalar._emitScalarHidden();
     }
   }
 
@@ -315,7 +315,7 @@ class _ScalarUiComponents extends _UiComponents {
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      scalar._fireScalarHidden();
+      scalar._emitScalarHidden();
     }
   }
 

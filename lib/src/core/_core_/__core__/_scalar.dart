@@ -1179,7 +1179,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _fireScalarHidden() {
+  void _emitScalarHidden() {
     // FlutterArtist.codeFlowLogger._addEvent(
     //   ownerClassInstance: this,
     //   event: "Scalar '${getClassName(this)}' just hides all UI Components!",

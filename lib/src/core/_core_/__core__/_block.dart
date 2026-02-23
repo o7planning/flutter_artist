@@ -649,7 +649,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _fireBlockHidden() {
+  void _emitBlockHidden() {
     // FlutterArtist.codeFlowLogger._addEvent(
     //   ownerClassInstance: this,
     //   event: "Block '${getClassName(this)}' just hides all UI Components!",
@@ -2343,12 +2343,12 @@ abstract class Block<
         codeId: "#08180",
         shortDesc:
             "${debugObjHtml(this)} > Fire event after deleting ${_debugItemTypeHtml()}($itemId).",
-        lineFlowType: LineFlowType.fireEvent,
+        lineFlowType: LineFlowType.emitEvent,
       );
       //
       // External React:
       //
-      __fireEventFromBlockToOtherShelves(
+      __emitEventFromBlockToOtherShelves(
         masterFlowItem: masterFlowItem,
         eventType: EventType.deletion,
       );
@@ -2983,10 +2983,10 @@ abstract class Block<
         codeId: "#42900",
         shortDesc:
             "${debugObjHtml(this)} > Fire event after deleting. (${deletionResult.deletedItems.length} items deleted!).",
-        lineFlowType: LineFlowType.fireEvent,
+        lineFlowType: LineFlowType.emitEvent,
       );
       //
-      __fireEventFromBlockToOtherShelves(
+      __emitEventFromBlockToOtherShelves(
         masterFlowItem: masterFlowItem,
         eventType: EventType.deletion,
       );
@@ -3519,9 +3519,9 @@ abstract class Block<
       codeId: "#45300",
       shortDesc:
           "${debugObjHtml(this)} > Fire event after execute backend action.",
-      lineFlowType: LineFlowType.fireEvent,
+      lineFlowType: LineFlowType.emitEvent,
     );
-    __fireEventFromBlockToOtherShelves(
+    __emitEventFromBlockToOtherShelves(
       masterFlowItem: masterFlowItem,
       eventType: EventType.unknown,
     );
@@ -3588,7 +3588,7 @@ abstract class Block<
       // TODO-Review.
       return;
     }
-    bool fireOutsideEvent = false;
+    bool emitExternalShelfEvent = false;
     final ITEM_DETAIL? savedItemDetail = result.data;
     //
     masterFlowItem._addLineFlowItem(
@@ -3601,12 +3601,12 @@ abstract class Block<
     if (savedItemDetail == null) {
       keepInList = false;
       if (isNew) {
-        fireOutsideEvent = false;
+        emitExternalShelfEvent = false;
       } else {
-        fireOutsideEvent = true;
+        emitExternalShelfEvent = true;
       }
     } else {
-      fireOutsideEvent = true;
+      emitExternalShelfEvent = true;
       //
       masterFlowItem._addLineFlowItem(
         codeId: "#16140",
@@ -3627,16 +3627,16 @@ abstract class Block<
       );
     }
     //
-    if (fireOutsideEvent) {
+    if (emitExternalShelfEvent) {
       masterFlowItem._addLineFlowSeparator();
       //
       masterFlowItem._addLineFlowItem(
         codeId: "#16200",
         shortDesc:
             "${debugObjHtml(this)} > Save successful --> An event occurred --> checking if it should be emitted.",
-        lineFlowType: LineFlowType.fireEvent,
+        lineFlowType: LineFlowType.emitEvent,
       );
-      __fireEventFromBlockToOtherShelves(
+      __emitEventFromBlockToOtherShelves(
         masterFlowItem: masterFlowItem,
         eventType: isNew ? EventType.creation : EventType.update,
       );
@@ -3864,7 +3864,7 @@ abstract class Block<
     //
     // External React:
     //
-    __fireEventFromBlockToOtherShelves(
+    __emitEventFromBlockToOtherShelves(
       masterFlowItem: masterFlowItem,
       eventType: EventType.creation,
     );
@@ -5782,12 +5782,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __fireEventFromBlockToOtherShelves({
+  void __emitEventFromBlockToOtherShelves({
     required MasterFlowItem masterFlowItem,
     required EventType eventType,
   }) {
     // TODO: Chuyen di noi khac.
-    FlutterArtist.storage.ev._fireEventFromBlockToOtherShelves(
+    FlutterArtist.storage.ev._emitEventFromBlockToOtherShelves(
       masterFlowItem: masterFlowItem,
       eventType: eventType,
       eventBlock: this,

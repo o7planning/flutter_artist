@@ -76,7 +76,7 @@ export 'src/core/enums/_task_flow_type.dart';
 export 'src/core/enums/_task_type.dart';
 export 'src/core/enums/_unified_item_refresh_policy.dart';
 export 'src/core/enums/after_backend_action.dart';
-export 'src/core/event/fire_backend_events_action.dart';
+export 'src/core/event/emit_backend_events_action.dart';
 export 'src/core/global/_global_data.dart';
 export 'src/core/logger/_logger.dart';
 export 'src/core/notification/_notification.dart';

@@ -128,7 +128,7 @@ class _SortUiComponents extends _UiComponents {
       FlutterArtist.storage._naturalQueryQueue.addShelf(sortModel.shelf);
     } else if (activeOLD && !activeCURRENT) {
       // TODO: (Kiem tra phuong thuc cung ten trong Block).
-      // block._fireBlockHidden();
+      // block._emitBlockHidden();
     }
   }
 

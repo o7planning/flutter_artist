@@ -14,13 +14,13 @@ class EffectedShelfMembers {
   /// ```dart
   /// config: BlockConfig (
   ///   executeScalarLevelReactionToEvts: [
-  ///      Evt.insideBlock("block1"),
-  ///      Evt.insideBlock("block2"),
-  ///      Evt.insideScalar("scalar1"),
+  ///      Evt.ofBlock("block1"),
+  ///      Evt.ofBlock("block2"),
+  ///      Evt.ofScalar("scalar1"),
   ///   ],
   ///   executeItemLevelReactionToEvts: [
-  ///      Evt.insideBlock"block1"),
-  ///      Evt.insideBlock"block2"),
+  ///      Evt.ofBlock"block1"),
+  ///      Evt.ofBlock"block2"),
   ///   ]
   /// ),
   /// ```
