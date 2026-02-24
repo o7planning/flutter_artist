@@ -181,9 +181,9 @@ abstract class Scalar<
   }
 
   ///
-  /// FilterModel Name registered in [Shelf.registerShelfStructure()] method.
+  /// FilterModel Name registered in [Shelf.defineShelfStructure()] method.
   ///
-  final String? registerFilterModelName;
+  final String? registeredFilterModelName;
 
   final String? description;
 
@@ -212,7 +212,7 @@ abstract class Scalar<
       get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   ///
-  /// Returns a FilterModel declared in the [Shelf.registerShelfStructure()] method.
+  /// Returns a FilterModel declared in the [Shelf.defineShelfStructure()] method.
   /// The return value may be null.
   ///
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>? get filterModel {
@@ -279,7 +279,7 @@ abstract class Scalar<
     required String? filterModelName,
     required List<Scalar>? childScalars,
   })  : config = config.copy(),
-        registerFilterModelName = filterModelName,
+        registeredFilterModelName = filterModelName,
         _childScalars = childScalars ?? [] {
     for (Scalar childScalar in _childScalars) {
       childScalar.parent = this;

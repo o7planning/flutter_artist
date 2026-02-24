@@ -80,7 +80,7 @@ class FaIconConstants {
 
   static const IconData routeStackIconData = Icons.layers_outlined;
 
-  static const IconData polymorphismIconData = Icons.grain;
+  static const IconData projectionIconData = Icons.grain;
 
   static const IconData shelfIconData = Icons.shelves;
 

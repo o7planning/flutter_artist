@@ -1,12 +1,12 @@
 part of '../core.dart';
 
-class PolymorphismFamily<ID extends Object> {
+class ProjectionFamily<ID extends Object> {
   final String familyName;
   final Set<Type> _members;
 
   Set<Type> get members => Set.unmodifiable(_members);
 
-  PolymorphismFamily({
+  ProjectionFamily({
     required this.familyName,
     required Set<Type> members,
   }) : _members = members;
@@ -22,6 +22,6 @@ class PolymorphismFamily<ID extends Object> {
   @override
   String toString() {
     // IMPORTANT: Do not change:
-    return "${getTypeNameWithoutGenerics(PolymorphismFamily)}('$familyName')";
+    return "${getTypeNameWithoutGenerics(ProjectionFamily)}('$familyName')";
   }
 }

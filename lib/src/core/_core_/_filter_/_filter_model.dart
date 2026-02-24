@@ -74,7 +74,7 @@ abstract class FilterModel<
   FilterModel({
     FilterModelConfig config = const FilterModelConfig(),
   }) : config = config.copy() {
-    __registerFilterModelStructure();
+    __defineFilterModelStructure();
   }
 
   // ***************************************************************************
@@ -94,7 +94,7 @@ abstract class FilterModel<
   ///
   /// ```dart
   /// @override
-  /// FilterModelStructure registerFilterModelStructure() {
+  /// FilterModelStructure defineFilterModelStructure() {
   ///   return FilterModelStructure(
   ///     criteriaStructure: FilterCriteriaStructure(
   ///       simpleCriterionDefs: [
@@ -129,7 +129,7 @@ abstract class FilterModel<
   /// ```
   ///
   @_AbstractMethodAnnotation()
-  FilterModelStructure registerFilterModelStructure();
+  FilterModelStructure defineFilterModelStructure();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -354,22 +354,22 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __registerFilterModelStructure() {
+  void __defineFilterModelStructure() {
     try {
-      _filterModelStructure = registerFilterModelStructure();
+      _filterModelStructure = defineFilterModelStructure();
       _filterModelStructure.filterModel = this;
       __filterCriteriaPrecheck();
     }
     // criterionBaseName is not valid:
     on FilterCriterionInvalidBaseNameError catch (e) {
       String message = "Invalid criterionBaseName '${e.criterionBaseName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // fieldName is not valid:
     on FilterCriterionFieldNameInvalidError catch (e) {
       String message = "Invalid fieldName '${e.fieldName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // No Field Converter:
@@ -377,40 +377,40 @@ abstract class FilterModel<
       String message =
           "Data type of '${e.criterionBaseName}' is '${e.dataType}' (Not simple data type).\n"
           "So you need to provide toFieldValue() function.\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // tildeCriterionName is not valid:
     on TildeFilterCriterionNameInvalidError catch (e) {
       String message = "Invalid tildeCriterionName '${e.tildeCriterionName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // parentMatchSuffix is not valid:
     on TildeFilterCriterionSuffixInvalidError catch (e) {
       String message =
           "Invalid parentMatchSuffix '${e.tildeSuffix}' (The correct examples: '~', '~1', '~min').\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // criterionBaseName not found:
     on TildeFilterCriterionBaseCriterionNotFoundError catch (e) {
       String message =
           "There is no criterionBaseName '${e.criterionBaseName}' corresponding to tildeCriterionName '${e.tildeCriterionName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // Duplicate criterionBaseName
     on FilterCriterionDuplicateNameError catch (e) {
       String message = "Duplicate criterionBaseName '${e.criterionBaseName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // Duplicate fieldName
     on FilterCriterionDuplicateFieldNameError catch (e) {
       String message =
           "Duplicate fieldName '${e.fieldName}' (criterionBaseName: ${e.criterionBaseName}).\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // TildeCriterionConfig - Invalid Suffix.
@@ -418,27 +418,27 @@ abstract class FilterModel<
       String message =
           "Invalid TildeCriterionConfig(suffix: '${e.tildeSuffix}') (criterionBaseName: ${e.criterionBaseName}).\n"
           "The correct examples: '~', '~1', '~min'.\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // TildeCriterionConfig - Duplicate Suffix.
     on TildeCriterionConfigDuplicationSuffixError catch (e) {
       String message =
           "Duplicate TildeCriterionConfig(suffix: '${e.tildeSuffix}') (criterionBaseName: ${e.criterionBaseName}).\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // Duplicate tildeCriterionName in a Group:
     on FilterConditionGroupDuplicateTildeError catch (e) {
       String message =
           "Duplicate tildeCriterionName '${e.tildeCriterionName}' in '${e.groupName}' group.\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // Duplicate groupName:
     on FilterConditionGroupDuplicateNameError catch (e) {
       String message = "Duplicate groupName '${e.groupName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // FilterCriteria class: Duplicate criterionName.

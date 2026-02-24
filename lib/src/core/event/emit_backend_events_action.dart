@@ -12,13 +12,13 @@ class FireBackendEventsAction extends StorageBackendAction {
     required super.needToConfirm,
     String? actionInfo,
     required this.events,
-  }) : super(actionInfo: actionInfo ?? "Fire event $events");
+  }) : super(actionInfo: actionInfo ?? "Emit event $events");
 
   @override
   StorageBackendActionConfig initDefaultConfig() {
     return StorageBackendActionConfig(
       emitEvents: events,
-      afterBackendAction: AfterStorageBackendAction.query,
+      // afterBackendAction: AfterStorageBackendAction.query,
     );
   }
 

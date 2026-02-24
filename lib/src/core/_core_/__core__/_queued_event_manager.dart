@@ -96,22 +96,22 @@ class _QueuedEventManager {
             "\n - @originEvents: <b>${originEvents.toList()}</b>.",
         lineFlowType: LineFlowType.debug,
       );
-      Set<Event> polymorphismEvents = FlutterArtist.storage._polymorphismManager
-          .getPolymorphismEvents(originEvents);
+      Set<Event> projectionEvents = FlutterArtist.storage._projectionManager
+          .getProjectionEvents(originEvents);
       masterFlowItem._addLineFlowItem(
         codeId: "#27160",
         shortDesc:
-            "Calculated <b>polymorphismEvents</b> from <b>originEvents</b>:"
-            "\n - @polymorphismEvents: <b>${polymorphismEvents.toList()}</b>.",
+            "Calculated <b>projectionEvents</b> from <b>originEvents</b>:"
+            "\n - @projectionEvents: <b>${projectionEvents.toList()}</b>.",
         lineFlowType: LineFlowType.debug,
-        tipDocument: TipDocument.polymorphism,
+        tipDocument: TipDocument.projection,
       );
       Shelf listenerShelf = storage._shelfMap[listenerShelfName]!;
       //
       __markReactionConditionsForEvents(
         masterFlowItem: masterFlowItem,
         listenerShelf: listenerShelf,
-        outsideEvents: polymorphismEvents.toList(),
+        outsideEvents: projectionEvents.toList(),
       );
       if (listenerShelf._hasReactionBookmark()) {
         if (listenerShelf.ui.hasActiveUiComponent()) {

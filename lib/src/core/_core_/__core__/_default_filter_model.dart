@@ -12,7 +12,7 @@ class _DefaultFilterModel
   }
 
   @override
-  FilterModelStructure registerFilterModelStructure() {
+  FilterModelStructure defineFilterModelStructure() {
     return FilterModelStructure(
       criteriaStructure: FilterCriteriaStructure(
         simpleCriterionDefs: [],

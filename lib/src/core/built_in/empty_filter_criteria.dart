@@ -5,9 +5,4 @@ class EmptyFilterCriteria extends FilterCriteria {
   EmptyFilterCriteria._();
 
   factory EmptyFilterCriteria() => EmptyFilterCriteria._();
-
-  @override
-  List<FilterCriterion> registerSupportedCriteria() {
-    return [];
-  }
 }

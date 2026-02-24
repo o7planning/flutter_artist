@@ -1,31 +1,31 @@
 part of '../core.dart';
 
-class _PolymorphismManager {
+class _ProjectionManager {
   final _Storage storage;
 
   bool _ready = false;
 
-  final Map<String, PolymorphismFamily> _nameToFamilyMap = {};
-  final Map<Type, PolymorphismFamily> _typeToFamilyMap = {};
+  final Map<String, ProjectionFamily> _nameToFamilyMap = {};
+  final Map<Type, ProjectionFamily> _typeToFamilyMap = {};
 
-  _PolymorphismManager(this.storage);
+  _ProjectionManager(this.storage);
 
   // ***************************************************************************
 
   void _init({
     required MasterFlowItem masterFlowItem,
-    required List<PolymorphismFamily> polymorphismFamilies,
+    required List<ProjectionFamily> projectionFamilies,
   }) {
     if (_ready) {
       return;
     }
     //
-    for (PolymorphismFamily family in polymorphismFamilies) {
+    for (ProjectionFamily family in projectionFamilies) {
       family._checkMembers();
       //
       if (_nameToFamilyMap.containsKey(family.familyName)) {
         String htmlMessage =
-            "Duplicate <b>PolymorphismFamily</b>(<b>'${family.familyName}</b>).";
+            "Duplicate <b>ProjectionFamily</b>(<b>'${family.familyName}</b>).";
         String errorMessage = HtmlUtils.removeTags(htmlMessage);
         //
         masterFlowItem._addLineFlowItem(
@@ -42,7 +42,7 @@ class _PolymorphismManager {
       _nameToFamilyMap[family.familyName] = family;
       //
       for (Type type in family.members) {
-        PolymorphismFamily? family2 = _typeToFamilyMap[type];
+        ProjectionFamily? family2 = _typeToFamilyMap[type];
         if (family2 != null) {
           String htmlMessage =
               "The <b>$type</b> data type is already in <b>$family2</b>.\n"
@@ -64,9 +64,9 @@ class _PolymorphismManager {
       }
     }
     // Valid alls:
-    for (PolymorphismFamily family in polymorphismFamilies) {
+    for (ProjectionFamily family in projectionFamilies) {
       String info = "<b>${family.familyName}</b> - ${family._members}";
-      FlutterArtist.debugRegister._addDebugRegisterPolymorphism(info);
+      FlutterArtist.debugRegister._addDebugRegisterProjection(info);
     }
     //
     _ready = true;
@@ -74,13 +74,13 @@ class _PolymorphismManager {
 
   // ***************************************************************************
 
-  PolymorphismFamily? findPolymorphismFamilyByType({
+  ProjectionFamily? findProjectionFamilyByType({
     required Type type,
   }) {
     return _typeToFamilyMap[type];
   }
 
-  PolymorphismFamily? findPolymorphismFamilyByName({
+  ProjectionFamily? findProjectionFamilyByName({
     required String familyName,
   }) {
     return _nameToFamilyMap[familyName];
@@ -88,12 +88,12 @@ class _PolymorphismManager {
 
   // ***************************************************************************
 
-  Set<Event> getPolymorphismEvents(Set<Event> originEvents) {
+  Set<Event> getProjectionEvents(Set<Event> originEvents) {
     final Set<Type> polyTypes = {};
     for (Event event in originEvents) {
       polyTypes.add(event.dataType);
-      final PolymorphismFamily? family =
-          findPolymorphismFamilyByType(type: event.dataType);
+      final ProjectionFamily? family =
+          findProjectionFamilyByType(type: event.dataType);
       if (family == null) {
         continue;
       }

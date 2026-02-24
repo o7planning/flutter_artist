@@ -130,7 +130,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   void __onInit() {
-    _shelfStruct = registerShelfStructure();
+    _shelfStruct = defineShelfStructure();
     config = _shelfStruct._config;
 
     for (String filterModelName in _shelfStruct.filterModels.keys) {
@@ -148,7 +148,7 @@ abstract class Shelf extends _Core {
       if (__hookMap.containsKey(hook.name)) {
         throw ___registerError(
             "Duplicated Hook '${hook.name}' in '${getClassName(this)}'"
-            "\nDouble-check ${getClassName(this)}.registerShelfStructure() method");
+            "\nDouble-check ${getClassName(this)}.defineShelfStructure() method");
       } else {
         __hookMap[hook.name] = hook;
       }
@@ -196,13 +196,13 @@ abstract class Shelf extends _Core {
           if (eventBlock == null) {
             throw ___registerError(
               "Configuration Error! --> No Block Name: '${evt.srcName}'. \n"
-              " ${getClassName(listenerBlock.shelf)} > registerShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
+              " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
               " > config > executeBlockLevelReactionToEvts > '${evt.srcName}'.",
             );
           } else if (identical(listenerBlock, eventBlock)) {
             throw ___registerError(
               "Configuration Error! --> Do not use: '${evt.srcName}', let use 'selfReQueryable:true' property. \n"
-              " ${getClassName(listenerBlock.shelf)} > registerShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
+              " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
               " > config > executeBlockLevelReactionToEvts > '${evt.srcName}'.",
             );
           }
@@ -216,7 +216,7 @@ abstract class Shelf extends _Core {
           if (eventScalar == null) {
             throw ___registerError(
               "Configuration Error! --> No Scalar Name: ${evt.srcName}. \n"
-              " ${getClassName(listenerBlock.shelf)} > registerShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
+              " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
               " > config > executeScalarLevelReactionToEvts > '${evt.srcName}'.",
             );
           }
@@ -234,13 +234,13 @@ abstract class Shelf extends _Core {
           if (eventBlock == null) {
             throw ___registerError(
               "Configuration Error! --> No Block Name: ${evt.srcName}. \n"
-              " ${getClassName(listenerBlock.shelf)} > registerShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
+              " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
               " > config > executeItemLevelReactionToEvts > '${evt.srcName}'.",
             );
           } else if (identical(listenerBlock, eventBlock)) {
             throw ___registerError(
               "Configuration Error! --> Do not use: '${evt.srcName}', let use 'currentItemSelfRefreshable:true' property. \n"
-              " ${getClassName(listenerBlock.shelf)} > registerShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
+              " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
               " > config > executeItemLevelReactionToEvts > '${evt.srcName}'.",
             );
           }
@@ -254,7 +254,7 @@ abstract class Shelf extends _Core {
           if (eventScalar == null) {
             throw ___registerError(
               "Configuration Error! --> No Scalar Name: ${evt.srcName}.\n"
-              " ${getClassName(listenerBlock.shelf)} > registerShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
+              " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
               " > config > executeItemLevelReactionToEvts > '${evt.srcName}'.",
             );
           }
@@ -280,7 +280,7 @@ abstract class Shelf extends _Core {
           if (eventBlock == null) {
             throw ___registerError(
               "Configuration Error! --> No Block Name: ${evt.srcName}. \n"
-              " ${getClassName(listenerScalar.shelf)} > registerShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
+              " ${getClassName(listenerScalar.shelf)} > defineShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
               " > config > executeBlockLevelReactionToEvts > '${evt.srcName}'.",
             );
           }
@@ -294,13 +294,13 @@ abstract class Shelf extends _Core {
           if (eventScalar == null) {
             throw ___registerError(
               "Configuration Error! --> No Scalar Name: ${evt.srcName}. \n"
-              " ${getClassName(listenerScalar.shelf)} > registerShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
+              " ${getClassName(listenerScalar.shelf)} > defineShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
               " > config > executeScalarLevelReactionToEvts > '${evt.srcName}'.",
             );
           } else if (identical(listenerScalar, eventScalar)) {
             throw ___registerError(
               "Configuration Error! --> Do not use: '${evt.srcName}', let use 'selfReQueryable:true' property.\n"
-              " ${getClassName(listenerScalar.shelf)} > registerShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
+              " ${getClassName(listenerScalar.shelf)} > defineShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
               " > config > executeScalarLevelReactionToEvts > '${evt.srcName}'.",
             );
           }
@@ -319,19 +319,19 @@ abstract class Shelf extends _Core {
     if (__scalarMap.containsKey(scalar.name)) {
       throw ___registerError(
           "Duplicated scalar '${scalar.name}' in '${getClassName(this)}'\n"
-          "Double-check ${getClassName(this)}.registerShelfStructure() method");
+          "Double-check ${getClassName(this)}.defineShelfStructure() method");
     } else {
       __scalarMap[scalar.name] = scalar;
     }
     //
     scalar.shelf = this;
-    if (scalar.registerFilterModelName != null) {
+    if (scalar.registeredFilterModelName != null) {
       FilterModel? filterModel =
-          _shelfStruct.filterModels[scalar.registerFilterModelName!];
+          _shelfStruct.filterModels[scalar.registeredFilterModelName!];
       if (filterModel == null) {
         throw ___registerError(
-            "FilterModel not found '${scalar.registerFilterModelName}' in '${getClassName(this)}'\n"
-            "Double-check ${getClassName(this)}.registerShelfStructure() method");
+            "FilterModel not found '${scalar.registeredFilterModelName}' in '${getClassName(this)}'\n"
+            "Double-check ${getClassName(this)}.defineShelfStructure() method");
       }
       //
       //
@@ -409,7 +409,7 @@ abstract class Shelf extends _Core {
     if (__blockMap.containsKey(block.name)) {
       throw ___registerError(
           "Duplicated block '${block.name}' in '${getClassName(this)}'\n"
-          "Double-check ${getClassName(this)}.registerShelfStructure() method");
+          "Double-check ${getClassName(this)}.defineShelfStructure() method");
     } else {
       __blockMap[block.name] = block;
       if (block.formModel != null) {
@@ -418,13 +418,13 @@ abstract class Shelf extends _Core {
     }
     //
     block.shelf = this;
-    if (block.registerFilterModelName != null) {
+    if (block.registeredFilterModelName != null) {
       FilterModel? filterModel =
-          _shelfStruct.filterModels[block.registerFilterModelName!];
+          _shelfStruct.filterModels[block.registeredFilterModelName!];
       if (filterModel == null) {
         throw ___registerError(
-            "FilterModel not found '${block.registerFilterModelName}' in '${getClassName(this)}'\n"
-            "Double-check ${getClassName(this)}.registerShelfStructure() method");
+            "FilterModel not found '${block.registeredFilterModelName}' in '${getClassName(this)}'\n"
+            "Double-check ${getClassName(this)}.defineShelfStructure() method");
       }
       //
       //
@@ -512,7 +512,7 @@ abstract class Shelf extends _Core {
   ///
   /// ```dart
   /// @override
-  /// ShelfStructure registerShelfStructure() {
+  /// ShelfStructure defineShelfStructure() {
   ///   return ShelfStructure(
   ///     filterModels: {
   ///       Song02aFilterModel.filterName: Song02aFilterModel(),
@@ -531,7 +531,7 @@ abstract class Shelf extends _Core {
   /// }
   /// ```
   ///
-  ShelfStructure registerShelfStructure();
+  ShelfStructure defineShelfStructure();
 
   // ***************************************************************************
   // ***************************************************************************

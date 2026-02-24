@@ -6,17 +6,4 @@ class IntIdFilterCriteria extends FilterCriteria {
   IntIdFilterCriteria({
     required this.idValue,
   });
-
-  @override
-  List<FilterCriterion> registerSupportedCriteria() {
-    return [
-      FilterCriterion<int>(
-        filterCriterionName: 'id',
-        filterFieldName: 'id',
-        converter: (int? baseValue) {
-          return SimpleVal.ofInt(baseValue);
-        },
-      ),
-    ];
-  }
 }

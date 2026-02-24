@@ -6,17 +6,4 @@ class StringIdFilterCriteria extends FilterCriteria {
   StringIdFilterCriteria({
     required this.idValue,
   });
-
-  @override
-  List<FilterCriterion> registerSupportedCriteria() {
-    return [
-      FilterCriterion<String>(
-        filterCriterionName: 'id',
-        filterFieldName: 'id',
-        converter: (String? baseValue) {
-          return SimpleVal.ofString(baseValue);
-        },
-      ),
-    ];
-  }
 }

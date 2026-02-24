@@ -12,7 +12,7 @@ class StringIdFilterModel
   StringIdFilterModel({required String? idValue}) : _idValue = idValue;
 
   @override
-  FilterModelStructure registerFilterModelStructure() {
+  FilterModelStructure defineFilterModelStructure() {
     return FilterModelStructure(
       criteriaStructure: FilterCriteriaStructure(
         simpleCriterionDefs: [

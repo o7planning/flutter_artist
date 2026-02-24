@@ -7,7 +7,7 @@ class _Storage extends _StorageCore {
 
   late final ui = _StorageUiComponents(storage: this);
 
-  late final _polymorphismManager = _PolymorphismManager(this);
+  late final _projectionManager = _ProjectionManager(this);
   late final ev = _StorageEventHandler(this);
   final _naturalQueryQueue = _StorageNaturalQueryQueue();
 
@@ -28,19 +28,19 @@ class _Storage extends _StorageCore {
     LineFlowItem item = masterFlowItem._addLineFlowItem(
       codeId: "#SS000",
       shortDesc:
-          "${debugObjHtml(storageStructure)}.registerPolymorphismFamilies().",
+          "${debugObjHtml(storageStructure)}.defineProjectionFamilies().",
       lineFlowType: LineFlowType.controllableCalling,
-      tipDocument: TipDocument.polymorphism,
+      tipDocument: TipDocument.projection,
     );
-    final List<PolymorphismFamily> polymorphismFamilies =
-        storageStructure.registerPolymorphismFamilies();
+    final List<ProjectionFamily> projectionFamilies =
+        storageStructure.defineProjectionFamilies();
     // This method may throw Fatal Error cause stop app.
-    _polymorphismManager._init(
+    _projectionManager._init(
       masterFlowItem: masterFlowItem,
-      polymorphismFamilies: polymorphismFamilies,
+      projectionFamilies: projectionFamilies,
     );
     //
-    item._extraInfos = FlutterArtist.debugRegister.debugRegisterPolymorphisms
+    item._extraInfos = FlutterArtist.debugRegister.debugRegisterProjections
       ..sort();
     item = masterFlowItem._addLineFlowItem(
       codeId: "#SS040",
@@ -60,13 +60,6 @@ class _Storage extends _StorageCore {
     );
     storageStructure.registerShelves();
     item._extraInfos = FlutterArtist.debugRegister.debugRegisterShelves..sort();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void registerItemVariants({required String name}) {
-    //
   }
 
   // ***************************************************************************

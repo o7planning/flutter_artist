@@ -153,9 +153,9 @@ abstract class Block<
   final String? description;
 
   ///
-  /// FilterModel Name registered in [Shelf.registerShelfStructure()] method.
+  /// FilterModel Name registered in [Shelf.defineShelfStructure()] method.
   ///
-  final String? registerFilterModelName;
+  final String? registeredFilterModelName;
 
   ///
   /// This field is not null.
@@ -172,7 +172,7 @@ abstract class Block<
       get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   ///
-  /// Returns a FilterModel declared in the [Shelf.registerShelfStructure()] method.
+  /// Returns a FilterModel declared in the [Shelf.defineShelfStructure()] method.
   /// The return value may be null.
   ///
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>? get filterModel {
@@ -469,7 +469,7 @@ abstract class Block<
     required this.formModel,
     required List<Block>? childBlocks,
     SortModelBuilder<ITEM>? sortModelBuilder,
-  })  : registerFilterModelName = filterModelName,
+  })  : registeredFilterModelName = filterModelName,
         config = config.copy(),
         _childBlocks = childBlocks ?? [] {
     for (Block childBlock in _childBlocks) {

@@ -13,7 +13,7 @@ class StringValueFilterModel
       : _stringValue = stringValue;
 
   @override
-  FilterModelStructure registerFilterModelStructure() {
+  FilterModelStructure defineFilterModelStructure() {
     return FilterModelStructure(
       criteriaStructure: FilterCriteriaStructure(
         simpleCriterionDefs: [
