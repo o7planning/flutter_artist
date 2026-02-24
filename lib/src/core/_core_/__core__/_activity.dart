@@ -1,7 +1,6 @@
 part of '../core.dart';
 
 abstract class Activity extends _Core {
-
   late final ui = _ActivityUiComponents(activity: this);
 
   Activity();
@@ -64,7 +63,8 @@ abstract class Activity extends _Core {
     try {
       masterFlowItem._addLineFlowItem(
         codeId: "#19100",
-        shortDesc: "Calling ${debugObjHtml(this)}.performActivityOperation()...",
+        shortDesc:
+            "Calling ${debugObjHtml(this)}.performActivityOperation()...",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       await performActivityOperation();

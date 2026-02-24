@@ -17,7 +17,7 @@ class FireBackendEventsAction extends StorageBackendAction {
   @override
   StorageBackendActionConfig initDefaultConfig() {
     return StorageBackendActionConfig(
-      affectedItemTypes: events,
+      emitEvents: events,
       afterBackendAction: AfterStorageBackendAction.query,
     );
   }

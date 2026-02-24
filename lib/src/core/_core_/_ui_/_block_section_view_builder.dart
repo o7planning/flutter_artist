@@ -1,30 +1,34 @@
 part of '../core.dart';
 
-class StorageAreaViewBuilder extends _RefreshableWidget {
+class BlockSectionViewBuilder extends _RefreshableWidget {
+  final Block block;
+  final bool itemRepresentative;
   final Widget Function() build;
 
-  const StorageAreaViewBuilder({
+  const BlockSectionViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
+    required this.block,
+    required this.itemRepresentative,
     required this.build,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _StorageAreaViewState();
+    return _BlockSectionViewBuilderState();
   }
 }
 
-class _StorageAreaViewState
-    extends _RefreshableWidgetState<StorageAreaViewBuilder> {
+class _BlockSectionViewBuilderState
+    extends _RefreshableWidgetState<BlockSectionViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
-    return "StorageAreaView";
+    return getClassName(widget.block);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.shelfFragment;
+  RefreshableWidgetType get type => RefreshableWidgetType.blockFragment;
 
   @override
   bool get isScalarRepresentative {
@@ -33,12 +37,12 @@ class _StorageAreaViewState
 
   @override
   bool get isBlockRepresentative {
-    return false;
+    return true;
   }
 
   @override
   bool get isItemRepresentative {
-    return false;
+    return widget.itemRepresentative;
   }
 
   @override
@@ -52,13 +56,8 @@ class _StorageAreaViewState
   }
 
   @override
-  Widget buildContent(BuildContext context) {
-    return widget.build();
-  }
-
-  @override
   void addWidgetState({required bool isVisible}) {
-    FlutterArtist.storage.ui._addShelfWidgetState(
+    widget.block.ui._addBlockBaseViewWidgetState(
       widgetState: this,
       isVisible: isVisible,
     );
@@ -66,16 +65,19 @@ class _StorageAreaViewState
 
   @override
   void removeWidgetState() {
-    FlutterArtist.storage.ui._removeShelfWidgetState(
+    widget.block.ui._removeBlockBaseViewWidgetState(
       widgetState: this,
     );
   }
 
   @override
+  Widget buildContent(BuildContext context) {
+    return widget.build();
+  }
+
+  @override
   void checkAndFreeMemory() {
-    // for (Shelf shelf in widget.shelves) {
-    //   FlutterArtist.storage._checkToRemoveShelf(shelf);
-    // }
+    FlutterArtist.storage._checkToRemoveShelf(widget.block.shelf);
   }
 
   @override

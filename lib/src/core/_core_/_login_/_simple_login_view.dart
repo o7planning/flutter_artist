@@ -10,7 +10,7 @@ class SimpleLoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return HookAreaViewBuilder(
+    return HookSectionViewBuilder(
       hook: hook,
       ownerClassInstance: this,
       description: null,

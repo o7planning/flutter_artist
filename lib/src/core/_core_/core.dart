@@ -587,21 +587,21 @@ part '_ui_/__refreshable_widget.dart';
 
 part '_ui_/__refreshable_widget_state.dart';
 
-part '_ui_/_activity_area_view.dart';
+part '_ui_/_activity_section_view.dart';
 
-part '_ui_/_activity_area_view_builder.dart';
+part '_ui_/_activity_section_view_builder.dart';
 
-part '_ui_/_hook_area_view.dart';
+part '_ui_/_hook_section_view.dart';
 
-part '_ui_/_hook_area_view_builder.dart';
+part '_ui_/_hook_section_view_builder.dart';
 
 part '_ui_/_block_control_bar.dart';
 
 part '_ui_/_block_control_bar_config.dart';
 
-part '_ui_/_block_area_view.dart';
+part '_ui_/_block_section_view.dart';
 
-part '_ui_/_block_area_view_builder.dart';
+part '_ui_/_block_section_view_builder.dart';
 
 part '_ui_/_block_item_detail_view.dart';
 
@@ -639,17 +639,17 @@ part '_ui_/_quick_suggestion_bar.dart';
 
 part '_ui_/_quick_suggestion_button.dart';
 
-part '_ui_/_storage_area_view.dart';
+part '_ui_/_storage_section_view.dart';
 
-part '_ui_/_storage_area_view_builder.dart';
+part '_ui_/_storage_section_view_builder.dart';
 
 part '_ui_/_scalar_value_view.dart';
 
 part '_ui_/_scalar_value_view_builder.dart';
 
-part '_ui_/_scalar_area_view.dart';
+part '_ui_/_scalar_section_view.dart';
 
-part '_ui_/_scalar_area_view_builder.dart';
+part '_ui_/_scalar_section_view_builder.dart';
 
 part '_ui_/_task_progress_view_builder.dart';
 

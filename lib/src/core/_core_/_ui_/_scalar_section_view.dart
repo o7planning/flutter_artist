@@ -1,10 +1,11 @@
 part of '../core.dart';
 
-abstract class ScalarAreaView<SCALAR extends Scalar> extends StatelessWidget {
+abstract class ScalarSectionView<SCALAR extends Scalar>
+    extends StatelessWidget {
   final SCALAR scalar;
   final QuickSuggestionMode quickSuggestionMode;
 
-  const ScalarAreaView({
+  const ScalarSectionView({
     required this.scalar,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     super.key,
@@ -13,7 +14,7 @@ abstract class ScalarAreaView<SCALAR extends Scalar> extends StatelessWidget {
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return ScalarAreaViewBuilder(
+    return ScalarSectionViewBuilder(
       ownerClassInstance: this,
       description: '',
       scalar: scalar,

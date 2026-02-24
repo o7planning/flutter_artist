@@ -1,11 +1,11 @@
 part of '../core.dart';
 
-class ScalarAreaViewBuilder extends _RefreshableWidget {
+class ScalarSectionViewBuilder extends _RefreshableWidget {
   final Scalar scalar;
   final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
 
-  const ScalarAreaViewBuilder({
+  const ScalarSectionViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -16,12 +16,12 @@ class ScalarAreaViewBuilder extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _ScalarAreaViewBuilderState();
+    return _ScalarSectionViewBuilderState();
   }
 }
 
-class _ScalarAreaViewBuilderState
-    extends _RefreshableWidgetState<ScalarAreaViewBuilder> {
+class _ScalarSectionViewBuilderState
+    extends _RefreshableWidgetState<ScalarSectionViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.scalar);

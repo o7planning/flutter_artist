@@ -3,7 +3,7 @@ part of '../core.dart';
 class _BlockUiComponents extends _UiComponents {
   final Block block;
 
-  // Fragments: BlockItemsView - BlockItemDetailView - BlockAreaView.
+  // Fragments: BlockItemsView - BlockItemDetailView - BlockSectionView.
   final Map<_RefreshableWidgetState, XState> __blockBaseViewWidgetStates = {};
   final Map<_RefreshableWidgetState, XState> __blockControlBarWidgetStates = {};
   final Map<_RefreshableWidgetState, XState> __controlWidgetStates = {};

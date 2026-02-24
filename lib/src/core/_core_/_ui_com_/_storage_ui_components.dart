@@ -3,8 +3,8 @@ part of '../core.dart';
 class _StorageUiComponents extends _UiComponents {
   final _Storage storage;
 
-  final Map<_RefreshableWidgetState, bool> __refreshableStorageAreaViewStates =
-      {};
+  final Map<_RefreshableWidgetState, bool>
+      __refreshableStorageSectionViewStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -16,11 +16,12 @@ class _StorageUiComponents extends _UiComponents {
 
   bool hasActiveUiComponent() {
     for (_RefreshableWidgetState widgetState
-        in __refreshableStorageAreaViewStates.keys) {
+        in __refreshableStorageSectionViewStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = __refreshableStorageAreaViewStates[widgetState] ?? false;
+      bool visible =
+          __refreshableStorageSectionViewStates[widgetState] ?? false;
       if (visible) {
         return true;
       }
@@ -33,7 +34,7 @@ class _StorageUiComponents extends _UiComponents {
 
   @override
   bool hasMountedUiComponent() {
-    bool hasMounted = __refreshableStorageAreaViewStates.isNotEmpty;
+    bool hasMounted = __refreshableStorageSectionViewStates.isNotEmpty;
     if (hasMounted) {
       return true;
     }
@@ -44,15 +45,15 @@ class _StorageUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateAllUiComponents() {
-    updateAllStorageAreaViews();
+    updateAllStorageSectionViews();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllStorageAreaViews() {
+  void updateAllStorageSectionViews() {
     for (_RefreshableWidgetState widgetState
-        in __refreshableStorageAreaViewStates.keys) {
+        in __refreshableStorageSectionViewStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -68,13 +69,13 @@ class _StorageUiComponents extends _UiComponents {
     required _RefreshableWidgetState widgetState,
     required bool isVisible,
   }) {
-    __refreshableStorageAreaViewStates[widgetState] = isVisible;
+    __refreshableStorageSectionViewStates[widgetState] = isVisible;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void _removeShelfWidgetState({required State widgetState}) {
-    __refreshableStorageAreaViewStates.remove(widgetState);
+    __refreshableStorageSectionViewStates.remove(widgetState);
   }
 }

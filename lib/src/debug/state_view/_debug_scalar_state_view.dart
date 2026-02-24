@@ -23,7 +23,7 @@ class DebugScalarStateView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const double minBoxWidth = 200;
-    return StorageAreaViewBuilder(
+    return StorageSectionViewBuilder(
       ownerClassInstance: this,
       description: null,
       build: () {

@@ -1,10 +1,10 @@
 part of '../core.dart';
 
-class HookAreaViewBuilder extends _RefreshableWidget {
+class HookSectionViewBuilder extends _RefreshableWidget {
   final Hook hook;
   final Widget Function() build;
 
-  const HookAreaViewBuilder({
+  const HookSectionViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -14,12 +14,12 @@ class HookAreaViewBuilder extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _HookAreaViewBuilderState();
+    return _HookSectionViewBuilderState();
   }
 }
 
-class _HookAreaViewBuilderState
-    extends _RefreshableWidgetState<HookAreaViewBuilder> {
+class _HookSectionViewBuilderState
+    extends _RefreshableWidgetState<HookSectionViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.hook);
