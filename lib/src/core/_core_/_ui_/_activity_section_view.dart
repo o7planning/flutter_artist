@@ -1,9 +1,9 @@
 part of '../core.dart';
 
-abstract class ActivityAreaView extends StatelessWidget {
+abstract class ActivitySectionView extends StatelessWidget {
   final Activity activity;
 
-  const ActivityAreaView({
+  const ActivitySectionView({
     required this.activity,
     super.key,
   });
@@ -11,7 +11,7 @@ abstract class ActivityAreaView extends StatelessWidget {
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return ActivityAreaViewBuilder(
+    return ActivitySectionViewBuilder(
       ownerClassInstance: this,
       description: '',
       activity: activity,

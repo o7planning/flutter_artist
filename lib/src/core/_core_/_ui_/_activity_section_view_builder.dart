@@ -1,10 +1,10 @@
 part of '../core.dart';
 
-class ActivityAreaViewBuilder extends _RefreshableWidget {
+class ActivitySectionViewBuilder extends _RefreshableWidget {
   final Activity activity;
   final Widget Function() build;
 
-  const ActivityAreaViewBuilder({
+  const ActivitySectionViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -14,12 +14,12 @@ class ActivityAreaViewBuilder extends _RefreshableWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _ActivityAreaViewBuilderState();
+    return _ActivitySectionViewBuilderState();
   }
 }
 
-class _ActivityAreaViewBuilderState
-    extends _RefreshableWidgetState<ActivityAreaViewBuilder> {
+class _ActivitySectionViewBuilderState
+    extends _RefreshableWidgetState<ActivitySectionViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.activity);

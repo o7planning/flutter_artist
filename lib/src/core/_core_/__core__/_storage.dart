@@ -244,7 +244,7 @@ class _Storage extends _StorageCore {
       masterFlowItem: masterFlowItem,
       eventType: EventType.unknown,
       eventShelf: null,
-      events: action.config.affectedItemTypes,
+      events: action.config.emitEvents,
     );
     //
     return true;

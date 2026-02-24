@@ -1,13 +1,13 @@
 part of '../core.dart';
 
-abstract class StorageAreaView extends StatelessWidget {
-  const StorageAreaView({
+abstract class StorageSectionView extends StatelessWidget {
+  const StorageSectionView({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return StorageAreaViewBuilder(
+    return StorageSectionViewBuilder(
       ownerClassInstance: this,
       description: null,
       build: () {

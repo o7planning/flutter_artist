@@ -1,9 +1,9 @@
 part of '../core.dart';
 
-abstract class HookAreaView extends StatelessWidget {
+abstract class HookSectionView extends StatelessWidget {
   final Hook hook;
 
-  const HookAreaView({
+  const HookSectionView({
     required this.hook,
     super.key,
   });
@@ -11,7 +11,7 @@ abstract class HookAreaView extends StatelessWidget {
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return HookAreaViewBuilder(
+    return HookSectionViewBuilder(
       ownerClassInstance: this,
       description: '',
       hook: hook,

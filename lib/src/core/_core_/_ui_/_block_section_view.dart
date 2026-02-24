@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-abstract class BlockAreaView<
+abstract class BlockSectionView<
     BLOCK extends Block<
         Object, //
         Identifiable,
@@ -12,7 +12,7 @@ abstract class BlockAreaView<
   final bool itemRepresentative;
   final BLOCK block;
 
-  const BlockAreaView({
+  const BlockSectionView({
     required this.block,
     this.itemRepresentative = true,
     super.key,
@@ -21,7 +21,7 @@ abstract class BlockAreaView<
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return BlockAreaViewBuilder(
+    return BlockSectionViewBuilder(
       ownerClassInstance: this,
       description: '',
       block: block,
