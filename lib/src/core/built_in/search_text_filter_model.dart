@@ -13,7 +13,7 @@ class SearchTextFilterModel
       : _searchText = searchText;
 
   @override
-  FilterModelStructure registerFilterModelStructure() {
+  FilterModelStructure defineFilterModelStructure() {
     return FilterModelStructure(
       criteriaStructure: FilterCriteriaStructure(
         simpleCriterionDefs: [

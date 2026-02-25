@@ -263,13 +263,13 @@ part '__core__/_storage_core.dart';
 
 part '__core__/_processed_query_result.dart';
 
-part '__core__/_polymorphism_manager.dart';
+part '__core__/_projection_manager.dart';
 
 part '__core__/_storage_natural_query_queue.dart';
 
 part '__core__/_storage_structure.dart';
 
-part '__core__/_polymorphism_family.dart';
+part '__core__/_projection_family.dart';
 
 part '__core__/_scalar.dart';
 

@@ -64,8 +64,6 @@ abstract class FilterCriteria {
     __ready = true;
   }
 
-  // List<FilterCriterion> registerSupportedCriteria();
-
   @override
   bool operator ==(Object other) {
     if (other is! FilterCriteria) {

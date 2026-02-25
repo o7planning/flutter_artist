@@ -9,17 +9,4 @@ class SearchTextFilterCriteria extends FilterCriteria {
   SearchTextFilterCriteria({
     required this.searchText,
   });
-
-  @override
-  List<FilterCriterion<Object>> registerSupportedCriteria() {
-    return [
-      FilterCriterion<String>(
-        filterCriterionName: 'searchText',
-        filterFieldName: 'searchText',
-        converter: (String? baseValue) {
-          return SimpleVal.ofString(baseValue);
-        },
-      ),
-    ];
-  }
 }

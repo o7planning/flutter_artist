@@ -11,7 +11,7 @@ class _DefaultFilterModel
   }
 
   @override
-  FilterCriteriaStructure registerFilterModelStructure() {
+  FilterCriteriaStructure defineFilterModelStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
       multiOptCriteria: [],
@@ -75,7 +75,7 @@ class StringIdFilterModel
   StringIdFilterModel({required this.idValue});
 
   @override
-  FilterCriteriaStructure registerFilterModelStructure() {
+  FilterCriteriaStructure defineFilterModelStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
       multiOptCriteria: [],
@@ -139,7 +139,7 @@ class StringValueFilterModel
   StringValueFilterModel({required this.stringValue});
 
   @override
-  FilterCriteriaStructure registerFilterModelStructure() {
+  FilterCriteriaStructure defineFilterModelStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
       multiOptCriteria: [],
@@ -203,7 +203,7 @@ class SearchTextFilterModel
   SearchTextFilterModel({required this.searchText});
 
   @override
-  FilterCriteriaStructure registerFilterModelStructure() {
+  FilterCriteriaStructure defineFilterModelStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
       multiOptCriteria: [],
@@ -267,7 +267,7 @@ class IntIdFilterModel
   IntIdFilterModel({required this.idValue});
 
   @override
-  FilterCriteriaStructure registerFilterModelStructure() {
+  FilterCriteriaStructure defineFilterModelStructure() {
     return FilterCriteriaStructure(
       simpleCriteria: [],
       multiOptCriteria: [],

@@ -10,14 +10,14 @@ abstract class SortModelBuilder<ITEM extends Object> {
     required this.clientSideSortMode,
     required this.serverSideSortMode,
   }) {
-    _structure = registerSortModelStructure();
+    _structure = defineSortModelStructure();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_AbstractMethodAnnotation()
-  SortModelStructure registerSortModelStructure();
+  SortModelStructure defineSortModelStructure();
 
   // ***************************************************************************
   // ***************************************************************************

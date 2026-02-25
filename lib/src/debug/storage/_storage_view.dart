@@ -5,7 +5,7 @@ import '../../core/icon/icon_constants.dart';
 import '../utils/_tab_theme_utils.dart';
 import '_active_shelves_view.dart';
 import '_activities_view.dart';
-import '_polymorphisms_view.dart';
+import '_projections_view.dart';
 import '_route_stack_view.dart';
 import '_shelves_view.dart';
 
@@ -92,14 +92,14 @@ class _StorageViewState extends State<StorageView> {
     );
     tabs.add(
       TabData(
-        text: ' Polymorphisms',
+        text: ' Projections',
         closable: false,
         leading: (context, status) => Icon(
-          FaIconConstants.polymorphismIconData,
+          FaIconConstants.projectionIconData,
           color: Colors.black,
           size: iconSize,
         ),
-        content: PolymorphismsView(),
+        content: ProjectionsView(),
       ),
     );
     tabs.add(

@@ -92,7 +92,7 @@ abstract class FormModel<
     FormModelConfig config = const FormModelConfig(),
   })  : config = config.copy(),
         _autovalidateMode = config.autovalidateMode {
-    __registerFormModelStructure();
+    __defineFormModelStructure();
   }
 
   // ***************************************************************************
@@ -112,7 +112,7 @@ abstract class FormModel<
   ///
   /// ```dart
   /// @override
-  /// FormModelStructure registerFormModelStructure() {
+  /// FormModelStructure defineFormModelStructure() {
   ///   return FormModelStructure(
   ///     simplePropDefs: [
   ///       SimpleFormPropDef<int>(propName: "id"),
@@ -136,7 +136,7 @@ abstract class FormModel<
   /// ```
   ///
   @_AbstractMethodAnnotation()
-  FormModelStructure registerFormModelStructure();
+  FormModelStructure defineFormModelStructure();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -675,21 +675,21 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __registerFormModelStructure() {
+  void __defineFormModelStructure() {
     try {
-      _formPropsStructure = registerFormModelStructure();
+      _formPropsStructure = defineFormModelStructure();
       _formPropsStructure.formModel = this;
     }
     // Invalid Form Prop.
     on FormPropInvalidNameError catch (e) {
       String message = "Invalid Form propName '${e.propName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.registerFormModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFormModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // Duplicate Form Prop.
     on FormPropDuplicateNameError catch (e) {
       String message = "Duplicate Form propName '${e.propName}'.\n";
-      "@see the '${getClassNameWithoutGenerics(this)}.registerFormModelStructure()' method for details.";
+      "@see the '${getClassNameWithoutGenerics(this)}.defineFormModelStructure()' method for details.";
       throw _createFatalAppError(message);
     } catch (e, stackTrace) {
       print(stackTrace);

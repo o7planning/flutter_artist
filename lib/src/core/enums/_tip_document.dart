@@ -14,7 +14,7 @@ enum TipDocument {
   loginLogoutAdapter(enabled: true),
   activity(enabled: true),
   shelf(enabled: true),
-  polymorphism(enabled: true),
+  projection(enabled: true),
   routeStack(enabled: true),
   globalData(enabled: true),
   pageData(enabled: true),
@@ -101,8 +101,8 @@ enum TipDocument {
         return "FlutterArtist Activities";
       case TipDocument.shelf:
         return "FlutterArtist Shelves";
-      case TipDocument.polymorphism:
-        return "FlutterArtist Polymorphism";
+      case TipDocument.projection:
+        return "FlutterArtist Projection";
       case TipDocument.routeStack:
         return "FlutterArtist Route Stack";
       case TipDocument.globalData:
@@ -206,8 +206,8 @@ enum TipDocument {
         return "FlutterArtist Activities";
       case TipDocument.shelf:
         return "FlutterArtist Shelves";
-      case TipDocument.polymorphism:
-        return "FlutterArtist Polymorphism";
+      case TipDocument.projection:
+        return "FlutterArtist Projection";
       case TipDocument.routeStack:
         return "FlutterArtist Route Stack";
       case TipDocument.globalData:
@@ -327,9 +327,9 @@ enum TipDocument {
           "http://51.195.44.134:8080/vi/11111/config1",
           "http://51.195.44.134:8080/vi/11112/config2",
         ];
-      case TipDocument.polymorphism:
+      case TipDocument.projection:
         return [
-          "http://51.195.44.134:8080/vi/14835/flutterartist-polymorphisms",
+          "http://51.195.44.134:8080/vi/14835/flutterartist-projections",
         ];
       case TipDocument.routeStack:
         return [
