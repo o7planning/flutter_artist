@@ -6,13 +6,13 @@ import '../../core/_core_/core.dart';
 import '../dialog/_error_viewer_dialog.dart';
 import '__task_flow_const.dart';
 
-class MasterFlowItemBox extends StatelessWidget {
-  final MasterFlowItem masterFlowItem;
+class ExecutionTraceBox extends StatelessWidget {
+  final ExecutionTrace executionTrace;
   final bool selected;
   final Function() onTap;
 
-  const MasterFlowItemBox({
-    required this.masterFlowItem,
+  const ExecutionTraceBox({
+    required this.executionTrace,
     required this.selected,
     required this.onTap,
     required super.key,
@@ -22,8 +22,8 @@ class MasterFlowItemBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: selected
-          ? CodeFlowConstants.selectedMasterFlowItemBgColor
-          : CodeFlowConstants.deselectedMasterFlowItemBgColor,
+          ? CodeFlowConstants.selectedExecutionTraceBgColor
+          : CodeFlowConstants.deselectedExecutionTraceBgColor,
       child: _buildMainContent(context),
     );
   }
@@ -39,7 +39,7 @@ class MasterFlowItemBox extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 5),
       leading: _buildLeading(),
       trailing: Text(
-        masterFlowItem.id.toString(),
+        executionTrace.id.toString(),
         style: TextStyle(
           color: Colors.black45,
           fontSize: 9,
@@ -52,12 +52,12 @@ class MasterFlowItemBox extends StatelessWidget {
   }
 
   Widget _buildLeading() {
-    bool error = masterFlowItem.hasError();
+    bool error = executionTrace.hasError();
     return Tooltip(
-      message: masterFlowItem.masterFlowItemType.getTooltipText(),
+      message: executionTrace.executionTraceType.getTooltipText(),
       child: Icon(
-        masterFlowItem.masterFlowItemType.getIconData(),
-        color: masterFlowItem.masterFlowItemType.getIconColor(error),
+        executionTrace.executionTraceType.getIconData(),
+        color: executionTrace.executionTraceType.getIconColor(error),
         size: 18,
       ),
     );
@@ -81,10 +81,10 @@ class MasterFlowItemBox extends StatelessWidget {
   }
 
   Widget _buildTitle(BuildContext context) {
-    ErrorInfo? errorInfo = masterFlowItem.getErrorInfo();
-    bool hasEvent = masterFlowItem.hasEvent();
+    ErrorInfo? errorInfo = executionTrace.getErrorInfo();
+    bool hasEvent = executionTrace.hasEvent();
     return IconLabelText(
-      text: masterFlowItem.getTitle(),
+      text: executionTrace.getTitle(),
       style: _titleStyle(),
       suffixIcon: hasEvent
           ? Tooltip(
@@ -110,7 +110,7 @@ class MasterFlowItemBox extends StatelessWidget {
   }
 
   Widget _buildSubTitle() {
-    return Text(masterFlowItem.getSubtitle(), style: _subtitleStyle());
+    return Text(executionTrace.getSubtitle(), style: _subtitleStyle());
   }
 
   void _showErrorDialog(BuildContext context, ErrorInfo errorInfo) {

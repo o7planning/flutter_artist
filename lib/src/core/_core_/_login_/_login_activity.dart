@@ -10,7 +10,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
   @override
   Future<void> performActivityOperation() async {
     ApiResult<USER> result;
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "performActivityOperation",
       parameters: null,
@@ -18,7 +18,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       isLibMethod: true,
     );
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#20000",
         shortDesc: "Calling ${debugObjHtml(this)}.performLogin()...",
         lineFlowType: LineFlowType.controllableCalling,
@@ -35,7 +35,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
         showSnackBar: true,
         tipDocument: TipDocument.loginActivityPerformLogin,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#20040",
         shortDesc:
             "The ${debugObjHtml(this)}.performLogin() method was called with an error!",
@@ -48,7 +48,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       final message =
           "No data from ${getClassNameWithoutGenerics(this)}.performLogin().";
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#20060",
         shortDesc: "Got value >> @loggedInUser: ${debugObjHtml(loggedInUser)}."
             "\n$message",
@@ -58,7 +58,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
         message: message,
         errorDetails: null,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#20080",
         shortDesc: message,
       );
@@ -75,14 +75,14 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       tokenPrefix = "$tokenPrefix...";
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#20100",
       shortDesc: "Got LoggedInUser: ${debugObjHtml(loggedInUser)}."
           "\n - @accessToken: <b>$tokenPrefix</b>.",
       lineFlowType: LineFlowType.debug,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#20200",
       shortDesc:
           "Calling <b>globalsManager._setOrUpdateLoggedInUserSafely()</b> with parameters:",
@@ -98,12 +98,12 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     //
     bool success =
         await FlutterArtist.globalsManager._setOrUpdateLoggedInUserSafely(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       loggedInUser: loggedInUser,
       requiresTheSameUser: false,
     );
     if (!success) {
-      masterFlowItem.printToConsole();
+      executionTrace.printToConsole();
       return;
     }
     //
@@ -112,7 +112,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     //
     final loginLogoutAdapter = FlutterArtist.globalsManager.loginLogoutAdapter;
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#22060",
         shortDesc:
             "Calling ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:",
@@ -126,13 +126,13 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     } catch (e, stackTrace) {
       final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#22080",
         shortDesc:
             "The ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
         errorInfo: errorInfo,
       );
-      masterFlowItem.printToConsole();
+      executionTrace.printToConsole();
       return;
     }
     //
@@ -140,15 +140,15 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     // IMPORTANT: This method never throw an error!
     //
     success = await FlutterArtist.globalsManager._loadGlobalDataSafely(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       loggedInUser: loggedInUser,
     );
     if (!success) {
-      masterFlowItem.printToConsole();
+      executionTrace.printToConsole();
       return;
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#20400",
       shortDesc: "Calling ${debugObjHtml(this)}.navigateToSuccessScreen()...",
       lineFlowType: LineFlowType.controllableCalling,

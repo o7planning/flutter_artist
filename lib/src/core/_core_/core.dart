@@ -6,7 +6,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_artist/src/debug/menu/_debug_menu_builder.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
@@ -17,7 +16,7 @@ import 'package:hive/hive.dart';
 import 'package:number_pagination/number_pagination.dart' as number_pagination;
 
 import '../../debug/code_flow/__task_flow_const.dart';
-import '../../debug/code_flow/_master_flow_item_box_detail.dart';
+import '../../debug/code_flow/_execution_trace_box_detail.dart';
 import '../../debug/dialog/_block_error_viewer_dialog.dart';
 import '../../debug/dialog/_debug_viewer_dialog.dart';
 import '../../debug/dialog/_debug_shelf_structure_viewer_dialog.dart';
@@ -34,6 +33,7 @@ import '../../debug/dialog/_debug_ui_components_viewer_dialog.dart';
 import '../../debug/executor/model/_debug_x_root_queue_item.dart';
 import '../../debug/executor/model/_debug_task_unit.dart';
 import '../../debug/executor/model/_debug_x_root_queue.dart';
+import '../../debug/menu/_debug_menu_builder.dart';
 import '../../debug/storage/_block_or_scalar.dart';
 import '../../debug/utils/_debug.dart';
 import '../action/_background_action.dart';
@@ -63,8 +63,8 @@ import '../enums/_block_control_action_type.dart';
 import '../enums/_block_error_method.dart';
 import '../enums/_block_hidden_action.dart';
 import '../enums/_item_absent_representative_policy.dart';
-import '../enums/_line_flow_type.dart';
-import '../enums/_master_flow_item_type.dart';
+import '../enums/_trace_step_type.dart';
+import '../enums/_execution_trace_type.dart';
 import '../enums/_current_item_setting_type.dart';
 import '../enums/_data_mode.dart';
 import '../enums/_data_state.dart';
@@ -86,7 +86,7 @@ import '../enums/_qry_pagination_type.dart';
 import '../enums/_quick_suggestion_mode.dart';
 import '../enums/_quick_suggestion_type.dart';
 import '../enums/_refreshable_widget_type.dart';
-import '../enums/_representative_type.dart';
+import '../enums/_context_kind.dart';
 import '../enums/_scalar_control_action_type.dart';
 import '../enums/_scalar_error_method.dart';
 import '../enums/_scalar_hidden_action.dart';
@@ -303,11 +303,11 @@ part '__core__/_storage_ev.dart';
 
 part '__core__/_suggested_selection.dart';
 
-part '_code_flow_/_master_flow_item.dart';
+part '_code_flow_/_execution_trace.dart';
 
 part '_code_flow_/_code_flow_logger.dart';
 
-part '_code_flow_/_line_flow_item.dart';
+part '_code_flow_/_trace_step.dart';
 
 part '_code_flow_/_func_call_info.dart';
 

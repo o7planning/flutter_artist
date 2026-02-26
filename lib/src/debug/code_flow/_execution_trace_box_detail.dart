@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_artist/src/debug/code_flow/_line_flow_item_box.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/_line_flow_type.dart';
+import '../../core/enums/_trace_step_type.dart';
 import '../../core/widgets/_iconed_checkbox.dart';
 import '../shelf/widget/_shelf_info_view.dart';
-import '_master_flow_func_trace_info_view.dart';
-import '_master_flow_method_args_view.dart';
-import '_master_flow_method_view.dart';
+import '_code_flow_func_trace_info_view.dart';
+import '_code_flow_method_args_view.dart';
+import '_code_flow_method_view.dart';
+import '_trace_step_box.dart';
 
-class MasterFlowItemDetailView extends StatefulWidget {
-  final MasterFlowItem masterFlowItem;
+class ExecutionTraceDetailView extends StatefulWidget {
+  final ExecutionTrace executionTrace;
 
-  const MasterFlowItemDetailView({
-    required this.masterFlowItem,
+  const ExecutionTraceDetailView({
+    required this.executionTrace,
     super.key,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _MasterFlowItemDetailViewState();
+    return _ExecutionTraceDetailViewState();
   }
 }
 
-class _MasterFlowItemDetailViewState extends State<MasterFlowItemDetailView> {
+class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
   bool checkAll = true;
   Map<LineFlowType, bool> lineFlowTypeFilterMap = {};
 
@@ -51,7 +51,7 @@ class _MasterFlowItemDetailViewState extends State<MasterFlowItemDetailView> {
         Divider(color: Colors.transparent, height: 10),
         Expanded(
           child: SingleChildScrollView(
-            child: _buildLineFlowItemList(),
+            child: _buildTraceStepList(),
           ),
         ),
       ],
@@ -94,7 +94,7 @@ class _MasterFlowItemDetailViewState extends State<MasterFlowItemDetailView> {
               iconSize: 18,
               onPressed: () async {
                 await Clipboard.setData(
-                    ClipboardData(text: widget.masterFlowItem.getText()));
+                    ClipboardData(text: widget.executionTrace.getText()));
                 // Optionally, show a SnackBar or other feedback to the user
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Copied!')),
@@ -140,34 +140,34 @@ class _MasterFlowItemDetailViewState extends State<MasterFlowItemDetailView> {
     );
   }
 
-  Widget _buildMethodCallInfo(MethodCallMasterFlowItem masterFlowItem) {
-    final Shelf? shelf = widget.masterFlowItem.getShelf();
+  Widget _buildMethodCallInfo(MethodCallExecutionTrace executionTrace) {
+    final Shelf? shelf = widget.executionTrace.getShelf();
     //
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (shelf != null && masterFlowItem.isUserMethod)
+        if (shelf != null && executionTrace.isUserMethod)
           ShelfInfoView(shelf: shelf),
-        if (shelf != null && masterFlowItem.isUserMethod) const Divider(),
+        if (shelf != null && executionTrace.isUserMethod) const Divider(),
         Card(
-          child: CodeFlowMethodView(masterFlowItem: masterFlowItem),
+          child: CodeFlowMethodView(executionTrace: executionTrace),
         ),
-        if (!masterFlowItem.isLibMethod) const SizedBox(height: 5),
-        if (!masterFlowItem.isLibMethod)
+        if (!executionTrace.isLibMethod) const SizedBox(height: 5),
+        if (!executionTrace.isLibMethod)
           CodeFlowFuncTraceInfoView(
-            funcCallInfo: masterFlowItem.funcCallInfo,
+            funcCallInfo: executionTrace.funcCallInfo,
           ),
         const SizedBox(height: 10),
         CodeFlowMethodArgsView(
-          arguments: masterFlowItem.funcCallInfo.arguments,
+          arguments: executionTrace.funcCallInfo.arguments,
         ),
       ],
     );
   }
 
-  Widget _buildLineFlowItemList() {
-    final List<LineFlowItem> lineFlowItems = widget.masterFlowItem.lineFlowItems
+  Widget _buildTraceStepList() {
+    final List<TraceStep> traceSteps = widget.executionTrace.traceSteps
         .where((item) => (lineFlowTypeFilterMap[item.lineFlowType] ?? false))
         .toList();
     //
@@ -175,16 +175,16 @@ class _MasterFlowItemDetailViewState extends State<MasterFlowItemDetailView> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (widget.masterFlowItem is MethodCallMasterFlowItem)
+        if (widget.executionTrace is MethodCallExecutionTrace)
           _buildMethodCallInfo(
-            widget.masterFlowItem as MethodCallMasterFlowItem,
+            widget.executionTrace as MethodCallExecutionTrace,
           ),
-        if (widget.masterFlowItem is MethodCallMasterFlowItem)
+        if (widget.executionTrace is MethodCallExecutionTrace)
           SizedBox(height: 10),
-        ...lineFlowItems
+        ...traceSteps
             .map(
-              (e) => LineFlowItemBox(
-                lineFlowItem: e,
+              (e) => TraceStepBox(
+                traceStep: e,
               ),
             )
             .expand(

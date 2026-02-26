@@ -31,34 +31,34 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   @override
   ShowMode showMode = ShowMode.production;
 
-  bool get isBlockRepresentative;
+  bool get provideBlockContext;
 
-  bool get isScalarRepresentative;
+  bool get provideScalarContext;
 
-  bool get isItemRepresentative;
+  bool get provideItemContext;
 
-  bool get isHookRepresentative;
+  bool get provideHookContext;
 
-  bool get isFormRepresentative;
+  bool get provideFormContext;
 
   bool get isActivityRepresentative => false;
 
-  bool isRepresentativeType(RepresentativeType? representativeType) {
-    switch (representativeType) {
+  bool isContextKind(ContextKind? contextKind) {
+    switch (contextKind) {
       case null:
         // Do not change!
         return true;
-      case RepresentativeType.scalarRepresentative:
-        return isScalarRepresentative;
-      case RepresentativeType.blockRepresentative:
-        return isBlockRepresentative;
-      case RepresentativeType.itemRepresentative:
-        return isItemRepresentative;
-      case RepresentativeType.formRepresentative:
-        return isFormRepresentative;
-      case RepresentativeType.hookRepresentative:
-        return isHookRepresentative;
-      case RepresentativeType.activityRepresentative:
+      case ContextKind.scalar:
+        return provideScalarContext;
+      case ContextKind.block:
+        return provideBlockContext;
+      case ContextKind.item:
+        return provideItemContext;
+      case ContextKind.form:
+        return provideFormContext;
+      case ContextKind.hook:
+        return provideHookContext;
+      case ContextKind.activity:
         return isActivityRepresentative;
     }
   }

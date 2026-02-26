@@ -13,7 +13,7 @@ class _ProjectionManager {
   // ***************************************************************************
 
   void _init({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required List<ProjectionFamily> projectionFamilies,
   }) {
     if (_ready) {
@@ -28,7 +28,7 @@ class _ProjectionManager {
             "Duplicate <b>ProjectionFamily</b>(<b>'${family.familyName}</b>).";
         String errorMessage = HtmlUtils.removeTags(htmlMessage);
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#SP010",
           shortDesc: htmlMessage,
           errorInfo: ErrorInfo(
@@ -49,7 +49,7 @@ class _ProjectionManager {
               "It cannot be registered as a member of <b>$family</b>.";
           String errorMessage = HtmlUtils.removeTags(htmlMessage);
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#SP030",
             shortDesc: htmlMessage,
             errorInfo: ErrorInfo(

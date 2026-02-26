@@ -616,11 +616,11 @@ abstract class Shelf extends _Core {
 
   // LOGIC: #0000
   Future<void> _startLoadDataForLazyUiComponentsIfNeed({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
   }) async {
     __lazyLoadId++;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#02000",
       shortDesc:
           "Find lazy model-components (block, scalar or formModel) that are in a state where they need to query or load data.",
@@ -632,7 +632,7 @@ abstract class Shelf extends _Core {
     _LazyObjects lazyObjects = xShelf.getLazyObjectInfos();
     //
     if (lazyObjects.isEmpty) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#02020",
         shortDesc:
             "No lazy model-components found. Just update All UI components and nothing else. "
@@ -644,20 +644,20 @@ abstract class Shelf extends _Core {
       FlutterArtist.storage.ui.updateAllUiComponents();
       return;
     }
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#02060",
       shortDesc: "Found some lazy model-components.\n"
           "${lazyObjects.toDebugString()}",
       lineFlowType: LineFlowType.debug,
     );
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#02100",
         shortDesc: "Create ${debugObjHtml(xShelf)} for <b>Natural-Load</b>.",
         note:
             "<b>XShelf</b> is a <b>RootQueueItem</b> and contains multiple <b>Task Units</b>.",
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#02120",
         shortDesc:
             "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits() to create <b>Natural-Load</b> task units...",
@@ -666,16 +666,16 @@ abstract class Shelf extends _Core {
       //
       // TODO: Handle Error:
       //
-      xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+      xShelf._initQueryTaskUnits(executionTrace: executionTrace);
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#02160",
         shortDesc:
             "Add ${debugObjHtml(xShelf)} (RootQueueItem) to <b>Root-Queue</b>.",
       );
       FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#02200",
         shortDesc:
             "Calling <b>FlutterArtist.executor._executeTaskUnitQueue()</b> "
@@ -692,7 +692,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   Future<void> _markReactionToExternalShelfEvents({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required EffectedShelfMembers effectedShelfMembers,
   }) async {
     for (String blockName in effectedShelfMembers._reQueryBlockMAP.keys) {
@@ -702,7 +702,7 @@ abstract class Shelf extends _Core {
         filterCriteria: block.filterCriteria,
       );
       block._blockReQryCondition = blockReQryCondition;
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#50000",
         shortDesc: " - <b>$blockName</b>:"
             "\n  --> @blockReQryCondition: <b>$blockReQryCondition</b>.",
@@ -719,7 +719,7 @@ abstract class Shelf extends _Core {
               itemId: itemId,
             );
       block._blockItemRefreshCondition = blockItemRefreshCondition;
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#50100",
         shortDesc: " - <b>$blockName</b>:"
             "\n  --> @blockItemRefreshCondition: <b>$blockItemRefreshCondition</b>.",
@@ -734,7 +734,7 @@ abstract class Shelf extends _Core {
       );
       scalar._scalarReQryCondition = scalarReQryCondition;
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#50200",
         shortDesc: " - <b>$scalarName</b>:"
             "\n  --> @scalarReQryCondition: <b>$scalarReQryCondition</b>.",
@@ -746,9 +746,9 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   void _addShelfExternalReactionTaskUnit({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
   }) async {
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#52000",
       shortDesc:
           "Creating <b>$_XShelfShelfExternalReaction</b> for ${debugObjHtml(this)}..",
@@ -758,14 +758,14 @@ abstract class Shelf extends _Core {
       shelf: this,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#52100",
       shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()..",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
-    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#52200",
       shortDesc: "Add ${debugObjHtml(xShelf)} to <b>RootQueue</b>.",
       lineFlowType: LineFlowType.info,
@@ -776,14 +776,14 @@ abstract class Shelf extends _Core {
 
   Future<ShelfQueuedEventExecutionResult>
       executeDelayedExternalReactionTaskUnit() async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "executeDelayedExternalReactionTaskUnit",
       parameters: null,
       navigate: null,
       isLibMethod: true,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#68000",
       shortDesc:
           "Checking before <b>executeDelayedExternalReactionTaskUnit</b>..",
@@ -799,7 +799,7 @@ abstract class Shelf extends _Core {
         showErrSnackBar: true,
         tipDocument: null,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#68100",
         shortDesc: "@actionable = ${debugObjHtml(actionable)}.",
         errorInfo: errorInfo,
@@ -809,7 +809,7 @@ abstract class Shelf extends _Core {
         errorInfo: actionable.errorInfo,
       );
     }
-    _addShelfExternalReactionTaskUnit(masterFlowItem: masterFlowItem);
+    _addShelfExternalReactionTaskUnit(executionTrace: executionTrace);
     await FlutterArtist.executor._executeTaskUnitQueue();
     return ShelfQueuedEventExecutionResult();
   }

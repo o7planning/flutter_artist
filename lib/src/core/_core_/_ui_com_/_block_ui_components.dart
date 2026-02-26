@@ -81,14 +81,14 @@ class _BlockUiComponents extends _UiComponents {
   bool hasActiveUiComponentBlockRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = findActiveUiComponentBlockRepresentative(
+    String? componentName = findActiveUiComponentByBlockContext(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
   }
 
   bool hasActiveUiComponentFormRepresentative() {
-    String? componentName = findActiveUiComponentFormRepresentative(
+    String? componentName = findActiveUiComponentByFormContext(
       alsoCheckChildren: false,
     );
     return componentName != null;
@@ -97,7 +97,7 @@ class _BlockUiComponents extends _UiComponents {
   bool hasActiveUiComponentItemRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = findActiveUiComponentItemRepresentative(
+    String? componentName = findActiveUiComponentByItemContext(
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
@@ -111,17 +111,17 @@ class _BlockUiComponents extends _UiComponents {
   }
 
   String? findActiveUiComponent({bool alsoCheckChildren = false}) {
-    return __activeUiComponentsWithRepresentativeType(
-      representativeType: null,
+    return __activeUiComponentsWithContextKind(
+      contextKind: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveUiComponentBlockRepresentative({
+  String? findActiveUiComponentByBlockContext({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = __activeUiComponentsWithRepresentativeType(
-      representativeType: RepresentativeType.blockRepresentative,
+    String? componentName = __activeUiComponentsWithContextKind(
+      contextKind: ContextKind.block,
       alsoCheckChildren: alsoCheckChildren,
     );
     if (componentName != null) {
@@ -131,8 +131,8 @@ class _BlockUiComponents extends _UiComponents {
       return null;
     }
     for (Block childBlock in block._childBlocks) {
-      componentName = childBlock.ui.__activeUiComponentsWithRepresentativeType(
-        representativeType: RepresentativeType.itemRepresentative,
+      componentName = childBlock.ui.__activeUiComponentsWithContextKind(
+        contextKind: ContextKind.item,
         alsoCheckChildren: alsoCheckChildren,
       );
       if (componentName != null) {
@@ -142,11 +142,11 @@ class _BlockUiComponents extends _UiComponents {
     return null;
   }
 
-  String? findActiveUiComponentItemRepresentative({
+  String? findActiveUiComponentByItemContext({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = __activeUiComponentsWithRepresentativeType(
-      representativeType: RepresentativeType.itemRepresentative,
+    String? componentName = __activeUiComponentsWithContextKind(
+      contextKind: ContextKind.item,
       alsoCheckChildren: alsoCheckChildren,
     );
     if (componentName != null) {
@@ -156,8 +156,8 @@ class _BlockUiComponents extends _UiComponents {
       return null;
     }
     for (Block childBlock in block._childBlocks) {
-      componentName = childBlock.ui.__activeUiComponentsWithRepresentativeType(
-        representativeType: RepresentativeType.blockRepresentative,
+      componentName = childBlock.ui.__activeUiComponentsWithContextKind(
+        contextKind: ContextKind.block,
         alsoCheckChildren: alsoCheckChildren,
       );
       if (componentName != null) {
@@ -167,17 +167,17 @@ class _BlockUiComponents extends _UiComponents {
     return null;
   }
 
-  String? findActiveUiComponentFormRepresentative({
+  String? findActiveUiComponentByFormContext({
     bool alsoCheckChildren = false,
   }) {
-    return __activeUiComponentsWithRepresentativeType(
-      representativeType: RepresentativeType.formRepresentative,
+    return __activeUiComponentsWithContextKind(
+      contextKind: ContextKind.form,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? __activeUiComponentsWithRepresentativeType({
-    required RepresentativeType? representativeType,
+  String? __activeUiComponentsWithContextKind({
+    required ContextKind? contextKind,
     bool alsoCheckChildren = false,
   }) {
     bool has = false;
@@ -185,8 +185,8 @@ class _BlockUiComponents extends _UiComponents {
     // Filter
     //
     // if (block.filterModel != null) {
-    //   has = block.filterModel!.ui.hasActiveUiComponentWithRepresentativeType(
-    //     representativeType: representativeType,
+    //   has = block.filterModel!.ui.hasActiveUiComponentWithContextKind(
+    //     contextKind: contextKind,
     //   );
     //   if (has) {
     //     return getClassNameWithoutGenerics(block.filterModel);
@@ -196,9 +196,8 @@ class _BlockUiComponents extends _UiComponents {
     // Sort
     //
     if (block.serverSideSortModel != null) {
-      has = block.serverSideSortModel!.ui
-          .hasActiveUiComponentWithRepresentativeType(
-        representativeType: representativeType,
+      has = block.serverSideSortModel!.ui.hasActiveUiComponentWithContextKind(
+        contextKind: contextKind,
       );
       if (has) {
         return getClassNameWithoutGenerics(block.serverSideSortModel);
@@ -206,9 +205,8 @@ class _BlockUiComponents extends _UiComponents {
     }
     //
     if (block.clientSideSortModel != null) {
-      has = block.clientSideSortModel!.ui
-          .hasActiveUiComponentWithRepresentativeType(
-        representativeType: representativeType,
+      has = block.clientSideSortModel!.ui.hasActiveUiComponentWithContextKind(
+        contextKind: contextKind,
       );
       if (has) {
         return getClassNameWithoutGenerics(block.clientSideSortModel);
@@ -218,8 +216,8 @@ class _BlockUiComponents extends _UiComponents {
     // Form
     //
     if (block.formModel != null) {
-      has = block.formModel!.ui.hasActiveUiComponentWithRepresentativeType(
-        representativeType: representativeType,
+      has = block.formModel!.ui.hasActiveUiComponentWithContextKind(
+        contextKind: contextKind,
       );
       if (has) {
         return getClassNameWithoutGenerics(block.formModel);
@@ -228,8 +226,8 @@ class _BlockUiComponents extends _UiComponents {
     //
     // Block Base Views:
     //
-    String? componentName = findActiveBlockBaseViewWithRepresentativeType(
-      representativeType: representativeType,
+    String? componentName = findActiveBlockBaseViewWithContextKind(
+      contextKind: contextKind,
       alsoCheckChildren: false,
     );
     if (componentName != null) {
@@ -238,8 +236,8 @@ class _BlockUiComponents extends _UiComponents {
     //
     // ControlBar:
     //
-    has = hasActiveControlBarWithRepresentativeType(
-      representativeType: representativeType,
+    has = hasActiveControlBarWithContextKind(
+      contextKind: contextKind,
     );
     if (has) {
       return "BlockControlBar";
@@ -247,8 +245,8 @@ class _BlockUiComponents extends _UiComponents {
     //
     // Control
     //
-    has = hasActiveControlWidgetWithRepresentativeType(
-      representativeType: representativeType,
+    has = hasActiveControlWidgetWithContextKind(
+      contextKind: contextKind,
     );
     if (has) {
       return "ControlWidget";
@@ -256,8 +254,8 @@ class _BlockUiComponents extends _UiComponents {
     //
     // Pagination
     //
-    has = hasActivePaginationWithRepresentativeType(
-      representativeType: representativeType,
+    has = hasActivePaginationWithContextKind(
+      contextKind: contextKind,
     );
     if (has) {
       return "PaginationWidget";
@@ -265,9 +263,8 @@ class _BlockUiComponents extends _UiComponents {
     //
     if (alsoCheckChildren) {
       for (Block childBlock in block._childBlocks) {
-        componentName =
-            childBlock.ui.__activeUiComponentsWithRepresentativeType(
-          representativeType: representativeType,
+        componentName = childBlock.ui.__activeUiComponentsWithContextKind(
+          contextKind: contextKind,
           alsoCheckChildren: alsoCheckChildren,
         );
         if (componentName != null) {
@@ -289,14 +286,14 @@ class _BlockUiComponents extends _UiComponents {
   }
 
   String? findActiveBlockBaseView({required bool alsoCheckChildren}) {
-    return findActiveBlockBaseViewWithRepresentativeType(
-      representativeType: null,
+    return findActiveBlockBaseViewWithContextKind(
+      contextKind: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveBlockBaseViewWithRepresentativeType({
-    required RepresentativeType? representativeType,
+  String? findActiveBlockBaseViewWithContextKind({
+    required ContextKind? contextKind,
     required bool alsoCheckChildren,
   }) {
     var map = {...__blockBaseViewWidgetStates};
@@ -308,7 +305,7 @@ class _BlockUiComponents extends _UiComponents {
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isRepresentativeType(representativeType);
+      bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return getClassNameWithoutGenerics(widgetState.widget);
       }
@@ -316,8 +313,8 @@ class _BlockUiComponents extends _UiComponents {
     if (alsoCheckChildren) {
       for (Block childBlock in block._childBlocks) {
         String? componentName =
-            childBlock.ui.findActiveBlockBaseViewWithRepresentativeType(
-          representativeType: representativeType,
+            childBlock.ui.findActiveBlockBaseViewWithContextKind(
+          contextKind: contextKind,
           alsoCheckChildren: true,
         );
         if (componentName != null) {
@@ -332,11 +329,11 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   bool hasActiveControlBar() {
-    return hasActiveControlBarWithRepresentativeType(representativeType: null);
+    return hasActiveControlBarWithContextKind(contextKind: null);
   }
 
-  bool hasActiveControlBarWithRepresentativeType({
-    required RepresentativeType? representativeType,
+  bool hasActiveControlBarWithContextKind({
+    required ContextKind? contextKind,
   }) {
     for (_RefreshableWidgetState widgetState
         in __blockControlBarWidgetStates.keys) {
@@ -348,7 +345,7 @@ class _BlockUiComponents extends _UiComponents {
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isRepresentativeType(representativeType);
+      bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return true;
       }
@@ -360,13 +357,13 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   bool hasActiveControlWidget() {
-    return hasActiveControlWidgetWithRepresentativeType(
-      representativeType: null,
+    return hasActiveControlWidgetWithContextKind(
+      contextKind: null,
     );
   }
 
-  bool hasActiveControlWidgetWithRepresentativeType({
-    required RepresentativeType? representativeType,
+  bool hasActiveControlWidgetWithContextKind({
+    required ContextKind? contextKind,
   }) {
     for (_RefreshableWidgetState widgetState in __controlWidgetStates.keys) {
       if (!widgetState.mounted) {
@@ -376,7 +373,7 @@ class _BlockUiComponents extends _UiComponents {
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isRepresentativeType(representativeType);
+      bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return true;
       }
@@ -388,11 +385,11 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   bool hasActivePagination() {
-    return hasActivePaginationWithRepresentativeType(representativeType: null);
+    return hasActivePaginationWithContextKind(contextKind: null);
   }
 
-  bool hasActivePaginationWithRepresentativeType({
-    required RepresentativeType? representativeType,
+  bool hasActivePaginationWithContextKind({
+    required ContextKind? contextKind,
   }) {
     for (_RefreshableWidgetState widgetState in __paginationWidgetStates.keys) {
       if (!widgetState.mounted) {
@@ -402,7 +399,7 @@ class _BlockUiComponents extends _UiComponents {
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isRepresentativeType(representativeType);
+      bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return true;
       }

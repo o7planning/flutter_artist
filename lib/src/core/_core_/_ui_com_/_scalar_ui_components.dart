@@ -148,14 +148,14 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
 
   String? findActiveScalarBaseView({required bool alsoCheckChildren}) {
-    return findActiveScalarBaseViewWithRepresentativeType(
-      representativeType: null,
+    return findActiveScalarBaseViewWithContextKind(
+      contextKind: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveScalarBaseViewWithRepresentativeType({
-    required RepresentativeType? representativeType,
+  String? findActiveScalarBaseViewWithContextKind({
+    required ContextKind? contextKind,
     required bool alsoCheckChildren,
   }) {
     for (State widgetState in __scalarBaseViewWidgetStates.keys) {
@@ -172,8 +172,8 @@ class _ScalarUiComponents extends _UiComponents {
     if (alsoCheckChildren) {
       for (Scalar childScalar in scalar._childScalars) {
         String? componentName =
-            childScalar.ui.findActiveScalarBaseViewWithRepresentativeType(
-          representativeType: representativeType,
+            childScalar.ui.findActiveScalarBaseViewWithContextKind(
+          contextKind: contextKind,
           alsoCheckChildren: true,
         );
         if (componentName != null) {
@@ -188,13 +188,13 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
 
   bool hasActiveControlBar() {
-    return hasActiveControlBarWithRepresentativeType(
-      representativeType: null,
+    return hasActiveControlBarWithContextKind(
+      contextKind: null,
     );
   }
 
-  bool hasActiveControlBarWithRepresentativeType({
-    required RepresentativeType? representativeType,
+  bool hasActiveControlBarWithContextKind({
+    required ContextKind? contextKind,
   }) {
     for (_RefreshableWidgetState widgetState
         in __scalarControlBarWidgetStates.keys) {
@@ -206,7 +206,7 @@ class _ScalarUiComponents extends _UiComponents {
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isRepresentativeType(representativeType);
+      bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return true;
       }

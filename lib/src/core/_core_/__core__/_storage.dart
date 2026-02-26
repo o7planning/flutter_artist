@@ -22,10 +22,10 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
 
   void _init({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required StorageStructure storageStructure,
   }) {
-    LineFlowItem item = masterFlowItem._addLineFlowItem(
+    TraceStep item = executionTrace._addTraceStep(
       codeId: "#SS000",
       shortDesc:
           "${debugObjHtml(storageStructure)}.defineProjectionFamilies().",
@@ -36,13 +36,13 @@ class _Storage extends _StorageCore {
         storageStructure.defineProjectionFamilies();
     // This method may throw Fatal Error cause stop app.
     _projectionManager._init(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       projectionFamilies: projectionFamilies,
     );
     //
     item._extraInfos = FlutterArtist.debugRegister.debugRegisterProjections
       ..sort();
-    item = masterFlowItem._addLineFlowItem(
+    item = executionTrace._addTraceStep(
       codeId: "#SS040",
       shortDesc: "${debugObjHtml(storageStructure)}.registerActivities().",
       lineFlowType: LineFlowType.controllableCalling,
@@ -52,7 +52,7 @@ class _Storage extends _StorageCore {
     item._extraInfos = FlutterArtist.debugRegister.debugRegisterActivities
       ..sort();
     //
-    item = masterFlowItem._addLineFlowItem(
+    item = executionTrace._addTraceStep(
       codeId: "#SS060",
       shortDesc: "${debugObjHtml(storageStructure)}.registerShelves().",
       lineFlowType: LineFlowType.controllableCalling,
@@ -80,7 +80,7 @@ class _Storage extends _StorageCore {
     required StorageBackendAction action,
     required Function(BuildContext context)? navigate,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "executeBackendAction",
       parameters: {
@@ -92,7 +92,7 @@ class _Storage extends _StorageCore {
     //
     final bool checkBusyTrue = true;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#75000",
       shortDesc:
           "Calling ${debugObjHtml(this)}.__canBackendAction() to check before execute the action.",
@@ -109,7 +109,7 @@ class _Storage extends _StorageCore {
     );
     //
     if (!actionable.yes) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#75040",
         shortDesc: "Got @actionable:",
         actionable: actionable,
@@ -145,7 +145,7 @@ class _Storage extends _StorageCore {
       );
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#75340",
       shortDesc: "Creating <b>_StorageBackendActionTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
@@ -182,14 +182,14 @@ class _Storage extends _StorageCore {
   @_TaskUnitMethodAnnotation()
   @_StorageBackendActionAnnotation()
   Future<bool> _unitBackendAction({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required StorageBackendAction action,
     required StorageBackendActionResult taskResult,
   }) async {
     ApiResult<void>? result;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#35000",
       shortDesc:
           "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
@@ -197,7 +197,7 @@ class _Storage extends _StorageCore {
     );
     //
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#35100",
         shortDesc: "Calling ${debugObjHtml(action)}.performBackendOperation().",
         lineFlowType: LineFlowType.controllableCalling,
@@ -219,7 +219,7 @@ class _Storage extends _StorageCore {
       taskResult._setErrorInfo(
         errorInfo: errorInfo,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#35200",
         shortDesc:
             "The ${debugObjHtml(action)}.performBackendOperation() method was called with an error!",
@@ -228,13 +228,13 @@ class _Storage extends _StorageCore {
       return false;
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#35300",
       shortDesc: "${debugObjHtml(this)} > Fire event after backend action.",
       lineFlowType: LineFlowType.emitEvent,
     );
     FlutterArtist.storage.ev._emitEventFromShelfToOtherShelves(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       eventType: EventType.unknown,
       eventShelf: null,
       events: action.config.emitEvents,
@@ -272,7 +272,7 @@ class _Storage extends _StorageCore {
       openDialogThenFreezeQueuedEventsUntilClosed<V>({
     required Future<V?> Function() openDialog,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "openDialogThenFreezeQueuedEventsUntilClosed",
       parameters: null,
@@ -281,7 +281,7 @@ class _Storage extends _StorageCore {
     );
     return await __freeze._openDialogThenFreezeQueuedEventsUntilClosed(
       openDialog: openDialog,
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
     );
   }
 
@@ -293,7 +293,7 @@ class _Storage extends _StorageCore {
     BuildContext context, {
     bool showSuggestionIfNeed = true,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: 'openDrawerThenFreezeQueuedEventsUntilClosed',
       parameters: null,
@@ -302,7 +302,7 @@ class _Storage extends _StorageCore {
     );
     return await __freeze._openDrawerThenFreezeQueuedEventsUntilClosed(
       context,
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       showSuggestionIfNeed: showSuggestionIfNeed,
     );
   }
@@ -315,7 +315,7 @@ class _Storage extends _StorageCore {
     BuildContext context, {
     bool showSuggestionIfNeed = true,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: 'openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed',
       parameters: null,
@@ -325,7 +325,7 @@ class _Storage extends _StorageCore {
     return await __freeze
         ._openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
       context,
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       showSuggestionIfNeed: showSuggestionIfNeed,
     );
   }

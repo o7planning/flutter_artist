@@ -147,7 +147,8 @@ abstract class Block<
   @DebugMethodAnnotation()
   String get debugClassParametersDefinition {
     return "<${getItemIdType()}, ${getItemType()}, ${getItemDetailType()}, "
-        "${getFilterInputType()}, ${getFilterCriteriaType()}, ${getFormInputType()}>";
+        "${getFilterInputType()}, ${getFilterCriteriaType()}, "
+        "${getFormInputType()}, ${getFormRelatedDataType()}>";
   }
 
   final String? description;
@@ -502,6 +503,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  // TODO: Rename.
   List<Event> getOutsideDataTypesToListen() {
     List<Event> itemTypeEvents = [];
     //
@@ -620,6 +622,10 @@ abstract class Block<
     return FORM_INPUT;
   }
 
+  Type getFormRelatedDataType() {
+    return FORM_RELATED_DATA;
+  }
+
   // ***************************************************************************
   // ************ Need to Query State ******************************************
   // ***************************************************************************
@@ -684,18 +690,18 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockClearanceAnnotation()
   Future<void> _unitClearance({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock thisXBlock,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#07000",
       shortDesc: "Begin ${debugObjHtml(this)} > ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#07020",
       shortDesc:
           "Clear all item of ${debugObjHtml(this)} and set to <b>pending</b>. "
@@ -716,19 +722,19 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockClearCurrentItemAnnotation()
   Future<void> _unitClearCurrent({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock thisXBlock,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#13000",
       shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#13100",
       shortDesc: "${debugObjHtml(this)} -> set currentItem to null.",
     );
@@ -738,7 +744,7 @@ abstract class Block<
       itemDetail: null,
     );
     if (formModel != null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#13200",
         shortDesc:
             "${debugObjHtml(formModel)} clear data and set state to <b>none</b>.",
@@ -746,7 +752,7 @@ abstract class Block<
       formModel!._clearDataWithDataState(formDataState: DataState.none);
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#13400",
       shortDesc: "Clear data of all child blocks and set them to <b>none</b>."
           "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
@@ -768,45 +774,45 @@ abstract class Block<
   @_BlockQueryAndPrepareToEditAnnotation()
   @_BlockQueryAndPrepareToCreateAnnotation()
   Future<void> _unitQuery({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock thisXBlock,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#03000",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
     );
     //
-    bool hasBlockRepresentative = ui.hasActiveUiComponentBlockRepresentative(
+    bool provideBlockContext = ui.hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#03020",
       shortDesc:
-          "@hasBlockRepresentative: ${debugObjHtml(hasBlockRepresentative)}.",
+          "@provideBlockContext: ${debugObjHtml(provideBlockContext)}.",
       lineFlowType: LineFlowType.debug,
       tipDocument: TipDocument.blockActiveUiComponents,
     );
     //
     QryHint queryHint = thisXBlock.queryHint;
     if (queryHint != QryHint.force) {
-      if (dataState != DataState.ready && hasBlockRepresentative) {
+      if (dataState != DataState.ready && provideBlockContext) {
         queryHint = QryHint.force;
       }
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#03040",
       shortDesc: "@queryHint: ${debugObjHtml(queryHint)}.",
       lineFlowType: LineFlowType.debug,
     );
     //
-    thisXBlock._printParameters(hasBlockRepresentative: hasBlockRepresentative);
+    thisXBlock._printParameters(provideBlockContext: provideBlockContext);
     //
     final performQueryMethod = BlockErrorMethod.performQuery;
     DataState newBlockDataState = dataState;
@@ -815,7 +821,7 @@ abstract class Block<
     bool queried = false;
 
     if (queryHint == QryHint.none) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03060",
         shortDesc: "@queryHint: ${debugObjHtml(queryHint)}.",
       );
@@ -829,14 +835,14 @@ abstract class Block<
       // If Natural Mode: Try to select an item as current if the Block has no current.
       //
       if (thisXBlock.xShelf.naturalMode) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#03080",
           shortDesc: "Currently, ${debugObjHtml(this)} query in naturalMode.",
         );
         // Test Cases: [38b] - test_companyCreationScreen_to_employeeScreen.
         // No need to select an Item as Current.
         if (formModel?.formMode == FormMode.creation) {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#03100",
             shortDesc:
                 "The ${debugObjHtml(this)} is in creation mode --> cancel query.",
@@ -856,7 +862,7 @@ abstract class Block<
       // Test Cases: [63a] - __test_event_63a__external_product_event_in_productScreen_1
       //
       if (currentItem == null && currentItemSettingType == null) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#03120",
           shortDesc:
               "The block has no currentItem and @currentItemSettingType is null --> Cancel query.",
@@ -873,7 +879,7 @@ abstract class Block<
         forceReloadItem: thisXBlock.forceReloadCurrItem,
         forceTypeForForm: null,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03140",
         shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
         lineFlowType: LineFlowType.addTaskUnit,
@@ -885,11 +891,11 @@ abstract class Block<
     }
     //
     else if (queryHint == QryHint.markAsPending) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03160",
         shortDesc: "@queryHint: $queryHint.",
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03180",
         shortDesc:
             "Clear all items of ${debugObjHtml(this)} and set to <b>pending</b>. "
@@ -911,7 +917,7 @@ abstract class Block<
     }
     //
     // FORCE QUERY:
-    // thisXBlock.queryHint || (hasBlockRepresentative && this.dataState != DataState.ready)
+    // thisXBlock.queryHint || (provideBlockContext && this.dataState != DataState.ready)
     //
     XFilterCriteria<FILTER_CRITERIA>? xFilterCriteriaOfFilterModel;
     try {
@@ -920,7 +926,7 @@ abstract class Block<
       // SAME-AS: #0004
       if (!xFilterModel.queried) {
         if (filterModel is! _DefaultFilterModel) {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#03200",
             shortDesc: "Need to load data for ${debugObjHtml(filterModel)}.",
           );
@@ -929,7 +935,7 @@ abstract class Block<
         //
         xFilterCriteriaOfFilterModel =
             await filterModel._startNewFilterActivity(
-          masterFlowItem: masterFlowItem,
+          executionTrace: executionTrace,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
         ) as XFilterCriteria<FILTER_CRITERIA>?;
@@ -937,7 +943,7 @@ abstract class Block<
         xFilterModel.queried = true;
       } else {
         if (filterModel is! _DefaultFilterModel) {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#03220",
             shortDesc:
                 "${debugObjHtml(filterModel)} data ready --> no need to load data.",
@@ -947,7 +953,7 @@ abstract class Block<
             filterModel._xFilterCriteria! as XFilterCriteria<FILTER_CRITERIA>;
       }
     } catch (e, stackTrace) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03240",
         shortDesc: "Load data for ${debugObjHtml(filterModel)} error!",
       );
@@ -959,7 +965,7 @@ abstract class Block<
     // Has Error in FilterModel.
     //
     if (xFilterCriteriaOfFilterModel == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03260",
         shortDesc:
             "Clear all items of ${debugObjHtml(this)} and set dataState to <b>error</b>. "
@@ -993,7 +999,7 @@ abstract class Block<
     final Pageable? usedPageable;
     //
     if (thisXBlock.queryType == QueryType.realQuery) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03280",
         shortDesc: "@queryType: ${debugObjHtml(thisXBlock.queryType)}.",
         lineFlowType: LineFlowType.debug,
@@ -1013,7 +1019,7 @@ abstract class Block<
         //
         final SortableCriteria sortableCriteria;
         if (serverSideSortModel != null) {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#03320",
             shortDesc:
                 "Calling ${debugObjHtml(serverSideSortModel)}.getSortableCriteria():",
@@ -1021,7 +1027,7 @@ abstract class Block<
             tipDocument: TipDocument.sorting,
           );
           sortableCriteria = serverSideSortModel!.getSortableCriteria();
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#03324",
             shortDesc:
                 "Got @sortableCriteria: ${debugObjHtml(sortableCriteria)}.",
@@ -1029,7 +1035,7 @@ abstract class Block<
           );
         } else {
           sortableCriteria = SortableCriteria._empty();
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#03330",
             shortDesc:
                 "No <b>serverSideSortModel</b> --> @sortableCriteria: ${debugObjHtml(sortableCriteria)}.",
@@ -1038,7 +1044,7 @@ abstract class Block<
           );
         }
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#03340",
           shortDesc: "Calling ${debugObjHtml(this)}.performQuery()...",
           parameters: {
@@ -1066,7 +1072,7 @@ abstract class Block<
         queryResultState = ActionResultState.success;
         queriedPageData = result.data;
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#03360",
           shortDesc: "Got @queriedPageData: ${debugObjHtml(queriedPageData)}.",
           lineFlowType: LineFlowType.debug,
@@ -1097,7 +1103,7 @@ abstract class Block<
           errorInfo: errorInfo,
         );
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#03400",
           shortDesc:
               "The ${debugObjHtml(this)}.performQuery() method was called with an error!",
@@ -1211,7 +1217,7 @@ abstract class Block<
     }
     // Query Empty:
     else {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03500",
         shortDesc: "@queryType: ${thisXBlock.queryType}.",
       );
@@ -1223,7 +1229,7 @@ abstract class Block<
       queryResultState = ActionResultState.success;
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#03520",
       shortDesc: "Calculated:",
       parameters: {
@@ -1235,7 +1241,7 @@ abstract class Block<
     //
     final ITEM? currItem = currentItem;
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03540",
         shortDesc:
             "Calling ${debugObjHtml(this)}.__processQueryResult() to process queried data.",
@@ -1259,7 +1265,7 @@ abstract class Block<
       // Update queried items to the List:
       //
       __blockData._updateData(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         forceListUpdateStrategy: realListUpdateStrategy,
         processedQueryResult: processedQueryResult,
       );
@@ -1275,7 +1281,7 @@ abstract class Block<
       thisXBlock.queryResult._setErrorInfo(
         errorInfo: errorInfo,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03560",
         shortDesc: "Update queried data to block --> error.",
         errorInfo: errorInfo,
@@ -1286,14 +1292,14 @@ abstract class Block<
     final bool currentItemInList = currItem != null && containsItem(currItem);
     candidateCurrItem = currentItemInList ? currItem : null;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#03580",
       shortDesc: "@currentItemInList: ${debugObjHtml(currentItemInList)}.",
       lineFlowType: LineFlowType.debug,
     );
     //
     if (!currentItemInList) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03600",
         shortDesc: "Set currentItem to <b>null</b>.",
       );
@@ -1304,7 +1310,7 @@ abstract class Block<
       );
       //
       if (formModel != null) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#03610",
           shortDesc:
               "Clear ${debugObjHtml(formModel)} data and set to <b>none</b>.",
@@ -1312,7 +1318,7 @@ abstract class Block<
         );
         formModel!._clearDataWithDataState(formDataState: DataState.none);
       }
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03620",
         shortDesc:
             "Clear data of all child blocks and set them to <b>none</b> state."
@@ -1342,7 +1348,7 @@ abstract class Block<
           );
         case DataState.error:
           // TODO: Test Cases.
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#03640",
             shortDesc:
                 "@newBlockDataState: $newBlockDataState --> Clear data of all child blocks and set them to <b>none</b> state."
@@ -1358,7 +1364,7 @@ abstract class Block<
     }
     if (thisXBlock.xShelf.naturalMode) {
       if (formMode == FormMode.creation) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#03660",
           shortDesc:
               "This query in naturalMode and formMode is creation --> do nothing.",
@@ -1376,7 +1382,7 @@ abstract class Block<
         return;
       }
     }
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#03700",
       shortDesc: "@afterQueryAction: ${debugObjHtml(afterQueryAction)}.",
       lineFlowType: LineFlowType.debug,
@@ -1388,7 +1394,7 @@ abstract class Block<
       final taskUnit = _BlockClearCurrentTaskUnit<ITEM>(
         xBlock: thisXBlock,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03720",
         shortDesc: "@afterQueryAction: ${debugObjHtml(afterQueryAction)} --> "
             "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
@@ -1407,7 +1413,7 @@ abstract class Block<
         formInput: null,
         navigate: null,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#03740",
         shortDesc: "@afterQueryAction: $afterQueryAction --> "
             "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
@@ -1435,7 +1441,7 @@ abstract class Block<
             CurrentItemSettingType.setAnItemAsCurrentThenLoadForm;
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#03780",
       shortDesc:
           "Calculated >> @currentItemSettingType: ${debugObjHtml(currentItemSettingType)}.",
@@ -1450,7 +1456,7 @@ abstract class Block<
       forceReloadItem: false,
       forceTypeForForm: null,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#03800",
       shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
       lineFlowType: LineFlowType.addTaskUnit,
@@ -1472,7 +1478,7 @@ abstract class Block<
   @_BlockSelectFirstItemAsCurrentAnnotation()
   @_BlockSelectPreviousItemAsCurrentAnnotation()
   Future<void> _unitSetItemAsCurrent({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required CurrentItemSettingType currentItemSettingType,
@@ -1482,7 +1488,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#28000",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
@@ -1496,7 +1502,7 @@ abstract class Block<
     //
     final bool manualDirty = false;
     if (formModel != null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#28020",
         shortDesc:
             "${debugObjHtml(formModel)} -> set <b>manualDirty</b> to ${debugObjHtml(manualDirty)}.",
@@ -1505,7 +1511,7 @@ abstract class Block<
     }
     //
     if (thisXBlock.candidateCurrItem != null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#28030",
         shortDesc:
             "Candidate Item specified by XBlock: ${debugObjHtml(thisXBlock.candidateCurrItem)}",
@@ -1518,7 +1524,7 @@ abstract class Block<
     }
     //
     if (dataState == DataState.pending) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#28040",
         shortDesc:
             "${debugObjHtml(this)} dataState is pending -> clear all data in child blocks and set them to <b>none</b>."
@@ -1535,7 +1541,7 @@ abstract class Block<
     }
     //
     if (dataState == DataState.error) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#28060",
         shortDesc:
             "${debugObjHtml(this)} dataState is error -> clear all data in child blocks and set them to <b>none</b>."
@@ -1552,7 +1558,7 @@ abstract class Block<
     }
     //
     if (itemCount == 0) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#28080",
         shortDesc:
             "${debugObjHtml(this)} has no item -> clear all data in child blocks and set them to <b>none</b>."
@@ -1570,7 +1576,7 @@ abstract class Block<
     //
     if (candidateCurrItem != null) {
       if (!containsItem(candidateCurrItem)) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#28120",
           shortDesc:
               "Candidate Item ${debugObjHtml(candidateCurrItem)} not in the list items of the block -> set candidate item to null.",
@@ -1593,7 +1599,7 @@ abstract class Block<
     //
     final bool currItemWillChanged;
     if (currItem == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#28160",
         shortDesc:
             "Currently, this block contains <b>$itemCount items</b> and has no <b>current item</b>.",
@@ -1601,24 +1607,24 @@ abstract class Block<
       );
       if (candidateCurrItem == null) {
         // If UI Component Active need an ITEM-load.
-        final String? itemRepComponent =
-            ui.findActiveUiComponentItemRepresentative(
+        final String? itemContextComponent =
+            ui.findActiveUiComponentByItemContext(
           alsoCheckChildren: true,
         );
-        final bool hasItemRep = itemRepComponent != null;
-        masterFlowItem._addLineFlowItem(
+        final bool hasItemRep = itemContextComponent != null;
+        executionTrace._addTraceStep(
           codeId: "#28200",
           shortDesc: hasItemRep
               ? "Found a <b>UI-X-Component</b> that displays and represents the ITEM. So setting a currentItem is required."
               : "This block does not have any visible <b>UI-Component</b> but represents the ITEM.",
           parameters: {
-            "itemRepComponent": itemRepComponent,
+            "itemContextComponent": itemContextComponent,
           },
           tipDocument: TipDocument.blockActiveUiComponents,
         );
         //
         ITEM? candidateCurrItem2;
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#28220",
           shortDesc:
               "Calling ${debugObjHtml(this)}.specifyItemIndexToSetAsCurrent() method "
@@ -1629,7 +1635,7 @@ abstract class Block<
         );
         int? suggestIdx = specifyItemIndexToSetAsCurrent();
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#28240",
           shortDesc: "Got value: <b>$suggestIdx</b>.",
         );
@@ -1637,7 +1643,7 @@ abstract class Block<
           candidateCurrItem2 = candidateCurrItem2 ?? items[suggestIdx];
         }
         candidateCurrItem2 = candidateCurrItem2 ?? firstItem;
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#28260",
           shortDesc:
               "Found an ITEM that could be a candidate - ${debugObjHtml(candidateCurrItem2)}",
@@ -1653,14 +1659,14 @@ abstract class Block<
           );
         }
         if (isInNewQueryList2) {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#28280",
             shortDesc:
                 "The ITEM ${debugObjHtml(candidateCurrItem2)} is in the list of ITEM(s) just queried.",
           );
         }
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#28300",
           shortDesc: "State:"
               "\n - ITEM == ITEM_DETAIL?: <b>${ITEM == ITEM_DETAIL}</b>."
@@ -1689,7 +1695,7 @@ abstract class Block<
     }
     // currItem != null
     else {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#28460",
         shortDesc:
             "Currently, this block contains <b>$itemCount items</b> and has a <b>currentItem</b> - ${debugObjHtml(currItem)}.",
@@ -1716,7 +1722,7 @@ abstract class Block<
       }
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#28560",
       shortDesc:
           "Finally, the candidate ITEM is ${debugObjHtml(candidateCurrItem)}. "
@@ -1726,7 +1732,7 @@ abstract class Block<
     // If no item can be current.
     //
     if (candidateCurrItem == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#28600",
         shortDesc:
             "No ITEM is determined to be the currentItem of ${debugObjHtml(this)} -> "
@@ -1768,26 +1774,26 @@ abstract class Block<
         ui.hasActiveUiComponentItemRepresentative(
       alsoCheckChildren: true,
     );
-    final bool hasFormRepresentative =
+    final bool provideFormContext =
         ui.hasActiveUiComponentFormRepresentative();
     //
     final bool inputForceReloadItem = thisXBlock.forceReloadCurrItem;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#28640",
       shortDesc: "Debug:",
       parameters: {
         "hasBlockXRepresentative": hasBlockXRepresentative,
         "hasItemXRepresentative": hasItemXRepresentative,
-        "hasFormRepresentative": hasFormRepresentative,
+        "provideFormContext": provideFormContext,
         "inputForceReloadItem": inputForceReloadItem,
       },
       lineFlowType: LineFlowType.debug,
     );
     //
-    masterFlowItem._addLineFlowSeparator();
+    executionTrace._addLineFlowSeparator();
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#28660",
       shortDesc: "Calling <b>_calculateBlockState()</b>:",
       parameters: {
@@ -1796,7 +1802,7 @@ abstract class Block<
         "candidateCurrItem": candidateCurrItem,
         "hasBlockXRepresentative": hasBlockXRepresentative,
         "hasItemXRepresentative": hasItemXRepresentative,
-        "hasFormRepresentative": hasFormRepresentative,
+        "provideFormContext": provideFormContext,
         "itemAbsentRepresentativePolicy": config.itemAbsentRepresentativePolicy,
         "unifiedItemRefreshPolicy": config.unifiedItemRefreshPolicy,
         "currentItemSettingType": currentItemSettingType,
@@ -1808,14 +1814,14 @@ abstract class Block<
     );
     //
     final _ForceReloadItemState blkState = _calculateBlockState(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       thisXBlock: thisXBlock,
       inputCandidateCurrItem: inputCandidateCurrItem,
       inputForceReloadItem: inputForceReloadItem,
       candidateCurrItem: candidateCurrItem,
       hasBlockXRepresentative: hasBlockXRepresentative,
       hasItemXRepresentative: hasItemXRepresentative,
-      hasFormRepresentative: hasFormRepresentative,
+      provideFormContext: provideFormContext,
       itemAbsentRepresentativePolicy: config.itemAbsentRepresentativePolicy,
       unifiedItemRefreshPolicy: config.unifiedItemRefreshPolicy,
       currentItemSettingType: currentItemSettingType,
@@ -1824,14 +1830,14 @@ abstract class Block<
       currentItemIdChanged: currItemWillChanged,
     );
     //
-    masterFlowItem._addLineFlowSeparator();
+    executionTrace._addLineFlowSeparator();
     //
     final forceReloadItem = blkState.forceReloadItem;
     final forceReloadForm = blkState.forceReloadForm;
     final candidateItemAccepted = blkState.candidateAccepted;
 
     if (!candidateItemAccepted) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#28670",
         shortDesc:
             "@candidateItemAccepted: <b>false</b> --> Clean all data of child blocks and set them to none.",
@@ -1849,7 +1855,7 @@ abstract class Block<
       }
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#28700",
       shortDesc: "Calculated:",
       parameters: {
@@ -1861,7 +1867,7 @@ abstract class Block<
     //
     final bool isCandidateIsCurrent = isCurrentItem(candidateCurrItem);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#28720",
       shortDesc: "Calculated:",
       parameters: {
@@ -1885,7 +1891,7 @@ abstract class Block<
     if (!forceReloadItem) {
       itemRefreshed = false;
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#28800",
         shortDesc:
             "The candidate ${debugObjHtml(candidateCurrItem)} will not need to be reloaded.",
@@ -1920,7 +1926,7 @@ abstract class Block<
             isRefreshingCurrentItem: true,
           );
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#28900",
             shortDesc:
                 "Calling ${debugObjHtml(this)}.$methodName() with parameters:",
@@ -1940,7 +1946,7 @@ abstract class Block<
           refreshedCurrentItemDetail = result.data;
           thisXBlock.setForceReloadCurrItemDone();
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#28920",
             shortDesc:
                 "Result --> @refreshedCurrentItemDetail: ${debugObjHtml(refreshedCurrentItemDetail)}.",
@@ -1958,7 +1964,7 @@ abstract class Block<
           blockCurrentItemSettingResult._setErrorInfo(
             errorInfo: errorInfo,
           );
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#29000",
             shortDesc:
                 "The ${debugObjHtml(this)}.$methodName() method was called with an error!",
@@ -1978,7 +1984,7 @@ abstract class Block<
     // If candidate not found in database --> remove.
     //
     if (refreshedCurrentItemDetail == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#29040",
         shortDesc:
             "Candidate ${debugObjHtml(candidateCurrItem)} seems to have been deleted from the system "
@@ -1990,12 +1996,12 @@ abstract class Block<
       );
       // #SAME-CODE-001
       if (!isCandidateIsCurrent) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#29060",
           shortDesc: "Remove ${debugObjHtml(candidateCurrItem)} from the list.",
         );
         await __removeItemFromList(
-          masterFlowItem: masterFlowItem,
+          executionTrace: executionTrace,
           removeItem: candidateCurrItem,
         );
         //
@@ -2009,7 +2015,7 @@ abstract class Block<
           return;
         }
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#29100",
           shortDesc:
               "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
@@ -2031,17 +2037,17 @@ abstract class Block<
       // Candidate is current but not found in database.
       // Remove Item (Current Item)
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#29160",
         shortDesc:
             "Remove current item ${debugObjHtml(candidateCurrItem)} from the ${debugObjHtml(this)}.",
       );
       await __removeItemFromList(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         removeItem: candidateCurrItem,
       );
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#29180",
         shortDesc: "Set current item to <b>null</b>.",
       );
@@ -2052,7 +2058,7 @@ abstract class Block<
         itemDetail: null,
       );
       if (formModel != null) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#29200",
           shortDesc:
               "Set ${debugObjHtml(formModel!)} dataState to <b>none</b>.",
@@ -2060,7 +2066,7 @@ abstract class Block<
         formModel?._clearDataWithDataState(formDataState: DataState.none);
       }
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#29220",
         shortDesc: "Clear all data in child blocks and set them to <b>none</b>."
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
@@ -2069,7 +2075,7 @@ abstract class Block<
       __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
       //
       if (siblingItem != null) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#29240",
           shortDesc:
               "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
@@ -2090,7 +2096,7 @@ abstract class Block<
     } // End if refreshedCurrentItemDetail == null.
     //
     if (currItemWillChanged || itemRefreshed) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#29400",
         shortDesc: "Debug",
         parameters: {
@@ -2106,7 +2112,7 @@ abstract class Block<
       //
       bool convertError = false;
       try {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#29410",
           shortDesc:
               "Calling ${debugObjHtml(this)}.$methodName() method to convert <b>ITEM_DETAIL</b> to <b>ITEM</b>.\n"
@@ -2117,7 +2123,7 @@ abstract class Block<
         candidateCurrItem = __convertItemDetailToItem(
           itemDetail: refreshedCurrentItemDetail,
         );
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#29420",
           shortDesc: "Got value: ${debugObjHtml(candidateCurrItem)}.",
           lineFlowType: LineFlowType.debug,
@@ -2132,7 +2138,7 @@ abstract class Block<
           showSnackBar: true,
           tipDocument: TipDocument.blockConvertItemDetailToItem,
         );
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#29440",
           shortDesc:
               "The ${debugObjHtml(this)}.$methodName() method was called with an error!",
@@ -2150,7 +2156,7 @@ abstract class Block<
       //
       __blockData._selectionDataState = DataState.ready;
       if (candidateCurrItem != null) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#29480",
           shortDesc: "Calling <b>__blockData._insertOrReplaceItem()</b> method "
               "to insert or replace ${debugObjHtml(candidateCurrItem)} into the list.",
@@ -2162,7 +2168,7 @@ abstract class Block<
         __blockData._insertOrReplaceItem(item: candidateCurrItem);
       }
 
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#29500",
         shortDesc: "Set ${debugObjHtml(candidateCurrItem)} as current.",
       );
@@ -2180,7 +2186,7 @@ abstract class Block<
         final taskUnit = _FormModelLoadDataTaskUnit(
           xFormModel: thisXBlock.xFormModel!,
         );
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#29540",
           shortDesc: "@forceReloadForm: ${debugObjHtml(forceReloadForm)}.\n"
               "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
@@ -2197,7 +2203,7 @@ abstract class Block<
         if (forceReloadItem ||
             currItemWillChanged ||
             isCandidateCurrentItemInNewQueriedList) {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#29560",
             shortDesc:
                 "@forceReloadForm: $forceReloadForm, @forceReloadItem: $forceReloadItem, @currItemWillChanged: $currItemWillChanged --> "
@@ -2216,7 +2222,7 @@ abstract class Block<
     if (currItemWillChanged) {
       blockCurrentItemSettingResult._currentItem = candidateCurrItem;
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#29640",
         shortDesc:
             "The <b>currentItem</b> has changed --> clear all data in child blocks and set them to <b>pending</b>."
@@ -2230,7 +2236,7 @@ abstract class Block<
       );
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#29700",
       shortDesc: "Create ${TaskType.blockQuery.asDebugTaskUnit()}(s) "
           "for all child blocks of ${debugObjHtml(this)} and add to Queue."
@@ -2241,7 +2247,7 @@ abstract class Block<
       final taskUnit = _BlockQueryTaskUnit(
         xBlock: childXBlock,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#29740",
         shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
         lineFlowType: LineFlowType.addTaskUnit,
@@ -2261,7 +2267,7 @@ abstract class Block<
   @_BlockDeleteCurrentItemAnnotation()
   @_BlockDeleteItemAnnotation()
   Future<void> _unitDeleteItem({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required ITEM item,
@@ -2269,7 +2275,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#08000",
       shortDesc:
           "${debugObjHtml(this)} --> Begin ${taskType.asDebugTaskUnit()} for ${debugObjHtml(this)}.",
@@ -2278,7 +2284,7 @@ abstract class Block<
     //
     final errorIfItemNotInTheBlock = true;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#08020",
       shortDesc: "Calling ${debugObjHtml(this)}.canDeleteItem().",
       parameters: {
@@ -2297,7 +2303,7 @@ abstract class Block<
       errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
     );
     if (!actionable.yes) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#08040",
         shortDesc:
             "Can not delete ${debugObjHtml(item)}. Cause: ${actionable.message}.",
@@ -2311,7 +2317,7 @@ abstract class Block<
     //
     final bool isCurrent = isCurrentItem(item);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#08060",
       shortDesc: isCurrent
           ? "You are deleting the current item - ${debugObjHtml(item)}."
@@ -2325,7 +2331,7 @@ abstract class Block<
       final ID itemId = __getItemIdShowErr(item, showErr: true);
       __refreshDeletingState(isDeleting: true);
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#08160",
         shortDesc:
             "Calling ${debugObjHtml(this)}.$methodName() with parameters:",
@@ -2339,7 +2345,7 @@ abstract class Block<
       // Throw ApiError:
       result.throwIfError();
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#08180",
         shortDesc:
             "${debugObjHtml(this)} > Fire event after deleting ${_debugItemTypeHtml()}($itemId).",
@@ -2349,7 +2355,7 @@ abstract class Block<
       // External React:
       //
       __emitEventFromBlockToOtherShelves(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         eventType: EventType.deletion,
       );
     } catch (e, stackTrace) {
@@ -2367,7 +2373,7 @@ abstract class Block<
         errorInfo: errorInfo,
       );
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#08200",
         shortDesc:
             "The ${debugObjHtml(this)}.$methodName() method was called with an error!",
@@ -2387,33 +2393,33 @@ abstract class Block<
     //
     // #SAME-CODE-001
     if (!isCurrent) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#08240",
         shortDesc:
             "Remove ${debugObjHtml(item)} from ${debugObjHtml(this)}. (*) This item was not current item.",
       );
       await __removeItemFromList(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         removeItem: item,
       );
       return;
     }
     //
-    final String? itemRepComponent = ui.findActiveUiComponentItemRepresentative(
+    final String? itemContextComponent = ui.findActiveUiComponentByItemContext(
       alsoCheckChildren: true,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#08250",
       shortDesc: "Debug:",
       parameters: {
-        "itemRepComponent": itemRepComponent,
+        "itemContextComponent": itemContextComponent,
       },
       lineFlowType: LineFlowType.debug,
       tipDocument: TipDocument.blockActiveUiComponents,
     );
     final ITEM? siblingItem;
-    if (itemRepComponent != null) {
-      masterFlowItem._addLineFlowItem(
+    if (itemContextComponent != null) {
+      executionTrace._addTraceStep(
         codeId: "#08260",
         shortDesc: "Finding sibling item...",
       );
@@ -2424,7 +2430,7 @@ abstract class Block<
     } else {
       siblingItem = null;
     }
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#08270",
       shortDesc: "Found sibling item:",
       parameters: {
@@ -2432,18 +2438,18 @@ abstract class Block<
       },
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#08280",
       shortDesc:
           "Remove ${debugObjHtml(item)} from ${debugObjHtml(this)}. (*) This item was current item.",
     );
     // Remove Item (Current Item)
     await __removeItemFromList(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       removeItem: item,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#08300",
       shortDesc: "${debugObjHtml(this)} --> set current item to <b>null</b>.",
     );
@@ -2454,7 +2460,7 @@ abstract class Block<
     );
     //
     if (formModel != null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#08320",
         shortDesc:
             "${debugObjHtml(formModel)} --> clear formModel, set dataState to <b>none</b>.",
@@ -2465,7 +2471,7 @@ abstract class Block<
       );
     }
     // TODO Test Cases.
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#08340",
       shortDesc: "Clear data of all child blocks and set them to <b>none</b>."
           "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
@@ -2474,13 +2480,13 @@ abstract class Block<
       thisXBlock: thisXBlock,
     );
     //
-    masterFlowItem._addLineFlowSeparator();
+    executionTrace._addLineFlowSeparator();
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#08400",
       shortDesc: "Deleted Successfully --> Process Internal Reaction.",
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#08440",
       shortDesc: "Calling ${debugObjHtml(this)}._processInternalReaction()",
       parameters: {
@@ -2491,7 +2497,7 @@ abstract class Block<
     // This: _unitDeleteItem() method.
     // SAME-AS: #0013 (Same as _unitDeleteItems() method)
     await _processInternalReaction(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       thisXBlock: thisXBlock,
       candidateCurrItem: siblingItem,
     );
@@ -2501,7 +2507,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<void> _processInternalReaction({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     bool forceReQuery = false,
     required ITEM? candidateCurrItem,
@@ -2534,7 +2540,7 @@ abstract class Block<
       forEventBlock: this,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#70260",
       shortDesc: "Processing INTERNAL EVENT [$name]...",
       parameters: {
@@ -2547,7 +2553,7 @@ abstract class Block<
     );
     //
     if (!hasInternalReaction) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#70300",
         shortDesc: "Calculated:",
         parameters: {
@@ -2557,7 +2563,7 @@ abstract class Block<
       );
       // forceReQuery (In !hasInternalReaction).
       if (forceReQuery) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#70320",
           shortDesc: "Creating <b>_BlockQueryTaskUnit</b>.",
           lineFlowType: LineFlowType.addTaskUnit,
@@ -2568,7 +2574,7 @@ abstract class Block<
       }
       // !forceReQuery (In !hasInternalReaction).
       else {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#70380",
           shortDesc: "Creating <b>_BlockSetItemAsCurrentTaskUnit</b>.",
           parameters: {
@@ -2594,7 +2600,7 @@ abstract class Block<
     } // End of !hasInternalReaction.
     //
     if (hasInternalReaction) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#70400",
         shortDesc: "Calling <b>xShelf._updateInternalReactionByEvtBlock()</b>.",
         parameters: {
@@ -2606,13 +2612,13 @@ abstract class Block<
       // Update only (No add to queue).
       //
       thisXBlock.xShelf._updateInternalReactionByEvtBlock(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         eventXBlock: thisXBlock,
         forceReQuery: forceReQuery,
       );
       //
       String debugHtmlString = thisXBlock.xShelf.toDebugXShelfStateAsHtml();
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#70440",
         shortDesc: debugHtmlString,
         lineFlowType: LineFlowType.debug,
@@ -2622,7 +2628,7 @@ abstract class Block<
     // IMPORTANT: If has effected member Outside Lineage ==> Init Query Tasks for Shelf.
     //
     if (hasEffectedOutsideLineage) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#70500",
         shortDesc: "Calculated:",
         parameters: {
@@ -2633,14 +2639,14 @@ abstract class Block<
       // Test Case: [62a] - __test_event_62a_test_DELETE.
       // Test Case: [62b] - __test_event_62b_test_DELETE.
       // Add Query Tasks to the Queue of XShelf.
-      thisXBlock.xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+      thisXBlock.xShelf._initQueryTaskUnits(executionTrace: executionTrace);
       return;
     }
     //
     // The Internal Event effects to current branch only.
     //
     if (effSelfInfo == null && topEffBlockInfo == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#70600",
         shortDesc: "Calculated:",
         parameters: {
@@ -2650,7 +2656,7 @@ abstract class Block<
         },
         lineFlowType: LineFlowType.debug,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#70620",
         shortDesc:
             "Creating <b>_BlockSetItemAsCurrentTaskUnit</b> for <b>${thisXBlock.name}</b>:",
@@ -2675,7 +2681,7 @@ abstract class Block<
     }
     // topEffBlockInfo is NOT NULL:
     else if (topEffBlockInfo != null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#70640",
         shortDesc: "Calculated:",
         parameters: {
@@ -2688,7 +2694,7 @@ abstract class Block<
         final XBlock topXBlock = topEffBlockInfo.getXBlock(
           xShelf: thisXBlock.xShelf,
         );
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#70660",
           shortDesc:
               "Create <b>_BlockQueryTaskUnit</b> for <b>${topXBlock.name}</b>:",
@@ -2703,7 +2709,7 @@ abstract class Block<
         }
         return;
       } else if (topEffBlockInfo.refreshCurrItem) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#70700",
           shortDesc: "Calculated:",
           parameters: {
@@ -2716,7 +2722,7 @@ abstract class Block<
           xShelf: thisXBlock.xShelf,
         );
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#70740",
           shortDesc:
               "Create <b>_BlockSetItemAsCurrentTaskUnit</b> for <b>${topXBlock.name}</b>:",
@@ -2744,7 +2750,7 @@ abstract class Block<
     }
     // effSelfInfo is NOT NULL:
     else if (effSelfInfo != null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#70800",
         shortDesc: "Calculated:",
         parameters: {
@@ -2757,7 +2763,7 @@ abstract class Block<
       QryHint queryHint = thisXBlock.queryHint;
       if (queryHint == QryHint.force) {
         // effSelfInfo.reQuery
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#70840",
           shortDesc:
               "Creating <b>_BlockQueryTaskUnit</b> for <b>${thisXBlock.name}</b>.",
@@ -2776,7 +2782,7 @@ abstract class Block<
             ? false // Will be decided laster.
             : isCurrentItem(currItemInternalEVT);
         final bool forceReloadItem = isCurrInternalEV;
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#70880",
           shortDesc:
               "Creating <b>_BlockSetItemAsCurrentTaskUnit</b> for <b>${thisXBlock.name}</b>.",
@@ -2804,7 +2810,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockDeleteItemsAnnotation()
   Future<void> _unitDeleteItems({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required List<ITEM> items,
@@ -2813,7 +2819,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#42000",
       shortDesc:
           "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
@@ -2837,14 +2843,14 @@ abstract class Block<
     //
     final String methodName = "performDeleteItemById";
     //
-    final String? itemRepComponent = ui.findActiveUiComponentItemRepresentative(
+    final String? itemContextComponent = ui.findActiveUiComponentByItemContext(
       alsoCheckChildren: true,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#42560",
       shortDesc: "Debug:",
       parameters: {
-        "itemRepComponent": itemRepComponent,
+        "itemContextComponent": itemContextComponent,
       },
       lineFlowType: LineFlowType.debug,
       tipDocument: TipDocument.blockActiveUiComponents,
@@ -2855,12 +2861,12 @@ abstract class Block<
         // May be throw Error:
         final ID deletingItemId = __getItemIdShowErr(delItem, showErr: true);
         //
-        if (itemRepComponent != null) {
+        if (itemContextComponent != null) {
           siblingItem = findSiblingItem(item: delItem);
         }
         __refreshDeletingState(isDeleting: true);
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#42600",
           shortDesc:
               "Calling ${debugObjHtml(this)}.$methodName() method to delete the ${debugObjHtml(delItem)}.",
@@ -2877,7 +2883,7 @@ abstract class Block<
         // Throw ApiError:
         result.throwIfError();
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#42660",
           shortDesc:
               "The ${debugObjHtml(delItem)} item has been successful deleted!",
@@ -2886,7 +2892,7 @@ abstract class Block<
         //
         deletionResult._addDeletedItem(deletedItem: delItem);
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#42720",
           shortDesc: "Remove ${debugObjHtml(delItem)} from the list.",
           lineFlowType: LineFlowType.info,
@@ -2895,14 +2901,14 @@ abstract class Block<
         // Remove Item from the List.
         //
         await __removeItemFromList(
-          masterFlowItem: masterFlowItem,
+          executionTrace: executionTrace,
           removeItem: delItem,
         );
         //
         // Current Item DELETED!
         //
         if (deletingItemId == currItemId) {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#42760",
             shortDesc:
                 "The current item has been deleted!. Set current item to <b>null</b>.",
@@ -2917,7 +2923,7 @@ abstract class Block<
           );
           //
           if (formModel != null) {
-            masterFlowItem._addLineFlowItem(
+            executionTrace._addTraceStep(
               codeId: "#42780",
               shortDesc:
                   "Clear ${debugObjHtml(formModel)} and set to <b>none</b>.",
@@ -2930,7 +2936,7 @@ abstract class Block<
               formDataState: DataState.none,
             );
           }
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#42800",
             shortDesc:
                 "Clear all data of child blocks and set them to <b>none</b>."
@@ -2956,14 +2962,14 @@ abstract class Block<
           error: errorInfo,
           stackTrace: stackTrace,
         );
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#42840",
           shortDesc: "Error",
           errorInfo: errorInfo,
         );
         //
         if (stopIfError) {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#42860",
             shortDesc:
                 "@stopIfError: ${debugObjHtml(stopIfError)} --> Stop deleting!",
@@ -2979,7 +2985,7 @@ abstract class Block<
     // External React:
     //
     if (deletionResult.deletedItems.isNotEmpty) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#42900",
         shortDesc:
             "${debugObjHtml(this)} > Fire event after deleting. (${deletionResult.deletedItems.length} items deleted!).",
@@ -2987,7 +2993,7 @@ abstract class Block<
       );
       //
       __emitEventFromBlockToOtherShelves(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         eventType: EventType.deletion,
       );
     }
@@ -3007,13 +3013,13 @@ abstract class Block<
       );
     }
     //
-    masterFlowItem._addLineFlowSeparator();
+    executionTrace._addLineFlowSeparator();
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#42920",
       shortDesc: "After Deleting --> Process Internal Reaction.",
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#42940",
       shortDesc: "Calling ${debugObjHtml(this)}._processInternalReaction()",
       parameters: {
@@ -3025,7 +3031,7 @@ abstract class Block<
     // SAME-AS: #0013 (Same as _unitDeleteItem() method)
     // Test Cases: [52a] (Multi Deletions with Internal Event).
     await _processInternalReaction(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       thisXBlock: thisXBlock,
       candidateCurrItem: siblingItem,
     );
@@ -3037,7 +3043,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
   Future<bool> _unitPrepareFormToCreateItem({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required bool initDirty,
@@ -3046,7 +3052,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#04000",
       shortDesc: "Begin ${taskType.asDebugTaskUnit()}.",
       parameters: {
@@ -3057,7 +3063,7 @@ abstract class Block<
       lineFlowType: LineFlowType.debug,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#04020",
       shortDesc: "${debugObjHtml(this)} set currentItem to null.",
     );
@@ -3070,7 +3076,7 @@ abstract class Block<
       itemDetail: nullItemDetail,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#04040",
       shortDesc: "Clear all data of child blocks and set them to <b>none</b>."
           "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
@@ -3079,7 +3085,7 @@ abstract class Block<
       thisXBlock: thisXBlock,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#04060",
       shortDesc: "${debugObjHtml(formModel)} set formMode to creation.",
     );
@@ -3094,19 +3100,19 @@ abstract class Block<
         isPreparingFormCreation: true,
       );
       // TODO: Test Cases??
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#04080",
         shortDesc: "${debugObjHtml(formModel)} set formMode to creation.",
       );
       FORM_RELATED_DATA? formRelatedData =
-          await _performLoadFormRelatedData(masterFlowItem);
+          await _performLoadFormRelatedData(executionTrace);
       if (formRelatedData == null) {
         return false;
       }
       //
       final activityType = FormActivityType.startCreatingOrEditing;
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#04100",
         shortDesc:
             "Calling ${debugObjHtml(formModel)}._startNewFormActivity() with parameters:",
@@ -3118,13 +3124,13 @@ abstract class Block<
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       success = await formModel!._startNewFormActivity(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         formRelatedData: formRelatedData,
         formInput: formInput,
         activityType: activityType,
       );
       if (success) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#04120",
           shortDesc:
               "${debugObjHtml(formModel)} manually set dirty to $initDirty.",
@@ -3141,7 +3147,7 @@ abstract class Block<
     }
     //
     if (success && navigate != null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#04140",
         shortDesc: "Execute navigation.",
       );
@@ -3156,7 +3162,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickItemCreationActionAnnotation()
   Future<void> _unitQuickCreateItem({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemCreationResult taskResult,
@@ -3166,7 +3172,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#09000",
       shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
@@ -3179,7 +3185,7 @@ abstract class Block<
     ApiResult<ITEM_DETAIL> result;
     final String methodName = "performQuickCreateItem";
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#09100",
         shortDesc: "Calling ${debugObjHtml(action)}.$methodName()",
         lineFlowType: LineFlowType.controllableCalling,
@@ -3205,7 +3211,7 @@ abstract class Block<
         errorInfo: errorInfo,
       );
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#09200",
         shortDesc:
             "The ${debugObjHtml(action)}.$methodName() method was called with an error!",
@@ -3215,14 +3221,14 @@ abstract class Block<
     }
     //
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#09220",
         shortDesc:
             "Calling ${debugObjHtml(this)}._processSaveActionRestResult().",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       await _processSaveActionRestResult(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         thisXBlock: thisXBlock,
         isNew: true,
         callingClassName: getClassNameWithoutGenerics(action),
@@ -3245,7 +3251,7 @@ abstract class Block<
         errorInfo: errorInfo,
       );
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#09260",
         shortDesc:
             "The ${debugObjHtml(this)}._processSaveActionRestResult() method was called with an error!",
@@ -3260,7 +3266,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickMultiItemCreationActionAnnotation()
   Future<bool> _unitQuickCreateMultiItem({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickMultiItemCreationAction<ID, ITEM, ITEM_DETAIL,
@@ -3269,7 +3275,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#44000",
       shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
@@ -3279,7 +3285,7 @@ abstract class Block<
     //
     ApiResult<PageData<ITEM>> result;
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#44100",
         shortDesc:
             "Calling ${debugObjHtml(action)}.performQuickCreateMultiItems().",
@@ -3305,7 +3311,7 @@ abstract class Block<
         tipDocument:
             TipDocument.blockQuickMultiItemCreationActionPerformBulkCreateItems,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#44200",
         shortDesc:
             "The ${debugObjHtml(action)}.performQuickCreateMultiItems() method was called with an error!",
@@ -3316,14 +3322,14 @@ abstract class Block<
     }
     //
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#44300",
         shortDesc:
             "Calling ${debugObjHtml(this)}._processCreateMultiItemActionResult()..",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       return await _processCreateMultiItemActionResult(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         thisXBlock: thisXBlock,
         blockCurrentFilterCriteria: blockCurrentFilterCriteria,
         calledMethodName:
@@ -3340,7 +3346,7 @@ abstract class Block<
         tipDocument:
             TipDocument.blockQuickMultiItemCreationActionPerformBulkCreateItems,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#44400",
         shortDesc:
             "The ${debugObjHtml(this)}._processCreateMultiItemActionResult() method was called with an error!",
@@ -3357,7 +3363,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockQuickItemUpdateActionAnnotation()
   Future<void> _unitQuickUpdateItem({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemUpdateResult taskResult,
@@ -3366,7 +3372,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#14000",
       shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
@@ -3379,7 +3385,7 @@ abstract class Block<
     ApiResult<ITEM_DETAIL> result;
     final String methodName = "performQuickUpdateItem";
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#14020",
         shortDesc:
             "Calling ${debugObjHtml(action)}.performQuickUpdateItem()...",
@@ -3411,7 +3417,7 @@ abstract class Block<
         errorInfo: errorInfo,
       );
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#14060",
         shortDesc:
             "The ${debugObjHtml(action)}.performQuickUpdateItem() method was called with an error.",
@@ -3421,14 +3427,14 @@ abstract class Block<
     }
     //
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#14100",
         shortDesc:
             "Calling ${debugObjHtml(this)}._processSaveActionRestResult()...",
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       await _processSaveActionRestResult(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         thisXBlock: thisXBlock,
         isNew: false,
         callingClassName: getClassNameWithoutGenerics(action),
@@ -3451,7 +3457,7 @@ abstract class Block<
         errorInfo: errorInfo,
       );
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#14100",
         shortDesc:
             "The ${debugObjHtml(this)}._processSaveActionRestResult() method was called with an error.",
@@ -3467,7 +3473,7 @@ abstract class Block<
   @_TaskUnitMethodAnnotation()
   @_BlockBackendActionAnnotation()
   Future<void> _unitBackendAction({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockBackendAction action,
@@ -3475,7 +3481,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#45000",
       shortDesc:
           "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
@@ -3484,7 +3490,7 @@ abstract class Block<
     //
     ApiResult<void>? result;
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#45100",
         shortDesc: "Calling ${debugObjHtml(action)}.performBackendOperation().",
         lineFlowType: LineFlowType.controllableCalling,
@@ -3506,7 +3512,7 @@ abstract class Block<
       taskResult._setErrorInfo(
         errorInfo: errorInfo,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#45200",
         shortDesc:
             "The ${debugObjHtml(action)}.performBackendOperation() method was called with an error!",
@@ -3515,19 +3521,19 @@ abstract class Block<
       return;
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#45300",
       shortDesc:
           "${debugObjHtml(this)} > Fire event after execute backend action.",
       lineFlowType: LineFlowType.emitEvent,
     );
     __emitEventFromBlockToOtherShelves(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       eventType: EventType.unknown,
     );
     //
     final ITEM? candidateCurrItem = null;
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#45400",
       shortDesc: "Calling ${debugObjHtml(this)}._processInternalReaction()..",
       parameters: {
@@ -3540,7 +3546,7 @@ abstract class Block<
     // Process Internal Reaction:
     //
     await _processInternalReaction(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       thisXBlock: thisXBlock,
       forceReQuery:
           action.config.afterBackendAction == AfterBlockBackendAction.query,
@@ -3552,7 +3558,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<void> _processSaveActionRestResult({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required bool isNew,
     required String callingClassName,
@@ -3568,7 +3574,7 @@ abstract class Block<
         showSnackBar: true,
         tipDocument: null,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#16000",
         shortDesc:
             "The <b>$callingClassName.$calledMethodName()</b> method was called with an error.",
@@ -3581,7 +3587,7 @@ abstract class Block<
     //
     FILTER_CRITERIA? blockCurrentFilterCriteria = filterCriteria;
     if (blockCurrentFilterCriteria == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#16040",
         shortDesc: "Dev Error: TODO: @blockCurrentFilterCriteria is null!!",
       );
@@ -3591,7 +3597,7 @@ abstract class Block<
     bool emitExternalShelfEvent = false;
     final ITEM_DETAIL? savedItemDetail = result.data;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#16100",
       shortDesc: "Got @savedItemDetail: ${debugObjHtml(savedItemDetail)}.",
       lineFlowType: LineFlowType.debug,
@@ -3608,7 +3614,7 @@ abstract class Block<
     } else {
       emitExternalShelfEvent = true;
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#16140",
         shortDesc:
             "Calling: ${debugObjHtml(this)}.needToKeepItemInList() to decide "
@@ -3628,25 +3634,25 @@ abstract class Block<
     }
     //
     if (emitExternalShelfEvent) {
-      masterFlowItem._addLineFlowSeparator();
+      executionTrace._addLineFlowSeparator();
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#16200",
         shortDesc:
             "${debugObjHtml(this)} > Save successful --> An event occurred --> checking if it should be emitted.",
         lineFlowType: LineFlowType.emitEvent,
       );
       __emitEventFromBlockToOtherShelves(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         eventType: isNew ? EventType.creation : EventType.update,
       );
       //
-      masterFlowItem._addLineFlowSeparator();
+      executionTrace._addLineFlowSeparator();
     } else {}
     ITEM? siblingItem;
     //
     if (savedItemDetail != null && keepInList) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#16220",
         shortDesc: "Debug:",
         parameters: {
@@ -3655,7 +3661,7 @@ abstract class Block<
         },
         lineFlowType: LineFlowType.debug,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#16240",
         shortDesc: "Calling ${debugObjHtml(this)}.convertItemDetailToItem() "
             "to convert ${debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
@@ -3664,7 +3670,7 @@ abstract class Block<
       ITEM refreshedItem = __convertItemDetailToItem(
         itemDetail: savedItemDetail,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#16280",
         shortDesc:
             "Insert or replace ${debugObjHtml(refreshedItem)} into the list.",
@@ -3682,7 +3688,7 @@ abstract class Block<
         item: refreshedItem,
         itemDetail: savedItemDetail,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#16320",
         shortDesc: "Set ${debugObjHtml(refreshedItem)} as current.",
       );
@@ -3694,7 +3700,7 @@ abstract class Block<
       // Test Case [01c]. New Code:
       // Test Case [02b] - __test_form_cat_product02b_newCat.
       if (isNew) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#16360",
           shortDesc:
               "Just created an item -> clear data of all child blocks and set them to <b>pending</b>."
@@ -3708,7 +3714,7 @@ abstract class Block<
       final newForceType = ForceType.force;
       //
       if (thisXBlock.xFormModel != null) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#16400",
           shortDesc:
               "${debugObjHtml(formModel)} -> set @forceType to ${debugObjHtml(newForceType)}",
@@ -3718,7 +3724,7 @@ abstract class Block<
     }
     // savedItemDetail = null or !keepInList
     else {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#16500",
         shortDesc: "Debug:",
         parameters: {
@@ -3729,7 +3735,7 @@ abstract class Block<
       );
       ITEM? savedItem;
       if (savedItemDetail != null) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#16520",
           shortDesc: "Calling ${debugObjHtml(this)}.convertItemDetailToItem() "
               "to convert ${debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
@@ -3748,20 +3754,20 @@ abstract class Block<
         //
         bool isCurrent = isCurrentItem(removeItem);
         if (!isCurrent) {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#16560",
             shortDesc:
                 "${debugObjHtml(this)} --> remove the ${debugObjHtml(removeItem)} from the list. "
                 "(*) This item is not current item.",
           );
           await __removeItemFromList(
-            masterFlowItem: masterFlowItem,
+            executionTrace: executionTrace,
             removeItem: removeItem,
           );
           return;
         }
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#16580",
           shortDesc:
               "Calling ${debugObjHtml(this)}.findSiblingItem() to find sibling item of ${debugObjHtml(removeItem)}.",
@@ -3773,18 +3779,18 @@ abstract class Block<
         //
         siblingItem = findSiblingItem(item: removeItem);
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#16600",
           shortDesc:
               "${debugObjHtml(this)} --> remove the current item ${debugObjHtml(removeItem)}.",
         );
         // Remove Item (Current Item)
         await __removeItemFromList(
-          masterFlowItem: masterFlowItem,
+          executionTrace: executionTrace,
           removeItem: removeItem,
         );
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#16620",
           shortDesc: "${debugObjHtml(this)} --> set current item to null.",
         );
@@ -3795,7 +3801,7 @@ abstract class Block<
         );
         //
         if (formModel != null) {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#16660",
             shortDesc:
                 "${debugObjHtml(formModel)} clear form data and set to <b>none</b>.",
@@ -3806,7 +3812,7 @@ abstract class Block<
           );
         }
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#16700",
           shortDesc:
               "Clear data of all child blocks and set them to <b>none</b>."
@@ -3834,7 +3840,7 @@ abstract class Block<
     // Process Internal Reaction (If Need).
     //
     await _processInternalReaction(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       thisXBlock: thisXBlock,
       candidateCurrItem: siblingItem,
     );
@@ -3844,7 +3850,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<bool> _processCreateMultiItemActionResult({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required FILTER_CRITERIA blockCurrentFilterCriteria,
     required String calledMethodName,
@@ -3865,7 +3871,7 @@ abstract class Block<
     // External React:
     //
     __emitEventFromBlockToOtherShelves(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       eventType: EventType.creation,
     );
     //
@@ -3893,7 +3899,7 @@ abstract class Block<
     // Internal Event:
     //
     await _processInternalReaction(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       thisXBlock: thisXBlock,
       candidateCurrItem: null,
     );
@@ -3929,7 +3935,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_BlockClearCurrentItemAnnotation()
   Future<void> clearCurrentItem() async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "clearCurrentItem",
       parameters: null,
@@ -3937,14 +3943,14 @@ abstract class Block<
       isLibMethod: true,
     );
     if (currentItem == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#63000",
         shortDesc: "No current item -> do nothing.",
       );
       return;
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#63100",
       shortDesc: "Creating <b>$_XShelfBlockClearCurrentItem</b>..",
     );
@@ -3966,7 +3972,7 @@ abstract class Block<
 
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockItemDeletionResult<ITEM>> __deleteItem({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required String methodName,
     required ITEM? item,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
@@ -3975,7 +3981,7 @@ abstract class Block<
     final bool checkBusyTrue = true;
     final bool checkAllowTrue = true;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#76000",
       shortDesc:
           "Calling ${debugObjHtml(this)}.__canDeleteItem() to check before execute the action.",
@@ -3996,7 +4002,7 @@ abstract class Block<
       errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
     );
     if (!actionable.yes) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#76040",
         shortDesc: "Got @actionable:",
         actionable: actionable,
@@ -4036,7 +4042,7 @@ abstract class Block<
     //
     final taskResult = _createEmptyItemDeletionResult();
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#76340",
       shortDesc: "Creating <b>_BlockItemDeletionTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
@@ -4059,7 +4065,7 @@ abstract class Block<
 
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockItemsDeletionResult<ITEM>> __deleteItems({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required String methodName,
     required List<ITEM> items,
     required bool stopIfError,
@@ -4069,7 +4075,7 @@ abstract class Block<
         __blockData.moveCurrentItemToEndOfList(
       itemList: items,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#65000",
       shortDesc: "Check before deletion..",
     );
@@ -4088,7 +4094,7 @@ abstract class Block<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#65100",
         shortDesc: "@actionable = ${debugObjHtml(actionable)}.",
         errorInfo: errorInfo,
@@ -4107,7 +4113,7 @@ abstract class Block<
       details: "Delete Multi Items",
     );
     if (!confirm) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#65200",
         shortDesc: "@confirm = <b>false</b> --> Cancelled!",
       );
@@ -4117,7 +4123,7 @@ abstract class Block<
       );
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#65300",
       shortDesc: "Creating <b>$_XShelfBlockMultiItemDeletion</b>..",
     );
@@ -4149,7 +4155,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockCurrentItemSettingResult<ITEM>>
       __refreshToShowOrEditItemAsCurrent({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required String methodName,
     required ITEM? item,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
@@ -4161,13 +4167,13 @@ abstract class Block<
         ? CurrentItemSettingType.setAnItemAsCurrentThenLoadForm
         : CurrentItemSettingType.setAnItemAsCurrent;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#69000",
       shortDesc:
           "Calculated > @currentItemSettingType: ${debugObjHtml(currentItemSettingType)}",
       lineFlowType: LineFlowType.debug,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#69100",
       shortDesc: "Calling ${debugObjHtml(this)}.__canSetItemAsCurrent()...",
       parameters: {
@@ -4195,7 +4201,7 @@ abstract class Block<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#69200",
         shortDesc: "Has error:",
         errorInfo: errorInfo,
@@ -4211,7 +4217,7 @@ abstract class Block<
       );
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#69300",
       shortDesc: "Creating <b>_XShelfBlockSetItemAsCurrent</b>...",
     );
@@ -4253,7 +4259,7 @@ abstract class Block<
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "refreshItemAndSetAsCurrent",
       parameters: {
@@ -4265,7 +4271,7 @@ abstract class Block<
       isLibMethod: true,
     );
     return await __refreshToShowOrEditItemAsCurrent(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       methodName: "refreshItemAndSetAsCurrent",
       item: item,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
@@ -4285,7 +4291,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockClearanceAnnotation()
   Future<BlockClearanceResult> clear({Function()? navigate}) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "clear",
       parameters: {
@@ -4294,7 +4300,7 @@ abstract class Block<
       navigate: null,
       isLibMethod: true,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#62000",
       shortDesc: "Check before clear the ${debugObjHtml(this)}...",
     );
@@ -4311,7 +4317,7 @@ abstract class Block<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#62100",
         shortDesc: "@actionable --> ${debugObjHtml(actionable)}.",
         errorInfo: errorInfo,
@@ -4321,7 +4327,7 @@ abstract class Block<
       );
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#62200",
       shortDesc: "Creating <b>$_XShelfBlockClearance</b>.",
     );
@@ -4360,7 +4366,7 @@ abstract class Block<
     //
     var qryMethod = BlockQryMethodName.queryNextPage;
     //
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryNextPage",
       parameters: {
@@ -4371,7 +4377,7 @@ abstract class Block<
     );
     //
     return await __queryBlock(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       qryMethod: qryMethod,
       suggestedListUpdateStrategy: ListUpdateStrategy.replace,
       filterInput: null,
@@ -4401,7 +4407,7 @@ abstract class Block<
     //
     final qryMethod = BlockQryMethodName.queryPreviousPage;
     //
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryPreviousPage",
       parameters: {
@@ -4412,7 +4418,7 @@ abstract class Block<
     );
     //
     return await __queryBlock(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       qryMethod: qryMethod,
       suggestedListUpdateStrategy: ListUpdateStrategy.replace,
       filterInput: null,
@@ -4442,7 +4448,7 @@ abstract class Block<
     //
     final qryMethod = BlockQryMethodName.queryMore;
     //
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryMore",
       parameters: {
@@ -4453,7 +4459,7 @@ abstract class Block<
     );
     //
     return await __queryBlock(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       qryMethod: qryMethod,
       suggestedListUpdateStrategy: ListUpdateStrategy.merge,
       afterQueryAction: afterQueryAction,
@@ -4477,7 +4483,7 @@ abstract class Block<
       return false;
     }
     //
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryEmptyAndPrepareToCreate",
       parameters: {
@@ -4489,7 +4495,7 @@ abstract class Block<
     );
     //
     return await __queryEmpty(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       filterInput: filterInput,
       prepareFormToCreateItem: true,
       navigate: navigate,
@@ -4510,7 +4516,7 @@ abstract class Block<
       return false;
     }
     //
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryEmpty",
       parameters: {
@@ -4523,7 +4529,7 @@ abstract class Block<
     );
     //
     return await __queryEmpty(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       filterInput: filterInput,
       prepareFormToCreateItem: prepareFormToCreateItem,
       navigate: navigate,
@@ -4556,7 +4562,7 @@ abstract class Block<
     //
     final qryMethod = BlockQryMethodName.query;
     //
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "query",
       parameters: {
@@ -4572,7 +4578,7 @@ abstract class Block<
     );
     //
     return await __queryBlock(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       qryMethod: qryMethod,
       suggestedListUpdateStrategy: suggestedListUpdateStrategy,
       afterQueryAction: afterQueryAction,
@@ -4602,7 +4608,7 @@ abstract class Block<
     Pageable? pageable,
     Function()? navigate,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryAndPrepareToEdit",
       parameters: {
@@ -4625,7 +4631,7 @@ abstract class Block<
       suggestedSelection: suggestedSelection,
     );
     //
-    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
@@ -4652,7 +4658,7 @@ abstract class Block<
     FILTER_INPUT? filterInput,
     Function()? navigate,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryAndPrepareToCreate",
       parameters: {
@@ -4662,7 +4668,7 @@ abstract class Block<
       navigate: null,
       isLibMethod: true,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#56000",
       shortDesc: "Creating <b>$_XShelfBlockQueryThenPrepareToCreate</b>..",
     );
@@ -4676,12 +4682,12 @@ abstract class Block<
       suggestedSelection: null,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#57000",
       shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()...",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
-    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
     //
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
@@ -4772,7 +4778,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  FORM_INPUT __buildInputForCreationForm(MasterFlowItem masterFlowItem) {
+  FORM_INPUT __buildInputForCreationForm(ExecutionTrace executionTrace) {
     final Object? parentBlockCurrentItem = parent?.currentItem;
     final FILTER_CRITERIA? currentFilterCriteria = filterCriteria;
 
@@ -4781,7 +4787,7 @@ abstract class Block<
       // Make sure never get this error.
       throw AppError(errorMessage: "FilterCriteria is null");
     }
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#05100",
       shortDesc: "Calling ${debugObjHtml(this)}.buildInputForCreationForm().",
       parameters: {
@@ -4797,7 +4803,7 @@ abstract class Block<
   }
 
   Future<FORM_RELATED_DATA?> _performLoadFormRelatedData(
-    MasterFlowItem masterFlowItem,
+    ExecutionTrace executionTrace,
   ) async {
     try {
       final Object? parentBlockCurrentItem = parent?.currentItem;
@@ -4808,7 +4814,7 @@ abstract class Block<
         // Make sure never get this error.
         throw AppError(errorMessage: "FilterCriteria is null");
       }
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#05000",
         shortDesc:
             "Calling ${debugObjHtml(this)}.performLoadFormRelatedData()...",
@@ -4833,7 +4839,7 @@ abstract class Block<
         showSnackBar: true,
         tipDocument: TipDocument.blockInitFormRelatedData,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#05020",
         shortDesc:
             "The ${debugObjHtml(this)}.performLoadFormRelatedData() method was called with an error!",
@@ -4973,12 +4979,12 @@ abstract class Block<
   /// Remove this item from Interface because it no longer exists on the server
   ///
   Future<void> __removeItemFromList({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required ITEM removeItem,
   }) async {
     __blockData._removeItem(removeItem: removeItem);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#43000",
       shortDesc: "Update <b>BlockItemsView</b>...",
       lineFlowType: LineFlowType.info,
@@ -5006,14 +5012,14 @@ abstract class Block<
     required BlockBackendAction<ID, dynamic> action,
     required Function(BuildContext context)? navigate,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "executeBackendAction",
       parameters: null,
       navigate: null,
       isLibMethod: true,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#71000",
       shortDesc: "Calling ${debugObjHtml(this)}.__canBackendAction()",
       parameters: {
@@ -5031,7 +5037,7 @@ abstract class Block<
     );
     //
     if (!actionable.yes) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#71040",
         shortDesc: "Got @actionable:",
         actionable: actionable,
@@ -5076,7 +5082,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#71340",
       shortDesc: "Creating <b>_BlockBackendActionTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
@@ -5107,7 +5113,7 @@ abstract class Block<
             FILTER_CRITERIA>
         action,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "executeQuickItemCreationAction",
       parameters: {
@@ -5120,7 +5126,7 @@ abstract class Block<
     final bool checkBusyTrue = true;
     final bool checkAllowTrue = true;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#73000",
       shortDesc:
           "Calling ${debugObjHtml(this)}.__canQuickCreateItem() to check before execute the action.",
@@ -5138,7 +5144,7 @@ abstract class Block<
       checkAllow: checkAllowTrue,
     );
     if (!actionable.yes) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#73040",
         shortDesc: "Got @actionable:",
         actionable: actionable,
@@ -5177,7 +5183,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#73340",
       shortDesc: "Creating <b>_BlockQuickItemCreationTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
@@ -5209,7 +5215,7 @@ abstract class Block<
             FILTER_CRITERIA>
         action,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "executeQuickMultiItemCreationAction",
       parameters: {
@@ -5222,7 +5228,7 @@ abstract class Block<
     final bool checkBusyTrue = true;
     final bool checkAllowTrue = true;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#74000",
       shortDesc:
           "Calling ${debugObjHtml(this)}.__canCreateMultiItem() to check before execute the action.",
@@ -5240,7 +5246,7 @@ abstract class Block<
       checkAllow: checkAllowTrue,
     );
     if (!actionable.yes) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#74040",
         shortDesc: "Got @actionable:",
         actionable: actionable,
@@ -5279,7 +5285,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#74340",
       shortDesc: "Creating <b>_BlockQuickMultiItemCreationTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
@@ -5310,7 +5316,7 @@ abstract class Block<
             FILTER_CRITERIA>
         action,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "executeQuickItemUpdateAction",
       parameters: {
@@ -5323,7 +5329,7 @@ abstract class Block<
     final bool checkBusyTrue = true;
     final bool checkAllowTrue = true;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#72000",
       shortDesc:
           "Calling ${debugObjHtml(this)}.__canQuickUpdateItem() to check before execute the action.",
@@ -5344,7 +5350,7 @@ abstract class Block<
     );
     //
     if (!actionable.yes) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#72040",
         shortDesc: "Got @actionable:",
         actionable: actionable,
@@ -5383,7 +5389,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#72340",
       shortDesc: "Creating <b>_BlockQuickItemUpdateTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
@@ -5410,7 +5416,7 @@ abstract class Block<
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "refreshFirstItemAndSetAsCurrent",
       parameters: {
@@ -5421,7 +5427,7 @@ abstract class Block<
       isLibMethod: true,
     );
     return __refreshToShowOrEditItemAsCurrent(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       methodName: "refreshFirstItemAndSetAsCurrent",
       item: firstItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
@@ -5441,7 +5447,7 @@ abstract class Block<
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "refreshNextItemAndSetAsCurrent",
       parameters: {
@@ -5455,7 +5461,7 @@ abstract class Block<
     ITEM? nextItem = nextSiblingItem;
     //
     return __refreshToShowOrEditItemAsCurrent(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       methodName: "refreshNextItemAndSetAsCurrent",
       item: nextItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
@@ -5476,7 +5482,7 @@ abstract class Block<
     bool forceLoadForm = false,
     Function()? navigate,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "refreshPreviousItemAndSetAsCurrent",
       parameters: {
@@ -5490,7 +5496,7 @@ abstract class Block<
     ITEM? previousItem = previousSiblingItem;
     //
     return __refreshToShowOrEditItemAsCurrent(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       methodName: "refreshPreviousItemAndSetAsCurrent",
       item: previousItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
@@ -5514,7 +5520,7 @@ abstract class Block<
     required Function()? navigate,
     bool initDirty = false,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "prepareFormToCreateItem",
       parameters: {
@@ -5529,7 +5535,7 @@ abstract class Block<
     final bool checkAllowTrue = true;
     final creationTypeForm = ItemCreationType.form;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#77000",
       shortDesc:
           "Calling ${debugObjHtml(this)}.__canCreateItem() to check before execute the action.",
@@ -5546,7 +5552,7 @@ abstract class Block<
       creationType: creationTypeForm,
     );
     if (!actionable.yes) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#77040",
         shortDesc: "Got @actionable:",
         actionable: actionable,
@@ -5570,7 +5576,7 @@ abstract class Block<
     final XShelf xShelf = _XShelfPrepareFormToCreateItem(block: this);
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#77340",
       shortDesc: "Creating <b>_BlockPrepareFormToCreateItemTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
@@ -5599,7 +5605,7 @@ abstract class Block<
     required CurrentItemInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "deleteSelectedItems",
       parameters: {
@@ -5612,13 +5618,13 @@ abstract class Block<
     List<ITEM> selItems = __blockData.getSelectedItems(
       currentItemInclusion: currentItemInclusion,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#66000",
       shortDesc: "Selected Items: ${debugObjHtml(selItems)}..",
     );
     //
     return await __deleteItems(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       methodName: "deleteSelectedItems",
       items: selItems,
       stopIfError: stopIfError,
@@ -5635,7 +5641,7 @@ abstract class Block<
     required CurrentItemInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "deleteCheckedItems",
       parameters: {
@@ -5648,13 +5654,13 @@ abstract class Block<
     List<ITEM> chkItems = __blockData.getCheckedItems(
       currentItemInclusion: currentItemInclusion,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#64000",
       shortDesc: "Checked Items: ${debugObjHtml(chkItems)}..",
     );
     //
     return await __deleteItems(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       methodName: "deleteCheckedItems",
       items: chkItems,
       stopIfError: stopIfError,
@@ -5670,7 +5676,7 @@ abstract class Block<
     required List<ITEM> items,
     required bool stopIfError,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "deleteItems",
       parameters: {
@@ -5680,12 +5686,12 @@ abstract class Block<
       navigate: null,
       isLibMethod: true,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#67000",
       shortDesc: "Items: ${debugObjHtml(items)}..",
     );
     return await __deleteItems(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       methodName: "deleteItems",
       items: items,
       stopIfError: stopIfError,
@@ -5699,7 +5705,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
   Future<BlockItemDeletionResult<ITEM>> deleteCurrentItem() async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "deleteCurrentItem",
       parameters: null,
@@ -5709,7 +5715,7 @@ abstract class Block<
     ITEM? currItem = currentItem;
     //
     return __deleteItem(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       methodName: "deleteCurrentItem",
       item: currItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
@@ -5727,7 +5733,7 @@ abstract class Block<
     required ITEM item,
     bool errorIfItemNotInTheBlock = true,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "deleteItem",
       parameters: {
@@ -5738,7 +5744,7 @@ abstract class Block<
       isLibMethod: true,
     );
     return __deleteItem(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       methodName: "deleteItem",
       item: item,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
@@ -5758,7 +5764,7 @@ abstract class Block<
   Future<BlockCurrentItemSettingResult<ITEM>> refreshCurrentItem({
     bool forceLoadForm = false,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "refreshCurrentItem",
       parameters: {
@@ -5769,7 +5775,7 @@ abstract class Block<
     );
     //
     return await __refreshToShowOrEditItemAsCurrent(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       methodName: 'refreshCurrentItem',
       item: currentItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
@@ -5783,12 +5789,12 @@ abstract class Block<
   // ***************************************************************************
 
   void __emitEventFromBlockToOtherShelves({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required EventType eventType,
   }) {
     // TODO: Chuyen di noi khac.
     FlutterArtist.storage.ev._emitEventFromBlockToOtherShelves(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       eventType: eventType,
       eventBlock: this,
       itemIdString: null,
@@ -5800,7 +5806,7 @@ abstract class Block<
 
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> __queryBlock({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required BlockQryMethodName qryMethod,
     required ListUpdateStrategy suggestedListUpdateStrategy,
     required AfterQueryAction afterQueryAction,
@@ -5844,7 +5850,7 @@ abstract class Block<
       suggestedSelection: suggestedSelection,
     );
     //
-    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
@@ -5860,7 +5866,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<bool> __queryEmpty({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required FILTER_INPUT? filterInput,
     bool prepareFormToCreateItem = false,
     required Function()? navigate,
@@ -5869,7 +5875,7 @@ abstract class Block<
       return false;
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#53000",
       shortDesc: "Creating <b>$_XShelfBlockQueryEmpty</b>..",
     );
@@ -5885,12 +5891,12 @@ abstract class Block<
       suggestedSelection: null,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#53100",
       shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()..",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
-    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //

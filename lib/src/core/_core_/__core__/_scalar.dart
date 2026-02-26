@@ -300,6 +300,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
+  // TODO: Rename.
   List<Event> getOutsideDataTypesToListen() {
     final List<Event> list = [];
     //
@@ -314,13 +315,13 @@ abstract class Scalar<
   @_TaskUnitMethodAnnotation()
   @_ScalarQueryAnnotation()
   Future<void> _unitQuery({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XScalar thisXScalar,
   }) async {
     __assertThisXScalar(thisXScalar);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#12000",
       shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
       lineFlowType: LineFlowType.debug,
@@ -328,7 +329,7 @@ abstract class Scalar<
     //
     bool hasXActiveUI = ui.hasActiveUiComponent(alsoCheckChildren: true);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#12020",
       shortDesc: "${debugObjHtml(this)} has UIX Visible? $hasXActiveUI",
     );
@@ -340,20 +341,20 @@ abstract class Scalar<
         queryHint = QryHint.force;
       }
     }
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#12040",
       shortDesc: "Calculated: @queryHint: $queryHint.",
     );
 
     if (queryHint == QryHint.none) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#12080",
         shortDesc:
             "@queryHint: $queryHint, @dataState: $dataState, @value: ${debugObjHtml(this.value)}.",
       );
       //
       if (this.dataState == DataState.ready && this.value != null) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#12100",
           shortDesc: "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) "
               "for all child scalars and add to Queue."
@@ -364,7 +365,7 @@ abstract class Scalar<
           final taskUnit = _ScalarQueryTaskUnit(
             xScalar: childXScalar,
           );
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#12120",
             shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
             lineFlowType: LineFlowType.addTaskUnit,
@@ -376,13 +377,13 @@ abstract class Scalar<
       }
       return;
     } else if (queryHint == QryHint.markAsPending) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#12140",
         shortDesc:
             "@queryHint: $queryHint, @dataState: $dataState, @value: ${debugObjHtml(this.value)}.",
       );
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#12180",
         shortDesc:
             "${debugObjHtml(this)} --> clear data and set to <b>pending</b> state. "
@@ -410,7 +411,7 @@ abstract class Scalar<
       final FilterModel filterModel = xFilterModel.filterModel;
       // SAME-AS: #0004
       if (!xFilterModel.queried) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#12220",
           shortDesc:
               "${debugObjHtml(this)} @queried: ${xFilterModel.queried} --> need to load data",
@@ -419,14 +420,14 @@ abstract class Scalar<
         //
         xFilterCriteriaOfFilterModel =
             await filterModel._startNewFilterActivity(
-          masterFlowItem: masterFlowItem,
+          executionTrace: executionTrace,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
         ) as XFilterCriteria<FILTER_CRITERIA>?;
         //
         xFilterModel.queried = true;
       } else {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#12300",
           shortDesc:
               "${debugObjHtml(this)} @queried: ${xFilterModel.queried} --> no need to load data.",
@@ -441,7 +442,7 @@ abstract class Scalar<
     // Has Error in FilterModel.
     //
     if (xFilterCriteriaOfFilterModel == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#12340",
         shortDesc:
             "${debugObjHtml(filterModel)} error --> clear data of ${debugObjHtml(this)} and set to <b>error</b>. "
@@ -474,7 +475,7 @@ abstract class Scalar<
       __refreshQueryingState(isQuerying: true);
       //
       __performQueryCount++;
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#12400",
         shortDesc: "Calling ${debugObjHtml(this)}.performQuery()...",
         parameters: {
@@ -526,7 +527,7 @@ abstract class Scalar<
         errorInfo: errorInfo,
       );
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#12440",
         shortDesc:
             "The ${debugObjHtml(this)}.performQuery() was called with an error!",
@@ -540,7 +541,7 @@ abstract class Scalar<
     if (isQueryError) {
       newScalarDataState = DataState.error;
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#12500",
         shortDesc: "${debugObjHtml(this)} --> set value to null",
       );
@@ -552,7 +553,7 @@ abstract class Scalar<
         value: null,
         queryResultState: ActionResultState.fail,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#12520",
         shortDesc:
             "${debugObjHtml(this)} --> clear value and set state to <b>error</b>. "
@@ -567,7 +568,7 @@ abstract class Scalar<
       return;
     }
     // No ERROR!
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#12600",
       shortDesc:
           "${debugObjHtml(this)} --> set state to ready and set value to ${debugObjHtml(value)}.",
@@ -583,7 +584,7 @@ abstract class Scalar<
     );
     //
     if (value == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#12680",
         shortDesc:
             "${debugObjHtml(this)} --> @value: null --> clear data of all child scalars and set them to <b>none</b>."
@@ -595,7 +596,7 @@ abstract class Scalar<
     }
     //
     if (xCriteriaChanged || valueId != oldValueId) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#12700",
         shortDesc:
             "${debugObjHtml(this)} --> @filterCriteria changed --> clear data of child scalars and set them to <b>pending</b>."
@@ -607,7 +608,7 @@ abstract class Scalar<
       );
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#12800",
       shortDesc: "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) "
           "for all child scalars and add to queue."
@@ -618,7 +619,7 @@ abstract class Scalar<
       final taskUnit = _ScalarQueryTaskUnit(
         xScalar: childXScalar,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#12840",
         shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
         lineFlowType: LineFlowType.addTaskUnit,
@@ -635,20 +636,20 @@ abstract class Scalar<
   @_TaskUnitMethodAnnotation()
   @_ScalarClearanceAnnotation()
   Future<void> _unitClearance({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XScalar thisXScalar,
   }) async {
     __assertThisXScalar(thisXScalar);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#39000",
       shortDesc:
           "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#39000",
       shortDesc:
           "${debugObjHtml(this)} ->  Clear data and set to <b>pending</b>. "
@@ -670,7 +671,7 @@ abstract class Scalar<
   @_TaskUnitMethodAnnotation()
   @_ScalarLoadExtraDataQuickActionAnnotation()
   Future<bool> _unitLoadExtraDataQuickAction<DATA extends Object>({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XScalar thisXScalar,
     required ScalarQuickExtraDataLoadAction<DATA> action,
@@ -678,7 +679,7 @@ abstract class Scalar<
   }) async {
     __assertThisXScalar(thisXScalar);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#40000",
       shortDesc:
           "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
@@ -687,7 +688,7 @@ abstract class Scalar<
     //
     ApiResult<DATA>? result;
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#40100",
         shortDesc: "Calling ${debugObjHtml(action)}.performLoadExtraData().",
         lineFlowType: LineFlowType.controllableCalling,
@@ -703,7 +704,7 @@ abstract class Scalar<
         showSnackBar: true,
         tipDocument: null,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#40200",
         shortDesc:
             "The ${debugObjHtml(action)}.performLoadExtraData() method was called with an error!",
@@ -724,7 +725,7 @@ abstract class Scalar<
         showSnackBar: true,
         tipDocument: null,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#40300",
         shortDesc:
             "The ${debugObjHtml(action)}.performLoadExtraData() method was called with an error!",
@@ -735,7 +736,7 @@ abstract class Scalar<
     DATA? extraData = result?.data;
     //
     return await _showAfterScalarLoadExtraData(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       action: action,
       afterQuickAction: afterQuickAction,
       extraData: extraData,
@@ -744,7 +745,7 @@ abstract class Scalar<
   }
 
   Future<bool> _showAfterScalarLoadExtraData<DATA extends Object>({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required ScalarQuickExtraDataLoadAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
     required DATA? extraData,
@@ -754,7 +755,7 @@ abstract class Scalar<
         FlutterArtist.coreFeaturesAdapter.getCurrentContext();
     bool success2;
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#41000",
         shortDesc: "Calling ${debugObjHtml(action)}.onExtraDataLoaded().",
         parameters: {
@@ -772,7 +773,7 @@ abstract class Scalar<
     } catch (e, stackTrace) {
       final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#41300",
         shortDesc:
             "The ${debugObjHtml(action)}.onExtraDataLoaded() method was called with an error!",
@@ -972,7 +973,7 @@ abstract class Scalar<
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
     required Function(BuildContext context)? navigate,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "executeQuickLoadExtraDataAction",
       parameters: {
@@ -1009,7 +1010,7 @@ abstract class Scalar<
     //
     final XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#80340",
       shortDesc: "Creating <b>_ScalarLoadExtraDataQuickActionTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,
@@ -1039,7 +1040,7 @@ abstract class Scalar<
   Future<ScalarQueryResult> query({
     FILTER_INPUT? filterInput,
   }) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "query",
       parameters: {
@@ -1048,7 +1049,7 @@ abstract class Scalar<
       navigate: null,
       isLibMethod: true,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#54000",
       shortDesc: "Creating <b>$_XShelfScalarQuery</b>..",
     );
@@ -1058,12 +1059,12 @@ abstract class Scalar<
       filterInput: filterInput,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#54100",
       shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()..",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
-    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
     //
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
@@ -1083,7 +1084,7 @@ abstract class Scalar<
   @_ReturnTaskResultMethodAnnotation()
   @_ScalarClearanceAnnotation()
   Future<ScalarClearanceResult> clear({Function()? navigate}) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "clear",
       parameters: {
@@ -1096,7 +1097,7 @@ abstract class Scalar<
     final bool checkBusyTrue = true;
     //
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#80000",
       shortDesc:
           "Calling ${debugObjHtml(this)}.__canClearScalar() to check before execute the action.",
@@ -1111,7 +1112,7 @@ abstract class Scalar<
     );
     //
     if (!actionable.yes) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#80040",
         shortDesc: "Got @actionable:",
         actionable: actionable,
@@ -1132,7 +1133,7 @@ abstract class Scalar<
     final XShelf xShelf = _XShelfScalarClearance(scalar: this);
     final XScalar thisXScalar = xShelf.findXScalarByName(name)!;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#80340",
       shortDesc: "Creating <b>_ScalarClearanceTaskUnit</b>.",
       lineFlowType: LineFlowType.addTaskUnit,

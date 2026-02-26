@@ -11,10 +11,10 @@ import '../../../core/widgets/_simple_accordion_section.dart';
 import '../../widgets/_dynamic_value_view.dart';
 import '../../widgets/_xdata_view.dart';
 
-class FilterCriterionView extends StatelessWidget {
+class TildeFilterCriterionView extends StatelessWidget {
   final TildeFilterCriterionModel criterion;
 
-  const FilterCriterionView({
+  const TildeFilterCriterionView({
     super.key,
     required this.criterion,
   });

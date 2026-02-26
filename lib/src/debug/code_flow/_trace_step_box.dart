@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/core/icon/icon_constants.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/_line_flow_type.dart';
+import '../../core/enums/_trace_step_type.dart';
+import '../../core/icon/icon_constants.dart';
 import '../../core/widgets/_html_selectable_rich_text.dart';
 import '../dialog/_error_viewer_dialog.dart';
 import '../dialog/_extra_info_viewer_dialog.dart';
 import '../dialog/_tip_document_viewer_dialog.dart';
 
-class LineFlowItemBox extends StatelessWidget {
-  final LineFlowItem lineFlowItem;
+class TraceStepBox extends StatelessWidget {
+  final TraceStep traceStep;
 
-  const LineFlowItemBox({
-    required this.lineFlowItem,
+  const TraceStepBox({
+    required this.traceStep,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (lineFlowItem.lineFlowType == LineFlowType.separator) {
+    if (traceStep.lineFlowType == LineFlowType.separator) {
       return SizedBox(
         width: double.maxFinite,
         child: Card(
@@ -41,20 +41,20 @@ class LineFlowItemBox extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               HtmlSelectableRichText(
-                "${lineFlowItem.shortDesc}${lineFlowItem.getParametersAsHtmlString()}"
-                "${lineFlowItem.getActionableAsHtmlString()}${lineFlowItem.getNoteAsHtmlString()}",
+                "${traceStep.shortDesc}${traceStep.getParametersAsHtmlString()}"
+                "${traceStep.getActionableAsHtmlString()}${traceStep.getNoteAsHtmlString()}",
                 icon: Icon(
-                  lineFlowItem.lineFlowType.getIconData(),
-                  color: lineFlowItem.showIconAndLabel
-                      ? lineFlowItem.lineFlowType.getIconColor()
+                  traceStep.lineFlowType.getIconData(),
+                  color: traceStep.showIconAndLabel
+                      ? traceStep.lineFlowType.getIconColor()
                       : Colors.transparent,
                   size: 16,
                 ),
-                label: lineFlowItem.lineId,
+                label: traceStep.lineId,
                 labelStyle: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: lineFlowItem.showIconAndLabel
+                  color: traceStep.showIconAndLabel
                       ? Colors.indigo
                       : Colors.transparent,
                 ),
@@ -64,8 +64,8 @@ class LineFlowItemBox extends StatelessWidget {
                 },
                 style: TextStyle(fontSize: 12),
               ),
-              if (lineFlowItem.needControlBar()) SizedBox(height: 5),
-              if (lineFlowItem.needControlBar()) _buildControlBar(context),
+              if (traceStep.needControlBar()) SizedBox(height: 5),
+              if (traceStep.needControlBar()) _buildControlBar(context),
             ],
           ),
         ),
@@ -81,8 +81,8 @@ class LineFlowItemBox extends StatelessWidget {
           message: "Error Info",
           child: SimpleSmallIconButton(
             iconData: Icons.error_outline_rounded,
-            iconColor: lineFlowItem.errorInfo == null ? null : Colors.red,
-            onPressed: lineFlowItem.errorInfo == null
+            iconColor: traceStep.errorInfo == null ? null : Colors.red,
+            onPressed: traceStep.errorInfo == null
                 ? null
                 : () {
                     _showErrorDialog(context);
@@ -93,7 +93,7 @@ class LineFlowItemBox extends StatelessWidget {
           message: "Extra Info",
           child: SimpleSmallIconButton(
             iconData: Icons.playlist_add_check_circle_outlined,
-            onPressed: lineFlowItem.hasExtraInfos()
+            onPressed: traceStep.hasExtraInfos()
                 ? () {
                     _showExtraInfoDialog(context);
                   }
@@ -104,15 +104,15 @@ class LineFlowItemBox extends StatelessWidget {
           message: "Tip & Document",
           child: SimpleSmallIconButton(
             iconData: FaIconConstants.tipDocument,
-            iconColor: lineFlowItem.tipDocument == null //
+            iconColor: traceStep.tipDocument == null //
                 ? null
                 : Colors.deepOrange,
-            onPressed: lineFlowItem.tipDocument == null ||
-                    !lineFlowItem.tipDocument!.enabled
-                ? null
-                : () {
-                    _showTipDocumentDialog(context);
-                  },
+            onPressed:
+                traceStep.tipDocument == null || !traceStep.tipDocument!.enabled
+                    ? null
+                    : () {
+                        _showTipDocumentDialog(context);
+                      },
           ),
         ),
       ],
@@ -123,25 +123,25 @@ class LineFlowItemBox extends StatelessWidget {
     ExtraInfoViewerDialog.open(
       context: context,
       title: "Extra Info",
-      extraInfos: lineFlowItem.extraInfos ?? [],
+      extraInfos: traceStep.extraInfos ?? [],
     );
   }
 
   void _showErrorDialog(BuildContext context) {
-    if (lineFlowItem.errorInfo != null) {
+    if (traceStep.errorInfo != null) {
       ErrorViewerDialog.open(
         context: context,
         title: "Error Viewer",
-        errorInfo: lineFlowItem.errorInfo!,
+        errorInfo: traceStep.errorInfo!,
       );
     }
   }
 
   void _showTipDocumentDialog(BuildContext context) {
-    if (lineFlowItem.tipDocument != null) {
+    if (traceStep.tipDocument != null) {
       TipDocumentViewerDialog.open(
         context: context,
-        tipDocument: lineFlowItem.tipDocument!,
+        tipDocument: traceStep.tipDocument!,
       );
     }
   }

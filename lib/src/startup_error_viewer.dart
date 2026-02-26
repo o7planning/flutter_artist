@@ -1,11 +1,11 @@
 part of 'core/_core_/core.dart';
 
 class _StartupErrorViewer extends StatelessWidget {
-  final MasterFlowItem masterFlowItem;
+  final ExecutionTrace executionTrace;
   final Object error;
 
   const _StartupErrorViewer({
-    required this.masterFlowItem,
+    required this.executionTrace,
     required this.error,
     super.key,
   });
@@ -35,8 +35,8 @@ class _StartupErrorViewer extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(color: Colors.white),
                   padding: EdgeInsets.all(10),
-                  child: MasterFlowItemDetailView(
-                    masterFlowItem: masterFlowItem,
+                  child: ExecutionTraceDetailView(
+                    executionTrace: executionTrace,
                   ),
                 ),
               ),

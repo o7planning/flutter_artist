@@ -2,6 +2,8 @@ part of '../core.dart';
 
 typedef ControlPressedAsyncFunction = Future<bool> Function();
 
+@Deprecated(
+    "Not yet ready for use, not yet designed, may be continued in a few months.")
 abstract class BlockControl extends _RefreshableWidget {
   final Block block;
   final StackTrace? currentStackTrace;
@@ -36,27 +38,27 @@ class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
   RefreshableWidgetType get type => RefreshableWidgetType.blockControlButton;
 
   @override
-  bool get isScalarRepresentative {
+  bool get provideScalarContext {
     return false;
   }
 
   @override
-  bool get isBlockRepresentative {
+  bool get provideBlockContext {
     return false;
   }
 
   @override
-  bool get isItemRepresentative {
+  bool get provideItemContext {
     return false;
   }
 
   @override
-  bool get isFormRepresentative {
+  bool get provideFormContext {
     return false;
   }
 
   @override
-  bool get isHookRepresentative {
+  bool get provideHookContext {
     return false;
   }
 

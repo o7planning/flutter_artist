@@ -2,23 +2,23 @@ part of '../core.dart';
 
 int __flowLogItemSEQ = 1;
 
-class MethodCallMasterFlowItem extends MasterFlowItem {
+class MethodCallExecutionTrace extends ExecutionTrace {
   final FuncCallInfo funcCallInfo;
   final bool isLibMethod;
 
   bool get isUserMethod => !isLibMethod;
 
-  MethodCallMasterFlowItem({
+  MethodCallExecutionTrace({
     required super.ownerClassInstance,
     required this.funcCallInfo,
     required this.isLibMethod,
   }) : super(
-          masterFlowItemType: isLibMethod
-              ? MasterFlowItemType.libMethodCall
-              : MasterFlowItemType.userMethodCall,
+          executionTraceType: isLibMethod
+              ? ExecutionTraceType.libMethodCall
+              : ExecutionTraceType.userMethodCall,
         );
 
-  MethodCallMasterFlowItem._methodCallFromStackTrace({
+  MethodCallExecutionTrace._methodCallFromStackTrace({
     required super.ownerClassInstance,
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? arguments,
@@ -28,21 +28,21 @@ class MethodCallMasterFlowItem extends MasterFlowItem {
           arguments: arguments,
         ),
         super(
-          masterFlowItemType: isLibMethod
-              ? MasterFlowItemType.libMethodCall
-              : MasterFlowItemType.userMethodCall,
+          executionTraceType: isLibMethod
+              ? ExecutionTraceType.libMethodCall
+              : ExecutionTraceType.userMethodCall,
         );
 
-  MethodCallMasterFlowItem._methodCall({
+  MethodCallExecutionTrace._methodCall({
     required super.ownerClassInstance,
     required String methodName,
     required Map<String, dynamic>? arguments,
     required this.isLibMethod,
   })  : funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
         super(
-          masterFlowItemType: isLibMethod
-              ? MasterFlowItemType.libMethodCall
-              : MasterFlowItemType.userMethodCall,
+          executionTraceType: isLibMethod
+              ? ExecutionTraceType.libMethodCall
+              : ExecutionTraceType.userMethodCall,
         );
 
   @override
@@ -109,10 +109,10 @@ class MethodCallMasterFlowItem extends MasterFlowItem {
   }
 }
 
-class NaturalLoadMasterFlowItem extends MasterFlowItem {
-  NaturalLoadMasterFlowItem({
+class NaturalLoadExecutionTrace extends ExecutionTrace {
+  NaturalLoadExecutionTrace({
     required super.ownerClassInstance,
-  }) : super(masterFlowItemType: MasterFlowItemType.naturalLoad);
+  }) : super(executionTraceType: ExecutionTraceType.naturalLoad);
 
   @override
   String getSubtitle() {
@@ -125,17 +125,17 @@ class NaturalLoadMasterFlowItem extends MasterFlowItem {
   }
 }
 
-class TaskUnitMasterFlowItem extends MasterFlowItem {
+class TaskUnitExecutionTrace extends ExecutionTrace {
   final TaskType taskType;
 
-  TaskUnitMasterFlowItem({
+  TaskUnitExecutionTrace({
     required super.ownerClassInstance,
     required this.taskType,
-  }) : super(masterFlowItemType: MasterFlowItemType.taskUnitCall);
+  }) : super(executionTraceType: ExecutionTraceType.taskUnitCall);
 
   @override
   String getSubtitle() {
-    return "${getClassNameWithoutGenerics(ownerClassInstance)} - (${lineFlowItems.length})";
+    return "${getClassNameWithoutGenerics(ownerClassInstance)} - (${traceSteps.length})";
   }
 
   @override
@@ -144,10 +144,10 @@ class TaskUnitMasterFlowItem extends MasterFlowItem {
   }
 }
 
-class StartupMasterFlowItem extends MasterFlowItem {
-  StartupMasterFlowItem({
+class StartupExecutionTrace extends ExecutionTrace {
+  StartupExecutionTrace({
     required super.ownerClassInstance,
-  }) : super(masterFlowItemType: MasterFlowItemType.startup);
+  }) : super(executionTraceType: ExecutionTraceType.startup);
 
   @override
   String getSubtitle() {
@@ -160,10 +160,10 @@ class StartupMasterFlowItem extends MasterFlowItem {
   }
 }
 
-class QueuedEventMasterFlowItem extends MasterFlowItem {
-  QueuedEventMasterFlowItem({
+class QueuedEventExecutionTrace extends ExecutionTrace {
+  QueuedEventExecutionTrace({
     required super.ownerClassInstance,
-  }) : super(masterFlowItemType: MasterFlowItemType.queuedEvent);
+  }) : super(executionTraceType: ExecutionTraceType.queuedEvent);
 
   @override
   String getSubtitle() {
@@ -176,20 +176,20 @@ class QueuedEventMasterFlowItem extends MasterFlowItem {
   }
 }
 
-abstract class MasterFlowItem {
+abstract class ExecutionTrace {
   final int id;
-  final MasterFlowItemType masterFlowItemType;
+  final ExecutionTraceType executionTraceType;
 
   final DateTime createdDateTime = DateTime.now();
 
   final Object ownerClassInstance;
-  final List<LineFlowItem> __lineFlowItems = [];
+  final List<TraceStep> __traceSteps = [];
 
-  List<LineFlowItem> get lineFlowItems => List.unmodifiable(__lineFlowItems);
+  List<TraceStep> get traceSteps => List.unmodifiable(__traceSteps);
 
-  MasterFlowItem({
+  ExecutionTrace({
     required this.ownerClassInstance,
-    required this.masterFlowItemType,
+    required this.executionTraceType,
   }) : id = __flowLogItemSEQ++;
 
   String getTitle();
@@ -197,7 +197,7 @@ abstract class MasterFlowItem {
   String getSubtitle();
 
   void _addLineFlowSeparator() {
-    var item = LineFlowItem(
+    var item = TraceStep(
       lineId: "-----",
       lineFlowType: LineFlowType.separator,
       isLibCall: false,
@@ -210,10 +210,10 @@ abstract class MasterFlowItem {
       errorInfo: null,
       extraInfos: null,
     );
-    __lineFlowItems.add(item);
+    __traceSteps.add(item);
   }
 
-  LineFlowItem _addLineFlowItem({
+  TraceStep _addTraceStep({
     LineFlowType? lineFlowType,
     bool isLibCall = false,
     required String codeId,
@@ -226,7 +226,7 @@ abstract class MasterFlowItem {
     ErrorInfo? errorInfo,
     bool showIconAndLabel = true,
   }) {
-    var item = LineFlowItem(
+    var item = TraceStep(
       lineId: codeId,
       lineFlowType: lineFlowType ?? LineFlowType.line,
       isLibCall: isLibCall,
@@ -239,7 +239,7 @@ abstract class MasterFlowItem {
       errorInfo: errorInfo,
       extraInfos: extraInfos,
     );
-    __lineFlowItems.add(item);
+    __traceSteps.add(item);
     return item;
   }
 
@@ -251,8 +251,8 @@ abstract class MasterFlowItem {
     return getLineFlowEvent() != null;
   }
 
-  LineFlowItem? getLineFlowEvent() {
-    for (LineFlowItem item in __lineFlowItems) {
+  TraceStep? getLineFlowEvent() {
+    for (TraceStep item in __traceSteps) {
       if (item.lineFlowType == LineFlowType.emitEvent) {
         return item;
       }
@@ -261,7 +261,7 @@ abstract class MasterFlowItem {
   }
 
   ErrorInfo? getErrorInfo() {
-    for (LineFlowItem item in __lineFlowItems) {
+    for (TraceStep item in __traceSteps) {
       if (item.errorInfo != null) {
         return item.errorInfo;
       }
@@ -283,8 +283,8 @@ abstract class MasterFlowItem {
   String getText() {
     String s = "";
     bool first = true;
-    for (LineFlowItem lineFlowItem in __lineFlowItems) {
-      s += (first ? "" : "\n\n") + lineFlowItem.getText();
+    for (TraceStep traceStep in __traceSteps) {
+      s += (first ? "" : "\n\n") + traceStep.getText();
       first = false;
     }
     return s;

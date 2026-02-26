@@ -2,6 +2,8 @@ part of '../core.dart';
 
 class _SortPanelBuilder extends _RefreshableWidget {
   final SortModel sortModel;
+  final bool provideItemContext;
+  final bool provideFormContext;
 
   final Widget Function() build;
 
@@ -10,6 +12,8 @@ class _SortPanelBuilder extends _RefreshableWidget {
     required super.ownerClassInstance,
     required super.description,
     required this.sortModel,
+    this.provideItemContext = false,
+    this.provideFormContext = false,
     required this.build,
   });
 
@@ -30,27 +34,27 @@ class _SortPanelBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.sort;
 
   @override
-  bool get isScalarRepresentative {
+  bool get provideScalarContext {
     return false;
   }
 
   @override
-  bool get isBlockRepresentative {
+  bool get provideBlockContext {
     return true;
   }
 
   @override
-  bool get isItemRepresentative {
-    return false;
+  bool get provideItemContext {
+    return widget.provideItemContext;
   }
 
   @override
-  bool get isFormRepresentative {
-    return false;
+  bool get provideFormContext {
+    return widget.provideFormContext;
   }
 
   @override
-  bool get isHookRepresentative {
+  bool get provideHookContext {
     return false;
   }
 

@@ -200,7 +200,7 @@ abstract class XShelf extends XRootQueueItem {
   // IMPORTANT: Sync Method.
   //
   void _updateInternalReactionByEvtBlock({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required XBlock eventXBlock,
     required bool forceReQuery,
   }) {
@@ -213,7 +213,7 @@ abstract class XShelf extends XRootQueueItem {
     final EffectedShelfMembers effectedShelfMembers =
         eventXBlock.block._internalEffectedShelfMembers;
 
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#10000",
       shortDesc:
           "Registered Effected Shelf Members:${effectedShelfMembers.getDebugInfoHtml()}",
@@ -223,7 +223,7 @@ abstract class XShelf extends XRootQueueItem {
     if (forceReQuery) {
       final forceQryHint = QryHint.force;
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#10100",
         shortDesc:
             "Set ${debugObjHtml(eventXBlock.block)} qryHint: ${debugObjHtml(forceQryHint)}.",
@@ -343,13 +343,13 @@ abstract class XShelf extends XRootQueueItem {
   }
 
   // debug [#01000]
-  void _initQueryTaskUnits({required MasterFlowItem masterFlowItem}) {
+  void _initQueryTaskUnits({required ExecutionTrace executionTrace}) {
     if (rootVipXScalar != null && rootVipXBlock != null) {
       throw "Development Logic Error";
     }
     shelf._debugInitQueryTaskUnitsCount++;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#01000",
       shortDesc: toDebugXShelfStateAsHtml(),
       lineFlowType: LineFlowType.debug,
@@ -365,7 +365,7 @@ abstract class XShelf extends XRootQueueItem {
         final taskUnit = _FilterModelLoadDataTaskUnit(
           xFilterModel: xFilterModel,
         );
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#01060",
           shortDesc:
               "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
@@ -385,7 +385,7 @@ abstract class XShelf extends XRootQueueItem {
       final taskUnit = _ScalarQueryTaskUnit(
         xScalar: rootVipXScalar!,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#01080",
         shortDesc:
             "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
@@ -402,7 +402,7 @@ abstract class XShelf extends XRootQueueItem {
       final taskUnit = _BlockQueryTaskUnit(
         xBlock: rootVipXBlock!,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#01120",
         shortDesc:
             "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
@@ -422,7 +422,7 @@ abstract class XShelf extends XRootQueueItem {
         final taskUnit = _ScalarQueryTaskUnit(
           xScalar: xScalar,
         );
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#01160",
           shortDesc:
               "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
@@ -440,7 +440,7 @@ abstract class XShelf extends XRootQueueItem {
         final taskUnit = _BlockQueryTaskUnit(
           xBlock: rootXBlock,
         );
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#01200",
           shortDesc:
               "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",

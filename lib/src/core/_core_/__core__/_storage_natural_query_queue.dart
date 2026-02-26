@@ -40,10 +40,10 @@ class _StorageNaturalQueryQueue {
       return;
     }
     //
-    var masterFlowItem = FlutterArtist.codeFlowLogger._addNaturalUIEvent(
+    var executionTrace = FlutterArtist.codeFlowLogger._addNaturalUIEvent(
       ownerClassInstance: this,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#00000",
       shortDesc:
           "Just detected some <b>UI Components</b> that have just been displayed. "
@@ -55,13 +55,13 @@ class _StorageNaturalQueryQueue {
       if (lazyShelf.disposed) {
         continue;
       }
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#00100",
         shortDesc:
             "Start checking lazy model-components of ${debugObjHtml(lazyShelf)}...",
       );
       await lazyShelf._startLoadDataForLazyUiComponentsIfNeed(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
       );
     }
   }

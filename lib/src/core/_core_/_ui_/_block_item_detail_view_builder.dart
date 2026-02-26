@@ -3,12 +3,14 @@ part of '../core.dart';
 class BlockItemDetailViewBuilder extends _RefreshableWidget {
   final Block block;
   final Widget Function() build;
+  final bool provideFormContext;
 
   const BlockItemDetailViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.block,
+    this.provideFormContext = false,
     required this.build,
   });
 
@@ -29,27 +31,27 @@ class _BlockItemDetailViewBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.blockItemDetailView;
 
   @override
-  bool get isScalarRepresentative {
+  bool get provideScalarContext {
     return false;
   }
 
   @override
-  bool get isBlockRepresentative {
+  bool get provideBlockContext {
     return true;
   }
 
   @override
-  bool get isItemRepresentative {
+  bool get provideItemContext {
     return true;
   }
 
   @override
-  bool get isFormRepresentative {
-    return false;
+  bool get provideFormContext {
+    return widget.provideFormContext;
   }
 
   @override
-  bool get isHookRepresentative {
+  bool get provideHookContext {
     return false;
   }
 

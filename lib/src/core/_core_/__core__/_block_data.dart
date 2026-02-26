@@ -361,7 +361,7 @@ class _BlockData<
   // ***************************************************************************
 
   void _updateData({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required ListUpdateStrategy forceListUpdateStrategy,
     required _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA>
         processedQueryResult,
@@ -406,7 +406,7 @@ class _BlockData<
     // Append to _items:
     //
     __appendQueriedItems(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       processedQueryResult: processedQueryResult,
     );
     // block.formModel?.data._formMode = FormMode.none;
@@ -419,7 +419,7 @@ class _BlockData<
   // ***************************************************************************
 
   void __appendQueriedItems({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA>
         processedQueryResult,
   }) {

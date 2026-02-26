@@ -36,8 +36,8 @@ class _HookUiComponents extends _UiComponents {
   bool hasActiveUiComponentHookRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = _findActiveUiComponentWithRepresentativeType(
-      representativeType: RepresentativeType.hookRepresentative,
+    String? componentName = _findActiveUiComponentWithContextKind(
+      contextKind: ContextKind.hook,
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
@@ -51,8 +51,8 @@ class _HookUiComponents extends _UiComponents {
   }
 
   String? findActiveUiComponent({bool alsoCheckChildren = false}) {
-    return _findActiveUiComponentWithRepresentativeType(
-      representativeType: null,
+    return _findActiveUiComponentWithContextKind(
+      contextKind: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
@@ -60,22 +60,22 @@ class _HookUiComponents extends _UiComponents {
   String? findActiveUiComponentHookRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    return _findActiveUiComponentWithRepresentativeType(
-      representativeType: RepresentativeType.hookRepresentative,
+    return _findActiveUiComponentWithContextKind(
+      contextKind: ContextKind.hook,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? _findActiveUiComponentWithRepresentativeType({
-    required RepresentativeType? representativeType,
+  String? _findActiveUiComponentWithContextKind({
+    required ContextKind? contextKind,
     bool alsoCheckChildren = false,
   }) {
     bool has = false;
     //
     // Hook Base View:
     //
-    String? componentName = findActiveHookBaseViewWithRepresentativeType(
-      representativeType: representativeType,
+    String? componentName = findActiveHookBaseViewWithContextKind(
+      contextKind: contextKind,
       alsoCheckChildren: false,
     );
     if (componentName != null) {
@@ -95,14 +95,14 @@ class _HookUiComponents extends _UiComponents {
   }
 
   String? findActiveHookBaseView({required bool alsoCheckChildren}) {
-    return findActiveHookBaseViewWithRepresentativeType(
-      representativeType: null,
+    return findActiveHookBaseViewWithContextKind(
+      contextKind: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveHookBaseViewWithRepresentativeType({
-    required RepresentativeType? representativeType,
+  String? findActiveHookBaseViewWithContextKind({
+    required ContextKind? contextKind,
     required bool alsoCheckChildren,
   }) {
     var map = {...__hookBaseViewWidgetStates};
@@ -114,7 +114,7 @@ class _HookUiComponents extends _UiComponents {
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isRepresentativeType(representativeType);
+      bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return getClassNameWithoutGenerics(widgetState.widget);
       }

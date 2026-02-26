@@ -48,11 +48,11 @@ class _QueuedEventManager {
     if (queuedEvents.isEmpty) {
       return;
     }
-    MasterFlowItem masterFlowItem =
+    ExecutionTrace executionTrace =
         FlutterArtist.codeFlowLogger._initTaskUnitForQueuedEvent(
       ownerClassInstance: this,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#27000",
       shortDesc:
           "Several originEvents have occurred, and they have generated <b>QueuedEvent(s)</b>. "
@@ -63,7 +63,7 @@ class _QueuedEventManager {
     // #0004.
     //
     final bool freezing = storage.__freeze.isFreezing;
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#27040",
       shortDesc: freezing
           ? "The mode to freeze <b>QueuedEvent</b> execution is <b>enabled</b>."
@@ -87,9 +87,9 @@ class _QueuedEventManager {
 
       hasSeparator = true;
       // SEPARATOR.
-      masterFlowItem._addLineFlowSeparator();
+      executionTrace._addLineFlowSeparator();
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#27140",
         shortDesc:
             "The <b>$listenerShelfName</b> received the <b>originEvents</b>:"
@@ -98,7 +98,7 @@ class _QueuedEventManager {
       );
       Set<Event> projectionEvents = FlutterArtist.storage._projectionManager
           .getProjectionEvents(originEvents);
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#27160",
         shortDesc:
             "Calculated <b>projectionEvents</b> from <b>originEvents</b>:"
@@ -109,7 +109,7 @@ class _QueuedEventManager {
       Shelf listenerShelf = storage._shelfMap[listenerShelfName]!;
       //
       __markReactionConditionsForEvents(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         listenerShelf: listenerShelf,
         outsideEvents: projectionEvents.toList(),
       );
@@ -123,13 +123,13 @@ class _QueuedEventManager {
     }
     if (hasSeparator) {
       // END SEPARATOR:
-      masterFlowItem._addLineFlowSeparator();
+      executionTrace._addLineFlowSeparator();
     }
     //
     // SAME-AS: #0003
     //
     for (Shelf reactionShelf in invisibleReactionShelves) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#27300",
         shortDesc:
             "Calling ${debugObjHtml(reactionShelf)}._addShelfExternalReactionTaskUnit():",
@@ -137,12 +137,12 @@ class _QueuedEventManager {
         lineFlowType: LineFlowType.nonControllableCalling,
       );
       reactionShelf._addShelfExternalReactionTaskUnit(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
       );
     }
     for (Shelf reactionShelf in visibleReactionShelves) {
       if (!freezing) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#27400",
           shortDesc:
               "Calling ${debugObjHtml(reactionShelf)}._addShelfExternalReactionTaskUnit():",
@@ -151,10 +151,10 @@ class _QueuedEventManager {
           tipDocument: TipDocument.eventReactionFreezing,
         );
         reactionShelf._addShelfExternalReactionTaskUnit(
-          masterFlowItem: masterFlowItem,
+          executionTrace: executionTrace,
         );
       } else {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#27500",
           shortDesc: "This Shelf is <b>VISIBLE</b> and <b>is frozen</b>.",
           lineFlowType: LineFlowType.info,
@@ -164,12 +164,12 @@ class _QueuedEventManager {
   }
 
   void __markReactionConditionsForEvents({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required Shelf listenerShelf,
     required List<Event> outsideEvents,
   }) {
     if (listenerShelf.isFullyPending) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#49000",
         shortDesc:
             "The <b>${listenerShelf.name}</b> is in frozen mode reacting to events, "
@@ -178,7 +178,7 @@ class _QueuedEventManager {
       );
       return;
     }
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#49100",
       shortDesc:
           "Calculating how the members of <b>${listenerShelf.name}</b> would react to the events above...",
@@ -186,7 +186,7 @@ class _QueuedEventManager {
     );
     EffectedShelfMembers effectedShelfMembers =
         listenerShelf._calculateEffectedShelfMembersByEvents(outsideEvents);
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#49200",
       shortDesc: "Calculated:${effectedShelfMembers.getDebugInfoHtml()}",
       lineFlowType: LineFlowType.info,
@@ -196,7 +196,7 @@ class _QueuedEventManager {
     }
     //
     listenerShelf._markReactionToExternalShelfEvents(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       effectedShelfMembers: effectedShelfMembers,
     );
   }

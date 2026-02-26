@@ -27,27 +27,27 @@ class _StorageSectionViewState
   RefreshableWidgetType get type => RefreshableWidgetType.shelfFragment;
 
   @override
-  bool get isScalarRepresentative {
+  bool get provideScalarContext {
     return false;
   }
 
   @override
-  bool get isBlockRepresentative {
+  bool get provideBlockContext {
     return false;
   }
 
   @override
-  bool get isItemRepresentative {
+  bool get provideItemContext {
     return false;
   }
 
   @override
-  bool get isFormRepresentative {
+  bool get provideFormContext {
     return false;
   }
 
   @override
-  bool get isHookRepresentative {
+  bool get provideHookContext {
     return false;
   }
 

@@ -3,7 +3,6 @@ import 'package:animated_tree_view/tree_view/tree_view.dart';
 import 'package:animated_tree_view/tree_view/widgets/expansion_indicator.dart';
 import 'package:animated_tree_view/tree_view/widgets/indent.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/debug/filter_criteria/widgets/_condition_group_view.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
 import '../../core/_core_/core.dart';
@@ -13,6 +12,7 @@ import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '_filter_model_debug_view.dart';
+import 'widgets/_condition_group_view.dart';
 import 'widgets/_criterion_condition_model_view.dart';
 
 class FilterConditionGroupsView extends StatefulWidget {

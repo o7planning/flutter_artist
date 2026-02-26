@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class LineFlowItem {
+class TraceStep {
   final bool showIconAndLabel;
   final LineFlowType lineFlowType;
   final bool isLibCall;
@@ -16,7 +16,7 @@ class LineFlowItem {
 
   List<String>? get extraInfos => _extraInfos;
 
-  LineFlowItem({
+  TraceStep({
     required this.showIconAndLabel,
     this.lineFlowType = LineFlowType.line,
     required this.isLibCall,

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/debug/filter/widgets/_filter_criterion_view.dart';
-import 'package:flutter_artist/src/debug/widgets/_json_view.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_left_right_container/left_right_container.dart';
 import 'package:tabbed_view/tabbed_view.dart';
@@ -10,6 +8,8 @@ import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';
+import '../widgets/_json_view.dart';
+import 'widgets/_filter_criterion_view.dart';
 
 class FilterCriteriaView extends StatefulWidget {
   final FilterModel filterModel;

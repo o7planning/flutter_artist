@@ -3,12 +3,12 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/_master_flow_item_type.dart';
+import '../../core/enums/_execution_trace_type.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../../core/widgets/_iconed_checkbox.dart';
 import '../dialog/_code_flow_settings_dialog.dart';
-import '_master_flow_item_box.dart';
-import '_master_flow_item_box_detail.dart';
+import '_execution_trace_box.dart';
+import '_execution_trace_box_detail.dart';
 
 class MasterFlowViewer extends StatefulWidget {
   const MasterFlowViewer({
@@ -21,31 +21,31 @@ class MasterFlowViewer extends StatefulWidget {
 
 class _MasterFlowViewerState extends State<MasterFlowViewer> {
   bool checkAll = true;
-  MasterFlowItem? selectedMasterFlowItem;
+  ExecutionTrace? selectedExecutionTrace;
 
-  final Map<MasterFlowItemType, bool> masterFlowItemTypeFilterMap = {};
+  final Map<ExecutionTraceType, bool> executionTraceTypeFilterMap = {};
 
   @override
   void initState() {
     super.initState();
     //
-    for (MasterFlowItemType type in MasterFlowItemType.values) {
-      masterFlowItemTypeFilterMap.putIfAbsent(type, () {
+    for (ExecutionTraceType type in ExecutionTraceType.values) {
+      executionTraceTypeFilterMap.putIfAbsent(type, () {
         return true;
       });
     }
-    // masterFlowItemTypeFilterMap[MasterFlowItemType.libMethodCall] = false;
+    // executionTraceTypeFilterMap[ExecutionTraceType.libMethodCall] = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    List<MasterFlowItem> items = FlutterArtist.codeFlowLogger.masterFlowItems
+    List<ExecutionTrace> items = FlutterArtist.codeFlowLogger.executionTraces
         .where((item) =>
-            (masterFlowItemTypeFilterMap[item.masterFlowItemType] ?? false))
+            (executionTraceTypeFilterMap[item.executionTraceType] ?? false))
         .toList();
     //
-    if (!items.contains(selectedMasterFlowItem)) {
-      selectedMasterFlowItem = items.isNotEmpty ? items.first : null;
+    if (!items.contains(selectedExecutionTrace)) {
+      selectedExecutionTrace = items.isNotEmpty ? items.first : null;
     }
     //
     return Column(
@@ -55,7 +55,7 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
         _buildFilter(),
         const SizedBox(height: 5),
         Expanded(
-          child: selectedMasterFlowItem == null
+          child: selectedExecutionTrace == null
               ? const CustomAppContainer(
                   child: Center(
                     child: Text("No Item", style: TextStyle(fontSize: 13)),
@@ -72,8 +72,8 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
                     ),
                     const SizedBox(width: 4),
                     Expanded(
-                      child: MasterFlowItemDetailView(
-                        masterFlowItem: selectedMasterFlowItem!,
+                      child: ExecutionTraceDetailView(
+                        executionTrace: selectedExecutionTrace!,
                       ),
                     ),
                   ],
@@ -95,8 +95,8 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
             value: checkAll,
             onChanged: (bool? value) {
               checkAll = value ?? false;
-              masterFlowItemTypeFilterMap.forEach((k, v) {
-                masterFlowItemTypeFilterMap[k] = checkAll;
+              executionTraceTypeFilterMap.forEach((k, v) {
+                executionTraceTypeFilterMap[k] = checkAll;
               });
               setState(() {});
             },
@@ -133,22 +133,22 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
         reverse: false,
         direction: Axis.horizontal,
       ),
-      items: MasterFlowItemType.values
+      items: ExecutionTraceType.values
           .map(
-            (masterFlowItemType) => BreadCrumbItem(
+            (executionTraceType) => BreadCrumbItem(
               content: Tooltip(
-                message: masterFlowItemType.desc,
+                message: executionTraceType.desc,
                 child: IconedCheckbox(
                   icon: Icon(
-                    masterFlowItemType.getIconData(),
+                    executionTraceType.getIconData(),
                     size: 16,
-                    color: masterFlowItemType.getIconColor(false),
+                    color: executionTraceType.getIconColor(false),
                   ),
                   value:
-                      masterFlowItemTypeFilterMap[masterFlowItemType] ?? true,
+                      executionTraceTypeFilterMap[executionTraceType] ?? true,
                   onChanged: (bool? value) {
                     setState(() {
-                      masterFlowItemTypeFilterMap[masterFlowItemType] =
+                      executionTraceTypeFilterMap[executionTraceType] =
                           value ?? false;
                     });
                   },
@@ -160,18 +160,18 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
     );
   }
 
-  Widget _buildLeftList(List<MasterFlowItem> items) {
+  Widget _buildLeftList(List<ExecutionTrace> items) {
     return ListView(
       padding: const EdgeInsets.only(right: 10),
       children: items
           .map(
-            (masterFlowItem) => MasterFlowItemBox(
-              key: Key("LogItem-${masterFlowItem.id}"),
-              masterFlowItem: masterFlowItem,
-              selected: masterFlowItem == selectedMasterFlowItem,
+            (executionTrace) => ExecutionTraceBox(
+              key: Key("LogItem-${executionTrace.id}"),
+              executionTrace: executionTrace,
+              selected: executionTrace == selectedExecutionTrace,
               onTap: () {
                 setState(() {
-                  selectedMasterFlowItem = masterFlowItem;
+                  selectedExecutionTrace = executionTrace;
                 });
               },
             ),

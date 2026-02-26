@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum MasterFlowItemType {
+enum ExecutionTraceType {
   startup,
   naturalLoad,
   taskUnitCall,
@@ -14,17 +14,17 @@ enum MasterFlowItemType {
 
   IconData getIconData() {
     switch (this) {
-      case MasterFlowItemType.startup:
+      case ExecutionTraceType.startup:
         return Icons.start;
-      case MasterFlowItemType.naturalLoad:
+      case ExecutionTraceType.naturalLoad:
         return Icons.event_note_rounded;
-      case MasterFlowItemType.taskUnitCall:
+      case ExecutionTraceType.taskUnitCall:
         return Icons.miscellaneous_services_outlined;
-      case MasterFlowItemType.userMethodCall:
+      case ExecutionTraceType.userMethodCall:
         return Icons.call;
-      case MasterFlowItemType.libMethodCall:
+      case ExecutionTraceType.libMethodCall:
         return Icons.call;
-      case MasterFlowItemType.queuedEvent:
+      case ExecutionTraceType.queuedEvent:
         return Icons.star;
     }
   }
@@ -34,34 +34,34 @@ enum MasterFlowItemType {
       return Colors.red;
     }
     switch (this) {
-      case MasterFlowItemType.startup:
+      case ExecutionTraceType.startup:
         return Colors.black;
-      case MasterFlowItemType.naturalLoad:
+      case ExecutionTraceType.naturalLoad:
         return Colors.orange;
-      case MasterFlowItemType.taskUnitCall:
+      case ExecutionTraceType.taskUnitCall:
         return Colors.indigo;
-      case MasterFlowItemType.userMethodCall:
+      case ExecutionTraceType.userMethodCall:
         return Colors.blue;
-      case MasterFlowItemType.libMethodCall:
+      case ExecutionTraceType.libMethodCall:
         return Colors.black;
-      case MasterFlowItemType.queuedEvent:
+      case ExecutionTraceType.queuedEvent:
         return Colors.deepOrange;
     }
   }
 
   String getTooltipText() {
     switch (this) {
-      case MasterFlowItemType.startup:
+      case ExecutionTraceType.startup:
         return "Startup";
-      case MasterFlowItemType.naturalLoad:
+      case ExecutionTraceType.naturalLoad:
         return "Detect newly displayed UI Component";
-      case MasterFlowItemType.taskUnitCall:
+      case ExecutionTraceType.taskUnitCall:
         return "Task Unit.";
-      case MasterFlowItemType.userMethodCall:
+      case ExecutionTraceType.userMethodCall:
         return "User's Method";
-      case MasterFlowItemType.libMethodCall:
+      case ExecutionTraceType.libMethodCall:
         return "Lib's Method";
-      case MasterFlowItemType.queuedEvent:
+      case ExecutionTraceType.queuedEvent:
         return "Init Task Unit for Lazied Events";
     }
   }

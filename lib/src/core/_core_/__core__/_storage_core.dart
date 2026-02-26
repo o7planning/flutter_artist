@@ -83,8 +83,8 @@ abstract class _StorageCore extends _Core {
     }
     //
     final String activityName = _getActivityName(F);
-    FlutterArtist.debugRegister._addDebugRegisterActivity(
-        "The <b>FlutterArtist.storage.registerActivity()</b> method was called for <b>$activityName</b>.");
+    FlutterArtist.debugRegister
+        ._addDebugRegisterActivity("<b>$activityName</b>.");
     //
     ActivityCreator? creator = __activityCreatorMap[activityName];
     if (creator == null) {
@@ -105,8 +105,7 @@ abstract class _StorageCore extends _Core {
     }
     //
     final String shelfName = _getShelfName(F);
-    FlutterArtist.debugRegister._addDebugRegisterShelf(
-        "The <b>FlutterArtist.storage.registerShelf()</b> method was called for <b>$shelfName</b>.");
+    FlutterArtist.debugRegister._addDebugRegisterShelf("<b>$shelfName</b>.");
     //
     ShelfCreator? creator = __shelfCreatorMap[shelfName];
     if (creator == null) {

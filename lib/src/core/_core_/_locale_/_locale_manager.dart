@@ -20,7 +20,7 @@ class LocaleManager extends _Core {
   /// Apply Locale and store it in local.
   ///
   Future<void> updateAndStoreLocale({required Locale locale}) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "updateAndStoreLocale",
       parameters: {
@@ -32,14 +32,14 @@ class LocaleManager extends _Core {
     //
     final ILoggedInUser? loggedInUser = _globalsManager.loggedInUser;
     if (loggedInUser == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#46000",
         shortDesc: "No LoggedInUser --> Nothing to do!",
       );
       return;
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#46040",
       shortDesc: "On the ${debugObjHtml(this)}.updateAndStoreLocale() method.",
       parameters: {
@@ -47,7 +47,7 @@ class LocaleManager extends _Core {
       },
       lineFlowType: LineFlowType.nonControllableCalling,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#46100",
       shortDesc:
           "Calling ${debugObjHtml(this)}._updateLocale() with parameters:",
@@ -57,12 +57,12 @@ class LocaleManager extends _Core {
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     // Refresh UI with new Locale.
-    await _updateLocale(masterFlowItem: masterFlowItem, locale: locale);
+    await _updateLocale(executionTrace: executionTrace, locale: locale);
     //
     final String localeValue =
         "${locale.languageCode}-${locale.countryCode ?? ''}";
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#46200",
       shortDesc:
           "Calling ${debugObjHtml(_globalsManager)}._storeExtraGlobalProp():",
@@ -74,7 +74,7 @@ class LocaleManager extends _Core {
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     await _globalsManager._storeExtraGlobalProp(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       loggedInUser: loggedInUser,
       propName: propName,
       value: localeValue,
@@ -82,10 +82,10 @@ class LocaleManager extends _Core {
   }
 
   Future<void> _updateLocale({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required Locale locale,
   }) async {
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#47100",
       shortDesc:
           "Calling ${debugObjHtml(_localeAdapter)}.updateLocale() with parameters:",
@@ -99,10 +99,10 @@ class LocaleManager extends _Core {
   }
 
   Locale? _readStoredLocale({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required ILoggedInUser loggedInUser,
   }) {
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#48000",
       shortDesc:
           "Calling <b>_globalsManager.getExtraGlobalProp()</b> to get <b>localeId</b>.",
@@ -113,12 +113,12 @@ class LocaleManager extends _Core {
     );
     // localeId: "languageCode-countryCode'.
     String? localeId = _globalsManager.getExtraGlobalProp(propName);
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#48200",
       shortDesc: "Got @localeId: <b>$localeId</b>.",
     );
     if (localeId == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#48300",
         shortDesc: "@localeId is <b>null</b> --> nothing to do.",
       );
@@ -135,14 +135,14 @@ class LocaleManager extends _Core {
     for (Locale locale in supportedLocales) {
       if (locale.languageCode == languageCode &&
           locale.countryCode == countryCode) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#48400",
           shortDesc: "Found Locale: ${debugObjHtml(locale)}.",
         );
         return locale;
       }
     }
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#48500",
       shortDesc: "No Local Found for @localeId: <b>$localeId</b>.",
     );

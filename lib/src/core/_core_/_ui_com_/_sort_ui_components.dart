@@ -34,13 +34,13 @@ class _SortUiComponents extends _UiComponents {
   // ***************************************************************************
 
   bool hasActiveUiComponent() {
-    return hasActiveUiComponentWithRepresentativeType(
-      representativeType: null,
+    return hasActiveUiComponentWithContextKind(
+      contextKind: null,
     );
   }
 
-  bool hasActiveUiComponentWithRepresentativeType({
-    required RepresentativeType? representativeType,
+  bool hasActiveUiComponentWithContextKind({
+    required ContextKind? contextKind,
   }) {
     for (_RefreshableWidgetState widgetState in _sortWidgetStates.keys) {
       if (!widgetState.mounted) {
@@ -50,7 +50,7 @@ class _SortUiComponents extends _UiComponents {
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isRepresentativeType(representativeType);
+      bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return true;
       }

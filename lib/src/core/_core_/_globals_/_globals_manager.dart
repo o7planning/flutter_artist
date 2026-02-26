@@ -66,10 +66,10 @@ class GlobalsManager extends _Core {
   /// - theme
   ///
   Future<void> __readExtraGlobalProps({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required ILoggedInUser loggedInUser,
   }) async {
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#E0000",
       shortDesc:
           "Open <b>HiveBox</b> to read <b>Extra Global Prop Names</b> from <b>Local</b>.",
@@ -81,7 +81,7 @@ class GlobalsManager extends _Core {
       String key = __getHiveExtraGlobalPropNamesKey(loggedInUser);
       String extraGlobalPropNamesStr = hiveBox.get(key) ?? "";
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#E0100",
         shortDesc: "Result from <b>HiveBox</b>:",
         parameters: {
@@ -96,7 +96,7 @@ class GlobalsManager extends _Core {
           .where((s) => s.isNotEmpty)
           .toList();
 
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#E0200",
         shortDesc: " - @extraGlobalPropNames: <b>$extraGlobalPropNames</b>.",
       );
@@ -109,7 +109,7 @@ class GlobalsManager extends _Core {
         error: e,
         stackTrace: stackTrace,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#E0300",
         shortDesc: "Has an error.",
         errorInfo: errorInfo,
@@ -120,7 +120,7 @@ class GlobalsManager extends _Core {
     }
     //
     for (String propName in __registeredExtraPropNames) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#E0400",
         shortDesc: "Reading prop <b>'$propName'</b> from <b>HiveBox</b>...",
       );
@@ -129,7 +129,7 @@ class GlobalsManager extends _Core {
         propName: propName,
       );
       __extraPropMap[propName] = value;
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#E0500",
         shortDesc: "Result from <b>HiveBox</b>:"
             "\n - @propName: <b>$propName</b>"
@@ -142,7 +142,7 @@ class GlobalsManager extends _Core {
   }
 
   Future<bool> __storeExtraGlobalPropNames({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required ILoggedInUser loggedInUser,
   }) async {
     // Store on local device:
@@ -151,7 +151,7 @@ class GlobalsManager extends _Core {
     try {
       String value = __registeredExtraPropNames.toList().join(__separator);
 
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#LE000",
         shortDesc: "Store to the <b>HiveBox</b>:",
         parameters: {
@@ -167,7 +167,7 @@ class GlobalsManager extends _Core {
         error: e,
         stackTrace: stackTrace,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#LE020",
         shortDesc: "Store @key: <b>$key</b> error!",
         errorInfo: errorInfo,
@@ -200,20 +200,20 @@ class GlobalsManager extends _Core {
   }
 
   Future<void> _storeExtraGlobalProp({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required ILoggedInUser loggedInUser,
     required String propName,
     required dynamic value,
   }) async {
     __registeredExtraPropNames.add(propName);
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#LS000",
       shortDesc:
           "Registered extraPropNames: <b>${__registeredExtraPropNames.toList()}</b>.",
       lineFlowType: LineFlowType.debug,
     );
     bool success = await __storeExtraGlobalPropNames(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       loggedInUser: loggedInUser,
     );
     if (!success) {
@@ -228,7 +228,7 @@ class GlobalsManager extends _Core {
       loggedInUser: loggedInUser,
       propName: propName,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#LS100",
       shortDesc: "Store to the <b>HiveBox</b>:"
           "\n - @key: <b>$key</b>"
@@ -242,14 +242,14 @@ class GlobalsManager extends _Core {
   ///
   /// This method is called only once when FlutterArtist is started.
   ///
-  Future<void> _init(MasterFlowItem masterFlowItem) async {
-    masterFlowItem._addLineFlowItem(
+  Future<void> _init(ExecutionTrace executionTrace) async {
+    executionTrace._addTraceStep(
       codeId: "#GM000",
       shortDesc:
           "Open <b>HiveBox</b> to read user information that was previously saved locally.",
     );
     Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#GM020",
       shortDesc:
           "Reading <b>LoggedInUser JSON String</b> from <b>HiveBox</b>...",
@@ -263,7 +263,7 @@ class GlobalsManager extends _Core {
     await hiveBox.close();
 
     if (loggedInUserJson == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#GM040",
         shortDesc: "Read @loggedInUserJson: <b>NULL</b>.",
         parameters: {
@@ -272,7 +272,7 @@ class GlobalsManager extends _Core {
       );
       return;
     }
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#GM060",
       shortDesc: "Read @loggedInUserJson: <b>NOT NULL</b>.",
       parameters: {
@@ -282,7 +282,7 @@ class GlobalsManager extends _Core {
     );
     ILoggedInUser? loggedInUser;
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#GM080",
         shortDesc: "Calling ${debugObjHtml(loginLogoutAdapter)}.fromJson() "
             "to convert above <b>JSON String</b> to <b>${getTypeNameWithoutGenerics(ILoggedInUser)}</b> object.",
@@ -294,7 +294,7 @@ class GlobalsManager extends _Core {
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       loggedInUser = loginLogoutAdapter.fromJson(loggedInUserJson);
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#GM100",
         shortDesc: "Got value: ${debugObjHtml(loggedInUser)}.",
       );
@@ -303,7 +303,7 @@ class GlobalsManager extends _Core {
         error: e,
         stackTrace: stackTrace,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#GM120",
         shortDesc:
             "The ${debugObjHtml(loginLogoutAdapter)}.fromJson() method was called with an error.",
@@ -314,7 +314,7 @@ class GlobalsManager extends _Core {
     }
     //
     if (loggedInUser == null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#GM140",
         shortDesc:
             "The ${debugObjHtml(loginLogoutAdapter)}.fromJson() method returned null.",
@@ -331,7 +331,7 @@ class GlobalsManager extends _Core {
     // After load User from Local successfully.
     //
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#GM160",
         shortDesc:
             "Calling ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:",
@@ -345,13 +345,13 @@ class GlobalsManager extends _Core {
     } catch (e, stackTrace) {
       final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#GM240",
         shortDesc:
             "The ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
         errorInfo: errorInfo,
       );
-      masterFlowItem.printToConsole();
+      executionTrace.printToConsole();
       return;
     }
     //
@@ -360,7 +360,7 @@ class GlobalsManager extends _Core {
     IGlobalData? globalData;
     try {
       _loadGlobalDataCount++;
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#GM360",
         shortDesc:
             "Calling ${debugObjHtml(loginLogoutAdapter)}.loadGlobalData() method with parameters:",
@@ -381,18 +381,18 @@ class GlobalsManager extends _Core {
         error: e,
         stackTrace: stackTrace,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#GM420",
         shortDesc:
             "The ${debugObjHtml(loginLogoutAdapter)}.loadGlobalData() method was called with an error.",
         errorInfo: errorInfo,
       );
-      masterFlowItem.printToConsole();
+      executionTrace.printToConsole();
       return;
     }
     _globalData = globalData;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#GM640",
       shortDesc:
           "Reading <b>Extra Global Prop Names</b> from <b>Local</b>. For example: favorite 'locale' and 'theme'.",
@@ -402,7 +402,7 @@ class GlobalsManager extends _Core {
     );
     // Load Extra Global Prop Names that stored in Hive Database.
     await __readExtraGlobalProps(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       loggedInUser: loggedInUser,
     );
   }
@@ -424,7 +424,7 @@ class GlobalsManager extends _Core {
   /// Store LoggedInUser data to Local.
   ///
   Future<bool> _setOrUpdateLoggedInUserSafely({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required ILoggedInUser loggedInUser,
     required bool requiresTheSameUser,
   }) async {
@@ -440,7 +440,7 @@ class GlobalsManager extends _Core {
         errorDetails: errorDetails,
       );
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#22020",
         shortDesc: errorMessage,
         errorInfo: ErrorInfo(
@@ -455,7 +455,7 @@ class GlobalsManager extends _Core {
     // Store on local device:
     Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#22420",
         shortDesc: "Calling ${debugObjHtml(loginLogoutAdapter)}.toJson()... "
             "to convert ${debugObjHtml(loggedInUser)} to <b>JSON String</b>.",
@@ -467,7 +467,7 @@ class GlobalsManager extends _Core {
       );
       String json = loginLogoutAdapter.toJson(loggedInUser);
       //
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#22440",
         shortDesc: "Storing the above <b>JSON String</b> to <b>Local</b>.",
         parameters: {
@@ -493,7 +493,7 @@ class GlobalsManager extends _Core {
         stackTrace: stackTrace,
       );
       // This is warning.
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#22480",
         shortDesc: warningHtmlMessage,
         errorInfo: errorInfo,
@@ -507,12 +507,12 @@ class GlobalsManager extends _Core {
   /// IMPORTANT: This method never throw an error!
   ///
   Future<bool> _loadGlobalDataSafely({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required ILoggedInUser loggedInUser,
   }) async {
     try {
       // Load GlobalData:
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#34240",
         shortDesc:
             "Calling ${debugObjHtml(globalDataAdapter)}.loadGlobalData() to load global data for @loggedInUser:",
@@ -529,7 +529,7 @@ class GlobalsManager extends _Core {
         loggedInUser: loggedInUser,
       );
       _globalData = globalData;
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#34280",
         shortDesc: "Got @globalData: ${debugObjHtml(globalData)}",
         lineFlowType: LineFlowType.debug,
@@ -544,7 +544,7 @@ class GlobalsManager extends _Core {
         message: errorInfo.errorMessage,
         errorDetails: errorInfo.errorDetails,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#34300",
         shortDesc:
             "The ${debugObjHtml(globalDataAdapter)}.loadGlobalData() method called with an error!",

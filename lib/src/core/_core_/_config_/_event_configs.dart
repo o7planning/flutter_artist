@@ -58,7 +58,9 @@ class ExternalShelfEventBlockRecipient {
 class InternalShelfEventBlockRecipient {
   final bool blockLevelSelfReactionEnabled;
   final bool currentItemSelfReactionEnabled;
+  /// Will reQuery the Block.
   final List<Evt> blockLevelReactionOn;
+  /// Will refresh the current Item.
   final List<Evt> itemLevelReactionOn;
 
   const InternalShelfEventBlockRecipient({

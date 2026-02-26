@@ -131,11 +131,11 @@ class _FlutterArtist extends _Core {
   /// ```
   ///
   Future<bool> _setOrUpdateLoggedInUser({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required ILoggedInUser loggedInUser,
     required bool requiresTheSameUser,
   }) async {
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#21000",
       shortDesc: "Calling <b>globalsManager._setOrUpdateLoggedInUser()</b>.",
       parameters: {
@@ -146,7 +146,7 @@ class _FlutterArtist extends _Core {
     );
     // This method never throw error.
     return await globalsManager._setOrUpdateLoggedInUserSafely(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       loggedInUser: loggedInUser,
       requiresTheSameUser: requiresTheSameUser,
     );
@@ -157,7 +157,7 @@ class _FlutterArtist extends _Core {
   }
 
   Future<void> setOrUpdateLoggedInUser(ILoggedInUser loggedInUser) async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "setOrUpdateLoggedInUser",
       parameters: {
@@ -167,7 +167,7 @@ class _FlutterArtist extends _Core {
       isLibMethod: true,
     );
     await _setOrUpdateLoggedInUser(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       loggedInUser: loggedInUser,
       requiresTheSameUser: true,
     );
@@ -192,15 +192,15 @@ class _FlutterArtist extends _Core {
       throw DebugUtils.getFatalError(
           "${getClassName(__coreFeaturesAdapter)} already registered!");
     }
-    // IMPORTANT: Call this before using MasterFlowItem.
+    // IMPORTANT: Call this before using ExecutionTrace.
     codeFlowLogger = CodeFlowLogger(
         codeFlowRetentionPeriodInSeconds: codeFlowRetentionPeriodInSeconds);
 
-    final masterFlowItem =
+    final executionTrace =
         FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
     try {
       await __config(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
         storageStructure: storageStructure,
         debugOptions: debugOptions,
         consoleDebugOptions: consoleDebugOptions,
@@ -215,15 +215,15 @@ class _FlutterArtist extends _Core {
         codeFlowRetentionPeriodInSeconds: codeFlowRetentionPeriodInSeconds,
       );
     } catch (e, stackTrace) {
-      masterFlowItem.printToConsole();
+      executionTrace.printToConsole();
       print("\n\n");
-      __showStartupError(masterFlowItem: masterFlowItem, error: e);
+      __showStartupError(executionTrace: executionTrace, error: e);
       rethrow;
     }
   }
 
   Future<void> __config({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required StorageStructure storageStructure,
     required DebugOptions? debugOptions,
     required ConsoleDebugOptions? consoleDebugOptions,
@@ -239,7 +239,7 @@ class _FlutterArtist extends _Core {
   }) async {
     logger = Logger(maxStoredLogEntryCount: maxStoredLogEntryCount);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#S0000",
       shortDesc: "Begin FlutterArtist Config...\n"
           "Note: You see this debug information because the <b>FlutterArtist.config()</b> method is called in <b>main.dart</b>.",
@@ -265,7 +265,7 @@ class _FlutterArtist extends _Core {
       __consoleDebugOptions = consoleDebugOptions;
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#S0200",
       shortDesc: "Calling <b>storage._init()</b> with parameters:",
       parameters: {
@@ -276,13 +276,13 @@ class _FlutterArtist extends _Core {
     );
     // This method may throw error and stop app.
     storage._init(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       storageStructure: storageStructure,
     );
     //
     // Global Manager:
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#S0400",
       shortDesc: "Creating <b>globalsManager</b>..",
       tipDocument: TipDocument.globalData,
@@ -291,7 +291,7 @@ class _FlutterArtist extends _Core {
       loginLogoutAdapter: loginLogoutAdapter,
       globalDataAdapter: globalDataAdapter,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#S0500",
       shortDesc: "Calling <b>globalsManager._init()</b>...",
       note:
@@ -299,7 +299,7 @@ class _FlutterArtist extends _Core {
       lineFlowType: LineFlowType.nonControllableCalling,
       tipDocument: TipDocument.globalData,
     );
-    await globalsManager._init(masterFlowItem);
+    await globalsManager._init(executionTrace);
     //
     // Locale Manager:
     //
@@ -311,14 +311,14 @@ class _FlutterArtist extends _Core {
     final ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     //
     if (loggedInUser != null) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#S0540",
         shortDesc: "Automatic authentication successful!",
         parameters: {
           "loggedInUser": loggedInUser,
         },
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#S0560",
         shortDesc:
             "Calling <b>localeManager._readStoredLocale()</b> to read saved locale from <b>Local</b>...",
@@ -326,14 +326,14 @@ class _FlutterArtist extends _Core {
       );
       final Locale? locale = localeManager._readStoredLocale(
         loggedInUser: loggedInUser,
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#S0580",
         shortDesc: "Got stored @locale: ${debugObjHtml(locale)}.",
       );
       if (locale != null) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#S0620",
           shortDesc: "Calling <b>localeManager._updateLocale()</b>:",
           parameters: {
@@ -343,7 +343,7 @@ class _FlutterArtist extends _Core {
         );
         Future.delayed(Duration(seconds: 2), () async {
           await localeManager._updateLocale(
-            masterFlowItem: masterFlowItem,
+            executionTrace: executionTrace,
             locale: locale,
           );
         });
@@ -357,7 +357,7 @@ class _FlutterArtist extends _Core {
     this.notificationFetchPeriodInSeconds = notificationFetchPeriodInSeconds;
     __notificationEngine = _NotificationEngine(notificationAdapter);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#S0680",
       shortDesc: "Start notificationEngine.",
     );
@@ -520,9 +520,9 @@ class _FlutterArtist extends _Core {
   }
 
   void __showStartupError({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required Object error,
   }) {
-    runApp(_StartupErrorViewer(masterFlowItem: masterFlowItem, error: error));
+    runApp(_StartupErrorViewer(executionTrace: executionTrace, error: error));
   }
 }

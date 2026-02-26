@@ -3,22 +3,22 @@ part of '../core.dart';
 class CodeFlowLogger {
   final int codeFlowRetentionPeriodInSeconds;
 
-  final List<MasterFlowItem> _masterFlowItems = [];
+  final List<ExecutionTrace> _executionTraces = [];
 
-  List<MasterFlowItem> get masterFlowItems =>
-      List.unmodifiable(_masterFlowItems);
+  List<ExecutionTrace> get executionTraces =>
+      List.unmodifiable(_executionTraces);
 
   CodeFlowLogger({required this.codeFlowRetentionPeriodInSeconds});
 
   void clear() {
-    _masterFlowItems.clear();
+    _executionTraces.clear();
   }
 
   // ===========================================================================
   // ===========================================================================
 
-  void __addMasterFlowItem(MasterFlowItem masterFlowItem) {
-    _masterFlowItems.removeWhere((item) {
+  void __addExecutionTrace(ExecutionTrace executionTrace) {
+    _executionTraces.removeWhere((item) {
       DateTime now = DateTime.now();
       Duration duration = now.difference(item.createdDateTime);
       if (duration.inSeconds > codeFlowRetentionPeriodInSeconds) {
@@ -26,48 +26,48 @@ class CodeFlowLogger {
       }
       return false;
     });
-    _masterFlowItems.add(masterFlowItem);
+    _executionTraces.add(executionTrace);
   }
 
   // ===========================================================================
   // ===========================================================================
 
-  MasterFlowItem _addNaturalUIEvent({
+  ExecutionTrace _addNaturalUIEvent({
     required Object ownerClassInstance,
   }) {
-    final masterFlowItem = NaturalLoadMasterFlowItem(
+    final executionTrace = NaturalLoadExecutionTrace(
       ownerClassInstance: ownerClassInstance,
     );
-    __addMasterFlowItem(masterFlowItem);
-    return masterFlowItem;
+    __addExecutionTrace(executionTrace);
+    return executionTrace;
   }
 
   // ===========================================================================
   // ===========================================================================
 
-  MasterFlowItem _addStartup({
+  ExecutionTrace _addStartup({
     required Object ownerClassInstance,
   }) {
-    final masterFlowItem = StartupMasterFlowItem(
+    final executionTrace = StartupExecutionTrace(
       ownerClassInstance: ownerClassInstance,
     );
-    __addMasterFlowItem(masterFlowItem);
-    return masterFlowItem;
+    __addExecutionTrace(executionTrace);
+    return executionTrace;
   }
 
   // ===========================================================================
   // ===========================================================================
 
-  MasterFlowItem _addTaskCall({
+  ExecutionTrace _addTaskCall({
     required Object ownerClassInstance,
     required TaskType taskType,
   }) {
-    final masterFlowItem = TaskUnitMasterFlowItem(
+    final executionTrace = TaskUnitExecutionTrace(
       ownerClassInstance: ownerClassInstance,
       taskType: taskType,
     );
-    __addMasterFlowItem(masterFlowItem);
-    return masterFlowItem;
+    __addExecutionTrace(executionTrace);
+    return executionTrace;
   }
 
   // ===========================================================================
@@ -85,49 +85,49 @@ class CodeFlowLogger {
       return;
     }
     //
-    MasterFlowItem item;
+    ExecutionTrace item;
     try {
-      item = MethodCallMasterFlowItem._methodCallFromStackTrace(
+      item = MethodCallExecutionTrace._methodCallFromStackTrace(
         ownerClassInstance: ownerClassInstance,
         currentStackTrace: currentStackTrace,
         arguments: parameters,
         isLibMethod: false,
       );
     } catch (e) {
-      item = MethodCallMasterFlowItem._methodCall(
+      item = MethodCallExecutionTrace._methodCall(
         ownerClassInstance: ownerClassInstance,
         methodName: "Something Error",
         arguments: parameters,
         isLibMethod: false,
       );
     }
-    __addMasterFlowItem(item);
+    __addExecutionTrace(item);
   }
 
-  MasterFlowItem _addMethodCall({
+  ExecutionTrace _addMethodCall({
     required Object ownerClassInstance,
     required String methodName,
     required Map<String, dynamic>? parameters,
     required Function()? navigate,
     required bool isLibMethod,
   }) {
-    MasterFlowItem log = MethodCallMasterFlowItem._methodCall(
+    ExecutionTrace log = MethodCallExecutionTrace._methodCall(
       ownerClassInstance: ownerClassInstance,
       methodName: methodName,
       arguments: parameters,
       isLibMethod: isLibMethod,
     );
-    __addMasterFlowItem(log);
+    __addExecutionTrace(log);
     return log;
   }
 
-  MasterFlowItem _initTaskUnitForQueuedEvent({
+  ExecutionTrace _initTaskUnitForQueuedEvent({
     required Object ownerClassInstance,
   }) {
-    MasterFlowItem log = QueuedEventMasterFlowItem(
+    ExecutionTrace log = QueuedEventExecutionTrace(
       ownerClassInstance: ownerClassInstance,
     );
-    __addMasterFlowItem(log);
+    __addExecutionTrace(log);
     return log;
   }
 }

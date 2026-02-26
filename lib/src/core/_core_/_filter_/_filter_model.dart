@@ -285,14 +285,14 @@ abstract class FilterModel<
   @_TaskUnitMethodAnnotation()
   @_FilterModelLoadDataAnnotation()
   Future<bool> _unitLoadFilterData({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XFilterModel thisXFilterModel,
     required FilterModelDataLoadResult taskResult,
   }) async {
     __assertThisXFilterModel(thisXFilterModel);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#24000",
       shortDesc: "Begin ${taskType.asDebugTaskUnit()}.",
       lineFlowType: LineFlowType.debug,
@@ -305,7 +305,7 @@ abstract class FilterModel<
             thisXFilterModel.filterInput as FILTER_INPUT?;
         //
         _xFilterCriteria = await _startNewFilterActivity(
-          masterFlowItem: masterFlowItem,
+          executionTrace: executionTrace,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
         );
@@ -327,13 +327,13 @@ abstract class FilterModel<
   @_TaskUnitMethodAnnotation()
   @_FilterPanelChangeAnnotation()
   Future<bool> _unitFilterPanelChanged({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XFilterModel xFilterModel,
   }) async {
     __assertThisXFilterModel(xFilterModel);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#30000",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
@@ -344,7 +344,7 @@ abstract class FilterModel<
     //
     XFilterCriteria<FILTER_CRITERIA>? xFilterCriteria =
         await _startNewFilterActivity(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       activityType: FilterActivityType.updateFromFilterPanel,
       filterInput: null,
     );
@@ -543,7 +543,7 @@ abstract class FilterModel<
   @_ImportantMethodAnnotation(
       "Called after changing in FilterPanel or Querying in Block or Scalar.")
   Future<XFilterCriteria<FILTER_CRITERIA>?> _startNewFilterActivity({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required FILTER_INPUT? filterInput,
     required FilterActivityType activityType,
   }) async {
@@ -557,7 +557,7 @@ abstract class FilterModel<
         _formKey.currentState?.instantValue ?? {};
     //
     if (this is! _DefaultFilterModel) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#31020",
         shortDesc:
             "Calling <b>_filterModelStructure._setupTemporaryStateForNewActivity()</b>..",
@@ -591,7 +591,7 @@ abstract class FilterModel<
         showSnackBar: true,
         tipDocument: null,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#31030",
         shortDesc:
             "The ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() was called with an error.",
@@ -608,7 +608,7 @@ abstract class FilterModel<
     try {
       for (MultiOptTildeFilterCriterionModel multiOptCriterion
           in _filterModelStructure._rootOptCriterionModels) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#31040",
           shortDesc:
               "Calling ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method "
@@ -628,7 +628,7 @@ abstract class FilterModel<
         // May throw ApiError.
         //
         await _loadMultiOptCriterionDataCascade(
-          masterFlowItem: masterFlowItem,
+          executionTrace: executionTrace,
           filterInput: filterInput,
           parentMultiOptTildeCriterionValue: null,
           multiOptCriterion: multiOptCriterion,
@@ -679,7 +679,7 @@ abstract class FilterModel<
         showSnackBar: true,
         tipDocument: TipDocument.filterModelPerformLoadMultiOptCriterionXData,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#31080",
         shortDesc:
             "The ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() was called with an error.",
@@ -694,7 +694,7 @@ abstract class FilterModel<
     //
     if (filterInput != null) {
       try {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#31140",
           shortDesc:
               "Calling ${debugObjHtml(this)}.updatedSimpleCriterionValues() method "
@@ -736,7 +736,7 @@ abstract class FilterModel<
           tipDocument: null,
         );
         //
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#31200",
           shortDesc:
               "The ${debugObjHtml(this)}.updatedSimpleCriterionValues() method was called with an error.",
@@ -753,7 +753,7 @@ abstract class FilterModel<
       try {
         if (!__initiatedAtLeastOnce) {
           if (this is! _DefaultFilterModel) {
-            masterFlowItem._addLineFlowItem(
+            executionTrace._addTraceStep(
               codeId: "#31300",
               shortDesc:
                   "Calling ${debugObjHtml(this)}.specifyDefaultValuesForSimpleTildeCriteria() method "
@@ -788,7 +788,7 @@ abstract class FilterModel<
           showSnackBar: true,
           tipDocument: null,
         );
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#31380",
           shortDesc:
               "The ${debugObjHtml(this)}.specifyDefaultValuesForSimpleTildeCriteria() method was called with an error.",
@@ -803,7 +803,7 @@ abstract class FilterModel<
     //
     try {
       if (this is! _DefaultFilterModel) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#31420",
           shortDesc:
               "Calling ${debugObjHtml(this)}.createNewFilterCriteria() method "
@@ -843,7 +843,7 @@ abstract class FilterModel<
       );
       //
       if (this is! _DefaultFilterModel) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#31460",
           shortDesc:
               "Got an instance of ${debugObjHtml(newXFilterCriteria)} (Dart object).\n"
@@ -880,7 +880,7 @@ abstract class FilterModel<
       );
       //
       _xFilterCriteria = null;
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#31500",
         shortDesc:
             "The ${debugObjHtml(this)}.createNewFilterCriteria() method was called with an error!",
@@ -894,7 +894,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   Future<void> _loadMultiOptCriterionDataCascade({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required FILTER_INPUT? filterInput,
     required Object? parentMultiOptTildeCriterionValue,
     required MultiOptTildeFilterCriterionModel multiOptCriterion,
@@ -906,7 +906,7 @@ abstract class FilterModel<
     final String multiOptCriterionBaseName = multiOptCriterion.criterionName;
     final SelectionType selectionType = multiOptCriterion.selectionType;
 
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#82000",
       shortDesc:
           "Begin of ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method.",
@@ -949,7 +949,7 @@ abstract class FilterModel<
         itemOrItemList2: newSelectedValue,
       );
     }
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#82100",
       shortDesc: "Debug:",
       parameters: {
@@ -1012,7 +1012,7 @@ abstract class FilterModel<
       newLoaded = true;
       //
       try {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#82300",
           shortDesc:
               "Calling ${debugObjHtml(this)}.performLoadMultiOptTildeCriterionXData():",
@@ -1039,7 +1039,7 @@ abstract class FilterModel<
           multiOptTildeCriterionName: multiOptTildeCriterionName,
           selectionType: selectionType,
         );
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "#82400",
           shortDesc: "Debug. Return value: ",
           parameters: {
@@ -1085,7 +1085,7 @@ abstract class FilterModel<
             (newLoaded &&
                 multiOptCriterion._tempCurrentValue == null &&
                 defaultSettingPolicy == DefaultSettingPolicy.onEveryLoad)) {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#82460",
             shortDesc:
                 "Calling ${debugObjHtml(this)}.__specifyDefaultValueForMultiOptTildeCriterion():",
@@ -1106,7 +1106,7 @@ abstract class FilterModel<
             multiOptTildeCriterionXData: tempMultiOptCriterionXData,
             selectionType: selectionType,
           );
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "#82470",
             shortDesc: "Debug",
             parameters: {
@@ -1152,7 +1152,7 @@ abstract class FilterModel<
       candidateSelectedItems = null;
     }
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#82600",
       shortDesc:
           "Calling ${debugObjHtml(this)}._setTempMultiOptCriterionXData():",
@@ -1200,7 +1200,7 @@ abstract class FilterModel<
         _filterModelStructure._getTempCurrentCriterionValue(
       tildeCriterionName: multiOptTildeCriterionName,
     );
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#82800",
       shortDesc: "Debug:",
       parameters: {
@@ -1214,7 +1214,7 @@ abstract class FilterModel<
       for (MultiOptTildeFilterCriterionModel child
           in multiOptCriterion.children) {
         await _loadMultiOptCriterionDataCascade(
-          masterFlowItem: masterFlowItem,
+          executionTrace: executionTrace,
           filterInput: filterInput,
           parentMultiOptTildeCriterionValue: tempSelectedCriterionValue,
           multiOptCriterion: child,
@@ -1415,7 +1415,7 @@ abstract class FilterModel<
     if (__lockAddMoreQuery) {
       return false;
     }
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryAll",
       parameters: {
@@ -1426,7 +1426,7 @@ abstract class FilterModel<
     );
     // Test Cases: [48b] - query() & queryAll().
     return await __query(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       methodName: "queryAll",
       filterInput: filterInput,
       forceQueryAll: true,
@@ -1445,7 +1445,7 @@ abstract class FilterModel<
     if (__lockAddMoreQuery) {
       return false;
     }
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "query",
       parameters: {
@@ -1456,7 +1456,7 @@ abstract class FilterModel<
     );
     // Test Cases: [48b] - query() & queryAll().
     return await __query(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       methodName: "query",
       filterInput: filterInput,
       forceQueryAll: false,
@@ -1467,7 +1467,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   Future<bool> __query({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     FILTER_INPUT? filterInput,
     required String methodName,
     required bool forceQueryAll,
@@ -1475,7 +1475,7 @@ abstract class FilterModel<
     if (__lockAddMoreQuery) {
       return false;
     }
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#55000",
       shortDesc: "Creating <b>$_XShelfFilterModelQuery</b>..",
     );
@@ -1486,12 +1486,12 @@ abstract class FilterModel<
       forceQueryAll: forceQueryAll,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#55100",
       shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()..",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
-    xShelf._initQueryTaskUnits(masterFlowItem: masterFlowItem);
+    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
     //
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();

@@ -11,7 +11,7 @@ import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '_filter_model_debug_view.dart';
-import 'widgets/_criteria_view.dart';
+import 'widgets/_tilde_filter_criteria_view.dart';
 
 class FilterCriteriaStructureView extends StatefulWidget {
   final FilterModel filterModel;
@@ -93,7 +93,7 @@ class FilterCriteriaStructureViewState
         filterModel: _currentNode!.data,
       );
     } else if (_currentNode!.data is TildeFilterCriterionModel) {
-      return FilterCriterionView(
+      return TildeFilterCriterionView(
         criterion: _currentNode!.data,
       );
     } else {

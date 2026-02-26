@@ -28,23 +28,23 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   RefreshableWidgetType get type => RefreshableWidgetType.controlBar;
 
   @override
-  bool get isScalarRepresentative {
+  bool get provideScalarContext {
     return false;
   }
 
   @override
-  bool get isBlockRepresentative {
+  bool get provideBlockContext {
     return true;
   }
 
   @override
-  bool get isHookRepresentative {
+  bool get provideHookContext {
     return false;
   }
 
   // Test Cases: [74b], [74d].
   @override
-  bool get isItemRepresentative {
+  bool get provideItemContext {
     // if (widget.config.allowDeleteButton || widget.config.allowRefreshButton) {
     //   return true;
     // }
@@ -57,7 +57,7 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   @override
-  bool get isFormRepresentative {
+  bool get provideFormContext {
     if (widget.block.formModel != null) {
       if (widget.config.allowCreateButton || widget.config.allowSaveButton) {
         return true;

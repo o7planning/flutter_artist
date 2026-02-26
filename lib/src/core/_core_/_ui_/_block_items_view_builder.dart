@@ -4,14 +4,16 @@ class BlockItemsViewBuilder extends _RefreshableWidget {
   final Block block;
   final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
-  final bool itemRepresentative;
+  final bool provideItemContext;
+  final bool provideFormContext;
 
   const BlockItemsViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.block,
-    this.itemRepresentative = false,
+    this.provideItemContext = false,
+    this.provideFormContext = false,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     required this.build,
   });
@@ -33,27 +35,27 @@ class _BlockItemsViewBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.blockItemsView;
 
   @override
-  bool get isScalarRepresentative {
+  bool get provideScalarContext {
     return false;
   }
 
   @override
-  bool get isBlockRepresentative {
+  bool get provideBlockContext {
     return true;
   }
 
   @override
-  bool get isItemRepresentative {
-    return widget.itemRepresentative;
+  bool get provideItemContext {
+    return widget.provideItemContext;
   }
 
   @override
-  bool get isFormRepresentative {
-    return false;
+  bool get provideFormContext {
+    return widget.provideFormContext;
   }
 
   @override
-  bool get isHookRepresentative {
+  bool get provideHookContext {
     return false;
   }
 
