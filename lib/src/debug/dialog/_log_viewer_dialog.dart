@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/core/icon/icon_constants.dart';
-import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
@@ -8,10 +6,12 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/enums/_tip_document.dart';
+import '../../core/icon/icon_constants.dart';
 import '../../core/logger/_logger.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../section/_error_info_viewer.dart';
 import '../section/_warn_info_viewer.dart';
+import '_tip_document_viewer_dialog.dart';
 
 class LogViewerDialog extends StatefulWidget {
   final String title;

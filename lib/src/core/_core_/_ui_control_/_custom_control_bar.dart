@@ -1,5 +1,7 @@
 part of '../core.dart';
 
+@Deprecated(
+    "Not yet ready for use, not yet designed, may be continued in a few months.")
 class CustomControlBar extends _RefreshableWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
@@ -37,24 +39,24 @@ class _CustomControlBarState extends _RefreshableWidgetState<CustomControlBar> {
   RefreshableWidgetType get type => RefreshableWidgetType.customControlBar;
 
   @override
-  bool get isScalarRepresentative {
+  bool get provideScalarContext {
     return false;
   }
 
   @override
-  bool get isBlockRepresentative {
+  bool get provideBlockContext {
     // TODO:
     return false;
   }
 
   @override
-  bool get isItemRepresentative {
+  bool get provideItemContext {
     // TODO:
     return false;
   }
 
   @override
-  bool get isFormRepresentative {
+  bool get provideFormContext {
     return false;
   }
 
@@ -64,7 +66,7 @@ class _CustomControlBarState extends _RefreshableWidgetState<CustomControlBar> {
   }
 
   @override
-  bool get isHookRepresentative {
+  bool get provideHookContext {
     return false;
   }
 

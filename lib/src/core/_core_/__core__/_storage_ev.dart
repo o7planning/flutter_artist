@@ -10,14 +10,14 @@ class _StorageEventHandler {
 
   @_ImportantMethodAnnotation("Called after saving or deleting in the Block")
   void _emitEventFromBlockToOtherShelves({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required EventType eventType,
     required Block eventBlock,
     required String? itemIdString,
   }) {
     List<Event> events = eventBlock.config.emitExternalShelfEvents;
     if (events.isEmpty) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#25000",
         shortDesc:
             "${debugObjHtml(eventBlock)}.config.emitExternalShelfEvents is empty! --> This event will be ignored.",
@@ -27,7 +27,7 @@ class _StorageEventHandler {
     }
     // Appends TaskUnits to QUEUE (No need to call execute).
     ___emitEventFromBlockToOtherShelves(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       eventType: eventType,
       srcEventBlock: eventBlock,
       events: eventBlock.config.emitExternalShelfEvents,
@@ -40,7 +40,7 @@ class _StorageEventHandler {
 
   // PRIVATE METHOD.
   void ___emitEventFromBlockToOtherShelves({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required EventType eventType,
     required Block? srcEventBlock,
     required List<Event> events,
@@ -48,7 +48,7 @@ class _StorageEventHandler {
   }) {
     // Never run.
     if (events.isEmpty) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#26000",
         shortDesc: "Events is empty! --> This event will be ignored.",
         lineFlowType: LineFlowType.eventInfo,
@@ -57,7 +57,7 @@ class _StorageEventHandler {
     }
     Type itemDetailType = events.first.dataType;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#26100",
       shortDesc: "Creating <b>QueuedEvent</b> and add to the queue.",
       parameters: {
@@ -76,7 +76,7 @@ class _StorageEventHandler {
       itemId: itemIdString,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#26120",
       shortDesc:
           "The <b>${getTypeNameWithoutGenerics(QueuedEvent)}</b> is created, It will be executed later....",
@@ -92,13 +92,13 @@ class _StorageEventHandler {
   @_ImportantMethodAnnotation(
       "Called after executing QuickAction in the Block or Scalar")
   void _emitEventFromShelfToOtherShelves({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required EventType eventType,
     required Shelf? eventShelf,
     required List<Event> events,
   }) {
     if (events.isEmpty) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#60000",
         shortDesc: "Events is empty! --> This event will be ignored.",
         lineFlowType: LineFlowType.eventInfo,
@@ -107,7 +107,7 @@ class _StorageEventHandler {
     }
     Type itemDetailType = events.first.dataType;
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#60100",
       shortDesc:
           "Creating <b>${getTypeNameWithoutGenerics(QueuedEvent)}</b> and add to queue.",
@@ -126,7 +126,7 @@ class _StorageEventHandler {
       itemId: null,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#60200",
       shortDesc:
           "The <b>${getTypeNameWithoutGenerics(QueuedEvent)}</b> is created, It will be executed later....",

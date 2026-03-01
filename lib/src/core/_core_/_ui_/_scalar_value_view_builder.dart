@@ -31,27 +31,27 @@ class _ScalarValueViewBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.scalarValueView;
 
   @override
-  bool get isScalarRepresentative {
+  bool get provideScalarContext {
     return true;
   }
 
   @override
-  bool get isBlockRepresentative {
+  bool get provideBlockContext {
     return false;
   }
 
   @override
-  bool get isItemRepresentative {
+  bool get provideItemContext {
     return false;
   }
 
   @override
-  bool get isFormRepresentative {
+  bool get provideFormContext {
     return false;
   }
 
   @override
-  bool get isHookRepresentative {
+  bool get provideHookContext {
     return false;
   }
 

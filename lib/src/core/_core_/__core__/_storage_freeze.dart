@@ -37,7 +37,7 @@ class _StorageFreeze {
   // ***************************************************************************
 
   Future<void> __checkDialogAndResumeReactionIfCan({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
   }) async {
     if (__freezeType != null) {
       return;
@@ -51,7 +51,7 @@ class _StorageFreeze {
           Shelf reactionShelf = _storage._shelfMap[shelfName]!;
           if (reactionShelf._hasReactionBookmark()) {
             reactionShelf._addShelfExternalReactionTaskUnit(
-              masterFlowItem: masterFlowItem,
+              executionTrace: executionTrace,
             );
           }
         }
@@ -64,7 +64,7 @@ class _StorageFreeze {
   // ***************************************************************************
 
   Future<void> __checkStartOrEndDrawerAndResumeReactionIfCan({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
   }) async {
     if (__freezeType != null) {
       return;
@@ -78,7 +78,7 @@ class _StorageFreeze {
           Shelf reactionShelf = _storage._shelfMap[shelfName]!;
           if (reactionShelf._hasReactionBookmark()) {
             reactionShelf._addShelfExternalReactionTaskUnit(
-              masterFlowItem: masterFlowItem,
+              executionTrace: executionTrace,
             );
           }
         }
@@ -107,7 +107,7 @@ class _StorageFreeze {
   Future<FreezeByDialogResult<V?>>
       _openDialogThenFreezeQueuedEventsUntilClosed<V>(
           {required Future<V?> Function() openDialog,
-          required MasterFlowItem masterFlowItem}) async {
+          required ExecutionTrace executionTrace}) async {
     if (!__ensureFreezeTypeIsNull()) {
       return FreezeByDialogResult<V?>.fail();
     }
@@ -119,7 +119,7 @@ class _StorageFreeze {
     } finally {
       __freezeType = null;
       __checkDialogAndResumeReactionIfCan(
-        masterFlowItem: masterFlowItem,
+        executionTrace: executionTrace,
       );
     }
   }
@@ -132,7 +132,7 @@ class _StorageFreeze {
   ///
   Future<void> _openDrawerThenFreezeQueuedEventsUntilClosed(
     BuildContext context, {
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     bool showSuggestionIfNeed = true,
   }) async {
     if (!__ensureFreezeTypeIsNull()) {
@@ -162,7 +162,7 @@ class _StorageFreeze {
     );
     __freezeType = null;
     __checkStartOrEndDrawerAndResumeReactionIfCan(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
     );
   }
 
@@ -174,7 +174,7 @@ class _StorageFreeze {
   ///
   Future<void> _openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
     BuildContext context, {
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     bool showSuggestionIfNeed = true,
   }) async {
     if (!__ensureFreezeTypeIsNull()) {
@@ -204,7 +204,7 @@ class _StorageFreeze {
     );
     __freezeType = null;
     __checkStartOrEndDrawerAndResumeReactionIfCan(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
     );
   }
 

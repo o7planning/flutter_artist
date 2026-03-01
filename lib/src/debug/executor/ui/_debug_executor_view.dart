@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/debug/executor/ui/_debug_x_shelf_task_unit_queue_view.dart';
-
 import '../model/_debug_x_root_queue.dart';
+import '_debug_x_shelf_task_unit_queue_view.dart';
 
 class DebugExecutorView extends StatefulWidget {
   final DebugXRootQueue debugXShelfQueue;

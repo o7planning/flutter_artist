@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/core/icon/icon_constants.dart';
-import 'package:flutter_artist/src/debug/dialog/_tip_document_viewer_dialog.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
 
 import '../../core/_core_/core.dart';
 import '../../core/enums/_tip_document.dart';
+import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../shelf/_shelf_structure_graph_view.dart';
 import '../utils/_dialog_size.dart';
+import '_tip_document_viewer_dialog.dart';
 
 class DebugShelfStructureViewerDialog extends StatefulWidget {
   final Shelf shelf;

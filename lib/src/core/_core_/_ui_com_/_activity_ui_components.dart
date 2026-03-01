@@ -37,8 +37,8 @@ class _ActivityUiComponents extends _UiComponents {
   bool hasActiveUiComponentActivityRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    String? componentName = _findActiveUiComponentWithRepresentativeType(
-      representativeType: RepresentativeType.activityRepresentative,
+    String? componentName = _findActiveUiComponentWithContextKind(
+      contextKind: ContextKind.activity,
       alsoCheckChildren: alsoCheckChildren,
     );
     return componentName != null;
@@ -52,8 +52,8 @@ class _ActivityUiComponents extends _UiComponents {
   }
 
   String? findActiveUiComponent({bool alsoCheckChildren = false}) {
-    return _findActiveUiComponentWithRepresentativeType(
-      representativeType: null,
+    return _findActiveUiComponentWithContextKind(
+      contextKind: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
@@ -61,22 +61,22 @@ class _ActivityUiComponents extends _UiComponents {
   String? findActiveUiComponentActivityRepresentative({
     bool alsoCheckChildren = false,
   }) {
-    return _findActiveUiComponentWithRepresentativeType(
-      representativeType: RepresentativeType.activityRepresentative,
+    return _findActiveUiComponentWithContextKind(
+      contextKind: ContextKind.activity,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? _findActiveUiComponentWithRepresentativeType({
-    required RepresentativeType? representativeType,
+  String? _findActiveUiComponentWithContextKind({
+    required ContextKind? contextKind,
     bool alsoCheckChildren = false,
   }) {
     bool has = false;
     //
     // Activity Base View:
     //
-    String? componentName = findActiveActivityBaseViewWithRepresentativeType(
-      representativeType: representativeType,
+    String? componentName = findActiveActivityBaseViewWithContextKind(
+      contextKind: contextKind,
       alsoCheckChildren: false,
     );
     if (componentName != null) {
@@ -96,14 +96,14 @@ class _ActivityUiComponents extends _UiComponents {
   }
 
   String? findActiveActivityBaseView({required bool alsoCheckChildren}) {
-    return findActiveActivityBaseViewWithRepresentativeType(
-      representativeType: null,
+    return findActiveActivityBaseViewWithContextKind(
+      contextKind: null,
       alsoCheckChildren: alsoCheckChildren,
     );
   }
 
-  String? findActiveActivityBaseViewWithRepresentativeType({
-    required RepresentativeType? representativeType,
+  String? findActiveActivityBaseViewWithContextKind({
+    required ContextKind? contextKind,
     required bool alsoCheckChildren,
   }) {
     var map = {...__activityBaseViewWidgetStates};
@@ -115,7 +115,7 @@ class _ActivityUiComponents extends _UiComponents {
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isRepresentativeType(representativeType);
+      bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return getClassNameWithoutGenerics(widgetState.widget);
       }

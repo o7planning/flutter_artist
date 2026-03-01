@@ -11,12 +11,14 @@ abstract class BlockItemsView<
         FormRelatedData>> extends StatelessWidget {
   final BLOCK block;
   final QuickSuggestionMode quickSuggestionMode;
-  final bool itemRepresentative;
+  final bool provideItemContext;
+  final bool provideFormContext;
 
   const BlockItemsView({
     required this.block,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
-    this.itemRepresentative = false,
+    this.provideItemContext = false,
+    this.provideFormContext = false,
     super.key,
   });
 
@@ -27,7 +29,7 @@ abstract class BlockItemsView<
       ownerClassInstance: this,
       description: '',
       block: block,
-      itemRepresentative: itemRepresentative,
+      provideItemContext: provideItemContext,
       quickSuggestionMode: quickSuggestionMode,
       build: () {
         return buildContent(context);

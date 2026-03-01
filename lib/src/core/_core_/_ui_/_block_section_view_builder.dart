@@ -2,7 +2,8 @@ part of '../core.dart';
 
 class BlockSectionViewBuilder extends _RefreshableWidget {
   final Block block;
-  final bool itemRepresentative;
+  final bool provideItemContext;
+  final bool provideFormContext;
   final Widget Function() build;
 
   const BlockSectionViewBuilder({
@@ -10,7 +11,8 @@ class BlockSectionViewBuilder extends _RefreshableWidget {
     required super.ownerClassInstance,
     required super.description,
     required this.block,
-    required this.itemRepresentative,
+    required this.provideItemContext,
+    this.provideFormContext = false,
     required this.build,
   });
 
@@ -31,27 +33,27 @@ class _BlockSectionViewBuilderState
   RefreshableWidgetType get type => RefreshableWidgetType.blockFragment;
 
   @override
-  bool get isScalarRepresentative {
+  bool get provideScalarContext {
     return false;
   }
 
   @override
-  bool get isBlockRepresentative {
+  bool get provideBlockContext {
     return true;
   }
 
   @override
-  bool get isItemRepresentative {
-    return widget.itemRepresentative;
+  bool get provideItemContext {
+    return widget.provideItemContext;
   }
 
   @override
-  bool get isFormRepresentative {
-    return false;
+  bool get provideFormContext {
+    return widget.provideFormContext;
   }
 
   @override
-  bool get isHookRepresentative {
+  bool get provideHookContext {
     return false;
   }
 

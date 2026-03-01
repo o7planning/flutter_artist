@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/debug/widgets/_html_info_view.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
@@ -10,6 +9,7 @@ import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../../core/widgets/_small_text_button.dart';
 import '../dialog/_error_viewer_dialog.dart';
+import '../widgets/_html_info_view.dart';
 
 class FormModelDebugView extends StatelessWidget {
   final FormModel formModel;

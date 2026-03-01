@@ -9,12 +9,14 @@ abstract class BlockSectionView<
         FilterCriteria,
         FormInput,
         FormRelatedData>> extends StatelessWidget {
-  final bool itemRepresentative;
+  final bool provideItemContext;
+  final bool provideFormContext;
   final BLOCK block;
 
   const BlockSectionView({
     required this.block,
-    this.itemRepresentative = true,
+    this.provideItemContext = true,
+    this.provideFormContext = false,
     super.key,
   });
 
@@ -25,7 +27,8 @@ abstract class BlockSectionView<
       ownerClassInstance: this,
       description: '',
       block: block,
-      itemRepresentative: itemRepresentative,
+      provideItemContext: provideItemContext,
+      provideFormContext: provideFormContext,
       build: () {
         return buildContent(context);
       },

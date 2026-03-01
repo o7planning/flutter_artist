@@ -266,17 +266,17 @@ class XBlock<
     return _recentLoadedItemMap[itemId];
   }
 
-  void _printParameters({required bool hasBlockRepresentative}) {
+  void _printParameters({required bool provideBlockContext}) {
     //
   }
 
   void printInfoCascade() {
-    bool hasBlockRepresentative =
+    bool provideBlockContext =
         block.ui.hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: false,
     );
     String msg = "${getClassName(this)}(${getClassName(block)}"
-        " - HasBlockRepresentative: $hasBlockRepresentative"
+        " - provideBlockContext: $provideBlockContext"
         " - QryHint: $__qryHint - RefreshItem: $__forceReloadCurrItem";
     print(msg);
     for (XBlock xBlock in childXBlocks) {

@@ -10,9 +10,11 @@ abstract class BlockItemDetailView<
         FormInput,
         FormRelatedData>> extends StatelessWidget {
   final BLOCK block;
+  final bool provideFormContext;
 
   const BlockItemDetailView({
     required this.block,
+    this.provideFormContext = false,
     super.key,
   });
 
@@ -23,6 +25,7 @@ abstract class BlockItemDetailView<
       ownerClassInstance: this,
       description: '',
       block: block,
+      provideFormContext: provideFormContext,
       build: () {
         return buildContent(context);
       },

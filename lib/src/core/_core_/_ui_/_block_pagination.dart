@@ -23,27 +23,27 @@ class _BlockPaginationState extends _RefreshableWidgetState<BlockPagination> {
   RefreshableWidgetType get type => RefreshableWidgetType.pagination;
 
   @override
-  bool get isScalarRepresentative {
+  bool get provideScalarContext {
     return false;
   }
 
   @override
-  bool get isBlockRepresentative {
+  bool get provideBlockContext {
     return true;
   }
 
   @override
-  bool get isItemRepresentative {
+  bool get provideItemContext {
     return false;
   }
 
   @override
-  bool get isFormRepresentative {
+  bool get provideFormContext {
     return false;
   }
 
   @override
-  bool get isHookRepresentative {
+  bool get provideHookContext {
     return false;
   }
 

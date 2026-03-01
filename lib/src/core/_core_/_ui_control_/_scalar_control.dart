@@ -1,5 +1,7 @@
 part of '../core.dart';
 
+@Deprecated(
+    "Not yet ready for use, not yet designed, may be continued in a few months.")
 abstract class ScalarControl extends _RefreshableWidget {
   final Scalar scalar;
   final StackTrace? currentStackTrace;
@@ -34,27 +36,27 @@ class _ControlButtonState extends _RefreshableWidgetState<ScalarControl> {
   RefreshableWidgetType get type => RefreshableWidgetType.scalarControlButton;
 
   @override
-  bool get isScalarRepresentative {
+  bool get provideScalarContext {
     return true;
   }
 
   @override
-  bool get isBlockRepresentative {
+  bool get provideBlockContext {
     return false;
   }
 
   @override
-  bool get isItemRepresentative {
+  bool get provideItemContext {
     return false;
   }
 
   @override
-  bool get isFormRepresentative {
+  bool get provideFormContext {
     return false;
   }
 
   @override
-  bool get isHookRepresentative {
+  bool get provideHookContext {
     return false;
   }
 

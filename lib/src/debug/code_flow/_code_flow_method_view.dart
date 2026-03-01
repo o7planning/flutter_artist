@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../../core/_core_/core.dart';
 
 class CodeFlowMethodView extends StatelessWidget {
-  final MethodCallMasterFlowItem masterFlowItem;
+  final MethodCallExecutionTrace executionTrace;
 
   const CodeFlowMethodView({
     super.key,
-    required this.masterFlowItem,
+    required this.executionTrace,
   });
 
   @override
@@ -21,16 +21,16 @@ class CodeFlowMethodView extends StatelessWidget {
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 5),
       leading: Icon(
-        masterFlowItem.titleIconData(),
-        color: masterFlowItem.titleIconColor(),
+        executionTrace.titleIconData(),
+        color: executionTrace.titleIconColor(),
         size: 18,
       ),
       title: SelectableText(
-        masterFlowItem.getTitle(),
+        executionTrace.getTitle(),
         style: _titleStyle(),
       ),
       subtitle: SelectableText(
-        masterFlowItem.getSubtitle(),
+        executionTrace.getSubtitle(),
         style: _subtitleStyle(),
       ),
     );

@@ -3,6 +3,8 @@ part of '../core.dart';
 class BlockConfig {
   final bool preventUnsavedChangesLoss;
   final ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy;
+
+  // IdentityBlockConfig
   final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy;
   final BlockHiddenAction onHideAction;
 

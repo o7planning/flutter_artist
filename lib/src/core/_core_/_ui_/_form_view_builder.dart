@@ -33,27 +33,27 @@ class _FormViewBuilderState extends _RefreshableWidgetState<FormViewBuilder> {
   RefreshableWidgetType get type => RefreshableWidgetType.form;
 
   @override
-  bool get isScalarRepresentative {
+  bool get provideScalarContext {
     return false;
   }
 
   @override
-  bool get isBlockRepresentative {
+  bool get provideBlockContext {
     return true;
   }
 
   @override
-  bool get isItemRepresentative {
+  bool get provideItemContext {
     return true;
   }
 
   @override
-  bool get isFormRepresentative {
+  bool get provideFormContext {
     return true;
   }
 
   @override
-  bool get isHookRepresentative {
+  bool get provideHookContext {
     return false;
   }
 

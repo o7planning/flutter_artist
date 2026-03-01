@@ -1,14 +1,14 @@
 part of '../core.dart';
 
 _ForceReloadItemState _calculateBlockState({
-  required final MasterFlowItem masterFlowItem,
+  required final ExecutionTrace executionTrace,
   required final XBlock thisXBlock,
   required final Object? inputCandidateCurrItem,
   required final Object candidateCurrItem,
   required final bool inputForceReloadItem,
   required final bool hasBlockXRepresentative,
   required final bool hasItemXRepresentative,
-  required final bool hasFormRepresentative,
+  required final bool provideFormContext,
   required final ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy,
   required final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy,
   required final CurrentItemSettingType currentItemSettingType,
@@ -25,7 +25,7 @@ _ForceReloadItemState _calculateBlockState({
   bool forceReloadItem = inputForceReloadItem;
   bool forceReloadForm = false;
   bool hasItemXRepresentativeExt = hasItemXRepresentative;
-  bool hasFormRepresentativeExt = hasFormRepresentative;
+  bool provideFormContextExt = provideFormContext;
 
   if (thisXBlock.xFormModel != null &&
       thisXBlock.xFormModel!.forceTypeForForm == ForceType.force) {
@@ -47,7 +47,7 @@ _ForceReloadItemState _calculateBlockState({
       hasItemXRepresentativeExt = true;
     case CurrentItemSettingType.setAnItemAsCurrentThenLoadForm:
       hasItemXRepresentativeExt = true;
-      hasFormRepresentativeExt = true;
+      provideFormContextExt = true;
     case CurrentItemSettingType.refresh:
       hasItemXRepresentativeExt = true;
       forceReloadItem = true;
@@ -80,25 +80,25 @@ _ForceReloadItemState _calculateBlockState({
   //
   // Start:
   //
-  masterFlowItem._addLineFlowItem(
+  executionTrace._addTraceStep(
     codeId: "A11000",
     shortDesc: "ITM 1: ITEM == ITEM_DETAIL",
   );
   // hasItemXRepresentativeExt
   if (hasItemXRepresentativeExt) {
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "A12000",
       shortDesc: "ITM 1.1: @hasItemXRepresentativeExt: <b>true</b>",
     );
     // currentItemIdChanged
     if (currentItemIdChanged) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "A13000",
         shortDesc: "ITM 1.1.1: @currentItemIdChanged: <b>true</b>",
       );
       // isCandidateCurrentItemInNewQueriedList
       if (isCandidateCurrentItemInNewQueriedList) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "A14000",
           shortDesc:
               "ITM 1.1.1.1: @isCandidateCurrentItemInNewQueriedList: <b>true</b>",
@@ -111,7 +111,7 @@ _ForceReloadItemState _calculateBlockState({
           retForceReloadItem = !isSpecialUniformITEM;
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A14100",
             shortDesc: "ITM 1.1.1.1.1 Calculated:",
             parameters: {
@@ -121,13 +121,13 @@ _ForceReloadItemState _calculateBlockState({
             },
           );
         }
-        // formModel != null && !hasFormRepresentativeExt
-        else if (!hasFormRepresentativeExt) {
+        // formModel != null && !provideFormContextExt
+        else if (!provideFormContextExt) {
           // (1)(2)(3) --> SPECIAL!! (****)
           retForceReloadItem = !isSpecialUniformITEM; // Only If (1)&&(3)
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A14200",
             shortDesc: "ITM 1.1.1.1.2 Calculated:",
             parameters: {
@@ -140,14 +140,14 @@ _ForceReloadItemState _calculateBlockState({
         // ON hasItemXRepresentativeExt. (1)
         // ON currentItemIdChanged. (2)
         // ON isCandidateCurrentItemInNewQueriedList. (3)
-        // formModel != null && hasFormRepresentativeExt
+        // formModel != null && provideFormContextExt
         else {
           // (1)(2)(3) --> SPECIAL!! (****)
           retForceReloadItem = !isSpecialUniformITEM; // Only If (1)&&(3)
-          // currentItemIdChanged && hasFormRepresentativeExt
+          // currentItemIdChanged && provideFormContextExt
           retForceReloadForm = true;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A14300",
             shortDesc: "ITM 1.1.1.1.3 Calculated:",
             parameters: {
@@ -160,7 +160,7 @@ _ForceReloadItemState _calculateBlockState({
       }
       // !isCandidateCurrentItemInNewQueriedList
       else {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "A17000",
           shortDesc:
               "ITM 1.1.1.2: @isCandidateCurrentItemInNewQueriedList: <b>false</b>",
@@ -172,7 +172,7 @@ _ForceReloadItemState _calculateBlockState({
           retForceReloadItem = true; // (2*)
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A17100",
             shortDesc: "ITM 1.1.1.2.1 Calculated:",
             parameters: {
@@ -182,12 +182,12 @@ _ForceReloadItemState _calculateBlockState({
             },
           );
         }
-        // formModel != null && !hasFormRepresentativeExt
-        else if (!hasFormRepresentativeExt) {
+        // formModel != null && !provideFormContextExt
+        else if (!provideFormContextExt) {
           retForceReloadItem = true; // (2*)
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A17200",
             shortDesc: "ITM 1.1.1.2.2 Calculated:",
             parameters: {
@@ -197,13 +197,13 @@ _ForceReloadItemState _calculateBlockState({
             },
           );
         }
-        // formModel != null && hasFormRepresentativeExt
+        // formModel != null && provideFormContextExt
         else {
           retForceReloadItem = true; // (2*)
-          // retForceReloadItem && hasFormRepresentativeExt
+          // retForceReloadItem && provideFormContextExt
           retForceReloadForm = true;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A17300",
             shortDesc: "ITM 1.1.1.2.3 Calculated:",
             parameters: {
@@ -217,13 +217,13 @@ _ForceReloadItemState _calculateBlockState({
     }
     // !currentItemIdChanged
     else {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "A21000",
         shortDesc: "ITM 1.1.2: @currentItemIdChanged: $currentItemIdChanged",
       );
       // isCandidateCurrentItemInNewQueriedList
       if (isCandidateCurrentItemInNewQueriedList) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "A22000",
           shortDesc:
               "ITM 1.1.2.1: @isCandidateCurrentItemInNewQueriedList: <b>true</b>",
@@ -236,7 +236,7 @@ _ForceReloadItemState _calculateBlockState({
           retForceReloadItem = !isSpecialUniformITEM; // Only If (1)&&(3)
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A22100",
             shortDesc: "ITM 1.1.2.1.1 Calculated:",
             parameters: {
@@ -246,13 +246,13 @@ _ForceReloadItemState _calculateBlockState({
             },
           );
         }
-        // formModel != null && !hasFormRepresentativeExt
-        else if (!hasFormRepresentativeExt) {
+        // formModel != null && !provideFormContextExt
+        else if (!provideFormContextExt) {
           // (1)(2*)(3*) --> SPECIAL!! (****)
           retForceReloadItem = !isSpecialUniformITEM; // Only If (1)&&(3)
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A22200",
             shortDesc: "ITM 1.1.2.1.2 Calculated:",
             parameters: {
@@ -265,14 +265,14 @@ _ForceReloadItemState _calculateBlockState({
         // ON hasItemXRepresentativeExt. (1)
         // ON !currentItemIdChanged. (2) --> currentItemReady before!
         // ON isCandidateCurrentItemInNewQueriedList. (3)
-        // formModel != null && hasFormRepresentativeExt
+        // formModel != null && provideFormContextExt
         else {
           // (1)(2*)(3*) --> SPECIAL!! (****)
           retForceReloadItem = !isSpecialUniformITEM; // Only If (1)&&(3)
-          // isCandidateCurrentItemInNewQueriedList && hasFormRepresentativeExt
+          // isCandidateCurrentItemInNewQueriedList && provideFormContextExt
           retForceReloadForm = true;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A22300",
             shortDesc: "ITM 1.1.2.1.3 Calculated:",
             parameters: {
@@ -285,7 +285,7 @@ _ForceReloadItemState _calculateBlockState({
       }
       // !isCandidateCurrentItemInNewQueriedList
       else {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "A25000",
           shortDesc:
               "ITM 1.1.2.2: @isCandidateCurrentItemInNewQueriedList: <b>false</b>",
@@ -298,7 +298,7 @@ _ForceReloadItemState _calculateBlockState({
           retForceReloadItem = false || forceReloadItem;
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A25100",
             shortDesc: "ITM 1.1.2.2.1 Calculated:",
             parameters: {
@@ -311,13 +311,13 @@ _ForceReloadItemState _calculateBlockState({
         // ON hasItemXRepresentativeExt. (1)
         // ON !currentItemIdChanged. (2) --> currentItemReady before!
         // ON !isCandidateCurrentItemInNewQueriedList. (3)
-        // formModel != null && !hasFormRepresentativeExt
-        else if (!hasFormRepresentativeExt) {
+        // formModel != null && !provideFormContextExt
+        else if (!provideFormContextExt) {
           // (2*)(3*)
           retForceReloadItem = false || forceReloadItem;
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A25200",
             shortDesc: "ITM 1.1.2.2.2 Calculated:",
             parameters: {
@@ -330,19 +330,19 @@ _ForceReloadItemState _calculateBlockState({
         // ON hasItemXRepresentativeExt. (1)
         // ON !currentItemIdChanged. (2) --> currentItemReady before!
         // ON !isCandidateCurrentItemInNewQueriedList. (3)
-        // formModel != null && hasFormRepresentativeExt
+        // formModel != null && provideFormContextExt
         else {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A25300",
             shortDesc: "ITM 1.1.2.2.3",
           );
           if (!__isReady(formModel!)) {
-            // hasFormRepresentativeExt && !formReady
+            // provideFormContextExt && !formReady
             retForceReloadForm = true;
             // retForceReloadForm && (2)
             retForceReloadItem = true;
             //
-            masterFlowItem._addLineFlowItem(
+            executionTrace._addTraceStep(
               codeId: "A25410",
               shortDesc: "ITM 1.1.2.2.3.1 Calculated:",
               parameters: {
@@ -355,16 +355,16 @@ _ForceReloadItemState _calculateBlockState({
           // ON hasItemXRepresentativeExt. (1)
           // ON !currentItemIdChanged. (2) --> currentItemReady before!
           // ON !isCandidateCurrentItemInNewQueriedList. (3)
-          // ON hasFormRepresentativeExt
+          // ON provideFormContextExt
           // ON formModel != null
           // formReady
           else {
             // (2*)(3*)
             retForceReloadItem = false || forceReloadItem;
-            // formReady && hasFormRepresentativeExt
+            // formReady && provideFormContextExt
             retForceReloadForm = false || retForceReloadItem;
             //
-            masterFlowItem._addLineFlowItem(
+            executionTrace._addTraceStep(
               codeId: "A25420",
               shortDesc: "ITM 1.1.2.2.3.2 Calculated:",
               parameters: {
@@ -380,19 +380,19 @@ _ForceReloadItemState _calculateBlockState({
   }
   // !hasItemXRepresentativeExt
   else {
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "A28000",
       shortDesc: "ITM 1.2: @hasItemXRepresentativeExt: <b>false</b>",
     );
     // currentItemIdChanged
     if (currentItemIdChanged) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "A29000",
         shortDesc: "ITM 1.2.1: @currentItemIdChanged: $currentItemIdChanged",
       );
       // isCandidateCurrentItemInNewQueriedList
       if (isCandidateCurrentItemInNewQueriedList) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "A31000",
           shortDesc:
               "ITM 1.2.1.1: @isCandidateCurrentItemInNewQueriedList: <b>true</b>",
@@ -405,7 +405,7 @@ _ForceReloadItemState _calculateBlockState({
           retForceReloadItem = false || forceReloadItem;
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A31100",
             shortDesc: "ITM 1.2.1.1.1 Calculated:",
             parameters: {
@@ -415,13 +415,13 @@ _ForceReloadItemState _calculateBlockState({
             },
           );
         }
-        // formModel != null && !hasFormRepresentativeExt
-        else if (!hasFormRepresentativeExt) {
+        // formModel != null && !provideFormContextExt
+        else if (!provideFormContextExt) {
           // (1*)
           retForceReloadItem = false || forceReloadItem;
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A31200",
             shortDesc: "ITM 1.2.1.1.2 Calculated:",
             parameters: {
@@ -431,19 +431,19 @@ _ForceReloadItemState _calculateBlockState({
             },
           );
         }
-        // formModel != null && hasFormRepresentativeExt
+        // formModel != null && provideFormContextExt
         else {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A31300",
             shortDesc: "ITM 1.2.1.1.3",
           );
           if (!__isReady(formModel!)) {
-            // hasFormRepresentativeExt && !formReady
+            // provideFormContextExt && !formReady
             retForceReloadForm = true;
             // retForceReloadForm && (2-currentItemIdChanged)
             retForceReloadItem = true;
             //
-            masterFlowItem._addLineFlowItem(
+            executionTrace._addTraceStep(
               codeId: "A31410",
               shortDesc: "ITM 1.2.1.1.3.1 Calculated:",
               parameters: {
@@ -455,12 +455,12 @@ _ForceReloadItemState _calculateBlockState({
           }
           // formReady
           else {
-            // formReady && hasFormRepresentativeExt && (2-currentItemIdChanged)
+            // formReady && provideFormContextExt && (2-currentItemIdChanged)
             retForceReloadForm = true;
             // retForceReloadForm && (2-currentItemIdChanged)
             retForceReloadItem = true;
             //
-            masterFlowItem._addLineFlowItem(
+            executionTrace._addTraceStep(
               codeId: "A31420",
               shortDesc: "ITM 1.2.1.1.3.2 Calculated:",
               parameters: {
@@ -474,7 +474,7 @@ _ForceReloadItemState _calculateBlockState({
       }
       // !isCandidateCurrentItemInNewQueriedList
       else {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "A34000",
           shortDesc:
               "ITM 1.2.1.2: @isCandidateCurrentItemInNewQueriedList: <b>false</b>",
@@ -487,7 +487,7 @@ _ForceReloadItemState _calculateBlockState({
           retForceReloadItem = false || forceReloadItem;
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A34100",
             shortDesc: "ITM 1.2.1.2.1 Calculated:",
             parameters: {
@@ -497,13 +497,13 @@ _ForceReloadItemState _calculateBlockState({
             },
           );
         }
-        // formModel != null && !hasFormRepresentativeExt
-        else if (!hasFormRepresentativeExt) {
+        // formModel != null && !provideFormContextExt
+        else if (!provideFormContextExt) {
           // (1*)
           retForceReloadItem = false || forceReloadItem;
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A34200",
             shortDesc: "ITM 1.2.1.2.2 Calculated:",
             parameters: {
@@ -513,20 +513,20 @@ _ForceReloadItemState _calculateBlockState({
             },
           );
         }
-        // formModel != null && hasFormRepresentativeExt
+        // formModel != null && provideFormContextExt
         else {
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A34300",
             shortDesc: "ITM 1.2.1.2.3",
           );
           if (!__isReady(formModel!)) {
-            // hasFormRepresentativeExt && !formReady
+            // provideFormContextExt && !formReady
             retForceReloadForm = true;
             // retForceReloadForm && (2-currentItemIdChanged)
             retForceReloadItem = true;
             //
-            masterFlowItem._addLineFlowItem(
+            executionTrace._addTraceStep(
               codeId: "A34410",
               shortDesc: "ITM 1.2.1.2.3.1 Calculated:",
               parameters: {
@@ -538,12 +538,12 @@ _ForceReloadItemState _calculateBlockState({
           }
           // formReady
           else {
-            // formReady && hasFormRepresentativeExt && (2-currentItemIdChanged)
+            // formReady && provideFormContextExt && (2-currentItemIdChanged)
             retForceReloadForm = true;
             // retForceReloadForm && (2-currentItemIdChanged)
             retForceReloadItem = true;
             //
-            masterFlowItem._addLineFlowItem(
+            executionTrace._addTraceStep(
               codeId: "A34420",
               shortDesc: "ITM 1.2.1.2.3.2 Calculated:",
               parameters: {
@@ -558,13 +558,13 @@ _ForceReloadItemState _calculateBlockState({
     }
     // !currentItemIdChanged
     else {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "A37000",
         shortDesc: "ITM 1.2.2: @currentItemIdChanged: $currentItemIdChanged",
       );
       // isCandidateCurrentItemInNewQueriedList
       if (isCandidateCurrentItemInNewQueriedList) {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "A38000",
           shortDesc:
               "ITM 1.2.2.1: @isCandidateCurrentItemInNewQueriedList: <b>true</b>",
@@ -577,7 +577,7 @@ _ForceReloadItemState _calculateBlockState({
           retForceReloadItem = false || forceReloadItem;
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A38100",
             shortDesc: "ITM 1.2.2.1.1 Calculated:",
             parameters: {
@@ -587,13 +587,13 @@ _ForceReloadItemState _calculateBlockState({
             },
           );
         }
-        // formModel != null && !hasFormRepresentativeExt
-        else if (!hasFormRepresentativeExt) {
+        // formModel != null && !provideFormContextExt
+        else if (!provideFormContextExt) {
           // (1*)
           retForceReloadItem = false || forceReloadItem;
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A38200",
             shortDesc: "ITM 1.2.2.1.2 Calculated:",
             parameters: {
@@ -603,19 +603,19 @@ _ForceReloadItemState _calculateBlockState({
             },
           );
         }
-        // formModel != null && hasFormRepresentativeExt
+        // formModel != null && provideFormContextExt
         else {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A38300",
             shortDesc: "ITM 1.2.2.1.3",
           );
           if (!__isReady(formModel!)) {
-            // hasFormRepresentativeExt && !formReady
+            // provideFormContextExt && !formReady
             retForceReloadForm = true;
             // retForceReloadForm && (3-isCandidateCurrentItemInNewQueriedList)
             retForceReloadItem = true;
             //
-            masterFlowItem._addLineFlowItem(
+            executionTrace._addTraceStep(
               codeId: "A38410",
               shortDesc: "ITM 1.2.2.1.3.1 Calculated:",
               parameters: {
@@ -627,12 +627,12 @@ _ForceReloadItemState _calculateBlockState({
           }
           // formReady
           else {
-            // formReady && hasFormRepresentativeExt && (3-isCandidateCurrentItemInNewQueriedList)
+            // formReady && provideFormContextExt && (3-isCandidateCurrentItemInNewQueriedList)
             retForceReloadForm = true;
             // retForceReloadForm && (3-isCandidateCurrentItemInNewQueriedList)
             retForceReloadItem = true;
             //
-            masterFlowItem._addLineFlowItem(
+            executionTrace._addTraceStep(
               codeId: "A38420",
               shortDesc: "ITM 1.2.2.1.3.2 Calculated:",
               parameters: {
@@ -646,7 +646,7 @@ _ForceReloadItemState _calculateBlockState({
       }
       // !isCandidateCurrentItemInNewQueriedList
       else {
-        masterFlowItem._addLineFlowItem(
+        executionTrace._addTraceStep(
           codeId: "A42000",
           shortDesc:
               "ITM 1.2.2.2: @currentItemIdChanged: $currentItemIdChanged",
@@ -659,7 +659,7 @@ _ForceReloadItemState _calculateBlockState({
           retForceReloadItem = false || forceReloadItem;
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A42100",
             shortDesc: "ITM 1.2.2.2.1 Calculated:",
             parameters: {
@@ -669,13 +669,13 @@ _ForceReloadItemState _calculateBlockState({
             },
           );
         }
-        // formModel != null && !hasFormRepresentativeExt
-        else if (!hasFormRepresentativeExt) {
+        // formModel != null && !provideFormContextExt
+        else if (!provideFormContextExt) {
           // (1*)
           retForceReloadItem = false || forceReloadItem;
           retForceReloadForm = false;
           //
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A42200",
             shortDesc: "ITM 1.2.2.2.2 Calculated:",
             parameters: {
@@ -685,19 +685,19 @@ _ForceReloadItemState _calculateBlockState({
             },
           );
         }
-        // formModel != null && hasFormRepresentativeExt
+        // formModel != null && provideFormContextExt
         else {
-          masterFlowItem._addLineFlowItem(
+          executionTrace._addTraceStep(
             codeId: "A42300",
             shortDesc: "ITM 1.2.2.2.3",
           );
           if (!__isReady(formModel!)) {
-            // hasFormRepresentativeExt && !formReady
+            // provideFormContextExt && !formReady
             retForceReloadForm = true;
             // retForceReloadForm
             retForceReloadItem = true;
             //
-            masterFlowItem._addLineFlowItem(
+            executionTrace._addTraceStep(
               codeId: "A42410",
               shortDesc: "ITM 1.2.2.2.3.1 Calculated:",
               parameters: {
@@ -711,10 +711,10 @@ _ForceReloadItemState _calculateBlockState({
           else {
             // (1*)
             retForceReloadItem = false || forceReloadItem;
-            // formReady && hasFormRepresentativeExt
+            // formReady && provideFormContextExt
             retForceReloadForm = false || retForceReloadItem;
             //
-            masterFlowItem._addLineFlowItem(
+            executionTrace._addTraceStep(
               codeId: "A42420",
               shortDesc: "ITM 1.2.2.2.3.2 Calculated:",
               parameters: {
@@ -740,7 +740,7 @@ _ForceReloadItemState _calculateBlockState({
       candidateAccepted = true;
   }
   //
-  masterFlowItem._addLineFlowItem(
+  executionTrace._addTraceStep(
     codeId: "A12800",
     shortDesc: "Calculated:",
     parameters: {

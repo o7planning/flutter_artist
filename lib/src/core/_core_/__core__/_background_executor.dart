@@ -10,7 +10,7 @@ class _BackgroundExecutor extends _Core {
   void executeBackgroundAction({
     required BackgroundAction action,
   }) {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "executeBackgroundAction",
       parameters: {
@@ -20,7 +20,7 @@ class _BackgroundExecutor extends _Core {
       isLibMethod: true,
     );
     __executeBackgroundAction(
-      masterFlowItem: masterFlowItem,
+      executionTrace: executionTrace,
       action: action,
     );
   }
@@ -29,12 +29,12 @@ class _BackgroundExecutor extends _Core {
   // ***************************************************************************
 
   Future<BackgroundActionResult> __executeBackgroundAction({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required BackgroundAction action,
   }) async {
     final needToConfirm = action.needToConfirm;
 
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#61000",
       shortDesc:
           "${debugObjHtml(action)}.needToConfirm = <b>$needToConfirm<b>.",
@@ -52,7 +52,7 @@ class _BackgroundExecutor extends _Core {
       );
     }
     if (!confirm) {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#61100",
         shortDesc: "@confirm = <b>$confirm</b> --> cancelled.",
       );
@@ -62,7 +62,7 @@ class _BackgroundExecutor extends _Core {
     }
     BackgroundActionResult backgroundResult = BackgroundActionResult();
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#61200",
         shortDesc: "Calling ${debugObjHtml(action)}.run()...",
         lineFlowType: LineFlowType.controllableCalling,
@@ -82,7 +82,7 @@ class _BackgroundExecutor extends _Core {
       backgroundResult._setErrorInfo(
         errorInfo: errorInfo,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#61300",
         shortDesc:
             "The ${debugObjHtml(action)}.run() method was called with an error!",

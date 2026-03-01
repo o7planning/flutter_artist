@@ -38,7 +38,7 @@ abstract class SortModelBuilder<ITEM extends Object> {
   // ***************************************************************************
 
   ///
-  /// The return type must be int, double, bool, null or String.
+  /// The return type must be int, double, bool, null, String or Comparable.
   ///
   Comparable? getComparisonValue({
     required ITEM item,

@@ -23,7 +23,7 @@ abstract class Activity extends _Core {
   // ***************************************************************************
 
   Future<void> executeActivity() async {
-    final masterFlowItem = FlutterArtist.codeFlowLogger._addMethodCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "executeActivity",
       parameters: null,
@@ -31,7 +31,7 @@ abstract class Activity extends _Core {
       isLibMethod: true,
     );
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#23000",
       shortDesc:
           "Creating <b>XActivity</b> for ${debugObjHtml(this)} and add it to <b>RootQueue</b>.",
@@ -46,13 +46,13 @@ abstract class Activity extends _Core {
   // ***************************************************************************
 
   Future<void> _unitExecuteActivity({
-    required MasterFlowItem masterFlowItem,
+    required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XActivity thisXActivity,
   }) async {
     __assertThisXActivity(thisXActivity);
     //
-    masterFlowItem._addLineFlowItem(
+    executionTrace._addTraceStep(
       codeId: "#19000",
       shortDesc:
           "Begin ${debugObjHtml(this)} > ${taskType.asDebugTaskUnit()}.\n"
@@ -61,7 +61,7 @@ abstract class Activity extends _Core {
     );
     //
     try {
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#19100",
         shortDesc:
             "Calling ${debugObjHtml(this)}.performActivityOperation()...",
@@ -78,7 +78,7 @@ abstract class Activity extends _Core {
         showSnackBar: true,
         tipDocument: TipDocument.activity,
       );
-      masterFlowItem._addLineFlowItem(
+      executionTrace._addTraceStep(
         codeId: "#19200",
         shortDesc:
             "The ${debugObjHtml(this)}.performActivityOperation() method was called with an error!",
