@@ -1,20 +1,20 @@
 part of '../core.dart';
 
-class FreezeByDialogResult<V> {
+class DialogDeferralResult<V> {
   bool success;
   V? dialogValue;
 
-  FreezeByDialogResult.fail() : success = false;
+  DialogDeferralResult.fail() : success = false;
 
-  FreezeByDialogResult.success({
+  DialogDeferralResult.success({
     required this.dialogValue,
   }) : success = true;
 }
 
-class _StorageFreeze {
+class _StorageDeferment {
   final _Storage _storage;
 
-  FreezeType? __freezeType;
+  DefermentSource? __defermentSource;
 
   bool __freezeTemporarilyOnce = false;
 
@@ -24,13 +24,13 @@ class _StorageFreeze {
     __freezeTemporarilyOnce = false;
   }
 
-  _StorageFreeze(_Storage storage) : _storage = storage;
+  _StorageDeferment(_Storage storage) : _storage = storage;
 
   bool get isFreezing {
     if (__freezeTemporarilyOnce) {
       return true;
     }
-    return __freezeType != null;
+    return __defermentSource != null;
   }
 
   // ***************************************************************************
@@ -39,7 +39,7 @@ class _StorageFreeze {
   Future<void> __checkDialogAndResumeReactionIfCan({
     required ExecutionTrace executionTrace,
   }) async {
-    if (__freezeType != null) {
+    if (__defermentSource != null) {
       return;
     }
     //
@@ -66,7 +66,7 @@ class _StorageFreeze {
   Future<void> __checkStartOrEndDrawerAndResumeReactionIfCan({
     required ExecutionTrace executionTrace,
   }) async {
-    if (__freezeType != null) {
+    if (__defermentSource != null) {
       return;
     }
     //
@@ -90,8 +90,8 @@ class _StorageFreeze {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool __ensureFreezeTypeIsNull() {
-    if (__freezeType != null) {
+  bool __ensureDefermentSourceIsNull() {
+    if (__defermentSource != null) {
       // TODO: Show notify!
       return false;
     }
@@ -104,20 +104,21 @@ class _StorageFreeze {
   ///
   /// Dialog:
   ///
-  Future<FreezeByDialogResult<V?>>
-      _openDialogThenFreezeQueuedEventsUntilClosed<V>(
-          {required Future<V?> Function() openDialog,
-          required ExecutionTrace executionTrace}) async {
-    if (!__ensureFreezeTypeIsNull()) {
-      return FreezeByDialogResult<V?>.fail();
+  Future<DialogDeferralResult<V?>>
+      _openDialogAndDeferExternalShelfEventsUntilClosed<V>({
+    required Future<V?> Function() openDialog,
+    required ExecutionTrace executionTrace,
+  }) async {
+    if (!__ensureDefermentSourceIsNull()) {
+      return DialogDeferralResult<V?>.fail();
     }
     try {
       // --> @see: #0004.
-      __freezeType = FreezeType.dialog;
+      __defermentSource = DefermentSource.dialog;
       V? value = await openDialog();
-      return FreezeByDialogResult.success(dialogValue: value);
+      return DialogDeferralResult.success(dialogValue: value);
     } finally {
-      __freezeType = null;
+      __defermentSource = null;
       __checkDialogAndResumeReactionIfCan(
         executionTrace: executionTrace,
       );
@@ -130,37 +131,37 @@ class _StorageFreeze {
   ///
   /// Drawer:
   ///
-  Future<void> _openDrawerThenFreezeQueuedEventsUntilClosed(
+  Future<void> _openDrawerAndDeferExternalShelfEventsUntilClosed(
     BuildContext context, {
     required ExecutionTrace executionTrace,
     bool showSuggestionIfNeed = true,
   }) async {
-    if (!__ensureFreezeTypeIsNull()) {
+    if (!__ensureDefermentSourceIsNull()) {
       return;
     }
     Scaffold.of(context).openDrawer();
-    __freezeType = FreezeType.drawer;
+    __defermentSource = DefermentSource.drawer;
     await Future.delayed(const Duration(milliseconds: 100));
-    if (showSuggestionIfNeed && !_storage.drawerState._isDrawerOpen) {
+    if (showSuggestionIfNeed && !_storage.drawer._isDrawerOpen) {
       _storage.showErrorSnackBar(
         message:
-            "Method openDrawerThenFreezeQueuedEventsUntilClosed() is being used incorrectly. "
+            "Method openDrawerAndDeferExternalShelfEventsUntilClosed() is being used incorrectly. "
             "See console for more details.",
         errorDetails: null,
       );
       String message = DebugUtils.getFatalError(
-          " Method openDrawerThenFreezeQueuedEventsUntilClosed() is being used incorrectly!\n "
+          " Method openDrawerAndDeferExternalShelfEventsUntilClosed() is being used incorrectly!\n "
           " @see: https://document.com");
       print(message);
     }
     await Future.doWhile(
       () => Future.delayed(const Duration(milliseconds: 1)).then(
         (_) {
-          return _storage.drawerState._isDrawerOpen == true;
+          return _storage.drawer._isDrawerOpen == true;
         },
       ),
     );
-    __freezeType = null;
+    __defermentSource = null;
     __checkStartOrEndDrawerAndResumeReactionIfCan(
       executionTrace: executionTrace,
     );
@@ -172,37 +173,37 @@ class _StorageFreeze {
   ///
   /// EndDrawer:
   ///
-  Future<void> _openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
+  Future<void> _openEndDrawerAndDeferExternalShelfEventsUntilClosed(
     BuildContext context, {
     required ExecutionTrace executionTrace,
     bool showSuggestionIfNeed = true,
   }) async {
-    if (!__ensureFreezeTypeIsNull()) {
+    if (!__ensureDefermentSourceIsNull()) {
       return;
     }
     Scaffold.of(context).openEndDrawer();
-    __freezeType = FreezeType.endDrawer;
+    __defermentSource = DefermentSource.endDrawer;
     await Future.delayed(const Duration(milliseconds: 100));
-    if (showSuggestionIfNeed && !_storage.endDrawerState._isEndDrawerOpen) {
+    if (showSuggestionIfNeed && !_storage.endDrawer._isEndDrawerOpen) {
       _storage.showErrorSnackBar(
         message:
-            "Method openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed() is being used incorrectly. "
+            "Method openEndDrawerAndDeferExternalShelfEventsUntilClosed() is being used incorrectly. "
             "See console for more details.",
         errorDetails: null,
       );
       String message = DebugUtils.getFatalError(
-          " Method openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed() is being used incorrectly!\n "
+          " Method openEndDrawerAndDeferExternalShelfEventsUntilClosed() is being used incorrectly!\n "
           " @see: https://document.com");
       print(message);
     }
     await Future.doWhile(
       () => Future.delayed(const Duration(milliseconds: 1)).then(
         (_) {
-          return _storage.endDrawerState._isEndDrawerOpen == true;
+          return _storage.endDrawer._isEndDrawerOpen == true;
         },
       ),
     );
-    __freezeType = null;
+    __defermentSource = null;
     __checkStartOrEndDrawerAndResumeReactionIfCan(
       executionTrace: executionTrace,
     );

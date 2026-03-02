@@ -43,8 +43,8 @@ class _Executor {
           while (true) {
             bool hasNext = FlutterArtist._rootQueue.hasNext();
             if (!hasNext) {
-              FlutterArtist.storage._queuedEventManager
-                  .addTaskUnitForQueuedEvents();
+              FlutterArtist.storage._deferredEventManager
+                  .addTaskUnitForDeferredEvents();
               hasNext = FlutterArtist._rootQueue.hasNext();
               if (!hasNext) {
                 break;
@@ -81,7 +81,7 @@ class _Executor {
           FlutterArtist.storage.ui.updateAllUiComponents();
           //
           __executingXShelfId = null;
-          FlutterArtist.storage.__freeze._resetFreezeTemporarilyOnce();
+          FlutterArtist.storage.__deferment._resetFreezeTemporarilyOnce();
         }
       },
     );

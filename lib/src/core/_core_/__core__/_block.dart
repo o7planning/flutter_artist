@@ -793,8 +793,7 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#03020",
-      shortDesc:
-          "@provideBlockContext: ${debugObjHtml(provideBlockContext)}.",
+      shortDesc: "@provideBlockContext: ${debugObjHtml(provideBlockContext)}.",
       lineFlowType: LineFlowType.debug,
       tipDocument: TipDocument.blockActiveUiComponents,
     );
@@ -1774,8 +1773,7 @@ abstract class Block<
         ui.hasActiveUiComponentItemRepresentative(
       alsoCheckChildren: true,
     );
-    final bool provideFormContext =
-        ui.hasActiveUiComponentFormRepresentative();
+    final bool provideFormContext = ui.hasActiveUiComponentFormRepresentative();
     //
     final bool inputForceReloadItem = thisXBlock.forceReloadCurrItem;
     //

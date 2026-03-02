@@ -160,19 +160,19 @@ class StartupExecutionTrace extends ExecutionTrace {
   }
 }
 
-class QueuedEventExecutionTrace extends ExecutionTrace {
-  QueuedEventExecutionTrace({
+class DeferredEventExecutionTrace extends ExecutionTrace {
+  DeferredEventExecutionTrace({
     required super.ownerClassInstance,
-  }) : super(executionTraceType: ExecutionTraceType.queuedEvent);
+  }) : super(executionTraceType: ExecutionTraceType.deferredEvent);
 
   @override
   String getSubtitle() {
-    return "Processing Queued Events...";
+    return "Processing Deferred Events...";
   }
 
   @override
   String getTitle() {
-    return "Queued Events";
+    return "Deferred Events";
   }
 }
 

@@ -774,7 +774,7 @@ abstract class Shelf extends _Core {
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
   }
 
-  Future<ShelfQueuedEventExecutionResult>
+  Future<ShelfDeferredEventExecutionResult>
       executeDelayedExternalReactionTaskUnit() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
@@ -788,7 +788,7 @@ abstract class Shelf extends _Core {
       shortDesc:
           "Checking before <b>executeDelayedExternalReactionTaskUnit</b>..",
     );
-    Actionable<ShelfQueuedEventExecutionPrecheck> actionable =
+    Actionable<ShelfDeferredEventExecutionPrecheck> actionable =
         __canExecuteDelayedExternalReaction(checkBusy: true);
     //
     if (!actionable.yes) {
@@ -804,32 +804,32 @@ abstract class Shelf extends _Core {
         shortDesc: "@actionable = ${debugObjHtml(actionable)}.",
         errorInfo: errorInfo,
       );
-      return ShelfQueuedEventExecutionResult(
+      return ShelfDeferredEventExecutionResult(
         precheck: actionable.errCode,
         errorInfo: actionable.errorInfo,
       );
     }
     _addShelfExternalReactionTaskUnit(executionTrace: executionTrace);
     await FlutterArtist.executor._executeTaskUnitQueue();
-    return ShelfQueuedEventExecutionResult();
+    return ShelfDeferredEventExecutionResult();
   }
 
   @_PrecheckPrivateMethod()
-  Actionable<ShelfQueuedEventExecutionPrecheck>
+  Actionable<ShelfDeferredEventExecutionPrecheck>
       __canExecuteDelayedExternalReaction({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<ShelfQueuedEventExecutionPrecheck>.no(
-        errCode: ShelfQueuedEventExecutionPrecheck.busy,
+      return Actionable<ShelfDeferredEventExecutionPrecheck>.no(
+        errCode: ShelfDeferredEventExecutionPrecheck.busy,
       );
     }
     //
-    return Actionable<ShelfQueuedEventExecutionPrecheck>.yes();
+    return Actionable<ShelfDeferredEventExecutionPrecheck>.yes();
   }
 
   @_PrecheckPrivateMethod()
-  Actionable<ShelfQueuedEventExecutionPrecheck>
+  Actionable<ShelfDeferredEventExecutionPrecheck>
       canExecuteDelayedExternalReaction() {
     return __canExecuteDelayedExternalReaction(checkBusy: true);
   }

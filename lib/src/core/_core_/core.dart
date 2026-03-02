@@ -76,7 +76,7 @@ import '../enums/_form_action.dart';
 import '../enums/_form_activity_type.dart';
 import '../enums/_form_error_method.dart';
 import '../enums/_form_mode.dart';
-import '../enums/_freeze_type.dart';
+import '../enums/_deferment_source.dart';
 import '../enums/_item_creation_type.dart';
 import '../enums/_list_update_strategy.dart';
 import '../enums/_multi_opt_prop_reload.dart';
@@ -158,7 +158,7 @@ import '../precheck/patch_form_fields_precheck.dart';
 import '../precheck/form_model_data_load_precheck.dart';
 import '../precheck/scalar_query_precheck.dart';
 import '../precheck/scalar_quick_action_precheck.dart';
-import '../precheck/shelf_delayed_reaction_execution_precheck.dart';
+import '../precheck/shelf_deferred_event_execution_precheck.dart';
 import '../precheck/show_form_info_precheck.dart';
 import '../typedef/custom_confirmation.dart';
 import '../utils/_class_utils.dart';
@@ -185,7 +185,7 @@ part '__core__/_block_data.dart';
 
 part '__core__/_coordinator.dart';
 
-part '__core__/_drawer_state.dart';
+part '__core__/_drawer_controller.dart';
 
 part '__core__/_block_item2_wrap.dart';
 
@@ -197,9 +197,9 @@ part '../debug/_debug_options.dart';
 
 part '__core__/_default_filter_model.dart';
 
-part '__core__/_queued_event.dart';
+part '__core__/_deferred_event.dart';
 
-part '__core__/_queued_event_manager.dart';
+part '__core__/_deferred_event_manager.dart';
 
 part '_core_event_/_eff_block.dart';
 
@@ -279,7 +279,7 @@ part '__core__/_scalar_value_wrap.dart';
 
 part '__core__/_shelf.dart';
 
-part '__core__/_storage_freeze.dart';
+part '__core__/_dialog_deferral_result.dart';
 
 part '__core__/_shelf_block_scalar_type.dart';
 
@@ -491,7 +491,7 @@ part '_observer_/_navigator_observer.dart';
 
 part '_task_result_/__task_result.dart';
 
-part '_task_result_/_shelf_delayed_reaction_execution_result.dart';
+part '_task_result_/_shelf_deferred_event_execution_result.dart';
 
 part '_task_result_/_form_model_patch_form_fields_result.dart';
 

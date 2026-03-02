@@ -59,7 +59,7 @@ class _StorageEventHandler {
     //
     executionTrace._addTraceStep(
       codeId: "#26100",
-      shortDesc: "Creating <b>QueuedEvent</b> and add to the queue.",
+      shortDesc: "Creating <b>DeferredEvent</b> and add to the queue.",
       parameters: {
         "eventType": eventType,
         "eventShelf": srcEventBlock?.shelf,
@@ -69,7 +69,7 @@ class _StorageEventHandler {
       lineFlowType: LineFlowType.eventInfo,
     );
     //
-    final QueuedEvent queuedEvent = QueuedEvent(
+    final DeferredEvent deferredEvent = DeferredEvent(
       eventType: eventType,
       eventShelf: srcEventBlock?.shelf,
       events: events,
@@ -79,11 +79,11 @@ class _StorageEventHandler {
     executionTrace._addTraceStep(
       codeId: "#26120",
       shortDesc:
-          "The <b>${getTypeNameWithoutGenerics(QueuedEvent)}</b> is created, It will be executed later....",
+          "The <b>${getTypeNameWithoutGenerics(DeferredEvent)}</b> is created, It will be executed later....",
       lineFlowType: LineFlowType.eventInfo,
     );
     //
-    storage._queuedEventManager.addQueuedEvent(queuedEvent);
+    storage._deferredEventManager.addDeferredEvent(deferredEvent);
   }
 
   // ***************************************************************************
@@ -110,7 +110,7 @@ class _StorageEventHandler {
     executionTrace._addTraceStep(
       codeId: "#60100",
       shortDesc:
-          "Creating <b>${getTypeNameWithoutGenerics(QueuedEvent)}</b> and add to queue.",
+          "Creating <b>${getTypeNameWithoutGenerics(DeferredEvent)}</b> and add to queue.",
       parameters: {
         "eventType": eventType,
         "eventShelf": eventShelf,
@@ -119,7 +119,7 @@ class _StorageEventHandler {
       lineFlowType: LineFlowType.eventInfo,
     );
     //
-    final QueuedEvent queuedEvent = QueuedEvent(
+    final DeferredEvent deferredEvent = DeferredEvent(
       eventType: eventType,
       eventShelf: eventShelf,
       events: events,
@@ -129,11 +129,11 @@ class _StorageEventHandler {
     executionTrace._addTraceStep(
       codeId: "#60200",
       shortDesc:
-          "The <b>${getTypeNameWithoutGenerics(QueuedEvent)}</b> is created, It will be executed later....",
+          "The <b>${getTypeNameWithoutGenerics(DeferredEvent)}</b> is created, It will be executed later....",
       lineFlowType: LineFlowType.eventInfo,
     );
     //
-    storage._queuedEventManager.addQueuedEvent(queuedEvent);
+    storage._deferredEventManager.addDeferredEvent(deferredEvent);
   }
 
   // ***************************************************************************

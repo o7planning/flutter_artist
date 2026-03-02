@@ -11,63 +11,63 @@ class SourceAndSummaryEvents {
   }
 }
 
-class _QueuedEventManager {
+class _DeferredEventManager {
   final _Storage storage;
-  final List<QueuedEvent> _list = [];
+  final List<DeferredEvent> _list = [];
 
-  _QueuedEventManager(this.storage);
+  _DeferredEventManager(this.storage);
 
-  void addQueuedEvent(QueuedEvent queuedEvent) {
-    _list.add(queuedEvent);
+  void addDeferredEvent(DeferredEvent deferredEvent) {
+    _list.add(deferredEvent);
   }
 
   Set<Event> _findEventsForListenerShelf({
-    required List<QueuedEvent> queuedEvents,
+    required List<DeferredEvent> deferredEvents,
     required String listenerShelfName,
   }) {
     Set<Event> events = {};
-    for (QueuedEvent queuedEvent in queuedEvents) {
-      final String? eventShelfName = queuedEvent.eventShelfName;
+    for (DeferredEvent deferredEvent in deferredEvents) {
+      final String? eventShelfName = deferredEvent.eventShelfName;
       if (eventShelfName == listenerShelfName) {
         continue;
       }
       //
       if (eventShelfName == null) {
-        events.addAll(queuedEvent.events);
+        events.addAll(deferredEvent.events);
         continue;
       }
-      events.addAll(queuedEvent.events);
+      events.addAll(deferredEvent.events);
     }
     return events;
   }
 
-  void addTaskUnitForQueuedEvents() {
-    final List<QueuedEvent> queuedEvents = [..._list];
+  void addTaskUnitForDeferredEvents() {
+    final List<DeferredEvent> deferredEvents = [..._list];
     _list.clear();
     //
-    if (queuedEvents.isEmpty) {
+    if (deferredEvents.isEmpty) {
       return;
     }
     ExecutionTrace executionTrace =
-        FlutterArtist.codeFlowLogger._initTaskUnitForQueuedEvent(
+        FlutterArtist.codeFlowLogger._initTaskUnitForDeferredEvent(
       ownerClassInstance: this,
     );
     executionTrace._addTraceStep(
       codeId: "#27000",
       shortDesc:
-          "Several originEvents have occurred, and they have generated <b>QueuedEvent(s)</b>. "
+          "Several originEvents have occurred, and they have generated <b>DeferredEvent(s)</b>. "
           "It's time to execute them.",
       lineFlowType: LineFlowType.debug,
     );
     //
     // #0004.
     //
-    final bool freezing = storage.__freeze.isFreezing;
+    final bool freezing = storage.__deferment.isFreezing;
     executionTrace._addTraceStep(
       codeId: "#27040",
       shortDesc: freezing
-          ? "The mode to freeze <b>QueuedEvent</b> execution is <b>enabled</b>."
-          : "The mode to freeze <b>QueuedEvent</b> execution is <b>not enabled</b>.",
+          ? "The mode to defer <b>DeferredEvent</b> execution is <b>enabled</b>."
+          : "The mode to defer <b>DeferredEvent</b> execution is <b>not enabled</b>.",
       lineFlowType: LineFlowType.debug,
       tipDocument: TipDocument.eventReactionFreezing,
     );
@@ -78,7 +78,7 @@ class _QueuedEventManager {
     bool hasSeparator = false;
     for (String listenerShelfName in storage._shelfMap.keys) {
       Set<Event> originEvents = _findEventsForListenerShelf(
-        queuedEvents: queuedEvents,
+        deferredEvents: deferredEvents,
         listenerShelfName: listenerShelfName,
       );
       if (originEvents.isEmpty) {

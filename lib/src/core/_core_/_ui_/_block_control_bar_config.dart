@@ -11,6 +11,10 @@ class BlockControlBarConfig {
   final bool allowDebugFilterCriteriaViewerButton;
   final bool allowDebugButton;
 
+  final Function(FormSaveResult result)? onNavigateSave;
+  final Function(PrepareItemCreationResult result)? onNavigateCreate;
+  final Function(BlockItemDeletionResult result)? onNavigateDelete;
+
   const BlockControlBarConfig({
     required this.allowRefreshButton,
     required this.allowQueryButton,
@@ -21,5 +25,8 @@ class BlockControlBarConfig {
     required this.allowDebugFormModelViewerButton,
     this.allowDebugFilterCriteriaViewerButton = false,
     this.allowDebugButton = false,
+    this.onNavigateCreate,
+    this.onNavigateSave,
+    this.onNavigateDelete,
   });
 }

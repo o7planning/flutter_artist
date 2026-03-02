@@ -48,8 +48,9 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
     // if (widget.config.allowDeleteButton || widget.config.allowRefreshButton) {
     //   return true;
     // }
+    // Docs: [14867]
     if (widget.block.formModel != null) {
-      if (widget.config.allowCreateButton || widget.config.allowSaveButton) {
+      if (widget.config.allowSaveButton) {
         return true;
       }
     }
@@ -59,7 +60,8 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   @override
   bool get provideFormContext {
     if (widget.block.formModel != null) {
-      if (widget.config.allowCreateButton || widget.config.allowSaveButton) {
+      // Docs: [14867]
+      if (widget.config.allowSaveButton) {
         return true;
       }
     }
@@ -384,15 +386,23 @@ class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
   }
 
   Future<void> _saveForm(Block block) async {
-    await widget.block.formModel?.saveForm();
+    FormModel? formModel = widget.block.formModel;
+    if (formModel == null) {
+      return;
+    }
+    FormSaveResult result = await formModel.saveForm();
+    widget.config.onNavigateSave?.call(result);
   }
 
   Future<void> _doDelete(Block block) async {
-    await widget.block.deleteCurrentItem();
+    BlockItemDeletionResult result = await widget.block.deleteCurrentItem();
+    widget.config.onNavigateDelete?.call(result);
   }
 
   Future<void> _prepareFormToCreateItem(Block block) async {
-    await widget.block.prepareFormToCreateItem(navigate: null);
+    PrepareItemCreationResult result =
+        await widget.block.prepareFormToCreateItem(navigate: null);
+    widget.config.onNavigateCreate?.call(result);
   }
 
   void _resetForm(Block block) {

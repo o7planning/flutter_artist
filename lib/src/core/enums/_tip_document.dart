@@ -126,7 +126,7 @@ enum TipDocument {
       case TipDocument.sorting:
         return "Sorting";
       case TipDocument.eventReactionFreezing:
-        return "Queued-Event Freezing";
+        return "Deferred-Event Freezing";
       case TipDocument.debugState:
         return "Debug State";
       case TipDocument.canDoAction:
@@ -231,7 +231,7 @@ enum TipDocument {
       case TipDocument.sorting:
         return "Sorting";
       case TipDocument.eventReactionFreezing:
-        return "Queued-Event Freezing";
+        return "Deferred-Event";
       case TipDocument.debugState:
         return "Debug State";
       case TipDocument.canDoAction:

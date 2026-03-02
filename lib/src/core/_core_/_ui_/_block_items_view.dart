@@ -30,6 +30,7 @@ abstract class BlockItemsView<
       description: '',
       block: block,
       provideItemContext: provideItemContext,
+      provideFormContext: provideFormContext,
       quickSuggestionMode: quickSuggestionMode,
       build: () {
         return buildContent(context);

@@ -121,10 +121,10 @@ class CodeFlowLogger {
     return log;
   }
 
-  ExecutionTrace _initTaskUnitForQueuedEvent({
+  ExecutionTrace _initTaskUnitForDeferredEvent({
     required Object ownerClassInstance,
   }) {
-    ExecutionTrace log = QueuedEventExecutionTrace(
+    ExecutionTrace log = DeferredEventExecutionTrace(
       ownerClassInstance: ownerClassInstance,
     );
     __addExecutionTrace(log);

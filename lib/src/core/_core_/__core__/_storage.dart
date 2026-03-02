@@ -1,9 +1,9 @@
 part of '../core.dart';
 
 class _Storage extends _StorageCore {
-  late final __freeze = _StorageFreeze(this);
-  late final drawerState = _DrawerState(this);
-  late final endDrawerState = _EndDrawerState(this);
+  late final __deferment = _StorageDeferment(this);
+  late final drawer = _DrawerController(this);
+  late final endDrawer = _EndDrawerController(this);
 
   late final ui = _StorageUiComponents(storage: this);
 
@@ -11,7 +11,7 @@ class _Storage extends _StorageCore {
   late final ev = _StorageEventHandler(this);
   final _naturalQueryQueue = _StorageNaturalQueryQueue();
 
-  late final _queuedEventManager = _QueuedEventManager(this);
+  late final _deferredEventManager = _DeferredEventManager(this);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -266,20 +266,21 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
   // ***************************************************************************
 
+  // openDialogThenFreezeQueuedEventsUntil Closed (OLD)
   // Open Dialog then freeze Shelf Reaction until closed.
   @_RootMethodAnnotation()
-  Future<FreezeByDialogResult<V?>>
-      openDialogThenFreezeQueuedEventsUntilClosed<V>({
+  Future<DialogDeferralResult<V?>>
+      openDialogAndDeferExternalShelfEventsUntilClosed<V>({
     required Future<V?> Function() openDialog,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "openDialogThenFreezeQueuedEventsUntilClosed",
+      methodName: "openDialogAndDeferExternalShelfEventsUntilClosed",
       parameters: null,
       navigate: null,
       isLibMethod: true,
     );
-    return await __freeze._openDialogThenFreezeQueuedEventsUntilClosed(
+    return await __deferment._openDialogAndDeferExternalShelfEventsUntilClosed(
       openDialog: openDialog,
       executionTrace: executionTrace,
     );
@@ -288,19 +289,20 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
   // ***************************************************************************
 
+  // openDrawerThenFreezeQueuedEventsUntil Closed (OLD)
   @_RootMethodAnnotation()
-  Future<void> openDrawerThenFreezeQueuedEventsUntilClosed(
+  Future<void> openDrawerAndDeferExternalShelfEventsUntilClosed(
     BuildContext context, {
     bool showSuggestionIfNeed = true,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: 'openDrawerThenFreezeQueuedEventsUntilClosed',
+      methodName: 'openDrawerAndDeferExternalShelfEventsUntilClosed',
       parameters: null,
       navigate: null,
       isLibMethod: true,
     );
-    return await __freeze._openDrawerThenFreezeQueuedEventsUntilClosed(
+    return await __deferment._openDrawerAndDeferExternalShelfEventsUntilClosed(
       context,
       executionTrace: executionTrace,
       showSuggestionIfNeed: showSuggestionIfNeed,
@@ -310,20 +312,21 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
   // ***************************************************************************
 
+  // openEndDrawerAndFreezeExternalReactions
+  // openEndDrawerThenFreezeReactionBetweenShelvesUntil Closed
   @_RootMethodAnnotation()
-  Future<void> openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
+  Future<void> openEndDrawerAndDeferExternalShelfEventsUntilClosed(
     BuildContext context, {
     bool showSuggestionIfNeed = true,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: 'openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed',
+      methodName: 'openEndDrawerAndDeferExternalShelfEventsUntilClosed',
       parameters: null,
       navigate: null,
       isLibMethod: true,
     );
-    return await __freeze
-        ._openEndDrawerThenFreezeReactionBetweenShelvesUntilClosed(
+    return await __deferment._openEndDrawerAndDeferExternalShelfEventsUntilClosed(
       context,
       executionTrace: executionTrace,
       showSuggestionIfNeed: showSuggestionIfNeed,
@@ -360,6 +363,6 @@ class _Storage extends _StorageCore {
 
   @_RootMethodAnnotation()
   void freezeReactionBetweenShelvesOnce() {
-    __freeze._freezeReactionBetweenShelvesOnce();
+    __deferment._freezeReactionBetweenShelvesOnce();
   }
 }

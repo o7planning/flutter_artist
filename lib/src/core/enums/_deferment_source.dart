@@ -1,4 +1,4 @@
-enum FreezeType {
+enum DefermentSource {
   uiComponent,
   dialog,
   drawer,

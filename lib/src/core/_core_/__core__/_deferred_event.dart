@@ -1,13 +1,13 @@
 part of '../core.dart';
 
-class QueuedEvent<ID extends Object> {
+class DeferredEvent<ID extends Object> {
   final Shelf? eventShelf;
 
   final EventType eventType;
   final ID? itemId;
   final List<Event> events;
 
-  QueuedEvent({
+  DeferredEvent({
     required this.eventType,
     required this.eventShelf,
     required this.events,

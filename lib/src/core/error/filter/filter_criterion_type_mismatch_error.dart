@@ -16,10 +16,10 @@ class FilterCriterionTypeMismatchError {
   AppError toAppError({required dynamic filterModelName}) {
     return AppError(
       errorMessage:
-          "The data type of `$tildeCriterionName` does not match between the definition and the actual type. "
+          "The data type of `$tildeCriterionName` does not match between the definition and the actual type  (or value type). "
           "Defined as `${getTypeNameWithoutGenerics(definedTildeCriterionType)}`, "
           "actually `${getTypeNameWithoutGenerics(actualValue.runtimeType)}`. "
-          "Check `$filterModelName` and its `FilterPanel` for details.",
+          "Check `$filterModelName` and its `FilterPanel` (or its value) for details.",
     );
   }
 }

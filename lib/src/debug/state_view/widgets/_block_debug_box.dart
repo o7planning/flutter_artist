@@ -19,16 +19,13 @@ class BlockDebugBox extends BaseDebugBox {
 
   @override
   List<Widget> getChildIconLabelTexts() {
-    String? activeUIBlockRep =
-        block.ui.findActiveUiComponentByBlockContext();
-    String? xActiveUIIBlockRep =
-        block.ui.findActiveUiComponentByBlockContext(
+    String? activeUIBlockRep = block.ui.findActiveUiComponentByBlockContext();
+    String? xActiveUIIBlockRep = block.ui.findActiveUiComponentByBlockContext(
       alsoCheckChildren: true,
     );
     //
 
-    String? activeUIItemRep =
-        block.ui.findActiveUiComponentByItemContext();
+    String? activeUIItemRep = block.ui.findActiveUiComponentByItemContext();
     String? xActiveUIItemRep = block.ui.findActiveUiComponentByItemContext(
       alsoCheckChildren: true,
     );

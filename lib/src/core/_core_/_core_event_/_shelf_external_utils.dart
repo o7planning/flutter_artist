@@ -8,7 +8,8 @@ class _ShelfExternalUtils {
 
   // Test Cases: [99a]
   EffectedShelfMembers calculateEffectedShelfMembersByEvents(
-      List<Event> events,) {
+    List<Event> events,
+  ) {
     EffectedShelfMembers ret = EffectedShelfMembers.ofNothing();
     for (Block block in shelf.blocks) {
       List<Event> typeEvents =

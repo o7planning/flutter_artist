@@ -271,8 +271,7 @@ class XBlock<
   }
 
   void printInfoCascade() {
-    bool provideBlockContext =
-        block.ui.hasActiveUiComponentBlockRepresentative(
+    bool provideBlockContext = block.ui.hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: false,
     );
     String msg = "${getClassName(this)}(${getClassName(block)}"

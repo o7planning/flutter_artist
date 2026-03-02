@@ -6,7 +6,7 @@ enum ExecutionTraceType {
   taskUnitCall,
   userMethodCall,
   libMethodCall,
-  queuedEvent;
+  deferredEvent;
 
   String get desc {
     return name;
@@ -24,7 +24,7 @@ enum ExecutionTraceType {
         return Icons.call;
       case ExecutionTraceType.libMethodCall:
         return Icons.call;
-      case ExecutionTraceType.queuedEvent:
+      case ExecutionTraceType.deferredEvent:
         return Icons.star;
     }
   }
@@ -44,7 +44,7 @@ enum ExecutionTraceType {
         return Colors.blue;
       case ExecutionTraceType.libMethodCall:
         return Colors.black;
-      case ExecutionTraceType.queuedEvent:
+      case ExecutionTraceType.deferredEvent:
         return Colors.deepOrange;
     }
   }
@@ -61,8 +61,8 @@ enum ExecutionTraceType {
         return "User's Method";
       case ExecutionTraceType.libMethodCall:
         return "Lib's Method";
-      case ExecutionTraceType.queuedEvent:
-        return "Init Task Unit for Lazied Events";
+      case ExecutionTraceType.deferredEvent:
+        return "Init Task Unit for Deferred Events";
     }
   }
 }
