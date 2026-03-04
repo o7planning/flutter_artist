@@ -44,8 +44,6 @@ import '../action/block_quick_item_creation_action.dart';
 import '../action/block_quick_item_update_action.dart';
 import '../action/scalar_quick_extra_data_load_action.dart';
 import '../action/storage_backend_action.dart';
-import '../adapter/_global_data_adapter.dart';
-import '../adapter/_notification_adapter.dart';
 import '../annotation/annotation.dart';
 import '../built_in/empty_form_input.dart';
 import '../built_in/empty_filter_criteria.dart';
@@ -85,7 +83,7 @@ import '../enums/_qry_hint.dart';
 import '../enums/_qry_pagination_type.dart';
 import '../enums/_quick_suggestion_mode.dart';
 import '../enums/_quick_suggestion_type.dart';
-import '../enums/_refreshable_widget_type.dart';
+import '../enums/_context_provider_view_type.dart';
 import '../enums/_context_kind.dart';
 import '../enums/_scalar_control_action_type.dart';
 import '../enums/_scalar_error_method.dart';
@@ -130,11 +128,8 @@ import '../error/filter_register/tilde_filter_criterion_suffix_invalid_error.dar
 import '../error/form/form_multi_opt_ms_mismatch_error.dart';
 import '../error/form/form_prop_type_mismatch_error.dart';
 import '../error/form_register/form_prop_invalid_name_error.dart';
-import '../global/_global_data.dart';
 import '../icon/icon_constants.dart';
 import '../logger/_logger.dart';
-import '../notification/_notification_listener.dart';
-import '../notification/_notification_summary.dart';
 import '../precheck/__actionable.dart';
 import '../precheck/_check_allow.dart';
 import '../precheck/background_action_precheck.dart';
@@ -583,9 +578,9 @@ part '_task_unit_/_scalar_query_task_unit.dart';
 
 part '_task_unit_/_storage_backend_action_task_unit.dart';
 
-part '_ui_/__refreshable_widget.dart';
+part '_ui_/__context_provider_view.dart';
 
-part '_ui_/__refreshable_widget_state.dart';
+part '_ui_/__context_provider_view_state.dart';
 
 part '_ui_/_activity_section_view.dart';
 

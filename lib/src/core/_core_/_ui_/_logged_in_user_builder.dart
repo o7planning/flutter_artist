@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class LoggedInUserBuilder extends _RefreshableWidget {
+class LoggedInUserBuilder extends _ContextProviderView {
   final Widget Function(ILoggedInUser? user) build;
 
   const LoggedInUserBuilder({
@@ -17,14 +17,14 @@ class LoggedInUserBuilder extends _RefreshableWidget {
 }
 
 class _LoggedInUserBuilderState
-    extends _RefreshableWidgetState<LoggedInUserBuilder> {
+    extends _ContextProviderViewState<LoggedInUserBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return "LoggedInUserBuilder";
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.loggedInUser;
+  ContextProviderViewType get type => ContextProviderViewType.loggedInUser;
 
   @override
   bool get provideScalarContext {

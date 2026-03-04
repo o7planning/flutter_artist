@@ -3,7 +3,7 @@ part of '../core.dart';
 class _StorageUiComponents extends _UiComponents {
   final _Storage storage;
 
-  final Map<_RefreshableWidgetState, bool>
+  final Map<_ContextProviderViewState, bool>
       __refreshableStorageSectionViewStates = {};
 
   // ***************************************************************************
@@ -15,7 +15,7 @@ class _StorageUiComponents extends _UiComponents {
   // ***************************************************************************
 
   bool hasActiveUiComponent() {
-    for (_RefreshableWidgetState widgetState
+    for (_ContextProviderViewState widgetState
         in __refreshableStorageSectionViewStates.keys) {
       if (!widgetState.mounted) {
         continue;
@@ -52,7 +52,7 @@ class _StorageUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateAllStorageSectionViews() {
-    for (_RefreshableWidgetState widgetState
+    for (_ContextProviderViewState widgetState
         in __refreshableStorageSectionViewStates.keys) {
       if (!widgetState.mounted) {
         continue;
@@ -66,7 +66,7 @@ class _StorageUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addShelfWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     __refreshableStorageSectionViewStates[widgetState] = isVisible;

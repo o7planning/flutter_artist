@@ -29,9 +29,9 @@ class GlobalsManager extends _Core {
 
   IGlobalData? get globalData => _globalData;
 
-  final ILoginLogoutAdapter loginLogoutAdapter;
+  final FlutterArtistLoginLogoutAdapter loginLogoutAdapter;
 
-  final IGlobalDataAdapter globalDataAdapter;
+  final FlutterArtistGlobalDataAdapter globalDataAdapter;
 
   ///
   /// For example: {"language", "theme"}

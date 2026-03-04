@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-abstract class _RefreshableWidget extends StatefulWidget {
+abstract class _ContextProviderView extends StatefulWidget {
   ///
   /// The owner class instance.
   ///
@@ -8,7 +8,7 @@ abstract class _RefreshableWidget extends StatefulWidget {
 
   final String? description;
 
-  const _RefreshableWidget({
+  const _ContextProviderView({
     required super.key,
     required this.ownerClassInstance,
     required this.description,

@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class TaskProgressViewBuilder extends _RefreshableWidget {
+class TaskProgressViewBuilder extends _ContextProviderView {
   final EdgeInsets progressOnMargin;
   final EdgeInsets progressOffMargin;
 
@@ -34,7 +34,7 @@ class TaskProgressViewBuilder extends _RefreshableWidget {
 }
 
 class _TaskProgressBuilderState
-    extends _RefreshableWidgetState<TaskProgressViewBuilder> {
+    extends _ContextProviderViewState<TaskProgressViewBuilder> {
   // Update from Executor:
   bool onProgress = false;
 
@@ -86,7 +86,7 @@ class _TaskProgressBuilderState
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.taskProgressView;
+  ContextProviderViewType get type => ContextProviderViewType.taskProgressView;
 
   @override
   String getWidgetOwnerClassName() {

@@ -71,7 +71,7 @@ class _DebugUiComponentsViewerDialogState
     }
   }
 
-  Map<IRefreshableWidgetState, XState> _findWidgetStates() {
+  Map<IContextProviderViewState, XState> _findWidgetStates() {
     if (widget.shelf != null) {
       return widget.shelf!.ui.debugFindMountedWidgetStates(
         activeOnly: true,
@@ -136,7 +136,7 @@ class _DebugUiComponentsViewerDialogState
       preferredHeight: 320,
     );
     //
-    Map<IRefreshableWidgetState, XState> widgetStates = _findWidgetStates();
+    Map<IContextProviderViewState, XState> widgetStates = _findWidgetStates();
     return SizedBox(
       width: size.width,
       height: size.height,
@@ -170,7 +170,7 @@ class _DebugUiComponentsViewerDialogState
   }
 
   Widget _buildRowInfo({
-    required MapEntry<IRefreshableWidgetState, XState> widgetStateEntry,
+    required MapEntry<IContextProviderViewState, XState> widgetStateEntry,
   }) {
     return Card(
       shape: const RoundedRectangleBorder(

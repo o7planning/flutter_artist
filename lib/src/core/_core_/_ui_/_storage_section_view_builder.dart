@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class StorageSectionViewBuilder extends _RefreshableWidget {
+class StorageSectionViewBuilder extends _ContextProviderView {
   final Widget Function() build;
 
   const StorageSectionViewBuilder({
@@ -17,14 +17,14 @@ class StorageSectionViewBuilder extends _RefreshableWidget {
 }
 
 class _StorageSectionViewState
-    extends _RefreshableWidgetState<StorageSectionViewBuilder> {
+    extends _ContextProviderViewState<StorageSectionViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return "StorageSectionView";
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.shelfFragment;
+  ContextProviderViewType get type => ContextProviderViewType.shelfFragment;
 
   @override
   bool get provideScalarContext {

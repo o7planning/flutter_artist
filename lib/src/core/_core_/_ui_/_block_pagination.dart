@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-abstract class BlockPagination extends _RefreshableWidget {
+abstract class BlockPagination extends _ContextProviderView {
   final Block block;
 
   const BlockPagination({
@@ -18,9 +18,9 @@ abstract class BlockPagination extends _RefreshableWidget {
   }
 }
 
-class _BlockPaginationState extends _RefreshableWidgetState<BlockPagination> {
+class _BlockPaginationState extends _ContextProviderViewState<BlockPagination> {
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.pagination;
+  ContextProviderViewType get type => ContextProviderViewType.pagination;
 
   @override
   bool get provideScalarContext {

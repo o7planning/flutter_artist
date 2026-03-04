@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class ActivitySectionViewBuilder extends _RefreshableWidget {
+class ActivitySectionViewBuilder extends _ContextProviderView {
   final Activity activity;
   final Widget Function() build;
 
@@ -19,14 +19,14 @@ class ActivitySectionViewBuilder extends _RefreshableWidget {
 }
 
 class _ActivitySectionViewBuilderState
-    extends _RefreshableWidgetState<ActivitySectionViewBuilder> {
+    extends _ContextProviderViewState<ActivitySectionViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.activity);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.activityFragment;
+  ContextProviderViewType get type => ContextProviderViewType.activityFragment;
 
   @override
   bool get provideScalarContext {

@@ -4,10 +4,11 @@ class _BlockUiComponents extends _UiComponents {
   final Block block;
 
   // Fragments: BlockItemsView - BlockItemDetailView - BlockSectionView.
-  final Map<_RefreshableWidgetState, XState> __blockBaseViewWidgetStates = {};
-  final Map<_RefreshableWidgetState, XState> __blockControlBarWidgetStates = {};
-  final Map<_RefreshableWidgetState, XState> __controlWidgetStates = {};
-  final Map<_RefreshableWidgetState, XState> __paginationWidgetStates = {};
+  final Map<_ContextProviderViewState, XState> __blockBaseViewWidgetStates = {};
+  final Map<_ContextProviderViewState, XState> __blockControlBarWidgetStates =
+      {};
+  final Map<_ContextProviderViewState, XState> __controlWidgetStates = {};
+  final Map<_ContextProviderViewState, XState> __paginationWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -18,7 +19,8 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updatePaginationViews({bool force = false}) {
-    for (_RefreshableWidgetState widgetState in __paginationWidgetStates.keys) {
+    for (_ContextProviderViewState widgetState
+        in __paginationWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -29,7 +31,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateBlockBaseViews({bool force = false}) {
-    for (_RefreshableWidgetState widgetState
+    for (_ContextProviderViewState widgetState
         in __blockBaseViewWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
@@ -41,7 +43,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateControlBars({bool force = false}) {
-    for (_RefreshableWidgetState widgetState
+    for (_ContextProviderViewState widgetState
         in __blockControlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
@@ -53,7 +55,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateControlButtons({bool force = false}) {
-    for (_RefreshableWidgetState widgetState in __controlWidgetStates.keys) {
+    for (_ContextProviderViewState widgetState in __controlWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -297,7 +299,7 @@ class _BlockUiComponents extends _UiComponents {
     required bool alsoCheckChildren,
   }) {
     var map = {...__blockBaseViewWidgetStates};
-    for (_RefreshableWidgetState widgetState in map.keys) {
+    for (_ContextProviderViewState widgetState in map.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -335,7 +337,7 @@ class _BlockUiComponents extends _UiComponents {
   bool hasActiveControlBarWithContextKind({
     required ContextKind? contextKind,
   }) {
-    for (_RefreshableWidgetState widgetState
+    for (_ContextProviderViewState widgetState
         in __blockControlBarWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
@@ -365,7 +367,7 @@ class _BlockUiComponents extends _UiComponents {
   bool hasActiveControlWidgetWithContextKind({
     required ContextKind? contextKind,
   }) {
-    for (_RefreshableWidgetState widgetState in __controlWidgetStates.keys) {
+    for (_ContextProviderViewState widgetState in __controlWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -391,7 +393,8 @@ class _BlockUiComponents extends _UiComponents {
   bool hasActivePaginationWithContextKind({
     required ContextKind? contextKind,
   }) {
-    for (_RefreshableWidgetState widgetState in __paginationWidgetStates.keys) {
+    for (_ContextProviderViewState widgetState
+        in __paginationWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -433,10 +436,10 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateItemsView() {
-    for (_RefreshableWidgetState widgetState
+    for (_ContextProviderViewState widgetState
         in __blockBaseViewWidgetStates.keys) {
       if (widgetState.mounted &&
-          widgetState.type == RefreshableWidgetType.blockItemsView) {
+          widgetState.type == ContextProviderViewType.blockItemsView) {
         widgetState.refreshState();
       }
     }
@@ -445,7 +448,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedBaseViewWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
@@ -454,7 +457,7 @@ class _BlockUiComponents extends _UiComponents {
     );
   }
 
-  Map<_RefreshableWidgetState, XState> _findMountedControlBarWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedControlBarWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
@@ -463,7 +466,7 @@ class _BlockUiComponents extends _UiComponents {
     );
   }
 
-  Map<_RefreshableWidgetState, XState> _findMountedPaginationWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedPaginationWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
@@ -476,7 +479,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addPaginationWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     __paginationWidgetStates.update(
@@ -494,7 +497,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _removePaginationWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
   }) {
     __paginationWidgetStates.remove(widgetState);
   }
@@ -503,7 +506,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addControlBarWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     bool blockXBlockRepOLD = hasActiveUiComponentBlockRepresentative(
@@ -536,7 +539,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _removeControlBarWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
   }) {
     __blockControlBarWidgetStates.remove(widgetState);
   }
@@ -545,7 +548,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addControlWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     bool blockXBlockRepOLD = hasActiveUiComponentBlockRepresentative(
@@ -578,7 +581,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _removeControlWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
   }) {
     __controlWidgetStates.remove(widgetState);
   }
@@ -587,7 +590,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addBlockBaseViewWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     bool hasXBlockRepOLD = hasActiveUiComponentBlockRepresentative(
@@ -632,7 +635,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
     required bool withPagination,
     required bool withBlockBaseView,
     required bool withFilter,
@@ -642,7 +645,7 @@ class _BlockUiComponents extends _UiComponents {
     required bool withBlockControlBar,
     required bool activeOnly,
   }) {
-    Map<_RefreshableWidgetState, XState> ret = {};
+    Map<_ContextProviderViewState, XState> ret = {};
     //
     if (withFilter) {
       final FilterModel filterModel = block._registeredOrDefaultFilterModel;
@@ -708,7 +711,7 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   @DebugMethodAnnotation()
-  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
     required bool withPagination,
     required bool withBlockBaseView,
     required bool withFilter,

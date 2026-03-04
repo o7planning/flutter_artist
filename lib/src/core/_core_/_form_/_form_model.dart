@@ -688,8 +688,8 @@ abstract class FormModel<
     }
     // Duplicate Form Prop.
     on FormPropDuplicateNameError catch (e) {
-      String message = "Duplicate Form propName '${e.propName}'.\n";
-      "@see the '${getClassNameWithoutGenerics(this)}.defineFormModelStructure()' method for details.";
+      String message = "Duplicate Form propName '${e.propName}'.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFormModelStructure()' method for details.";
       throw _createFatalAppError(message);
     } catch (e, stackTrace) {
       print(stackTrace);

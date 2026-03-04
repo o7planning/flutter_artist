@@ -2,7 +2,7 @@ part of '../core.dart';
 
 @Deprecated(
     "Not yet ready for use, not yet designed, may be continued in a few months.")
-abstract class ScalarControl extends _RefreshableWidget {
+abstract class ScalarControl extends _ContextProviderView {
   final Scalar scalar;
   final StackTrace? currentStackTrace;
   final Widget Function(VoidCallback? onPressed) build;
@@ -26,14 +26,15 @@ abstract class ScalarControl extends _RefreshableWidget {
   }
 }
 
-class _ControlButtonState extends _RefreshableWidgetState<ScalarControl> {
+class _ControlButtonState extends _ContextProviderViewState<ScalarControl> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.scalar);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.scalarControlButton;
+  ContextProviderViewType get type =>
+      ContextProviderViewType.scalarControlButton;
 
   @override
   bool get provideScalarContext {

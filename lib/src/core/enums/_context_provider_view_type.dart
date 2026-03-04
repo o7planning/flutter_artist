@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../icon/icon_constants.dart';
 
-enum RefreshableWidgetType {
+enum ContextProviderViewType {
   pagination(
     name: "Pagination",
     iconData: FaIconConstants.paginationIconData,
@@ -81,5 +81,5 @@ enum RefreshableWidgetType {
   final String name;
   final IconData iconData;
 
-  const RefreshableWidgetType({required this.name, required this.iconData});
+  const ContextProviderViewType({required this.name, required this.iconData});
 }

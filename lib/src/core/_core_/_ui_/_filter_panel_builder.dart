@@ -2,7 +2,7 @@ part of '../core.dart';
 
 // bool _lockChangeEvent1 = false;
 
-class _FilterPanelBuilder extends _RefreshableWidget {
+class _FilterPanelBuilder extends _ContextProviderView {
   final FilterModel filterModel;
 
   final Widget Function() build;
@@ -22,7 +22,7 @@ class _FilterPanelBuilder extends _RefreshableWidget {
 }
 
 class _FilterPanelBuilderState
-    extends _RefreshableWidgetState<_FilterPanelBuilder> {
+    extends _ContextProviderViewState<_FilterPanelBuilder> {
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -31,7 +31,7 @@ class _FilterPanelBuilderState
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.filter;
+  ContextProviderViewType get type => ContextProviderViewType.filter;
 
   @override
   bool get provideScalarContext {

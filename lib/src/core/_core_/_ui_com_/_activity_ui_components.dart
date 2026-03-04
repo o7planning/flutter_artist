@@ -3,7 +3,7 @@ part of '../core.dart';
 class _ActivityUiComponents extends _UiComponents {
   final Activity activity;
 
-  final Map<_RefreshableWidgetState, XState> __activityBaseViewWidgetStates =
+  final Map<_ContextProviderViewState, XState> __activityBaseViewWidgetStates =
       {};
 
   // ***************************************************************************
@@ -15,7 +15,7 @@ class _ActivityUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateActivityBaseViews({bool force = false}) {
-    for (_RefreshableWidgetState widgetState
+    for (_ContextProviderViewState widgetState
         in __activityBaseViewWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
@@ -107,7 +107,7 @@ class _ActivityUiComponents extends _UiComponents {
     required bool alsoCheckChildren,
   }) {
     var map = {...__activityBaseViewWidgetStates};
-    for (_RefreshableWidgetState widgetState in map.keys) {
+    for (_ContextProviderViewState widgetState in map.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -135,7 +135,7 @@ class _ActivityUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedBaseViewWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
@@ -148,7 +148,7 @@ class _ActivityUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addActivityBaseViewWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     bool hasXActivityRepOLD = hasActiveUiComponentActivityRepresentative(
@@ -193,11 +193,11 @@ class _ActivityUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
     required bool withActivityBaseView,
     required bool activeOnly,
   }) {
-    Map<_RefreshableWidgetState, XState> ret = {};
+    Map<_ContextProviderViewState, XState> ret = {};
     //
     if (withActivityBaseView) {
       ret.addAll(
@@ -212,7 +212,7 @@ class _ActivityUiComponents extends _UiComponents {
   // ***************************************************************************
 
   @DebugMethodAnnotation()
-  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
     required bool withActivityBaseView,
     required bool activeOnly,
   }) {

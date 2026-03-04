@@ -3,8 +3,9 @@ part of '../core.dart';
 class _ScalarUiComponents extends _UiComponents {
   final Scalar scalar;
 
-  final Map<_RefreshableWidgetState, XState> __scalarBaseViewWidgetStates = {};
-  final Map<_RefreshableWidgetState, XState> __scalarControlBarWidgetStates =
+  final Map<_ContextProviderViewState, XState> __scalarBaseViewWidgetStates =
+      {};
+  final Map<_ContextProviderViewState, XState> __scalarControlBarWidgetStates =
       {};
 
   // ***************************************************************************
@@ -67,13 +68,13 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
     required bool withScalarBaseView,
     required bool withFilter,
     required bool withScalarControlBar,
     required bool activeOnly,
   }) {
-    Map<_RefreshableWidgetState, XState> ret = {};
+    Map<_ContextProviderViewState, XState> ret = {};
     //
     if (withFilter) {
       final FilterModel filterModel = scalar._registeredOrDefaultFilterModel;
@@ -101,7 +102,7 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateControlBars({bool force = false}) {
-    for (_RefreshableWidgetState widgetState
+    for (_ContextProviderViewState widgetState
         in __scalarControlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
@@ -113,7 +114,7 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateScalarBaseViews({bool force = true}) {
-    for (_RefreshableWidgetState state in __scalarBaseViewWidgetStates.keys) {
+    for (_ContextProviderViewState state in __scalarBaseViewWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -196,7 +197,7 @@ class _ScalarUiComponents extends _UiComponents {
   bool hasActiveControlBarWithContextKind({
     required ContextKind? contextKind,
   }) {
-    for (_RefreshableWidgetState widgetState
+    for (_ContextProviderViewState widgetState
         in __scalarControlBarWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
@@ -217,7 +218,7 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedBaseViewWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
@@ -226,7 +227,7 @@ class _ScalarUiComponents extends _UiComponents {
     );
   }
 
-  Map<_RefreshableWidgetState, XState> _findMountedControlBarWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedControlBarWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
@@ -239,7 +240,7 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addControlWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     bool activeOLD = hasActiveUiComponent();
@@ -281,7 +282,7 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addScalarBaseViewWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     bool activeOLD = hasActiveUiComponent();
@@ -323,7 +324,7 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
 
   @DebugMethodAnnotation()
-  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
     required bool withPagination,
     required bool withScalarBaseView,
     required bool withFilter,

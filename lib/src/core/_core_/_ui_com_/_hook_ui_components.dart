@@ -3,7 +3,7 @@ part of '../core.dart';
 class _HookUiComponents extends _UiComponents {
   final Hook hook;
 
-  final Map<_RefreshableWidgetState, XState> __hookBaseViewWidgetStates = {};
+  final Map<_ContextProviderViewState, XState> __hookBaseViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -14,7 +14,7 @@ class _HookUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateHookBaseViews({bool force = false}) {
-    for (_RefreshableWidgetState widgetState
+    for (_ContextProviderViewState widgetState
         in __hookBaseViewWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
@@ -106,7 +106,7 @@ class _HookUiComponents extends _UiComponents {
     required bool alsoCheckChildren,
   }) {
     var map = {...__hookBaseViewWidgetStates};
-    for (_RefreshableWidgetState widgetState in map.keys) {
+    for (_ContextProviderViewState widgetState in map.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -134,7 +134,7 @@ class _HookUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedBaseViewWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
@@ -147,7 +147,7 @@ class _HookUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addHookBaseViewWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     bool hasXHookRepOLD = hasActiveUiComponentHookRepresentative(
@@ -192,11 +192,11 @@ class _HookUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
     required bool withHookBaseView,
     required bool activeOnly,
   }) {
-    Map<_RefreshableWidgetState, XState> ret = {};
+    Map<_ContextProviderViewState, XState> ret = {};
     //
     if (withHookBaseView) {
       ret.addAll(
@@ -211,7 +211,7 @@ class _HookUiComponents extends _UiComponents {
   // ***************************************************************************
 
   @DebugMethodAnnotation()
-  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
     required bool withHookBaseView,
     required bool activeOnly,
   }) {

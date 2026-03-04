@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class _LoggedInUserUiComponents extends _UiComponents {
-  final Map<_RefreshableWidgetState, bool> _loggedInUserWidgetStates = {};
+  final Map<_ContextProviderViewState, bool> _loggedInUserWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -20,8 +20,8 @@ class _LoggedInUserUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateAllUiComponents() {
-    for (_RefreshableWidgetState widgetState
-        in _loggedInUserWidgetStates.keys) {
+    for (_ContextProviderViewState widgetState
+    in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }
@@ -32,7 +32,7 @@ class _LoggedInUserUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addLoggedInUserWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     _loggedInUserWidgetStates[widgetState] = isVisible;

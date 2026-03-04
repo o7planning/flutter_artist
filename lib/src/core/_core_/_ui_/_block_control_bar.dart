@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class BlockControlBar extends _RefreshableWidget {
+class BlockControlBar extends _ContextProviderView {
   final EdgeInsets padding;
   final Block block;
   final BlockControlBarConfig config;
@@ -20,12 +20,12 @@ class BlockControlBar extends _RefreshableWidget {
   }
 }
 
-class _BlockControlBarState extends _RefreshableWidgetState<BlockControlBar> {
+class _BlockControlBarState extends _ContextProviderViewState<BlockControlBar> {
   static const double _dividerHeight = 20;
   final Color _dividerColor = Colors.indigo.withAlpha(80);
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.controlBar;
+  ContextProviderViewType get type => ContextProviderViewType.controlBar;
 
   @override
   bool get provideScalarContext {

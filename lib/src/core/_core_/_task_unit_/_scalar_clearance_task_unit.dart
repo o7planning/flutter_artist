@@ -8,11 +8,11 @@ class _ScalarClearanceTaskUnit
   _ScalarClearanceTaskUnit({
     required this.xScalar,
   }) : super(
-    taskType: TaskType.scalarClearance,
-    taskResult: ScalarClearanceResult(
-      precheck: null,
-    ),
-  );
+          taskType: TaskType.scalarClearance,
+          taskResult: ScalarClearanceResult(
+            precheck: null,
+          ),
+        );
 
   @override
   XShelf get xShelf => xScalar.xShelf;

@@ -4,7 +4,7 @@ typedef ControlPressedAsyncFunction = Future<bool> Function();
 
 @Deprecated(
     "Not yet ready for use, not yet designed, may be continued in a few months.")
-abstract class BlockControl extends _RefreshableWidget {
+abstract class BlockControl extends _ContextProviderView {
   final Block block;
   final StackTrace? currentStackTrace;
   final Widget Function(VoidCallback? onPressed) build;
@@ -28,14 +28,15 @@ abstract class BlockControl extends _RefreshableWidget {
   }
 }
 
-class _BlockControlButtonState extends _RefreshableWidgetState<BlockControl> {
+class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.blockControlButton;
+  ContextProviderViewType get type =>
+      ContextProviderViewType.blockControlButton;
 
   @override
   bool get provideScalarContext {

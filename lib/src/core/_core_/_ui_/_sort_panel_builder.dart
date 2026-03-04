@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class _SortPanelBuilder extends _RefreshableWidget {
+class _SortPanelBuilder extends _ContextProviderView {
   final SortModel sortModel;
   final bool provideItemContext;
   final bool provideFormContext;
@@ -24,14 +24,14 @@ class _SortPanelBuilder extends _RefreshableWidget {
 }
 
 class _SortPanelBuilderState
-    extends _RefreshableWidgetState<_SortPanelBuilder> {
+    extends _ContextProviderViewState<_SortPanelBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.sortModel);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.sort;
+  ContextProviderViewType get type => ContextProviderViewType.sort;
 
   @override
   bool get provideScalarContext {

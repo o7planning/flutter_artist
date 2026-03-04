@@ -42,7 +42,7 @@ class _FlutterArtist extends _Core {
 
   int notificationFetchPeriodInSeconds = 60;
 
-  ICoreFeaturesAdapter? __coreFeaturesAdapter;
+  FlutterArtistCoreFeaturesAdapter? __coreFeaturesAdapter;
 
   late final GlobalsManager globalsManager;
 
@@ -100,10 +100,10 @@ class _FlutterArtist extends _Core {
     offAllAndGotoRoute();
   }
 
-  ICoreFeaturesAdapter get coreFeaturesAdapter {
+  FlutterArtistCoreFeaturesAdapter get coreFeaturesAdapter {
     if (__coreFeaturesAdapter == null) {
       throw DebugUtils.getFatalError(
-          " >>>>>> $ICoreFeaturesAdapter is not registered!. "
+          " >>>>>> $FlutterArtistCoreFeaturesAdapter is not registered!. "
           "\n >>>>>> You need to call $FlutterArtist.config() in main.dart");
     }
     return __coreFeaturesAdapter!;
@@ -178,11 +178,11 @@ class _FlutterArtist extends _Core {
     required StorageStructure storageStructure,
     required DebugOptions? debugOptions,
     required ConsoleDebugOptions? consoleDebugOptions,
-    required ICoreFeaturesAdapter coreFeaturesAdapter,
-    required INotificationAdapter? notificationAdapter,
-    required ILoginLogoutAdapter loginLogoutAdapter,
-    required IGlobalDataAdapter globalDataAdapter,
-    required ILocaleAdapter localeAdapter,
+    required FlutterArtistCoreFeaturesAdapter coreFeaturesAdapter,
+    required FlutterArtistNotificationAdapter? notificationAdapter,
+    required FlutterArtistLoginLogoutAdapter loginLogoutAdapter,
+    required FlutterArtistGlobalDataAdapter globalDataAdapter,
+    required FlutterArtistLocaleAdapter localeAdapter,
     required Function(BuildContext context)? showRestDebugDialog,
     int notificationFetchPeriodInSeconds = 60,
     int maxStoredLogEntryCount = 20,
@@ -227,11 +227,11 @@ class _FlutterArtist extends _Core {
     required StorageStructure storageStructure,
     required DebugOptions? debugOptions,
     required ConsoleDebugOptions? consoleDebugOptions,
-    required ICoreFeaturesAdapter coreFeaturesAdapter,
-    required INotificationAdapter? notificationAdapter,
-    required ILoginLogoutAdapter loginLogoutAdapter,
-    required IGlobalDataAdapter globalDataAdapter,
-    required ILocaleAdapter localeAdapter,
+    required FlutterArtistCoreFeaturesAdapter coreFeaturesAdapter,
+    required FlutterArtistNotificationAdapter? notificationAdapter,
+    required FlutterArtistLoginLogoutAdapter loginLogoutAdapter,
+    required FlutterArtistGlobalDataAdapter globalDataAdapter,
+    required FlutterArtistLocaleAdapter localeAdapter,
     required Function(BuildContext context)? showRestDebugDialog,
     required int notificationFetchPeriodInSeconds,
     required int maxStoredLogEntryCount,

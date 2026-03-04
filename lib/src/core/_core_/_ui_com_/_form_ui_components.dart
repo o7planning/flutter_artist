@@ -3,7 +3,7 @@ part of '../core.dart';
 class _FormUiComponents extends _UiComponents {
   final FormModel formModel;
 
-  final Map<_RefreshableWidgetState, XState> __formWidgetStates = {};
+  final Map<_ContextProviderViewState, XState> __formWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -37,7 +37,7 @@ class _FormUiComponents extends _UiComponents {
   bool hasActiveUiComponentWithContextKind({
     required ContextKind? contextKind,
   }) {
-    for (_RefreshableWidgetState widgetState in __formWidgetStates.keys) {
+    for (_ContextProviderViewState widgetState in __formWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -56,7 +56,7 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedFormWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedFormWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
@@ -69,7 +69,7 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _setFormViewBuildingState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isBuilding,
   }) {
     __formWidgetStates.update(
@@ -83,7 +83,7 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addFormWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required final bool isVisible,
   }) {
     bool isVisibleOLD = __formWidgetStates[widgetState]?.isVisible ?? false;
@@ -106,7 +106,7 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _removeFormWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
   }) {
     __formWidgetStates.remove(widgetState);
   }
@@ -114,9 +114,11 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  List<_RefreshableWidgetState> _getMountedFormWidgetStates() {
-    List<_RefreshableWidgetState> ret = [];
-    for (_RefreshableWidgetState widgetState in [...__formWidgetStates.keys]) {
+  List<_ContextProviderViewState> _getMountedFormWidgetStates() {
+    List<_ContextProviderViewState> ret = [];
+    for (_ContextProviderViewState widgetState in [
+      ...__formWidgetStates.keys
+    ]) {
       if (widgetState.mounted) {
         ret.add(widgetState);
       }
@@ -127,7 +129,8 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
+  bool _isWidgetStateBuilding(
+      {required _ContextProviderViewState widgetState}) {
     return __formWidgetStates[widgetState]?.isBuilding ?? false;
   }
 
@@ -138,8 +141,8 @@ class _FormUiComponents extends _UiComponents {
   /// Call this method to refresh Widgets..
   ///
   void __updateFormWidgets({bool force = false}) {
-    List<_RefreshableWidgetState> list = _getMountedFormWidgetStates();
-    for (_RefreshableWidgetState formWidgetState in list) {
+    List<_ContextProviderViewState> list = _getMountedFormWidgetStates();
+    for (_ContextProviderViewState formWidgetState in list) {
       if (formWidgetState.mounted) {
         formWidgetState.refreshState(force: force);
       }

@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class HookSectionViewBuilder extends _RefreshableWidget {
+class HookSectionViewBuilder extends _ContextProviderView {
   final Hook hook;
   final Widget Function() build;
 
@@ -19,14 +19,14 @@ class HookSectionViewBuilder extends _RefreshableWidget {
 }
 
 class _HookSectionViewBuilderState
-    extends _RefreshableWidgetState<HookSectionViewBuilder> {
+    extends _ContextProviderViewState<HookSectionViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.hook);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.hookFragment;
+  ContextProviderViewType get type => ContextProviderViewType.hookFragment;
 
   @override
   bool get provideScalarContext {

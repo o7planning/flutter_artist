@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class BlockSectionViewBuilder extends _RefreshableWidget {
+class BlockSectionViewBuilder extends _ContextProviderView {
   final Block block;
   final bool provideItemContext;
   final bool provideFormContext;
@@ -23,14 +23,14 @@ class BlockSectionViewBuilder extends _RefreshableWidget {
 }
 
 class _BlockSectionViewBuilderState
-    extends _RefreshableWidgetState<BlockSectionViewBuilder> {
+    extends _ContextProviderViewState<BlockSectionViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.blockFragment;
+  ContextProviderViewType get type => ContextProviderViewType.blockFragment;
 
   @override
   bool get provideScalarContext {

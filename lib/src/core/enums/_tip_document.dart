@@ -96,7 +96,7 @@ enum TipDocument {
       case TipDocument.coreFeaturesAdapter:
         return "FlutterArtistAdapter";
       case TipDocument.loginLogoutAdapter:
-        return "ILoginLogoutAdapter";
+        return "FlutterArtistLoginLogoutAdapter";
       case TipDocument.activity:
         return "FlutterArtist Activities";
       case TipDocument.shelf:
@@ -201,7 +201,7 @@ enum TipDocument {
       case TipDocument.coreFeaturesAdapter:
         return "FlutterArtistAdapter";
       case TipDocument.loginLogoutAdapter:
-        return "ILoginLogoutAdapter";
+        return "FlutterArtistLoginLogoutAdapter";
       case TipDocument.activity:
         return "FlutterArtist Activities";
       case TipDocument.shelf:

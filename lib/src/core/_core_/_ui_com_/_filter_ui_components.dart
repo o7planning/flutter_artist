@@ -3,7 +3,7 @@ part of '../core.dart';
 class _FilterUiComponents extends _UiComponents {
   final FilterModel filterModel;
 
-  final Map<_RefreshableWidgetState, XState> _filterBaseViewWidgetStates = {};
+  final Map<_ContextProviderViewState, XState> _filterBaseViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -13,7 +13,7 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedBaseViewWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
@@ -42,8 +42,8 @@ class _FilterUiComponents extends _UiComponents {
   bool hasActiveUiComponentWithContextKind({
     required ContextKind? contextKind,
   }) {
-    for (_RefreshableWidgetState widgetState
-        in _filterBaseViewWidgetStates.keys) {
+    for (_ContextProviderViewState widgetState
+    in _filterBaseViewWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -64,7 +64,7 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateFilterBaseViews({bool force = true}) {
-    for (_RefreshableWidgetState state in _filterBaseViewWidgetStates.keys) {
+    for (_ContextProviderViewState state in _filterBaseViewWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -75,7 +75,7 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateAllUiComponents({bool force = true}) {
-    for (_RefreshableWidgetState widgetState in [
+    for (_ContextProviderViewState widgetState in [
       ..._filterBaseViewWidgetStates.keys
     ]) {
       if (widgetState.mounted) {
@@ -87,7 +87,8 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
+  bool _isWidgetStateBuilding(
+      {required _ContextProviderViewState widgetState}) {
     return _filterBaseViewWidgetStates[widgetState]?.isBuilding ?? false;
   }
 
@@ -107,13 +108,15 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _setFilterPanelBuildingState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isBuilding,
   }) {
     _filterBaseViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setBuilding(isBuilding),
-      ifAbsent: () => XState().._setBuilding(isBuilding),
+          (xState) => xState.._setBuilding(isBuilding),
+      ifAbsent: () =>
+      XState()
+        .._setBuilding(isBuilding),
     );
   }
 
@@ -121,14 +124,16 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addFilterFragmentWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     bool activeOLD = hasActiveUiComponent();
     _filterBaseViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     bool activeCURRENT = hasActiveUiComponent();
 

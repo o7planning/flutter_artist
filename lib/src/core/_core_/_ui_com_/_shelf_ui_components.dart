@@ -3,7 +3,8 @@ part of '../core.dart';
 class _ShelfUiComponents extends _UiComponents {
   final Shelf shelf;
 
-  final Map<_RefreshableWidgetState, bool> __refreshableNeutralViewStates = {};
+  final Map<_ContextProviderViewState, bool> __refreshableNeutralViewStates =
+      {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -136,7 +137,7 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addShelfWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     __refreshableNeutralViewStates[widgetState] = isVisible;
@@ -187,7 +188,8 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void __updateRefreshableNeutralViews({bool force = true}) {
-    for (_RefreshableWidgetState state in __refreshableNeutralViewStates.keys) {
+    for (_ContextProviderViewState state
+        in __refreshableNeutralViewStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -210,10 +212,10 @@ class _ShelfUiComponents extends _UiComponents {
     required bool withControl,
     required bool activeOnly,
     required bool withPagination,
-    required Map<_RefreshableWidgetState, XState> founds,
+    required Map<_ContextProviderViewState, XState> founds,
   }) {
     for (Block block in blocks) {
-      Map<_RefreshableWidgetState, XState> m =
+      Map<_ContextProviderViewState, XState> m =
           block.ui._findMountedWidgetStates(
         activeOnly: activeOnly,
         withPagination: withPagination,
@@ -243,7 +245,7 @@ class _ShelfUiComponents extends _UiComponents {
       );
     }
     for (Scalar scalar in scalars) {
-      Map<_RefreshableWidgetState, XState> m =
+      Map<_ContextProviderViewState, XState> m =
           scalar.ui._findMountedWidgetStates(
         activeOnly: activeOnly,
         withFilter: withFilter,
@@ -273,7 +275,7 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
     required bool withBlockFragment,
     required bool withScalarFragment,
     required bool withPagination,
@@ -285,7 +287,7 @@ class _ShelfUiComponents extends _UiComponents {
     required bool withControl,
     required bool activeOnly,
   }) {
-    Map<_RefreshableWidgetState, XState> founds = {};
+    Map<_ContextProviderViewState, XState> founds = {};
     __findMountedWidgetStates(
       blocks: shelf._rootBlocks,
       scalars: shelf._rootScalars,
@@ -308,7 +310,7 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
 
   @DebugMethodAnnotation()
-  Map<IRefreshableWidgetState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
     required bool withBlockFragment,
     required bool withScalarFragment,
     required bool withPagination,

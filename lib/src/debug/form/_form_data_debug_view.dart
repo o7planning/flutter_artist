@@ -104,7 +104,7 @@ class _FormDataViewState extends State<FormDataView> {
 
     tabs.add(
       TabData(
-        text: ' Form Props Structure',
+        text: ' Properties',
         closable: false,
         leading: (context, status) => Icon(
           FaIconConstants.formValueIconData,

@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class ScalarSectionViewBuilder extends _RefreshableWidget {
+class ScalarSectionViewBuilder extends _ContextProviderView {
   final Scalar scalar;
   final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
@@ -21,14 +21,14 @@ class ScalarSectionViewBuilder extends _RefreshableWidget {
 }
 
 class _ScalarSectionViewBuilderState
-    extends _RefreshableWidgetState<ScalarSectionViewBuilder> {
+    extends _ContextProviderViewState<ScalarSectionViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.scalar);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.scalarFragment;
+  ContextProviderViewType get type => ContextProviderViewType.scalarFragment;
 
   @override
   bool get provideScalarContext {

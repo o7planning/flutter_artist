@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class BlockItemsViewBuilder extends _RefreshableWidget {
+class BlockItemsViewBuilder extends _ContextProviderView {
   final Block block;
   final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
@@ -25,14 +25,14 @@ class BlockItemsViewBuilder extends _RefreshableWidget {
 }
 
 class _BlockItemsViewBuilderState
-    extends _RefreshableWidgetState<BlockItemsViewBuilder> {
+    extends _ContextProviderViewState<BlockItemsViewBuilder> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.blockItemsView;
+  ContextProviderViewType get type => ContextProviderViewType.blockItemsView;
 
   @override
   bool get provideScalarContext {

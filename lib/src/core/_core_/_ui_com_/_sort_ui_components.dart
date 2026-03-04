@@ -3,7 +3,7 @@ part of '../core.dart';
 class _SortUiComponents extends _UiComponents {
   final SortModel sortModel;
 
-  final Map<_RefreshableWidgetState, XState> _sortWidgetStates = {};
+  final Map<_ContextProviderViewState, XState> _sortWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -13,7 +13,7 @@ class _SortUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_RefreshableWidgetState, XState> _findMountedBaseViewWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
@@ -42,7 +42,7 @@ class _SortUiComponents extends _UiComponents {
   bool hasActiveUiComponentWithContextKind({
     required ContextKind? contextKind,
   }) {
-    for (_RefreshableWidgetState widgetState in _sortWidgetStates.keys) {
+    for (_ContextProviderViewState widgetState in _sortWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -62,7 +62,7 @@ class _SortUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void updateAllUiComponents({bool force = true}) {
-    for (_RefreshableWidgetState widgetState in [..._sortWidgetStates.keys]) {
+    for (_ContextProviderViewState widgetState in [..._sortWidgetStates.keys]) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -72,7 +72,8 @@ class _SortUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isWidgetStateBuilding({required _RefreshableWidgetState widgetState}) {
+  bool _isWidgetStateBuilding(
+      {required _ContextProviderViewState widgetState}) {
     return _sortWidgetStates[widgetState]?.isBuilding ?? false;
   }
 
@@ -92,7 +93,7 @@ class _SortUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _setSortPanelBuildingState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isBuilding,
   }) {
     _sortWidgetStates.update(
@@ -106,7 +107,7 @@ class _SortUiComponents extends _UiComponents {
   // ***************************************************************************
 
   void _addSortFragmentWidgetState({
-    required _RefreshableWidgetState widgetState,
+    required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
     bool activeOLD = hasActiveUiComponent();

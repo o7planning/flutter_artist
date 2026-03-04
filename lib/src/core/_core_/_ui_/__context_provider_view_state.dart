@@ -1,9 +1,9 @@
 part of '../core.dart';
 
-interface class IRefreshableWidgetState {
+interface class IContextProviderViewState {
   ShowMode showMode = ShowMode.production;
 
-  RefreshableWidgetType get type => throw UnimplementedError();
+  ContextProviderViewType get type => throw UnimplementedError();
 
   String get locationInfo => throw UnimplementedError();
 
@@ -13,13 +13,13 @@ interface class IRefreshableWidgetState {
 }
 
 // Google Search: Flutter NavigatorObserver Aware.
-abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
+abstract class _ContextProviderViewState<W extends _ContextProviderView>
     extends State<W> //
 // Google Search: Flutter NavigatorObserver Aware.
     with
         RouteAware
     implements
-        IRefreshableWidgetState {
+        IContextProviderViewState {
   String? __modelRouteName;
 
   double __maxSize = 0;
@@ -64,7 +64,7 @@ abstract class _RefreshableWidgetState<W extends _RefreshableWidget>
   }
 
   @override
-  RefreshableWidgetType get type;
+  ContextProviderViewType get type;
 
   @override
   String get locationInfo => getClassName(widget.ownerClassInstance);

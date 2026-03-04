@@ -2,13 +2,13 @@ part of '../core.dart';
 
 class LocaleManager extends _Core {
   final GlobalsManager _globalsManager;
-  final ILocaleAdapter _localeAdapter;
+  final FlutterArtistLocaleAdapter _localeAdapter;
 
   final String propName = "locale";
 
   LocaleManager._({
     required GlobalsManager globalsManager,
-    required ILocaleAdapter localeAdapter,
+    required FlutterArtistLocaleAdapter localeAdapter,
   })  : _globalsManager = globalsManager,
         _localeAdapter = localeAdapter;
 

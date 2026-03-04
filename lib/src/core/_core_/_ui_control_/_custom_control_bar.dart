@@ -2,7 +2,7 @@ part of '../core.dart';
 
 @Deprecated(
     "Not yet ready for use, not yet designed, may be continued in a few months.")
-class CustomControlBar extends _RefreshableWidget {
+class CustomControlBar extends _ContextProviderView {
   final EdgeInsets margin;
   final EdgeInsets padding;
   final Decoration? decoration;
@@ -29,14 +29,15 @@ class CustomControlBar extends _RefreshableWidget {
   }
 }
 
-class _CustomControlBarState extends _RefreshableWidgetState<CustomControlBar> {
+class _CustomControlBarState
+    extends _ContextProviderViewState<CustomControlBar> {
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
 
   @override
-  RefreshableWidgetType get type => RefreshableWidgetType.customControlBar;
+  ContextProviderViewType get type => ContextProviderViewType.customControlBar;
 
   @override
   bool get provideScalarContext {

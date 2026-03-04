@@ -326,7 +326,8 @@ class _Storage extends _StorageCore {
       navigate: null,
       isLibMethod: true,
     );
-    return await __deferment._openEndDrawerAndDeferExternalShelfEventsUntilClosed(
+    return await __deferment
+        ._openEndDrawerAndDeferExternalShelfEventsUntilClosed(
       context,
       executionTrace: executionTrace,
       showSuggestionIfNeed: showSuggestionIfNeed,
