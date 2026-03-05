@@ -778,7 +778,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     required bool success,
   }) async {
     BuildContext context =
-    FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    FlutterArtist.coreFeaturesAdapter.context;
     bool success2;
     try {
       executionTrace._addTraceStep(
@@ -1265,7 +1265,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
 
   Future<void> showDebugFilterCriteriaViewerDialog() async {
     BuildContext context =
-    FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    FlutterArtist.coreFeaturesAdapter.context;
     //
     await DebugViewerDialog.openDebugFilterCriteriaViewer(
       context: context,

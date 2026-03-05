@@ -4022,7 +4022,7 @@ abstract class Block<
     }
     //
     BuildContext context =
-        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+        FlutterArtist.coreFeaturesAdapter.context;
     bool confirm = await showConfirmDeleteDialog(
       context: context,
       details: getClassName(item),
@@ -4105,7 +4105,7 @@ abstract class Block<
     }
     //
     BuildContext context =
-        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+        FlutterArtist.coreFeaturesAdapter.context;
     bool confirm = await showConfirmDeleteDialog(
       context: context,
       details: "Delete Multi Items",
@@ -7899,7 +7899,7 @@ abstract class Block<
 
   Future<void> showDebugFilterCriteriaViewerDialog() async {
     BuildContext context =
-        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+        FlutterArtist.coreFeaturesAdapter.context;
     //
     await DebugViewerDialog.openDebugFilterCriteriaViewer(
       context: context,

@@ -2311,7 +2311,7 @@ abstract class FormModel<
 
   Future<void> showDebugFormModelViewerDialog() async {
     BuildContext context =
-        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+        FlutterArtist.coreFeaturesAdapter.context;
     //
     await DebugFormModelViewerDialog.open(
       context: context,

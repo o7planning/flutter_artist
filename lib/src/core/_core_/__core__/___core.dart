@@ -6,8 +6,7 @@ abstract class _Core {
     required String message,
     String? details,
   }) async {
-    BuildContext context =
-        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     bool confirm = await dialogs.showConfirmDialog(
       context: context,
       message: message,
@@ -18,8 +17,7 @@ abstract class _Core {
 
   // TODO: Them tham so BuildContext?
   Future<bool> showConfirmDeleteDialog({String? details}) async {
-    BuildContext context =
-        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     bool confirm = await dialogs.showConfirmDeleteDialog(
       context: context,
       details: details ?? "",
@@ -32,8 +30,7 @@ abstract class _Core {
     required String message,
     String? details,
   }) async {
-    BuildContext context =
-        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     await dialogs.showMessageDialog(
       context: context,
       message: message,
@@ -46,8 +43,7 @@ abstract class _Core {
     required DefaultConfirmation defaultConfirmation,
     required CustomConfirmation? customConfirmation,
   }) async {
-    BuildContext context =
-        FlutterArtist.coreFeaturesAdapter.getCurrentContext();
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     //
     if (customConfirmation != null) {
       try {

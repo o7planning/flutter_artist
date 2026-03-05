@@ -410,10 +410,10 @@ class _FlutterArtist extends _Core {
   }
 
   void _showOverlayIfNeed() {
-    if (isOverlaysOpen()) {
+    if (isOverlayOpen) {
       return;
     }
-    showOverlay(
+    _runWithOverlay(
       asyncFunction: () async {
         await Future.doWhile(
           () => Future.delayed(
@@ -429,21 +429,21 @@ class _FlutterArtist extends _Core {
     );
   }
 
-  Future<void> showOverlay({
+  Future<void> _runWithOverlay({
     required Future<dynamic> Function() asyncFunction,
   }) async {
-    await coreFeaturesAdapter.showOverlay(
+    await coreFeaturesAdapter.runWithOverlay(
       opacity: _isOverlayMode ? 0.3 : 0.02,
       asyncFunction: asyncFunction,
     );
   }
 
-  bool isOverlaysOpen() {
-    return coreFeaturesAdapter.isOverlaysOpen();
+  bool get isOverlayOpen {
+    return coreFeaturesAdapter.isOverlayOpen;
   }
 
   Future<void> showCodeFlowViewerDialog() async {
-    BuildContext context = coreFeaturesAdapter.getCurrentContext();
+    BuildContext context = coreFeaturesAdapter.context;
     await CodeFlowViewerDialog.open(context: context);
   }
 
@@ -461,7 +461,7 @@ class _FlutterArtist extends _Core {
   }
 
   Future<void> showLogViewerDialog({int? logEntryId}) async {
-    BuildContext context = coreFeaturesAdapter.getCurrentContext();
+    BuildContext context = coreFeaturesAdapter.context;
     //
     await LogViewerDialog.open(
       context: context,
