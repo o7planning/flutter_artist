@@ -43,7 +43,7 @@ class _FilterUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (_ContextProviderViewState widgetState
-    in _filterBaseViewWidgetStates.keys) {
+        in _filterBaseViewWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -113,10 +113,8 @@ class _FilterUiComponents extends _UiComponents {
   }) {
     _filterBaseViewWidgetStates.update(
       widgetState,
-          (xState) => xState.._setBuilding(isBuilding),
-      ifAbsent: () =>
-      XState()
-        .._setBuilding(isBuilding),
+      (xState) => xState.._setBuilding(isBuilding),
+      ifAbsent: () => XState().._setBuilding(isBuilding),
     );
   }
 
@@ -130,10 +128,8 @@ class _FilterUiComponents extends _UiComponents {
     bool activeOLD = hasActiveUiComponent();
     _filterBaseViewWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
     bool activeCURRENT = hasActiveUiComponent();
 

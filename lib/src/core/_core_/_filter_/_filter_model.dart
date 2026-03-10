@@ -1135,10 +1135,10 @@ abstract class FilterModel<
       }
       if (currentSelectedItems != null) {
         currentSelectedItems =
-            tempMultiOptCriterionXData._findInternalItemsByDynamics(
+            tempMultiOptCriterionXData._resolveItemsFromRawData(
           dynamicValues: currentSelectedItems,
-          removeCurrentNotFoundItems: true,
-          addToInternalIfNotFound: false,
+          clearOrphanItems: true,
+          addOrphan: false,
         );
       }
       // Candidate Selected Items:
@@ -1298,10 +1298,10 @@ abstract class FilterModel<
     }
     List? value = valueWrap.values;
     return OptValueWrap.multi(
-      multiOptTildeCriterionXData._findInternalItemsByDynamics(
+      multiOptTildeCriterionXData._resolveItemsFromRawData(
         dynamicValues: value,
-        addToInternalIfNotFound: false,
-        removeCurrentNotFoundItems: true,
+        addOrphan: false,
+        clearOrphanItems: true,
       ),
     );
   }
@@ -1328,10 +1328,10 @@ abstract class FilterModel<
     }
     List? value = valueWrap?.values ?? [];
     return OptValueWrap.multi(
-      multiOptTildeCriterionXData._findInternalItemsByDynamics(
+      multiOptTildeCriterionXData._resolveItemsFromRawData(
         dynamicValues: value,
-        addToInternalIfNotFound: false,
-        removeCurrentNotFoundItems: true,
+        addOrphan: false,
+        clearOrphanItems: true,
       ),
     );
   }
@@ -1503,8 +1503,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   Future<void> showDebugFilterModelViewerDialog() async {
-    BuildContext context =
-        FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     //
     await DebugViewerDialog.openDebugFilterModelViewer(
       context: context,
@@ -1517,8 +1516,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   Future<void> showDebugFilterCriteriaViewerDialog() async {
-    BuildContext context =
-        FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     //
     await DebugViewerDialog.openDebugFilterCriteriaViewer(
       context: context,

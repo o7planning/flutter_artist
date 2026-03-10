@@ -1,101 +1,113 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/core/built_in_ui/_tile.dart';
 
 import '../_core_/core.dart';
 import '../enums/_sort_direction.dart';
 import '_sorting_options.dart';
-
-// TODO: Garbage collection.
-final __privateGlobalMap = <SortModel, SortCriterion?>{};
+import 'dropdown_sort_panel_style.dart';
 
 class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
-  final TextStyle textStyle;
-  final double iconSpacing;
+  final DropdownSortPanelStyle style;
+
+  final SortCriterionItemBuilder? itemBuilder;
+
+  final AlignmentGeometry? alignment;
+  final EdgeInsetsGeometry? padding;
+  final Decoration? decoration;
+  final EdgeInsetsGeometry? margin;
 
   const DropdownSortPanel({
     super.key,
     required super.sortModel,
-    this.iconSpacing = 3,
-    this.textStyle = const TextStyle(fontSize: 14),
-  });
-
-  const DropdownSortPanel.simple({
-    super.key,
-    required super.sortModel,
-    this.iconSpacing = 3,
-    this.textStyle = const TextStyle(fontSize: 14),
+    this.style = const DropdownSortPanelStyle(),
+    this.itemBuilder,
+    this.alignment,
+    this.padding,
+    this.decoration,
+    this.margin,
   });
 
   @override
   Widget buildContent(BuildContext context) {
-    List<SortCriterion> criteria = sortModel.criteria;
-    SortCriterion? selected = __privateGlobalMap[sortModel];
-    if (selected == null) {
-      selected = sortModel.findFirstCriterionHasDirection() ??
-          sortModel.criteria.firstOrNull;
-      __privateGlobalMap[sortModel] = selected;
-    }
+    SortCriterion? selected = sortModel.findFirstCriterionHasDirection() ??
+        (sortModel.criteria.isNotEmpty ? sortModel.criteria.first : null);
 
-    //
-    return DropdownButton<SortCriterion>(
-      isDense: true,
-      value: selected,
-      icon: const Icon(Icons.keyboard_arrow_down),
-      items: criteria.map(
-        (criterion) {
-          return DropdownMenuItem(
-            value: criterion,
-            child: _buildSortingCriterionView(
-              sortModel: sortModel,
-              sortCriterion: criterion,
-              selectedSortingCriterion: selected,
-            ),
-          );
-        },
-      ).toList(),
-      onChanged: _onChanged,
+    return Container(
+      alignment: alignment,
+      padding: padding ?? style.padding,
+      decoration: decoration ?? style.decoration,
+      margin: margin,
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<SortCriterion>(
+          isDense: style.isDense,
+          value: selected,
+          icon: Icon(
+            style.dropdownIcon,
+            size: style.dropdownIconSize,
+            color: style.dropdownIconColor,
+          ),
+          items: sortModel.criteria
+              .map(
+                (criterion) => DropdownMenuItem(
+                  value: criterion,
+                  child: _buildItem(
+                    context,
+                    criterion,
+                    selected,
+                  ),
+                ),
+              )
+              .toList(),
+          onChanged: (value) => _onChanged(value),
+        ),
+      ),
     );
   }
 
-  void _onChanged(SortCriterion? selectedSortCriterion) {
-    if (selectedSortCriterion == null) {
-      return;
+  Widget _buildItem(
+    BuildContext context,
+    SortCriterion criterion,
+    SortCriterion? selected,
+  ) {
+    final toggle = () => _toggleCriterion(criterion);
+
+    if (itemBuilder != null) {
+      return itemBuilder!(
+        context,
+        criterion,
+        criterion == selected,
+        toggle,
+      );
     }
-    __privateGlobalMap[sortModel] = selectedSortCriterion;
 
-    SortDirection? direction = selectedSortCriterion.direction;
-    direction ??= selectedSortCriterion.lastUsedDirection ??
-        selectedSortCriterion.initialDirection ??
-        SortDirection.asc;
+    return SortCriterionTile(
+      sortModel: sortModel,
+      criterion: criterion,
+      style: style,
+      enabled: criterion == selected,
+    );
+  }
 
+  void _toggleCriterion(SortCriterion criterion) {
     sortModel.updateSortingCriterionByName(
-      criterionName: selectedSortCriterion.criterionName,
-      direction: direction,
+      criterionName: criterion.criterionName,
+      direction: criterion.nextDirection,
       moveToFirst: false,
     );
   }
 
-  Widget _buildSortingCriterionView({
-    required SortModel sortModel,
-    required SortCriterion sortCriterion,
-    required SortCriterion? selectedSortingCriterion,
-  }) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          sortCriterion.text,
-          style: textStyle,
-        ),
-        SizedBox(width: iconSpacing),
-        buildSortBtn(
-          sortModel: sortModel,
-          sortCriterion: sortCriterion,
-          isDragging: false,
-          enabled: sortCriterion.criterionName ==
-              selectedSortingCriterion?.criterionName,
-        ),
-      ],
+  void _onChanged(SortCriterion? selected) {
+    if (selected == null) return;
+
+    SortDirection? direction = selected.direction ??
+        selected.lastUsedDirection ??
+        selected.initialDirection ??
+        SortDirection.asc;
+
+    sortModel.updateSortingCriterionByName(
+      criterionName: selected.criterionName,
+      direction: direction,
+      moveToFirst: false,
     );
   }
 }

@@ -75,7 +75,7 @@ abstract class SortModel<ITEM extends Object> {
   ///
   SortableCriteria getSortableCriteria() {
     List<SortableCriterion> list = _criteria
-        .where((sc) => sc.hasDirection())
+        .where((sc) => sc.hasDirection)
         .map(
           (sc) => SortableCriterion._(
             direction: sc.direction!,
@@ -98,9 +98,9 @@ abstract class SortModel<ITEM extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasDirection() {
+  bool get hasDirection {
     for (SortCriterion criterion in _criteria) {
-      if (criterion.hasDirection()) {
+      if (criterion.hasDirection) {
         return true;
       }
     }
@@ -218,7 +218,7 @@ abstract class SortModel<ITEM extends Object> {
   // ***************************************************************************
 
   Future<void> clearAllSorts() async {
-    if (!hasDirection()) {
+    if (!hasDirection) {
       return;
     }
     for (SortCriterion sc in _criteria) {

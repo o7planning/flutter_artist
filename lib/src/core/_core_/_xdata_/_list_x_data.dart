@@ -43,7 +43,7 @@ class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
   }
 
   @override
-  ITEM? findInternalItemByItemId(ID? id) {
+  ITEM? findInternalItemById(ID? id) {
     return ItemsUtils.findItemInListById(
       id: id,
       targetList: _items,
@@ -60,7 +60,7 @@ class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
     );
   }
 
-  void replaceOrInsertItem({
+  void _replaceOrInsertItem({
     required ITEM newItem,
   }) {
     ItemsUtils.replaceOrInsertItem(
@@ -70,7 +70,7 @@ class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
     );
   }
 
-  void removeItemById(ID id) {
+  void _removeItemById(ID id) {
     ItemsUtils.removeItemById(
       id: id,
       targetList: _items,
@@ -78,12 +78,12 @@ class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
     );
   }
 
-  void removeItem({required ITEM removeItem}) {
+  void _removeItem({required ITEM removeItem}) {
     ID id = getItemId(removeItem);
-    removeItemById(id);
+    _removeItemById(id);
   }
 
-  void addItemIfNotExists({
+  void _addItemIfNotExists({
     required ITEM item,
   }) {
     ItemsUtils.addItemIfNotExists(
@@ -93,20 +93,20 @@ class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
     );
   }
 
-  void addItemsIfNotExists({
+  void _addItemsIfNotExists({
     required List<ITEM> items,
   }) {
     for (ITEM item in items) {
-      addItemIfNotExists(item: item);
+      _addItemIfNotExists(item: item);
     }
   }
 
-  void clear() {
+  void _clear() {
     _items.clear();
   }
 
   @override
-  void addNotFoundItem(ITEM item) {
+  void addOrphanItem(ITEM item) {
     ITEM? internalItem = findInternalItem(item: item);
     if (internalItem == null) {
       _items.add(item);
@@ -114,7 +114,7 @@ class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
   }
 
   @override
-  void removeNotFoundItem(ITEM item) {
+  void removeOrphanItem(ITEM item) {
     ITEM? internalItem = findInternalItem(item: item);
     if (internalItem != null) {
       _items.remove(internalItem);

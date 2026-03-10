@@ -3,13 +3,11 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
 import '../_core_/core.dart';
 import '_sorting_options.dart';
+import 'breadcrumb_sort_panel_style.dart';
 
 class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
-  final double itemSpacing;
-  final double iconSpacing;
+  final BreadcrumbSortPanelStyle style;
 
-  //
-  final TextStyle textStyle;
   final AlignmentGeometry? alignment;
   final EdgeInsetsGeometry? padding;
   final Decoration? decoration;
@@ -22,17 +20,10 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
   final AlignmentGeometry? transformAlignment;
   final Clip clipBehavior;
 
-  //
-  final Color _dividerColor = Colors.indigo.withAlpha(80);
-  static const double _dividerHeight = 20;
-
-  BreadcrumbSortPanel({
+  const BreadcrumbSortPanel({
     super.key,
     required super.sortModel,
-    this.itemSpacing = 5,
-    this.iconSpacing = 3,
-    this.textStyle = const TextStyle(fontSize: 14),
-    //
+    this.style = const BreadcrumbSortPanelStyle(),
     this.alignment,
     this.padding,
     this.decoration,
@@ -46,13 +37,10 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
     this.clipBehavior = Clip.none,
   });
 
-  BreadcrumbSortPanel.simple({
+  const BreadcrumbSortPanel.simple({
     super.key,
     required super.sortModel,
-    this.itemSpacing = 5,
-    this.iconSpacing = 3,
-    this.textStyle = const TextStyle(fontSize: 14),
-    //
+    this.style = const BreadcrumbSortPanelStyle(),
     this.alignment,
     this.padding = const EdgeInsets.all(5),
     this.foregroundDecoration,
@@ -63,8 +51,10 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
     this.transform,
     this.transformAlignment,
     this.clipBehavior = Clip.none,
-  }) : decoration = BoxDecoration(
-          border: Border.all(color: Colors.grey, width: 0.4),
+  }) : decoration = const BoxDecoration(
+          border: Border.fromBorderSide(
+            BorderSide(color: Colors.grey, width: 0.4),
+          ),
         );
 
   @override
@@ -82,100 +72,95 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
       transformAlignment: transformAlignment,
       clipBehavior: clipBehavior,
       child: BreadCrumb(
-        divider: _buildVerticalSeparator(),
+        divider: _buildSeparator(),
         overflow: ScrollableOverflow(
           keepLastDivider: false,
           reverse: false,
           direction: Axis.horizontal,
         ),
         items: sortModel.criteria
-            .map(
-              (criterion) => _buildBreadCrumbItem(
-                criterion,
-              ),
-            )
+            .map((criterion) => _buildBreadCrumbItem(context, criterion))
             .toList(),
       ),
     );
   }
 
-  BreadCrumbItem _buildBreadCrumbItem(SortCriterion criterion) {
+  BreadCrumbItem _buildBreadCrumbItem(
+    BuildContext context,
+    SortCriterion criterion,
+  ) {
     return BreadCrumbItem(
       content: DragTarget<SortCriterion>(
         hitTestBehavior: HitTestBehavior.deferToChild,
-        onWillAcceptWithDetails: (DragTargetDetails<SortCriterion> details) {
-          if (details.data.criterionName == criterion.criterionName) {
-            return false;
-          }
-          return true;
-        },
-        onAcceptWithDetails: (DragTargetDetails<SortCriterion> details) {
+        onWillAcceptWithDetails: (details) =>
+            details.data.criterionName != criterion.criterionName,
+        onAcceptWithDetails: (details) {
           sortModel.moveCriterion(
             movingCriterionName: details.data.criterionName,
             destCriterionName: criterion.criterionName,
           );
         },
-        builder: (
-          BuildContext context,
-          List<SortCriterion?> candidateData,
-          List<dynamic> rejectedData,
-        ) {
+        builder: (context, candidateData, rejectedData) {
           return Draggable<SortCriterion>(
             data: criterion,
-            feedback: _buildDragFeedback(criterion),
-            childWhenDragging: _buildSortingCriterionView(
-              sortCriterion: criterion,
-              isDragging: true,
-            ),
-            onDragCompleted: () {
-              // Do nothing.
-            },
-            child: _buildSortingCriterionView(
-              sortCriterion: criterion,
-              isDragging: false,
-            ),
+            feedback: _buildDragFeedback(),
+            childWhenDragging: _buildCriterionView(context, criterion, true),
+            child: _buildCriterionView(context, criterion, false),
           );
         },
       ),
     );
   }
 
-  Widget _buildDragFeedback(SortCriterion sortingCriterion) {
-    return Icon(
-      Icons.video_file,
-      size: 16,
-      color: Colors.indigo,
+  Widget _buildDragFeedback() {
+    return Material(
+      color: Colors.transparent,
+      child: Icon(
+        style.dragFeedbackIcon,
+        size: 20,
+        color: style.dragFeedbackColor,
+      ),
     );
   }
 
-  Widget _buildSortingCriterionView({
-    required SortCriterion sortCriterion,
-    required bool isDragging,
-  }) {
+  Widget _buildCriterionView(
+    BuildContext context,
+    SortCriterion criterion,
+    bool isDragging,
+  ) {
+    final textStyle = isDragging
+        ? (style.draggingTextStyle ??
+            style.textStyle.copyWith(color: Colors.grey))
+        : style.textStyle;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          sortCriterion.text,
-          style: isDragging //
-              ? textStyle.copyWith(color: Colors.grey)
-              : textStyle,
-        ),
-        SizedBox(width: iconSpacing),
-        buildSortBtn(
+        Text(criterion.text, style: textStyle),
+        SizedBox(width: style.iconSpacing),
+        buildSortButton(
+          context: context,
           sortModel: sortModel,
-          sortCriterion: sortCriterion,
-          isDragging: isDragging,
+          criterion: criterion,
           enabled: true,
+          isDragging: isDragging,
+          iconSize: 16,
+          draggingColor: Colors.grey,
         ),
       ],
     );
   }
 
-  Widget _buildVerticalSeparator() {
-    return SizedBox(
-      height: _dividerHeight,
-      child: VerticalDivider(color: _dividerColor),
+  Widget _buildSeparator() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: style.itemSpacing),
+      child: SizedBox(
+        height: style.dividerHeight,
+        child: VerticalDivider(
+          color: style.dividerColor,
+          thickness: style.dividerThickness,
+        ),
+      ),
     );
   }
 }

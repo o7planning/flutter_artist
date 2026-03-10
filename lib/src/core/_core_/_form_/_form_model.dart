@@ -1631,10 +1631,10 @@ abstract class FormModel<
       }
       if (currentSelectedItems != null) {
         currentSelectedItems =
-            tempMultiOptPropXData._findInternalItemsByDynamics(
+            tempMultiOptPropXData._resolveItemsFromRawData(
           dynamicValues: currentSelectedItems,
-          addToInternalIfNotFound: true,
-          removeCurrentNotFoundItems: true,
+          addOrphan: true,
+          clearOrphanItems: true,
         );
       }
       // Candidate Selected Items:
@@ -1666,20 +1666,20 @@ abstract class FormModel<
     //
     if (activityType == FormActivityType.startCreatingOrEditing ||
         parentValueIsInitialValue) {
-      tempMultiOptPropXData?._addInitialValueIfNotFound(
+      tempMultiOptPropXData?._addInitialValueIfOrphan(
         initialValue: initialValue,
-        removeCurrentNotFoundItems: true,
+        removeCurrentOrphanItems: true,
       );
     }
     // TODO: Dangerous, check not null:
     candidateSelectedItems =
-        tempMultiOptPropXData?._findInternalItemsByDynamics(
+        tempMultiOptPropXData?._resolveItemsFromRawData(
               dynamicValues: candidateSelectedItems,
               //
               // IMPORTANT: Add not found item to internal list.
               //
-              addToInternalIfNotFound: true,
-              removeCurrentNotFoundItems: false,
+              addOrphan: true,
+              clearOrphanItems: false,
             ) ??
             [];
     //
@@ -1826,10 +1826,10 @@ abstract class FormModel<
       }
       List? value = valueWrap.values;
       return OptValueWrap.multi(
-        multiOptPropXData._findInternalItemsByDynamics(
+        multiOptPropXData._resolveItemsFromRawData(
           dynamicValues: value,
-          addToInternalIfNotFound: true,
-          removeCurrentNotFoundItems: true,
+          addOrphan: true,
+          clearOrphanItems: true,
         ),
       );
     } catch (e, stackTrace) {
@@ -1969,10 +1969,10 @@ abstract class FormModel<
       }
       List? value = valueWrap?.values ?? [];
       return OptValueWrap.multi(
-        multiOptPropXData._findInternalItemsByDynamics(
+        multiOptPropXData._resolveItemsFromRawData(
           dynamicValues: value,
-          addToInternalIfNotFound: true,
-          removeCurrentNotFoundItems: true,
+          addOrphan: true,
+          clearOrphanItems: true,
         ),
       );
     } catch (e, stackTrace) {
@@ -2310,8 +2310,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<void> showDebugFormModelViewerDialog() async {
-    BuildContext context =
-        FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     //
     await DebugFormModelViewerDialog.open(
       context: context,

@@ -1,14 +1,14 @@
 part of '../core.dart';
 
 abstract class BlockItemsView<
-BLOCK extends Block<
-    Object, //
-    Identifiable,
-    Identifiable,
-    FilterInput,
-    FilterCriteria,
-    FormInput,
-    AdditionalFormRelatedData>> extends StatelessWidget {
+    BLOCK extends Block<
+        Object, //
+        Identifiable,
+        Identifiable,
+        FilterInput,
+        FilterCriteria,
+        FormInput,
+        AdditionalFormRelatedData>> extends StatelessWidget {
   final BLOCK block;
   final QuickSuggestionMode quickSuggestionMode;
   final bool provideItemContext;

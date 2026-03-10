@@ -43,18 +43,18 @@ class TreeXData<ID, TREE_ITEM, TREE_DATA>
   }
 
   @override
-  TREE_ITEM? findInternalItemByItemId(ID? id) {
+  TREE_ITEM? findInternalItemById(ID? id) {
     List<TREE_ITEM> rootItems = getRootTreeItems();
     return __findIdByIdCascade(rootItems, id);
   }
 
   @override
-  void addNotFoundItem(TREE_ITEM item) {
+  void addOrphanItem(TREE_ITEM item) {
     addNotFoundTreeItem(item);
   }
 
   @override
-  void removeNotFoundItem(TREE_ITEM item) {
+  void removeOrphanItem(TREE_ITEM item) {
     removeNotFoundTreeItem(item);
   }
 }

@@ -29,19 +29,19 @@ class SortCriterion extends Equatable {
         _initialDirection = direction,
         _lastUsedDirection = direction;
 
-  bool isAscending() {
+  bool get isAscending {
     return _direction == SortDirection.asc;
   }
 
-  bool isDescending() {
+  bool get isDescending {
     return _direction == SortDirection.desc;
   }
 
-  bool hasDirection() {
+  bool get hasDirection {
     return _direction != null;
   }
 
-  bool hasNoDirection() {
+  bool get hasNoDirection {
     return _direction == null;
   }
 
@@ -69,7 +69,7 @@ class SortCriterion extends Equatable {
     );
   }
 
-  SortDirection? getNextDirection() {
+  SortDirection? get nextDirection {
     switch (_direction) {
       case SortDirection.asc:
         return SortDirection.desc;

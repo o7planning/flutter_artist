@@ -75,8 +75,10 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
 
   Widget _buildLeftRightFilterCriterion() {
     return LeftRightContainer(
-      startPadding: EdgeInsets.all(5),
-      endPadding: EdgeInsets.all(5),
+      style: LeftRightContainerStyle(
+        startPadding: EdgeInsets.all(5),
+        endPadding: EdgeInsets.all(5),
+      ),
       spacing: 20,
       fixedSizeWidth: 260,
       minSideWidth: 240,

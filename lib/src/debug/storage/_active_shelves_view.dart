@@ -48,13 +48,15 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
   @override
   Widget build(BuildContext context) {
     return LeftRightContainer(
+      style: LeftRightContainerStyle(
+        startPadding: EdgeInsets.all(5),
+        endPadding: EdgeInsets.all(5),
+      ),
       fixedSide: FixedSide.start,
       spacing: 5,
       arrowTopPosition: 35,
       fixedSizeWidth: 280,
       minSideWidth: 300,
-      startPadding: const EdgeInsets.all(5),
-      endPadding: const EdgeInsets.all(5),
       start: _buildLeft(),
       end: _buildRight(),
     );

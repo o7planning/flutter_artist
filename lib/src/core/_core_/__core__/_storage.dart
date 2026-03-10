@@ -338,8 +338,7 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
 
   Future<void> showDebugStorageViewerDialog() async {
-    BuildContext context =
-        FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     //
     await DebugStorageViewerDialog.open(
       context: context,

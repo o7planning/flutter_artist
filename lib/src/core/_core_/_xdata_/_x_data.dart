@@ -3,9 +3,9 @@ part of '../core.dart';
 abstract class XData<ID, ITEM, DATA> {
   final ID Function(ITEM item) _getItemId;
 
-  final Map<ID, ITEM> _notFoundItemsMap = {};
+  final Map<ID, ITEM> _orphanItemsMap = {};
 
-  List<ITEM> get notFoundItems => List.unmodifiable(_notFoundItemsMap.values);
+  List<ITEM> get orphanItems => List.unmodifiable(_orphanItemsMap.values);
 
   XData({
     required ID Function(ITEM item) getItemId,
@@ -17,15 +17,15 @@ abstract class XData<ID, ITEM, DATA> {
 
   Type get itemIdType => ID;
 
-  ITEM? findInternalItemByItemId(ID? id);
+  ITEM? findInternalItemById(ID? id);
 
-  void addNotFoundItem(ITEM item);
+  void addOrphanItem(ITEM item);
 
-  void removeNotFoundItem(ITEM item);
+  void removeOrphanItem(ITEM item);
 
-  void __removeAllNotFoundItems() {
-    for (ITEM item in _notFoundItemsMap.values) {
-      removeNotFoundItem(item);
+  void _clearOrphanItems() {
+    for (ITEM item in _orphanItemsMap.values) {
+      removeOrphanItem(item);
     }
   }
 
@@ -37,16 +37,16 @@ abstract class XData<ID, ITEM, DATA> {
     return findInternalItem(item: item) != null;
   }
 
-  List<ITEM> _findInternalItemsByDynamics({
+  List<ITEM> _resolveItemsFromRawData({
     required List<dynamic>? dynamicValues,
-    required bool removeCurrentNotFoundItems,
-    required bool addToInternalIfNotFound,
+    required bool clearOrphanItems,
+    required bool addOrphan,
   }) {
     if (dynamicValues == null) {
       return [];
     }
-    if (removeCurrentNotFoundItems) {
-      __removeAllNotFoundItems();
+    if (clearOrphanItems) {
+      _clearOrphanItems();
     }
     //
     List<ITEM> items = dynamicValues
@@ -56,16 +56,16 @@ abstract class XData<ID, ITEM, DATA> {
     //
     return _findInternalItems(
       items: items,
-      addToInternalIfNotFound: addToInternalIfNotFound,
+      addOrphan: addOrphan,
     );
   }
 
-  void _addInitialValueIfNotFound({
+  void _addInitialValueIfOrphan({
     required dynamic initialValue,
-    required bool removeCurrentNotFoundItems,
+    required bool removeCurrentOrphanItems,
   }) {
-    if (removeCurrentNotFoundItems) {
-      __removeAllNotFoundItems();
+    if (removeCurrentOrphanItems) {
+      _clearOrphanItems();
     }
     if (initialValue == null) {
       return;
@@ -83,19 +83,19 @@ abstract class XData<ID, ITEM, DATA> {
     //
     _findInternalItems(
       items: items,
-      addToInternalIfNotFound: true,
+      addOrphan: true,
     );
   }
 
   List<ITEM> _findInternalItems({
     required List<ITEM?>? items,
-    required bool addToInternalIfNotFound,
+    required bool addOrphan,
   }) {
     List<ITEM> ret = [];
     for (ITEM? item in items ?? []) {
       ITEM? found = _findInternalItem(
         item: item,
-        addToInternalIfNotFound: addToInternalIfNotFound,
+        addOrphan: addOrphan,
       );
       if (found != null) {
         ret.add(found);
@@ -107,45 +107,45 @@ abstract class XData<ID, ITEM, DATA> {
   List<ITEM> findInternalItems({required List<ITEM?>? items}) {
     return _findInternalItems(
       items: items,
-      addToInternalIfNotFound: false,
+      addOrphan: false,
     );
   }
 
   ITEM? _findInternalItem({
     required ITEM? item,
-    required bool addToInternalIfNotFound,
+    required bool addOrphan,
   }) {
     if (item == null) {
       return null;
     }
     ID id = getItemId(item);
-    ITEM? found = findInternalItemByItemId(id);
+    ITEM? found = findInternalItemById(id);
     if (found == null) {
-      if (addToInternalIfNotFound) {
-        __addNotFoundItem(item);
-        addNotFoundItem(item);
+      if (addOrphan) {
+        __addOrphanItem(item);
+        addOrphanItem(item);
         return item;
       }
     }
     return found;
   }
 
-  void __addNotFoundItem(ITEM item) {
+  void __addOrphanItem(ITEM item) {
     bool found = false;
     ID id = getItemId(item);
-    _notFoundItemsMap[id] = item;
+    _orphanItemsMap[id] = item;
   }
 
   ITEM? findInternalItem({required ITEM? item}) {
     return _findInternalItem(
       item: item,
-      addToInternalIfNotFound: false,
+      addOrphan: false,
     );
   }
 
-  List<ITEM> findInternalItemsByItemIds({required List<ID?>? itemIds}) {
+  List<ITEM> findInternalItemsByIds({required List<ID?>? itemIds}) {
     return itemIds!
-        .map((id) => findInternalItemByItemId(id))
+        .map((id) => findInternalItemById(id))
         .where((item) => item != null)
         .toList()
         .cast<ITEM>();
