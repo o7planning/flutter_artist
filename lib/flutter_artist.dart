@@ -12,7 +12,7 @@ export 'src/core/action/storage_backend_action.dart';
 export 'src/core/built_in/empty_filter_criteria.dart';
 export 'src/core/built_in/empty_filter_input.dart';
 export 'src/core/built_in/empty_form_input.dart';
-export 'src/core/built_in/empty_form_related_data.dart';
+export 'src/core/built_in/empty_additional_form_related_data.dart';
 export 'src/core/built_in/int_id_filter_criteria.dart';
 export 'src/core/built_in/int_id_filter_input.dart';
 export 'src/core/built_in/int_id_filter_model.dart';

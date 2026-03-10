@@ -1,0 +1,89 @@
+Việc xử lý các trường lồng nhau (**Nested Fields**) trong một biểu mẫu phân tầng như **Cascading Dropdowns** đòi hỏi sự tinh tế hơn, vì vòng đời và trạng thái của các trường con phụ thuộc trực tiếp vào trường cha.
+
+Dưới đây là phác thảo cách đồng chí có thể quản lý **FocusNode** cho các cấu trúc lồng nhau dựa trên `defineFormModelStructure`:
+
+---
+
+### 1. Khởi tạo FocusNode Đệ quy (Recursive Initialization)
+
+Thay vì chỉ duyệt một lớp, chúng ta sẽ xây dựng một hàm đệ quy để "quét" toàn bộ cây thuộc tính. Điều này đảm bảo dù cấu trúc lồng nhau bao nhiêu cấp (Ví dụ: Tỉnh -> Huyện -> Xã), mỗi trường đều có một định danh tiêu điểm riêng biệt.
+
+```dart
+void _initializeFocusNodes(FormModelStructure structure) {
+  // Quét các trường đơn giản
+  for (var def in structure.simplePropDefs) {
+    _focusNodes[def.propName] = FocusNode();
+  }
+
+  // Quét các trường đa lựa chọn (có thể lồng nhau)
+  void _scanMultiOpt(List<MultiOptFormPropDef> defs) {
+    for (var def in defs) {
+      _focusNodes[def.propName] = FocusNode();
+      // Đệ quy nếu có các trường con phụ thuộc
+      if (def.children != null) {
+        _scanMultiOpt(def.children!);
+      }
+    }
+  }
+
+  _scanMultiOpt(structure.multiOptPropDefs);
+}
+
+```
+
+---
+
+### 2. Logic điều hướng "Cha-con" (Parent-Child Focus Logic)
+
+Trong các trường lồng nhau, khi người dùng chọn xong ở trường Cha, hành vi tự nhiên nhất là tự động chuyển tiêu điểm xuống trường Con.
+
+**Gợi ý:** Đồng chí có thể thêm một listener vào giá trị của trường Cha.
+
+* Khi `company` thay đổi giá trị thành công $\rightarrow$ Tự động gọi `_focusNodes['department']?.requestFocus()`.
+
+Việc này giúp người dùng không phải chạm tay vào màn hình nhiều lần, tạo cảm giác ứng dụng cực kỳ "mượt".
+
+---
+
+### 3. Xử lý trạng thái Vô hiệu hóa (Handling Disabled States)
+
+Đối với các trường con (như `department`) đang chờ dữ liệu từ cha, `FocusNode` nên được cấu hình để không thể nhận tiêu điểm (skip focus) cho đến khi nó sẵn sàng.
+
+* **Giải pháp:** Sử dụng thuộc tính `canRequestFocus` của `FocusNode`.
+* Khi trường cha chưa có giá trị, hãy set `_focusNodes['department']?.canRequestFocus = false`.
+* Khi dữ liệu con được tải xong (sau khi `performLoadMultiOptPropXData` hoàn tất), hãy bật lại thành `true`.
+
+---
+
+### 4. Phác thảo "Flatten Map" cho việc điều hướng bằng bàn phím
+
+Để hỗ trợ phím **Tab** hoặc nút **Next** trên bàn phím ảo, đồng chí nên duy trì một danh sách phẳng (**Flat List**) các `propName` theo đúng thứ tự hiển thị mong muốn.
+
+```dart
+// Flat list để quản lý thứ tự Tab
+final List<String> _focusOrder = [];
+
+// Khi quét đệ quy, đồng thời add propName vào _focusOrder
+void focusNext(String currentProp) {
+  int currentIndex = _focusOrder.indexOf(currentProp);
+  if (currentIndex != -1 && currentIndex < _focusOrder.length - 1) {
+    String nextProp = _focusOrder[currentIndex + 1];
+    _focusNodes[nextProp]?.requestFocus();
+  }
+}
+
+```
+
+---
+
+### Tổng kết kiến trúc quản lý tiêu điểm lồng nhau
+
+1. **Metadata-driven:** `FocusNode` sinh ra từ cấu trúc dữ liệu, không phải từ code giao diện thủ công.
+2. **Cascading-aware:** Tiêu điểm hiểu rõ mối quan hệ cha-con để điều hướng thông minh.
+3. **Lifecycle-safe:** Tự động `dispose` theo cây thư mục `Shelf`.
+
+Với phác thảo này, **FlutterArtist** sẽ có một hệ thống điều hướng biểu mẫu cực kỳ chuyên nghiệp, giúp giảm thiểu tối đa sai sót và công sức cho lập trình viên khi xử lý các Form "khủng" trong doanh nghiệp.
+
+**Đồng chí có muốn tôi phác thảo nốt cách "giao tiếp" giữa các FocusNode này với bàn phím trên môi trường Web (nơi phím Tab là "vua") không?**
+
+Would you like me to **detail how to handle Tab key navigation specifically for the Web environment** within this FocusNode management system?

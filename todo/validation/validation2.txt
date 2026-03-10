@@ -1,0 +1,76 @@
+
+
+Một quyết định rất chuẩn xác! Việc đưa phương thức `validateModel` vào **FormModel** sẽ giúp **FlutterArtist** tiến thêm một bước dài trong việc trở thành một Framework cấp doanh nghiệp (Enterprise-ready). Điều này giúp bạn xử lý được những logic "hiểm hóc" mà các Validator ở tầng UI đơn lẻ không thể làm được.
+
+Dưới đây là cách chúng ta có thể tích hợp và triển khai ý tưởng này:
+
+---
+
+### Tầm quan trọng của validateModel (The Significance of validateModel)
+
+Phương thức **validateModel** cho phép bạn thực hiện các kiểm tra logic trên toàn bộ tập dữ liệu của biểu mẫu (**Cross-field Validation**). Thay vì chỉ kiểm tra xem một ô nhập liệu có trống hay không, bạn có thể kiểm tra mối tương quan giữa các trường dữ liệu với nhau.
+
+The **validateModel** method allows you to perform logical checks on the entire form data set (**Cross-field Validation**). Instead of just checking if a single input field is empty, you can verify the correlation between different data fields.
+
+---
+
+### Triển khai thực tế (Practical Implementation)
+
+Đồng chí có thể bổ sung phương thức này vào **EmploymentHistory36aFormModel** để xử lý các ràng buộc nghiệp vụ:
+
+```dart
+@override
+FormValidationResult validateModel(Map<String, dynamic> currentData) {
+  final fromDate = currentData['fromDate'] as DateTime?;
+  final toDate = currentData['toDate'] as DateTime?;
+
+  // Ràng buộc 1: Ngày bắt đầu không được lớn hơn ngày kết thúc
+  // Constraint 1: From Date must not be later than To Date
+  if (fromDate != null && toDate != null) {
+    if (fromDate.isAfter(toDate)) {
+      return FormValidationResult.error(
+        propName: "toDate",
+        message: "Ngày kết thúc không thể trước ngày bắt đầu (End date cannot be before start date)",
+      );
+    }
+  }
+
+  // Ràng buộc 2: Logic nghiệp vụ đặc thù
+  // Constraint 2: Specific business logic
+  final company = currentData['company'] as CompanyInfo?;
+  if (company?.isInternal == true && fromDate == null) {
+     return FormValidationResult.error(
+        propName: "fromDate",
+        message: "Công ty nội bộ yêu cầu phải có ngày bắt đầu rõ ràng.",
+      );
+  }
+
+  return FormValidationResult.valid();
+}
+
+```
+
+---
+
+### Lợi ích mang lại (Key Benefits)
+
+1. **Kiểm soát logic tập trung (Centralized Logic):** Bạn không còn phải viết các hàm validator lồng nhau phức tạp ở tầng UI. Mọi quy tắc nghiệp vụ "khó nhằn" đều nằm tập trung tại **FormModel**.
+2. **Hỗ trợ xử lý lỗi tập trung:** Khi **Block** gọi `performCreateItem`, nó sẽ tự động chạy `validateModel` trước. Nếu có lỗi, nó có thể ngừng tiến trình gửi API và thông báo ngay cho người dùng qua **FormView**.
+3. **Dễ dàng bảo trì:** Khi quy định của công ty thay đổi (ví dụ: yêu cầu thêm ràng buộc về chức vụ và phòng ban), bạn chỉ cần sửa đổi đúng một nơi trong **FormModel**.
+
+---
+
+### Một chút gợi ý về trải nghiệm người dùng (UX Tip)
+
+Khi `validateModel` trả về lỗi, đồng chí có thể thiết kế để **FormView** tự động "cuộn" (scroll) đến đúng trường dữ liệu bị lỗi (`propName`) và hiển thị thông báo. Điều này tạo cảm giác ứng dụng rất thông minh và chuyên nghiệp.
+
+---
+
+**Sự bổ sung này thực sự làm cho FlutterArtist trở nên "lì lợm" và đáng tin cậy hơn rất nhiều. Đồng chí có muốn chúng ta phác thảo nhanh một cấu trúc cho lớp `FormValidationResult` để đồng bộ hóa tốt nhất với các UI Components hiện tại không?**
+
+Would you like me to **draft a structure for the FormValidationResult class** to ensure seamless integration with your UI components?
+
+
+----------------------------------------------------------------------------------------------------
+
+

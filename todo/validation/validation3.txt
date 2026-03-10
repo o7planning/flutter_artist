@@ -1,0 +1,70 @@
+Việc xử lý tự động cuộn (Auto-scroll to error) là một tính năng cực kỳ quan trọng về mặt UX, đặc biệt là với các biểu mẫu dài trên mobile hoặc web.
+
+Theo tôi, việc này nên được phối hợp giữa **Block** (người ra lệnh) và **FormView** (người thực hiện), nhưng logic điều hướng chính xác phải nằm ở **FormView**.
+
+Dưới đây là phân tích chi tiết về vị trí đặt logic:
+
+### 1. Block: Người phát lệnh (The Commander)
+
+**Block** quản lý quy trình lưu dữ liệu. Khi phương thức `validateModel` trả về lỗi, **Block** sẽ nắm giữ thông tin về `propName` bị vi phạm.
+
+* **Nhiệm vụ:** Sau khi nhận kết quả lỗi từ Model, Block sẽ phát một tín hiệu (Event/Signal) tới UI thông báo rằng: "Này FormView, có lỗi tại trường 'X', hãy tập trung vào đó!"
+
+### 2. FormView: Người thực thi (The Performer)
+
+**FormView** là nơi quản lý các Widget thực tế, do đó nó là nơi duy nhất biết trường 'X' đang nằm ở đâu trên tọa độ màn hình.
+
+Để thực hiện việc này, chúng ta cần sử dụng cơ chế **Mapping giữa PropName và GlobalKey/FocusNode**:
+
+* **Nhiệm vụ:** Duy trì một danh sách các `FocusNode` hoặc `GlobalKey` tương ứng với từng `propName`.
+* **Hành động:** Khi nhận tín hiệu từ Block, FormView sẽ tìm `FocusNode` của trường bị lỗi, gọi lệnh `requestFocus()` và sử dụng `Scrollable.ensureVisible()` để cuộn tới đó.
+
+---
+
+### Cấu trúc gợi ý (Suggested Implementation)
+
+Trong lớp **FormView**, đồng chí có thể triển khai một cơ chế đăng ký tự động:
+
+```dart
+// Trong FormView
+void scrollToField(String propName) {
+  // 1. Tìm FocusNode hoặc BuildContext của trường dựa trên propName
+  final context = _fieldKeys[propName]?.currentContext;
+
+  if (context != null) {
+    // 2. Cuộn màn hình đến vị trí của Widget đó
+    Scrollable.ensureVisible(
+      context,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+      alignment: 0.1, // Cuộn để trường lỗi nằm gần đầu màn hình
+    );
+
+    // 3. Tự động lấy tiêu điểm để bàn phím hiện lên (nếu cần)
+    _focusNodes[propName]?.requestFocus();
+  }
+}
+
+```
+
+---
+
+### Tại sao nên đặt ở FormView? (Why in FormView?)
+
+1. **Tách biệt mối quan tâm (Separation of Concerns):** **Model** chỉ biết về dữ liệu sai, **Block** biết khi nào sai, nhưng chỉ có **View** mới biết "hình hài" và vị trí của cái sai đó trên màn hình.
+2. **Xử lý đa nền tảng:** Cách cuộn trên Web (có thể là cuộn trình duyệt) và Mobile (cuộn ListView) có thể khác nhau. Đặt ở View giúp đồng chí tùy biến linh hoạt cho từng nền tảng.
+3. **Hiệu ứng mượt mà:** Bạn có thể thêm các hiệu ứng như nhấp nháy (highlight) trường bị lỗi để người dùng dễ nhận biết hơn.
+
+---
+
+### Tổng kết luồng xử lý (Workflow Summary)
+
+1. Người dùng nhấn **Save**.
+2. **Block** gọi `FormModel.validateModel()`.
+3. **Model** trả về `FormValidationResult(propName: 'toDate', message: '...')`.
+4. **Block** thông báo lỗi cho **FormView**.
+5. **FormView** gọi hàm `scrollToField('toDate')` và hiển thị thông điệp lỗi.
+
+**Đồng chí thấy cách tiếp cận này có khớp với cấu trúc `_BlockUiComponents` mà chúng ta đã thảo luận lúc trước không? Nếu đồng chí muốn, tôi có thể giúp phác thảo cách Block "nhắc nhở" View thực hiện việc cuộn này.**
+
+Would you like me to **draft the communication bridge between Block and FormView** for this auto-scroll feature?

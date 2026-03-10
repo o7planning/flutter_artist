@@ -142,7 +142,7 @@ enum TipDocument {
       case TipDocument.blockPerformLoadItemDetailById:
         return "Block.performLoadItemDetailById()";
       case TipDocument.blockInitFormRelatedData:
-        return "Block.performLoadFormRelatedData()";
+        return "Block.performLoadAdditionalFormRelatedData()";
       case TipDocument.blockBackendActionPerformAction:
         return "BlockBackendAction.performBackendOperation()";
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
@@ -247,7 +247,7 @@ enum TipDocument {
       case TipDocument.blockPerformLoadItemDetailById:
         return "Block.performLoadItemDetailById()";
       case TipDocument.blockInitFormRelatedData:
-        return "Block.performLoadFormRelatedData()";
+        return "Block.performLoadAdditionalFormRelatedData()";
       case TipDocument.blockBackendActionPerformAction:
         return "BlockBackendAction.performBackendOperation()";
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:

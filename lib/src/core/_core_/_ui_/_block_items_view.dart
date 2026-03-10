@@ -8,7 +8,7 @@ BLOCK extends Block<
     FilterInput,
     FilterCriteria,
     FormInput,
-    FormRelatedData>> extends StatelessWidget {
+    AdditionalFormRelatedData>> extends StatelessWidget {
   final BLOCK block;
   final QuickSuggestionMode quickSuggestionMode;
   final bool provideItemContext;

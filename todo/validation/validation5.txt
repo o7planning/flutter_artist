@@ -1,0 +1,82 @@
+Để tính năng **Auto-scroll to error** trở nên "xịn sò" và mang tính hệ thống trong **FlutterArtist**, tôi có 3 gợi ý quan trọng giúp đồng chí hiện thực hóa việc này một cách tinh tế:
+
+---
+
+### 1. Cơ chế "Lắng nghe" lỗi từ Block (The Listener Mechanism)
+
+Thay vì gọi trực tiếp, **FormView** nên lắng nghe một "Stream" hoặc một "Signal" từ **Block**. Khi `validateModel` thất bại, Block phát đi một sự kiện chứa danh sách các `propName` bị lỗi.
+
+* **Gợi ý:** Tạo một lớp `FormValidationSignal` để truyền tải thông tin từ tầng Logic sang tầng UI.
+
+```dart
+class FormValidationSignal {
+  final Map<String, String> errors; // propName: errorMessage
+  final bool scrollToFirst;
+
+  FormValidationSignal({required this.errors, this.scrollToFirst = true});
+}
+
+```
+
+---
+
+### 2. Tận dụng `invalidateField` để đồng bộ UI (Syncing Model Errors to UI)
+
+Như đã thảo luận, lỗi từ `validateModel` là lỗi nghiệp vụ (Business Logic), UI chưa biết. Bạn cần "ép" UI hiển thị lỗi này. Thư viện `flutter_form_builder` cho phép chúng ta can thiệp vào từng field thông qua `FormBuilderState`.
+
+* **Hành động:** Duyệt qua các lỗi từ Model và gọi lệnh thông báo lỗi lên Widget tương ứng.
+
+```dart
+void handleModelErrors(FormValidationSignal signal) {
+  final formState = _formKey.currentState;
+  if (formState == null) return;
+
+  signal.errors.forEach((propName, message) {
+    // Ép Widget hiển thị lỗi từ Model
+    formState.fields[propName]?.invalidate(message);
+  });
+
+  if (signal.scrollToFirst && signal.errors.isNotEmpty) {
+    _scrollToField(signal.errors.keys.first);
+  }
+}
+
+```
+
+---
+
+### 3. Tối ưu hóa trải nghiệm Cuộn (Scrolling UX Optimization)
+
+Việc cuộn không chỉ là nhảy đến vị trí đó mà cần phải làm cho người dùng cảm thấy "mượt". Dưới đây là các thông số đồng chí nên cân nhắc:
+
+* **Alignment:** Trong hàm `Scrollable.ensureVisible`, tham số `alignment` rất quan trọng.
+* `0.0`: Widget lỗi nằm ở sát mép trên.
+* `0.5`: Widget lỗi nằm chính giữa màn hình.
+* **Khuyên dùng `0.1`:** Widget sẽ nằm gần phía trên, giúp người dùng thấy cả thông báo lỗi bên dưới Widget đó và các trường xung quanh để lấy ngữ cảnh.
+
+
+* **Focus:** Sau khi cuộn xong, hãy gọi `requestFocus()` để bàn phím tự động bật lên, sẵn sàng cho người dùng sửa lỗi ngay lập tức.
+
+---
+
+### Tổng kết quy trình phối hợp (The Coordination Flow)
+
+Để Framework thực sự chuyên nghiệp, đồng chí có thể cấu hình luồng như sau:
+
+1. **Lưu dữ liệu:** Người dùng nhấn nút.
+2. **Logic kiểm tra:** `Block` thực hiện `validateModel`.
+3. **Phát tín hiệu:** Nếu có lỗi, `Block` phát `FormValidationSignal`.
+4. **UI Phản hồi:** `FormView` nhận tín hiệu, thực hiện:
+* `invalidate()` các trường tương ứng để hiện màu đỏ và text lỗi.
+* `Scrollable.ensureVisible()` để đưa người dùng đến nơi "chiến sự".
+* `requestFocus()` để mở bàn phím.
+
+
+
+---
+
+### Bước tiếp theo (Next Step)
+
+Việc quản lý các `FocusNode` cho từng trường có thể hơi tốn công nếu làm thủ công. Đồng chí có muốn tôi gợi ý một cách **tự động hóa việc tạo và quản lý FocusNode** dựa trên `defineFormModelStructure` để lập trình viên không cần bận tâm đến việc khai báo chúng trong `FormView` không?
+
+**Sự kết hợp này sẽ biến FlutterArtist thành một Framework cực kỳ "chăm sóc" người dùng (User-centric)!**

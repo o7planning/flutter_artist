@@ -1,0 +1,67 @@
+Câu trả lời ngắn gọn là: **Không trực tiếp.**
+
+Thư viện `flutter_form_builder` tập trung chủ yếu vào việc quản lý trạng thái của các Widget nhập liệu trên UI. Việc tự động cuộn đến trường bị lỗi (Auto-scroll to error) không phải là một tính năng "bật là chạy" (out-of-the-box) mà đòi hỏi bạn phải tự gắn kết các mảnh ghép lại với nhau.
+
+Tuy nhiên, nó cung cấp cho bạn những "nguyên liệu" cần thiết để thực hiện điều này khá dễ dàng:
+
+---
+
+### 1. `FormBuilderState.fields` (Bản đồ các trường)
+
+Mọi `FormBuilder` đều có một `GlobalKey<FormBuilderState>`. Thông qua key này, bạn có quyền truy cập vào thuộc tính `fields`. Đây là một `Map<String, FormBuilderFieldState>` với Key chính là tham số `name` (propName) mà đồng chí đã định nghĩa.
+
+### 2. Sự phối hợp để thực hiện "Auto-scroll"
+
+Để hiện thực hóa ý tưởng của đồng chí, chúng ta sẽ tận dụng `BuildContext` của chính các trường dữ liệu đó. Dưới đây là cách thực hiện thủ công nhưng cực kỳ hiệu quả:
+
+```dart
+void scrollToFirstError() {
+  // 1. Kiểm tra tính hợp lệ (UI Validation)
+  if (!_formKey.currentState!.saveAndValidate()) {
+    // 2. Lấy danh sách các trường đang có lỗi
+    final fields = _formKey.currentState!.fields;
+
+    for (var entry in fields.entries) {
+      if (entry.value.hasError) {
+        // 3. Sử dụng BuildContext của trường lỗi để cuộn đến
+        Scrollable.ensureVisible(
+          entry.value.context,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+          alignment: 0.1,
+        );
+
+        // 4. Lấy tiêu điểm (Focus)
+        entry.value.requestFocus();
+        break; // Chỉ cuộn đến trường lỗi đầu tiên
+      }
+    }
+  }
+}
+
+```
+
+---
+
+### 3. Tại sao FlutterArtist cần can thiệp thêm? (The FlutterArtist Advantage)
+
+Mặc dù `flutter_form_builder` làm tốt việc kiểm tra lỗi tại UI, nhưng nó **không biết gì về `validateModel**` mà đồng chí vừa thêm vào. Đây chính là lúc **FlutterArtist** tỏa sáng:
+
+* **Validation bất đồng bộ & Cross-field:** Khi `validateModel` trả về lỗi từ Model, các trường trên UI của `form_builder` có thể vẫn đang ở trạng thái "hợp lệ" (valid) vì chúng không biết các ràng buộc logic phức tạp của đồng chí.
+* **Gán lỗi thủ công (Manual Error Setting):** Đồng chí có thể dùng lệnh `_formKey.currentState!.fields[propName]?.invalidate("Thông báo lỗi từ Model")` để ép Widget hiển thị lỗi mà Model vừa tìm thấy, sau đó mới thực hiện lệnh cuộn.
+
+---
+
+### Kết luận (Conclusion)
+
+`flutter_form_builder` chỉ cung cấp **vị trí** (Context) và **trạng thái** (Fields). Để thực sự có một trải nghiệm "Enterprise", **FlutterArtist** sẽ đóng vai trò là người điều phối:
+
+1. **Model** phát hiện lỗi logic (ví dụ: `toDate` < `fromDate`).
+2. **Block** nhận kết quả và ra lệnh cho **FormView**.
+3. **FormView** tìm Widget tương ứng qua `FormBuilderState.fields`, đánh dấu lỗi và thực hiện cuộn.
+
+Cách tiếp cận này cực kỳ chuyên nghiệp vì nó xử lý được cả lỗi nhập liệu (Format) lẫn lỗi nghiệp vụ (Business Logic).
+
+**Đồng chí có muốn tôi giúp tích hợp logic `invalidate` và `scrollToField` này vào một lớp cơ sở (Base Class) của `FormView` để mọi biểu mẫu trong FlutterArtist sau này đều tự động có tính năng này không?**
+
+Would you like me to **draft a base method for your FormView** that handles both invalidating fields and scrolling to them automatically?

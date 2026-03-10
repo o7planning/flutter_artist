@@ -1,0 +1,9 @@
+3. Những kịch bản "Nâng cao" cần cân nhắc (Edge Cases)
+Để đạt đến sự bao quát 100%, đồng chí có thể cân nhắc thêm 2 tình huống nhỏ này:
+
+Async Patching (Vá bất đồng bộ): Ví dụ: Quét mã số thuế từ QR, nhưng cần gọi một API trung gian để lấy
+Tên công ty và Địa chỉ trước khi điền vào Form. Hiện tại các hàm extract...
+của đồng chí đang là đồng bộ (Synchronous). Nếu kịch bản cần chờ API, đồng chí có thể cân nhắc cho phép các hàm này trả về Future.
+
+Multi-Block Patching (Vá liên khối): Đôi khi một cú quét QR không chỉ điền vào Form hiện tại mà còn sinh ra các dòng dữ liệu ở Block con
+(ví dụ: quét mã thùng hàng tự động thêm các dòng sản phẩm vào bảng chi tiết).

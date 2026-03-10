@@ -5,7 +5,7 @@ abstract class FormView<
         Object, //
         Identifiable,
         FormInput,
-        FormRelatedData>> extends StatelessWidget {
+        AdditionalFormRelatedData>> extends StatelessWidget {
   final FORM_MODEL formModel;
   final QuickSuggestionMode quickSuggestionMode;
 

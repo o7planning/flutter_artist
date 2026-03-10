@@ -17,7 +17,7 @@ class XBlock<
       FilterInput,
       FilterCriteria,
       FormInput,
-      FormRelatedData> block;
+      AdditionalFormRelatedData> block;
 
   XBlock get rootXBlock {
     if (parentXBlock == null) {

@@ -4,7 +4,7 @@ abstract class FormModel<
     ID extends Object,
     ITEM_DETAIL extends Identifiable<ID>,
     FORM_INPUT extends FormInput,
-    FORM_RELATED_DATA extends FormRelatedData // EmptyFormRelatedData
+    ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData // AdditionalFormRelatedData
     > extends _Core {
   final FormModelConfig config;
 
@@ -28,7 +28,7 @@ abstract class FormModel<
     return "block-form > ${shelf.name} > ${block.name}";
   }
 
-  FORM_RELATED_DATA? __formRelatedData;
+  ADDITIONAL_FORM_RELATED_DATA? __additionalFormRelatedData;
   FORM_INPUT? __creationFormInput;
 
   bool _changeEventLocked = false;
@@ -54,7 +54,7 @@ abstract class FormModel<
       FilterInput,
       FilterCriteria,
       FORM_INPUT,
-      FORM_RELATED_DATA> block;
+      ADDITIONAL_FORM_RELATED_DATA> block;
 
   bool _defaultSimpleValuesInitiated = false;
   bool _defaultMultiOptValuesInitiated = false;
@@ -177,7 +177,7 @@ abstract class FormModel<
     required String multiOptPropName,
     required SelectionType selectionType,
     required Object? parentMultiOptPropValue,
-    required FORM_RELATED_DATA formRelatedData,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required FORM_INPUT? formInput,
     required ITEM_DETAIL? itemDetail,
   });
@@ -236,7 +236,7 @@ abstract class FormModel<
     required SelectionType selectionType,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
-    required FORM_RELATED_DATA formRelatedData,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required ITEM_DETAIL itemDetail,
   });
 
@@ -249,7 +249,7 @@ abstract class FormModel<
   /// ```dart
   ///  Map<String, dynamic>? extractSimplePropValuesFromItemDetail({
   ///      required Object? parentBlockCurrentItemId,
-  ///      required EmptyFormRelatedData formRelatedData,
+  ///      required AdditionalFormRelatedData additionalFormRelatedData,
   ///      required DepartmentData itemDetail,
   ///  }) {
   ///     return {
@@ -259,16 +259,16 @@ abstract class FormModel<
   ///  }
   /// ```
   ///
-  /// [formRelatedData] can include other information from the parent Block's [currentItem].
+  /// [additionalFormRelatedData] can include other information from the parent Block's [currentItem].
   /// ```dart
   ///  Map<String, dynamic>? extractSimplePropValuesFromItemDetail({
   ///      required Object? parentBlockCurrentItemId,
-  ///      required DepartmentFormRelatedData formRelatedData,
+  ///      required DepartmentFormRelatedData additionalFormRelatedData,
   ///      required DepartmentData itemDetail,
   ///  }) {
   ///     return {
   ///        "companyId": itemDetail.companyId,
-  ///        "companyName": formRelatedData.companyName,
+  ///        "companyName": additionalFormRelatedData.companyName,
   ///        "departmentName": itemDetail.name,
   ///     };
   ///  }
@@ -277,7 +277,7 @@ abstract class FormModel<
   @_AbstractMethodAnnotation()
   Map<String, dynamic>? extractSimplePropValuesFromItemDetail({
     required Object? parentBlockCurrentItemId,
-    required FORM_RELATED_DATA formRelatedData,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required ITEM_DETAIL itemDetail,
   });
 
@@ -292,7 +292,7 @@ abstract class FormModel<
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
     required Object? parentBlockCurrentItemId,
-    required FORM_RELATED_DATA formRelatedData,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required FORM_INPUT formInput,
   });
 
@@ -304,7 +304,7 @@ abstract class FormModel<
   /// ```dart
   ///  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
   ///     required Object? parentBlockCurrentItemId,
-  ///     required FORM_RELATED_DATA formRelatedData,
+  ///     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
   ///     required DepartmentFormInput formInput,
   ///  }) {
   ///     return {
@@ -320,7 +320,7 @@ abstract class FormModel<
   @_AbstractMethodAnnotation()
   Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
     required Object? parentBlockCurrentItemId,
-    required FORM_RELATED_DATA formRelatedData,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required FORM_INPUT formInput,
   });
 
@@ -411,7 +411,7 @@ abstract class FormModel<
     //
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      formRelatedData: null,
+      additionalFormRelatedData: null,
       formInput: null,
       activityType: FormActivityType.updateFromFormView,
     );
@@ -474,12 +474,12 @@ abstract class FormModel<
     executionTrace._addTraceStep(
       codeId: "#37160",
       shortDesc:
-          "Calling ${debugObjHtml(block)}._performLoadFormRelatedData().",
+          "Calling ${debugObjHtml(block)}._performLoadAdditionalFormRelatedData().",
       lineFlowType: LineFlowType.nonControllableCalling,
     );
-    FORM_RELATED_DATA? formRelatedData =
-        await block._performLoadFormRelatedData(executionTrace);
-    if (formRelatedData == null) {
+    ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData =
+        await block._performLoadAdditionalFormRelatedData(executionTrace);
+    if (additionalFormRelatedData == null) {
       return false;
     }
     //
@@ -492,14 +492,14 @@ abstract class FormModel<
       parameters: {
         "activityType": activityType,
         "formInput": formInput,
-        "formRelatedData": formRelatedData,
+        "additionalFormRelatedData": additionalFormRelatedData,
       },
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     // TODO: Bắt lỗi cho vào "taskResult" ???????
     return await _startNewFormActivity(
       executionTrace: executionTrace,
-      formRelatedData: formRelatedData,
+      additionalFormRelatedData: additionalFormRelatedData,
       formInput: formInput,
       activityType: activityType,
     );
@@ -525,7 +525,7 @@ abstract class FormModel<
       lineFlowType: LineFlowType.debug,
     );
     //
-    final FORM_RELATED_DATA? formRelatedData = null;
+    final ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData = null;
     final activityType = FormActivityType.patchFormFields;
 
     executionTrace._addTraceStep(
@@ -534,14 +534,14 @@ abstract class FormModel<
       parameters: {
         "activityType": activityType,
         "formInput": formInput,
-        "formRelatedData": formRelatedData,
+        "additionalFormRelatedData": additionalFormRelatedData,
       },
       lineFlowType: LineFlowType.nonControllableCalling,
     );
     //
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      formRelatedData: formRelatedData, // null
+      additionalFormRelatedData: additionalFormRelatedData, // null
       formInput: formInput,
       activityType: activityType,
     );
@@ -708,7 +708,7 @@ abstract class FormModel<
       "Called when Form Data is being loaded or user makes changes in FormView")
   Future<bool> _startNewFormActivity({
     required ExecutionTrace executionTrace,
-    required FORM_RELATED_DATA? formRelatedData,
+    required ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData,
     required FORM_INPUT? formInput,
     required FormActivityType activityType,
   }) async {
@@ -744,22 +744,22 @@ abstract class FormModel<
         } else {
           __creationFormInput = null;
         }
-        if (formRelatedData == null) {
+        if (additionalFormRelatedData == null) {
           throw DevError(
             errorMessage:
-                "Dev Error. formRelatedData must be not null if FormModel.activityType = startCreatingOrEditing.",
+                "Dev Error. additionalFormRelatedData must be not null if FormModel.activityType = startCreatingOrEditing.",
           );
         }
-        __formRelatedData = formRelatedData;
+        __additionalFormRelatedData = additionalFormRelatedData;
       case FormActivityType.updateFromFormView:
         currentFormMode = formMode;
-        if (formRelatedData != null) {
+        if (additionalFormRelatedData != null) {
           throw DevError(
             errorMessage:
-                "Dev Error. formRelatedData must be null if FormModel.activityType = updateFromFormView.",
+                "Dev Error. additionalFormRelatedData must be null if FormModel.activityType = updateFromFormView.",
           );
         }
-        formRelatedData = __formRelatedData!;
+        additionalFormRelatedData = __additionalFormRelatedData!;
         if (formInput != null) {
           throw DevError(
             errorMessage:
@@ -771,13 +771,13 @@ abstract class FormModel<
         }
       case FormActivityType.patchFormFields:
         currentFormMode = formMode;
-        if (formRelatedData != null) {
+        if (additionalFormRelatedData != null) {
           throw DevError(
             errorMessage:
-                "Dev Error. formRelatedData must be null if FormModel.activityType = patchFormFields.",
+                "Dev Error. additionalFormRelatedData must be null if FormModel.activityType = patchFormFields.",
           );
         }
-        formRelatedData = __formRelatedData!;
+        additionalFormRelatedData = __additionalFormRelatedData!;
         if (formInput == null) {
           throw DevError(
             errorMessage:
@@ -827,12 +827,12 @@ abstract class FormModel<
             parameters: {
               "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               "itemDetail": itemDetail,
-              "formRelatedData": formRelatedData,
+              "additionalFormRelatedData": additionalFormRelatedData,
             },
           );
           var simplePropValueMap = extractSimplePropValuesFromItemDetail(
                 parentBlockCurrentItemId: block.parentBlockCurrentItemId,
-                formRelatedData: formRelatedData,
+                additionalFormRelatedData: additionalFormRelatedData,
                 itemDetail: itemDetail,
               ) ??
               {};
@@ -992,14 +992,14 @@ abstract class FormModel<
               parameters: {
                 "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
                 "formInput": formInput,
-                "formRelatedData": formRelatedData,
+                "additionalFormRelatedData": additionalFormRelatedData,
               },
               lineFlowType: LineFlowType.controllableCalling,
             );
             final Map<String, SimpleValueWrap?> updatedSimplePropValues =
                 extractUpdateValuesForSimpleProps(
                       parentBlockCurrentItemId: block.parentBlockCurrentItemId,
-                      formRelatedData: formRelatedData,
+                      additionalFormRelatedData: additionalFormRelatedData,
                       formInput: formInput!,
                     ) ??
                     {};
@@ -1079,14 +1079,14 @@ abstract class FormModel<
             parameters: {
               "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               "formInput": formInput,
-              "formRelatedData": formRelatedData,
+              "additionalFormRelatedData": additionalFormRelatedData,
             },
             lineFlowType: LineFlowType.controllableCalling,
           );
           final Map<String, SimpleValueWrap?> updatedSimplePropValues =
               extractUpdateValuesForSimpleProps(
                     parentBlockCurrentItemId: block.parentBlockCurrentItemId,
-                    formRelatedData: formRelatedData,
+                    additionalFormRelatedData: additionalFormRelatedData,
                     formInput: formInput,
                   ) ??
                   {};
@@ -1156,7 +1156,7 @@ abstract class FormModel<
               "Calling ${debugObjHtml(this)}._loadMultiOptPropDataCascade() "
               "to load data for ${debugObjHtml(multiOptProp)} and its descendants.",
           parameters: {
-            "formRelatedData": formRelatedData,
+            "additionalFormRelatedData": additionalFormRelatedData,
             "formInput": formInput,
             "parentMultiOptPropValue": null,
             "parentValueIsInitialValue": true,
@@ -1173,7 +1173,7 @@ abstract class FormModel<
         //
         await _loadMultiOptPropDataCascade(
           executionTrace: executionTrace,
-          formRelatedData: formRelatedData,
+          additionalFormRelatedData: additionalFormRelatedData,
           formInput: formInput,
           parentMultiOptPropValue: null,
           parentValueIsInitialValue: true,
@@ -1366,7 +1366,7 @@ abstract class FormModel<
   Future<void> _loadMultiOptPropDataCascade({
     required final ExecutionTrace executionTrace,
     required final FormActivityType activityType,
-    required final FORM_RELATED_DATA formRelatedData,
+    required final ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required final FORM_INPUT? formInput,
     required final Object? parentMultiOptPropValue,
     required final MultiOptFormPropModel multiOptProp,
@@ -1473,7 +1473,7 @@ abstract class FormModel<
             "selectionType": selectionType,
             "itemDetail": block.currentItemDetail,
             "formInput": formInput,
-            "formRelatedData": formRelatedData,
+            "additionalFormRelatedData": additionalFormRelatedData,
           },
           lineFlowType: LineFlowType.controllableCalling,
         );
@@ -1481,7 +1481,7 @@ abstract class FormModel<
         tempMultiOptPropXData = await performLoadMultiOptPropXData(
           formInput: formInput,
           itemDetail: block.currentItemDetail,
-          formRelatedData: formRelatedData,
+          additionalFormRelatedData: additionalFormRelatedData,
           parentMultiOptPropValue: parentMultiOptPropValue,
           multiOptPropName: multiOptPropName,
           selectionType: selectionType,
@@ -1543,7 +1543,7 @@ abstract class FormModel<
             // May throw FormTempError.
             initialValueWrap = __extractUpdateValueForMultiOptProp(
               executionTrace: executionTrace,
-              formRelatedData: formRelatedData,
+              additionalFormRelatedData: additionalFormRelatedData,
               formInput: formInput,
               multiOptPropXData: tempMultiOptPropXData,
               multiOptPropName: multiOptPropName,
@@ -1572,7 +1572,7 @@ abstract class FormModel<
           // May throw FormTempError.
           initialValueWrap = __extractMultiOptPropValueFromItemDetail(
             executionTrace: executionTrace,
-            formRelatedData: formRelatedData,
+            additionalFormRelatedData: additionalFormRelatedData,
             itemDetail: currentItemDetail,
             multiOptPropXData: tempMultiOptPropXData,
             multiOptPropName: multiOptPropName,
@@ -1602,7 +1602,7 @@ abstract class FormModel<
           // May throw FormTempError.
           initialValueWrap = __extractUpdateValueForMultiOptProp(
             executionTrace: executionTrace,
-            formRelatedData: formRelatedData,
+            additionalFormRelatedData: additionalFormRelatedData,
             formInput: formInput,
             multiOptPropXData: tempMultiOptPropXData,
             multiOptPropName: multiOptPropName,
@@ -1721,7 +1721,7 @@ abstract class FormModel<
       for (MultiOptFormPropModel child in multiOptProp._children) {
         await _loadMultiOptPropDataCascade(
           executionTrace: executionTrace,
-          formRelatedData: formRelatedData,
+          additionalFormRelatedData: additionalFormRelatedData,
           formInput: formInput,
           parentMultiOptPropValue: tempSelectedPropValue,
           parentValueIsInitialValue: multiOptValueIsInitialValue,
@@ -1876,7 +1876,7 @@ abstract class FormModel<
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
-    required FORM_RELATED_DATA formRelatedData,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required ITEM_DETAIL itemDetail,
     required Object? parentMultiOptPropValue,
   }) {
@@ -1891,7 +1891,7 @@ abstract class FormModel<
           "selectionType": selectionType,
           "multiOptPropXData": multiOptPropXData,
           "itemDetail": itemDetail,
-          "formRelatedData": formRelatedData,
+          "additionalFormRelatedData": additionalFormRelatedData,
         },
         lineFlowType: LineFlowType.controllableCalling,
       );
@@ -1899,7 +1899,7 @@ abstract class FormModel<
         multiOptPropName: multiOptPropName,
         selectionType: selectionType,
         multiOptPropXData: multiOptPropXData,
-        formRelatedData: formRelatedData,
+        additionalFormRelatedData: additionalFormRelatedData,
         itemDetail: itemDetail,
         parentMultiOptPropValue: parentMultiOptPropValue,
       );
@@ -1929,7 +1929,7 @@ abstract class FormModel<
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
-    required FORM_RELATED_DATA formRelatedData,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required FORM_INPUT formInput,
     required Object? parentMultiOptPropValue,
   }) {
@@ -1947,7 +1947,7 @@ abstract class FormModel<
           "selectionType": selectionType,
           "parentMultiOptPropValue": parentMultiOptPropValue,
           "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
-          "formRelatedData": formRelatedData,
+          "additionalFormRelatedData": additionalFormRelatedData,
           "formInput": formInput,
         },
         lineFlowType: LineFlowType.controllableCalling,
@@ -1958,7 +1958,7 @@ abstract class FormModel<
         selectionType: selectionType,
         parentMultiOptPropValue: parentMultiOptPropValue,
         parentBlockCurrentItemId: block.parentBlockCurrentItemId,
-        formRelatedData: formRelatedData,
+        additionalFormRelatedData: additionalFormRelatedData,
         formInput: formInput,
       );
       if (valueWrap == null) {
