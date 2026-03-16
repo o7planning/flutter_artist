@@ -719,7 +719,7 @@ abstract class FilterModel<
           SimpleValueWrap? valueWrap =
               updatedSimpleCriterionValues[tildeCriterionName];
           // SAME-AS: #0012 (formModel)
-          if (valueWrap != null) {
+          if (valueWrap != null && valueWrap.use) {
             _filterModelStructure._setTempSimpleCriterionValue(
               tildeCriterionName: tildeCriterionName,
               value: valueWrap.value,

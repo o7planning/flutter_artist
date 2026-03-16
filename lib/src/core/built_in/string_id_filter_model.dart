@@ -60,7 +60,7 @@ class StringIdFilterModel
     required StringIdFilterInput filterInput,
   }) {
     return {
-      "id$tildeSymbol": SimpleValueWrap(filterInput.idValue),
+      "id$tildeSymbol": SimpleValueWrap.of(filterInput.idValue),
     };
   }
 

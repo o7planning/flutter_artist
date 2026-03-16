@@ -61,7 +61,7 @@ class StringValueFilterModel
     required StringValueFilterInput filterInput,
   }) {
     return {
-      "string$tildeSymbol": SimpleValueWrap(filterInput.stringValue),
+      "string$tildeSymbol": SimpleValueWrap.of(filterInput.stringValue),
     };
   }
 

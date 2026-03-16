@@ -167,12 +167,12 @@ class DeferredEventExecutionTrace extends ExecutionTrace {
 
   @override
   String getSubtitle() {
-    return "Processing Deferred Events...";
+    return "Observe Incoming Events...";
   }
 
   @override
   String getTitle() {
-    return "Deferred Events";
+    return "IncomingEvents";
   }
 }
 

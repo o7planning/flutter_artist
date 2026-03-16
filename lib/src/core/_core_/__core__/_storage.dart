@@ -350,12 +350,12 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
 
   // TODO: Show all active components of all shelves.
-  Future<void> showDebugFaUiComponentsViewerDialog() async {
+  Future<void> showDebugUiComponentsViewerDialog() async {
     Shelf? shelf = _recentShelf();
     if (shelf == null) {
       return;
     }
-    await shelf.showDebugFaUiComponentsViewerDialog();
+    await shelf.showDebugUiComponentsViewerDialog();
   }
 
   // ***************************************************************************

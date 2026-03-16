@@ -61,7 +61,7 @@ class SearchTextFilterModel
     required SearchTextFilterInput filterInput,
   }) {
     return {
-      "searchText$tildeSymbol": SimpleValueWrap(filterInput.searchText),
+      "searchText$tildeSymbol": SimpleValueWrap.of(filterInput.searchText),
     };
   }
 

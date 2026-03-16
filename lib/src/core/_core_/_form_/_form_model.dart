@@ -1016,7 +1016,7 @@ abstract class FormModel<
               //
               SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
               // SAME-AS: #0012 (filterModel)
-              if (valueWrap != null) {
+              if (valueWrap != null && valueWrap.use) {
                 _formPropsStructure._setTempSimplePropValue(
                   propName: propName,
                   value: valueWrap.value,
@@ -1102,7 +1102,7 @@ abstract class FormModel<
             // In (patchFormFields + formInput != null)
             //
             SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
-            if (valueWrap != null) {
+            if (valueWrap != null && valueWrap.use) {
               _formPropsStructure._setTempSimplePropValue(
                 propName: propName,
                 value: valueWrap.value,

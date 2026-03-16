@@ -5,9 +5,9 @@ class OptValueWrap<VALUE extends Object> {
 
   OptValueWrap.single(VALUE? value) {
     if (value == null) {
-      this.values = [];
+      values = [];
     } else {
-      this.values = [value];
+      values = [value];
     }
   }
 
@@ -23,15 +23,17 @@ class OptValueWrap<VALUE extends Object> {
 
 class SimpleValueWrap<VALUE extends Object> {
   final VALUE? value;
+  final bool use;
 
-  SimpleValueWrap(this.value);
+  SimpleValueWrap._(this.value, this.use);
 
-  static SimpleValueWrap<VALUE>? useIfNotNull<VALUE extends Object>(
-      VALUE? value) {
+  SimpleValueWrap.of(this.value) : use = true;
+
+  factory SimpleValueWrap.useIfNotNull(VALUE? value) {
     if (value == null) {
-      return null;
+      return SimpleValueWrap._(value, false);
     }
-    return SimpleValueWrap(value);
+    return SimpleValueWrap._(value, true);
   }
 
   @override

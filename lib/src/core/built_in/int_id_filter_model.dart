@@ -61,7 +61,7 @@ class IntIdFilterModel
     required IntIdFilterInput filterInput,
   }) {
     return {
-      "id$tildeSymbol": SimpleValueWrap(filterInput.idValue),
+      "id$tildeSymbol": SimpleValueWrap.of(filterInput.idValue),
     };
   }
 
