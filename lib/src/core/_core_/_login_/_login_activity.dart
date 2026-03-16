@@ -139,7 +139,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     // Load Global Data.
     // IMPORTANT: This method never throw an error!
     //
-    success = await FlutterArtist.globalsManager._loadGlobalDataSafely(
+    success = await FlutterArtist.globalsManager._performLoadGlobalDataSafely(
       executionTrace: executionTrace,
       loggedInUser: loggedInUser,
     );

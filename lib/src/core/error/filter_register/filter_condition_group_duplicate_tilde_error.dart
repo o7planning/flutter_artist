@@ -11,6 +11,6 @@ class FilterConditionGroupDuplicateTildeError extends FilterModelRegisterError {
 
   @override
   String toString() {
-    return "Duplicated ConditionDef Criterion Name Tilde: $tildeCriterionName";
+    return "Duplicate ConditionDef Criterion Name Tilde: $tildeCriterionName";
   }
 }

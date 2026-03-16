@@ -17,9 +17,9 @@ class GlobalsManager extends _Core {
   final String __hiveKeyLoggedInUser =
       "*---flutter-artist-hive-key-logged-in-user---*";
 
-  int _loadGlobalDataCount = 0;
+  int _performLoadGlobalDataCount = 0;
 
-  int get loadGlobalDataCount => _loadGlobalDataCount;
+  int get performLoadGlobalDataCount => _performLoadGlobalDataCount;
 
   IGlobalData? _globalData;
 
@@ -359,11 +359,11 @@ class GlobalsManager extends _Core {
     //
     IGlobalData? globalData;
     try {
-      _loadGlobalDataCount++;
+      _performLoadGlobalDataCount++;
       executionTrace._addTraceStep(
         codeId: "#GM360",
         shortDesc:
-            "Calling ${debugObjHtml(loginLogoutAdapter)}.loadGlobalData() method with parameters:",
+            "Calling ${debugObjHtml(loginLogoutAdapter)}.performLoadGlobalData() method with parameters:",
         parameters: {
           "loggedInUser": loggedInUser,
         },
@@ -373,7 +373,7 @@ class GlobalsManager extends _Core {
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       // Load Global Data:
-      globalData = await globalDataAdapter.loadGlobalData(
+      globalData = await globalDataAdapter.performLoadGlobalData(
         loggedInUser: loggedInUser,
       );
     } catch (e, stackTrace) {
@@ -384,7 +384,7 @@ class GlobalsManager extends _Core {
       executionTrace._addTraceStep(
         codeId: "#GM420",
         shortDesc:
-            "The ${debugObjHtml(loginLogoutAdapter)}.loadGlobalData() method was called with an error.",
+            "The ${debugObjHtml(loginLogoutAdapter)}.performLoadGlobalData() method was called with an error.",
         errorInfo: errorInfo,
       );
       executionTrace.printToConsole();
@@ -506,7 +506,7 @@ class GlobalsManager extends _Core {
   ///
   /// IMPORTANT: This method never throw an error!
   ///
-  Future<bool> _loadGlobalDataSafely({
+  Future<bool> _performLoadGlobalDataSafely({
     required ExecutionTrace executionTrace,
     required ILoggedInUser loggedInUser,
   }) async {
@@ -515,7 +515,7 @@ class GlobalsManager extends _Core {
       executionTrace._addTraceStep(
         codeId: "#34240",
         shortDesc:
-            "Calling ${debugObjHtml(globalDataAdapter)}.loadGlobalData() to load global data for @loggedInUser:",
+            "Calling ${debugObjHtml(globalDataAdapter)}.performLoadGlobalData() to load global data for @loggedInUser:",
         parameters: {
           "loggedInUser": loggedInUser,
         },
@@ -524,8 +524,8 @@ class GlobalsManager extends _Core {
         lineFlowType: LineFlowType.controllableCalling,
         tipDocument: TipDocument.globalData,
       );
-      _loadGlobalDataCount++;
-      IGlobalData globalData = await globalDataAdapter.loadGlobalData(
+      _performLoadGlobalDataCount++;
+      IGlobalData globalData = await globalDataAdapter.performLoadGlobalData(
         loggedInUser: loggedInUser,
       );
       _globalData = globalData;
@@ -547,7 +547,7 @@ class GlobalsManager extends _Core {
       executionTrace._addTraceStep(
         codeId: "#34300",
         shortDesc:
-            "The ${debugObjHtml(globalDataAdapter)}.loadGlobalData() method called with an error!",
+            "The ${debugObjHtml(globalDataAdapter)}.performLoadGlobalData() method called with an error!",
         errorInfo: errorInfo,
       );
       return false;

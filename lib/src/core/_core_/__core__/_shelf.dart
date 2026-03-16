@@ -147,7 +147,7 @@ abstract class Shelf extends _Core {
     for (Hook hook in hooks) {
       if (__hookMap.containsKey(hook.name)) {
         throw ___registerError(
-            "Duplicated Hook '${hook.name}' in '${getClassName(this)}'"
+            "Duplicate Hook '${hook.name}' in '${getClassName(this)}'"
             "\nDouble-check ${getClassName(this)}.defineShelfStructure() method");
       } else {
         __hookMap[hook.name] = hook;
@@ -318,7 +318,7 @@ abstract class Shelf extends _Core {
   void __registerScalarCascade(Scalar scalar) {
     if (__scalarMap.containsKey(scalar.name)) {
       throw ___registerError(
-          "Duplicated scalar '${scalar.name}' in '${getClassName(this)}'\n"
+          "Duplicate scalar '${scalar.name}' in '${getClassName(this)}'\n"
           "Double-check ${getClassName(this)}.defineShelfStructure() method");
     } else {
       __scalarMap[scalar.name] = scalar;
@@ -408,7 +408,7 @@ abstract class Shelf extends _Core {
   void __registerBlockCascade(Block block) {
     if (__blockMap.containsKey(block.name)) {
       throw ___registerError(
-          "Duplicated block '${block.name}' in '${getClassName(this)}'\n"
+          "Duplicate block '${block.name}' in '${getClassName(this)}'\n"
           "Double-check ${getClassName(this)}.defineShelfStructure() method");
     } else {
       __blockMap[block.name] = block;

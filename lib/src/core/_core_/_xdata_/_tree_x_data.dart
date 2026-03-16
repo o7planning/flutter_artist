@@ -6,16 +6,16 @@ class TreeXData<ID, TREE_ITEM, TREE_DATA>
 
   List<TREE_ITEM> Function() getRootTreeItems;
   List<TREE_ITEM>? Function(TREE_ITEM item) getChildren;
-  void Function(TREE_ITEM item) addNotFoundTreeItem;
-  void Function(TREE_ITEM item) removeNotFoundTreeItem;
+  void Function(TREE_ITEM item) addOrphanTreeItem;
+  void Function(TREE_ITEM item) removeOrphanTreeItem;
 
   TreeXData({
     required this.treeData,
     required super.getItemId,
     required this.getRootTreeItems,
     required this.getChildren,
-    required this.addNotFoundTreeItem,
-    required this.removeNotFoundTreeItem,
+    required this.addOrphanTreeItem,
+    required this.removeOrphanTreeItem,
   });
 
   @override
@@ -50,11 +50,11 @@ class TreeXData<ID, TREE_ITEM, TREE_DATA>
 
   @override
   void addOrphanItem(TREE_ITEM item) {
-    addNotFoundTreeItem(item);
+    addOrphanTreeItem(item);
   }
 
   @override
   void removeOrphanItem(TREE_ITEM item) {
-    removeNotFoundTreeItem(item);
+    removeOrphanTreeItem(item);
   }
 }

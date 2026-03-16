@@ -7,6 +7,6 @@ class FilterConditionGroupDuplicateNameError extends FilterModelRegisterError {
 
   @override
   String toString() {
-    return "Duplicated ConditionGroupDef Group Name: $groupName";
+    return "Duplicate ConditionGroupDef Group Name: $groupName";
   }
 }
