@@ -13,6 +13,18 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  Set<String> get routeNames {
+    List<_ContextProviderViewState> list = [
+      ...__formWidgetStates.keys,
+    ];
+    return list.map((v) => v.routeName).nonNulls.toList().toSet();
+  }
+
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void updateAllUiComponents({bool force = false}) {
     __updateFormWidgets(force: force);
   }

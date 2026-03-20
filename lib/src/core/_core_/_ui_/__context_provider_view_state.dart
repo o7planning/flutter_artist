@@ -21,12 +21,19 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     implements
         IContextProviderViewState {
   String? __modelRouteName;
+  String? __routeName;
+
+  String? get routeName => __routeName;
 
   double __maxSize = 0;
 
   double get maxSize => __maxSize;
 
   int _refreshCount = 0;
+
+  void __setRouteName(ModalRoute? modalRoute) {
+    __routeName = modalRoute?.settings.name;
+  }
 
   @override
   ShowMode showMode = ShowMode.production;
@@ -205,9 +212,12 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
   void didPush() {
     __addWidgetState(isVisible: true);
     //
+    final ModalRoute? modalRoute = ModalRoute.of(context);
+    __setRouteName(modalRoute);
+    //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
-      ' ---->  [RouteAware] ---------> didPush: ${ModalRoute.of(context)?.settings.name}'
+      ' ---->  [RouteAware] ---------> didPush: ${modalRoute?.settings.name}'
       ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }
@@ -217,9 +227,11 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
   void didPop() {
     __addWidgetState(isVisible: false);
     //
+    final ModalRoute? modalRoute = ModalRoute.of(context);
+    //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
-      ' ---->  [RouteAware] ---------> didPop: ${ModalRoute.of(context)?.settings.name}'
+      ' ---->  [RouteAware] ---------> didPop: ${modalRoute?.settings.name}'
       ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }

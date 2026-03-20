@@ -14,6 +14,14 @@ class _StorageUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  Set<String> get routeNames {
+    return {};
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   bool hasActiveUiComponent() {
     for (_ContextProviderViewState widgetState
         in __refreshableStorageSectionViewStates.keys) {

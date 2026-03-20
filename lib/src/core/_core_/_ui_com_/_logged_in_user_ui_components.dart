@@ -8,6 +8,18 @@ class _LoggedInUserUiComponents extends _UiComponents {
 
   _LoggedInUserUiComponents();
 
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @override
+  Set<String> get routeNames {
+    List<_ContextProviderViewState> list = [
+      ..._loggedInUserWidgetStates.keys,
+    ];
+    return list.map((v) => v.routeName).nonNulls.toList().toSet();
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 

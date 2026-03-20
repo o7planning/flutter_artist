@@ -13,6 +13,18 @@ class _SortUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  Set<String> get routeNames {
+    return _sortWidgetStates.keys
+        .map((v) => v.routeName)
+        .nonNulls
+        .toList()
+        .toSet();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {

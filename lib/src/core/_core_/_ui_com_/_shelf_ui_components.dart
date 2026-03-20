@@ -3,13 +3,28 @@ part of '../core.dart';
 class _ShelfUiComponents extends _UiComponents {
   final Shelf shelf;
 
-  final Map<_ContextProviderViewState, bool> __refreshableNeutralViewStates =
-      {};
-
   // ***************************************************************************
   // ***************************************************************************
 
   _ShelfUiComponents({required this.shelf});
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @override
+  Set<String> get routeNames {
+    final Set<String> set = {};
+    for (Block block in shelf.blocks) {
+      set.addAll(block.ui.routeNames);
+    }
+    for (Scalar scalar in shelf.scalars) {
+      set.addAll(scalar.ui.routeNames);
+    }
+    for (FilterModel filterModel in shelf._allFilterModels) {
+      set.addAll(filterModel.ui.routeNames);
+    }
+    return set;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -28,11 +43,7 @@ class _ShelfUiComponents extends _UiComponents {
 
   @override
   bool hasMountedUiComponent() {
-    bool hasMounted = __refreshableNeutralViewStates.isNotEmpty;
-    if (hasMounted) {
-      return true;
-    }
-    hasMounted = _hasMountedBlockUiComponentCascade(shelf._rootBlocks);
+    bool hasMounted = _hasMountedBlockUiComponentCascade(shelf._rootBlocks);
     if (hasMounted) {
       return true;
     }
@@ -49,7 +60,6 @@ class _ShelfUiComponents extends _UiComponents {
   void updateAllUiComponents() {
     try {
       print("|----> ${getClassName(shelf)}.ui.updateAllUiComponents()");
-      __updateRefreshableNeutralViews();
       //
       for (FilterModel filterModel in shelf._allFilterModels) {
         filterModel.ui.updateAllUiComponents();
@@ -68,12 +78,6 @@ class _ShelfUiComponents extends _UiComponents {
     }
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void updateAllRefreshableNeutralViews() {
-    __updateRefreshableNeutralViews(force: true);
-  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -136,23 +140,6 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addShelfWidgetState({
-    required _ContextProviderViewState widgetState,
-    required bool isVisible,
-  }) {
-    __refreshableNeutralViewStates[widgetState] = isVisible;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeShelfWidgetState({required State widgetState}) {
-    __refreshableNeutralViewStates.remove(widgetState);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   void __updateAllScalarUiComponentsCascade(
     Scalar scalar, {
     required bool withoutFilters,
@@ -181,18 +168,6 @@ class _ShelfUiComponents extends _UiComponents {
         childBlock,
         withoutFilters: withoutFilters,
       );
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __updateRefreshableNeutralViews({bool force = true}) {
-    for (_ContextProviderViewState state
-        in __refreshableNeutralViewStates.keys) {
-      if (state.mounted) {
-        state.refreshState(force: force);
-      }
     }
   }
 

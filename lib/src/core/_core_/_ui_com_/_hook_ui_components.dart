@@ -10,6 +10,19 @@ class _HookUiComponents extends _UiComponents {
 
   _HookUiComponents({required this.hook});
 
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @override
+  Set<String> get routeNames {
+    List<_ContextProviderViewState> list = [
+      ...__hookBaseViewWidgetStates.keys,
+    ];
+    return list.map((v) => v.routeName).nonNulls.toList().toSet();
+  }
+
+
   // ***************************************************************************
   // ***************************************************************************
 

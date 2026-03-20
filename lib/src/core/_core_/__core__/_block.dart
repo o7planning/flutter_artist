@@ -389,13 +389,13 @@ abstract class Block<
   //   }
   // }
 
-  late final SortModel<ITEM>? __clientSideSortModel;
+  late final SortModel<ITEM>? _clientSideSortModel;
 
-  late final SortModel<ITEM>? __serverSideSortModel;
+  late final SortModel<ITEM>? _serverSideSortModel;
 
-  SortModel<ITEM>? get clientSideSortModel => __clientSideSortModel;
+  SortModel<ITEM>? get clientSideSortModel => _clientSideSortModel;
 
-  SortModel<ITEM>? get serverSideSortModel => __serverSideSortModel;
+  SortModel<ITEM>? get serverSideSortModel => _serverSideSortModel;
 
   FILTER_CRITERIA? get filterCriteria =>
       __blockData._xFilterCriteria?.filterCriteria;
@@ -478,13 +478,13 @@ abstract class Block<
     }
     formModel?.block = this;
     //
-    __serverSideSortModel = sortModelBuilder?.createServerSideSortModel();
-    __clientSideSortModel =
+    _serverSideSortModel = sortModelBuilder?.createServerSideSortModel();
+    _clientSideSortModel =
         config.clientSideSortStrategy != SortStrategy.modelBased
             ? null
             : sortModelBuilder?.createClientSideSortModel();
-    __serverSideSortModel?.block = this;
-    __clientSideSortModel?.block = this;
+    _serverSideSortModel?.block = this;
+    _clientSideSortModel?.block = this;
   }
 
   // ***************************************************************************

@@ -13,6 +13,20 @@ class _ScalarUiComponents extends _UiComponents {
 
   _ScalarUiComponents({required this.scalar});
 
+
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @override
+  Set<String> get routeNames {
+    List<_ContextProviderViewState> list = [
+      ...__scalarBaseViewWidgetStates.keys,
+      ...__scalarControlBarWidgetStates.keys,
+    ];
+    return list.map((v) => v.routeName).nonNulls.toList().toSet();
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 

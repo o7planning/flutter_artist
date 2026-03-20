@@ -3,7 +3,7 @@ part of '../core.dart';
 class _BlockUiComponents extends _UiComponents {
   final Block block;
 
-  // Fragments: BlockItemsView - BlockItemDetailView - BlockSectionView.
+  // Sections: BlockItemsView - BlockItemDetailView - BlockSectionView.
   final Map<_ContextProviderViewState, XState> __blockBaseViewWidgetStates = {};
   final Map<_ContextProviderViewState, XState> __blockControlBarWidgetStates =
       {};
@@ -14,6 +14,31 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
 
   _BlockUiComponents({required this.block});
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @override
+  Set<String> get routeNames {
+    List<_ContextProviderViewState> list = [
+      ...__blockBaseViewWidgetStates.keys,
+      ...__blockControlBarWidgetStates.keys,
+      ...__controlWidgetStates.keys,
+      ...__paginationWidgetStates.keys
+    ];
+    final Set<String> routeNames =
+        list.map((v) => v.routeName).nonNulls.toList().toSet();
+    if (block.formModel != null) {
+      routeNames.addAll(block.formModel!.ui.routeNames);
+    }
+    if (block._clientSideSortModel != null) {
+      routeNames.addAll(block._clientSideSortModel!.ui.routeNames);
+    }
+    if (block._serverSideSortModel != null) {
+      routeNames.addAll(block._serverSideSortModel!.ui.routeNames);
+    }
+    return routeNames;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
