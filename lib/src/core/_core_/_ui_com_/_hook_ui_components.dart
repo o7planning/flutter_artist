@@ -13,6 +13,17 @@ class _HookUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  Set<FaRouteData> get faRouteDatas {
+    List<_ContextProviderViewState> list = [
+      ...__hookBaseViewWidgetStates.keys,
+    ];
+    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void updateHookBaseViews({bool force = false}) {
     for (_ContextProviderViewState widgetState
         in __hookBaseViewWidgetStates.keys) {

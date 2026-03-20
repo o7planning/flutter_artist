@@ -13,6 +13,17 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  Set<FaRouteData> get faRouteDatas {
+    List<_ContextProviderViewState> list = [
+      ..._filterBaseViewWidgetStates.keys,
+    ];
+    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {

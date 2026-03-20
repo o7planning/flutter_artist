@@ -17,6 +17,18 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
 
   @override
+  Set<FaRouteData> get faRouteDatas {
+    List<_ContextProviderViewState> list = [
+      ...__scalarBaseViewWidgetStates.keys,
+      ...__scalarControlBarWidgetStates.keys,
+    ];
+    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @override
   bool hasMountedUiComponent() {
     return __scalarBaseViewWidgetStates.isNotEmpty ||
         __scalarControlBarWidgetStates.isNotEmpty;

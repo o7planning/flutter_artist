@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_artist_router/flutter_artist_router.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/enums/_data_state.dart';
@@ -11,6 +12,14 @@ class BlockOrScalar extends Equatable {
   const BlockOrScalar.block(this.block) : scalar = null;
 
   const BlockOrScalar.scalar(this.scalar) : block = null;
+
+  Set<FaRouteData> get faRoutes {
+    if (block != null) {
+      return block!.ui.faRouteDatas;
+    } else {
+      return scalar!.ui.faRouteDatas;
+    }
+  }
 
   Shelf get shelf {
     if (block != null) {

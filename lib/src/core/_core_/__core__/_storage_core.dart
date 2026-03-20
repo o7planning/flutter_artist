@@ -267,13 +267,13 @@ abstract class _StorageCore extends _Core {
   void _checkToRemoveShelf(Shelf shelf) {
     bool hasMountedUiComponent = shelf.ui.hasMountedUiComponent();
     if (!hasMountedUiComponent) {
-      print(">>>>>>>>>>> Shelf: ${getClassName(shelf)} dispose all component");
       if (shelf.config.onHideAction == ShelfHiddenAction.clear) {
         print(
-            "  ---------> Remove ${getClassName(shelf)} from FlutterArtist Storage");
-        _shelfMap.remove(shelf.name);
+            "[FLUTTER_ARTIST]  ---------> MASK_TO_REMOVE: ${getClassName(shelf)}");
+        // _shelfMap.remove(shelf.name);
+        shelf._markAsOrphaned = true;
       } else {
-        print("  ---------> Do Nothing");
+        print("[FLUTTER_ARTIST]  ---------> KEEP: ${getClassName(shelf)}");
       }
     }
   }
@@ -288,7 +288,7 @@ abstract class _StorageCore extends _Core {
   List<Shelf> getRecentShelves({required bool visibleOnly}) {
     List<Shelf> ret = [];
     for (Shelf shelf in _recentShelves) {
-      if (shelf.disposed) {
+      if (shelf.markAsOrphaned) {
         continue;
       }
       if (visibleOnly) {

@@ -14,6 +14,18 @@ class _ActivityUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  Set<FaRouteData> get faRouteDatas {
+    return __activityBaseViewWidgetStates.keys
+        .map((v) => v.faRoute)
+        .nonNulls
+        .toList()
+        .toSet();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void updateActivityBaseViews({bool force = false}) {
     for (_ContextProviderViewState widgetState
         in __activityBaseViewWidgetStates.keys) {

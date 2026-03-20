@@ -18,9 +18,8 @@ class DebugStorageViewerDialog extends StatefulWidget {
   });
 
   @override
-  State<DebugStorageViewerDialog> createState() {
-    return _DebugStorageViewerDialogState();
-  }
+  State<DebugStorageViewerDialog> createState() =>
+      _DebugStorageViewerDialogState();
 
   static Future<void> open({
     required BuildContext context,
@@ -28,6 +27,7 @@ class DebugStorageViewerDialog extends StatefulWidget {
   }) async {
     await showDialog(
       context: context,
+      barrierDismissible: true,
       builder: (BuildContext context) {
         return DebugStorageViewerDialog(shelf: shelf);
       },
@@ -36,23 +36,25 @@ class DebugStorageViewerDialog extends StatefulWidget {
 }
 
 class _DebugStorageViewerDialogState extends State<DebugStorageViewerDialog> {
-  @override
-  void initState() {
-    super.initState();
-  }
+  final PageStorageBucket _bucket = PageStorageBucket();
 
   @override
   Widget build(BuildContext context) {
     Size size = DialogSizeUtils.calculateDebugDialogSize(context);
 
-    Widget contentWidget = CustomAppContainer(
-      padding: const EdgeInsets.all(2),
-      width: size.width,
-      height: size.height,
-      child: StorageView(),
+    Widget contentWidget = PageStorage(
+      bucket: _bucket,
+      child: CustomAppContainer(
+        padding: const EdgeInsets.all(2),
+        width: size.width,
+        height: size.height,
+        child: const StorageView(
+          key: PageStorageKey('MainStorageView'),
+        ),
+      ),
     );
 
-    FaAlertDialog alert = FaAlertDialog(
+    return FaAlertDialog(
       icon: Icon(
         FaIconConstants.storageIconData,
         size: 16,
@@ -68,6 +70,5 @@ class _DebugStorageViewerDialogState extends State<DebugStorageViewerDialog> {
         );
       },
     );
-    return alert;
   }
 }

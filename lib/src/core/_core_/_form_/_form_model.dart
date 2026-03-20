@@ -1630,8 +1630,7 @@ abstract class FormModel<
         }
       }
       if (currentSelectedItems != null) {
-        currentSelectedItems =
-            tempMultiOptPropXData._resolveItemsFromRawData(
+        currentSelectedItems = tempMultiOptPropXData._resolveItemsFromRawData(
           dynamicValues: currentSelectedItems,
           addOrphan: true,
           clearOrphanItems: true,
@@ -1672,16 +1671,15 @@ abstract class FormModel<
       );
     }
     // TODO: Dangerous, check not null:
-    candidateSelectedItems =
-        tempMultiOptPropXData?._resolveItemsFromRawData(
-              dynamicValues: candidateSelectedItems,
-              //
-              // IMPORTANT: Add not found item to internal list.
-              //
-              addOrphan: true,
-              clearOrphanItems: false,
-            ) ??
-            [];
+    candidateSelectedItems = tempMultiOptPropXData?._resolveItemsFromRawData(
+          dynamicValues: candidateSelectedItems,
+          //
+          // IMPORTANT: Add not found item to internal list.
+          //
+          addOrphan: true,
+          clearOrphanItems: false,
+        ) ??
+        [];
     //
     // TODO: Double check this code:
     //

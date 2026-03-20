@@ -65,6 +65,25 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
   // ***************************************************************************
 
+  bool isRouteValid(RouteKey routeKey) {
+    for (Shelf shelf in activeShelves) {
+      Set<FaRouteData> routes = shelf.ui.faRouteDatas;
+      for (FaRouteData faRouteData in routes) {
+        if (faRouteData.key.id == routeKey.id) {
+          print(" --> FOUND routeKey: ${routeKey}");
+          return true;
+        }
+      }
+    }
+    if (FlutterArtist.isCommonRouteKey(routeKey)) {
+      return true;
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _logout() {
     _shelfMap.clear();
   }

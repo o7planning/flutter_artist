@@ -2,22 +2,30 @@ part of '../core.dart';
 
 // https://pub.dev/packages/navigation_history_observer/example
 class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
-  final List<ModalRoute> _history = [];
-
   ModalRoute? _topRoute;
 
   ModalRoute? get topRoute => _topRoute;
 
   bool get topRouteIsPopupRoute => _topRoute is PopupRoute;
 
-  /// Returns all active route names in the back-stack.
-  List<String> get historyNames =>
-      _history.map((r) => r.settings.name ?? 'anonymous').toList();
+  void __addCommonRouteName(ModalRoute modalRoute) {
+    if (modalRoute.settings.arguments is FaRouteData) {
+      final data = modalRoute.settings.arguments as FaRouteData;
+      FlutterArtist._addCommonRouteKey(data.key);
+    }
+  }
+
+  void __removeCommonRouteName(ModalRoute modalRoute) {
+    if (modalRoute.settings.arguments is FaRouteData) {
+      final data = modalRoute.settings.arguments as FaRouteData;
+      // FlutterArtist._removeCommonRouteKey(data.key);
+    }
+  }
 
   @override
   void didPush(Route route, Route? previousRoute) {
     if (route is ModalRoute) {
-      _history.add(route);
+      __addCommonRouteName(route);
     }
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
@@ -40,10 +48,9 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
 
   @override
   void didPop(Route route, Route? previousRoute) {
-    // --- MIXED: Remove from history and trigger potential Block disposal ---
     if (route is ModalRoute) {
-      _history.remove(route);
       _onRouteRemovedForever(route.settings.name);
+      __removeCommonRouteName(route);
     }
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
@@ -72,8 +79,8 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
     if (route is ModalRoute) {
-      _history.remove(route);
       _onRouteRemovedForever(route.settings.name);
+      __removeCommonRouteName(route);
     }
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
@@ -86,15 +93,13 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
 
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
-    // --- MIXED: Vital for SAP-style apps to prevent leaks during replacement ---
     if (oldRoute is ModalRoute) {
-      _history.remove(oldRoute);
       _onRouteRemovedForever(oldRoute.settings.name);
+      __removeCommonRouteName(oldRoute);
     }
     if (newRoute is ModalRoute) {
-      _history.add(newRoute);
+      __addCommonRouteName(newRoute);
     }
-
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
       '[NavigatorObserver] -----------------> Route didReplace: ${newRoute?.settings.name}'
@@ -150,10 +155,8 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
   // --- INTERNAL DISPOSAL LOGIC ---
   void _onRouteRemovedForever(String? routeName) {
     if (routeName != null) {
-      // Logic for FlutterArtist to wipe the Block from memory
-      // because the user can no longer "back" to this route.
       DebugPrinter.printDebug(
-          DebugCat.navigatorObserver, 'Disposing Block for: $routeName');
+          DebugCat.navigatorObserver, 'Disposing route: $routeName');
     }
   }
 }

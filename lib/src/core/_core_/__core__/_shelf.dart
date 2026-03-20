@@ -5,9 +5,9 @@ abstract class Shelf extends _Core {
 
   late final ShelfConfig config;
 
-  bool __disposed = false;
+  bool _markAsOrphaned = false;
 
-  bool get disposed => __disposed;
+  bool get markAsOrphaned => _markAsOrphaned;
 
   late final ShelfStructure _shelfStruct;
 

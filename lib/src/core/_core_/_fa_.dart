@@ -18,6 +18,10 @@ class _FlutterArtist extends _Core {
     return __navigatorObserver!;
   }
 
+  final Set<RouteKey> __commonRouteKeys = {};
+
+  late final FlutterArtistRouter router;
+
   bool testCaseMode = false;
 
   final debugRegister = _DebugRegister();
@@ -71,6 +75,23 @@ class _FlutterArtist extends _Core {
   _FlutterArtist();
 
   // ***************************************************************************
+  // ***************************************************************************
+
+  void _addCommonRouteKey(RouteKey routeKey) {
+    print("COMMON KEYS _addCommonRouteKey: $routeKey");
+    __commonRouteKeys.add(routeKey);
+  }
+
+  void _removeCommonRouteKey(RouteKey routeKey) {
+    print("COMMON KEYS _removeCommonRouteKey: $routeKey");
+    __commonRouteKeys.remove(routeKey);
+  }
+
+  bool isCommonRouteKey(RouteKey routeKey) {
+    print("COMMON KEYS: isCommonRouteKey: $__commonRouteKeys");
+    return __commonRouteKeys.contains(routeKey);
+  }
+
   // ***************************************************************************
 
   @Deprecated("Do Not Use")
@@ -176,6 +197,7 @@ class _FlutterArtist extends _Core {
   // Docs: [14841] - FlutterArtist Config.
   Future<void> config({
     required StorageStructure storageStructure,
+    required FlutterArtistRouter router,
     required DebugOptions? debugOptions,
     required ConsoleDebugOptions? consoleDebugOptions,
     required FlutterArtistCoreFeaturesAdapter coreFeaturesAdapter,
@@ -188,10 +210,12 @@ class _FlutterArtist extends _Core {
     int maxStoredLogEntryCount = 20,
     int codeFlowRetentionPeriodInSeconds = 20,
   }) async {
+    print("[FLUTTER-ARTIST] - FlutterArtist.config() - BEGIN");
     if (__coreFeaturesAdapter != null) {
       throw DebugUtils.getFatalError(
           "${getClassName(__coreFeaturesAdapter)} already registered!");
     }
+    this.router = router;
     // IMPORTANT: Call this before using ExecutionTrace.
     codeFlowLogger = CodeFlowLogger(
         codeFlowRetentionPeriodInSeconds: codeFlowRetentionPeriodInSeconds);
@@ -220,6 +244,7 @@ class _FlutterArtist extends _Core {
       __showStartupError(executionTrace: executionTrace, error: e);
       rethrow;
     }
+    print("[FLUTTER-ARTIST] - FlutterArtist.config() - DONE");
   }
 
   Future<void> __config({
@@ -305,7 +330,7 @@ class _FlutterArtist extends _Core {
     //
     localeManager = LocaleManager._(
       globalsManager: globalsManager,
-      localeAdapter: localeAdapter,
+      localeConfig: localeAdapter,
     );
     //
     final ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;

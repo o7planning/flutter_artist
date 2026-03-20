@@ -9,7 +9,9 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
-import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart'
+    hide FlutterArtistLocaleAdapter;
+import 'package:flutter_artist_router/flutter_artist_router.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hive/hive.dart';
@@ -165,6 +167,8 @@ import '../widgets/_custom_app_container.dart';
 import '../event/emit_backend_events_action.dart';
 
 part '../../startup_error_viewer.dart';
+
+part '_bridge.dart';
 
 part '__core__/___core.dart';
 
@@ -475,6 +479,8 @@ part '__core__/_value_wrap.dart';
 part '_globals_/_globals_manager.dart';
 
 part '_locale_/_locale_manager.dart';
+
+part '_locale_/_flutter_artist_locale_adapter.dart';
 
 part '_login_/_login_activity.dart';
 

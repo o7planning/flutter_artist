@@ -34,7 +34,7 @@ class _StorageNaturalQueryQueue {
   // LOGIC: #0000 (**)
   Future<void> _executeNaturalQueryQueue() async {
     List<Shelf> lazyShelves =
-        getAllRemoveAll().where((s) => !s.disposed).toList();
+        getAllRemoveAll().where((s) => !s.markAsOrphaned).toList();
 
     if (lazyShelves.isEmpty) {
       return;
@@ -52,7 +52,7 @@ class _StorageNaturalQueryQueue {
       tipDocument: TipDocument.naturalQuery,
     );
     for (Shelf lazyShelf in lazyShelves) {
-      if (lazyShelf.disposed) {
+      if (lazyShelf.markAsOrphaned) {
         continue;
       }
       executionTrace._addTraceStep(

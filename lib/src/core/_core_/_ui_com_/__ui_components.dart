@@ -3,6 +3,8 @@ part of '../core.dart';
 abstract class _UiComponents {
   bool hasMountedUiComponent();
 
+  Set<FaRouteData> get faRouteDatas;
+
   Map<_ContextProviderViewState, XState> ___findMountedWidgetStates({
     required Map<_ContextProviderViewState, XState> widgetStates,
     required bool activeOnly,

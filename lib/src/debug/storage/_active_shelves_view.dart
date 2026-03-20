@@ -75,8 +75,10 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
                 borderRadius: BorderRadius.circular(2.0),
               ),
               child: ListTile(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 3, horizontal: 4),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 3,
+                  horizontal: 4,
+                ),
                 horizontalTitleGap: 0,
                 minVerticalPadding: 0,
                 minLeadingWidth: 22,
@@ -149,14 +151,12 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
   }
 
   Widget _buildRight() {
-    return CustomAppContainer(
-      width: double.maxFinite,
-      height: double.maxFinite,
-      child: selectedBlockOrScalar == null
-          ? SizedBox()
-          : BlockOrScalarView(
-              blockOrScalar: selectedBlockOrScalar!,
-            ),
-    );
+    return selectedBlockOrScalar == null
+        ? const SizedBox()
+        : BlockOrScalarView(
+            // Index 1
+            key: const PageStorageKey('PersistentTabbedView'),
+            blockOrScalar: selectedBlockOrScalar!,
+          );
   }
 }

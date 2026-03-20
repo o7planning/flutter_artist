@@ -13,6 +13,17 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  Set<FaRouteData> get faRouteDatas {
+    List<_ContextProviderViewState> list = [
+      ...__formWidgetStates.keys,
+    ];
+    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void updateAllUiComponents({bool force = false}) {
     __updateFormWidgets(force: force);
   }

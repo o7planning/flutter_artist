@@ -9,9 +9,9 @@ class _FormModelLoadDataTaskUnit
   _FormModelLoadDataTaskUnit({
     required this.xFormModel,
   }) : super(
-          taskType: TaskType.formModelLoadData,
-          taskResult: FormModelDataLoadResult(),
-        );
+    taskType: TaskType.formModelLoadData,
+    taskResult: FormModelDataLoadResult(),
+  );
 
   @override
   XShelf get xShelf => xFormModel.xShelf;

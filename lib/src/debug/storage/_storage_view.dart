@@ -13,23 +13,73 @@ class StorageView extends StatefulWidget {
   const StorageView({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return _StorageViewState();
-  }
+  State<StorageView> createState() => _StorageViewState();
 }
 
 class _StorageViewState extends State<StorageView> {
   static const double iconSize = 16;
-  static const double fontSize = 13;
-
-  static const int instantValueTab = 2;
-  late int selectedTab = instantValueTab;
 
   late TabbedViewController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = TabbedViewController(_getTabs());
+  }
+
+  List<TabData> _getTabs() {
+    return [
+      TabData(
+        text: ' Active Shelves',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.shelfIconData,
+          color: Colors.indigo,
+          size: iconSize,
+        ),
+        content: const ActiveShelvesView(),
+      ),
+      TabData(
+        text: ' Activities',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.activityIconData,
+          color: Colors.black,
+          size: iconSize,
+        ),
+        content: ActivitiesView(),
+      ),
+      TabData(
+        text: ' Shelves',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.shelfIconData,
+          color: Colors.black,
+          size: iconSize,
+        ),
+        content: ShelvesView(),
+      ),
+      TabData(
+        text: ' Projections',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.projectionIconData,
+          color: Colors.black,
+          size: iconSize,
+        ),
+        content: ProjectionsView(),
+      ),
+      TabData(
+        text: ' Route Stack',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.routeStackIconData,
+          color: Colors.black,
+          size: iconSize,
+        ),
+        content: RouteStackView(),
+      ),
+    ];
   }
 
   @override
@@ -42,89 +92,18 @@ class _StorageViewState extends State<StorageView> {
         _buildFilterModelInfo(context),
         const SizedBox(height: 5),
         Expanded(
-          child: _buildTabContainer(),
+          child: TabbedViewTheme(
+            data: TabThemeUtils.getTabbedViewThemeData(),
+            child: TabbedView(
+              controller: _controller,
+            ),
+          ),
         ),
       ],
     );
   }
 
   Widget _buildFilterModelInfo(BuildContext context) {
-    return SizedBox();
-  }
-
-  Widget _buildTabContainer() {
-    List<TabData> tabs = [];
-    tabs.add(
-      TabData(
-        text: ' Active Shelves',
-        closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.shelfIconData,
-          color: Colors.indigo,
-          size: iconSize,
-        ),
-        content: ActiveShelvesView(),
-      ),
-    );
-    tabs.add(
-      TabData(
-        text: ' Activities',
-        closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.activityIconData,
-          color: Colors.black,
-          size: iconSize,
-        ),
-        content: ActivitiesView(),
-      ),
-    );
-    tabs.add(
-      TabData(
-        text: ' Shelves',
-        closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.shelfIconData,
-          color: Colors.black,
-          size: iconSize,
-        ),
-        content: ShelvesView(),
-      ),
-    );
-    tabs.add(
-      TabData(
-        text: ' Projections',
-        closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.projectionIconData,
-          color: Colors.black,
-          size: iconSize,
-        ),
-        content: ProjectionsView(),
-      ),
-    );
-    tabs.add(
-      TabData(
-        text: ' Route Stack',
-        closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.routeStackIconData,
-          color: Colors.black,
-          size: iconSize,
-        ),
-        content: RouteStackView(),
-      ),
-    );
-    //
-    _controller = TabbedViewController(tabs);
-    TabbedView tabbedView = TabbedView(controller: _controller);
-
-    TabbedViewThemeData themeData = TabThemeUtils.getTabbedViewThemeData();
-
-    TabbedViewTheme tabbedViewTheme = TabbedViewTheme(
-      data: themeData,
-      child: tabbedView,
-    );
-    //
-    return tabbedViewTheme;
+    return const SizedBox();
   }
 }

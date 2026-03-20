@@ -8,6 +8,22 @@ class _LoggedInUserUiComponents extends _UiComponents {
 
   _LoggedInUserUiComponents();
 
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @override
+  Set<FaRouteData> get faRouteDatas {
+    List<_ContextProviderViewState> list = [
+      ..._loggedInUserWidgetStates.keys,
+    ];
+    return list
+        .map((v) => v.faRoute)
+        .nonNulls
+        .toList()
+        .toSet();
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -21,7 +37,7 @@ class _LoggedInUserUiComponents extends _UiComponents {
 
   void updateAllUiComponents() {
     for (_ContextProviderViewState widgetState
-        in _loggedInUserWidgetStates.keys) {
+    in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

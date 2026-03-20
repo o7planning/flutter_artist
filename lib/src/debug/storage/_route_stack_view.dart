@@ -5,7 +5,9 @@ import '_html_text_list_view.dart';
 class RouteStackView extends HtmlTextListView {
   RouteStackView({super.key})
       : super(
-          htmlTexts: FlutterArtist.navigatorObserver.historyNames,
+          htmlTexts: FlutterArtist.router.stack
+              .map((routeKey) => "${routeKey.path} (#${routeKey.id}")
+              .toList(),
           tipDocument: TipDocument.routeStack,
         );
 }

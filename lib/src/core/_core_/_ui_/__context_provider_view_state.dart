@@ -21,12 +21,32 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     implements
         IContextProviderViewState {
   String? __modelRouteName;
+  FaRouteData? __faRoute;
+
+  FaRouteData? get faRoute => __faRoute;
 
   double __maxSize = 0;
 
   double get maxSize => __maxSize;
 
   int _refreshCount = 0;
+
+  void __setRouteName(ModalRoute? modalRoute) {
+    if (modalRoute == null) {
+      __faRoute = null;
+    } else {
+      if (modalRoute.settings.arguments is FaRouteData) {
+        final data = modalRoute.settings.arguments as FaRouteData;
+        __faRoute = data;
+        // IMPORTANT:
+        if (provideBlockContext || provideScalarContext) {
+          FlutterArtist._removeCommonRouteKey(data.key);
+        }
+      } else {
+        __faRoute = null;
+      }
+    }
+  }
 
   @override
   ShowMode showMode = ShowMode.production;
@@ -205,9 +225,12 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
   void didPush() {
     __addWidgetState(isVisible: true);
     //
+    final ModalRoute? modalRoute = ModalRoute.of(context);
+    __setRouteName(modalRoute);
+    //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
-      ' ---->  [RouteAware] ---------> didPush: ${ModalRoute.of(context)?.settings.name}'
+      ' ---->  [RouteAware] ---------> didPush: ${modalRoute?.settings.name}'
       ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }
@@ -217,9 +240,11 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
   void didPop() {
     __addWidgetState(isVisible: false);
     //
+    final ModalRoute? modalRoute = ModalRoute.of(context);
+    //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
-      ' ---->  [RouteAware] ---------> didPop: ${ModalRoute.of(context)?.settings.name}'
+      ' ---->  [RouteAware] ---------> didPop: ${modalRoute?.settings.name}'
       ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }
