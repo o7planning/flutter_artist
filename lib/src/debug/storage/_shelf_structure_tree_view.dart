@@ -49,6 +49,8 @@ class _ShelfStructureTreeViewState extends State<ShelfStructureTreeView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return TreeView.simple(
       tree: rootTreeNode,
       showRootNode: false,
@@ -56,7 +58,7 @@ class _ShelfStructureTreeViewState extends State<ShelfStructureTreeView> {
       expansionIndicatorBuilder: (context, node) {
         return ChevronIndicator.upDown(
           tree: node,
-          color: Colors.grey[700],
+          color: theme.hintColor.withValues(alpha: 0.5),
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.fromLTRB(0, 8, 20, 8),
           icon: Icons.keyboard_arrow_down_outlined,
@@ -100,7 +102,10 @@ class _ShelfStructureTreeViewState extends State<ShelfStructureTreeView> {
         } else {
           title = "ROOT";
         }
+        final isSelected = _currentNode == node;
+
         return Material(
+          color: Colors.transparent,
           child: ListTile(
             dense: true,
             visualDensity: const VisualDensity(
@@ -114,32 +119,30 @@ class _ShelfStructureTreeViewState extends State<ShelfStructureTreeView> {
                   child: Text(
                     title,
                     style: TextStyle(
-                      overflow: TextOverflow.ellipsis,
                       fontSize: 12,
                       color: isListener
-                          ? DebugConstants.listenerTextColor
+                          ? colorScheme.error
                           : isNotifier
-                              ? DebugConstants.eventSourceTextColor
-                              : Colors.black,
-                      fontWeight: _currentNode == node
-                          ? FontWeight.bold
-                          : FontWeight.normal,
+                              ? colorScheme.primary
+                              : colorScheme.onSurface,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
                     ),
                   ),
                 ),
                 if (isNotifier) const SizedBox(width: 5),
                 if (isNotifier)
-                  const Icon(
+                  Icon(
                     FaIconConstants.eventSourceIconData,
                     size: 16,
-                    color: DebugConstants.eventSourceIconColor,
+                    color: DebugConstants.eventSourceIconColor(context),
                   ),
                 if (isListener) const SizedBox(width: 5),
                 if (isListener)
-                  const Icon(
+                  Icon(
                     FaIconConstants.listenerIconData,
                     size: 16,
-                    color: DebugConstants.listenerIconColor,
+                    color: DebugConstants.listenerIconColor(context),
                   )
               ],
             ),

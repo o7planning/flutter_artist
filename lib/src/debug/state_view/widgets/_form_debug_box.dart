@@ -16,7 +16,7 @@ class FormDebugBox extends BaseDebugBox {
   });
 
   @override
-  List<Widget> getChildIconLabelTexts() {
+  List<Widget> getChildIconLabelTexts(BuildContext context) {
     FormModelStructure structure = formModel.formPropsStructure;
     List<MultiOptFormPropModel> optProps = structure.allMultiOptProps;
     //
@@ -26,50 +26,50 @@ class FormDebugBox extends BaseDebugBox {
           label: "Form UI Active?: ",
           text:
               "${formModel.ui.hasActiveUiComponent()}/${formModel.loadTimeUiActive}*",
-          labelStyle: labelStyle0,
-          textStyle: textStyle0,
+          labelStyle: getLabelStyle0(context),
+          textStyle: getTextStyle0(context),
         ),
       if (options.showFormEnable)
         IconLabelText(
           label: "Form Enable?: ",
           text: "${formModel.isEnabled()}",
-          labelStyle: labelStyle0,
-          textStyle: textStyle0,
+          labelStyle: getLabelStyle0(context),
+          textStyle: getTextStyle0(context),
         ),
       if (options.showFormDataState)
         IconLabelText(
           label: "Form State: ",
           text: formModel.dataState.name.toString(),
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
       if (options.showFormMode)
         IconLabelText(
           label: "Form Mode: ",
           text: formModel.formMode.name.toString(),
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
       if (options.showFormLoadCount)
         IconLabelText(
           label: "Form Load Count: ",
           text: formModel.loadCount.toString(),
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
       if (options.showFormActivityCount)
         IconLabelText(
           label: "Form Activity Count: ",
           text: formModel.formActivityCount.toString(),
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
       if (options.showFormDirty)
         IconLabelText(
           label: "Form Dirty: ",
           text: formModel.isDirty().toString(),
-          labelStyle: labelStyle0,
-          textStyle: textStyle0,
+          labelStyle: getLabelStyle0(context),
+          textStyle: getTextStyle0(context),
         ),
     ];
 
@@ -79,8 +79,8 @@ class FormDebugBox extends BaseDebugBox {
           (optProp) => IconLabelText(
             label: "Load Count (${optProp.propName}): ",
             text: optProp.loadCount.toString(),
-            labelStyle: labelStyle0,
-            textStyle: textStyle0,
+            labelStyle: getLabelStyle0(context),
+            textStyle: getTextStyle0(context),
           ),
         ),
     ];

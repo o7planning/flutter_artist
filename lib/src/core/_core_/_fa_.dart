@@ -52,6 +52,8 @@ class _FlutterArtist extends _Core {
 
   late final LocaleManager localeManager;
 
+  late final ThemeManager themeManager;
+
   AfterQueryAction _defaultAfterQueryAction =
       AfterQueryAction.setAnItemAsCurrentIfNeed;
 
@@ -59,7 +61,7 @@ class _FlutterArtist extends _Core {
 
   Function(BuildContext context)? showRestDebugViewerDialog;
 
-  late final _NotificationEngine __notificationEngine;
+  late final FlutterArtistNotificationService __notificationService;
 
   late final Logger logger;
   late final CodeFlowLogger codeFlowLogger;
@@ -163,7 +165,7 @@ class _FlutterArtist extends _Core {
         "loggedInUser": loggedInUser,
         "requiresTheSameUser": requiresTheSameUser,
       },
-      lineFlowType: LineFlowType.nonControllableCalling,
+      traceStepType: TraceStepType.nonControllableCalling,
     );
     // This method never throw error.
     return await globalsManager._setOrUpdateLoggedInUserSafely(
@@ -262,6 +264,7 @@ class _FlutterArtist extends _Core {
     required int maxStoredLogEntryCount,
     required int codeFlowRetentionPeriodInSeconds,
   }) async {
+    await FaIsarStorage.init();
     logger = Logger(maxStoredLogEntryCount: maxStoredLogEntryCount);
     //
     executionTrace._addTraceStep(
@@ -277,7 +280,7 @@ class _FlutterArtist extends _Core {
         "maxStoredLogEntryCount": maxStoredLogEntryCount,
         "notificationFetchPeriodInSeconds": notificationFetchPeriodInSeconds,
       },
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
       tipDocument: TipDocument.config,
     );
     //
@@ -296,7 +299,7 @@ class _FlutterArtist extends _Core {
       parameters: {
         "storageStructure": storageStructure,
       },
-      lineFlowType: LineFlowType.nonControllableCalling,
+      traceStepType: TraceStepType.nonControllableCalling,
       tipDocument: TipDocument.storageStructure,
     );
     // This method may throw error and stop app.
@@ -321,10 +324,16 @@ class _FlutterArtist extends _Core {
       shortDesc: "Calling <b>globalsManager._init()</b>...",
       note:
           "This method will read all the user data that was previously stored in <b>Local</b>.",
-      lineFlowType: LineFlowType.nonControllableCalling,
+      traceStepType: TraceStepType.nonControllableCalling,
       tipDocument: TipDocument.globalData,
     );
     await globalsManager._init(executionTrace);
+    //
+    // Theme Manager:
+    //
+    themeManager = ThemeManager._(
+      globalsManager: globalsManager,
+    );
     //
     // Locale Manager:
     //
@@ -346,13 +355,11 @@ class _FlutterArtist extends _Core {
       executionTrace._addTraceStep(
         codeId: "#S0560",
         shortDesc:
-            "Calling <b>localeManager._readStoredLocale()</b> to read saved locale from <b>Local</b>...",
-        lineFlowType: LineFlowType.nonControllableCalling,
+            "Calling <b>localeManager.currentLocale()</b> to read saved locale from <b>Local</b>...",
+        traceStepType: TraceStepType.nonControllableCalling,
       );
-      final Locale? locale = localeManager._readStoredLocale(
-        loggedInUser: loggedInUser,
-        executionTrace: executionTrace,
-      );
+      final Locale? locale = localeManager.currentLocale;
+
       executionTrace._addTraceStep(
         codeId: "#S0580",
         shortDesc: "Got stored @locale: ${debugObjHtml(locale)}.",
@@ -364,7 +371,7 @@ class _FlutterArtist extends _Core {
           parameters: {
             "locale": locale,
           },
-          lineFlowType: LineFlowType.nonControllableCalling,
+          traceStepType: TraceStepType.nonControllableCalling,
         );
         Future.delayed(Duration(seconds: 2), () async {
           await localeManager._updateLocale(
@@ -380,16 +387,26 @@ class _FlutterArtist extends _Core {
     // Notification:
     //
     this.notificationFetchPeriodInSeconds = notificationFetchPeriodInSeconds;
-    __notificationEngine = _NotificationEngine(notificationAdapter);
+    if (notificationAdapter is SimpleNotificationAdapter) {
+      __notificationService = SimpleNotificationService(notificationAdapter);
+    } else if (notificationAdapter is FirebaseNotificationAdapter) {
+      __notificationService = FirebaseNotificationService(notificationAdapter);
+    } else if (notificationAdapter is SSENotificationAdapter) {
+      __notificationService = SSENotificationService(notificationAdapter);
+    } else {
+      throw UnimplementedError();
+    }
     //
     executionTrace._addTraceStep(
       codeId: "#S0680",
       shortDesc: "Start notificationEngine.",
     );
     //
-    // IMPORTANT: No await:
+    // IMPORTANT: No await.
     //
-    __notificationEngine.start();
+    print(
+        "[FLUTTER_ARTIST] ${getClassNameWithoutGenerics(__notificationService)}.initialize()");
+    __notificationService.initialize();
   }
 
   void addLogListener(ILogListener listener) {

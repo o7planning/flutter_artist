@@ -57,7 +57,7 @@ class _DeferredEventManager {
       shortDesc:
           "Several originEvents have occurred, and they have generated <b>DeferredEvent(s)</b>. "
           "It's time to execute them.",
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
     );
     //
     // #0004.
@@ -68,7 +68,7 @@ class _DeferredEventManager {
       shortDesc: freezing
           ? "The mode to defer <b>DeferredEvent</b> execution is <b>enabled</b>."
           : "The mode to defer <b>DeferredEvent</b> execution is <b>not enabled</b>.",
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
       tipDocument: TipDocument.eventReactionFreezing,
     );
     //
@@ -94,7 +94,7 @@ class _DeferredEventManager {
         shortDesc:
             "The <b>$listenerShelfName</b> received the <b>originEvents</b>:"
             "\n - @originEvents: <b>${originEvents.toList()}</b>.",
-        lineFlowType: LineFlowType.debug,
+        traceStepType: TraceStepType.debug,
       );
       Set<Event> projectionEvents = FlutterArtist.storage._projectionManager
           .getProjectionEvents(originEvents);
@@ -103,7 +103,7 @@ class _DeferredEventManager {
         shortDesc:
             "Calculated <b>projectionEvents</b> from <b>originEvents</b>:"
             "\n - @projectionEvents: <b>${projectionEvents.toList()}</b>.",
-        lineFlowType: LineFlowType.debug,
+        traceStepType: TraceStepType.debug,
         tipDocument: TipDocument.projection,
       );
       Shelf listenerShelf = storage._shelfMap[listenerShelfName]!;
@@ -134,7 +134,7 @@ class _DeferredEventManager {
         shortDesc:
             "Calling ${debugObjHtml(reactionShelf)}._addShelfExternalReactionTaskUnit():",
         note: " This Shelf is <b>INVISIBLE</b>.",
-        lineFlowType: LineFlowType.nonControllableCalling,
+        traceStepType: TraceStepType.nonControllableCalling,
       );
       reactionShelf._addShelfExternalReactionTaskUnit(
         executionTrace: executionTrace,
@@ -147,7 +147,7 @@ class _DeferredEventManager {
           shortDesc:
               "Calling ${debugObjHtml(reactionShelf)}._addShelfExternalReactionTaskUnit():",
           note: " This Shelf is <b>VISIBLE</b> and <b>is not frozen</b>.",
-          lineFlowType: LineFlowType.nonControllableCalling,
+          traceStepType: TraceStepType.nonControllableCalling,
           tipDocument: TipDocument.eventReactionFreezing,
         );
         reactionShelf._addShelfExternalReactionTaskUnit(
@@ -157,7 +157,7 @@ class _DeferredEventManager {
         executionTrace._addTraceStep(
           codeId: "#27500",
           shortDesc: "This Shelf is <b>VISIBLE</b> and <b>is frozen</b>.",
-          lineFlowType: LineFlowType.info,
+          traceStepType: TraceStepType.info,
         );
       }
     }
@@ -174,7 +174,7 @@ class _DeferredEventManager {
         shortDesc:
             "The <b>${listenerShelf.name}</b> is in frozen mode reacting to events, "
             "so there is no need to create a task unit for it.",
-        lineFlowType: LineFlowType.info,
+        traceStepType: TraceStepType.info,
       );
       return;
     }
@@ -182,14 +182,14 @@ class _DeferredEventManager {
       codeId: "#49100",
       shortDesc:
           "Calculating how the members of <b>${listenerShelf.name}</b> would react to the events above...",
-      lineFlowType: LineFlowType.info,
+      traceStepType: TraceStepType.info,
     );
     EffectedShelfMembers effectedShelfMembers =
         listenerShelf._calculateEffectedShelfMembersByEvents(outsideEvents);
     executionTrace._addTraceStep(
       codeId: "#49200",
       shortDesc: "Calculated:${effectedShelfMembers.getDebugInfoHtml()}",
-      lineFlowType: LineFlowType.info,
+      traceStepType: TraceStepType.info,
     );
     if (!effectedShelfMembers.hasMember()) {
       return;

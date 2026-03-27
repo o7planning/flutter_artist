@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../../core/_core_/core.dart';
 
@@ -19,7 +20,9 @@ class FilterCriterionView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 3, horizontal: 0),
-      color: selected ? Colors.indigo.withAlpha(40) : null,
+      color: selected
+          ? FaColorUtils.primaryHighlight(context).withValues(alpha: 0.15)
+          : null,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(2.0),
       ),
@@ -49,6 +52,7 @@ class FilterCriterionView extends StatelessWidget {
           filterCriterion.filterFieldName,
           style: TextStyle(
             fontSize: 12,
+            color: FaColorUtils.sourceCode(context),
           ),
         ),
       ),

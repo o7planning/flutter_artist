@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_left_right_container/left_right_container.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
@@ -30,6 +31,9 @@ class FilterCriteriaView extends StatefulWidget {
 class _FilterCriteriaViewState extends State<FilterCriteriaView> {
   FilterCriterion<Object>? _selectedFilterCriterion;
   FilterCriteria? filterCriteria;
+
+  final fieldBasedJsonTabId = "Field-Based JSON";
+  final supportedCriteriaTabId = "Supported Criteria";
 
   @override
   void initState() {
@@ -104,61 +108,81 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
   }
 
   Widget _buildFilterCriterionValue() {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Criterion Base Name:",
-          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 5),
+        _buildSectionLabel("Criterion Base Name:"),
         Text(
           _selectedFilterCriterion?.filterCriterionName ?? "-",
-          style: TextStyle(fontSize: 13),
+          style: TextStyle(
+              fontSize: 13, color: FaColorUtils.primaryHighlight(context)),
         ),
-        SizedBox(height: 10),
-        IconLabelSelectableText(
-          label: "Data Type: ",
-          text: _selectedFilterCriterion == null
-              ? "-"
-              : "<${_selectedFilterCriterion!.rawDataTypeName}>",
-          labelStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-          textStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Text("Data Type: ",
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: FaColorUtils.primaryHighlight(context))),
+            Text(
+              _selectedFilterCriterion == null
+                  ? "-"
+                  : "<${_selectedFilterCriterion!.rawDataTypeName}>",
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: FaColorUtils.technicalHighlight(context),
+              ),
+            ),
+          ],
         ),
-        Divider(),
-        Text(
-          "Field Name:",
-          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 5),
+        const Divider(height: 20),
+        _buildSectionLabel("Field Name:"),
         Text(
           _selectedFilterCriterion?.filterFieldName ?? "-",
-          style: TextStyle(fontSize: 13),
+          style: TextStyle(
+              fontSize: 13,
+              fontFamily: 'Courier',
+              color: FaColorUtils.sourceCode(context)),
         ),
-        SizedBox(height: 15),
+        const Spacer(),
         SizedBox(
           width: double.maxFinite,
           child: ElevatedButton.icon(
             onPressed: widget.onDebugFilterModelPressed,
             style: ElevatedButton.styleFrom(
-              minimumSize: Size.zero,
-              padding: EdgeInsets.all(3),
+              backgroundColor: colorScheme.primaryContainer,
+              foregroundColor: colorScheme.onPrimaryContainer,
+              elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(4),
               ),
             ),
-            icon: Icon(
-              FaIconConstants.filterModelDebugIconData,
-              size: 15,
-            ),
-            label: Text(
+            icon: Icon(FaIconConstants.filterModelDebugIconData, size: 16),
+            label: const Text(
               "Debug Filter Model Viewer",
-              style: TextStyle(fontSize: 13),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildSectionLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.bold,
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+        ),
+      ),
     );
   }
 
@@ -167,33 +191,36 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
 
     tabs.add(
       TabData(
+        id: fieldBasedJsonTabId,
         text: ' Field-Based JSON',
         closable: false,
         leading: (context, status) => Icon(
           Icons.data_object,
-          color: Colors.black,
+          color: TabThemeUtils.getTabIconColor(context, status),
           size: 16,
         ),
-        content: _buildJsonContent(),
+        view: _buildJsonContent(),
       ),
     );
     tabs.add(
       TabData(
+        id: supportedCriteriaTabId,
         text: ' Supported Criteria',
         closable: false,
         leading: (context, status) => Icon(
           Icons.policy_outlined,
-          color: Colors.black,
+          color: TabThemeUtils.getTabIconColor(context, status),
           size: 16,
         ),
-        content: _buildLeftRightFilterCriterion(),
+        view: _buildLeftRightFilterCriterion(),
       ),
     );
 
     TabbedViewController _controller = TabbedViewController(tabs);
     TabbedView tabbedView = TabbedView(controller: _controller);
 
-    TabbedViewThemeData themeData = TabThemeUtils.getTabbedViewThemeData();
+    TabbedViewThemeData themeData =
+        TabThemeUtils.getTabbedViewThemeData(context);
 
     TabbedViewTheme tabbedViewTheme = TabbedViewTheme(
       data: themeData,

@@ -20,45 +20,57 @@ class ExecutionTraceBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: selected
+              ? theme.colorScheme.primary
+              : theme.dividerColor.withValues(alpha: 0.1),
+          width: 1,
+        ),
+      ),
       color: selected
-          ? CodeFlowConstants.selectedExecutionTraceBgColor
-          : CodeFlowConstants.deselectedExecutionTraceBgColor,
+          ? theme.colorScheme.primaryContainer.withValues(alpha: 0.4)
+          : theme.colorScheme.surface.withValues(alpha: 0.1),
       child: _buildMainContent(context),
     );
   }
 
   Widget _buildMainContent(BuildContext context) {
+    final theme = Theme.of(context);
     return ListTile(
-      horizontalTitleGap: 5,
+      horizontalTitleGap: 8,
       dense: true,
-      visualDensity: const VisualDensity(
-        horizontal: -3,
-        vertical: -3,
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-      leading: _buildLeading(),
+      visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+      contentPadding: const EdgeInsets.fromLTRB(8, 0, 4, 0),
+      leading: _buildLeading(context),
       trailing: Text(
         executionTrace.id.toString(),
         style: TextStyle(
-          color: Colors.black45,
-          fontSize: 9,
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
+          fontSize: 10,
+          fontFamily: 'Courier',
+          fontWeight: FontWeight.bold,
         ),
       ),
       title: _buildTitle(context),
-      subtitle: _buildSubTitle(),
+      subtitle: _buildSubTitle(context),
       onTap: onTap,
     );
   }
 
-  Widget _buildLeading() {
+  Widget _buildLeading(BuildContext context) {
     bool error = executionTrace.hasError();
+    final theme = Theme.of(context);
     return Tooltip(
       message: executionTrace.executionTraceType.getTooltipText(),
       child: Icon(
         executionTrace.executionTraceType.getIconData(),
-        color: executionTrace.executionTraceType.getIconColor(error),
-        size: 18,
+        color: executionTrace.executionTraceType.getIconColor(context, error),
+        size: 20,
       ),
     );
   }
@@ -80,18 +92,54 @@ class ExecutionTraceBox extends StatelessWidget {
     );
   }
 
+  // Widget _buildTitle(BuildContext context) {
+  //   ErrorInfo? errorInfo = executionTrace.getErrorInfo();
+  //   bool hasEvent = executionTrace.hasEvent();
+  //   return IconLabelText(
+  //     text: executionTrace.getTitle(),
+  //     style: _titleStyle(),
+  //     suffixIcon: hasEvent
+  //         ? Tooltip(
+  //             message: "There was an event broadcast here.",
+  //             child: Icon(
+  //               Icons.electric_bolt_outlined,
+  //               color: Colors.deepOrangeAccent,
+  //               size: 14,
+  //             ),
+  //           )
+  //         : null,
+  //     suffixIcon2: errorInfo != null
+  //         ? SimpleSmallIconButton(
+  //             iconData: Icons.error_outline,
+  //             iconColor: Colors.red,
+  //             iconSize: 14,
+  //             onPressed: () {
+  //               _showErrorDialog(context, errorInfo);
+  //             },
+  //           )
+  //         : null,
+  //   );
+  // }
+
   Widget _buildTitle(BuildContext context) {
+    final theme = Theme.of(context);
     ErrorInfo? errorInfo = executionTrace.getErrorInfo();
     bool hasEvent = executionTrace.hasEvent();
+
     return IconLabelText(
       text: executionTrace.getTitle(),
-      style: _titleStyle(),
+      style: TextStyle(
+        fontSize: 12,
+        fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+        color: theme.colorScheme.onSurface,
+        overflow: TextOverflow.ellipsis,
+      ),
       suffixIcon: hasEvent
           ? Tooltip(
               message: "There was an event broadcast here.",
               child: Icon(
                 Icons.electric_bolt_outlined,
-                color: Colors.deepOrangeAccent,
+                color: theme.colorScheme.tertiary,
                 size: 14,
               ),
             )
@@ -99,18 +147,25 @@ class ExecutionTraceBox extends StatelessWidget {
       suffixIcon2: errorInfo != null
           ? SimpleSmallIconButton(
               iconData: Icons.error_outline,
-              iconColor: Colors.red,
+              iconColor: theme.colorScheme.error,
               iconSize: 14,
-              onPressed: () {
-                _showErrorDialog(context, errorInfo);
-              },
+              onPressed: () => _showErrorDialog(context, errorInfo),
             )
           : null,
     );
   }
 
-  Widget _buildSubTitle() {
-    return Text(executionTrace.getSubtitle(), style: _subtitleStyle());
+  Widget _buildSubTitle(BuildContext context) {
+    final theme = Theme.of(context);
+    return Text(
+      executionTrace.getSubtitle(),
+      style: TextStyle(
+        fontSize: 11,
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+        overflow: TextOverflow.ellipsis,
+        fontFamily: 'Courier',
+      ),
+    );
   }
 
   void _showErrorDialog(BuildContext context, ErrorInfo errorInfo) {

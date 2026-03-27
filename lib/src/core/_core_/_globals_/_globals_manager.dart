@@ -1,22 +1,6 @@
 part of '../core.dart';
 
 class GlobalsManager extends _Core {
-  final String __separator = ";";
-
-  ///
-  /// Hive Prefix Key for "Extra Prop Names", for example: {'language', 'theme'}.
-  ///
-  final String __prefixHiveExtraPropNamesKey = "--hive-extra-prop-names-key--";
-
-  ///
-  /// Hive Prefix Key for "Extra Prop Name", for example: 'language'.
-  ///
-  final String __prefixHiveExtraPropNameKey = "--hive-extra-prop-name-key--";
-
-  //
-  final String __hiveKeyLoggedInUser =
-      "*---flutter-artist-hive-key-logged-in-user---*";
-
   int _performLoadGlobalDataCount = 0;
 
   int get performLoadGlobalDataCount => _performLoadGlobalDataCount;
@@ -33,14 +17,7 @@ class GlobalsManager extends _Core {
 
   final FlutterArtistGlobalDataAdapter globalDataAdapter;
 
-  ///
-  /// For example: {"language", "theme"}
-  ///
-  final Set<String> __registeredExtraPropNames = {};
-
-  Set<String> get registeredExtraPropNames => {...__registeredExtraPropNames};
-
-  final Map<String, dynamic> __extraPropMap = {};
+  FaMetadata? __faMetadata;
 
   final ui = _LoggedInUserUiComponents();
 
@@ -49,196 +26,6 @@ class GlobalsManager extends _Core {
     required this.globalDataAdapter,
   });
 
-  String __getHiveExtraGlobalPropNamesKey(ILoggedInUser loggedInUser) {
-    return "$__prefixHiveExtraPropNamesKey-**-${loggedInUser.userName}";
-  }
-
-  String __getHiveExtraGlobalPropNameKey({
-    required ILoggedInUser loggedInUser,
-    required String propName,
-  }) {
-    return "$__prefixHiveExtraPropNameKey-**-$propName-**-${loggedInUser.userName}";
-  }
-
-  ///
-  /// Extra Global Prop Names. For Example:
-  /// - language
-  /// - theme
-  ///
-  Future<void> __readExtraGlobalProps({
-    required ExecutionTrace executionTrace,
-    required ILoggedInUser loggedInUser,
-  }) async {
-    executionTrace._addTraceStep(
-      codeId: "#E0000",
-      shortDesc:
-          "Open <b>HiveBox</b> to read <b>Extra Global Prop Names</b> from <b>Local</b>.",
-    );
-    // Store on local device:
-    Box<String> hiveBox = await HiveUtils.openHiveBoxExtraGlobalPropNames();
-    try {
-      // xxx-**-${loggedInUser.userName}
-      String key = __getHiveExtraGlobalPropNamesKey(loggedInUser);
-      String extraGlobalPropNamesStr = hiveBox.get(key) ?? "";
-      //
-      executionTrace._addTraceStep(
-        codeId: "#E0100",
-        shortDesc: "Result from <b>HiveBox</b>:",
-        parameters: {
-          "key": key,
-          "extraGlobalPropNamesStr": extraGlobalPropNamesStr,
-        },
-        lineFlowType: LineFlowType.debug,
-      );
-      List<String> extraGlobalPropNames = extraGlobalPropNamesStr
-          .split(__separator)
-          .map((s) => s.trim())
-          .where((s) => s.isNotEmpty)
-          .toList();
-
-      executionTrace._addTraceStep(
-        codeId: "#E0200",
-        shortDesc: " - @extraGlobalPropNames: <b>$extraGlobalPropNames</b>.",
-      );
-      //
-      __registeredExtraPropNames
-        ..clear()
-        ..addAll(extraGlobalPropNames);
-    } catch (e, stackTrace) {
-      ErrorInfo errorInfo = ErrorInfo.fromError(
-        error: e,
-        stackTrace: stackTrace,
-      );
-      executionTrace._addTraceStep(
-        codeId: "#E0300",
-        shortDesc: "Has an error.",
-        errorInfo: errorInfo,
-      );
-      return;
-    } finally {
-      await hiveBox.close();
-    }
-    //
-    for (String propName in __registeredExtraPropNames) {
-      executionTrace._addTraceStep(
-        codeId: "#E0400",
-        shortDesc: "Reading prop <b>'$propName'</b> from <b>HiveBox</b>...",
-      );
-      dynamic value = await __readExtraGlobalProp(
-        loggedInUser: loggedInUser,
-        propName: propName,
-      );
-      __extraPropMap[propName] = value;
-      executionTrace._addTraceStep(
-        codeId: "#E0500",
-        shortDesc: "Result from <b>HiveBox</b>:"
-            "\n - @propName: <b>$propName</b>"
-            "\n - @value: <b>$value</b>",
-        note:
-            "You can access current locale via <b>FlutterArtist.localeManager.currentLocale</b>.",
-        tipDocument: TipDocument.locale,
-      );
-    }
-  }
-
-  Future<bool> __storeExtraGlobalPropNames({
-    required ExecutionTrace executionTrace,
-    required ILoggedInUser loggedInUser,
-  }) async {
-    // Store on local device:
-    Box<String> hiveBox = await HiveUtils.openHiveBoxExtraGlobalPropNames();
-    String key = __getHiveExtraGlobalPropNamesKey(loggedInUser);
-    try {
-      String value = __registeredExtraPropNames.toList().join(__separator);
-
-      executionTrace._addTraceStep(
-        codeId: "#LE000",
-        shortDesc: "Store to the <b>HiveBox</b>:",
-        parameters: {
-          "key": key,
-          "value": value,
-        },
-        lineFlowType: LineFlowType.debug,
-      );
-      await hiveBox.put(key, value);
-      return true;
-    } catch (e, stackTrace) {
-      final ErrorInfo errorInfo = ErrorInfo.fromError(
-        error: e,
-        stackTrace: stackTrace,
-      );
-      executionTrace._addTraceStep(
-        codeId: "#LE020",
-        shortDesc: "Store @key: <b>$key</b> error!",
-        errorInfo: errorInfo,
-      );
-      return false;
-    } finally {
-      await hiveBox.close();
-    }
-  }
-
-  Future<dynamic> __readExtraGlobalProp({
-    required ILoggedInUser loggedInUser,
-    required String propName,
-  }) async {
-    Box<dynamic> hiveBox = await HiveUtils.openHiveBoxExtraGlobalProp();
-    try {
-      String key = __getHiveExtraGlobalPropNameKey(
-        loggedInUser: loggedInUser,
-        propName: propName,
-      );
-      dynamic value = hiveBox.get(key);
-      return value;
-    } finally {
-      await hiveBox.close();
-    }
-  }
-
-  dynamic getExtraGlobalProp(String propName) {
-    return __extraPropMap[propName];
-  }
-
-  Future<void> _storeExtraGlobalProp({
-    required ExecutionTrace executionTrace,
-    required ILoggedInUser loggedInUser,
-    required String propName,
-    required dynamic value,
-  }) async {
-    __registeredExtraPropNames.add(propName);
-    executionTrace._addTraceStep(
-      codeId: "#LS000",
-      shortDesc:
-          "Registered extraPropNames: <b>${__registeredExtraPropNames.toList()}</b>.",
-      lineFlowType: LineFlowType.debug,
-    );
-    bool success = await __storeExtraGlobalPropNames(
-      executionTrace: executionTrace,
-      loggedInUser: loggedInUser,
-    );
-    if (!success) {
-      return;
-    }
-    //
-    __extraPropMap[propName] = value;
-    //
-    Box<dynamic> hiveBox = await HiveUtils.openHiveBoxExtraGlobalProp();
-    // xxx*$propName*userName
-    String key = __getHiveExtraGlobalPropNameKey(
-      loggedInUser: loggedInUser,
-      propName: propName,
-    );
-    executionTrace._addTraceStep(
-      codeId: "#LS100",
-      shortDesc: "Store to the <b>HiveBox</b>:"
-          "\n - @key: <b>$key</b>"
-          "\n - @value: <b>$value</b>",
-      lineFlowType: LineFlowType.debug,
-    );
-    await hiveBox.put(key, value);
-    await hiveBox.close();
-  }
-
   ///
   /// This method is called only once when FlutterArtist is started.
   ///
@@ -246,58 +33,63 @@ class GlobalsManager extends _Core {
     executionTrace._addTraceStep(
       codeId: "#GM000",
       shortDesc:
-          "Open <b>HiveBox</b> to read user information that was previously saved locally.",
+          "Call <b>FaIsarStorage.getLatestMetadata()</b> to read user information that was previously saved locally.",
     );
-    Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
-    executionTrace._addTraceStep(
-      codeId: "#GM020",
-      shortDesc:
-          "Reading <b>LoggedInUser JSON String</b> from <b>HiveBox</b>...",
-      parameters: {
-        "key": __hiveKeyLoggedInUser,
-      },
-      note:
-          "This information has been stored locally when the user successfully logged in before.",
-    );
-    String? loggedInUserJson = hiveBox.get(__hiveKeyLoggedInUser);
-    await hiveBox.close();
+    __faMetadata = await FaIsarStorage.getLatestMetadata();
 
-    if (loggedInUserJson == null) {
+    if (__faMetadata == null) {
+      print("Stored @faMetadata is NULL");
       executionTrace._addTraceStep(
         codeId: "#GM040",
-        shortDesc: "Read @loggedInUserJson: <b>NULL</b>.",
-        parameters: {
-          "key": __hiveKeyLoggedInUser,
-        },
+        shortDesc: "Read @faMetadata: <b>NULL</b>.",
       );
       return;
     }
     executionTrace._addTraceStep(
-      codeId: "#GM060",
-      shortDesc: "Read @loggedInUserJson: <b>NOT NULL</b>.",
-      parameters: {
-        "key": __hiveKeyLoggedInUser,
-      },
-      extraInfos: [loggedInUserJson],
+      codeId: "#GM050",
+      shortDesc: "Prefer theme: <b>${__faMetadata!.themeName}</b>.",
     );
+
+    print("Read stored themeName: ${__faMetadata!.themeName}");
+    FaThemeHub.instance.setThemeByName(__faMetadata!.themeName);
+
+    executionTrace._addTraceStep(
+      codeId: "#GM060",
+      shortDesc: "Read @userName: <b>${__faMetadata!.userId}</b>.",
+    );
+
     ILoggedInUser? loggedInUser;
     try {
       executionTrace._addTraceStep(
-        codeId: "#GM080",
-        shortDesc: "Calling ${debugObjHtml(loginLogoutAdapter)}.fromJson() "
-            "to convert above <b>JSON String</b> to <b>${getTypeNameWithoutGenerics(ILoggedInUser)}</b> object.",
+        codeId: "#GM070",
+        shortDesc:
+            "Calling: <b>${getTypeNameWithoutGenerics(FaIsarStorage)}.getDecryptedUserJson()</b>.",
         parameters: {
-          "jsonString": loggedInUserJson,
+          "userId": __faMetadata!.userId,
         },
-        extraInfos: [loggedInUserJson],
-        lineFlowType: LineFlowType.controllableCalling,
-        tipDocument: TipDocument.loginLogoutAdapter,
+        traceStepType: TraceStepType.nonControllableCalling,
       );
-      loggedInUser = loginLogoutAdapter.fromJson(loggedInUserJson);
-      executionTrace._addTraceStep(
-        codeId: "#GM100",
-        shortDesc: "Got value: ${debugObjHtml(loggedInUser)}.",
-      );
+      final String? loggedInUserJson =
+          await FaIsarStorage.getDecryptedUserJson(__faMetadata!.userId);
+
+      if (loggedInUserJson != null) {
+        executionTrace._addTraceStep(
+          codeId: "#GM080",
+          shortDesc: "Calling ${debugObjHtml(loginLogoutAdapter)}.fromJson() "
+              "to convert above <b>JSON String</b> to <b>${getTypeNameWithoutGenerics(ILoggedInUser)}</b> object.",
+          parameters: {
+            "jsonString": loggedInUserJson,
+          },
+          extraInfos: [loggedInUserJson],
+          traceStepType: TraceStepType.controllableCalling,
+          tipDocument: TipDocument.loginLogoutAdapter,
+        );
+        loggedInUser = loginLogoutAdapter.fromJson(loggedInUserJson);
+        executionTrace._addTraceStep(
+          codeId: "#GM100",
+          shortDesc: "Got value: ${debugObjHtml(loggedInUser)}.",
+        );
+      }
     } catch (e, stackTrace) {
       ErrorInfo errorInfo = ErrorInfo.fromError(
         error: e,
@@ -322,23 +114,64 @@ class GlobalsManager extends _Core {
       );
       return;
     }
+    ILoggedInUser refreshedUser;
+    try {
+      executionTrace._addTraceStep(
+        codeId: "#GM160",
+        shortDesc:
+            "Calling ${debugObjHtml(loginLogoutAdapter)}.performReloadLoggedInUser().",
+        traceStepType: TraceStepType.controllableCalling,
+        isLibCall: false,
+        parameters: {
+          "loggedInUser": loggedInUser,
+        },
+      );
+      refreshedUser = await loginLogoutAdapter.performReloadLoggedInUser(
+          loggedInUser: loggedInUser);
+    } catch (e, stackTrace) {
+      final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
+      //
+      executionTrace._addTraceStep(
+        codeId: "#GM180",
+        shortDesc:
+            "The ${debugObjHtml(loginLogoutAdapter)}.performReloadLoggedInUser() method was called with an error.",
+        errorInfo: errorInfo,
+      );
+      executionTrace.printToConsole();
+      return;
+    }
+    if (refreshedUser.userName != loggedInUser.userName) {
+      executionTrace._addTraceStep(
+        codeId: "#GM190",
+        shortDesc:
+            "The ${debugObjHtml(loginLogoutAdapter)}.performReloadLoggedInUser() an invalid user, the username has been changed.",
+      );
+      executionTrace.printToConsole();
+      return;
+    }
+    // Save again:
+    await _setOrUpdateLoggedInUserSafely(
+      executionTrace: executionTrace,
+      loggedInUser: refreshedUser,
+      requiresTheSameUser: true,
+    );
     //
     // IMPORTANT: Set before calling globalData.
     // (Do not remove this line).
     //
-    _loggedInUser = loggedInUser;
+    _loggedInUser = refreshedUser;
     //
-    // After load User from Local successfully.
+    // After reload User successfully.
     //
     try {
       executionTrace._addTraceStep(
-        codeId: "#GM160",
+        codeId: "#GM200",
         shortDesc:
             "Calling ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:",
         parameters: {
           "loggedInUser": loggedInUser,
         },
-        lineFlowType: LineFlowType.controllableCalling,
+        traceStepType: TraceStepType.controllableCalling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       loginLogoutAdapter.addThirdPartyLogicOnLogin(loggedInUser);
@@ -369,7 +202,7 @@ class GlobalsManager extends _Core {
         },
         note:
             "This method requires calling an <b>API</b> to retrieve global data for user ${debugObjHtml(loggedInUser)}.",
-        lineFlowType: LineFlowType.controllableCalling,
+        traceStepType: TraceStepType.controllableCalling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       // Load Global Data:
@@ -384,7 +217,7 @@ class GlobalsManager extends _Core {
       executionTrace._addTraceStep(
         codeId: "#GM420",
         shortDesc:
-            "The ${debugObjHtml(loginLogoutAdapter)}.performLoadGlobalData() method was called with an error.",
+            "The ${debugObjHtml(globalDataAdapter)}.performLoadGlobalData() method was called with an error.",
         errorInfo: errorInfo,
       );
       executionTrace.printToConsole();
@@ -400,18 +233,14 @@ class GlobalsManager extends _Core {
           "This information is stored locally when the user selects a preferred 'locale' or 'theme'.",
       tipDocument: TipDocument.locale,
     );
-    // Load Extra Global Prop Names that stored in Hive Database.
-    await __readExtraGlobalProps(
-      executionTrace: executionTrace,
-      loggedInUser: loggedInUser,
-    );
   }
 
   Future<void> removeStoredLoggedInUser() async {
     try {
-      Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
-      hiveBox.delete(__hiveKeyLoggedInUser);
-      await hiveBox.close();
+      if (_loggedInUser == null) {
+        return;
+      }
+      await FaIsarStorage.removeUser(_loggedInUser!.userName);
     } catch (e, stackTrace) {
       print("\n\n******** Error removeStoredLoggedInUser: $e ************");
       print(stackTrace);
@@ -453,7 +282,6 @@ class GlobalsManager extends _Core {
     }
     _loggedInUser = loggedInUser;
     // Store on local device:
-    Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
     try {
       executionTrace._addTraceStep(
         codeId: "#22420",
@@ -462,7 +290,7 @@ class GlobalsManager extends _Core {
         parameters: {
           "loggedInUser": loggedInUser,
         },
-        lineFlowType: LineFlowType.controllableCalling,
+        traceStepType: TraceStepType.controllableCalling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       String json = loginLogoutAdapter.toJson(loggedInUser);
@@ -470,16 +298,15 @@ class GlobalsManager extends _Core {
       executionTrace._addTraceStep(
         codeId: "#22440",
         shortDesc: "Storing the above <b>JSON String</b> to <b>Local</b>.",
-        parameters: {
-          "key": __hiveKeyLoggedInUser,
-        },
-        lineFlowType: LineFlowType.info,
+        traceStepType: TraceStepType.info,
         extraInfos: [json],
       );
-      await hiveBox.put(__hiveKeyLoggedInUser, json);
-      await hiveBox.flush();
-      await hiveBox.close();
+      print("@SAVE userJson --> Call FaIsarStorage.saveSettings()");
+      await FaIsarStorage.saveSettings(
+          userId: _loggedInUser!.userName, userJson: json);
     } catch (e, stackTrace) {
+      print("ERROR: $e");
+      print(stackTrace);
       final warningHtmlMessage =
           "Warning: Unable to store <b>JSON String</b> to <b>Local</b>..\n"
           "This means that the login information cannot be remembered.";
@@ -521,7 +348,7 @@ class GlobalsManager extends _Core {
         },
         note:
             "You can access global data via <b>FlutterArtist.globalsManager.globalData</b>.",
-        lineFlowType: LineFlowType.controllableCalling,
+        traceStepType: TraceStepType.controllableCalling,
         tipDocument: TipDocument.globalData,
       );
       _performLoadGlobalDataCount++;
@@ -532,7 +359,7 @@ class GlobalsManager extends _Core {
       executionTrace._addTraceStep(
         codeId: "#34280",
         shortDesc: "Got @globalData: ${debugObjHtml(globalData)}",
-        lineFlowType: LineFlowType.debug,
+        traceStepType: TraceStepType.debug,
         tipDocument: TipDocument.globalData,
       );
     } catch (e, stackTrace) {
@@ -562,11 +389,11 @@ class GlobalsManager extends _Core {
   }
 
   Future<void> _logout() async {
+    if (_loggedInUser != null) {
+      FaIsarStorage.removeUser(_loggedInUser!.userName);
+    }
     _loggedInUser = null;
     _globalData = null;
-    Box<String> hiveBox = await HiveUtils.openHiveBoxLoggedInUser();
-    await hiveBox.delete(__hiveKeyLoggedInUser);
-    await hiveBox.close();
     ui.updateAllUiComponents();
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/icon/icon_constants.dart';
+import '../../core/widgets/_simple_copy_button.dart';
 import '_dialog_constants.dart';
 
 class LocationInfoDialog extends StatelessWidget {
@@ -56,14 +56,10 @@ class LocationInfoDialog extends StatelessWidget {
             ),
             label: "Location: ",
             text: locationInfo,
-            suffixIcon: SimpleSmallIconButton(
-              iconData: FaIconConstants.copyToClipboardIconData,
+            suffixIcon: SimpleCopyButton(
               iconSize: 14,
-              iconColor: Colors.black54,
-              onPressed: () {
-                Clipboard.setData(ClipboardData(text: locationInfo));
-                var snackBar = const SnackBar(content: Text("Copied!"));
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              getText: () {
+                return locationInfo;
               },
             ),
           ),
@@ -72,17 +68,3 @@ class LocationInfoDialog extends StatelessWidget {
     );
   }
 }
-
-// Future<void> open({
-//   required BuildContext context,
-//   required String locationInfo,
-// }) async {
-//   await showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return LocationInfoDialog(
-//         locationInfo: locationInfo,
-//       );
-//     },
-//   );
-// }

@@ -16,27 +16,48 @@ class SimpleAccordionSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    final Color expandedBg = colorScheme.primary.withValues(alpha: 0.08);
+    final Color collapsedBg = colorScheme.primary.withValues(alpha: 0.04);
+
     return Theme(
-      data: ThemeData().copyWith(dividerColor: Colors.transparent),
+      data: theme.copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         dense: true,
         visualDensity: const VisualDensity(
-          vertical: -3,
+          vertical: -4,
           horizontal: -3,
         ),
         initiallyExpanded: initiallyExpanded,
-        backgroundColor: Colors.indigo.withAlpha(30),
-        collapsedBackgroundColor: Colors.indigo.withAlpha(20),
+        backgroundColor: expandedBg,
+        collapsedBackgroundColor: collapsedBg,
         tilePadding: const EdgeInsets.symmetric(
-          horizontal: 5,
-          vertical: 1,
+          horizontal: 8,
+          vertical: 0,
         ),
-        title: headerTitle,
+        minTileHeight: 32,
+        title: DefaultTextStyle.merge(
+          style: TextStyle(
+            fontSize: 13,
+            color: colorScheme.onSurface,
+            fontWeight: FontWeight.bold,
+          ),
+          child: headerTitle,
+        ),
         subtitle: headerSubtitle,
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         expandedAlignment: Alignment.topLeft,
         enabled: content != null,
-        children: content == null ? [] : [content!],
+        children: content == null
+            ? []
+            : [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                  child: content!,
+                )
+              ],
       ),
     );
   }

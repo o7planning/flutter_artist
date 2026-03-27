@@ -217,7 +217,7 @@ abstract class XShelf extends XRootQueueItem {
       codeId: "#10000",
       shortDesc:
           "Registered Effected Shelf Members:${effectedShelfMembers.getDebugInfoHtml()}",
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
     );
 
     if (forceReQuery) {
@@ -352,7 +352,7 @@ abstract class XShelf extends XRootQueueItem {
     executionTrace._addTraceStep(
       codeId: "#01000",
       shortDesc: toDebugXShelfStateAsHtml(),
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
     );
     //
     final bool toMainQueue = false;
@@ -369,7 +369,7 @@ abstract class XShelf extends XRootQueueItem {
           codeId: "#01060",
           shortDesc:
               "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
-          lineFlowType: LineFlowType.addTaskUnit,
+          traceStepType: TraceStepType.addTaskUnit,
         );
         //
         // Execute xFilterModel first!!
@@ -389,7 +389,7 @@ abstract class XShelf extends XRootQueueItem {
         codeId: "#01080",
         shortDesc:
             "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
-        lineFlowType: LineFlowType.addTaskUnit,
+        traceStepType: TraceStepType.addTaskUnit,
       );
       //
       // Execute vipXScalar before XBlock(s)!!
@@ -406,7 +406,7 @@ abstract class XShelf extends XRootQueueItem {
         codeId: "#01120",
         shortDesc:
             "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
-        lineFlowType: LineFlowType.addTaskUnit,
+        traceStepType: TraceStepType.addTaskUnit,
       );
       //
       // Execute rootVipXBlock!!
@@ -426,7 +426,7 @@ abstract class XShelf extends XRootQueueItem {
           codeId: "#01160",
           shortDesc:
               "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
-          lineFlowType: LineFlowType.addTaskUnit,
+          traceStepType: TraceStepType.addTaskUnit,
         );
         _addTaskUnit(
           taskUnit: taskUnit,
@@ -444,7 +444,7 @@ abstract class XShelf extends XRootQueueItem {
           codeId: "#01200",
           shortDesc:
               "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
-          lineFlowType: LineFlowType.addTaskUnit,
+          traceStepType: TraceStepType.addTaskUnit,
         );
         _addTaskUnit(
           taskUnit: taskUnit,

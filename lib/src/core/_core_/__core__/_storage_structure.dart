@@ -5,7 +5,9 @@ abstract class StorageStructure {
 
   void registerShelves();
 
-  List<ProjectionFamily> defineProjectionFamilies();
+  List<ProjectionFamily> projectionFamilies();
+
+  List<FaTheme> additionalThemes();
 }
 
 class _DebugRegister {

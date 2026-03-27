@@ -2,7 +2,7 @@ part of '../core.dart';
 
 class TraceStep {
   final bool showIconAndLabel;
-  final LineFlowType lineFlowType;
+  final TraceStepType traceStepType;
   final bool isLibCall;
   final String lineId;
   final String shortDesc;
@@ -18,7 +18,7 @@ class TraceStep {
 
   TraceStep({
     required this.showIconAndLabel,
-    this.lineFlowType = LineFlowType.line,
+    this.traceStepType = TraceStepType.line,
     required this.isLibCall,
     required this.lineId,
     required this.shortDesc,

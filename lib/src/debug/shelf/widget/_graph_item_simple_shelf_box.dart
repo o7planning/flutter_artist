@@ -64,13 +64,13 @@ class GraphItemSimpleShelfBoxState extends State<GraphItemSimpleShelfBox> {
         padding: const EdgeInsets.all(padding),
         decoration: BoxDecoration(
           color: widget.isSelected
-              ? DebugConstants.selectedGraphBoxBgColor
+              ? DebugConstants.selectedGraphBoxBgColor(context)
               : widget.shelf == null //
-                  ? DebugConstants.inactiveGraphBoxBgColor
-                  : DebugConstants.activeGraphBoxBgColor,
+                  ? DebugConstants.inactiveGraphBoxBgColor(context)
+                  : DebugConstants.activeGraphBoxBgColor(context),
           borderRadius: BorderRadius.circular(4),
           boxShadow: [
-            DebugConstants.graphBoxShadow,
+            DebugConstants.graphBoxShadow(context),
           ],
         ),
         child: _buildRootBoxContent(),

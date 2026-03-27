@@ -14,12 +14,16 @@ class DebugScalarCriteriaView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     FilterModel filterModel = scalar.registeredOrDefaultFilterModel;
     String scalarClassName = getClassNameWithoutGenerics(scalar);
     String filterClassName = getClassNameWithoutGenerics(filterModel);
-    //
+    bool isCriteriaNull = scalar.filterCriteria == null;
+
     return Padding(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(8),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,21 +32,42 @@ class DebugScalarCriteriaView extends StatelessWidget {
             filterClassName: filterClassName,
             scalarClassName: scalarClassName,
           ),
-          SizedBox(height: 10),
-          IconLabelSelectableText(
-            icon: Icon(
-              Icons.arrow_circle_right_outlined,
-              size: 14,
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            decoration: BoxDecoration(
+              color: (isCriteriaNull ? colorScheme.error : colorScheme.primary)
+                  .withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(
+                color:
+                    (isCriteriaNull ? colorScheme.error : colorScheme.primary)
+                        .withValues(alpha: 0.2),
+              ),
             ),
-            label: "$scalarClassName.filterCriteria: ",
-            text: scalar.filterCriteria == null ? "null" : "not null",
-            labelStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            textStyle: TextStyle(
-              fontSize: 13,
-              color: scalar.filterCriteria == null ? Colors.red : Colors.indigo,
+            child: IconLabelSelectableText(
+              icon: Icon(
+                isCriteriaNull
+                    ? Icons.cancel_outlined
+                    : Icons.check_circle_outline,
+                size: 16,
+                color: isCriteriaNull ? colorScheme.error : colorScheme.primary,
+              ),
+              label: "$scalarClassName.filterCriteria: ",
+              text: isCriteriaNull ? "NULL" : "NOT NULL",
+              labelStyle: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: colorScheme.onSurface.withValues(alpha: 0.8),
+              ),
+              textStyle: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: isCriteriaNull ? colorScheme.error : colorScheme.primary,
+              ),
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 16),
           Expanded(
             child: SingleChildScrollView(
               child: DebugScalarStateView(
@@ -65,10 +90,8 @@ class DebugScalarCriteriaView extends StatelessWidget {
       infoAsHtml:
           "The <b>$filterClassName.filterCriteria</b> is used as a parameter to query the <b>$scalarClassName</b>. "
           "If successful, it will be assigned to <b>$scalarClassName.filterCriteria</b>. "
-          "Otherwise, the <b>$scalarClassName.filterCriteria</b> can be set to <b>null</b>. "
-          "The <b>$scalarClassName.filterCriteria</b> can also be <b>null</b> "
-          "if the <b>$scalarClassName</b> is in the <b>'none'</b> or <b>'pending'</b> state.",
-      style: TextStyle(fontSize: 13),
+          "Otherwise, it can be <b>null</b>. "
+          "It also resets to <b>null</b> if the Scalar is in <b>'none'</b> or <b>'pending'</b> state.",
     );
   }
 }

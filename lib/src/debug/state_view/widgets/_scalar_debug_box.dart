@@ -17,7 +17,7 @@ class ScalarDebugBox extends BaseDebugBox {
   });
 
   @override
-  List<Widget> getChildIconLabelTexts() {
+  List<Widget> getChildIconLabelTexts(BuildContext context) {
     String? activeUI = scalar.ui.findActiveUiComponent();
     String? xActiveUI =
         scalar.ui.findActiveUiComponent(alsoCheckChildren: true);
@@ -27,8 +27,8 @@ class ScalarDebugBox extends BaseDebugBox {
           activeElementType: ActiveElementType.scalar,
           activeUiComponentName: activeUI,
           xActiveUiComponentName: xActiveUI,
-          labelStyle: labelStyle0,
-          textStyle: textStyle0,
+          labelStyle: getLabelStyle0(context),
+          textStyle: getTextStyle0(context),
           checkAgain: () {
             String? activeUI = scalar.ui.findActiveUiComponent();
             print("Check again: $activeUI");
@@ -38,49 +38,49 @@ class ScalarDebugBox extends BaseDebugBox {
         IconLabelText(
           label: "Last Query Type: ",
           text: scalar.lastQueryType.name,
-          labelStyle: labelStyle,
-          textStyle: textStyle0,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle0(context),
         ),
       if (options.showScalarDataState)
         IconLabelText(
           label: "Data State: ",
           text: scalar.dataState.name.toString(),
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
       if (options.showLastQueryResultState)
         IconLabelText(
           label: "Last Query Result: ",
           text: scalar.lastQueryResultState?.name ?? "",
-          labelStyle: labelStyle,
-          textStyle: textStyle0,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle0(context),
         ),
       if (options.showPerformQueryCount)
         IconLabelText(
           label: "Query Count: ",
           text: scalar.performQueryCount.toString(),
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
       if (scalar.filterModel != null && options.showFilterCriteria)
         IconLabelText(
           label: "Filter Criteria: ",
           text: scalar.filterCriteria == null ? "null" : "[Not Null]",
-          labelStyle: labelStyle,
-          textStyle: textStyle0,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle0(context),
         ),
       if (options.showFilterCriteriaChangeCount)
         IconLabelText(
           label: "Filter Criteria Change Count: ",
           text: scalar.filterCriteriaChangeCount.toString(),
-          labelStyle: labelStyle,
-          textStyle: textStyle0,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle0(context),
         ),
       IconLabelText(
         label: "Has Value?: ",
         text: (scalar.value != null).toString(),
-        labelStyle: labelStyle,
-        textStyle: textStyle0,
+        labelStyle: getLabelStyle(context),
+        textStyle: getTextStyle0(context),
       ),
     ];
   }

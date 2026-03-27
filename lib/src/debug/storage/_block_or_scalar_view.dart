@@ -29,11 +29,22 @@ class BlockOrScalarView extends StatefulWidget {
 
 class _BlockOrScalarViewState extends State<BlockOrScalarView> {
   late TabbedViewController _controller;
+  bool _initialized = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = TabbedViewController(_getTabs());
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
+      _controller = TabbedViewController(_getTabs());
+      _initialized = true;
+    } else {
+      _controller.setTabs(_getTabs());
+    }
   }
 
   @override
@@ -49,18 +60,26 @@ class _BlockOrScalarViewState extends State<BlockOrScalarView> {
   List<TabData> _getTabs() {
     return [
       TabData(
+        id: "General",
         text: ' General',
         closable: false,
-        leading: (context, status) =>
-            const Icon(Icons.apps, color: Colors.indigo, size: 16),
-        content: _buildTab1(context),
+        leading: (context, status) => Icon(
+          Icons.apps,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: 16,
+        ),
+        view: _buildGeneralTab(context),
       ),
       TabData(
+        id: "Debug",
         text: ' Debug',
         closable: false,
-        leading: (context, status) =>
-            const Icon(Icons.bug_report, color: Colors.black, size: 16),
-        content: _buildTab2(),
+        leading: (context, status) => Icon(
+          Icons.bug_report,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: 16,
+        ),
+        view: _buildDebugTab(),
       ),
     ];
   }
@@ -68,39 +87,57 @@ class _BlockOrScalarViewState extends State<BlockOrScalarView> {
   @override
   Widget build(BuildContext context) {
     return TabbedViewTheme(
-      data: TabThemeUtils.getTabbedViewThemeData(),
+      data: TabThemeUtils.getTabbedViewThemeData(context),
       child: TabbedView(controller: _controller),
     );
   }
 
   Widget _buildControlBar(BuildContext context) {
-    return Card(
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      width: double.maxFinite,
       margin: EdgeInsets.zero,
-      color: Colors.grey[100],
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-        child: Row(
-          children: [
-            Spacer(),
-            SimpleSmallIconButton(
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        children: [
+          Text(
+            "ACTIONS",
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              color: colorScheme.onSurface.withValues(alpha: 0.4),
+              letterSpacing: 1.1,
+            ),
+          ),
+          const Spacer(),
+          Tooltip(
+            message: "Tip & Document",
+            child: SimpleSmallIconButton(
               iconData: FaIconConstants.tipDocument,
               iconSize: 14,
-              iconColor: Colors.deepOrange,
+              iconColor: colorScheme.tertiary,
               onPressed: () {
                 TipDocumentViewerDialog.open(
                   context: context,
                   tipDocument: TipDocument.debugState,
                 );
               },
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
 
-  Widget _buildTab1(BuildContext context) {
+  Widget _buildGeneralTab(BuildContext context) {
     return SingleChildScrollView(
+      key: PageStorageKey('GeneralTab-${widget.blockOrScalar.hashCode}'),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,7 +169,7 @@ class _BlockOrScalarViewState extends State<BlockOrScalarView> {
     );
   }
 
-  Widget _buildTab2() {
+  Widget _buildDebugTab() {
     return FARouteDebugger(
       routes: widget.blockOrScalar.faRoutes.toList(),
     );

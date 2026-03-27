@@ -50,7 +50,9 @@ class FormPropView extends StatelessWidget {
                   ? 'Prop Name: '
                   : 'Multi Opt Prop Name: ',
               text: prop.propName,
-              textStyle: TextStyle(color: Colors.indigo),
+              textStyle: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             subtitle: IconLabelText(
               label: getClassNameWithoutGenerics(prop),

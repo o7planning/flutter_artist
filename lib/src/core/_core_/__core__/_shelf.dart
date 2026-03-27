@@ -635,7 +635,7 @@ abstract class Shelf extends _Core {
         shortDesc:
             "No lazy model-components found. Just update All UI components and nothing else. "
             "Calling ${debugObjHtml(this)}.ui.updateAllUiComponents().",
-        lineFlowType: LineFlowType.nonControllableCalling,
+        traceStepType: TraceStepType.nonControllableCalling,
       );
       // IMPORTANT: No Lazy entities, but need to refresh UiComponents:
       ui.updateAllUiComponents();
@@ -646,7 +646,7 @@ abstract class Shelf extends _Core {
       codeId: "#02060",
       shortDesc: "Found some lazy model-components.\n"
           "${lazyObjects.toDebugString()}",
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
     );
     try {
       executionTrace._addTraceStep(
@@ -659,7 +659,7 @@ abstract class Shelf extends _Core {
         codeId: "#02120",
         shortDesc:
             "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits() to create <b>Natural-Load</b> task units...",
-        lineFlowType: LineFlowType.nonControllableCalling,
+        traceStepType: TraceStepType.nonControllableCalling,
       );
       //
       // TODO: Handle Error:
@@ -678,7 +678,7 @@ abstract class Shelf extends _Core {
         shortDesc:
             "Calling <b>FlutterArtist.executor._executeTaskUnitQueue()</b> "
             "to execute <b>RootQueueItem(s)</b> on the queue and its <b>Task Units</b>...",
-        lineFlowType: LineFlowType.nonControllableCalling,
+        traceStepType: TraceStepType.nonControllableCalling,
       );
       await FlutterArtist.executor._executeTaskUnitQueue();
     } finally {
@@ -759,14 +759,14 @@ abstract class Shelf extends _Core {
     executionTrace._addTraceStep(
       codeId: "#52100",
       shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()..",
-      lineFlowType: LineFlowType.nonControllableCalling,
+      traceStepType: TraceStepType.nonControllableCalling,
     );
     xShelf._initQueryTaskUnits(executionTrace: executionTrace);
     //
     executionTrace._addTraceStep(
       codeId: "#52200",
       shortDesc: "Add ${debugObjHtml(xShelf)} to <b>RootQueue</b>.",
-      lineFlowType: LineFlowType.info,
+      traceStepType: TraceStepType.info,
     );
     // IMPORTANT: No need to call "execute".
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);

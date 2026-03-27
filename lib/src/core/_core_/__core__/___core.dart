@@ -1,7 +1,6 @@
 part of '../core.dart';
 
 abstract class _Core {
-  // TODO: Them tham so BuildContext?
   Future<bool> showConfirmDialog({
     required String message,
     String? details,
@@ -15,7 +14,6 @@ abstract class _Core {
     return confirm;
   }
 
-  // TODO: Them tham so BuildContext?
   Future<bool> showConfirmDeleteDialog({String? details}) async {
     BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     bool confirm = await dialogs.showConfirmDeleteDialog(
@@ -25,16 +23,17 @@ abstract class _Core {
     return confirm;
   }
 
-  // TODO: Them tham so BuildContext?
   Future<void> showMessageDialog({
     required String message,
     String? details,
+    FaMessageType type = FaMessageType.info,
   }) async {
     BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     await dialogs.showMessageDialog(
       context: context,
       message: message,
       details: details ?? "",
+      type: type,
     );
   }
 

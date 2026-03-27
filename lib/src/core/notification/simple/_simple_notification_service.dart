@@ -1,9 +1,8 @@
-part of '../core.dart';
+part of '../../_core_/core.dart';
 
-class _NotificationEngine {
-  final FlutterArtistNotificationAdapter? adapter;
-
-  _NotificationEngine(this.adapter);
+class SimpleNotificationService
+    extends FlutterArtistNotificationService<SimpleNotificationAdapter> {
+  SimpleNotificationService(super.adapter);
 
   String __keyForNotificationSummary(String loggedInUserName) {
     return "$loggedInUserName-short-notification-summary--";
@@ -13,8 +12,9 @@ class _NotificationEngine {
     return "$loggedInUserName-last-fetch-notification-summary--";
   }
 
-  Future<void> start() async {
-    print("${getClassName(this)}.start()");
+  @override
+  Future<void> initialize() async {
+    print("${getClassName(this)}.initialize()");
     await __getNotificationSummary();
     Timer.periodic(
       Duration(seconds: FlutterArtist.notificationFetchPeriodInSeconds),
@@ -86,7 +86,7 @@ class _NotificationEngine {
       try {
         // Fetch from Server:
         ApiResult<INotificationSummary> result =
-            await adapter!.performLoadNotificationSummary();
+            await adapter!.performLoadSummary();
         if (result.error != null) {
           FlutterArtist.logger.addError(
             shelfName: null,
@@ -150,5 +150,10 @@ class _NotificationEngine {
       await hiveBoxDateTime.close();
       await notificationSummaryBox.close();
     }
+  }
+
+  @override
+  void dispose() {
+    // Nothing
   }
 }

@@ -81,8 +81,17 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
   }
 
   Widget _buildRight() {
+    final colorScheme = Theme.of(context).colorScheme;
     if (_currentNode == null) {
-      return Text("Null");
+      return Center(
+        child: Text(
+          "Select a condition or group to inspect",
+          style: TextStyle(
+            color: colorScheme.onSurfaceVariant,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+      );
     } else if (_currentNode!.data is FilterModel) {
       return FilterModelDebugView(
         filterModel: _currentNode!.data,
@@ -96,7 +105,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
         conditionModel: _currentNode!.data,
       );
     } else {
-      return Text("TODO-4");
+      return const Center(child: Text("Detail not available"));
     }
   }
 
@@ -122,6 +131,9 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
   // ***************************************************************************
 
   Widget buildTreeView(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(5),
@@ -132,10 +144,9 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
         expansionIndicatorBuilder: (context, node) {
           return PlusMinusIndicator(
             tree: node,
-            color: Colors.grey[600],
+            color: theme.hintColor.withValues(alpha: 0.7),
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.zero,
-            // icon: Icons.keyboard_arrow_down_outlined,
             curve: Curves.linear,
           );
         },
@@ -151,6 +162,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
           controller.expandAllChildren(rootTreeNode);
         },
         builder: (context, node) {
+          final isSelected = _currentNode == node;
           dynamic data = node.data;
           String title;
           String? tooltip;
@@ -199,7 +211,15 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
             prefixIconData = FaIconConstants.uknownIconData;
             title = "UNKNOWN";
           }
+          Color itemColor = colorScheme.onSurface;
+          if (data is ConditionGroupModelImpl) {
+            itemColor = colorScheme.tertiary;
+          } else if (isSelected) {
+            itemColor = colorScheme.primary;
+          }
+
           return Material(
+            color: Colors.transparent,
             child: ListTile(
               dense: true,
               visualDensity: const VisualDensity(
@@ -213,6 +233,9 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
                 children: [
                   Icon(
                     prefixIconData,
+                    color: isSelected
+                        ? colorScheme.primary
+                        : itemColor.withValues(alpha: 0.8),
                     size: 16,
                   ),
                   SizedBox(width: 5),
@@ -222,11 +245,12 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
                       child: Text(
                         title,
                         style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
                           fontSize: 13,
                           fontWeight: _currentNode == node
                               ? FontWeight.bold
                               : FontWeight.normal,
+                          color: isSelected ? colorScheme.primary : itemColor,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),
@@ -235,10 +259,10 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
                   if (isMultiOpt && isMultiSelection)
                     Tooltip(
                       message: "Multi Selection",
-                      child: const Icon(
+                      child: Icon(
                         FaIconConstants.multiSelectionIconData,
                         size: 16,
-                        color: Colors.red,
+                        color: colorScheme.error.withValues(alpha: 0.8),
                       ),
                     ),
                 ],

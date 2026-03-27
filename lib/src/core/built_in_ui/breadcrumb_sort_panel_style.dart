@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 
-class BreadcrumbSortPanelStyle {
+import '_tile.dart';
+
+class BreadcrumbSortPanelStyle extends SortPanelStyle {
   final double itemSpacing;
-  final double iconSpacing;
-  final TextStyle textStyle;
   final TextStyle? draggingTextStyle;
-  final Color dividerColor;
+  final Color? dividerColor;
   final double dividerHeight;
   final double dividerThickness;
   final IconData dragFeedbackIcon;
-  final Color dragFeedbackColor;
+  final Color? dragFeedbackColor;
 
   const BreadcrumbSortPanelStyle({
+    super.textStyle,
+    super.iconSpacing,
+    super.sortIconSize,
+    super.draggingColor,
+    super.boldActiveText,
     this.itemSpacing = 5,
-    this.iconSpacing = 3,
-    this.textStyle = const TextStyle(fontSize: 14),
     this.draggingTextStyle,
-    this.dividerColor = const Color(0x503F51B5), // Indigo with alpha
+    this.dividerColor,
     this.dividerHeight = 20,
     this.dividerThickness = 1.0,
     this.dragFeedbackIcon = Icons.unfold_more_rounded,
-    this.dragFeedbackColor = Colors.indigo,
+    this.dragFeedbackColor,
   });
 }

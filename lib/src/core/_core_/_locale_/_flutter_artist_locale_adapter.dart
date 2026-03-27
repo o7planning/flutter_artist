@@ -1,9 +1,9 @@
 part of '../core.dart';
 
-class FlutterArtistLocaleAdapter { 
+class FlutterArtistLocaleAdapter {
   final Future<void> Function(Locale locale) _updateLocale;
 
-  FlutterArtistLocaleAdapter({ 
+  FlutterArtistLocaleAdapter({
     required Future<void> Function(Locale locale) updateLocale,
-  })  :  _updateLocale = updateLocale;
+  }) : _updateLocale = updateLocale;
 }

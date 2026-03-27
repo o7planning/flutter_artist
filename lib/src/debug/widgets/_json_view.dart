@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
+import '../../core/widgets/_floating_copy_button.dart';
+
 class JsonView extends StatelessWidget {
   final String json;
 
@@ -13,26 +15,60 @@ class JsonView extends StatelessWidget {
     Key? key,
     required Map<String, dynamic> map,
   }) {
-    String? json = JsonUtils.toBeautifulJson(map);
-    return JsonView(key: key, json: json ?? "");
+    return JsonView(key: key, json: map.toString()); // Demo
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    final Color bgColor = FaColorUtils.surfaceContainer(context);
+
     return Container(
-      constraints: const BoxConstraints(minHeight: 300),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: TextFormField(
-          initialValue: json,
-          maxLines: null,
-          decoration: const InputDecoration(
-            border: InputBorder.none,
-          ),
-          style: const TextStyle(
-            fontSize: 13,
-          ),
+      width: double.maxFinite,
+      height: double.maxFinite,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.3),
+          width: 0.5,
         ),
+      ),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: TextFormField(
+              initialValue: json,
+              maxLines: null,
+              expands: true,
+              textAlignVertical: TextAlignVertical.top,
+              readOnly: true,
+              decoration: const InputDecoration(
+                contentPadding: EdgeInsets.fromLTRB(12, 12, 52, 12),
+                border: InputBorder.none,
+                isDense: true,
+              ),
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Courier',
+                color: FaColorUtils.infoText(context),
+                height: 1.5,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 8,
+            right: 8,
+            child: FloatingCopyButton(
+              getText: () {
+                return json;
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

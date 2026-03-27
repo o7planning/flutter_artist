@@ -30,54 +30,59 @@ class _StorageViewState extends State<StorageView> {
   List<TabData> _getTabs() {
     return [
       TabData(
+        id: "Active Shelves",
         text: ' Active Shelves',
         closable: false,
         leading: (context, status) => Icon(
           FaIconConstants.shelfIconData,
-          color: Colors.indigo,
+          color: TabThemeUtils.getTabIconColor(context, status),
           size: iconSize,
         ),
-        content: const ActiveShelvesView(),
+        view: const ActiveShelvesView(),
       ),
       TabData(
+        id: "Activities",
         text: ' Activities',
         closable: false,
         leading: (context, status) => Icon(
           FaIconConstants.activityIconData,
-          color: Colors.black,
+          color: TabThemeUtils.getTabIconColor(context, status),
           size: iconSize,
         ),
-        content: ActivitiesView(),
+        view: ActivitiesView(),
       ),
       TabData(
+        id: "Shelves",
         text: ' Shelves',
         closable: false,
         leading: (context, status) => Icon(
           FaIconConstants.shelfIconData,
-          color: Colors.black,
+          color: TabThemeUtils.getTabIconColor(context, status),
           size: iconSize,
         ),
-        content: ShelvesView(),
+        view: ShelvesView(),
       ),
       TabData(
+        id: "Projections",
         text: ' Projections',
         closable: false,
         leading: (context, status) => Icon(
           FaIconConstants.projectionIconData,
-          color: Colors.black,
+          color: TabThemeUtils.getTabIconColor(context, status),
           size: iconSize,
         ),
-        content: ProjectionsView(),
+        view: ProjectionsView(),
       ),
       TabData(
+        id: "Route Stack",
         text: ' Route Stack',
         closable: false,
         leading: (context, status) => Icon(
           FaIconConstants.routeStackIconData,
-          color: Colors.black,
+          color: TabThemeUtils.getTabIconColor(context, status),
           size: iconSize,
         ),
-        content: RouteStackView(),
+        view: RouteStackView(),
       ),
     ];
   }
@@ -93,7 +98,7 @@ class _StorageViewState extends State<StorageView> {
         const SizedBox(height: 5),
         Expanded(
           child: TabbedViewTheme(
-            data: TabThemeUtils.getTabbedViewThemeData(),
+            data: TabThemeUtils.getTabbedViewThemeData(context),
             child: TabbedView(
               controller: _controller,
             ),

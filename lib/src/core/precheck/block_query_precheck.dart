@@ -39,6 +39,7 @@ enum BlockQueryPrecheck implements Precheck {
     message: "The Block querying is disabled.",
     details: ["The application logic does not allow query this block."],
   ),
+  // TODO-Rename: checkAllowMethodError --> allowCheckMethodError.
   checkAllowMethodError(
     precheckCode: PrecheckCode.checkAllowMethodError,
     message: "The Block querying is disabled.",

@@ -19,103 +19,133 @@ class TraceStepBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (traceStep.lineFlowType == LineFlowType.separator) {
-      return SizedBox(
-        width: double.maxFinite,
-        child: Card(
-          color: Colors.lightBlueAccent,
-          margin: EdgeInsets.symmetric(vertical: 2),
-          child: SizedBox(height: 3),
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    if (traceStep.traceStepType == TraceStepType.separator) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Divider(
+          color: colorScheme.primary.withValues(alpha: 0.2),
+          thickness: 1,
+          indent: 20,
+          endIndent: 20,
         ),
       );
     }
-    return SizedBox(
+
+    return Container(
       width: double.maxFinite,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-        margin: EdgeInsets.symmetric(vertical: 2),
-        child: Padding(
-          padding: EdgeInsets.all(5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              HtmlSelectableRichText(
-                "${traceStep.shortDesc}${traceStep.getParametersAsHtmlString()}"
-                "${traceStep.getActionableAsHtmlString()}${traceStep.getNoteAsHtmlString()}",
-                icon: Icon(
-                  traceStep.lineFlowType.getIconData(),
-                  color: traceStep.showIconAndLabel
-                      ? traceStep.lineFlowType.getIconColor()
-                      : Colors.transparent,
-                  size: 16,
-                ),
-                label: traceStep.lineId,
-                labelStyle: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: traceStep.showIconAndLabel
-                      ? Colors.indigo
-                      : Colors.transparent,
-                ),
-                tagStyles: {
-                  'b': TextStyle(fontWeight: FontWeight.bold),
-                  'i': TextStyle(fontStyle: FontStyle.italic),
-                },
-                style: TextStyle(fontSize: 12),
+      margin: const EdgeInsets.symmetric(vertical: 2),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: 0.05),
+          width: 0.5,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            HtmlSelectableRichText(
+              "${traceStep.shortDesc}${traceStep.getParametersAsHtmlString()}"
+              "${traceStep.getActionableAsHtmlString()}${traceStep.getNoteAsHtmlString()}",
+              icon: Icon(
+                traceStep.traceStepType.getIconData(),
+                color: traceStep.showIconAndLabel
+                    ? traceStep.traceStepType
+                        .getIconColor(context) // Đã dùng Semantic Color
+                    : Colors.transparent,
+                size: 16,
               ),
-              if (traceStep.needControlBar()) SizedBox(height: 5),
-              if (traceStep.needControlBar()) _buildControlBar(context),
-            ],
-          ),
+              label: traceStep.lineId,
+              labelStyle: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Courier',
+                fontWeight: FontWeight.bold,
+                color: traceStep.showIconAndLabel
+                    ? colorScheme.primary
+                    : Colors.transparent,
+              ),
+              tagStyles: {
+                'b': const TextStyle(fontWeight: FontWeight.bold),
+                'i': const TextStyle(fontStyle: FontStyle.italic),
+                'code': TextStyle(
+                  fontFamily: 'Courier',
+                  backgroundColor:
+                      colorScheme.onSurface.withValues(alpha: 0.05),
+                ),
+              },
+              style: TextStyle(
+                fontSize: 12,
+                color: colorScheme.onSurface.withValues(alpha: 0.9),
+              ),
+            ),
+            if (traceStep.needControlBar()) const SizedBox(height: 6),
+            if (traceStep.needControlBar()) _buildControlBar(context),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildControlBar(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Wrap(
-      spacing: 0,
+      spacing: 4,
       children: [
-        Tooltip(
+        _buildActionIcon(
+          context,
           message: "Error Info",
-          child: SimpleSmallIconButton(
-            iconData: Icons.error_outline_rounded,
-            iconColor: traceStep.errorInfo == null ? null : Colors.red,
-            onPressed: traceStep.errorInfo == null
-                ? null
-                : () {
-                    _showErrorDialog(context);
-                  },
-          ),
+          icon: Icons.error_outline_rounded,
+          color: traceStep.errorInfo == null ? null : colorScheme.error,
+          onPressed: traceStep.errorInfo == null
+              ? null
+              : () => _showErrorDialog(context),
         ),
-        Tooltip(
+        _buildActionIcon(
+          context,
           message: "Extra Info",
-          child: SimpleSmallIconButton(
-            iconData: Icons.playlist_add_check_circle_outlined,
-            onPressed: traceStep.hasExtraInfos()
-                ? () {
-                    _showExtraInfoDialog(context);
-                  }
-                : null,
-          ),
+          icon: Icons.playlist_add_check_circle_outlined,
+          color: traceStep.hasExtraInfos() ? colorScheme.primary : null,
+          onPressed: traceStep.hasExtraInfos()
+              ? () => _showExtraInfoDialog(context)
+              : null,
         ),
-        Tooltip(
+        _buildActionIcon(
+          context,
           message: "Tip & Document",
-          child: SimpleSmallIconButton(
-            iconData: FaIconConstants.tipDocument,
-            iconColor: traceStep.tipDocument == null //
-                ? null
-                : Colors.deepOrange,
-            onPressed:
-                traceStep.tipDocument == null || !traceStep.tipDocument!.enabled
-                    ? null
-                    : () {
-                        _showTipDocumentDialog(context);
-                      },
-          ),
+          icon: FaIconConstants.tipDocument,
+          color: traceStep.tipDocument == null ? null : colorScheme.tertiary,
+          onPressed:
+              traceStep.tipDocument == null || !traceStep.tipDocument!.enabled
+                  ? null
+                  : () => _showTipDocumentDialog(context),
         ),
       ],
+    );
+  }
+
+  Widget _buildActionIcon(
+    BuildContext context, {
+    required String message,
+    required IconData icon,
+    Color? color,
+    VoidCallback? onPressed,
+  }) {
+    return Tooltip(
+      message: message,
+      child: SimpleSmallIconButton(
+        iconData: icon,
+        iconColor: color,
+        iconSize: 16,
+        onPressed: onPressed,
+      ),
     );
   }
 

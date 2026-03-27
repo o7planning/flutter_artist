@@ -35,7 +35,7 @@ abstract class Activity extends _Core {
       codeId: "#23000",
       shortDesc:
           "Creating <b>XActivity</b> for ${debugObjHtml(this)} and add it to <b>RootQueue</b>.",
-      lineFlowType: LineFlowType.info,
+      traceStepType: TraceStepType.info,
     );
     XActivity xActivity = _createXActivity();
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
@@ -57,7 +57,7 @@ abstract class Activity extends _Core {
       shortDesc:
           "Begin ${debugObjHtml(this)} > ${taskType.asDebugTaskUnit()}.\n"
           "Note: This is called because you called the ${debugObjHtml(this)}.executeActivity() method.",
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
     );
     //
     try {
@@ -65,7 +65,7 @@ abstract class Activity extends _Core {
         codeId: "#19100",
         shortDesc:
             "Calling ${debugObjHtml(this)}.performActivityOperation()...",
-        lineFlowType: LineFlowType.nonControllableCalling,
+        traceStepType: TraceStepType.nonControllableCalling,
       );
       await performActivityOperation();
     } catch (e, stackTrace) {

@@ -1,61 +1,57 @@
 import 'package:flutter/material.dart';
 
-const double _debugBoxFontSize = 11.5;
-
 abstract class BaseDebugBox extends StatelessWidget {
-  final labelStyle0 = const TextStyle(
-    color: Colors.indigo,
-    fontWeight: FontWeight.bold,
-    fontSize: _debugBoxFontSize,
-  );
+  TextStyle getLabelStyle0(BuildContext context) => TextStyle(
+        color: Theme.of(context).colorScheme.primary,
+        fontWeight: FontWeight.bold,
+        fontSize: 11.5,
+      );
 
-  final textStyle0 = const TextStyle(
-    color: Colors.deepOrange,
-    fontSize: _debugBoxFontSize,
-  );
+  TextStyle getTextStyle0(BuildContext context) => TextStyle(
+        color: Theme.of(context).colorScheme.tertiary,
+        fontSize: 11.5,
+      );
 
-  final labelStyle = const TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: _debugBoxFontSize,
-  );
+  TextStyle getLabelStyle(BuildContext context) => const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 11.5,
+      );
 
-  final labelStyle1 = const TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: _debugBoxFontSize,
-    color: Colors.blue,
-  );
+  TextStyle getLabelStyle1(BuildContext context) => const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 11.5,
+      );
 
-  final textStyle = const TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: _debugBoxFontSize,
-  );
+  TextStyle getTextStyle(BuildContext context) => const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 11.5,
+      );
 
   const BaseDebugBox({super.key});
 
-  List<Widget> getChildIconLabelTexts();
+  List<Widget> getChildIconLabelTexts(BuildContext context);
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = getChildIconLabelTexts();
+    final theme = Theme.of(context);
+    List<Widget> children = getChildIconLabelTexts(context);
+
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       width: double.maxFinite,
       decoration: BoxDecoration(
-        border: Border.all(width: 0.3),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: 0.1),
+          width: 0.5,
+        ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: children.isEmpty
             ? children
-            : children
-                .expand(
-                  (w) => [
-                    w,
-                    const SizedBox(height: 5),
-                  ],
-                )
-                .toList(),
+            : children.expand((w) => [w, const SizedBox(height: 5)]).toList()
+          ..removeLast(),
       ),
     );
   }

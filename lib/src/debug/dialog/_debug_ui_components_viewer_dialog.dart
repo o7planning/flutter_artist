@@ -172,47 +172,73 @@ class _DebugUiComponentsViewerDialogState
   Widget _buildRowInfo({
     required MapEntry<IContextProviderViewState, XState> widgetStateEntry,
   }) {
-    return Card(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(3)),
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final bool isVisible = widgetStateEntry.value.isVisible;
+    final bool isDevMode = widgetStateEntry.key.showMode == ShowMode.dev;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: isDevMode
+              ? colorScheme.primary
+              : theme.dividerColor.withValues(alpha: 0.1),
+          width: 0.8,
+        ),
       ),
       child: CheckboxListTile(
         dense: true,
-        visualDensity: const VisualDensity(vertical: -3, horizontal: -3),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 3, vertical: 0),
+        visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+        contentPadding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
         controlAffinity: ListTileControlAffinity.trailing,
-        value: widgetStateEntry.key.showMode == ShowMode.dev,
+        value: isDevMode,
         secondary: Container(
-          width: 40,
-          height: 40,
-          padding: const EdgeInsets.all(2),
+          width: 42,
+          height: 42,
           decoration: BoxDecoration(
-            border: Border.all(width: 0.5),
-            color: widgetStateEntry.value.isVisible
-                ? Colors.green.withAlpha(30)
-                : Colors.grey[200],
+            borderRadius: BorderRadius.circular(6),
+            color: isVisible
+                ? colorScheme.primary.withValues(alpha: 0.15)
+                : theme.colorScheme.surfaceContainerHighest
+                    .withValues(alpha: 0.4),
+            border: Border.all(
+              color: isVisible
+                  ? colorScheme.primary.withValues(alpha: 0.5)
+                  : theme.dividerColor.withValues(alpha: 0.1),
+              width: 0.5,
+            ),
           ),
           child: Icon(
             widgetStateEntry.key.type.iconData,
-            size: 24,
+            size: 22,
+            color: isVisible ? colorScheme.primary : theme.hintColor,
           ),
         ),
         title: IconLabelText(
-          icon: const Icon(
+          icon: Icon(
             FaIconConstants.locationIconData,
-            size: 16,
+            size: 14,
+            color: colorScheme.onSurface.withValues(alpha: 0.7),
           ),
           label: "",
           text: widgetStateEntry.key.locationInfo,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: fontSize,
+            fontWeight: isDevMode ? FontWeight.bold : FontWeight.normal,
+            color: colorScheme.onSurface,
           ),
         ),
-        subtitle: IconLabelText(
-          label: '  ',
-          text: widgetStateEntry.key.description,
-          style: const TextStyle(
-            fontSize: fontSize - 2,
+        subtitle: Padding(
+          padding: const EdgeInsets.only(left: 18),
+          child: Text(
+            widgetStateEntry.key.description,
+            style: TextStyle(
+              fontSize: fontSize - 2,
+              color: colorScheme.onSurface.withValues(alpha: 0.5),
+            ),
           ),
         ),
         onChanged: (bool? value) {

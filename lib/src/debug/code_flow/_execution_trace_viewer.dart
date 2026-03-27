@@ -10,16 +10,16 @@ import '../dialog/_code_flow_settings_dialog.dart';
 import '_execution_trace_box.dart';
 import '_execution_trace_box_detail.dart';
 
-class MasterFlowViewer extends StatefulWidget {
-  const MasterFlowViewer({
+class ExecutionTraceViewer extends StatefulWidget {
+  const ExecutionTraceViewer({
     super.key,
   });
 
   @override
-  State<MasterFlowViewer> createState() => _MasterFlowViewerState();
+  State<ExecutionTraceViewer> createState() => _ExecutionTraceViewerState();
 }
 
-class _MasterFlowViewerState extends State<MasterFlowViewer> {
+class _ExecutionTraceViewerState extends State<ExecutionTraceViewer> {
   bool checkAll = true;
   ExecutionTrace? selectedExecutionTrace;
 
@@ -52,15 +52,24 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildFilter(),
+        _buildFilter(context),
         const SizedBox(height: 5),
         Expanded(
           child: selectedExecutionTrace == null
               ? const CustomAppContainer(
                   child: Center(
-                    child: Text("No Item", style: TextStyle(fontSize: 13)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.inbox_outlined, size: 48, color: Colors.grey),
+                      SizedBox(height: 8),
+                      Text(
+                        "No execution traces found.",
+                        style: TextStyle(fontSize: 13, color: Colors.grey),
+                      ),
+                    ],
                   ),
-                )
+                ))
               : Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,15 +92,25 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
     );
   }
 
-  Widget _buildFilter() {
-    return CustomAppContainer(
+  Widget _buildFilter(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
       width: double.maxFinite,
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: theme.dividerColor.withValues(alpha: 0.1),
+          width: 0.5,
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Checkbox(
+            visualDensity: VisualDensity.compact,
             value: checkAll,
             onChanged: (bool? value) {
               checkAll = value ?? false;
@@ -106,7 +125,7 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
             child: VerticalDivider(),
           ),
           Expanded(
-            child: _buildBreadCrumb(),
+            child: _buildBreadCrumb(context),
           ),
           SizedBox(
             height: 20,
@@ -117,6 +136,7 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
             child: SimpleSmallIconButton(
               iconData: Icons.settings,
               iconSize: 18,
+              iconColor: theme.colorScheme.onSurfaceVariant,
               onPressed: _showCodeFlowSetting,
             ),
           ),
@@ -125,7 +145,12 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
     );
   }
 
-  Widget _buildBreadCrumb() {
+  Widget _buildBreadCrumb(BuildContext context) {
+    bool hasError(ExecutionTraceType type) {
+      return FlutterArtist.codeFlowLogger.executionTraces
+          .any((t) => t.executionTraceType == type && t.hasError());
+    }
+
     return BreadCrumb(
       divider: VerticalDivider(width: 10),
       overflow: ScrollableOverflow(
@@ -142,7 +167,10 @@ class _MasterFlowViewerState extends State<MasterFlowViewer> {
                   icon: Icon(
                     executionTraceType.getIconData(),
                     size: 16,
-                    color: executionTraceType.getIconColor(false),
+                    color: executionTraceType.getIconColor(
+                      context,
+                      hasError(executionTraceType),
+                    ),
                   ),
                   value:
                       executionTraceTypeFilterMap[executionTraceType] ?? true,

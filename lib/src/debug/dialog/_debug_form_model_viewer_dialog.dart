@@ -6,7 +6,7 @@ import '../../core/_core_/core.dart';
 import '../../core/enums/_tip_document.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
-import '../form/_form_data_debug_view.dart';
+import '../form/_form_model_view.dart';
 import '../shelf/_shelf_structure_graph_view.dart';
 import '../utils/_dialog_size.dart';
 import '_tip_document_viewer_dialog.dart';
@@ -84,7 +84,7 @@ class _DebugFormModelViewerDialogState
       width: width,
       height: height,
       child: showFormData
-          ? FormDataView(
+          ? FormModelView(
               formModel: widget.formModel,
               locationInfo: widget.locationInfo,
               onPressedShelf: () {

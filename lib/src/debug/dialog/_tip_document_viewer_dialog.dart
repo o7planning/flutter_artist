@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 import '../../core/enums/_tip_document.dart';
 import '../../core/icon/icon_constants.dart';
+import '../../core/widgets/_simple_copy_button.dart';
+import '../../core/widgets/_simple_open_url_button.dart';
+import '../utils/_tab_theme_utils.dart';
 
 class TipDocumentViewerDialog extends StatefulWidget {
   final TipDocument tipDocument;
@@ -36,6 +39,8 @@ class TipDocumentViewerDialog extends StatefulWidget {
 
 class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
   late TipDocument tipDocument;
+  late TabbedViewController _controller;
+  bool _isInitialized = false;
 
   @override
   void initState() {
@@ -44,165 +49,249 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    Size preferredSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 620,
-      preferredHeight: 320,
-    );
-    FaAlertDialog alert = FaAlertDialog(
-      icon: Icon(
-        FaIconConstants.tipDocument,
-        color: Colors.deepOrange,
-        size: 16,
-      ),
-      titleText: "Tip & Docs - ${tipDocument.getTitle()}",
-      contentPadding: EdgeInsets.all(8),
-      content: SizedBox(
-        width: preferredSize.width,
-        height: preferredSize.height,
-        child: _buildMainContent(context),
-      ),
-    );
-    return alert;
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isInitialized) {
+      _controller = TabbedViewController(_buildTabs());
+      _controller.selectedIndex = 0;
+      _isInitialized = true;
+    }
   }
 
   Widget _buildMainContent(BuildContext context) {
-    final documentWidget = _buildDocument(context);
-    return Padding(
-      padding: EdgeInsets.all(3),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildControlBar(),
-          SizedBox(height: 5),
-          Expanded(
-            child: _buildTip(),
+    return Column(
+      children: [
+        _buildControlBar(),
+        const SizedBox(height: 6),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              color:
+                  FaColorUtils.surfaceContainer(context).withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(
+                  color: FaColorUtils.dividerColor(context)
+                      .withValues(alpha: 0.3)),
+            ),
+            child: TabbedViewTheme(
+              data: TabThemeUtils.getTabbedViewThemeData(context),
+              child: TabbedView(controller: _controller),
+            ),
           ),
-          if (documentWidget != null) SizedBox(height: 10),
-          if (documentWidget != null) documentWidget,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildControlBar() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: FaColorUtils.surfaceContainer(context).withValues(alpha: 0.8),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.auto_awesome_outlined,
+              size: 12, color: FaColorUtils.technicalHighlight(context)),
+          const SizedBox(width: 4),
+          Text(
+            "${tipDocument.getPosition()} / ${TipDocument.enabledValues.length}",
+            style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: FaColorUtils.primaryContent(context)),
+          ),
+          const Spacer(),
+          _buildNavButton(Icons.arrow_back_ios_new_rounded,
+              () => _refresh(tipDocument.previous())),
+          const SizedBox(width: 4),
+          _buildNavButton(Icons.arrow_forward_ios_rounded,
+              () => _refresh(tipDocument.next())),
         ],
       ),
     );
   }
 
-  Widget _buildControlBar() {
-    return SizedBox(
-      width: double.maxFinite,
-      child: Card(
-        margin: EdgeInsets.zero,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(8, 3, 3, 3),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+  Widget _buildTip() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              Text(
-                "${tipDocument.getPosition()} / ${TipDocument.enabledValues.length}",
-                style: TextStyle(fontSize: 12),
-              ),
-              Spacer(),
-              SimpleSmallIconButton(
-                iconData: Icons.arrow_circle_left_outlined,
-                iconSize: 14,
-                onPressed: () {
-                  setState(() {
-                    tipDocument = tipDocument.previous();
-                  });
-                },
-              ),
-              SimpleSmallIconButton(
-                iconData: Icons.arrow_circle_right_outlined,
-                iconSize: 14,
-                onPressed: () {
-                  setState(() {
-                    tipDocument = tipDocument.next();
-                  });
-                },
-              ),
+              Icon(Icons.lightbulb_outline_rounded,
+                  size: 14, color: FaColorUtils.technicalHighlight(context)),
+              const SizedBox(width: 6),
+              Text("PRO TIP",
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: FaColorUtils.technicalHighlight(context),
+                  )),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTip() {
-    return SizedBox(
-      width: double.maxFinite,
-      child: Card(
-        margin: EdgeInsets.zero,
-        child: Padding(
-          padding: EdgeInsets.all(5),
-          child: SelectableText(
+          const SizedBox(height: 4),
+          SelectableText(
             tipDocument.getTip(),
-            style: TextStyle(fontSize: 13),
+            style: TextStyle(
+                fontSize: 13,
+                height: 1.4,
+                color: FaColorUtils.primaryContent(context)),
           ),
-        ),
+        ],
       ),
     );
   }
 
   Widget? _buildDocument(BuildContext context) {
     List<String> docs = tipDocument.getDocuments();
-    if (docs.isEmpty) {
-      return null;
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: docs
-          .map((doc) => _buildLink(context, doc))
-          .expand((w) => [w, SizedBox(height: 5)])
-          .toList()
-        ..removeLast(),
+    if (docs.isEmpty) return null;
+
+    return ListView(
+      padding: const EdgeInsets.all(6),
+      children: [
+        Text("Detailed Documentation",
+            style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: FaColorUtils.infoLabel(context))),
+        const SizedBox(height: 8),
+        ...docs.map((doc) => _buildLink(context, doc)),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size preferredSize = calculatePreferredDialogSize(
+      context,
+      preferredWidth: 620,
+      preferredHeight: 340,
+    );
+
+    return FaAlertDialog(
+      icon: Icon(
+        FaIconConstants.tipDocument,
+        color: FaColorUtils.primaryHighlight(context),
+        size: 20,
+      ),
+      titleText: "Artist Insights - ${tipDocument.getTitle()}",
+      // subtitleText: tipDocument.getTitle(),
+      contentPadding: const EdgeInsets.all(8),
+      content: SizedBox(
+        width: preferredSize.width,
+        height: preferredSize.height,
+        child: _buildMainContent(context),
+      ),
+    );
+  }
+
+  Widget _buildNavButton(IconData icon, VoidCallback onPressed) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(4),
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Icon(icon,
+              size: 14, color: FaColorUtils.primaryHighlight(context)),
+        ),
+      ),
     );
   }
 
   Widget _buildLink(BuildContext context, String url) {
-    return SelectableText.rich(
-      style: TextStyle(fontSize: 13, color: Colors.indigo),
-      TextSpan(
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: FaColorUtils.primaryContent(context).withValues(alpha: 0.03),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+            color: FaColorUtils.dividerColor(context).withValues(alpha: 0.5)),
+      ),
+      child: Row(
         children: [
-          WidgetSpan(
-            child: Icon(
-              Icons.arrow_circle_right_outlined,
-              size: 14,
+          Icon(Icons.link_rounded,
+              size: 16, color: FaColorUtils.primaryHighlight(context)),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              url,
+              style: TextStyle(
+                  fontSize: 13,
+                  color: FaColorUtils.primaryHighlight(context),
+                  decoration: TextDecoration.underline),
+              overflow: TextOverflow.ellipsis,
             ),
-            alignment: PlaceholderAlignment.middle,
           ),
-          const WidgetSpan(child: SizedBox(width: 2)),
-          TextSpan(text: url),
-          const TextSpan(text: ' '),
-          WidgetSpan(
-            child: SimpleSmallIconButton(
-              iconData: Icons.open_in_new,
-              iconSize: 14,
-              onPressed: () async {
-                var urlObj = Uri.parse(url);
-                await launchUrl(urlObj);
-              },
-            ),
-            alignment: PlaceholderAlignment.middle,
-          ),
-          const WidgetSpan(child: SizedBox(width: 2)),
-          WidgetSpan(
-            child: SimpleSmallIconButton(
-              iconData: Icons.copy_rounded,
-              iconSize: 14,
-              onPressed: () async {
-                await Clipboard.setData(ClipboardData(text: url));
-                // Optionally, show a SnackBar or other feedback to the user
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Copied!')),
-                );
-              },
-            ),
-            alignment: PlaceholderAlignment.middle,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SimpleOpenUrlButton(
+                iconSize: 16,
+                url: url,
+              ),
+              SimpleCopyButton(
+                iconSize: 16,
+                getText: () {
+                  return url;
+                },
+              ),
+            ],
           ),
         ],
       ),
     );
+  }
+
+  void _refresh(TipDocument newTipDocument) {
+    tipDocument = newTipDocument;
+    List<TabData> tabs = _buildTabs();
+    int currentTab = _controller.selectedIndex ?? 0;
+    _controller.setTabs(tabs);
+    _controller.selectedIndex = currentTab;
+    setState(() {});
+  }
+
+  List<TabData> _buildTabs() {
+    List<TabData> tabs = [];
+
+    tabs.add(
+      TabData(
+        id: "tips",
+        text: ' Tips',
+        closable: false,
+        leading: (context, status) => Icon(
+          Icons.tips_and_updates_outlined,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: 16,
+        ),
+        view: _buildTip(),
+      ),
+    );
+    tabs.add(
+      TabData(
+        id: "docs",
+        text: ' Docs',
+        closable: false,
+        leading: (context, status) => Icon(
+          Icons.policy_outlined,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: 16,
+        ),
+        view: _buildDocument(context),
+      ),
+    );
+    return tabs;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 }

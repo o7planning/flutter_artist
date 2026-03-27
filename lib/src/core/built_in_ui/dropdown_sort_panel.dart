@@ -1,112 +1,116 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/core/built_in_ui/_tile.dart';
+import 'package:flutter_artist_theme/flutter_artist_theme.dart';
 
 import '../_core_/core.dart';
 import '../enums/_sort_direction.dart';
 import '_sorting_options.dart';
+import '_tile.dart';
 import 'dropdown_sort_panel_style.dart';
 
-class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
+/// A sort panel using a standard DropdownButton.
+class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM>
+    with SortPanelMixin {
   final DropdownSortPanelStyle style;
-
-  final SortCriterionItemBuilder? itemBuilder;
-
   final AlignmentGeometry? alignment;
-  final EdgeInsetsGeometry? padding;
-  final Decoration? decoration;
   final EdgeInsetsGeometry? margin;
 
   const DropdownSortPanel({
     super.key,
     required super.sortModel,
     this.style = const DropdownSortPanelStyle(),
-    this.itemBuilder,
     this.alignment,
-    this.padding,
-    this.decoration,
     this.margin,
   });
 
   @override
   Widget buildContent(BuildContext context) {
-    SortCriterion? selected = sortModel.findFirstCriterionHasDirection() ??
+    final tokens = context.faTokens;
+    final theme = Theme.of(context);
+
+    final selected = sortModel.findFirstCriterionHasDirection() ??
         (sortModel.criteria.isNotEmpty ? sortModel.criteria.first : null);
+    final bool hasActiveSort = selected?.direction != null;
 
     return Container(
       alignment: alignment,
-      padding: padding ?? style.padding,
-      decoration: decoration ?? style.decoration,
       margin: margin,
+      decoration: style.decoration ??
+          BoxDecoration(
+            color: tokens.shortcut.surfaceColor,
+            border: Border.fromBorderSide(tokens.shortcut.border),
+            borderRadius:
+                BorderRadius.circular(tokens.shortcut.borderRadius / 2),
+            boxShadow: tokens.shortcut.cardShadows,
+          ),
+      padding: style.padding,
+      height: 36,
       child: DropdownButtonHideUnderline(
         child: DropdownButton<SortCriterion>(
-          isDense: style.isDense,
           value: selected,
+          isDense: true,
+          dropdownColor: tokens.shortcut.surfaceColor,
+          borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
           icon: Icon(
             style.dropdownIcon,
             size: style.dropdownIconSize,
-            color: style.dropdownIconColor,
+            color: hasActiveSort
+                ? theme.primaryColor
+                : tokens.shortcut.onSurfaceColor.withValues(alpha: 0.6),
           ),
-          items: sortModel.criteria
-              .map(
-                (criterion) => DropdownMenuItem(
-                  value: criterion,
-                  child: _buildItem(
-                    context,
-                    criterion,
-                    selected,
+          onChanged: (_) {},
+          items: sortModel.criteria.map((criterion) {
+            final isActive = criterion == selected;
+            return DropdownMenuItem<SortCriterion>(
+              value: criterion,
+              onTap: () => _handleDropdownChanged(criterion),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    criterion.text,
+                    style: style.getTextStyle(context, isActive).copyWith(
+                          color: isActive
+                              ? theme.primaryColor
+                              : tokens.shortcut.onSurfaceColor,
+                        ),
                   ),
-                ),
-              )
-              .toList(),
-          onChanged: (value) => _onChanged(value),
+                  const SizedBox(width: 8),
+                  defaultSortIcon(
+                    context,
+                    criterion.direction,
+                    false,
+                    style.sortIconSize,
+                    null,
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
         ),
       ),
     );
   }
 
-  Widget _buildItem(
-    BuildContext context,
-    SortCriterion criterion,
-    SortCriterion? selected,
-  ) {
-    final toggle = () => _toggleCriterion(criterion);
+  void _handleDropdownChanged(SortCriterion? criterion) {
+    if (criterion == null) return;
 
-    if (itemBuilder != null) {
-      return itemBuilder!(
-        context,
-        criterion,
-        criterion == selected,
-        toggle,
-      );
+    final currentActive = sortModel.findFirstCriterionHasDirection();
+
+    SortDirection nextDirection;
+    if (currentActive?.criterionName == criterion.criterionName) {
+      nextDirection = (criterion.direction == SortDirection.asc)
+          ? SortDirection.desc
+          : SortDirection.asc;
+    } else {
+      nextDirection = criterion.direction ??
+          criterion.lastUsedDirection ??
+          criterion.initialDirection ??
+          SortDirection.asc;
     }
 
-    return SortCriterionTile(
-      sortModel: sortModel,
-      criterion: criterion,
-      style: style,
-      enabled: criterion == selected,
-    );
-  }
-
-  void _toggleCriterion(SortCriterion criterion) {
     sortModel.updateSortingCriterionByName(
       criterionName: criterion.criterionName,
-      direction: criterion.nextDirection,
-      moveToFirst: false,
-    );
-  }
-
-  void _onChanged(SortCriterion? selected) {
-    if (selected == null) return;
-
-    SortDirection? direction = selected.direction ??
-        selected.lastUsedDirection ??
-        selected.initialDirection ??
-        SortDirection.asc;
-
-    sortModel.updateSortingCriterionByName(
-      criterionName: selected.criterionName,
-      direction: direction,
+      direction: nextDirection,
       moveToFirst: false,
     );
   }

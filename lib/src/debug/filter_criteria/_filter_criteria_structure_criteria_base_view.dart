@@ -86,18 +86,29 @@ class FilterModelStructureCriteriaBaseViewState
   }
 
   Widget _buildRight() {
+    final colorScheme = Theme.of(context).colorScheme;
+
     if (_currentNode == null) {
-      return Text("Null");
-    } else if (_currentNode!.data is FilterModel) {
-      return FilterModelDebugView(
-        filterModel: _currentNode!.data,
+      return Center(
+        child: Text(
+          "Select a node to see definition",
+          style: TextStyle(
+            color: colorScheme.onSurfaceVariant,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
       );
-    } else if (_currentNode!.data is FilterCriterionDef) {
-      return FilterCriterionDefView(
-        criterion: _currentNode!.data,
-      );
+    }
+    return _getContentByData(_currentNode!.data);
+  }
+
+  Widget _getContentByData(dynamic data) {
+    if (data is FilterModel) {
+      return FilterModelDebugView(filterModel: data);
+    } else if (data is FilterCriterionDef) {
+      return FilterCriterionDefView(criterion: data);
     } else {
-      return Text("TODO");
+      return const Center(child: Text("Criterion detail not available"));
     }
   }
 
@@ -123,9 +134,9 @@ class FilterModelStructureCriteriaBaseViewState
   // ***************************************************************************
 
   Widget buildTreeView(BuildContext context) {
-    FilterModelStructure filterModelStructure =
-        widget.filterModel.filterModelStructure;
-    //
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(5),
@@ -136,10 +147,9 @@ class FilterModelStructureCriteriaBaseViewState
         expansionIndicatorBuilder: (context, node) {
           return PlusMinusIndicator(
             tree: node,
-            color: Colors.grey[600],
+            color: theme.hintColor.withValues(alpha: 0.7),
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.zero,
-            // icon: Icons.keyboard_arrow_down_outlined,
             curve: Curves.linear,
           );
         },
@@ -155,6 +165,7 @@ class FilterModelStructureCriteriaBaseViewState
           controller.expandAllChildren(rootTreeNode);
         },
         builder: (context, node) {
+          final isSelected = _currentNode == node;
           dynamic data = node.data;
           String title;
           String? tooltip;
@@ -186,6 +197,7 @@ class FilterModelStructureCriteriaBaseViewState
             title = "UNKNOWN";
           }
           return Material(
+            color: Colors.transparent,
             child: ListTile(
               dense: true,
               visualDensity: const VisualDensity(
@@ -200,6 +212,9 @@ class FilterModelStructureCriteriaBaseViewState
                   Icon(
                     prefixIconData,
                     size: 16,
+                    color: isSelected
+                        ? colorScheme.primary
+                        : colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
                   SizedBox(width: 5),
                   Expanded(
@@ -210,6 +225,9 @@ class FilterModelStructureCriteriaBaseViewState
                         style: TextStyle(
                           overflow: TextOverflow.ellipsis,
                           fontSize: 13,
+                          color: isSelected
+                              ? colorScheme.primary
+                              : colorScheme.onSurface,
                           fontWeight: _currentNode == node
                               ? FontWeight.bold
                               : FontWeight.normal,
@@ -221,10 +239,10 @@ class FilterModelStructureCriteriaBaseViewState
                   if (isMultiOpt && isMultiSelection)
                     Tooltip(
                       message: "Multi Selection",
-                      child: const Icon(
+                      child: Icon(
                         FaIconConstants.multiSelectionIconData,
                         size: 16,
-                        color: Colors.red,
+                        color: colorScheme.error.withValues(alpha: 0.8),
                       ),
                     ),
                 ],

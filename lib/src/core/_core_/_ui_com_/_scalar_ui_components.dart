@@ -47,8 +47,8 @@ class _ScalarUiComponents extends _UiComponents {
   String? findActiveUiComponent({bool alsoCheckChildren = false}) {
     bool active = false;
     // Filter
-    // if (block.filterModel != null) {
-    //   active = block.filterModel!.ui.hasActiveUiComponent();
+    // if (scalar.filterModel != null) {
+    //   active = scalar.filterModel!.ui.hasActiveUiComponent();
     //   if (active) {
     //     return true;
     //   }
@@ -246,6 +246,142 @@ class _ScalarUiComponents extends _UiComponents {
       widgetStates: __scalarControlBarWidgetStates,
       activeOnly: activeOnly,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  String? __activeUiComponentsWithContextKind({
+    required ContextKind? contextKind,
+    bool alsoCheckChildren = false,
+  }) {
+    bool has = false;
+    //
+    // Filter
+    //
+    // if (scalar.filterModel != null) {
+    //   has = scalar.filterModel!.ui.hasActiveUiComponentWithContextKind(
+    //     contextKind: contextKind,
+    //   );
+    //   if (has) {
+    //     return getClassNameWithoutGenerics(scalar.filterModel);
+    //   }
+    // }
+    //
+    //
+    // Scalar Base Views:
+    //
+    String? componentName = findActiveScalarBaseViewWithContextKind(
+      contextKind: contextKind,
+      alsoCheckChildren: false,
+    );
+    if (componentName != null) {
+      return componentName;
+    }
+    //
+    // ControlBar:
+    //
+    has = hasActiveControlBarWithContextKind(
+      contextKind: contextKind,
+    );
+    if (has) {
+      return "ScalarControlBar";
+    }
+    //
+    if (alsoCheckChildren) {
+      for (Scalar childScalar in scalar._childScalars) {
+        componentName = childScalar.ui.__activeUiComponentsWithContextKind(
+          contextKind: contextKind,
+          alsoCheckChildren: alsoCheckChildren,
+        );
+        if (componentName != null) {
+          return componentName;
+        }
+      }
+    }
+    return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  String? findActiveUiComponentByScalarContext({
+    bool alsoCheckChildren = false,
+  }) {
+    String? componentName = __activeUiComponentsWithContextKind(
+      contextKind: ContextKind.scalar,
+      alsoCheckChildren: alsoCheckChildren,
+    );
+    if (componentName != null) {
+      return componentName;
+    }
+    if (!alsoCheckChildren) {
+      return null;
+    }
+    for (Scalar childScalar in scalar._childScalars) {
+      componentName = childScalar.ui.__activeUiComponentsWithContextKind(
+        contextKind: ContextKind.item,
+        alsoCheckChildren: alsoCheckChildren,
+      );
+      if (componentName != null) {
+        return componentName;
+      }
+    }
+    return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool hasActiveUiComponentScalarRepresentative({
+    bool alsoCheckChildren = false,
+  }) {
+    String? componentName = findActiveUiComponentByScalarContext(
+      alsoCheckChildren: alsoCheckChildren,
+    );
+    return componentName != null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _addControlBarWidgetState({
+    required _ContextProviderViewState widgetState,
+    required bool isVisible,
+  }) {
+    bool scalarXScalarRepOLD = hasActiveUiComponentScalarRepresentative(
+      alsoCheckChildren: true,
+    );
+    __scalarControlBarWidgetStates.update(
+      widgetState,
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
+    );
+    bool scalarXScalarRepCURRENT = hasActiveUiComponentScalarRepresentative(
+      alsoCheckChildren: true,
+    );
+    //
+    if (isVisible) {
+      FlutterArtist.storage._addRecentShelf(scalar.shelf);
+    }
+    //
+    if (!scalarXScalarRepOLD && scalarXScalarRepCURRENT) {
+      // Fire event:
+      // scalar.shelf._startLoadDataForLazyUiComponentsIfNeed();
+      // LOGIC: #0000
+      FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
+    } else if (scalarXScalarRepOLD && !scalarXScalarRepCURRENT) {
+      scalar._emitScalarHidden();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _removeControlBarWidgetState({
+    required _ContextProviderViewState widgetState,
+  }) {
+    __scalarControlBarWidgetStates.remove(widgetState);
   }
 
   // ***************************************************************************

@@ -1,33 +1,34 @@
 import 'package:flutter/material.dart';
 
+import '_sorting_options.dart';
 import '_tile.dart';
 
+/// Style configuration for the [PopupSortPanel].
 class PopupSortPanelStyle extends SortPanelStyle {
   final IconData buttonIcon;
-
   final double buttonIconSize;
-
   final Color? buttonIconColor;
-
-  final EdgeInsetsGeometry menuPadding;
-
   final Decoration? menuDecoration;
-
-  final TextStyle? menuTextStyle;
-
-  final double itemSpacing;
+  final PopupTextPosition textPosition;
+  final double textIconSpacing;
+  final SortIconBuilder? iconBuilder;
+  final double height;
 
   const PopupSortPanelStyle({
     super.textStyle,
     super.iconSpacing,
     super.sortIconSize,
     super.draggingColor,
+    super.boldActiveText,
     this.buttonIcon = Icons.sort,
-    this.buttonIconSize = 18,
+    this.buttonIconSize = 16,
     this.buttonIconColor,
-    this.menuPadding = const EdgeInsets.symmetric(vertical: 4),
     this.menuDecoration,
-    this.menuTextStyle,
-    this.itemSpacing = 8,
+    this.textPosition = PopupTextPosition.left,
+    this.textIconSpacing = 8,
+    this.iconBuilder,
+    this.height = 36,
   });
 }
+
+enum PopupTextPosition { left, right, none }

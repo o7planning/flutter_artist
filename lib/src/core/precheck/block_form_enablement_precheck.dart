@@ -3,7 +3,7 @@ import '__chk_code.dart';
 import '__precheck.dart';
 
 @RenameAnnotation()
-enum BlockFormEnablementPrecheckCode implements Precheck {
+enum BlockFormEnablementPrecheck implements Precheck {
   noForm(
     precheckCode: PrecheckCode.noForm,
     message: "Block has no Form",
@@ -40,7 +40,7 @@ enum BlockFormEnablementPrecheckCode implements Precheck {
   @override
   final List<String>? details;
 
-  const BlockFormEnablementPrecheckCode({
+  const BlockFormEnablementPrecheck({
     required this.precheckCode,
     required this.message,
     required this.details,

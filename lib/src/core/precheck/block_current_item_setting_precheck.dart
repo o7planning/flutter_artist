@@ -1,6 +1,7 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
+// TODO-Rename: --> BlockSetCurrentItemPrecheck
 enum BlockCurrentItemSettingPrecheck implements Precheck {
   busy(
     precheckCode: PrecheckCode.busy,

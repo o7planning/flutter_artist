@@ -10,7 +10,7 @@ abstract class BlockPagination extends _ContextProviderView {
     required super.ownerClassInstance,
   });
 
-  Widget build();
+  Widget build(BuildContext context);
 
   @override
   State<StatefulWidget> createState() {
@@ -49,7 +49,7 @@ class _BlockPaginationState extends _ContextProviderViewState<BlockPagination> {
 
   @override
   Widget buildContent(BuildContext context) {
-    return widget.build();
+    return widget.build(context);
   }
 
   @override

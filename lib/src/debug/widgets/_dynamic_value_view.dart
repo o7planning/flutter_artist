@@ -10,16 +10,29 @@ class DynamicValueView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final Color bgColor = theme.brightness == Brightness.dark
+        ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
+        : theme.colorScheme.surfaceContainerLow;
+
     return Container(
       width: double.maxFinite,
-      margin: EdgeInsets.all(5),
-      padding: EdgeInsets.all(5),
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: bgColor,
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(
+            color: theme.dividerColor.withValues(alpha: 0.1), width: 0.5),
       ),
-      child: Text(
-        value.toString(),
-        style: TextStyle(fontSize: 12),
+      child: SelectableText(
+        value == null ? 'null' : value.toString(),
+        style: TextStyle(
+          fontSize: 12,
+          fontFamily: 'Courier',
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
       ),
     );
   }

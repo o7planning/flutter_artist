@@ -82,8 +82,8 @@ class _ControlButtonState extends _ContextProviderViewState<ScalarControl> {
   ControlPressedAsyncFunction? _getOnPressedFunction() {
     switch (widget.actionType) {
       case ScalarControlActionType.query:
-        bool canQuery = widget.scalar.canQuery();
-        return canQuery ? __queryScalar : null;
+        Actionable queryActionable = widget.scalar.canQuery();
+        return queryActionable.yes ? __queryScalar : null;
     }
   }
 

@@ -52,9 +52,9 @@ class FormModelDebugView extends StatelessWidget {
               formModel.formInitialDataReady
                   ? FaIconConstants.formInitialDataReadyTrueIconData
                   : FaIconConstants.formInitialDataReadyFalseIconData,
-              color: formModel.formInitialDataReady //
-                  ? Colors.indigo
-                  : Colors.red,
+              color: formModel.formInitialDataReady
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.error,
               size: 20,
             ),
           ),

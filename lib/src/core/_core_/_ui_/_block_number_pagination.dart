@@ -14,10 +14,13 @@ class BlockNumberPagination extends BlockPagination {
   });
 
   @override
-  Widget build() {
+  Widget build(BuildContext context) {
+    final tokens = context.faTokens;
+    final theme = Theme.of(context);
+
     return Padding(
       padding: padding,
-      child: number_pagination.NumberPagination(
+      child: NumberPagination(
         onPageChanged: (int pageNumber) {
           block.query(
             pageable: Pageable(
@@ -33,6 +36,33 @@ class BlockNumberPagination extends BlockPagination {
             ? 1
             : block.paginationInfo!.currentPage,
         fontSize: 13,
+        buttonRadius: tokens.shortcut.borderRadius,
+        buttonElevation: tokens.shortcut.elevation,
+
+        // selectedButtonColor: tokens.primary,
+        // selectedNumberColor: Colors.white,
+        //
+        // // Color for unselected buttons (Blends into the surface background)
+        // unSelectedButtonColor: tokens.shortcut.surfaceColor,
+        // unSelectedNumberColor: tokens.shortcut.onSurfaceColor.withValues(alpha: 0.7),
+        //
+        // // Border for buttons
+        // buttonUnSelectedBorderColor: tokens.shortcut.border.color,
+        // buttonSelectedBorderColor: tokens.primary ,
+
+        // Selected button.
+        selectedButtonColor: theme.primaryColor,
+        selectedNumberColor: theme.colorScheme.onPrimary,
+
+        // Unselected button
+        unSelectedButtonColor: tokens.shortcut.surfaceColor,
+        unSelectedNumberColor:
+            tokens.shortcut.onSurfaceColor.withValues(alpha: 0.7),
+
+        // Border for buttons
+        buttonUnSelectedBorderColor: tokens.shortcut.border.color,
+        buttonSelectedBorderColor: theme.primaryColor,
+
         controlButtonSize: const Size(22, 22),
         numberButtonSize: const Size(22, 22),
         // enableInteraction: false,

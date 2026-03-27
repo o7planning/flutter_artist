@@ -19,6 +19,7 @@ enum TipDocument {
   globalData(enabled: true),
   pageData(enabled: true),
   locale(enabled: true),
+  theme(enabled: true),
   naturalQuery(enabled: true),
   filterCriteria(enabled: true),
   blockActiveUiComponents(enabled: true),
@@ -109,6 +110,8 @@ enum TipDocument {
         return "FlutterArtist Global Data";
       case TipDocument.locale:
         return "FlutterArtist Locale";
+      case TipDocument.theme:
+        return "FlutterArtist Theme";
       case TipDocument.naturalQuery:
         return "Natural Query";
       case TipDocument.filterCriteria:
@@ -213,7 +216,9 @@ enum TipDocument {
       case TipDocument.globalData:
         return "FlutterArtist Global Data";
       case TipDocument.locale:
-        return "FlutterArtist Locale and Theme";
+        return "FlutterArtist Locale";
+      case TipDocument.theme:
+        return "FlutterArtist Theme";
       case TipDocument.naturalQuery:
         return "Natural Query";
       case TipDocument.filterCriteria:
@@ -347,6 +352,10 @@ enum TipDocument {
       case TipDocument.locale:
         return [
           "http://51.195.44.134:8080/vi/14837/flutterartist-locales",
+        ];
+      case TipDocument.theme:
+        return [
+          // "http://51.195.44.134:8080/vi/14837/flutterartist-themes",
         ];
       case TipDocument.naturalQuery:
         return [

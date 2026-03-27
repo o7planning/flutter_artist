@@ -76,14 +76,14 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
       preferredHeight: 380,
     );
 
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
+    return dialogs.FaAlertDialog(
       icon: Icon(
         FaIconConstants.logViewerIconData,
         size: 20,
-        color: Colors.indigo,
+        color: FaColorUtils.technicalHighlight(context),
       ),
       titleText: widget.title,
-      contentPadding: EdgeInsets.all(8),
+      contentPadding: const EdgeInsets.all(8),
       content: _buildContent(preferredSize.width, preferredSize.height),
       onHelpPressed: loggedInUser == null || !loggedInUser.isSystemUser
           ? null
@@ -94,163 +94,136 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
               );
             },
     );
-    return alert;
   }
 
   Widget _buildSummaryInfo() {
-    final double fontSize = 12;
+    final double fontSize = 11;
     final double iconSize = 14;
     final TipDocument? tipDocument = _logEntry?.tipDocument as TipDocument?;
 
-    return Card(
-      margin: EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(4),
-        ),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Tooltip(
-              message: "Tip & Document",
-              child: SimpleSmallIconButton(
-                iconData: FaIconConstants.tipDocument,
-                iconSize: iconSize,
-                iconColor: tipDocument == null || !tipDocument.enabled
-                    ? null
-                    : Colors.deepOrange,
-                onPressed: tipDocument == null || !tipDocument.enabled
-                    ? null
-                    : () {
-                        TipDocumentViewerDialog.open(
-                          context: context,
-                          tipDocument: tipDocument,
-                        );
-                      },
-              ),
+    return CustomAppContainer.customBackground(
+      backgroundColor: FaColorUtils.surfaceContainer(context),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      child: Row(
+        children: [
+          Tooltip(
+            message: "Tip & Document",
+            child: SimpleSmallIconButton(
+              iconData: FaIconConstants.tipDocument,
+              iconSize: iconSize,
+              iconColor: tipDocument == null || !tipDocument.enabled
+                  ? null
+                  : FaColorUtils.primaryHighlight(context),
+              onPressed: tipDocument == null || !tipDocument.enabled
+                  ? null
+                  : () {
+                      TipDocumentViewerDialog.open(
+                        context: context,
+                        tipDocument: tipDocument,
+                      );
+                    },
             ),
-            Spacer(),
-            Text(
-              "Recent: ",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: fontSize,
-              ),
-            ),
-            Icon(
-              FaIconConstants.dataStateErrorIconData,
-              size: iconSize,
-              color: LogEntryType.error.bgColor,
-            ),
-            SizedBox(width: 5),
-            Text(
-              widget.logger.recentErrorCount.toString(),
-              style: TextStyle(fontSize: fontSize),
-            ),
-            SizedBox(width: 5),
-            Icon(
-              FaIconConstants.dataStateWarningIconData,
-              size: iconSize,
-              color: LogEntryType.warning.bgColor,
-            ),
-            SizedBox(width: 5),
-            Text(
-              widget.logger.recentWarningCount.toString(),
-              style: TextStyle(fontSize: fontSize),
-            ),
-            SizedBox(width: 10),
-            Text(
-              "Total: ",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: fontSize,
-              ),
-            ),
-            Icon(
-              FaIconConstants.dataStateErrorIconData,
-              size: iconSize,
-              color: LogEntryType.error.bgColor,
-            ),
-            SizedBox(width: 5),
-            Text(
-              widget.logger.totalErrorCount.toString(),
-              style: TextStyle(fontSize: fontSize),
-            ),
-            SizedBox(width: 5),
-            Icon(
-              FaIconConstants.dataStateWarningIconData,
-              size: iconSize,
-              color: LogEntryType.warning.bgColor,
-            ),
-            SizedBox(width: 5),
-            Text(
-              widget.logger.totalWarningCount.toString(),
-              style: TextStyle(fontSize: fontSize),
-            ),
-          ],
-        ),
+          ),
+          const Spacer(),
+          _buildStatItem("Recent: ", widget.logger.recentErrorCount,
+              widget.logger.recentWarningCount, fontSize, iconSize),
+          const SizedBox(width: 16),
+          _buildStatItem("Total: ", widget.logger.totalErrorCount,
+              widget.logger.totalWarningCount, fontSize, iconSize),
+        ],
       ),
     );
   }
 
+  Widget _buildStatItem(String label, int errors, int warnings, double fontSize,
+      double iconSize) {
+    return Row(
+      children: [
+        Text(label,
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: fontSize,
+                color: FaColorUtils.dataLabel(context))),
+        const SizedBox(width: 4),
+        Icon(FaIconConstants.dataStateErrorIconData,
+            size: iconSize, color: Colors.redAccent),
+        const SizedBox(width: 2),
+        Text(errors.toString(),
+            style: TextStyle(fontSize: fontSize, fontFamily: 'Courier')),
+        const SizedBox(width: 8),
+        Icon(
+          FaIconConstants.dataStateWarningIconData,
+          size: iconSize,
+          color: Colors.orangeAccent,
+        ),
+        const SizedBox(width: 2),
+        Text(warnings.toString(),
+            style: TextStyle(fontSize: fontSize, fontFamily: 'Courier')),
+      ],
+    );
+  }
+
   Widget _buildLogEntryButtons() {
-    return CustomAppContainer(
+    return CustomAppContainer.customBackground(
       width: double.maxFinite,
-      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+      backgroundColor:
+          FaColorUtils.surfaceContainer(context).withValues(alpha: 0.5),
       child: Wrap(
-        spacing: 5,
-        children: widget.logger.logEntries
-            .map(
-              (logEntry) => TextButton(
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.all(8),
-                  minimumSize: Size.zero,
-                  backgroundColor: logEntry.logEntryType.bgColor,
-                  side: BorderSide(
-                    color: _logEntry == logEntry
-                        ? Colors.blue
-                        : logEntry.logEntryType.bgColor,
-                    width: 1.0,
-                  ),
-                ),
-                onPressed: () {
-                  _logEntry = logEntry;
-                  setState(() {});
-                },
-                child: Text(
-                  logEntry.id.toString(),
-                  style: TextStyle(color: logEntry.logEntryType.textColor),
+        spacing: 4,
+        runSpacing: 4,
+        children: widget.logger.logEntries.map((logEntry) {
+          final bool isSelected = _logEntry == logEntry;
+          final Color baseColor = logEntry.logEntryType == LogEntryType.error
+              ? Colors.redAccent
+              : Colors.orangeAccent;
+
+          return InkWell(
+            onTap: () => setState(() => _logEntry = logEntry),
+            borderRadius: BorderRadius.circular(4),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? baseColor.withValues(alpha: 0.4)
+                    : baseColor.withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(
+                  color: isSelected
+                      ? baseColor.withValues(alpha: 0.8)
+                      : baseColor.withValues(alpha: 0.3),
+                  width: 0.5,
                 ),
               ),
-            )
-            .toList(),
+              child: Text(
+                logEntry.id.toString(),
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color: baseColor,
+                ),
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
 
   Widget _buildContent(double width, double height) {
-    if (_logEntry == null) {
-      return SizedBox();
-    }
+    if (_logEntry == null) return const SizedBox();
+
     Widget view;
     switch (_logEntry!.logEntryType) {
       case LogEntryType.error:
         view = ErrorInfoView(
-          errorInfo: _logEntry!.errorInfo!,
-          width: width,
-          height: height,
-        );
+            errorInfo: _logEntry!.errorInfo!, width: width, height: height);
       case LogEntryType.warning:
         view = WarningInfoView(
-          warningInfo: _logEntry!.warningInfo!,
-          width: width,
-          height: height,
-        );
+            warningInfo: _logEntry!.warningInfo!, width: width, height: height);
     }
+
     return SizedBox(
       width: width,
       height: height,
@@ -259,10 +232,16 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildLogEntryButtons(),
-          SizedBox(height: 5),
+          const SizedBox(height: 8),
           _buildSummaryInfo(),
-          SizedBox(height: 5),
-          Expanded(child: view),
+          const SizedBox(height: 8),
+          Expanded(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4), child: view),
+            ),
+          ),
         ],
       ),
     );

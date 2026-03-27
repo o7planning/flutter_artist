@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../../core/icon/icon_constants.dart';
 import '../../constants/_debug_constants.dart';
@@ -11,6 +12,8 @@ class BlockOrScalarInfoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return ListTile(
       contentPadding: EdgeInsets.zero,
       minLeadingWidth: 0,
@@ -25,6 +28,7 @@ class BlockOrScalarInfoView extends StatelessWidget {
             ? FaIconConstants.blockIconData
             : FaIconConstants.scalarIconData,
         size: 18,
+        color: colorScheme.onSurface.withValues(alpha: 0.8),
       ),
       title: SelectableText.rich(
         style: TextStyle(fontSize: DebugConstants.blockOrScalaInfoFontSize),
@@ -33,15 +37,16 @@ class BlockOrScalarInfoView extends StatelessWidget {
             WidgetSpan(child: SizedBox(width: 3)),
             TextSpan(
               text: blockOrScalar.blockOrScalarClassName,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: colorScheme.onSurface,
               ),
             ),
             TextSpan(
               text: blockOrScalar.blockOrScalarClassParametersDefinition,
-              style: const TextStyle(
-                color: DebugConstants.classParametersColor,
+              style: TextStyle(
+                color: FaColorUtils.technicalHighlight(context),
+                fontFamily: 'Courier',
               ),
             ),
           ],
@@ -51,9 +56,9 @@ class BlockOrScalarInfoView extends StatelessWidget {
           ? null
           : Text(
               blockOrScalar.description!,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
-                color: Colors.grey,
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
     );

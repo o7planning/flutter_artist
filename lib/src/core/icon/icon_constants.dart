@@ -168,7 +168,9 @@ class FaIconConstants {
 // static const  IconData _shelfIconData = cupertino.CupertinoIcons.;
 
   static const IconData filterCriteriaIconData = Icons.filter_alt_outlined;
-  static const IconData blockIconData = cupertino.CupertinoIcons.calendar;
+  static const IconData formIconData = cupertino.CupertinoIcons.calendar;
+
+  static const IconData blockIconData = Icons.view_module;
   static const IconData scalarIconData =
       cupertino.CupertinoIcons.smallcircle_circle;
 

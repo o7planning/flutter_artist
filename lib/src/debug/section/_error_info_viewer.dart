@@ -119,7 +119,9 @@ class _ErrorInfoViewState extends State<ErrorInfoView> {
                       inactiveColor: Colors.grey,
                       activeChild: const Text('Error Details'),
                       inactiveChild: const Text('Stack Trace'),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
                       width: 130.0,
                       height: 20.0,
                       enabled: true,

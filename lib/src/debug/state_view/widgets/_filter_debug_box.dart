@@ -16,7 +16,7 @@ class FilterDebugBox extends BaseDebugBox {
   });
 
   @override
-  List<Widget> getChildIconLabelTexts() {
+  List<Widget> getChildIconLabelTexts(BuildContext context) {
     FilterModelStructure structure = filterModel.filterModelStructure;
     List<MultiOptTildeFilterCriterionModel> optCriteria =
         structure.allMultiOptCriteria;
@@ -26,50 +26,50 @@ class FilterDebugBox extends BaseDebugBox {
         IconLabelText(
           label: "Filter UI Active?: ",
           text: "${filterModel.ui.hasActiveUiComponent()}",
-          labelStyle: labelStyle0,
-          textStyle: textStyle0,
+          labelStyle: getLabelStyle0(context),
+          textStyle: getTextStyle0(context),
         ),
       if (options.showInitiatedAtLeastOnce)
         IconLabelText(
           label: "Initiated At Least Once?: ",
           text: "${filterModel.initiatedAtLeastOnce}",
-          labelStyle: labelStyle0,
-          textStyle: textStyle0,
+          labelStyle: getLabelStyle0(context),
+          textStyle: getTextStyle0(context),
         ),
       // if (options.showFilterEnable)
       //   IconLabelText(
       //     label: "Filter Enable?: ",
       //     text: "${filterModel.isEnabled()}",
       //     labelStyle: labelStyle0,
-      //     textStyle: textStyle0,
+      //     textStyle: getTextStyle0(context),
       //   ),
       if (options.showFilterDataState)
         IconLabelText(
           label: "Filter State: ",
           text: filterModel.dataState.name.toString(),
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
       // if (options.showFilterMode)
       //   IconLabelText(
       //     label: "Filter Mode: ",
       //     text: filterModel.filterMode.name.toString(),
-      //     labelStyle: labelStyle,
-      //     textStyle: textStyle,
+      //     labelStyle: getLabelStyle(context),
+      //     textStyle: getTextStyle(context),
       //   ),
       if (options.showFilterLoadCount)
         IconLabelText(
           label: "Filter Load Count: ",
           text: filterModel.loadCount.toString(),
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
       if (options.showFilterActivityCount)
         IconLabelText(
           label: "Filter Activity Count: ",
           text: filterModel.filterActivityCount.toString(),
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
       // if (options.showFilterDirty)
       //   IconLabelText(
@@ -86,8 +86,8 @@ class FilterDebugBox extends BaseDebugBox {
           (optCriterion) => IconLabelText(
             label: "Load Count (${optCriterion.tildeCriterionName}): ",
             text: optCriterion.loadCount.toString(),
-            labelStyle: labelStyle0,
-            textStyle: textStyle0,
+            labelStyle: getLabelStyle0(context),
+            textStyle: getTextStyle0(context),
           ),
         ),
     ];

@@ -8,7 +8,7 @@ import '../utils/_tab_theme_utils.dart';
 import '__debug_filter_criteria_view.dart';
 import '_debug_filter_model_criteria_view.dart';
 
-class DebugFilterCriteriaView extends StatelessWidget {
+class DebugFilterCriteriaView extends StatefulWidget {
   final Block? block;
   final Scalar? scalar;
   final FilterModel filterModel;
@@ -40,50 +40,70 @@ class DebugFilterCriteriaView extends StatelessWidget {
         scalar = null;
 
   @override
-  Widget build(BuildContext context) {
+  State<StatefulWidget> createState() {
+    return _DebugFilterCriteriaViewState();
+  }
+}
+
+class _DebugFilterCriteriaViewState extends State<DebugFilterCriteriaView> {
+  late TabbedViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TabbedViewController(_getTabs());
+    _controller.selectedIndex = 0;
+  }
+
+  List<TabData> _getTabs() {
     List<TabData> tabs = [];
-    //
-    if (filterCriteria != null) {
+    if (widget.filterCriteria != null) {
       tabs.add(
         TabData(
-          text: getClassNameWithoutGenerics(filterCriteria!),
+          id: "filterCriteria",
+          text: getClassNameWithoutGenerics(widget.filterCriteria!),
           closable: false,
           leading: (context, status) => Icon(
             FaIconConstants.filterCriteriaIconData,
-            color: Colors.indigo,
+            color: TabThemeUtils.getTabIconColor(context, status),
             size: 16,
           ),
-          content: FilterCriteriaView(
-            filterModel: filterModel,
-            onDebugFilterModelPressed: onDebugFilterModelPressed,
+          view: FilterCriteriaView(
+            filterModel: widget.filterModel,
+            onDebugFilterModelPressed: widget.onDebugFilterModelPressed,
           ),
         ),
       );
     }
     tabs.add(
       TabData(
-        text: getClassNameWithoutGenerics(filterModel),
+        id: "filterModel",
+        text: getClassNameWithoutGenerics(widget.filterModel),
         closable: false,
         leading: (context, status) => Icon(
           FaIconConstants.filterModelIconData,
-          color: Colors.indigo,
+          color: TabThemeUtils.getTabIconColor(context, status),
           size: 16,
         ),
-        content: DebugFilterModelCriteriaView(
-          filterModel: filterModel,
+        view: DebugFilterModelCriteriaView(
+          filterModel: widget.filterModel,
         ),
       ),
     );
-    //
-    TabbedViewController _controller = TabbedViewController(tabs);
-    TabbedView tabbedView = TabbedView(controller: _controller);
+    return tabs;
+  }
 
-    TabbedViewThemeData themeData = TabThemeUtils.getTabbedViewThemeData();
-
-    TabbedViewTheme tabbedViewTheme = TabbedViewTheme(
-      data: themeData,
-      child: tabbedView,
+  @override
+  Widget build(BuildContext context) {
+    return TabbedViewTheme(
+      data: TabThemeUtils.getTabbedViewThemeData(context),
+      child: TabbedView(controller: _controller),
     );
-    return tabbedViewTheme;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 }

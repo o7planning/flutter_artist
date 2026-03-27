@@ -97,6 +97,15 @@ abstract class FormModel<
 
   // ***************************************************************************
 
+  void __disableAutovalidation() {
+    AutovalidateMode temp = _autovalidateMode;
+    _autovalidateMode = AutovalidateMode.disabled;
+    ui.updateAllUiComponents(force: true);
+    _autovalidateMode = temp;
+  }
+
+  // ***************************************************************************
+
   XFormModel<ID, ITEM_DETAIL> _createXFormModel({
     required FORM_INPUT? formInput,
   }) {
@@ -406,7 +415,7 @@ abstract class FormModel<
       codeId: "#36000",
       shortDesc:
           "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
     );
     //
     await _startNewFormActivity(
@@ -435,7 +444,7 @@ abstract class FormModel<
       codeId: "#37000",
       shortDesc:
           "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
     );
     //
     final bool forceReloadForm;
@@ -475,7 +484,7 @@ abstract class FormModel<
       codeId: "#37160",
       shortDesc:
           "Calling ${debugObjHtml(block)}._performLoadAdditionalFormRelatedData().",
-      lineFlowType: LineFlowType.nonControllableCalling,
+      traceStepType: TraceStepType.nonControllableCalling,
     );
     ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData =
         await block._performLoadAdditionalFormRelatedData(executionTrace);
@@ -494,7 +503,7 @@ abstract class FormModel<
         "formInput": formInput,
         "additionalFormRelatedData": additionalFormRelatedData,
       },
-      lineFlowType: LineFlowType.nonControllableCalling,
+      traceStepType: TraceStepType.nonControllableCalling,
     );
     // TODO: Bắt lỗi cho vào "taskResult" ???????
     return await _startNewFormActivity(
@@ -522,7 +531,7 @@ abstract class FormModel<
       codeId: "#38000",
       shortDesc:
           "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
     );
     //
     final ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData = null;
@@ -536,7 +545,7 @@ abstract class FormModel<
         "formInput": formInput,
         "additionalFormRelatedData": additionalFormRelatedData,
       },
-      lineFlowType: LineFlowType.nonControllableCalling,
+      traceStepType: TraceStepType.nonControllableCalling,
     );
     //
     await _startNewFormActivity(
@@ -564,7 +573,7 @@ abstract class FormModel<
     executionTrace._addTraceStep(
       codeId: "#11000",
       shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
     );
     //
     // No need to check again?
@@ -596,7 +605,7 @@ abstract class FormModel<
         parameters: {
           "formMapData": formMapData,
         },
-        lineFlowType: LineFlowType.controllableCalling,
+        traceStepType: TraceStepType.controllableCalling,
       );
       //
       result = isNew
@@ -636,7 +645,7 @@ abstract class FormModel<
         codeId: "#11800",
         shortDesc:
             "Calling ${debugObjHtml(this)}._processSaveActionRestResult().",
-        lineFlowType: LineFlowType.nonControllableCalling,
+        traceStepType: TraceStepType.nonControllableCalling,
       );
       await block._processSaveActionRestResult(
         executionTrace: executionTrace,
@@ -721,7 +730,7 @@ abstract class FormModel<
     //
     if (activityType == FormActivityType.startCreatingOrEditing) {
       __loadCount++;
-      _autovalidateMode = AutovalidateMode.disabled;
+      _autovalidateMode = config.autovalidateMode; // AutovalidateMode.disabled;
     } else {
       _autovalidateMode = config.autovalidateMode;
     }
@@ -816,12 +825,12 @@ abstract class FormModel<
           shortDesc: "Editing item in the form."
               "\n - @activityType: <b>$activityType</b>."
               "\n - @itemDetail: ${debugObjHtml(itemDetail)}.",
-          lineFlowType: LineFlowType.debug,
+          traceStepType: TraceStepType.debug,
         );
         try {
           executionTrace._addTraceStep(
             codeId: "#06200",
-            lineFlowType: LineFlowType.controllableCalling,
+            traceStepType: TraceStepType.controllableCalling,
             shortDesc:
                 "Calling ${debugObjHtml(this)}.extractSimplePropValuesFromItemDetail().",
             parameters: {
@@ -901,7 +910,7 @@ abstract class FormModel<
           shortDesc: "Creating item in the form."
               "\n - @activityType: <b>$activityType</b>."
               "\n - @itemDetail: ${debugObjHtml(itemDetail)}.",
-          lineFlowType: LineFlowType.debug,
+          traceStepType: TraceStepType.debug,
         );
         Map<String, dynamic> simplePropValueDefault = {};
         if (!_defaultSimpleValuesInitiated) {
@@ -918,7 +927,7 @@ abstract class FormModel<
               parameters: {
                 "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               },
-              lineFlowType: LineFlowType.controllableCalling,
+              traceStepType: TraceStepType.controllableCalling,
             );
             // In case of activityType = startCreatingOrEditing.
             simplePropValueDefault = specifyDefaultValuesForSimpleProps(
@@ -994,7 +1003,7 @@ abstract class FormModel<
                 "formInput": formInput,
                 "additionalFormRelatedData": additionalFormRelatedData,
               },
-              lineFlowType: LineFlowType.controllableCalling,
+              traceStepType: TraceStepType.controllableCalling,
             );
             final Map<String, SimpleValueWrap?> updatedSimplePropValues =
                 extractUpdateValuesForSimpleProps(
@@ -1068,7 +1077,7 @@ abstract class FormModel<
         shortDesc: "Enter Form Fields."
             "\n - @activityType: <b>$activityType</b>."
             "\n - @itemDetail: ${debugObjHtml(itemDetail)}.",
-        lineFlowType: LineFlowType.debug,
+        traceStepType: TraceStepType.debug,
       );
       if (formInput != null) {
         try {
@@ -1081,7 +1090,7 @@ abstract class FormModel<
               "formInput": formInput,
               "additionalFormRelatedData": additionalFormRelatedData,
             },
-            lineFlowType: LineFlowType.controllableCalling,
+            traceStepType: TraceStepType.controllableCalling,
           );
           final Map<String, SimpleValueWrap?> updatedSimplePropValues =
               extractUpdateValuesForSimpleProps(
@@ -1164,7 +1173,7 @@ abstract class FormModel<
             "formKeyInstantValues": formKeyInstantValues,
             "activityType": activityType,
           },
-          lineFlowType: LineFlowType.nonControllableCalling,
+          traceStepType: TraceStepType.nonControllableCalling,
         );
         //
         // Load OptProp Data and set default and selected.
@@ -1380,7 +1389,7 @@ abstract class FormModel<
       codeId: "#17000",
       shortDesc:
           "Loading Data for ${debugObjHtml(multiOptProp)} and its children..",
-      lineFlowType: LineFlowType.info,
+      traceStepType: TraceStepType.info,
     );
 
     // Get current OptProp data:
@@ -1431,7 +1440,7 @@ abstract class FormModel<
         codeId: "#17200",
         shortDesc:
             "Value of <b>'$multiOptPropName'</b> has changed --> Clear data of all descendant <b>MultiOptFormProp(s)</b>.",
-        lineFlowType: LineFlowType.info,
+        traceStepType: TraceStepType.info,
       );
       _formPropsStructure._updateChildrenMultiOptValueToNullCascade(
         multiOptProp: multiOptProp,
@@ -1475,7 +1484,7 @@ abstract class FormModel<
             "formInput": formInput,
             "additionalFormRelatedData": additionalFormRelatedData,
           },
-          lineFlowType: LineFlowType.controllableCalling,
+          traceStepType: TraceStepType.controllableCalling,
         );
         // May throw AppError, ApiError or others.
         tempMultiOptPropXData = await performLoadMultiOptPropXData(
@@ -1522,7 +1531,7 @@ abstract class FormModel<
               "tempMultiOptPropXData": tempMultiOptPropXData,
               "formInput": formInput,
             },
-            lineFlowType: LineFlowType.debug,
+            traceStepType: TraceStepType.debug,
           );
           // In startCreatingOrEditing & currentItemDetail == null.
           if (!_defaultMultiOptValuesInitiated) {
@@ -1567,7 +1576,7 @@ abstract class FormModel<
               "tempMultiOptPropXData": tempMultiOptPropXData,
               "formInput": formInput,
             },
-            lineFlowType: LineFlowType.debug,
+            traceStepType: TraceStepType.debug,
           );
           // May throw FormTempError.
           initialValueWrap = __extractMultiOptPropValueFromItemDetail(
@@ -1597,7 +1606,7 @@ abstract class FormModel<
               "currentItemDetail": currentItemDetail,
               "formInput": formInput,
             },
-            lineFlowType: LineFlowType.debug,
+            traceStepType: TraceStepType.debug,
           );
           // May throw FormTempError.
           initialValueWrap = __extractUpdateValueForMultiOptProp(
@@ -1807,7 +1816,7 @@ abstract class FormModel<
           "selectionType": selectionType,
           "parentMultiOptPropValue": parentMultiOptPropValue,
         },
-        lineFlowType: LineFlowType.controllableCalling,
+        traceStepType: TraceStepType.controllableCalling,
       );
       OptValueWrap? valueWrap = specifyDefaultValueForMultiOptProp(
         multiOptPropXData: multiOptPropXData,
@@ -1891,7 +1900,7 @@ abstract class FormModel<
           "itemDetail": itemDetail,
           "additionalFormRelatedData": additionalFormRelatedData,
         },
-        lineFlowType: LineFlowType.controllableCalling,
+        traceStepType: TraceStepType.controllableCalling,
       );
       OptValueWrap? valueWrap = extractMultiOptPropValueFromItemDetail(
         multiOptPropName: multiOptPropName,
@@ -1948,7 +1957,7 @@ abstract class FormModel<
           "additionalFormRelatedData": additionalFormRelatedData,
           "formInput": formInput,
         },
-        lineFlowType: LineFlowType.controllableCalling,
+        traceStepType: TraceStepType.controllableCalling,
       );
       OptValueWrap? valueWrap = extractUpdateValueForMultiOptProp(
         multiOptPropName: multiOptPropName,
@@ -2003,6 +2012,8 @@ abstract class FormModel<
 
   void _clearDataWithDataState({required DataState formDataState}) {
     try {
+      // Disable Auto validation.
+      __disableAutovalidation();
       _formPropsStructure._clearFormDataWithState(
         formDataState: formDataState,
       );
@@ -2045,7 +2056,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   bool isEnabled() {
-    Actionable<BlockFormEnablementPrecheckCode> actionable =
+    Actionable<BlockFormEnablementPrecheck> actionable =
         block._isEnableFormToModify();
     return actionable.yes;
   }
@@ -2196,7 +2207,7 @@ abstract class FormModel<
         codeId: "#78040",
         shortDesc: "Got @actionable:",
         actionable: actionable,
-        lineFlowType: LineFlowType.debug,
+        traceStepType: TraceStepType.debug,
       );
       // _createItemErrorCount++;
       _addErrorLogActionable(
@@ -2218,7 +2229,7 @@ abstract class FormModel<
     executionTrace._addTraceStep(
       codeId: "#78340",
       shortDesc: "Creating <b>_FormModelPatchFormFieldsTaskUnit</b>.",
-      lineFlowType: LineFlowType.addTaskUnit,
+      traceStepType: TraceStepType.addTaskUnit,
     );
     _ResultedSTaskUnit taskUnit = _FormModelPatchFormFieldsTaskUnit(
       xFormModel: xFormModel,
@@ -2270,7 +2281,7 @@ abstract class FormModel<
         codeId: "#79040",
         shortDesc: "Got @actionable:",
         actionable: actionable,
-        lineFlowType: LineFlowType.debug,
+        traceStepType: TraceStepType.debug,
       );
       //
       _saveErrorCount++;
@@ -2291,7 +2302,7 @@ abstract class FormModel<
     executionTrace._addTraceStep(
       codeId: "#79340",
       shortDesc: "Creating <b>_FormModelSaveFormTaskUnit</b>.",
-      lineFlowType: LineFlowType.addTaskUnit,
+      traceStepType: TraceStepType.addTaskUnit,
     );
     final _ResultedSTaskUnit taskUnit = _FormModelSaveFormTaskUnit(
       xFormModel: xFormModel,

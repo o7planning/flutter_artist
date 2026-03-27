@@ -63,46 +63,62 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
   }
 
   Widget _buildShelfList() {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return ListView(
-      children: activeShelves
-          .map(
-            (s) => Card(
-              margin: EdgeInsets.all(2),
-              color: selectedShelf?.name == s.name //
-                  ? Colors.grey[300]
-                  : null,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2.0),
-              ),
-              child: ListTile(
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 3,
-                  horizontal: 4,
-                ),
-                horizontalTitleGap: 0,
-                minVerticalPadding: 0,
-                minLeadingWidth: 22,
-                minTileHeight: 0,
-                dense: true,
-                visualDensity: VisualDensity(vertical: -3, horizontal: -3),
-                leading: Icon(
-                  FaIconConstants.shelfIconData,
-                  size: 14,
-                  color: selectedShelf?.name == s.name //
-                      ? Colors.indigo
-                      : null,
-                ),
-                title: Text(s.name, style: TextStyle(fontSize: 13)),
-                onTap: () {
-                  setState(() {
-                    selectedShelf = s;
-                    _selectDefaultBlockOrScalar();
-                  });
-                },
-              ),
+      children: activeShelves.map(
+        (s) {
+          final isSelected = selectedShelf?.name == s.name;
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? colorScheme.primary.withValues(alpha: 0.1)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(
+                  color: isSelected
+                      ? colorScheme.primary.withValues(alpha: 0.3)
+                      : Colors.transparent,
+                  width: 0.5),
             ),
-          )
-          .toList(),
+            child: ListTile(
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 3,
+                horizontal: 4,
+              ),
+              horizontalTitleGap: 0,
+              minVerticalPadding: 0,
+              minLeadingWidth: 22,
+              minTileHeight: 0,
+              dense: true,
+              visualDensity: VisualDensity(vertical: -3, horizontal: -3),
+              leading: Icon(
+                FaIconConstants.shelfIconData,
+                size: 14,
+                color: isSelected
+                    ? colorScheme.primary
+                    : colorScheme.onSurface.withValues(alpha: 0.6),
+              ),
+              title: Text(
+                s.name,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color:
+                      isSelected ? colorScheme.primary : colorScheme.onSurface,
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  selectedShelf = s;
+                  _selectDefaultBlockOrScalar();
+                });
+              },
+            ),
+          );
+        },
+      ).toList(),
     );
   }
 
@@ -110,7 +126,7 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
     return Column(
       children: [
         SizedBox(
-          height: 200,
+          height: 160,
           child: CustomAppContainer(
             padding: EdgeInsets.symmetric(
               vertical: paddingVertical,
@@ -154,7 +170,6 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
     return selectedBlockOrScalar == null
         ? const SizedBox()
         : BlockOrScalarView(
-            // Index 1
             key: const PageStorageKey('PersistentTabbedView'),
             blockOrScalar: selectedBlockOrScalar!,
           );

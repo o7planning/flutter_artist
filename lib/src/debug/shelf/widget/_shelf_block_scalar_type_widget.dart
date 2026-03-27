@@ -38,8 +38,8 @@ class ShelfBlockScalarTypeWidget extends StatelessWidget {
               : FaIconConstants.eventSourceIconData,
           size: 16,
           color: isListener
-              ? DebugConstants.listenerIconColor
-              : DebugConstants.eventSourceIconColor,
+              ? DebugConstants.listenerIconColor(context)
+              : DebugConstants.eventSourceIconColor(context),
         ),
         title: BreadCrumb(
           divider: const Padding(

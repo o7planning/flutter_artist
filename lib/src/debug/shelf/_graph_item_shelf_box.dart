@@ -39,10 +39,10 @@ class GraphItemShelfBoxState extends State<GraphItemShelfBox> {
       child: Container(
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: DebugConstants.rootGraphBoxBgColor,
+          color: DebugConstants.rootGraphBoxBgColor(context),
           borderRadius: BorderRadius.circular(4),
           boxShadow: [
-            DebugConstants.graphBoxShadow,
+            DebugConstants.graphBoxShadow(context),
           ],
         ),
         child: _buildRootBoxContent(),

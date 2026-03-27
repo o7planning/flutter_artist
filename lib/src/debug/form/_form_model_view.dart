@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
@@ -10,6 +11,7 @@ import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
+import '../../core/widgets/_simple_copy_button.dart';
 import '../form_props/_form_props_structure_view.dart';
 import '../shelf/widget/_shelf_block_scalar_type_widget.dart';
 import '../storage/_block_or_scalar.dart';
@@ -17,12 +19,12 @@ import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';
 import '../widgets/_json_view.dart';
 
-class FormDataView extends StatefulWidget {
+class FormModelView extends StatefulWidget {
   final FormModel formModel;
   final String locationInfo;
   final Function() onPressedShelf;
 
-  const FormDataView({
+  const FormModelView({
     required this.formModel,
     required this.locationInfo,
     required this.onPressedShelf,
@@ -30,10 +32,10 @@ class FormDataView extends StatefulWidget {
   });
 
   @override
-  State<FormDataView> createState() => _FormDataViewState();
+  State<FormModelView> createState() => _FormModelViewState();
 }
 
-class _FormDataViewState extends State<FormDataView> {
+class _FormModelViewState extends State<FormModelView> {
   static const double iconSize = 18;
   static const double fontSize = 13;
 
@@ -51,6 +53,7 @@ class _FormDataViewState extends State<FormDataView> {
     listeners = FlutterArtist.storage.ev.getListenerShelfBlockScalarTypes(
       eventBlockOrScalar: BlockOrScalar.block(widget.formModel.block),
     );
+    _controller = TabbedViewController(_createTabs());
   }
 
   @override
@@ -69,6 +72,69 @@ class _FormDataViewState extends State<FormDataView> {
     );
   }
 
+  List<TabData> _createTabs() {
+    FormModelStructure formPropsStructure = widget.formModel.formPropsStructure;
+    //
+    Map<String, dynamic> initial1Value = formPropsStructure.initialFormData;
+    Map<String, dynamic> instantValue = formPropsStructure.currentFormData;
+
+    //
+    String initial1Json = toJson(initial1Value);
+    String instantJson = toJson(instantValue);
+    //
+
+    List<TabData> tabs = [];
+
+    tabs.add(
+      TabData(
+        id: "Properties",
+        text: ' Properties',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.formValueIconData,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: iconSize,
+        ),
+        view: _buildTabFormPropsStructure(),
+      ),
+    );
+    tabs.add(
+      TabData(
+        id: "Initial",
+        text: ' Initial',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.formValueIconData,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: iconSize,
+        ),
+        view: _buildTabContent(
+          infoAsHtml: "Initial Form values",
+          json: initial1Json,
+        ),
+      ),
+    );
+    tabs.add(
+      TabData(
+        id: "Current",
+        text: ' Current',
+        closable: false,
+        leading: (context, status) => Icon(
+          FaIconConstants.formValueIconData,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: iconSize,
+        ),
+        view: _buildTabContent(
+          infoAsHtml: "The current values of the form (Will be passed to the "
+              "<b>${getClassName(widget.formModel)}.performCreateItem()</b> or "
+              "<b>${getClassName(widget.formModel)}.performUpdateItem()</b> method).",
+          json: instantJson,
+        ),
+      ),
+    );
+    return tabs;
+  }
+
   String toJson(Map<String, dynamic> map) {
     String json;
     try {
@@ -85,93 +151,14 @@ class _FormDataViewState extends State<FormDataView> {
     }
   }
 
-  Color _getTabIconColor(TabStatus tabStatus) {
-    return tabStatus == TabStatus.selected ? Colors.indigo : Colors.black;
-  }
-
   Widget _buildTabContainer() {
-    FormModelStructure formPropsStructure = widget.formModel.formPropsStructure;
-    //
-    Map<String, dynamic> initial1Value = formPropsStructure.initialFormData;
-    Map<String, dynamic> instantValue = formPropsStructure.currentFormData;
+    final tabbedView = TabbedView(controller: _controller);
+    final themeData = TabThemeUtils.getTabbedViewThemeData(context);
 
-    //
-    String initial1Json = toJson(initial1Value);
-    String instantJson = toJson(instantValue);
-    //
-
-    List<TabData> tabs = [];
-
-    tabs.add(
-      TabData(
-        text: ' Properties',
-        closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
-          color: _getTabIconColor(status),
-          size: iconSize,
-        ),
-        content: _buildTabFormPropsStructure(),
-      ),
-    );
-    tabs.add(
-      TabData(
-        text: ' Initial',
-        closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
-          color: _getTabIconColor(status),
-          size: iconSize,
-        ),
-        content: _buildTabContent(
-          infoAsHtml: "Initial Form values",
-          json: initial1Json,
-        ),
-      ),
-    );
-    tabs.add(
-      TabData(
-        text: ' Current',
-        closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
-          color: _getTabIconColor(status),
-          size: iconSize,
-        ),
-        content: _buildTabContent(
-          infoAsHtml: "The current values of the form (Will be passed to the "
-              "<b>${getClassName(widget.formModel)}.performCreateItem()</b> or "
-              "<b>${getClassName(widget.formModel)}.performUpdateItem()</b> method).",
-          json: instantJson,
-        ),
-      ),
-    );
-
-    tabs.add(
-      TabData(
-        text: ' ',
-        closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.effectIconData,
-          color: _getTabIconColor(status),
-          size: iconSize,
-        ),
-        content: _buildFormEventListenerInfo(),
-      ),
-    );
-    //
-    _controller = TabbedViewController(tabs);
-    TabbedView tabbedView = TabbedView(controller: _controller);
-
-    TabbedViewThemeData themeData = TabThemeUtils.getTabbedViewThemeData();
-
-    TabbedViewTheme tabbedViewTheme = TabbedViewTheme(
+    return TabbedViewTheme(
       data: themeData,
       child: tabbedView,
     );
-
-    //
-    return tabbedViewTheme;
   }
 
   Widget _buildTabFormPropsStructure() {
@@ -297,21 +284,17 @@ class _FormDataViewState extends State<FormDataView> {
           const Divider(),
           IconLabelText(
             style: const TextStyle(fontSize: fontSize),
-            icon: const Icon(
+            icon: Icon(
               FaIconConstants.locationIconData,
               size: iconSize,
-              color: Colors.black54,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             label: "Location: ",
             text: widget.locationInfo,
-            suffixIcon: SimpleSmallIconButton(
-              iconData: FaIconConstants.copyToClipboardIconData,
+            suffixIcon: SimpleCopyButton(
               iconSize: 14,
-              iconColor: Colors.black54,
-              onPressed: () {
-                Clipboard.setData(ClipboardData(text: widget.locationInfo));
-                var snackBar = const SnackBar(content: Text("Copied!"));
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              getText: () {
+                return widget.locationInfo;
               },
             ),
           ),

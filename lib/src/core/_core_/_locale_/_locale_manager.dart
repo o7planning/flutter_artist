@@ -4,8 +4,6 @@ class LocaleManager extends _Core {
   final GlobalsManager _globalsManager;
   final FlutterArtistLocaleAdapter _localeAdapter;
 
-  final String _localePropName = "locale";
-
   LocaleManager._({
     required GlobalsManager globalsManager,
     required FlutterArtistLocaleAdapter localeConfig,
@@ -13,7 +11,21 @@ class LocaleManager extends _Core {
         _localeAdapter = localeConfig;
 
   Locale? get currentLocale {
-    return _globalsManager.getExtraGlobalProp(_localePropName);
+    // "en-US".
+    String? localeCode = _globalsManager.__faMetadata?.localeCode;
+    if (localeCode == null) {
+      return null;
+    }
+    try {
+      // @supportedLocales: Error if BuildContext not ready.
+      for (Locale locale in supportedLocales) {
+        String code = "${locale.languageCode}-${locale.countryCode ?? ''}";
+        if (code == localeCode) return locale;
+      }
+    } catch (e) {
+      return LocaleUtils.fromCode(localeCode);
+    }
+    return null;
   }
 
   List<Locale> get supportedLocales {
@@ -58,7 +70,7 @@ class LocaleManager extends _Core {
       parameters: {
         "locale": locale,
       },
-      lineFlowType: LineFlowType.nonControllableCalling,
+      traceStepType: TraceStepType.nonControllableCalling,
     );
     executionTrace._addTraceStep(
       codeId: "#46100",
@@ -67,7 +79,7 @@ class LocaleManager extends _Core {
       parameters: {
         "locale": locale,
       },
-      lineFlowType: LineFlowType.nonControllableCalling,
+      traceStepType: TraceStepType.nonControllableCalling,
     );
     // Refresh UI with new Locale.
     await _updateLocale(executionTrace: executionTrace, locale: locale);
@@ -77,21 +89,16 @@ class LocaleManager extends _Core {
     //
     executionTrace._addTraceStep(
       codeId: "#46200",
-      shortDesc:
-          "Calling ${debugObjHtml(_globalsManager)}._storeExtraGlobalProp():",
+      shortDesc: "Calling ${debugObjHtml(FaIsarStorage)}.saveSettings():",
       parameters: {
-        "loggedInUser": loggedInUser,
-        "propName": _localePropName,
-        "value": localeValue,
+        "userId": loggedInUser.userName,
+        "locale": localeValue,
       },
-      lineFlowType: LineFlowType.nonControllableCalling,
+      traceStepType: TraceStepType.nonControllableCalling,
     );
-    await _globalsManager._storeExtraGlobalProp(
-      executionTrace: executionTrace,
-      loggedInUser: loggedInUser,
-      propName: _localePropName,
-      value: localeValue,
-    );
+    print("@SAVE localeValue --> Call FaIsarStorage.saveSettings()");
+    FaIsarStorage.saveSettings(
+        userId: loggedInUser.userName, locale: localeValue);
   }
 
   Future<void> _updateLocale({
@@ -105,68 +112,9 @@ class LocaleManager extends _Core {
       parameters: {
         "locale": locale,
       },
-      lineFlowType: LineFlowType.controllableCalling,
+      traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.locale,
     );
     await _localeAdapter._updateLocale(locale);
-  }
-
-  Locale? _readStoredLocale({
-    required ExecutionTrace executionTrace,
-    required ILoggedInUser loggedInUser,
-  }) {
-    executionTrace._addTraceStep(
-      codeId: "#48000",
-      shortDesc:
-          "Calling <b>_globalsManager.getExtraGlobalProp()</b> to get <b>localeId</b>.",
-      parameters: {
-        "propName": _localePropName,
-      },
-      lineFlowType: LineFlowType.nonControllableCalling,
-    );
-    // localeId: "languageCode-countryCode'.
-    String? localeId = _globalsManager.getExtraGlobalProp(_localePropName);
-    executionTrace._addTraceStep(
-      codeId: "#48200",
-      shortDesc: "Got @localeId: <b>$localeId</b>.",
-    );
-    if (localeId == null) {
-      executionTrace._addTraceStep(
-        codeId: "#48300",
-        shortDesc: "@localeId is <b>null</b> --> nothing to do.",
-      );
-      return null;
-    }
-    List<String> ss = localeId.split("-");
-    if (ss.length < 2) {
-      return null;
-    }
-    final String languageCode = ss[0];
-    final String? countryCode = ss[1].isEmpty ? null : ss[1];
-
-    // Do not use the "supportedLocales" now
-    //  ... because FlutterArtistCore.context may be null.
-    if (languageCode.isNotEmpty) {
-      Locale locale = Locale(languageCode, countryCode);
-      return locale;
-    }
-    //
-    // IMPORTANT: supportedLocales may be null on startup.
-    //
-    // for (Locale locale in supportedLocales) {
-    //   if (locale.languageCode == languageCode &&
-    //       locale.countryCode == countryCode) {
-    //     executionTrace._addTraceStep(
-    //       codeId: "#48400",
-    //       shortDesc: "Found Locale: ${debugObjHtml(locale)}.",
-    //     );
-    //     return locale;
-    //   }
-    // }
-    executionTrace._addTraceStep(
-      codeId: "#48500",
-      shortDesc: "No Local Found for @localeId: <b>$localeId</b>.",
-    );
-    return null;
   }
 }

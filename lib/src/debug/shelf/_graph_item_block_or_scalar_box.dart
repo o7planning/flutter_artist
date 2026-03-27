@@ -59,11 +59,11 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: hasActiveWidget //
-                  ? DebugConstants.activeGraphBoxBgColor
-                  : DebugConstants.inactiveGraphBoxBgColor,
+                  ? DebugConstants.activeGraphBoxBgColor(context)
+                  : DebugConstants.inactiveGraphBoxBgColor(context),
               borderRadius: BorderRadius.circular(4),
               boxShadow: [
-                DebugConstants.graphBoxShadow,
+                DebugConstants.graphBoxShadow(context),
               ],
             ),
             child: _buildMainContent(),
@@ -92,7 +92,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
         const SizedBox(height: 5),
         _buildFilterInfo(),
         const SizedBox(height: 2),
-        _buildFilterColor(),
+        _buildFilterColor(context),
         const SizedBox(height: 3),
         _buildDataStateRow(),
       ],
@@ -114,12 +114,11 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Image.asset(
+        Icon(
           widget.blockOrScalar.isBlock
-              ? "packages/flutter_artist/static-rs/block.png"
-              : "packages/flutter_artist/static-rs/scalar.png",
-          width: DebugConstants.graphBoxImageWidth,
-          height: DebugConstants.graphBoxImageHeight,
+              ? FaIconConstants.blockIconData
+              : FaIconConstants.scalarIconData,
+          size: DebugConstants.graphBoxIconSize,
         ),
         const SizedBox(width: spacing),
         Expanded(
@@ -227,17 +226,19 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     return width;
   }
 
-  Widget _buildFilterColor() {
+  Widget _buildFilterColor(BuildContext context) {
     FilterModel? filterModel = widget.blockOrScalar.filterModel;
     Color color = Colors.white;
+    List<Color> filterColors = DebugConstants.filterColors(context);
+
     if (filterModel != null) {
       // Sort an Unmodifiable List:
       List<String> filterNames = [...widget.blockOrScalar.shelf.filterNames]
         ..sort((a, b) => a.compareTo(b));
       //
       int idx = filterNames.indexOf(filterModel.name);
-      color = DebugConstants.filterColors.length > idx //
-          ? DebugConstants.filterColors[idx]
+      color = filterColors.length > idx //
+          ? filterColors[idx]
           : Colors.transparent;
     }
     //
@@ -267,7 +268,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     return TextStyle(
       fontSize: DebugConstants.graphBoxFontSizeChildBox,
       overflow: TextOverflow.ellipsis,
-      color: DebugConstants.graphBoxTextColor,
+      color: DebugConstants.graphBoxTextColor(context),
     );
   }
 
@@ -281,7 +282,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
   TextStyle _getBlockClassParameterTextStyle() {
     return TextStyle(
       fontSize: DebugConstants.graphBoxFontSizeChildBox,
-      color: DebugConstants.classParametersColor,
+      color: DebugConstants.classParametersColor(context),
       overflow: TextOverflow.ellipsis,
     );
   }
@@ -355,12 +356,12 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
           width: 0.5,
           color: widget.highlightFilterModelName != null &&
                   filterModel?.name == widget.highlightFilterModelName
-              ? DebugConstants.graphBoxHighlighFilterColor
+              ? DebugConstants.graphBoxHighlighFilterColor(context)
               : Colors.grey,
         ),
         color: widget.highlightFilterModelName != null &&
                 filterModel?.name == widget.highlightFilterModelName
-            ? DebugConstants.graphBoxHighlighFilterColor
+            ? DebugConstants.graphBoxHighlighFilterColor(context)
             : Colors.transparent,
       ),
       child: filterModel == null
@@ -437,13 +438,13 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
   Color _dataStateBgColor(DataState dataState) {
     switch (dataState) {
       case DataState.pending:
-        return DebugConstants.graphBoxDataStatePendingBgColor;
+        return DebugConstants.graphBoxDataStatePendingBgColor(context);
       case DataState.ready:
-        return DebugConstants.graphBoxDataStateReadyBgColor;
+        return DebugConstants.graphBoxDataStateReadyBgColor(context);
       case DataState.error:
-        return DebugConstants.graphBoxDataStateErrorBgColor;
+        return DebugConstants.graphBoxDataStateErrorBgColor(context);
       case DataState.none:
-        return DebugConstants.graphBoxDataStateNoneBgColor;
+        return DebugConstants.graphBoxDataStateNoneBgColor(context);
     }
   }
 
@@ -462,13 +463,13 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
             Icon(
               _dataStateIconData(dataState),
               size: iconSize,
-              color: DebugConstants.graphBoxTextColor,
+              color: DebugConstants.graphBoxTextColor(context),
             ),
             const SizedBox(width: 2),
             Icon(
               _visibilityIconData(active),
               size: iconSize,
-              color: DebugConstants.graphBoxTextColor,
+              color: DebugConstants.graphBoxTextColor(context),
             ),
             const SizedBox(width: 5),
             Text(
@@ -500,7 +501,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
             Icon(
               _dataStateIconData(formModel.dataState),
               size: 16,
-              color: DebugConstants.graphBoxTextColor,
+              color: DebugConstants.graphBoxTextColor(context),
             ),
             const SizedBox(width: 5),
             Text(

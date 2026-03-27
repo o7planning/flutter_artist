@@ -19,23 +19,33 @@ class HtmlInfoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Padding(
       padding: padding,
       child: HtmlSelectableRichText(
         infoAsHtml,
         icon: showIcon
-            ? const Icon(
+            ? Icon(
                 FaIconConstants.infoIconData,
                 size: 16,
+                color: colorScheme.primary,
               )
             : null,
         tagStyles: {
-          'b': TextStyle(fontWeight: FontWeight.bold),
-          'i': TextStyle(fontStyle: FontStyle.italic),
+          'b': TextStyle(
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onSurface,
+          ),
+          'i': TextStyle(
+            fontStyle: FontStyle.italic,
+            color: colorScheme.onSurface.withValues(alpha: 0.8),
+          ),
         },
         style: style ??
-            const TextStyle(
+            TextStyle(
               fontSize: 13,
+              color: colorScheme.onSurface.withValues(alpha: 0.9),
             ),
       ),
     );

@@ -17,6 +17,7 @@ class SortCriterion extends Equatable {
   String get text => _text;
 
   SortDirection? get direction => _direction;
+  bool _isCopied = false;
 
   SortCriterion._({
     required SortDirection? direction,
@@ -50,23 +51,33 @@ class SortCriterion extends Equatable {
   }
 
   SortCriterion copyWith({required SortDirection direction}) {
-    return SortCriterion._(
+    final copy = SortCriterion._(
       criterionName: criterionName,
       directionalSelectionOnly: directionalSelectionOnly,
       translationKey: translationKey,
       text: text,
       direction: direction,
     );
+    copy._isCopied = true;
+    return copy;
   }
 
   SortCriterion copy() {
-    return SortCriterion._(
+    final copy = SortCriterion._(
       criterionName: criterionName,
       directionalSelectionOnly: directionalSelectionOnly,
       translationKey: translationKey,
       text: text,
       direction: _direction,
     );
+    copy._isCopied = true;
+    return copy;
+  }
+
+  void updateDirectionIfCopied(SortDirection? direction) {
+    if (_isCopied) {
+      _direction = direction;
+    }
   }
 
   SortDirection? get nextDirection {

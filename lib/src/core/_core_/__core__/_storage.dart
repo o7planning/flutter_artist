@@ -27,13 +27,12 @@ class _Storage extends _StorageCore {
   }) {
     TraceStep item = executionTrace._addTraceStep(
       codeId: "#SS000",
-      shortDesc:
-          "${debugObjHtml(storageStructure)}.defineProjectionFamilies().",
-      lineFlowType: LineFlowType.controllableCalling,
+      shortDesc: "${debugObjHtml(storageStructure)}.projectionFamilies().",
+      traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.projection,
     );
     final List<ProjectionFamily> projectionFamilies =
-        storageStructure.defineProjectionFamilies();
+        storageStructure.projectionFamilies();
     // This method may throw Fatal Error cause stop app.
     _projectionManager._init(
       executionTrace: executionTrace,
@@ -45,7 +44,7 @@ class _Storage extends _StorageCore {
     item = executionTrace._addTraceStep(
       codeId: "#SS040",
       shortDesc: "${debugObjHtml(storageStructure)}.registerActivities().",
-      lineFlowType: LineFlowType.controllableCalling,
+      traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.activity,
     );
     storageStructure.registerActivities();
@@ -55,11 +54,20 @@ class _Storage extends _StorageCore {
     item = executionTrace._addTraceStep(
       codeId: "#SS060",
       shortDesc: "${debugObjHtml(storageStructure)}.registerShelves().",
-      lineFlowType: LineFlowType.controllableCalling,
+      traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.shelf,
     );
     storageStructure.registerShelves();
     item._extraInfos = FlutterArtist.debugRegister.debugRegisterShelves..sort();
+    //
+    item = executionTrace._addTraceStep(
+      codeId: "#SS160",
+      shortDesc: "${debugObjHtml(storageStructure)}.additionalThemes().",
+      traceStepType: TraceStepType.controllableCalling,
+      tipDocument: TipDocument.theme,
+    );
+    List<FaTheme> faThemes = storageStructure.additionalThemes();
+    FaThemeHub.instance.registerAll(faThemes);
   }
 
   // ***************************************************************************
@@ -132,7 +140,7 @@ class _Storage extends _StorageCore {
         codeId: "#75040",
         shortDesc: "Got @actionable:",
         actionable: actionable,
-        lineFlowType: LineFlowType.debug,
+        traceStepType: TraceStepType.debug,
       );
       // _createItemErrorCount++;
       _addErrorLogActionable(
@@ -167,7 +175,7 @@ class _Storage extends _StorageCore {
     executionTrace._addTraceStep(
       codeId: "#75340",
       shortDesc: "Creating <b>_StorageBackendActionTaskUnit</b>.",
-      lineFlowType: LineFlowType.addTaskUnit,
+      traceStepType: TraceStepType.addTaskUnit,
     );
     final taskUnit = _StorageBackendActionTaskUnit(
       action: action,
@@ -212,14 +220,14 @@ class _Storage extends _StorageCore {
       codeId: "#35000",
       shortDesc:
           "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
     );
     //
     try {
       executionTrace._addTraceStep(
         codeId: "#35100",
         shortDesc: "Calling ${debugObjHtml(action)}.performBackendOperation().",
-        lineFlowType: LineFlowType.controllableCalling,
+        traceStepType: TraceStepType.controllableCalling,
       );
       //
       result = await action.performBackendOperation();
@@ -250,7 +258,7 @@ class _Storage extends _StorageCore {
     executionTrace._addTraceStep(
       codeId: "#35300",
       shortDesc: "${debugObjHtml(this)} > Fire event after backend action.",
-      lineFlowType: LineFlowType.emitEvent,
+      traceStepType: TraceStepType.emitEvent,
     );
     FlutterArtist.storage.ev._emitEventFromShelfToOtherShelves(
       executionTrace: executionTrace,

@@ -29,23 +29,29 @@ enum ExecutionTraceType {
     }
   }
 
-  Color getIconColor(bool error) {
+  Color getIconColor(BuildContext context, bool error) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     if (error) {
-      return Colors.red;
+      return colorScheme.error;
     }
+
     switch (this) {
-      case ExecutionTraceType.startup:
-        return Colors.black;
-      case ExecutionTraceType.naturalLoad:
-        return Colors.orange;
-      case ExecutionTraceType.taskUnitCall:
-        return Colors.indigo;
       case ExecutionTraceType.userMethodCall:
-        return Colors.blue;
-      case ExecutionTraceType.libMethodCall:
-        return Colors.black;
+        return colorScheme.primary;
+      case ExecutionTraceType.taskUnitCall:
+        return colorScheme.tertiary;
+      case ExecutionTraceType.naturalLoad:
+        return colorScheme.secondary;
       case ExecutionTraceType.deferredEvent:
-        return Colors.deepOrange;
+        return Colors.orangeAccent;
+      case ExecutionTraceType.startup:
+        return theme.colorScheme.onSurface.withValues(alpha: 0.5);
+      case ExecutionTraceType.libMethodCall:
+        return theme.colorScheme.onSurface.withValues(alpha: 0.5);
+      default:
+        return theme.colorScheme.onSurface.withValues(alpha: 0.5);
     }
   }
 

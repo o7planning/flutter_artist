@@ -12,6 +12,7 @@ class ShelfInfoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return ListTile(
       titleAlignment: ListTileTitleAlignment.top,
       contentPadding: EdgeInsets.zero,
@@ -41,17 +42,17 @@ class ShelfInfoView extends StatelessWidget {
       ),
       title: Text(
         getClassName(shelf),
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.bold,
-          color: Colors.black87,
+          color: theme.colorScheme.onSurface,
         ),
       ),
       subtitle: Text(
         shelf?.description ?? '[No Description]',
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 12,
-          color: Colors.grey,
+          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
         ),
       ),
     );

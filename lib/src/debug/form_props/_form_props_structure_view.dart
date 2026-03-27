@@ -125,7 +125,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
         expansionIndicatorBuilder: (context, node) {
           return ChevronIndicator.upDown(
             tree: node,
-            color: Colors.grey[700],
+            color: Theme.of(context).hintColor,
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.fromLTRB(0, 8, 20, 8),
             icon: Icons.keyboard_arrow_down_outlined,
@@ -133,7 +133,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
         },
         indentation: const Indentation(
           style: IndentStyle.squareJoint,
-          thickness: 1,
+          thickness: 0.3,
           width: 10,
         ),
         onTreeReady: (
@@ -181,6 +181,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
             title = "UNKNOWN";
           }
           return Material(
+            color: _currentNode == node ? null : Colors.transparent,
             child: ListTile(
               dense: true,
               visualDensity: const VisualDensity(
@@ -197,7 +198,9 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
                     child: Icon(
                       prefixIconData,
                       size: 16,
-                      color: isError ? Colors.red : Colors.black,
+                      color: isError
+                          ? Colors.red
+                          : Theme.of(context).iconTheme.color,
                     ),
                   ),
                   SizedBox(width: 5),

@@ -38,7 +38,7 @@ class _BackgroundExecutor extends _Core {
       codeId: "#61000",
       shortDesc:
           "${debugObjHtml(action)}.needToConfirm = <b>$needToConfirm<b>.",
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
     );
     //
     // Confirmation:
@@ -65,7 +65,7 @@ class _BackgroundExecutor extends _Core {
       executionTrace._addTraceStep(
         codeId: "#61200",
         shortDesc: "Calling ${debugObjHtml(action)}.run()...",
-        lineFlowType: LineFlowType.controllableCalling,
+        traceStepType: TraceStepType.controllableCalling,
       );
       ApiResult<void> result = await action.run();
       // Throw ApiError:

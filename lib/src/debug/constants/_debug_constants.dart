@@ -1,73 +1,113 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 class DebugConstants {
+  static Color eventSourceIconColor(BuildContext context) =>
+      Theme.of(context).colorScheme.primary;
+
+  static Color listenerIconColor(BuildContext context) =>
+      Theme.of(context).colorScheme.error;
+
+  static Color classParametersColor(BuildContext context) =>
+      FaColorUtils.technicalHighlight(context);
+
+  static Color rootGraphBoxBgColor(BuildContext context) {
+    return Theme.of(context)
+        .colorScheme
+        .primaryContainer
+        .withValues(alpha: 0.9);
+  }
+
+  static Color activeGraphBoxBgColor(BuildContext context) {
+    return Theme.of(context).colorScheme.surface;
+  }
+
+  static Color? inactiveGraphBoxBgColor(BuildContext context) {
+    return Theme.of(context)
+        .colorScheme
+        .surfaceContainerHighest
+        .withValues(alpha: 0.5);
+  }
+
+  static Color graphBoxTextColor(BuildContext context) {
+    return FaColorUtils.primaryContent(context);
+  }
+
+  static BoxShadow graphBoxShadow(BuildContext context) {
+    return BoxShadow(
+      color: Colors.black.withValues(alpha: 0.2),
+      spreadRadius: 0,
+      blurRadius: 10,
+      offset: const Offset(0, 4),
+    );
+  }
+
+  static const double graphBoxIconSize = 32;
+  static const double graphBoxImageWidth = 32;
+  static const double graphBoxImageHeight = 24;
+  static final double graphBoxFontSizeRootBox = 13;
+  static final double graphBoxFontSizeChildBox = 11.5;
+  static final double blockOrScalaInfoFontSize = 12;
+  static final double debugFontSize = 13;
+
+  static Color graphBoxDataStateReadyBgColor(BuildContext context) =>
+      Colors.green;
+
+  static Color graphBoxDataStatePendingBgColor(BuildContext context) =>
+      Colors.black54;
+
+  static Color graphBoxDataStateErrorBgColor(BuildContext context) =>
+      Colors.redAccent;
+
+  static Color graphBoxDataStateNoneBgColor(BuildContext context) =>
+      Colors.grey;
+
   static const Color listenerTextColor = Colors.indigo;
   static const Color eventSourceTextColor = Colors.red;
 
-  static const Color eventSourceIconColor = Colors.red;
-  static const Color listenerIconColor = Colors.indigo;
+  static Color nonEventOrListenerIconColor(BuildContext context) {
+    return FaColorUtils.primaryHighlight(context);
+  }
 
-  static const Color nonEventOrListenerIconColor = Colors.indigo;
+  static List<Color> filterColors(BuildContext context) {
+    return [
+      Colors.lightBlueAccent, //
+      Colors.indigo, //
+      Colors.greenAccent, //
+      Colors.brown, //
+      Colors.purple, //
+      Colors.teal, //
+      Colors.purpleAccent, //
+      Colors.black54, //
+      Colors.deepOrangeAccent, //
+      Colors.amber, //
+      Colors.deepOrangeAccent, //
+    ];
+  }
 
-  static const Color classParametersColor = Colors.purpleAccent;
+  static Color selectedGraphBoxBgColor(BuildContext context) {
+    return Colors.green.withAlpha(20);
+  }
 
-  static const List<Color> filterColors = [
-    Colors.lightBlueAccent, //
-    Colors.indigo, //
-    Colors.greenAccent, //
-    Colors.brown, //
-    Colors.purple, //
-    Colors.teal, //
-    Colors.purpleAccent, //
-    Colors.black54, //
-    Colors.deepOrangeAccent, //
-    Colors.amber, //
-    Colors.deepOrangeAccent, //
-  ];
+  static Color shadowGraphBoxColor(BuildContext context) {
+    return Colors.grey.withAlpha(127);
+  }
 
-  static final Color rootGraphBoxBgColor = Colors.indigo.withAlpha(60);
-  static final Color selectedGraphBoxBgColor = Colors.green.withAlpha(20);
-  static final Color activeGraphBoxBgColor = Colors.white;
-  static final Color? inactiveGraphBoxBgColor = Colors.grey[200];
+  static Color graphBoxHighlighFilterColor(BuildContext context) {
+    return Colors.amberAccent.withAlpha(80);
+  }
 
-  static final Color shadowGraphBoxColor = Colors.grey.withAlpha(127);
+  static TextStyle listenerTextStyle(BuildContext context) {
+    return TextStyle(
+      color: DebugConstants.listenerTextColor,
+      fontWeight: FontWeight.bold,
+    );
+  }
 
-  static final BoxShadow graphBoxShadow = BoxShadow(
-    color: shadowGraphBoxColor,
-    spreadRadius: 1,
-    blurRadius: 5,
-    offset: const Offset(0, 3),
-  );
-
-  static const double graphBoxImageWidth = 32;
-  static const double graphBoxImageHeight = 24;
-
-  static final double graphBoxFontSizeRootBox = 13;
-
-  static final double debugFontSize = 13;
-
-  static final double graphBoxFontSizeChildBox = 11.5;
-
-  static final double blockOrScalaInfoFontSize = 12;
-
-  static final Color graphBoxDataStateReadyBgColor = Colors.green;
-  static final Color graphBoxDataStatePendingBgColor = Colors.black54;
-  static final Color graphBoxDataStateErrorBgColor = Colors.deepOrangeAccent;
-  static final Color graphBoxDataStateNoneBgColor = Colors.white;
-
-  static final Color graphBoxTextColor = Colors.white;
-  static final Color graphBoxHighlighFilterColor =
-      Colors.amberAccent.withAlpha(80);
-
-//
-
-  static final TextStyle listenerTextStyle = TextStyle(
-    color: DebugConstants.listenerTextColor,
-    fontWeight: FontWeight.bold,
-  );
-
-  static final TextStyle eventSourceTextStyle = TextStyle(
-    color: DebugConstants.eventSourceTextColor,
-    fontWeight: FontWeight.bold,
-  );
+  static TextStyle eventSourceTextStyle(BuildContext context) {
+    return TextStyle(
+      color: DebugConstants.eventSourceTextColor,
+      fontWeight: FontWeight.bold,
+    );
+  }
 }

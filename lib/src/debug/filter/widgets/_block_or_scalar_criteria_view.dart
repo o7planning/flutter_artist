@@ -14,78 +14,99 @@ class BlockOrScalarCriteriaView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.1)),
+      ),
       child: ListTile(
-        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 8),
-        minLeadingWidth: 24,
-        horizontalTitleGap: 5,
+        contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+        minLeadingWidth: 0,
+        horizontalTitleGap: 12,
         dense: true,
-        visualDensity: const VisualDensity(
-          horizontal: -3,
-          vertical: -3,
-        ),
+        visualDensity: VisualDensity.compact,
         leading: Icon(
           blockOrScalar.isBlock
               ? FaIconConstants.blockIconData
               : FaIconConstants.scalarIconData,
           size: 18,
+          color: colorScheme.primary.withValues(alpha: 0.8),
         ),
         title: Text(
           blockOrScalar.blockOrScalarClassName,
-          style: TextStyle(fontSize: 13),
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onSurface,
+          ),
         ),
-        subtitle: _buildStatusBar(blockOrScalar),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 6),
+          child: _buildStatusBar(context, blockOrScalar),
+        ),
       ),
     );
   }
 
-  Widget _buildStatusBar(BlockOrScalar blockOrScalar) {
+  Widget _buildStatusBar(BuildContext context, BlockOrScalar blockOrScalar) {
+    final colorScheme = Theme.of(context).colorScheme;
     DataState dataState = blockOrScalar.dataState;
     FilterCriteria? filterCriteria = blockOrScalar.filterCriteria;
-    //
-    final labelStyle = TextStyle(fontSize: 11, fontWeight: FontWeight.bold);
-    final textStyle = TextStyle(fontSize: 11);
-    //
-    return Card(
-      margin: EdgeInsets.all(0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-      color: Colors.white,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-        child: BreadCrumb(
-          divider: SizedBox(width: 10),
-          overflow: ScrollableOverflow(
-            keepLastDivider: false,
-            reverse: false,
-            direction: Axis.horizontal,
-          ),
-          items: [
-            BreadCrumbItem(
-              content: IconLabelText(
-                labelStyle: labelStyle,
-                textStyle: textStyle.copyWith(
-                  color:
-                      dataState == DataState.error ? Colors.red : Colors.black,
-                ),
-                label: 'Data State: ',
-                text: dataState.name,
-              ),
-            ),
-            BreadCrumbItem(
-              content: IconLabelText(
-                labelStyle: labelStyle,
-                textStyle: textStyle.copyWith(
-                  color: filterCriteria == null ? Colors.red : Colors.indigo,
-                ),
-                label: "Filter Criteria: ",
-                text: filterCriteria == null ? 'null' : 'not null',
-              ),
-            ),
-          ],
+
+    final labelStyle = TextStyle(
+      fontSize: 10,
+      fontWeight: FontWeight.bold,
+      color: colorScheme.onSurface.withValues(alpha: 0.5),
+    );
+    final textStyle = TextStyle(fontSize: 10, fontWeight: FontWeight.w500);
+
+    return Wrap(
+      spacing: 12,
+      children: [
+        _buildStatusItem(
+          context,
+          label: 'Data State: ',
+          value: dataState.name.toUpperCase(),
+          valueColor: dataState == DataState.error
+              ? colorScheme.error
+              : (dataState == DataState.ready
+                  ? Colors.green
+                  : colorScheme.onSurface),
+          labelStyle: labelStyle,
+          textStyle: textStyle,
         ),
-      ),
+        _buildStatusItem(
+          context,
+          label: "Filter Criteria: ",
+          value: filterCriteria == null ? 'NULL' : 'NOT NULL',
+          valueColor:
+              filterCriteria == null ? colorScheme.error : colorScheme.primary,
+          labelStyle: labelStyle,
+          textStyle: textStyle,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatusItem(
+    BuildContext context, {
+    required String label,
+    required String value,
+    required Color valueColor,
+    required TextStyle labelStyle,
+    required TextStyle textStyle,
+  }) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(label, style: labelStyle),
+        Text(value, style: textStyle.copyWith(color: valueColor)),
+      ],
     );
   }
 }

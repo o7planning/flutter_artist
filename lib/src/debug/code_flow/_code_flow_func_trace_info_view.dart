@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/_core_/core.dart';
+import '__task_flow_const.dart';
 
 class CodeFlowFuncTraceInfoView extends StatelessWidget {
   final FuncCallInfo funcCallInfo;
@@ -13,22 +14,19 @@ class CodeFlowFuncTraceInfoView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Location:",
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.bold,
-          ),
+          style: codeStyle(context, isBold: true),
         ),
         const SizedBox(height: 5),
         SelectableText(
           " - ${funcCallInfo.filePath ?? ''}",
-          style: const TextStyle(fontSize: 12),
+          style: codeStyle(context, isBold: false),
         ),
         const SizedBox(height: 5),
         SelectableText(
           " - Line/Column: ${funcCallInfo.lineNumber ?? '-'}:${funcCallInfo.columnNumber ?? '-'}",
-          style: const TextStyle(fontSize: 12),
+          style: codeStyle(context, isBold: false),
         ),
       ],
     );

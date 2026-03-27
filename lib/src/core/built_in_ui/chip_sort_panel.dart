@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist_theme/flutter_artist_theme.dart';
 
 import '../_core_/core.dart';
 import '_sorting_options.dart';
+import '_tile.dart';
 import 'chip_sort_panel_style.dart';
 
-class ChipSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
+class ChipSortPanel<ITEM extends Object> extends SortPanel<ITEM>
+    with SortPanelMixin {
   final ChipSortPanelStyle style;
   final WrapAlignment alignment;
 
@@ -17,6 +20,9 @@ class ChipSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
 
   @override
   Widget buildContent(BuildContext context) {
+    final tokens = context.faTokens;
+    final theme = Theme.of(context);
+
     return Padding(
       padding: style.padding,
       child: Wrap(
@@ -24,15 +30,14 @@ class ChipSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
         spacing: style.spacing,
         runSpacing: style.runSpacing,
         children: sortModel.criteria.map((criterion) {
-          final selected = criterion.direction != null;
-
-          return Chip(
-            label: Text(
-              criterion.text,
-              style: selected && style.selectedTextStyle != null
-                  ? style.selectedTextStyle
-                  : style.textStyle,
-            ),
+          final isSelected = criterion.direction != null;
+          final effectiveSelectedColor =
+              style.selectedColor ?? theme.primaryColor.withValues(alpha: 0.15);
+          final effectiveUnselectedColor =
+              style.backgroundColor ?? tokens.shortcut.surfaceColor;
+          return RawChip(
+            label: Text(criterion.text,
+                style: style.getTextStyle(context, isSelected)),
             labelPadding: EdgeInsets.only(right: style.iconSpacing),
             deleteIcon: buildSortButton(
               context: context,
@@ -43,9 +48,14 @@ class ChipSortPanel<ITEM extends Object> extends SortPanel<ITEM> {
               iconSize: style.sortIconSize,
               draggingColor: style.draggingColor,
             ),
-            backgroundColor:
-                selected ? style.selectedColor : style.backgroundColor,
-            shape: style.chipShape ?? const StadiumBorder(),
+            onDeleted: () => toggleCriterionByName(sortModel, criterion),
+            onPressed: () => toggleCriterionByName(sortModel, criterion),
+            backgroundColor: effectiveUnselectedColor,
+            selectedColor: effectiveSelectedColor,
+            shape:
+                style.chipShape ?? StadiumBorder(side: tokens.shortcut.border),
+            selected: isSelected,
+            showCheckmark: false,
           );
         }).toList(),
       ),

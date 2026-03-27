@@ -21,7 +21,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       executionTrace._addTraceStep(
         codeId: "#20000",
         shortDesc: "Calling ${debugObjHtml(this)}.performLogin()...",
-        lineFlowType: LineFlowType.controllableCalling,
+        traceStepType: TraceStepType.controllableCalling,
       );
       result = await performLogin();
       // Throw if Error.
@@ -79,7 +79,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       codeId: "#20100",
       shortDesc: "Got LoggedInUser: ${debugObjHtml(loggedInUser)}."
           "\n - @accessToken: <b>$tokenPrefix</b>.",
-      lineFlowType: LineFlowType.debug,
+      traceStepType: TraceStepType.debug,
     );
     //
     executionTrace._addTraceStep(
@@ -90,7 +90,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
         "loggedInUser": loggedInUser,
         "requiresTheSameUser": false,
       },
-      lineFlowType: LineFlowType.nonControllableCalling,
+      traceStepType: TraceStepType.nonControllableCalling,
     );
     //
     // IMPORTANT:
@@ -119,7 +119,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
         parameters: {
           "loggedInUser": loggedInUser,
         },
-        lineFlowType: LineFlowType.controllableCalling,
+        traceStepType: TraceStepType.controllableCalling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       loginLogoutAdapter.addThirdPartyLogicOnLogin(loggedInUser);
@@ -151,7 +151,7 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
     executionTrace._addTraceStep(
       codeId: "#20400",
       shortDesc: "Calling ${debugObjHtml(this)}.navigateToSuccessScreen()...",
-      lineFlowType: LineFlowType.controllableCalling,
+      traceStepType: TraceStepType.controllableCalling,
     );
     // IMPORTANT: No await:
     navigateToSuccessScreen();

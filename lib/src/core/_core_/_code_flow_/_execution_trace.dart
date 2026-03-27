@@ -199,7 +199,7 @@ abstract class ExecutionTrace {
   void _addLineFlowSeparator() {
     var item = TraceStep(
       lineId: "-----",
-      lineFlowType: LineFlowType.separator,
+      traceStepType: TraceStepType.separator,
       isLibCall: false,
       showIconAndLabel: false,
       shortDesc: "",
@@ -214,7 +214,7 @@ abstract class ExecutionTrace {
   }
 
   TraceStep _addTraceStep({
-    LineFlowType? lineFlowType,
+    TraceStepType? traceStepType,
     bool isLibCall = false,
     required String codeId,
     required String shortDesc,
@@ -228,7 +228,7 @@ abstract class ExecutionTrace {
   }) {
     var item = TraceStep(
       lineId: codeId,
-      lineFlowType: lineFlowType ?? LineFlowType.line,
+      traceStepType: traceStepType ?? TraceStepType.line,
       isLibCall: isLibCall,
       showIconAndLabel: showIconAndLabel,
       shortDesc: shortDesc,
@@ -253,7 +253,7 @@ abstract class ExecutionTrace {
 
   TraceStep? getLineFlowEvent() {
     for (TraceStep item in __traceSteps) {
-      if (item.lineFlowType == LineFlowType.emitEvent) {
+      if (item.traceStepType == TraceStepType.emitEvent) {
         return item;
       }
     }

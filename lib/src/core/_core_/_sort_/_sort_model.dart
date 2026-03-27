@@ -14,9 +14,15 @@ abstract class SortModel<ITEM extends Object> {
 
   List<SortCriterion> get criteria => List.unmodifiable(_criteria);
 
+  List<SortCriterion> get copiedCriteria {
+    return criteria.map((s) => s.copy()).toList();
+  }
+
   late final ui = _SortUiComponents(sortModel: this);
 
   SortCriterion? get firstOrNullCriterion => _criteria.firstOrNull;
+
+  final List<Function> __listeners = [];
 
   SortModel._({
     required this.sortModelBuilder,
@@ -58,6 +64,23 @@ abstract class SortModel<ITEM extends Object> {
         }
       }
     }
+  }
+
+  // TODO: to private?
+  void notifyListeners() {
+    for (Function func in __listeners) {
+      func.call();
+    }
+  }
+
+  // TODO: to private?
+  void addListener(Function listener) {
+    __listeners.add(listener);
+  }
+
+  // TODO: to private?
+  void removeListener(Function listener) {
+    __listeners.remove(listener);
   }
 
   // ***************************************************************************
@@ -146,9 +169,7 @@ abstract class SortModel<ITEM extends Object> {
     required SortDirection? direction,
     required bool moveToFirst, // TODO-XXX: Do it!!
   }) async {
-    print("criterionName: $criterionName");
     SortCriterion? criterion = _sortCriteriaMap[criterionName];
-    print("criterion: $criterion");
     if (criterion == null) {
       return;
     }
@@ -161,44 +182,41 @@ abstract class SortModel<ITEM extends Object> {
         sc._direction = null;
       }
     }
-    print("direction: $direction");
     criterion._direction = direction;
     if (direction != null) {
       criterion._lastUsedDirection = direction;
     }
     //
     await __applyChanges();
+    notifyListeners();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> rearrangeSortingCriteria({
-    required List<String> newArrangementCriterionNames,
+  SortCriterion? _findByName(String criterionName) {
+    return _criteria.firstWhereOrNull((c) => c.criterionName == criterionName);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> rearrange({
+    required List<SortCriterion> newArrangement,
   }) async {
-    final List<String> oldArrangementCn =
-        _criteria.map((c) => c.criterionName).toList();
-    //
-    final List<String> newArrangementCn = [
-      ...{...newArrangementCriterionNames, ...oldArrangementCn}
-    ]..retainWhere((cn) => oldArrangementCn.contains(cn));
-    //
-    bool arrangementChanged = !listEquals(oldArrangementCn, newArrangementCn);
-    if (!arrangementChanged) {
-      return;
-    }
-    //
-    int optCount = 0;
-    List<SortCriterion> newArrangementCriteria = [];
-    //
-    for (String criterionName in newArrangementCn) {
-      SortCriterion? criterion = _sortCriteriaMap[criterionName];
-      if (criterion == null) {
-        continue;
+    final List<SortCriterion> tailCriteria = [..._criteria];
+    final List<SortCriterion> arrangement = [];
+    for (SortCriterion criterion in newArrangement) {
+      SortCriterion? internalCriterion = _findByName(criterion.criterionName);
+      if (internalCriterion != null) {
+        arrangement.add(internalCriterion);
+        tailCriteria.remove(internalCriterion);
+        internalCriterion._direction = criterion._direction;
       }
-      //
-      newArrangementCriteria.add(criterion);
-      //
+    }
+    arrangement.addAll(tailCriteria);
+    int optCount = 0;
+    for (SortCriterion criterion in arrangement) {
       if (criterion.direction != null) {
         optCount++;
         if (optCount > 1 && sortMode == SortMode.single) {
@@ -209,9 +227,25 @@ abstract class SortModel<ITEM extends Object> {
     //
     _criteria
       ..clear()
-      ..addAll(newArrangementCriteria);
+      ..addAll(arrangement);
     //
     await __applyChanges();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> applySequence({
+    required List<String> criterionNames,
+  }) async {
+    final List<SortCriterion> newArrangement = [];
+    for (String criterionName in criterionNames) {
+      SortCriterion? c = _findByName(criterionName);
+      if (c != null) {
+        newArrangement.add(c);
+      }
+    }
+    rearrange(newArrangement: newArrangement);
   }
 
   // ***************************************************************************

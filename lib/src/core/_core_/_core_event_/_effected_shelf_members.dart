@@ -72,10 +72,10 @@ class EffectedShelfMembers {
     return (!reQuery && !refreshCurrItem)
         ? null
         : _EffBlock(
-            block: forEventBlock,
-            reQuery: reQuery,
-            refreshCurrItem: refreshCurrItem,
-          );
+      block: forEventBlock,
+      reQuery: reQuery,
+      refreshCurrItem: refreshCurrItem,
+    );
   }
 
   // ***************************************************************************
@@ -91,9 +91,9 @@ class EffectedShelfMembers {
     return !reQuery
         ? null
         : _EffScalar(
-            scalar: forEventScalar,
-            reQuery: reQuery,
-          );
+      scalar: forEventScalar,
+      reQuery: reQuery,
+    );
   }
 
   // ***************************************************************************
@@ -155,10 +155,10 @@ class EffectedShelfMembers {
     _EffBlock? effBlock = block == null || (!reQuery && !refreshCurrItem)
         ? null
         : _EffBlock(
-            block: block,
-            reQuery: reQuery,
-            refreshCurrItem: refreshCurrItem,
-          );
+      block: block,
+      reQuery: reQuery,
+      refreshCurrItem: refreshCurrItem,
+    );
     return _getTopEffectedAncestor(forEventBlock: parentBlk) ?? effBlock;
   }
 

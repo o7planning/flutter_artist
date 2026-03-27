@@ -6,6 +6,7 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import '../../core/_core_/core.dart';
 import '../../core/enums/_trace_step_type.dart';
 import '../../core/widgets/_iconed_checkbox.dart';
+import '../../core/widgets/_simple_copy_button.dart';
 import '../shelf/widget/_shelf_info_view.dart';
 import '_code_flow_func_trace_info_view.dart';
 import '_code_flow_method_args_view.dart';
@@ -28,14 +29,14 @@ class ExecutionTraceDetailView extends StatefulWidget {
 
 class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
   bool checkAll = true;
-  Map<LineFlowType, bool> lineFlowTypeFilterMap = {};
+  Map<TraceStepType, bool> traceStepTypeFilterMap = {};
 
   @override
   void initState() {
     super.initState();
     //
-    for (LineFlowType lineFlowType in LineFlowType.values) {
-      lineFlowTypeFilterMap.putIfAbsent(lineFlowType, () {
+    for (TraceStepType traceStepType in TraceStepType.values) {
+      traceStepTypeFilterMap.putIfAbsent(traceStepType, () {
         return true;
       });
     }
@@ -48,7 +49,7 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildFilter(),
-        Divider(color: Colors.transparent, height: 10),
+        SizedBox(height: 10),
         Expanded(
           child: SingleChildScrollView(
             child: _buildTraceStepList(),
@@ -59,50 +60,44 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
   }
 
   Widget _buildFilter() {
-    return Card(
-      margin: EdgeInsets.all(0),
-      color: Colors.grey[100],
-      child: Padding(
-        padding: EdgeInsets.all(3),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Checkbox(
-              value: checkAll,
-              onChanged: (bool? value) {
-                checkAll = value ?? false;
-                lineFlowTypeFilterMap.forEach((k, v) {
-                  lineFlowTypeFilterMap[k] = checkAll;
-                });
-                setState(() {});
-              },
-            ),
-            SizedBox(
-              height: 20,
-              child: VerticalDivider(),
-            ),
-            Expanded(
-              child: _buildBreadCrumb(),
-            ),
-            SizedBox(
-              height: 20,
-              child: VerticalDivider(),
-            ),
-            SimpleSmallIconButton(
-              iconData: Icons.copy_rounded,
-              iconSize: 18,
-              onPressed: () async {
-                await Clipboard.setData(
-                    ClipboardData(text: widget.executionTrace.getText()));
-                // Optionally, show a SnackBar or other feedback to the user
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Copied!')),
-                );
-              },
-            ),
-          ],
-        ),
+    final theme = Theme.of(context);
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Checkbox(
+            value: checkAll,
+            onChanged: (bool? value) {
+              checkAll = value ?? false;
+              traceStepTypeFilterMap.forEach((k, v) {
+                traceStepTypeFilterMap[k] = checkAll;
+              });
+              setState(() {});
+            },
+          ),
+          SizedBox(
+            height: 16,
+            child: VerticalDivider(),
+          ),
+          Expanded(
+            child: _buildBreadCrumb(),
+          ),
+          SizedBox(
+            height: 16,
+            child: VerticalDivider(),
+          ),
+          SimpleCopyButton(
+            getText: () {
+              return widget.executionTrace.getText();
+            },
+          ),
+        ],
       ),
     );
   }
@@ -115,21 +110,21 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
         reverse: false,
         direction: Axis.horizontal,
       ),
-      items: LineFlowType.values
+      items: TraceStepType.values
           .map(
-            (lineFlowType) => BreadCrumbItem(
+            (traceStepType) => BreadCrumbItem(
               content: Tooltip(
-                message: lineFlowType.desc,
+                message: traceStepType.desc,
                 child: IconedCheckbox(
                   icon: Icon(
-                    lineFlowType.getIconData(),
+                    traceStepType.getIconData(),
                     size: 16,
-                    color: lineFlowType.getIconColor(),
+                    color: traceStepType.getIconColor(context),
                   ),
-                  value: lineFlowTypeFilterMap[lineFlowType] ?? true,
+                  value: traceStepTypeFilterMap[traceStepType] ?? true,
                   onChanged: (bool? value) {
                     setState(() {
-                      lineFlowTypeFilterMap[lineFlowType] = value ?? false;
+                      traceStepTypeFilterMap[traceStepType] = value ?? false;
                     });
                   },
                 ),
@@ -141,6 +136,7 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
   }
 
   Widget _buildMethodCallInfo(MethodCallExecutionTrace executionTrace) {
+    final theme = Theme.of(context);
     final Shelf? shelf = widget.executionTrace.getShelf();
     //
     return Column(
@@ -150,7 +146,13 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
         if (shelf != null && executionTrace.isUserMethod)
           ShelfInfoView(shelf: shelf),
         if (shelf != null && executionTrace.isUserMethod) const Divider(),
-        Card(
+        Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primary.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(8),
+            border:
+                Border.all(color: theme.dividerColor.withValues(alpha: 0.1)),
+          ),
           child: CodeFlowMethodView(executionTrace: executionTrace),
         ),
         if (!executionTrace.isLibMethod) const SizedBox(height: 5),
@@ -168,7 +170,7 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
 
   Widget _buildTraceStepList() {
     final List<TraceStep> traceSteps = widget.executionTrace.traceSteps
-        .where((item) => (lineFlowTypeFilterMap[item.lineFlowType] ?? false))
+        .where((item) => (traceStepTypeFilterMap[item.traceStepType] ?? false))
         .toList();
     //
     return Column(

@@ -21,138 +21,54 @@ class TildeFilterCriterionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isSimple = criterion is SimpleTildeFilterCriterionModel;
+
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(10),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ListTile(
             contentPadding: EdgeInsets.zero,
-            visualDensity: VisualDensity(horizontal: -3, vertical: -3),
+            visualDensity: VisualDensity.compact,
             dense: true,
-            horizontalTitleGap: 0,
-            minVerticalPadding: 0,
-            minLeadingWidth: 40,
-            minTileHeight: 0,
+            horizontalTitleGap: 8,
             leading: Icon(
-              criterion is SimpleTildeFilterCriterionModel
+              isSimple
                   ? FaIconConstants.simplePropOrCriterionIconData
                   : FaIconConstants.optPropOrCriterionIconData,
               size: 20,
+              color: colorScheme.primary,
             ),
             title: IconLabelText(
-              label: criterion is SimpleTildeFilterCriterionModel
+              label: isSimple
                   ? 'Criterion Name Tilde: '
                   : 'Multi Opt Criterion Name Tilde: ',
               text: criterion.tildeCriterionName,
-              textStyle: TextStyle(color: Colors.indigo),
+              // CHIÊU 1: Hít màu Primary đậm đà
+              textStyle: TextStyle(
+                color: colorScheme.primary,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
             ),
-            subtitle: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IconLabelText(
-                  label: getClassNameWithoutGenerics(criterion),
-                  text: "<${criterion.dataType.toString()}>",
-                  labelStyle:
-                      TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                  textStyle: TextStyle(fontSize: 12, color: Colors.blue),
-                ),
-                if (criterion is MultiOptTildeFilterCriterionModel)
-                  SizedBox(height: 3),
-                if (criterion is MultiOptTildeFilterCriterionModel)
-                  IconLabelText(
-                    label: "Default Value Setting Policy: ",
-                    text: (criterion as MultiOptTildeFilterCriterionModel)
-                        .defaultSettingPolicy
-                        .name,
-                    labelStyle:
-                        TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    textStyle: TextStyle(fontSize: 12, color: Colors.blue),
-                  ),
-                if (criterion is MultiOptTildeFilterCriterionModel)
-                  SizedBox(height: 3),
-                if (criterion is MultiOptTildeFilterCriterionModel)
-                  IconLabelText(
-                    label: "Parent Match Suffix: ",
-                    text: (criterion as MultiOptTildeFilterCriterionModel)
-                            .parentMatchSuffix ??
-                        "null",
-                    labelStyle: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textStyle: TextStyle(
-                      fontSize: 12,
-                      color: (criterion as MultiOptTildeFilterCriterionModel)
-                                  .parentMatchSuffix ==
-                              null
-                          ? Colors.grey
-                          : Colors.blue,
-                    ),
-                  ),
-              ],
+            subtitle: Padding(
+              padding: const EdgeInsets.only(top: 6),
+              child: _buildSubtitle(context),
             ),
           ),
-          Divider(),
-          if (criterion is MultiOptTildeFilterCriterionModel)
-            SizedBox(height: 5),
-          if (criterion is MultiOptTildeFilterCriterionModel)
-            LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Tooltip(
-                      message: "Single Selection",
-                      child: Radio(
-                        value: (criterion as MultiOptTildeFilterCriterionModel)
-                                .selectionType ==
-                            SelectionType.single,
-                        onChanged: null,
-                        groupValue: true,
-                      ),
-                    ),
-                    if (constraints.constrainWidth() > 200)
-                      Text(
-                        "Single Selection",
-                        style: TextStyle(
-                          fontSize: 13,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    SizedBox(width: 5),
-                    Tooltip(
-                      message: "Multi Selection",
-                      child: Radio(
-                        value: (criterion as MultiOptTildeFilterCriterionModel)
-                                .selectionType ==
-                            SelectionType.multi,
-                        onChanged: null,
-                        groupValue: true,
-                      ),
-                    ),
-                    if (constraints.constrainWidth() > 200)
-                      Expanded(
-                        child: Text(
-                          "Multi Selection",
-                          style: TextStyle(
-                            fontSize: 13,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
-          SizedBox(height: 10),
+          const Divider(height: 20),
+          if (criterion is MultiOptTildeFilterCriterionModel) ...[
+            _buildSelectionTypeRow(
+                context, criterion as MultiOptTildeFilterCriterionModel),
+            const Divider(height: 20),
+          ],
           Expanded(
             child: SingleChildScrollView(
-              child: _buildDetails(),
+              child: _buildDetails(context),
             ),
           ),
         ],
@@ -160,73 +76,168 @@ class TildeFilterCriterionView extends StatelessWidget {
     );
   }
 
-  Widget _buildDetails() {
+  Widget _buildSubtitle(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        IconLabelText(
+          label: getClassNameWithoutGenerics(criterion),
+          text: " <${criterion.dataType.toString()}>",
+          labelStyle: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              color: colorScheme.onSurface.withValues(alpha: 0.6)),
+          textStyle: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              color: colorScheme.tertiary),
+        ),
+        if (criterion is MultiOptTildeFilterCriterionModel) ...[
+          const SizedBox(height: 4),
+          _buildSubtitleItem(
+              context,
+              "Policy: ",
+              (criterion as MultiOptTildeFilterCriterionModel)
+                  .defaultSettingPolicy
+                  .name),
+          const SizedBox(height: 4),
+          _buildSubtitleItem(
+              context,
+              "Suffix: ",
+              (criterion as MultiOptTildeFilterCriterionModel)
+                      .parentMatchSuffix ??
+                  "null"),
+        ]
+      ],
+    );
+  }
+
+  Widget _buildSubtitleItem(BuildContext context, String label, String text) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return IconLabelText(
+      label: label,
+      text: text,
+      labelStyle: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.bold,
+          color: colorScheme.onSurface.withValues(alpha: 0.5)),
+      textStyle: TextStyle(fontSize: 11, color: colorScheme.secondary),
+    );
+  }
+
+  Widget _buildSelectionTypeRow(
+      BuildContext context, MultiOptTildeFilterCriterionModel def) {
+    final isMulti = def.selectionType == SelectionType.multi;
+    return Row(
+      children: [
+        _buildSelectionBadge(
+            context, "SINGLE SELECTION", !isMulti, Icons.radio_button_checked),
+        const SizedBox(width: 10),
+        _buildSelectionBadge(
+            context, "MULTI SELECTION", isMulti, Icons.check_box_rounded),
+      ],
+    );
+  }
+
+  Widget _buildSelectionBadge(
+      BuildContext context, String label, bool isActive, IconData icon) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      decoration: BoxDecoration(
+        color: isActive
+            ? colorScheme.primaryContainer
+            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(
+            color: isActive ? colorScheme.primary : colorScheme.outlineVariant),
+      ),
+      child: Row(
+        children: [
+          Icon(icon,
+              size: 14,
+              color: isActive
+                  ? colorScheme.primary
+                  : colorScheme.onSurfaceVariant),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              color: isActive
+                  ? colorScheme.onPrimaryContainer
+                  : colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetails(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Column(
       children: [
         SimpleAccordion(
           children: [
-            SimpleAccordionSection(
-              initiallyExpanded: true,
-              headerTitle: Text(
-                "Initial Value:",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              headerSubtitle: _headerSubtitle(criterion.initialValue),
-              content: DynamicValueView(value: criterion.initialValue),
-            ),
-            SimpleAccordionSection(
-              initiallyExpanded: true,
-              headerTitle: Text(
-                "Current Value:",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              headerSubtitle: _headerSubtitle(criterion.currentValue),
-              content: DynamicValueView(value: criterion.currentValue),
-            ),
-            if (criterion is MultiOptTildeFilterCriterionModel)
-              SimpleAccordionSection(
-                initiallyExpanded: true,
-                headerTitle: Text(
-                  "Initial XData:",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                headerSubtitle: _headerSubtitle(criterion.initialXData),
-                content: XDataView(xData: criterion.initialXData),
-              ),
-            if (criterion is MultiOptTildeFilterCriterionModel)
-              SimpleAccordionSection(
-                initiallyExpanded: true,
-                headerTitle: Text(
-                  "Current XData:",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                headerSubtitle: _headerSubtitle(criterion.currentXData),
-                content: XDataView(xData: criterion.currentXData),
-              ),
+            _buildAccordionSection(
+                context,
+                "Initial Value",
+                criterion.initialValue,
+                DynamicValueView(value: criterion.initialValue)),
+            _buildAccordionSection(
+                context,
+                "Current Value",
+                criterion.currentValue,
+                DynamicValueView(value: criterion.currentValue)),
+            if (criterion is MultiOptTildeFilterCriterionModel) ...[
+              _buildAccordionSection(
+                  context,
+                  "Initial XData",
+                  (criterion as MultiOptTildeFilterCriterionModel).initialXData,
+                  XDataView(
+                      xData: (criterion as MultiOptTildeFilterCriterionModel)
+                          .initialXData)),
+              _buildAccordionSection(
+                  context,
+                  "Current XData",
+                  (criterion as MultiOptTildeFilterCriterionModel).currentXData,
+                  XDataView(
+                      xData: (criterion as MultiOptTildeFilterCriterionModel)
+                          .currentXData)),
+            ],
           ],
         ),
       ],
     );
   }
 
-  Text? _headerSubtitle(dynamic value) {
-    return value == null
-        ? null
-        : Text(
-            " - ${value!.runtimeType.toString()}",
-            style: TextStyle(
-              fontSize: 12,
+  SimpleAccordionSection _buildAccordionSection(
+      BuildContext context, String title, dynamic value, Widget content) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return SimpleAccordionSection(
+      initiallyExpanded: true,
+      headerTitle: Text(
+        title,
+        style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+            color: colorScheme.onSurface),
+      ),
+      headerSubtitle: value == null
+          ? null
+          : Text(
+              " - ${value.runtimeType.toString()}",
+              style: TextStyle(
+                  fontSize: 10,
+                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                  fontStyle: FontStyle.italic),
             ),
-          );
+      content: content,
+    );
   }
 }

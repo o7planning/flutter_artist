@@ -1,72 +1,48 @@
 import 'package:flutter/material.dart';
 
 import '../_core_/core.dart';
-import '_sorting_options.dart';
 
+/// Base configuration style for all Sort Panels.
 abstract class SortPanelStyle {
   final TextStyle textStyle;
   final double iconSpacing;
   final double sortIconSize;
   final Color? draggingColor;
 
+  /// Determines if the text should be bold when the criterion is active.
+  final bool boldActiveText;
+
   const SortPanelStyle({
     this.textStyle = const TextStyle(fontSize: 14),
     this.iconSpacing = 4,
     this.sortIconSize = 16,
     this.draggingColor,
+    this.boldActiveText = false,
   });
+
+  /// Returns the appropriate text style based on the active state.
+  TextStyle getTextStyle(BuildContext context, bool isActive) {
+    final theme = Theme.of(context);
+    final baseStyle = textStyle.copyWith(
+      color: isActive
+          ? theme.primaryColor
+          : theme.colorScheme.onSurface.withValues(alpha: 0.8),
+    );
+    if (!isActive) return baseStyle;
+    return baseStyle.copyWith(
+      fontWeight: boldActiveText ? FontWeight.bold : baseStyle.fontWeight,
+    );
+  }
 }
 
-class SortCriterionTile<ITEM extends Object> extends StatelessWidget {
-  final SortModel<ITEM> sortModel;
-  final SortCriterion criterion;
-
-  final bool enabled;
-  final bool isDragging;
-
-  final SortPanelStyle style;
-  final SortIconBuilder? iconBuilder;
-
-  const SortCriterionTile({
-    super.key,
-    required this.sortModel,
-    required this.criterion,
-    required this.style,
-    this.enabled = true,
-    this.isDragging = false,
-    this.iconBuilder,
-  });
-
-  void _toggle() {
+/// A mixin to provide shared sorting logic across different panel types.
+mixin SortPanelMixin {
+  /// Standardized method to toggle a criterion's direction.
+  void toggleCriterionByName(SortModel sortModel, SortCriterion criterion) {
     sortModel.updateSortingCriterionByName(
       criterionName: criterion.criterionName,
       direction: criterion.nextDirection,
       moveToFirst: false,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final textStyle = isDragging
-        ? style.textStyle.copyWith(color: Colors.grey)
-        : style.textStyle;
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(criterion.text, style: textStyle),
-        SizedBox(width: style.iconSpacing),
-        InkWell(
-          onTap: enabled ? _toggle : null,
-          child: (iconBuilder ?? defaultSortIcon)(
-            context,
-            criterion.direction,
-            isDragging,
-            style.sortIconSize,
-            style.draggingColor,
-          ),
-        )
-      ],
     );
   }
 }

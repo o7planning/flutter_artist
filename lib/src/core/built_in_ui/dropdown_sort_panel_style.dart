@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/core/built_in_ui/_tile.dart';
 
+import '_tile.dart';
+
+/// Style configuration for the [DropdownSortPanel].
 class DropdownSortPanelStyle extends SortPanelStyle {
   final IconData dropdownIcon;
   final double dropdownIconSize;
   final Color? dropdownIconColor;
-
   final EdgeInsetsGeometry padding;
   final Decoration? decoration;
-
   final bool isDense;
 
   const DropdownSortPanelStyle({
@@ -16,6 +16,7 @@ class DropdownSortPanelStyle extends SortPanelStyle {
     super.iconSpacing,
     super.sortIconSize,
     super.draggingColor,
+    super.boldActiveText,
     this.dropdownIcon = Icons.keyboard_arrow_down,
     this.dropdownIconSize = 18,
     this.dropdownIconColor,

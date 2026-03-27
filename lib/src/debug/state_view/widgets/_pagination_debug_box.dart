@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../../core/_core_/core.dart';
@@ -15,35 +16,35 @@ class PaginationDebugBox extends BaseDebugBox {
   });
 
   @override
-  List<IconLabelText> getChildIconLabelTexts() {
+  List<IconLabelText> getChildIconLabelTexts(BuildContext context) {
     return [
       if (options.showCurrentPage)
         IconLabelText(
           label: "Current Page: ",
           text: "${block.paginationInfo?.currentPage}",
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
       if (options.showPageSize)
         IconLabelText(
           label: "Page Size: ",
           text: "${block.paginationInfo?.pageSize}",
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
       if (options.showTotalItems)
         IconLabelText(
           label: "Total Items: ",
           text: "${block.paginationInfo?.totalItems}",
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
       if (options.showTotalPages)
         IconLabelText(
           label: "Total Pages: ",
           text: "${block.paginationInfo?.totalPages}",
-          labelStyle: labelStyle,
-          textStyle: textStyle,
+          labelStyle: getLabelStyle(context),
+          textStyle: getTextStyle(context),
         ),
     ];
   }

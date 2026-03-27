@@ -39,6 +39,9 @@ class DebugBlockStateView extends StatelessWidget {
       ownerClassInstance: this,
       description: null,
       build: () {
+        final theme = Theme.of(context);
+        final colorScheme = theme.colorScheme;
+
         List<Widget> children = [];
         if (debugFilterOptions != null && block.filterModel != null) {
           children.add(
@@ -76,8 +79,13 @@ class DebugBlockStateView extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
-              color: Colors.greenAccent.withAlpha(20),
-              border: Border.all(width: 0.5)),
+            color: colorScheme.primary.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(
+              color: theme.dividerColor.withValues(alpha: 0.2),
+              width: 0.5,
+            ),
+          ),
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               final int boxCount = children.length;
@@ -110,7 +118,15 @@ class DebugBlockStateView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (showTitle) Text(block.name),
+                  if (showTitle)
+                    Text(
+                      block.name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.primary,
+                        fontSize: 12,
+                      ),
+                    ),
                   if (showTitle) const Divider(height: 10),
                   mainWidget,
                 ],

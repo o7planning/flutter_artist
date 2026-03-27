@@ -21,7 +21,7 @@ class _StorageEventHandler {
         codeId: "#25000",
         shortDesc:
             "${debugObjHtml(eventBlock)}.config.emitExternalShelfEvents is empty! --> This event will be ignored.",
-        lineFlowType: LineFlowType.debug,
+        traceStepType: TraceStepType.debug,
       );
       return;
     }
@@ -51,7 +51,7 @@ class _StorageEventHandler {
       executionTrace._addTraceStep(
         codeId: "#26000",
         shortDesc: "Events is empty! --> This event will be ignored.",
-        lineFlowType: LineFlowType.eventInfo,
+        traceStepType: TraceStepType.eventInfo,
       );
       return;
     }
@@ -66,7 +66,7 @@ class _StorageEventHandler {
         "events": events,
         "itemId": itemIdString,
       },
-      lineFlowType: LineFlowType.eventInfo,
+      traceStepType: TraceStepType.eventInfo,
     );
     //
     final DeferredEvent deferredEvent = DeferredEvent(
@@ -80,7 +80,7 @@ class _StorageEventHandler {
       codeId: "#26120",
       shortDesc:
           "The <b>${getTypeNameWithoutGenerics(DeferredEvent)}</b> is created, It will be executed later....",
-      lineFlowType: LineFlowType.eventInfo,
+      traceStepType: TraceStepType.eventInfo,
     );
     //
     storage._deferredEventManager.addDeferredEvent(deferredEvent);
@@ -101,7 +101,7 @@ class _StorageEventHandler {
       executionTrace._addTraceStep(
         codeId: "#60000",
         shortDesc: "Events is empty! --> This event will be ignored.",
-        lineFlowType: LineFlowType.eventInfo,
+        traceStepType: TraceStepType.eventInfo,
       );
       return;
     }
@@ -116,7 +116,7 @@ class _StorageEventHandler {
         "eventShelf": eventShelf,
         "events": events,
       },
-      lineFlowType: LineFlowType.eventInfo,
+      traceStepType: TraceStepType.eventInfo,
     );
     //
     final DeferredEvent deferredEvent = DeferredEvent(
@@ -130,7 +130,7 @@ class _StorageEventHandler {
       codeId: "#60200",
       shortDesc:
           "The <b>${getTypeNameWithoutGenerics(DeferredEvent)}</b> is created, It will be executed later....",
-      lineFlowType: LineFlowType.eventInfo,
+      traceStepType: TraceStepType.eventInfo,
     );
     //
     storage._deferredEventManager.addDeferredEvent(deferredEvent);
@@ -239,9 +239,7 @@ class _StorageEventHandler {
     Map<String, Scalar> foundMap = {};
 
     for (String shelfName in storage.activeShelfNames) {
-      print("@~~~~~~~~~~~~> shelfName: $shelfName ");
       Shelf? shelf = storage.findShelfByName(shelfName);
-      print("@~~~~~~~~~~~~> shelfName: $shelfName --> shelf: $shelf");
       if (shelf == null || identical(shelf, eventShelf)) {
         continue;
       }

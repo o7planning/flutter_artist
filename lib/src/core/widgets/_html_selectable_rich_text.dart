@@ -19,80 +19,14 @@ import 'package:flutter/material.dart';
 /// ```
 class HtmlSelectableRichText extends StatefulWidget {
   final Icon? icon;
-
   final String? label;
-
   final TextStyle? labelStyle;
-
-  /// The HTML-styled text to be rendered.
-  ///
-  /// This string can contain HTML-like tags that match the keys in [tagStyles].
-  /// Text without matching tags will be rendered using the default [style].
   final String htmlText;
-
-  /// The default text style applied to all text.
-  ///
-  /// This style is used as the base style for all text. Tag-specific styles
-  /// from [tagStyles] will be merged with this style.
   final TextStyle? style;
-
-  /// A map of HTML tag names to their corresponding text styles.
-  ///
-  /// Keys should be tag names (without angle brackets), and values should be
-  /// the [TextStyle] to apply to text within those tags.
-  ///
-  /// Example:
-  /// ```dart
-  /// {
-  ///   'b': TextStyle(fontWeight: FontWeight.bold),
-  ///   'highlight': TextStyle(backgroundColor: Colors.yellow),
-  /// }
-  /// ```
   final Map<String, TextStyle> tagStyles;
-
-  /// How the text should be aligned horizontally.
-  ///
-  /// Defaults to [TextAlign.start].
+  final void Function(String)? onLinkTap;
   final TextAlign textAlign;
 
-  /// An optional maximum number of lines for the text to span.
-  ///
-  /// If the text exceeds the given number of lines, it will be truncated
-  /// according to [overflow].
-  final int? maxLines;
-
-  /// How visual overflow should be handled.
-  ///
-  /// This determines what happens when the text would exceed the available space.
-  /// Defaults to [TextOverflow.clip].
-  final TextOverflow overflow;
-
-  /// Callback function that is called when a link is tapped.
-  ///
-  /// This callback receives the URL from the href attribute of the <a> tag.
-  /// If this is null, links will be styled but not clickable.
-  ///
-  /// Example:
-  /// ```dart
-  /// HtmlSelectableRichText(
-  ///   'Visit <a href="https://flutter.dev">Flutter</a>',
-  ///   onLinkTap: (url) => print('Tapped: $url'),
-  /// )
-  /// ```
-  final void Function(String url)? onLinkTap;
-
-  /// Creates an [HtmlSelectableRichText] widget.
-  ///
-  /// The [htmlText] parameter is required and contains the text to be rendered.
-  /// Use [tagStyles] to define styling for specific HTML-like tags.
-  ///
-  /// Example:
-  /// ```dart
-  /// HtmlSelectableRichText(
-  ///   'Hello <b>world</b>!',
-  ///   tagStyles: {'b': TextStyle(fontWeight: FontWeight.bold)},
-  /// )
-  /// ```
   const HtmlSelectableRichText(
     this.htmlText, {
     super.key,
@@ -100,11 +34,9 @@ class HtmlSelectableRichText extends StatefulWidget {
     this.label,
     this.labelStyle,
     this.style,
-    this.tagStyles = const {},
-    this.textAlign = TextAlign.start,
-    this.maxLines,
-    this.overflow = TextOverflow.clip,
+    required this.tagStyles,
     this.onLinkTap,
+    this.textAlign = TextAlign.start,
   });
 
   @override
@@ -116,202 +48,103 @@ class _HtmlSelectableRichTextState extends State<HtmlSelectableRichText> {
 
   @override
   void dispose() {
-    for (final recognizer in _recognizers) {
-      recognizer.dispose();
+    for (final r in _recognizers) {
+      r.dispose();
     }
     super.dispose();
   }
 
-  /// Builds the widget by parsing HTML text and returning a [RichText] widget.
-  ///
-  /// This method processes the [htmlText] using the provided [tagStyles] mapping
-  /// and creates a [RichText] widget with the appropriate styling.
   @override
   Widget build(BuildContext context) {
-    // Clear previous recognizers
-    for (final recognizer in _recognizers) {
-      recognizer.dispose();
-    }
-    _recognizers.clear();
-
     return SelectableText.rich(
-      _parseAdvancedHtmlToTextSpan(widget.htmlText, context),
-      // textAlign: widget.textAlign,
-      maxLines: widget.maxLines,
-      // overflow: widget.overflow,
+      _parseHtml(widget.htmlText, context),
+      textAlign: widget.textAlign,
     );
   }
 
-  TextSpan _parseAdvancedHtmlToTextSpan(String html, BuildContext context) {
+  TextSpan _parseHtml(String html, BuildContext context) {
     final List<InlineSpan> spans = [];
 
     if (widget.icon != null) {
-      spans.add(
-        WidgetSpan(child: widget.icon!, alignment: PlaceholderAlignment.middle),
-      );
-      spans.add(const WidgetSpan(child: SizedBox(width: 2)));
+      spans.add(WidgetSpan(
+          child: widget.icon!, alignment: PlaceholderAlignment.middle));
+      spans.add(const WidgetSpan(child: SizedBox(width: 4)));
     }
-
     if (widget.label != null) {
-      spans.add(
-        TextSpan(
-          text: widget.label!,
-          style:
-              widget.labelStyle ?? const TextStyle(fontWeight: FontWeight.bold),
-        ),
-      );
-      spans.add(const WidgetSpan(child: SizedBox(width: 2)));
+      spans.add(TextSpan(
+        text: widget.label!,
+        style:
+            widget.labelStyle ?? const TextStyle(fontWeight: FontWeight.bold),
+      ));
+      spans.add(const WidgetSpan(child: SizedBox(width: 4)));
     }
 
-    // Check if we need to process HTML
-    final bool hasAnyTags = widget.tagStyles.isNotEmpty ||
-        html.contains('<a') ||
-        widget.onLinkTap != null;
+    final baseStyle = widget.style ??
+        Theme.of(context).textTheme.bodyMedium ??
+        const TextStyle();
 
-    if (widget.icon == null && !hasAnyTags) {
-      return TextSpan(
-        text: html,
-        style: widget.style ?? Theme.of(context).textTheme.bodyMedium,
-      );
-    }
-
-    // Create regex pattern for tags defined in tagStyles and <a> tags
-    final List<String> patterns = [];
-
-    // Add patterns for regular tags
-    for (final tag in widget.tagStyles.keys) {
-      if (tag != 'a') {
-        patterns.add('<$tag>(.*?)</$tag>');
-      }
-    }
-
-    // Always add pattern for <a> tags if they exist in the HTML
-    if (html.contains('<a')) {
-      patterns.add(r'<a(?:\s+href=["' ']([^"' ']*)[^>]*)?>([^<]*)</a>');
-    }
-
-    if (patterns.isEmpty) {
-      return TextSpan(
-        text: html,
-        style: widget.style ?? Theme.of(context).textTheme.bodyMedium,
-      );
-    }
-
-    final String tagPattern = patterns.join('|');
-    final RegExp tagRegex = RegExp(tagPattern, caseSensitive: false);
+    final tagRegex =
+        RegExp(r'''<(/?)([a-zA-Z0-9]+)(?:\s+href=["']([^"']*)["'])?>''');
 
     int lastIndex = 0;
+    List<TextStyle> styleStack = [baseStyle];
+    List<String?> linkStack = [null];
 
     for (final Match match in tagRegex.allMatches(html)) {
-      // Add text before the tag
       if (match.start > lastIndex) {
-        final beforeText = html.substring(lastIndex, match.start);
-        if (beforeText.isNotEmpty) {
-          spans.add(TextSpan(
-            text: beforeText,
-            style: widget.style ?? Theme.of(context).textTheme.bodyMedium,
-          ));
-        }
+        final text = html.substring(lastIndex, match.start);
+        spans.add(TextSpan(
+          text: text,
+          style: styleStack.last,
+          recognizer: _createRecognizer(linkStack.last),
+        ));
       }
 
-      // Find which tag matched and get its content
-      final String matchedTag = match.group(0)!;
+      final bool isClosingTag = match.group(1) == '/';
+      final String tagName = match.group(2)!.toLowerCase();
+      final String? href = match.group(3);
 
-      // Check if it's an <a> tag
-      final aTagPattern = RegExp(
-        r'<a(?:\s+href=["' ']([^"' ']*)[^>]*)?>([^<]*)</a>',
-        caseSensitive: false,
-      );
-      final aTagMatch = aTagPattern.firstMatch(matchedTag);
-
-      if (aTagMatch != null) {
-        // Handle <a> tag
-        final String? href = aTagMatch.group(1);
-        final String? linkText = aTagMatch.group(2);
-
-        if (linkText != null) {
-          final baseStyle =
-              widget.style ?? Theme.of(context).textTheme.bodyMedium;
-
-          // Get custom style for 'a' tag or use default link style
-          final linkStyle = widget.tagStyles['a'] ??
-              const TextStyle(
-                color: Colors.blue,
-                decoration: TextDecoration.underline,
-              );
-
-          final mergedStyle = baseStyle?.merge(linkStyle) ?? linkStyle;
-
-          if (href != null && widget.onLinkTap != null) {
-            // Create clickable link
-            final recognizer = TapGestureRecognizer()
-              ..onTap = () => widget.onLinkTap!(href);
-            _recognizers.add(recognizer);
-
-            spans.add(TextSpan(
-              text: linkText,
-              style: mergedStyle,
-              recognizer: recognizer,
-            ));
-          } else {
-            // Non-clickable styled link
-            spans.add(TextSpan(
-              text: linkText,
-              style: mergedStyle,
-            ));
-          }
+      if (isClosingTag) {
+        if (styleStack.length > 1) {
+          styleStack.removeLast();
+          linkStack.removeLast();
         }
       } else {
-        // Handle other tags
-        String? tagName;
-        String? content;
+        TextStyle currentStyle = styleStack.last;
 
-        for (final tag in widget.tagStyles.keys) {
-          if (tag == 'a') continue; // Skip 'a' tag as it's handled separately
-
-          final tagPattern = RegExp('<$tag>(.*?)</$tag>', caseSensitive: false);
-          final tagMatch = tagPattern.firstMatch(matchedTag);
-          if (tagMatch != null) {
-            tagName = tag;
-            content = tagMatch.group(1);
-            break;
-          }
-        }
-
-        if (tagName != null && content != null) {
-          final baseStyle =
-              widget.style ?? Theme.of(context).textTheme.bodyMedium;
-          final tagStyleFromMap = widget.tagStyles[tagName]!;
-
-          spans.add(TextSpan(
-            text: content,
-            style: baseStyle?.merge(tagStyleFromMap) ?? tagStyleFromMap,
-          ));
+        if (tagName == 'a') {
+          final aStyle = widget.tagStyles['a'] ??
+              const TextStyle(
+                  color: Colors.blue, decoration: TextDecoration.underline);
+          styleStack.add(currentStyle.merge(aStyle));
+          linkStack.add(href);
+        } else if (widget.tagStyles.containsKey(tagName)) {
+          styleStack.add(currentStyle.merge(widget.tagStyles[tagName]));
+          linkStack.add(linkStack.last);
+        } else {
+          styleStack.add(currentStyle);
+          linkStack.add(linkStack.last);
         }
       }
-
       lastIndex = match.end;
     }
 
-    // Add remaining text after the last tag
     if (lastIndex < html.length) {
-      final remainingText = html.substring(lastIndex);
-      if (remainingText.isNotEmpty) {
-        spans.add(TextSpan(
-          text: remainingText,
-          style: widget.style ?? Theme.of(context).textTheme.bodyMedium,
-        ));
-      }
-    }
-
-    // If no tags found, return the whole text as normal
-    if (spans.isEmpty) {
-      return TextSpan(
-        text: html,
-        style: widget.style ?? Theme.of(context).textTheme.bodyMedium,
-      );
+      spans.add(TextSpan(
+        text: html.substring(lastIndex),
+        style: styleStack.last,
+        recognizer: _createRecognizer(linkStack.last),
+      ));
     }
 
     return TextSpan(children: spans);
+  }
+
+  TapGestureRecognizer? _createRecognizer(String? url) {
+    if (url == null || widget.onLinkTap == null) return null;
+    final recognizer = TapGestureRecognizer()
+      ..onTap = () => widget.onLinkTap!(url);
+    _recognizers.add(recognizer);
+    return recognizer;
   }
 }

@@ -72,11 +72,13 @@ Widget buildSortButton({
   required double iconSize,
   required Color? draggingColor,
   SortIconBuilder? iconBuilder,
+  VoidCallback? onToggle,
 }) {
-  final onToggle = () => toggleCriterion(sortModel, criterion);
+  final VoidCallback handleToggle =
+      onToggle ?? () => toggleCriterion(sortModel, criterion);
 
   return InkWell(
-    onTap: enabled ? onToggle : null,
+    onTap: enabled ? handleToggle : null,
     child: (iconBuilder ?? defaultSortIcon)(
       context,
       criterion.direction,
