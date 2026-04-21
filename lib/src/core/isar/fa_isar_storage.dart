@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '_fake_isar.dart';
@@ -57,6 +58,7 @@ class FaIsarStorage {
         await isarDir.create(recursive: true);
       }
       dir = isarDir.path;
+      Hive.init(dir);
     }
 
     _isar = await FakeIsar.open(
