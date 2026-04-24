@@ -18,9 +18,11 @@ class LocationInfoDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Set up the AlertDialog
-    FaAlertDialog alert = FaAlertDialog(
+    FaDialog alert = FaDialog(
       titleText: title,
       contentPadding: const EdgeInsets.all(5),
+      preferredContentWidth: 320,
+      preferredContentHeight: null,
       content: _buildMainContent(context),
       actions: [
         ElevatedButton(
@@ -40,31 +42,28 @@ class LocationInfoDialog extends StatelessWidget {
   }
 
   Widget _buildMainContent(BuildContext context) {
-    return SizedBox(
-      width: 320,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 10),
-          IconLabelText(
-            icon: Icon(
-              FaIconConstants.locationIconData,
-              size: 18,
-              color: Colors.black54,
-            ),
-            label: "Location: ",
-            text: locationInfo,
-            suffixIcon: SimpleCopyButton(
-              iconSize: 14,
-              getText: () {
-                return locationInfo;
-              },
-            ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(height: 10),
+        IconLabelText(
+          icon: Icon(
+            FaIconConstants.locationIconData,
+            size: 18,
+            color: Colors.black54,
           ),
-        ],
-      ),
+          label: "Location: ",
+          text: locationInfo,
+          suffixIcon: SimpleCopyButton(
+            iconSize: 14,
+            getText: () {
+              return locationInfo;
+            },
+          ),
+        ),
+      ],
     );
   }
 }

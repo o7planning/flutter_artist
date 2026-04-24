@@ -7,13 +7,9 @@ import '../../core/widgets/_custom_app_container.dart';
 
 class ErrorInfoView extends StatefulWidget {
   final ErrorInfo errorInfo;
-  final double width;
-  final double height;
 
   const ErrorInfoView({
     required this.errorInfo,
-    required this.width,
-    required this.height,
     super.key,
   });
 
@@ -34,14 +30,6 @@ class _ErrorInfoViewState extends State<ErrorInfoView> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.width,
-      height: widget.height,
-      child: _buildErrorDetails(),
-    );
-  }
-
-  Widget _buildErrorDetails() {
     bool hasErrorDetails = widget.errorInfo.errorDetails != null &&
         widget.errorInfo.errorDetails!.isNotEmpty;
     bool hasStackTrace = widget.errorInfo.stackTrace != null;

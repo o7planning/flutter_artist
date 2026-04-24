@@ -5,13 +5,9 @@ import '../../core/icon/icon_constants.dart';
 
 class WarningInfoView extends StatefulWidget {
   final WarningInfo warningInfo;
-  final double width;
-  final double height;
 
   const WarningInfoView({
     required this.warningInfo,
-    required this.width,
-    required this.height,
     super.key,
   });
 
@@ -32,14 +28,6 @@ class _WarningInfoViewState extends State<WarningInfoView> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.width,
-      height: widget.height,
-      child: _buildWarningDetails(),
-    );
-  }
-
-  Widget _buildWarningDetails() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,

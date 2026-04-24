@@ -165,26 +165,19 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    Size preferredSize = calculatePreferredDialogSize(
+    final Size preferContentSize = calculatePreferredDialogSize(
       context,
       preferredWidth: 620,
       preferredHeight: 340,
     );
 
-    return FaAlertDialog(
-      icon: Icon(
-        FaIconConstants.tipDocument,
-        color: FaColorUtils.primaryHighlight(context),
-        size: 20,
-      ),
+    return FaDialog(
+      iconData: FaIconConstants.tipDocument,
       titleText: "Artist Insights - ${tipDocument.getTitle()}",
-      // subtitleText: tipDocument.getTitle(),
       contentPadding: const EdgeInsets.all(8),
-      content: SizedBox(
-        width: preferredSize.width,
-        height: preferredSize.height,
-        child: _buildMainContent(context),
-      ),
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
+      content: _buildMainContent(context),
     );
   }
 

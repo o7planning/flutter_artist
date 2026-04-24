@@ -40,29 +40,23 @@ class _DebugStorageViewerDialogState extends State<DebugStorageViewerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = DialogSizeUtils.calculateDebugDialogSize(context);
+    final Size preferContentSize =
+        DialogSizeUtils.calculateDebugDialogSize(context);
 
     Widget contentWidget = PageStorage(
       bucket: _bucket,
-      child: CustomAppContainer(
-        padding: const EdgeInsets.all(2),
-        width: size.width,
-        height: size.height,
-        child: const StorageView(
-          key: PageStorageKey('MainStorageView'),
-        ),
+      child: const StorageView(
+        key: PageStorageKey('MainStorageView'),
       ),
     );
 
-    return FaAlertDialog(
-      icon: Icon(
-        FaIconConstants.storageIconData,
-        size: 16,
-        color: Colors.indigo,
-      ),
+    return FaDialog(
+      iconData: FaIconConstants.storageIconData,
       titleText: "Debug Storage Viewer",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
       onHelpPressed: () {
         TipDocumentViewerDialog.open(
           context: context,

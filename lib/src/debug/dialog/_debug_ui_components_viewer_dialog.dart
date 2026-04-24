@@ -111,12 +111,17 @@ class _DebugUiComponentsViewerDialogState
 
   @override
   Widget build(BuildContext context) {
-    FaAlertDialog alert = FaAlertDialog(
-      icon: Icon(
-        FaIconConstants.uiComponentsIconData,
-        size: 18,
-      ),
+    final preferContentSize = calculatePreferredDialogSize(
+      context,
+      preferredWidth: 560,
+      preferredHeight: 320,
+    );
+
+    FaDialog alert = FaDialog(
+      iconData: FaIconConstants.uiComponentsIconData,
       titleText: "Debug UI Components Viewer",
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(context),
       onHelpPressed: () {
@@ -130,42 +135,32 @@ class _DebugUiComponentsViewerDialogState
   }
 
   Widget _buildMainContent(BuildContext context) {
-    final size = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 560,
-      preferredHeight: 320,
-    );
-    //
     Map<IContextProviderViewState, XState> widgetStates = _findWidgetStates();
-    return SizedBox(
-      width: size.width,
-      height: size.height,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (widget.block != null)
-            IconLabelText(
-              label: "Block: ",
-              text: "${getClassName(widget.block)} (${widget.block!.name})",
-            ),
-          if (widget.block != null) const SizedBox(height: 10),
-          Text(_title()),
-          const SizedBox(height: 10),
-          Expanded(
-            child: ListView(
-              children: [
-                ...widgetStates.entries.map(
-                  (entry) => _buildRowInfo(
-                    widgetStateEntry: entry,
-                  ),
-                ),
-              ],
-            ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (widget.block != null)
+          IconLabelText(
+            label: "Block: ",
+            text: "${getClassName(widget.block)} (${widget.block!.name})",
           ),
-        ],
-      ),
+        if (widget.block != null) const SizedBox(height: 10),
+        Text(_title()),
+        const SizedBox(height: 10),
+        Expanded(
+          child: ListView(
+            children: [
+              ...widgetStates.entries.map(
+                (entry) => _buildRowInfo(
+                  widgetStateEntry: entry,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 

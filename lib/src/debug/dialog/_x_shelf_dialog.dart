@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/widgets/_custom_app_container.dart';
 import '../executor/x_shelf/_x_shelf_tree_view.dart';
 
 class XShelfDialog extends StatelessWidget {
@@ -27,23 +26,18 @@ class XShelfDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = calculatePreferredDialogSize(
+    final Size preferContentSize = calculatePreferredDialogSize(
       context,
       preferredWidth: 800,
       preferredHeight: 400,
     );
 
-    Widget contentWidget = CustomAppContainer(
-      padding: const EdgeInsets.all(2),
-      width: size.width,
-      height: size.height,
-      child: _buildMainWidget(),
-    );
-
-    FaAlertDialog alert = FaAlertDialog(
+    FaDialog alert = FaDialog(
       titleText: "XShelf Viewer",
-      content: contentWidget,
       contentPadding: EdgeInsets.zero,
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
+      content: _buildMainWidget(),
     );
     return alert;
   }

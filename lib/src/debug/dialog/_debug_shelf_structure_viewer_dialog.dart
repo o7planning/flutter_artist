@@ -42,22 +42,16 @@ class _DebugShelfStructureViewerDialogState
     extends State<DebugShelfStructureViewerDialog> {
   @override
   Widget build(BuildContext context) {
-    Size size = DialogSizeUtils.calculateDebugDialogSize(context);
+    Size preferContentSize = DialogSizeUtils.calculateDebugDialogSize(context);
 
     // Set up the AlertDialog
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
-      icon: Icon(
-        FaIconConstants.shelfStructureIconData,
-        size: 18,
-      ),
+    dialogs.FaDialog alert = dialogs.FaDialog(
+      iconData: FaIconConstants.shelfStructureIconData,
       titleText: "Debug Shelf Structure Viewer - ${getClassName(widget.shelf)}",
       contentPadding: const EdgeInsets.all(5),
-      content: _buildMainContent(
-        context,
-        size.width,
-        size.height,
-      ),
-      clipBehavior: Clip.hardEdge,
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
+      content: _buildMainContent(context),
       onHelpPressed: () {
         TipDocumentViewerDialog.open(
           context: context,
@@ -68,14 +62,10 @@ class _DebugShelfStructureViewerDialogState
     return alert;
   }
 
-  Widget _buildMainContent(BuildContext context, double width, double height) {
-    return SizedBox(
-      width: width,
-      height: height,
-      child: ShelfStructureGraphView(
-        shelf: widget.shelf,
-        onPressedBack: null,
-      ),
+  Widget _buildMainContent(BuildContext context) {
+    return ShelfStructureGraphView(
+      shelf: widget.shelf,
+      onPressedBack: null,
     );
   }
 }

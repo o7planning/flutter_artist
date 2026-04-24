@@ -49,26 +49,21 @@ class _DebugFormModelViewerDialogState
 
   @override
   Widget build(BuildContext context) {
-    Size size = DialogSizeUtils.calculateDebugDialogSize(context);
+    final Size preferContentSize =
+        DialogSizeUtils.calculateDebugDialogSize(context);
 
     // Set up the AlertDialog
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
-      icon: Icon(
-        showFormData
-            ? FaIconConstants.formModelIconData
-            : FaIconConstants.shelfStructureIconData,
-        size: 18,
-      ),
+    dialogs.FaDialog alert = dialogs.FaDialog(
+      iconData: showFormData
+          ? FaIconConstants.formModelIconData
+          : FaIconConstants.shelfStructureIconData,
       titleText: showFormData
           ? "Debug Form Model Viewer - ${getClassName(widget.formModel)}"
           : "Debug Shelf Structure Viewer - ${getClassName(widget.formModel.block.shelf)}",
       contentPadding: const EdgeInsets.all(5),
-      content: _buildMainContent(
-        context,
-        size.width,
-        size.height,
-      ),
-      clipBehavior: Clip.hardEdge,
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
+      content: _buildMainContent(context),
       onHelpPressed: () {
         TipDocumentViewerDialog.open(
           context: context,
@@ -79,28 +74,24 @@ class _DebugFormModelViewerDialogState
     return alert;
   }
 
-  Widget _buildMainContent(BuildContext context, double width, double height) {
-    return SizedBox(
-      width: width,
-      height: height,
-      child: showFormData
-          ? FormModelView(
-              formModel: widget.formModel,
-              locationInfo: widget.locationInfo,
-              onPressedShelf: () {
-                setState(() {
-                  showFormData = false;
-                });
-              },
-            )
-          : ShelfStructureGraphView(
-              shelf: widget.formModel.block.shelf,
-              onPressedBack: () {
-                setState(() {
-                  showFormData = true;
-                });
-              },
-            ),
-    );
+  Widget _buildMainContent(BuildContext context) {
+    return showFormData
+        ? FormModelView(
+            formModel: widget.formModel,
+            locationInfo: widget.locationInfo,
+            onPressedShelf: () {
+              setState(() {
+                showFormData = false;
+              });
+            },
+          )
+        : ShelfStructureGraphView(
+            shelf: widget.formModel.block.shelf,
+            onPressedBack: () {
+              setState(() {
+                showFormData = true;
+              });
+            },
+          );
   }
 }

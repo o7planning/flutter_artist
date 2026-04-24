@@ -28,9 +28,11 @@ class _DevelopmentModeSettingsDialogState
   @override
   Widget build(BuildContext context) {
     // Set up the AlertDialog
-    dialogs.FaAlertDialog alert = dialogs.FaAlertDialog(
+    dialogs.FaDialog alert = dialogs.FaDialog(
       titleText: widget.title,
       contentPadding: const EdgeInsets.all(5),
+      preferredContentWidth: 320,
+      preferredContentHeight: null,
       content: _buildMainContent(context),
       actions: [
         ElevatedButton(
@@ -50,32 +52,29 @@ class _DevelopmentModeSettingsDialogState
   }
 
   Widget _buildMainContent(BuildContext context) {
-    return SizedBox(
-      width: 320,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 10),
-          CheckboxListTile(
-            dense: true,
-            visualDensity: const VisualDensity(vertical: -3, horizontal: -3),
-            contentPadding: EdgeInsets.zero,
-            controlAffinity: ListTileControlAffinity.leading,
-            value: false,
-            title: const Text(
-              "Show Eager Loading Registers",
-              style: TextStyle(
-                fontSize: fontSize,
-              ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(height: 10),
+        CheckboxListTile(
+          dense: true,
+          visualDensity: const VisualDensity(vertical: -3, horizontal: -3),
+          contentPadding: EdgeInsets.zero,
+          controlAffinity: ListTileControlAffinity.leading,
+          value: false,
+          title: const Text(
+            "Show Eager Loading Registers",
+            style: TextStyle(
+              fontSize: fontSize,
             ),
-            onChanged: (bool? value) {
-              //
-            },
           ),
-        ],
-      ),
+          onChanged: (bool? value) {
+            //
+          },
+        ),
+      ],
     );
   }
 

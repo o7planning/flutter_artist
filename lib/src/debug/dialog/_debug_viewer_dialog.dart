@@ -74,22 +74,16 @@ class _DebugViewerDialogState extends State<DebugViewerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = DialogSizeUtils.calculateDebugDialogSize(context);
+    Size preferContentSize = DialogSizeUtils.calculateDebugDialogSize(context);
 
     // Set up the AlertDialog
-    FaAlertDialog alert = FaAlertDialog(
-      icon: Icon(
-        FaIconConstants.filterModelDebugIconData,
-        size: 18,
-      ),
+    FaDialog alert = FaDialog(
+      iconData: FaIconConstants.filterModelDebugIconData,
       titleText: filterViewType.title,
       contentPadding: const EdgeInsets.all(5),
-      content: _buildMainContent(
-        context,
-        size.width,
-        size.height,
-      ),
-      clipBehavior: Clip.hardEdge,
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
+      content: _buildMainContent(context),
       onHelpPressed: _onHelpPressed,
     );
     return alert;
@@ -111,7 +105,7 @@ class _DebugViewerDialogState extends State<DebugViewerDialog> {
     );
   }
 
-  Widget _buildMainContent(BuildContext context, double width, double height) {
+  Widget _buildMainContent(BuildContext context) {
     Widget mainWidget;
     switch (filterViewType) {
       case FilterViewType.debugFilterModel:
@@ -147,10 +141,6 @@ class _DebugViewerDialogState extends State<DebugViewerDialog> {
           },
         );
     }
-    return SizedBox(
-      width: width,
-      height: height,
-      child: mainWidget,
-    );
+    return mainWidget;
   }
 }

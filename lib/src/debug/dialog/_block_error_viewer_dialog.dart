@@ -16,18 +16,9 @@ class BlockErrorViewerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FaAlertDialog alert = FaAlertDialog(
-      titleText: "Error",
-      contentPadding: EdgeInsets.all(8),
-      content: _buildContent(context),
-    );
-    return alert;
-  }
-
-  Widget _buildContent(BuildContext context) {
     AppError apiError = ErrorUtils.toAppError(blockErrorInfo.error);
-    //
-    final Size size = calculatePreferredDialogSize(
+
+    final Size preferContentSize = calculatePreferredDialogSize(
       context,
       preferredWidth: 440,
       preferredHeight:
@@ -35,67 +26,72 @@ class BlockErrorViewerDialog extends StatelessWidget {
               ? 200
               : 280,
     );
-    //
-    return Container(
-      height: size.height,
-      width: size.width,
-      padding: EdgeInsets.all(5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("${blockErrorInfo.blockDataState}"),
-          if (blockErrorInfo.blockDataState == DataState.error)
-            IconLabelText(
-              icon: Icon(
-                FaIconConstants.formErrorDisabledIconData2,
-                color: Colors.red,
-                size: 20,
-              ),
-              text: "Block query data error.",
-            ),
-          Divider(),
-          ListTile(
-            dense: true,
-            visualDensity: const VisualDensity(
-              vertical: -3,
-              horizontal: -3,
-            ),
-            contentPadding: EdgeInsets.all(0),
-            horizontalTitleGap: 5,
-            minVerticalPadding: 5,
-            minLeadingWidth: 24,
-            minTileHeight: 0,
-            titleAlignment: ListTileTitleAlignment.top,
-            leading: Icon(
-              FaIconConstants.dataStateErrorIconData,
-              size: 18,
+
+    FaDialog alert = FaDialog(
+      titleText: "Error",
+      contentPadding: EdgeInsets.all(8),
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
+      content: _buildContent(context, apiError),
+    );
+    return alert;
+  }
+
+  Widget _buildContent(BuildContext context, AppError apiError) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("${blockErrorInfo.blockDataState}"),
+        if (blockErrorInfo.blockDataState == DataState.error)
+          IconLabelText(
+            icon: Icon(
+              FaIconConstants.formErrorDisabledIconData2,
               color: Colors.red,
+              size: 20,
             ),
-            title: Text(
-              apiError.errorMessage,
-              maxLines: 3,
-              style: const TextStyle(
-                fontSize: 13,
-                overflow: TextOverflow.ellipsis,
-              ),
+            text: "Block query data error.",
+          ),
+        Divider(),
+        ListTile(
+          dense: true,
+          visualDensity: const VisualDensity(
+            vertical: -3,
+            horizontal: -3,
+          ),
+          contentPadding: EdgeInsets.all(0),
+          horizontalTitleGap: 5,
+          minVerticalPadding: 5,
+          minLeadingWidth: 24,
+          minTileHeight: 0,
+          titleAlignment: ListTileTitleAlignment.top,
+          leading: Icon(
+            FaIconConstants.dataStateErrorIconData,
+            size: 18,
+            color: Colors.red,
+          ),
+          title: Text(
+            apiError.errorMessage,
+            maxLines: 3,
+            style: const TextStyle(
+              fontSize: 13,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
-          if (apiError.errorDetails != null &&
-              apiError.errorDetails!.isNotEmpty)
-            Divider(height: 10),
-          Expanded(
-            child: ListView(
-              children: apiError.errorDetails != null &&
-                      apiError.errorDetails!.isNotEmpty
-                  ? apiError.errorDetails!
-                      .map((errorDetail) => _buildErrorDetail(errorDetail))
-                      .toList()
-                  : [],
-            ),
+        ),
+        if (apiError.errorDetails != null && apiError.errorDetails!.isNotEmpty)
+          Divider(height: 10),
+        Expanded(
+          child: ListView(
+            children: apiError.errorDetails != null &&
+                    apiError.errorDetails!.isNotEmpty
+                ? apiError.errorDetails!
+                    .map((errorDetail) => _buildErrorDetail(errorDetail))
+                    .toList()
+                : [],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

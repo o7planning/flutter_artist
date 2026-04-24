@@ -27,23 +27,18 @@ class RootDebugDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = calculatePreferredDialogSize(
+    final Size preferContentSize = calculatePreferredDialogSize(
       context,
       preferredWidth: 1000,
       preferredHeight: 600,
     );
 
-    Widget contentWidget = CustomAppContainer(
-      padding: const EdgeInsets.all(2),
-      width: size.width,
-      height: size.height,
-      child: _buildMainWidget(),
-    );
-
-    FaAlertDialog alert = FaAlertDialog(
+    FaDialog alert = FaDialog(
       titleText: "Root Debug",
-      content: contentWidget,
+      content: _buildMainWidget(),
       contentPadding: EdgeInsets.zero,
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
     );
     return alert;
   }

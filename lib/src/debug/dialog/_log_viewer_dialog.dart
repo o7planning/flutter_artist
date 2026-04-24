@@ -70,21 +70,19 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
   Widget build(BuildContext context) {
     final ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
 
-    Size preferredSize = calculatePreferredDialogSize(
+    Size preferContentSize = calculatePreferredDialogSize(
       context,
       preferredWidth: 760,
       preferredHeight: 380,
     );
 
-    return dialogs.FaAlertDialog(
-      icon: Icon(
-        FaIconConstants.logViewerIconData,
-        size: 20,
-        color: FaColorUtils.technicalHighlight(context),
-      ),
+    return dialogs.FaDialog(
+      iconData: FaIconConstants.logViewerIconData,
       titleText: widget.title,
       contentPadding: const EdgeInsets.all(8),
-      content: _buildContent(preferredSize.width, preferredSize.height),
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
+      content: _buildContent(),
       onHelpPressed: loggedInUser == null || !loggedInUser.isSystemUser
           ? null
           : () {
@@ -211,39 +209,35 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
     );
   }
 
-  Widget _buildContent(double width, double height) {
+  Widget _buildContent() {
     if (_logEntry == null) return const SizedBox();
 
     Widget view;
     switch (_logEntry!.logEntryType) {
       case LogEntryType.error:
-        view = ErrorInfoView(
-            errorInfo: _logEntry!.errorInfo!, width: width, height: height);
+        view = ErrorInfoView(errorInfo: _logEntry!.errorInfo!);
       case LogEntryType.warning:
-        view = WarningInfoView(
-            warningInfo: _logEntry!.warningInfo!, width: width, height: height);
+        view = WarningInfoView(warningInfo: _logEntry!.warningInfo!);
     }
 
-    return SizedBox(
-      width: width,
-      height: height,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildLogEntryButtons(),
-          const SizedBox(height: 8),
-          _buildSummaryInfo(),
-          const SizedBox(height: 8),
-          Expanded(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(4), child: view),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildLogEntryButtons(),
+        const SizedBox(height: 8),
+        _buildSummaryInfo(),
+        const SizedBox(height: 8),
+        Expanded(
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: view,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

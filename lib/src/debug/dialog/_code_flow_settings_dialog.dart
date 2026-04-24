@@ -33,22 +33,21 @@ class _CodeFlowSettingsDialogState extends State<CodeFlowSettingsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = calculatePreferredDialogSize(
+    Size preferContentSize = calculatePreferredDialogSize(
       context,
       preferredWidth: 500,
       preferredHeight: 320,
     );
     //
     Widget contentWidget = CustomAppContainer(
-      padding: const EdgeInsets.all(2),
-      width: size.width,
-      height: size.height,
       child: Text("Code Flow Settings"),
     );
 
-    FaAlertDialog alert = FaAlertDialog(
+    FaDialog alert = FaDialog(
       titleText: "Code Flow Settings",
-      icon: Icon(Icons.settings, size: 18),
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
+      iconData: Icons.settings,
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
     );

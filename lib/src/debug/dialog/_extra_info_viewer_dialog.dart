@@ -22,40 +22,32 @@ class ExtraInfoViewerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size preferredSize = calculatePreferredDialogSize(
+    Size preferContentSize = calculatePreferredDialogSize(
       context,
       preferredWidth: 620,
       preferredHeight: 320,
     );
-    FaAlertDialog alert = FaAlertDialog(
-      icon: Icon(
-        Icons.info_outline,
-        size: 18,
-        color: Colors.indigo,
-      ),
+    FaDialog alert = FaDialog(
+      iconData: Icons.info_outline,
       titleText: title,
       contentPadding: EdgeInsets.all(8),
-      content: SizedBox(
-        width: preferredSize.width,
-        height: preferredSize.height,
-        child: Expanded(
-          child: Card(
-            margin: EdgeInsets.zero,
-            child: Padding(
-              padding: EdgeInsets.all(5),
-              child: HtmlSelectableRichText(
-                _getExtraInfoText(),
-                labelStyle: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-                tagStyles: {
-                  'b': TextStyle(fontWeight: FontWeight.bold),
-                  'i': TextStyle(fontStyle: FontStyle.italic),
-                },
-                style: TextStyle(fontSize: 12),
-              ),
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
+      content: Card(
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: EdgeInsets.all(5),
+          child: HtmlSelectableRichText(
+            _getExtraInfoText(),
+            labelStyle: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
             ),
+            tagStyles: {
+              'b': TextStyle(fontWeight: FontWeight.bold),
+              'i': TextStyle(fontStyle: FontStyle.italic),
+            },
+            style: TextStyle(fontSize: 12),
           ),
         ),
       ),

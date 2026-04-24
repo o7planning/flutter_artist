@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/enums/_tip_document.dart';
-import '../../core/widgets/_custom_app_container.dart';
 import '../code_flow/_execution_trace_viewer.dart';
 import '../utils/_dialog_size.dart';
 import '_tip_document_viewer_dialog.dart';
@@ -37,23 +36,14 @@ class CodeFlowViewerDialogState extends State<CodeFlowViewerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = DialogSizeUtils.calculateDebugDialogSize(context);
+    Size preferContentSize = DialogSizeUtils.calculateDebugDialogSize(context);
 
-    Widget contentWidget = CustomAppContainer(
-      padding: const EdgeInsets.all(2),
-      width: size.width,
-      height: size.height,
-      child: _buildMainWidget(),
-    );
-    //
-    FaAlertDialog alert = FaAlertDialog(
-      icon: Icon(
-        Icons.code,
-        size: 18,
-        color: Colors.indigo,
-      ),
+    FaDialog alert = FaDialog(
+      iconData: Icons.code,
       titleText: "Code Flow Viewer",
-      content: contentWidget,
+      content: _buildMainWidget(),
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
       contentPadding: EdgeInsets.zero,
       onHelpPressed: () {
         TipDocumentViewerDialog.open(

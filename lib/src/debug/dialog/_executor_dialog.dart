@@ -24,17 +24,15 @@ class DebugExecutorDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = DialogSizeUtils.calculateDebugDialogSize(context);
+    final Size preferContentSize =
+        DialogSizeUtils.calculateDebugDialogSize(context);
 
-    Widget contentWidget = CustomAppContainer(
-      padding: const EdgeInsets.all(2),
-      width: size.width,
-      height: size.height,
-      child: _buildMainWidget(),
-    );
+    Widget contentWidget = _buildMainWidget();
 
-    FaAlertDialog alert = FaAlertDialog(
+    FaDialog alert = FaDialog(
       titleText: "Task Unit Queue Viewer",
+      preferredContentWidth: preferContentSize.width,
+      preferredContentHeight: preferContentSize.height,
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
     );

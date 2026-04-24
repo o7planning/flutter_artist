@@ -11,8 +11,8 @@ class TaskProgressViewBuilder extends _ContextProviderView {
   final List<Hook> hooks;
 
   final Widget Function(
-      bool onProgress,
-      ) build;
+    bool onProgress,
+  ) build;
 
   const TaskProgressViewBuilder({
     super.key,
