@@ -3,8 +3,9 @@ import 'package:flutter_artist_theme/flutter_artist_theme.dart';
 
 import '../_core_/core.dart';
 import '../enums/_sort_direction.dart';
+import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_tile.dart';
+import '_style.dart';
 import 'dropdown_sort_panel_style.dart';
 
 /// A sort panel using a standard DropdownButton.
@@ -25,7 +26,6 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM>
   @override
   Widget buildContent(BuildContext context) {
     final tokens = context.faTokens;
-    final theme = Theme.of(context);
 
     final selected = sortModel.findFirstCriterionHasDirection() ??
         (sortModel.criteria.isNotEmpty ? sortModel.criteria.first : null);
@@ -36,8 +36,8 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM>
       margin: margin,
       decoration: style.decoration ??
           BoxDecoration(
-            color: tokens.shortcut.surfaceColor,
-            border: Border.fromBorderSide(tokens.shortcut.border),
+            color: SortPanelHelper.getBackgroundColor(context),
+            border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
             borderRadius:
                 BorderRadius.circular(tokens.shortcut.borderRadius / 2),
             boxShadow: tokens.shortcut.cardShadows,
@@ -48,18 +48,18 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM>
         child: DropdownButton<SortCriterion>(
           value: selected,
           isDense: true,
-          dropdownColor: tokens.shortcut.surfaceColor,
+          dropdownColor: SortPanelHelper.getBackgroundColor(context),
           borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
           icon: Icon(
             style.dropdownIcon,
             size: style.dropdownIconSize,
-            color: hasActiveSort
-                ? theme.primaryColor
-                : tokens.shortcut.onSurfaceColor.withValues(alpha: 0.6),
+            color: SortPanelHelper.getIconColor(context, hasActiveSort),
           ),
           onChanged: (_) {},
           items: sortModel.criteria.map((criterion) {
-            final isActive = criterion == selected;
+            final isCurrentActive = criterion.direction != null;
+            final isSelectedInMenu = criterion == selected;
+
             return DropdownMenuItem<SortCriterion>(
               value: criterion,
               onTap: () => _handleDropdownChanged(criterion),
@@ -68,11 +68,11 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                 children: [
                   Text(
                     criterion.text,
-                    style: style.getTextStyle(context, isActive).copyWith(
-                          color: isActive
-                              ? theme.primaryColor
-                              : tokens.shortcut.onSurfaceColor,
-                        ),
+                    style:
+                        style.getTextStyle(context, isSelectedInMenu).copyWith(
+                              color: SortPanelHelper.getTextColor(
+                                  context, isSelectedInMenu),
+                            ),
                   ),
                   const SizedBox(width: 8),
                   defaultSortIcon(

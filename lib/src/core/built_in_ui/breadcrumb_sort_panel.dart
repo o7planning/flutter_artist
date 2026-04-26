@@ -3,8 +3,9 @@ import 'package:flutter_artist_theme/flutter_artist_theme.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
 import '../_core_/core.dart';
+import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_tile.dart';
+import '_style.dart';
 import 'breadcrumb_sort_panel_style.dart';
 
 class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
@@ -33,13 +34,13 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
           padding ?? const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       decoration: decoration ??
           BoxDecoration(
-            color: tokens.shortcut.surfaceColor.withValues(alpha: 0.5),
+            color: SortPanelHelper.getBackgroundColor(context)
+                .withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
-            border: Border.all(
-                color: tokens.shortcut.border.color.withValues(alpha: 0.2)),
+            border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
           ),
       child: BreadCrumb(
-        divider: _buildSeparator(tokens.shortcut.border.color),
+        divider: _buildSeparator(context),
         items: sortModel.criteria
             .map((c) => _buildBreadCrumbItem(context, c, tokens))
             .toList(),
@@ -87,12 +88,7 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
           children: [
             Text(
               criterion.text,
-              style: style.getTextStyle(context, isActive).copyWith(
-                    color: isActive
-                        ? tokens.shortcut.headerTextStyle.color
-                        : tokens.shortcut.bodyTextStyle.color,
-                    fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-                  ),
+              style: style.getTextStyle(context, isActive),
             ),
             SizedBox(width: style.iconSpacing),
             buildSortButton(
@@ -111,13 +107,13 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     );
   }
 
-  Widget _buildSeparator(Color dividerColor) {
+  Widget _buildSeparator(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: style.itemSpacing),
       child: Text(
         '/',
         style: TextStyle(
-          color: dividerColor.withValues(alpha: 0.5),
+          color: SortPanelHelper.getSeparatorColor(context),
           fontWeight: FontWeight.w300,
         ),
       ),
@@ -131,19 +127,25 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: tokens.shortcut.surfaceColor.withValues(alpha: 0.9),
+          color: SortPanelHelper.getBackgroundColor(context)
+              .withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
           boxShadow: tokens.shortcut.cardShadows,
-          border: Border.all(color: tokens.shortcut.border.color),
+          border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(criterion.text,
-                style: tokens.shortcut.headerTextStyle.copyWith(fontSize: 14)),
+            Text(
+              criterion.text,
+              style: style.getTextStyle(context, false),
+            ),
             const SizedBox(width: 8),
-            Icon(Icons.unfold_more_rounded,
-                size: 16, color: tokens.shortcut.onSurfaceColor),
+            Icon(
+              Icons.unfold_more_rounded,
+              size: 16,
+              color: SortPanelHelper.getSortIconColor(context, false),
+            ),
           ],
         ),
       ),

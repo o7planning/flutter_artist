@@ -12,7 +12,7 @@ class CopyUtils {
             behavior: SnackBarBehavior.floating,
             width: 220,
             duration: const Duration(seconds: 1),
-            backgroundColor: FaColorUtils.primaryHighlight(context),
+            backgroundColor: FaColorUtils.primaryAction(context),
           ),
         );
       }

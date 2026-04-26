@@ -21,7 +21,7 @@ class FilterCriterionView extends StatelessWidget {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 3, horizontal: 0),
       color: selected
-          ? FaColorUtils.primaryHighlight(context).withValues(alpha: 0.15)
+          ? FaColorUtils.primaryAction(context).withValues(alpha: 0.15)
           : null,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(2.0),

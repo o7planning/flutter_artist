@@ -12,7 +12,7 @@ abstract class _BaseControlBarState<OWNER extends Object,
   }
 
   Color _getEffectiveActiveIconColor(BuildContext context) =>
-      widget.style.activeIconColor ?? FaColorUtils.primaryHighlight(context);
+      widget.style.activeIconColor ?? FaColorUtils.primaryAction(context);
 
   Color _getEffectiveDisabledIconColor(BuildContext context) =>
       widget.style.disabledIconColor ?? FaColorUtils.infoLabel(context);

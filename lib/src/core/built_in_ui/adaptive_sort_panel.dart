@@ -3,8 +3,9 @@ import 'package:flutter_artist_theme/flutter_artist_theme.dart';
 
 import '../_core_/core.dart';
 import '_menu_item.dart';
+import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_tile.dart';
+import '_style.dart';
 import 'adaptive_sort_panel_style.dart';
 
 /// A smart sort panel that displays as many items as possible horizontally,
@@ -87,8 +88,9 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: tokens.shortcut.surfaceColor,
-                      border: Border.fromBorderSide(tokens.shortcut.border),
+                      color: SortPanelHelper.getBackgroundColor(context),
+                      border: Border.fromBorderSide(
+                          SortPanelHelper.getBorder(context)),
                       borderRadius:
                           BorderRadius.circular(tokens.shortcut.borderRadius),
                       boxShadow: tokens.shortcut.cardShadows,
@@ -103,7 +105,7 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                             for (int i = 0; i < visibleItems.length; i++) ...[
                               _buildToolbarItem(context, visibleItems[i]),
                               if (i != visibleItems.length - 1)
-                                _buildDivider(tokens),
+                                _buildDivider(context),
                             ],
                           ],
                         ),
@@ -135,17 +137,17 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     return PopupMenuButton<void>(
       padding: EdgeInsets.zero,
       offset: const Offset(0, 40),
-      color: tokens.shortcut.surfaceColor,
+      color: SortPanelHelper.getBackgroundColor(context),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
-        side: tokens.shortcut.border,
+        side: SortPanelHelper.getBorder(context),
       ),
       child: Container(
         height: style.height,
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
-          color: tokens.shortcut.surfaceColor,
-          border: Border.fromBorderSide(tokens.shortcut.border),
+          color: SortPanelHelper.getBackgroundColor(context),
+          border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
           borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
           boxShadow: tokens.shortcut.cardShadows,
         ),
@@ -156,7 +158,7 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
               activeInHidden.text,
               style: style.getTextStyle(context, hasActiveSort).copyWith(
                     fontSize: 13,
-                    color: hasActiveSort ? theme.primaryColor : null,
+                    color: SortPanelHelper.getTextColor(context, hasActiveSort),
                   ),
             ),
             if (hasActiveSort) ...[
@@ -177,13 +179,13 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
               child: Container(
                 width: 1,
                 height: 12,
-                color: tokens.shortcut.onSurfaceColor.withValues(alpha: 0.2),
+                color: SortPanelHelper.getIconColor(context, false),
               ),
             ),
             Icon(
               Icons.more_vert_rounded,
               size: 16,
-              color: tokens.shortcut.onSurfaceColor.withValues(alpha: 0.6),
+              color: SortPanelHelper.getIconColor(context, false),
             ),
           ],
         ),
@@ -207,12 +209,12 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     );
   }
 
-  Widget _buildDivider(FaThemeTokens tokens) {
+  Widget _buildDivider(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       width: 1,
       height: 14,
-      color: tokens.shortcut.border.color.withValues(alpha: 0.3),
+      color: SortPanelHelper.getBorder(context).color,
     );
   }
 

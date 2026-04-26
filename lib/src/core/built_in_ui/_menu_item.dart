@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../_core_/core.dart';
 import '_sorting_options.dart';
-import '_tile.dart';
+import '_style.dart';
 
 /// A stateful menu item that listens to SortModel changes to refresh
 /// even when inside a PopupMenu overlay.
@@ -42,7 +42,6 @@ class _SortMenuItemState extends State<SortMenuItem> {
   }
 
   void _handleModelChange() {
-    print("_handleModelChange @@@@@@@@@@@");
     if (mounted) {
       setState(() {}); // Trigger local rebuild of the menu item
     }

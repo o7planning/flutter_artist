@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../_core_/core.dart';
+import '../enums/_sort_direction.dart';
+import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
 import 'sort_dialog_panel_style.dart';
 
@@ -45,6 +47,15 @@ class SortDialogContentState extends State<SortDialogContent> {
       height: 400,
       child: ReorderableListView.builder(
         itemCount: _localCriteria.length,
+        proxyDecorator: (child, index, animation) {
+          return Material(
+            elevation: 4,
+            color: SortPanelHelper.getBackgroundColor(context)
+                .withValues(alpha: 0.8),
+            borderRadius: BorderRadius.circular(8),
+            child: child,
+          );
+        },
         onReorder: (oldIndex, newIndex) {
           setState(() {
             if (oldIndex < newIndex) newIndex -= 1;
@@ -55,17 +66,40 @@ class SortDialogContentState extends State<SortDialogContent> {
         itemBuilder: (context, index) {
           final criterion = _localCriteria[index];
           final isActive = criterion.direction != null;
+          final bool canToggle = !criterion.directionalSelectionOnly;
 
-          // Trong itemBuilder của SortDialogContent
           return ListTile(
             key: ValueKey('dialog_item_${criterion.criterionName}'),
+            onTap: canToggle
+                ? () {
+                    setState(() {
+                      criterion.updateDirectionIfCopied(
+                        isActive
+                            ? null
+                            : (criterion.initialDirection ?? SortDirection.asc),
+                      );
+                    });
+                  }
+                : null,
             leading: Tooltip(
               message: isActive ? 'Active' : 'Non-active',
               child: Transform.scale(
                 scale: widget.style.switchScale,
                 child: Switch.adaptive(
                   value: isActive,
-                  onChanged: null,
+                  activeTrackColor: SortPanelHelper.getTextColor(context, true),
+                  onChanged: canToggle
+                      ? (val) {
+                          setState(() {
+                            criterion.updateDirectionIfCopied(
+                              val
+                                  ? (criterion.initialDirection ??
+                                      SortDirection.asc)
+                                  : null,
+                            );
+                          });
+                        }
+                      : null,
                 ),
               ),
             ),
@@ -95,9 +129,12 @@ class SortDialogContentState extends State<SortDialogContent> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Tooltip(
+                Tooltip(
                   message: 'Drag to change the priority order.',
-                  child: Icon(Icons.drag_handle, color: Colors.grey),
+                  child: Icon(
+                    Icons.drag_handle,
+                    color: SortPanelHelper.getIconColor(context, false),
+                  ),
                 ),
               ],
             ),

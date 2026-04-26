@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '_tile.dart';
+import '_style.dart';
 
 class BreadcrumbSortPanelStyle extends SortPanelStyle {
   final double itemSpacing;

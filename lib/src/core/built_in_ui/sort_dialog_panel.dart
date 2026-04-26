@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_artist_theme/flutter_artist_theme.dart';
 
 import '../_core_/core.dart';
-import '_tile.dart';
+import '_sort_panel_helper.dart';
+import '_sorting_options.dart';
+import '_style.dart';
 import 'sort_dialog_content.dart';
 import 'sort_dialog_panel_style.dart';
 
@@ -25,12 +28,17 @@ class SortDialogPanel<ITEM extends Object> extends SortPanel<ITEM>
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: tokens.shortcut.surfaceColor,
+          backgroundColor: SortPanelHelper.getBackgroundColor(context),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
-            side: tokens.shortcut.border,
+            side: SortPanelHelper.getBorder(context),
           ),
-          title: Text(style.title, style: tokens.shortcut.headerTextStyle),
+          title: Text(
+            style.title,
+            style: style.getTextStyle(context, false).copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
           constraints: BoxConstraints(maxWidth: style.dialogMaxWidth),
           contentPadding: const EdgeInsets.symmetric(vertical: 8),
           content: SortDialogContent(
@@ -46,19 +54,28 @@ class SortDialogPanel<ITEM extends Object> extends SortPanel<ITEM>
                   TextButton(
                     onPressed: () =>
                         contentKey.currentState?.resetLocalCriteria(),
-                    child: const Text('Reset',
-                        style: TextStyle(color: Colors.redAccent)),
+                    child: Text(
+                      'Reset',
+                      style: TextStyle(
+                        color: FaColorUtils.alertError(context),
+                      ),
+                    ),
                   ),
                   const Spacer(),
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: Text(style.cancelButtonText),
+                    child: Text(
+                      style.cancelButtonText,
+                      style: TextStyle(
+                          color: SortPanelHelper.getTextColor(context, false)),
+                    ),
                   ),
                   const SizedBox(width: 8),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: Colors.white,
+                      backgroundColor:
+                          SortPanelHelper.getTextColor(context, true),
+                      foregroundColor: FaColorUtils.onHighlight(context),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                             tokens.shortcut.borderRadius / 2),
@@ -95,8 +112,8 @@ class SortDialogPanel<ITEM extends Object> extends SortPanel<ITEM>
         height: style.height,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
-          border: Border.all(
-              color: Theme.of(context).dividerColor.withValues(alpha: 0.5)),
+          color: SortPanelHelper.getBackgroundColor(context),
+          border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
@@ -105,16 +122,14 @@ class SortDialogPanel<ITEM extends Object> extends SortPanel<ITEM>
             Icon(
               style.triggerIcon,
               size: style.triggerIconSize,
-              color: hasActiveSort
-                  ? Theme.of(context).primaryColor
-                  : style.triggerIconColor,
+              color: SortPanelHelper.getIconColor(context, hasActiveSort),
             ),
             const SizedBox(width: 8),
             Text(
               style.title,
-              style: style.textStyle.copyWith(
-                color: hasActiveSort ? Theme.of(context).primaryColor : null,
-              ),
+              style: style.getTextStyle(context, hasActiveSort).copyWith(
+                    color: SortPanelHelper.getTextColor(context, hasActiveSort),
+                  ),
             ),
           ],
         ),

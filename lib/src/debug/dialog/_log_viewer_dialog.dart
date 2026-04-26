@@ -111,7 +111,7 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
               iconSize: iconSize,
               iconColor: tipDocument == null || !tipDocument.enabled
                   ? null
-                  : FaColorUtils.primaryHighlight(context),
+                  : FaColorUtils.primaryAction(context),
               onPressed: tipDocument == null || !tipDocument.enabled
                   ? null
                   : () {

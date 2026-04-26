@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_theme/flutter_artist_theme.dart';
 
 import '../_core_/core.dart';
+import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_tile.dart';
+import '_style.dart';
 import 'chip_sort_panel_style.dart';
 
 class ChipSortPanel<ITEM extends Object> extends SortPanel<ITEM>
@@ -31,13 +32,19 @@ class ChipSortPanel<ITEM extends Object> extends SortPanel<ITEM>
         runSpacing: style.runSpacing,
         children: sortModel.criteria.map((criterion) {
           final isSelected = criterion.direction != null;
-          final effectiveSelectedColor =
-              style.selectedColor ?? theme.primaryColor.withValues(alpha: 0.15);
-          final effectiveUnselectedColor =
-              style.backgroundColor ?? tokens.shortcut.surfaceColor;
+
+          final effectiveUnselectedColor = style.backgroundColor ??
+              SortPanelHelper.getBackgroundColor(context);
+
+          final effectiveSelectedColor = style.selectedColor ??
+              SortPanelHelper.getTextColor(context, true)
+                  .withValues(alpha: 0.15);
+
           return RawChip(
-            label: Text(criterion.text,
-                style: style.getTextStyle(context, isSelected)),
+            label: Text(
+              criterion.text,
+              style: style.getTextStyle(context, isSelected),
+            ),
             labelPadding: EdgeInsets.only(right: style.iconSpacing),
             deleteIcon: buildSortButton(
               context: context,
@@ -52,8 +59,10 @@ class ChipSortPanel<ITEM extends Object> extends SortPanel<ITEM>
             onPressed: () => toggleCriterionByName(sortModel, criterion),
             backgroundColor: effectiveUnselectedColor,
             selectedColor: effectiveSelectedColor,
-            shape:
-                style.chipShape ?? StadiumBorder(side: tokens.shortcut.border),
+            shape: style.chipShape ??
+                StadiumBorder(
+                  side: SortPanelHelper.getBorder(context),
+                ),
             selected: isSelected,
             showCheckmark: false,
           );

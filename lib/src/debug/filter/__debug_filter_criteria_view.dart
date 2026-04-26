@@ -117,7 +117,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         Text(
           _selectedFilterCriterion?.filterCriterionName ?? "-",
           style: TextStyle(
-              fontSize: 13, color: FaColorUtils.primaryHighlight(context)),
+              fontSize: 13, color: FaColorUtils.primaryAction(context)),
         ),
         const SizedBox(height: 12),
         Row(
@@ -126,7 +126,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
                 style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: FaColorUtils.primaryHighlight(context))),
+                    color: FaColorUtils.primaryAction(context))),
             Text(
               _selectedFilterCriterion == null
                   ? "-"

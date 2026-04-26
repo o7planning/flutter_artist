@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_theme/flutter_artist_theme.dart';
 
 import '../_core_/core.dart';
+import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_tile.dart';
+import '_style.dart';
 import 'segmented_sort_panel_style.dart';
 
 /// A Material 3 segmented sort panel with drag-and-drop support.
@@ -31,15 +32,14 @@ class SegmentedSortPanel<ITEM extends Object> extends SortPanel<ITEM>
             style: SegmentedButton.styleFrom(
               visualDensity: style.visualDensity,
               tapTargetSize: style.tapTargetSize,
-              backgroundColor: tokens.shortcut.surfaceColor,
+              backgroundColor: SortPanelHelper.getBackgroundColor(context),
+              foregroundColor: SortPanelHelper.getTextColor(context, false),
               selectedBackgroundColor:
-                  theme.primaryColor.withValues(alpha: 0.1),
-              foregroundColor: tokens.shortcut.onSurfaceColor,
-              selectedForegroundColor: theme.primaryColor,
-              side: BorderSide(
-                color: tokens.shortcut.border.color.withValues(alpha: 0.5),
-                width: 1,
-              ),
+                  SortPanelHelper.getTextColor(context, true)
+                      .withValues(alpha: 0.1),
+              selectedForegroundColor:
+                  SortPanelHelper.getTextColor(context, true),
+              side: SortPanelHelper.getBorder(context),
               shape: RoundedRectangleBorder(
                 borderRadius:
                     BorderRadius.circular(tokens.shortcut.borderRadius / 2),
@@ -92,21 +92,24 @@ class SegmentedSortPanel<ITEM extends Object> extends SortPanel<ITEM>
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Theme.of(context).cardColor.withValues(alpha: 0.8),
+                color: SortPanelHelper.getBackgroundColor(context)
+                    .withValues(alpha: 0.9),
                 borderRadius: BorderRadius.circular(4),
                 boxShadow: const [
                   BoxShadow(color: Colors.black12, blurRadius: 4)
                 ],
+                border:
+                    Border.fromBorderSide(SortPanelHelper.getBorder(context)),
               ),
-              child: Text(criterion.text, style: style.textStyle),
+              child: Text(criterion.text,
+                  style: style.textStyle.copyWith(
+                      color: SortPanelHelper.getTextColor(context, false))),
             )),
-        // Use the common getTextStyle and buildSortButton.
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(criterion.text, style: style.getTextStyle(context, isActive)),
             SizedBox(width: style.iconSpacing),
-            // The icon itself shouldn't trigger toggle here to avoid conflict with SegmentedButton's onTap.
             buildSortButton(
                 context: context,
                 sortModel: sortModel,

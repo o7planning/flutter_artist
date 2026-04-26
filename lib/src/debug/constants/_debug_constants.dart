@@ -66,7 +66,7 @@ class DebugConstants {
   static const Color eventSourceTextColor = Colors.red;
 
   static Color nonEventOrListenerIconColor(BuildContext context) {
-    return FaColorUtils.primaryHighlight(context);
+    return FaColorUtils.primaryAction(context);
   }
 
   static List<Color> filterColors(BuildContext context) {

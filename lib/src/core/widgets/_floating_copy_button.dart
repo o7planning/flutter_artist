@@ -41,7 +41,7 @@ class FloatingCopyButton extends StatelessWidget {
         ),
         icon: Icon(
           Icons.copy_all_rounded,
-          color: FaColorUtils.primaryHighlight(context),
+          color: FaColorUtils.primaryAction(context),
         ),
       ),
     );

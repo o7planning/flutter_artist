@@ -1,5 +1,6 @@
 part of '../core.dart';
 
+// Rename: AppConfiguration.
 abstract class StorageStructure {
   void registerActivities();
 
@@ -8,6 +9,8 @@ abstract class StorageStructure {
   List<ProjectionFamily> projectionFamilies();
 
   List<FaTheme> additionalThemes();
+
+  void overrideColorResolvers();
 }
 
 class _DebugRegister {

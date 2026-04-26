@@ -3,8 +3,9 @@ import 'package:flutter_artist_theme/flutter_artist_theme.dart';
 
 import '../_core_/core.dart';
 import '_menu_item.dart';
+import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_tile.dart';
+import '_style.dart';
 import 'collapsible_sort_panel_style.dart';
 
 class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
@@ -55,17 +56,17 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
       padding: style.padding,
       child: PopupMenuButton<void>(
         offset: const Offset(0, 40),
-        color: tokens.shortcut.surfaceColor,
+        color: SortPanelHelper.getBackgroundColor(context),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
-          side: tokens.shortcut.border,
+          side: SortPanelHelper.getBorder(context),
         ),
         child: Container(
           height: style.height,
           padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
-            color: tokens.shortcut.surfaceColor,
-            border: Border.fromBorderSide(tokens.shortcut.border),
+            color: SortPanelHelper.getBackgroundColor(context),
+            border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
             borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
             boxShadow: tokens.shortcut.cardShadows,
           ),
@@ -76,7 +77,7 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                 activeCriterion.text,
                 style: style.getTextStyle(context, hasActiveSort).copyWith(
                       color:
-                          hasActiveSort ? Theme.of(context).primaryColor : null,
+                          SortPanelHelper.getTextColor(context, hasActiveSort),
                     ),
               ),
               const SizedBox(width: 8),
@@ -122,8 +123,8 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
           padding: const EdgeInsets.symmetric(horizontal: 10),
           height: style.height,
           decoration: BoxDecoration(
-            color: tokens.shortcut.surfaceColor,
-            border: Border.fromBorderSide(tokens.shortcut.border),
+            color: SortPanelHelper.getBackgroundColor(context),
+            border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
             borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
             boxShadow: tokens.shortcut.cardShadows,
           ),
@@ -135,7 +136,8 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
               children: [
                 for (int i = 0; i < sortModel.criteria.length; i++) ...[
                   _buildToolbarItem(context, sortModel.criteria[i]),
-                  if (i != sortModel.criteria.length - 1) _buildDivider(tokens),
+                  if (i != sortModel.criteria.length - 1)
+                    _buildDivider(context),
                 ],
               ],
             ),
@@ -145,12 +147,12 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     );
   }
 
-  Widget _buildDivider(FaThemeTokens tokens) {
+  Widget _buildDivider(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: style.buttonSpacing / 2),
       width: 1,
       height: 14,
-      color: tokens.shortcut.border.color.withValues(alpha: 0.3),
+      color: SortPanelHelper.getBorder(context).color.withValues(alpha: 0.6),
     );
   }
 
@@ -162,7 +164,8 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     return InkWell(
       borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius / 2),
       onTap: () => toggleCriterionByName(sortModel, criterion),
-      hoverColor: theme.primaryColor.withValues(alpha: 0.1),
+      hoverColor:
+          SortPanelHelper.getTextColor(context, true).withValues(alpha: 0.1),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
         child: Row(

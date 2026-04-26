@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../_core_/core.dart';
+import '_sort_panel_helper.dart';
 
 /// Base configuration style for all Sort Panels.
 abstract class SortPanelStyle {
@@ -22,27 +22,17 @@ abstract class SortPanelStyle {
 
   /// Returns the appropriate text style based on the active state.
   TextStyle getTextStyle(BuildContext context, bool isActive) {
-    final theme = Theme.of(context);
+    final Color effectiveColor =
+        SortPanelHelper.getTextColor(context, isActive);
+
     final baseStyle = textStyle.copyWith(
-      color: isActive
-          ? theme.primaryColor
-          : theme.colorScheme.onSurface.withValues(alpha: 0.8),
+      color: effectiveColor,
     );
+
     if (!isActive) return baseStyle;
+
     return baseStyle.copyWith(
       fontWeight: boldActiveText ? FontWeight.bold : baseStyle.fontWeight,
-    );
-  }
-}
-
-/// A mixin to provide shared sorting logic across different panel types.
-mixin SortPanelMixin {
-  /// Standardized method to toggle a criterion's direction.
-  void toggleCriterionByName(SortModel sortModel, SortCriterion criterion) {
-    sortModel.updateSortingCriterionByName(
-      criterionName: criterion.criterionName,
-      direction: criterion.nextDirection,
-      moveToFirst: false,
     );
   }
 }

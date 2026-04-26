@@ -190,7 +190,7 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
         child: Padding(
           padding: const EdgeInsets.all(4),
           child: Icon(icon,
-              size: 14, color: FaColorUtils.primaryHighlight(context)),
+              size: 14, color: FaColorUtils.primaryAction(context)),
         ),
       ),
     );
@@ -209,14 +209,14 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
       child: Row(
         children: [
           Icon(Icons.link_rounded,
-              size: 16, color: FaColorUtils.primaryHighlight(context)),
+              size: 16, color: FaColorUtils.primaryAction(context)),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               url,
               style: TextStyle(
                   fontSize: 13,
-                  color: FaColorUtils.primaryHighlight(context),
+                  color: FaColorUtils.primaryAction(context),
                   decoration: TextDecoration.underline),
               overflow: TextOverflow.ellipsis,
             ),

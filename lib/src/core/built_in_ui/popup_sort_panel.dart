@@ -3,8 +3,9 @@ import 'package:flutter_artist_theme/flutter_artist_theme.dart';
 
 import '../_core_/core.dart';
 import '_menu_item.dart';
+import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_tile.dart';
+import '_style.dart';
 import 'popup_sort_panel_style.dart';
 
 /// A sort panel that opens a stateful popup menu for selecting criteria.
@@ -24,28 +25,29 @@ class PopupSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     final hasActiveSort = activeCriterion != null;
 
     final tokens = context.faTokens;
-    final theme = Theme.of(context);
 
     return PopupMenuButton<void>(
       padding: EdgeInsets.zero,
       offset: const Offset(0, 40),
       elevation: tokens.shortcut.elevation > 0 ? tokens.shortcut.elevation : 8,
-      color: tokens.shortcut.surfaceColor,
+      color: SortPanelHelper.getBackgroundColor(context),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
-        side: tokens.shortcut.border,
+        side: SortPanelHelper.getBorder(context),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
         onTap: null,
-        hoverColor: theme.primaryColor.withValues(alpha: 0.08),
+        hoverColor:
+            SortPanelHelper.getTextColor(context, true).withValues(alpha: 0.08),
         child: Container(
           height: style.height,
           padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: style.menuDecoration ??
               BoxDecoration(
-                color: tokens.shortcut.surfaceColor,
-                border: Border.fromBorderSide(tokens.shortcut.border),
+                color: SortPanelHelper.getBackgroundColor(context),
+                border:
+                    Border.fromBorderSide(SortPanelHelper.getBorder(context)),
                 borderRadius:
                     BorderRadius.circular(tokens.shortcut.borderRadius),
                 boxShadow: tokens.shortcut.cardShadows,
@@ -58,9 +60,7 @@ class PopupSortPanel<ITEM extends Object> extends SortPanel<ITEM>
               Icon(
                 Icons.arrow_drop_down_rounded,
                 size: 20,
-                color: hasActiveSort
-                    ? theme.primaryColor
-                    : tokens.shortcut.onSurfaceColor.withValues(alpha: 0.5),
+                color: SortPanelHelper.getIconColor(context, hasActiveSort),
               ),
             ],
           ),
@@ -91,6 +91,7 @@ class PopupSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     final List<Widget> children = [];
     final iconWidget = (style.iconBuilder ?? defaultSortIcon)(
         context, active?.direction, false, style.sortIconSize, null);
+
     final textWidget = Text(active?.text ?? "Sort",
         style: style.getTextStyle(context, isActive));
 

@@ -20,7 +20,7 @@ class _ControlBarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color baseColor = iconColor ?? FaColorUtils.primaryHighlight(context);
+    final Color baseColor = iconColor ?? FaColorUtils.primaryAction(context);
     final effectiveColor =
         onPressed == null ? baseColor.withValues(alpha: 0.3) : baseColor;
 
