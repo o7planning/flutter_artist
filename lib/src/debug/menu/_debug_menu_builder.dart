@@ -62,6 +62,14 @@ class DebugMenuBuilder {
               _showDebugStorageViewerDialog(context);
             },
           ),
+        if (isSystemUser)
+          _buildPopupMenuItem(
+            iconData: FaIconConstants.themeIconData,
+            title: 'Theme Viewer',
+            onTab: () {
+              _showDebugThemeViewerDialog(context);
+            },
+          ),
         if (isSystemUser) _divider(),
         if (isSystemUser)
           _buildPopupMenuItem(
@@ -132,6 +140,12 @@ class DebugMenuBuilder {
     Navigator.pop(context, null);
     await FlutterArtist.storage.showDebugStorageViewerDialog();
   }
+
+  Future<void> _showDebugThemeViewerDialog(BuildContext context) async {
+    Navigator.pop(context, null);
+    await FlutterArtist. showDebugThemeViewerDialog();
+  }
+
 
   void _clearCodeFlow(BuildContext context) {
     Navigator.pop(context, null);

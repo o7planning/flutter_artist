@@ -7213,6 +7213,17 @@ abstract class Block<
     return List.unmodifiable(__blockData._selectedItems);
   }
 
+  List<int> get selectedItemIndexes {
+    final allItems = items;
+    final List<ITEM> sItems = selectedItems;
+    final List<int> indexes = [];
+    for (var item in sItems) {
+      int idx = allItems.indexWhere((it) => identical(it, item));
+      indexes.add(idx);
+    }
+    return indexes;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 

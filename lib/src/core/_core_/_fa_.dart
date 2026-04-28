@@ -484,6 +484,11 @@ class _FlutterArtist extends _Core {
     return coreFeaturesAdapter.isOverlayOpen;
   }
 
+  Future<void> showDebugThemeViewerDialog() async {
+    BuildContext context = coreFeaturesAdapter.context;
+    await FlutterArtistTheme.showDebugDialog(context);
+  }
+
   Future<void> showCodeFlowViewerDialog() async {
     BuildContext context = coreFeaturesAdapter.context;
     await CodeFlowViewerDialog.open(context: context);
