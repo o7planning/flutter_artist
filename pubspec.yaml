@@ -31,16 +31,12 @@ dependencies:
   back_button_interceptor: ^8.0.4
   url_launcher: ^6.3.2
 
-  flutter_artist_core:
-    path: ../flutter_artist_core
-  flutter_artist_theme:
-    path: ../flutter_artist_theme
-  flutter_artist_router:
-    path: ../flutter_artist_router
+  flutter_artist_core: ^0.0.1
+  flutter_artist_theme: ^0.0.1
+  flutter_artist_router: ^0.0.1
   flutter_left_right_container:
     path: ../flutter_left_right_container
-  flutter_artist_commons_ui:
-    path: ../flutter_artist_commons_ui
+  flutter_artist_commons_ui: ^0.0.1
 
 dev_dependencies:
   flutter_test:
@@ -84,3 +80,13 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/to/font-from-package
+
+dependency_overrides:
+  flutter_artist_core:
+    path: ../flutter_artist_core
+  flutter_artist_theme:
+    path: ../flutter_artist_theme
+  flutter_artist_router:
+    path: ../flutter_artist_router
+  flutter_artist_commons_ui:
+    path: ../flutter_artist_commons_ui
