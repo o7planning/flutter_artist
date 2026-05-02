@@ -10,17 +10,17 @@ import '../shelf/_shelf_structure_graph_view.dart';
 import '../utils/_dialog_size.dart';
 import '_tip_document_viewer_dialog.dart';
 
-class DebugShelfStructureViewerDialog extends StatefulWidget {
+class DebugShelfStructureInspectorDialog extends StatefulWidget {
   final Shelf shelf;
 
-  const DebugShelfStructureViewerDialog({
+  const DebugShelfStructureInspectorDialog({
     required this.shelf,
     super.key,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _DebugShelfStructureViewerDialogState();
+    return _DebugShelfStructureInspectorDialogState();
   }
 
   static Future<void> open({
@@ -30,7 +30,7 @@ class DebugShelfStructureViewerDialog extends StatefulWidget {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return DebugShelfStructureViewerDialog(
+        return DebugShelfStructureInspectorDialog(
           shelf: shelf,
         );
       },
@@ -38,8 +38,8 @@ class DebugShelfStructureViewerDialog extends StatefulWidget {
   }
 }
 
-class _DebugShelfStructureViewerDialogState
-    extends State<DebugShelfStructureViewerDialog> {
+class _DebugShelfStructureInspectorDialogState
+    extends State<DebugShelfStructureInspectorDialog> {
   @override
   Widget build(BuildContext context) {
     Size preferContentSize = DialogSizeUtils.calculateDebugDialogSize(context);
@@ -47,7 +47,8 @@ class _DebugShelfStructureViewerDialogState
     // Set up the AlertDialog
     dialogs.FaDialog alert = dialogs.FaDialog(
       iconData: FaIconConstants.shelfStructureIconData,
-      titleText: "Debug Shelf Structure Viewer - ${getClassName(widget.shelf)}",
+      titleText:
+          "Debug Shelf Structure Inspector - ${getClassName(widget.shelf)}",
       contentPadding: const EdgeInsets.all(5),
       preferredContentWidth: preferContentSize.width,
       preferredContentHeight: preferContentSize.height,
@@ -55,7 +56,7 @@ class _DebugShelfStructureViewerDialogState
       onHelpPressed: () {
         TipDocumentViewerDialog.open(
           context: context,
-          tipDocument: TipDocument.debugShelfStructureViewer,
+          tipDocument: TipDocument.debugShelfStructureInspector,
         );
       },
     );

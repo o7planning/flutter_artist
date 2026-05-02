@@ -37,37 +37,36 @@ class DebugMenuBuilder {
             },
           ),
         if (isSystemUser && hasLogs) _divider(),
-        if (isSystemUser &&
-            FlutterArtist.canShowDebugShelfStructureViewerDialog())
+        if (isSystemUser)
+          _buildPopupMenuItem(
+            iconData: FaIconConstants.appIconData,
+            title: 'App Inspector',
+            onTab: () {
+              _showDebugAppInspectorDialog(context);
+            },
+          ),
+        if (isSystemUser && FlutterArtist.canShowDebugShelfStructureInspector())
           _buildPopupMenuItem(
             iconData: FaIconConstants.shelfStructureIconData,
-            title: 'Shelf Structure Viewer',
+            title: 'Shelf Structure Inspector',
             onTab: () {
-              _showDebugShelfStructureViewer(context);
+              _showDebugShelfStructureInspector(context);
             },
           ),
         if (isSystemUser && FlutterArtist.debugCanShowUiComponentDialog())
           _buildPopupMenuItem(
             iconData: FaIconConstants.uiComponentsIconData,
-            title: 'UI Components Viewer',
+            title: 'UI Context Inspector',
             onTab: () {
-              _showUiComponentsDialog(context);
-            },
-          ),
-        if (isSystemUser)
-          _buildPopupMenuItem(
-            iconData: FaIconConstants.storageIconData,
-            title: 'Storage Viewer',
-            onTab: () {
-              _showDebugStorageViewerDialog(context);
+              _showDebugUiContextInspector(context);
             },
           ),
         if (isSystemUser)
           _buildPopupMenuItem(
             iconData: FaIconConstants.themeIconData,
-            title: 'Theme Viewer',
+            title: 'Theme Inspector',
             onTab: () {
-              _showDebugThemeViewerDialog(context);
+              _showDebugThemeInspector(context);
             },
           ),
         if (isSystemUser) _divider(),
@@ -82,18 +81,18 @@ class DebugMenuBuilder {
         if (isSystemUser)
           _buildPopupMenuItem(
             iconData: FaIconConstants.flowLogIconData,
-            title: 'Code Flow Viewer',
+            title: 'Code Flow Inspector',
             onTab: () {
-              _showFlowLogStructure(context);
+              _showCodeFlowInspector(context);
             },
           ),
         if (isSystemUser) _divider(),
-        if (isSystemUser && FlutterArtist.showRestDebugViewerDialog != null)
+        if (isSystemUser && FlutterArtist.showDebugNetworkInspector != null)
           _buildPopupMenuItem(
-            iconData: FaIconConstants.restDebugIconData,
-            title: 'Rest Debug Viewer',
+            iconData: FaIconConstants.debugNetworkInspectorIconData,
+            title: 'Network Inspector',
             onTab: () {
-              _showRestDebugViewerDialog(context);
+              _showDebugNetworkInspector(context);
             },
           ),
       ],
@@ -126,40 +125,39 @@ class DebugMenuBuilder {
     );
   }
 
-  Future<void> _showUiComponentsDialog(BuildContext context) async {
+  Future<void> _showDebugUiContextInspector(BuildContext context) async {
     Navigator.pop(context, null);
-    await FlutterArtist.storage.showDebugUiComponentsViewerDialog();
+    await FlutterArtist.showDebugUiContextInspector();
   }
 
-  Future<void> _showRestDebugViewerDialog(BuildContext context) async {
+  Future<void> _showDebugNetworkInspector(BuildContext context) async {
     Navigator.pop(context, null);
-    FlutterArtist.showRestDebugViewerDialog!(context);
+    FlutterArtist.showDebugNetworkInspector!(context);
   }
 
-  Future<void> _showDebugStorageViewerDialog(BuildContext context) async {
+  Future<void> _showDebugAppInspectorDialog(BuildContext context) async {
     Navigator.pop(context, null);
-    await FlutterArtist.storage.showDebugStorageViewerDialog();
+    await FlutterArtist.showDebugAppInspectorDialog();
   }
 
-  Future<void> _showDebugThemeViewerDialog(BuildContext context) async {
+  Future<void> _showDebugThemeInspector(BuildContext context) async {
     Navigator.pop(context, null);
-    await FlutterArtist. showDebugThemeViewerDialog();
+    await FlutterArtist.showDebugThemeInspector();
   }
-
 
   void _clearCodeFlow(BuildContext context) {
     Navigator.pop(context, null);
     FlutterArtist.codeFlowLogger.clear();
   }
 
-  Future<void> _showFlowLogStructure(BuildContext context) async {
+  Future<void> _showCodeFlowInspector(BuildContext context) async {
     Navigator.pop(context, null);
-    await FlutterArtist.showCodeFlowViewerDialog();
+    await FlutterArtist.showCodeFlowInspector();
   }
 
-  Future<void> _showDebugShelfStructureViewer(BuildContext context) async {
+  Future<void> _showDebugShelfStructureInspector(BuildContext context) async {
     Navigator.pop(context, null);
-    await FlutterArtist.showDebugShelfStructureViewerDialog();
+    await FlutterArtist.showDebugShelfStructureInspector();
   }
 
   Future<void> _showLogViewerDialog(BuildContext context) async {

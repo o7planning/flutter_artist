@@ -6,11 +6,11 @@ enum FilterViewType {
   String get title {
     switch (this) {
       case FilterViewType.debugFilterModel:
-        return "Debug Filter Model Viewer";
+        return "Debug Filter Model Inspector";
       case FilterViewType.debugFilterCriteria:
-        return "Debug Filter Criteria Viewer";
+        return "Debug Filter Criteria Inspector";
       case FilterViewType.debugShelfStructure:
-        return "Debug Shelf Structure Viewer";
+        return "Debug Shelf Structure Inspector";
     }
   }
 }

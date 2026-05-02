@@ -1297,7 +1297,7 @@ abstract class Scalar<
   Future<void> showDebugFilterCriteriaViewerDialog() async {
     BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     //
-    await DebugViewerDialog.openDebugFilterCriteriaViewer(
+    await DebugViewerDialog.openDebugFilterCriteriaInspector(
       context: context,
       locationInfo: '',
       filterModel: registeredOrDefaultFilterModel,

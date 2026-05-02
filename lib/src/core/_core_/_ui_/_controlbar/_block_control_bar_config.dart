@@ -7,8 +7,8 @@ class BlockControlBarConfig {
   final bool allowSaveButton;
   final bool allowDeleteButton;
   final bool allowBackButton;
-  final bool allowDebugFormModelViewerButton;
-  final bool allowDebugFilterCriteriaViewerButton;
+  final bool allowDebugFormModelInspectorButton;
+  final bool allowDebugFilterCriteriaInspectorButton;
   final bool allowDebugButton;
 
   final Function(FormSaveResult result)? onNavigateSave;
@@ -22,8 +22,8 @@ class BlockControlBarConfig {
     required this.allowSaveButton,
     required this.allowDeleteButton,
     required this.allowBackButton,
-    required this.allowDebugFormModelViewerButton,
-    this.allowDebugFilterCriteriaViewerButton = false,
+    required this.allowDebugFormModelInspectorButton,
+    this.allowDebugFilterCriteriaInspectorButton = false,
     this.allowDebugButton = false,
     this.onNavigateCreate,
     this.onNavigateSave,

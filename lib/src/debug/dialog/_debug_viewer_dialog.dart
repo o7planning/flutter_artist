@@ -45,7 +45,7 @@ class DebugViewerDialog extends StatefulWidget {
     );
   }
 
-  static Future<void> openDebugFilterCriteriaViewer({
+  static Future<void> openDebugFilterCriteriaInspector({
     required BuildContext context,
     required String locationInfo,
     required FilterModel filterModel,
@@ -97,7 +97,7 @@ class _DebugViewerDialogState extends State<DebugViewerDialog> {
       case FilterViewType.debugFilterCriteria:
         tipDocument = TipDocument.debugFilterCriteriaViewer;
       case FilterViewType.debugShelfStructure:
-        tipDocument = TipDocument.debugShelfStructureViewer;
+        tipDocument = TipDocument.debugShelfStructureInspector;
     }
     TipDocumentViewerDialog.open(
       context: context,

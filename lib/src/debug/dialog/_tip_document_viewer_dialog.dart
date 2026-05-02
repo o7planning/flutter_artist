@@ -189,8 +189,8 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
         borderRadius: BorderRadius.circular(4),
         child: Padding(
           padding: const EdgeInsets.all(4),
-          child: Icon(icon,
-              size: 14, color: FaColorUtils.primaryAction(context)),
+          child:
+              Icon(icon, size: 14, color: FaColorUtils.primaryAction(context)),
         ),
       ),
     );

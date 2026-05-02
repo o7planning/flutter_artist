@@ -73,15 +73,15 @@ class _ScalarControlBarState extends _BaseControlBarState<Scalar,
         );
 
       case ScalarControlBarItemType.debugFilter:
-        if (!widget.config.allowDebugFilterCriteriaViewerButton) return null;
+        if (!widget.config.allowDebugFilterCriteriaInspectorButton) return null;
         bool show = widget.scalar.canShowFilterCriteria();
         return _buildButton(
-          tooltip: "Debug Filter Criteria Viewer",
+          tooltip: "Debug Filter Criteria Inspector",
           iconData: FaIconConstants.filterCriteriaIconData,
           onAction: false,
           onPressed: show
               ? () {
-                  DebugViewerDialog.openDebugFilterCriteriaViewer(
+                  DebugViewerDialog.openDebugFilterCriteriaInspector(
                     context: context,
                     locationInfo: '',
                     filterModel: widget.scalar.registeredOrDefaultFilterModel,

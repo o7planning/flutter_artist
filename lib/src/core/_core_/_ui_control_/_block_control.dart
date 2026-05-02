@@ -104,7 +104,7 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
         return deleteActionable.yes ? __deleteCurrentItem : null;
       case BlockControlActionType.showFormInfo:
         Actionable formInfoActionable = widget.block.canShowFormInfo();
-        return formInfoActionable.yes ? __showDebugFormModelViewerDialog : null;
+        return formInfoActionable.yes ? __showDebugFormModelnspector : null;
     }
   }
 
@@ -158,8 +158,8 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
     return result.successForAll;
   }
 
-  Future<bool> __showDebugFormModelViewerDialog() async {
-    DebugFormModelViewerDialog.open(
+  Future<bool> __showDebugFormModelnspector() async {
+    DebugFormModelInspectorDialog.open(
       context: context,
       locationInfo: getClassName(widget.ownerClassInstance),
       formModel: widget.block.formModel!,

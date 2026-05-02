@@ -216,7 +216,8 @@ abstract class XShelf extends XRootQueueItem {
     executionTrace._addTraceStep(
       codeId: "#10000",
       shortDesc:
-          "Registered Effected Shelf Members:${effectedShelfMembers.getDebugInfoHtml()}",
+      "Registered Effected Shelf Members:${effectedShelfMembers
+          .getDebugInfoHtml()}",
       traceStepType: TraceStepType.debug,
     );
 
@@ -226,21 +227,22 @@ abstract class XShelf extends XRootQueueItem {
       executionTrace._addTraceStep(
         codeId: "#10100",
         shortDesc:
-            "Set ${debugObjHtml(eventXBlock.block)} qryHint: ${debugObjHtml(forceQryHint)}.",
+        "Set ${debugObjHtml(eventXBlock.block)} qryHint: ${debugObjHtml(
+            forceQryHint)}.",
       );
       eventXBlock.setQueryHintToGreater(forceQryHint);
     }
 
     //
-    Set<String> listenerBlockNames = {}
-      ..addAll(effectedShelfMembers._reQueryBlockMAP.keys)
-      ..addAll(effectedShelfMembers._refreshCurrItmBlockMAP.keys);
+    Set<String> listenerBlockNames = {}..addAll(
+        effectedShelfMembers._reQueryBlockMAP.keys)..addAll(
+        effectedShelfMembers._refreshCurrItmBlockMAP.keys);
 
     for (String listenerBlkName in listenerBlockNames) {
       final Block? reQryBlock =
-          effectedShelfMembers._reQueryBlockMAP[listenerBlkName];
+      effectedShelfMembers._reQueryBlockMAP[listenerBlkName];
       final Block? refreshCurrBlock =
-          effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
+      effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
       //
       bool hasXBlockRep = false;
       bool hasXItemRep = false;
@@ -259,8 +261,8 @@ abstract class XShelf extends XRootQueueItem {
         // @@@hasActiveBlockFragment
         hasXItemRep =
             refreshCurrBlock.ui.hasActiveUiComponentItemRepresentative(
-          alsoCheckChildren: true,
-        );
+              alsoCheckChildren: true,
+            );
         forceReloadCurrItem = true;
         XBlock refreshCurrXBlock = findXBlockByName(refreshCurrBlock.name)!;
         refreshCurrXBlock.setCurrItemToReload(refreshCurrBlock.currentItem);
@@ -295,7 +297,7 @@ abstract class XShelf extends XRootQueueItem {
         }
         // @@@hasActiveBlockFragment
         bool hasXBlockRep =
-            xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
+        xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
         if (hasXBlockRep) {
@@ -368,7 +370,8 @@ abstract class XShelf extends XRootQueueItem {
         executionTrace._addTraceStep(
           codeId: "#01060",
           shortDesc:
-              "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
+          "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(
+              this)}.",
           traceStepType: TraceStepType.addTaskUnit,
         );
         //
@@ -388,7 +391,8 @@ abstract class XShelf extends XRootQueueItem {
       executionTrace._addTraceStep(
         codeId: "#01080",
         shortDesc:
-            "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
+        "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(
+            this)}.",
         traceStepType: TraceStepType.addTaskUnit,
       );
       //
@@ -405,7 +409,8 @@ abstract class XShelf extends XRootQueueItem {
       executionTrace._addTraceStep(
         codeId: "#01120",
         shortDesc:
-            "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
+        "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(
+            this)}.",
         traceStepType: TraceStepType.addTaskUnit,
       );
       //
@@ -425,7 +430,8 @@ abstract class XShelf extends XRootQueueItem {
         executionTrace._addTraceStep(
           codeId: "#01160",
           shortDesc:
-              "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
+          "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(
+              this)}.",
           traceStepType: TraceStepType.addTaskUnit,
         );
         _addTaskUnit(
@@ -443,7 +449,8 @@ abstract class XShelf extends XRootQueueItem {
         executionTrace._addTraceStep(
           codeId: "#01200",
           shortDesc:
-              "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(this)}.",
+          "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(
+              this)}.",
           traceStepType: TraceStepType.addTaskUnit,
         );
         _addTaskUnit(

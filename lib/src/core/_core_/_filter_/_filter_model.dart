@@ -1518,7 +1518,7 @@ abstract class FilterModel<
   Future<void> showDebugFilterCriteriaViewerDialog() async {
     BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     //
-    await DebugViewerDialog.openDebugFilterCriteriaViewer(
+    await DebugViewerDialog.openDebugFilterCriteriaInspector(
       context: context,
       locationInfo: '',
       filterModel: this,

@@ -59,7 +59,7 @@ class _FlutterArtist extends _Core {
 
   AfterQueryAction get defaultAfterQueryAction => _defaultAfterQueryAction;
 
-  Function(BuildContext context)? showRestDebugViewerDialog;
+  Function(BuildContext context)? showDebugNetworkInspector;
 
   late final FlutterArtistNotificationService __notificationService;
 
@@ -382,7 +382,7 @@ class _FlutterArtist extends _Core {
       }
     }
     //
-    showRestDebugViewerDialog = showRestDebugDialog;
+    showDebugNetworkInspector = showRestDebugDialog;
     //
     // Notification:
     //
@@ -484,25 +484,49 @@ class _FlutterArtist extends _Core {
     return coreFeaturesAdapter.isOverlayOpen;
   }
 
-  Future<void> showDebugThemeViewerDialog() async {
-    BuildContext context = coreFeaturesAdapter.context;
-    await FlutterArtistTheme.showDebugDialog(context);
-  }
+  // ***************************************************************************
+  // ***************************************************************************
 
-  Future<void> showCodeFlowViewerDialog() async {
-    BuildContext context = coreFeaturesAdapter.context;
-    await CodeFlowViewerDialog.open(context: context);
-  }
-
-  Future<void> showDebugShelfStructureViewerDialog() async {
+  // TODO: Show all active components of all shelves.
+  Future<void> showDebugUiContextInspector() async {
     Shelf? shelf = storage._recentShelf();
     if (shelf == null) {
       return;
     }
-    await shelf.showDebugShelfStructureViewerDialog();
+    await shelf.showDebugUiContextInspector();
   }
 
-  bool canShowDebugShelfStructureViewerDialog() {
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> showDebugAppInspectorDialog() async {
+    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    //
+    await DebugAppInspectorDialog.open(
+      context: context,
+      shelf: null,
+    );
+  }
+
+  Future<void> showDebugThemeInspector() async {
+    BuildContext context = coreFeaturesAdapter.context;
+    await FlutterArtistTheme.showDebugDialog(context);
+  }
+
+  Future<void> showCodeFlowInspector() async {
+    BuildContext context = coreFeaturesAdapter.context;
+    await CodeFlowInspectorDialog.open(context: context);
+  }
+
+  Future<void> showDebugShelfStructureInspector() async {
+    Shelf? shelf = storage._recentShelf();
+    if (shelf == null) {
+      return;
+    }
+    await shelf.showDebugShelfStructureInspector();
+  }
+
+  bool canShowDebugShelfStructureInspector() {
     Shelf? shelf = storage._recentShelf();
     return shelf != null;
   }

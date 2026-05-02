@@ -6,7 +6,7 @@ class RouteStackView extends HtmlTextListView {
   RouteStackView({super.key})
       : super(
           htmlTexts: FlutterArtist.router.stack
-              .map((routeKey) => "${routeKey.path} (#${routeKey.id}")
+              .map((routeKey) => "${routeKey.path} (#${routeKey.id})")
               .toList(),
           tipDocument: TipDocument.routeStack,
         );

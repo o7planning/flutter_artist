@@ -6,14 +6,14 @@ import '../code_flow/_execution_trace_viewer.dart';
 import '../utils/_dialog_size.dart';
 import '_tip_document_viewer_dialog.dart';
 
-class CodeFlowViewerDialog extends StatefulWidget {
-  const CodeFlowViewerDialog({
+class CodeFlowInspectorDialog extends StatefulWidget {
+  const CodeFlowInspectorDialog({
     super.key,
   });
 
   @override
-  State<CodeFlowViewerDialog> createState() {
-    return CodeFlowViewerDialogState();
+  State<CodeFlowInspectorDialog> createState() {
+    return CodeFlowInspectorDialogState();
   }
 
   static Future<void> open({
@@ -22,13 +22,13 @@ class CodeFlowViewerDialog extends StatefulWidget {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CodeFlowViewerDialog();
+        return const CodeFlowInspectorDialog();
       },
     );
   }
 }
 
-class CodeFlowViewerDialogState extends State<CodeFlowViewerDialog> {
+class CodeFlowInspectorDialogState extends State<CodeFlowInspectorDialog> {
   @override
   void initState() {
     super.initState();
@@ -40,7 +40,7 @@ class CodeFlowViewerDialogState extends State<CodeFlowViewerDialog> {
 
     FaDialog alert = FaDialog(
       iconData: Icons.code,
-      titleText: "Code Flow Viewer",
+      titleText: "Code Flow Inspector",
       content: _buildMainWidget(),
       preferredContentWidth: preferContentSize.width,
       preferredContentHeight: preferContentSize.height,
@@ -48,7 +48,7 @@ class CodeFlowViewerDialogState extends State<CodeFlowViewerDialog> {
       onHelpPressed: () {
         TipDocumentViewerDialog.open(
           context: context,
-          tipDocument: TipDocument.codeFlowViewer,
+          tipDocument: TipDocument.codeFlowInspector,
         );
       },
     );

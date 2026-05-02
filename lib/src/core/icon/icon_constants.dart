@@ -75,6 +75,7 @@ class FaIconConstants {
 
   static const IconData themeIconData = Icons.palette_outlined;
 
+  static const IconData appIconData = Icons.apps;
   static const IconData storageIconData = Icons.storage;
 
   // static const IconData storageIconData = cupertino.CupertinoIcons.globe;
@@ -102,7 +103,7 @@ class FaIconConstants {
   static const IconData filterModelDebugIconData =
       cupertino.CupertinoIcons.ant_circle;
 
-  static const IconData restDebugIconData = cupertino.CupertinoIcons.ant;
+  static const IconData debugNetworkInspectorIconData = Icons.sync_alt;
 
   static const IconData copyToClipboardIconData =
       cupertino.CupertinoIcons.doc_on_clipboard;

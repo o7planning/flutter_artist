@@ -2318,10 +2318,10 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showDebugFormModelViewerDialog() async {
+  Future<void> showDebugFormModelnspector() async {
     BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
     //
-    await DebugFormModelViewerDialog.open(
+    await DebugFormModelInspectorDialog.open(
       context: context,
       locationInfo: getClassName(this),
       formModel: this,

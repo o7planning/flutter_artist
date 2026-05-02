@@ -1,9 +1,9 @@
 enum TipDocument {
   config(enabled: true),
   logViewer(enabled: true),
-  codeFlowViewer(enabled: true),
-  debugStorageViewer(enabled: true),
-  debugShelfStructureViewer(enabled: true),
+  codeFlowInspector(enabled: true),
+  debugAppInspector(enabled: true),
+  debugShelfStructureInspector(enabled: true),
   debugFilterCriteriaViewer(enabled: true),
   debugFilterModelViewer(enabled: true),
   debugFormModelViewer(enabled: true),
@@ -176,20 +176,20 @@ enum TipDocument {
         return "Coordinator.performSetupOperation()";
       case TipDocument.logViewer:
         return "Log Viewer";
-      case TipDocument.codeFlowViewer:
-        return "Code Flow Viewer";
-      case TipDocument.debugStorageViewer:
-        return "Storage Viewer";
-      case TipDocument.debugShelfStructureViewer:
-        return "Debug Shelf Structure Viewer";
+      case TipDocument.codeFlowInspector:
+        return "Code Flow Inspector";
+      case TipDocument.debugAppInspector:
+        return "App Inspector";
+      case TipDocument.debugShelfStructureInspector:
+        return "Debug Shelf Structure Inspector";
       case TipDocument.debugFilterCriteriaViewer:
         return "FilterCriteria Viewer";
       case TipDocument.debugFilterModelViewer:
-        return "Debug Filter Model Viewer";
+        return "Debug Filter Model Inspector";
       case TipDocument.debugFormModelViewer:
-        return "Debug Form Model Viewer";
+        return "Debug Form Model Inspector";
       case TipDocument.debugUiComponentsViewer:
-        return "UI Components Viewer";
+        return "UI Context Inspector";
       case TipDocument.debugMenu:
         return "Debug Menu";
     }
@@ -283,20 +283,20 @@ enum TipDocument {
         return "Coordinator.performSetupOperation()";
       case TipDocument.logViewer:
         return "Log Viewer";
-      case TipDocument.codeFlowViewer:
-        return "Code Flow Viewer";
-      case TipDocument.debugStorageViewer:
-        return "Debug Storage Viewer";
-      case TipDocument.debugShelfStructureViewer:
-        return "Debug Shelf Structure Viewer";
+      case TipDocument.codeFlowInspector:
+        return "Code Flow Inspector";
+      case TipDocument.debugAppInspector:
+        return "Debug App Inspector";
+      case TipDocument.debugShelfStructureInspector:
+        return "Debug Shelf Structure Inspector";
       case TipDocument.debugFilterCriteriaViewer:
         return "Debug FilterCriteria Viewer";
       case TipDocument.debugFilterModelViewer:
-        return "Debug Filter Model Viewer";
+        return "Debug Filter Model Inspector";
       case TipDocument.debugFormModelViewer:
-        return "Debug Form Model Viewer";
+        return "Debug Form Model Inspector";
       case TipDocument.debugUiComponentsViewer:
-        return "UI Components Viewer";
+        return "UI Context Inspector";
       case TipDocument.debugMenu:
         return "Debug Menu";
     }
@@ -412,15 +412,15 @@ enum TipDocument {
         return [
           "http://51.195.44.134:8080/vi/14545/flutterartist-log-viewer",
         ];
-      case TipDocument.codeFlowViewer:
+      case TipDocument.codeFlowInspector:
         return [
           "http://51.195.44.134:8080/vi/14833/flutterartist-code-flow-viewer",
         ];
-      case TipDocument.debugStorageViewer:
+      case TipDocument.debugAppInspector:
         return [
           "http://51.195.44.134:8080/vi/14849/flutterartist-debug-storage-viewer",
         ];
-      case TipDocument.debugShelfStructureViewer:
+      case TipDocument.debugShelfStructureInspector:
         return [
           "http://51.195.44.134:8080/vi/14865/flutterartist-debug-shelf-structure-viewer",
         ];

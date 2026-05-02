@@ -4,7 +4,6 @@ import 'package:flutter_artist_theme/flutter_artist_theme.dart';
 import '../_core_/core.dart';
 import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_style.dart';
 import 'chip_sort_panel_style.dart';
 
 class ChipSortPanel<ITEM extends Object> extends SortPanel<ITEM>

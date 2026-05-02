@@ -119,7 +119,7 @@ class _DebugUiComponentsViewerDialogState
 
     FaDialog alert = FaDialog(
       iconData: FaIconConstants.uiComponentsIconData,
-      titleText: "Debug UI Components Viewer",
+      titleText: "Debug UI Context Inspector",
       preferredContentWidth: preferContentSize.width,
       preferredContentHeight: preferContentSize.height,
       contentPadding: const EdgeInsets.all(5),

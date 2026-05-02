@@ -11,11 +11,11 @@ import '../shelf/_shelf_structure_graph_view.dart';
 import '../utils/_dialog_size.dart';
 import '_tip_document_viewer_dialog.dart';
 
-class DebugFormModelViewerDialog extends StatefulWidget {
+class DebugFormModelInspectorDialog extends StatefulWidget {
   final FormModel formModel;
   final String locationInfo;
 
-  const DebugFormModelViewerDialog({
+  const DebugFormModelInspectorDialog({
     required this.formModel,
     required this.locationInfo,
     super.key,
@@ -23,7 +23,7 @@ class DebugFormModelViewerDialog extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _DebugFormModelViewerDialogState();
+    return _DebugFormModelInspectorDialogState();
   }
 
   static Future<void> open({
@@ -34,7 +34,7 @@ class DebugFormModelViewerDialog extends StatefulWidget {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return DebugFormModelViewerDialog(
+        return DebugFormModelInspectorDialog(
           formModel: formModel,
           locationInfo: locationInfo,
         );
@@ -43,8 +43,8 @@ class DebugFormModelViewerDialog extends StatefulWidget {
   }
 }
 
-class _DebugFormModelViewerDialogState
-    extends State<DebugFormModelViewerDialog> {
+class _DebugFormModelInspectorDialogState
+    extends State<DebugFormModelInspectorDialog> {
   bool showFormData = true;
 
   @override
@@ -58,8 +58,8 @@ class _DebugFormModelViewerDialogState
           ? FaIconConstants.formModelIconData
           : FaIconConstants.shelfStructureIconData,
       titleText: showFormData
-          ? "Debug Form Model Viewer - ${getClassName(widget.formModel)}"
-          : "Debug Shelf Structure Viewer - ${getClassName(widget.formModel.block.shelf)}",
+          ? "Debug Form Model Inspector - ${getClassName(widget.formModel)}"
+          : "Debug Shelf Structure Inspector - ${getClassName(widget.formModel.block.shelf)}",
       contentPadding: const EdgeInsets.all(5),
       preferredContentWidth: preferContentSize.width,
       preferredContentHeight: preferContentSize.height,

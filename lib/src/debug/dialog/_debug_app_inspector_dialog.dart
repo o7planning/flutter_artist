@@ -9,17 +9,17 @@ import '../storage/_storage_view.dart';
 import '../utils/_dialog_size.dart';
 import '_tip_document_viewer_dialog.dart';
 
-class DebugStorageViewerDialog extends StatefulWidget {
+class DebugAppInspectorDialog extends StatefulWidget {
   final Shelf? shelf;
 
-  const DebugStorageViewerDialog({
+  const DebugAppInspectorDialog({
     required this.shelf,
     super.key,
   });
 
   @override
-  State<DebugStorageViewerDialog> createState() =>
-      _DebugStorageViewerDialogState();
+  State<DebugAppInspectorDialog> createState() =>
+      _DebugAppInspectorDialogState();
 
   static Future<void> open({
     required BuildContext context,
@@ -29,13 +29,13 @@ class DebugStorageViewerDialog extends StatefulWidget {
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) {
-        return DebugStorageViewerDialog(shelf: shelf);
+        return DebugAppInspectorDialog(shelf: shelf);
       },
     );
   }
 }
 
-class _DebugStorageViewerDialogState extends State<DebugStorageViewerDialog> {
+class _DebugAppInspectorDialogState extends State<DebugAppInspectorDialog> {
   final PageStorageBucket _bucket = PageStorageBucket();
 
   @override
@@ -51,8 +51,8 @@ class _DebugStorageViewerDialogState extends State<DebugStorageViewerDialog> {
     );
 
     return FaDialog(
-      iconData: FaIconConstants.storageIconData,
-      titleText: "Debug Storage Viewer",
+      iconData: FaIconConstants.appIconData,
+      titleText: "Debug App Inspector",
       content: contentWidget,
       contentPadding: EdgeInsets.zero,
       preferredContentWidth: preferContentSize.width,
@@ -60,7 +60,7 @@ class _DebugStorageViewerDialogState extends State<DebugStorageViewerDialog> {
       onHelpPressed: () {
         TipDocumentViewerDialog.open(
           context: context,
-          tipDocument: TipDocument.debugStorageViewer,
+          tipDocument: TipDocument.debugAppInspector,
         );
       },
     );

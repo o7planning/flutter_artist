@@ -163,15 +163,15 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
         );
 
       case BlockControlBarItemType.debugFilter:
-        if (!widget.config.allowDebugFilterCriteriaViewerButton) return null;
+        if (!widget.config.allowDebugFilterCriteriaInspectorButton) return null;
         bool show = widget.block.canShowFilterCriteria();
         return _buildButton(
-          tooltip: "Debug Filter Criteria Viewer",
+          tooltip: "Debug Filter Criteria Inspector",
           iconData: FaIconConstants.filterCriteriaIconData,
           onAction: false,
           onPressed: show
               ? () {
-                  DebugViewerDialog.openDebugFilterCriteriaViewer(
+                  DebugViewerDialog.openDebugFilterCriteriaInspector(
                     context: context,
                     locationInfo: '',
                     filterModel: widget.block.registeredOrDefaultFilterModel,
@@ -181,15 +181,15 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
         );
 
       case BlockControlBarItemType.debugForm:
-        if (!widget.config.allowDebugFormModelViewerButton) return null;
+        if (!widget.config.allowDebugFormModelInspectorButton) return null;
         Actionable actionable = widget.block.canShowFormInfo();
         return _buildButton(
-          tooltip: "Debug Form Model Viewer",
+          tooltip: "Debug Form Model Inspector",
           iconData: FaIconConstants.formIconData,
           onAction: false,
           onPressed: actionable.yes
               ? () {
-                  DebugFormModelViewerDialog.open(
+                  DebugFormModelInspectorDialog.open(
                     context: context,
                     locationInfo:
                         getClassNameWithoutGenerics(widget.ownerClassInstance),

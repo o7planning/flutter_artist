@@ -6,10 +6,8 @@ RefreshableView ==> ContextProviderView
 
 
 FilterCriteriaViewerDialog ==> DebugFilterCriteriaViewerDialog
-FilterModelViewerDialog ==> DebugFilterModelViewerDialog
-FormModelViewerDialog ==> DebugFormModelViewerDialog
-ShelfStructureViewerDialog ==> DebugShelfStructureViewerDialog
-StorageViewer ==> DebugStorageViewerDialog
+FormModelViewerDialog ==> DebugFormModelInspectorDialog
+AppViewer ==> DebugAppInspectorDialog
 UiComponentsViewerDialog ==> UiComponentsViewerDialog
 
 

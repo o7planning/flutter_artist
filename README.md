@@ -50,7 +50,7 @@ Explore FlutterArtist in action before diving into the code:
 ![Debug GIF](https://via.placeholder.com/1000x400.gif?text=Debug+Viewer+Wide+Demo)
 
 **Developer Transparency** We provide built-in tools to help you visualize the internal state of your application.
-- **Theme Viewer:** Real-time preview of `FaThemeTokens`.
+- **Theme Inspector:** Real-time preview of `FaThemeTokens`.
 - **State Inspector:** Monitor every state transition in your Blocks.
 
 ---

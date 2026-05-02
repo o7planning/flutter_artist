@@ -163,7 +163,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
             ),
             icon: Icon(FaIconConstants.filterModelDebugIconData, size: 16),
             label: const Text(
-              "Debug Filter Model Viewer",
+              "Debug Filter Model Inspector",
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ),

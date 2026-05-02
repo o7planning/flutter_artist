@@ -376,7 +376,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
           ),
           SizedBox(width: 10),
           Tooltip(
-            message: "Debug Filter Criteria Viewer",
+            message: "Debug Filter Criteria Inspector",
             child: SimpleSmallIconButton(
               iconData: FaIconConstants.filterCriteriaIconData,
               iconSize: 18,

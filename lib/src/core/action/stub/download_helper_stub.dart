@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'download_helper.dart';
 
 class DownloadHelperImpl implements DownloadHelper {
