@@ -93,7 +93,8 @@ class CodeFlowLogger {
         arguments: parameters,
         isLibMethod: false,
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print("ERROR: $stackTrace");
       item = MethodCallExecutionTrace._methodCall(
         ownerClassInstance: ownerClassInstance,
         methodName: "Something Error",

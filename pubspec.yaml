@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  stack_trace: ^1.12.1
   path_provider: ^2.1.5
   encrypt: ^5.0.3
   flutter_form_builder: ^10.3.0+2 # ^10.2.0 # ^10.0.1

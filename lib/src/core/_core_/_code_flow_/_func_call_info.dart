@@ -8,6 +8,9 @@ class FuncCallInfo {
   final int? columnNumber;
   final Map<String, dynamic>? arguments;
 
+  static final Map<String, FuncCallInfo> _cache = {};
+  static const int _maxCacheSize = 200;
+
   const FuncCallInfo._({
     required this.funcName,
     required this.callerFuncName,
@@ -38,50 +41,30 @@ class FuncCallInfo {
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? arguments,
   }) {
-    // print("STACK TRACE: $currentStackTrace");
-    final frames = currentStackTrace.toString().split('\n');
+    final trace = Trace.from(currentStackTrace);
+    final frames = trace.frames;
 
-    String? myLine1; // First line not startWith "dart-sdk/"
-    String? myLine2; // Second line not startWith "dart-sdk/"
-    for (String frame in frames) {
-      String line = frame.trim();
-      if (line.startsWith("dart-sdk/")) {
-        continue;
-      } else {
-        if (myLine1 == null) {
-          myLine1 = line;
-        } else if (myLine2 == null) {
-          myLine2 = line;
-          break;
-        }
-      }
+    final selected = _FuncCallInfoUtils._pickBestFrame(frames);
+    final key = _FuncCallInfoUtils._makeKey(selected);
+
+    // ✅ DEV mode:
+    if (kDebugMode) {
+      return _FuncCallInfoUtils._buildInfo(selected, arguments);
     }
-    _TraceLineInfo? info1;
-    _TraceLineInfo? info2;
-    if (myLine1 != null) {
-      info1 = _TraceLineInfo.parseLine(myLine1);
+
+    // ✅ PROD:
+    final cached = _cache[key];
+    if (cached != null) return cached;
+
+    final info = _FuncCallInfoUtils._buildInfo(selected, arguments);
+
+    // Simple LRU-ish
+    if (_cache.length > _maxCacheSize) {
+      _cache.clear();
     }
-    if (myLine2 != null) {
-      info2 = _TraceLineInfo.parseLine(myLine2);
-    }
-    //
-    _TraceLineInfo? info;
-    if (info1 != null && info1.isNamedFunction) {
-      info = info1;
-    } else if (info2 != null && info2.isNamedFunction) {
-      info = info2;
-    } else {
-      info = info1;
-    }
-    //
-    return FuncCallInfo._(
-      funcName: info?.functionName ?? "-",
-      callerFuncName: null,
-      filePath: info?.filePath ?? "_",
-      lineNumber: info?.lineNumber ?? -1,
-      columnNumber: info?.columnNumber ?? -1,
-      arguments: null,
-    );
+
+    _cache[key] = info;
+    return info;
   }
 
   bool isPrivateFunc() {
@@ -104,62 +87,5 @@ class FuncCallInfo {
         'filePath: $filePath, '
         'lineNumber: $lineNumber, '
         'columnNumber: $columnNumber)';
-  }
-}
-
-// packages/flutter_leantek/screens/okr_manager/filter/a.dart 128:66  [_onSelectTimeFrame]
-// packages/flutter_leantek/screens/okr_manager/filter/a.dart 59:9    <fn>
-class _TraceLineInfo {
-  String filePath;
-  int lineNumber;
-  int columnNumber;
-  String functionName;
-
-  _TraceLineInfo({
-    required this.filePath,
-    required this.lineNumber,
-    required this.columnNumber,
-    required this.functionName,
-  });
-
-  bool get isNamedFunction {
-    return functionName != "<fn>";
-  }
-
-  static _TraceLineInfo parseLine(String traceLine) {
-    final idx = traceLine.indexOf(' ');
-    final String filePath = traceLine.substring(0, idx).trim();
-
-    // 128:66  [_onSelectTimeFrame]
-    // 59:9    <fn>
-    final suffix = traceLine.substring(idx).trim();
-    final idx2 = suffix.indexOf(' ');
-    // 128:66
-    // 59:9
-    final List<String> rowCol = suffix.substring(0, idx2).trim().split(":");
-    final int lineNumber = int.parse(rowCol[0]);
-    final int columnNumber = int.parse(rowCol[1]);
-
-    // [_onSelectTimeFrame]
-    // <fn>
-    final String fName = suffix.substring(idx2).trim();
-    //
-    final String functionName;
-    if (fName.startsWith("[")) {
-      functionName = fName.substring(1, fName.length - 1);
-    } else {
-      functionName = fName;
-    }
-    return _TraceLineInfo(
-      filePath: filePath,
-      lineNumber: lineNumber,
-      columnNumber: columnNumber,
-      functionName: functionName,
-    );
-  }
-
-  @override
-  String toString() {
-    return "[$functionName, $lineNumber]";
   }
 }

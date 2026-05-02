@@ -18,6 +18,7 @@ import 'package:flutter_artist_router/flutter_artist_router.dart';
 import 'package:flutter_artist_theme/flutter_artist_theme.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hive/hive.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import '../../debug/code_flow/__task_flow_const.dart';
 import '../../debug/code_flow/_execution_trace_box_detail.dart';
@@ -314,6 +315,8 @@ part '_code_flow_/_code_flow_logger.dart';
 part '_code_flow_/_trace_step.dart';
 
 part '_code_flow_/_func_call_info.dart';
+
+part '_code_flow_/_func_call_info_utils.dart';
 
 part '_config_/_event_configs.dart';
 

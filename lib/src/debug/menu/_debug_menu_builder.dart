@@ -26,13 +26,13 @@ class DebugMenuBuilder {
       context: context,
       position: position,
       positionBuilder: positionBuilder,
-      items: [
+      items: <PopupMenuEntry>[
         if (hasLogs)
           _buildPopupMenuItem(
             iconData: FaIconConstants.errorIconData,
-            iconColor: Colors.red,
+            iconColor: Theme.of(context).colorScheme.error,
             title: 'Log Viewer',
-            onTab: () {
+            onTap: () {
               _showLogViewerDialog(context);
             },
           ),
@@ -41,7 +41,7 @@ class DebugMenuBuilder {
           _buildPopupMenuItem(
             iconData: FaIconConstants.appIconData,
             title: 'App Inspector',
-            onTab: () {
+            onTap: () {
               _showDebugAppInspectorDialog(context);
             },
           ),
@@ -49,7 +49,7 @@ class DebugMenuBuilder {
           _buildPopupMenuItem(
             iconData: FaIconConstants.shelfStructureIconData,
             title: 'Shelf Structure Inspector',
-            onTab: () {
+            onTap: () {
               _showDebugShelfStructureInspector(context);
             },
           ),
@@ -57,7 +57,7 @@ class DebugMenuBuilder {
           _buildPopupMenuItem(
             iconData: FaIconConstants.uiComponentsIconData,
             title: 'UI Context Inspector',
-            onTab: () {
+            onTap: () {
               _showDebugUiContextInspector(context);
             },
           ),
@@ -65,25 +65,22 @@ class DebugMenuBuilder {
           _buildPopupMenuItem(
             iconData: FaIconConstants.themeIconData,
             title: 'Theme Inspector',
-            onTab: () {
+            onTap: () {
               _showDebugThemeInspector(context);
             },
           ),
         if (isSystemUser) _divider(),
         if (isSystemUser)
           _buildPopupMenuItem(
-            iconData: FaIconConstants.clearCodeFlowIconData,
-            title: 'Clear Code Flow',
-            onTab: () {
-              _clearCodeFlow(context);
-            },
-          ),
-        if (isSystemUser)
-          _buildPopupMenuItem(
             iconData: FaIconConstants.flowLogIconData,
             title: 'Code Flow Inspector',
-            onTab: () {
+            onTap: () {
               _showCodeFlowInspector(context);
+            },
+            trainingIconData: FaIconConstants.clearCodeFlowIconData,
+            // trainingIconColor: Theme.of(context).colorScheme.primary,
+            trainingCallback: () {
+              _clearCodeFlow(context);
             },
           ),
         if (isSystemUser) _divider(),
@@ -91,7 +88,7 @@ class DebugMenuBuilder {
           _buildPopupMenuItem(
             iconData: FaIconConstants.debugNetworkInspectorIconData,
             title: 'Network Inspector',
-            onTab: () {
+            onTap: () {
               _showDebugNetworkInspector(context);
             },
           ),
@@ -103,17 +100,39 @@ class DebugMenuBuilder {
     required IconData iconData,
     Color? iconColor,
     required String title,
-    required Function() onTab,
+    required Function() onTap,
+    IconData? trainingIconData,
+    Color? trainingIconColor,
+    VoidCallback? trainingCallback,
   }) {
     return PopupMenuItem(
+      padding: EdgeInsets.all(0),
       child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 8),
         leading: Icon(
           iconData,
           size: menuItemIconSize,
           color: iconColor ?? menuItemIconColor,
         ),
-        title: Text(title),
-        onTap: onTab,
+        trailing: trainingIconData == null
+            ? null
+            : IconButton(
+                icon: Icon(
+                  trainingIconData,
+                  size: menuItemIconSize,
+                  color: trainingIconColor,
+                ),
+                tooltip: "Clear Data",
+                onPressed: trainingCallback,
+              ),
+        title: SizedBox(
+          width: 180,
+          child: Text(
+            title,
+            maxLines: 1,
+          ),
+        ),
+        onTap: onTap,
       ),
     );
   }
