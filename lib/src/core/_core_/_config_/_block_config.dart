@@ -1,10 +1,13 @@
 part of '../core.dart';
 
 class BlockConfig {
+  final bool enforceParentLinkConstraint;
   final bool preventUnsavedChangesLoss;
-  final ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy;
 
+  @Deprecated("No longer supported")
+  final ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy;
   // IdentityBlockConfig
+  @Deprecated("No longer supported")
   final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy;
   final BlockHiddenAction onHideAction;
 
@@ -23,6 +26,7 @@ class BlockConfig {
   final SortStrategy clientSideSortStrategy;
 
   BlockConfig({
+    this.enforceParentLinkConstraint = false,
     this.itemAbsentRepresentativePolicy =
         ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
     this.unifiedItemRefreshPolicy = UnifiedItemRefreshPolicy.auto,

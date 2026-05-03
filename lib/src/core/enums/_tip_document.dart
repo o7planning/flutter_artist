@@ -135,7 +135,7 @@ enum TipDocument {
       case TipDocument.canDoAction:
         return "Can Do Action";
       case TipDocument.blockExtractParentBlockItemId:
-        return "Block.extractParentBlockItemId()";
+        return "Block.resolveParentBlockItemId()";
       case TipDocument.blockPerformDeleteItemById:
         return "Block.performDeleteItemById()";
       case TipDocument.blockPerformQuery:
@@ -242,7 +242,7 @@ enum TipDocument {
       case TipDocument.canDoAction:
         return "Can Do Action";
       case TipDocument.blockExtractParentBlockItemId:
-        return "Block.extractParentBlockItemId() method.";
+        return "Block.resolveParentBlockItemId() method.";
       case TipDocument.blockPerformDeleteItemById:
         return "Block.performDeleteItemById()";
       case TipDocument.blockPerformQuery:

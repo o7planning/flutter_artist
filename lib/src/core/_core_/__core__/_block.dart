@@ -4864,25 +4864,14 @@ abstract class Block<
   /// to ensure that it actually matches the current item of the parent Block.
   /// If it doesn't match, it will be removed from this Block's list.
   ///
-  /// If you don't care about this method, you can simply throw an [FeatureUnsupportedException].
-  ///
-  /// ```dart
-  /// @override
-  /// Object extractParentBlockItemId({required ITEM fromThisBlockItem}) {
-  ///     throw FeatureUnsupportedException("This feature will be ignored!");
-  /// }
-  /// ```
-  ///
-  /// For example:
-  /// ```dart
-  /// @override
-  /// Object extractParentBlockItemId({required ProductInfo fromThisBlockItem}) {
-  ///   return fromThisBlockItem.categoryId;
-  /// }
-  /// ```
+  /// If you don't care about this method, you can simply set BlockConfig.enforceParentLinkConstraint = true.
   ///
   @_AbstractMethodAnnotation()
-  Object extractParentBlockItemId({required ITEM fromThisBlockItem});
+  Object resolveParentBlockItemId({required ITEM item}) {
+    throw UnimplementedError(
+        'The resolveParentBlockItemId() method must be implemented when config.enforceParentLinkConstraint is true '
+        'to determine the parent reference of each item.');
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -7753,28 +7742,29 @@ abstract class Block<
     if (parentBlkCurrItemId == null) {
       validItems.addAll(queriedItems);
     } else {
-      for (var item in queriedItems) {
-        try {
-          Object parentBlkItemId =
-              extractParentBlockItemId(fromThisBlockItem: item);
-          if (parentBlkItemId == parentBlkCurrItemId) {
-            validItems.add(item);
-          } else {
-            invalidItems.add(item);
+      if (config.enforceParentLinkConstraint) {
+        for (var item in queriedItems) {
+          try {
+            Object parentBlkItemId = resolveParentBlockItemId(item: item);
+            if (parentBlkItemId == parentBlkCurrItemId) {
+              validItems.add(item);
+            } else {
+              invalidItems.add(item);
+            }
+          } catch (e, stackTrace) {
+            errorInfo ??= _handleError(
+              shelf: shelf,
+              methodName: "resolveParentBlockItemId",
+              error: e,
+              stackTrace: stackTrace,
+              showSnackBar: true,
+              tipDocument: TipDocument.blockExtractParentBlockItemId,
+            );
+            errorItems.add(item);
           }
-        } on FeatureUnsupportedException {
-          validItems.add(item);
-        } catch (e, stackTrace) {
-          errorInfo ??= _handleError(
-            shelf: shelf,
-            methodName: "extractParentBlockItemId",
-            error: e,
-            stackTrace: stackTrace,
-            showSnackBar: true,
-            tipDocument: TipDocument.blockExtractParentBlockItemId,
-          );
-          errorItems.add(item);
         }
+      } else {
+        validItems.addAll(queriedItems);
       }
     }
     //
@@ -7782,7 +7772,7 @@ abstract class Block<
       if (invalidItems.isNotEmpty) {
         _handleWarning(
           shelf: shelf,
-          methodName: "extractParentBlockItemId",
+          methodName: "resolveParentBlockItemId",
           warningMessage:
               '${queriedItems.length} items were just queried (${getClassNameWithoutGenerics(this)}). '
               '${errorItems.length} items failed during the validation process, '
