@@ -1,16 +1,40 @@
 part of '../core.dart';
 
-// Rename: AppConfiguration.
-abstract class StorageStructure {
-  void registerActivities();
-
-  void registerShelves();
+abstract class AppConfiguration {
+  String get appName;
 
   List<ProjectionFamily> projectionFamilies();
 
-  List<FaTheme> additionalThemes();
+  void registerShelves();
 
-  void overrideColorResolvers();
+  void registerActivities() {}
+
+  List<FaTheme> additionalThemes() => [];
+
+  void overrideColorResolvers() {}
+
+  FlutterArtistLocaleAdapter get localeAdapter;
+
+  FlutterArtistLoginLogoutAdapter get loginLogoutAdapter;
+
+  FlutterArtistNotificationAdapter? get notificationAdapter;
+
+  FlutterArtistGlobalDataAdapter get globalDataAdapter;
+
+  FlutterArtistCoreFeaturesAdapter get coreFeaturesAdapter;
+
+  Future<void> showDebugNetworkInspector(BuildContext context);
+
+  int get maxStoredLogEntryCount => 20;
+
+  int get notificationFetchPeriodInSeconds => 24 * 60 * 60;
+
+  int get codeFlowRetentionPeriodInSeconds => 60;
+
+  DebugOptions get debugOptions => DebugOptions();
+
+  ConsoleDebugOptions get consoleDebugOptions =>
+      ConsoleDebugOptions(enabled: true);
 }
 
 class _DebugRegister {

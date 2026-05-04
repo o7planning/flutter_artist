@@ -80,7 +80,7 @@ class DebugMenuBuilder {
             trainingIconData: FaIconConstants.clearCodeFlowIconData,
             // trainingIconColor: Theme.of(context).colorScheme.primary,
             trainingCallback: () {
-              _clearCodeFlow(context);
+              _clearCodeFlowLogger(context);
             },
           ),
         if (isSystemUser) _divider(),
@@ -151,7 +151,7 @@ class DebugMenuBuilder {
 
   Future<void> _showDebugNetworkInspector(BuildContext context) async {
     Navigator.pop(context, null);
-    FlutterArtist.showDebugNetworkInspector!(context);
+    await FlutterArtist.showDebugNetworkInspector();
   }
 
   Future<void> _showDebugAppInspectorDialog(BuildContext context) async {
@@ -164,7 +164,7 @@ class DebugMenuBuilder {
     await FlutterArtist.showDebugThemeInspector();
   }
 
-  void _clearCodeFlow(BuildContext context) {
+  void _clearCodeFlowLogger(BuildContext context) {
     Navigator.pop(context, null);
     FlutterArtist.codeFlowLogger.clear();
   }

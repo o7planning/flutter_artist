@@ -1,6 +1,5 @@
 part of '../../core.dart';
 
-typedef Converter<RAW_VALUE> = SimpleVal Function(RAW_VALUE? rawValue);
 
 class SimpleVal extends Equatable {
   final dynamic value;

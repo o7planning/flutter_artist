@@ -113,7 +113,7 @@ export 'src/core/precheck/form_model_data_load_precheck.dart';
 export 'src/core/precheck/patch_form_fields_precheck.dart';
 export 'src/core/precheck/scalar_query_precheck.dart';
 export 'src/core/precheck/show_form_info_precheck.dart';
-export 'src/core/typedef/custom_confirmation.dart';
+export 'src/core/typedef/typedefs.dart';
 export 'src/core/utils/_class_utils.dart';
 export 'src/debug/menu/_debug_menu.dart';
 export 'src/debug/state_view/_debug_block_state_view.dart';

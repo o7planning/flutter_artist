@@ -172,22 +172,19 @@ class _FormModelViewState extends State<FormModelView> {
     required String infoAsHtml,
     required String json,
   }) {
-    return Padding(
-      padding: const EdgeInsets.all(5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          HtmlInfoView(
-            infoAsHtml: infoAsHtml,
-            style: TextStyle(fontSize: 13),
-          ),
-          const Divider(height: 10),
-          Expanded(
-            child: JsonView(json: json),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        HtmlInfoView(
+          infoAsHtml: infoAsHtml,
+          style: TextStyle(fontSize: 13),
+        ),
+        const Divider(height: 10),
+        Expanded(
+          child: JsonView(json: json),
+        ),
+      ],
     );
   }
 

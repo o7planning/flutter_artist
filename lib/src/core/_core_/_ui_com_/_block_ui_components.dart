@@ -6,7 +6,7 @@ class _BlockUiComponents extends _UiComponents {
   // Sections: BlockItemsView - BlockItemDetailView - BlockSectionView.
   final Map<_ContextProviderViewState, XState> __blockBaseViewWidgetStates = {};
   final Map<_ContextProviderViewState, XState> __blockControlBarWidgetStates =
-      {};
+  {};
   final Map<_ContextProviderViewState, XState> __controlWidgetStates = {};
   final Map<_ContextProviderViewState, XState> __paginationWidgetStates = {};
 
@@ -27,7 +27,11 @@ class _BlockUiComponents extends _UiComponents {
       ...__paginationWidgetStates.keys
     ];
     final Set<FaRouteData> faRoutes =
-        list.map((v) => v.faRoute).nonNulls.toList().toSet();
+    list
+        .map((v) => v.faRoute)
+        .nonNulls
+        .toList()
+        .toSet();
     if (block.formModel != null) {
       faRoutes.addAll(block.formModel!.ui.faRouteDatas);
     }
@@ -45,7 +49,7 @@ class _BlockUiComponents extends _UiComponents {
 
   void updatePaginationViews({bool force = false}) {
     for (_ContextProviderViewState widgetState
-        in __paginationWidgetStates.keys) {
+    in __paginationWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -57,7 +61,7 @@ class _BlockUiComponents extends _UiComponents {
 
   void updateBlockBaseViews({bool force = false}) {
     for (_ContextProviderViewState widgetState
-        in __blockBaseViewWidgetStates.keys) {
+    in __blockBaseViewWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -69,7 +73,7 @@ class _BlockUiComponents extends _UiComponents {
 
   void updateControlBars({bool force = false}) {
     for (_ContextProviderViewState widgetState
-        in __blockControlBarWidgetStates.keys) {
+    in __blockControlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -340,7 +344,7 @@ class _BlockUiComponents extends _UiComponents {
     if (alsoCheckChildren) {
       for (Block childBlock in block._childBlocks) {
         String? componentName =
-            childBlock.ui.findActiveBlockBaseViewWithContextKind(
+        childBlock.ui.findActiveBlockBaseViewWithContextKind(
           contextKind: contextKind,
           alsoCheckChildren: true,
         );
@@ -363,7 +367,7 @@ class _BlockUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (_ContextProviderViewState widgetState
-        in __blockControlBarWidgetStates.keys) {
+    in __blockControlBarWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -419,7 +423,7 @@ class _BlockUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (_ContextProviderViewState widgetState
-        in __paginationWidgetStates.keys) {
+    in __paginationWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -462,7 +466,7 @@ class _BlockUiComponents extends _UiComponents {
 
   void updateItemsView() {
     for (_ContextProviderViewState widgetState
-        in __blockBaseViewWidgetStates.keys) {
+    in __blockBaseViewWidgetStates.keys) {
       if (widgetState.mounted &&
           widgetState.type == ContextProviderViewType.blockItemsView) {
         widgetState.refreshState();
@@ -509,8 +513,10 @@ class _BlockUiComponents extends _UiComponents {
   }) {
     __paginationWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     //
     if (isVisible) {
@@ -539,8 +545,10 @@ class _BlockUiComponents extends _UiComponents {
     );
     __blockControlBarWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     bool blockXBlockRepCURRENT = hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
@@ -581,8 +589,10 @@ class _BlockUiComponents extends _UiComponents {
     );
     __controlWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     bool blockXBlockRepCURRENT = hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
@@ -623,8 +633,10 @@ class _BlockUiComponents extends _UiComponents {
     );
     __blockBaseViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     bool hasXBlockRepCURRENT = hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,

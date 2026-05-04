@@ -4,7 +4,7 @@ class FilterCriterion<RAW_VALUE extends Object> {
   final String filterCriterionName;
   final String filterFieldName;
 
-  final Converter<RAW_VALUE> __converter;
+  final SimpleValConverter<RAW_VALUE> __converter;
 
   Type get rawDataType {
     return RAW_VALUE;
@@ -17,7 +17,7 @@ class FilterCriterion<RAW_VALUE extends Object> {
   FilterCriterion({
     required this.filterCriterionName,
     required this.filterFieldName,
-    required Converter<RAW_VALUE> converter,
+    required SimpleValConverter<RAW_VALUE> converter,
   }) : __converter = converter;
 
   Object? _convert(RAW_VALUE? rawValue) {
@@ -27,7 +27,7 @@ class FilterCriterion<RAW_VALUE extends Object> {
       print(stackTrace);
       throw AppError(
           errorMessage:
-              "The ${getTypeNameWithoutGenerics(FilterCriterion)}.convert() "
+          "The ${getTypeNameWithoutGenerics(FilterCriterion)}.convert() "
               "method of criterionBaseName('$filterCriterionName') was called with error. $e");
     }
   }

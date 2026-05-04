@@ -23,16 +23,16 @@ class _Storage extends _StorageCore {
 
   void _init({
     required ExecutionTrace executionTrace,
-    required StorageStructure storageStructure,
+    required AppConfiguration appConfiguration,
   }) {
     TraceStep item = executionTrace._addTraceStep(
       codeId: "#SS000",
-      shortDesc: "${debugObjHtml(storageStructure)}.projectionFamilies().",
+      shortDesc: "${debugObjHtml(appConfiguration)}.projectionFamilies().",
       traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.projection,
     );
     final List<ProjectionFamily> projectionFamilies =
-        storageStructure.projectionFamilies();
+        appConfiguration.projectionFamilies();
     // This method may throw Fatal Error cause stop app.
     _projectionManager._init(
       executionTrace: executionTrace,
@@ -43,30 +43,30 @@ class _Storage extends _StorageCore {
       ..sort();
     item = executionTrace._addTraceStep(
       codeId: "#SS040",
-      shortDesc: "${debugObjHtml(storageStructure)}.registerActivities().",
+      shortDesc: "${debugObjHtml(appConfiguration)}.registerActivities().",
       traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.activity,
     );
-    storageStructure.registerActivities();
+    appConfiguration.registerActivities();
     item._extraInfos = FlutterArtist.debugRegister.debugRegisterActivities
       ..sort();
     //
     item = executionTrace._addTraceStep(
       codeId: "#SS060",
-      shortDesc: "${debugObjHtml(storageStructure)}.registerShelves().",
+      shortDesc: "${debugObjHtml(appConfiguration)}.registerShelves().",
       traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.shelf,
     );
-    storageStructure.registerShelves();
+    appConfiguration.registerShelves();
     item._extraInfos = FlutterArtist.debugRegister.debugRegisterShelves..sort();
     //
     item = executionTrace._addTraceStep(
       codeId: "#SS160",
-      shortDesc: "${debugObjHtml(storageStructure)}.additionalThemes().",
+      shortDesc: "${debugObjHtml(appConfiguration)}.additionalThemes().",
       traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.theme,
     );
-    List<FaTheme> faThemes = storageStructure.additionalThemes();
+    List<FaTheme> faThemes = appConfiguration.additionalThemes();
     FaThemeHub.instance.registerAll(faThemes);
   }
 

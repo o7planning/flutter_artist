@@ -45,9 +45,13 @@ class _LazyObjects {
   }
 
   String toDebugString() {
-    return " - LazyFilterModels: ${lazyFilterModels.map((e) => e.toDebugString()).join(", ")}.\n"
-        " - LazyBlocks: ${lazyBlocks.map((e) => e.toDebugString()).join(", ")}.\n"
-        " - LazyScalars: ${lazyScalars.map((e) => e.toDebugString()).join(", ")}.\n"
-        " - LazyFormModels: ${lazyFormModels.map((e) => e.toDebugString()).join(", ")}.";
+    return " - LazyFilterModels: ${lazyFilterModels.map((e) =>
+        e.toDebugString()).join(", ")}.\n"
+        " - LazyBlocks: ${lazyBlocks.map((e) => e.toDebugString()).join(
+        ", ")}.\n"
+        " - LazyScalars: ${lazyScalars.map((e) => e.toDebugString()).join(
+        ", ")}.\n"
+        " - LazyFormModels: ${lazyFormModels.map((e) => e.toDebugString()).join(
+        ", ")}.";
   }
 }

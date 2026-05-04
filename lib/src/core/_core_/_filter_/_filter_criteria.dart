@@ -38,8 +38,10 @@ abstract class FilterCriteria {
         } else {
           throw AppError(
             errorMessage:
-                "Duplicate criterionBaseName '${filterCriterion.filterCriterionName}'. "
-                "@see the ${getClassNameWithoutGenerics(this)}.registerSupportedCriteria() method for details.",
+            "Duplicate criterionBaseName '${filterCriterion
+                .filterCriterionName}'. "
+                "@see the ${getClassNameWithoutGenerics(
+                this)}.registerSupportedCriteria() method for details.",
           );
         }
       }
@@ -52,8 +54,9 @@ abstract class FilterCriteria {
         } else {
           throw AppError(
             errorMessage:
-                "Duplicate jsonCriterionName '${filterCriterion.filterFieldName}'. "
-                "@see the ${getClassNameWithoutGenerics(this)}.registerSupportedCriteria() method for details.",
+            "Duplicate jsonCriterionName '${filterCriterion.filterFieldName}'. "
+                "@see the ${getClassNameWithoutGenerics(
+                this)}.registerSupportedCriteria() method for details.",
           );
         }
       }

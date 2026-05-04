@@ -161,7 +161,7 @@ import '../precheck/scalar_query_precheck.dart';
 import '../precheck/scalar_quick_action_precheck.dart';
 import '../precheck/shelf_deferred_event_execution_precheck.dart';
 import '../precheck/show_form_info_precheck.dart';
-import '../typedef/custom_confirmation.dart';
+import '../typedef/typedefs.dart';
 import '../utils/_class_utils.dart';
 import '../utils/_compare_utils.dart';
 import '../utils/_hive_utils.dart';
@@ -272,7 +272,7 @@ part '__core__/_projection_manager.dart';
 
 part '__core__/_storage_natural_query_queue.dart';
 
-part '__core__/_storage_structure.dart';
+part '_config_/_app_configuration.dart';
 
 part '__core__/_projection_family.dart';
 

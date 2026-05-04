@@ -42,7 +42,8 @@ class BlockControlBar extends BaseControlBar<Block, BlockControlBarItemType> {
 }
 
 class _BlockControlBarState extends _BaseControlBarState<Block,
-    BlockControlBarItemType, BlockControlBar> {
+    BlockControlBarItemType,
+    BlockControlBar> {
   @override
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
 
@@ -89,10 +90,10 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
           onAction: widget.block.isPreparingFormCreation,
           onPressed: actionable.yes
               ? () async {
-                  final result = await widget.block
-                      .prepareFormToCreateItem(navigate: null);
-                  widget.config.onNavigateCreate?.call(result);
-                }
+            final result = await widget.block
+                .prepareFormToCreateItem(navigate: null);
+            widget.config.onNavigateCreate?.call(result);
+          }
               : null,
         );
 
@@ -106,9 +107,9 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
           onAction: widget.block.isDeleting,
           onPressed: actionable.yes
               ? () async {
-                  final result = await widget.block.deleteCurrentItem();
-                  widget.config.onNavigateDelete?.call(result);
-                }
+            final result = await widget.block.deleteCurrentItem();
+            widget.config.onNavigateDelete?.call(result);
+          }
               : null,
         );
 
@@ -123,9 +124,9 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
           onAction: widget.block.__isSaving,
           onPressed: actionable.yes
               ? () async {
-                  final result = await widget.block.formModel!.saveForm();
-                  widget.config.onNavigateSave?.call(result);
-                }
+            final result = await widget.block.formModel!.saveForm();
+            widget.config.onNavigateSave?.call(result);
+          }
               : null,
         );
 
@@ -137,7 +138,7 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
           iconData: FaIconConstants.formRefreshIconData,
           onAction: widget.block.isRefreshingCurrentItem,
           onPressed:
-              actionable.yes ? () => widget.block.refreshCurrentItem() : null,
+          actionable.yes ? () => widget.block.refreshCurrentItem() : null,
         );
 
       case BlockControlBarItemType.reset:
@@ -149,7 +150,7 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
           tooltip: "Reset Form",
           iconData: FaIconConstants.formCleanIconData,
           onPressed:
-              actionable.yes ? () => widget.block.formModel?.resetForm() : null,
+          actionable.yes ? () => widget.block.formModel?.resetForm() : null,
         );
 
       case BlockControlBarItemType.query:
@@ -171,12 +172,12 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
           onAction: false,
           onPressed: show
               ? () {
-                  DebugViewerDialog.openDebugFilterCriteriaInspector(
-                    context: context,
-                    locationInfo: '',
-                    filterModel: widget.block.registeredOrDefaultFilterModel,
-                  );
-                }
+            DebugViewerDialog.openDebugFilterCriteriaInspector(
+              context: context,
+              locationInfo: '',
+              filterModel: widget.block.registeredOrDefaultFilterModel,
+            );
+          }
               : null,
         );
 
@@ -189,13 +190,13 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
           onAction: false,
           onPressed: actionable.yes
               ? () {
-                  DebugFormModelInspectorDialog.open(
-                    context: context,
-                    locationInfo:
-                        getClassNameWithoutGenerics(widget.ownerClassInstance),
-                    formModel: widget.block.formModel!,
-                  );
-                }
+            DebugFormModelInspectorDialog.open(
+              context: context,
+              locationInfo:
+              getClassNameWithoutGenerics(widget.ownerClassInstance),
+              formModel: widget.block.formModel!,
+            );
+          }
               : null,
         );
 
@@ -207,8 +208,8 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
           onPressed: item.onPressed == null
               ? null
               : () {
-                  item.onPressed!.call(widget.block, type);
-                },
+            item.onPressed!.call(widget.block, type);
+          },
         );
       default:
         return null;
@@ -243,8 +244,9 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
   String getWidgetOwnerClassName() => getClassNameWithoutGenerics(widget.block);
 
   @override
-  void addWidgetState({required bool isVisible}) => widget.block.ui
-      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) =>
+      widget.block.ui
+          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

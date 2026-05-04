@@ -9,7 +9,7 @@ enum TipDocument {
   debugFormModelViewer(enabled: true),
   debugUiComponentsViewer(enabled: true),
   debugMenu(enabled: true),
-  storageStructure(enabled: true),
+  appConfiguration(enabled: true),
   coreFeaturesAdapter(enabled: true),
   loginLogoutAdapter(enabled: true),
   activity(enabled: true),
@@ -92,8 +92,8 @@ enum TipDocument {
     switch (this) {
       case TipDocument.config:
         return "FlutterArtist Config";
-      case TipDocument.storageStructure:
-        return "FlutterArtist StorageStructure";
+      case TipDocument.appConfiguration:
+        return "FlutterArtist AppConfiguration";
       case TipDocument.coreFeaturesAdapter:
         return "FlutterArtistAdapter";
       case TipDocument.loginLogoutAdapter:
@@ -198,9 +198,9 @@ enum TipDocument {
   String getTip() {
     switch (this) {
       case TipDocument.config:
-        return "FlutterArtist.config()";
-      case TipDocument.storageStructure:
-        return "FlutterArtist StorageStructure";
+        return "FlutterArtist.start()";
+      case TipDocument.appConfiguration:
+        return "FlutterArtist AppConfiguration";
       case TipDocument.coreFeaturesAdapter:
         return "FlutterArtistAdapter";
       case TipDocument.loginLogoutAdapter:
@@ -308,7 +308,7 @@ enum TipDocument {
         return [
           "http://51.195.44.134:8080/vi/14841/flutterartist-config",
         ];
-      case TipDocument.storageStructure:
+      case TipDocument.appConfiguration:
         return [
           "http://51.195.44.134:8080/vi/11111/config1",
           "http://51.195.44.134:8080/vi/11112/config2",

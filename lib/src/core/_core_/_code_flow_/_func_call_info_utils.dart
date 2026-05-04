@@ -1,11 +1,9 @@
 part of '../core.dart';
 
 class _FuncCallInfoUtils {
-   
-  static FuncCallInfo _buildInfo(
-    Frame? selected,
-    Map<String, dynamic>? arguments,
-  ) {
+
+  static FuncCallInfo _buildInfo(Frame? selected,
+      Map<String, dynamic>? arguments,) {
     return FuncCallInfo._(
       funcName: _cleanFunctionName(selected?.member),
       callerFuncName: null,
@@ -39,9 +37,9 @@ class _FuncCallInfoUtils {
 
     bool isNamed(Frame? f) =>
         f != null &&
-        f.member != null &&
-        f.member != '<fn>' &&
-        f.member != 'closure';
+            f.member != null &&
+            f.member != '<fn>' &&
+            f.member != 'closure';
 
     if (isNamed(f1)) return f1;
     if (isNamed(f2)) return f2;
@@ -60,20 +58,20 @@ class _FuncCallInfoUtils {
   }
 
   static String _cleanFunctionName(String? raw) {
-    if (raw == null || raw.isEmpty) return "-"; 
-    String name = raw.trim(); 
+    if (raw == null || raw.isEmpty) return "-";
+    String name = raw.trim();
     // remove [ ... ]
     if (name.startsWith('[') && name.endsWith(']')) {
       name = name.substring(1, name.length - 1);
-    } 
+    }
     // remove trailing ()
     if (name.endsWith('()')) {
       name = name.substring(0, name.length - 2);
-    } 
+    }
     // normalize closure / fn
     if (name == '<fn>' || name == 'closure') {
       return "-";
-    } 
+    }
     return name;
-  } 
+  }
 }

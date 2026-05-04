@@ -6,9 +6,9 @@ class _XShelfFilterModelQuery extends _XShelfSbQuery {
     required FilterInput? filterInput,
     required bool forceQueryAll,
   }) : super(
-          xShelfType: XShelfType.filterModelQuery,
-          shelf: filterModel.shelf,
-        ) {
+    xShelfType: XShelfType.filterModelQuery,
+    shelf: filterModel.shelf,
+  ) {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: filterModel,
       filterInput: filterInput,

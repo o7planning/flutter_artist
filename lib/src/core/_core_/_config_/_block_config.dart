@@ -6,6 +6,7 @@ class BlockConfig {
 
   @Deprecated("No longer supported")
   final ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy;
+
   // IdentityBlockConfig
   @Deprecated("No longer supported")
   final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy;
@@ -49,7 +50,7 @@ class BlockConfig {
     ),
     this.clientSideSortStrategy = SortStrategy.none,
   }) : emitExternalShelfEvents =
-            List.unmodifiable(emitExternalShelfEvents?.toSet() ?? []);
+  List.unmodifiable(emitExternalShelfEvents?.toSet() ?? []);
 
   BlockConfig copy() {
     return BlockConfig(

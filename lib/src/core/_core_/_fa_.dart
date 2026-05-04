@@ -59,8 +59,6 @@ class _FlutterArtist extends _Core {
 
   AfterQueryAction get defaultAfterQueryAction => _defaultAfterQueryAction;
 
-  Function(BuildContext context)? showDebugNetworkInspector;
-
   late final FlutterArtistNotificationService __notificationService;
 
   late final Logger logger;
@@ -70,6 +68,8 @@ class _FlutterArtist extends _Core {
   final List<INotificationListener> _notificationListeners = [];
 
   final List<Future<dynamic>> __futureTaskList = [];
+
+  late final ShowDebugNetworkInspector _showDebugNetworkInspector;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -127,7 +127,7 @@ class _FlutterArtist extends _Core {
     if (__coreFeaturesAdapter == null) {
       throw DebugUtils.getFatalError(
           " >>>>>> $FlutterArtistCoreFeaturesAdapter is not registered!. "
-          "\n >>>>>> You need to call $FlutterArtist.config() in main.dart");
+          "\n >>>>>> You need to call $FlutterArtist.start() in main.dart");
     }
     return __coreFeaturesAdapter!;
   }
@@ -196,23 +196,12 @@ class _FlutterArtist extends _Core {
     );
   }
 
-  // Docs: [14841] - FlutterArtist Config.
-  Future<void> config({
-    required StorageStructure storageStructure,
+  // Docs: [14841] - FlutterArtist Start.
+  Future<void> start({
+    required AppConfiguration appConfiguration,
     required FlutterArtistRouter router,
-    required DebugOptions? debugOptions,
-    required ConsoleDebugOptions? consoleDebugOptions,
-    required FlutterArtistCoreFeaturesAdapter coreFeaturesAdapter,
-    required FlutterArtistNotificationAdapter? notificationAdapter,
-    required FlutterArtistLoginLogoutAdapter loginLogoutAdapter,
-    required FlutterArtistGlobalDataAdapter globalDataAdapter,
-    required FlutterArtistLocaleAdapter localeAdapter,
-    required Function(BuildContext context)? showRestDebugDialog,
-    int notificationFetchPeriodInSeconds = 60,
-    int maxStoredLogEntryCount = 20,
-    int codeFlowRetentionPeriodInSeconds = 20,
   }) async {
-    print("[FLUTTER-ARTIST] - FlutterArtist.config() - BEGIN");
+    print("[FLUTTER-ARTIST] - FlutterArtist.start() - BEGIN");
     if (__coreFeaturesAdapter != null) {
       throw DebugUtils.getFatalError(
           "${getClassName(__coreFeaturesAdapter)} already registered!");
@@ -220,25 +209,29 @@ class _FlutterArtist extends _Core {
     this.router = router;
     // IMPORTANT: Call this before using ExecutionTrace.
     codeFlowLogger = CodeFlowLogger(
-        codeFlowRetentionPeriodInSeconds: codeFlowRetentionPeriodInSeconds);
+      codeFlowRetentionPeriodInSeconds:
+          appConfiguration.codeFlowRetentionPeriodInSeconds,
+    );
 
     final executionTrace =
         FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
     try {
-      await __config(
+      await __start(
         executionTrace: executionTrace,
-        storageStructure: storageStructure,
-        debugOptions: debugOptions,
-        consoleDebugOptions: consoleDebugOptions,
-        coreFeaturesAdapter: coreFeaturesAdapter,
-        notificationAdapter: notificationAdapter,
-        loginLogoutAdapter: loginLogoutAdapter,
-        globalDataAdapter: globalDataAdapter,
-        localeAdapter: localeAdapter,
-        showRestDebugDialog: showRestDebugDialog,
-        notificationFetchPeriodInSeconds: notificationFetchPeriodInSeconds,
-        maxStoredLogEntryCount: maxStoredLogEntryCount,
-        codeFlowRetentionPeriodInSeconds: codeFlowRetentionPeriodInSeconds,
+        appConfiguration: appConfiguration,
+        showDebugNetworkInspector: appConfiguration.showDebugNetworkInspector,
+        debugOptions: appConfiguration.debugOptions,
+        consoleDebugOptions: appConfiguration.consoleDebugOptions,
+        coreFeaturesAdapter: appConfiguration.coreFeaturesAdapter,
+        notificationAdapter: appConfiguration.notificationAdapter,
+        loginLogoutAdapter: appConfiguration.loginLogoutAdapter,
+        globalDataAdapter: appConfiguration.globalDataAdapter,
+        localeAdapter: appConfiguration.localeAdapter,
+        notificationFetchPeriodInSeconds:
+            appConfiguration.notificationFetchPeriodInSeconds,
+        maxStoredLogEntryCount: appConfiguration.maxStoredLogEntryCount,
+        codeFlowRetentionPeriodInSeconds:
+            appConfiguration.codeFlowRetentionPeriodInSeconds,
       );
     } catch (e, stackTrace) {
       executionTrace.printToConsole();
@@ -246,12 +239,13 @@ class _FlutterArtist extends _Core {
       __showStartupError(executionTrace: executionTrace, error: e);
       rethrow;
     }
-    print("[FLUTTER-ARTIST] - FlutterArtist.config() - DONE");
+    print("[FLUTTER-ARTIST] - FlutterArtist.start() - DONE");
   }
 
-  Future<void> __config({
+  Future<void> __start({
     required ExecutionTrace executionTrace,
-    required StorageStructure storageStructure,
+    required AppConfiguration appConfiguration,
+    required ShowDebugNetworkInspector showDebugNetworkInspector,
     required DebugOptions? debugOptions,
     required ConsoleDebugOptions? consoleDebugOptions,
     required FlutterArtistCoreFeaturesAdapter coreFeaturesAdapter,
@@ -259,26 +253,26 @@ class _FlutterArtist extends _Core {
     required FlutterArtistLoginLogoutAdapter loginLogoutAdapter,
     required FlutterArtistGlobalDataAdapter globalDataAdapter,
     required FlutterArtistLocaleAdapter localeAdapter,
-    required Function(BuildContext context)? showRestDebugDialog,
     required int notificationFetchPeriodInSeconds,
     required int maxStoredLogEntryCount,
     required int codeFlowRetentionPeriodInSeconds,
   }) async {
     await FaIsarStorage.init();
     logger = Logger(maxStoredLogEntryCount: maxStoredLogEntryCount);
+    _showDebugNetworkInspector = showDebugNetworkInspector;
     //
     executionTrace._addTraceStep(
       codeId: "#S0000",
       shortDesc: "Begin FlutterArtist Config...\n"
-          "Note: You see this debug information because the <b>FlutterArtist.config()</b> method is called in <b>main.dart</b>.",
+          "Note: You see this debug information because the <b>FlutterArtist.start()</b> method is called in <b>main.dart</b>.",
       parameters: {
-        "storageStructure": storageStructure,
-        "coreFeaturesAdapter": coreFeaturesAdapter,
-        "loginLogoutAdapter": loginLogoutAdapter,
-        "globalDataAdapter": globalDataAdapter,
-        "notificationAdapter": notificationAdapter,
-        "maxStoredLogEntryCount": maxStoredLogEntryCount,
-        "notificationFetchPeriodInSeconds": notificationFetchPeriodInSeconds,
+        // "appConfiguration": appConfiguration,
+        // "coreFeaturesAdapter": coreFeaturesAdapter,
+        // "loginLogoutAdapter": loginLogoutAdapter,
+        // "globalDataAdapter": globalDataAdapter,
+        // "notificationAdapter": notificationAdapter,
+        // "maxStoredLogEntryCount": maxStoredLogEntryCount,
+        // "notificationFetchPeriodInSeconds": notificationFetchPeriodInSeconds,
       },
       traceStepType: TraceStepType.debug,
       tipDocument: TipDocument.config,
@@ -297,15 +291,15 @@ class _FlutterArtist extends _Core {
       codeId: "#S0200",
       shortDesc: "Calling <b>storage._init()</b> with parameters:",
       parameters: {
-        "storageStructure": storageStructure,
+        "appConfiguration": appConfiguration,
       },
       traceStepType: TraceStepType.nonControllableCalling,
-      tipDocument: TipDocument.storageStructure,
+      tipDocument: TipDocument.appConfiguration,
     );
     // This method may throw error and stop app.
     storage._init(
       executionTrace: executionTrace,
-      storageStructure: storageStructure,
+      appConfiguration: appConfiguration,
     );
     //
     // Global Manager:
@@ -381,8 +375,6 @@ class _FlutterArtist extends _Core {
         });
       }
     }
-    //
-    showDebugNetworkInspector = showRestDebugDialog;
     //
     // Notification:
     //
@@ -482,6 +474,13 @@ class _FlutterArtist extends _Core {
 
   bool get isOverlayOpen {
     return coreFeaturesAdapter.isOverlayOpen;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> showDebugNetworkInspector() async {
+    await _showDebugNetworkInspector(FlutterArtistCore.context);
   }
 
   // ***************************************************************************

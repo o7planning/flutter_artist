@@ -9,7 +9,7 @@ abstract class FilterCriterionDef<V extends Object> {
   final String criterionBaseName;
   final String fieldName;
   final String? description;
-  final Converter<V>? __toFieldValue;
+  final SimpleValConverter<V>? __toFieldValue;
 
   bool get toFieldValueProvided => __toFieldValue != null;
 
@@ -21,7 +21,7 @@ abstract class FilterCriterionDef<V extends Object> {
     required this.criterionBaseName,
     required this.description,
     required String? fieldName,
-    required Converter<V>? toFieldValue,
+    required SimpleValConverter<V>? toFieldValue,
   })  : fieldName = fieldName ?? criterionBaseName,
         __toFieldValue = toFieldValue {
     // Check the validity of the name:
@@ -164,7 +164,7 @@ class MultiOptFilterCriterionDef<V extends Object>
     required String criterionBaseName,
     String? description,
     required String? fieldName,
-    required Converter<V>? toFieldValue,
+    required SimpleValConverter<V>? toFieldValue,
     List<TildeCriterionConfig> tildeCriterionConfigs = const [],
     List<MultiOptFilterCriterionDef> children = const [],
   }) {
@@ -183,7 +183,7 @@ class MultiOptFilterCriterionDef<V extends Object>
     required String criterionBaseName,
     String? description,
     required String? fieldName,
-    required Converter<V>? toFieldValue,
+    required SimpleValConverter<V>? toFieldValue,
     List<TildeCriterionConfig> tildeCriterionConfigs = const [],
   }) {
     return MultiOptFilterCriterionDef._(

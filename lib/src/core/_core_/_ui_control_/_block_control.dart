@@ -1,7 +1,5 @@
 part of '../core.dart';
 
-typedef ControlPressedAsyncFunction = Future<bool> Function();
-
 @Deprecated(
     "Not yet ready for use, not yet designed, may be continued in a few months.")
 abstract class BlockControl extends _ContextProviderView {

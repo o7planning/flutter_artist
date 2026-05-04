@@ -1,8 +1,5 @@
 part of '../core.dart';
 
-typedef ShelfCreator<S> = S Function();
-typedef ActivityCreator<S> = S Function();
-
 abstract class _StorageCore extends _Core {
   final Map<String, ShelfCreator> __shelfCreatorMap = {};
   final Map<String, ActivityCreator> __activityCreatorMap = {};

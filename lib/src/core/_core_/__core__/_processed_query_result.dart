@@ -1,9 +1,9 @@
 part of '../core.dart';
 
 class _ProcessedQueryResult<
-    ID extends Object, //
-    ITEM extends Identifiable<ID>,
-    FILTER_CRITERIA extends FilterCriteria> {
+ID extends Object, //
+ITEM extends Identifiable<ID>,
+FILTER_CRITERIA extends FilterCriteria> {
   final Object? parentBlockCurrentItemId;
   final XFilterCriteria<FILTER_CRITERIA>? usedXFilterCriteria;
   final Pageable? usedPageable;

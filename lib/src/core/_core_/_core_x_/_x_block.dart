@@ -1,9 +1,9 @@
 part of '../core.dart';
 
 class XBlock<
-    ID extends Object, //
-    ITEM extends Identifiable<ID>,
-    ITEM_DETAIL extends Identifiable<ID>> {
+ID extends Object, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> {
   XShelf get xShelf => xFilterModel.xShelf;
 
   int get xShelfId => xShelf.xShelfId;
@@ -52,7 +52,7 @@ class XBlock<
 
   // TODO: Chuyen sang BlockQueryResult?
   late final PrepareItemCreationResult itemCreationResult =
-      block._createEmptyItemCreationResult();
+  block._createEmptyItemCreationResult();
   final queryResult = BlockQueryResult._();
 
   // ***************************************************************************
@@ -180,11 +180,11 @@ class XBlock<
       return true;
     }
     final ID currItemIdToReload =
-        block._getItemIdInternal(currItemInternalEVT!);
+    block._getItemIdInternal(currItemInternalEVT!);
     // TODO: Check throw pending exception.
     final ITEM? currItem = block.currentItem;
     ID? currItemId =
-        currItem == null ? null : block._getItemIdInternal(currItem);
+    currItem == null ? null : block._getItemIdInternal(currItem);
     if (currItemId != currItemIdToReload) {
       return true;
     }
