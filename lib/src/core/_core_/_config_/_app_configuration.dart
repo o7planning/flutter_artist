@@ -13,7 +13,7 @@ abstract class AppConfiguration {
 
   void overrideColorResolvers() {}
 
-  FlutterArtistLocaleAdapter get localeAdapter;
+  Future<void> updateLocale({required Locale locale});
 
   FlutterArtistLoginLogoutAdapter get loginLogoutAdapter;
 

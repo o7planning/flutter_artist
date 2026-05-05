@@ -226,7 +226,11 @@ class _FlutterArtist extends _Core {
         notificationAdapter: appConfiguration.notificationAdapter,
         loginLogoutAdapter: appConfiguration.loginLogoutAdapter,
         globalDataAdapter: appConfiguration.globalDataAdapter,
-        localeAdapter: appConfiguration.localeAdapter,
+        localeAdapter: FlutterArtistLocaleAdapter(
+          updateLocale: (Locale locale) async {
+            await appConfiguration.updateLocale(locale: locale);
+          },
+        ), //appConfiguration.localeAdapter,
         notificationFetchPeriodInSeconds:
             appConfiguration.notificationFetchPeriodInSeconds,
         maxStoredLogEntryCount: appConfiguration.maxStoredLogEntryCount,
