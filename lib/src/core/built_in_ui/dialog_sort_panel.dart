@@ -6,22 +6,22 @@ import '../_core_/core.dart';
 import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
 import '_style.dart';
-import 'sort_dialog_content.dart';
-import 'sort_dialog_panel_style.dart';
+import 'dialog_sort_content.dart';
+import 'dialog_sort_panel_style.dart';
 
 /// A sort panel that opens a modal dialog for advanced multi-sort configuration.
-class SortDialogPanel<ITEM extends Object> extends SortPanel<ITEM>
+class DialogSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     with SortPanelMixin {
-  final SortDialogPanelStyle style;
+  final DialogSortPanelStyle style;
 
-  const SortDialogPanel({
+  const DialogSortPanel({
     super.key,
     required super.sortModel,
-    this.style = const SortDialogPanelStyle(),
+    this.style = const DialogSortPanelStyle(),
   });
 
   void _showSortDialog(BuildContext context) {
-    final contentKey = GlobalKey<SortDialogContentState>();
+    final contentKey = GlobalKey<DialogSortContentState>();
     final tokens = context.faTokens;
 
     showDialog(
@@ -41,7 +41,7 @@ class SortDialogPanel<ITEM extends Object> extends SortPanel<ITEM>
           ),
           constraints: BoxConstraints(maxWidth: style.dialogMaxWidth),
           contentPadding: const EdgeInsets.symmetric(vertical: 8),
-          content: SortDialogContent(
+          content: DialogSortContent(
             key: contentKey,
             sortModel: sortModel,
             style: style,

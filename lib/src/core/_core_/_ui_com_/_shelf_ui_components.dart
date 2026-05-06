@@ -87,7 +87,7 @@ class _ShelfUiComponents extends _UiComponents {
         return true;
       }
       bool hasMounted =
-          _hasMountedScalarUiComponentCascade(scalar._childScalars);
+      _hasMountedScalarUiComponentCascade(scalar._childScalars);
       if (hasMounted) {
         return true;
       }
@@ -139,8 +139,7 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __updateAllScalarUiComponentsCascade(
-    Scalar scalar, {
+  void __updateAllScalarUiComponentsCascade(Scalar scalar, {
     required bool withoutFilters,
   }) {
     scalar.ui.updateAllUiComponents(withoutFilters: withoutFilters);
@@ -156,8 +155,7 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __updateAllBlockUiComponentsCascade(
-    Block block, {
+  void __updateAllBlockUiComponentsCascade(Block block, {
     required bool withoutFilters,
   }) {
     block.ui.updateAllUiComponents(withoutFilters: withoutFilters);
@@ -190,7 +188,7 @@ class _ShelfUiComponents extends _UiComponents {
   }) {
     for (Block block in blocks) {
       Map<_ContextProviderViewState, XState> m =
-          block.ui._findMountedWidgetStates(
+      block.ui._findMountedWidgetStates(
         activeOnly: activeOnly,
         withPagination: withPagination,
         withBlockBaseView: withBlockFragment,
@@ -220,7 +218,7 @@ class _ShelfUiComponents extends _UiComponents {
     }
     for (Scalar scalar in scalars) {
       Map<_ContextProviderViewState, XState> m =
-          scalar.ui._findMountedWidgetStates(
+      scalar.ui._findMountedWidgetStates(
         activeOnly: activeOnly,
         withFilter: withFilter,
         withScalarControlBar: withScalarControlBar,

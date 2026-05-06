@@ -33,7 +33,7 @@ import '../../debug/dialog/_form_error_viewer_dialog.dart';
 import '../../debug/dialog/_debug_form_model_inspector_dialog.dart';
 import '../../debug/dialog/_scalar_error_viewer_dialog.dart';
 import '../../debug/dialog/_debug_app_inspector_dialog.dart';
-import '../../debug/dialog/_debug_ui_components_viewer_dialog.dart';
+import '../../debug/dialog/_debug_ui_context_inspector_dialog.dart';
 import '../../debug/executor/model/_debug_x_root_queue_item.dart';
 import '../../debug/executor/model/_debug_task_unit.dart';
 import '../../debug/executor/model/_debug_x_root_queue.dart';

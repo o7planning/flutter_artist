@@ -169,7 +169,7 @@ class TraceStepBox extends StatelessWidget {
 
   void _showTipDocumentDialog(BuildContext context) {
     if (traceStep.tipDocument != null) {
-      TipDocumentViewerDialog.open(
+      TipDocumentViewerDialog.show(
         context: context,
         tipDocument: traceStep.tipDocument!,
       );

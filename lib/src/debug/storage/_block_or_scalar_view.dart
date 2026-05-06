@@ -123,7 +123,7 @@ class _BlockOrScalarViewState extends State<BlockOrScalarView> {
               iconSize: 14,
               iconColor: colorScheme.tertiary,
               onPressed: () {
-                TipDocumentViewerDialog.open(
+                TipDocumentViewerDialog.show(
                   context: context,
                   tipDocument: TipDocument.debugState,
                 );

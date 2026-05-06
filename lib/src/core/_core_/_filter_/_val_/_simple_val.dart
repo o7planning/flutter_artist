@@ -1,6 +1,5 @@
 part of '../../core.dart';
 
-
 class SimpleVal extends Equatable {
   final dynamic value;
 

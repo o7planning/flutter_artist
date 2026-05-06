@@ -69,7 +69,7 @@ class _DeferredEventManager {
           ? "The mode to defer <b>DeferredEvent</b> execution is <b>enabled</b>."
           : "The mode to defer <b>DeferredEvent</b> execution is <b>not enabled</b>.",
       traceStepType: TraceStepType.debug,
-      tipDocument: TipDocument.eventReactionFreezing,
+      tipDocument: TipDocument.deferringEvent,
     );
     //
     final List<Shelf> visibleReactionShelves = [];
@@ -148,7 +148,7 @@ class _DeferredEventManager {
               "Calling ${debugObjHtml(reactionShelf)}._addShelfExternalReactionTaskUnit():",
           note: " This Shelf is <b>VISIBLE</b> and <b>is not frozen</b>.",
           traceStepType: TraceStepType.nonControllableCalling,
-          tipDocument: TipDocument.eventReactionFreezing,
+          tipDocument: TipDocument.deferringEvent,
         );
         reactionShelf._addShelfExternalReactionTaskUnit(
           executionTrace: executionTrace,

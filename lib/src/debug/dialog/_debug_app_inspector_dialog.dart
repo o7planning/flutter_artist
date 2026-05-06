@@ -58,7 +58,7 @@ class _DebugAppInspectorDialogState extends State<DebugAppInspectorDialog> {
       preferredContentWidth: preferContentSize.width,
       preferredContentHeight: preferContentSize.height,
       onHelpPressed: () {
-        TipDocumentViewerDialog.open(
+        TipDocumentViewerDialog.show(
           context: context,
           tipDocument: TipDocument.debugAppInspector,
         );

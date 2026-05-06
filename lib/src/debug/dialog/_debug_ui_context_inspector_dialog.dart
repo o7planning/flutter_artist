@@ -8,27 +8,27 @@ import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '_tip_document_viewer_dialog.dart';
 
-class DebugUiComponentsViewerDialog extends StatefulWidget {
+class DebugUiContextInspectorDialog extends StatefulWidget {
   final Shelf? shelf;
   final Block? block;
   final Scalar? scalar;
   final bool showActiveOnly;
 
-  const DebugUiComponentsViewerDialog.block({
+  const DebugUiContextInspectorDialog.block({
     required Block this.block,
     this.showActiveOnly = true,
     super.key,
   })  : shelf = null,
         scalar = null;
 
-  const DebugUiComponentsViewerDialog.scalar({
+  const DebugUiContextInspectorDialog.scalar({
     required Scalar this.scalar,
     this.showActiveOnly = true,
     super.key,
   })  : shelf = null,
         block = null;
 
-  const DebugUiComponentsViewerDialog.shelf({
+  const DebugUiContextInspectorDialog.shelf({
     required Shelf this.shelf,
     this.showActiveOnly = true,
     super.key,
@@ -37,7 +37,7 @@ class DebugUiComponentsViewerDialog extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _DebugUiComponentsViewerDialogState();
+    return _DebugUiContextInspectorDialogState();
   }
 
   static Future<void> open({
@@ -47,7 +47,7 @@ class DebugUiComponentsViewerDialog extends StatefulWidget {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return DebugUiComponentsViewerDialog.shelf(
+        return DebugUiContextInspectorDialog.shelf(
           shelf: shelf,
         );
       },
@@ -55,8 +55,8 @@ class DebugUiComponentsViewerDialog extends StatefulWidget {
   }
 }
 
-class _DebugUiComponentsViewerDialogState
-    extends State<DebugUiComponentsViewerDialog> {
+class _DebugUiContextInspectorDialogState
+    extends State<DebugUiContextInspectorDialog> {
   static const double fontSize = 13;
 
   String _title() {
@@ -125,9 +125,9 @@ class _DebugUiComponentsViewerDialogState
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(context),
       onHelpPressed: () {
-        TipDocumentViewerDialog.open(
+        TipDocumentViewerDialog.show(
           context: context,
-          tipDocument: TipDocument.debugUiComponentsViewer,
+          tipDocument: TipDocument.debugUiContextInspector,
         );
       },
     );

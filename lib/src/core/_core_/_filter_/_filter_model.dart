@@ -1,9 +1,9 @@
 part of '../core.dart';
 
 abstract class FilterModel<
-FILTER_INPUT extends FilterInput, // EmptyFilterInput
-FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-> extends _Core {
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+    > extends _Core {
   bool _filterCriteriaPrechecked = false;
 
   late final Shelf shelf;
@@ -302,7 +302,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       // SAME-AS: #0004
       if (!thisXFilterModel.queried) {
         FILTER_INPUT? filterInput =
-        thisXFilterModel.filterInput as FILTER_INPUT?;
+            thisXFilterModel.filterInput as FILTER_INPUT?;
         //
         _xFilterCriteria = await _startNewFilterActivity(
           executionTrace: executionTrace,
@@ -336,14 +336,14 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     executionTrace._addTraceStep(
       codeId: "#30000",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
+          "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
       traceStepType: TraceStepType.debug,
     );
     //
     _filterModelStructure._setFilterDataState(DataState.pending);
     //
     XFilterCriteria<FILTER_CRITERIA>? xFilterCriteria =
-    await _startNewFilterActivity(
+        await _startNewFilterActivity(
       executionTrace: executionTrace,
       activityType: FilterActivityType.updateFromFilterPanel,
       filterInput: null,
@@ -363,116 +363,94 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     // criterionBaseName is not valid:
     on FilterCriterionInvalidBaseNameError catch (e) {
       String message = "Invalid criterionBaseName '${e.criterionBaseName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // fieldName is not valid:
     on FilterCriterionFieldNameInvalidError catch (e) {
       String message = "Invalid fieldName '${e.fieldName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // No Field Converter:
     on FilterCriterionNoFieldValueConverterError catch (e) {
       String message =
-          "Data type of '${e.criterionBaseName}' is '${e
-          .dataType}' (Not simple data type).\n"
+          "Data type of '${e.criterionBaseName}' is '${e.dataType}' (Not simple data type).\n"
           "So you need to provide toFieldValue() function.\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // tildeCriterionName is not valid:
     on TildeFilterCriterionNameInvalidError catch (e) {
       String message = "Invalid tildeCriterionName '${e.tildeCriterionName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // parentMatchSuffix is not valid:
     on TildeFilterCriterionSuffixInvalidError catch (e) {
       String message =
-          "Invalid parentMatchSuffix '${e
-          .tildeSuffix}' (The correct examples: '~', '~1', '~min').\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFilterModelStructure()' method for details.";
+          "Invalid parentMatchSuffix '${e.tildeSuffix}' (The correct examples: '~', '~1', '~min').\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // criterionBaseName not found:
     on TildeFilterCriterionBaseCriterionNotFoundError catch (e) {
       String message =
-          "There is no criterionBaseName '${e
-          .criterionBaseName}' corresponding to tildeCriterionName '${e
-          .tildeCriterionName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFilterModelStructure()' method for details.";
+          "There is no criterionBaseName '${e.criterionBaseName}' corresponding to tildeCriterionName '${e.tildeCriterionName}'.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // Duplicate criterionBaseName
     on FilterCriterionDuplicateNameError catch (e) {
       String message = "Duplicate criterionBaseName '${e.criterionBaseName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // Duplicate fieldName
     on FilterCriterionDuplicateFieldNameError catch (e) {
       String message =
-          "Duplicate fieldName '${e.fieldName}' (criterionBaseName: ${e
-          .criterionBaseName}).\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFilterModelStructure()' method for details.";
+          "Duplicate fieldName '${e.fieldName}' (criterionBaseName: ${e.criterionBaseName}).\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // TildeCriterionConfig - Invalid Suffix.
     on TildeCriterionConfigInvalidSuffixError catch (e) {
       String message =
-          "Invalid TildeCriterionConfig(suffix: '${e
-          .tildeSuffix}') (criterionBaseName: ${e.criterionBaseName}).\n"
+          "Invalid TildeCriterionConfig(suffix: '${e.tildeSuffix}') (criterionBaseName: ${e.criterionBaseName}).\n"
           "The correct examples: '~', '~1', '~min'.\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // TildeCriterionConfig - Duplicate Suffix.
     on TildeCriterionConfigDuplicationSuffixError catch (e) {
       String message =
-          "Duplicate TildeCriterionConfig(suffix: '${e
-          .tildeSuffix}') (criterionBaseName: ${e.criterionBaseName}).\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFilterModelStructure()' method for details.";
+          "Duplicate TildeCriterionConfig(suffix: '${e.tildeSuffix}') (criterionBaseName: ${e.criterionBaseName}).\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // Duplicate tildeCriterionName in a Group:
     on FilterConditionGroupDuplicateTildeError catch (e) {
       String message =
-          "Duplicate tildeCriterionName '${e.tildeCriterionName}' in '${e
-          .groupName}' group.\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFilterModelStructure()' method for details.";
+          "Duplicate tildeCriterionName '${e.tildeCriterionName}' in '${e.groupName}' group.\n"
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // Duplicate groupName:
     on FilterConditionGroupDuplicateNameError catch (e) {
       String message = "Duplicate groupName '${e.groupName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFilterModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFilterModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // FilterCriteria class: Duplicate criterionName.
     on FilterCriteriaDuplicateCriterionError catch (e) {
       String message = "Duplicate criterionBaseName '${e.criterionBaseName}'.\n"
-          "@see the '${e
-          .filterCriteriaClassName}.registerSupportedCriteria()' method for details.";
+          "@see the '${e.filterCriteriaClassName}.registerSupportedCriteria()' method for details.";
       throw _createFatalAppError(message);
     }
     // FilterCriteria class: Duplicate Field.
     on FilterCriteriaDuplicateFieldError catch (e) {
       String message = "Duplicate field '${e.field}'.\n"
-          "@see the '${e
-          .filterCriteriaClassName}.registerSupportedCriteria()' method for details.";
+          "@see the '${e.filterCriteriaClassName}.registerSupportedCriteria()' method for details.";
       throw _createFatalAppError(message);
     }
     // Other Error:
@@ -582,7 +560,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       executionTrace._addTraceStep(
         codeId: "#31020",
         shortDesc:
-        "Calling <b>_filterModelStructure._setupTemporaryStateForNewActivity()</b>..",
+            "Calling <b>_filterModelStructure._setupTemporaryStateForNewActivity()</b>..",
         traceStepType: TraceStepType.nonControllableCalling,
       );
     }
@@ -616,8 +594,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       executionTrace._addTraceStep(
         codeId: "#31030",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}._loadMultiOptCriterionDataCascade() was called with an error.",
+            "The ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() was called with an error.",
         errorInfo: errorInfo,
       );
       //
@@ -630,14 +607,12 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     //
     try {
       for (MultiOptTildeFilterCriterionModel multiOptCriterion
-      in _filterModelStructure._rootOptCriterionModels) {
+          in _filterModelStructure._rootOptCriterionModels) {
         executionTrace._addTraceStep(
           codeId: "#31040",
           shortDesc:
-          "Calling ${debugObjHtml(
-              this)}._loadMultiOptCriterionDataCascade() method "
-              "to load data for ${debugObjHtml(
-              multiOptCriterion)} and its descendants.",
+              "Calling ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method "
+              "to load data for ${debugObjHtml(multiOptCriterion)} and its descendants.",
           parameters: {
             "activityType": activityType,
             "filterInput": filterInput,
@@ -707,8 +682,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       executionTrace._addTraceStep(
         codeId: "#31080",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}._loadMultiOptCriterionDataCascade() was called with an error.",
+            "The ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() was called with an error.",
         errorInfo: errorInfo,
       );
       //
@@ -723,7 +697,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         executionTrace._addTraceStep(
           codeId: "#31140",
           shortDesc:
-          "Calling ${debugObjHtml(this)}.updatedSimpleCriterionValues() method "
+              "Calling ${debugObjHtml(this)}.updatedSimpleCriterionValues() method "
               "to get values from filterInput to update for simpleCriteria",
           parameters: {
             "filterInput": filterInput,
@@ -732,18 +706,18 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         );
         final Map<String, SimpleValueWrap?> updatedSimpleCriterionValues =
             extractUpdateValuesForSimpleTildeCriteria(
-              filterInput: filterInput,
-            ) ??
+                  filterInput: filterInput,
+                ) ??
                 {};
         for (String tildeCriterionName in updatedSimpleCriterionValues.keys) {
           // Check and throw error if 'tildeCriterionName' is not a SimpleFilterCriterion:
           __throwErrorIfNotASimpleCriterionName(
             tildeCriterionName: tildeCriterionName,
             filterErrorMethod:
-            FilterErrorMethod.extractUpdateValuesForSimpleTildeCriteria,
+                FilterErrorMethod.extractUpdateValuesForSimpleTildeCriteria,
           );
           SimpleValueWrap? valueWrap =
-          updatedSimpleCriterionValues[tildeCriterionName];
+              updatedSimpleCriterionValues[tildeCriterionName];
           // SAME-AS: #0012 (formModel)
           if (valueWrap != null && valueWrap.use) {
             _filterModelStructure._setTempSimpleCriterionValue(
@@ -765,8 +739,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         executionTrace._addTraceStep(
           codeId: "#31200",
           shortDesc:
-          "The ${debugObjHtml(
-              this)}.updatedSimpleCriterionValues() method was called with an error.",
+              "The ${debugObjHtml(this)}.updatedSimpleCriterionValues() method was called with an error.",
           errorInfo: errorInfo,
         );
         //
@@ -783,8 +756,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
             executionTrace._addTraceStep(
               codeId: "#31300",
               shortDesc:
-              "Calling ${debugObjHtml(
-                  this)}.specifyDefaultValuesForSimpleTildeCriteria() method "
+                  "Calling ${debugObjHtml(this)}.specifyDefaultValuesForSimpleTildeCriteria() method "
                   "to get default values for <b>simple criteria</b>.",
               traceStepType: TraceStepType.controllableCalling,
             );
@@ -797,7 +769,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
             __throwErrorIfNotASimpleCriterionName(
               tildeCriterionName: tildeCriterionName,
               filterErrorMethod:
-              FilterErrorMethod.specifyDefaultValuesForSimpleTildeCriteria,
+                  FilterErrorMethod.specifyDefaultValuesForSimpleTildeCriteria,
             );
             //
             dynamic value = defaultSimpleCriterionValues[tildeCriterionName];
@@ -819,8 +791,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         executionTrace._addTraceStep(
           codeId: "#31380",
           shortDesc:
-          "The ${debugObjHtml(
-              this)}.specifyDefaultValuesForSimpleTildeCriteria() method was called with an error.",
+              "The ${debugObjHtml(this)}.specifyDefaultValuesForSimpleTildeCriteria() method was called with an error.",
           errorInfo: errorInfo,
         );
         //
@@ -835,7 +806,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         executionTrace._addTraceStep(
           codeId: "#31420",
           shortDesc:
-          "Calling ${debugObjHtml(this)}.createNewFilterCriteria() method "
+              "Calling ${debugObjHtml(this)}.createNewFilterCriteria() method "
               "to convert criteria in type of Map to a Dart object.",
           parameters: {
             "dataMap": _filterModelStructure._tempCriteriaValues,
@@ -865,7 +836,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
 
       // Convert Map Data to FilterCriteria Object.
       final XFilterCriteria<FILTER_CRITERIA> newXFilterCriteria =
-      __createXFilterCriteria(
+          __createXFilterCriteria(
         tildeCriteriaMap: newCriteriaMap,
         baseCriteria: baseCriteria,
         isPrecheck: false,
@@ -875,8 +846,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         executionTrace._addTraceStep(
           codeId: "#31460",
           shortDesc:
-          "Got an instance of ${debugObjHtml(
-              newXFilterCriteria)} (Dart object).\n"
+              "Got an instance of ${debugObjHtml(newXFilterCriteria)} (Dart object).\n"
               "This object will be passed to the <b>@filterCriteria</b> parameter "
               "of the <b>Block.query()</b> or <b>Scalar.query()</b> method.",
           tipDocument: TipDocument.filterCriteria,
@@ -913,8 +883,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       executionTrace._addTraceStep(
         codeId: "#31500",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}.createNewFilterCriteria() method was called with an error!",
+            "The ${debugObjHtml(this)}.createNewFilterCriteria() method was called with an error!",
         errorInfo: errorInfo,
       );
       return _xFilterCriteria;
@@ -940,8 +909,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     executionTrace._addTraceStep(
       codeId: "#82000",
       shortDesc:
-      "Begin of ${debugObjHtml(
-          this)}._loadMultiOptCriterionDataCascade() method.",
+          "Begin of ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method.",
       parameters: {
         "filterInput": filterInput,
         "parentMultiOptTildeCriterionValue": parentMultiOptTildeCriterionValue,
@@ -955,15 +923,15 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         multiOptCriterion.parent;
     // Get current OptCriterion data:
     XData? tempMultiOptCriterionXData =
-    _filterModelStructure._getTempMultiOptCriterionXData(
+        _filterModelStructure._getTempMultiOptCriterionXData(
       multiOptTildeCriterionName,
     );
     final dynamic tempCurrentMultiOptValue =
-    _filterModelStructure._getTempCurrentCriterionValue(
-        tildeCriterionName: multiOptTildeCriterionName);
+        _filterModelStructure._getTempCurrentCriterionValue(
+            tildeCriterionName: multiOptTildeCriterionName);
     //
     dynamic newSelectedValue =
-    _filterModelStructure._getTempCurrentCriterionValue(
+        _filterModelStructure._getTempCurrentCriterionValue(
       tildeCriterionName: multiOptTildeCriterionName,
     );
     if (activityType == FilterActivityType.updateFromFilterPanel) {
@@ -1002,14 +970,14 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     //
     if (multiOptCriterionParent != null) {
       XData? tempMultiOptXDataParent =
-      _filterModelStructure._getTempMultiOptCriterionXData(
+          _filterModelStructure._getTempMultiOptCriterionXData(
         multiOptCriterionParent.tildeCriterionName,
       );
       //
       if (tempMultiOptXDataParent != null) {
         // Item or Item List (Multi Selection):
         Object? parentOptCriterionValueOLD =
-        _filterModelStructure._getCurrentCriterionValue(
+            _filterModelStructure._getCurrentCriterionValue(
           tildeCriterionName: multiOptCriterionParent.tildeCriterionName,
         );
         // Parent Value change?
@@ -1047,12 +1015,11 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         executionTrace._addTraceStep(
           codeId: "#82300",
           shortDesc:
-          "Calling ${debugObjHtml(
-              this)}.performLoadMultiOptTildeCriterionXData():",
+              "Calling ${debugObjHtml(this)}.performLoadMultiOptTildeCriterionXData():",
           parameters: {
             "filterInput": filterInput,
             "parentMultiOptTildeCriterionValue":
-            parentMultiOptTildeCriterionValue,
+                parentMultiOptTildeCriterionValue,
             "multiOptCriterionBaseName": multiOptCriterionBaseName,
             "multiOptTildeCriterionName": multiOptTildeCriterionName,
             "selectionType": selectionType,
@@ -1065,7 +1032,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         // May throw ApiError.
         //
         tempMultiOptCriterionXData =
-        await performLoadMultiOptTildeCriterionXData(
+            await performLoadMultiOptTildeCriterionXData(
           filterInput: filterInput,
           parentMultiOptTildeCriterionValue: parentMultiOptTildeCriterionValue,
           multiOptCriterionBaseName: multiOptCriterionBaseName,
@@ -1085,7 +1052,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         throw FilterMethodError(
           tildeCriterionName: multiOptTildeCriterionName,
           filterErrorMethod:
-          FilterErrorMethod.performLoadMultiOptTildeCriterionXData,
+              FilterErrorMethod.performLoadMultiOptTildeCriterionXData,
           error: e, // May be AppError, ApiError or others.
           errorStackTrace: stackTrace,
         );
@@ -1114,18 +1081,17 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
         final parentMatchSuffix = multiOptCriterion.parentMatchSuffix;
         final defaultSettingPolicy = multiOptCriterion.defaultSettingPolicy;
         if ((!__initiatedAtLeastOnce &&
-            defaultSettingPolicy == DefaultSettingPolicy.onInitialOnly) ||
+                defaultSettingPolicy == DefaultSettingPolicy.onInitialOnly) ||
             (newLoaded &&
                 multiOptCriterion._tempCurrentValue == null &&
                 defaultSettingPolicy == DefaultSettingPolicy.onEveryLoad)) {
           executionTrace._addTraceStep(
             codeId: "#82460",
             shortDesc:
-            "Calling ${debugObjHtml(
-                this)}.__specifyDefaultValueForMultiOptTildeCriterion():",
+                "Calling ${debugObjHtml(this)}.__specifyDefaultValueForMultiOptTildeCriterion():",
             parameters: {
               "parentMultiOptTildeCriterionValue":
-              parentMultiOptTildeCriterionValue,
+                  parentMultiOptTildeCriterionValue,
               "multiOptCriterionBaseName": multiOptCriterionBaseName,
               "multiOptTildeCriterionName": multiOptTildeCriterionName,
               "selectionType": selectionType,
@@ -1136,7 +1102,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
             multiOptCriterionBaseName: multiOptCriterionBaseName,
             multiOptTildeCriterionName: multiOptTildeCriterionName,
             parentMultiOptTildeCriterionValue:
-            parentMultiOptTildeCriterionValue,
+                parentMultiOptTildeCriterionValue,
             multiOptTildeCriterionXData: tempMultiOptCriterionXData,
             selectionType: selectionType,
           );
@@ -1155,14 +1121,14 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-      _filterModelStructure._getTempCurrentCriterionValue(
+          _filterModelStructure._getTempCurrentCriterionValue(
         tildeCriterionName: multiOptTildeCriterionName,
       );
       //
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
           currentSelectedItems =
-          tempCurrentValue.isEmpty ? null : tempCurrentValue;
+              tempCurrentValue.isEmpty ? null : tempCurrentValue;
         } else {
           currentSelectedItems = [tempCurrentValue];
         }
@@ -1170,10 +1136,10 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       if (currentSelectedItems != null) {
         currentSelectedItems =
             tempMultiOptCriterionXData._resolveItemsFromRawData(
-              dynamicValues: currentSelectedItems,
-              clearOrphanItems: true,
-              addOrphan: false,
-            );
+          dynamicValues: currentSelectedItems,
+          clearOrphanItems: true,
+          addOrphan: false,
+        );
       }
       // Candidate Selected Items:
       candidateSelectedItems = inputValueWrap?.values;
@@ -1189,7 +1155,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     executionTrace._addTraceStep(
       codeId: "#82600",
       shortDesc:
-      "Calling ${debugObjHtml(this)}._setTempMultiOptCriterionXData():",
+          "Calling ${debugObjHtml(this)}._setTempMultiOptCriterionXData():",
       parameters: {
         "multiOptTildeCriterionName": multiOptTildeCriterionName,
         "multiOptXData": tempMultiOptCriterionXData,
@@ -1231,7 +1197,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     }
     //
     Object? tempSelectedCriterionValue =
-    _filterModelStructure._getTempCurrentCriterionValue(
+        _filterModelStructure._getTempCurrentCriterionValue(
       tildeCriterionName: multiOptTildeCriterionName,
     );
     executionTrace._addTraceStep(
@@ -1246,7 +1212,7 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
 
     if (tempSelectedCriterionValue != null) {
       for (MultiOptTildeFilterCriterionModel child
-      in multiOptCriterion.children) {
+          in multiOptCriterion.children) {
         await _loadMultiOptCriterionDataCascade(
           executionTrace: executionTrace,
           filterInput: filterInput,
@@ -1274,16 +1240,15 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
       throw "The '$multiOptTildeCriterionName' is not $MultiOptTildeFilterCriterionModel";
     }
     String message =
-        "The ${getClassName(
-        this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptTildeCriterionName '$multiOptTildeCriterionName'. ";
+        "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptTildeCriterionName '$multiOptTildeCriterionName'. ";
     if (multiOptCriterion.selectionType == SelectionType.single) {
       message += "$OptValueWrap.single(null) or $OptValueWrap.single(value). ";
     } else {
       message +=
-      "$OptValueWrap.multi([null]) or $OptValueWrap.multi([value]). ";
+          "$OptValueWrap.multi([null]) or $OptValueWrap.multi([value]). ";
     }
     message +=
-    "And return null for not $MultiOptTildeFilterCriterionModel. See the specification of this method for more information.";
+        "And return null for not $MultiOptTildeFilterCriterionModel. See the specification of this method for more information.";
     // throw AppError(errorMessage: message);
   }
 
@@ -1297,12 +1262,9 @@ FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     if (_filterModelStructure._isMultiOptFilterCriterion(tildeCriterionName)) {
       throw DevError(
         errorMessage:
-        '$tildeCriterionName is not a ${getTypeNameWithoutGenerics(
-            SimpleTildeFilterCriterionModel)}',
+            '$tildeCriterionName is not a ${getTypeNameWithoutGenerics(SimpleTildeFilterCriterionModel)}',
         errorDetails: [
-          "See ${getClassNameWithoutGenerics(
-              this)}.${getClassNameWithoutGenerics(
-              filterErrorMethod)}() method."
+          "See ${getClassNameWithoutGenerics(this)}.${getClassNameWithoutGenerics(filterErrorMethod)}() method."
         ],
       );
     }

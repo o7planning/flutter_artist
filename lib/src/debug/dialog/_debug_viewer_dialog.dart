@@ -93,13 +93,13 @@ class _DebugViewerDialogState extends State<DebugViewerDialog> {
     TipDocument tipDocument;
     switch (filterViewType) {
       case FilterViewType.debugFilterModel:
-        tipDocument = TipDocument.debugFilterModelViewer;
+        tipDocument = TipDocument.debugFilterModelInspector;
       case FilterViewType.debugFilterCriteria:
-        tipDocument = TipDocument.debugFilterCriteriaViewer;
+        tipDocument = TipDocument.debugFilterCriteriaInspector;
       case FilterViewType.debugShelfStructure:
         tipDocument = TipDocument.debugShelfStructureInspector;
     }
-    TipDocumentViewerDialog.open(
+    TipDocumentViewerDialog.show(
       context: context,
       tipDocument: tipDocument,
     );

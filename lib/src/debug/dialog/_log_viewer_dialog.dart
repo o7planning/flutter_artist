@@ -86,7 +86,7 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
       onHelpPressed: loggedInUser == null || !loggedInUser.isSystemUser
           ? null
           : () {
-              TipDocumentViewerDialog.open(
+              TipDocumentViewerDialog.show(
                 context: context,
                 tipDocument: TipDocument.logViewer,
               );
@@ -115,7 +115,7 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
               onPressed: tipDocument == null || !tipDocument.enabled
                   ? null
                   : () {
-                      TipDocumentViewerDialog.open(
+                      TipDocumentViewerDialog.show(
                         context: context,
                         tipDocument: tipDocument,
                       );

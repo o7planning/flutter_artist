@@ -8,6 +8,7 @@ import '../../core/icon/icon_constants.dart';
 import '../../core/widgets/_simple_copy_button.dart';
 import '../../core/widgets/_simple_open_url_button.dart';
 import '../utils/_tab_theme_utils.dart';
+import '../widgets/_doc_link_view.dart';
 
 class TipDocumentViewerDialog extends StatefulWidget {
   final TipDocument tipDocument;
@@ -22,7 +23,7 @@ class TipDocumentViewerDialog extends StatefulWidget {
     return _TipDocumentViewerDialogState();
   }
 
-  static Future<void> open({
+  static Future<void> show({
     required BuildContext context,
     required TipDocument tipDocument,
   }) async {
@@ -42,10 +43,14 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
   late TabbedViewController _controller;
   bool _isInitialized = false;
 
+  String _selectedLangCode = 'en';
+  late Future<FaDocuments> _docsFuture;
+
   @override
   void initState() {
     super.initState();
     tipDocument = widget.tipDocument;
+    _docsFuture = FlutterArtistDocSystem.instance.faDocuments;
   }
 
   @override
@@ -56,6 +61,158 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
       _controller.selectedIndex = 0;
       _isInitialized = true;
     }
+  }
+
+  Widget _buildControlBar() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: FaColorUtils.surfaceContainer(context).withValues(alpha: 0.8),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.auto_awesome_outlined,
+              size: 12, color: FaColorUtils.technicalHighlight(context)),
+          const SizedBox(width: 4),
+          Text(
+            "${tipDocument.getPosition()} / ${TipDocument.enabledValues.length}",
+            style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: FaColorUtils.primaryContent(context)),
+          ),
+          const SizedBox(width: 16),
+          _buildLangFlag("EN", "en"),
+          const SizedBox(width: 8),
+          _buildLangFlag("VI", "vi"),
+          const Spacer(),
+          _buildNavButton(Icons.arrow_back_ios_new_rounded,
+              () => _refresh(tipDocument.previous())),
+          const SizedBox(width: 4),
+          _buildNavButton(Icons.arrow_forward_ios_rounded,
+              () => _refresh(tipDocument.next())),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLangFlag(String flag, String langCode) {
+    bool isSelected = _selectedLangCode == langCode;
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _selectedLangCode = langCode;
+          _refresh(tipDocument);
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? FaColorUtils.primaryAction(context).withValues(alpha: 0.2)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(4),
+          border: isSelected
+              ? Border.all(
+                  color: FaColorUtils.primaryAction(context), width: 0.5)
+              : null,
+        ),
+        child: FlagCdnView.flagHeight(langCode: langCode, height: 14),
+      ),
+    );
+  }
+
+  Widget _buildDocumentList(BuildContext context) {
+    return FutureBuilder<FaDocuments>(
+      future: _docsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+        }
+        List<String> docIds = tipDocument.getDocuments();
+        List<FaDocument> filteredDocs = [];
+
+        if (snapshot.hasData) {
+          filteredDocs = snapshot.data!.documents
+              .where((doc) =>
+                  doc.langCode == _selectedLangCode && docIds.contains(doc.id))
+              .toList();
+        }
+
+        if (filteredDocs.isEmpty) {
+          return Center(
+            child: Text("No documentation available for $_selectedLangCode.",
+                style: TextStyle(
+                    color: FaColorUtils.mutedText(context), fontSize: 12)),
+          );
+        }
+
+        return ListView(
+          padding: const EdgeInsets.all(6),
+          children: [
+            Text("Detailed Documentation ($_selectedLangCode)",
+                style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: FaColorUtils.infoLabel(context))),
+            const SizedBox(height: 8),
+            ...filteredDocs.map(
+              (doc) => DocLinkView(
+                faDocument: doc,
+                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.only(bottom: 8),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _refresh(TipDocument newTipDocument) {
+    int currentTab = _controller.selectedIndex ?? 0;
+
+    setState(() {
+      tipDocument = newTipDocument;
+
+      List<TabData> tabs = _buildTabs();
+
+      _controller.setTabs(tabs);
+
+      Future.microtask(() {
+        if (_controller.tabs.isNotEmpty) {
+          _controller.selectedIndex = currentTab;
+        }
+      });
+    });
+  }
+
+  List<TabData> _buildTabs() {
+    return [
+      TabData(
+        id: "tips",
+        text: ' Tips',
+        closable: false,
+        leading: (context, status) => Icon(
+          Icons.tips_and_updates_outlined,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: 16,
+        ),
+        view: _buildTip(),
+      ),
+      TabData(
+        id: "docs",
+        text: ' Docs',
+        closable: false,
+        leading: (context, status) => Icon(
+          Icons.policy_outlined,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: 16,
+        ),
+        view: _buildDocumentList(context), // Sử dụng hàm nạp tài liệu mới
+      ),
+    ];
   }
 
   Widget _buildMainContent(BuildContext context) {
@@ -80,36 +237,6 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildControlBar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(
-        color: FaColorUtils.surfaceContainer(context).withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.auto_awesome_outlined,
-              size: 12, color: FaColorUtils.technicalHighlight(context)),
-          const SizedBox(width: 4),
-          Text(
-            "${tipDocument.getPosition()} / ${TipDocument.enabledValues.length}",
-            style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-                color: FaColorUtils.primaryContent(context)),
-          ),
-          const Spacer(),
-          _buildNavButton(Icons.arrow_back_ios_new_rounded,
-              () => _refresh(tipDocument.previous())),
-          const SizedBox(width: 4),
-          _buildNavButton(Icons.arrow_forward_ios_rounded,
-              () => _refresh(tipDocument.next())),
-        ],
-      ),
     );
   }
 
@@ -239,47 +366,6 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
         ],
       ),
     );
-  }
-
-  void _refresh(TipDocument newTipDocument) {
-    tipDocument = newTipDocument;
-    List<TabData> tabs = _buildTabs();
-    int currentTab = _controller.selectedIndex ?? 0;
-    _controller.setTabs(tabs);
-    _controller.selectedIndex = currentTab;
-    setState(() {});
-  }
-
-  List<TabData> _buildTabs() {
-    List<TabData> tabs = [];
-
-    tabs.add(
-      TabData(
-        id: "tips",
-        text: ' Tips',
-        closable: false,
-        leading: (context, status) => Icon(
-          Icons.tips_and_updates_outlined,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: 16,
-        ),
-        view: _buildTip(),
-      ),
-    );
-    tabs.add(
-      TabData(
-        id: "docs",
-        text: ' Docs',
-        closable: false,
-        leading: (context, status) => Icon(
-          Icons.policy_outlined,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: 16,
-        ),
-        view: _buildDocument(context),
-      ),
-    );
-    return tabs;
   }
 
   @override

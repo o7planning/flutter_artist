@@ -65,9 +65,9 @@ class _DebugFormModelInspectorDialogState
       preferredContentHeight: preferContentSize.height,
       content: _buildMainContent(context),
       onHelpPressed: () {
-        TipDocumentViewerDialog.open(
+        TipDocumentViewerDialog.show(
           context: context,
-          tipDocument: TipDocument.debugFormModelViewer,
+          tipDocument: TipDocument.debugFormModelInspector,
         );
       },
     );

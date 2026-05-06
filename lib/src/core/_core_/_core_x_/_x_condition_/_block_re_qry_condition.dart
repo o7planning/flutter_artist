@@ -14,7 +14,6 @@ class _BlockReQryCon extends Equatable {
 
   @override
   String toString() {
-    return "parentItemId: $parentItemId, filterCriteria: ${filterCriteria ==
-        null ? 'null' : 'OK'}";
+    return "parentItemId: $parentItemId, filterCriteria: ${filterCriteria == null ? 'null' : 'OK'}";
   }
 }

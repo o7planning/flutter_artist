@@ -39,12 +39,12 @@ class _XShelfTaskUnitQueue {
       mainTaskUnits: _mainTaskUnits
           .map(
             (tu) => tu.toDebugTaskUnit(),
-      )
+          )
           .toList(),
       secondaryTaskUnits: _secondaryTaskUnits
           .map(
             (tu) => tu.toDebugTaskUnit(),
-      )
+          )
           .toList(),
     );
   }

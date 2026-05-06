@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '_style.dart';
 
-/// Style configuration for the [SortDialogPanel].
-class SortDialogPanelStyle extends SortPanelStyle {
+/// Style configuration for the [DialogSortPanel].
+class DialogSortPanelStyle extends SortPanelStyle {
   final String title;
   final String applyButtonText;
   final String cancelButtonText;
@@ -17,7 +17,7 @@ class SortDialogPanelStyle extends SortPanelStyle {
   /// Default is 0.8 (20% smaller).
   final double switchScale;
 
-  const SortDialogPanelStyle({
+  const DialogSortPanelStyle({
     super.textStyle,
     super.iconSpacing,
     super.sortIconSize,

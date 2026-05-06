@@ -1,13 +1,13 @@
 enum TipDocument {
-  config(enabled: true),
+  start(enabled: true),
   logViewer(enabled: true),
   codeFlowInspector(enabled: true),
   debugAppInspector(enabled: true),
   debugShelfStructureInspector(enabled: true),
-  debugFilterCriteriaViewer(enabled: true),
-  debugFilterModelViewer(enabled: true),
-  debugFormModelViewer(enabled: true),
-  debugUiComponentsViewer(enabled: true),
+  debugFilterCriteriaInspector(enabled: true),
+  debugFilterModelInspector(enabled: true),
+  debugFormModelInspector(enabled: true),
+  debugUiContextInspector(enabled: true),
   debugMenu(enabled: true),
   appConfiguration(enabled: true),
   coreFeaturesAdapter(enabled: true),
@@ -27,7 +27,7 @@ enum TipDocument {
   sorting(enabled: true),
   scalarActiveUiComponents(enabled: true),
   dataState(enabled: true),
-  eventReactionFreezing(enabled: true),
+  deferringEvent(enabled: true),
   debugState(enabled: true),
   canDoAction(enabled: true),
   //
@@ -35,7 +35,7 @@ enum TipDocument {
   blockPerformQuery(enabled: false),
   blockConvertItemDetailToItem(enabled: false),
   blockPerformLoadItemDetailById(enabled: false),
-  blockExtractParentBlockItemId(enabled: true),
+  blockResolveParentBlockItemId(enabled: true),
   blockInitFormRelatedData(enabled: false),
   //
   blockBackendActionPerformAction(enabled: false),
@@ -57,7 +57,7 @@ enum TipDocument {
   //
   backgroundActionRun(enabled: false),
   loginActivityPerformLogin(enabled: false),
-  coordinatorCoordinationLogic(enabled: false),
+  coordinatorPerformSetupOperation(enabled: false),
   ;
 
   final bool enabled;
@@ -90,7 +90,7 @@ enum TipDocument {
 
   String getTitle() {
     switch (this) {
-      case TipDocument.config:
+      case TipDocument.start:
         return "FlutterArtist Config";
       case TipDocument.appConfiguration:
         return "FlutterArtist AppConfiguration";
@@ -128,13 +128,13 @@ enum TipDocument {
         return "DataState";
       case TipDocument.sorting:
         return "Sorting";
-      case TipDocument.eventReactionFreezing:
+      case TipDocument.deferringEvent:
         return "Deferred-Event Freezing";
       case TipDocument.debugState:
         return "Debug State";
       case TipDocument.canDoAction:
         return "Can Do Action";
-      case TipDocument.blockExtractParentBlockItemId:
+      case TipDocument.blockResolveParentBlockItemId:
         return "Block.resolveParentBlockItemId()";
       case TipDocument.blockPerformDeleteItemById:
         return "Block.performDeleteItemById()";
@@ -172,7 +172,7 @@ enum TipDocument {
         return "BackgroundAction.run()";
       case TipDocument.loginActivityPerformLogin:
         return "LoginActivity.performLogin()";
-      case TipDocument.coordinatorCoordinationLogic:
+      case TipDocument.coordinatorPerformSetupOperation:
         return "Coordinator.performSetupOperation()";
       case TipDocument.logViewer:
         return "Log Viewer";
@@ -182,13 +182,13 @@ enum TipDocument {
         return "App Inspector";
       case TipDocument.debugShelfStructureInspector:
         return "Debug Shelf Structure Inspector";
-      case TipDocument.debugFilterCriteriaViewer:
+      case TipDocument.debugFilterCriteriaInspector:
         return "FilterCriteria Viewer";
-      case TipDocument.debugFilterModelViewer:
+      case TipDocument.debugFilterModelInspector:
         return "Debug Filter Model Inspector";
-      case TipDocument.debugFormModelViewer:
+      case TipDocument.debugFormModelInspector:
         return "Debug Form Model Inspector";
-      case TipDocument.debugUiComponentsViewer:
+      case TipDocument.debugUiContextInspector:
         return "UI Context Inspector";
       case TipDocument.debugMenu:
         return "Debug Menu";
@@ -197,7 +197,7 @@ enum TipDocument {
 
   String getTip() {
     switch (this) {
-      case TipDocument.config:
+      case TipDocument.start:
         return "FlutterArtist.start()";
       case TipDocument.appConfiguration:
         return "FlutterArtist AppConfiguration";
@@ -235,13 +235,13 @@ enum TipDocument {
         return "DataState";
       case TipDocument.sorting:
         return "Sorting";
-      case TipDocument.eventReactionFreezing:
+      case TipDocument.deferringEvent:
         return "Deferred-Event";
       case TipDocument.debugState:
         return "Debug State";
       case TipDocument.canDoAction:
         return "Can Do Action";
-      case TipDocument.blockExtractParentBlockItemId:
+      case TipDocument.blockResolveParentBlockItemId:
         return "Block.resolveParentBlockItemId() method.";
       case TipDocument.blockPerformDeleteItemById:
         return "Block.performDeleteItemById()";
@@ -279,7 +279,7 @@ enum TipDocument {
         return "BackgroundAction.run()";
       case TipDocument.loginActivityPerformLogin:
         return "LoginActivity.performLogin()";
-      case TipDocument.coordinatorCoordinationLogic:
+      case TipDocument.coordinatorPerformSetupOperation:
         return "Coordinator.performSetupOperation()";
       case TipDocument.logViewer:
         return "Log Viewer";
@@ -289,13 +289,13 @@ enum TipDocument {
         return "Debug App Inspector";
       case TipDocument.debugShelfStructureInspector:
         return "Debug Shelf Structure Inspector";
-      case TipDocument.debugFilterCriteriaViewer:
+      case TipDocument.debugFilterCriteriaInspector:
         return "Debug FilterCriteria Viewer";
-      case TipDocument.debugFilterModelViewer:
+      case TipDocument.debugFilterModelInspector:
         return "Debug Filter Model Inspector";
-      case TipDocument.debugFormModelViewer:
+      case TipDocument.debugFormModelInspector:
         return "Debug Form Model Inspector";
-      case TipDocument.debugUiComponentsViewer:
+      case TipDocument.debugUiContextInspector:
         return "UI Context Inspector";
       case TipDocument.debugMenu:
         return "Debug Menu";
@@ -304,146 +304,147 @@ enum TipDocument {
 
   List<String> getDocuments() {
     switch (this) {
-      case TipDocument.config:
+      case TipDocument.start:
         return [
-          "http://51.195.44.134:8080/vi/14841/flutterartist-config",
+          "14841", // FlutterArtist start
         ];
       case TipDocument.appConfiguration:
         return [
-          "http://51.195.44.134:8080/vi/11111/config1",
-          "http://51.195.44.134:8080/vi/11112/config2",
+          "14845", // FlutterArtist AppConfiguration
         ];
       case TipDocument.coreFeaturesAdapter:
         return [
-          "http://51.195.44.134:8080/vi/14863/flutterartist-icorefeaturesadapter",
+          "14863", // FlutterArtist FlutterArtistCoreFeaturesAdapter
         ];
       case TipDocument.loginLogoutAdapter:
         return [
-          "http://51.195.44.134:8080/vi/11111/config1",
-          "http://51.195.44.134:8080/vi/11112/config2",
+          "14845", // FlutterArtist AppConfiguration
+          "14821", // FlutterArtist FlutterArtistLoginLogoutAdapter
         ];
       case TipDocument.activity:
         return [
-          "http://51.195.44.134:8080/vi/11111/config1",
-          "http://51.195.44.134:8080/vi/11112/config2",
+          "14795", // FlutterArtist Activity ex1
         ];
       case TipDocument.shelf:
         return [
-          "http://51.195.44.134:8080/vi/11111/config1",
-          "http://51.195.44.134:8080/vi/11112/config2",
+          "14865", // FlutterArtist Debug Shelf Structure Inspector
+          "14881", // FlutterArtist Deferring External Shelf Events (ví dụ)
+          "14879", // FlutterArtist Internal Shelf Event ex1 (***)
+          "14823", // FlutterArtist Scalar External Shelf Event (ví dụ)
         ];
       case TipDocument.projection:
         return [
-          "http://51.195.44.134:8080/vi/14835/flutterartist-projections",
+          "14835", // FlutterArtist Projections (***)
         ];
       case TipDocument.routeStack:
         return [
-          "http://51.195.44.134:8080/vi/11111/config1",
-          "http://51.195.44.134:8080/vi/11112/config2",
+          "14887", // FlutterArtistRouter
         ];
       case TipDocument.globalData:
         return [
-          "http://51.195.44.134:8080/vi/14839/flutterartist-global-data",
+          "14839", // FlutterArtist Global Data (***)
+          "14845", // FlutterArtist AppConfiguration
         ];
       case TipDocument.pageData:
         return [
-          "http://51.195.44.134:8080/vi/14749/flutterartist-pagedata",
+          "14749", // FlutterArtist PageData (***)
         ];
       case TipDocument.locale:
         return [
-          "http://51.195.44.134:8080/vi/14837/flutterartist-locales",
+          "14837", // FlutterArtist Locales (***)
+          "14845", // FlutterArtist AppConfiguration
         ];
       case TipDocument.theme:
         return [
-          // "http://51.195.44.134:8080/vi/14837/flutterartist-themes",
+          "14889", // Overview of FlutterArtist Theme
+          "14891", // Design Tokens Architecture in FlutterArtist Theme
+          "14895", // Flutter Artist Theme - Create a custom theme
+          "14893", // FlutterArtist Themes FaColorUtils
         ];
       case TipDocument.naturalQuery:
         return [
-          "http://51.195.44.134:8080/vi/11111/config1",
-          "http://51.195.44.134:8080/vi/11112/config2",
+          "14777", // FlutterArtist Natural Load example 1 (***)
         ];
       case TipDocument.filterCriteria:
         return [
-          "http://51.195.44.134:8080/vi/11111/config1",
-          "http://51.195.44.134:8080/vi/11112/config2",
+          "14701", // FlutterArtist FilterCriteria (***)
         ];
       case TipDocument.scalarActiveUiComponents:
         return [
-          "http://51.195.44.134:8080/vi/14827/xxx",
+          "14827", // FlutterArtist Scalar Active UI Components (***)
         ];
       case TipDocument.blockActiveUiComponents:
         return [
-          "http://51.195.44.134:8080/vi/14829/xxx",
+          "14829", // FlutterArtist Block Active UI Components (***)
         ];
       case TipDocument.blockQueryType:
         return [
-          "http://51.195.44.134:8080/vi/14831/flutterartist-querytype",
+          "14831", // FlutterArtist Block QueryType (***)
         ];
       case TipDocument.dataState:
         return [
-          "http://51.195.44.134:8080/vi/14749/flutterartist-block-datastate",
+          "14695", // FlutterArtist Block DataState (***)
         ];
       case TipDocument.sorting:
         return [
-          "http://51.195.44.134:8080/vi/11111/config1",
-          "http://51.195.44.134:8080/vi/11112/config2",
+          "14817", // FlutterArtist Manual Sorting ReorderableGridView (***)
+          "14819", // FlutterArtist Manual Sorting ReorderableListView (***)
+          "14793", // FlutterArtist Multi Sort ex1 (***)
+          "14743", // FlutterArtist Sort DropdownSortPanel Example (***)
         ];
-      case TipDocument.eventReactionFreezing:
+      case TipDocument.deferringEvent:
         return [
-          "http://51.195.44.134:8080/vi/11111/config1",
-          "http://51.195.44.134:8080/vi/11112/config2",
+          "14881", // FlutterArtist Deferring External Shelf Events (ví dụ)
         ];
       case TipDocument.debugState:
         return [
-          "http://51.195.44.134:8080/vi/11111/config1",
-          "http://51.195.44.134:8080/vi/11112/config2",
+          "14735", // FlutterArtist DebugBlockStateView (***)
         ];
       case TipDocument.canDoAction:
         return [
-          "http://51.195.44.134:8080/vi/11111/config1",
-          "http://51.195.44.134:8080/vi/11112/config2",
+          "14755", // FlutterArtist canDoAction (***)
         ];
-      case TipDocument.blockExtractParentBlockItemId:
+      case TipDocument.blockResolveParentBlockItemId:
         return [
-          "http://51.195.44.134:8080/vi/11111/config1",
-          "http://51.195.44.134:8080/vi/11112/config2",
+          "14757", // FlutterArtist Block.resolveParentBlockItemId()
         ];
       case TipDocument.logViewer:
         return [
-          "http://51.195.44.134:8080/vi/14545/flutterartist-log-viewer",
+          "14545", // ￼FlutterArtist Log Viewer
         ];
       case TipDocument.codeFlowInspector:
         return [
-          "http://51.195.44.134:8080/vi/14833/flutterartist-code-flow-viewer",
+          "14833", // FlutterArtist Code Flow Inspector
         ];
       case TipDocument.debugAppInspector:
         return [
-          "http://51.195.44.134:8080/vi/14849/flutterartist-debug-storage-viewer",
+          "14849", // FlutterArtist Debug App Inspector
         ];
       case TipDocument.debugShelfStructureInspector:
         return [
-          "http://51.195.44.134:8080/vi/14865/flutterartist-debug-shelf-structure-viewer",
+          "14865", // FlutterArtist Debug Shelf Structure Inspector
         ];
-      case TipDocument.debugFilterCriteriaViewer:
+      case TipDocument.debugFilterCriteriaInspector:
         return [
-          "http://51.195.44.134:8080/vi/14701/flutterartist-filtercriteria",
-          "http://51.195.44.134:8080/vi/14851/flutterartist-debug-filter-criteria-viewer",
+          "14851", // FlutterArtist Debug Filter Criteria Inspector
+          "14853", // FlutterArtist Debug Filter Model Inspector
         ];
-      case TipDocument.debugFilterModelViewer:
+      case TipDocument.debugFilterModelInspector:
         return [
-          "http://51.195.44.134:8080/vi/14853/flutterartist-debug-filter-model-viewer",
+          "14853", // FlutterArtist Debug Filter Model Inspector
+          "14851", // FlutterArtist Debug Filter Criteria Inspector
         ];
-      case TipDocument.debugFormModelViewer:
+      case TipDocument.debugFormModelInspector:
         return [
-          "http://51.195.44.134:8080/vi/14855/flutterartist-debug-form-model-viewer",
+          "14855", // FlutterArtist Debug Form Model Inspector
         ];
-      case TipDocument.debugUiComponentsViewer:
+      case TipDocument.debugUiContextInspector:
         return [
-          "http://51.195.44.134:8080/vi/14861/flutterartist-debug-ui-components-viewer",
+          "14861", // FlutterArtist Debug UI Context Inspector
         ];
       case TipDocument.debugMenu:
         return [
-          "http://51.195.44.134:8080/vi/14857/flutterartist-debugmenu",
+          "14857", // ￼FlutterArtist DebugMenu
         ];
       case TipDocument.blockPerformDeleteItemById:
         return [];
@@ -481,7 +482,7 @@ enum TipDocument {
         return [];
       case TipDocument.loginActivityPerformLogin:
         return [];
-      case TipDocument.coordinatorCoordinationLogic:
+      case TipDocument.coordinatorPerformSetupOperation:
         return [];
     }
   }

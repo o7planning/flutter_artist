@@ -230,7 +230,8 @@ class _FlutterArtist extends _Core {
           updateLocale: (Locale locale) async {
             await appConfiguration.updateLocale(locale: locale);
           },
-        ), //appConfiguration.localeAdapter,
+        ),
+        //appConfiguration.localeAdapter,
         notificationFetchPeriodInSeconds:
             appConfiguration.notificationFetchPeriodInSeconds,
         maxStoredLogEntryCount: appConfiguration.maxStoredLogEntryCount,
@@ -279,7 +280,7 @@ class _FlutterArtist extends _Core {
         // "notificationFetchPeriodInSeconds": notificationFetchPeriodInSeconds,
       },
       traceStepType: TraceStepType.debug,
-      tipDocument: TipDocument.config,
+      tipDocument: TipDocument.start,
     );
     //
     __coreFeaturesAdapter = coreFeaturesAdapter;

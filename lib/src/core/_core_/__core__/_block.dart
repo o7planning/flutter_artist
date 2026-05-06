@@ -7758,7 +7758,7 @@ abstract class Block<
               error: e,
               stackTrace: stackTrace,
               showSnackBar: true,
-              tipDocument: TipDocument.blockExtractParentBlockItemId,
+              tipDocument: TipDocument.blockResolveParentBlockItemId,
             );
             errorItems.add(item);
           }
@@ -7779,7 +7779,7 @@ abstract class Block<
               'and ${invalidItems.length} items did not match the current item of the parent block.',
           stackTrace: null,
           showSnackBar: true,
-          tipDocument: TipDocument.blockExtractParentBlockItemId,
+          tipDocument: TipDocument.blockResolveParentBlockItemId,
         );
       }
     }

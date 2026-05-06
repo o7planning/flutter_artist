@@ -21,7 +21,7 @@ abstract class Coordinator extends _Core {
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument: TipDocument.coordinatorCoordinationLogic,
+        tipDocument: TipDocument.coordinatorPerformSetupOperation,
       );
       success = false;
     }

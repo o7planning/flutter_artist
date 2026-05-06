@@ -54,7 +54,7 @@ class _DebugShelfStructureInspectorDialogState
       preferredContentHeight: preferContentSize.height,
       content: _buildMainContent(context),
       onHelpPressed: () {
-        TipDocumentViewerDialog.open(
+        TipDocumentViewerDialog.show(
           context: context,
           tipDocument: TipDocument.debugShelfStructureInspector,
         );

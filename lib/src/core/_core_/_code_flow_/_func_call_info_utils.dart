@@ -1,9 +1,10 @@
 part of '../core.dart';
 
 class _FuncCallInfoUtils {
-
-  static FuncCallInfo _buildInfo(Frame? selected,
-      Map<String, dynamic>? arguments,) {
+  static FuncCallInfo _buildInfo(
+    Frame? selected,
+    Map<String, dynamic>? arguments,
+  ) {
     return FuncCallInfo._(
       funcName: _cleanFunctionName(selected?.member),
       callerFuncName: null,
@@ -37,9 +38,9 @@ class _FuncCallInfoUtils {
 
     bool isNamed(Frame? f) =>
         f != null &&
-            f.member != null &&
-            f.member != '<fn>' &&
-            f.member != 'closure';
+        f.member != null &&
+        f.member != '<fn>' &&
+        f.member != 'closure';
 
     if (isNamed(f1)) return f1;
     if (isNamed(f2)) return f2;

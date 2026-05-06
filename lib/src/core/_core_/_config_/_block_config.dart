@@ -50,7 +50,7 @@ class BlockConfig {
     ),
     this.clientSideSortStrategy = SortStrategy.none,
   }) : emitExternalShelfEvents =
-  List.unmodifiable(emitExternalShelfEvents?.toSet() ?? []);
+            List.unmodifiable(emitExternalShelfEvents?.toSet() ?? []);
 
   BlockConfig copy() {
     return BlockConfig(

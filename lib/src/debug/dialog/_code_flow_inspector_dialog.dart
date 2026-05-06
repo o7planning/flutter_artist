@@ -46,7 +46,7 @@ class CodeFlowInspectorDialogState extends State<CodeFlowInspectorDialog> {
       preferredContentHeight: preferContentSize.height,
       contentPadding: EdgeInsets.zero,
       onHelpPressed: () {
-        TipDocumentViewerDialog.open(
+        TipDocumentViewerDialog.show(
           context: context,
           tipDocument: TipDocument.codeFlowInspector,
         );

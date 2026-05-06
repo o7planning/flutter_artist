@@ -4,23 +4,23 @@ import '../_core_/core.dart';
 import '../enums/_sort_direction.dart';
 import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import 'sort_dialog_panel_style.dart';
+import 'dialog_sort_panel_style.dart';
 
-class SortDialogContent extends StatefulWidget {
+class DialogSortContent extends StatefulWidget {
   final SortModel sortModel;
-  final SortDialogPanelStyle style;
+  final DialogSortPanelStyle style;
 
-  const SortDialogContent({
+  const DialogSortContent({
     super.key,
     required this.sortModel,
     required this.style,
   });
 
   @override
-  State<SortDialogContent> createState() => SortDialogContentState();
+  State<DialogSortContent> createState() => DialogSortContentState();
 }
 
-class SortDialogContentState extends State<SortDialogContent> {
+class DialogSortContentState extends State<DialogSortContent> {
   late List<SortCriterion> _localCriteria;
 
   @override

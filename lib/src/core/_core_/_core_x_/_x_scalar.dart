@@ -92,8 +92,7 @@ class XScalar<VALUE extends Object> {
   void printInfo() {
     bool hasActiveUI = scalar.ui.hasActiveUiComponent();
     String msg =
-        "${getClassName(this)}(${getClassName(
-        scalar)} - UiActive: $hasActiveUI - needQuery: $queryHint)";
+        "${getClassName(this)}(${getClassName(scalar)} - UiActive: $hasActiveUI - needQuery: $queryHint)";
     print(msg);
   }
 

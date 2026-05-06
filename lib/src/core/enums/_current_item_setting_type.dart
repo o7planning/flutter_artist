@@ -10,15 +10,3 @@ enum CurrentItemInclusion {
   ifMatch,
   include,
 }
-
-// enum CurrentItemSelInclusion {
-//   withoutCurrentItem,
-//   withCurrentIfSelected,
-//   withCurrentItem;
-// }
-
-// enum CurrentItemChkInclusion {
-//   withoutCurrentItem,
-//   withCurrentIfChecked,
-//   withCurrentItem;
-// }

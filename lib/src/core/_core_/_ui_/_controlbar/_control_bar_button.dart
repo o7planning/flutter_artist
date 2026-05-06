@@ -22,7 +22,7 @@ class _ControlBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color baseColor = iconColor ?? FaColorUtils.primaryAction(context);
     final effectiveColor =
-    onPressed == null ? baseColor.withValues(alpha: 0.3) : baseColor;
+        onPressed == null ? baseColor.withValues(alpha: 0.3) : baseColor;
 
     return SizedBox(
       height: iconSize + 4,
@@ -35,18 +35,18 @@ class _ControlBarButton extends StatelessWidget {
           child: Center(
             child: onAction
                 ? SizedBox(
-              width: iconSize,
-              height: iconSize,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(effectiveColor),
-              ),
-            )
+                    width: iconSize,
+                    height: iconSize,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(effectiveColor),
+                    ),
+                  )
                 : Icon(
-              iconData,
-              size: iconSize,
-              color: effectiveColor,
-            ),
+                    iconData,
+                    size: iconSize,
+                    color: effectiveColor,
+                  ),
           ),
         ),
       ),

@@ -1,3 +1,4 @@
+export 'src/_wcfg.dart';
 export 'src/core/_core_/core.dart'
     hide XBlock, XShelf, XFilterModel, XFormModel, XScalar;
 export 'src/core/action/_action.dart';
@@ -39,8 +40,8 @@ export 'src/core/built_in_ui/popup_sort_panel.dart';
 export 'src/core/built_in_ui/popup_sort_panel_style.dart';
 export 'src/core/built_in_ui/segmented_sort_panel.dart';
 export 'src/core/built_in_ui/segmented_sort_panel_style.dart';
-export 'src/core/built_in_ui/sort_dialog_panel.dart';
-export 'src/core/built_in_ui/sort_dialog_panel_style.dart';
+export 'src/core/built_in_ui/dialog_sort_panel.dart';
+export 'src/core/built_in_ui/dialog_sort_panel_style.dart';
 export 'src/core/enums/_action_confirmation_type.dart';
 export 'src/core/enums/_action_result_state.dart';
 export 'src/core/enums/_after_query_action.dart';
@@ -115,6 +116,8 @@ export 'src/core/precheck/scalar_query_precheck.dart';
 export 'src/core/precheck/show_form_info_precheck.dart';
 export 'src/core/typedef/typedefs.dart';
 export 'src/core/utils/_class_utils.dart';
+export 'src/core/utils/_url_utils.dart';
+export 'src/debug/dialog/_document_selection_dialog.dart';
 export 'src/debug/menu/_debug_menu.dart';
 export 'src/debug/state_view/_debug_block_state_view.dart';
 export 'src/debug/state_view/_debug_scalar_state_view.dart';
