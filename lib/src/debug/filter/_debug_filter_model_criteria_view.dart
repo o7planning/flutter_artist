@@ -117,7 +117,7 @@ class _DebugFilterModelCriteriaViewState
           "It is used as criteria to query data on the following blocks and scalars:",
       style: TextStyle(
         fontSize: 13,
-        color: FaColorUtils.infoLabel(context),
+        color: context.faColors.ink.label,
       ),
     );
   }

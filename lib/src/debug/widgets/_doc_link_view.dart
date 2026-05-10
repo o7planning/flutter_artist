@@ -27,10 +27,9 @@ class DocLinkView extends StatelessWidget {
       margin: margin,
       padding: padding,
       decoration: BoxDecoration(
-        color: FaColorUtils.primaryContent(context).withValues(alpha: 0.03),
+        color: context.faColors.surface.muted,
         borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-            color: FaColorUtils.dividerColor(context).withValues(alpha: 0.5)),
+        border: Border.all(color: context.faColors.divider.subtle),
       ),
       child: Row(
         children: [
@@ -43,14 +42,14 @@ class DocLinkView extends StatelessWidget {
             child: Text(
               faDocument.title,
               style: TextStyle(
-                  fontSize: 13,
-                  color: faDocument.published && demoRelease
-                      ? FaColorUtils.primaryAction(context)
-                      : FaColorUtils.disabledContent(context),
-                  decoration: faDocument.published
-                      ? TextDecoration.underline
-                      : TextDecoration.none),
-              overflow: TextOverflow.ellipsis,
+                fontSize: 13,
+                color: faDocument.published && demoRelease
+                    ? context.faColors.action.ink.primary
+                    : context.faColors.ink.muted,
+                decoration: faDocument.published
+                    ? TextDecoration.underline
+                    : TextDecoration.none,
+              ),
             ),
           ),
           const SizedBox(width: 4),
@@ -59,9 +58,9 @@ class DocLinkView extends StatelessWidget {
             children: [
               IconButton(
                 icon: const Icon(Icons.edit_note, size: 18),
+                color: context.faColors.action.ink.warning,
                 tooltip: "Open Draft URL",
                 onPressed: () => UrlUtils.tryOpen(url: draftUrl),
-                color: FaColorUtils.alertWarning(context),
                 constraints: const BoxConstraints(),
                 padding: const EdgeInsets.symmetric(horizontal: 4),
               ),

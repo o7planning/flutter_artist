@@ -20,20 +20,15 @@ class JsonView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    final Color bgColor = FaColorUtils.surfaceContainer(context);
-
     return Container(
       width: double.maxFinite,
       height: double.maxFinite,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: bgColor,
+        color: context.faColors.surface.standard,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: colorScheme.outlineVariant.withValues(alpha: 0.3),
+          color: context.faColors.divider.subtle,
           width: 0.5,
         ),
       ),
@@ -54,7 +49,7 @@ class JsonView extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontFamily: 'Courier',
-                color: FaColorUtils.infoText(context),
+                color: context.faColors.special.sourceCode,
                 height: 1.5,
               ),
             ),

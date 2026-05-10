@@ -57,7 +57,7 @@ class DialogSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                     child: Text(
                       'Reset',
                       style: TextStyle(
-                        color: FaColorUtils.alertError(context),
+                        color: context.faColors.action.ink.danger,
                       ),
                     ),
                   ),
@@ -73,9 +73,8 @@ class DialogSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                   const SizedBox(width: 8),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          SortPanelHelper.getTextColor(context, true),
-                      foregroundColor: FaColorUtils.onHighlight(context),
+                      backgroundColor: context.faColors.action.fill.primary,
+                      foregroundColor: context.faColors.action.ink.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                             tokens.shortcut.borderRadius / 2),

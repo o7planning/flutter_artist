@@ -514,8 +514,14 @@ class _FlutterArtist extends _Core {
 
   Future<void> showDebugThemeInspector() async {
     BuildContext context = coreFeaturesAdapter.context;
-    await FlutterArtistTheme.showDebugDialog(context);
+    await ThemeInspectorDialog.show (context);
   }
+
+  Future<void> showDebugFaColorsInspector() async {
+    BuildContext context = coreFeaturesAdapter.context;
+    await FaColorsInspectorDialog.show (context);
+  }
+
 
   Future<void> showCodeFlowInspector() async {
     BuildContext context = coreFeaturesAdapter.context;

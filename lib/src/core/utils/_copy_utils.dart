@@ -8,11 +8,14 @@ class CopyUtils {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text("Copied to clipboard"),
+            content: Text(
+              "Copied to clipboard",
+              style: TextStyle(color: context.faColors.action.ink.info),
+            ),
             behavior: SnackBarBehavior.floating,
             width: 220,
             duration: const Duration(seconds: 1),
-            backgroundColor: FaColorUtils.primaryAction(context),
+            backgroundColor: context.faColors.action.fill.info,
           ),
         );
       }

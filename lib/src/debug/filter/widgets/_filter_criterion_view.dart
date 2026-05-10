@@ -16,43 +16,61 @@ class FilterCriterionView extends StatelessWidget {
     required this.onPressed,
   });
 
-  @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 3, horizontal: 0),
+      margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 0),
       color: selected
-          ? FaColorUtils.primaryAction(context).withValues(alpha: 0.15)
-          : null,
+          ? context.faColors.action.fill.selected
+          : context.faColors.common.transparent,
+      elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(2.0),
+        side: selected
+            ? BorderSide(
+                color: context.faColors.action.stroke.primary, width: 0.5)
+            : BorderSide.none,
       ),
       child: ListTile(
-        onTap: () {
-          onPressed(filterCriterion);
-        },
+        onTap: () => onPressed(filterCriterion),
         dense: true,
-        visualDensity: VisualDensity(vertical: -3, horizontal: -3),
+        visualDensity: const VisualDensity(vertical: -3, horizontal: -3),
         minLeadingWidth: 0,
         minTileHeight: 0,
         minVerticalPadding: 0,
         horizontalTitleGap: 10,
-        contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
         leading: SimpleSmallIconButton(
           iconData: Icons.verified,
           iconSize: 16,
+          iconColor: selected
+              ? context.faColors.action.ink.primary
+              : context.faColors.ink.muted,
         ),
-        title: Text(
-          "${filterCriterion.filterCriterionName} <${filterCriterion.rawDataType}>",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 13,
+        title: RichText(
+          text: TextSpan(
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
+              color: context.faColors.ink.primary,
+            ),
+            children: [
+              TextSpan(text: filterCriterion.filterCriterionName),
+              const TextSpan(text: " "),
+              TextSpan(
+                text: "<${filterCriterion.rawDataType}>",
+                style: TextStyle(
+                  color: context.faColors.special.highlight,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ],
           ),
         ),
         subtitle: Text(
           filterCriterion.filterFieldName,
           style: TextStyle(
             fontSize: 12,
-            color: FaColorUtils.sourceCode(context),
+            color: context.faColors.special.sourceCode,
           ),
         ),
       ),

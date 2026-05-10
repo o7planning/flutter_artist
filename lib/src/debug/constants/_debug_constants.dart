@@ -8,8 +8,10 @@ class DebugConstants {
   static Color listenerIconColor(BuildContext context) =>
       Theme.of(context).colorScheme.error;
 
-  static Color classParametersColor(BuildContext context) =>
-      FaColorUtils.technicalHighlight(context);
+  static Color classParametersColor(BuildContext context) {
+    //  FaColorUtils.technicalHighlight(context);
+    return context.faColors.ink.primary;
+  }
 
   static Color rootGraphBoxBgColor(BuildContext context) {
     return Theme.of(context)
@@ -30,7 +32,7 @@ class DebugConstants {
   }
 
   static Color graphBoxTextColor(BuildContext context) {
-    return FaColorUtils.primaryContent(context);
+    return context.faColors.ink.label;
   }
 
   static BoxShadow graphBoxShadow(BuildContext context) {
@@ -66,7 +68,8 @@ class DebugConstants {
   static const Color eventSourceTextColor = Colors.red;
 
   static Color nonEventOrListenerIconColor(BuildContext context) {
-    return FaColorUtils.primaryAction(context);
+    // return FaColorUtils.primaryAction(context);
+    return context.faColors.ink.primary;
   }
 
   static List<Color> filterColors(BuildContext context) {

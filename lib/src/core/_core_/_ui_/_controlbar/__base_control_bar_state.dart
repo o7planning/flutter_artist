@@ -6,19 +6,10 @@ abstract class _BaseControlBarState<OWNER extends Object,
   Decoration _getEffectiveDecoration(BuildContext context) {
     return widget.style.decoration ??
         BoxDecoration(
-          color: FaColorUtils.surfaceContainer(context),
+          color: context.faColors.bar.primary,
           borderRadius: BorderRadius.circular(8),
         );
   }
-
-  Color _getEffectiveActiveIconColor(BuildContext context) =>
-      widget.style.activeIconColor ?? FaColorUtils.primaryAction(context);
-
-  Color _getEffectiveDisabledIconColor(BuildContext context) =>
-      widget.style.disabledIconColor ?? FaColorUtils.infoLabel(context);
-
-  Color _getEffectiveDeleteIconColor(BuildContext context) =>
-      widget.style.deleteIconColor ?? FaColorUtils.alertError(context);
 
   @override
   Widget buildContent(BuildContext context) {
@@ -47,8 +38,7 @@ abstract class _BaseControlBarState<OWNER extends Object,
         width: widget.style.dividerThickness,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: widget.style.dividerColor ??
-                FaColorUtils.dividerColor(context).withValues(alpha: 0.3),
+            color: widget.style.dividerColor ?? context.faColors.divider.subtle,
           ),
         ),
       ),

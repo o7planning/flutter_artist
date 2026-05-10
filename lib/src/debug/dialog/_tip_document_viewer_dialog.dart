@@ -67,20 +67,24 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: FaColorUtils.surfaceContainer(context).withValues(alpha: 0.8),
+        color: context.faColors.bar.primary,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Row(
         children: [
-          Icon(Icons.auto_awesome_outlined,
-              size: 12, color: FaColorUtils.technicalHighlight(context)),
+          Icon(
+            Icons.auto_awesome_outlined,
+            size: 12,
+            color: context.faColors.action.ink.highlight,
+          ),
           const SizedBox(width: 4),
           Text(
             "${tipDocument.getPosition()} / ${TipDocument.enabledValues.length}",
             style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-                color: FaColorUtils.primaryContent(context)),
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              color: context.faColors.ink.primary,
+            ),
           ),
           const SizedBox(width: 16),
           _buildLangFlag("EN", "en"),
@@ -110,13 +114,13 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
         decoration: BoxDecoration(
           color: isSelected
-              ? FaColorUtils.primaryAction(context).withValues(alpha: 0.2)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(4),
+              ? context.faColors.action.fill.selected
+              : context.faColors.common.transparent,
           border: isSelected
               ? Border.all(
-                  color: FaColorUtils.primaryAction(context), width: 0.5)
+                  color: context.faColors.action.stroke.primary, width: 0.5)
               : null,
+          borderRadius: BorderRadius.circular(4),
         ),
         child: FlagCdnView.flagHeight(langCode: langCode, height: 14),
       ),
@@ -142,20 +146,27 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
 
         if (filteredDocs.isEmpty) {
           return Center(
-            child: Text("No documentation available for $_selectedLangCode.",
-                style: TextStyle(
-                    color: FaColorUtils.mutedText(context), fontSize: 12)),
+            child: Text(
+              "No documentation available for $_selectedLangCode.",
+              style: TextStyle(
+                color: context.faColors.ink.muted,
+                fontSize: 12,
+              ),
+            ),
           );
         }
 
         return ListView(
           padding: const EdgeInsets.all(6),
           children: [
-            Text("Detailed Documentation ($_selectedLangCode)",
-                style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                    color: FaColorUtils.infoLabel(context))),
+            Text(
+              "Detailed Documentation ($_selectedLangCode)",
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: context.faColors.ink.label,
+              ),
+            ),
             const SizedBox(height: 8),
             ...filteredDocs.map(
               (doc) => DocLinkView(
@@ -223,12 +234,9 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-              color:
-                  FaColorUtils.surfaceContainer(context).withValues(alpha: 0.3),
+              color: context.faColors.surface.muted,
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(
-                  color: FaColorUtils.dividerColor(context)
-                      .withValues(alpha: 0.3)),
+              border: Border.all(color: context.faColors.divider.subtle),
             ),
             child: TabbedViewTheme(
               data: TabThemeUtils.getTabbedViewThemeData(context),
@@ -248,14 +256,17 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
         children: [
           Row(
             children: [
-              Icon(Icons.lightbulb_outline_rounded,
-                  size: 14, color: FaColorUtils.technicalHighlight(context)),
+              Icon(
+                Icons.lightbulb_outline_rounded,
+                size: 14,
+                color: context.faColors.special.highlight,
+              ),
               const SizedBox(width: 6),
               Text("PRO TIP",
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
-                    color: FaColorUtils.technicalHighlight(context),
+                    color: context.faColors.special.highlight,
                   )),
             ],
           ),
@@ -263,30 +274,13 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
           SelectableText(
             tipDocument.getTip(),
             style: TextStyle(
-                fontSize: 13,
-                height: 1.4,
-                color: FaColorUtils.primaryContent(context)),
+              fontSize: 13,
+              height: 1.4,
+              color: context.faColors.ink.primary,
+            ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget? _buildDocument(BuildContext context) {
-    List<String> docs = tipDocument.getDocuments();
-    if (docs.isEmpty) return null;
-
-    return ListView(
-      padding: const EdgeInsets.all(6),
-      children: [
-        Text("Detailed Documentation",
-            style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-                color: FaColorUtils.infoLabel(context))),
-        const SizedBox(height: 8),
-        ...docs.map((doc) => _buildLink(context, doc)),
-      ],
     );
   }
 
@@ -316,54 +310,12 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
         borderRadius: BorderRadius.circular(4),
         child: Padding(
           padding: const EdgeInsets.all(4),
-          child:
-              Icon(icon, size: 14, color: FaColorUtils.primaryAction(context)),
+          child: Icon(
+            icon,
+            size: 14,
+            color: context.faColors.action.ink.primary,
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildLink(BuildContext context, String url) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: FaColorUtils.primaryContent(context).withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-            color: FaColorUtils.dividerColor(context).withValues(alpha: 0.5)),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.link_rounded,
-              size: 16, color: FaColorUtils.primaryAction(context)),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              url,
-              style: TextStyle(
-                  fontSize: 13,
-                  color: FaColorUtils.primaryAction(context),
-                  decoration: TextDecoration.underline),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SimpleOpenUrlButton(
-                iconSize: 16,
-                url: url,
-              ),
-              SimpleCopyButton(
-                iconSize: 16,
-                getText: () {
-                  return url;
-                },
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

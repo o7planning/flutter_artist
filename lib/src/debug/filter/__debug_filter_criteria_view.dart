@@ -108,8 +108,6 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
   }
 
   Widget _buildFilterCriterionValue() {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -117,7 +115,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         Text(
           _selectedFilterCriterion?.filterCriterionName ?? "-",
           style: TextStyle(
-              fontSize: 13, color: FaColorUtils.primaryAction(context)),
+              fontSize: 13, color: context.faColors.action.ink.primary),
         ),
         const SizedBox(height: 12),
         Row(
@@ -126,7 +124,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
                 style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: FaColorUtils.primaryAction(context))),
+                    color: context.faColors.action.ink.primary)),
             Text(
               _selectedFilterCriterion == null
                   ? "-"
@@ -134,19 +132,20 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
-                color: FaColorUtils.technicalHighlight(context),
+                color: context.faColors.special.highlight,
               ),
             ),
           ],
         ),
-        const Divider(height: 20),
+        Divider(height: 20, color: context.faColors.divider.subtle),
         _buildSectionLabel("Field Name:"),
         Text(
           _selectedFilterCriterion?.filterFieldName ?? "-",
           style: TextStyle(
-              fontSize: 13,
-              fontFamily: 'Courier',
-              color: FaColorUtils.sourceCode(context)),
+            fontSize: 13,
+            fontFamily: 'Courier',
+            color: context.faColors.special.sourceCode,
+          ),
         ),
         const Spacer(),
         SizedBox(
@@ -154,12 +153,11 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
           child: ElevatedButton.icon(
             onPressed: widget.onDebugFilterModelPressed,
             style: ElevatedButton.styleFrom(
-              backgroundColor: colorScheme.primaryContainer,
-              foregroundColor: colorScheme.onPrimaryContainer,
+              backgroundColor: context.faColors.action.fill.highlight,
+              foregroundColor: context.faColors.action.ink.highlight,
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
+                  borderRadius: BorderRadius.circular(4)),
             ),
             icon: Icon(FaIconConstants.filterModelDebugIconData, size: 16),
             label: const Text(
@@ -180,7 +178,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+          color: context.faColors.ink.label,
         ),
       ),
     );

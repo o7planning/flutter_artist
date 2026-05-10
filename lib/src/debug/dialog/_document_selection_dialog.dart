@@ -72,20 +72,24 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: FaColorUtils.surfaceContainer(context).withValues(alpha: 0.8),
+        color: context.faColors.bar.primary,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Row(
         children: [
-          Icon(Icons.language_rounded,
-              size: 14, color: FaColorUtils.technicalHighlight(context)),
+          Icon(
+            Icons.language_rounded,
+            size: 14,
+            color: context.faColors.special.highlight,
+          ),
           const SizedBox(width: 8),
           Text(
             "Select Language",
             style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-                color: FaColorUtils.primaryContent(context)),
+              fontSize: 11,
+              fontWeight: FontWeight.bold,
+              color: context.faColors.special.highlight,
+            ),
           ),
           const Spacer(),
           _buildLangFlag("en"),
@@ -104,12 +108,14 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
         padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           color: isSelected
-              ? FaColorUtils.primaryAction(context).withValues(alpha: 0.2)
+              ? context.faColors.action.fill.selected
               : Colors.transparent,
           borderRadius: BorderRadius.circular(4),
           border: isSelected
               ? Border.all(
-                  color: FaColorUtils.primaryAction(context), width: 0.5)
+                  color: context.faColors.action.stroke.primary,
+                  width: 0.5,
+                )
               : null,
         ),
         child: FlagCdnView.flagHeight(langCode: langCode, height: 14),
@@ -139,7 +145,9 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
             child: Text(
               "No English documentation available for this example.",
               style: TextStyle(
-                  color: FaColorUtils.mutedText(context), fontSize: 12),
+                color: context.faColors.ink.muted,
+                fontSize: 12,
+              ),
             ),
           );
         }

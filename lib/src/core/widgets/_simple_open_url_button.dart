@@ -20,7 +20,7 @@ class SimpleOpenUrlButton extends StatelessWidget {
     return SimpleSmallIconButton(
       iconData: Icons.open_in_new_rounded,
       iconSize: iconSize,
-      iconColor: FaColorUtils.infoLabel(context),
+      iconColor: context.faColors.ink.label,
       onPressed: () async {
         await launchUrl(Uri.parse(url));
       },

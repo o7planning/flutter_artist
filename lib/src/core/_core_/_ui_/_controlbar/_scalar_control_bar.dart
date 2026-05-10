@@ -29,8 +29,7 @@ class ScalarControlBar
 }
 
 class _ScalarControlBarState extends _BaseControlBarState<Scalar,
-    ScalarControlBarItemType,
-    ScalarControlBar> {
+    ScalarControlBarItemType, ScalarControlBar> {
   @override
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
 
@@ -82,12 +81,12 @@ class _ScalarControlBarState extends _BaseControlBarState<Scalar,
           onAction: false,
           onPressed: show
               ? () {
-            DebugViewerDialog.openDebugFilterCriteriaInspector(
-              context: context,
-              locationInfo: '',
-              filterModel: widget.scalar.registeredOrDefaultFilterModel,
-            );
-          }
+                  DebugViewerDialog.openDebugFilterCriteriaInspector(
+                    context: context,
+                    locationInfo: '',
+                    filterModel: widget.scalar.registeredOrDefaultFilterModel,
+                  );
+                }
               : null,
         );
 
@@ -99,8 +98,8 @@ class _ScalarControlBarState extends _BaseControlBarState<Scalar,
           onPressed: item.onPressed == null
               ? null
               : () {
-            item.onPressed!.call(widget.scalar, type);
-          },
+                  item.onPressed!.call(widget.scalar, type);
+                },
         );
       default:
         return null;
@@ -136,9 +135,8 @@ class _ScalarControlBarState extends _BaseControlBarState<Scalar,
       getClassNameWithoutGenerics(widget.scalar);
 
   @override
-  void addWidgetState({required bool isVisible}) =>
-      widget.scalar.ui
-          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) => widget.scalar.ui
+      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

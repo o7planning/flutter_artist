@@ -31,7 +31,7 @@ class BlockNumberPagination extends BlockPagination {
         },
         visiblePagesCount: visiblePagesCount,
         totalPages:
-        block.paginationInfo == null ? 0 : block.paginationInfo!.totalPages,
+            block.paginationInfo == null ? 0 : block.paginationInfo!.totalPages,
         currentPage: block.paginationInfo == null
             ? 1
             : block.paginationInfo!.currentPage,
@@ -57,7 +57,7 @@ class BlockNumberPagination extends BlockPagination {
         // Unselected button
         unSelectedButtonColor: tokens.shortcut.surfaceColor,
         unSelectedNumberColor:
-        tokens.shortcut.onSurfaceColor.withValues(alpha: 0.7),
+            tokens.shortcut.onSurfaceColor.withValues(alpha: 0.7),
 
         // Border for buttons
         buttonUnSelectedBorderColor: tokens.shortcut.border.color,

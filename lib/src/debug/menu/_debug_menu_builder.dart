@@ -69,6 +69,14 @@ class DebugMenuBuilder {
               _showDebugThemeInspector(context);
             },
           ),
+        if (isSystemUser)
+          _buildPopupMenuItem(
+            iconData: FaIconConstants.themeIconData,
+            title: 'FaColors Inspector',
+            onTap: () {
+              _showDebugFaColorsInspector(context);
+            },
+          ),
         if (isSystemUser) _divider(),
         if (isSystemUser)
           _buildPopupMenuItem(
@@ -162,6 +170,11 @@ class DebugMenuBuilder {
   Future<void> _showDebugThemeInspector(BuildContext context) async {
     Navigator.pop(context, null);
     await FlutterArtist.showDebugThemeInspector();
+  }
+
+  Future<void> _showDebugFaColorsInspector(BuildContext context) async {
+    Navigator.pop(context, null);
+    await FlutterArtist.showDebugFaColorsInspector();
   }
 
   void _clearCodeFlowLogger(BuildContext context) {

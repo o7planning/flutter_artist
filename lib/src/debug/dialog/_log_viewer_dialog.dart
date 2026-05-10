@@ -100,7 +100,7 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
     final TipDocument? tipDocument = _logEntry?.tipDocument as TipDocument?;
 
     return CustomAppContainer.customBackground(
-      backgroundColor: FaColorUtils.surfaceContainer(context),
+      backgroundColor: context.faColors.bar.primary,
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Row(
         children: [
@@ -111,7 +111,7 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
               iconSize: iconSize,
               iconColor: tipDocument == null || !tipDocument.enabled
                   ? null
-                  : FaColorUtils.primaryAction(context),
+                  : context.faColors.action.ink.primary,
               onPressed: tipDocument == null || !tipDocument.enabled
                   ? null
                   : () {
@@ -141,40 +141,44 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: fontSize,
-                color: FaColorUtils.dataLabel(context))),
+                color: context.faColors.ink.label)),
         const SizedBox(width: 4),
         Icon(FaIconConstants.dataStateErrorIconData,
-            size: iconSize, color: Colors.redAccent),
+            size: iconSize, color: context.faColors.ink.danger),
         const SizedBox(width: 2),
         Text(errors.toString(),
-            style: TextStyle(fontSize: fontSize, fontFamily: 'Courier')),
+            style: TextStyle(
+                fontSize: fontSize,
+                fontFamily: 'Courier',
+                color: context.faColors.ink.danger)),
         const SizedBox(width: 8),
-        Icon(
-          FaIconConstants.dataStateWarningIconData,
-          size: iconSize,
-          color: Colors.orangeAccent,
-        ),
+        Icon(FaIconConstants.dataStateWarningIconData,
+            size: iconSize, color: context.faColors.ink.warning),
         const SizedBox(width: 2),
         Text(warnings.toString(),
-            style: TextStyle(fontSize: fontSize, fontFamily: 'Courier')),
+            style: TextStyle(
+                fontSize: fontSize,
+                fontFamily: 'Courier',
+                color: context.faColors.ink.warning)),
       ],
     );
   }
 
   Widget _buildLogEntryButtons() {
-    return CustomAppContainer.customBackground(
+    return Container(
       width: double.maxFinite,
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-      backgroundColor:
-          FaColorUtils.surfaceContainer(context).withValues(alpha: 0.5),
+      decoration: BoxDecoration(color: context.faColors.bar.primary),
       child: Wrap(
         spacing: 4,
         runSpacing: 4,
         children: widget.logger.logEntries.map((logEntry) {
           final bool isSelected = _logEntry == logEntry;
-          final Color baseColor = logEntry.logEntryType == LogEntryType.error
-              ? Colors.redAccent
-              : Colors.orangeAccent;
+          final bool isError = logEntry.logEntryType == LogEntryType.error;
+
+          final Color themeColor = isError
+              ? context.faColors.ink.danger
+              : context.faColors.ink.warning;
 
           return InkWell(
             onTap: () => setState(() => _logEntry = logEntry),
@@ -184,13 +188,16 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? baseColor.withValues(alpha: 0.4)
-                    : baseColor.withValues(alpha: 0.15),
+                    ? (isError
+                            ? context.faColors.action.fill.danger
+                            : context.faColors.action.fill.warning)
+                        .withValues(alpha: 0.3)
+                    : themeColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(
                   color: isSelected
-                      ? baseColor.withValues(alpha: 0.8)
-                      : baseColor.withValues(alpha: 0.3),
+                      ? themeColor
+                      : themeColor.withValues(alpha: 0.3),
                   width: 0.5,
                 ),
               ),
@@ -199,7 +206,7 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: baseColor,
+                  color: themeColor,
                 ),
               ),
             ),
