@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../core/widgets/_floating_copy_button.dart';
 
@@ -49,7 +50,7 @@ class JsonView extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontFamily: 'Courier',
-                color: context.faColors.special.sourceCode,
+                color: context.faColors.ink.sourceCode,
                 height: 1.5,
               ),
             ),

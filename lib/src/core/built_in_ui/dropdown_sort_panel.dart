@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist_theme/flutter_artist_theme.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../_core_/core.dart';
 import '../enums/_sort_direction.dart';

@@ -6,7 +6,7 @@ abstract class _BaseControlBarState<OWNER extends Object,
   Decoration _getEffectiveDecoration(BuildContext context) {
     return widget.style.decoration ??
         BoxDecoration(
-          color: context.faColors.bar.primary,
+          color: context.faColors.bar.strong,
           borderRadius: BorderRadius.circular(8),
         );
   }

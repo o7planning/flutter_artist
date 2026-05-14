@@ -3,6 +3,10 @@ part of '../core.dart';
 abstract class AppConfiguration {
   String get appName;
 
+  FlutterArtistOverlayAdapter get overlayAdapter {
+    return MaterialFlutterArtistOverlayAdapter();
+  }
+
   List<ProjectionFamily> projectionFamilies();
 
   void registerShelves();
@@ -20,8 +24,6 @@ abstract class AppConfiguration {
   FlutterArtistNotificationAdapter? get notificationAdapter;
 
   FlutterArtistGlobalDataAdapter get globalDataAdapter;
-
-  FlutterArtistCoreFeaturesAdapter get coreFeaturesAdapter;
 
   Future<void> showDebugNetworkInspector(BuildContext context);
 

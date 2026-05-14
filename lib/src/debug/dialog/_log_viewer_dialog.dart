@@ -3,6 +3,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/enums/_tip_document.dart';
@@ -100,7 +101,7 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
     final TipDocument? tipDocument = _logEntry?.tipDocument as TipDocument?;
 
     return CustomAppContainer.customBackground(
-      backgroundColor: context.faColors.bar.primary,
+      backgroundColor: context.faColors.bar.standard,
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: Row(
         children: [
@@ -168,7 +169,7 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
     return Container(
       width: double.maxFinite,
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-      decoration: BoxDecoration(color: context.faColors.bar.primary),
+      decoration: BoxDecoration(color: context.faColors.bar.standard),
       child: Wrap(
         spacing: 4,
         runSpacing: 4,

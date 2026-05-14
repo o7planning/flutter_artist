@@ -14,8 +14,10 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart'
     hide FlutterArtistLocaleAdapter;
+import 'package:flutter_artist_overlay_adapter/flutter_artist_overlay_adapter.dart';
 import 'package:flutter_artist_router/flutter_artist_router.dart';
-import 'package:flutter_artist_theme/flutter_artist_theme.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
+import 'package:flutter_artist_styles_inspector/flutter_artist_styles_inspector.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:hive/hive.dart';
 import 'package:stack_trace/stack_trace.dart';
@@ -605,6 +607,26 @@ part '_ui_/_activity_section_view_builder.dart';
 part '_ui_/_hook_section_view.dart';
 
 part '_ui_/_hook_section_view_builder.dart';
+
+part '_navigation_intent_/_navigation_to_intent.dart';
+
+part '_navigation_intent_/_navigation_off_intent.dart';
+
+part '_navigation_intent_/_navigation_off_all_intent.dart';
+
+part '_navigation_intent_/_navigation_pop_intent.dart';
+
+part '_navigation_intent_/_navigation_drawer_intent.dart';
+
+part '_navigation_intent_/_close_all_dialogs_intent.dart';
+
+part '_navigation_intent_/_custom_intent.dart';
+
+part '_navigation_intent_/_navigation_end_drawer_intent.dart';
+
+part '_navigation_intent_/_navigation_dialog_intent.dart';
+
+part '_navigation_intent_/__navigation_intent.dart';
 
 part '_ui_/_controlbar/__base_control_bar.dart';
 

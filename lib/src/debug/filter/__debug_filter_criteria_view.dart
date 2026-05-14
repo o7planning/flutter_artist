@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import 'package:flutter_left_right_container/left_right_container.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
@@ -132,7 +133,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
-                color: context.faColors.special.highlight,
+                color: context.faColors.ink.highlight,
               ),
             ),
           ],
@@ -144,7 +145,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
           style: TextStyle(
             fontSize: 13,
             fontFamily: 'Courier',
-            color: context.faColors.special.sourceCode,
+            color: context.faColors.ink.sourceCode,
           ),
         ),
         const Spacer(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../../core/_core_/core.dart';
 
@@ -59,7 +60,7 @@ class FilterCriterionView extends StatelessWidget {
               TextSpan(
                 text: "<${filterCriterion.rawDataType}>",
                 style: TextStyle(
-                  color: context.faColors.special.highlight,
+                  color: context.faColors.ink.highlight,
                   fontWeight: FontWeight.normal,
                 ),
               ),
@@ -70,7 +71,7 @@ class FilterCriterionView extends StatelessWidget {
           filterCriterion.filterFieldName,
           style: TextStyle(
             fontSize: 12,
-            color: context.faColors.special.sourceCode,
+            color: context.faColors.ink.sourceCode,
           ),
         ),
       ),

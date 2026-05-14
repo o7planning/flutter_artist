@@ -29,7 +29,7 @@ class LocaleManager extends _Core {
   }
 
   List<Locale> get supportedLocales {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     if (context == null) {
       return [];
     }

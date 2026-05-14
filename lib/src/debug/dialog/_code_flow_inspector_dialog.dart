@@ -16,7 +16,7 @@ class CodeFlowInspectorDialog extends StatefulWidget {
     return CodeFlowInspectorDialogState();
   }
 
-  static Future<void> open({
+  static Future<void> show({
     required BuildContext context,
   }) async {
     await showDialog(

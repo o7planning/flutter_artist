@@ -97,6 +97,8 @@ class FaIconConstants {
   static const IconData clearCodeFlowIconData =
       cupertino.CupertinoIcons.paintbrush;
 
+  static const IconData faColorGeneratorIconData = Icons.data_object;
+
   static const IconData uiComponentsIconData =
       cupertino.CupertinoIcons.color_filter;
 
@@ -196,6 +198,9 @@ class FaIconConstants {
   static const IconData formDeleteIconData = cupertino.CupertinoIcons.delete;
   static const IconData formCreateIconData =
       cupertino.CupertinoIcons.add_circled;
+
+  static const IconData formEditIconData =
+      cupertino.CupertinoIcons.pencil_circle;
 
   static const IconData formErrorDisabledIconData =
       cupertino.CupertinoIcons.lock;

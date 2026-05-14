@@ -1503,7 +1503,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   Future<void> showDebugFilterModelViewerDialog() async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     //
     await DebugViewerDialog.openDebugFilterModelViewer(
       context: context,
@@ -1516,7 +1516,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   Future<void> showDebugFilterCriteriaViewerDialog() async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     //
     await DebugViewerDialog.openDebugFilterCriteriaInspector(
       context: context,

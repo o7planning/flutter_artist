@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
 import '../../core/enums/_tip_document.dart';
 import '../../core/icon/icon_constants.dart';
-import '../../core/widgets/_simple_copy_button.dart';
-import '../../core/widgets/_simple_open_url_button.dart';
 import '../utils/_tab_theme_utils.dart';
 import '../widgets/_doc_link_view.dart';
 
@@ -67,7 +66,7 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: context.faColors.bar.primary,
+        color: context.faColors.bar.standard,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Row(
@@ -259,14 +258,14 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
               Icon(
                 Icons.lightbulb_outline_rounded,
                 size: 14,
-                color: context.faColors.special.highlight,
+                color: context.faColors.ink.highlight,
               ),
               const SizedBox(width: 6),
               Text("PRO TIP",
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
-                    color: context.faColors.special.highlight,
+                    color: context.faColors.ink.highlight,
                   )),
             ],
           ),

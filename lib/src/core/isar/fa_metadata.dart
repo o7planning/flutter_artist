@@ -1,4 +1,4 @@
-import 'package:flutter_artist_theme/flutter_artist_theme.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import 'package:hive/hive.dart';
 
 class FaMetadata {

@@ -3,6 +3,10 @@ enum ItemCreationType {
   quickCreate;
 }
 
+enum ItemEditType {
+  form,
+}
+
 enum ItemUpdateType {
   quickUpdate;
 }

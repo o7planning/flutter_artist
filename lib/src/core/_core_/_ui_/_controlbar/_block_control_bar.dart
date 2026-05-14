@@ -16,6 +16,7 @@ class BlockControlBar extends BaseControlBar<Block, BlockControlBarItemType> {
       ControlBarItem.standard(BlockControlBarItemType.back),
       ControlBarItem.standard(BlockControlBarItemType.divider),
       ControlBarItem.standard(BlockControlBarItemType.create),
+      ControlBarItem.standard(BlockControlBarItemType.edit),
       ControlBarItem.standard(BlockControlBarItemType.delete),
     ],
     super.rightItems = const [
@@ -91,11 +92,45 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
               ? () async {
                   final result = await widget.block
                       .prepareFormToCreateItem(navigate: null);
-                  widget.config.onNavigateCreate?.call(result);
+                  // widget.config.onNavigateCreate?.call(result);
+                  final NavigationIntent? intent =
+                      widget.config.createNavigationIntent;
+                  if (intent != null) {
+                    widget.block._processNavigationIntent(
+                      context: context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
                 }
               : null,
         );
-
+      case BlockControlBarItemType.edit:
+        if (widget.block.formModel == null || !widget.config.allowEditButton) {
+          return null;
+        }
+        final actionable = widget.block.canEditCurrentItemWithForm();
+        return _buildButton(
+          tooltip: "Edit",
+          iconData: FaIconConstants.formEditIconData,
+          onAction: widget.block.isRefreshingCurrentItem,
+          onPressed: actionable.yes
+              ? () async {
+                  final result =
+                      await widget.block._prepareFormToEditCurrentItem();
+                  //
+                  final NavigationIntent? intent =
+                      widget.config.editNavigationIntent;
+                  if (intent != null) {
+                    widget.block._processNavigationIntent(
+                      context: context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
+                }
+              : null,
+        );
       case BlockControlBarItemType.delete:
         if (!widget.config.allowDeleteButton) return null;
         final actionable = widget.block.canDeleteCurrentItem();
@@ -107,11 +142,19 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
           onPressed: actionable.yes
               ? () async {
                   final result = await widget.block.deleteCurrentItem();
-                  widget.config.onNavigateDelete?.call(result);
+                  // widget.config.onNavigateDelete?.call(result);
+                  final NavigationIntent? intent =
+                      widget.config.deleteNavigationIntent;
+                  if (intent != null) {
+                    widget.block._processNavigationIntent(
+                      context: context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
                 }
               : null,
         );
-
       case BlockControlBarItemType.save:
         if (widget.block.formModel == null || !widget.config.allowSaveButton) {
           return null;
@@ -124,7 +167,16 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
           onPressed: actionable.yes
               ? () async {
                   final result = await widget.block.formModel!.saveForm();
-                  widget.config.onNavigateSave?.call(result);
+                  // widget.config.onNavigateSave?.call(result);
+                  final NavigationIntent? intent =
+                      widget.config.saveNavigationIntent;
+                  if (intent != null) {
+                    widget.block._processNavigationIntent(
+                      context: context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
                 }
               : null,
         );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist_theme/flutter_artist_theme.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
 import '../_core_/core.dart';

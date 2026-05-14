@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../../core/icon/icon_constants.dart';
 import '../../constants/_debug_constants.dart';
@@ -45,7 +46,7 @@ class BlockOrScalarInfoView extends StatelessWidget {
             TextSpan(
               text: blockOrScalar.blockOrScalarClassParametersDefinition,
               style: TextStyle(
-                color: context.faColors.special.sourceCode,
+                color: context.faColors.ink.sourceCode,
                 fontFamily: 'Courier',
               ),
             ),

@@ -5,7 +5,7 @@ abstract class _Core {
     required String message,
     String? details,
   }) async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     bool confirm = await dialogs.showConfirmDialog(
       context: context,
       message: message,
@@ -15,7 +15,7 @@ abstract class _Core {
   }
 
   Future<bool> showConfirmDeleteDialog({String? details}) async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     bool confirm = await dialogs.showConfirmDeleteDialog(
       context: context,
       details: details ?? "",
@@ -28,7 +28,7 @@ abstract class _Core {
     String? details,
     FaMessageType type = FaMessageType.info,
   }) async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     await dialogs.showMessageDialog(
       context: context,
       message: message,
@@ -42,7 +42,7 @@ abstract class _Core {
     required DefaultConfirmation defaultConfirmation,
     required CustomConfirmation? customConfirmation,
   }) async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     //
     if (customConfirmation != null) {
       try {
@@ -228,7 +228,7 @@ abstract class _Core {
     if (FlutterArtist.testCaseMode) {
       // return;
     }
-    FlutterArtist.coreFeaturesAdapter.showWarningSnackBar(
+    FlutterArtist.overlayAdapter.showWarningSnackBar(
       message: message,
       details: null,
     );
@@ -241,7 +241,7 @@ abstract class _Core {
     if (FlutterArtist.testCaseMode) {
       // return;
     }
-    FlutterArtist.coreFeaturesAdapter.showErrorSnackBar(
+    FlutterArtist.overlayAdapter.showErrorSnackBar(
       message: message,
       details: errorDetails,
     );
@@ -254,18 +254,18 @@ abstract class _Core {
     if (FlutterArtist.testCaseMode) {
       return;
     }
-    FlutterArtist.coreFeaturesAdapter.showErrorSnackBar(
+    FlutterArtist.overlayAdapter.showErrorSnackBar(
       message: message,
       details: details,
     );
   }
 
   void showSavedSnackBar() {
-    FlutterArtist.coreFeaturesAdapter.showSavedSnackBar();
+    FlutterArtist.overlayAdapter.showSavedSnackBar();
   }
 
   void showDeletedSnackBar({String? customMessage}) {
-    FlutterArtist.coreFeaturesAdapter.showDeletedSnackBar(
+    FlutterArtist.overlayAdapter.showDeletedSnackBar(
       customMessage: customMessage,
     );
   }

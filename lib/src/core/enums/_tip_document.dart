@@ -10,7 +10,7 @@ enum TipDocument {
   debugUiContextInspector(enabled: true),
   debugMenu(enabled: true),
   appConfiguration(enabled: true),
-  coreFeaturesAdapter(enabled: true),
+  overlayAdapter(enabled: true),
   loginLogoutAdapter(enabled: true),
   activity(enabled: true),
   shelf(enabled: true),
@@ -94,7 +94,7 @@ enum TipDocument {
         return "FlutterArtist Config";
       case TipDocument.appConfiguration:
         return "FlutterArtist AppConfiguration";
-      case TipDocument.coreFeaturesAdapter:
+      case TipDocument.overlayAdapter:
         return "FlutterArtistAdapter";
       case TipDocument.loginLogoutAdapter:
         return "FlutterArtistLoginLogoutAdapter";
@@ -201,7 +201,7 @@ enum TipDocument {
         return "FlutterArtist.start()";
       case TipDocument.appConfiguration:
         return "FlutterArtist AppConfiguration";
-      case TipDocument.coreFeaturesAdapter:
+      case TipDocument.overlayAdapter:
         return "FlutterArtistAdapter";
       case TipDocument.loginLogoutAdapter:
         return "FlutterArtistLoginLogoutAdapter";
@@ -312,9 +312,9 @@ enum TipDocument {
         return [
           "14845", // FlutterArtist AppConfiguration
         ];
-      case TipDocument.coreFeaturesAdapter:
+      case TipDocument.overlayAdapter:
         return [
-          "14863", // FlutterArtist FlutterArtistCoreFeaturesAdapter
+          "14863", // FlutterArtist FlutterArtistOverlayAdapter
         ];
       case TipDocument.loginLogoutAdapter:
         return [

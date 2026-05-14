@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
+import 'package:flutter_artist_styles_inspector/flutter_artist_styles_inspector.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
@@ -32,6 +34,7 @@ class DebugMenuBuilder {
             iconData: FaIconConstants.errorIconData,
             iconColor: Theme.of(context).colorScheme.error,
             title: 'Log Viewer',
+            trainingTooltip: null,
             onTap: () {
               _showLogViewerDialog(context);
             },
@@ -41,6 +44,7 @@ class DebugMenuBuilder {
           _buildPopupMenuItem(
             iconData: FaIconConstants.appIconData,
             title: 'App Inspector',
+            trainingTooltip: null,
             onTap: () {
               _showDebugAppInspectorDialog(context);
             },
@@ -49,6 +53,7 @@ class DebugMenuBuilder {
           _buildPopupMenuItem(
             iconData: FaIconConstants.shelfStructureIconData,
             title: 'Shelf Structure Inspector',
+            trainingTooltip: null,
             onTap: () {
               _showDebugShelfStructureInspector(context);
             },
@@ -57,6 +62,7 @@ class DebugMenuBuilder {
           _buildPopupMenuItem(
             iconData: FaIconConstants.uiComponentsIconData,
             title: 'UI Context Inspector',
+            trainingTooltip: null,
             onTap: () {
               _showDebugUiContextInspector(context);
             },
@@ -65,6 +71,7 @@ class DebugMenuBuilder {
           _buildPopupMenuItem(
             iconData: FaIconConstants.themeIconData,
             title: 'Theme Inspector',
+            trainingTooltip: null,
             onTap: () {
               _showDebugThemeInspector(context);
             },
@@ -73,8 +80,13 @@ class DebugMenuBuilder {
           _buildPopupMenuItem(
             iconData: FaIconConstants.themeIconData,
             title: 'FaColors Inspector',
+            trainingTooltip: "FaColors Code Generator",
             onTap: () {
               _showDebugFaColorsInspector(context);
+            },
+            trainingIconData: FaIconConstants.faColorGeneratorIconData,
+            trainingCallback: () {
+              _showFaColorCodeGenerator(context);
             },
           ),
         if (isSystemUser) _divider(),
@@ -82,6 +94,7 @@ class DebugMenuBuilder {
           _buildPopupMenuItem(
             iconData: FaIconConstants.flowLogIconData,
             title: 'Code Flow Inspector',
+            trainingTooltip: "Clear Data",
             onTap: () {
               _showCodeFlowInspector(context);
             },
@@ -96,6 +109,7 @@ class DebugMenuBuilder {
           _buildPopupMenuItem(
             iconData: FaIconConstants.debugNetworkInspectorIconData,
             title: 'Network Inspector',
+            trainingTooltip: null,
             onTap: () {
               _showDebugNetworkInspector(context);
             },
@@ -109,6 +123,7 @@ class DebugMenuBuilder {
     Color? iconColor,
     required String title,
     required Function() onTap,
+    required String? trainingTooltip,
     IconData? trainingIconData,
     Color? trainingIconColor,
     VoidCallback? trainingCallback,
@@ -130,7 +145,7 @@ class DebugMenuBuilder {
                   size: menuItemIconSize,
                   color: trainingIconColor,
                 ),
-                tooltip: "Clear Data",
+                tooltip: trainingTooltip,
                 onPressed: trainingCallback,
               ),
         title: SizedBox(
@@ -169,12 +184,17 @@ class DebugMenuBuilder {
 
   Future<void> _showDebugThemeInspector(BuildContext context) async {
     Navigator.pop(context, null);
-    await FlutterArtist.showDebugThemeInspector();
+    await FlutterArtist.showDebugFaThemeInspector();
   }
 
   Future<void> _showDebugFaColorsInspector(BuildContext context) async {
     Navigator.pop(context, null);
     await FlutterArtist.showDebugFaColorsInspector();
+  }
+
+  void _showFaColorCodeGenerator(BuildContext context) {
+    Navigator.pop(context, null);
+    FaColorsGeneratorDialog.show(context);
   }
 
   void _clearCodeFlowLogger(BuildContext context) {

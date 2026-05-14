@@ -537,7 +537,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   Future<void> showDebugShelfStructureInspector() async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     //
     await DebugShelfStructureInspectorDialog.open(
       context: context,
@@ -549,7 +549,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   Future<void> showDebugUiContextInspector() async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     await DebugUiContextInspectorDialog.open(
       context: context,
       shelf: this,

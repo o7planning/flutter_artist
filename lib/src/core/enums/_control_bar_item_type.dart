@@ -3,6 +3,7 @@ enum BlockControlBarItemType {
   refresh,
   query,
   create,
+  edit,
   save,
   delete,
   reset,

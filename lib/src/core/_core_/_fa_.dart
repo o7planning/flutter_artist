@@ -46,7 +46,7 @@ class _FlutterArtist extends _Core {
 
   int notificationFetchPeriodInSeconds = 60;
 
-  FlutterArtistCoreFeaturesAdapter? __coreFeaturesAdapter;
+  FlutterArtistOverlayAdapter? __overlayAdapter;
 
   late final GlobalsManager globalsManager;
 
@@ -123,13 +123,13 @@ class _FlutterArtist extends _Core {
     offAllAndGotoRoute();
   }
 
-  FlutterArtistCoreFeaturesAdapter get coreFeaturesAdapter {
-    if (__coreFeaturesAdapter == null) {
+  FlutterArtistOverlayAdapter get overlayAdapter {
+    if (__overlayAdapter == null) {
       throw DebugUtils.getFatalError(
-          " >>>>>> $FlutterArtistCoreFeaturesAdapter is not registered!. "
+          " >>>>>> $FlutterArtistOverlayAdapter is not registered!. "
           "\n >>>>>> You need to call $FlutterArtist.start() in main.dart");
     }
-    return __coreFeaturesAdapter!;
+    return __overlayAdapter!;
   }
 
   // docs: [14683].
@@ -202,9 +202,9 @@ class _FlutterArtist extends _Core {
     required FlutterArtistRouter router,
   }) async {
     print("[FLUTTER-ARTIST] - FlutterArtist.start() - BEGIN");
-    if (__coreFeaturesAdapter != null) {
+    if (__overlayAdapter != null) {
       throw DebugUtils.getFatalError(
-          "${getClassName(__coreFeaturesAdapter)} already registered!");
+          "${getClassName(__overlayAdapter)} already registered!");
     }
     this.router = router;
     // IMPORTANT: Call this before using ExecutionTrace.
@@ -222,7 +222,7 @@ class _FlutterArtist extends _Core {
         showDebugNetworkInspector: appConfiguration.showDebugNetworkInspector,
         debugOptions: appConfiguration.debugOptions,
         consoleDebugOptions: appConfiguration.consoleDebugOptions,
-        coreFeaturesAdapter: appConfiguration.coreFeaturesAdapter,
+        overlayAdapter: appConfiguration.overlayAdapter,
         notificationAdapter: appConfiguration.notificationAdapter,
         loginLogoutAdapter: appConfiguration.loginLogoutAdapter,
         globalDataAdapter: appConfiguration.globalDataAdapter,
@@ -253,7 +253,7 @@ class _FlutterArtist extends _Core {
     required ShowDebugNetworkInspector showDebugNetworkInspector,
     required DebugOptions? debugOptions,
     required ConsoleDebugOptions? consoleDebugOptions,
-    required FlutterArtistCoreFeaturesAdapter coreFeaturesAdapter,
+    required FlutterArtistOverlayAdapter overlayAdapter,
     required FlutterArtistNotificationAdapter? notificationAdapter,
     required FlutterArtistLoginLogoutAdapter loginLogoutAdapter,
     required FlutterArtistGlobalDataAdapter globalDataAdapter,
@@ -272,7 +272,7 @@ class _FlutterArtist extends _Core {
           "Note: You see this debug information because the <b>FlutterArtist.start()</b> method is called in <b>main.dart</b>.",
       parameters: {
         // "appConfiguration": appConfiguration,
-        // "coreFeaturesAdapter": coreFeaturesAdapter,
+        // "overlayAdapter": overlayAdapter,
         // "loginLogoutAdapter": loginLogoutAdapter,
         // "globalDataAdapter": globalDataAdapter,
         // "notificationAdapter": notificationAdapter,
@@ -283,7 +283,7 @@ class _FlutterArtist extends _Core {
       tipDocument: TipDocument.start,
     );
     //
-    __coreFeaturesAdapter = coreFeaturesAdapter;
+    __overlayAdapter = overlayAdapter;
     //
     if (debugOptions != null) {
       __debugOptions = debugOptions;
@@ -471,14 +471,14 @@ class _FlutterArtist extends _Core {
   Future<void> _runWithOverlay({
     required Future<dynamic> Function() asyncFunction,
   }) async {
-    await coreFeaturesAdapter.runWithOverlay(
+    await overlayAdapter.runWithOverlay(
       opacity: _isOverlayMode ? 0.3 : 0.02,
       asyncFunction: asyncFunction,
     );
   }
 
   bool get isOverlayOpen {
-    return coreFeaturesAdapter.isOverlayOpen;
+    return overlayAdapter.isOverlayOpen;
   }
 
   // ***************************************************************************
@@ -504,7 +504,7 @@ class _FlutterArtist extends _Core {
   // ***************************************************************************
 
   Future<void> showDebugAppInspectorDialog() async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     //
     await DebugAppInspectorDialog.open(
       context: context,
@@ -512,20 +512,19 @@ class _FlutterArtist extends _Core {
     );
   }
 
-  Future<void> showDebugThemeInspector() async {
-    BuildContext context = coreFeaturesAdapter.context;
-    await ThemeInspectorDialog.show (context);
+  Future<void> showDebugFaThemeInspector() async {
+    BuildContext context = FlutterArtistCore.context;
+    await FaThemeInspectorDialog.show(context);
   }
 
   Future<void> showDebugFaColorsInspector() async {
-    BuildContext context = coreFeaturesAdapter.context;
-    await FaColorsInspectorDialog.show (context);
+    BuildContext context = FlutterArtistCore.context;
+    await FaColorsInspectorDialog.show(context);
   }
 
-
   Future<void> showCodeFlowInspector() async {
-    BuildContext context = coreFeaturesAdapter.context;
-    await CodeFlowInspectorDialog.open(context: context);
+    BuildContext context = FlutterArtistCore.context;
+    await CodeFlowInspectorDialog.show(context: context);
   }
 
   Future<void> showDebugShelfStructureInspector() async {
@@ -542,8 +541,7 @@ class _FlutterArtist extends _Core {
   }
 
   Future<void> showLogViewerDialog({int? logEntryId}) async {
-    BuildContext context = coreFeaturesAdapter.context;
-    //
+    BuildContext context = FlutterArtistCore.context;
     await LogViewerDialog.open(
       context: context,
       logger: logger,

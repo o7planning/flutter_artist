@@ -4021,7 +4021,7 @@ abstract class Block<
       );
     }
     //
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     bool confirm = await showConfirmDeleteDialog(
       context: context,
       details: getClassName(item),
@@ -4103,7 +4103,7 @@ abstract class Block<
       );
     }
     //
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     bool confirm = await showConfirmDeleteDialog(
       context: context,
       details: "Delete Multi Items",
@@ -5495,6 +5495,24 @@ abstract class Block<
   // ***************************************************************************
 
   ///
+  /// Prepare to edit an item in a Form.
+  ///
+  Future<BlockCurrentItemSettingResult> _prepareFormToEditCurrentItem() async {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "_prepareFormToEditItem",
+      parameters: {},
+      navigate: null,
+      isLibMethod: true,
+    );
+    //
+    return await refreshCurrentItem(forceLoadForm: true);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
   /// Prepare to create an item in a Form.
   ///
   @_RootMethodAnnotation()
@@ -5768,6 +5786,88 @@ abstract class Block<
       forceLoadForm: forceLoadForm,
       navigate: null,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _processNavigationIntent({
+    required BuildContext context,
+    required TaskResult result,
+    required NavigationIntent intent,
+  }) {
+    try {
+      final bool isActionSuccess = result.successForFirst;
+
+      // PrepareItemCreationResult
+      // FormSaveResult
+      // BlockItemDeletionResult
+      // if (result is TaskResult) {
+      //   isActionSuccess = result.successForFirst;
+      // } else {
+      //   throw UnimplementedError("TODO ResultType: $result");
+      // }
+      if (!isActionSuccess && !intent.executeOnFailure) {
+        return;
+      }
+      final router = context.faRouter;
+      // to()
+      if (intent is _NavigationToIntent) {
+        router.to(intent.path, builder: intent.builder, extra: intent.extra);
+      }
+      // off()
+      else if (intent is _NavigationOffIntent) {
+        router.off(intent.path, builder: intent.builder, extra: intent.extra);
+      }
+      // offAll()
+      else if (intent is _NavigationOffAllIntent) {
+        router.offAll(intent.path,
+            builder: intent.builder, extra: intent.extra);
+      }
+      // pop()
+      else if (intent is _NavigationPopIntent) {
+        router.pop();
+      }
+      // dialog()
+      else if (intent is _NavigationDialogIntent) {
+        router.dialog(
+          intent.path,
+          builder: intent.builder,
+          guards: intent.guards,
+          extra: intent.extra,
+          barrierDismissible: intent.barrierDismissible,
+        );
+      }
+      // closeAllDialogs()
+      else if (intent is _NavigationCloseAllDialogsIntent) {
+        router.closeAllDialogs();
+      }
+      // endDrawer()
+      else if (intent is _NavigationEndDrawerIntent) {
+        Scaffold.of(context).openEndDrawer();
+      }
+      // drawer()
+      else if (intent is _NavigationDrawerIntent) {
+        Scaffold.of(context).openDrawer();
+      }
+      // Custom Intent.
+      else if (intent is _CustomIntent) {
+        intent.onExecute(context, result);
+      }
+      // else.
+      else {
+        throw UnimplementedError("TODO _processNavigationIntent");
+      }
+    } catch (e, stackTrace) {
+      final errorInfo = _handleError(
+        shelf: shelf,
+        methodName: "${getClassName(this)}._processNavigationIntent",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+    }
   }
 
   // ***************************************************************************
@@ -6924,6 +7024,13 @@ abstract class Block<
     );
   }
 
+  @_PrecheckMethod()
+  Actionable<BlockCurrentItemSettingPrecheck> canEditCurrentItemWithForm() {
+    return __canRefreshCurrentItem(
+      checkBusy: true,
+    );
+  }
+
   // ***************************************************************************
 
   @_PrecheckMethod()
@@ -7897,7 +8004,7 @@ abstract class Block<
   // ***************************************************************************
 
   Future<void> showDebugFilterCriteriaViewerDialog() async {
-    BuildContext context = FlutterArtist.coreFeaturesAdapter.context;
+    BuildContext context = FlutterArtistCore.context;
     //
     await DebugViewerDialog.openDebugFilterCriteriaInspector(
       context: context,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../widgets/_doc_link_view.dart';
 
@@ -72,7 +73,7 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: context.faColors.bar.primary,
+        color: context.faColors.bar.standard,
         borderRadius: BorderRadius.circular(4),
       ),
       child: Row(
@@ -80,7 +81,7 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
           Icon(
             Icons.language_rounded,
             size: 14,
-            color: context.faColors.special.highlight,
+            color: context.faColors.ink.highlight,
           ),
           const SizedBox(width: 8),
           Text(
@@ -88,7 +89,7 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.bold,
-              color: context.faColors.special.highlight,
+              color: context.faColors.ink.highlight,
             ),
           ),
           const Spacer(),
