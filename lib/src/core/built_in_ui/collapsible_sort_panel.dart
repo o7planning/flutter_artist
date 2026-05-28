@@ -44,7 +44,7 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
   }
 
   Widget _buildCollapsedMenu(BuildContext context) {
-    final tokens = context.faTokens;
+    final tokens = context.faTheme.tokens;
 
     final activeCriterion =
         sortModel.findFirstCriterionHasDirection() ?? sortModel.criteria.first;
@@ -58,7 +58,7 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
         offset: const Offset(0, 40),
         color: SortPanelHelper.getBackgroundColor(context),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
+          borderRadius: BorderRadius.circular(tokens.radius.sm),
           side: SortPanelHelper.getBorder(context),
         ),
         child: Container(
@@ -67,8 +67,8 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
           decoration: BoxDecoration(
             color: SortPanelHelper.getBackgroundColor(context),
             border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
-            borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
-            boxShadow: tokens.shortcut.cardShadows,
+            borderRadius: BorderRadius.circular(tokens.radius.sm),
+            boxShadow: context.faTheme.shadow.card,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -113,7 +113,7 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
   }
 
   Widget _buildHorizontalToolbar(BuildContext context) {
-    final tokens = context.faTokens;
+    final tokens = context.faTheme.tokens;
     return Container(
       key: const ValueKey('horizontal'),
       alignment: AlignmentDirectional.centerStart,
@@ -125,8 +125,8 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
           decoration: BoxDecoration(
             color: SortPanelHelper.getBackgroundColor(context),
             border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
-            borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
-            boxShadow: tokens.shortcut.cardShadows,
+            borderRadius: BorderRadius.circular(tokens.radius.sm),
+            boxShadow: context.faTheme.shadow.card,
           ),
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -158,11 +158,10 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
 
   Widget _buildToolbarItem(BuildContext context, SortCriterion criterion) {
     final isActive = criterion.direction != null;
-    final tokens = context.faTokens;
-    final theme = Theme.of(context);
+    final tokens = context.faTheme.tokens;
 
     return InkWell(
-      borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius / 2),
+      borderRadius: BorderRadius.circular(tokens.radius.sm),
       onTap: () => toggleCriterionByName(sortModel, criterion),
       hoverColor:
           SortPanelHelper.getTextColor(context, true).withValues(alpha: 0.1),

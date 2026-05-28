@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:js_interop';
 
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';

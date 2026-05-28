@@ -26,7 +26,7 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
 
   @override
   Widget buildContent(BuildContext context) {
-    final tokens = context.faTokens;
+    final tokens = context.faTheme.tokens;
 
     return Container(
       alignment: alignment,
@@ -36,7 +36,7 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
           BoxDecoration(
             color: SortPanelHelper.getBackgroundColor(context)
                 .withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
+            borderRadius: BorderRadius.circular(tokens.radius.sm),
             border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
           ),
       child: BreadCrumb(
@@ -98,8 +98,8 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
               enabled: true,
               isDragging: isDragging,
               iconSize: style.sortIconSize,
-              draggingColor:
-                  style.draggingColor ?? tokens.shortcut.onSurfaceColor,
+              draggingColor: style.draggingColor ??
+                  context.faColors.action.fill.primaryTonal.dragged,
             ),
           ],
         ),
@@ -129,8 +129,8 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
         decoration: BoxDecoration(
           color: SortPanelHelper.getBackgroundColor(context)
               .withValues(alpha: 0.9),
-          borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
-          boxShadow: tokens.shortcut.cardShadows,
+          borderRadius: BorderRadius.circular(tokens.radius.sm),
+          boxShadow: context.faTheme.shadow.button,
           border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
         ),
         child: Row(

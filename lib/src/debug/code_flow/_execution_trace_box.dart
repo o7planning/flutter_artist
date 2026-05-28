@@ -144,7 +144,7 @@ class ExecutionTraceBox extends StatelessWidget {
               ),
             )
           : null,
-      suffixIcon2: errorInfo != null
+      endIcon: errorInfo != null
           ? SimpleSmallIconButton(
               iconData: Icons.error_outline,
               iconColor: theme.colorScheme.error,

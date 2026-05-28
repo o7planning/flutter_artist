@@ -56,7 +56,7 @@ class SimpleNotificationService
       try {
         if (notificationSummaryJsonLocal != null) {
           notificationSummaryLocal =
-              adapter!.fromJson(notificationSummaryJsonLocal);
+              adapter.fromJson(notificationSummaryJsonLocal);
         }
       } catch (e, stackTrace) {
         FlutterArtist.logger.addError(
@@ -86,7 +86,7 @@ class SimpleNotificationService
       try {
         // Fetch from Server:
         ApiResult<INotificationSummary> result =
-            await adapter!.performLoadSummary();
+            await adapter.performLoadSummary();
         if (result.error != null) {
           FlutterArtist.logger.addError(
             shelfName: null,
@@ -131,7 +131,7 @@ class SimpleNotificationService
       FlutterArtist._notifyNotification(fetchedData);
       //
       try {
-        String notificationSummaryJSON = adapter!.toJson(fetchedData);
+        String notificationSummaryJSON = adapter.toJson(fetchedData);
         notificationSummaryBox.put(
           notificationSummaryKey,
           notificationSummaryJSON,

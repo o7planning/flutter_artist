@@ -24,19 +24,19 @@ class PopupSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     final activeCriterion = sortModel.findFirstCriterionHasDirection();
     final hasActiveSort = activeCriterion != null;
 
-    final tokens = context.faTokens;
+    final tokens = context.faTheme.tokens;
 
     return PopupMenuButton<void>(
       padding: EdgeInsets.zero,
       offset: const Offset(0, 40),
-      elevation: tokens.shortcut.elevation > 0 ? tokens.shortcut.elevation : 8,
+      elevation: tokens.elevation.defaultValue,
       color: SortPanelHelper.getBackgroundColor(context),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
+        borderRadius: BorderRadius.circular(tokens.radius.sm),
         side: SortPanelHelper.getBorder(context),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
+        borderRadius: BorderRadius.circular(tokens.radius.sm),
         onTap: null,
         hoverColor:
             SortPanelHelper.getTextColor(context, true).withValues(alpha: 0.08),
@@ -49,8 +49,8 @@ class PopupSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                 border:
                     Border.fromBorderSide(SortPanelHelper.getBorder(context)),
                 borderRadius:
-                    BorderRadius.circular(tokens.shortcut.borderRadius),
-                boxShadow: tokens.shortcut.cardShadows,
+                    BorderRadius.circular(tokens.radius.sm),
+                boxShadow: context.faTheme.shadow.popup,
               ),
           child: Row(
             mainAxisSize: MainAxisSize.min,

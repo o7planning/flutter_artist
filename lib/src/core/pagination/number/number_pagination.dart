@@ -31,10 +31,10 @@ class NumberPagination extends StatelessWidget {
     this.controlButtonSize = const Size(48, 48),
     this.numberButtonSize = const Size(48, 48),
     this.betweenNumberButtonSpacing = 3,
-    this.selectedNumberColor = Colors.white,
-    this.unSelectedNumberColor = Colors.black,
-    this.selectedButtonColor = Colors.black,
-    this.unSelectedButtonColor = Colors.white,
+    this.selectedFgColor = Colors.white,
+    this.unSelectedFgColor = Colors.black,
+    this.selectedBgColor = Colors.black,
+    this.unSelectedBgColor = Colors.white,
     this.controlButtonColor = Colors.white,
     this.selectedNumberFontWeight = FontWeight.w600,
     this.buttonSelectedBorderColor,
@@ -94,13 +94,13 @@ class NumberPagination extends StatelessWidget {
   final double betweenNumberButtonSpacing;
 
   /// The color of the text for the selected page button.
-  final Color selectedNumberColor;
+  final Color selectedFgColor;
 
   /// The color of the text for unselected page buttons.
-  final Color unSelectedNumberColor;
+  final Color unSelectedFgColor;
 
   /// The background color of the selected page button.
-  final Color selectedButtonColor;
+  final Color selectedBgColor;
 
   /// The color of the selected page button border.
   final Color? buttonSelectedBorderColor;
@@ -109,7 +109,7 @@ class NumberPagination extends StatelessWidget {
   final Color? buttonUnSelectedBorderColor;
 
   /// The background color of unselected page buttons.
-  final Color unSelectedButtonColor;
+  final Color unSelectedBgColor;
 
   /// The background color of control buttons.
   final Color controlButtonColor;
@@ -200,10 +200,10 @@ class NumberPagination extends StatelessWidget {
                   fontFamily: fontFamily ?? '',
                   onSelect: (c, number) => _changePage(c, number),
                   fixedSize: numberButtonSize,
-                  selectedTextColor: selectedNumberColor,
-                  unSelectedTextColor: unSelectedNumberColor,
-                  selectedButtonColor: selectedButtonColor,
-                  unSelectedButtonColor: unSelectedButtonColor,
+                  selectedFgColor: selectedFgColor,
+                  unSelectedFgColor: unSelectedFgColor,
+                  selectedBgColor: selectedBgColor,
+                  unSelectedBgColor: unSelectedBgColor,
                   selectedNumberFontWeight: selectedNumberFontWeight,
                   buttonSelectedBorderColor: buttonSelectedBorderColor,
                   buttonUnSelectedBorderColor: buttonUnSelectedBorderColor,

@@ -1009,7 +1009,7 @@ abstract class FormModel<
                 extractUpdateValuesForSimpleProps(
                       parentBlockCurrentItemId: block.parentBlockCurrentItemId,
                       additionalFormRelatedData: additionalFormRelatedData,
-                      formInput: formInput!,
+                      formInput: formInput,
                     ) ??
                     {};
             //

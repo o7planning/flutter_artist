@@ -113,8 +113,8 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
         decoration: BoxDecoration(
           color: isSelected
-              ? context.faColors.action.fill.selected
-              : context.faColors.common.transparent,
+              ? context.faColors.action.fill.primary.selected
+              : context.faColors.action.fill.primary,
           border: isSelected
               ? Border.all(
                   color: context.faColors.action.stroke.primary, width: 0.5)
@@ -148,7 +148,7 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
             child: Text(
               "No documentation available for $_selectedLangCode.",
               style: TextStyle(
-                color: context.faColors.ink.muted,
+                color: context.faColors.ink.tertiaryQuiet,
                 fontSize: 12,
               ),
             ),

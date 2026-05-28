@@ -31,11 +31,11 @@ dependencies:
   url_launcher: ^6.3.2
 
   flutter_artist_core: ^0.9.1
-  flutter_artist_styles: ^0.9.1+1
-  flutter_artist_styles_inspector: ^0.9.3+1
-  flutter_artist_overlay_adapter: ^0.9.3
+  flutter_artist_styles: ^2.1.0
+  flutter_artist_styles_inspector: ^2.0.2
+  flutter_artist_overlay_adapter: ^0.9.4
   flutter_artist_router: ^0.9.3
-  flutter_artist_commons_ui: ^0.9.1
+  flutter_artist_commons_ui: ^0.9.4
 
 dev_dependencies:
   flutter_test:

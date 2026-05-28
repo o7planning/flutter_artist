@@ -20,7 +20,7 @@ class SegmentedSortPanel<ITEM extends Object> extends SortPanel<ITEM>
 
   @override
   Widget buildContent(BuildContext context) {
-    final tokens = context.faTokens;
+    final tokens = context.faTheme.tokens;
     final theme = Theme.of(context);
     final selected = sortModel.findFirstCriterionHasDirection();
 
@@ -41,8 +41,7 @@ class SegmentedSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                   SortPanelHelper.getTextColor(context, true),
               side: SortPanelHelper.getBorder(context),
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(tokens.shortcut.borderRadius / 2),
+                borderRadius: BorderRadius.circular(tokens.radius.sm),
               ),
             ),
           ),

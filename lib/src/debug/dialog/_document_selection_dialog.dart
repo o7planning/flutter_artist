@@ -109,8 +109,8 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
         padding: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           color: isSelected
-              ? context.faColors.action.fill.selected
-              : Colors.transparent,
+              ? context.faColors.action.fill.primary.selected
+              : context.faColors.action.fill.primary,
           borderRadius: BorderRadius.circular(4),
           border: isSelected
               ? Border.all(
@@ -146,7 +146,7 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
             child: Text(
               "No English documentation available for this example.",
               style: TextStyle(
-                color: context.faColors.ink.muted,
+                color: context.faColors.ink.tertiaryQuiet,
                 fontSize: 12,
               ),
             ),

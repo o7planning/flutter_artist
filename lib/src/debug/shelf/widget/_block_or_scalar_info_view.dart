@@ -46,7 +46,7 @@ class BlockOrScalarInfoView extends StatelessWidget {
             TextSpan(
               text: blockOrScalar.blockOrScalarClassParametersDefinition,
               style: TextStyle(
-                color: context.faColors.ink.sourceCode,
+                color: context.faColors.ink.code,
                 fontFamily: 'Courier',
               ),
             ),

@@ -7309,6 +7309,14 @@ abstract class Block<
     return List.unmodifiable(__blockData._selectedItems);
   }
 
+  List<ID> get selectedItemIds {
+    return selectedItems.map((item)=> item.id).toList();
+  }
+
+  List<ID> get checkedItemIds {
+    return checkedItems.map((item)=> item.id).toList();
+  }
+
   List<int> get selectedItemIndexes {
     final allItems = items;
     final List<ITEM> sItems = selectedItems;

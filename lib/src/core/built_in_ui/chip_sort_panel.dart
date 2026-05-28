@@ -20,9 +20,6 @@ class ChipSortPanel<ITEM extends Object> extends SortPanel<ITEM>
 
   @override
   Widget buildContent(BuildContext context) {
-    final tokens = context.faTokens;
-    final theme = Theme.of(context);
-
     return Padding(
       padding: style.padding,
       child: Wrap(

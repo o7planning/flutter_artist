@@ -46,7 +46,7 @@ class DocLinkView extends StatelessWidget {
                 fontSize: 13,
                 color: faDocument.published && demoRelease
                     ? context.faColors.action.ink.primary
-                    : context.faColors.ink.muted,
+                    : context.faColors.action.ink.tertiaryQuiet,
                 decoration: faDocument.published
                     ? TextDecoration.underline
                     : TextDecoration.none,

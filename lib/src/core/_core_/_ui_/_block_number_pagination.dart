@@ -15,9 +15,6 @@ class BlockNumberPagination extends BlockPagination {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = context.faTokens;
-    final theme = Theme.of(context);
-
     return Padding(
       padding: padding,
       child: NumberPagination(
@@ -36,32 +33,19 @@ class BlockNumberPagination extends BlockPagination {
             ? 1
             : block.paginationInfo!.currentPage,
         fontSize: 13,
-        buttonRadius: tokens.shortcut.borderRadius,
-        buttonElevation: tokens.shortcut.elevation,
-
-        // selectedButtonColor: tokens.primary,
-        // selectedNumberColor: Colors.white,
-        //
-        // // Color for unselected buttons (Blends into the surface background)
-        // unSelectedButtonColor: tokens.shortcut.surfaceColor,
-        // unSelectedNumberColor: tokens.shortcut.onSurfaceColor.withValues(alpha: 0.7),
-        //
-        // // Border for buttons
-        // buttonUnSelectedBorderColor: tokens.shortcut.border.color,
-        // buttonSelectedBorderColor: tokens.primary ,
-
+        buttonRadius: context.faTheme.tokens.radius.borderRadius,
+        buttonElevation: context.faTheme.tokens.elevation.level1,
         // Selected button.
-        selectedButtonColor: theme.primaryColor,
-        selectedNumberColor: theme.colorScheme.onPrimary,
+        selectedBgColor: context.faColors.action.fill.primary,
+        selectedFgColor: context.faColors.action.ink.onPrimaryFill,
 
         // Unselected button
-        unSelectedButtonColor: tokens.shortcut.surfaceColor,
-        unSelectedNumberColor:
-            tokens.shortcut.onSurfaceColor.withValues(alpha: 0.7),
+        unSelectedBgColor: context.faColors.action.fill.secondary,
+        unSelectedFgColor: context.faColors.action.ink.onSecondaryFill,
 
         // Border for buttons
-        buttonUnSelectedBorderColor: tokens.shortcut.border.color,
-        buttonSelectedBorderColor: theme.primaryColor,
+        buttonUnSelectedBorderColor: context.faColors.action.stroke.subtle,
+        buttonSelectedBorderColor: context.faColors.action.stroke.subtle,
 
         controlButtonSize: const Size(22, 22),
         numberButtonSize: const Size(22, 22),

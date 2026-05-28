@@ -11,10 +11,10 @@ class NumberButton extends StatelessWidget {
     required this.fontFamily,
     required this.onSelect,
     required this.fixedSize,
-    required this.selectedTextColor,
-    required this.unSelectedTextColor,
-    required this.selectedButtonColor,
-    required this.unSelectedButtonColor,
+    required this.selectedFgColor,
+    required this.unSelectedFgColor,
+    required this.selectedBgColor,
+    required this.unSelectedBgColor,
     required this.selectedNumberFontWeight,
     this.buttonSelectedBorderColor,
     this.buttonUnSelectedBorderColor,
@@ -29,10 +29,10 @@ class NumberButton extends StatelessWidget {
   final String fontFamily;
   final Function(BuildContext, int) onSelect;
   final Size fixedSize;
-  final Color selectedTextColor;
-  final Color unSelectedTextColor;
-  final Color selectedButtonColor;
-  final Color unSelectedButtonColor;
+  final Color selectedFgColor;
+  final Color unSelectedFgColor;
+  final Color selectedBgColor;
+  final Color unSelectedBgColor;
   final Color? buttonSelectedBorderColor;
   final Color? buttonUnSelectedBorderColor;
   final FontWeight selectedNumberFontWeight;
@@ -49,10 +49,10 @@ class NumberButton extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   elevation: selected ? buttonElevation : 0,
                   backgroundColor:
-                      selected ? selectedButtonColor : unSelectedButtonColor,
+                      selected ? selectedBgColor : unSelectedBgColor,
                   surfaceTintColor: Colors.transparent,
                   shadowColor: selected
-                      ? selectedButtonColor.withValues(alpha: 0.4)
+                      ? selectedBgColor.withValues(alpha: 0.4)
                       : Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(buttonRadius),
@@ -68,7 +68,7 @@ class NumberButton extends StatelessWidget {
                   minimumSize: fixedSize,
                   overlayColor: selected
                       ? null
-                      : selectedButtonColor.withValues(alpha: 0.1),
+                      : selectedBgColor.withValues(alpha: 0.1),
                 ),
                 onPressed: () {
                   onSelect(context, number);
@@ -78,7 +78,7 @@ class NumberButton extends StatelessWidget {
                   style: TextStyle(
                     fontSize: fontSize,
                     fontFamily: fontFamily,
-                    color: selected ? selectedTextColor : unSelectedTextColor,
+                    color: selected ? selectedFgColor : unSelectedFgColor,
                     fontWeight: selected ? selectedNumberFontWeight : null,
                   ),
                 ),
@@ -105,7 +105,7 @@ class NumberButton extends StatelessWidget {
                   minimumSize: fixedSize,
                   overlayColor: Colors.transparent,
                   backgroundColor:
-                      selected ? selectedButtonColor : unSelectedButtonColor,
+                      selected ? selectedBgColor : unSelectedBgColor,
                 ),
                 onPressed: () {
                   onSelect(context, number);
@@ -115,7 +115,7 @@ class NumberButton extends StatelessWidget {
                   style: TextStyle(
                     fontSize: fontSize,
                     fontFamily: fontFamily,
-                    color: selected ? selectedTextColor : unSelectedTextColor,
+                    color: selected ? selectedFgColor : unSelectedFgColor,
                     fontWeight: selected ? selectedNumberFontWeight : null,
                   ),
                 ),

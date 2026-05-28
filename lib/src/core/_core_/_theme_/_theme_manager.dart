@@ -21,7 +21,7 @@ class ThemeManager extends _Core {
     if (meta?.themeName != themeName) {
       print("@SAVE themeName --> Call FaIsarStorage.saveSettings()");
       await FaIsarStorage.saveSettings(
-        userId: loggedInUser!.userName,
+        userId: loggedInUser.userName,
         themeName: themeName,
       );
     }

@@ -21,8 +21,8 @@ class FilterCriterionView extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 0),
       color: selected
-          ? context.faColors.action.fill.selected
-          : context.faColors.common.transparent,
+          ? context.faColors.action.fill.primaryTonal.selected
+          : context.faColors.action.fill.primaryTonal,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(2.0),
@@ -45,7 +45,7 @@ class FilterCriterionView extends StatelessWidget {
           iconSize: 16,
           iconColor: selected
               ? context.faColors.action.ink.primary
-              : context.faColors.ink.muted,
+              : context.faColors.action.ink.tertiaryQuiet,
         ),
         title: RichText(
           text: TextSpan(
@@ -71,7 +71,7 @@ class FilterCriterionView extends StatelessWidget {
           filterCriterion.filterFieldName,
           style: TextStyle(
             fontSize: 12,
-            color: context.faColors.ink.sourceCode,
+            color: context.faColors.ink.code,
           ),
         ),
       ),

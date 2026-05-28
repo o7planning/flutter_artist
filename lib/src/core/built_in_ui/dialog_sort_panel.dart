@@ -22,7 +22,7 @@ class DialogSortPanel<ITEM extends Object> extends SortPanel<ITEM>
 
   void _showSortDialog(BuildContext context) {
     final contentKey = GlobalKey<DialogSortContentState>();
-    final tokens = context.faTokens;
+    final tokens = context.faTheme.tokens;
 
     showDialog(
       context: context,
@@ -30,7 +30,7 @@ class DialogSortPanel<ITEM extends Object> extends SortPanel<ITEM>
         return AlertDialog(
           backgroundColor: SortPanelHelper.getBackgroundColor(context),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
+            borderRadius: BorderRadius.circular(tokens.radius.sm),
             side: SortPanelHelper.getBorder(context),
           ),
           title: Text(
@@ -76,8 +76,7 @@ class DialogSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                       backgroundColor: context.faColors.action.fill.primary,
                       foregroundColor: context.faColors.action.ink.primary,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            tokens.shortcut.borderRadius / 2),
+                        borderRadius: BorderRadius.circular(tokens.radius.sm),
                       ),
                     ),
                     onPressed: () {

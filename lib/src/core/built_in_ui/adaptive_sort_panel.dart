@@ -22,8 +22,7 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
 
   @override
   Widget buildContent(BuildContext context) {
-    final tokens = context.faTokens;
-    final theme = Theme.of(context);
+    final tokens = context.faTheme.tokens;
 
     return SizedBox(
       width: double.maxFinite,
@@ -92,8 +91,8 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                       border: Border.fromBorderSide(
                           SortPanelHelper.getBorder(context)),
                       borderRadius:
-                          BorderRadius.circular(tokens.shortcut.borderRadius),
-                      boxShadow: tokens.shortcut.cardShadows,
+                          BorderRadius.circular(tokens.radius.borderRadius),
+                      boxShadow: context.faTheme.shadow.card,
                     ),
                     child: ClipRect(
                       child: SingleChildScrollView(
@@ -125,7 +124,7 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
   }
 
   Widget _buildMoreMenu(BuildContext context, List<SortCriterion> hiddenItems) {
-    final tokens = context.faTokens;
+    final tokens = context.faTheme.tokens;
     final theme = Theme.of(context);
 
     final activeInHidden = hiddenItems.firstWhere(
@@ -139,7 +138,7 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
       offset: const Offset(0, 40),
       color: SortPanelHelper.getBackgroundColor(context),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
+        borderRadius: BorderRadius.circular(tokens.radius.sm),
         side: SortPanelHelper.getBorder(context),
       ),
       child: Container(
@@ -148,8 +147,8 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
         decoration: BoxDecoration(
           color: SortPanelHelper.getBackgroundColor(context),
           border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
-          borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
-          boxShadow: tokens.shortcut.cardShadows,
+          borderRadius: BorderRadius.circular(tokens.radius.sm),
+          boxShadow: context.faTheme.shadow.popup,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

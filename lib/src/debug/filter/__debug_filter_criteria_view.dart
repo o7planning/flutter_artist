@@ -145,7 +145,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
           style: TextStyle(
             fontSize: 13,
             fontFamily: 'Courier',
-            color: context.faColors.ink.sourceCode,
+            color: context.faColors.ink.code,
           ),
         ),
         const Spacer(),

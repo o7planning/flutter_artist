@@ -50,7 +50,7 @@ class JsonView extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontFamily: 'Courier',
-                color: context.faColors.ink.sourceCode,
+                color: context.faColors.ink.code,
                 height: 1.5,
               ),
             ),

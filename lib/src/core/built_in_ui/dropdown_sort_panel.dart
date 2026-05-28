@@ -25,7 +25,7 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM>
 
   @override
   Widget buildContent(BuildContext context) {
-    final tokens = context.faTokens;
+    final tokens = context.faTheme.tokens;
 
     final selected = sortModel.findFirstCriterionHasDirection() ??
         (sortModel.criteria.isNotEmpty ? sortModel.criteria.first : null);
@@ -39,8 +39,8 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM>
             color: SortPanelHelper.getBackgroundColor(context),
             border: Border.fromBorderSide(SortPanelHelper.getBorder(context)),
             borderRadius:
-                BorderRadius.circular(tokens.shortcut.borderRadius / 2),
-            boxShadow: tokens.shortcut.cardShadows,
+                BorderRadius.circular(tokens.radius.sm),
+            boxShadow: context.faTheme.shadow.card,
           ),
       padding: style.padding,
       height: 36,
@@ -49,7 +49,7 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM>
           value: selected,
           isDense: true,
           dropdownColor: SortPanelHelper.getBackgroundColor(context),
-          borderRadius: BorderRadius.circular(tokens.shortcut.borderRadius),
+          borderRadius: BorderRadius.circular(tokens.radius.sm),
           icon: Icon(
             style.dropdownIcon,
             size: style.dropdownIconSize,

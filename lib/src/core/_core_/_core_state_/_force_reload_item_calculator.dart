@@ -336,7 +336,7 @@ _ForceReloadItemState _calculateBlockState({
             codeId: "A25300",
             shortDesc: "ITM 1.1.2.2.3",
           );
-          if (!__isReady(formModel!)) {
+          if (!__isReady(formModel)) {
             // provideFormContextExt && !formReady
             retForceReloadForm = true;
             // retForceReloadForm && (2)
@@ -437,7 +437,7 @@ _ForceReloadItemState _calculateBlockState({
             codeId: "A31300",
             shortDesc: "ITM 1.2.1.1.3",
           );
-          if (!__isReady(formModel!)) {
+          if (!__isReady(formModel)) {
             // provideFormContextExt && !formReady
             retForceReloadForm = true;
             // retForceReloadForm && (2-currentItemIdChanged)
@@ -520,7 +520,7 @@ _ForceReloadItemState _calculateBlockState({
             codeId: "A34300",
             shortDesc: "ITM 1.2.1.2.3",
           );
-          if (!__isReady(formModel!)) {
+          if (!__isReady(formModel)) {
             // provideFormContextExt && !formReady
             retForceReloadForm = true;
             // retForceReloadForm && (2-currentItemIdChanged)
@@ -609,7 +609,7 @@ _ForceReloadItemState _calculateBlockState({
             codeId: "A38300",
             shortDesc: "ITM 1.2.2.1.3",
           );
-          if (!__isReady(formModel!)) {
+          if (!__isReady(formModel)) {
             // provideFormContextExt && !formReady
             retForceReloadForm = true;
             // retForceReloadForm && (3-isCandidateCurrentItemInNewQueriedList)
@@ -691,7 +691,7 @@ _ForceReloadItemState _calculateBlockState({
             codeId: "A42300",
             shortDesc: "ITM 1.2.2.2.3",
           );
-          if (!__isReady(formModel!)) {
+          if (!__isReady(formModel)) {
             // provideFormContextExt && !formReady
             retForceReloadForm = true;
             // retForceReloadForm
