@@ -156,13 +156,13 @@ abstract class XData<ID, ITEM, DATA> {
     required List<ITEM> itemList2,
   }) {
     for (ITEM it1 in itemList1) {
-      if (!ItemsUtils.isListContainItem(
+      if (!FaItemsUtils.isListContainItem(
           item: it1, targetList: itemList2, getItemId: getItemId)) {
         return false;
       }
     }
     for (ITEM it2 in itemList2) {
-      if (!ItemsUtils.isListContainItem(
+      if (!FaItemsUtils.isListContainItem(
           item: it2, targetList: itemList1, getItemId: getItemId)) {
         return false;
       }
@@ -174,7 +174,7 @@ abstract class XData<ID, ITEM, DATA> {
     required ITEM? item1,
     required ITEM? item2,
   }) {
-    return ItemsUtils.isSame(
+    return FaItemsUtils.isSame(
       item1: item1,
       item2: item2,
       getItemId: getItemId,

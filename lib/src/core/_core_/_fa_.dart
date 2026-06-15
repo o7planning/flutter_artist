@@ -74,7 +74,9 @@ class _FlutterArtist extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  _FlutterArtist();
+  _FlutterArtist() {
+    _GarbageCollector.instance.start();
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -186,7 +188,6 @@ class _FlutterArtist extends _Core {
       parameters: {
         "loggedInUser": loggedInUser,
       },
-      navigate: null,
       isLibMethod: true,
     );
     await _setOrUpdateLoggedInUser(

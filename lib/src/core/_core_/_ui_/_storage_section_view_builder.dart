@@ -19,12 +19,17 @@ class StorageSectionViewBuilder extends _ContextProviderView {
 class _StorageSectionViewState
     extends _ContextProviderViewState<StorageSectionViewBuilder> {
   @override
-  String getWidgetOwnerClassName() {
-    return "StorageSectionView";
+  ContextProviderViewType get type => ContextProviderViewType.shelfFragment;
+
+  @override
+  Shelf? _getRelatedShelf() {
+    return null;
   }
 
   @override
-  ContextProviderViewType get type => ContextProviderViewType.shelfFragment;
+  String getWidgetOwnerClassName() {
+    return "StorageSectionView";
+  }
 
   @override
   bool get provideScalarContext {

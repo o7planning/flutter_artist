@@ -23,6 +23,11 @@ class BlockItemDetailViewBuilder extends _ContextProviderView {
 class _BlockItemDetailViewBuilderState
     extends _ContextProviderViewState<BlockItemDetailViewBuilder> {
   @override
+  Shelf? _getRelatedShelf() {
+    return widget.block.shelf;
+  }
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }

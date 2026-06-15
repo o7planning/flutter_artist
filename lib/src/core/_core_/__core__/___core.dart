@@ -115,7 +115,7 @@ abstract class _Core {
     required bool showSnackBar,
     required TipDocument? tipDocument,
   }) {
-    AppError appError = ErrorUtils.toAppError(error);
+    AppError appError = FaErrorUtils.toAppError(error);
     StackTrace? st = appError is ApiError ? null : stackTrace;
     //
     final String msg;

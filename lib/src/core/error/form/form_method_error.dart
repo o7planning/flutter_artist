@@ -13,5 +13,5 @@ class FormMethodError {
     required this.formErrorMethod,
     required Object error,
     required this.stackTrace,
-  }) : error = ErrorUtils.toAppError(error);
+  }) : error = FaErrorUtils.toAppError(error);
 }

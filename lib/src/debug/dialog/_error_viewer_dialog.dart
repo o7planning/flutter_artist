@@ -16,17 +16,11 @@ class ErrorViewerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 620,
-      preferredHeight: 360,
-    );
-
     FaDialog alert = FaDialog(
       titleText: title,
       contentPadding: EdgeInsets.all(8),
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 620,
+      preferredContentHeight: 360,
       content: ErrorInfoView(errorInfo: errorInfo),
     );
     return alert;

@@ -9,14 +9,14 @@ import '_projections_view.dart';
 import '_route_stack_view.dart';
 import '_shelves_view.dart';
 
-class StorageView extends StatefulWidget {
-  const StorageView({super.key});
+class DebugAppView extends StatefulWidget {
+  const DebugAppView({super.key});
 
   @override
-  State<StorageView> createState() => _StorageViewState();
+  State<DebugAppView> createState() => _DebugAppViewState();
 }
 
-class _StorageViewState extends State<StorageView> {
+class _DebugAppViewState extends State<DebugAppView> {
   static const double iconSize = 16;
 
   late TabbedViewController _controller;

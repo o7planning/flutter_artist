@@ -23,6 +23,11 @@ class _BlockPaginationState extends _ContextProviderViewState<BlockPagination> {
   ContextProviderViewType get type => ContextProviderViewType.pagination;
 
   @override
+  Shelf? _getRelatedShelf() {
+    return widget.block.shelf;
+  }
+
+  @override
   bool get provideScalarContext {
     return false;
   }

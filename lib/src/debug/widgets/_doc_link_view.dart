@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_artist_doc/flutter_artist_doc.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../_wcfg.dart';
@@ -9,20 +10,20 @@ import '../../core/widgets/_simple_copy_button.dart';
 import '../../core/widgets/_simple_open_url_button.dart';
 
 class DocLinkView extends StatelessWidget {
-  final FaDocument faDocument;
+  final FaDoc faDoc;
   final EdgeInsets padding;
   final EdgeInsets margin;
 
   const DocLinkView({
     super.key,
-    required this.faDocument,
+    required this.faDoc,
     required this.padding,
     required this.margin,
   });
 
   @override
   Widget build(BuildContext context) {
-    final String draftUrl = DevUtils.getDraftUrl(faDocument);
+    final String draftUrl = faDoc.draftUrl ;
 
     return Container(
       margin: margin,
@@ -35,19 +36,20 @@ class DocLinkView extends StatelessWidget {
       child: Row(
         children: [
           FlagCdnView.flagHeight(
-            langCode: faDocument.langCode,
+            langCode: faDoc.langCode,
             height: 14,
           ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              faDocument.title,
+              faDoc.title,
               style: TextStyle(
                 fontSize: 13,
-                color: faDocument.published && demoRelease
+                color: faDoc.published
+                    && demoRelease
                     ? context.faColors.action.ink.primary
                     : context.faColors.action.ink.tertiaryQuiet,
-                decoration: faDocument.published
+                decoration: faDoc.published
                     ? TextDecoration.underline
                     : TextDecoration.none,
               ),
@@ -65,15 +67,15 @@ class DocLinkView extends StatelessWidget {
                 constraints: const BoxConstraints(),
                 padding: const EdgeInsets.symmetric(horizontal: 4),
               ),
-              if (faDocument.published && demoRelease)
+              if (faDoc.published && demoRelease)
                 SimpleOpenUrlButton(
                   iconSize: 16,
-                  url: faDocument.url,
+                  url: faDoc.url,
                 ),
               SimpleCopyButton(
                 iconSize: 16,
-                getText: () => faDocument.published && demoRelease
-                    ? faDocument.url
+                getText: () => faDoc.published && demoRelease
+                    ? faDoc.url
                     : draftUrl,
               ),
             ],

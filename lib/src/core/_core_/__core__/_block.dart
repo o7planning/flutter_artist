@@ -674,19 +674,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _executeNavigation({Function()? navigate}) {
-    try {
-      if (navigate != null) {
-        navigate();
-      }
-    } catch (e, stackTrace) {
-      print(stackTrace);
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   @_TaskUnitMethodAnnotation()
   @_BlockClearanceAnnotation()
   Future<void> _unitClearance({
@@ -1410,7 +1397,6 @@ abstract class Block<
         xBlock: thisXBlock,
         initDirty: false,
         formInput: null,
-        navigate: null,
       );
       executionTrace._addTraceStep(
         codeId: "#03740",
@@ -1651,7 +1637,7 @@ abstract class Block<
         if (candidateCurrItem2 == null) {
           isInNewQueryList2 = false;
         } else {
-          isInNewQueryList2 = ItemsUtils.isListContainItem(
+          isInNewQueryList2 = FaItemsUtils.isListContainItem(
             targetList: newQueriedList,
             item: candidateCurrItem2,
             getItemId: _getItemIdInternal,
@@ -1757,7 +1743,7 @@ abstract class Block<
     }
     //
     final bool isCandidateCurrentItemInNewQueriedList =
-        ItemsUtils.isListContainItem(
+        FaItemsUtils.isListContainItem(
       targetList: newQueriedList,
       item: candidateCurrItem,
       getItemId: _getItemIdInternal,
@@ -1895,7 +1881,7 @@ abstract class Block<
             "The candidate ${debugObjHtml(candidateCurrItem)} will not need to be reloaded.",
       );
       // Test Cases: [13a], [42a]. (?????)
-      final ITEM? candidateCurrItemInNewQueriedList = ItemsUtils.findItemInList(
+      final ITEM? candidateCurrItemInNewQueriedList = FaItemsUtils.findItemInList(
         item: candidateCurrItem,
         targetList: newQueriedList,
         getItemId: _getItemIdInternal,
@@ -3046,7 +3032,6 @@ abstract class Block<
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required bool initDirty,
     required FORM_INPUT? formInput,
-    required Function()? navigate,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -3056,7 +3041,6 @@ abstract class Block<
       parameters: {
         "formInput": formInput,
         "initDirty": initDirty,
-        "navigate": navigate,
       },
       traceStepType: TraceStepType.debug,
     );
@@ -3139,17 +3123,6 @@ abstract class Block<
       __refreshPreparingFormCreationState(
         isPreparingFormCreation: false,
       );
-    }
-    if (!success) {
-      return false;
-    }
-    //
-    if (success && navigate != null) {
-      executionTrace._addTraceStep(
-        codeId: "#04140",
-        shortDesc: "Execute navigation.",
-      );
-      _executeNavigation(navigate: navigate);
     }
     return success;
   }
@@ -3937,7 +3910,6 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "clearCurrentItem",
       parameters: null,
-      navigate: null,
       isLibMethod: true,
     );
     if (currentItem == null) {
@@ -4157,7 +4129,6 @@ abstract class Block<
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
     required bool forceLoadItem,
     required bool forceLoadForm,
-    required Function()? navigate,
   }) async {
     final currentItemSettingType = forceLoadForm
         ? CurrentItemSettingType.setAnItemAsCurrentThenLoadForm
@@ -4236,11 +4207,6 @@ abstract class Block<
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
     var result = taskUnit.taskResult as BlockCurrentItemSettingResult<ITEM>;
-    if (result.successForAll) {
-      if (navigate != null) {
-        navigate();
-      }
-    }
     return result;
   }
 
@@ -4253,7 +4219,6 @@ abstract class Block<
   Future<BlockCurrentItemSettingResult<ITEM>> refreshItemAndSetAsCurrent({
     required ITEM item,
     bool forceLoadForm = false,
-    Function()? navigate,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
@@ -4261,9 +4226,7 @@ abstract class Block<
       parameters: {
         "item": item,
         "forceLoadForm": forceLoadForm,
-        "navigate": navigate,
       },
-      navigate: null,
       isLibMethod: true,
     );
     return await __refreshToShowOrEditItemAsCurrent(
@@ -4273,7 +4236,6 @@ abstract class Block<
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
       forceLoadItem: true,
       forceLoadForm: forceLoadForm,
-      navigate: navigate,
     );
   }
 
@@ -4286,14 +4248,11 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockClearanceAnnotation()
-  Future<BlockClearanceResult> clear({Function()? navigate}) async {
+  Future<BlockClearanceResult> clear() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "clear",
-      parameters: {
-        "navigate": navigate,
-      },
-      navigate: null,
+      parameters: {},
       isLibMethod: true,
     );
     executionTrace._addTraceStep(
@@ -4338,8 +4297,6 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
-    _executeNavigation(navigate: navigate);
-    //
     return taskUnit.taskResult;
   }
 
@@ -4368,7 +4325,6 @@ abstract class Block<
       parameters: {
         "afterQueryAction": afterQueryAction,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -4380,7 +4336,6 @@ abstract class Block<
       afterQueryAction: afterQueryAction,
       suggestedSelection: null,
       specifiedPageable: null,
-      navigate: null,
     );
   }
 
@@ -4409,7 +4364,6 @@ abstract class Block<
       parameters: {
         "afterQueryAction": afterQueryAction,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -4421,7 +4375,6 @@ abstract class Block<
       afterQueryAction: afterQueryAction,
       suggestedSelection: null,
       specifiedPageable: null,
-      navigate: null,
     );
   }
 
@@ -4450,7 +4403,6 @@ abstract class Block<
       parameters: {
         "afterQueryAction": afterQueryAction,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -4462,7 +4414,6 @@ abstract class Block<
       filterInput: null,
       suggestedSelection: null,
       specifiedPageable: null,
-      navigate: null,
     );
   }
 
@@ -4473,7 +4424,6 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   Future<bool> queryEmptyAndPrepareToCreate({
     FILTER_INPUT? filterInput,
-    Function()? navigate,
   }) async {
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
       return false;
@@ -4484,9 +4434,7 @@ abstract class Block<
       methodName: "queryEmptyAndPrepareToCreate",
       parameters: {
         "filterInput": filterInput,
-        "navigate": navigate,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -4494,7 +4442,6 @@ abstract class Block<
       executionTrace: executionTrace,
       filterInput: filterInput,
       prepareFormToCreateItem: true,
-      navigate: navigate,
     );
   }
 
@@ -4506,7 +4453,6 @@ abstract class Block<
   Future<bool> queryEmpty({
     FILTER_INPUT? filterInput,
     bool prepareFormToCreateItem = false,
-    Function()? navigate,
   }) async {
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
       return false;
@@ -4518,9 +4464,7 @@ abstract class Block<
       parameters: {
         "filterInput": filterInput,
         "prepareFormToCreateItem": prepareFormToCreateItem,
-        "navigate": navigate,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -4528,7 +4472,6 @@ abstract class Block<
       executionTrace: executionTrace,
       filterInput: filterInput,
       prepareFormToCreateItem: prepareFormToCreateItem,
-      navigate: navigate,
     );
   }
 
@@ -4550,7 +4493,6 @@ abstract class Block<
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     Pageable? pageable,
-    Function()? navigate,
   }) async {
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -4567,9 +4509,7 @@ abstract class Block<
         "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
-        "navigate": navigate,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -4581,7 +4521,6 @@ abstract class Block<
       filterInput: filterInput,
       suggestedSelection: suggestedSelection,
       specifiedPageable: pageable,
-      navigate: navigate,
     );
   }
 
@@ -4596,13 +4535,11 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQueryAndPrepareToEditAnnotation()
-  // TODO: @Rename --> queryThenPrepareToEdit (queryThenSetAnItemAsCurrentThenEdit).
   Future<BlockQueryResult> queryAndPrepareToEdit({
     FILTER_INPUT? filterInput,
     ListUpdateStrategy suggestedListUpdateStrategy = ListUpdateStrategy.replace,
     SuggestedSelection<ID>? suggestedSelection,
     Pageable? pageable,
-    Function()? navigate,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
@@ -4612,9 +4549,7 @@ abstract class Block<
         "suggestedListUpdateStrategy": suggestedListUpdateStrategy,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
-        "navigate": navigate,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -4633,9 +4568,6 @@ abstract class Block<
     //
     XBlock xBlock = xShelf.findXBlockByName(name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
-    if (queryResult.successForAll) {
-      _executeNavigation(navigate: navigate);
-    }
     return queryResult;
   }
 
@@ -4649,19 +4581,15 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQueryAndPrepareToCreateAnnotation()
-  // TODO: @Rename --> queryThenPrepareToCreate
   Future<BlockQueryResult> queryAndPrepareToCreate({
     FILTER_INPUT? filterInput,
-    Function()? navigate,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryAndPrepareToCreate",
       parameters: {
         "filterInput": filterInput,
-        "navigate": navigate,
       },
-      navigate: null,
       isLibMethod: true,
     );
     executionTrace._addTraceStep(
@@ -4690,9 +4618,6 @@ abstract class Block<
     //
     XBlock xBlock = xShelf.findXBlockByName(name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
-    if (queryResult.successForAll) {
-      _executeNavigation(navigate: navigate);
-    }
     return queryResult;
   }
 
@@ -4995,13 +4920,11 @@ abstract class Block<
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
     required BlockBackendAction<ID, dynamic> action,
-    required Function(BuildContext context)? navigate,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "executeBackendAction",
       parameters: null,
-      navigate: null,
       isLibMethod: true,
     );
     executionTrace._addTraceStep(
@@ -5104,7 +5027,6 @@ abstract class Block<
       parameters: {
         "action": action,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -5206,7 +5128,6 @@ abstract class Block<
       parameters: {
         "action": action,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -5307,7 +5228,6 @@ abstract class Block<
       parameters: {
         "action": action,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -5399,16 +5319,13 @@ abstract class Block<
   @_BlockSelectFirstItemAsCurrentAnnotation()
   Future<BlockCurrentItemSettingResult<ITEM>> refreshFirstItemAndSetAsCurrent({
     bool forceLoadForm = false,
-    Function()? navigate,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "refreshFirstItemAndSetAsCurrent",
       parameters: {
         "forceLoadForm": forceLoadForm,
-        "navigate": navigate,
       },
-      navigate: null,
       isLibMethod: true,
     );
     return __refreshToShowOrEditItemAsCurrent(
@@ -5418,7 +5335,6 @@ abstract class Block<
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceLoadItem: true,
       forceLoadForm: forceLoadForm,
-      navigate: navigate,
     );
   }
 
@@ -5430,16 +5346,13 @@ abstract class Block<
   @_BlockSelectNextItemAsCurrentAnnotation()
   Future<BlockCurrentItemSettingResult<ITEM>> refreshNextItemAndSetAsCurrent({
     bool forceLoadForm = false,
-    Function()? navigate,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "refreshNextItemAndSetAsCurrent",
       parameters: {
         "forceLoadForm": forceLoadForm,
-        "navigate": navigate,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -5452,7 +5365,6 @@ abstract class Block<
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceLoadItem: true,
       forceLoadForm: forceLoadForm,
-      navigate: navigate,
     );
   }
 
@@ -5465,16 +5377,13 @@ abstract class Block<
   Future<BlockCurrentItemSettingResult<ITEM>>
       refreshPreviousItemAndSetAsCurrent({
     bool forceLoadForm = false,
-    Function()? navigate,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "refreshPreviousItemAndSetAsCurrent",
       parameters: {
         "forceLoadForm": forceLoadForm,
-        "navigate": navigate,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -5487,7 +5396,6 @@ abstract class Block<
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceLoadItem: true,
       forceLoadForm: forceLoadForm,
-      navigate: navigate,
     );
   }
 
@@ -5502,7 +5410,6 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "_prepareFormToEditItem",
       parameters: {},
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -5520,7 +5427,6 @@ abstract class Block<
   @_BlockPrepareFormToCreateItemAnnotation()
   Future<PrepareItemCreationResult> prepareFormToCreateItem({
     FORM_INPUT? formInput,
-    required Function()? navigate,
     bool initDirty = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5530,7 +5436,6 @@ abstract class Block<
         "formInput": formInput,
         "initDirty": initDirty,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -5588,7 +5493,6 @@ abstract class Block<
       xBlock: thisXBlock,
       initDirty: initDirty,
       formInput: formInput,
-      navigate: navigate,
     );
     //
     xShelf._addTaskUnit(taskUnit: taskUnit);
@@ -5615,7 +5519,6 @@ abstract class Block<
         "currentItemInclusion": currentItemInclusion,
         "stopIfError": stopIfError,
       },
-      navigate: null,
       isLibMethod: true,
     );
     List<ITEM> selItems = __blockData.getSelectedItems(
@@ -5651,7 +5554,6 @@ abstract class Block<
         "currentItemInclusion": currentItemInclusion,
         "stopIfError": stopIfError,
       },
-      navigate: null,
       isLibMethod: true,
     );
     List<ITEM> chkItems = __blockData.getCheckedItems(
@@ -5686,7 +5588,6 @@ abstract class Block<
         "items": items,
         "stopIfError": stopIfError,
       },
-      navigate: null,
       isLibMethod: true,
     );
     executionTrace._addTraceStep(
@@ -5712,7 +5613,6 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "deleteCurrentItem",
       parameters: null,
-      navigate: null,
       isLibMethod: true,
     );
     ITEM? currItem = currentItem;
@@ -5743,7 +5643,6 @@ abstract class Block<
         "item": item,
         "errorIfItemNotInTheBlock": errorIfItemNotInTheBlock,
       },
-      navigate: null,
       isLibMethod: true,
     );
     return __deleteItem(
@@ -5773,7 +5672,6 @@ abstract class Block<
       parameters: {
         "forceLoadForm": forceLoadForm,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -5784,7 +5682,6 @@ abstract class Block<
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceLoadItem: true,
       forceLoadForm: forceLoadForm,
-      navigate: null,
     );
   }
 
@@ -5797,40 +5694,89 @@ abstract class Block<
     required NavigationIntent intent,
   }) {
     try {
+      final executionTrace = FlutterArtist.codeFlowLogger._addNavigationIntent(
+        ownerClassInstance: this,
+        intent: intent,
+      );
       final bool isActionSuccess = result.successForFirst;
 
-      // PrepareItemCreationResult
-      // FormSaveResult
-      // BlockItemDeletionResult
-      // if (result is TaskResult) {
-      //   isActionSuccess = result.successForFirst;
-      // } else {
-      //   throw UnimplementedError("TODO ResultType: $result");
-      // }
+      executionTrace._addTraceStep(
+        codeId: "#81000",
+        shortDesc: "Calling ${debugObjHtml(this)}._processNavigationIntent().",
+        parameters: {
+          "intent": intent,
+        },
+      );
+      final List<RouteKey> stack = context.faRouter.stack;
+
+      executionTrace._addTraceStep(
+        codeId: "#81020",
+        shortDesc: "Route Stack:",
+        note: "Open Extra-Info Dialog for details",
+        extraInfos: stack.map((rk) => rk.toString()).toList(),
+      );
+
       if (!isActionSuccess && !intent.executeOnFailure) {
         return;
       }
       final router = context.faRouter;
       // to()
       if (intent is _NavigationToIntent) {
+        executionTrace._addTraceStep(
+          codeId: "#81040",
+          shortDesc: "Calling router.to().",
+          parameters: {
+            "intent": intent,
+          },
+        );
         router.to(intent.path, builder: intent.builder, extra: intent.extra);
       }
       // off()
       else if (intent is _NavigationOffIntent) {
+        executionTrace._addTraceStep(
+          codeId: "#81080",
+          shortDesc: "Calling router.off().",
+          parameters: {
+            "intent": intent,
+          },
+        );
         router.off(intent.path, builder: intent.builder, extra: intent.extra);
       }
       // offAll()
       else if (intent is _NavigationOffAllIntent) {
+        executionTrace._addTraceStep(
+          codeId: "#81120",
+          shortDesc: "Calling router.offAll().",
+          parameters: {
+            "intent": intent,
+          },
+        );
         router.offAll(intent.path,
             builder: intent.builder, extra: intent.extra);
       }
       // pop()
       else if (intent is _NavigationPopIntent) {
+        executionTrace._addTraceStep(
+          codeId: "#81160",
+          shortDesc: "Calling router.pop().",
+          parameters: {
+            "intent": intent,
+          },
+        );
+        print("ROUTE STACK Before: ${router.stack}");
         router.pop();
+        print("ROUTE STACK After: ${router.stack}");
       }
       // dialog()
-      else if (intent is _NavigationDialogIntent) {
-        router.dialog(
+      else if (intent is _NavigationShowDialogIntent) {
+        executionTrace._addTraceStep(
+          codeId: "#81200",
+          shortDesc: "Calling router.showDialog().",
+          parameters: {
+            "intent": intent,
+          },
+        );
+        router.showDialog(
           intent.path,
           builder: intent.builder,
           guards: intent.guards,
@@ -5840,18 +5786,46 @@ abstract class Block<
       }
       // closeAllDialogs()
       else if (intent is _NavigationCloseAllDialogsIntent) {
+        executionTrace._addTraceStep(
+          codeId: "#81240",
+          shortDesc: "Calling router.closeAllDialogs().",
+          parameters: {
+            "intent": intent,
+          },
+        );
         router.closeAllDialogs();
       }
       // endDrawer()
-      else if (intent is _NavigationEndDrawerIntent) {
+      else if (intent is _NavigationOpenEndDrawerIntent) {
+        executionTrace._addTraceStep(
+          codeId: "#81280",
+          shortDesc: "Calling Scaffold.of(context).openEndDrawer().",
+          parameters: {
+            "intent": intent,
+          },
+        );
         Scaffold.of(context).openEndDrawer();
       }
       // drawer()
-      else if (intent is _NavigationDrawerIntent) {
+      else if (intent is _NavigationOpenDrawerIntent) {
+        executionTrace._addTraceStep(
+          codeId: "#81320",
+          shortDesc: "Calling Scaffold.of(context).openDrawer().",
+          parameters: {
+            "intent": intent,
+          },
+        );
         Scaffold.of(context).openDrawer();
       }
       // Custom Intent.
-      else if (intent is _CustomIntent) {
+      else if (intent is _NavigationCustomIntent) {
+        executionTrace._addTraceStep(
+          codeId: "#81360",
+          shortDesc: "Calling intent.onExecute().",
+          parameters: {
+            "intent": intent,
+          },
+        );
         intent.onExecute(context, result);
       }
       // else.
@@ -5898,7 +5872,6 @@ abstract class Block<
     required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
     required Pageable? specifiedPageable,
-    Function()? navigate,
   }) async {
     Pageable? usedPageable;
     switch (qryMethod) {
@@ -5941,9 +5914,6 @@ abstract class Block<
     //
     XBlock xBlock = xShelf.findXBlockByName(name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
-    if (queryResult.successForAll) {
-      _executeNavigation(navigate: navigate);
-    }
     return queryResult;
   }
 
@@ -5954,7 +5924,6 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required FILTER_INPUT? filterInput,
     bool prepareFormToCreateItem = false,
-    required Function()? navigate,
   }) async {
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
       return false;
@@ -5987,9 +5956,6 @@ abstract class Block<
     //
     XBlock xBlock = xShelf.findXBlockByName(name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
-    if (queryResult.successForAll) {
-      _executeNavigation(navigate: navigate);
-    }
     return queryResult.successForAll;
   }
 
@@ -6288,7 +6254,7 @@ abstract class Block<
     required List<ITEM> items,
     required bool errorIfItemNotInTheBlock,
   }) {
-    List<ITEM> rmvItems = ItemsUtils.removeDuplicatedItems(
+    List<ITEM> rmvItems = FaItemsUtils.removeDuplicatedItems(
       items: items,
       getItemId: _getItemIdInternal,
     );
@@ -7310,11 +7276,11 @@ abstract class Block<
   }
 
   List<ID> get selectedItemIds {
-    return selectedItems.map((item)=> item.id).toList();
+    return selectedItems.map((item) => item.id).toList();
   }
 
   List<ID> get checkedItemIds {
-    return checkedItems.map((item)=> item.id).toList();
+    return checkedItems.map((item) => item.id).toList();
   }
 
   List<int> get selectedItemIndexes {
@@ -7362,7 +7328,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool isSelectedItem(ITEM item) {
-    return ItemsUtils.isListContainItem(
+    return FaItemsUtils.isListContainItem(
       targetList: __blockData._selectedItems,
       item: item,
       getItemId: _getItemIdInternal,
@@ -7418,13 +7384,13 @@ abstract class Block<
 
   void __setSelectedItem(ITEM item, {required bool selected}) {
     if (selected) {
-      ItemsUtils.insertOrReplaceItemInList(
+      FaItemsUtils.insertOrReplaceItemInList(
         item: item,
         targetList: __blockData._selectedItems,
         getItemId: _getItemIdInternal,
       );
     } else {
-      ItemsUtils.removeItemFromList(
+      FaItemsUtils.removeItemFromList(
         removeItem: item,
         targetList: __blockData._selectedItems,
         getItemId: _getItemIdInternal,
@@ -7460,7 +7426,7 @@ abstract class Block<
   // ***************************************************************************
 
   void __setSelectedItems({required List<ITEM> items}) {
-    ItemsUtils.insertOrReplaceItemsInList(
+    FaItemsUtils.insertOrReplaceItemsInList(
       items: items,
       targetList: __blockData._selectedItems,
       getItemId: _getItemIdInternal,
@@ -7545,7 +7511,7 @@ abstract class Block<
   ITEM? findNextSiblingItem({
     required ITEM item,
   }) {
-    return ItemsUtils.findNextSiblingItemInList(
+    return FaItemsUtils.findNextSiblingItemInList(
       item: item,
       targetList: __blockData._items,
       getItemId: _getItemIdInternal,
@@ -7558,7 +7524,7 @@ abstract class Block<
   ITEM? findPreviousSiblingItem({
     required ITEM item,
   }) {
-    return ItemsUtils.findPreviousSiblingItemInList(
+    return FaItemsUtils.findPreviousSiblingItemInList(
       item: item,
       targetList: __blockData._items,
       getItemId: _getItemIdInternal,
@@ -7571,7 +7537,7 @@ abstract class Block<
   ITEM? findSiblingItem({
     required ITEM item,
   }) {
-    return ItemsUtils.findSiblingItemInList(
+    return FaItemsUtils.findSiblingItemInList(
       item: item,
       targetList: __blockData._items,
       getItemId: _getItemIdInternal,
@@ -7592,7 +7558,7 @@ abstract class Block<
   // ***************************************************************************
 
   ITEM? findItemById(ID itemId) {
-    return ItemsUtils.findItemInListById(
+    return FaItemsUtils.findItemInListById(
       id: itemId,
       targetList: __blockData._items,
       getItemId: _getItemIdInternal,
@@ -7631,7 +7597,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool containsItem(ITEM item) {
-    return ItemsUtils.isListContainItem(
+    return FaItemsUtils.isListContainItem(
       targetList: __blockData._items,
       item: item,
       getItemId: _getItemIdInternal,
@@ -7639,7 +7605,7 @@ abstract class Block<
   }
 
   bool isCheckedItem(ITEM item) {
-    return ItemsUtils.isListContainItem(
+    return FaItemsUtils.isListContainItem(
       targetList: __blockData._checkedItems,
       item: item,
       getItemId: _getItemIdInternal,
@@ -7662,13 +7628,13 @@ abstract class Block<
 
   void __setCheckedItem(ITEM item, {required bool checked}) {
     if (checked) {
-      ItemsUtils.insertOrReplaceItemInList(
+      FaItemsUtils.insertOrReplaceItemInList(
         item: item,
         targetList: __blockData._checkedItems,
         getItemId: _getItemIdInternal,
       );
     } else {
-      ItemsUtils.removeItemFromList(
+      FaItemsUtils.removeItemFromList(
         removeItem: item,
         targetList: __blockData._checkedItems,
         getItemId: _getItemIdInternal,
@@ -7695,7 +7661,7 @@ abstract class Block<
   // ***************************************************************************
 
   void __setCheckedItems(List<ITEM> items) {
-    ItemsUtils.insertOrReplaceItemsInList(
+    FaItemsUtils.insertOrReplaceItemsInList(
       items: items,
       targetList: __blockData._checkedItems,
       getItemId: _getItemIdInternal,
@@ -7800,7 +7766,7 @@ abstract class Block<
     if (!__checkBeforeChangeTheItemPositionManually()) {
       return false;
     }
-    bool success = ItemsUtils.swapPositionsByIds(
+    bool success = FaItemsUtils.swapPositionsByIds(
       itemId1: _getItemIdInternal(item1),
       itemId2: _getItemIdInternal(item2),
       targetList: __blockData._items,
@@ -7822,7 +7788,7 @@ abstract class Block<
     if (!__checkBeforeChangeTheItemPositionManually()) {
       return false;
     }
-    bool success = ItemsUtils.moveItemToNewIndexPosition(
+    bool success = FaItemsUtils.moveItemToNewIndexPosition(
       item: item,
       newIndexPosition: newIndexPosition,
       targetList: __blockData._items,
@@ -7979,7 +7945,7 @@ abstract class Block<
     if (!__checkBeforeChangeTheItemPositionManually()) {
       return false;
     }
-    bool success = ItemsUtils.moveItemByIndexPosition(
+    bool success = FaItemsUtils.moveItemByIndexPosition(
       oldIndexPosition: oldIndexPosition,
       newIndexPosition: newIndexPosition,
       targetList: __blockData._items,

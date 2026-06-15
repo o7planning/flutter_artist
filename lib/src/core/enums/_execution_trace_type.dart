@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 enum ExecutionTraceType {
   startup,
@@ -6,6 +7,7 @@ enum ExecutionTraceType {
   taskUnitCall,
   userMethodCall,
   libMethodCall,
+  navigationIntent,
   deferredEvent;
 
   String get desc {
@@ -26,6 +28,8 @@ enum ExecutionTraceType {
         return Icons.call;
       case ExecutionTraceType.deferredEvent:
         return Icons.star;
+      case ExecutionTraceType.navigationIntent:
+        return Icons.navigation;
     }
   }
 
@@ -44,6 +48,8 @@ enum ExecutionTraceType {
         return colorScheme.tertiary;
       case ExecutionTraceType.naturalLoad:
         return colorScheme.secondary;
+      case ExecutionTraceType.navigationIntent:
+        return context.faColors.action.ink.success;
       case ExecutionTraceType.deferredEvent:
         return Colors.orangeAccent;
       case ExecutionTraceType.startup:
@@ -69,6 +75,8 @@ enum ExecutionTraceType {
         return "Lib's Method";
       case ExecutionTraceType.deferredEvent:
         return "Init Task Unit for Deferred Events";
+      case ExecutionTraceType.navigationIntent:
+        return "Navigation Intent";
     }
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../../core/icon/icon_constants.dart';
 import '../../constants/_debug_constants.dart';
-import '../../storage/_block_or_scalar.dart';
+import '../../app/_block_or_scalar.dart';
 
 class BlockOrScalarInfoView extends StatelessWidget {
   final BlockOrScalar blockOrScalar;

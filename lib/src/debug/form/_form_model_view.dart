@@ -14,7 +14,7 @@ import '../../core/widgets/_custom_app_container.dart';
 import '../../core/widgets/_simple_copy_button.dart';
 import '../form_props/_form_props_structure_view.dart';
 import '../shelf/widget/_shelf_block_scalar_type_widget.dart';
-import '../storage/_block_or_scalar.dart';
+import '../app/_block_or_scalar.dart';
 import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';
 import '../widgets/_json_view.dart';

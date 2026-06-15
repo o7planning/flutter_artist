@@ -23,12 +23,17 @@ class ScalarValueViewBuilder extends _ContextProviderView {
 class _ScalarValueViewBuilderState
     extends _ContextProviderViewState<ScalarValueViewBuilder> {
   @override
-  String getWidgetOwnerClassName() {
-    return getClassName(widget.scalar);
+  ContextProviderViewType get type => ContextProviderViewType.scalarValueView;
+
+  @override
+  Shelf? _getRelatedShelf() {
+    return widget.scalar.shelf;
   }
 
   @override
-  ContextProviderViewType get type => ContextProviderViewType.scalarValueView;
+  String getWidgetOwnerClassName() {
+    return getClassName(widget.scalar);
+  }
 
   @override
   bool get provideScalarContext {

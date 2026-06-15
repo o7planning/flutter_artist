@@ -48,8 +48,7 @@ class PopupSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                 color: SortPanelHelper.getBackgroundColor(context),
                 border:
                     Border.fromBorderSide(SortPanelHelper.getBorder(context)),
-                borderRadius:
-                    BorderRadius.circular(tokens.radius.sm),
+                borderRadius: BorderRadius.circular(tokens.radius.sm),
                 boxShadow: context.faTheme.shadow.popup,
               ),
           child: Row(

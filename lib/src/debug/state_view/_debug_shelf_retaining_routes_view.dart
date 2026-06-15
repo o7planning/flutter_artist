@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_router/flutter_artist_router.dart';
 
-class FARouteDebugger extends StatelessWidget {
+class DebugShelfRetainingRoutesView extends StatelessWidget {
   final List<FaRouteData> routes;
 
-  const FARouteDebugger({super.key, required this.routes});
+  const DebugShelfRetainingRoutesView({super.key, required this.routes});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class FARouteDebugger extends StatelessWidget {
                   color: colorScheme.tertiary, size: 20),
               const SizedBox(width: 8),
               Text(
-                "REGISTERED ROUTES (${routes.length})",
+                "SHELF RETAINING ROUTES (${routes.length})",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: colorScheme.onSurface,
@@ -38,45 +38,51 @@ class FARouteDebugger extends StatelessWidget {
             key: const PageStorageKey('fa_route_debugger_list'),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             children: routes.map((routeData) {
-              return Container(
-                margin: const EdgeInsets.only(bottom: 6),
-                decoration: BoxDecoration(
+              // FIX: Thay Container bằng Material để Ink Splash và Hover của ExpansionTile hoạt động chuẩn chỉnh
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Material(
                   color: colorScheme.surface.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: theme.dividerColor.withValues(alpha: 0.05),
-                    width: 0.5,
+                  clipBehavior: Clip
+                      .antiAlias, // Đảm bảo bo góc mượt mà, không bị tràn màu
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        8), // Đẩy bo góc vào trong shape để tránh xung đột
+                    side: BorderSide(
+                      color: theme.dividerColor.withValues(alpha: 0.05),
+                      width: 0.5,
+                    ),
                   ),
-                ),
-                child: Theme(
-                  data: theme.copyWith(dividerColor: Colors.transparent),
-                  child: ExpansionTile(
-                    key: PageStorageKey('Expansion-${routeData.key.id}'),
-                    visualDensity: VisualDensity.compact,
-                    leading: Icon(
-                      Icons.alt_route_rounded,
-                      color: colorScheme.primary,
-                      size: 20,
-                    ),
-                    title: Text(
-                      routeData.route.path,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Courier',
-                        color: colorScheme.onSurface,
+                  child: Theme(
+                    data: theme.copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      key: PageStorageKey('Expansion-${routeData.key.id}'),
+                      visualDensity: VisualDensity.compact,
+                      leading: Icon(
+                        Icons.alt_route_rounded,
+                        color: colorScheme.primary,
+                        size: 20,
                       ),
-                    ),
-                    subtitle: Text(
-                      "${routeData.route.guards.length} guards active",
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: colorScheme.onSurface.withValues(alpha: 0.6),
+                      title: Text(
+                        routeData.route.path,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Courier',
+                          color: colorScheme.onSurface,
+                        ),
                       ),
+                      subtitle: Text(
+                        "${routeData.route.guards.length} guards active",
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: colorScheme.onSurface.withValues(alpha: 0.6),
+                        ),
+                      ),
+                      children: [
+                        _buildGuardDetails(context, routeData.route.guards),
+                      ],
                     ),
-                    children: [
-                      _buildGuardDetails(context, routeData.route.guards),
-                    ],
                   ),
                 ),
               );

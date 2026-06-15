@@ -26,17 +26,11 @@ class XShelfDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 800,
-      preferredHeight: 400,
-    );
-
     FaDialog alert = FaDialog(
       titleText: "XShelf Viewer",
       contentPadding: EdgeInsets.zero,
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 800,
+      preferredContentHeight: 400,
       content: _buildMainWidget(),
     );
     return alert;

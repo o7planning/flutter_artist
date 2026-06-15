@@ -1421,7 +1421,6 @@ abstract class FilterModel<
       parameters: {
         "filterInput": filterInput,
       },
-      navigate: null,
       isLibMethod: true,
     );
     // Test Cases: [48b] - query() & queryAll().
@@ -1451,7 +1450,6 @@ abstract class FilterModel<
       parameters: {
         "filterInput": filterInput,
       },
-      navigate: null,
       isLibMethod: true,
     );
     // Test Cases: [48b] - query() & queryAll().
@@ -1505,7 +1503,7 @@ abstract class FilterModel<
   Future<void> showDebugFilterModelViewerDialog() async {
     BuildContext context = FlutterArtistCore.context;
     //
-    await DebugViewerDialog.openDebugFilterModelViewer(
+    await DebugViewerDialog.openDebugFilterModelInspector(
       context: context,
       locationInfo: "locationInfo", // TODO: Remove.
       filterModel: this,

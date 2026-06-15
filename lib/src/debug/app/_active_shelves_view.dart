@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import 'package:flutter_left_right_container/left_right_container.dart';
 
 import '../../core/_core_/core.dart';
@@ -69,52 +70,71 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
       children: activeShelves.map(
         (s) {
           final isSelected = selectedShelf?.name == s.name;
-          return Container(
-            margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-            decoration: BoxDecoration(
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+            child: Material(
               color: isSelected
                   ? colorScheme.primary.withValues(alpha: 0.1)
                   : Colors.transparent,
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(
+              clipBehavior: Clip.antiAlias,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+                side: BorderSide(
                   color: isSelected
                       ? colorScheme.primary.withValues(alpha: 0.3)
                       : Colors.transparent,
-                  width: 0.5),
-            ),
-            child: ListTile(
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 3,
-                horizontal: 4,
-              ),
-              horizontalTitleGap: 0,
-              minVerticalPadding: 0,
-              minLeadingWidth: 22,
-              minTileHeight: 0,
-              dense: true,
-              visualDensity: VisualDensity(vertical: -3, horizontal: -3),
-              leading: Icon(
-                FaIconConstants.shelfIconData,
-                size: 14,
-                color: isSelected
-                    ? colorScheme.primary
-                    : colorScheme.onSurface.withValues(alpha: 0.6),
-              ),
-              title: Text(
-                s.name,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color:
-                      isSelected ? colorScheme.primary : colorScheme.onSurface,
+                  width: 0.5,
                 ),
               ),
-              onTap: () {
-                setState(() {
-                  selectedShelf = s;
-                  _selectDefaultBlockOrScalar();
-                });
-              },
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 3,
+                  horizontal: 4,
+                ),
+                horizontalTitleGap: 0,
+                minVerticalPadding: 0,
+                minLeadingWidth: 22,
+                minTileHeight: 0,
+                dense: true,
+                visualDensity:
+                    const VisualDensity(vertical: -3, horizontal: -3),
+                leading: Icon(
+                  FaIconConstants.shelfIconData,
+                  size: 14,
+                  color: isSelected
+                      ? colorScheme.primary
+                      : colorScheme.onSurface.withValues(alpha: 0.6),
+                ),
+                trailing: Tooltip(
+                  message: s.markAsOrphaned
+                      ? "Mark As Orphaned, will be unmounted!"
+                      : "Fine, It's being managed in memory!",
+                  child: Icon(
+                    s.markAsOrphaned ? Icons.warning_amber : Icons.check,
+                    size: 14,
+                    color: s.markAsOrphaned
+                        ? context.faColors.ink.danger
+                        : context.faColors.ink.primary,
+                  ),
+                ),
+                title: Text(
+                  s.name,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected
+                        ? colorScheme.primary
+                        : colorScheme.onSurface,
+                  ),
+                ),
+                onTap: () {
+                  setState(() {
+                    selectedShelf = s;
+                    _selectDefaultBlockOrScalar();
+                  });
+                },
+              ),
             ),
           );
         },

@@ -1,5 +1,5 @@
 import '../../core/_core_/core.dart';
-import '../storage/_block_or_scalar.dart';
+import '../app/_block_or_scalar.dart';
 import 'widget/_graph_item.dart';
 
 class GraphDebugUtils {

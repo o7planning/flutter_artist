@@ -66,9 +66,8 @@ class NumberButton extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   fixedSize: fixedSize,
                   minimumSize: fixedSize,
-                  overlayColor: selected
-                      ? null
-                      : selectedBgColor.withValues(alpha: 0.1),
+                  overlayColor:
+                      selected ? null : selectedBgColor.withValues(alpha: 0.1),
                 ),
                 onPressed: () {
                   onSelect(context, number);

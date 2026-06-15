@@ -1,9 +1,26 @@
 part of '../core.dart';
 
-abstract class Activity extends _Core {
-  late final ui = _ActivityUiComponents(activity: this);
+/// An abstract base class that encapsulates non-data-table business logic processes
+/// (such as authentication tokens, password recovery pipelines, or generic system workflows).
+///
+/// ### ⚠️ Design Limitations & Architectural Context
+/// Under the current version 1.0.0 implementation, this class offers a very restrictive and
+/// basic feature set compared to the robust, data-centric layout features found inside [Shelf].
+/// It currently serves as a lightweight, stopgap solution tailored explicitly for driving simple,
+/// linear operations like system log-ins or straightforward data submissions.
+///
+/// ###  Why "ActivityV1" and Future Roadmap
+/// This class is intentionally explicitly named **[ActivityV1]** to denote that it represents the
+/// first-generation, localized iteration of the business operation subsystem. It is a transitional
+/// component and **will be completely replaced or drastically redesigned** in version **2.0.0** /// to offer a comprehensive, full-scale operational workflow engine.
+///
+/// Appending the "V1" suffix cleanly reserves the premium "Activity" namespace so that the upcoming
+/// version 2.0.0 rewrite can introduce the finalized core architecture without imposing chaotic breaking
+/// changes on the global naming convention.
+abstract class ActivityV1 extends _Core {
+  late final ui = _ActivityV1UiComponents(activity: this);
 
-  Activity();
+  ActivityV1();
 
   // ***************************************************************************
 
@@ -27,7 +44,6 @@ abstract class Activity extends _Core {
       ownerClassInstance: this,
       methodName: "executeActivity",
       parameters: null,
-      navigate: null,
       isLibMethod: true,
     );
     //

@@ -1,7 +1,9 @@
 part of '../../core.dart';
 
-class ScalarControlBar
-    extends BaseControlBar<Scalar, ScalarControlBarItemType> {
+class ScalarControlBar extends BaseControlBar<
+    Scalar, //
+    ScalarControlBarItemType,
+    ScalarControlBarItem> {
   final Scalar scalar;
   final ScalarControlBarConfig config;
 
@@ -14,13 +16,12 @@ class ScalarControlBar
     super.style,
     //
     super.leftItems = const [
-      ControlBarItem<Scalar, ScalarControlBarItemType>.standard(
-          ScalarControlBarItemType.back),
+      ScalarControlBarItem.standard(ScalarControlBarItemType.back),
     ],
     super.rightItems = const [
-      ControlBarItem.standard(ScalarControlBarItemType.query),
-      ControlBarItem.standard(ScalarControlBarItemType.divider),
-      ControlBarItem.standard(ScalarControlBarItemType.debugFilter),
+      ScalarControlBarItem.standard(ScalarControlBarItemType.query),
+      ScalarControlBarItem.standard(ScalarControlBarItemType.divider),
+      ScalarControlBarItem.standard(ScalarControlBarItemType.debugFilter),
     ],
   });
 
@@ -28,10 +29,18 @@ class ScalarControlBar
   State<StatefulWidget> createState() => _ScalarControlBarState();
 }
 
-class _ScalarControlBarState extends _BaseControlBarState<Scalar,
-    ScalarControlBarItemType, ScalarControlBar> {
+class _ScalarControlBarState extends _BaseControlBarState<
+    Scalar, //
+    ScalarControlBarItemType,
+    ScalarControlBarItem,
+    ScalarControlBar> {
   @override
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
+
+  @override
+  Shelf? _getRelatedShelf() {
+    return widget.scalar.shelf;
+  }
 
   @override
   bool get provideScalarContext => true;
@@ -49,8 +58,8 @@ class _ScalarControlBarState extends _BaseControlBarState<Scalar,
   bool get provideFormContext => false;
 
   @override
-  Widget? buildStandardButton(ControlBarItem item) {
-    Enum type = item.type ?? ScalarControlBarItemType.custom;
+  Widget? buildStandardButton(ScalarControlBarItem item) {
+    final type = item.type ?? ScalarControlBarItemType.custom;
     switch (type) {
       case ScalarControlBarItemType.back:
         if (!widget.config.allowBackButton) return null;
@@ -61,7 +70,6 @@ class _ScalarControlBarState extends _BaseControlBarState<Scalar,
               ? () => Navigator.of(context).maybePop()
               : null,
         );
-
       case ScalarControlBarItemType.query:
         if (!widget.config.allowQueryButton) return null;
         final actionable = widget.scalar.canQuery();

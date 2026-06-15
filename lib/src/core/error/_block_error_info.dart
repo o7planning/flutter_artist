@@ -14,7 +14,7 @@ class BlockErrorInfo {
     required this.blockErrorMethod,
     required Object error,
     required this.errorStackTrace,
-  }) : error = ErrorUtils.toAppError(error);
+  }) : error = FaErrorUtils.toAppError(error);
 
   String get errorMessage {
     return error.errorMessage;

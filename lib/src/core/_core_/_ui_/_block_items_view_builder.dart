@@ -27,12 +27,17 @@ class BlockItemsViewBuilder extends _ContextProviderView {
 class _BlockItemsViewBuilderState
     extends _ContextProviderViewState<BlockItemsViewBuilder> {
   @override
-  String getWidgetOwnerClassName() {
-    return getClassName(widget.block);
+  ContextProviderViewType get type => ContextProviderViewType.blockItemsView;
+
+  @override
+  Shelf? _getRelatedShelf() {
+    return widget.block.shelf;
   }
 
   @override
-  ContextProviderViewType get type => ContextProviderViewType.blockItemsView;
+  String getWidgetOwnerClassName() {
+    return getClassName(widget.block);
+  }
 
   @override
   bool get provideScalarContext {

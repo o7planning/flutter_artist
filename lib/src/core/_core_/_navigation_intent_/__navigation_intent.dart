@@ -6,9 +6,11 @@ abstract class NavigationIntent {
   /// Controls whether this intent should still execute if the prior
   /// framework action (Create/Save/Delete) reports a failure.
   final bool executeOnFailure;
+  final String name;
 
   const NavigationIntent._({
     this.executeOnFailure = false,
+    required this.name,
   });
 
   /// Standard intent to push a new path onto the router stack.
@@ -68,7 +70,7 @@ abstract class NavigationIntent {
   }
 
   /// Standard intent to overlay a declarative dialog onto the router stack.
-  factory NavigationIntent.dialog(
+  factory NavigationIntent.showDialog(
     String path, {
     required FaRouteBuilder builder,
     List<FaRouteGuard> guards = const [],
@@ -76,7 +78,7 @@ abstract class NavigationIntent {
     bool barrierDismissible = false,
     bool executeOnFailure = false,
   }) {
-    return _NavigationDialogIntent(
+    return _NavigationShowDialogIntent(
       path,
       builder: builder,
       guards: guards,
@@ -96,18 +98,18 @@ abstract class NavigationIntent {
     );
   }
 
-  factory NavigationIntent.drawer({
+  factory NavigationIntent.openDrawer({
     bool executeOnFailure = false,
   }) {
-    return _NavigationDrawerIntent(
+    return _NavigationOpenDrawerIntent(
       executeOnFailure: executeOnFailure,
     );
   }
 
-  factory NavigationIntent.endDrawer({
+  factory NavigationIntent.openEndDrawer({
     bool executeOnFailure = false,
   }) {
-    return _NavigationEndDrawerIntent(
+    return _NavigationOpenEndDrawerIntent(
       executeOnFailure: executeOnFailure,
     );
   }

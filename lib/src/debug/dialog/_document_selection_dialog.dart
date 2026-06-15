@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
-import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_artist_doc/flutter_artist_doc.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../widgets/_doc_link_view.dart';
+
+import 'package:flutter/material.dart';
 
 class DocumentSelectionDialog extends StatefulWidget {
   final List<String> documentIds;
@@ -37,28 +39,22 @@ class DocumentSelectionDialog extends StatefulWidget {
 
 class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
   String _selectedLangCode = 'en';
-  late Future<FaDocuments> _docsFuture;
+  late Future<FaDocSystem> _docSystemFuture;
 
   @override
   void initState() {
     super.initState();
-    _docsFuture = FlutterArtistDocSystem.instance.faDocuments;
+    _docSystemFuture = FlutterArtistDocSystem.instance.faDocSystem;
   }
 
   @override
   Widget build(BuildContext context) {
-    final Size preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 500,
-      preferredHeight: 300,
-    );
-
     return FaDialog(
       iconData: Icons.menu_book_rounded,
       titleText: widget.title,
       contentPadding: const EdgeInsets.all(12),
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 500,
+      preferredContentHeight: 300,
       content: Column(
         children: [
           _buildControlBar(),
@@ -125,26 +121,49 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
   }
 
   Widget _buildDocumentList(BuildContext context) {
-    return FutureBuilder<FaDocuments>(
-      future: _docsFuture,
+    return FutureBuilder<FaDocSystem>(
+      future: _docSystemFuture,
       builder: (context, snapshot) {
+        // 1. Handling Asynchronous Loading State
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator(strokeWidth: 2));
         }
 
-        List<FaDocument> filteredDocs = [];
-        if (snapshot.hasData) {
-          filteredDocs = snapshot.data!.documents
+        // 2. Handling High-Level Network/HTTP Exceptions
+        if (snapshot.hasError) {
+          return _buildErrorView(
+            context,
+            message: "Network Exception Raised",
+            details: snapshot.error.toString(),
+          );
+        }
+
+        // 3. Handling Business Domain/Parsing Logic Errors
+        if (snapshot.hasData && snapshot.data!.isError) {
+          return _buildErrorView(
+            context,
+            message: "Failed to compile Documentation Infrastructure",
+            details: snapshot.data!.errorMessage,
+          );
+        }
+
+        // 4. Filtering Valid Data Stream Matrix
+        List<FaDoc> filteredDocs = [];
+        if (snapshot.hasData && snapshot.data!.ready) {
+          filteredDocs = snapshot.data!.allDocs
               .where((doc) =>
                   doc.langCode == _selectedLangCode &&
                   widget.documentIds.contains(doc.id))
               .toList();
         }
 
+        // 5. Handling Empty Collection Fallbacks Dynamically Based on Locale
         if (filteredDocs.isEmpty) {
+          final String missingLangLabel =
+              _selectedLangCode == 'vi' ? "Vietnamese" : "English";
           return Center(
             child: Text(
-              "No English documentation available for this example.",
+              "No $missingLangLabel documentation available for this example.",
               style: TextStyle(
                 color: context.faColors.ink.tertiaryQuiet,
                 fontSize: 12,
@@ -153,18 +172,77 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
           );
         }
 
+        // 6. Rendering Document Feed View Link Cards
         return ListView.separated(
           itemCount: filteredDocs.length,
           separatorBuilder: (context, index) => const SizedBox(height: 8),
           itemBuilder: (context, index) {
             return DocLinkView(
-              faDocument: filteredDocs[index],
+              faDoc: filteredDocs[index],
               padding: const EdgeInsets.all(10),
               margin: EdgeInsets.all(0),
             );
           },
         );
       },
+    );
+  }
+
+  /// Compiles a responsive, standardized diagnostic error card layout.
+  Widget _buildErrorView(
+    BuildContext context, {
+    required String message,
+    required String? details,
+  }) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline_rounded,
+              color: context.faColors.ink.error,
+              size: 28,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: context.faColors.ink.primary,
+              ),
+            ),
+            if (details != null && details.trim().isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Container(
+                padding: const EdgeInsets.all(8),
+                constraints: BoxConstraints(
+                  maxHeight: 100,
+                ),
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  color: context.faColors.surface.emphasized,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: SingleChildScrollView(
+                  child: Text(
+                    details,
+                    style: TextStyle(
+                      fontFamily: 'Courier',
+                      fontSize: 11,
+                      color: context.faColors.ink.secondary,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }

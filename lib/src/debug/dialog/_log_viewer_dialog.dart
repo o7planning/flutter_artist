@@ -70,19 +70,12 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
   @override
   Widget build(BuildContext context) {
     final ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
-
-    Size preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 760,
-      preferredHeight: 380,
-    );
-
     return dialogs.FaDialog(
       iconData: FaIconConstants.logViewerIconData,
       titleText: widget.title,
       contentPadding: const EdgeInsets.all(8),
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 760,
+      preferredContentHeight: 380,
       content: _buildContent(),
       onHelpPressed: loggedInUser == null || !loggedInUser.isSystemUser
           ? null

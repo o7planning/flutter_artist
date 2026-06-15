@@ -32,6 +32,11 @@ class CustomControlBar extends _ContextProviderView {
 class _CustomControlBarState
     extends _ContextProviderViewState<CustomControlBar> {
   @override
+  Shelf? _getRelatedShelf() {
+    return widget.block.shelf;
+  }
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }

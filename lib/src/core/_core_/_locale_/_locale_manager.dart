@@ -51,7 +51,6 @@ class LocaleManager extends _Core {
       parameters: {
         "locale": locale,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //

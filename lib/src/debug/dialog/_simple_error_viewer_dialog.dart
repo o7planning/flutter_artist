@@ -16,22 +16,16 @@ class SimpleErrorViewerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AppError appError = ErrorUtils.toAppError(error);
-    //
-    final Size preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 440,
-      preferredHeight:
-          appError.errorDetails == null || appError.errorDetails!.isEmpty
-              ? 160
-              : 240,
-    );
+    final AppError appError = FaErrorUtils.toAppError(error);
 
     FaDialog alert = FaDialog(
       titleText: title,
       contentPadding: EdgeInsets.all(8),
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 440,
+      preferredContentHeight:
+          appError.errorDetails == null || appError.errorDetails!.isEmpty
+              ? 160
+              : 240,
       content: _buildContent(context, appError),
     );
     return alert;

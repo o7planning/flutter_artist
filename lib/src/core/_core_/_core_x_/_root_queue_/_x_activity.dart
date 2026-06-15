@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
 class XActivity extends XRootQueueItem {
-  final Activity activity;
+  final ActivityV1 activity;
 
   // String get name => activity.name;
 

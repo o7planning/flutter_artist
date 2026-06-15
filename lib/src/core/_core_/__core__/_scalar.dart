@@ -970,7 +970,6 @@ abstract class Scalar<
     required ActionConfirmationType actionConfirmationType,
     required ScalarQuickExtraDataLoadAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
-    required Function(BuildContext context)? navigate,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
@@ -980,9 +979,7 @@ abstract class Scalar<
         "actionConfirmationType": actionConfirmationType,
         "action": action,
         "afterQuickAction": afterQuickAction,
-        "navigate": navigate,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -1045,7 +1042,6 @@ abstract class Scalar<
       parameters: {
         "filterInput": filterInput,
       },
-      navigate: null,
       isLibMethod: true,
     );
     executionTrace._addTraceStep(
@@ -1082,14 +1078,11 @@ abstract class Scalar<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_ScalarClearanceAnnotation()
-  Future<ScalarClearanceResult> clear({Function()? navigate}) async {
+  Future<ScalarClearanceResult> clear() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "clear",
-      parameters: {
-        "navigate": navigate,
-      },
-      navigate: null,
+      parameters: {},
       isLibMethod: true,
     );
     //
@@ -1144,9 +1137,6 @@ abstract class Scalar<
     xShelf._addTaskUnit(taskUnit: taskUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
-    //
-    // _executeNavigation(navigate: navigate); // ????
-    //
     return taskUnit.taskResult;
   }
 

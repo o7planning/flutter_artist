@@ -111,17 +111,11 @@ class _DebugUiContextInspectorDialogState
 
   @override
   Widget build(BuildContext context) {
-    final preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 560,
-      preferredHeight: 320,
-    );
-
     FaDialog alert = FaDialog(
       iconData: FaIconConstants.uiComponentsIconData,
       titleText: "Debug UI Context Inspector",
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 560,
+      preferredContentHeight: 320,
       contentPadding: const EdgeInsets.all(5),
       content: _buildMainContent(context),
       onHelpPressed: () {

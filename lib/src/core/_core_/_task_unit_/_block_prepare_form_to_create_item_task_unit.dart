@@ -5,14 +5,12 @@ part of '../core.dart';
 class _BlockPrepareFormToCreateItemTaskUnit extends _STaskUnit {
   XBlock xBlock;
   FormInput? formInput;
-  Function()? navigate;
   final bool initDirty;
 
   _BlockPrepareFormToCreateItemTaskUnit({
     required this.xBlock,
     required this.initDirty,
     required this.formInput,
-    required this.navigate,
   }) : super(taskType: TaskType.blockPrepareToCreateItem);
 
   @override

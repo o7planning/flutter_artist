@@ -98,14 +98,14 @@ class FilterConditionGroupVal implements IConditionVal {
 
   String toCriterionBasedJson() {
     final Map<String, dynamic> map = _toCriterionBasedMapData();
-    return MapUtils.toJson(map: map);
+    return FaMapUtils.toJson(map: map);
   }
 
   String toFieldBasedJson({required bool throwIfError}) {
     final Map<String, dynamic> map = _toFieldBasedMapData(
       throwIfError: throwIfError,
     );
-    return MapUtils.toJson(map: map);
+    return FaMapUtils.toJson(map: map);
   }
 
   FilterConditionVal? findFilterCondition({

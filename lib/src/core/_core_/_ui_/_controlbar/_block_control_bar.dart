@@ -1,6 +1,7 @@
 part of '../../core.dart';
 
-class BlockControlBar extends BaseControlBar<Block, BlockControlBarItemType> {
+class BlockControlBar extends BaseControlBar<Block, BlockControlBarItemType,
+    BlockControlBarItem> {
   final Block block;
   final BlockControlBarConfig config;
 
@@ -13,25 +14,25 @@ class BlockControlBar extends BaseControlBar<Block, BlockControlBarItemType> {
     super.style,
     //
     super.leftItems = const [
-      ControlBarItem.standard(BlockControlBarItemType.back),
-      ControlBarItem.standard(BlockControlBarItemType.divider),
-      ControlBarItem.standard(BlockControlBarItemType.create),
-      ControlBarItem.standard(BlockControlBarItemType.edit),
-      ControlBarItem.standard(BlockControlBarItemType.delete),
+      BlockControlBarItem.standard(BlockControlBarItemType.back),
+      BlockControlBarItem.standard(BlockControlBarItemType.divider),
+      BlockControlBarItem.standard(BlockControlBarItemType.create),
+      BlockControlBarItem.standard(BlockControlBarItemType.edit),
+      BlockControlBarItem.standard(BlockControlBarItemType.delete),
     ],
     super.rightItems = const [
-      ControlBarItem.standard(BlockControlBarItemType.refresh),
-      ControlBarItem.standard(BlockControlBarItemType.query),
-      ControlBarItem.standard(BlockControlBarItemType.divider),
-      ControlBarItem.standard(BlockControlBarItemType.save),
-      ControlBarItem.standard(BlockControlBarItemType.reset),
-      ControlBarItem.standard(BlockControlBarItemType.divider),
-      ControlBarItem.standard(BlockControlBarItemType.debugFilter),
-      ControlBarItem.standard(BlockControlBarItemType.debugForm),
-      // ControlBarItem.custom(
+      BlockControlBarItem.standard(BlockControlBarItemType.refresh),
+      BlockControlBarItem.standard(BlockControlBarItemType.query),
+      BlockControlBarItem.standard(BlockControlBarItemType.divider),
+      BlockControlBarItem.standard(BlockControlBarItemType.save),
+      BlockControlBarItem.standard(BlockControlBarItemType.reset),
+      BlockControlBarItem.standard(BlockControlBarItemType.divider),
+      BlockControlBarItem.standard(BlockControlBarItemType.debugFilter),
+      BlockControlBarItem.standard(BlockControlBarItemType.debugForm),
+      // BlockControlBarItem.custom(
       //   tooltip: '',
       //   iconData: Icons.eighteen_mp,
-      //   onPressed: (Block owner, ControlBarItemType itemType) {
+      //   onPressed: (Block owner, BlockControlBarItemType itemType) {
       //     throw UnimplementError();
       //   },
       // ),
@@ -42,10 +43,18 @@ class BlockControlBar extends BaseControlBar<Block, BlockControlBarItemType> {
   State<StatefulWidget> createState() => _BlockControlBarState();
 }
 
-class _BlockControlBarState extends _BaseControlBarState<Block,
-    BlockControlBarItemType, BlockControlBar> {
+class _BlockControlBarState extends _BaseControlBarState<
+    Block, //
+    BlockControlBarItemType,
+    BlockControlBarItem,
+    BlockControlBar> {
   @override
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
+
+  @override
+  Shelf? _getRelatedShelf() {
+    return widget.block.shelf;
+  }
 
   @override
   bool get provideBlockContext => true;
@@ -65,8 +74,8 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
       widget.block.formModel != null && widget.config.allowSaveButton;
 
   @override
-  Widget? buildStandardButton(ControlBarItem item) {
-    Enum type = item.type ?? BlockControlBarItemType.custom;
+  Widget? buildStandardButton(BlockControlBarItem item) {
+    final type = item.type ?? BlockControlBarItemType.custom;
     switch (type) {
       case BlockControlBarItemType.back:
         if (!widget.config.allowBackButton) return null;
@@ -90,8 +99,7 @@ class _BlockControlBarState extends _BaseControlBarState<Block,
           onAction: widget.block.isPreparingFormCreation,
           onPressed: actionable.yes
               ? () async {
-                  final result = await widget.block
-                      .prepareFormToCreateItem(navigate: null);
+                  final result = await widget.block.prepareFormToCreateItem();
                   // widget.config.onNavigateCreate?.call(result);
                   final NavigationIntent? intent =
                       widget.config.createNavigationIntent;

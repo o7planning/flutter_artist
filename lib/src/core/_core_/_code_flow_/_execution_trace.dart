@@ -2,6 +2,27 @@ part of '../core.dart';
 
 int __flowLogItemSEQ = 1;
 
+class NavigationIntentExecutionTrace extends ExecutionTrace {
+  final NavigationIntent navigationIntent;
+
+  NavigationIntentExecutionTrace({
+    required super.ownerClassInstance,
+    required this.navigationIntent,
+  }) : super(
+          executionTraceType: ExecutionTraceType.navigationIntent,
+        );
+
+  @override
+  String getSubtitle() {
+    return navigationIntent.name;
+  }
+
+  @override
+  String getTitle() {
+    return "Navigation Intent";
+  }
+}
+
 class MethodCallExecutionTrace extends ExecutionTrace {
   final FuncCallInfo funcCallInfo;
   final bool isLibMethod;
