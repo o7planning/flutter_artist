@@ -7,19 +7,17 @@ class ScalarConfig {
   final InternalShelfEventScalarRecipient onInternalShelfEvents;
 
   ScalarConfig({
-    this.onHideAction = ScalarHiddenAction.none,
-    //
     this.onExternalShelfEvents = const ExternalShelfEventScalarRecipient(
       scalarLevelReactionOn: [],
     ),
     this.onInternalShelfEvents = const InternalShelfEventScalarRecipient(
       scalarLevelReactionOn: [],
     ),
-  });
+  }) : onHideAction = ScalarHiddenAction.none;
 
   ScalarConfig copy() {
     return ScalarConfig(
-      onHideAction: onHideAction,
+      // onHideAction: onHideAction,
       //
       onExternalShelfEvents: onExternalShelfEvents,
       onInternalShelfEvents: onInternalShelfEvents,

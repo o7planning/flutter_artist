@@ -41,7 +41,7 @@ import '../../debug/executor/model/_debug_x_root_queue_item.dart';
 import '../../debug/executor/model/_debug_task_unit.dart';
 import '../../debug/executor/model/_debug_x_root_queue.dart';
 import '../../debug/menu/_debug_menu_builder.dart';
-import '../../debug/storage/_block_or_scalar.dart';
+import '../../debug/app/_block_or_scalar.dart';
 import '../../debug/utils/_debug.dart';
 import '../action/_background_action.dart';
 import '../action/block_backend_action.dart';
@@ -95,7 +95,7 @@ import '../enums/_scalar_control_action_type.dart';
 import '../enums/_scalar_error_method.dart';
 import '../enums/_scalar_hidden_action.dart';
 import '../enums/_selection_type.dart';
-import '../enums/_shelf_hidden_action.dart';
+import '../enums/_shelf_release_policy.dart';
 import '../enums/_show_mode.dart';
 import '../enums/_sort_direction.dart';
 import '../enums/_sort_mode.dart';
@@ -183,7 +183,7 @@ part '__core__/___core.dart';
 
 part '__core__/_hook.dart';
 
-part '__core__/_activity.dart';
+part '__core__/_activity_v1.dart';
 
 part '__core__/_background_executor.dart';
 
@@ -487,6 +487,8 @@ part '_form_/_model_/_simple_form_prop_model.dart';
 
 part '__core__/_value_wrap.dart';
 
+part '_garbage_collector.dart';
+
 part '_globals_/_globals_manager.dart';
 
 part '_theme_/_theme_manager.dart';
@@ -495,9 +497,7 @@ part '_locale_/_locale_manager.dart';
 
 part '_locale_/_flutter_artist_locale_adapter.dart';
 
-part '_login_/_login_activity.dart';
-
-part '_login_/_simple_login_view.dart';
+part '_login_/_login_activity_v1.dart';
 
 part '../notification/simple/_simple_notification_service.dart';
 
@@ -617,15 +617,15 @@ part '_navigation_intent_/_navigation_off_all_intent.dart';
 
 part '_navigation_intent_/_navigation_pop_intent.dart';
 
-part '_navigation_intent_/_navigation_drawer_intent.dart';
+part '_navigation_intent_/_navigation_open_drawer_intent.dart';
 
-part '_navigation_intent_/_close_all_dialogs_intent.dart';
+part '_navigation_intent_/_navigation_close_all_dialogs_intent.dart';
 
-part '_navigation_intent_/_custom_intent.dart';
+part '_navigation_intent_/_navigation_custom_intent.dart';
 
-part '_navigation_intent_/_navigation_end_drawer_intent.dart';
+part '_navigation_intent_/_navigation_open_end_drawer_intent.dart';
 
-part '_navigation_intent_/_navigation_dialog_intent.dart';
+part '_navigation_intent_/_navigation_show_dialog_intent.dart';
 
 part '_navigation_intent_/__navigation_intent.dart';
 
@@ -638,6 +638,9 @@ part '_ui_/_controlbar/_block_control_helper.dart';
 part '_ui_/_controlbar/__control_bar_item.dart';
 
 part '_ui_/_controlbar/__base_control_bar_state.dart';
+
+part '_ui_/_controlbar/_filter_control_bar_config.dart';
+part '_ui_/_controlbar/_filter_control_bar.dart';
 
 part '_ui_/_controlbar/_block_control_bar.dart';
 
@@ -705,7 +708,7 @@ part '_ui_/_x_state.dart';
 
 part '_ui_com_/__ui_components.dart';
 
-part '_ui_com_/_activity_ui_components.dart';
+part '_ui_com_/_activity_v1_ui_components.dart';
 
 part '_ui_com_/_block_ui_components.dart';
 

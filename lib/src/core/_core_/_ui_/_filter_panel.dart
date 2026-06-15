@@ -22,25 +22,25 @@ abstract class FilterPanel<FILTER_MODEL extends FilterModel>
     );
   }
 
-  Widget buildFilterBar(
-    BuildContext context, {
-    Decoration? decoration,
-    EdgeInsetsGeometry? padding,
-  }) {
-    return Container(
-      padding: padding ?? EdgeInsets.all(5),
-      decoration: decoration ??
-          BoxDecoration(
-            color: Colors.black12,
-          ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          buildDebugButton(),
-        ],
-      ),
-    );
-  }
+  // Widget buildFilterBar(
+  //   BuildContext context, {
+  //   Decoration? decoration,
+  //   EdgeInsetsGeometry? padding,
+  // }) {
+  //   return Container(
+  //     padding: padding ?? EdgeInsets.all(5),
+  //     decoration: decoration ??
+  //         BoxDecoration(
+  //           color: Colors.black12,
+  //         ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.end,
+  //       children: [
+  //         buildDebugButton(),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget buildDebugButton({
     ButtonStyle? style,
@@ -68,7 +68,7 @@ abstract class FilterPanel<FILTER_MODEL extends FilterModel>
   Future<void> showDebugFilterModelViewerDialog() async {
     BuildContext context = FlutterArtistCore.context;
     //
-    await DebugViewerDialog.openDebugFilterModelViewer(
+    await DebugViewerDialog.openDebugFilterModelInspector(
       context: context,
       locationInfo: getClassName(this),
       filterModel: filterModel,

@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-class _ActivityUiComponents extends _UiComponents {
-  final Activity activity;
+class _ActivityV1UiComponents extends _UiComponents {
+  final ActivityV1 activity;
 
   final Map<_ContextProviderViewState, XState> __activityBaseViewWidgetStates =
       {};
@@ -9,7 +9,7 @@ class _ActivityUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  _ActivityUiComponents({required this.activity});
+  _ActivityV1UiComponents({required this.activity});
 
   // ***************************************************************************
   // ***************************************************************************

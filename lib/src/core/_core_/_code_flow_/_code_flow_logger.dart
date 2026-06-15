@@ -105,11 +105,22 @@ class CodeFlowLogger {
     __addExecutionTrace(item);
   }
 
+  ExecutionTrace _addNavigationIntent({
+    required Object ownerClassInstance,
+    required NavigationIntent intent,
+  }) {
+    ExecutionTrace log = NavigationIntentExecutionTrace(
+      ownerClassInstance: ownerClassInstance,
+      navigationIntent: intent,
+    );
+    __addExecutionTrace(log);
+    return log;
+  }
+
   ExecutionTrace _addMethodCall({
     required Object ownerClassInstance,
     required String methodName,
     required Map<String, dynamic>? parameters,
-    required Function()? navigate,
     required bool isLibMethod,
   }) {
     ExecutionTrace log = MethodCallExecutionTrace._methodCall(

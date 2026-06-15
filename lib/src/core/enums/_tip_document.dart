@@ -302,7 +302,7 @@ enum TipDocument {
     }
   }
 
-  List<String> getDocuments() {
+  List<String> getDocIds() {
     switch (this) {
       case TipDocument.start:
         return [

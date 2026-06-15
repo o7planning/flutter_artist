@@ -26,18 +26,12 @@ class RootDebugDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 1000,
-      preferredHeight: 600,
-    );
-
     FaDialog alert = FaDialog(
       titleText: "Root Debug",
       content: _buildMainWidget(),
       contentPadding: EdgeInsets.zero,
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 1000,
+      preferredContentHeight: 600,
     );
     return alert;
   }

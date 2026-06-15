@@ -17,21 +17,15 @@ class FormErrorViewerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppError exception = ErrorUtils.toAppError(formErrorInfo.error);
-    final Size preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 560,
-      preferredHeight:
-          exception.errorDetails == null || exception.errorDetails!.isEmpty
-              ? 200
-              : 280,
-    );
-
+    AppError exception = FaErrorUtils.toAppError(formErrorInfo.error);
     FaDialog alert = FaDialog(
       titleText: "Form Error",
       contentPadding: EdgeInsets.all(8),
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 560,
+      preferredContentHeight:
+          exception.errorDetails == null || exception.errorDetails!.isEmpty
+              ? 200
+              : 280,
       content: _buildContent(context, exception),
     );
     return alert;

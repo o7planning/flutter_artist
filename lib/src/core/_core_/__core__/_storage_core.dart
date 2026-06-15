@@ -5,10 +5,10 @@ abstract class _StorageCore extends _Core {
   final Map<String, ActivityCreator> __activityCreatorMap = {};
 
   final Map<String, Shelf> _shelfMap = {};
-  final Map<String, Activity> _activityMap = {};
+  final Map<String, ActivityV1> _activityMap = {};
 
   final List<Shelf> _recentShelves = [];
-  final List<Activity> _recentActivities = [];
+  final List<ActivityV1> _recentActivities = [];
 
   bool __started = false;
 
@@ -20,7 +20,8 @@ abstract class _StorageCore extends _Core {
 
   List<String> get activeActivityNames => List.unmodifiable(_activityMap.keys);
 
-  List<Activity> get activeActivities => List.unmodifiable(_activityMap.values);
+  List<ActivityV1> get activeActivities =>
+      List.unmodifiable(_activityMap.values);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -71,7 +72,7 @@ abstract class _StorageCore extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  void registerActivity<F extends Activity>(ActivityCreator<F> builder) {
+  void registerActivity<F extends ActivityV1>(ActivityCreator<F> builder) {
     if (__started) {
       // LOGIC: #0001
       throw DebugUtils.getFatalError(
@@ -137,7 +138,7 @@ abstract class _StorageCore extends _Core {
     return shelf;
   }
 
-  F _createActivity<F extends Activity>(String activityName) {
+  F _createActivity<F extends ActivityV1>(String activityName) {
     F? activity = _activityMap[activityName] as F?;
     if (activity != null) {
       return activity;
@@ -179,9 +180,9 @@ abstract class _StorageCore extends _Core {
     return shelf;
   }
 
-  Activity? _findActivity(Type activityType) {
+  ActivityV1? _findActivity(Type activityType) {
     final String activityName = _getActivityName(activityType);
-    Activity? activity = _activityMap[activityName];
+    ActivityV1? activity = _activityMap[activityName];
     activity ??= _createActivity(activityName);
     return activity;
   }
@@ -202,9 +203,9 @@ abstract class _StorageCore extends _Core {
     return shelf as F;
   }
 
-  F findActivity<F extends Activity>() {
+  F findActivity<F extends ActivityV1>() {
     final String activityName = _getActivityName(F);
-    Activity? activity = _activityMap[activityName];
+    ActivityV1? activity = _activityMap[activityName];
     activity ??= _createActivity(activityName);
     return activity as F;
   }
@@ -218,7 +219,7 @@ abstract class _StorageCore extends _Core {
     return shelf;
   }
 
-  F? findOrNullActivity<F extends Activity>() {
+  F? findOrNullActivity<F extends ActivityV1>() {
     final String activityName = _getActivityName(F);
     F? activity = _activityMap[activityName] as F?;
     return activity;
@@ -247,6 +248,21 @@ abstract class _StorageCore extends _Core {
     _activityMap.clear();
   }
 
+  void _unmountOrphanShelves() {
+    List<String> shelfNames = [..._shelfMap.keys];
+    for (String shelfName in shelfNames) {
+      Shelf? shelf = _shelfMap[shelfName];
+      if (shelf == null) {
+        continue;
+      }
+      if (shelf.markAsOrphaned) {
+        print("[FLUTTER_ARTIST] - Unmount ${getClassName(shelf)}");
+        _shelfMap.remove(shelfName);
+        _recentShelves.remove(shelf);
+      }
+    }
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -257,21 +273,28 @@ abstract class _StorageCore extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _checkToRemoveActivity(Activity activity) {
+  void _checkToRemoveActivity(ActivityV1 activity) {
     //
   }
 
   void _checkToRemoveShelf(Shelf shelf) {
     bool hasMountedUiComponent = shelf.ui.hasMountedUiComponent();
     if (!hasMountedUiComponent) {
-      if (shelf.config.onHideAction == ShelfHiddenAction.clear) {
-        print(
-            "[FLUTTER_ARTIST]  ---------> MASK_TO_REMOVE: ${getClassName(shelf)}");
-        // _shelfMap.remove(shelf.name);
-        shelf._markAsOrphaned = true;
-      } else {
-        print("[FLUTTER_ARTIST]  ---------> KEEP: ${getClassName(shelf)}");
+      switch (shelf.config.releasePolicy) {
+        case ShelfReleasePolicy.retain:
+          print(
+              "[FLUTTER_ARTIST] ---------> RETAIN_IN_MEMORY: ${getClassName(shelf)}");
+          return;
+        case ShelfReleasePolicy.unmount:
+          print(
+              "[FLUTTER_ARTIST] ---------> MARK_TO_RELEASE_AND_PRUNE: ${getClassName(shelf)}");
+          shelf._markAsOrphaned = true;
+          return;
       }
+    } else {
+      print(
+          "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(shelf)}");
+      shelf._markAsOrphaned = false;
     }
   }
 
@@ -301,7 +324,7 @@ abstract class _StorageCore extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addRecentActivity(Activity activity) {
+  void _addRecentActivity(ActivityV1 activity) {
     //
   }
 

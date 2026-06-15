@@ -28,7 +28,7 @@ class DebugViewerDialog extends StatefulWidget {
     return _DebugViewerDialogState();
   }
 
-  static Future<void> openDebugFilterModelViewer({
+  static Future<void> openDebugFilterModelInspector({
     required BuildContext context,
     required String locationInfo,
     required FilterModel filterModel,

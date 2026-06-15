@@ -1,15 +1,15 @@
 part of '../core.dart';
 
 class ShelfConfig {
-  final ShelfHiddenAction onHideAction;
+  final ShelfReleasePolicy releasePolicy;
 
   const ShelfConfig({
-    this.onHideAction = ShelfHiddenAction.none,
+    this.releasePolicy = ShelfReleasePolicy.retain,
   });
 
   ShelfConfig copy() {
     return ShelfConfig(
-      onHideAction: onHideAction,
+      releasePolicy: releasePolicy,
     );
   }
 }

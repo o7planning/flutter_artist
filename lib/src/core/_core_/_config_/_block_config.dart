@@ -32,7 +32,6 @@ class BlockConfig {
         ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
     this.unifiedItemRefreshPolicy = UnifiedItemRefreshPolicy.auto,
     this.preventUnsavedChangesLoss = true,
-    this.onHideAction = BlockHiddenAction.none,
     List<Event>? emitExternalShelfEvents,
     //
     List<Event>? executeItemLevelReactionToEvents,
@@ -49,7 +48,8 @@ class BlockConfig {
       pageSize: 20,
     ),
     this.clientSideSortStrategy = SortStrategy.none,
-  }) : emitExternalShelfEvents =
+  })  : this.onHideAction = BlockHiddenAction.none,
+        emitExternalShelfEvents =
             List.unmodifiable(emitExternalShelfEvents?.toSet() ?? []);
 
   BlockConfig copy() {
@@ -57,7 +57,7 @@ class BlockConfig {
       unifiedItemRefreshPolicy: unifiedItemRefreshPolicy,
       itemAbsentRepresentativePolicy: itemAbsentRepresentativePolicy,
       preventUnsavedChangesLoss: preventUnsavedChangesLoss,
-      onHideAction: onHideAction,
+      // onHideAction: onHideAction,
       pageable: pageable.copy(),
       //
       emitExternalShelfEvents: emitExternalShelfEvents,

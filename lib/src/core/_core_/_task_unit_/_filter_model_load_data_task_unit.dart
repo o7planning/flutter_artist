@@ -9,9 +9,9 @@ class _FilterModelLoadDataTaskUnit
   _FilterModelLoadDataTaskUnit({
     required this.xFilterModel,
   }) : super(
-          taskType: TaskType.filterModelLoadData,
-          taskResult: FilterModelDataLoadResult(),
-        );
+    taskType: TaskType.filterModelLoadData,
+    taskResult: FilterModelDataLoadResult(),
+  );
 
   @override
   XShelf get xShelf => xFilterModel.xShelf;

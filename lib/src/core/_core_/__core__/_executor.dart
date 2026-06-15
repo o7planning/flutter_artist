@@ -184,7 +184,6 @@ class _Executor {
         thisXBlock: taskUnit.xBlock,
         initDirty: taskUnit.initDirty,
         formInput: taskUnit.formInput,
-        navigate: taskUnit.navigate,
       );
     }
     // Block Select Item as Current:

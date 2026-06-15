@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class ActivitySectionViewBuilder extends _ContextProviderView {
-  final Activity activity;
+  final ActivityV1 activity;
   final Widget Function() build;
 
   const ActivitySectionViewBuilder({
@@ -21,12 +21,17 @@ class ActivitySectionViewBuilder extends _ContextProviderView {
 class _ActivitySectionViewBuilderState
     extends _ContextProviderViewState<ActivitySectionViewBuilder> {
   @override
-  String getWidgetOwnerClassName() {
-    return getClassName(widget.activity);
+  ContextProviderViewType get type => ContextProviderViewType.activityFragment;
+
+  @override
+  Shelf? _getRelatedShelf() {
+    return null;
   }
 
   @override
-  ContextProviderViewType get type => ContextProviderViewType.activityFragment;
+  String getWidgetOwnerClassName() {
+    return getClassName(widget.activity);
+  }
 
   @override
   bool get provideScalarContext {

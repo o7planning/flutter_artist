@@ -127,7 +127,7 @@ class _BlockData<
     if (currItem == null) {
       return false;
     }
-    return ItemsUtils.isListContainItem(
+    return FaItemsUtils.isListContainItem(
       item: currItem,
       targetList: _checkedItems,
       getItemId: block._getItemIdInternal,
@@ -141,7 +141,7 @@ class _BlockData<
     if (currItem == null) {
       return false;
     }
-    return ItemsUtils.isListContainItem(
+    return FaItemsUtils.isListContainItem(
       item: currItem,
       targetList: _selectedItems,
       getItemId: block._getItemIdInternal,
@@ -313,17 +313,17 @@ class _BlockData<
   void _removeItem({
     required ITEM removeItem,
   }) {
-    ItemsUtils.removeItemFromList(
+    FaItemsUtils.removeItemFromList(
       targetList: _items,
       removeItem: removeItem,
       getItemId: block._getItemIdInternal,
     );
-    ItemsUtils.removeItemFromList(
+    FaItemsUtils.removeItemFromList(
       targetList: _checkedItems,
       removeItem: removeItem,
       getItemId: block._getItemIdInternal,
     );
-    ItemsUtils.removeItemFromList(
+    FaItemsUtils.removeItemFromList(
       targetList: _selectedItems,
       removeItem: removeItem,
       getItemId: block._getItemIdInternal,
@@ -337,7 +337,7 @@ class _BlockData<
     required ITEM item,
     // required ITEM_DETAIL itemDetail,
   }) {
-    ItemsUtils.insertOrReplaceItemInList(
+    FaItemsUtils.insertOrReplaceItemInList(
       targetList: _items,
       item: item,
       getItemId: block._getItemIdInternal,
@@ -345,12 +345,12 @@ class _BlockData<
     //
     _clientSideSortItems();
     //
-    ItemsUtils.replaceItemInList(
+    FaItemsUtils.replaceItemInList(
       targetList: _checkedItems,
       replacementItem: item,
       getItemId: block._getItemIdInternal,
     );
-    ItemsUtils.replaceItemInList(
+    FaItemsUtils.replaceItemInList(
       targetList: _selectedItems,
       replacementItem: item,
       getItemId: block._getItemIdInternal,
@@ -424,17 +424,17 @@ class _BlockData<
         processedQueryResult,
   }) {
     if (processedQueryResult.errorItems.isNotEmpty) {
-      ItemsUtils.removeItemsFromList(
+      FaItemsUtils.removeItemsFromList(
         removeItems: processedQueryResult.errorItems,
         targetList: _items,
         getItemId: block._getItemIdInternal,
       );
-      ItemsUtils.removeItemsFromList(
+      FaItemsUtils.removeItemsFromList(
         removeItems: processedQueryResult.errorItems,
         targetList: _selectedItems,
         getItemId: block._getItemIdInternal,
       );
-      ItemsUtils.removeItemsFromList(
+      FaItemsUtils.removeItemsFromList(
         removeItems: processedQueryResult.errorItems,
         targetList: _checkedItems,
         getItemId: block._getItemIdInternal,
@@ -442,17 +442,17 @@ class _BlockData<
     }
     //
     if (processedQueryResult.invalidItems.isNotEmpty) {
-      ItemsUtils.removeItemsFromList(
+      FaItemsUtils.removeItemsFromList(
         removeItems: processedQueryResult.invalidItems,
         targetList: _items,
         getItemId: block._getItemIdInternal,
       );
-      ItemsUtils.removeItemsFromList(
+      FaItemsUtils.removeItemsFromList(
         removeItems: processedQueryResult.invalidItems,
         targetList: _selectedItems,
         getItemId: block._getItemIdInternal,
       );
-      ItemsUtils.removeItemsFromList(
+      FaItemsUtils.removeItemsFromList(
         removeItems: processedQueryResult.invalidItems,
         targetList: _checkedItems,
         getItemId: block._getItemIdInternal,
@@ -460,17 +460,17 @@ class _BlockData<
     }
     //
     if (processedQueryResult.validItems.isNotEmpty) {
-      ItemsUtils.appendItemsToList(
+      FaItemsUtils.appendItemsToList(
         appendItems: processedQueryResult.validItems,
         targetList: _items,
         getItemId: block._getItemIdInternal,
       );
-      ItemsUtils.replaceItemsInList(
+      FaItemsUtils.replaceItemsInList(
         replacementItems: processedQueryResult.validItems,
         targetList: _selectedItems,
         getItemId: block._getItemIdInternal,
       );
-      ItemsUtils.replaceItemsInList(
+      FaItemsUtils.replaceItemsInList(
         replacementItems: processedQueryResult.validItems,
         targetList: _checkedItems,
         getItemId: block._getItemIdInternal,

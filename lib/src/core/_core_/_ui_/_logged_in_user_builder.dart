@@ -19,12 +19,17 @@ class LoggedInUserBuilder extends _ContextProviderView {
 class _LoggedInUserBuilderState
     extends _ContextProviderViewState<LoggedInUserBuilder> {
   @override
-  String getWidgetOwnerClassName() {
-    return "LoggedInUserBuilder";
+  ContextProviderViewType get type => ContextProviderViewType.loggedInUser;
+
+  @override
+  Shelf? _getRelatedShelf() {
+    return null;
   }
 
   @override
-  ContextProviderViewType get type => ContextProviderViewType.loggedInUser;
+  String getWidgetOwnerClassName() {
+    return "LoggedInUserBuilder";
+  }
 
   @override
   bool get provideScalarContext {

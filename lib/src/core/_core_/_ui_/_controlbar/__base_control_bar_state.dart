@@ -1,7 +1,10 @@
 part of '../../core.dart';
 
-abstract class _BaseControlBarState<OWNER extends Object,
-        ITEM_TYPE extends Enum, W extends BaseControlBar<OWNER, ITEM_TYPE>>
+abstract class _BaseControlBarState<
+OWNER extends Object, //
+ITEM_TYPE extends Enum, //
+CONTROL_BAR_ITEM extends ControlBarItem<OWNER, ITEM_TYPE>,
+W extends BaseControlBar<OWNER, ITEM_TYPE, CONTROL_BAR_ITEM>>
     extends _ContextProviderViewState<W> {
   Decoration _getEffectiveDecoration(BuildContext context) {
     return widget.style.decoration ??
@@ -45,7 +48,7 @@ abstract class _BaseControlBarState<OWNER extends Object,
     );
   }
 
-  Widget _buildDecoratedGroup(List<ControlBarItem<OWNER, ITEM_TYPE>> items) {
+  Widget _buildDecoratedGroup(List<CONTROL_BAR_ITEM> items) {
     final children = _buildItemGroup(items);
     if (children.isEmpty) return const SizedBox();
 
@@ -59,7 +62,7 @@ abstract class _BaseControlBarState<OWNER extends Object,
     );
   }
 
-  List<Widget> _buildItemGroup(List<ControlBarItem<OWNER, ITEM_TYPE>> items) {
+  List<Widget> _buildItemGroup(List<CONTROL_BAR_ITEM> items) {
     List<Widget?> rawWidgets = items.map((item) {
       if (item.type == BlockControlBarItemType.divider) {
         return const VerticalDivider(key: ValueKey('__divider_marker__'));
@@ -111,5 +114,5 @@ abstract class _BaseControlBarState<OWNER extends Object,
         widget.key == const ValueKey('__divider_marker__');
   }
 
-  Widget? buildStandardButton(ControlBarItem<OWNER, ITEM_TYPE> item);
+  Widget? buildStandardButton(CONTROL_BAR_ITEM item);
 }

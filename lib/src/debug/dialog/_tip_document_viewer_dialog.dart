@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_artist_doc/flutter_artist_doc.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
@@ -43,13 +44,13 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
   bool _isInitialized = false;
 
   String _selectedLangCode = 'en';
-  late Future<FaDocuments> _docsFuture;
+  late Future<FaDocSystem> _docSystemFuture;
 
   @override
   void initState() {
     super.initState();
     tipDocument = widget.tipDocument;
-    _docsFuture = FlutterArtistDocSystem.instance.faDocuments;
+    _docSystemFuture = FlutterArtistDocSystem.instance.faDocSystem;
   }
 
   @override
@@ -86,9 +87,9 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
             ),
           ),
           const SizedBox(width: 16),
-          _buildLangFlag("EN", "en"),
+          _buildLangFlag("en"),
           const SizedBox(width: 8),
-          _buildLangFlag("VI", "vi"),
+          _buildLangFlag("vi"),
           const Spacer(),
           _buildNavButton(Icons.arrow_back_ios_new_rounded,
               () => _refresh(tipDocument.previous())),
@@ -100,7 +101,7 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
     );
   }
 
-  Widget _buildLangFlag(String flag, String langCode) {
+  Widget _buildLangFlag(String langCode) {
     bool isSelected = _selectedLangCode == langCode;
     return InkWell(
       onTap: () {
@@ -127,26 +128,50 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
   }
 
   Widget _buildDocumentList(BuildContext context) {
-    return FutureBuilder<FaDocuments>(
-      future: _docsFuture,
+    return FutureBuilder<FaDocSystem>(
+      future: _docSystemFuture,
       builder: (context, snapshot) {
+        // 1. Handling Asynchronous Loading State
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator(strokeWidth: 2));
         }
-        List<String> docIds = tipDocument.getDocuments();
-        List<FaDocument> filteredDocs = [];
 
-        if (snapshot.hasData) {
-          filteredDocs = snapshot.data!.documents
+        // 2. Handling High-Level Network/HTTP Exceptions
+        if (snapshot.hasError) {
+          return _buildErrorView(
+            context,
+            message: "Network Exception Raised",
+            details: snapshot.error.toString(),
+          );
+        }
+
+        // 3. Handling Business Domain/Parsing Logic Errors
+        if (snapshot.hasData && snapshot.data!.isError) {
+          return _buildErrorView(
+            context,
+            message: "Failed to compile Documentation Infrastructure",
+            details: snapshot.data!.errorMessage,
+          );
+        }
+
+        List<String> docIds = tipDocument.getDocIds();
+        List<FaDoc> filteredDocs = [];
+
+        // 4. Filtering Valid Data Stream Matrix
+        if (snapshot.hasData && snapshot.data!.ready) {
+          filteredDocs = snapshot.data!.allDocs
               .where((doc) =>
                   doc.langCode == _selectedLangCode && docIds.contains(doc.id))
               .toList();
         }
 
+        // 5. Handling Empty Collection Fallbacks Dynamically Based on Locale
         if (filteredDocs.isEmpty) {
+          final String missingLangLabel =
+              _selectedLangCode == 'vi' ? "Vietnamese" : "English";
           return Center(
             child: Text(
-              "No documentation available for $_selectedLangCode.",
+              "No $missingLangLabel documentation available for this example.",
               style: TextStyle(
                 color: context.faColors.ink.tertiaryQuiet,
                 fontSize: 12,
@@ -155,11 +180,12 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
           );
         }
 
+        // 6. Rendering Document Feed View
         return ListView(
           padding: const EdgeInsets.all(6),
           children: [
             Text(
-              "Detailed Documentation ($_selectedLangCode)",
+              "Detailed Documentation (${_selectedLangCode.toUpperCase()})",
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.bold,
@@ -169,14 +195,72 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
             const SizedBox(height: 8),
             ...filteredDocs.map(
               (doc) => DocLinkView(
-                faDocument: doc,
-                padding: EdgeInsets.all(8),
-                margin: EdgeInsets.only(bottom: 8),
+                faDoc: doc,
+                padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.only(bottom: 8),
               ),
             ),
           ],
         );
       },
+    );
+  }
+
+  /// Compiles a responsive, standardized diagnostic error card layout.
+  Widget _buildErrorView(
+    BuildContext context, {
+    required String message,
+    required String? details,
+  }) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline_rounded,
+              color: context.faColors.ink.error,
+              size: 24,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: context.faColors.ink.primary,
+              ),
+            ),
+            if (details != null && details.trim().isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Container(
+                padding: const EdgeInsets.all(8),
+                constraints: BoxConstraints(
+                  maxHeight: 120,
+                ),
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  color: context.faColors.surface.emphasized,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: SingleChildScrollView(
+                  child: Text(
+                    details,
+                    style: TextStyle(
+                      fontFamily: 'Courier',
+                      fontSize: 11,
+                      color: context.faColors.ink.secondary,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 
@@ -220,7 +304,7 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
           color: TabThemeUtils.getTabIconColor(context, status),
           size: 16,
         ),
-        view: _buildDocumentList(context), // Sử dụng hàm nạp tài liệu mới
+        view: _buildDocumentList(context),
       ),
     ];
   }
@@ -285,18 +369,12 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final Size preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 620,
-      preferredHeight: 340,
-    );
-
     return FaDialog(
       iconData: FaIconConstants.tipDocument,
       titleText: "Artist Insights - ${tipDocument.getTitle()}",
       contentPadding: const EdgeInsets.all(8),
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 620,
+      preferredContentHeight: 340,
       content: _buildMainContent(context),
     );
   }
@@ -321,7 +399,7 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
 
   @override
   void dispose() {
-    super.dispose();
     _controller.dispose();
+    super.dispose();
   }
 }

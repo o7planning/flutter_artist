@@ -138,8 +138,16 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
           );
   }
 
+  Shelf? _getRelatedShelf();
+
   void __addWidgetState({required bool isVisible}) {
     addWidgetState(isVisible: isVisible);
+    if (isVisible) {
+      final Shelf? shelf = _getRelatedShelf();
+      if (shelf != null) {
+        shelf._markAsOrphaned = false;
+      }
+    }
   }
 
   void __removeWidgetState() {

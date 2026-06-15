@@ -5,6 +5,9 @@ class _FilterUiComponents extends _UiComponents {
 
   final Map<_ContextProviderViewState, XState> _filterBaseViewWidgetStates = {};
 
+  final Map<_ContextProviderViewState, XState> __filterControlBarWidgetStates =
+      {};
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -68,6 +71,21 @@ class _FilterUiComponents extends _UiComponents {
         return true;
       }
     }
+    for (_ContextProviderViewState widgetState
+        in __filterControlBarWidgetStates.keys) {
+      if (!widgetState.mounted) {
+        continue;
+      }
+      bool visible =
+          __filterControlBarWidgetStates[widgetState]?.isVisible ?? false;
+      if (!visible) {
+        continue;
+      }
+      bool ok = widgetState.isContextKind(contextKind);
+      if (ok) {
+        return true;
+      }
+    }
     return false;
   }
 
@@ -87,7 +105,8 @@ class _FilterUiComponents extends _UiComponents {
 
   void updateAllUiComponents({bool force = true}) {
     for (_ContextProviderViewState widgetState in [
-      ..._filterBaseViewWidgetStates.keys
+      ..._filterBaseViewWidgetStates.keys,
+      ...__filterControlBarWidgetStates.keys
     ]) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
@@ -166,5 +185,43 @@ class _FilterUiComponents extends _UiComponents {
     required State widgetState,
   }) {
     _filterBaseViewWidgetStates.remove(widgetState);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _addControlBarWidgetState({
+    required _ContextProviderViewState widgetState,
+    required bool isVisible,
+  }) {
+    bool activeOLD = hasActiveUiComponent();
+    __filterControlBarWidgetStates.update(
+      widgetState,
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
+    );
+    bool activeCURRENT = hasActiveUiComponent();
+
+    if (isVisible) {
+      FlutterArtist.storage._addRecentShelf(filterModel.shelf);
+    }
+    //
+    if (!activeOLD && activeCURRENT) {
+      // Fire event:
+      // filterModel.shelf._startLoadDataForLazyUiComponentsIfNeed();
+      FlutterArtist.storage._naturalQueryQueue.addShelf(filterModel.shelf);
+    } else if (activeOLD && !activeCURRENT) {
+      // TODO: (Kiem tra phuong thuc cung ten trong Block).
+      // block._emitBlockHidden();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _removeControlBarWidgetState({
+    required _ContextProviderViewState widgetState,
+  }) {
+    __filterControlBarWidgetStates.remove(widgetState);
   }
 }

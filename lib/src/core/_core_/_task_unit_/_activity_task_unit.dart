@@ -10,7 +10,7 @@ class _ActivityTaskUnit extends _TaskUnit {
   }) : super(taskType: TaskType.activity);
 
   @override
-  Activity get owner => xActivity.activity;
+  ActivityV1 get owner => xActivity.activity;
 
   @override
   String getObjectName() {

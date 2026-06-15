@@ -2183,7 +2183,6 @@ abstract class FormModel<
       parameters: {
         "formInput": formInput,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -2252,7 +2251,6 @@ abstract class FormModel<
       ownerClassInstance: this,
       methodName: "saveForm",
       parameters: null,
-      navigate: null,
       isLibMethod: true,
     );
     //

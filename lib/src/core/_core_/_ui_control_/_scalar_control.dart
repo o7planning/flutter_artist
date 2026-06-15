@@ -28,6 +28,11 @@ abstract class ScalarControl extends _ContextProviderView {
 
 class _ControlButtonState extends _ContextProviderViewState<ScalarControl> {
   @override
+  Shelf? _getRelatedShelf() {
+    return widget.scalar.shelf;
+  }
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.scalar);
   }

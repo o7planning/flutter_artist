@@ -45,7 +45,7 @@ class BlockItemsDeletionResult<ITEM>
     required Object error,
     required StackTrace? stackTrace,
   }) {
-    AppError appError = ErrorUtils.toAppError(error);
+    AppError appError = FaErrorUtils.toAppError(error);
     //
     _failedItemDeletions.add(
       FailedItemDeletion(

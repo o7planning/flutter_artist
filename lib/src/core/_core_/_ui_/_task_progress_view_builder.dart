@@ -35,6 +35,14 @@ class TaskProgressViewBuilder extends _ContextProviderView {
 
 class _TaskProgressBuilderState
     extends _ContextProviderViewState<TaskProgressViewBuilder> {
+  @override
+  ContextProviderViewType get type => ContextProviderViewType.taskProgressView;
+
+  @override
+  Shelf? _getRelatedShelf() {
+    return null;
+  }
+
   // Update from Executor:
   bool onProgress = false;
 
@@ -84,9 +92,6 @@ class _TaskProgressBuilderState
     }
     return false;
   }
-
-  @override
-  ContextProviderViewType get type => ContextProviderViewType.taskProgressView;
 
   @override
   String getWidgetOwnerClassName() {

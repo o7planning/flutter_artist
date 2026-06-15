@@ -21,12 +21,18 @@ class HookSectionViewBuilder extends _ContextProviderView {
 class _HookSectionViewBuilderState
     extends _ContextProviderViewState<HookSectionViewBuilder> {
   @override
+  ContextProviderViewType get type => ContextProviderViewType.hookFragment;
+
+  @override
+  Shelf? _getRelatedShelf() {
+    return widget.hook.shelf;
+  }
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.hook);
   }
 
-  @override
-  ContextProviderViewType get type => ContextProviderViewType.hookFragment;
 
   @override
   bool get provideScalarContext {

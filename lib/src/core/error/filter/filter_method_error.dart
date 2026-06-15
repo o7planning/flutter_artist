@@ -13,5 +13,5 @@ class FilterMethodError {
     required this.filterErrorMethod,
     required Object error,
     required this.errorStackTrace,
-  }) : error = ErrorUtils.toAppError(error);
+  }) : error = FaErrorUtils.toAppError(error);
 }

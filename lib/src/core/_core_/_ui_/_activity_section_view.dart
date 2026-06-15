@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 abstract class ActivitySectionView extends StatelessWidget {
-  final Activity activity;
+  final ActivityV1 activity;
 
   const ActivitySectionView({
     required this.activity,

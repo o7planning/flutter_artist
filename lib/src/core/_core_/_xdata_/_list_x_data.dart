@@ -44,7 +44,7 @@ class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
 
   @override
   ITEM? findInternalItemById(ID? id) {
-    return ItemsUtils.findItemInListById(
+    return FaItemsUtils.findItemInListById(
       id: id,
       targetList: _items,
       getItemId: _getItemId,
@@ -53,7 +53,7 @@ class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
 
   @override
   List<ITEM> findInternalItems({required List<ITEM?>? items}) {
-    return ItemsUtils.findItemsInList(
+    return FaItemsUtils.findItemsInList(
       items: items,
       targetList: _items,
       getItemId: _getItemId,
@@ -63,7 +63,7 @@ class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
   void _replaceOrInsertItem({
     required ITEM newItem,
   }) {
-    ItemsUtils.replaceOrInsertItem(
+    FaItemsUtils.replaceOrInsertItem(
       newItem: newItem,
       targetList: _items,
       getItemId: _getItemId,
@@ -71,7 +71,7 @@ class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
   }
 
   void _removeItemById(ID id) {
-    ItemsUtils.removeItemById(
+    FaItemsUtils.removeItemById(
       id: id,
       targetList: _items,
       getItemId: _getItemId,
@@ -86,7 +86,7 @@ class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
   void _addItemIfNotExists({
     required ITEM item,
   }) {
-    ItemsUtils.addItemIfNotExists(
+    FaItemsUtils.addItemIfNotExists(
       item: item,
       targetList: _items,
       getItemId: _getItemId,

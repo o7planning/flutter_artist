@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
-  LoginActivity();
+abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
+  LoginActivityV1();
 
   Future<ApiResult<USER>> performLogin();
 
@@ -14,7 +14,6 @@ abstract class LoginActivity<USER extends ILoggedInUser> extends Activity {
       ownerClassInstance: this,
       methodName: "performActivityOperation",
       parameters: null,
-      navigate: null,
       isLibMethod: true,
     );
     try {

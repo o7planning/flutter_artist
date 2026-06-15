@@ -16,22 +16,16 @@ class BlockErrorViewerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppError apiError = ErrorUtils.toAppError(blockErrorInfo.error);
-
-    final Size preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 440,
-      preferredHeight:
-          apiError.errorDetails == null || apiError.errorDetails!.isEmpty
-              ? 200
-              : 280,
-    );
+    AppError apiError = FaErrorUtils.toAppError(blockErrorInfo.error);
 
     FaDialog alert = FaDialog(
       titleText: "Error",
       contentPadding: EdgeInsets.all(8),
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 440,
+      preferredContentHeight:
+          apiError.errorDetails == null || apiError.errorDetails!.isEmpty
+              ? 200
+              : 280,
       content: _buildContent(context, apiError),
     );
     return alert;

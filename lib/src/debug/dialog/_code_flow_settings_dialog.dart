@@ -33,20 +33,14 @@ class _CodeFlowSettingsDialogState extends State<CodeFlowSettingsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    Size preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 500,
-      preferredHeight: 320,
-    );
-    //
     Widget contentWidget = CustomAppContainer(
       child: Text("Code Flow Settings"),
     );
 
     FaDialog alert = FaDialog(
       titleText: "Code Flow Settings",
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 500,
+      preferredContentHeight: 320,
       iconData: Icons.settings,
       content: contentWidget,
       contentPadding: EdgeInsets.zero,

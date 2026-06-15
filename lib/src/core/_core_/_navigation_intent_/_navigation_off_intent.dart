@@ -10,5 +10,5 @@ class _NavigationOffIntent extends NavigationIntent {
     this.builder,
     this.extra,
     required super.executeOnFailure,
-  }) : super._();
+  }) : super._(name: "Navigation Off");
 }

@@ -16,23 +16,17 @@ class ScalarErrorViewerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppError apiError = ErrorUtils.toAppError(scalarErrorInfo.error);
-
-    final Size preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 440,
-      preferredHeight:
-          apiError.errorDetails == null || apiError.errorDetails!.isEmpty
-              ? 200
-              : 280,
-    );
+    AppError apiError = FaErrorUtils.toAppError(scalarErrorInfo.error);
 
     FaDialog alert = FaDialog(
       titleText: "Error",
       contentPadding: EdgeInsets.all(8),
       content: _buildContent(context, apiError),
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 440,
+      preferredContentHeight:
+          apiError.errorDetails == null || apiError.errorDetails!.isEmpty
+              ? 200
+              : 280,
     );
     return alert;
   }

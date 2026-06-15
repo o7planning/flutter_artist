@@ -28,6 +28,11 @@ abstract class BlockControl extends _ContextProviderView {
 
 class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
   @override
+  Shelf? _getRelatedShelf() {
+    return widget.block.shelf;
+  }
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
@@ -139,9 +144,7 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
     }
     //
     PrepareItemCreationResult result =
-        await widget.block.prepareFormToCreateItem(
-      navigate: null,
-    );
+        await widget.block.prepareFormToCreateItem();
     return result.successForAll;
   }
 

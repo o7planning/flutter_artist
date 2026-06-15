@@ -5,7 +5,7 @@ import '../../core/_core_/core.dart';
 import '../../core/enums/_tip_document.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/widgets/_custom_app_container.dart';
-import '../storage/_storage_view.dart';
+import '../app/_debug_app_view.dart';
 import '../utils/_dialog_size.dart';
 import '_tip_document_viewer_dialog.dart';
 
@@ -45,7 +45,7 @@ class _DebugAppInspectorDialogState extends State<DebugAppInspectorDialog> {
 
     Widget contentWidget = PageStorage(
       bucket: _bucket,
-      child: const StorageView(
+      child: const DebugAppView(
         key: PageStorageKey('MainStorageView'),
       ),
     );

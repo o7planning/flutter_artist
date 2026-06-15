@@ -23,12 +23,17 @@ class ScalarSectionViewBuilder extends _ContextProviderView {
 class _ScalarSectionViewBuilderState
     extends _ContextProviderViewState<ScalarSectionViewBuilder> {
   @override
-  String getWidgetOwnerClassName() {
-    return getClassName(widget.scalar);
+  ContextProviderViewType get type => ContextProviderViewType.scalarFragment;
+
+  @override
+  Shelf? _getRelatedShelf() {
+    return widget.scalar.shelf;
   }
 
   @override
-  ContextProviderViewType get type => ContextProviderViewType.scalarFragment;
+  String getWidgetOwnerClassName() {
+    return getClassName(widget.scalar);
+  }
 
   @override
   bool get provideScalarContext {

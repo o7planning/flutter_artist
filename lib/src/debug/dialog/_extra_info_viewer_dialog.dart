@@ -22,17 +22,12 @@ class ExtraInfoViewerDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size preferContentSize = calculatePreferredDialogSize(
-      context,
-      preferredWidth: 620,
-      preferredHeight: 320,
-    );
     FaDialog alert = FaDialog(
       iconData: Icons.info_outline,
       titleText: title,
       contentPadding: EdgeInsets.all(8),
-      preferredContentWidth: preferContentSize.width,
-      preferredContentHeight: preferContentSize.height,
+      preferredContentWidth: 620,
+      preferredContentHeight: 320,
       content: Card(
         margin: EdgeInsets.zero,
         child: Padding(

@@ -105,7 +105,6 @@ class _Storage extends _StorageCore {
   Future<StorageBackendActionResult> executeBackendAction({
     required ActionConfirmationType actionConfirmationType,
     required StorageBackendAction action,
-    required Function(BuildContext context)? navigate,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
@@ -113,7 +112,6 @@ class _Storage extends _StorageCore {
       parameters: {
         "action": action,
       },
-      navigate: null,
       isLibMethod: true,
     );
     //
@@ -286,7 +284,6 @@ class _Storage extends _StorageCore {
     return await executeBackendAction(
       actionConfirmationType: ActionConfirmationType.custom,
       action: action,
-      navigate: null,
     );
   }
 
@@ -304,7 +301,6 @@ class _Storage extends _StorageCore {
       ownerClassInstance: this,
       methodName: "openDialogAndDeferExternalShelfEventsUntilClosed",
       parameters: null,
-      navigate: null,
       isLibMethod: true,
     );
     return await __deferment._openDialogAndDeferExternalShelfEventsUntilClosed(
@@ -326,7 +322,6 @@ class _Storage extends _StorageCore {
       ownerClassInstance: this,
       methodName: 'openDrawerAndDeferExternalShelfEventsUntilClosed',
       parameters: null,
-      navigate: null,
       isLibMethod: true,
     );
     return await __deferment._openDrawerAndDeferExternalShelfEventsUntilClosed(
@@ -350,7 +345,6 @@ class _Storage extends _StorageCore {
       ownerClassInstance: this,
       methodName: 'openEndDrawerAndDeferExternalShelfEventsUntilClosed',
       parameters: null,
-      navigate: null,
       isLibMethod: true,
     );
     return await __deferment

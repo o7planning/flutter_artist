@@ -11,7 +11,7 @@ import '../../core/widgets/_custom_app_container.dart';
 import '../filter_criteria/_filter_condition_groups_view.dart';
 import '../filter_criteria/_filter_criteria_structure_criteria_base_view.dart';
 import '../filter_criteria/_filter_criteria_structure_tildes_view.dart';
-import '../storage/_block_or_scalar.dart';
+import '../app/_block_or_scalar.dart';
 import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';
 import '../widgets/_json_view.dart';
@@ -78,8 +78,8 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
     Map<String, dynamic> currentValue =
         filterModelStructure.debugCurrentCriteriaValues;
 
-    String initial1Json = MapUtils.toJson(map: initial1Value);
-    String currentJson = MapUtils.toJson(map: currentValue);
+    String initial1Json = FaMapUtils.toJson(map: initial1Value);
+    String currentJson = FaMapUtils.toJson(map: currentValue);
 
     final ConditionGroupModelImpl rootFilterCriteriaGroupModel =
         widget.filterModel.filterModelStructure.rootConditionGroupModel;

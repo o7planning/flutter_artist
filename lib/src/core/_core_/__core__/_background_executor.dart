@@ -16,7 +16,6 @@ class _BackgroundExecutor extends _Core {
       parameters: {
         "action": action,
       },
-      navigate: null,
       isLibMethod: true,
     );
     __executeBackgroundAction(

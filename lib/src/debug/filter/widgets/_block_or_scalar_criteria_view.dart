@@ -5,7 +5,7 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import '../../../core/_core_/core.dart';
 import '../../../core/enums/_data_state.dart';
 import '../../../core/icon/icon_constants.dart';
-import '../../storage/_block_or_scalar.dart';
+import '../../app/_block_or_scalar.dart';
 
 class BlockOrScalarCriteriaView extends StatelessWidget {
   final BlockOrScalar blockOrScalar;

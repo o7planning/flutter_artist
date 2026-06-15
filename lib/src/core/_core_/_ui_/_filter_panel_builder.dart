@@ -26,12 +26,17 @@ class _FilterPanelBuilderState
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   @override
-  String getWidgetOwnerClassName() {
-    return getClassName(widget.filterModel);
+  ContextProviderViewType get type => ContextProviderViewType.filter;
+
+  @override
+  Shelf? _getRelatedShelf() {
+    return widget.filterModel.shelf;
   }
 
   @override
-  ContextProviderViewType get type => ContextProviderViewType.filter;
+  String getWidgetOwnerClassName() {
+    return getClassName(widget.filterModel);
+  }
 
   @override
   bool get provideScalarContext {

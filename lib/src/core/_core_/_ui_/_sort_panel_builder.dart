@@ -26,12 +26,17 @@ class _SortPanelBuilder extends _ContextProviderView {
 class _SortPanelBuilderState
     extends _ContextProviderViewState<_SortPanelBuilder> {
   @override
-  String getWidgetOwnerClassName() {
-    return getClassName(widget.sortModel);
+  ContextProviderViewType get type => ContextProviderViewType.sort;
+
+  @override
+  Shelf? _getRelatedShelf() {
+    return widget.sortModel.shelf;
   }
 
   @override
-  ContextProviderViewType get type => ContextProviderViewType.sort;
+  String getWidgetOwnerClassName() {
+    return getClassName(widget.sortModel);
+  }
 
   @override
   bool get provideScalarContext {

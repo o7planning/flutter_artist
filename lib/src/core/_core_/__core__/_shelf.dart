@@ -778,7 +778,6 @@ abstract class Shelf extends _Core {
       ownerClassInstance: this,
       methodName: "executeDelayedExternalReactionTaskUnit",
       parameters: null,
-      navigate: null,
       isLibMethod: true,
     );
     executionTrace._addTraceStep(

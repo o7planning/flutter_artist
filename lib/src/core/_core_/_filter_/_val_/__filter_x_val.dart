@@ -28,7 +28,7 @@ class FilterConditionGroupTildeVal implements IConditionTildeVal {
 
   String toJson() {
     final Map<String, dynamic> map = _toMapData();
-    return MapUtils.toJson(map: map);
+    return FaMapUtils.toJson(map: map);
   }
 }
 
