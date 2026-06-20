@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
-import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
 import '../../../core/_core_/core.dart';
 import '../../../core/enums/_data_state.dart';

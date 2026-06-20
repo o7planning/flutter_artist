@@ -63,7 +63,7 @@ class _StorageDeferment {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> __checkStartOrEndDrawerAndResumeReactionIfCan({
+  Future<void> __checkDrawerOrEndDrawerAndResumeReactionIfCan({
     required ExecutionTrace executionTrace,
   }) async {
     if (__defermentSource != null) {
@@ -105,8 +105,9 @@ class _StorageDeferment {
   /// Dialog:
   ///
   Future<DialogDeferralResult<V?>>
-      _openDialogAndDeferExternalShelfEventsUntilClosed<V>({
-    required Future<V?> Function() openDialog,
+      _showDialogAndDeferExternalShelfEventsUntilClosed<V>({
+    required String path,
+    required FaRouteBuilder builder,
     required ExecutionTrace executionTrace,
   }) async {
     if (!__ensureDefermentSourceIsNull()) {
@@ -115,7 +116,7 @@ class _StorageDeferment {
     try {
       // --> @see: #0004.
       __defermentSource = DefermentSource.dialog;
-      V? value = await openDialog();
+      V? value = await FlutterArtist.router.showDialog(path, builder: builder);
       return DialogDeferralResult.success(dialogValue: value);
     } finally {
       __defermentSource = null;
@@ -142,27 +143,29 @@ class _StorageDeferment {
     Scaffold.of(context).openDrawer();
     __defermentSource = DefermentSource.drawer;
     await Future.delayed(const Duration(milliseconds: 100));
-    if (showSuggestionIfNeed && !_storage.drawer._isDrawerOpen) {
-      _storage.showErrorSnackBar(
-        message:
-            "Method openDrawerAndDeferExternalShelfEventsUntilClosed() is being used incorrectly. "
-            "See console for more details.",
-        errorDetails: null,
-      );
-      String message = DebugUtils.getFatalError(
-          " Method openDrawerAndDeferExternalShelfEventsUntilClosed() is being used incorrectly!\n "
-          " @see: https://document.com");
-      print(message);
-    }
+
+    // if (showSuggestionIfNeed && !_storage.drawer.isOpen) {
+    //   _storage.showErrorSnackBar(
+    //     message:
+    //         "Method openDrawerAndDeferExternalShelfEventsUntilClosed() is being used incorrectly. "
+    //         "See console for more details.",
+    //     errorDetails: null,
+    //   );
+    //   String message = DebugUtils.getFatalError(
+    //       " Method openDrawerAndDeferExternalShelfEventsUntilClosed() is being used incorrectly!\n "
+    //       " @see: https://document.com");
+    //   print(message);
+    // }
+
     await Future.doWhile(
       () => Future.delayed(const Duration(milliseconds: 1)).then(
         (_) {
-          return _storage.drawer._isDrawerOpen == true;
+          return _storage.drawer.isOpen == true;
         },
       ),
     );
     __defermentSource = null;
-    __checkStartOrEndDrawerAndResumeReactionIfCan(
+    __checkDrawerOrEndDrawerAndResumeReactionIfCan(
       executionTrace: executionTrace,
     );
   }
@@ -184,27 +187,29 @@ class _StorageDeferment {
     Scaffold.of(context).openEndDrawer();
     __defermentSource = DefermentSource.endDrawer;
     await Future.delayed(const Duration(milliseconds: 100));
-    if (showSuggestionIfNeed && !_storage.endDrawer._isEndDrawerOpen) {
-      _storage.showErrorSnackBar(
-        message:
-            "Method openEndDrawerAndDeferExternalShelfEventsUntilClosed() is being used incorrectly. "
-            "See console for more details.",
-        errorDetails: null,
-      );
-      String message = DebugUtils.getFatalError(
-          " Method openEndDrawerAndDeferExternalShelfEventsUntilClosed() is being used incorrectly!\n "
-          " @see: https://document.com");
-      print(message);
-    }
+
+    // if (showSuggestionIfNeed && !_storage.endDrawer.isOpen) {
+    //   _storage.showErrorSnackBar(
+    //     message:
+    //         "Method openEndDrawerAndDeferExternalShelfEventsUntilClosed() is being used incorrectly. "
+    //         "See console for more details.",
+    //     errorDetails: null,
+    //   );
+    //   String message = DebugUtils.getFatalError(
+    //       " Method openEndDrawerAndDeferExternalShelfEventsUntilClosed() is being used incorrectly!\n "
+    //       " @see: https://document.com");
+    //   print(message);
+    // }
+
     await Future.doWhile(
       () => Future.delayed(const Duration(milliseconds: 1)).then(
         (_) {
-          return _storage.endDrawer._isEndDrawerOpen == true;
+          return _storage.endDrawer.isOpen == true;
         },
       ),
     );
     __defermentSource = null;
-    __checkStartOrEndDrawerAndResumeReactionIfCan(
+    __checkDrawerOrEndDrawerAndResumeReactionIfCan(
       executionTrace: executionTrace,
     );
   }

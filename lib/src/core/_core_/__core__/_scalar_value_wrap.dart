@@ -7,7 +7,8 @@ class _ScalarValueWrap<VALUE> {
   _ScalarValueWrap({
     required String? id,
     required VALUE? value,
-  })  : _id = id,
+  })
+      : _id = id,
         _value = value,
         assert((id == null && value == null) || (id != null && value != null));
 }

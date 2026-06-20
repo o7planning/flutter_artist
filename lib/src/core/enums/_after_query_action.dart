@@ -1,6 +1,6 @@
-import '_current_item_setting_type.dart';
+import '_block_set_current_item_directive.dart';
 
-enum AfterQueryAction {
+enum BlockAfterQueryDirective {
   /// Clear Current Item.
   clearCurrentItem,
 
@@ -16,18 +16,18 @@ enum AfterQueryAction {
   /// Select an available item in the List and prepare form to edit.
   setAnItemAsCurrentThenLoadForm;
 
-  CurrentItemSettingType? toCurrentItemSettingType() {
+  BlockSetCurrentItemDirective? toSetCurrentItemDirective() {
     switch (this) {
-      case AfterQueryAction.clearCurrentItem:
+      case BlockAfterQueryDirective.clearCurrentItem:
         return null;
-      case AfterQueryAction.createNewItem:
+      case BlockAfterQueryDirective.createNewItem:
         return null;
-      case AfterQueryAction.setAnItemAsCurrentIfNeed:
-        return CurrentItemSettingType.setAnItemAsCurrentIfNeed;
-      case AfterQueryAction.setAnItemAsCurrent:
-        return CurrentItemSettingType.setAnItemAsCurrent;
-      case AfterQueryAction.setAnItemAsCurrentThenLoadForm:
-        return CurrentItemSettingType.setAnItemAsCurrentThenLoadForm;
+      case BlockAfterQueryDirective.setAnItemAsCurrentIfNeed:
+        return BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
+      case BlockAfterQueryDirective.setAnItemAsCurrent:
+        return BlockSetCurrentItemDirective.setAnItemAsCurrent;
+      case BlockAfterQueryDirective.setAnItemAsCurrentThenLoadForm:
+        return BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm;
     }
   }
 }

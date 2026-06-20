@@ -5,10 +5,6 @@ import '../../../core/_core_/core.dart';
 import '../../../core/enums/_filter_connector.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/widgets/_custom_app_container.dart';
-import '../../../core/widgets/_simple_accordion.dart';
-import '../../../core/widgets/_simple_accordion_section.dart';
-import '../../widgets/_dynamic_value_view.dart';
-import '../../widgets/_xdata_view.dart';
 
 class ConditionGroupView extends StatelessWidget {
   final ConditionGroupModelImpl conditionGroupModel;

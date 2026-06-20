@@ -70,7 +70,7 @@ class _Executor {
           );
         }
         // May be AppError (FatalException).
-        catch (e, stackTrace) {
+        catch (e, _) {
           FlutterArtist._rootQueue.clear();
           rethrow;
         } finally {
@@ -161,8 +161,8 @@ class _Executor {
       );
     }
     // Block Clear All Items:
-    else if (taskUnit is _BlockClearanceTaskUnit) {
-      await taskUnit.xBlock.block._unitClearance(
+    else if (taskUnit is _BlockClearTaskUnit) {
+      await taskUnit.xBlock.block._unitClear(
         executionTrace: executionTrace,
         taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
@@ -191,12 +191,12 @@ class _Executor {
       await taskUnit.xBlock.block._unitSetItemAsCurrent(
         executionTrace: executionTrace,
         taskType: taskUnit.taskType,
-        currentItemSettingType: taskUnit.currentItemSettingType,
+        setCurrentItemDirective: taskUnit.setCurrentItemDirective,
         newQueriedList: taskUnit.newQueriedList,
         inputCandidateCurrItem: taskUnit.candidateItem,
         thisXBlock: taskUnit.xBlock,
-        blockCurrentItemSettingResult:
-            taskUnit.taskResult as BlockCurrentItemSettingResult<Identifiable>,
+        blockSetCurrentItemResult:
+            taskUnit.taskResult as BlockSetCurrentItemResult<Identifiable>,
       );
     }
     // Block Delete Item:
@@ -297,8 +297,8 @@ class _Executor {
       );
     }
     // Scalar Clear Value:
-    else if (taskUnit is _ScalarClearanceTaskUnit) {
-      await taskUnit.xScalar.scalar._unitClearance(
+    else if (taskUnit is _ScalarClearTaskUnit) {
+      await taskUnit.xScalar.scalar._unitClear(
         executionTrace: executionTrace,
         taskType: taskUnit.taskType,
         thisXScalar: taskUnit.xScalar,

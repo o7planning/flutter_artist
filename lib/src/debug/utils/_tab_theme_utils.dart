@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
 class TabThemeUtils {
   static TabbedViewThemeData getTabbedViewThemeData(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    // 2. Map structural layout canvas and boundary parameters onto exact token milestones
+    final Color contentAreaColor = context.faColors.surface.standard;
+    final Color borderColor = context.faColors.stroke.subtle;
+    final Color selectedTabColor = context.faColors.stroke.strong;
 
-    final Color contentAreaColor = colorScheme.surfaceContainer;
-    final Color tabsAreaColor = colorScheme.surfaceContainerLow;
-
-    final Color borderColor = theme.dividerColor;
-    final Color selectedTabColor = colorScheme.primary;
-
-    final borderSide = BorderSide(color: borderColor, width: 0.7);
+    final borderSide = BorderSide(color: borderColor, width: 1);
     final borderSideSelected = BorderSide(color: selectedTabColor, width: 2.0);
-    final borderSideNone =
-        const BorderSide(color: Colors.transparent, width: 0);
+    final borderSideNone = const BorderSide(
+      color: Colors.transparent,
+      width: 0,
+    );
 
-    final themeData = TabbedViewThemeData.underline();
+    TabbedViewThemeData themeData = TabbedViewThemeData.underline();
 
     final boxDecoTabSelected = BoxDecoration(
       border: Border(
@@ -41,24 +40,24 @@ class TabThemeUtils {
         fontSize: 13,
         color: getTabTextColor(context, TabStatus.unselected),
       )
+      ..selectedStatus = TabStatusThemeData(
+        fontColor: getTabTextColor(context, TabStatus.selected),
+      )
+      ..hoveredStatus = TabStatusThemeData(
+        fontColor: getTabTextColor(context, TabStatus.hovered),
+      );
+
+    themeData.tab
       ..selectedStatus = selectedStatus
       ..hoveredStatus = hoveredStatus
       ..decorationBuilder = ({
         required TabStyleContext styleContext,
         required TabBarPosition tabBarPosition,
       }) {
-        Color backgroundColor;
-
-        if (styleContext.status == TabStatus.selected) {
-          backgroundColor = colorScheme.surface;
-        } else if (styleContext.status == TabStatus.hovered) {
-          backgroundColor = colorScheme.primary.withValues(alpha: 0.06);
-        } else {
-          backgroundColor = Colors.transparent;
-        }
-
         return TabDecoration(
-          color: backgroundColor,
+          color: styleContext.status == TabStatus.selected
+              ? contentAreaColor
+              : Colors.transparent,
           border: Border(
             left: borderSide,
             right: borderSide,
@@ -74,7 +73,7 @@ class TabThemeUtils {
 
     themeData.tabsArea
       ..border = const BorderSide(color: Colors.transparent, width: 1)
-      ..color = tabsAreaColor
+      ..color = Colors.transparent
       ..initialGap = 0
       ..middleGap = 0
       ..minimalFinalGap = 0;
@@ -87,73 +86,23 @@ class TabThemeUtils {
     return themeData;
   }
 
-  static Widget buildTabLeading(
-      BuildContext context, TabStatus status, IconData iconData, String text) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    Color color;
-    FontWeight fontWeight;
-
-    if (status == TabStatus.selected) {
-      color = colorScheme.primary;
-      fontWeight = FontWeight.bold;
-    } else if (status == TabStatus.hovered) {
-      color = colorScheme.onSurface;
-      fontWeight = FontWeight.w600;
-    } else {
-      color = colorScheme.onSurface.withValues(alpha: 0.6);
-      fontWeight = FontWeight.w500;
-    }
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(iconData, color: color, size: 18),
-        const SizedBox(width: 6),
-        Text(
-          text,
-          style: TextStyle(
-            color: color,
-            fontSize: 13,
-            fontWeight: fontWeight,
-          ),
-        ),
-      ],
-    );
-  }
-
   static Color getTabIconColor(BuildContext context, TabStatus tabStatus) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    switch (tabStatus) {
-      case TabStatus.selected:
-        return colorScheme.primary;
-
-      case TabStatus.hovered:
-        return colorScheme.onSurface;
-
-      case TabStatus.unselected:
-      default:
-        return colorScheme.onSurface.withValues(alpha: 0.6);
-    }
+    return getTabTextColor(context, tabStatus);
   }
 
   static Color getTabTextColor(BuildContext context, TabStatus status) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
     switch (status) {
       case TabStatus.selected:
-        return colorScheme.primary;
+        // Anchored core typography text value inside selected interaction contexts
+        return context.faColors.ink.primary;
 
       case TabStatus.hovered:
-        return colorScheme.onSurface;
+        // Supporting accompaniment ink for focused hover states
+        return context.faColors.ink.secondary;
 
       case TabStatus.unselected:
-      default:
-        return colorScheme.onSurface.withValues(alpha: 0.6);
+        // Low-contrast regular typography for idle unselected viewports
+        return context.faColors.ink.tertiary;
     }
   }
 }

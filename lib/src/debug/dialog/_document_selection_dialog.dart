@@ -5,8 +5,6 @@ import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../widgets/_doc_link_view.dart';
 
-import 'package:flutter/material.dart';
-
 class DocumentSelectionDialog extends StatefulWidget {
   final List<String> documentIds;
   final String title;

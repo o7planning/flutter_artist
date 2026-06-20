@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_router/flutter_artist_router.dart';
 
-import '../../../core/_core_/core.dart';
-import '../options/_debug_filter_options.dart';
 import '_debug_box.dart';
 
 class RouteStackDebugBox extends BaseDebugBox {

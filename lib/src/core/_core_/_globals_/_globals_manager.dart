@@ -17,9 +17,10 @@ class GlobalsManager extends _Core {
 
   final FlutterArtistGlobalDataAdapter globalDataAdapter;
 
-  FaMetadata? __faMetadata;
+  FaMetadata? _faMetadata;
 
   final ui = _LoggedInUserUiComponents();
+  bool __inited = false;
 
   GlobalsManager._({
     required this.loginLogoutAdapter,
@@ -30,14 +31,16 @@ class GlobalsManager extends _Core {
   /// This method is called only once when FlutterArtist is started.
   ///
   Future<void> _init(ExecutionTrace executionTrace) async {
+    if (__inited) return;
+    __inited = true;
     executionTrace._addTraceStep(
       codeId: "#GM000",
       shortDesc:
           "Call <b>FaIsarStorage.getLatestMetadata()</b> to read user information that was previously saved locally.",
     );
-    __faMetadata = await FaIsarStorage.getLatestMetadata();
+    _faMetadata = await FaIsarStorage.getLatestMetadata();
 
-    if (__faMetadata == null) {
+    if (_faMetadata == null) {
       print("Stored @faMetadata is NULL");
       executionTrace._addTraceStep(
         codeId: "#GM040",
@@ -47,15 +50,16 @@ class GlobalsManager extends _Core {
     }
     executionTrace._addTraceStep(
       codeId: "#GM050",
-      shortDesc: "Prefer theme: <b>${__faMetadata!.themeName}</b>.",
+      shortDesc:
+          "Prefer theme: <b>${_faMetadata!.themeName}</b>. Prefer locale: <b>${_faMetadata!.localeCode}</b>",
     );
 
-    print("Read stored themeName: ${__faMetadata!.themeName}");
-    FaThemeHub.instance.setThemeByName(__faMetadata!.themeName);
+    print("Read stored themeName: ${_faMetadata!.themeName}");
+    FaThemeHub.instance.setThemeByName(_faMetadata!.themeName);
 
     executionTrace._addTraceStep(
       codeId: "#GM060",
-      shortDesc: "Read @userName: <b>${__faMetadata!.userId}</b>.",
+      shortDesc: "Read @userName: <b>${_faMetadata!.userId}</b>.",
     );
 
     ILoggedInUser? loggedInUser;
@@ -65,12 +69,12 @@ class GlobalsManager extends _Core {
         shortDesc:
             "Calling: <b>${getTypeNameWithoutGenerics(FaIsarStorage)}.getDecryptedUserJson()</b>.",
         parameters: {
-          "userId": __faMetadata!.userId,
+          "userId": _faMetadata!.userId,
         },
         traceStepType: TraceStepType.nonControllableCalling,
       );
       final String? loggedInUserJson =
-          await FaIsarStorage.getDecryptedUserJson(__faMetadata!.userId);
+          await FaIsarStorage.getDecryptedUserJson(_faMetadata!.userId);
 
       if (loggedInUserJson != null) {
         executionTrace._addTraceStep(

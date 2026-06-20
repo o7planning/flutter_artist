@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
-import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_artist_doc/flutter_artist_doc.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
@@ -23,7 +22,7 @@ class DocLinkView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String draftUrl = faDoc.draftUrl ;
+    final String draftUrl = faDoc.draftUrl;
 
     return Container(
       margin: margin,
@@ -45,8 +44,7 @@ class DocLinkView extends StatelessWidget {
               faDoc.title,
               style: TextStyle(
                 fontSize: 13,
-                color: faDoc.published
-                    && demoRelease
+                color: faDoc.published && demoRelease
                     ? context.faColors.action.ink.primary
                     : context.faColors.action.ink.tertiaryQuiet,
                 decoration: faDoc.published
@@ -74,9 +72,8 @@ class DocLinkView extends StatelessWidget {
                 ),
               SimpleCopyButton(
                 iconSize: 16,
-                getText: () => faDoc.published && demoRelease
-                    ? faDoc.url
-                    : draftUrl,
+                getText: () =>
+                    faDoc.published && demoRelease ? faDoc.url : draftUrl,
               ),
             ],
           ),

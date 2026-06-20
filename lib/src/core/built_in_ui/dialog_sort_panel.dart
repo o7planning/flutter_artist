@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../_core_/core.dart';
 import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_style.dart';
 import 'dialog_sort_content.dart';
 import 'dialog_sort_panel_style.dart';
 

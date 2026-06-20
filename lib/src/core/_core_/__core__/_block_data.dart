@@ -263,7 +263,7 @@ class _BlockData<
           // TODO
           break;
       }
-    } catch (e, stackTrace) {
+    } catch (e, _) {
       print("Sort Error: $e");
       rethrow;
     }

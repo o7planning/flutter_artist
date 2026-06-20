@@ -57,7 +57,7 @@ class XBlockView extends StatelessWidget {
         SizedBox(height: 10),
         IconLabelText(
           label: "After Query Action: ",
-          text: xBlock.afterQueryAction.name,
+          text: xBlock.afterQueryDirective.name,
         ),
         SizedBox(height: 10),
         IconLabelText(

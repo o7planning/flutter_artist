@@ -4,7 +4,6 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../core/_core_/core.dart';
 import '../dialog/_error_viewer_dialog.dart';
-import '__task_flow_const.dart';
 
 class ExecutionTraceBox extends StatelessWidget {
   final ExecutionTrace executionTrace;

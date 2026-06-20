@@ -435,7 +435,7 @@ abstract class Scalar<
         xFilterCriteriaOfFilterModel =
             filterModel._xFilterCriteria! as XFilterCriteria<FILTER_CRITERIA>;
       }
-    } catch (e, stackTrace) {
+    } catch (e, _) {
       /* Never Error */
     }
     //
@@ -634,8 +634,8 @@ abstract class Scalar<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_ScalarClearanceAnnotation()
-  Future<void> _unitClearance({
+  @_ScalarClearAnnotation()
+  Future<void> _unitClear({
     required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XScalar thisXScalar,
@@ -1077,8 +1077,8 @@ abstract class Scalar<
   ///
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_ScalarClearanceAnnotation()
-  Future<ScalarClearanceResult> clear() async {
+  @_ScalarClearAnnotation()
+  Future<ScalarClearResult> clear() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "clear",
@@ -1099,7 +1099,7 @@ abstract class Scalar<
     );
     //
     // @Same-Code-Precheck-01
-    Actionable<ScalarClearancePrecheck> actionable = __canClearScalar(
+    Actionable<ScalarClearPrecheck> actionable = __canClearScalar(
       checkBusy: true,
     );
     //
@@ -1117,20 +1117,20 @@ abstract class Scalar<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return ScalarClearanceResult(
+      return ScalarClearResult(
         precheck: actionable.errCode,
       );
     }
     //
-    final XShelf xShelf = _XShelfScalarClearance(scalar: this);
+    final XShelf xShelf = _XShelfScalarClear(scalar: this);
     final XScalar thisXScalar = xShelf.findXScalarByName(name)!;
     //
     executionTrace._addTraceStep(
       codeId: "#80340",
-      shortDesc: "Creating <b>_ScalarClearanceTaskUnit</b>.",
+      shortDesc: "Creating <b>_ScalarClearTaskUnit</b>.",
       traceStepType: TraceStepType.addTaskUnit,
     );
-    final _ResultedSTaskUnit taskUnit = _ScalarClearanceTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _ScalarClearTaskUnit(
       xScalar: thisXScalar,
     );
     //
@@ -1264,21 +1264,21 @@ abstract class Scalar<
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<ScalarClearancePrecheck> __canClearScalar({
+  Actionable<ScalarClearPrecheck> __canClearScalar({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<ScalarClearancePrecheck>.no(
-        errCode: ScalarClearancePrecheck.busy,
+      return Actionable<ScalarClearPrecheck>.no(
+        errCode: ScalarClearPrecheck.busy,
       );
     }
     // bool hasActiveUI = ui.hasActiveUiComponent(alsoCheckChildren: true);
     // if (hasActiveUI) {
-    //   return Actionable<ScalarClearancePrecheck>.no(
-    //     errCode: ScalarClearancePrecheck.hasActiveUI,
+    //   return Actionable<ScalarClearPrecheck>.no(
+    //     errCode: ScalarClearPrecheck.hasActiveUI,
     //   );
     // }
-    return Actionable<ScalarClearancePrecheck>.yes();
+    return Actionable<ScalarClearPrecheck>.yes();
   }
 
   // ***************************************************************************

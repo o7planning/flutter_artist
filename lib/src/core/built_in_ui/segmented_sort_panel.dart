@@ -4,7 +4,6 @@ import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import '../_core_/core.dart';
 import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_style.dart';
 import 'segmented_sort_panel_style.dart';
 
 /// A Material 3 segmented sort panel with drag-and-drop support.

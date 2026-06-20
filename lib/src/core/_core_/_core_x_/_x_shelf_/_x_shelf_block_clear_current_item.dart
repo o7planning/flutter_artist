@@ -3,7 +3,7 @@ part of '../../core.dart';
 class _XShelfBlockClearCurrentItem extends XShelf {
   _XShelfBlockClearCurrentItem({required Block block})
       : super(
-          xShelfType: XShelfType.blockCurrItemClearance,
+          xShelfType: XShelfType.blockCurrItemClear,
           shelf: block.shelf,
         ) {
     //

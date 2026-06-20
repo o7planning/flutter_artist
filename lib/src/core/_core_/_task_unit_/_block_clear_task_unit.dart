@@ -1,17 +1,17 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-class _BlockClearanceTaskUnit extends _ResultedSTaskUnit<BlockClearanceResult> {
+class _BlockClearTaskUnit extends _ResultedSTaskUnit<BlockClearResult> {
   final XBlock xBlock;
 
-  _BlockClearanceTaskUnit({
+  _BlockClearTaskUnit({
     required this.xBlock,
   }) : super(
-          taskType: TaskType.blockClearance,
-          taskResult: BlockClearanceResult(
-            precheck: null,
-          ),
-        );
+    taskType: TaskType.blockClear,
+    taskResult: BlockClearResult(
+      precheck: null,
+    ),
+  );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

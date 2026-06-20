@@ -5,7 +5,6 @@ import '../_core_/core.dart';
 import '../enums/_sort_direction.dart';
 import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_style.dart';
 import 'dropdown_sort_panel_style.dart';
 
 /// A sort panel using a standard DropdownButton.

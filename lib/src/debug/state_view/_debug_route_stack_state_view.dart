@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/debug/state_view/widgets/_route_stack_debug_box.dart';
 import 'package:flutter_artist_router/flutter_artist_router.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/widgets/_table_container.dart';
-import 'options/_debug_block_options.dart';
-import 'options/_debug_filter_options.dart';
-import 'options/_debug_form_options.dart';
-import 'options/_debug_pagination_options.dart';
-import 'widgets/_block_debug_box.dart';
-import 'widgets/_filter_debug_box.dart';
-import 'widgets/_form_debug_box.dart';
-import 'widgets/_pagination_debug_box.dart';
+import 'widgets/_route_stack_debug_box.dart';
 
 class DebugRouteStackStateView extends StatelessWidget {
   final bool showTitle;

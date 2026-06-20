@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
-import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import 'package:flutter_artist_styles_inspector/flutter_artist_styles_inspector.dart';
 
 import '../../core/_core_/core.dart';
@@ -105,7 +104,7 @@ class DebugMenuBuilder {
             },
           ),
         if (isSystemUser) _divider(),
-        if (isSystemUser && FlutterArtist.showDebugNetworkInspector != null)
+        if (isSystemUser)
           _buildPopupMenuItem(
             iconData: FaIconConstants.debugNetworkInspectorIconData,
             title: 'Network Inspector',

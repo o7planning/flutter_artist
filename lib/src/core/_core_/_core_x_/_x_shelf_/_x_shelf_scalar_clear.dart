@@ -1,9 +1,9 @@
 part of '../../core.dart';
 
-class _XShelfScalarClearance extends XShelf {
-  _XShelfScalarClearance({required Scalar scalar})
+class _XShelfScalarClear extends XShelf {
+  _XShelfScalarClear({required Scalar scalar})
       : super(
-          xShelfType: XShelfType.scalarClearance,
+          xShelfType: XShelfType.scalarClear,
           shelf: scalar.shelf,
         ) {
     //

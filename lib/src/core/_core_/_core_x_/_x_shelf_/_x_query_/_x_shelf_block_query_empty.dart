@@ -6,7 +6,7 @@ class _XShelfBlockQueryEmpty extends _XShelfSbQuery {
     required FilterInput? filterInput,
     required Pageable? pageable,
     required ListUpdateStrategy? listUpdateStrategy,
-    required AfterQueryAction? afterQueryAction,
+    required BlockAfterQueryDirective? afterQueryDirective,
     required SuggestedSelection<dynamic>? suggestedSelection,
   }) : super(
           xShelfType: XShelfType.blockQueryEmpty,
@@ -20,7 +20,7 @@ class _XShelfBlockQueryEmpty extends _XShelfSbQuery {
         queryType: QueryType.emptyQuery,
         listUpdateStrategy: listUpdateStrategy,
         suggestedSelection: suggestedSelection,
-        afterQueryAction: afterQueryAction,
+        afterQueryDirective: afterQueryDirective,
         pageable: pageable,
       ),
       srcScalarAndOptions: null,

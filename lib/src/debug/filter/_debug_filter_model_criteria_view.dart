@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 

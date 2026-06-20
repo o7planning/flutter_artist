@@ -61,8 +61,7 @@ class FilterConditionModelView extends StatelessWidget {
           ),
           const Divider(height: 20),
           if (criterionModel is MultiOptTildeFilterCriterionModel) ...[
-            _buildSelectionTypeRow(
-                context, criterionModel as MultiOptTildeFilterCriterionModel),
+            _buildSelectionTypeRow(context, criterionModel),
             const Divider(height: 20),
           ],
           Expanded(

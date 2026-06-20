@@ -34,7 +34,7 @@ class XBlock<
 
   String get name => block.name;
 
-  CurrentItemSettingType? __currentItemSettingType;
+  BlockSetCurrentItemDirective? __setCurrentItemDirective;
   ITEM? __candidateCurrItem;
 
   // Options:
@@ -47,7 +47,7 @@ class XBlock<
 
   ListUpdateStrategy? __listUpdateStrategy;
   SuggestedSelection? __suggestedSelection;
-  AfterQueryAction? __afterQueryAction;
+  BlockAfterQueryDirective? __afterQueryDirective;
   Pageable? __pageable;
 
   // TODO: Chuyen sang BlockQueryResult?
@@ -108,14 +108,14 @@ class XBlock<
   // ***************************************************************************
 
   _BlockSetItemAsCurrentTaskUnit createBlockSetItemAsCurrentTaskUnit({
-    required CurrentItemSettingType currentItemSettingType,
+    required BlockSetCurrentItemDirective setCurrentItemDirective,
     required List<Object> newQueriedList, // Do not change <Object>
     required Object? candidateItem, // Do not change <Object>
     required bool forceReloadItem,
     required ForceType? forceTypeForForm,
   }) {
     return _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
-      currentItemSettingType: currentItemSettingType,
+      setCurrentItemDirective: setCurrentItemDirective,
       xBlock: this,
       newQueriedList: newQueriedList.whereType<ITEM>().toList(),
       candidateItem: candidateItem as ITEM?,
@@ -215,12 +215,12 @@ class XBlock<
     __candidateCurrItem = candidateCurrItem;
   }
 
-  CurrentItemSettingType? get currentItemSettingType =>
-      __currentItemSettingType;
+  BlockSetCurrentItemDirective? get setCurrentItemDirective =>
+      __setCurrentItemDirective;
 
-  void setCurrentItemSettingType(
-      CurrentItemSettingType? currentItemSettingType) {
-    __currentItemSettingType = currentItemSettingType;
+  void setBlockSetCurrentItemDirective(
+      BlockSetCurrentItemDirective? setCurrentItemDirective) {
+    __setCurrentItemDirective = setCurrentItemDirective;
   }
 
   ListUpdateStrategy get listUpdateStrategy {
@@ -232,21 +232,21 @@ class XBlock<
     __suggestedSelection = value;
   }
 
-  AfterQueryAction get afterQueryAction {
-    return __afterQueryAction ?? FlutterArtist.defaultAfterQueryAction;
+  BlockAfterQueryDirective get afterQueryDirective {
+    return __afterQueryDirective ?? FlutterArtist.defaultAfterQueryDirective;
   }
 
   void setOptions({
     required QueryType queryType,
     required ListUpdateStrategy? listUpdateStrategy,
     required SuggestedSelection? suggestedSelection,
-    required AfterQueryAction? afterQueryAction,
+    required BlockAfterQueryDirective? afterQueryDirective,
     required Pageable? pageable,
   }) {
     __queryType = queryType;
     __listUpdateStrategy = listUpdateStrategy;
     __suggestedSelection = suggestedSelection;
-    __afterQueryAction = afterQueryAction;
+    __afterQueryDirective = afterQueryDirective;
     __pageable = pageable;
   }
 

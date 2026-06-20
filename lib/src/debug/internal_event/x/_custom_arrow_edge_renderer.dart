@@ -10,7 +10,6 @@ const double ARROW_LENGTH = 10;
 class CustomArrowEdgeRenderer extends EdgeRenderer {
   var trianglePath = Path();
 
-  @override
   void render(Canvas canvas, Graph graph, Paint paint) {
     var trianglePaint = Paint()
       ..color = paint.color

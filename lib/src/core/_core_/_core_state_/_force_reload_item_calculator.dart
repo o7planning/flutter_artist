@@ -11,7 +11,7 @@ _ForceReloadItemState _calculateBlockState({
   required final bool provideFormContext,
   required final ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy,
   required final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy,
-  required final CurrentItemSettingType currentItemSettingType,
+  required final BlockSetCurrentItemDirective setCurrentItemDirective,
   required final bool isCandidateCurrentItemInNewQueriedList,
   required final bool currentItemIdChanged,
 }) {
@@ -40,15 +40,15 @@ _ForceReloadItemState _calculateBlockState({
     );
   }
   //
-  switch (currentItemSettingType) {
-    case CurrentItemSettingType.setAnItemAsCurrentIfNeed:
+  switch (setCurrentItemDirective) {
+    case BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed:
       break;
-    case CurrentItemSettingType.setAnItemAsCurrent:
+    case BlockSetCurrentItemDirective.setAnItemAsCurrent:
       hasItemXRepresentativeExt = true;
-    case CurrentItemSettingType.setAnItemAsCurrentThenLoadForm:
+    case BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm:
       hasItemXRepresentativeExt = true;
       provideFormContextExt = true;
-    case CurrentItemSettingType.refresh:
+    case BlockSetCurrentItemDirective.refresh:
       hasItemXRepresentativeExt = true;
       forceReloadItem = true;
   }
@@ -729,14 +729,14 @@ _ForceReloadItemState _calculateBlockState({
     }
   }
   //
-  switch (currentItemSettingType) {
-    case CurrentItemSettingType.setAnItemAsCurrentIfNeed:
+  switch (setCurrentItemDirective) {
+    case BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed:
       if (retForceReloadItem != null || retForceReloadForm != null) {
         candidateAccepted = true;
       }
-    case CurrentItemSettingType.setAnItemAsCurrent:
-    case CurrentItemSettingType.setAnItemAsCurrentThenLoadForm:
-    case CurrentItemSettingType.refresh:
+    case BlockSetCurrentItemDirective.setAnItemAsCurrent:
+    case BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm:
+    case BlockSetCurrentItemDirective.refresh:
       candidateAccepted = true;
   }
   //

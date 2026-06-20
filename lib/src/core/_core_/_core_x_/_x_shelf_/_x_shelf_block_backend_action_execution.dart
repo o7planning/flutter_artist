@@ -34,7 +34,7 @@ class _XShelfBlockBackendActionExecution extends XShelf {
       queryType: QueryType.realQuery,
       listUpdateStrategy: null,
       suggestedSelection: null,
-      afterQueryAction: null,
+      afterQueryDirective: null,
       pageable: null,
     );
     //

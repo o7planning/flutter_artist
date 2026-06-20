@@ -4,7 +4,7 @@ class _StorageUiComponents extends _UiComponents {
   final _Storage storage;
 
   final Map<_ContextProviderViewState, bool>
-      __refreshableStorageSectionViewStates = {};
+  __refreshableStorageSectionViewStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -24,7 +24,7 @@ class _StorageUiComponents extends _UiComponents {
 
   bool hasActiveUiComponent() {
     for (_ContextProviderViewState widgetState
-        in __refreshableStorageSectionViewStates.keys) {
+    in __refreshableStorageSectionViewStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -61,7 +61,7 @@ class _StorageUiComponents extends _UiComponents {
 
   void updateAllStorageSectionViews() {
     for (_ContextProviderViewState widgetState
-        in __refreshableStorageSectionViewStates.keys) {
+    in __refreshableStorageSectionViewStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
