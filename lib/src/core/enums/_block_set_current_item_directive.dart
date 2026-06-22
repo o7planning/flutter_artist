@@ -1,4 +1,4 @@
-enum CurrentItemSettingType {
+enum BlockSetCurrentItemDirective {
   setAnItemAsCurrentIfNeed, // DEFAULT.
   setAnItemAsCurrent,
   setAnItemAsCurrentThenLoadForm,

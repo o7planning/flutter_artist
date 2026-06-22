@@ -269,7 +269,7 @@ abstract class FilterModel<
         isPrecheck: true,
       );
       FILTER_CRITERIA filterCriteria = xFilterCriteria.filterCriteria;
-    } on FilterModelRegisterError catch (e) {
+    } on FilterModelRegisterError catch (_) {
       rethrow;
     }
     // IMPORTANT: If can not initial FilterCriteria,..

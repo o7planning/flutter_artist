@@ -21,7 +21,6 @@ enum ScalarControlBarItemType {
   debugFilter,
 }
 
-
 enum FilterControlBarItemType {
   back,
   divider,

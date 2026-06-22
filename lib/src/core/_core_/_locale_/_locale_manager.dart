@@ -4,15 +4,26 @@ class LocaleManager extends _Core {
   final GlobalsManager _globalsManager;
   final FlutterArtistLocaleAdapter _localeAdapter;
 
+  /// Internal memory cache allocation to completely eliminate redundant
+  /// heavy collection traversal cycles on Flutter Web runtime.
+  List<LocaleProfile>? _computedProfilesCache;
+
   LocaleManager._({
     required GlobalsManager globalsManager,
-    required FlutterArtistLocaleAdapter localeConfig,
+    required FlutterArtistLocaleAdapter localeAdapter,
   })  : _globalsManager = globalsManager,
-        _localeAdapter = localeConfig;
+        _localeAdapter = localeAdapter;
 
-  Locale? get currentLocale {
+  /// Exposes the core localized asset dictionary loader delegate infrastructure.
+  ///
+  /// Client applications must inject this token gateway directly into their
+  /// [MaterialApp.localizationsDelegates] collection during initialization.
+  LocalizationsDelegate<dynamic> get localizationsDelegate =>
+      const LocaleNamesLocalizationsDelegate();
+
+  Locale? get storedLocale {
     // "en-US".
-    String? localeCode = _globalsManager.__faMetadata?.localeCode;
+    String? localeCode = _globalsManager._faMetadata?.localeCode;
     if (localeCode == null) {
       return null;
     }
@@ -28,18 +39,76 @@ class LocaleManager extends _Core {
     return null;
   }
 
-  List<Locale> get supportedLocales {
-    BuildContext context = FlutterArtistCore.context;
-    if (context == null) {
-      return [];
+  /// A customizable profile comparator layout configuration.
+  ///
+  /// Developers can override this callback directly to enforce custom sorting
+  /// pipelines (e.g., sorting by ISO codes or English naming conventions).
+  int Function(LocaleProfile a, LocaleProfile b)? profileComparator;
+
+  /// Exposes the dynamically compiled profile registry tracking native string naming layouts.
+  List<LocaleProfile> get supportedLocalesProfiles {
+    if (_computedProfilesCache != null) return _computedProfilesCache!;
+
+    final context = FlutterArtistCore.context;
+    final List<Locale> targets = supportedLocales;
+    if (targets.isEmpty) return const [];
+
+    final List<LocaleProfile> compiled = [];
+    final Map<String, String>? englishLocaleMap = LocaleNames.of(context)?.data;
+
+    for (Locale locale in targets) {
+      final String lookupKey = locale.toString();
+      final String? nativeLang = LocaleNames.of(context)?.nameOf(lookupKey) ??
+          LocaleNames.of(context)?.nameOf(locale.languageCode);
+      final String? englishLang = englishLocaleMap?[lookupKey] ??
+          englishLocaleMap?[locale.languageCode];
+      final String? flag = CountryUtils.getFlag(locale.languageCode);
+
+      compiled.add(
+        LocaleProfile(
+          locale: locale,
+          languageNativeName: nativeLang ?? locale.languageCode.toUpperCase(),
+          languageEnglishName: englishLang ?? locale.languageCode.toUpperCase(),
+          emojiFlag: flag,
+        ),
+      );
     }
-    final widgetsApp = context.findAncestorWidgetOfExactType<WidgetsApp>();
-    return widgetsApp?.supportedLocales.toList() ?? [];
+
+    // THE MAGIC: Execute the custom sorting pipeline if provided,
+    // otherwise fallback elegantly to the native alphabetic sorting mechanism.
+    if (profileComparator != null) {
+      compiled.sort(profileComparator);
+    } else {
+      compiled
+          .sort((a, b) => a.languageNativeName.compareTo(b.languageNativeName));
+    }
+
+    _computedProfilesCache = List.unmodifiable(compiled);
+    return _computedProfilesCache!;
   }
 
-  // Future<void> updateLocale(Locale locale) async {
-  //   return await _localeConfig._updateLocale(locale);
-  // }
+  /// Public API allowing developers to dynamically update the sorting algorithm at runtime.
+  void setProfileSortingRules(
+      int Function(LocaleProfile a, LocaleProfile b)? comparator) {
+    profileComparator = comparator;
+    // Clear cache allocation to force re-computation cycle
+    _computedProfilesCache = null;
+  }
+
+  List<Locale> get supportedLocales {
+    final context = FlutterArtistCore.context;
+    final widgetsApp = context.findAncestorWidgetOfExactType<WidgetsApp>();
+    return widgetsApp?.supportedLocales.toList() ?? const [];
+  }
+
+  Locale? get currentLocale {
+    final context = FlutterArtistCore.context;
+    final widgetsApp = context.findAncestorWidgetOfExactType<WidgetsApp>();
+    if (widgetsApp?.locale != null) {
+      return widgetsApp!.locale;
+    }
+    return Localizations.maybeLocaleOf(context);
+  }
 
   ///
   /// Apply Locale and store it in local.

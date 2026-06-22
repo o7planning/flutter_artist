@@ -5,7 +5,6 @@ import '../_core_/core.dart';
 import '_menu_item.dart';
 import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_style.dart';
 import 'popup_sort_panel_style.dart';
 
 /// A sort panel that opens a stateful popup menu for selecting criteria.

@@ -154,7 +154,7 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
   }
 
   Future<bool> __refreshCurrentItem() async {
-    BlockCurrentItemSettingResult result =
+    BlockSetCurrentItemResult result =
         await widget.block.refreshCurrentItem();
     return result.successForAll;
   }

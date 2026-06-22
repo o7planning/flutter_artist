@@ -35,7 +35,7 @@ class _XShelfSbQuery extends XShelf {
         queryType: srcBlockAndOptions.queryType,
         listUpdateStrategy: srcBlockAndOptions.listUpdateStrategy,
         suggestedSelection: srcBlockAndOptions.suggestedSelection,
-        afterQueryAction: srcBlockAndOptions.afterQueryAction,
+        afterQueryDirective: srcBlockAndOptions.afterQueryDirective,
         pageable: srcBlockAndOptions.pageable,
       );
       setRootVipXBlock(descendantXBlock: srcXBlock);
@@ -78,7 +78,7 @@ class _XShelfSbQuery extends XShelf {
         queryType: QueryType.realQuery,
         listUpdateStrategy: ListUpdateStrategy.replace,
         suggestedSelection: null,
-        afterQueryAction: null,
+        afterQueryDirective: null,
         pageable: null,
       );
       //

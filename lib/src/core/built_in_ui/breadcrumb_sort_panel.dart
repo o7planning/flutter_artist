@@ -5,7 +5,6 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 import '../_core_/core.dart';
 import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
-import '_style.dart';
 import 'breadcrumb_sort_panel_style.dart';
 
 class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>

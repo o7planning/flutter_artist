@@ -2,6 +2,7 @@ part of 'core.dart';
 
 class _GarbageCollector {
   static const _GarbageCollector instance = _GarbageCollector.__();
+
   const _GarbageCollector.__();
 
   static bool __isStarted = false;

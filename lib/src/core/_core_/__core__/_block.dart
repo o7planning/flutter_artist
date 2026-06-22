@@ -675,8 +675,8 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockClearanceAnnotation()
-  Future<void> _unitClearance({
+  @_BlockClearAnnotation()
+  Future<void> _unitClear({
     required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock thisXBlock,
@@ -813,10 +813,10 @@ abstract class Block<
       );
       candidateCurrItem = null;
       //
-      CurrentItemSettingType? currentItemSettingType;
-      final defaultAfterQueryAction = FlutterArtist.defaultAfterQueryAction;
-      final CurrentItemSettingType? defaultCurrentItemSettingType =
-          defaultAfterQueryAction.toCurrentItemSettingType();
+      BlockSetCurrentItemDirective? setCurrentItemDirective;
+      final defaultAfterQueryDirective = FlutterArtist.defaultAfterQueryDirective;
+      final BlockSetCurrentItemDirective? defaultBlockSetCurrentItemDirective =
+          defaultAfterQueryDirective.toSetCurrentItemDirective();
       //
       // If Natural Mode: Try to select an item as current if the Block has no current.
       //
@@ -836,29 +836,29 @@ abstract class Block<
           return;
         }
         //
-        currentItemSettingType = defaultCurrentItemSettingType;
+        setCurrentItemDirective = defaultBlockSetCurrentItemDirective;
       }
       // Not Natural Mode.
       else {
-        if (thisXBlock.currentItemSettingType != null) {
-          currentItemSettingType = thisXBlock.currentItemSettingType!;
+        if (thisXBlock.setCurrentItemDirective != null) {
+          setCurrentItemDirective = thisXBlock.setCurrentItemDirective!;
         }
       }
       //
       // Test Cases: [63a] - __test_event_63a__external_product_event_in_productScreen_1
       //
-      if (currentItem == null && currentItemSettingType == null) {
+      if (currentItem == null && setCurrentItemDirective == null) {
         executionTrace._addTraceStep(
           codeId: "#03120",
           shortDesc:
-              "The block has no currentItem and @currentItemSettingType is null --> Cancel query.",
+              "The block has no currentItem and @setCurrentItemDirective is null --> Cancel query.",
         );
         return;
       }
       //
       final taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
-        currentItemSettingType: currentItemSettingType ??
-            CurrentItemSettingType.setAnItemAsCurrentIfNeed,
+        setCurrentItemDirective: setCurrentItemDirective ??
+            BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
         xBlock: thisXBlock,
         newQueriedList: [],
         candidateItem: candidateCurrItem,
@@ -1362,7 +1362,7 @@ abstract class Block<
     }
     //
     // TODO: LOGIC-01 (If not querying block --> No need to force select an item).
-    AfterQueryAction afterQueryAction = thisXBlock.afterQueryAction;
+    BlockAfterQueryDirective afterQueryDirective = thisXBlock.afterQueryDirective;
     if (!thisXBlock.xShelf.naturalMode) {
       if (!queried) {
         return;
@@ -1370,19 +1370,19 @@ abstract class Block<
     }
     executionTrace._addTraceStep(
       codeId: "#03700",
-      shortDesc: "@afterQueryAction: ${debugObjHtml(afterQueryAction)}.",
+      shortDesc: "@afterQueryDirective: ${debugObjHtml(afterQueryDirective)}.",
       traceStepType: TraceStepType.debug,
     );
     //
-    // Begin AfterQueryAction
+    // Begin AfterQueryDirective
     //
-    if (afterQueryAction == AfterQueryAction.clearCurrentItem) {
+    if (afterQueryDirective == BlockAfterQueryDirective.clearCurrentItem) {
       final taskUnit = _BlockClearCurrentTaskUnit<ITEM>(
         xBlock: thisXBlock,
       );
       executionTrace._addTraceStep(
         codeId: "#03720",
-        shortDesc: "@afterQueryAction: ${debugObjHtml(afterQueryAction)} --> "
+        shortDesc: "@afterQueryDirective: ${debugObjHtml(afterQueryDirective)} --> "
             "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
         traceStepType: TraceStepType.addTaskUnit,
       );
@@ -1392,7 +1392,7 @@ abstract class Block<
       return;
     }
     // createNewItem
-    else if (afterQueryAction == AfterQueryAction.createNewItem) {
+    else if (afterQueryDirective == BlockAfterQueryDirective.createNewItem) {
       final taskUnit = _BlockPrepareFormToCreateItemTaskUnit(
         xBlock: thisXBlock,
         initDirty: false,
@@ -1400,7 +1400,7 @@ abstract class Block<
       );
       executionTrace._addTraceStep(
         codeId: "#03740",
-        shortDesc: "@afterQueryAction: $afterQueryAction --> "
+        shortDesc: "@afterQueryDirective: $afterQueryDirective --> "
             "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
         traceStepType: TraceStepType.addTaskUnit,
       );
@@ -1410,31 +1410,30 @@ abstract class Block<
       return;
     }
     //
-    final CurrentItemSettingType currentItemSettingType;
-    switch (afterQueryAction) {
-      case AfterQueryAction.clearCurrentItem:
+    final BlockSetCurrentItemDirective setCurrentItemDirective;
+    switch (afterQueryDirective) {
+      case BlockAfterQueryDirective.clearCurrentItem:
         throw UnimplementedError("Never ran. Handled above.");
-      case AfterQueryAction.createNewItem:
+      case BlockAfterQueryDirective.createNewItem:
         throw UnimplementedError("Never ran. Handled above.");
-      case AfterQueryAction.setAnItemAsCurrentIfNeed:
-        currentItemSettingType =
-            CurrentItemSettingType.setAnItemAsCurrentIfNeed;
-      case AfterQueryAction.setAnItemAsCurrent:
-        currentItemSettingType = CurrentItemSettingType.setAnItemAsCurrent;
-      case AfterQueryAction.setAnItemAsCurrentThenLoadForm:
-        currentItemSettingType =
-            CurrentItemSettingType.setAnItemAsCurrentThenLoadForm;
+      case BlockAfterQueryDirective.setAnItemAsCurrentIfNeed:
+        setCurrentItemDirective = BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
+      case BlockAfterQueryDirective.setAnItemAsCurrent:
+        setCurrentItemDirective = BlockSetCurrentItemDirective.setAnItemAsCurrent;
+      case BlockAfterQueryDirective.setAnItemAsCurrentThenLoadForm:
+        setCurrentItemDirective =
+            BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm;
     }
     //
     executionTrace._addTraceStep(
       codeId: "#03780",
       shortDesc:
-          "Calculated >> @currentItemSettingType: ${debugObjHtml(currentItemSettingType)}.",
+          "Calculated >> @setCurrentItemDirective: ${debugObjHtml(setCurrentItemDirective)}.",
       traceStepType: TraceStepType.debug,
     );
     //
     final taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
-      currentItemSettingType: currentItemSettingType,
+      setCurrentItemDirective: setCurrentItemDirective,
       xBlock: thisXBlock,
       newQueriedList: queriedPageData?.items ?? [],
       candidateItem: candidateCurrItem,
@@ -1466,10 +1465,10 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required CurrentItemSettingType currentItemSettingType,
+    required BlockSetCurrentItemDirective setCurrentItemDirective,
     required List<ITEM> newQueriedList,
     required ITEM? inputCandidateCurrItem,
-    required BlockCurrentItemSettingResult<ITEM> blockCurrentItemSettingResult,
+    required BlockSetCurrentItemResult<ITEM> blockSetCurrentItemResult,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -1480,7 +1479,7 @@ abstract class Block<
       parameters: {
         "inputCandidateCurrItem": inputCandidateCurrItem,
         "newQueriedList": newQueriedList,
-        "currentItemSettingType": currentItemSettingType,
+        "setCurrentItemDirective": setCurrentItemDirective,
       },
       traceStepType: TraceStepType.debug,
     );
@@ -1505,7 +1504,7 @@ abstract class Block<
       inputCandidateCurrItem ??= (thisXBlock.candidateCurrItem as ITEM);
     }
     if (inputCandidateCurrItem != null) {
-      blockCurrentItemSettingResult._addCandidateItem(inputCandidateCurrItem);
+      blockSetCurrentItemResult._addCandidateItem(inputCandidateCurrItem);
     }
     //
     if (dataState == DataState.pending) {
@@ -1655,19 +1654,18 @@ abstract class Block<
           codeId: "#28300",
           shortDesc: "State:"
               "\n - ITEM == ITEM_DETAIL?: <b>${ITEM == ITEM_DETAIL}</b>."
-              "\n - @currentItemSettingType: <b>$currentItemSettingType</b>.",
+              "\n - @setCurrentItemDirective: <b>$setCurrentItemDirective</b>.",
           traceStepType: TraceStepType.debug,
         );
         //
         if (hasItemRep ||
-            currentItemSettingType ==
-                CurrentItemSettingType.setAnItemAsCurrent ||
-            currentItemSettingType ==
-                CurrentItemSettingType.setAnItemAsCurrentThenLoadForm) {
+            setCurrentItemDirective == BlockSetCurrentItemDirective.setAnItemAsCurrent ||
+            setCurrentItemDirective ==
+                BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm) {
           candidateCurrItem = candidateCurrItem2;
           currItemWillChanged = candidateCurrItem != null;
-        } else if (currentItemSettingType ==
-                CurrentItemSettingType.setAnItemAsCurrentIfNeed &&
+        } else if (setCurrentItemDirective ==
+                BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed &&
             (ITEM == ITEM_DETAIL && isInNewQueryList2)) {
           candidateCurrItem = isInNewQueryList2 ? candidateCurrItem2 : null;
           currItemWillChanged = candidateCurrItem != null;
@@ -1739,7 +1737,7 @@ abstract class Block<
       item2: candidateCurrItem,
     );
     if (!isSameCandidateItem) {
-      blockCurrentItemSettingResult._addCandidateItem(candidateCurrItem);
+      blockSetCurrentItemResult._addCandidateItem(candidateCurrItem);
     }
     //
     final bool isCandidateCurrentItemInNewQueriedList =
@@ -1789,7 +1787,7 @@ abstract class Block<
         "provideFormContext": provideFormContext,
         "itemAbsentRepresentativePolicy": config.itemAbsentRepresentativePolicy,
         "unifiedItemRefreshPolicy": config.unifiedItemRefreshPolicy,
-        "currentItemSettingType": currentItemSettingType,
+        "setCurrentItemDirective": setCurrentItemDirective,
         "isCandidateCurrentItemInNewQueriedList":
             isCandidateCurrentItemInNewQueriedList,
         "currentItemChanged": currItemWillChanged,
@@ -1808,7 +1806,7 @@ abstract class Block<
       provideFormContext: provideFormContext,
       itemAbsentRepresentativePolicy: config.itemAbsentRepresentativePolicy,
       unifiedItemRefreshPolicy: config.unifiedItemRefreshPolicy,
-      currentItemSettingType: currentItemSettingType,
+      setCurrentItemDirective: setCurrentItemDirective,
       isCandidateCurrentItemInNewQueriedList:
           isCandidateCurrentItemInNewQueriedList,
       currentItemIdChanged: currItemWillChanged,
@@ -1881,7 +1879,8 @@ abstract class Block<
             "The candidate ${debugObjHtml(candidateCurrItem)} will not need to be reloaded.",
       );
       // Test Cases: [13a], [42a]. (?????)
-      final ITEM? candidateCurrItemInNewQueriedList = FaItemsUtils.findItemInList(
+      final ITEM? candidateCurrItemInNewQueriedList =
+          FaItemsUtils.findItemInList(
         item: candidateCurrItem,
         targetList: newQueriedList,
         getItemId: _getItemIdInternal,
@@ -1945,7 +1944,7 @@ abstract class Block<
             tipDocument: TipDocument.blockPerformLoadItemDetailById,
           );
           //
-          blockCurrentItemSettingResult._setErrorInfo(
+          blockSetCurrentItemResult._setErrorInfo(
             errorInfo: errorInfo,
           );
           executionTrace._addTraceStep(
@@ -2007,7 +2006,7 @@ abstract class Block<
         //
         thisXBlock.xShelf._addTaskUnit(
           taskUnit: _BlockSetItemAsCurrentTaskUnit(
-            currentItemSettingType: currentItemSettingType,
+            setCurrentItemDirective: setCurrentItemDirective,
             xBlock: thisXBlock,
             newQueriedList: newQueriedList,
             candidateItem: siblingItem,
@@ -2066,7 +2065,7 @@ abstract class Block<
         );
         thisXBlock.xShelf._addTaskUnit(
           taskUnit: _BlockSetItemAsCurrentTaskUnit(
-            currentItemSettingType: currentItemSettingType,
+            setCurrentItemDirective: setCurrentItemDirective,
             xBlock: thisXBlock,
             newQueriedList: newQueriedList,
             candidateItem: siblingItem,
@@ -2130,7 +2129,7 @@ abstract class Block<
         );
       }
       if (convertError) {
-        blockCurrentItemSettingResult._convertError = true;
+        blockSetCurrentItemResult._convertError = true;
         // TODO Always return??
         // If currentItemChanged or not currentItemChanged
         // Always return. Nothing to do if has error!!
@@ -2204,7 +2203,7 @@ abstract class Block<
     // (On _unitSetItemAsCurrent method).
     // candidateCurrItem != null.
     if (currItemWillChanged) {
-      blockCurrentItemSettingResult._currentItem = candidateCurrItem;
+      blockSetCurrentItemResult._currentItem = candidateCurrItem;
       //
       executionTrace._addTraceStep(
         codeId: "#29640",
@@ -2503,9 +2502,8 @@ abstract class Block<
     //
     // Fire Internal Event.
     //
-    final currentItemSettingType =
-        CurrentItemSettingType.setAnItemAsCurrentIfNeed;
-    thisXBlock.setCurrentItemSettingType(currentItemSettingType);
+    final setCurrentItemDirective = BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
+    thisXBlock.setBlockSetCurrentItemDirective(setCurrentItemDirective);
     //
     final bool hasInternalReaction = _internalEffectedShelfMembers.hasMember();
     //
@@ -2562,7 +2560,7 @@ abstract class Block<
           codeId: "#70380",
           shortDesc: "Creating <b>_BlockSetItemAsCurrentTaskUnit</b>.",
           parameters: {
-            "currentItemSettingType": currentItemSettingType,
+            "setCurrentItemDirective": setCurrentItemDirective,
             "candidateItem": candidateCurrItem,
             "forceReloadItem": false,
             "forceTypeForForm": null,
@@ -2572,7 +2570,7 @@ abstract class Block<
         //
         final _STaskUnit taskUnit =
             thisXBlock.createBlockSetItemAsCurrentTaskUnit(
-          currentItemSettingType: currentItemSettingType,
+          setCurrentItemDirective: setCurrentItemDirective,
           newQueriedList: [],
           candidateItem: candidateCurrItem,
           forceReloadItem: false,
@@ -2655,7 +2653,7 @@ abstract class Block<
       // Test Case:
       final _STaskUnit taskUnit =
           thisXBlock.createBlockSetItemAsCurrentTaskUnit(
-        currentItemSettingType: currentItemSettingType,
+        setCurrentItemDirective: setCurrentItemDirective,
         newQueriedList: [],
         candidateItem: candidateCurrItem,
         forceReloadItem: false,
@@ -2713,7 +2711,7 @@ abstract class Block<
           parameters: {
             "newQueriedList": [],
             "candidateItem": null,
-            "currentItemSettingType": currentItemSettingType,
+            "setCurrentItemDirective": setCurrentItemDirective,
             "forceReloadItem": true,
             "forceTypeForForm": null,
           },
@@ -2722,7 +2720,7 @@ abstract class Block<
         //
         final _STaskUnit taskUnit =
             topXBlock.createBlockSetItemAsCurrentTaskUnit(
-          currentItemSettingType: currentItemSettingType,
+          setCurrentItemDirective: setCurrentItemDirective,
           newQueriedList: [],
           candidateItem: null,
           forceReloadItem: true,
@@ -2777,7 +2775,7 @@ abstract class Block<
         //
         final _STaskUnit taskUnit =
             thisXBlock.createBlockSetItemAsCurrentTaskUnit(
-          currentItemSettingType: currentItemSettingType,
+          setCurrentItemDirective: setCurrentItemDirective,
           newQueriedList: [],
           candidateItem: candidateCurrItem,
           forceReloadItem: forceReloadItem,
@@ -3796,8 +3794,8 @@ abstract class Block<
         // TODO-XXX: Add _BlockSetItemAsCurrentTaskUnit?
         //  xxx; Xoa di.
         // _TaskUnit taskUnit = _BlockSetItemAsCurrentTaskUnit<ITEM>(
-        //   currentItemSettingType:
-        //       CurrentItemSettingType.selectAnItemAsCurrentIfNeed,
+        //   setCurrentItemDirective:
+        //       BlockSetCurrentItemDirective.selectAnItemAsCurrentIfNeed,
         //   xBlock: thisXBlock,
         //   newQueriedList: [],
         //   candidateItem: siblingItem,
@@ -4121,8 +4119,7 @@ abstract class Block<
 
   @_BlockSetItemAsCurrentAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  Future<BlockCurrentItemSettingResult<ITEM>>
-      __refreshToShowOrEditItemAsCurrent({
+  Future<BlockSetCurrentItemResult<ITEM>> __refreshItemAndSetAsCurrent({
     required ExecutionTrace executionTrace,
     required String methodName,
     required ITEM? item,
@@ -4130,14 +4127,14 @@ abstract class Block<
     required bool forceLoadItem,
     required bool forceLoadForm,
   }) async {
-    final currentItemSettingType = forceLoadForm
-        ? CurrentItemSettingType.setAnItemAsCurrentThenLoadForm
-        : CurrentItemSettingType.setAnItemAsCurrent;
+    final setCurrentItemDirective = forceLoadForm
+        ? BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm
+        : BlockSetCurrentItemDirective.setAnItemAsCurrent;
     //
     executionTrace._addTraceStep(
       codeId: "#69000",
       shortDesc:
-          "Calculated > @currentItemSettingType: ${debugObjHtml(currentItemSettingType)}",
+          "Calculated > @setCurrentItemDirective: ${debugObjHtml(setCurrentItemDirective)}",
       traceStepType: TraceStepType.debug,
     );
     executionTrace._addTraceStep(
@@ -4153,8 +4150,7 @@ abstract class Block<
     //
     // @Same-Code-Precheck-01
     //
-    Actionable<BlockCurrentItemSettingPrecheck> actionable =
-        __canSetItemAsCurrent(
+    Actionable<BlockSetCurrentItemPrecheck> actionable = __canSetItemAsCurrent(
       item: item,
       errCodeIfItemIsNull: errCodeIfItemIsNull,
       checkBusy: true,
@@ -4174,9 +4170,9 @@ abstract class Block<
         errorInfo: errorInfo,
       );
       //
-      return BlockCurrentItemSettingResult<ITEM>(
+      return BlockSetCurrentItemResult<ITEM>(
         precheck: actionable.errCode,
-        currentItemSettingType: currentItemSettingType,
+        setCurrentItemDirective: setCurrentItemDirective,
         getItemId: _getItemIdInternal,
         candidateItem: item,
         oldCurrentItem: currentItem,
@@ -4193,7 +4189,7 @@ abstract class Block<
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     final taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
-      currentItemSettingType: currentItemSettingType,
+      setCurrentItemDirective: setCurrentItemDirective,
       xBlock: thisXBlock,
       newQueriedList: [],
       candidateItem: item,
@@ -4206,7 +4202,7 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
-    var result = taskUnit.taskResult as BlockCurrentItemSettingResult<ITEM>;
+    var result = taskUnit.taskResult as BlockSetCurrentItemResult<ITEM>;
     return result;
   }
 
@@ -4216,7 +4212,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSetItemAsCurrentAnnotation()
-  Future<BlockCurrentItemSettingResult<ITEM>> refreshItemAndSetAsCurrent({
+  Future<BlockSetCurrentItemResult<ITEM>> refreshItemAndSetAsCurrent({
     required ITEM item,
     bool forceLoadForm = false,
   }) async {
@@ -4229,7 +4225,7 @@ abstract class Block<
       },
       isLibMethod: true,
     );
-    return await __refreshToShowOrEditItemAsCurrent(
+    return await __refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshItemAndSetAsCurrent",
       item: item,
@@ -4247,8 +4243,8 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_BlockClearanceAnnotation()
-  Future<BlockClearanceResult> clear() async {
+  @_BlockClearAnnotation()
+  Future<BlockClearResult> clear() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "clear",
@@ -4260,7 +4256,7 @@ abstract class Block<
       shortDesc: "Check before clear the ${debugObjHtml(this)}...",
     );
     // @Same-Code-Precheck-01
-    Actionable<BlockClearancePrecheck> actionable = __canClearBlock(
+    Actionable<BlockClearPrecheck> actionable = __canClearBlock(
       checkBusy: true,
     );
     //
@@ -4277,19 +4273,19 @@ abstract class Block<
         shortDesc: "@actionable --> ${debugObjHtml(actionable)}.",
         errorInfo: errorInfo,
       );
-      return BlockClearanceResult(
+      return BlockClearResult(
         precheck: actionable.errCode,
       );
     }
     //
     executionTrace._addTraceStep(
       codeId: "#62200",
-      shortDesc: "Creating <b>$_XShelfBlockClearance</b>.",
+      shortDesc: "Creating <b>$_XShelfBlockClear</b>.",
     );
-    final XShelf xShelf = _XShelfBlockClearance(block: this);
+    final XShelf xShelf = _XShelfBlockClear(block: this);
 
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-    final _ResultedSTaskUnit taskUnit = _BlockClearanceTaskUnit(
+    final _ResultedSTaskUnit taskUnit = _BlockClearTaskUnit(
       xBlock: thisXBlock,
     );
     //
@@ -4310,8 +4306,8 @@ abstract class Block<
   @_BlockQueryNextPageAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> queryNextPage({
-    AfterQueryAction afterQueryAction =
-        AfterQueryAction.setAnItemAsCurrentIfNeed,
+    BlockAfterQueryDirective afterQueryDirective =
+        BlockAfterQueryDirective.setAnItemAsCurrentIfNeed,
   }) async {
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -4323,7 +4319,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "queryNextPage",
       parameters: {
-        "afterQueryAction": afterQueryAction,
+        "afterQueryDirective": afterQueryDirective,
       },
       isLibMethod: true,
     );
@@ -4333,7 +4329,7 @@ abstract class Block<
       qryMethod: qryMethod,
       suggestedListUpdateStrategy: ListUpdateStrategy.replace,
       filterInput: null,
-      afterQueryAction: afterQueryAction,
+      afterQueryDirective: afterQueryDirective,
       suggestedSelection: null,
       specifiedPageable: null,
     );
@@ -4349,8 +4345,8 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQueryPreviousPageAnnotation()
   Future<BlockQueryResult> queryPreviousPage({
-    AfterQueryAction afterQueryAction =
-        AfterQueryAction.setAnItemAsCurrentIfNeed,
+    BlockAfterQueryDirective afterQueryDirective =
+        BlockAfterQueryDirective.setAnItemAsCurrentIfNeed,
   }) async {
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -4362,7 +4358,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "queryPreviousPage",
       parameters: {
-        "afterQueryAction": afterQueryAction,
+        "afterQueryDirective": afterQueryDirective,
       },
       isLibMethod: true,
     );
@@ -4372,7 +4368,7 @@ abstract class Block<
       qryMethod: qryMethod,
       suggestedListUpdateStrategy: ListUpdateStrategy.replace,
       filterInput: null,
-      afterQueryAction: afterQueryAction,
+      afterQueryDirective: afterQueryDirective,
       suggestedSelection: null,
       specifiedPageable: null,
     );
@@ -4388,8 +4384,8 @@ abstract class Block<
   @_BlockQueryMorePageAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> queryMore({
-    AfterQueryAction afterQueryAction =
-        AfterQueryAction.setAnItemAsCurrentIfNeed,
+    BlockAfterQueryDirective afterQueryDirective =
+        BlockAfterQueryDirective.setAnItemAsCurrentIfNeed,
   }) async {
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
@@ -4401,7 +4397,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "queryMore",
       parameters: {
-        "afterQueryAction": afterQueryAction,
+        "afterQueryDirective": afterQueryDirective,
       },
       isLibMethod: true,
     );
@@ -4410,7 +4406,7 @@ abstract class Block<
       executionTrace: executionTrace,
       qryMethod: qryMethod,
       suggestedListUpdateStrategy: ListUpdateStrategy.merge,
-      afterQueryAction: afterQueryAction,
+      afterQueryDirective: afterQueryDirective,
       filterInput: null,
       suggestedSelection: null,
       specifiedPageable: null,
@@ -4488,8 +4484,8 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> query({
     ListUpdateStrategy suggestedListUpdateStrategy = ListUpdateStrategy.replace,
-    AfterQueryAction afterQueryAction =
-        AfterQueryAction.setAnItemAsCurrentIfNeed,
+    BlockAfterQueryDirective afterQueryDirective =
+        BlockAfterQueryDirective.setAnItemAsCurrentIfNeed,
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     Pageable? pageable,
@@ -4504,7 +4500,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "query",
       parameters: {
-        "afterQueryAction": afterQueryAction,
+        "afterQueryDirective": afterQueryDirective,
         "suggestedListUpdateStrategy": suggestedListUpdateStrategy,
         "filterInput": filterInput,
         "suggestedSelection": suggestedSelection,
@@ -4517,7 +4513,7 @@ abstract class Block<
       executionTrace: executionTrace,
       qryMethod: qryMethod,
       suggestedListUpdateStrategy: suggestedListUpdateStrategy,
-      afterQueryAction: afterQueryAction,
+      afterQueryDirective: afterQueryDirective,
       filterInput: filterInput,
       suggestedSelection: suggestedSelection,
       specifiedPageable: pageable,
@@ -4558,7 +4554,7 @@ abstract class Block<
       filterInput: filterInput,
       pageable: null,
       suggestedListUpdateStrategy: suggestedListUpdateStrategy,
-      afterQueryAction: AfterQueryAction.setAnItemAsCurrentThenLoadForm,
+      afterQueryDirective: BlockAfterQueryDirective.setAnItemAsCurrentThenLoadForm,
       suggestedSelection: suggestedSelection,
     );
     //
@@ -4602,7 +4598,7 @@ abstract class Block<
       filterInput: filterInput,
       pageable: null,
       listUpdateStrategy: ListUpdateStrategy.replace,
-      afterQueryAction: AfterQueryAction.createNewItem,
+      afterQueryDirective: BlockAfterQueryDirective.createNewItem,
       suggestedSelection: null,
     );
     //
@@ -4773,7 +4769,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Them tham so ITEM.
+  // TODO: Rename to shouldRetainItem.
   @_AbstractMethodAnnotation()
   bool needToKeepItemInList({
     required Object? parentBlockCurrentItemId,
@@ -5317,7 +5313,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectFirstItemAsCurrentAnnotation()
-  Future<BlockCurrentItemSettingResult<ITEM>> refreshFirstItemAndSetAsCurrent({
+  Future<BlockSetCurrentItemResult<ITEM>> refreshFirstItemAndSetAsCurrent({
     bool forceLoadForm = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5328,7 +5324,7 @@ abstract class Block<
       },
       isLibMethod: true,
     );
-    return __refreshToShowOrEditItemAsCurrent(
+    return __refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshFirstItemAndSetAsCurrent",
       item: firstItem,
@@ -5344,7 +5340,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectNextItemAsCurrentAnnotation()
-  Future<BlockCurrentItemSettingResult<ITEM>> refreshNextItemAndSetAsCurrent({
+  Future<BlockSetCurrentItemResult<ITEM>> refreshNextItemAndSetAsCurrent({
     bool forceLoadForm = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5358,7 +5354,7 @@ abstract class Block<
     //
     ITEM? nextItem = nextSiblingItem;
     //
-    return __refreshToShowOrEditItemAsCurrent(
+    return __refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshNextItemAndSetAsCurrent",
       item: nextItem,
@@ -5374,8 +5370,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockSelectPreviousItemAsCurrentAnnotation()
-  Future<BlockCurrentItemSettingResult<ITEM>>
-      refreshPreviousItemAndSetAsCurrent({
+  Future<BlockSetCurrentItemResult<ITEM>> refreshPreviousItemAndSetAsCurrent({
     bool forceLoadForm = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5389,7 +5384,7 @@ abstract class Block<
     //
     ITEM? previousItem = previousSiblingItem;
     //
-    return __refreshToShowOrEditItemAsCurrent(
+    return __refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshPreviousItemAndSetAsCurrent",
       item: previousItem,
@@ -5405,7 +5400,7 @@ abstract class Block<
   ///
   /// Prepare to edit an item in a Form.
   ///
-  Future<BlockCurrentItemSettingResult> _prepareFormToEditCurrentItem() async {
+  Future<BlockSetCurrentItemResult> _prepareFormToEditCurrentItem() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "_prepareFormToEditItem",
@@ -5663,7 +5658,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
-  Future<BlockCurrentItemSettingResult<ITEM>> refreshCurrentItem({
+  Future<BlockSetCurrentItemResult<ITEM>> refreshCurrentItem({
     bool forceLoadForm = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5675,7 +5670,7 @@ abstract class Block<
       isLibMethod: true,
     );
     //
-    return await __refreshToShowOrEditItemAsCurrent(
+    return await __refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: 'refreshCurrentItem',
       item: currentItem,
@@ -5868,7 +5863,7 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required BlockQryMethodName qryMethod,
     required ListUpdateStrategy suggestedListUpdateStrategy,
-    required AfterQueryAction afterQueryAction,
+    required BlockAfterQueryDirective afterQueryDirective,
     required FILTER_INPUT? filterInput,
     required SuggestedSelection? suggestedSelection,
     required Pageable? specifiedPageable,
@@ -5904,7 +5899,7 @@ abstract class Block<
       filterInput: filterInput,
       pageable: usedPageable,
       listUpdateStrategy: suggestedListUpdateStrategy,
-      afterQueryAction: afterQueryAction,
+      afterQueryDirective: afterQueryDirective,
       suggestedSelection: suggestedSelection,
     );
     //
@@ -5939,9 +5934,9 @@ abstract class Block<
       filterInput: filterInput,
       pageable: pageable,
       listUpdateStrategy: ListUpdateStrategy.replace,
-      afterQueryAction: prepareFormToCreateItem
-          ? AfterQueryAction.createNewItem
-          : AfterQueryAction.setAnItemAsCurrent,
+      afterQueryDirective: prepareFormToCreateItem
+          ? BlockAfterQueryDirective.createNewItem
+          : BlockAfterQueryDirective.setAnItemAsCurrent,
       suggestedSelection: null,
     );
     //
@@ -6440,23 +6435,23 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<BlockClearancePrecheck> __canClearBlock({
+  Actionable<BlockClearPrecheck> __canClearBlock({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockClearancePrecheck>.no(
-        errCode: BlockClearancePrecheck.busy,
+      return Actionable<BlockClearPrecheck>.no(
+        errCode: BlockClearPrecheck.busy,
       );
     }
     bool hasBlockRep = ui.hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
     if (hasBlockRep) {
-      return Actionable<BlockClearancePrecheck>.no(
-        errCode: BlockClearancePrecheck.hasActiveUI,
+      return Actionable<BlockClearPrecheck>.no(
+        errCode: BlockClearPrecheck.hasActiveUI,
       );
     }
-    return Actionable<BlockClearancePrecheck>.yes();
+    return Actionable<BlockClearPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -6805,14 +6800,14 @@ abstract class Block<
 
   @_PrecheckPrivateMethod()
   // @seeAlso: __canRefreshCurrentItem()
-  Actionable<BlockCurrentItemSettingPrecheck> __canSetItemAsCurrent({
+  Actionable<BlockSetCurrentItemPrecheck> __canSetItemAsCurrent({
     required ITEM? item,
     required bool checkBusy,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockCurrentItemSettingPrecheck>.no(
-        errCode: BlockCurrentItemSettingPrecheck.busy,
+      return Actionable<BlockSetCurrentItemPrecheck>.no(
+        errCode: BlockSetCurrentItemPrecheck.busy,
       );
     }
     ITEM? internalItem = item;
@@ -6822,38 +6817,38 @@ abstract class Block<
     // Test Cases: [03b].
     if (internalItem == null) {
       if (errCodeIfItemIsNull == ErrCodeIfItemIsNull.noTarget) {
-        return Actionable<BlockCurrentItemSettingPrecheck>.no(
-          errCode: BlockCurrentItemSettingPrecheck.noTarget,
+        return Actionable<BlockSetCurrentItemPrecheck>.no(
+          errCode: BlockSetCurrentItemPrecheck.noTarget,
         );
       } else {
-        return Actionable<BlockCurrentItemSettingPrecheck>.no(
-          errCode: BlockCurrentItemSettingPrecheck.invalidTarget,
+        return Actionable<BlockSetCurrentItemPrecheck>.no(
+          errCode: BlockSetCurrentItemPrecheck.invalidTarget,
         );
       }
     }
     //
-    return Actionable<BlockCurrentItemSettingPrecheck>.yes();
+    return Actionable<BlockSetCurrentItemPrecheck>.yes();
   }
 
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
   // @seeAlso: __canSetItemAsCurrent()
-  Actionable<BlockCurrentItemSettingPrecheck> __canRefreshCurrentItem({
+  Actionable<BlockSetCurrentItemPrecheck> __canRefreshCurrentItem({
     required bool checkBusy,
   }) {
     if (currentItem == null) {
-      return Actionable<BlockCurrentItemSettingPrecheck>.no(
-        errCode: BlockCurrentItemSettingPrecheck.noTarget,
+      return Actionable<BlockSetCurrentItemPrecheck>.no(
+        errCode: BlockSetCurrentItemPrecheck.noTarget,
       );
     }
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockCurrentItemSettingPrecheck>.no(
-        errCode: BlockCurrentItemSettingPrecheck.busy,
+      return Actionable<BlockSetCurrentItemPrecheck>.no(
+        errCode: BlockSetCurrentItemPrecheck.busy,
       );
     }
     //
-    return Actionable<BlockCurrentItemSettingPrecheck>.yes();
+    return Actionable<BlockSetCurrentItemPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -6991,7 +6986,7 @@ abstract class Block<
   }
 
   @_PrecheckMethod()
-  Actionable<BlockCurrentItemSettingPrecheck> canEditCurrentItemWithForm() {
+  Actionable<BlockSetCurrentItemPrecheck> canEditCurrentItemWithForm() {
     return __canRefreshCurrentItem(
       checkBusy: true,
     );
@@ -7012,7 +7007,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckMethod()
-  Actionable<BlockClearancePrecheck> canClearBlock() {
+  Actionable<BlockClearPrecheck> canClearBlock() {
     return __canClearBlock(
       checkBusy: true,
     );
@@ -7104,7 +7099,7 @@ abstract class Block<
 
   @_PrecheckMethod()
   // @seeAlso: canRefreshCurrentItem()
-  Actionable<BlockCurrentItemSettingPrecheck> canSetItemAsCurrent({
+  Actionable<BlockSetCurrentItemPrecheck> canSetItemAsCurrent({
     required ITEM item,
   }) {
     return __canSetItemAsCurrent(
@@ -7121,7 +7116,7 @@ abstract class Block<
   ///
   @_PrecheckMethod()
   // @seeAlso: canSetItemAsCurrent()
-  Actionable<BlockCurrentItemSettingPrecheck> canRefreshCurrentItem() {
+  Actionable<BlockSetCurrentItemPrecheck> canRefreshCurrentItem() {
     return __canRefreshCurrentItem(
       checkBusy: true,
     );

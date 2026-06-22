@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
-import '../../core/_core_/core.dart';
 import '../../core/enums/_tip_document.dart';
 import '../../core/icon/icon_constants.dart';
 import '../dialog/_tip_document_viewer_dialog.dart';
 import '../shelf/widget/_block_or_scalar_info_view.dart';
 import '../shelf/widget/_shelf_info_view.dart';
 import '../state_view/_debug_block_state_view.dart';
-import '../state_view/_debug_shelf_retaining_routes_view.dart';
 import '../state_view/_debug_scalar_state_view.dart';
+import '../state_view/_debug_shelf_retaining_routes_view.dart';
 import '../state_view/options/_debug_block_options.dart';
 import '../state_view/options/_debug_form_options.dart';
 import '../state_view/options/_debug_pagination_options.dart';

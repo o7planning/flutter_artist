@@ -290,21 +290,22 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
   // ***************************************************************************
 
-  // openDialogThenFreezeQueuedEventsUntil Closed (OLD)
-  // Open Dialog then freeze Shelf Reaction until closed.
+  // Show Dialog then freeze Shelf Reaction until closed.
   @_RootMethodAnnotation()
   Future<DialogDeferralResult<V?>>
-      openDialogAndDeferExternalShelfEventsUntilClosed<V>({
-    required Future<V?> Function() openDialog,
+      showDialogAndDeferExternalShelfEventsUntilClosed<V>({
+    required String path,
+    required FaRouteBuilder builder,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "openDialogAndDeferExternalShelfEventsUntilClosed",
+      methodName: "showDialogAndDeferExternalShelfEventsUntilClosed",
       parameters: null,
       isLibMethod: true,
     );
-    return await __deferment._openDialogAndDeferExternalShelfEventsUntilClosed(
-      openDialog: openDialog,
+    return await __deferment._showDialogAndDeferExternalShelfEventsUntilClosed(
+      path: path,
+      builder: builder,
       executionTrace: executionTrace,
     );
   }

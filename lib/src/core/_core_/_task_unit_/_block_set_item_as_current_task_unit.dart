@@ -8,15 +8,15 @@ part of '../core.dart';
 @_BlockSelectPreviousItemAsCurrentAnnotation()
 class _BlockSetItemAsCurrentTaskUnit<ID extends Object,
         ITEM extends Identifiable<ID>>
-    extends _ResultedSTaskUnit<BlockCurrentItemSettingResult<ITEM>> {
+    extends _ResultedSTaskUnit<BlockSetCurrentItemResult<ITEM>> {
   final XBlock xBlock;
   final ForceType? forceTypeForForm;
-  final CurrentItemSettingType currentItemSettingType;
+  final BlockSetCurrentItemDirective setCurrentItemDirective;
   final ITEM? candidateItem;
   final List<ITEM> newQueriedList;
 
   _BlockSetItemAsCurrentTaskUnit({
-    required this.currentItemSettingType,
+    required this.setCurrentItemDirective,
     required this.xBlock,
     required this.newQueriedList,
     required this.candidateItem,
@@ -24,9 +24,9 @@ class _BlockSetItemAsCurrentTaskUnit<ID extends Object,
     required this.forceTypeForForm,
   }) : super(
           taskType: TaskType.blockSetItemAsCurrent,
-          taskResult: BlockCurrentItemSettingResult<ITEM>(
+          taskResult: BlockSetCurrentItemResult<ITEM>(
             precheck: null,
-            currentItemSettingType: currentItemSettingType,
+            setCurrentItemDirective: setCurrentItemDirective,
             getItemId: xBlock.block._getItemIdInternal,
             candidateItem: candidateItem,
             oldCurrentItem: xBlock.block.currentItem as ITEM?,

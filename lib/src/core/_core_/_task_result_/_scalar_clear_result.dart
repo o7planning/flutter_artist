@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-class ScalarClearanceResult extends TaskResult<ScalarClearancePrecheck> {
-  ScalarClearanceResult({super.precheck});
+class ScalarClearResult extends TaskResult<ScalarClearPrecheck> {
+  ScalarClearResult({super.precheck});
 
   @override
   bool get successForFirst {

@@ -1,9 +1,9 @@
 part of '../../core.dart';
 
-class _XShelfBlockClearance extends XShelf {
-  _XShelfBlockClearance({required Block block})
+class _XShelfBlockClear extends XShelf {
+  _XShelfBlockClear({required Block block})
       : super(
-          xShelfType: XShelfType.blockClearance,
+          xShelfType: XShelfType.blockClear,
           shelf: block.shelf,
         ) {
     //

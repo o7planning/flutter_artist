@@ -5,8 +5,8 @@ enum XShelfType {
   blockQueryAndPrepareToCreate,
   blockQueryAndPrepareToEdit,
   blockPrepareFormToCreateItem,
-  blockCurrItemClearance,
-  blockClearance,
+  blockCurrItemClear,
+  blockClear,
   blockItemDeletion,
   blockMultiItemDeletion,
   blockCurrItemSelection,
@@ -24,7 +24,7 @@ enum XShelfType {
   filterPanelChange,
   //
   scalarQuery,
-  scalarClearance,
+  scalarClear,
   scalarBackendAction,
   scalarQuickExtraDataLoadAction,
   //

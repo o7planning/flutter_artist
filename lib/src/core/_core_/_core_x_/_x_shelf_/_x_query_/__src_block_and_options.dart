@@ -5,7 +5,7 @@ class SrcBlockAndOptions {
   final QueryType queryType;
   final ListUpdateStrategy? listUpdateStrategy;
   final SuggestedSelection<dynamic>? suggestedSelection;
-  final AfterQueryAction? afterQueryAction;
+  final BlockAfterQueryDirective? afterQueryDirective;
   final Pageable? pageable;
 
   SrcBlockAndOptions({
@@ -13,7 +13,7 @@ class SrcBlockAndOptions {
     required this.queryType,
     required this.listUpdateStrategy,
     required this.suggestedSelection,
-    required this.afterQueryAction,
+    required this.afterQueryDirective,
     required this.pageable,
   });
 }

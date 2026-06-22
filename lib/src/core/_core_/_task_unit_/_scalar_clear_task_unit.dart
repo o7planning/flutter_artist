@@ -1,15 +1,15 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-class _ScalarClearanceTaskUnit
-    extends _ResultedSTaskUnit<ScalarClearanceResult> {
+class _ScalarClearTaskUnit
+    extends _ResultedSTaskUnit<ScalarClearResult> {
   final XScalar xScalar;
 
-  _ScalarClearanceTaskUnit({
+  _ScalarClearTaskUnit({
     required this.xScalar,
   }) : super(
-          taskType: TaskType.scalarClearance,
-          taskResult: ScalarClearanceResult(
+          taskType: TaskType.scalarClear,
+          taskResult: ScalarClearResult(
             precheck: null,
           ),
         );

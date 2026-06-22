@@ -54,10 +54,10 @@ class _FlutterArtist extends _Core {
 
   late final ThemeManager themeManager;
 
-  AfterQueryAction _defaultAfterQueryAction =
-      AfterQueryAction.setAnItemAsCurrentIfNeed;
+  BlockAfterQueryDirective _defaultAfterQueryDirective =
+      BlockAfterQueryDirective.setAnItemAsCurrentIfNeed;
 
-  AfterQueryAction get defaultAfterQueryAction => _defaultAfterQueryAction;
+  BlockAfterQueryDirective get defaultAfterQueryDirective => _defaultAfterQueryDirective;
 
   late final FlutterArtistNotificationService __notificationService;
 
@@ -104,9 +104,9 @@ class _FlutterArtist extends _Core {
   }
 
   @Deprecated("Do Not Use, Test Only")
-  void debugSetDefaultAfterQueryAction(
-      AfterQueryAction defaultAfterQueryAction) {
-    _defaultAfterQueryAction = defaultAfterQueryAction;
+  void debugSetDefaultAfterQueryDirective(
+      BlockAfterQueryDirective defaultAfterQueryDirective) {
+    _defaultAfterQueryDirective = defaultAfterQueryDirective;
   }
 
   ///
@@ -239,7 +239,7 @@ class _FlutterArtist extends _Core {
         codeFlowRetentionPeriodInSeconds:
             appConfiguration.codeFlowRetentionPeriodInSeconds,
       );
-    } catch (e, stackTrace) {
+    } catch (e, _) {
       executionTrace.printToConsole();
       print("\n\n");
       __showStartupError(executionTrace: executionTrace, error: e);
@@ -272,13 +272,13 @@ class _FlutterArtist extends _Core {
       shortDesc: "Begin FlutterArtist Config...\n"
           "Note: You see this debug information because the <b>FlutterArtist.start()</b> method is called in <b>main.dart</b>.",
       parameters: {
-        // "appConfiguration": appConfiguration,
-        // "overlayAdapter": overlayAdapter,
-        // "loginLogoutAdapter": loginLogoutAdapter,
-        // "globalDataAdapter": globalDataAdapter,
-        // "notificationAdapter": notificationAdapter,
-        // "maxStoredLogEntryCount": maxStoredLogEntryCount,
-        // "notificationFetchPeriodInSeconds": notificationFetchPeriodInSeconds,
+        "appConfiguration": appConfiguration,
+        "overlayAdapter": overlayAdapter,
+        "loginLogoutAdapter": loginLogoutAdapter,
+        "globalDataAdapter": globalDataAdapter,
+        "notificationAdapter": notificationAdapter,
+        "maxStoredLogEntryCount": maxStoredLogEntryCount,
+        "notificationFetchPeriodInSeconds": notificationFetchPeriodInSeconds,
       },
       traceStepType: TraceStepType.debug,
       tipDocument: TipDocument.start,
@@ -339,7 +339,7 @@ class _FlutterArtist extends _Core {
     //
     localeManager = LocaleManager._(
       globalsManager: globalsManager,
-      localeConfig: localeAdapter,
+      localeAdapter: localeAdapter,
     );
     //
     final ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
@@ -355,31 +355,15 @@ class _FlutterArtist extends _Core {
       executionTrace._addTraceStep(
         codeId: "#S0560",
         shortDesc:
-            "Calling <b>localeManager.currentLocale()</b> to read saved locale from <b>Local</b>...",
+            "Calling <b>localeManager._getStoredLocalLocale()</b> to read saved locale from <b>Local</b>...",
         traceStepType: TraceStepType.nonControllableCalling,
       );
-      final Locale? locale = localeManager.currentLocale;
+      final Locale? locale = localeManager.storedLocale;
 
       executionTrace._addTraceStep(
         codeId: "#S0580",
         shortDesc: "Got stored @locale: ${debugObjHtml(locale)}.",
       );
-      if (locale != null) {
-        executionTrace._addTraceStep(
-          codeId: "#S0620",
-          shortDesc: "Calling <b>localeManager._updateLocale()</b>:",
-          parameters: {
-            "locale": locale,
-          },
-          traceStepType: TraceStepType.nonControllableCalling,
-        );
-        Future.delayed(Duration(seconds: 2), () async {
-          await localeManager._updateLocale(
-            executionTrace: executionTrace,
-            locale: locale,
-          );
-        });
-      }
     }
     //
     // Notification:

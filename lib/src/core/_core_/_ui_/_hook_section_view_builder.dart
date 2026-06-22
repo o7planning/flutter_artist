@@ -33,7 +33,6 @@ class _HookSectionViewBuilderState
     return getClassName(widget.hook);
   }
 
-
   @override
   bool get provideScalarContext {
     return false;

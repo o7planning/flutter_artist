@@ -17,7 +17,7 @@ enum TaskType {
   blockQuickUpdateItem,
   blockBackendUpdateItem,
   blockSetItemAsCurrent,
-  blockClearance,
+  blockClear,
   //
   filterModelLoadData,
   filterModelFilterPanelChanged,
@@ -28,7 +28,7 @@ enum TaskType {
   formModelFormViewChanged,
   //
   scalarQuery,
-  scalarClearance,
+  scalarClear,
   scalarBackendAction,
   scalarLoadExtraData,
   //

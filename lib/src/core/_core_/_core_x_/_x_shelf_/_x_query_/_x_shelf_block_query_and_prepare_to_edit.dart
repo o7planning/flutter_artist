@@ -6,7 +6,7 @@ class _XShelfBlockQueryThenPrepareToEdit extends _XShelfSbQuery {
     required FilterInput? filterInput,
     required Pageable? pageable,
     required ListUpdateStrategy? suggestedListUpdateStrategy,
-    required AfterQueryAction? afterQueryAction,
+    required BlockAfterQueryDirective? afterQueryDirective,
     required SuggestedSelection<dynamic>? suggestedSelection,
   }) : super(
           xShelfType: XShelfType.blockQueryAndPrepareToEdit,
@@ -20,7 +20,7 @@ class _XShelfBlockQueryThenPrepareToEdit extends _XShelfSbQuery {
         queryType: QueryType.realQuery,
         listUpdateStrategy: suggestedListUpdateStrategy,
         suggestedSelection: suggestedSelection,
-        afterQueryAction: afterQueryAction,
+        afterQueryDirective: afterQueryDirective,
         pageable: pageable,
       ),
       srcScalarAndOptions: null,

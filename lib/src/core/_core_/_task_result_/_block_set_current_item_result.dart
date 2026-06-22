@@ -1,8 +1,8 @@
 part of '../core.dart';
 
-class BlockCurrentItemSettingResult<ITEM>
-    extends TaskResult<BlockCurrentItemSettingPrecheck> {
-  final CurrentItemSettingType currentItemSettingType;
+class BlockSetCurrentItemResult<ITEM>
+    extends TaskResult<BlockSetCurrentItemPrecheck> {
+  final BlockSetCurrentItemDirective setCurrentItemDirective;
   final List<ITEM> _candidateItems = [];
   ITEM? _oldCurrentItem;
   ITEM? _currentItem;
@@ -10,9 +10,9 @@ class BlockCurrentItemSettingResult<ITEM>
   bool _apiError = false;
   bool _convertError = false;
 
-  BlockCurrentItemSettingResult({
+  BlockSetCurrentItemResult({
     required super.precheck,
-    required this.currentItemSettingType,
+    required this.setCurrentItemDirective,
     required Object Function(ITEM item) getItemId,
     //
     required ITEM? candidateItem,
@@ -39,14 +39,14 @@ class BlockCurrentItemSettingResult<ITEM>
     } else if (errorInfo != null) {
       return false;
     }
-    switch (currentItemSettingType) {
-      case CurrentItemSettingType.setAnItemAsCurrentThenLoadForm:
+    switch (setCurrentItemDirective) {
+      case BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm:
         return _successfullySelectedToEdit();
-      case CurrentItemSettingType.setAnItemAsCurrent:
+      case BlockSetCurrentItemDirective.setAnItemAsCurrent:
         return _successfullySelectedToShow();
-      case CurrentItemSettingType.setAnItemAsCurrentIfNeed:
+      case BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed:
         return _successfullySelectedDefault();
-      case CurrentItemSettingType.refresh:
+      case BlockSetCurrentItemDirective.refresh:
         return _successfullySelectedToRefresh();
     }
   }
@@ -71,7 +71,7 @@ class BlockCurrentItemSettingResult<ITEM>
     if (_candidateItems.isEmpty || _currentItem == null) {
       return false;
     }
-    if (_getItemId(_candidateItems[0] as ITEM) != _getItemId(_currentItem!)) {
+    if (_getItemId(_candidateItems[0]) != _getItemId(_currentItem!)) {
       return false;
     }
     return true;

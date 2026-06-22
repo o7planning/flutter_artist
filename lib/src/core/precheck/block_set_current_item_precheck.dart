@@ -2,7 +2,7 @@ import '__chk_code.dart';
 import '__precheck.dart';
 
 // TODO-Rename: --> BlockSetCurrentItemPrecheck
-enum BlockCurrentItemSettingPrecheck implements Precheck {
+enum BlockSetCurrentItemPrecheck implements Precheck {
   busy(
     precheckCode: PrecheckCode.busy,
     message: "Cannot refresh the current item.",
@@ -36,7 +36,7 @@ enum BlockCurrentItemSettingPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const BlockCurrentItemSettingPrecheck({
+  const BlockSetCurrentItemPrecheck({
     required this.precheckCode,
     required this.message,
     required this.details,
