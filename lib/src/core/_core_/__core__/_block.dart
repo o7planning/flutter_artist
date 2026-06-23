@@ -7806,7 +7806,7 @@ abstract class Block<
     required DataState newBlockDataState,
     required ActionResultState queryResultState,
   }) {
-    final PageData<ITEM> ap = queriedPageData ?? DefaultPageData<ITEM>.empty();
+    final PageData<ITEM> ap = queriedPageData ??  PageData<ITEM>.empty();
     final List<ITEM> queriedItems = ap.items;
     //
     final List<ITEM> validItems = [];

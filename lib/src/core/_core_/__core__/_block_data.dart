@@ -378,7 +378,7 @@ class _BlockData<
     }
     //
     final PageData<ITEM> ap =
-        processedQueryResult.queriedPageData ?? DefaultPageData<ITEM>.empty();
+        processedQueryResult.queriedPageData ?? PageData<ITEM>.empty();
     _pageable = processedQueryResult.usedPageable?.copy();
     if (_parentBlockCurrentItemId !=
             processedQueryResult.parentBlockCurrentItemId ||
