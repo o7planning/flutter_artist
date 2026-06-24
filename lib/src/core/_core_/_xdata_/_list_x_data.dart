@@ -23,6 +23,11 @@ class ListXData<ID, ITEM> extends XData<ID, ITEM, List<ITEM>> {
     required super.getItemId,
   }) : _items = pageData?.items ?? [];
 
+  ListXData.fromListData({
+    required ListData<ITEM>? listData,
+    required super.getItemId,
+  }) : _items = listData?.items ?? [];
+
   ListXData.ofItems({
     required List<ITEM> items,
     required super.getItemId,

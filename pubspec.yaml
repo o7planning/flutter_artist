@@ -29,13 +29,13 @@ dependencies:
   url_launcher: ^6.3.2
   flutter_localized_locales: ^2.0.5
 
-  flutter_artist_core: ^1.0.0
+  flutter_artist_core: ^2.0.0
   flutter_artist_doc: ^0.9.0
-  flutter_artist_styles: ^2.1.0
-  flutter_artist_styles_inspector: ^2.0.5
-  flutter_artist_overlay_adapter: ^0.9.5
-  flutter_artist_router: ^1.0.1
-  flutter_artist_commons_ui: ^0.9.8
+  flutter_artist_styles: ^2.1.1
+  flutter_artist_styles_inspector: ^2.0.6
+  flutter_artist_overlay_adapter: ^0.9.6
+  flutter_artist_router: ^1.0.2
+  flutter_artist_commons_ui: ^0.9.9
 
 dev_dependencies:
   flutter_test:
