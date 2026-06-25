@@ -58,7 +58,7 @@ class ScalarDebugBox extends BaseDebugBox {
       if (options.showPerformQueryCount)
         IconLabelText(
           label: "Query Count: ",
-          text: scalar.performQueryCount.toString(),
+          text: scalar.debug.performQueryCount.toString(),
           labelStyle: getLabelStyle(context),
           textStyle: getTextStyle(context),
         ),
@@ -72,7 +72,7 @@ class ScalarDebugBox extends BaseDebugBox {
       if (options.showFilterCriteriaChangeCount)
         IconLabelText(
           label: "Filter Criteria Change Count: ",
-          text: scalar.filterCriteriaChangeCount.toString(),
+          text: scalar.debug.filterCriteriaChangeCount.toString(),
           labelStyle: getLabelStyle(context),
           textStyle: getTextStyle0(context),
         ),

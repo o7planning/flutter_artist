@@ -90,7 +90,7 @@ class _XShelfSbQuery extends XShelf {
           }
           // @@@hasActiveBlockFragment
           final hasXBlockRep =
-              parentXBlock.block.ui.hasActiveUiComponentBlockRepresentative(
+          parentXBlock.block.ui.hasActiveUiComponentBlockRepresentative(
             alsoCheckChildren: true,
           );
           if (hasXBlockRep) {

@@ -5,8 +5,8 @@ class EffectedShelfMembers {
   final Block? eventBlock;
   final Scalar? eventScalar;
 
-  final Map<String, Block> _reQueryBlockMAP = {};
-  final Map<String, Scalar> _reQueryScalarMAP = {};
+  final Map<String, Block> _requeryBlockMAP = {};
+  final Map<String, Scalar> _requeryScalarMAP = {};
   final Map<String, Block> _refreshCurrItmBlockMAP = {};
 
   ///
@@ -36,19 +36,19 @@ class EffectedShelfMembers {
         eventScalar = null;
 
   bool hasMember() {
-    return _reQueryBlockMAP.isNotEmpty ||
-        _reQueryScalarMAP.isNotEmpty ||
+    return _requeryBlockMAP.isNotEmpty ||
+        _requeryScalarMAP.isNotEmpty ||
         _refreshCurrItmBlockMAP.isNotEmpty;
   }
 
   // ***************************************************************************
 
-  void _addReQueryScalar(Scalar scalar) {
-    _reQueryScalarMAP[scalar.name] = scalar;
+  void _addRequeryScalar(Scalar scalar) {
+    _requeryScalarMAP[scalar.name] = scalar;
   }
 
-  void _addReQueryBlock(Block block) {
-    _reQueryBlockMAP[block.name] = block;
+  void _addRequeryBlock(Block block) {
+    _requeryBlockMAP[block.name] = block;
   }
 
   void _addRefreshCurrItmBlock(Block block) {
@@ -60,21 +60,23 @@ class EffectedShelfMembers {
 
   _EffBlock? _getSelfEffectedBlockInfo({
     required Block forEventBlock,
+    required BlockViewportSyncStrategy? viewportSyncStrategy,
   }) {
-    bool reQuery = false;
+    bool requery = false;
     bool refreshCurrItem = false;
-    if (_reQueryBlockMAP.containsKey(forEventBlock.name)) {
-      reQuery = true;
+    if (_requeryBlockMAP.containsKey(forEventBlock.name)) {
+      requery = true;
     }
     if (_refreshCurrItmBlockMAP.containsKey(forEventBlock.name)) {
       refreshCurrItem = true;
     }
-    return (!reQuery && !refreshCurrItem)
+    return (!requery && !refreshCurrItem)
         ? null
         : _EffBlock(
             block: forEventBlock,
-            reQuery: reQuery,
             refreshCurrItem: refreshCurrItem,
+            requery: requery,
+            viewportSyncStrategy: viewportSyncStrategy,
           );
   }
 
@@ -84,15 +86,15 @@ class EffectedShelfMembers {
   _EffScalar? _getSelfEffectedScalarInfo({
     required Scalar forEventScalar,
   }) {
-    bool reQuery = false;
-    if (_reQueryScalarMAP.containsKey(forEventScalar.name)) {
-      reQuery = true;
+    bool requery = false;
+    if (_requeryScalarMAP.containsKey(forEventScalar.name)) {
+      requery = true;
     }
-    return !reQuery
+    return !requery
         ? null
         : _EffScalar(
             scalar: forEventScalar,
-            reQuery: reQuery,
+            requery: requery,
           );
   }
 
@@ -112,11 +114,11 @@ class EffectedShelfMembers {
   bool _hasEffectedMemberOutsideLineageOfBlock({
     required Block eventBlock,
   }) {
-    if (_reQueryScalarMAP.isNotEmpty) {
+    if (_requeryScalarMAP.isNotEmpty) {
       return true;
     }
     final List<Block> lineageBlocks = eventBlock.lineageBlocks;
-    for (Block block in _reQueryBlockMAP.values) {
+    for (Block block in _requeryBlockMAP.values) {
       if (!__inList(lineageBlocks, block)) {
         return true;
       }
@@ -136,30 +138,36 @@ class EffectedShelfMembers {
   ///
   _EffBlock? _getTopEffectedAncestor({
     required Block forEventBlock,
+    required BlockViewportSyncStrategy? viewportSyncStrategy,
   }) {
     Block? parentBlk = forEventBlock.parent;
     if (parentBlk == null) {
       return null;
     }
     Block? block;
-    bool reQuery = false;
+    bool requery = false;
     bool refreshCurrItem = false;
-    if (_reQueryBlockMAP.containsKey(parentBlk.name)) {
+    if (_requeryBlockMAP.containsKey(parentBlk.name)) {
       block = parentBlk;
-      reQuery = true;
+      requery = true;
     }
     if (_refreshCurrItmBlockMAP.containsKey(parentBlk.name)) {
       block = parentBlk;
       refreshCurrItem = true;
     }
-    _EffBlock? effBlock = block == null || (!reQuery && !refreshCurrItem)
+    _EffBlock? effBlock = block == null || (!requery && !refreshCurrItem)
         ? null
         : _EffBlock(
             block: block,
-            reQuery: reQuery,
             refreshCurrItem: refreshCurrItem,
+            requery: requery,
+            viewportSyncStrategy: viewportSyncStrategy,
           );
-    return _getTopEffectedAncestor(forEventBlock: parentBlk) ?? effBlock;
+    return _getTopEffectedAncestor(
+          forEventBlock: parentBlk,
+          viewportSyncStrategy: viewportSyncStrategy,
+        ) ??
+        effBlock;
   }
 
   // ***************************************************************************
@@ -167,14 +175,14 @@ class EffectedShelfMembers {
 
   bool hasEffectedAncestor({
     required Block forEventBlock,
-    required bool reQuery,
+    required bool requery,
     required bool refreshCurrItem,
   }) {
     Block? parentBlk = forEventBlock.parent;
     if (parentBlk == null) {
       return false;
     }
-    if (reQuery && _reQueryBlockMAP.containsKey(parentBlk.name)) {
+    if (requery && _requeryBlockMAP.containsKey(parentBlk.name)) {
       return true;
     }
     if (refreshCurrItem &&
@@ -183,14 +191,14 @@ class EffectedShelfMembers {
     }
     return hasEffectedAncestor(
       forEventBlock: parentBlk,
-      reQuery: reQuery,
+      requery: requery,
       refreshCurrItem: refreshCurrItem,
     );
   }
 
   String getDebugInfoHtml() {
-    String s = "\n - @reQueryScalars: <b>${_reQueryScalarMAP.keys}</b>."
-        "\n - @reQueryBlocks: <b>${_reQueryBlockMAP.keys}</b>."
+    String s = "\n - @requeryScalars: <b>${_requeryScalarMAP.keys}</b>."
+        "\n - @requeryBlocks: <b>${_requeryBlockMAP.keys}</b>."
         "\n - @refreshCurrItmBlocks: <b>${_refreshCurrItmBlockMAP.keys}</b>.";
     return s;
   }
@@ -199,8 +207,8 @@ class EffectedShelfMembers {
   // ***************************************************************************
 
   void printInfo() {
-    print("@@reQueryScalar: ${_reQueryScalarMAP.keys}");
-    print("@@reQueryBlock: ${_reQueryBlockMAP.keys}");
+    print("@@requeryScalar: ${_requeryScalarMAP.keys}");
+    print("@@requeryBlock: ${_requeryBlockMAP.keys}");
     print("@@refreshCurrItmBlock: ${_refreshCurrItmBlockMAP.keys}");
   }
 }

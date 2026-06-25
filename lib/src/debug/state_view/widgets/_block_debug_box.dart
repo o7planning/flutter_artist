@@ -90,14 +90,15 @@ class BlockDebugBox extends BaseDebugBox {
       if (options.showPerformQueryCount)
         IconLabelText(
           label: "Query Count: ",
-          text: block.performQueryCount.toString(),
+          text:
+              "${block.debug.performQueryCount} / ${block.debug.performQueryByItemIdsCount}",
           labelStyle: getLabelStyle(context),
           textStyle: getTextStyle(context),
         ),
       if (options.showPerformLoadItemCount)
         IconLabelText(
           label: "Item Refresh Count: ",
-          text: block.performLoadItemDetailByIdCount.toString(),
+          text: block.debug.performLoadItemDetailByIdCount.toString(),
           labelStyle: getLabelStyle(context),
           textStyle: getTextStyle(context),
         ),
@@ -111,7 +112,7 @@ class BlockDebugBox extends BaseDebugBox {
       if (options.showCurrentItemChangeCount)
         IconLabelText(
           label: "Current Item Change Count: ",
-          text: block.currentItemChangeCount.toString(),
+          text: block.debug.currentItemChangeCount.toString(),
           labelStyle: getLabelStyle(context),
           textStyle: getTextStyle0(context),
         ),
@@ -125,7 +126,7 @@ class BlockDebugBox extends BaseDebugBox {
       if (block.filterModel != null && options.showFilterCriteriaChangeCount)
         IconLabelText(
           label: "Filter Criteria Change Count: ",
-          text: block.filterCriteriaChangeCount.toString(),
+          text: block.debug.filterCriteriaChangeCount.toString(),
           labelStyle: getLabelStyle(context),
           textStyle: getTextStyle0(context),
         ),

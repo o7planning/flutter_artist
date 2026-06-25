@@ -41,7 +41,7 @@ enum TipDocument {
   blockBackendActionPerformAction(enabled: false),
   //
   blockQuickItemUpdateActionPerformQuickUpdateItem(enabled: false),
-  blockQuickMultiItemCreationActionPerformBulkCreateItems(enabled: false),
+  blockMultiItemCreationBackendActionPerformCreateMultiItems(enabled: false),
   blockQuickItemCreationActionPerformQuickCreateItem(enabled: false),
   //
   scalarPerformQuery(enabled: false),
@@ -150,8 +150,9 @@ enum TipDocument {
         return "BlockBackendAction.performBackendOperation()";
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
         return "BlockQuickItemUpdateAction.performQuickUpdateItem()";
-      case TipDocument.blockQuickMultiItemCreationActionPerformBulkCreateItems:
-        return "BlockQuickMultiItemCreationAction.performQuickCreateMultiItems()";
+      case TipDocument
+            .blockMultiItemCreationBackendActionPerformCreateMultiItems:
+        return "BlockMultiItemCreationActionBackendAction.performCreateMultiItems()";
       case TipDocument.blockQuickItemCreationActionPerformQuickCreateItem:
         return "BlockQuickItemCreationAction.performQuickCreateItem()";
       case TipDocument.scalarPerformQuery:
@@ -257,8 +258,9 @@ enum TipDocument {
         return "BlockBackendAction.performBackendOperation()";
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
         return "BlockQuickItemUpdateAction.performQuickUpdateItem()";
-      case TipDocument.blockQuickMultiItemCreationActionPerformBulkCreateItems:
-        return "BlockQuickMultiItemCreationAction.performQuickCreateMultiItems()";
+      case TipDocument
+            .blockMultiItemCreationBackendActionPerformCreateMultiItems:
+        return "BlockMultiItemCreationActionBackendAction.performCreateMultiItems()";
       case TipDocument.blockQuickItemCreationActionPerformQuickCreateItem:
         return "BlockQuickItemCreationAction.performQuickCreateItem()";
       case TipDocument.scalarPerformQuery:
@@ -460,7 +462,8 @@ enum TipDocument {
         return [];
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
         return [];
-      case TipDocument.blockQuickMultiItemCreationActionPerformBulkCreateItems:
+      case TipDocument
+            .blockMultiItemCreationBackendActionPerformCreateMultiItems:
         return [];
       case TipDocument.blockQuickItemCreationActionPerformQuickCreateItem:
         return [];

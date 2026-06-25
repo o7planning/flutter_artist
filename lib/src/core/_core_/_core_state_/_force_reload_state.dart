@@ -72,7 +72,9 @@ void printDebugForceReloadMap() {
     bool changed = debug.currentShelfCodes != newTestCodes;
     if (changed && key.startsWith("ITM")) {
       print(
-          "${j.toString().padLeft(2, '0')} KEY: $key - $newTestCodes ${changed ? '***' : ''}");
+          "${j.toString().padLeft(2, '0')} KEY: $key - $newTestCodes ${changed
+              ? '***'
+              : ''}");
       j++;
     }
   }
@@ -96,7 +98,9 @@ void printDebugForceReloadMap() {
     bool changed = debug.currentShelfCodes != newTestCodes;
     if (changed && key.startsWith("FRM")) {
       print(
-          "${j.toString().padLeft(2, '0')} KEY: $key - $newTestCodes ${changed ? '***' : ''}");
+          "${j.toString().padLeft(2, '0')} KEY: $key - $newTestCodes ${changed
+              ? '***'
+              : ''}");
       j++;
     }
   }

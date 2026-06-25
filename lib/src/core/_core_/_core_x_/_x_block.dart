@@ -37,8 +37,11 @@ class XBlock<
   BlockSetCurrentItemDirective? __setCurrentItemDirective;
   ITEM? __candidateCurrItem;
 
+  BlockViewportSyncStrategy? get viewportSyncStrategy => __viewportSyncStrategy;
+
   // Options:
 
+  BlockViewportSyncStrategy? __viewportSyncStrategy;
   QryHint __qryHint = QryHint.none;
   bool __forceReloadCurrItem = false;
   QueryType __queryType = QueryType.realQuery;
@@ -81,7 +84,7 @@ class XBlock<
   // ***************************************************************************
   // ***************************************************************************
 
-  _BlockReQryCon? _blockReQryCon;
+  _BlockRequeryCondition? _blockReQryCon;
 
   _BlockItemRefreshCon? _blockItemRefreshCon;
 
@@ -97,10 +100,10 @@ class XBlock<
     required this.xFilterModel,
     required this.xFormModel,
   }) {
-    _blockReQryCon = block._blockReQryCondition;
+    _blockReQryCon = block._blockReqryCondition;
     _blockItemRefreshCon = block._blockItemRefreshCondition;
     //
-    block._blockReQryCondition = null;
+    block._blockReqryCondition = null;
     block._blockItemRefreshCondition = null;
   }
 
@@ -205,6 +208,10 @@ class XBlock<
     }
   }
 
+  void setViewportSyncStrategy(BlockViewportSyncStrategy viewportSyncStrategy) {
+    __viewportSyncStrategy = viewportSyncStrategy;
+  }
+
   void setForceReloadCurrItem(bool forceReloadCurrItem) {
     __forceReloadCurrItem = forceReloadCurrItem;
   }
@@ -286,7 +293,7 @@ class XBlock<
   String toDebugHtmlString() {
     return " - <b>XBlock (${getClassName(block)})</b>"
         "\n    - <b>qryHint</b>: $queryHint"
-        "\n    - <b>blockReQryCondition</b>: $_blockReQryCon"
+        "\n    - <b>blockReqryCondition</b>: $_blockReQryCon"
         "\n    - <b>forceReloadItem</b>: $__forceReloadCurrItem"
         "\n    - <b>blockItemRefreshCondition</b>: $_blockItemRefreshCon"
         "\n    - <b>xFormModel</b>: $xFormModel";

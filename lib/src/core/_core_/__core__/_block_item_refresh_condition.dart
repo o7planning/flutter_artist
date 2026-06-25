@@ -1,7 +1,7 @@
-part of '../../core.dart';
+part of '../core.dart';
 
-class _BlockItemRefreshCon extends Equatable {
-  final Object itemId;
+class _BlockItemRefreshCon<ID extends Object> extends Equatable {
+  final ID itemId;
 
   const _BlockItemRefreshCon({
     required this.itemId,

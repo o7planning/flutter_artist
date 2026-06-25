@@ -10,7 +10,11 @@ class _FormModelPatchFormFieldsTaskUnit<FORM_INPUT extends FormInput>
   _FormModelPatchFormFieldsTaskUnit({
     required this.xFormModel,
     required this.formInput,
-  }) : super(taskType: TaskType.formModelPatchFormFields);
+    required FormModelPatchFormFieldsResult taskResult,
+  }) : super(
+          taskType: TaskType.formModelPatchFormFields,
+          taskResult: taskResult,
+        );
 
   @override
   XShelf get xShelf => xFormModel.xShelf;

@@ -160,6 +160,8 @@ class _BlockData<
 
   ActionResultState? _lastQueryResultState;
 
+  ListUpdateStrategy? _lastForceListUpdateStrategy;
+
   late final Pageable? _initialPageable;
 
   late Pageable? _pageable;
@@ -365,8 +367,10 @@ class _BlockData<
     required ListUpdateStrategy forceListUpdateStrategy,
     required _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA>
         processedQueryResult,
+    required List<ID> removeItemIds,
   }) {
     _lastQueryResultState = processedQueryResult.queryResultState;
+    _lastForceListUpdateStrategy = forceListUpdateStrategy;
     bool cleared = false;
     // Check if filterCriteria changed.
     if (forceListUpdateStrategy == ListUpdateStrategy.replace ||
@@ -377,8 +381,14 @@ class _BlockData<
       cleared = true;
     }
     //
-    final PageData<ITEM> ap =
-        processedQueryResult.queriedPageData ?? PageData<ITEM>.empty();
+    final PageData<ITEM>? lastQueriedPageData =
+        processedQueryResult.queriedItemList == null
+            ? null
+            : PageData<ITEM>(
+                items: processedQueryResult.queriedItemList!,
+                paginationInfo: processedQueryResult.queriedPaginationInfo);
+
+    final PageData<ITEM> ap = lastQueriedPageData ?? PageData<ITEM>.empty();
     _pageable = processedQueryResult.usedPageable?.copy();
     if (_parentBlockCurrentItemId !=
             processedQueryResult.parentBlockCurrentItemId ||
@@ -394,7 +404,7 @@ class _BlockData<
     }
     //
     _parentBlockCurrentItemId = processedQueryResult.parentBlockCurrentItemId;
-    _lastQueryResult = processedQueryResult.queriedPageData;
+    _lastQueryResult = lastQueriedPageData;
     _blockDataState = processedQueryResult.newBlockDataState;
     //
     // Update FilterCriteria:
@@ -408,6 +418,7 @@ class _BlockData<
     __appendQueriedItems(
       executionTrace: executionTrace,
       processedQueryResult: processedQueryResult,
+      removeItemIds: removeItemIds,
     );
     // block.formModel?.data._formMode = FormMode.none;
     if (cleared) {
@@ -422,7 +433,25 @@ class _BlockData<
     required ExecutionTrace executionTrace,
     required _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA>
         processedQueryResult,
+    required List<ID> removeItemIds,
   }) {
+    if (removeItemIds.isNotEmpty) {
+      FaItemsUtils.removeItemsFromListByIds(
+        removeItemIds: removeItemIds,
+        targetList: _items,
+        getItemId: block._getItemIdInternal,
+      );
+      FaItemsUtils.removeItemsFromListByIds(
+        removeItemIds: removeItemIds,
+        targetList: _selectedItems,
+        getItemId: block._getItemIdInternal,
+      );
+      FaItemsUtils.removeItemsFromListByIds(
+        removeItemIds: removeItemIds,
+        targetList: _checkedItems,
+        getItemId: block._getItemIdInternal,
+      );
+    }
     if (processedQueryResult.errorItems.isNotEmpty) {
       FaItemsUtils.removeItemsFromList(
         removeItems: processedQueryResult.errorItems,

@@ -57,9 +57,10 @@ class _FlutterArtist extends _Core {
   BlockAfterQueryDirective _defaultAfterQueryDirective =
       BlockAfterQueryDirective.setAnItemAsCurrentIfNeed;
 
-  BlockAfterQueryDirective get defaultAfterQueryDirective => _defaultAfterQueryDirective;
+  BlockAfterQueryDirective get defaultAfterQueryDirective =>
+      _defaultAfterQueryDirective;
 
-  late final FlutterArtistNotificationService __notificationService;
+  late final FlutterArtistNotificationService? __notificationService;
 
   late final Logger logger;
   late final CodeFlowLogger codeFlowLogger;
@@ -82,17 +83,14 @@ class _FlutterArtist extends _Core {
   // ***************************************************************************
 
   void _addCommonRouteKey(RouteKey routeKey) {
-    print("COMMON KEYS _addCommonRouteKey: $routeKey");
     __commonRouteKeys.add(routeKey);
   }
 
   void _removeCommonRouteKey(RouteKey routeKey) {
-    print("COMMON KEYS _removeCommonRouteKey: $routeKey");
     __commonRouteKeys.remove(routeKey);
   }
 
   bool isCommonRouteKey(RouteKey routeKey) {
-    print("COMMON KEYS: isCommonRouteKey: $__commonRouteKeys");
     return __commonRouteKeys.contains(routeKey);
   }
 
@@ -369,14 +367,16 @@ class _FlutterArtist extends _Core {
     // Notification:
     //
     this.notificationFetchPeriodInSeconds = notificationFetchPeriodInSeconds;
-    if (notificationAdapter is SimpleNotificationAdapter) {
+    if (notificationAdapter == null) {
+      __notificationService = null;
+    } else if (notificationAdapter is SimpleNotificationAdapter) {
       __notificationService = SimpleNotificationService(notificationAdapter);
     } else if (notificationAdapter is FirebaseNotificationAdapter) {
       __notificationService = FirebaseNotificationService(notificationAdapter);
     } else if (notificationAdapter is SSENotificationAdapter) {
       __notificationService = SSENotificationService(notificationAdapter);
     } else {
-      throw UnimplementedError();
+      throw UnimplementedError("TODO: Notification: $notificationAdapter");
     }
     //
     executionTrace._addTraceStep(
@@ -386,9 +386,11 @@ class _FlutterArtist extends _Core {
     //
     // IMPORTANT: No await.
     //
-    print(
-        "[FLUTTER_ARTIST] ${getClassNameWithoutGenerics(__notificationService)}.initialize()");
-    __notificationService.initialize();
+    if (__notificationService != null) {
+      print(
+          "[FLUTTER_ARTIST] ${getClassNameWithoutGenerics(__notificationService)}.initialize()");
+      __notificationService.initialize();
+    }
   }
 
   void addLogListener(ILogListener listener) {

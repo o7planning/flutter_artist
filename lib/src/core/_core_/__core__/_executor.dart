@@ -233,8 +233,8 @@ class _Executor {
       );
     }
     // Block QuickCreateMultiItem:
-    else if (taskUnit is _BlockQuickMultiItemCreationTaskUnit) {
-      await taskUnit.xBlock.block._unitQuickCreateMultiItem(
+    else if (taskUnit is _BlockMultiItemCreationBackendActionTaskUnit) {
+      await taskUnit.xBlock.block._unitCreateMultiItemBackendAction(
         executionTrace: executionTrace,
         taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,

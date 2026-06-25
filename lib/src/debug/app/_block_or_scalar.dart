@@ -101,17 +101,17 @@ class BlockOrScalar extends Equatable {
 
   String get blockOrScalarClassParametersDefinition {
     if (block != null) {
-      return block!.debugClassParametersDefinition;
+      return block!.debug.classParametersDefinition;
     } else {
-      return scalar!.debugClassParametersDefinition;
+      return scalar!.debug.classParametersDefinition;
     }
   }
 
   String get blockOrScalarClassDefinition {
     if (block != null) {
-      return block!.debugClassDefinition;
+      return block!.debug.classDefinition;
     } else {
-      return scalar!.debugClassDefinition;
+      return scalar!.debug.classDefinition;
     }
   }
 

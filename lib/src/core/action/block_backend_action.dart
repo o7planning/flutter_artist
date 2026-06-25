@@ -1,9 +1,9 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/after_backend_action.dart';
+import '../enums/_block_viewport_sync_strategy.dart';
 import '_action.dart';
 
-abstract class BlockBackendAction<ID extends Object, DATA> extends Action {
+abstract class BlockBackendAction<ID extends Object> extends Action {
   late final BlockBackendActionConfig _config;
 
   BlockBackendActionConfig get config => _config;
@@ -17,19 +17,17 @@ abstract class BlockBackendAction<ID extends Object, DATA> extends Action {
 
   BlockBackendActionConfig initDefaultConfig();
 
-  Future<ApiResult<DATA>> performBackendOperation();
+  Future<ApiResult<ListData<ID>?>> performBackendOperation({
+    required Object? parentBlockItem,
+  });
 
-  ID? suggestNewCurrentItemId({required DATA data});
+  ID? suggestNewCurrentItemId({required List<ID> itemIds});
 }
 
 class BlockBackendActionConfig {
-  final AfterBlockBackendAction afterBackendAction;
-
-  // @Deprecated("Xoa di")
-  // final List<Type> affectedItemTypes;
+  final BlockViewportSyncStrategy? viewportSyncStrategy;
 
   const BlockBackendActionConfig({
-    // required this.affectedItemTypes,
-    required this.afterBackendAction,
+    required this.viewportSyncStrategy,
   });
 }

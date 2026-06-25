@@ -4,7 +4,8 @@ class _XShelfBlockBackendActionExecution extends XShelf {
   _XShelfBlockBackendActionExecution({
     required Block block,
     required FilterInput? filterInput,
-    required AfterBlockBackendAction afterBackendAction,
+    required BlockViewportSyncStrategy? viewportSyncStrategy,
+    // required AfterBlockBackendAction afterBackendAction,
   }) : super(
           xShelfType: XShelfType.blockBackendActionExecution,
           shelf: block.shelf,
@@ -16,10 +17,21 @@ class _XShelfBlockBackendActionExecution extends XShelf {
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
     //
-    switch (afterBackendAction) {
-      case AfterBlockBackendAction.none:
+    // switch (afterBackendAction) {
+    //   case AfterBlockBackendAction.none:
+    //     break;
+    //   case AfterBlockBackendAction.query:
+    //     queryHint = QryHint.force;
+    //     forceReloadItem = false;
+    // }
+    //
+    switch (viewportSyncStrategy) {
+      case null:
         break;
-      case AfterBlockBackendAction.query:
+      case BlockViewportSyncStrategy.convergeAll:
+      case BlockViewportSyncStrategy.incrementalMerge:
+      case BlockViewportSyncStrategy.forceNativeQuery:
+        // case BlockViewportSyncStrategy.refreshCurrentOnly:
         queryHint = QryHint.force;
         forceReloadItem = false;
     }

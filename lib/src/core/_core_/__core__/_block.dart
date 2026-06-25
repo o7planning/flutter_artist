@@ -87,14 +87,6 @@ abstract class Block<
     > extends _Core {
   late final Shelf shelf;
 
-  int _deletionErrorCount = 0;
-
-  int get deletionErrorCount => _deletionErrorCount;
-
-  int _lazyLoadCount = 0;
-
-  int get lazyLoadCount => _lazyLoadCount;
-
   bool __isQuerying = false;
 
   bool get isQuerying => __isQuerying;
@@ -115,6 +107,8 @@ abstract class Block<
 
   bool get isPreparingFormCreation => __isPreparingFormCreation;
 
+  late final _BlockDebugInfo<ID> debug = _BlockDebugInfo<ID>(block: this);
+
   final BlockConfig config;
 
   late final _internalEffectedShelfMembers = EffectedShelfMembers.ofBlock(
@@ -124,7 +118,7 @@ abstract class Block<
   // TODO: LOGIC-01
   final bool _alwaysTrySelectAnItemAsCurrent = true;
 
-  bool get alwayTrySelectAnItemAsCurrent => _alwaysTrySelectAnItemAsCurrent;
+  bool get alwaysTrySelectAnItemAsCurrent => _alwaysTrySelectAnItemAsCurrent;
 
   ///
   /// Block name. It is unique in a Shelf.
@@ -137,18 +131,6 @@ abstract class Block<
 
   String get pathInfo {
     return "block > ${shelf.name} > $name";
-  }
-
-  @DebugMethodAnnotation()
-  String get debugClassDefinition {
-    return "${getClassName(this)}$debugClassParametersDefinition";
-  }
-
-  @DebugMethodAnnotation()
-  String get debugClassParametersDefinition {
-    return "<${getItemIdType()}, ${getItemType()}, ${getItemDetailType()}, "
-        "${getFilterInputType()}, ${getFilterCriteriaType()}, "
-        "${getFormInputType()}, ${getFormRelatedDataType()}>";
   }
 
   final String? description;
@@ -301,14 +283,6 @@ abstract class Block<
     return ascendingAncestorBlocks.reversed.toList();
   }
 
-  int __performLoadItemDetailByIdCount = 0;
-
-  int get performLoadItemDetailByIdCount => __performLoadItemDetailByIdCount;
-
-  int __performQueryCount = 0;
-
-  int get performQueryCount => __performQueryCount;
-
   QueryType __lastQueryType = QueryType.realQuery;
 
   QueryType get lastQueryType => __lastQueryType;
@@ -400,8 +374,6 @@ abstract class Block<
   FILTER_CRITERIA? get filterCriteria =>
       __blockData._xFilterCriteria?.filterCriteria;
 
-  int get filterCriteriaChangeCount => __blockData._filterCriteriaChangeCount;
-
   XFilterCriteria<FILTER_CRITERIA>? get debugXFilterCriteria =>
       __blockData._xFilterCriteria;
 
@@ -410,6 +382,10 @@ abstract class Block<
   ///
   List<ITEM> get items {
     return [...__blockData._items];
+  }
+
+  List<ID> get itemIds {
+    return items.map((item) => item.id).toList();
   }
 
   int get itemCount => __blockData._items.length;
@@ -435,15 +411,53 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  _BlockReQryCon? _blockReQryCondition;
+  _BlockRequeryCondition<ID>? _blockReqryCondition;
 
-  _BlockItemRefreshCon? _blockItemRefreshCondition;
+  _BlockItemRefreshCon<ID>? _blockItemRefreshCondition;
 
-  bool _hasReactionBookmark() {
-    return _blockReQryCondition != null || _blockItemRefreshCondition != null;
+  void _resetBlockRequeryCondition({
+    required ExecutionTrace executionTrace,
+  }) {
+    executionTrace._addTraceStep(
+      codeId: "#84000",
+      shortDesc: "Reset _blockReqryCondition",
+    );
+    _blockReqryCondition = null;
   }
 
-  bool _isMatchBlockReQryCon(_BlockReQryCon? blockReQryCon) {
+  void _createBlockRequeryConditionIfNeed({
+    required ExecutionTrace executionTrace,
+    required FILTER_CRITERIA? blockCurrentFilterCriteria,
+    required BlockViewportSyncStrategy? viewportSyncStrategy,
+    required List<ID>? addedEffectiveIds,
+  }) {
+    executionTrace._addTraceStep(
+      codeId: "#83100",
+      shortDesc: "Calling _createBlockRequeryConditionIfNeed()",
+      traceStepType: TraceStepType.nonControllableCalling,
+    );
+    _blockReqryCondition ??= _BlockRequeryCondition<ID>(
+      block: this,
+      parentItemId: parent?.currentItem?.id,
+      filterCriteria: blockCurrentFilterCriteria ?? filterCriteria,
+    );
+
+    executionTrace._addTraceStep(
+      codeId: "#83400",
+      shortDesc: "addEffectiveItemIds length: ${addedEffectiveIds?.length}",
+    );
+    // Add effected itemIds.
+    _blockReqryCondition?.addEffectiveItemIds(
+      viewportSyncStrategy: viewportSyncStrategy,
+      effectiveItemIds: addedEffectiveIds ?? <ID>[],
+    );
+  }
+
+  bool _hasReactionBookmark() {
+    return _blockReqryCondition != null || _blockItemRefreshCondition != null;
+  }
+
+  bool _isMatchBlockReQryCon(_BlockRequeryCondition? blockReQryCon) {
     if (blockReQryCon == null) {
       return false;
     }
@@ -799,107 +813,126 @@ abstract class Block<
     );
     //
     thisXBlock._printParameters(provideBlockContext: provideBlockContext);
+    final viewportSyncStrategy = thisXBlock.viewportSyncStrategy ??
+        BlockViewportSyncStrategy.forceNativeQuery;
     //
-    final performQueryMethod = BlockErrorMethod.performQuery;
+    final performQryMethod =
+        viewportSyncStrategy == BlockViewportSyncStrategy.forceNativeQuery
+            ? BlockErrorMethod.performQuery
+            : BlockErrorMethod.performQueryByItemIds;
+
+    executionTrace._addTraceStep(
+      codeId: "#03050",
+      shortDesc: "Debug:",
+      parameters: {
+        "queryHint": queryHint,
+        "viewportSyncStrategy": viewportSyncStrategy,
+        "performQryMethod": performQryMethod,
+      },
+      traceStepType: TraceStepType.debug,
+    );
+
     DataState newBlockDataState = dataState;
-    PageData<ITEM>? queriedPageData;
+    // PageData<ITEM>? queriedPageData;
+    List<ITEM>? queriedItemList;
+    PaginationInfo? queriedPaginationInfo;
     final ITEM? candidateCurrItem;
     bool queried = false;
 
-    if (queryHint == QryHint.none) {
-      executionTrace._addTraceStep(
-        codeId: "#03060",
-        shortDesc: "@queryHint: ${debugObjHtml(queryHint)}.",
-      );
-      candidateCurrItem = null;
-      //
-      BlockSetCurrentItemDirective? setCurrentItemDirective;
-      final defaultAfterQueryDirective = FlutterArtist.defaultAfterQueryDirective;
-      final BlockSetCurrentItemDirective? defaultBlockSetCurrentItemDirective =
-          defaultAfterQueryDirective.toSetCurrentItemDirective();
-      //
-      // If Natural Mode: Try to select an item as current if the Block has no current.
-      //
-      if (thisXBlock.xShelf.naturalMode) {
+    switch (queryHint) {
+      case QryHint.none:
         executionTrace._addTraceStep(
-          codeId: "#03080",
-          shortDesc: "Currently, ${debugObjHtml(this)} query in naturalMode.",
+          codeId: "#03060",
+          shortDesc: "@queryHint: ${debugObjHtml(queryHint)}, "
+              "@viewportSyncStrategy: ${debugObjHtml(thisXBlock.viewportSyncStrategy)}.",
         );
-        // Test Cases: [38b] - test_companyCreationScreen_to_employeeScreen.
-        // No need to select an Item as Current.
-        if (formModel?.formMode == FormMode.creation) {
+        candidateCurrItem = null;
+        //
+        BlockSetCurrentItemDirective? setCurrentItemDirective;
+        final defaultAfterQueryDirective =
+            FlutterArtist.defaultAfterQueryDirective;
+        final BlockSetCurrentItemDirective?
+            defaultBlockSetCurrentItemDirective =
+            defaultAfterQueryDirective.toSetCurrentItemDirective();
+        //
+        // If Natural Mode: Try to select an item as current if the Block has no current.
+        //
+        if (thisXBlock.xShelf.naturalMode) {
           executionTrace._addTraceStep(
-            codeId: "#03100",
+            codeId: "#03080",
+            shortDesc: "Currently, ${debugObjHtml(this)} query in naturalMode.",
+          );
+          // Test Cases: [38b] - test_companyCreationScreen_to_employeeScreen.
+          // No need to select an Item as Current.
+          if (formModel?.formMode == FormMode.creation) {
+            executionTrace._addTraceStep(
+              codeId: "#03100",
+              shortDesc:
+                  "The ${debugObjHtml(this)} is in creation mode --> cancel query.",
+            );
+            return;
+          }
+          //
+          setCurrentItemDirective = defaultBlockSetCurrentItemDirective;
+        }
+        // Not Natural Mode.
+        else {
+          if (thisXBlock.setCurrentItemDirective != null) {
+            setCurrentItemDirective = thisXBlock.setCurrentItemDirective!;
+          }
+        }
+        //
+        // Test Cases: [63a] - __test_event_63a__external_product_event_in_productScreen_1
+        //
+        if (currentItem == null && setCurrentItemDirective == null) {
+          executionTrace._addTraceStep(
+            codeId: "#03120",
             shortDesc:
-                "The ${debugObjHtml(this)} is in creation mode --> cancel query.",
+                "The block has no currentItem and @setCurrentItemDirective is null --> Cancel query.",
           );
           return;
         }
         //
-        setCurrentItemDirective = defaultBlockSetCurrentItemDirective;
-      }
-      // Not Natural Mode.
-      else {
-        if (thisXBlock.setCurrentItemDirective != null) {
-          setCurrentItemDirective = thisXBlock.setCurrentItemDirective!;
-        }
-      }
-      //
-      // Test Cases: [63a] - __test_event_63a__external_product_event_in_productScreen_1
-      //
-      if (currentItem == null && setCurrentItemDirective == null) {
+        final taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
+          setCurrentItemDirective: setCurrentItemDirective ??
+              BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
+          xBlock: thisXBlock,
+          newQueriedList: [],
+          candidateItem: candidateCurrItem,
+          forceReloadItem: thisXBlock.forceReloadCurrItem,
+          forceTypeForForm: null,
+        );
         executionTrace._addTraceStep(
-          codeId: "#03120",
-          shortDesc:
-              "The block has no currentItem and @setCurrentItemDirective is null --> Cancel query.",
+          codeId: "#03140",
+          shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
+          traceStepType: TraceStepType.addTaskUnit,
+        );
+        thisXBlock.xShelf._addTaskUnit(
+          taskUnit: taskUnit,
         );
         return;
-      }
-      //
-      final taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
-        setCurrentItemDirective: setCurrentItemDirective ??
-            BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
-        xBlock: thisXBlock,
-        newQueriedList: [],
-        candidateItem: candidateCurrItem,
-        forceReloadItem: thisXBlock.forceReloadCurrItem,
-        forceTypeForForm: null,
-      );
-      executionTrace._addTraceStep(
-        codeId: "#03140",
-        shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
-        traceStepType: TraceStepType.addTaskUnit,
-      );
-      thisXBlock.xShelf._addTaskUnit(
-        taskUnit: taskUnit,
-      );
-      return;
-    }
-    //
-    else if (queryHint == QryHint.markAsPending) {
-      executionTrace._addTraceStep(
-        codeId: "#03160",
-        shortDesc: "@queryHint: $queryHint.",
-      );
-      executionTrace._addTraceStep(
-        codeId: "#03180",
-        shortDesc:
-            "Clear all items of ${debugObjHtml(this)} and set to <b>pending</b>. "
-            "Clear data of all child blocks and set them to <b>none</b>."
-            "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-      );
-      __clearWithDataStateAndChildrenToNonCascade(
-        thisXBlock: thisXBlock,
-        blkDataState: DataState.pending,
-        frmDataState: DataState.none,
-        errorInFilter: false,
-      );
-      thisXBlock.setReQueryDone();
-      return;
-    }
-    //
-    else if (queryHint != QryHint.force) {
-      throw "TODO"; // Never run.
+      case QryHint.markAsPending:
+        executionTrace._addTraceStep(
+          codeId: "#03160",
+          shortDesc: "@queryHint: $queryHint.",
+        );
+        executionTrace._addTraceStep(
+          codeId: "#03180",
+          shortDesc:
+              "Clear all items of ${debugObjHtml(this)} and set to <b>pending</b>. "
+              "Clear data of all child blocks and set them to <b>none</b>."
+              "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
+        );
+        __clearWithDataStateAndChildrenToNonCascade(
+          thisXBlock: thisXBlock,
+          blkDataState: DataState.pending,
+          frmDataState: DataState.none,
+          errorInFilter: false,
+        );
+        thisXBlock.setReQueryDone();
+        return;
+      case QryHint.force:
+      // Continue below:
     }
     //
     // FORCE QUERY:
@@ -927,7 +960,9 @@ abstract class Block<
         ) as XFilterCriteria<FILTER_CRITERIA>?;
         //
         xFilterModel.queried = true;
-      } else {
+      }
+      // xFilterModel.queried
+      else {
         if (filterModel is! _DefaultFilterModel) {
           executionTrace._addTraceStep(
             codeId: "#03220",
@@ -983,6 +1018,7 @@ abstract class Block<
     ListUpdateStrategy realListUpdateStrategy;
     //
     final Pageable? usedPageable;
+    List<ID>? itemIdsToQry;
     //
     if (thisXBlock.queryType == QueryType.realQuery) {
       executionTrace._addTraceStep(
@@ -1030,47 +1066,90 @@ abstract class Block<
           );
         }
         //
-        executionTrace._addTraceStep(
-          codeId: "#03340",
-          shortDesc: "Calling ${debugObjHtml(this)}.performQuery()...",
-          parameters: {
-            "parentBlockCurrentItem": parent?.currentItem,
-            "filterCriteria": xFilterCriteriaOfFilterModel.filterCriteria,
-            "sortableCriteria": sortableCriteria,
-            "pageable": usedPageable,
-          },
-          traceStepType: TraceStepType.controllableCalling,
-        );
-        __performQueryCount++;
-        final ApiResult<PageData<ITEM>?> result = await performQuery(
-          parentBlockCurrentItem: parent?.currentItem,
-          filterCriteria: xFilterCriteriaOfFilterModel.filterCriteria,
-          sortableCriteria: sortableCriteria,
-          pageable: usedPageable,
-        );
-        // Throw ApiError:
-        result.throwIfError();
+        if (viewportSyncStrategy ==
+            BlockViewportSyncStrategy.forceNativeQuery) {
+          executionTrace._addTraceStep(
+            codeId: "#03340",
+            shortDesc: "Calling ${debugObjHtml(this)}.performQuery()...",
+            parameters: {
+              "parentBlockCurrentItem": parent?.currentItem,
+              "filterCriteria": xFilterCriteriaOfFilterModel.filterCriteria,
+              "sortableCriteria": sortableCriteria,
+              "pageable": usedPageable,
+            },
+            traceStepType: TraceStepType.controllableCalling,
+          );
+          itemIdsToQry = null;
+          debug.__performQueryCount++;
+          final ApiResult<PageData<ITEM>?> result = await performQuery(
+            parentBlockCurrentItem: parent?.currentItem,
+            filterCriteria: xFilterCriteriaOfFilterModel.filterCriteria,
+            sortableCriteria: sortableCriteria,
+            pageable: usedPageable,
+          );
+          // Throw ApiError:
+          result.throwIfError();
+          queriedItemList = result.data?.items;
+          queriedPaginationInfo = result.data?.paginationInfo;
+          //
+          _resetBlockRequeryCondition(executionTrace: executionTrace);
+        }
+        // viewportSyncStrategy != BlockViewportSyncStrategy.forceNativeQuery
+        else {
+          executionTrace._addTraceStep(
+            codeId: "#03350",
+            shortDesc:
+                "Calling ${debugObjHtml(this)}.performQueryByItemIds()...",
+            parameters: {
+              "parentBlockCurrentItem": parent?.currentItem,
+              "filterCriteria": xFilterCriteriaOfFilterModel.filterCriteria,
+              "sortableCriteria": sortableCriteria,
+              "pageable": usedPageable,
+            },
+            traceStepType: TraceStepType.controllableCalling,
+          );
+          itemIdsToQry =
+              _blockReqryCondition?.getPerformQueryItemIds(itemIds).toList() ??
+                  [];
+
+          debug.__performQueryByItemIdsCount++;
+          debug.requeryCondition._lastPerformQueryItemIds =
+              itemIdsToQry.toSet();
+
+          final ApiResult<ListData<ITEM>?> result = await performQueryByItemIds(
+            parentBlockCurrentItem: parent?.currentItem,
+            filterCriteria: xFilterCriteriaOfFilterModel.filterCriteria,
+            sortableCriteria: sortableCriteria,
+            itemIds: itemIdsToQry,
+          );
+          // Throw ApiError:
+          result.throwIfError();
+          queriedItemList = result.data?.items;
+          queriedPaginationInfo = null;
+          //
+          _resetBlockRequeryCondition(executionTrace: executionTrace);
+        }
         //
         // Query DONE!
         //
         thisXBlock.setReQueryDone();
         queried = true;
         queryResultState = ActionResultState.success;
-        queriedPageData = result.data;
         //
         executionTrace._addTraceStep(
           codeId: "#03360",
-          shortDesc: "Got @queriedPageData: ${debugObjHtml(queriedPageData)}.",
+          shortDesc: "Got @queriedItemList: ${debugObjHtml(queriedItemList)}.",
           traceStepType: TraceStepType.debug,
           tipDocument: TipDocument.pageData,
         );
       } catch (e, stackTrace) {
         queryResultState = ActionResultState.fail;
-        queriedPageData = null;
+        queriedItemList = null;
+        queriedPaginationInfo = null;
         //
         final blockErrorInfo = BlockErrorInfo(
           blockDataState: dataState,
-          blockErrorMethod: performQueryMethod,
+          blockErrorMethod: performQryMethod,
           error: e, // AppError, ApiError or others.
           errorStackTrace: stackTrace,
         );
@@ -1078,7 +1157,7 @@ abstract class Block<
         //
         final errorInfo = _handleError(
           shelf: shelf,
-          methodName: performQueryMethod.name,
+          methodName: performQryMethod.name,
           // AppError, ApiError or others.
           error: e,
           stackTrace: stackTrace,
@@ -1092,7 +1171,7 @@ abstract class Block<
         executionTrace._addTraceStep(
           codeId: "#03400",
           shortDesc:
-              "The ${debugObjHtml(this)}.performQuery() method was called with an error!",
+              "The ${debugObjHtml(this)}.${performQryMethod.name}() method was called with an error!",
           errorInfo: errorInfo,
         );
       } finally {
@@ -1104,25 +1183,73 @@ abstract class Block<
         if (parentOrCriteriaChanged) {
           switch (dataState) {
             case DataState.ready:
-              // @FaCode-002.
-              // Test Case: [42a].
-              // Replace by empty items.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.error;
+              // [ON Query Fail] + [Parent or Criteria changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // @FaCode-002.
+                  // Test Case: [42a].
+                  // Replace by empty items.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.error;
+              }
             case DataState.pending:
-              // Replace by empty items.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.error;
+              // [ON Query Fail] + [Parent or Criteria changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Replace by empty items.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+              }
             case DataState.error:
-              // @FaCode-003.
-              // Test Case: [42a].
-              // Replace by empty items.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.error;
+              // [ON Query Fail] + [Parent or Criteria changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // @FaCode-003.
+                  // Test Case: [42a].
+                  // Replace by empty items.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.error;
+              }
             case DataState.none:
-              // Replace by empty items.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.error;
+              // [ON Query Fail] + [Parent or Criteria changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Replace by empty items.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+              }
           }
         }
         // Query Error + Parent not changed + Criteria not changed.
@@ -1130,24 +1257,72 @@ abstract class Block<
         else {
           switch (dataState) {
             case DataState.ready:
-              // Append empty items (No items got from Server).
-              // Test Case: [42a].
-              // @FaCode-001.
-              realListUpdateStrategy = ListUpdateStrategy.merge;
-              newBlockDataState = DataState.ready;
+              // [ON Query Fail] + [Parent not changed] + [Criteria not changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Append empty items (No items got from Server).
+                  // Test Case: [42a].
+                  // @FaCode-001.
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.ready;
+              }
             case DataState.pending:
-              // Replace by empty items.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.error;
+              // [ON Query Fail] + [Parent not changed] + [Criteria not changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Replace by empty items.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.ready;
+              }
             case DataState.error:
-              // @FaCode-004.
-              // Replace by empty items.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.error;
+              // [ON Query Fail] + [Parent not changed] + [Criteria not changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // @FaCode-004.
+                  // Replace by empty items.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.error;
+              }
             case DataState.none:
-              // Replace by empty items.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.error;
+              // [ON Query Fail] + [Parent not changed] + [Criteria not changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Replace by empty items.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.error;
+              }
           }
         }
       }
@@ -1157,42 +1332,138 @@ abstract class Block<
         if (parentOrCriteriaChanged) {
           switch (dataState) {
             case DataState.ready:
-              // Replace.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.ready;
+              // [ON Query SUCCESS] + [Parent or Criteria changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Replace.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.ready;
+              }
             case DataState.pending:
-              // Replace.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.ready;
+              // [ON Query SUCCESS] + [Parent or Criteria changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Replace.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.ready;
+              }
             case DataState.error:
-              // Replace.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.ready;
+              // [ON Query SUCCESS] + [Parent or Criteria changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Replace.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.ready;
+              }
             case DataState.none:
-              // Replace.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.ready;
+              // [ON Query SUCCESS] + [Parent or Criteria changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Replace.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.ready;
+              }
           }
         }
         // Query Successful + Parent not changed + Criteria not changed.
         else {
           switch (dataState) {
             case DataState.ready:
-              // Replace or Expand:
-              realListUpdateStrategy = thisXBlock.listUpdateStrategy;
-              newBlockDataState = DataState.ready;
+              // [ON Query SUCCESS] + [Parent not changed] + [Criteria not changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Replace or Merge:
+                  realListUpdateStrategy = thisXBlock.listUpdateStrategy;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.ready;
+              }
             case DataState.pending:
-              // Replace.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.ready;
+              // [ON Query SUCCESS] + [Parent not changed] + [Criteria not changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Replace.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.ready;
+              }
             case DataState.error:
-              // Replace.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.ready;
+              // [ON Query SUCCESS] + [Parent not changed] + [Criteria not changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Replace.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.ready;
+              }
             case DataState.none:
-              // Replace.
-              realListUpdateStrategy = ListUpdateStrategy.replace;
-              newBlockDataState = DataState.ready;
+              // [ON Query SUCCESS] + [Parent not changed] + [Criteria not changed].
+              switch (viewportSyncStrategy) {
+                case BlockViewportSyncStrategy.forceNativeQuery:
+                  // Replace.
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.convergeAll:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.replace;
+                  newBlockDataState = DataState.ready;
+                case BlockViewportSyncStrategy.incrementalMerge:
+                  // TODO: Test Case
+                  realListUpdateStrategy = ListUpdateStrategy.merge;
+                  newBlockDataState = DataState.ready;
+              }
           }
         }
       }
@@ -1211,7 +1482,8 @@ abstract class Block<
       __lastQueryType = thisXBlock.queryType;
       realListUpdateStrategy = ListUpdateStrategy.replace;
       newBlockDataState = DataState.ready;
-      queriedPageData = PageData.empty();
+      queriedItemList = [];
+      queriedPaginationInfo = null;
       queryResultState = ActionResultState.success;
     }
     //
@@ -1223,6 +1495,19 @@ abstract class Block<
       },
       traceStepType: TraceStepType.debug,
     );
+    final List<ID> removeItemIds = [];
+    if (queriedItemList != null &&
+        realListUpdateStrategy == ListUpdateStrategy.merge) {
+      if (itemIdsToQry != null && itemIdsToQry.isNotEmpty) {
+        for (ID itmId in itemIdsToQry) {
+          ITEM? found =
+              queriedItemList.firstWhereOrNull((it) => it.id == itmId);
+          if (found == null) {
+            removeItemIds.add(itmId);
+          }
+        }
+      }
+    }
     //
     //
     final ITEM? currItem = currentItem;
@@ -1234,8 +1519,8 @@ abstract class Block<
         parameters: {
           "usedXFilterCriteria": xFilterCriteriaOfFilterModel,
           "usedPageable": usedPageable,
-          "queriedPageData": queriedPageData,
-          "newBlockDataState": newBlockDataState,
+          "queriedItemList": queriedItemList,
+          "queriedPaginationInfo": queriedPaginationInfo,
           "queryResultState": queryResultState,
         },
         traceStepType: TraceStepType.nonControllableCalling,
@@ -1243,7 +1528,9 @@ abstract class Block<
       final processedQueryResult = __processQueryResult(
         usedXFilterCriteria: xFilterCriteriaOfFilterModel,
         usedPageable: usedPageable,
-        queriedPageData: queriedPageData,
+        //
+        queriedItemList: queriedItemList,
+        queriedPaginationInfo: queriedPaginationInfo,
         newBlockDataState: newBlockDataState,
         queryResultState: queryResultState,
       );
@@ -1254,6 +1541,7 @@ abstract class Block<
         executionTrace: executionTrace,
         forceListUpdateStrategy: realListUpdateStrategy,
         processedQueryResult: processedQueryResult,
+        removeItemIds: removeItemIds,
       );
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
@@ -1362,7 +1650,8 @@ abstract class Block<
     }
     //
     // TODO: LOGIC-01 (If not querying block --> No need to force select an item).
-    BlockAfterQueryDirective afterQueryDirective = thisXBlock.afterQueryDirective;
+    BlockAfterQueryDirective afterQueryDirective =
+        thisXBlock.afterQueryDirective;
     if (!thisXBlock.xShelf.naturalMode) {
       if (!queried) {
         return;
@@ -1382,7 +1671,8 @@ abstract class Block<
       );
       executionTrace._addTraceStep(
         codeId: "#03720",
-        shortDesc: "@afterQueryDirective: ${debugObjHtml(afterQueryDirective)} --> "
+        shortDesc:
+            "@afterQueryDirective: ${debugObjHtml(afterQueryDirective)} --> "
             "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
         traceStepType: TraceStepType.addTaskUnit,
       );
@@ -1417,9 +1707,11 @@ abstract class Block<
       case BlockAfterQueryDirective.createNewItem:
         throw UnimplementedError("Never ran. Handled above.");
       case BlockAfterQueryDirective.setAnItemAsCurrentIfNeed:
-        setCurrentItemDirective = BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
+        setCurrentItemDirective =
+            BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
       case BlockAfterQueryDirective.setAnItemAsCurrent:
-        setCurrentItemDirective = BlockSetCurrentItemDirective.setAnItemAsCurrent;
+        setCurrentItemDirective =
+            BlockSetCurrentItemDirective.setAnItemAsCurrent;
       case BlockAfterQueryDirective.setAnItemAsCurrentThenLoadForm:
         setCurrentItemDirective =
             BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm;
@@ -1435,7 +1727,7 @@ abstract class Block<
     final taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
       setCurrentItemDirective: setCurrentItemDirective,
       xBlock: thisXBlock,
-      newQueriedList: queriedPageData?.items ?? [],
+      newQueriedList: queriedItemList ?? [],
       candidateItem: candidateCurrItem,
       forceReloadItem: false,
       forceTypeForForm: null,
@@ -1659,7 +1951,8 @@ abstract class Block<
         );
         //
         if (hasItemRep ||
-            setCurrentItemDirective == BlockSetCurrentItemDirective.setAnItemAsCurrent ||
+            setCurrentItemDirective ==
+                BlockSetCurrentItemDirective.setAnItemAsCurrent ||
             setCurrentItemDirective ==
                 BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm) {
           candidateCurrItem = candidateCurrItem2;
@@ -1919,7 +2212,7 @@ abstract class Block<
             traceStepType: TraceStepType.controllableCalling,
           );
           //
-          __performLoadItemDetailByIdCount++;
+          debug.__performLoadItemDetailByIdCount++;
           ApiResult<ITEM_DETAIL> result = await performLoadItemDetailById(
             itemId: itemId,
           );
@@ -2483,6 +2776,7 @@ abstract class Block<
       executionTrace: executionTrace,
       thisXBlock: thisXBlock,
       candidateCurrItem: siblingItem,
+      viewportSyncStrategy: null,
     );
   }
 
@@ -2492,17 +2786,19 @@ abstract class Block<
   Future<void> _processInternalReaction({
     required ExecutionTrace executionTrace,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    bool forceReQuery = false,
+    required BlockViewportSyncStrategy? viewportSyncStrategy,
     required ITEM? candidateCurrItem,
   }) async {
     __assertThisXBlock(thisXBlock);
-
+    // TODO: Xem lai.
+    final bool forceRequery = viewportSyncStrategy?.forceRequery ?? false;
     // @DEL-01
     thisXBlock.setCandidateCurrItem(candidateCurrItem);
     //
     // Fire Internal Event.
     //
-    final setCurrentItemDirective = BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
+    final setCurrentItemDirective =
+        BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
     thisXBlock.setBlockSetCurrentItemDirective(setCurrentItemDirective);
     //
     final bool hasInternalReaction = _internalEffectedShelfMembers.hasMember();
@@ -2516,10 +2812,12 @@ abstract class Block<
     final _EffBlock? effSelfInfo =
         _internalEffectedShelfMembers._getSelfEffectedBlockInfo(
       forEventBlock: this,
+      viewportSyncStrategy: viewportSyncStrategy,
     );
     final _EffBlock? topEffBlockInfo =
         _internalEffectedShelfMembers._getTopEffectedAncestor(
       forEventBlock: this,
+      viewportSyncStrategy: viewportSyncStrategy,
     );
     //
     executionTrace._addTraceStep(
@@ -2543,18 +2841,19 @@ abstract class Block<
         },
         traceStepType: TraceStepType.debug,
       );
-      // forceReQuery (In !hasInternalReaction).
-      if (forceReQuery) {
+      // forceRequery (In !hasInternalReaction).
+      if (forceRequery) {
         executionTrace._addTraceStep(
           codeId: "#70320",
           shortDesc: "Creating <b>_BlockQueryTaskUnit</b>.",
           traceStepType: TraceStepType.addTaskUnit,
         );
+        thisXBlock.setViewportSyncStrategy(viewportSyncStrategy!);
         // Test Cases: [72a].
         final _STaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
         thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       }
-      // !forceReQuery (In !hasInternalReaction).
+      // !forceRequery (In !hasInternalReaction).
       else {
         executionTrace._addTraceStep(
           codeId: "#70380",
@@ -2586,7 +2885,7 @@ abstract class Block<
         codeId: "#70400",
         shortDesc: "Calling <b>xShelf._updateInternalReactionByEvtBlock()</b>.",
         parameters: {
-          "forceReQuery": forceReQuery,
+          "forceRequery": forceRequery,
         },
         traceStepType: TraceStepType.nonControllableCalling,
       );
@@ -2596,7 +2895,7 @@ abstract class Block<
       thisXBlock.xShelf._updateInternalReactionByEvtBlock(
         executionTrace: executionTrace,
         eventXBlock: thisXBlock,
-        forceReQuery: forceReQuery,
+        forceRequery: forceRequery,
       );
       //
       String debugHtmlString = thisXBlock.xShelf.toDebugXShelfStateAsHtml();
@@ -2672,7 +2971,7 @@ abstract class Block<
         },
         traceStepType: TraceStepType.debug,
       );
-      if (topEffBlockInfo.reQuery) {
+      if (topEffBlockInfo.requery) {
         final XBlock topXBlock = topEffBlockInfo.getXBlock(
           xShelf: thisXBlock.xShelf,
         );
@@ -2744,7 +3043,7 @@ abstract class Block<
       // Value is Updated:
       QryHint queryHint = thisXBlock.queryHint;
       if (queryHint == QryHint.force) {
-        // effSelfInfo.reQuery
+        // effSelfInfo.requery
         executionTrace._addTraceStep(
           codeId: "#70840",
           shortDesc:
@@ -3016,6 +3315,7 @@ abstract class Block<
       executionTrace: executionTrace,
       thisXBlock: thisXBlock,
       candidateCurrItem: siblingItem,
+      viewportSyncStrategy: null,
     );
   }
 
@@ -3233,14 +3533,12 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockQuickMultiItemCreationActionAnnotation()
-  Future<bool> _unitQuickCreateMultiItem({
+  @_BlockMultiItemCreationBackendActionAnnotation()
+  Future<bool> _unitCreateMultiItemBackendAction({
     required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockQuickMultiItemCreationAction<ID, ITEM, ITEM_DETAIL,
-            FILTER_CRITERIA>
-        action,
+    required BlockMultiItemCreationBackendAction<ID> action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -3250,14 +3548,13 @@ abstract class Block<
       traceStepType: TraceStepType.debug,
     );
     //
-    FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
+    final FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
-    ApiResult<PageData<ITEM>> result;
+    ApiResult<ListData<ID>> actionResult;
     try {
       executionTrace._addTraceStep(
         codeId: "#44100",
-        shortDesc:
-            "Calling ${debugObjHtml(action)}.performQuickCreateMultiItems().",
+        shortDesc: "Calling ${debugObjHtml(action)}.performCreateMultiItems().",
         parameters: {
           "parentBlockItem": parent?.currentItem,
           "filterCriteria": blockCurrentFilterCriteria,
@@ -3265,25 +3562,90 @@ abstract class Block<
         traceStepType: TraceStepType.controllableCalling,
       );
       //
-      result = await action.performQuickCreateMultiItems(
+      actionResult = await action.performCreateMultiItems(
         parentBlockItem: parent?.currentItem,
-        filterCriteria: blockCurrentFilterCriteria,
       );
-      //
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: '${getClassName(action)}.performQuickCreateMultiItems',
+        methodName: '${getClassName(action)}.performCreateMultiItems',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument:
-            TipDocument.blockQuickMultiItemCreationActionPerformBulkCreateItems,
+        tipDocument: TipDocument
+            .blockMultiItemCreationBackendActionPerformCreateMultiItems,
       );
       executionTrace._addTraceStep(
         codeId: "#44200",
         shortDesc:
-            "The ${debugObjHtml(action)}.performQuickCreateMultiItems() method was called with an error!",
+            "The ${debugObjHtml(action)}.performCreateMultiItems() method was called with an error!",
+        errorInfo: errorInfo,
+      );
+      //
+      return false;
+    }
+    if (actionResult.error != null) {
+      _handleRestError(
+        shelf: shelf,
+        methodName: "${getClassName(action)}.performCreateMultiItems",
+        message: actionResult.error!.errorMessage,
+        errorDetails: actionResult.error!.errorDetails,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+      return false;
+    }
+    // *new*
+    ApiResult<ListData<ITEM>?> listDataResult;
+    // Call performQueryByItemIds()
+    try {
+      final List<ID> performQueryItemIds = actionResult.data?.items ?? [];
+      final SortableCriteria sortableCriteria;
+      if (serverSideSortModel != null) {
+        sortableCriteria = serverSideSortModel!.getSortableCriteria();
+      } else {
+        sortableCriteria = SortableCriteria._empty();
+      }
+      //
+      //
+      executionTrace._addTraceStep(
+        codeId: "#44300",
+        shortDesc: "Calling ${debugObjHtml(this)}.performQueryByItemIds().",
+        parameters: {
+          "parentBlockItem": parent?.currentItem,
+          "filterCriteria": blockCurrentFilterCriteria,
+          "sortableCriteria": sortableCriteria,
+          "performQueryItemIds": performQueryItemIds,
+        },
+        traceStepType: TraceStepType.controllableCalling,
+      );
+      debug.__performQueryByItemIdsCount++;
+      debug.requeryCondition._lastPerformQueryItemIds =
+          performQueryItemIds.toSet();
+
+      // #######################################################################
+      // ############# XOA DI ##################################################
+      // #######################################################################
+      listDataResult = await performQueryByItemIds(
+        parentBlockCurrentItem: parent?.currentItem,
+        filterCriteria: blockCurrentFilterCriteria,
+        sortableCriteria: sortableCriteria,
+        itemIds: performQueryItemIds,
+      );
+    } catch (e, stackTrace) {
+      final ErrorInfo errorInfo = _handleError(
+        shelf: shelf,
+        methodName: '${getClassName(this)}.performQueryByItemIds',
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: TipDocument
+            .blockMultiItemCreationBackendActionPerformCreateMultiItems,
+      );
+      executionTrace._addTraceStep(
+        codeId: "#44400",
+        shortDesc:
+            "The ${debugObjHtml(this)}.performQueryByItemIds() method was called with an error!",
         errorInfo: errorInfo,
       );
       //
@@ -3292,31 +3654,34 @@ abstract class Block<
     //
     try {
       executionTrace._addTraceStep(
-        codeId: "#44300",
+        codeId: "#44700",
         shortDesc:
             "Calling ${debugObjHtml(this)}._processCreateMultiItemActionResult()..",
         traceStepType: TraceStepType.nonControllableCalling,
       );
+      // TODO: Hardcode.
+      final viewportSyncStrategy = BlockViewportSyncStrategy.forceNativeQuery;
+      //
       return await _processCreateMultiItemActionResult(
         executionTrace: executionTrace,
         thisXBlock: thisXBlock,
         blockCurrentFilterCriteria: blockCurrentFilterCriteria,
-        calledMethodName:
-            "${getClassName(action)}.performQuickCreateMultiItems",
-        result: result,
+        calledMethodName: "${getClassName(action)}.performCreateMultiItems",
+        result: listDataResult,
+        viewportSyncStrategy: viewportSyncStrategy,
       );
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: "${getClassName(action)}.performQuickCreateMultiItems",
+        methodName: "${getClassName(action)}.performCreateMultiItems",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument:
-            TipDocument.blockQuickMultiItemCreationActionPerformBulkCreateItems,
+        tipDocument: TipDocument
+            .blockMultiItemCreationBackendActionPerformCreateMultiItems,
       );
       executionTrace._addTraceStep(
-        codeId: "#44400",
+        codeId: "#44800",
         shortDesc:
             "The ${debugObjHtml(this)}._processCreateMultiItemActionResult() method was called with an error!",
         errorInfo: errorInfo,
@@ -3445,7 +3810,7 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockBackendAction action,
+    required BlockBackendAction<ID> action,
     required BlockBackendActionResult taskResult,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -3457,17 +3822,23 @@ abstract class Block<
       traceStepType: TraceStepType.debug,
     );
     //
-    ApiResult<void>? result;
+    final FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
+    //
+    ApiResult<ListData<ID>?> actionResult;
     try {
       executionTrace._addTraceStep(
         codeId: "#45100",
         shortDesc: "Calling ${debugObjHtml(action)}.performBackendOperation().",
+        parameters: {
+          "parentBlockItem": parent?.currentItem,
+          "filterCriteria": blockCurrentFilterCriteria,
+        },
         traceStepType: TraceStepType.controllableCalling,
       );
       //
-      result = await action.performBackendOperation();
-      // Throw ApiError.
-      result.throwIfError();
+      actionResult = await action.performBackendOperation(
+        parentBlockItem: parent?.currentItem,
+      );
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
@@ -3489,6 +3860,26 @@ abstract class Block<
       );
       return;
     }
+    if (actionResult.error != null) {
+      _handleRestError(
+        shelf: shelf,
+        methodName: "${getClassName(action)}.performBackendOperation",
+        message: actionResult.error!.errorMessage,
+        errorDetails: actionResult.error!.errorDetails,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+      return;
+    }
+    final viewportSyncStrategy = action.config.viewportSyncStrategy;
+    _createBlockRequeryConditionIfNeed(
+      executionTrace: executionTrace,
+      viewportSyncStrategy: viewportSyncStrategy,
+      addedEffectiveIds: actionResult.data?.items ?? [],
+      blockCurrentFilterCriteria: blockCurrentFilterCriteria,
+    );
+    //
+    // *new*
     //
     executionTrace._addTraceStep(
       codeId: "#45300",
@@ -3506,7 +3897,7 @@ abstract class Block<
       codeId: "#45400",
       shortDesc: "Calling ${debugObjHtml(this)}._processInternalReaction()..",
       parameters: {
-        "forceReQuery": true,
+        "forceRequery": true,
         "candidateCurrItem": candidateCurrItem,
       },
       traceStepType: TraceStepType.nonControllableCalling,
@@ -3517,8 +3908,9 @@ abstract class Block<
     await _processInternalReaction(
       executionTrace: executionTrace,
       thisXBlock: thisXBlock,
-      forceReQuery:
-          action.config.afterBackendAction == AfterBlockBackendAction.query,
+      // forceRequery:
+      //     action.config.afterBackendAction == AfterBlockBackendAction.query,
+      viewportSyncStrategy: viewportSyncStrategy,
       candidateCurrItem: candidateCurrItem,
     );
   }
@@ -3791,27 +4183,17 @@ abstract class Block<
         __clearAllChildrenBlocksToNone(
           thisXBlock: thisXBlock,
         );
-        // TODO-XXX: Add _BlockSetItemAsCurrentTaskUnit?
-        //  xxx; Xoa di.
-        // _TaskUnit taskUnit = _BlockSetItemAsCurrentTaskUnit<ITEM>(
-        //   setCurrentItemDirective:
-        //       BlockSetCurrentItemDirective.selectAnItemAsCurrentIfNeed,
-        //   xBlock: thisXBlock,
-        //   newQueriedList: [],
-        //   candidateItem: siblingItem,
-        //   forceReloadItem: false,
-        //   forceTypeForForm: null,
-        // );
-        // thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
       }
     }
     //
     // Process Internal Reaction (If Need).
+    // IN: _processSaveActionRestResult()
     //
     await _processInternalReaction(
       executionTrace: executionTrace,
       thisXBlock: thisXBlock,
       candidateCurrItem: siblingItem,
+      viewportSyncStrategy: null,
     );
   }
 
@@ -3823,7 +4205,8 @@ abstract class Block<
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required FILTER_CRITERIA blockCurrentFilterCriteria,
     required String calledMethodName,
-    required ApiResult<PageData<ITEM>> result,
+    required ApiResult<ListData<ITEM>?> result,
+    required BlockViewportSyncStrategy viewportSyncStrategy,
   }) async {
     if (result.error != null) {
       _handleRestError(
@@ -3844,22 +4227,9 @@ abstract class Block<
       eventType: EventType.creation,
     );
     //
-    final PageData<ITEM>? newItemsPage = result.data;
-
-    final List<ITEM> keepInListItems = [];
-    for (ITEM newItem in newItemsPage?.items ?? []) {
-      // TODO: Keep in List:
-      final bool keepInList = true;
-      // needToKeepItemInList(
-      //   parentBlockCurrentItem: parent?.currentItem,
-      //   filterCriteria: blockCurrentFilterCriteria,
-      //   itemDetail: savedItemDetail,
-      // );
-      if (!keepInList) {
-        continue;
-      }
-      keepInListItems.add(newItem);
-      //
+    final ListData<ITEM>? newItemsList = result.data;
+    final List<ITEM> keepInListItems = newItemsList?.items ?? [];
+    for (ITEM newItem in keepInListItems) {
       __blockData._insertOrReplaceItem(
         item: newItem,
       );
@@ -3871,6 +4241,7 @@ abstract class Block<
       executionTrace: executionTrace,
       thisXBlock: thisXBlock,
       candidateCurrItem: null,
+      viewportSyncStrategy: viewportSyncStrategy,
     );
     return true;
   }
@@ -3955,7 +4326,7 @@ abstract class Block<
           "Calling ${debugObjHtml(this)}.__canDeleteItem() to check before execute the action.",
       parameters: {
         "checkBusy": checkBusyTrue,
-        "checkBusy": checkBusyTrue,
+        "checkAllow": checkAllowTrue,
         "item": item,
         "errCodeIfItemIsNull": errCodeIfItemIsNull,
         "errorIfItemNotInTheBlock": errorIfItemNotInTheBlock,
@@ -3964,7 +4335,7 @@ abstract class Block<
     // @Same-Code-Precheck-01
     Actionable<BlockItemDeletionPrecheck> actionable = __canDeleteItem(
       checkBusy: checkBusyTrue,
-      checkAllow: checkBusyTrue,
+      checkAllow: checkAllowTrue,
       item: item,
       errCodeIfItemIsNull: errCodeIfItemIsNull,
       errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
@@ -3977,7 +4348,7 @@ abstract class Block<
         traceStepType: TraceStepType.debug,
       );
       //
-      _deletionErrorCount++;
+      debug._deletionErrorCount++;
       _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
@@ -4054,7 +4425,7 @@ abstract class Block<
       items: candidateDeleteItems,
     );
     if (!actionable.yes) {
-      _deletionErrorCount++;
+      debug._deletionErrorCount++;
       final ErrorInfo? errorInfo = _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
@@ -4554,7 +4925,8 @@ abstract class Block<
       filterInput: filterInput,
       pageable: null,
       suggestedListUpdateStrategy: suggestedListUpdateStrategy,
-      afterQueryDirective: BlockAfterQueryDirective.setAnItemAsCurrentThenLoadForm,
+      afterQueryDirective:
+          BlockAfterQueryDirective.setAnItemAsCurrentThenLoadForm,
       suggestedSelection: suggestedSelection,
     );
     //
@@ -4814,6 +5186,13 @@ abstract class Block<
     required Pageable pageable,
   });
 
+  Future<ApiResult<ListData<ITEM>?>> performQueryByItemIds({
+    required Object? parentBlockCurrentItem,
+    required FILTER_CRITERIA filterCriteria,
+    required SortableCriteria sortableCriteria,
+    required List<ID> itemIds,
+  });
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -4915,7 +5294,7 @@ abstract class Block<
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
-    required BlockBackendAction<ID, dynamic> action,
+    required BlockBackendAction<ID> action,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
@@ -4981,7 +5360,8 @@ abstract class Block<
     final XShelf xShelf = _XShelfBlockBackendActionExecution(
       block: this,
       filterInput: filterInput,
-      afterBackendAction: action.config.afterBackendAction,
+      // afterBackendAction: action.config.afterBackendAction,
+      viewportSyncStrategy: action.config.viewportSyncStrategy,
     );
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
@@ -5108,19 +5488,14 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
-  @_BlockQuickMultiItemCreationActionAnnotation()
-  Future<BlockQuickMultiItemCreationResult>
-      executeQuickMultiItemCreationAction({
-    required BlockQuickMultiItemCreationAction<
-            ID, //
-            ITEM,
-            ITEM_DETAIL,
-            FILTER_CRITERIA>
-        action,
+  @_BlockMultiItemCreationBackendActionAnnotation()
+  Future<BlockMultiItemCreationBackendActionResult>
+      executeMultiItemCreationBackendAction({
+    required BlockMultiItemCreationBackendAction<ID> action,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "executeQuickMultiItemCreationAction",
+      methodName: "executeMultiItemCreationBackendAction",
       parameters: {
         "action": action,
       },
@@ -5142,7 +5517,7 @@ abstract class Block<
     //
     // @Same-Code-Precheck-01
     //
-    Actionable<BlockQuickMultiItemCreationPrecheck> actionable =
+    Actionable<BlockMultiItemCreationBackendActionPrecheck> actionable =
         __canCreateMultiItem(
       checkBusy: checkBusyTrue,
       checkAllow: checkAllowTrue,
@@ -5161,7 +5536,7 @@ abstract class Block<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return BlockQuickMultiItemCreationResult(
+      return BlockMultiItemCreationBackendActionResult(
         precheck: actionable.errCode,
         errorInfo: actionable.errorInfo,
       );
@@ -5178,21 +5553,24 @@ abstract class Block<
       );
     }
     if (!confirm) {
-      return BlockQuickMultiItemCreationResult(
-        precheck: BlockQuickMultiItemCreationPrecheck.cancelled,
+      return BlockMultiItemCreationBackendActionResult(
+        precheck: BlockMultiItemCreationBackendActionPrecheck.cancelled,
       );
     }
     //
-    final XShelf xShelf = _XShelfBlockQuickMultiItemCreationAction(block: this);
+    final XShelf xShelf =
+        _XShelfBlockMultiItemCreationBackendAction(block: this);
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
     executionTrace._addTraceStep(
       codeId: "#74340",
-      shortDesc: "Creating <b>_BlockQuickMultiItemCreationTaskUnit</b>.",
+      shortDesc:
+          "Creating <b>_BlockMultiItemCreationBackendActionTaskUnit</b>.",
       traceStepType: TraceStepType.addTaskUnit,
     );
-    final _ResultedSTaskUnit taskUnit = _BlockQuickMultiItemCreationTaskUnit(
+    final _ResultedSTaskUnit taskUnit =
+        _BlockMultiItemCreationBackendActionTaskUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -5758,9 +6136,7 @@ abstract class Block<
             "intent": intent,
           },
         );
-        print("ROUTE STACK Before: ${router.stack}");
         router.pop();
-        print("ROUTE STACK After: ${router.stack}");
       }
       // dialog()
       else if (intent is _NavigationShowDialogIntent) {
@@ -6327,27 +6703,29 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<BlockQuickMultiItemCreationPrecheck> __canCreateMultiItem({
+  Actionable<BlockMultiItemCreationBackendActionPrecheck> __canCreateMultiItem({
     required bool checkBusy,
     required bool checkAllow,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockQuickMultiItemCreationPrecheck>.no(
-        errCode: BlockQuickMultiItemCreationPrecheck.busy,
+      return Actionable<BlockMultiItemCreationBackendActionPrecheck>.no(
+        errCode: BlockMultiItemCreationBackendActionPrecheck.busy,
       );
     }
     switch (dataState) {
       case DataState.pending:
-        return Actionable<BlockQuickMultiItemCreationPrecheck>.no(
-          errCode: BlockQuickMultiItemCreationPrecheck.blockInPendingState,
+        return Actionable<BlockMultiItemCreationBackendActionPrecheck>.no(
+          errCode:
+              BlockMultiItemCreationBackendActionPrecheck.blockInPendingState,
         );
       case DataState.error:
-        return Actionable<BlockQuickMultiItemCreationPrecheck>.no(
-          errCode: BlockQuickMultiItemCreationPrecheck.blockInErrorState,
+        return Actionable<BlockMultiItemCreationBackendActionPrecheck>.no(
+          errCode:
+              BlockMultiItemCreationBackendActionPrecheck.blockInErrorState,
         );
       case DataState.none:
-        return Actionable<BlockQuickMultiItemCreationPrecheck>.no(
-          errCode: BlockQuickMultiItemCreationPrecheck.blockInNoneState,
+        return Actionable<BlockMultiItemCreationBackendActionPrecheck>.no(
+          errCode: BlockMultiItemCreationBackendActionPrecheck.blockInNoneState,
         );
       case DataState.ready:
         break;
@@ -6357,20 +6735,21 @@ abstract class Block<
       CheckAllowResult result = __isItemCreationAllowed();
       switch (result.result) {
         case CheckAllow.allow:
-          return Actionable<BlockQuickMultiItemCreationPrecheck>.yes();
+          return Actionable<BlockMultiItemCreationBackendActionPrecheck>.yes();
         case CheckAllow.notAllow:
-          return Actionable<BlockQuickMultiItemCreationPrecheck>.no(
-            errCode: BlockQuickMultiItemCreationPrecheck.notAllow,
+          return Actionable<BlockMultiItemCreationBackendActionPrecheck>.no(
+            errCode: BlockMultiItemCreationBackendActionPrecheck.notAllow,
           );
         case CheckAllow.error:
-          return Actionable<BlockQuickMultiItemCreationPrecheck>.no(
-            errCode: BlockQuickMultiItemCreationPrecheck.checkAllowMethodError,
+          return Actionable<BlockMultiItemCreationBackendActionPrecheck>.no(
+            errCode: BlockMultiItemCreationBackendActionPrecheck
+                .checkAllowMethodError,
             errorInfo: result.errorInfo,
           );
       }
     }
     //
-    return Actionable<BlockQuickMultiItemCreationPrecheck>.yes();
+    return Actionable<BlockMultiItemCreationBackendActionPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -7224,8 +7603,6 @@ abstract class Block<
   // ***** BLOCK DATA **********************************************************
   // ***************************************************************************
 
-  int get currentItemChangeCount => __blockData._currentItemChangeCount;
-
   Object? get parentBlockCurrentItemId {
     return parent?.currentItemId;
   }
@@ -7802,12 +8179,12 @@ abstract class Block<
     required XFilterCriteria<FILTER_CRITERIA>? usedXFilterCriteria,
     required Pageable? usedPageable,
     //
-    required PageData<ITEM>? queriedPageData,
+    required List<ITEM>? queriedItemList,
+    required PaginationInfo? queriedPaginationInfo,
     required DataState newBlockDataState,
     required ActionResultState queryResultState,
   }) {
-    final PageData<ITEM> ap = queriedPageData ??  PageData<ITEM>.empty();
-    final List<ITEM> queriedItems = ap.items;
+    final List<ITEM> queriedItems = queriedItemList ?? [];
     //
     final List<ITEM> validItems = [];
     final List<ITEM> invalidItems = [];
@@ -7865,7 +8242,8 @@ abstract class Block<
       usedXFilterCriteria: usedXFilterCriteria,
       usedPageable: usedPageable,
       //
-      queriedPageData: queriedPageData,
+      queriedItemList: queriedItemList,
+      queriedPaginationInfo: queriedPaginationInfo,
       queryResultState: queryResultState,
       newBlockDataState: newBlockDataState,
       //

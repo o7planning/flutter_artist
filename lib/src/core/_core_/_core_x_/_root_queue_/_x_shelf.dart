@@ -202,7 +202,7 @@ abstract class XShelf extends XRootQueueItem {
   void _updateInternalReactionByEvtBlock({
     required ExecutionTrace executionTrace,
     required XBlock eventXBlock,
-    required bool forceReQuery,
+    required bool forceRequery,
   }) {
     __assertXShelf(eventXBlock.xShelf);
     //
@@ -220,7 +220,7 @@ abstract class XShelf extends XRootQueueItem {
       traceStepType: TraceStepType.debug,
     );
 
-    if (forceReQuery) {
+    if (forceRequery) {
       final forceQryHint = QryHint.force;
       //
       executionTrace._addTraceStep(
@@ -233,12 +233,12 @@ abstract class XShelf extends XRootQueueItem {
 
     //
     Set<String> listenerBlockNames = {}
-      ..addAll(effectedShelfMembers._reQueryBlockMAP.keys)
+      ..addAll(effectedShelfMembers._requeryBlockMAP.keys)
       ..addAll(effectedShelfMembers._refreshCurrItmBlockMAP.keys);
 
     for (String listenerBlkName in listenerBlockNames) {
       final Block? reQryBlock =
-          effectedShelfMembers._reQueryBlockMAP[listenerBlkName];
+          effectedShelfMembers._requeryBlockMAP[listenerBlkName];
       final Block? refreshCurrBlock =
           effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
       //
@@ -273,7 +273,7 @@ abstract class XShelf extends XRootQueueItem {
       }
     }
     //
-    for (Scalar s in effectedShelfMembers._reQueryScalarMAP.values) {
+    for (Scalar s in effectedShelfMembers._requeryScalarMAP.values) {
       String scalarName = s.name;
       XScalar xScalar = xScalarMap[scalarName]!;
       //
@@ -332,7 +332,7 @@ abstract class XShelf extends XRootQueueItem {
   // ***************************************************************************
 
   void _initHookTaskUnit() {
-    shelf._debugInitQueryTaskUnitsCount++;
+    shelf.debug._initQueryTaskUnitsCount++;
     //
     // _addTaskUnit(
     //   taskUnit: _HookTaskUnit(
@@ -347,7 +347,7 @@ abstract class XShelf extends XRootQueueItem {
     if (rootVipXScalar != null && rootVipXBlock != null) {
       throw "Development Logic Error";
     }
-    shelf._debugInitQueryTaskUnitsCount++;
+    shelf.debug._initQueryTaskUnitsCount++;
     //
     executionTrace._addTraceStep(
       codeId: "#01000",
@@ -398,7 +398,9 @@ abstract class XShelf extends XRootQueueItem {
         taskUnit: taskUnit,
         toMainQueue: toMainQueue,
       );
-    } else if (rootVipXBlock != null) {
+    }
+    //
+    else if (rootVipXBlock != null) {
       final taskUnit = _BlockQueryTaskUnit(
         xBlock: rootVipXBlock!,
       );

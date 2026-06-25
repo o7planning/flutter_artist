@@ -1,13 +1,15 @@
 part of '../core.dart';
 
 class _EffBlock {
-  final bool reQuery;
+  final bool requery;
+  final BlockViewportSyncStrategy? viewportSyncStrategy;
   final bool refreshCurrItem;
   final Block block;
 
   _EffBlock({
     required this.block,
-    required this.reQuery,
+    required this.requery,
+    required this.viewportSyncStrategy,
     required this.refreshCurrItem,
   });
 
@@ -16,6 +18,6 @@ class _EffBlock {
   }
 
   String getDebugInfo() {
-    return "${block.name}(reQuery: $reQuery, refreshCurrItem: $refreshCurrItem)";
+    return "${block.name}(requery: $requery, viewportSyncStrategy: ${viewportSyncStrategy?.name}, refreshCurrItem: $refreshCurrItem)";
   }
 }
