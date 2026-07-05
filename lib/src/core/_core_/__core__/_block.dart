@@ -957,6 +957,7 @@ abstract class Block<
           executionTrace: executionTrace,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
+          formKeyInstantValuesInUI: null,
         ) as XFilterCriteria<FILTER_CRITERIA>?;
         //
         xFilterModel.queried = true;
@@ -1783,7 +1784,7 @@ abstract class Block<
         shortDesc:
             "${debugObjHtml(formModel)} -> set <b>manualDirty</b> to ${debugObjHtml(manualDirty)}.",
       );
-      formModel?._formPropsStructure._setManualDirty(manualDirty);
+      formModel?._formModelStructure._setManualDirty(manualDirty);
     }
     //
     if (thisXBlock.candidateCurrItem != null) {
@@ -3369,7 +3370,7 @@ abstract class Block<
       codeId: "#04060",
       shortDesc: "${debugObjHtml(formModel)} set formMode to creation.",
     );
-    formModel!._formPropsStructure._setFormMode_TODO_DELETE(
+    formModel!._formModelStructure._setFormMode_TODO_DELETE(
       formMode: FormMode.creation,
       formDataState: DataState.ready,
     );
@@ -3408,6 +3409,7 @@ abstract class Block<
         additionalFormRelatedData: additionalFormRelatedData,
         formInput: formInput,
         activityType: activityType,
+        formKeyInstantValuesInUI: null,
       );
       if (success) {
         executionTrace._addTraceStep(
@@ -3415,7 +3417,7 @@ abstract class Block<
           shortDesc:
               "${debugObjHtml(formModel)} manually set dirty to $initDirty.",
         );
-        formModel!._formPropsStructure._setManualDirty(initDirty);
+        formModel!._formModelStructure._setManualDirty(initDirty);
       }
     } finally {
       __refreshPreparingFormCreationState(
@@ -5486,6 +5488,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @Deprecated("TODO: Delete")
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockMultiItemCreationBackendActionAnnotation()
@@ -7083,8 +7086,28 @@ abstract class Block<
         errCode: BlockFormSavePrecheck.formIsNotDirty,
       );
     }
+    // TODO: DELETE.
+    // if (checkValidate) {
+    //   if (!(formModel!._formKey.currentState?.validate() ?? false)) {
+    //     return Actionable<BlockFormSavePrecheck>.no(
+    //       errCode: BlockFormSavePrecheck.formInvalidated,
+    //     );
+    //   }
+    // }
     if (checkValidate) {
-      if (!(formModel!._formKey.currentState?.validate() ?? false)) {
+      final activeForms = formModel!.ui._activeFormBuilderStates;
+      bool allFormsAreValid = true;
+
+      if (activeForms.isEmpty) {
+        allFormsAreValid = true;
+      } else {
+        for (FormBuilderState formState in activeForms) {
+          bool isValid = formState.validate(focusOnInvalid: false);
+          allFormsAreValid = allFormsAreValid && isValid;
+        }
+      }
+
+      if (!allFormsAreValid) {
         return Actionable<BlockFormSavePrecheck>.no(
           errCode: BlockFormSavePrecheck.formInvalidated,
         );

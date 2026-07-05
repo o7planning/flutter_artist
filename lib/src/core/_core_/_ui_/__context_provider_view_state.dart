@@ -145,7 +145,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     if (isVisible) {
       final Shelf? shelf = _getRelatedShelf();
       if (shelf != null) {
-        shelf._markAsOrphaned = false;
+        shelf._markAsOrphaned(false);
       }
     }
   }

@@ -27,6 +27,22 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  List<FormBuilderState> get _activeFormBuilderStates {
+    List<FormBuilderState> forms = [];
+    for (_ContextProviderViewState state in _filterBaseViewWidgetStates.keys) {
+      if (state.mounted && state is _FilterPanelBuilderState) {
+        final formState = state.formKey.currentState;
+        if (formState != null) {
+          forms.add(formState);
+        }
+      }
+    }
+    return forms;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
     required bool activeOnly,
   }) {

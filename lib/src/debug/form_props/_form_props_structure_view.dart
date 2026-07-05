@@ -47,7 +47,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     _currentNode = formModelNode;
     rootTreeNode = TreeNode.root()..add(formModelNode);
     //
-    FormModelStructure structure = widget.formModel.formPropsStructure;
+    FormModelStructure structure = widget.formModel.formModelStructure;
 
     List<MultiOptFormPropModel> rootMultiOptProp = structure.debugRootOptProps;
     for (MultiOptFormPropModel multiOptProp in rootMultiOptProp) {

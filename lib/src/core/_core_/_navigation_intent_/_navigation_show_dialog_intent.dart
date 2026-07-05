@@ -7,8 +7,7 @@ class _NavigationShowDialogIntent extends NavigationIntent {
   final Object? extra;
   final bool barrierDismissible;
 
-  const _NavigationShowDialogIntent(
-    this.path, {
+  const _NavigationShowDialogIntent(this.path, {
     required this.builder,
     this.guards = const [],
     this.extra,

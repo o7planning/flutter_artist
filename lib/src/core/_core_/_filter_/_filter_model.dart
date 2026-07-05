@@ -31,17 +31,7 @@ abstract class FilterModel<
   XFilterCriteria<FILTER_CRITERIA>? get debugXFilterCriteria =>
       _xFilterCriteria;
 
-  int __loadCount = 0;
-
-  int get loadCount => __loadCount;
-
-  int __filterActivityCount = 0;
-
-  int get filterActivityCount => __filterActivityCount;
-
-  bool _loadTimeUiActive = false;
-
-  bool get loadTimeUiActive => _loadTimeUiActive;
+  late final _FilterModelDebugInfo debug = _FilterModelDebugInfo();
 
   bool __initiatedAtLeastOnce = false;
 
@@ -64,7 +54,7 @@ abstract class FilterModel<
   // TODO: Test case.
   ErrorInfo? _errorInfo;
 
-  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  // GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   late final ui = _FilterUiComponents(filterModel: this);
 
@@ -308,6 +298,7 @@ abstract class FilterModel<
           executionTrace: executionTrace,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
+          formKeyInstantValuesInUI: null,
         );
         //
         thisXFilterModel.queried = true;
@@ -330,6 +321,7 @@ abstract class FilterModel<
     required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XFilterModel xFilterModel,
+    required Map<String, dynamic> formKeyInstantValuesInUI,
   }) async {
     __assertThisXFilterModel(xFilterModel);
     //
@@ -347,6 +339,7 @@ abstract class FilterModel<
       executionTrace: executionTrace,
       activityType: FilterActivityType.updateFromFilterPanel,
       filterInput: null,
+      formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );
     return xFilterCriteria != null;
   }
@@ -523,11 +516,28 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  // void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
+  //   try {
+  //     FlutterArtist._lockAddMoreQuery = true;
+  //     __lockAddMoreQuery = true;
+  //     _formKey.currentState?.patchValue(newCurrentValue);
+  //   } finally {
+  //     FlutterArtist._lockAddMoreQuery = false;
+  //     __lockAddMoreQuery = false;
+  //   }
+  // }
+
   void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
     try {
       FlutterArtist._lockAddMoreQuery = true;
       __lockAddMoreQuery = true;
-      _formKey.currentState?.patchValue(newCurrentValue);
+      final List<FormBuilderState> activeForms = ui._activeFormBuilderStates;
+
+      for (FormBuilderState formState in activeForms) {
+        // Only patch fields that this Form actually owns or allows
+        // flutter_form_builder supports safe patchValue for maps containing multiple fields
+        formState.patchValue(newCurrentValue);
+      }
     } finally {
       FlutterArtist._lockAddMoreQuery = false;
       __lockAddMoreQuery = false;
@@ -546,15 +556,20 @@ abstract class FilterModel<
     required ExecutionTrace executionTrace,
     required FILTER_INPUT? filterInput,
     required FilterActivityType activityType,
+    required Map<String, dynamic>? formKeyInstantValuesInUI,
   }) async {
-    __filterActivityCount++;
+    debug.__filterActivityCount++;
     //
     if (activityType == FilterActivityType.newFilt) {
-      __loadCount++;
+      debug.__loadCount++;
       __clearFilterError();
     }
+    // final Map<String, dynamic> formKeyInstantValues =
+    //     _formKey.currentState?.instantValue ?? {};
+
     final Map<String, dynamic> formKeyInstantValues =
-        _formKey.currentState?.instantValue ?? {};
+        formKeyInstantValuesInUI ??
+            _filterModelStructure._currentCriteriaValues;
     //
     if (this is! _DefaultFilterModel) {
       executionTrace._addTraceStep(
@@ -1353,7 +1368,9 @@ abstract class FilterModel<
   @_ImportantMethodAnnotation(
       "Called when the user makes a change on the FilterPanel")
   @_FilterPanelChangeAnnotation()
-  Future<void> _onChangeFromFilterPanel() async {
+  Future<void> _onChangeFromFilterPanel({
+    required Map<String, dynamic> formKeyInstantValuesInUI,
+  }) async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFilterPanel");
     //
     final XShelf xShelf = _XShelfFilterPanelChange(filterModel: this);
@@ -1361,6 +1378,7 @@ abstract class FilterModel<
     final XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
     _FilterPanelChangeTaskUnit taskUnit = _FilterPanelChangeTaskUnit(
       xFilterModel: xFilterModel,
+      formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );
     xShelf._addTaskUnit(taskUnit: taskUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);

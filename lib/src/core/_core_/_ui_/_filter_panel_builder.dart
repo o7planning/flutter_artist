@@ -94,7 +94,7 @@ class _FilterPanelBuilderState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    widget.filterModel._formKey = formKey;
+    // widget.filterModel._formKey = formKey;
   }
 
   @_FilterPanelChangeAnnotation()
@@ -107,7 +107,9 @@ class _FilterPanelBuilderState
       widgetState: this,
     );
     if (!isBuilding) {
-      await widget.filterModel._onChangeFromFilterPanel();
+      await widget.filterModel._onChangeFromFilterPanel(
+        formKeyInstantValuesInUI: formKey.currentState?.instantValue ?? {},
+      );
     }
   }
 

@@ -13,6 +13,22 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  List<FormBuilderState> get _activeFormBuilderStates {
+    List<FormBuilderState> forms = [];
+    for (_ContextProviderViewState state in __formWidgetStates.keys) {
+      if (state.mounted && state is _FormViewBuilderState) {
+        final formState = state.formKey.currentState;
+        if (formState != null) {
+          forms.add(formState);
+        }
+      }
+    }
+    return forms;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @override
   Set<FaRouteData> get faRouteDatas {
     List<_ContextProviderViewState> list = [

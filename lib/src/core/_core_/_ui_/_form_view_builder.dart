@@ -93,7 +93,7 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    widget.formModel._formKey = formKey;
+    // widget.formModel._formKey = formKey;
   }
 
   Future<void> _onPopInvokedWithResult(bool didPop, dynamic result) async {
@@ -162,7 +162,10 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
       widgetState: this,
     );
     if (!isBuilding) {
-      await widget.formModel._onChangeFromFormView();
+      final Map<String, dynamic> currentInstantValues =
+          formKey.currentState?.instantValue ?? {};
+      await widget.formModel._onChangeFromFormView(
+          formKeyInstantValuesInUI: currentInstantValues);
     }
   }
 

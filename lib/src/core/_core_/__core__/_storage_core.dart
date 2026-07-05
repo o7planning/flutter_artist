@@ -31,6 +31,30 @@ abstract class _StorageCore extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
+  void collectGarbage() {
+    final now = FlutterArtist.clock.now();
+    //
+    final keys = _shelfMap.keys.toList();
+    for (final key in keys) {
+      final shelf = _shelfMap[key];
+      if (shelf == null) continue;
+      final orphanedAt = shelf.orphanedAt;
+      if (orphanedAt == null) continue;
+
+      if (now.difference(orphanedAt).inMilliseconds >=
+          FlutterArtist.garbageCollectionIntervalInSeconds * 1000) {
+        Shelf? shelf = _shelfMap.remove(key);
+        if (shelf != null) {
+          _recentShelves.remove(shelf);
+        }
+        print("Unmount $key");
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _setStarted() {
     if (!__started) {
       __started = true;
@@ -213,13 +237,13 @@ abstract class _StorageCore extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  F? findOrNullShelf<F extends Shelf>() {
+  F? findShelfOrNull<F extends Shelf>() {
     final String shelfName = _getShelfName(F);
     F? shelf = _shelfMap[shelfName] as F?;
     return shelf;
   }
 
-  F? findOrNullActivity<F extends ActivityV1>() {
+  F? findActivityOrNull<F extends ActivityV1>() {
     final String activityName = _getActivityName(F);
     F? activity = _activityMap[activityName] as F?;
     return activity;
@@ -248,21 +272,6 @@ abstract class _StorageCore extends _Core {
     _activityMap.clear();
   }
 
-  void _unmountOrphanShelves() {
-    List<String> shelfNames = [..._shelfMap.keys];
-    for (String shelfName in shelfNames) {
-      Shelf? shelf = _shelfMap[shelfName];
-      if (shelf == null) {
-        continue;
-      }
-      if (shelf.markAsOrphaned) {
-        print("[FLUTTER_ARTIST] - Unmount ${getClassName(shelf)}");
-        _shelfMap.remove(shelfName);
-        _recentShelves.remove(shelf);
-      }
-    }
-  }
-
   // ***************************************************************************
   // ***************************************************************************
 
@@ -287,14 +296,14 @@ abstract class _StorageCore extends _Core {
           return;
         case ShelfReleasePolicy.unmount:
           print(
-              "[FLUTTER_ARTIST] ---------> MARK_TO_RELEASE_AND_PRUNE: ${getClassName(shelf)}");
-          shelf._markAsOrphaned = true;
+              "[FLUTTER_ARTIST] ---------> MARK_TO_RELEASE_AND_PRUNE: ${getClassName(shelf)} - ${DateTime.now()}");
+          shelf._markAsOrphaned(true);
           return;
       }
     } else {
       print(
-          "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(shelf)}");
-      shelf._markAsOrphaned = false;
+          "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(shelf)} - ${DateTime.now()}");
+      shelf._markAsOrphaned(false);
     }
   }
 
@@ -308,7 +317,7 @@ abstract class _StorageCore extends _Core {
   List<Shelf> getRecentShelves({required bool visibleOnly}) {
     List<Shelf> ret = [];
     for (Shelf shelf in _recentShelves) {
-      if (shelf.markAsOrphaned) {
+      if (shelf.markedAsOrphan) {
         continue;
       }
       if (visibleOnly) {

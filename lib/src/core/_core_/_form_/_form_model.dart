@@ -8,21 +8,7 @@ abstract class FormModel<
     > extends _Core {
   final FormModelConfig config;
 
-  int __loadCount = 0;
-
-  int get loadCount => __loadCount;
-
-  int _saveErrorCount = 0;
-
-  int get saveErrorCount => _saveErrorCount;
-
-  int __formActivityCount = 0;
-
-  int get formActivityCount => __formActivityCount;
-
-  int _lazyLoadCount = 0;
-
-  int get lazyLoadCount => _lazyLoadCount;
+  late final _FormModelDebugInfo debug = _FormModelDebugInfo();
 
   String get pathInfo {
     return "block-form > ${shelf.name} > ${block.name}";
@@ -33,17 +19,13 @@ abstract class FormModel<
 
   bool _changeEventLocked = false;
 
-  bool _loadTimeUiActive = false;
+  FormMode get formMode => _formModelStructure.formMode;
 
-  bool get loadTimeUiActive => _loadTimeUiActive;
+  DataState get dataState => _formModelStructure._formDataState;
 
-  FormMode get formMode => _formPropsStructure.formMode;
+  FormErrorInfo? get formErrorInfo => _formModelStructure.formErrorInfo;
 
-  DataState get dataState => _formPropsStructure._formDataState;
-
-  FormErrorInfo? get formErrorInfo => _formPropsStructure.formErrorInfo;
-
-  bool get formInitialDataReady => _formPropsStructure._formInitialDataReady;
+  bool get formInitialDataReady => _formModelStructure._formInitialDataReady;
 
   Shelf get shelf => block.shelf;
 
@@ -68,7 +50,7 @@ abstract class FormModel<
   AutovalidateMode get autovalidateMode => _autovalidateMode;
 
   AutovalidateMode get _autovalidateModeForFormView {
-    if (_formPropsStructure._formMode == FormMode.none) {
+    if (_formModelStructure._formMode == FormMode.none) {
       return AutovalidateMode.disabled;
     }
     return _autovalidateMode;
@@ -78,11 +60,11 @@ abstract class FormModel<
 
   // ***************************************************************************
 
-  late final FormModelStructure _formPropsStructure;
+  late final FormModelStructure _formModelStructure;
 
-  FormModelStructure get formPropsStructure => _formPropsStructure;
+  FormModelStructure get formModelStructure => _formModelStructure;
 
-  GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  // GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -392,11 +374,11 @@ abstract class FormModel<
   // ***************************************************************************
 
   void _triggerFilterCriteriaChanged() {
-    _formPropsStructure._triggerFilterCriteriaChanged();
+    _formModelStructure._triggerFilterCriteriaChanged();
   }
 
   void _triggerItemIdChanged() {
-    _formPropsStructure._triggerItemIdChanged();
+    _formModelStructure._triggerItemIdChanged();
   }
 
   // ***************************************************************************
@@ -408,6 +390,7 @@ abstract class FormModel<
     required ExecutionTrace executionTrace,
     required TaskType taskType,
     required XFormModel xFormModel,
+    required Map<String, dynamic>? formKeyInstantValuesInUI,
   }) async {
     __assertThisXFormModel(xFormModel);
     //
@@ -423,6 +406,7 @@ abstract class FormModel<
       additionalFormRelatedData: null,
       formInput: null,
       activityType: FormActivityType.updateFromFormView,
+      formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );
     return true;
   }
@@ -511,6 +495,7 @@ abstract class FormModel<
       additionalFormRelatedData: additionalFormRelatedData,
       formInput: formInput,
       activityType: activityType,
+      formKeyInstantValuesInUI: null,
     );
   }
 
@@ -551,9 +536,11 @@ abstract class FormModel<
     //
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      additionalFormRelatedData: additionalFormRelatedData, // null
+      additionalFormRelatedData: additionalFormRelatedData,
+      // null
       formInput: formInput,
       activityType: activityType,
+      formKeyInstantValuesInUI: null,
     );
     return true;
   }
@@ -588,15 +575,15 @@ abstract class FormModel<
       return;
     }
     final Map<String, dynamic> formMapData =
-        _formPropsStructure.currentFormData;
+        _formModelStructure._currentFormData;
     //
-    String calledMethodName = _formPropsStructure.isNew //
+    String calledMethodName = _formModelStructure.isNew //
         ? 'performCreateItem'
         : 'performUpdateItem';
     //
     ApiResult<ITEM_DETAIL> result;
     bool saveError = false;
-    final bool isNew = _formPropsStructure.isNew;
+    final bool isNew = _formModelStructure.isNew;
     try {
       block._refreshSavingState(isSaving: true);
       //
@@ -687,8 +674,8 @@ abstract class FormModel<
 
   void __defineFormModelStructure() {
     try {
-      _formPropsStructure = defineFormModelStructure();
-      _formPropsStructure.formModel = this;
+      _formModelStructure = defineFormModelStructure();
+      _formModelStructure.formModel = this;
     }
     // Invalid Form Prop.
     on FormPropInvalidNameError catch (e) {
@@ -721,16 +708,17 @@ abstract class FormModel<
     required ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData,
     required FORM_INPUT? formInput,
     required FormActivityType activityType,
+    required Map<String, dynamic>? formKeyInstantValuesInUI,
   }) async {
-    __formActivityCount++;
+    debug.__formActivityCount++;
     //
     executionTrace._addTraceStep(
       codeId: "#06000",
-      shortDesc: "${debugObjHtml(this)} Form View Changed.",
+      shortDesc: "${debugObjHtml(this)} on _startNewFormActivity().",
     );
     //
     if (activityType == FormActivityType.startCreatingOrEditing) {
-      __loadCount++;
+      debug.__loadCount++;
       _autovalidateMode = config.autovalidateMode; // AutovalidateMode.disabled;
     } else {
       _autovalidateMode = config.autovalidateMode;
@@ -744,8 +732,8 @@ abstract class FormModel<
             ? FormMode.creation
             : FormMode.edit;
         //
-        _formPropsStructure._clearFormError();
-        _formPropsStructure._setFormDataState(
+        _formModelStructure._clearFormError();
+        _formModelStructure._setFormDataState(
           formDataState: DataState.pending,
           error: null,
         );
@@ -796,7 +784,7 @@ abstract class FormModel<
         }
     }
     //
-    _formPropsStructure._setFormMode(currentFormMode);
+    _formModelStructure._setFormMode(currentFormMode);
     final bool isNoneMode = currentFormMode == FormMode.none;
     final bool isCreationMode = currentFormMode == FormMode.creation;
     //
@@ -807,10 +795,14 @@ abstract class FormModel<
       }
     }
     //
+    // final Map<String, dynamic> formKeyInstantValues =
+    //     _formKey.currentState?.instantValue ?? {};
     final Map<String, dynamic> formKeyInstantValues =
-        _formKey.currentState?.instantValue ?? {};
+        formKeyInstantValuesInUI ?? _formModelStructure._currentFormData;
+
+    print("formKeyInstantValues : $formKeyInstantValues");
     //
-    _formPropsStructure._setupTemporaryStateForNewActivity(
+    _formModelStructure._setupTemporaryStateForNewActivity(
       activityType: activityType,
       // Data from FormView:
       formKeyInstantValues: formKeyInstantValues,
@@ -857,7 +849,7 @@ abstract class FormModel<
             // In (First load + itemDetail != null).
             //
             dynamic value = simplePropValueMap[propName];
-            _formPropsStructure._setTempSimplePropValue(
+            _formModelStructure._setTempSimplePropValue(
               propName: propName,
               value: value,
               setForInitial: true,
@@ -879,7 +871,7 @@ abstract class FormModel<
             error: error,
             errorStackTrace: stackTrace,
           );
-          _formPropsStructure._setFormError(formErrorInfo);
+          _formModelStructure._setFormError(formErrorInfo);
           //
           final ErrorInfo errorInfo = _handleError(
             shelf: shelf,
@@ -947,7 +939,7 @@ abstract class FormModel<
               // In (Item First Load + itemDetail == null + !_defaultValueInitiated).
               //
               dynamic value = simplePropValueDefault[propName];
-              _formPropsStructure._setTempSimplePropValue(
+              _formModelStructure._setTempSimplePropValue(
                 propName: propName,
                 value: value,
                 setForInitial: true,
@@ -962,7 +954,7 @@ abstract class FormModel<
               error: e,
               errorStackTrace: stackTrace,
             );
-            _formPropsStructure._setFormError(formErrorInfo);
+            _formModelStructure._setFormError(formErrorInfo);
             //
             final ErrorInfo errorInfo = _handleError(
               shelf: shelf,
@@ -1027,7 +1019,7 @@ abstract class FormModel<
               SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
               // SAME-AS: #0012 (filterModel)
               if (valueWrap != null && valueWrap.use) {
-                _formPropsStructure._setTempSimplePropValue(
+                _formModelStructure._setTempSimplePropValue(
                   propName: propName,
                   value: valueWrap.value,
                   setForInitial: true,
@@ -1043,7 +1035,7 @@ abstract class FormModel<
               error: e,
               errorStackTrace: stackTrace,
             );
-            _formPropsStructure._setFormError(formErrorInfo);
+            _formModelStructure._setFormError(formErrorInfo);
             //
             final ErrorInfo errorInfo = _handleError(
               shelf: shelf,
@@ -1113,7 +1105,7 @@ abstract class FormModel<
             //
             SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
             if (valueWrap != null && valueWrap.use) {
-              _formPropsStructure._setTempSimplePropValue(
+              _formModelStructure._setTempSimplePropValue(
                 propName: propName,
                 value: valueWrap.value,
                 setForInitial: false,
@@ -1128,7 +1120,7 @@ abstract class FormModel<
             error: e,
             errorStackTrace: stackTrace,
           );
-          _formPropsStructure._setFormError(formErrorInfo);
+          _formModelStructure._setFormError(formErrorInfo);
           //
           final ErrorInfo errorInfo = _handleError(
             shelf: shelf,
@@ -1159,7 +1151,7 @@ abstract class FormModel<
     //
     try {
       for (MultiOptFormPropModel multiOptProp
-          in _formPropsStructure._rootOptPropModels) {
+          in _formModelStructure._rootOptPropModels) {
         executionTrace._addTraceStep(
           codeId: "#06780",
           shortDesc:
@@ -1222,7 +1214,7 @@ abstract class FormModel<
           errorStackTrace: stackTrace,
         );
       }
-      _formPropsStructure._setFormError(formErrorInfo);
+      _formModelStructure._setFormError(formErrorInfo);
       //
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
@@ -1261,7 +1253,7 @@ abstract class FormModel<
     required String propName,
     required FormErrorMethod formErrorMethod,
   }) {
-    if (_formPropsStructure._isMultiOptFormProp(propName)) {
+    if (_formModelStructure._isMultiOptFormProp(propName)) {
       throw DevError(
         errorMessage:
             '$propName is not a ${getTypeNameWithoutGenerics(SimpleFormPropModel)}',
@@ -1284,40 +1276,48 @@ abstract class FormModel<
       //
       // Update Real FromData from Temporary FormData:
       //
-      _formPropsStructure._updateTempToReal();
+      _formModelStructure._updateTempToReal();
       //
       if (activityType == FormActivityType.startCreatingOrEditing) {
-        _formPropsStructure._setInitialFormDataForItemFirstLoad();
+        _formModelStructure._setInitialFormDataForItemFirstLoad();
       }
       //
       // IMPORTANT: (Called on Field.onChanged).
       //
       _formKeyPatchValue(
-        newCurrentValue: _formPropsStructure.currentFormData,
+        newCurrentValue: _formModelStructure._currentFormData,
       );
       //
       // _defaultValueInitiated = true;
-      _formPropsStructure._setFormDataState(
+      _formModelStructure._setFormDataState(
         formDataState: formDataState,
         error: error,
       );
       //
       if (activityType == FormActivityType.startCreatingOrEditing) {
         if (formDataState == DataState.ready) {
-          _formPropsStructure._formInitialDataReady = true;
+          _formModelStructure._formInitialDataReady = true;
         }
       }
       // Form Disabled:
-      if (!_formPropsStructure._formInitialDataReady) {
+      if (!_formModelStructure._formInitialDataReady) {
         // Clear form validation error
       }
       // Form Initial Data Ready
       else {
         // Validate Form
         if (activityType == FormActivityType.startCreatingOrEditing) {
-          if (formMode == FormMode.edit && _formKey.currentState != null) {
-            if (_formPropsStructure._formInitialDataReady) {
-              _formKey.currentState!.validate(focusOnInvalid: false);
+          // if (formMode == FormMode.edit && _formKey.currentState != null) {
+          //   if (_formModelStructure._formInitialDataReady) {
+          //     _formKey.currentState!.validate(focusOnInvalid: false);
+          //   }
+          // }
+          if (formMode == FormMode.edit &&
+              _formModelStructure._formInitialDataReady) {
+            final List<FormBuilderState> activeForms =
+                ui._activeFormBuilderStates;
+            for (FormBuilderState formState in activeForms) {
+              formState.validate(focusOnInvalid: false);
             }
           }
         }
@@ -1337,25 +1337,17 @@ abstract class FormModel<
       // IMPORTANT:
       //
       _formKeyPatchValue(
-        newCurrentValue: _formPropsStructure.currentFormData,
+        newCurrentValue: _formModelStructure._currentFormData,
       );
       //
-      _formPropsStructure._setFormDataState(
+      _formModelStructure._setFormDataState(
         formDataState: DataState.error,
         error: e,
       );
       return false;
     } finally {
-      _formPropsStructure.__isTempMode = false;
+      _formModelStructure.__isTempMode = false;
     }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _printStructureAndTempData(String prefix) {
-    _formPropsStructure._printTemporaryInfo(prefix);
-    print("instantData: ${_formKey.currentState?.instantValue}\n\n");
   }
 
   // ***************************************************************************
@@ -1364,7 +1356,11 @@ abstract class FormModel<
   // TestCase [16a]-changeSupplierType.
   void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
     try {
-      _formKey.currentState?.patchValue(newCurrentValue);
+      // _formKey.currentState?.patchValue(newCurrentValue);
+      final List<FormBuilderState> activeForms = ui._activeFormBuilderStates;
+      for (FormBuilderState formState in activeForms) {
+        formState.patchValue(newCurrentValue);
+      }
     } finally {
       //
     }
@@ -1395,17 +1391,17 @@ abstract class FormModel<
 
     // Get current OptProp data:
     XData? tempMultiOptPropXData =
-        _formPropsStructure._getTempMultiOptPropXData(
+        _formModelStructure._getTempMultiOptPropXData(
       propName: multiOptPropName,
     );
 
-    final dynamic tempInitialMultiOptValue = _formPropsStructure
+    final dynamic tempInitialMultiOptValue = _formModelStructure
         ._getTempInitialPropValue(propName: multiOptPropName);
-    final dynamic tempCurrentMultiOptValue = _formPropsStructure
+    final dynamic tempCurrentMultiOptValue = _formModelStructure
         ._getTempCurrentPropValue(propName: multiOptPropName);
 
     //
-    dynamic newSelectedValue = _formPropsStructure._getTempCurrentPropValue(
+    dynamic newSelectedValue = _formModelStructure._getTempCurrentPropValue(
       propName: multiOptPropName,
     );
     if (activityType == FormActivityType.updateFromFormView) {
@@ -1443,20 +1439,20 @@ abstract class FormModel<
             "Value of <b>'$multiOptPropName'</b> has changed --> Clear data of all descendant <b>MultiOptFormProp(s)</b>.",
         traceStepType: TraceStepType.info,
       );
-      _formPropsStructure._updateChildrenMultiOptValueToNullCascade(
+      _formModelStructure._updateChildrenMultiOptValueToNullCascade(
         multiOptProp: multiOptProp,
       );
     }
     //
     if (tempMultiOptPropXData == null) {
-      _formPropsStructure._setTempMultiOptPropXData(
+      _formModelStructure._setTempMultiOptPropXData(
         multiOptPropName: multiOptPropName,
         multiOptPropXData: null,
       );
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptProp to null if parent-Value is null or not selected.
-      _formPropsStructure._updatePropsTempValues({
+      _formModelStructure._updatePropsTempValues({
         multiOptPropName: null,
       });
     }
@@ -1626,7 +1622,7 @@ abstract class FormModel<
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-          _formPropsStructure._getTempCurrentPropValue(
+          _formModelStructure._getTempCurrentPropValue(
         propName: multiOptPropName,
       );
       //
@@ -1659,7 +1655,7 @@ abstract class FormModel<
       candidateSelectedItems = null;
     }
     //
-    _formPropsStructure._setTempMultiOptPropXData(
+    _formModelStructure._setTempMultiOptPropXData(
       multiOptPropName: multiOptPropName,
       multiOptPropXData: tempMultiOptPropXData,
     );
@@ -1668,7 +1664,7 @@ abstract class FormModel<
     if (activityType == FormActivityType.startCreatingOrEditing) {
       initialValue = initialValueWrap?.values;
     } else {
-      initialValue = _formPropsStructure._getInitialPropValue(
+      initialValue = _formModelStructure._getInitialPropValue(
         propName: multiOptPropName,
       );
     }
@@ -1699,7 +1695,7 @@ abstract class FormModel<
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
-        _formPropsStructure._updatePropsTempValues({
+        _formModelStructure._updatePropsTempValues({
           multiOptPropName: candidateSelectedItem,
         });
       } else {
@@ -1707,7 +1703,7 @@ abstract class FormModel<
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         // Try MULTI SELECTED ITEMS:
-        _formPropsStructure._updatePropsTempValues({
+        _formModelStructure._updatePropsTempValues({
           multiOptPropName: candidateSelectedItems,
         });
       }
@@ -1715,13 +1711,13 @@ abstract class FormModel<
       // IMPORTANT:
       //  - Update from ROOTs to LEAVES
       //  - And make sure children-OptProp to null if parent-Value is null or not selected.
-      _formPropsStructure._updatePropsTempValues({
+      _formModelStructure._updatePropsTempValues({
         multiOptPropName: null,
       });
     }
     //
     Object? tempSelectedPropValue =
-        _formPropsStructure._getTempCurrentPropValue(
+        _formModelStructure._getTempCurrentPropValue(
       propName: multiOptPropName,
     );
 
@@ -1750,32 +1746,32 @@ abstract class FormModel<
   /// Used for FormView.
   ///
   Map<String, dynamic> _initialValuesForFormView() {
-    return _formPropsStructure.currentFormData;
+    return _formModelStructure._currentFormData;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   dynamic getInitialPropValue(String propName) {
-    return _formPropsStructure._getInitialPropValue(propName: propName);
+    return _formModelStructure._getInitialPropValue(propName: propName);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   // TODO: Add test case:
-  @Deprecated("Xem lai, co can xoa di khong?")
-  void setFormInstantValue(String propertyName, dynamic value) {
-    _formKey.currentState?.patchValue({propertyName: value});
-    _formPropsStructure._setCurrentPropValue(
-      propName: propertyName,
-      value: value,
-    );
-    ui.updateAllUiComponents();
-  }
+  // @Deprecated("Xem lai, co can xoa di khong?")
+  // void setFormInstantValue(String propertyName, dynamic value) {
+  //   _formKey.currentState?.patchValue({propertyName: value});
+  //   _formModelStructure._setCurrentPropValue(
+  //     propName: propertyName,
+  //     value: value,
+  //   );
+  //   ui.updateAllUiComponents();
+  // }
 
   dynamic getPropValue(String propName) {
-    return _formPropsStructure._getCurrentPropValue(
+    return _formModelStructure._getCurrentPropValue(
       propName: propName,
     );
   }
@@ -1784,13 +1780,13 @@ abstract class FormModel<
   // ***************************************************************************
 
   XData? getMultiOptPropXData(String multiOptPropName) {
-    return _formPropsStructure._getCurrentMultiOptPropXData(
+    return _formModelStructure._getCurrentMultiOptPropXData(
       propName: multiOptPropName,
     );
   }
 
   dynamic getMultiOptPropData(String multiOptPropName) {
-    return _formPropsStructure._getCurrentMultiOptPropData(
+    return _formModelStructure._getCurrentMultiOptPropData(
       propName: multiOptPropName,
     );
   }
@@ -1858,7 +1854,7 @@ abstract class FormModel<
     required String multiOptPropName,
   }) {
     MultiOptFormPropModel? multiOptProp =
-        _formPropsStructure._getMultiOptFormProp(multiOptPropName);
+        _formModelStructure._getMultiOptFormProp(multiOptPropName);
     if (multiOptProp == null) {
       throw "The '$multiOptPropName' is not $MultiOptFormPropModel";
     }
@@ -1997,15 +1993,15 @@ abstract class FormModel<
   // ***************************************************************************
 
   bool get isNew {
-    return _formPropsStructure.isNew;
+    return _formModelStructure.isNew;
   }
 
   Map<String, dynamic> get initialFormData {
-    return _formPropsStructure.initialFormData;
+    return _formModelStructure._initialFormData;
   }
 
   Map<String, dynamic> get currentFormData {
-    return _formPropsStructure.currentFormData;
+    return _formModelStructure._currentFormData;
   }
 
   // ***************************************************************************
@@ -2015,7 +2011,7 @@ abstract class FormModel<
     try {
       // Disable Auto validation.
       __disableAutovalidation();
-      _formPropsStructure._clearFormDataWithState(
+      _formModelStructure._clearFormDataWithState(
         formDataState: formDataState,
       );
       //
@@ -2038,19 +2034,26 @@ abstract class FormModel<
   // ***************************************************************************
 
   void __clearFormKey() {
-    final Map<String, dynamic> instantValues =
-        this._formKey.currentState?.instantValue ?? {};
-    //
-    final Map<String, dynamic> newFormData = {...instantValues}
-      ..updateAll((k, v) => null);
-    this._formKey.currentState?.patchValue(newFormData);
+    // final Map<String, dynamic> instantValues =
+    //     this._formKey.currentState?.instantValue ?? {};
+    // //
+    // final Map<String, dynamic> newFormData = {...instantValues}
+    //   ..updateAll((k, v) => null);
+    // this._formKey.currentState?.patchValue(newFormData);
+    final List<FormBuilderState> activeForms = ui._activeFormBuilderStates;
+    for (FormBuilderState formState in activeForms) {
+      final Map<String, dynamic> instantValues = formState.instantValue;
+      final Map<String, dynamic> newFormData = {...instantValues}
+        ..updateAll((k, v) => null);
+      formState.patchValue(newFormData);
+    }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   bool isDirty() {
-    return _formPropsStructure._isDirty();
+    return _formModelStructure._isDirty();
   }
 
   // ***************************************************************************
@@ -2075,17 +2078,33 @@ abstract class FormModel<
       //
       // Reset FormData:
       //
-      _formPropsStructure._resetFormData();
+      _formModelStructure._resetFormData();
       //
       // Patch _formKey:
       //
-      Map<String, dynamic> initData = {..._formPropsStructure.initialFormData};
-      for (String key in _formKey.currentState?.instantValue.keys ?? []) {
-        if (!initData.containsKey(key)) {
-          initData[key] = null;
+      // TODO: DELETE
+      // Map<String, dynamic> initData = {..._formModelStructure.initialFormData};
+      // for (String key in _formKey.currentState?.instantValue.keys ?? []) {
+      //   if (!initData.containsKey(key)) {
+      //     initData[key] = null;
+      //   }
+      // }
+      // _formKey.currentState?.patchValue(initData);
+
+      Map<String, dynamic> initData = {..._formModelStructure._initialFormData};
+      print("^^^^^^^^^^ initData: $initData");
+      final activeForms = ui._activeFormBuilderStates;
+
+      for (FormBuilderState formState in activeForms) {
+        Map<String, dynamic> localInitData = {...initData};
+        for (String key in formState.instantValue.keys) {
+          if (!localInitData.containsKey(key)) {
+            localInitData[key] = null;
+          }
         }
+        print("^^^^^^^^^^ localInitData: $localInitData");
+        formState.patchValue(localInitData);
       }
-      _formKey.currentState?.patchValue(initData);
       //
       shelf.ui.updateAllUiComponents();
     } finally {
@@ -2099,7 +2118,9 @@ abstract class FormModel<
   // Change Event from GUI.
   @_ImportantMethodAnnotation("Called when user makes a change in FormView.")
   @_FormViewChangeAnnotation()
-  Future<void> _onChangeFromFormView() async {
+  Future<void> _onChangeFromFormView({
+    required Map<String, dynamic> formKeyInstantValuesInUI,
+  }) async {
     print("#~~~~~~~~~~~~~~~> _onChangeFromFormView");
     //
     final XShelf xShelf = _XShelfFormViewChange(formModel: this);
@@ -2108,6 +2129,7 @@ abstract class FormModel<
     XFormModel xFormModel = xBlock.xFormModel!;
     _FormViewChangeTaskUnit taskUnit = _FormViewChangeTaskUnit(
       xFormModel: xFormModel,
+      formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );
     //
     xShelf._addTaskUnit(taskUnit: taskUnit);
@@ -2120,7 +2142,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   void _afterBuildFormView() {
-    _formPropsStructure._justInitialized = false;
+    _formModelStructure._justInitialized = false;
   }
 
   // ***************************************************************************
@@ -2288,7 +2310,7 @@ abstract class FormModel<
         traceStepType: TraceStepType.debug,
       );
       //
-      _saveErrorCount++;
+      debug._saveErrorCount++;
       _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
@@ -2339,14 +2361,14 @@ abstract class FormModel<
   MultiOptFormPropModel? findMultiOptFormProp({
     required String multiOptPropName,
   }) {
-    return _formPropsStructure._findMultiOptFormProp(
+    return _formModelStructure._findMultiOptFormProp(
       multiOptPropName,
     );
   }
 
   // SAME-AS: #0008 (filterModel.debugGetMultiOptCriterionLoadCount())
   int debugGetMultiOptPropLoadCount(String multiOptPropName) {
-    return _formPropsStructure._debugGetMultiOptPropLoadCount(
+    return _formModelStructure._debugGetMultiOptPropLoadCount(
       multiOptPropName: multiOptPropName,
     );
   }
