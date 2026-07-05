@@ -59,7 +59,7 @@ class InternalShelfEventBlockRecipient {
   final bool blockLevelSelfReactionEnabled;
   final bool currentItemSelfReactionEnabled;
 
-  /// Will reQuery the Block.
+  /// Will requery the Block.
   final List<Evt> blockLevelReactionOn;
 
   /// Will refresh the current Item.

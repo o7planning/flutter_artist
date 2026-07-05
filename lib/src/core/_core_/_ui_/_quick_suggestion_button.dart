@@ -36,7 +36,7 @@ class _QuickSuggestionButton extends StatelessWidget {
         iconData = FaIconConstants.formErrorRollbackIconData,
         iconColor = null;
 
-  const _QuickSuggestionButton.reQuery({
+  const _QuickSuggestionButton.requery({
     required this.tooltip,
     required this.onPressed,
   })  : suggestionType = QuickSuggestionType.normal,

@@ -107,8 +107,8 @@ class _BlockItemsViewBuilderState
             widget.block.showBlockErrorViewerDialog(context);
           },
         ),
-        _QuickSuggestionButton.reQuery(
-          tooltip: "Re Query",
+        _QuickSuggestionButton.requery(
+          tooltip: "Requery",
           onPressed: () async {
             await widget.block.query();
           },

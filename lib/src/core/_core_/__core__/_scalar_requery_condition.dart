@@ -1,10 +1,10 @@
-part of '../../core.dart';
+part of '../core.dart';
 
-class _ScalarReQryCon extends Equatable {
+class _ScalarRequeryCondition extends Equatable {
   final String? parentScalarValueId;
   final FilterCriteria? filterCriteria;
 
-  const _ScalarReQryCon({
+  const _ScalarRequeryCondition({
     required this.parentScalarValueId,
     required this.filterCriteria,
   });

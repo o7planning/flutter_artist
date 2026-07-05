@@ -524,6 +524,7 @@ abstract class FormModel<
     required TaskType taskType,
     required XFormModel thisXFormModel,
     required FORM_INPUT formInput,
+    // required FormModelPatchFormFieldsResult taskResult,
   }) async {
     __assertThisXFormModel(thisXFormModel);
     //
@@ -1074,7 +1075,7 @@ abstract class FormModel<
     else if (activityType == FormActivityType.patchFormFields) {
       executionTrace._addTraceStep(
         codeId: "#06700",
-        shortDesc: "Enter Form Fields."
+        shortDesc: "Patch Form Fields."
             "\n - @activityType: <b>$activityType</b>."
             "\n - @itemDetail: ${debugObjHtml(itemDetail)}.",
         traceStepType: TraceStepType.debug,
@@ -2230,16 +2231,21 @@ abstract class FormModel<
       shortDesc: "Creating <b>_FormModelPatchFormFieldsTaskUnit</b>.",
       traceStepType: TraceStepType.addTaskUnit,
     );
+    // Create TaskResult:
+    final taskResult = FormModelPatchFormFieldsResult(
+      precheck: null,
+    );
     _ResultedSTaskUnit taskUnit = _FormModelPatchFormFieldsTaskUnit(
       xFormModel: xFormModel,
       formInput: formInput,
+      taskResult: taskResult,
     );
     //
     xShelf._addTaskUnit(taskUnit: taskUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
-    return taskUnit.taskResult;
+    return taskResult;
   }
 
   // ***************************************************************************

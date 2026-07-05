@@ -1,9 +1,9 @@
 part of '../core.dart';
 
 @RenameAnnotation()
-class BlockQuickMultiItemCreationResult
-    extends TaskResult<BlockQuickMultiItemCreationPrecheck> {
-  BlockQuickMultiItemCreationResult({
+class BlockMultiItemCreationBackendActionResult
+    extends TaskResult<BlockMultiItemCreationBackendActionPrecheck> {
+  BlockMultiItemCreationBackendActionResult({
     super.precheck,
     super.errorInfo,
   });

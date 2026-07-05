@@ -1,7 +1,7 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
-enum BlockQuickMultiItemCreationPrecheck implements Precheck {
+enum BlockMultiItemCreationBackendActionPrecheck implements Precheck {
   busy(
     precheckCode: PrecheckCode.busy,
     message: "Bulk Items creation is disabled.",
@@ -53,7 +53,7 @@ enum BlockQuickMultiItemCreationPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const BlockQuickMultiItemCreationPrecheck({
+  const BlockMultiItemCreationBackendActionPrecheck({
     required this.precheckCode,
     required this.message,
     required this.details,

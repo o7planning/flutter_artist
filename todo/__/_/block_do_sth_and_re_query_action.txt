@@ -33,6 +33,6 @@ class BlockDoSthAndReQueryActionConfig {
 }
 
 enum AfterBlockDoSthAndReQueryAction {
-  reQuery,
+  requery,
   refreshParentBlockCurrentItem;
 }

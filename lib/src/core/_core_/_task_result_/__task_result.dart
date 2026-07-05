@@ -11,8 +11,7 @@ abstract class TaskResult<PRECHECK> {
   TaskResult({
     PRECHECK? precheck,
     ErrorInfo? errorInfo,
-  })
-      : _precheck = precheck,
+  })  : _precheck = precheck,
         _errorInfo = errorInfo;
 
   bool get successForFirst;

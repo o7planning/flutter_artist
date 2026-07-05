@@ -3,6 +3,8 @@ part of '../core.dart';
 abstract class Shelf extends _Core {
   Shelf get shelf => this;
 
+  late final debug = _ShelfDebugInfo(shelf: this);
+
   late final ShelfConfig config;
 
   bool _markAsOrphaned = false;
@@ -83,10 +85,6 @@ abstract class Shelf extends _Core {
   late final ui = _ShelfUiComponents(shelf: this);
 
   late final _shelfExternalUtils = _ShelfExternalUtils(this);
-
-  int _debugInitQueryTaskUnitsCount = 0;
-
-  int get debugInitQueryTasksCount => _debugInitQueryTaskUnitsCount;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -181,7 +179,7 @@ abstract class Shelf extends _Core {
       if (listenerBlock
           .config.onInternalShelfEvents.blockLevelSelfReactionEnabled) {
         listenerBlock._internalEffectedShelfMembers
-            ._addReQueryBlock(listenerBlock);
+            ._addRequeryBlock(listenerBlock);
       }
       if (listenerBlock
           .config.onInternalShelfEvents.currentItemSelfReactionEnabled) {
@@ -208,7 +206,7 @@ abstract class Shelf extends _Core {
           }
           // BLOCK EVENT
           eventBlock._internalEffectedShelfMembers
-              ._addReQueryBlock(listenerBlock);
+              ._addRequeryBlock(listenerBlock);
         }
         // SCALAR EVENT:
         else if (evt.srcType == SrcType.scalar) {
@@ -222,7 +220,7 @@ abstract class Shelf extends _Core {
           }
           // SCALAR EVENT: update (Only One Events).
           eventScalar._internalEffectedShelfMembers
-              ._addReQueryBlock(listenerBlock);
+              ._addRequeryBlock(listenerBlock);
         }
       }
       //
@@ -270,7 +268,7 @@ abstract class Shelf extends _Core {
       if (listenerScalar
           .config.onInternalShelfEvents.scalarLevelSelfReactionEnabled) {
         listenerScalar._internalEffectedShelfMembers
-            ._addReQueryScalar(listenerScalar);
+            ._addRequeryScalar(listenerScalar);
       }
       for (Evt evt in listenerScalar
           .config.onInternalShelfEvents.scalarLevelReactionOn) {
@@ -286,7 +284,7 @@ abstract class Shelf extends _Core {
           }
           // BLOCK EVENT:
           eventBlock._internalEffectedShelfMembers
-              ._addReQueryScalar(listenerScalar);
+              ._addRequeryScalar(listenerScalar);
         }
         // SCALAR EVENT:
         else if (evt.srcType == SrcType.scalar) {
@@ -306,7 +304,7 @@ abstract class Shelf extends _Core {
           }
           // SCALAR EVENT: update (Only One Events).
           eventScalar._internalEffectedShelfMembers
-              ._addReQueryScalar(listenerScalar);
+              ._addRequeryScalar(listenerScalar);
         }
       }
     }
@@ -693,17 +691,23 @@ abstract class Shelf extends _Core {
     required ExecutionTrace executionTrace,
     required EffectedShelfMembers effectedShelfMembers,
   }) async {
-    for (String blockName in effectedShelfMembers._reQueryBlockMAP.keys) {
+    for (String blockName in effectedShelfMembers._requeryBlockMAP.keys) {
       Block block = __blockMap[blockName]!;
-      final blockReQryCondition = _BlockReQryCon(
-        parentItemId: block.parentBlockCurrentItemId,
-        filterCriteria: block.filterCriteria,
+      block._createBlockRequeryConditionIfNeed(
+        executionTrace: executionTrace,
+        viewportSyncStrategy: BlockViewportSyncStrategy.forceNativeQuery,
+        addedEffectiveIds: null,
+        blockCurrentFilterCriteria: null,
       );
-      block._blockReQryCondition = blockReQryCondition;
+      // block._blockReqryCondition ??= _BlockRequeryCondition<ID>(
+      //   block: block,
+      //   parentItemId: block.parentBlockCurrentItemId,
+      //   filterCriteria: block.filterCriteria,
+      // );
       executionTrace._addTraceStep(
         codeId: "#50000",
         shortDesc: " - <b>$blockName</b>:"
-            "\n  --> @blockReQryCondition: <b>$blockReQryCondition</b>.",
+            "\n  --> @blockReqryCondition: <b>${block._blockReqryCondition}</b>.",
       );
     }
     //
@@ -724,9 +728,9 @@ abstract class Shelf extends _Core {
       );
     }
     //
-    for (String scalarName in effectedShelfMembers._reQueryScalarMAP.keys) {
+    for (String scalarName in effectedShelfMembers._requeryScalarMAP.keys) {
       Scalar scalar = __scalarMap[scalarName]!;
-      final scalarReQryCondition = _ScalarReQryCon(
+      final scalarReQryCondition = _ScalarRequeryCondition(
         parentScalarValueId: scalar.parentScalarValueId, //
         filterCriteria: scalar.filterCriteria,
       );

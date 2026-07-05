@@ -88,7 +88,7 @@ class _ScalarValueViewBuilderState
             widget.scalar.showScalarErrorViewerDialog(context);
           },
         ),
-        _QuickSuggestionButton.reQuery(
+        _QuickSuggestionButton.requery(
           tooltip: "Re Query",
           onPressed: () async {
             await widget.scalar.query();

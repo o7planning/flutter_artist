@@ -386,8 +386,8 @@ class _StorageEventHandler {
         ShelfBlockScalarType.block(
           shelfType: eventBlock.shelf.runtimeType,
           blockType: eventBlock.runtimeType,
-          classDefinition: eventBlock.debugClassDefinition,
-          classParameterDefinition: eventBlock.debugClassParametersDefinition,
+          classDefinition: eventBlock.debug.classDefinition,
+          classParameterDefinition: eventBlock.debug.classParametersDefinition,
         ),
       );
     }
@@ -439,9 +439,9 @@ class _StorageEventHandler {
           ShelfBlockScalarType.block(
             shelfType: listenerBlock.shelf.runtimeType,
             blockType: listenerBlock.runtimeType,
-            classDefinition: listenerBlock.debugClassDefinition,
+            classDefinition: listenerBlock.debug.classDefinition,
             classParameterDefinition:
-                listenerBlock.debugClassParametersDefinition,
+                listenerBlock.debug.classParametersDefinition,
           ),
         );
       }
@@ -450,9 +450,9 @@ class _StorageEventHandler {
           ShelfBlockScalarType.scalar(
             shelfType: listenerScalar.shelf.runtimeType,
             scalarType: listenerScalar.runtimeType,
-            classDefinition: listenerScalar.debugClassDefinition,
+            classDefinition: listenerScalar.debug.classDefinition,
             classParameterDefinition:
-                listenerScalar.debugClassParametersDefinition,
+                listenerScalar.debug.classParametersDefinition,
           ),
         );
       }

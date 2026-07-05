@@ -3,6 +3,7 @@ enum BlockErrorMethod {
   convertItemDetailToItem,
   needToKeepItemInList,
   performQuery,
+  performQueryByItemIds,
   performDeleteItemById,
   performLoadItemDetailById,
 }

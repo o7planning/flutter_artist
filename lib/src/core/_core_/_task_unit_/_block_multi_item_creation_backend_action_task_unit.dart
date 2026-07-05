@@ -1,20 +1,20 @@
 part of '../core.dart';
 
 @_TaskUnitClassAnnotation()
-@_BlockQuickMultiItemCreationActionAnnotation()
-class _BlockQuickMultiItemCreationTaskUnit
-    extends _ResultedSTaskUnit<BlockQuickMultiItemCreationResult> {
+@_BlockMultiItemCreationBackendActionAnnotation()
+class _BlockMultiItemCreationBackendActionTaskUnit
+    extends _ResultedSTaskUnit<BlockMultiItemCreationBackendActionResult> {
   XBlock xBlock;
 
-  BlockQuickMultiItemCreationAction action;
+  BlockMultiItemCreationBackendAction action;
 
-  _BlockQuickMultiItemCreationTaskUnit({
+  _BlockMultiItemCreationBackendActionTaskUnit({
     required this.xBlock,
     required this.action,
   }) : super(
-    taskType: TaskType.blockQuickMultiItemCreation,
-    taskResult: BlockQuickMultiItemCreationResult(),
-  );
+          taskType: TaskType.blockMultiItemCreationBackendAction,
+          taskResult: BlockMultiItemCreationBackendActionResult(),
+        );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

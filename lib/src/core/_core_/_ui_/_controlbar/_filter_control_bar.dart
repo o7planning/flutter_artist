@@ -121,9 +121,8 @@ class _FilterControlBarState extends _BaseControlBarState<
       getClassNameWithoutGenerics(widget.filterModel);
 
   @override
-  void addWidgetState({required bool isVisible}) =>
-      widget.filterModel.ui
-          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) => widget.filterModel.ui
+      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>
