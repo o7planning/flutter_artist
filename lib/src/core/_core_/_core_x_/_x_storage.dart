@@ -10,7 +10,8 @@ class XStorage {
   bool get isNotEmpty => !isEmpty;
 
   void _addStorageBackendActionTaskUnit(
-      _StorageBackendActionTaskUnit storageBackendActionTaskUnit,) {
+    _StorageBackendActionTaskUnit storageBackendActionTaskUnit,
+  ) {
     __storageBackendActionTaskUnit = storageBackendActionTaskUnit;
   }
 

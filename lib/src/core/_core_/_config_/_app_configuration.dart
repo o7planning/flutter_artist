@@ -27,11 +27,13 @@ abstract class AppConfiguration {
 
   Future<void> showDebugNetworkInspector(BuildContext context);
 
+  Duration get garbageCollectionInterval => Duration(seconds: 30);
+
+  Duration get notificationFetchInterval => Duration(seconds: 24 * 60 * 60);
+
+  Duration get codeFlowRetentionPeriod => Duration(seconds: 60);
+
   int get maxStoredLogEntryCount => 20;
-
-  int get notificationFetchPeriodInSeconds => 24 * 60 * 60;
-
-  int get codeFlowRetentionPeriodInSeconds => 60;
 
   DebugOptions get debugOptions => DebugOptions();
 

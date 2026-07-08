@@ -34,7 +34,13 @@ class _FlutterArtist extends _Core {
 
   ConsoleDebugOptions get consoleDebugOptions => __consoleDebugOptions;
 
-  final storage = _Storage();
+  final clock = FaSystemClock();
+
+  final garbageCollector = _GarbageCollector();
+
+  final garbageScheduler = _GarbageScheduler();
+
+  late final storage = _Storage();
 
   final executor = _Executor();
 
@@ -44,7 +50,14 @@ class _FlutterArtist extends _Core {
 
   DebugXRootQueue get debugTaskUnitQueue => _rootQueue.toDebugXRootQueue();
 
-  int notificationFetchPeriodInSeconds = 60;
+  int _notificationFetchPeriodInSeconds = 60;
+
+  int get notificationFetchPeriodInSeconds => _notificationFetchPeriodInSeconds;
+
+  int _garbageCollectionIntervalInSeconds = 30;
+
+  int get garbageCollectionIntervalInSeconds =>
+      _garbageCollectionIntervalInSeconds;
 
   FlutterArtistOverlayAdapter? __overlayAdapter;
 
@@ -75,9 +88,7 @@ class _FlutterArtist extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  _FlutterArtist() {
-    _GarbageCollector.instance.start();
-  }
+  _FlutterArtist();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -209,7 +220,7 @@ class _FlutterArtist extends _Core {
     // IMPORTANT: Call this before using ExecutionTrace.
     codeFlowLogger = CodeFlowLogger(
       codeFlowRetentionPeriodInSeconds:
-          appConfiguration.codeFlowRetentionPeriodInSeconds,
+          appConfiguration.codeFlowRetentionPeriod.inSeconds,
     );
 
     final executionTrace =
@@ -230,13 +241,15 @@ class _FlutterArtist extends _Core {
             await appConfiguration.updateLocale(locale: locale);
           },
         ),
-        //appConfiguration.localeAdapter,
+        garbageCollectionIntervalInSeconds:
+            appConfiguration.garbageCollectionInterval.inSeconds,
         notificationFetchPeriodInSeconds:
-            appConfiguration.notificationFetchPeriodInSeconds,
+            appConfiguration.notificationFetchInterval.inSeconds,
         maxStoredLogEntryCount: appConfiguration.maxStoredLogEntryCount,
         codeFlowRetentionPeriodInSeconds:
-            appConfiguration.codeFlowRetentionPeriodInSeconds,
+            appConfiguration.codeFlowRetentionPeriod.inSeconds,
       );
+      garbageScheduler.start();
     } catch (e, _) {
       executionTrace.printToConsole();
       print("\n\n");
@@ -257,6 +270,7 @@ class _FlutterArtist extends _Core {
     required FlutterArtistLoginLogoutAdapter loginLogoutAdapter,
     required FlutterArtistGlobalDataAdapter globalDataAdapter,
     required FlutterArtistLocaleAdapter localeAdapter,
+    required int garbageCollectionIntervalInSeconds,
     required int notificationFetchPeriodInSeconds,
     required int maxStoredLogEntryCount,
     required int codeFlowRetentionPeriodInSeconds,
@@ -363,10 +377,11 @@ class _FlutterArtist extends _Core {
         shortDesc: "Got stored @locale: ${debugObjHtml(locale)}.",
       );
     }
+    _garbageCollectionIntervalInSeconds = garbageCollectionIntervalInSeconds;
     //
     // Notification:
     //
-    this.notificationFetchPeriodInSeconds = notificationFetchPeriodInSeconds;
+    _notificationFetchPeriodInSeconds = notificationFetchPeriodInSeconds;
     if (notificationAdapter == null) {
       __notificationService = null;
     } else if (notificationAdapter is SimpleNotificationAdapter) {

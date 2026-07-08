@@ -4,9 +4,11 @@ part of '../core.dart';
 @_FormViewChangeAnnotation()
 class _FormViewChangeTaskUnit extends _STaskUnit {
   XFormModel xFormModel;
+  final Map<String, dynamic> formKeyInstantValuesInUI;
 
   _FormViewChangeTaskUnit({
     required this.xFormModel,
+    required this.formKeyInstantValuesInUI,
   }) : super(taskType: TaskType.formModelFormViewChanged);
 
   @override

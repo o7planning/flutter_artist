@@ -73,7 +73,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
     Map<String, dynamic> initial1Value =
         filterModelStructure.debugInitialCriteriaValues;
 
-    Map<String, dynamic> instantValue = filterModelStructure.debugInstantValues;
+    // Map<String, dynamic> instantValue = filterModelStructure.debugInstantValues;
 
     Map<String, dynamic> currentValue =
         filterModelStructure.debugCurrentCriteriaValues;

@@ -106,13 +106,13 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
                       : colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
                 trailing: Tooltip(
-                  message: s.markAsOrphaned
+                  message: s.markedAsOrphan
                       ? "Mark As Orphaned, will be unmounted!"
                       : "Fine, It's being managed in memory!",
                   child: Icon(
-                    s.markAsOrphaned ? Icons.warning_amber : Icons.check,
+                    s.markedAsOrphan ? Icons.warning_amber : Icons.check,
                     size: 14,
-                    color: s.markAsOrphaned
+                    color: s.markedAsOrphan
                         ? context.faColors.ink.danger
                         : context.faColors.ink.primary,
                   ),

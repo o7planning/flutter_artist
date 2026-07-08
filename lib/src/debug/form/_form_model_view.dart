@@ -71,10 +71,8 @@ class _FormModelViewState extends State<FormModelView> {
   }
 
   List<TabData> _createTabs() {
-    FormModelStructure formPropsStructure = widget.formModel.formPropsStructure;
-    //
-    Map<String, dynamic> initial1Value = formPropsStructure.initialFormData;
-    Map<String, dynamic> instantValue = formPropsStructure.currentFormData;
+    Map<String, dynamic> initial1Value = widget.formModel.initialFormData;
+    Map<String, dynamic> instantValue = widget.formModel.currentFormData;
 
     //
     String initial1Json = toJson(initial1Value);

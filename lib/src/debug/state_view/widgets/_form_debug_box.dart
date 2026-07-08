@@ -17,7 +17,7 @@ class FormDebugBox extends BaseDebugBox {
 
   @override
   List<Widget> getChildIconLabelTexts(BuildContext context) {
-    FormModelStructure structure = formModel.formPropsStructure;
+    FormModelStructure structure = formModel.formModelStructure;
     List<MultiOptFormPropModel> optProps = structure.allMultiOptProps;
     //
     List<Widget> list1 = [
@@ -25,7 +25,7 @@ class FormDebugBox extends BaseDebugBox {
         IconLabelText(
           label: "Form UI Active?: ",
           text:
-              "${formModel.ui.hasActiveUiComponent()}/${formModel.loadTimeUiActive}*",
+              "${formModel.ui.hasActiveUiComponent()}/${formModel.debug.loadTimeUiActive}*",
           labelStyle: getLabelStyle0(context),
           textStyle: getTextStyle0(context),
         ),
@@ -53,14 +53,14 @@ class FormDebugBox extends BaseDebugBox {
       if (options.showFormLoadCount)
         IconLabelText(
           label: "Form Load Count: ",
-          text: formModel.loadCount.toString(),
+          text: formModel.debug.loadCount.toString(),
           labelStyle: getLabelStyle(context),
           textStyle: getTextStyle(context),
         ),
       if (options.showFormActivityCount)
         IconLabelText(
           label: "Form Activity Count: ",
-          text: formModel.formActivityCount.toString(),
+          text: formModel.debug.formActivityCount.toString(),
           labelStyle: getLabelStyle(context),
           textStyle: getTextStyle(context),
         ),

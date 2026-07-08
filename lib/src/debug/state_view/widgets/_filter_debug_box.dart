@@ -60,14 +60,14 @@ class FilterDebugBox extends BaseDebugBox {
       if (options.showFilterLoadCount)
         IconLabelText(
           label: "Filter Load Count: ",
-          text: filterModel.loadCount.toString(),
+          text: filterModel.debug.loadCount.toString(),
           labelStyle: getLabelStyle(context),
           textStyle: getTextStyle(context),
         ),
       if (options.showFilterActivityCount)
         IconLabelText(
           label: "Filter Activity Count: ",
-          text: filterModel.filterActivityCount.toString(),
+          text: filterModel.debug.filterActivityCount.toString(),
           labelStyle: getLabelStyle(context),
           textStyle: getTextStyle(context),
         ),

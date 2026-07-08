@@ -7,9 +7,19 @@ abstract class Shelf extends _Core {
 
   late final ShelfConfig config;
 
-  bool _markAsOrphaned = false;
+  void _markAsOrphaned(bool orphaned) {
+    if (orphaned) {
+      __orphanedAt = DateTime.now();
+    } else {
+      __orphanedAt = null;
+    }
+  }
 
-  bool get markAsOrphaned => _markAsOrphaned;
+  DateTime? __orphanedAt;
+
+  DateTime? get orphanedAt => __orphanedAt;
+
+  bool get markedAsOrphan => __orphanedAt != null;
 
   late final ShelfStructure _shelfStruct;
 

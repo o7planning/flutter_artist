@@ -351,7 +351,7 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  // SAME-AS: #0007 (formPropsStructure.allMultiOptProps)
+  // SAME-AS: #0007 (formModelStructure.allMultiOptProps)
   List<MultiOptTildeFilterCriterionModel> get allMultiOptCriteria {
     return _allCriterionModelMapX.values
         .whereType<MultiOptTildeFilterCriterionModel>()
@@ -393,10 +393,10 @@ class FilterModelStructure {
   @DebugMethodAnnotation()
   Map<String, dynamic> get debugCurrentCriteriaValues => _currentCriteriaValues;
 
-  @DebugMethodAnnotation()
-  Map<String, dynamic> get debugInstantValues {
-    return filterModel._formKey.currentState?.instantValue ?? {};
-  }
+  // @DebugMethodAnnotation()
+  // Map<String, dynamic> get debugInstantValues {
+  //   return filterModel._formKey.currentState?.instantValue ?? {};
+  // }
 
   @DebugMethodAnnotation()
   List<MultiOptTildeFilterCriterionModel> get debugRootOptCriteria =>

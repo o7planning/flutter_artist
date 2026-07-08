@@ -4,9 +4,11 @@ part of '../core.dart';
 @_FilterPanelChangeAnnotation()
 class _FilterPanelChangeTaskUnit extends _STaskUnit {
   XFilterModel xFilterModel;
+  final Map<String, dynamic> formKeyInstantValuesInUI;
 
   _FilterPanelChangeTaskUnit({
     required this.xFilterModel,
+    required this.formKeyInstantValuesInUI,
   }) : super(taskType: TaskType.filterModelFilterPanelChanged);
 
   @override

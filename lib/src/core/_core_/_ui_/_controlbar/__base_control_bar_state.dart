@@ -1,10 +1,10 @@
 part of '../../core.dart';
 
 abstract class _BaseControlBarState<
-OWNER extends Object, //
-ITEM_TYPE extends Enum, //
-CONTROL_BAR_ITEM extends ControlBarItem<OWNER, ITEM_TYPE>,
-W extends BaseControlBar<OWNER, ITEM_TYPE, CONTROL_BAR_ITEM>>
+        OWNER extends Object, //
+        ITEM_TYPE extends Enum, //
+        CONTROL_BAR_ITEM extends ControlBarItem<OWNER, ITEM_TYPE>,
+        W extends BaseControlBar<OWNER, ITEM_TYPE, CONTROL_BAR_ITEM>>
     extends _ContextProviderViewState<W> {
   Decoration _getEffectiveDecoration(BuildContext context) {
     return widget.style.decoration ??

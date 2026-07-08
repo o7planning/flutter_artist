@@ -353,11 +353,13 @@ class FormModelStructure {
     return {};
   }
 
-  Map<String, dynamic> get initialFormData {
+  // initialFormData
+  Map<String, dynamic> get _initialFormData {
     return _allPropModelMapX.map((k, v) => MapEntry(k, v._initialValue));
   }
 
-  Map<String, dynamic> get currentFormData {
+  // currentFormData
+  Map<String, dynamic> get _currentFormData {
     return _allPropModelMapX.map((k, v) => MapEntry(k, v._currentValue));
   }
 
