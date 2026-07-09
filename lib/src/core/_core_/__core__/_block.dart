@@ -1022,6 +1022,7 @@ abstract class Block<
     List<ID>? itemIdsToQry;
     //
     if (thisXBlock.queryType == QueryType.realQuery) {
+      //
       executionTrace._addTraceStep(
         codeId: "#03280",
         shortDesc: "@queryType: ${debugObjHtml(thisXBlock.queryType)}.",
@@ -1178,300 +1179,25 @@ abstract class Block<
       } finally {
         __refreshQueryingState(isQuerying: false);
       }
-      //
-      if (queryResultState == ActionResultState.fail) {
-        // Query Error + Parent or Criteria changed.
-        if (parentOrCriteriaChanged) {
-          switch (dataState) {
-            case DataState.ready:
-              // [ON Query Fail] + [Parent or Criteria changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // @FaCode-002.
-                  // Test Case: [42a].
-                  // Replace by empty items.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.error;
-              }
-            case DataState.pending:
-              // [ON Query Fail] + [Parent or Criteria changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Replace by empty items.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-              }
-            case DataState.error:
-              // [ON Query Fail] + [Parent or Criteria changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // @FaCode-003.
-                  // Test Case: [42a].
-                  // Replace by empty items.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.error;
-              }
-            case DataState.none:
-              // [ON Query Fail] + [Parent or Criteria changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Replace by empty items.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-              }
-          }
-        }
-        // Query Error + Parent not changed + Criteria not changed.
-        // Test Case: [42a].
-        else {
-          switch (dataState) {
-            case DataState.ready:
-              // [ON Query Fail] + [Parent not changed] + [Criteria not changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Append empty items (No items got from Server).
-                  // Test Case: [42a].
-                  // @FaCode-001.
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.ready;
-              }
-            case DataState.pending:
-              // [ON Query Fail] + [Parent not changed] + [Criteria not changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Replace by empty items.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.ready;
-              }
-            case DataState.error:
-              // [ON Query Fail] + [Parent not changed] + [Criteria not changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // @FaCode-004.
-                  // Replace by empty items.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.error;
-              }
-            case DataState.none:
-              // [ON Query Fail] + [Parent not changed] + [Criteria not changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Replace by empty items.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.error;
-              }
-          }
-        }
-      }
-      // Query Successful:
-      else {
-        // Query Successful + Parent or Criteria changed.
-        if (parentOrCriteriaChanged) {
-          switch (dataState) {
-            case DataState.ready:
-              // [ON Query SUCCESS] + [Parent or Criteria changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Replace.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.ready;
-              }
-            case DataState.pending:
-              // [ON Query SUCCESS] + [Parent or Criteria changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Replace.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.ready;
-              }
-            case DataState.error:
-              // [ON Query SUCCESS] + [Parent or Criteria changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Replace.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.ready;
-              }
-            case DataState.none:
-              // [ON Query SUCCESS] + [Parent or Criteria changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Replace.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.ready;
-              }
-          }
-        }
-        // Query Successful + Parent not changed + Criteria not changed.
-        else {
-          switch (dataState) {
-            case DataState.ready:
-              // [ON Query SUCCESS] + [Parent not changed] + [Criteria not changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Replace or Merge:
-                  realListUpdateStrategy = thisXBlock.listUpdateStrategy;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.ready;
-              }
-            case DataState.pending:
-              // [ON Query SUCCESS] + [Parent not changed] + [Criteria not changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Replace.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.ready;
-              }
-            case DataState.error:
-              // [ON Query SUCCESS] + [Parent not changed] + [Criteria not changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Replace.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.ready;
-              }
-            case DataState.none:
-              // [ON Query SUCCESS] + [Parent not changed] + [Criteria not changed].
-              switch (viewportSyncStrategy) {
-                case BlockViewportSyncStrategy.forceNativeQuery:
-                  // Replace.
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.convergeAll:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.replace;
-                  newBlockDataState = DataState.ready;
-                case BlockViewportSyncStrategy.incrementalMerge:
-                  // TODO: Test Case
-                  realListUpdateStrategy = ListUpdateStrategy.merge;
-                  newBlockDataState = DataState.ready;
-              }
-          }
-        }
-      }
-      if (queryTypeChanged) {
-        // Replace:
-        realListUpdateStrategy = ListUpdateStrategy.replace;
-      }
+
+      final calculationInput = QueryCalculatorInput(
+        queryResultState: queryResultState,
+        currentDataState: dataState,
+        syncStrategy: viewportSyncStrategy,
+        parentOrCriteriaChanged: parentOrCriteriaChanged,
+        isQueryMore: thisXBlock.isQueryMoreFlow,
+        isPageShifting: !parentOrCriteriaChanged,
+        hasRemoveItemIds: false,
+        queryTypeChanged: queryTypeChanged,
+        suggestedListUpdateStrategy: thisXBlock.listUpdateStrategy,
+      );
+
+      final calculationResult =
+          QueryStateCalculator.calculate(calculationInput);
+
+      // Extract variables directly into your pre-existing downstream fields securely
+      realListUpdateStrategy = calculationResult.realListUpdateStrategy;
+      newBlockDataState = calculationResult.newBlockDataState;
     }
     // Query Empty:
     else {
@@ -2791,7 +2517,7 @@ abstract class Block<
     required ITEM? candidateCurrItem,
   }) async {
     __assertThisXBlock(thisXBlock);
-    // TODO: Xem lai.
+    //
     final bool forceRequery = viewportSyncStrategy?.forceRequery ?? false;
     // @DEL-01
     thisXBlock.setCandidateCurrItem(candidateCurrItem);
@@ -4856,7 +4582,7 @@ abstract class Block<
   @_BlockQueryAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   Future<BlockQueryResult> query({
-    ListUpdateStrategy suggestedListUpdateStrategy = ListUpdateStrategy.replace,
+    // ListUpdateStrategy suggestedListUpdateStrategy = ListUpdateStrategy.replace,
     BlockAfterQueryDirective afterQueryDirective =
         BlockAfterQueryDirective.setAnItemAsCurrentIfNeed,
     FILTER_INPUT? filterInput,
@@ -4866,6 +4592,7 @@ abstract class Block<
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
     }
+    final suggestedListUpdateStrategy = ListUpdateStrategy.replace;
     //
     final qryMethod = BlockQryMethodName.query;
     //
@@ -6248,17 +5975,21 @@ abstract class Block<
     required Pageable? specifiedPageable,
   }) async {
     Pageable? usedPageable;
+    final bool isQueryMoreFlow;
     switch (qryMethod) {
       case BlockQryMethodName.query:
         usedPageable = specifiedPageable;
+        isQueryMoreFlow = false;
       case BlockQryMethodName.queryNextPage:
         Pageable? currentPageable = __blockData.pageable;
+        isQueryMoreFlow = false;
         if (currentPageable == null) {
           return BlockQueryResult._noCurrentPagination();
         }
         usedPageable = currentPageable.next();
       case BlockQryMethodName.queryPreviousPage:
         Pageable? currentPageable = __blockData.pageable;
+        isQueryMoreFlow = false;
         if (currentPageable == null) {
           return BlockQueryResult._noCurrentPagination();
         }
@@ -6268,6 +5999,7 @@ abstract class Block<
         }
       case BlockQryMethodName.queryMore:
         usedPageable = nextPageable;
+        isQueryMoreFlow = true;
         if (usedPageable == null) {
           return BlockQueryResult._noNextPage();
         }
@@ -6281,12 +6013,13 @@ abstract class Block<
       afterQueryDirective: afterQueryDirective,
       suggestedSelection: suggestedSelection,
     );
+    XBlock xBlock = xShelf.findXBlockByName(name)!;
+    xBlock._isQueryMoreFlow = isQueryMoreFlow;
     //
     xShelf._initQueryTaskUnits(executionTrace: executionTrace);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
-    XBlock xBlock = xShelf.findXBlockByName(name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
     return queryResult;
   }

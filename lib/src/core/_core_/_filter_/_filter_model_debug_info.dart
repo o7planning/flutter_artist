@@ -1,8 +1,6 @@
 part of '../core.dart';
 
 class _FilterModelDebugInfo {
-
-
   int __loadCount = 0;
 
   int get loadCount => __loadCount;

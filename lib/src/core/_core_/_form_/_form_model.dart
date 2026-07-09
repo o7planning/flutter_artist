@@ -1,11 +1,11 @@
 part of '../core.dart';
 
 abstract class FormModel<
-    ID extends Object,
-    ITEM_DETAIL extends Identifiable<ID>,
-    FORM_INPUT extends FormInput,
-    ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData // AdditionalFormRelatedData
-    > extends _Core {
+ID extends Object,
+ITEM_DETAIL extends Identifiable<ID>,
+FORM_INPUT extends FormInput,
+ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData // AdditionalFormRelatedData
+> extends _Core {
   final FormModelConfig config;
 
   late final _FormModelDebugInfo debug = _FormModelDebugInfo();
@@ -72,7 +72,8 @@ abstract class FormModel<
   FormModel({
     AutovalidateMode autovalidateMode = AutovalidateMode.onUserInteraction,
     FormModelConfig config = const FormModelConfig(),
-  })  : config = config.copy(),
+  })
+      : config = config.copy(),
         _autovalidateMode = config.autovalidateMode {
     __defineFormModelStructure();
   }
@@ -397,7 +398,7 @@ abstract class FormModel<
     executionTrace._addTraceStep(
       codeId: "#36000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+      "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -427,7 +428,7 @@ abstract class FormModel<
     executionTrace._addTraceStep(
       codeId: "#37000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+      "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -436,15 +437,15 @@ abstract class FormModel<
       case ForceType.force:
         forceReloadForm = true;
       case ForceType.decidedAtRuntime:
-        // forceReloadForm =
-        //     formDataState != DataState.ready && hasActiveUiComponent();
+      // forceReloadForm =
+      //     formDataState != DataState.ready && hasActiveUiComponent();
         forceReloadForm = false;
     }
     //
     executionTrace._addTraceStep(
       codeId: "#37060",
       shortDesc:
-          "Calculate >>  @forceReloadForm: ${debugObjHtml(forceReloadForm)}",
+      "Calculate >>  @forceReloadForm: ${debugObjHtml(forceReloadForm)}",
     );
     //
     if (!forceReloadForm) {
@@ -452,14 +453,15 @@ abstract class FormModel<
         executionTrace._addTraceStep(
           codeId: "#37100",
           shortDesc:
-              "${debugObjHtml(this)} - @dataState: ${debugObjHtml(dataState)} --> Clear data and set to <b>pending</b>.",
+          "${debugObjHtml(this)} - @dataState: ${debugObjHtml(
+              dataState)} --> Clear data and set to <b>pending</b>.",
         );
         _clearDataWithDataState(formDataState: DataState.pending);
       }
       executionTrace._addTraceStep(
         codeId: "#37120",
         shortDesc:
-            "@forceReloadForm: ${debugObjHtml(forceReloadForm)} --> do nothing.",
+        "@forceReloadForm: ${debugObjHtml(forceReloadForm)} --> do nothing.",
       );
       return true;
     }
@@ -467,11 +469,11 @@ abstract class FormModel<
     executionTrace._addTraceStep(
       codeId: "#37160",
       shortDesc:
-          "Calling ${debugObjHtml(block)}._performLoadAdditionalFormRelatedData().",
+      "Calling ${debugObjHtml(block)}._performLoadAdditionalFormRelatedData().",
       traceStepType: TraceStepType.nonControllableCalling,
     );
     ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData =
-        await block._performLoadAdditionalFormRelatedData(executionTrace);
+    await block._performLoadAdditionalFormRelatedData(executionTrace);
     if (additionalFormRelatedData == null) {
       return false;
     }
@@ -516,7 +518,7 @@ abstract class FormModel<
     executionTrace._addTraceStep(
       codeId: "#38000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+      "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -619,7 +621,8 @@ abstract class FormModel<
       executionTrace._addTraceStep(
         codeId: "#11500",
         shortDesc:
-            "The ${debugObjHtml(this)}.$calledMethodName() method was called with an error!",
+        "The ${debugObjHtml(
+            this)}.$calledMethodName() method was called with an error!",
         errorInfo: errorInfo,
       );
       //
@@ -632,7 +635,7 @@ abstract class FormModel<
       executionTrace._addTraceStep(
         codeId: "#11800",
         shortDesc:
-            "Calling ${debugObjHtml(this)}._processSaveActionRestResult().",
+        "Calling ${debugObjHtml(this)}._processSaveActionRestResult().",
         traceStepType: TraceStepType.nonControllableCalling,
       );
       await block._processSaveActionRestResult(
@@ -661,7 +664,8 @@ abstract class FormModel<
       executionTrace._addTraceStep(
         codeId: "#11900",
         shortDesc:
-            "The ${debugObjHtml(this)}.$calledMethodName() method was called with an error!",
+        "The ${debugObjHtml(
+            this)}.$calledMethodName() method was called with an error!",
         errorInfo: errorInfo,
       );
       //
@@ -680,13 +684,15 @@ abstract class FormModel<
     // Invalid Form Prop.
     on FormPropInvalidNameError catch (e) {
       String message = "Invalid Form propName '${e.propName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.defineFormModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(
+          this)}.defineFormModelStructure()' method for details.";
       throw _createFatalAppError(message);
     }
     // Duplicate Form Prop.
     on FormPropDuplicateNameError catch (e) {
       String message = "Duplicate Form propName '${e.propName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(this)}.defineFormModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(
+          this)}.defineFormModelStructure()' method for details.";
       throw _createFatalAppError(message);
     } catch (e, stackTrace) {
       print(stackTrace);
@@ -745,7 +751,7 @@ abstract class FormModel<
         if (additionalFormRelatedData == null) {
           throw DevError(
             errorMessage:
-                "Dev Error. additionalFormRelatedData must be not null if FormModel.activityType = startCreatingOrEditing.",
+            "Dev Error. additionalFormRelatedData must be not null if FormModel.activityType = startCreatingOrEditing.",
           );
         }
         __additionalFormRelatedData = additionalFormRelatedData;
@@ -754,14 +760,14 @@ abstract class FormModel<
         if (additionalFormRelatedData != null) {
           throw DevError(
             errorMessage:
-                "Dev Error. additionalFormRelatedData must be null if FormModel.activityType = updateFromFormView.",
+            "Dev Error. additionalFormRelatedData must be null if FormModel.activityType = updateFromFormView.",
           );
         }
         additionalFormRelatedData = __additionalFormRelatedData!;
         if (formInput != null) {
           throw DevError(
             errorMessage:
-                "Dev Error. formInput must be null if FormModel.activityType = updateFromFormView.",
+            "Dev Error. formInput must be null if FormModel.activityType = updateFromFormView.",
           );
         }
         if (currentFormMode == FormMode.creation) {
@@ -772,14 +778,14 @@ abstract class FormModel<
         if (additionalFormRelatedData != null) {
           throw DevError(
             errorMessage:
-                "Dev Error. additionalFormRelatedData must be null if FormModel.activityType = patchFormFields.",
+            "Dev Error. additionalFormRelatedData must be null if FormModel.activityType = patchFormFields.",
           );
         }
         additionalFormRelatedData = __additionalFormRelatedData!;
         if (formInput == null) {
           throw DevError(
             errorMessage:
-                "Dev Error. formInput must be not null if FormModel.activityType = patchFormFields.",
+            "Dev Error. formInput must be not null if FormModel.activityType = patchFormFields.",
           );
         }
     }
@@ -825,7 +831,8 @@ abstract class FormModel<
             codeId: "#06200",
             traceStepType: TraceStepType.controllableCalling,
             shortDesc:
-                "Calling ${debugObjHtml(this)}.extractSimplePropValuesFromItemDetail().",
+            "Calling ${debugObjHtml(
+                this)}.extractSimplePropValuesFromItemDetail().",
             parameters: {
               "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               "itemDetail": itemDetail,
@@ -833,17 +840,17 @@ abstract class FormModel<
             },
           );
           var simplePropValueMap = extractSimplePropValuesFromItemDetail(
-                parentBlockCurrentItemId: block.parentBlockCurrentItemId,
-                additionalFormRelatedData: additionalFormRelatedData,
-                itemDetail: itemDetail,
-              ) ??
+            parentBlockCurrentItemId: block.parentBlockCurrentItemId,
+            additionalFormRelatedData: additionalFormRelatedData,
+            itemDetail: itemDetail,
+          ) ??
               {};
           for (String propName in simplePropValueMap.keys) {
             // Check and throw error if 'propName' is not a SimpleFormProp:
             __throwErrorIfNotASimplePropName(
               propName: propName,
               formErrorMethod:
-                  FormErrorMethod.extractSimplePropValuesFromItemDetail,
+              FormErrorMethod.extractSimplePropValuesFromItemDetail,
             );
             //
             // In (First load + itemDetail != null).
@@ -867,7 +874,7 @@ abstract class FormModel<
             activityType: activityType,
             propName: null,
             formErrorMethod:
-                FormErrorMethod.extractSimplePropValuesFromItemDetail,
+            FormErrorMethod.extractSimplePropValuesFromItemDetail,
             error: error,
             errorStackTrace: stackTrace,
           );
@@ -890,7 +897,8 @@ abstract class FormModel<
           executionTrace._addTraceStep(
             codeId: "#06400",
             shortDesc:
-                "The ${debugObjHtml(this)}.extractSimplePropValuesFromItemDetail() method was called with an error!",
+            "The ${debugObjHtml(
+                this)}.extractSimplePropValuesFromItemDetail() method was called with an error!",
             errorInfo: errorInfo,
           );
           return false;
@@ -910,13 +918,14 @@ abstract class FormModel<
           executionTrace._addTraceStep(
             codeId: "#06520",
             shortDesc:
-                "@_defaultSimpleValuesInitiated = false --> Need to init default simple values.",
+            "@_defaultSimpleValuesInitiated = false --> Need to init default simple values.",
           );
           try {
             executionTrace._addTraceStep(
               codeId: "#06540",
               shortDesc:
-                  "Calling ${debugObjHtml(this)}.specifyDefaultValuesForSimpleProps().",
+              "Calling ${debugObjHtml(
+                  this)}.specifyDefaultValuesForSimpleProps().",
               parameters: {
                 "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               },
@@ -924,8 +933,8 @@ abstract class FormModel<
             );
             // In case of activityType = startCreatingOrEditing.
             simplePropValueDefault = specifyDefaultValuesForSimpleProps(
-                  parentBlockCurrentItemId: block.parentBlockCurrentItemId,
-                ) ??
+              parentBlockCurrentItemId: block.parentBlockCurrentItemId,
+            ) ??
                 {};
             //
             for (String propName in simplePropValueDefault.keys) {
@@ -933,7 +942,7 @@ abstract class FormModel<
               __throwErrorIfNotASimplePropName(
                 propName: propName,
                 formErrorMethod:
-                    FormErrorMethod.specifyDefaultValuesForSimpleProps,
+                FormErrorMethod.specifyDefaultValuesForSimpleProps,
               );
               //
               // In (Item First Load + itemDetail == null + !_defaultValueInitiated).
@@ -950,7 +959,7 @@ abstract class FormModel<
               activityType: activityType,
               propName: null,
               formErrorMethod:
-                  FormErrorMethod.specifyDefaultValuesForSimpleProps,
+              FormErrorMethod.specifyDefaultValuesForSimpleProps,
               error: e,
               errorStackTrace: stackTrace,
             );
@@ -963,7 +972,7 @@ abstract class FormModel<
               stackTrace: formErrorInfo.errorStackTrace,
               showSnackBar: true,
               tipDocument:
-                  TipDocument.formModelSpecifyDefaultValuesForSimpleProps,
+              TipDocument.formModelSpecifyDefaultValuesForSimpleProps,
             );
             //
             __endFormActivityWithDataState(
@@ -974,7 +983,8 @@ abstract class FormModel<
             executionTrace._addTraceStep(
               codeId: "#06580",
               shortDesc:
-                  "The ${debugObjHtml(this)}.specifyDefaultValuesForSimpleProps() method was called with an error!",
+              "The ${debugObjHtml(
+                  this)}.specifyDefaultValuesForSimpleProps() method was called with an error!",
               errorInfo: errorInfo,
             );
             return false;
@@ -990,7 +1000,8 @@ abstract class FormModel<
             executionTrace._addTraceStep(
               codeId: "#06620",
               shortDesc:
-                  "Calling ${debugObjHtml(this)}.extractUpdateValuesForSimpleProps().",
+              "Calling ${debugObjHtml(
+                  this)}.extractUpdateValuesForSimpleProps().",
               parameters: {
                 "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
                 "formInput": formInput,
@@ -1000,10 +1011,10 @@ abstract class FormModel<
             );
             final Map<String, SimpleValueWrap?> updatedSimplePropValues =
                 extractUpdateValuesForSimpleProps(
-                      parentBlockCurrentItemId: block.parentBlockCurrentItemId,
-                      additionalFormRelatedData: additionalFormRelatedData,
-                      formInput: formInput,
-                    ) ??
+                  parentBlockCurrentItemId: block.parentBlockCurrentItemId,
+                  additionalFormRelatedData: additionalFormRelatedData,
+                  formInput: formInput,
+                ) ??
                     {};
             //
             for (String propName in updatedSimplePropValues.keys) {
@@ -1011,7 +1022,7 @@ abstract class FormModel<
               __throwErrorIfNotASimplePropName(
                 propName: propName,
                 formErrorMethod:
-                    FormErrorMethod.extractUpdateValuesForSimpleProps,
+                FormErrorMethod.extractUpdateValuesForSimpleProps,
               );
               //
               // In (ItemFirstLoad + formInput != null).
@@ -1031,7 +1042,7 @@ abstract class FormModel<
               activityType: activityType,
               propName: null,
               formErrorMethod:
-                  FormErrorMethod.extractUpdateValuesForSimpleProps,
+              FormErrorMethod.extractUpdateValuesForSimpleProps,
               error: e,
               errorStackTrace: stackTrace,
             );
@@ -1055,7 +1066,8 @@ abstract class FormModel<
             executionTrace._addTraceStep(
               codeId: "#06660",
               shortDesc:
-                  "The ${debugObjHtml(this)}.extractUpdateValuesForSimpleProps() method was called with an error!",
+              "The ${debugObjHtml(
+                  this)}.extractUpdateValuesForSimpleProps() method was called with an error!",
               errorInfo: errorInfo,
             );
             return false;
@@ -1077,7 +1089,8 @@ abstract class FormModel<
           executionTrace._addTraceStep(
             codeId: "#06720",
             shortDesc:
-                "Calling ${debugObjHtml(this)}.extractUpdateValuesForSimpleProps() with parameters:",
+            "Calling ${debugObjHtml(
+                this)}.extractUpdateValuesForSimpleProps() with parameters:",
             parameters: {
               "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               "formInput": formInput,
@@ -1087,10 +1100,10 @@ abstract class FormModel<
           );
           final Map<String, SimpleValueWrap?> updatedSimplePropValues =
               extractUpdateValuesForSimpleProps(
-                    parentBlockCurrentItemId: block.parentBlockCurrentItemId,
-                    additionalFormRelatedData: additionalFormRelatedData,
-                    formInput: formInput,
-                  ) ??
+                parentBlockCurrentItemId: block.parentBlockCurrentItemId,
+                additionalFormRelatedData: additionalFormRelatedData,
+                formInput: formInput,
+              ) ??
                   {};
           //
           for (String propName in updatedSimplePropValues.keys) {
@@ -1098,7 +1111,7 @@ abstract class FormModel<
             __throwErrorIfNotASimplePropName(
               propName: propName,
               formErrorMethod:
-                  FormErrorMethod.extractUpdateValuesForSimpleProps,
+              FormErrorMethod.extractUpdateValuesForSimpleProps,
             );
             //
             // In (patchFormFields + formInput != null)
@@ -1139,7 +1152,8 @@ abstract class FormModel<
           executionTrace._addTraceStep(
             codeId: "#06760",
             shortDesc:
-                "The ${debugObjHtml(this)}.extractUpdateValuesForSimpleProps() method was called with an error!",
+            "The ${debugObjHtml(
+                this)}.extractUpdateValuesForSimpleProps() method was called with an error!",
             errorInfo: errorInfo,
           );
           return false;
@@ -1151,12 +1165,13 @@ abstract class FormModel<
     //
     try {
       for (MultiOptFormPropModel multiOptProp
-          in _formModelStructure._rootOptPropModels) {
+      in _formModelStructure._rootOptPropModels) {
         executionTrace._addTraceStep(
           codeId: "#06780",
           shortDesc:
-              "Calling ${debugObjHtml(this)}._loadMultiOptPropDataCascade() "
-              "to load data for ${debugObjHtml(multiOptProp)} and its descendants.",
+          "Calling ${debugObjHtml(this)}._loadMultiOptPropDataCascade() "
+              "to load data for ${debugObjHtml(
+              multiOptProp)} and its descendants.",
           parameters: {
             "additionalFormRelatedData": additionalFormRelatedData,
             "formInput": formInput,
@@ -1233,7 +1248,8 @@ abstract class FormModel<
       executionTrace._addTraceStep(
         codeId: "#06800",
         shortDesc:
-            "The ${debugObjHtml(this)}.${formErrorInfo.methodName}() method was called with an error!",
+        "The ${debugObjHtml(this)}.${formErrorInfo
+            .methodName}() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -1256,9 +1272,10 @@ abstract class FormModel<
     if (_formModelStructure._isMultiOptFormProp(propName)) {
       throw DevError(
         errorMessage:
-            '$propName is not a ${getTypeNameWithoutGenerics(SimpleFormPropModel)}',
+        '$propName is not a ${getTypeNameWithoutGenerics(SimpleFormPropModel)}',
         errorDetails: [
-          "See ${getClassNameWithoutGenerics(this)}.${getClassNameWithoutGenerics(formErrorMethod)}() method."
+          "See ${getClassNameWithoutGenerics(
+              this)}.${getClassNameWithoutGenerics(formErrorMethod)}() method."
         ],
       );
     }
@@ -1385,13 +1402,13 @@ abstract class FormModel<
     executionTrace._addTraceStep(
       codeId: "#17000",
       shortDesc:
-          "Loading Data for ${debugObjHtml(multiOptProp)} and its children..",
+      "Loading Data for ${debugObjHtml(multiOptProp)} and its children..",
       traceStepType: TraceStepType.info,
     );
 
     // Get current OptProp data:
     XData? tempMultiOptPropXData =
-        _formModelStructure._getTempMultiOptPropXData(
+    _formModelStructure._getTempMultiOptPropXData(
       propName: multiOptPropName,
     );
 
@@ -1436,7 +1453,7 @@ abstract class FormModel<
       executionTrace._addTraceStep(
         codeId: "#17200",
         shortDesc:
-            "Value of <b>'$multiOptPropName'</b> has changed --> Clear data of all descendant <b>MultiOptFormProp(s)</b>.",
+        "Value of <b>'$multiOptPropName'</b> has changed --> Clear data of all descendant <b>MultiOptFormProp(s)</b>.",
         traceStepType: TraceStepType.info,
       );
       _formModelStructure._updateChildrenMultiOptValueToNullCascade(
@@ -1472,7 +1489,7 @@ abstract class FormModel<
         executionTrace._addTraceStep(
           codeId: "#17400",
           shortDesc:
-              "Calling ${debugObjHtml(this)}.performLoadMultiOptPropXData().",
+          "Calling ${debugObjHtml(this)}.performLoadMultiOptPropXData().",
           parameters: {
             "multiOptPropName": multiOptPropName,
             "parentMultiOptPropValue": parentMultiOptPropValue,
@@ -1521,7 +1538,8 @@ abstract class FormModel<
           executionTrace._addTraceStep(
             codeId: "#17500",
             shortDesc:
-                "(In _loadMultiOptPropDataCascade() method for ${debugObjHtml(multiOptProp)}):",
+            "(In _loadMultiOptPropDataCascade() method for ${debugObjHtml(
+                multiOptProp)}):",
             parameters: {
               "activityType": activityType,
               "currentItemDetail": currentItemDetail,
@@ -1597,7 +1615,8 @@ abstract class FormModel<
           executionTrace._addTraceStep(
             codeId: "#17600",
             shortDesc:
-                "(In _loadMultiOptPropDataCascade() method for ${debugObjHtml(multiOptProp)}):",
+            "(In _loadMultiOptPropDataCascade() method for ${debugObjHtml(
+                multiOptProp)}):",
             parameters: {
               "activityType": activityType,
               "currentItemDetail": currentItemDetail,
@@ -1622,7 +1641,7 @@ abstract class FormModel<
       // It can be a single value or a List.
       //
       final dynamic tempCurrentValue =
-          _formModelStructure._getTempCurrentPropValue(
+      _formModelStructure._getTempCurrentPropValue(
         propName: multiOptPropName,
       );
       //
@@ -1678,13 +1697,13 @@ abstract class FormModel<
     }
     // TODO: Dangerous, check not null:
     candidateSelectedItems = tempMultiOptPropXData?._resolveItemsFromRawData(
-          dynamicValues: candidateSelectedItems,
-          //
-          // IMPORTANT: Add not found item to internal list.
-          //
-          addOrphan: true,
-          clearOrphanItems: false,
-        ) ??
+      dynamicValues: candidateSelectedItems,
+      //
+      // IMPORTANT: Add not found item to internal list.
+      //
+      addOrphan: true,
+      clearOrphanItems: false,
+    ) ??
         [];
     //
     // TODO: Double check this code:
@@ -1717,7 +1736,7 @@ abstract class FormModel<
     }
     //
     Object? tempSelectedPropValue =
-        _formModelStructure._getTempCurrentPropValue(
+    _formModelStructure._getTempCurrentPropValue(
       propName: multiOptPropName,
     );
 
@@ -1806,7 +1825,8 @@ abstract class FormModel<
       executionTrace._addTraceStep(
         codeId: "#33000",
         shortDesc:
-            "Calling ${debugObjHtml(this)}.specifyDefaultValueForMultiOptProp() for <b>'$multiOptPropName'</b>.",
+        "Calling ${debugObjHtml(
+            this)}.specifyDefaultValueForMultiOptProp() for <b>'$multiOptPropName'</b>.",
         parameters: {
           "multiOptPropXData": multiOptPropXData,
           "multiOptPropName": multiOptPropName,
@@ -1854,20 +1874,21 @@ abstract class FormModel<
     required String multiOptPropName,
   }) {
     MultiOptFormPropModel? multiOptProp =
-        _formModelStructure._getMultiOptFormProp(multiOptPropName);
+    _formModelStructure._getMultiOptFormProp(multiOptPropName);
     if (multiOptProp == null) {
       throw "The '$multiOptPropName' is not $MultiOptFormPropModel";
     }
     String message =
-        "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptPropName '$multiOptPropName'. ";
+        "The ${getClassName(
+        this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptPropName '$multiOptPropName'. ";
     if (multiOptProp.selectionType == SelectionType.single) {
       message += "$OptValueWrap.single(null) or $OptValueWrap.single(value). ";
     } else {
       message +=
-          "$OptValueWrap.multi([null]) or $OptValueWrap.multi([value]). ";
+      "$OptValueWrap.multi([null]) or $OptValueWrap.multi([value]). ";
     }
     message +=
-        "And return null for not $MultiOptFormPropModel. See the specification of this method for more information.";
+    "And return null for not $MultiOptFormPropModel. See the specification of this method for more information.";
     // throw AppError(errorMessage: message);
   }
 
@@ -1888,7 +1909,8 @@ abstract class FormModel<
       executionTrace._addTraceStep(
         codeId: "#32000",
         shortDesc:
-            "Calling ${debugObjHtml(this)}.extractMultiOptPropValueFromItemDetail() for <b>'$multiOptPropName'</b>.",
+        "Calling ${debugObjHtml(
+            this)}.extractMultiOptPropValueFromItemDetail() for <b>'$multiOptPropName'</b>.",
         parameters: {
           "multiOptPropName": multiOptPropName,
           "parentMultiOptPropValue": parentMultiOptPropValue,
@@ -1944,7 +1966,8 @@ abstract class FormModel<
       executionTrace._addTraceStep(
         codeId: "#18000",
         shortDesc:
-            "Calling ${debugObjHtml(this)}.extractUpdateValueForMultiOptProp() for <b>'$multiOptPropName'</b>.",
+        "Calling ${debugObjHtml(
+            this)}.extractUpdateValueForMultiOptProp() for <b>'$multiOptPropName'</b>.",
         parameters: {
           "multiOptPropName": multiOptPropName,
           "multiOptPropXData": multiOptPropXData,
@@ -2061,7 +2084,7 @@ abstract class FormModel<
 
   bool isEnabled() {
     Actionable<BlockFormEnablementPrecheck> actionable =
-        block._isEnableFormToModify();
+    block._isEnableFormToModify();
     return actionable.yes;
   }
 
@@ -2215,7 +2238,8 @@ abstract class FormModel<
     executionTrace._addTraceStep(
       codeId: "#78000",
       shortDesc:
-          "Calling ${debugObjHtml(this)}.__canPatchFormFields() to check before execute the action.",
+      "Calling ${debugObjHtml(
+          this)}.__canPatchFormFields() to check before execute the action.",
       parameters: {
         "checkBusy": checkBusyTrue,
       },
@@ -2289,7 +2313,8 @@ abstract class FormModel<
     executionTrace._addTraceStep(
       codeId: "#79000",
       shortDesc:
-          "Calling ${debugObjHtml(block)}.__canSaveForm() to check before execute the action.",
+      "Calling ${debugObjHtml(
+          block)}.__canSaveForm() to check before execute the action.",
       parameters: {
         "checkBusy": checkBusyTrue,
         "checkAllow": checkAllowTrue,

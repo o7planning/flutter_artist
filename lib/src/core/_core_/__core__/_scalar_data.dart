@@ -1,9 +1,9 @@
 part of '../core.dart';
 
 class _ScalarData<
-    VALUE extends Object, //
-    FILTER_INPUT extends FilterInput,
-    FILTER_CRITERIA extends FilterCriteria> {
+VALUE extends Object, //
+FILTER_INPUT extends FilterInput,
+FILTER_CRITERIA extends FilterCriteria> {
   ///
   /// Owner Scalar.
   ///
@@ -12,7 +12,7 @@ class _ScalarData<
   XFilterCriteria<FILTER_CRITERIA>? _xFilterCriteria;
 
   _ScalarValueWrap<VALUE> __current =
-      _ScalarValueWrap<VALUE>(id: null, value: null);
+  _ScalarValueWrap<VALUE>(id: null, value: null);
 
   _ScalarValueWrap<VALUE> get current => __current;
 

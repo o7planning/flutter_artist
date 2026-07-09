@@ -3,9 +3,9 @@ part of '../../core.dart';
 class _XShelfBlockMultiItemCreationBackendAction extends XShelf {
   _XShelfBlockMultiItemCreationBackendAction({required Block block})
       : super(
-          xShelfType: XShelfType.blockMultiItemCreationBackendAction,
-          shelf: block.shelf,
-        ) {
+    xShelfType: XShelfType.blockMultiItemCreationBackendAction,
+    shelf: block.shelf,
+  ) {
     //
     // IMPORTANT:
     //

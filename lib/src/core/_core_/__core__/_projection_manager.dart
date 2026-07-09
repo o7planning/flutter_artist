@@ -93,7 +93,7 @@ class _ProjectionManager {
     for (Event event in originEvents) {
       polyTypes.add(event.dataType);
       final ProjectionFamily? family =
-          findProjectionFamilyByType(type: event.dataType);
+      findProjectionFamilyByType(type: event.dataType);
       if (family == null) {
         continue;
       }

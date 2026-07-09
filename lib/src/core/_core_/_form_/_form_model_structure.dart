@@ -48,8 +48,7 @@ class FormModelStructure {
   FormModelStructure({
     required List<SimpleFormPropDef> simplePropDefs,
     required List<MultiOptFormPropDef> multiOptPropDefs,
-  })
-      : __simplePropDefs = [...simplePropDefs],
+  })  : __simplePropDefs = [...simplePropDefs],
         __rootMultiOptPropDefs = [...multiOptPropDefs] {
     for (SimpleFormPropDef simplePropDef in simplePropDefs) {
       __initSimplePropDef(simplePropDef: simplePropDef);
@@ -589,8 +588,7 @@ class FormModelStructure {
       if (prop == null) {
         print("""\n
             ****************************************************************************************************
-            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(
-            formModel)}.
+            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(formModel)}.
             ****************************************************************************************************
             """);
         //
@@ -660,7 +658,7 @@ class FormModelStructure {
     } else {
       throw AppError(
         errorMessage:
-        'Invalid Prop "$multiOptPropName", it must be $MultiOptFormPropModel',
+            'Invalid Prop "$multiOptPropName", it must be $MultiOptFormPropModel',
       );
     }
   }

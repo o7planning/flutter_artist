@@ -14,7 +14,6 @@ class _ScalarRequeryCondition extends Equatable {
 
   @override
   String toString() {
-    return "parentScalarValueId: $parentScalarValueId, filterCriteria: ${filterCriteria ==
-        null ? 'null' : 'OK'}";
+    return "parentScalarValueId: $parentScalarValueId, filterCriteria: ${filterCriteria == null ? 'null' : 'OK'}";
   }
 }
