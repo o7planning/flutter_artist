@@ -7,29 +7,23 @@ enum BlockViewportSyncStrategy {
   /// effective IDs, fetches the complete unified set, and overwrites the active list.
   ///
   /// *Ideal for generic update/upsert actions where consistency is paramount.*
-  convergeAll,
+  convergeAll(priority: 3),
+
+  /// **Native Re-Query**: Ignores precise ID pooling and forces a clean page-bound
+  /// layout query sequence to maintain strict pagination integrity.
+  forceNativeQuery(priority: 2),
 
   /// **Incremental Merge**: Fetches *only* the newly mutated effective IDs and appends/merges
   /// them directly into the existing viewport without touching unchanged items.
   ///
   /// *Highly optimized for Batch/Multi-Creation scenarios to save bandwidth.*
-  incrementalMerge,
+  incrementalMerge(priority: 1);
 
-  // /// **Current Guard (Eviction)**: Re-evaluates *only* the existing on-screen IDs.
-  // /// Deleted or non-compliant records will naturally vanish from the returned dataset.
-  // ///
-  // /// *Best suited for destructive operations (delete, archive, or deactivate).*
-  // refreshCurrentOnly,
+  /// The weight of strictness and integrity enforcement.
+  /// Higher priority overrides laxer synchronization options.
+  final int priority;
 
-  /// **Native Re-Query**: Ignores precise ID pooling and forces a clean page-bound
-  /// layout query sequence to maintain strict pagination integrity.
-  forceNativeQuery,
-
-  // /// **Fire and Forget (None)**: Intentionally suppresses all network re-fetch streams.
-  // ///
-  // /// *Designed for analytical triggers, background procedures, or export executions.*
-  // none
-  ;
+  const BlockViewportSyncStrategy({required this.priority});
 
   bool get willReplace {
     switch (this) {
@@ -41,8 +35,17 @@ enum BlockViewportSyncStrategy {
     }
   }
 
-  bool get willMerge {
-    return !willReplace;
+  bool get willMerge => !willReplace;
+
+  /// Resolves the dominant strategy by evaluating weights between two components.
+  /// If one of the strategies is null, the non-null strategy takes precedence.
+  static BlockViewportSyncStrategy? resolveMax(
+    BlockViewportSyncStrategy? a,
+    BlockViewportSyncStrategy? b,
+  ) {
+    if (a == null) return b;
+    if (b == null) return a;
+    return a.priority >= b.priority ? a : b;
   }
 
   @Deprecated("Xoa di")
@@ -51,10 +54,7 @@ enum BlockViewportSyncStrategy {
       case BlockViewportSyncStrategy.convergeAll:
       case BlockViewportSyncStrategy.incrementalMerge:
       case BlockViewportSyncStrategy.forceNativeQuery:
-        // case BlockViewportSyncStrategy.refreshCurrentOnly:
         return true;
-      // case BlockViewportSyncStrategy.none:
-      //   return false;
     }
   }
 }

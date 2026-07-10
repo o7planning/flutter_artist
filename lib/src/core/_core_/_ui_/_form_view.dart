@@ -1,11 +1,11 @@
 part of '../core.dart';
 
 abstract class FormView<
-    FORM_MODEL extends FormModel<
-        Object, //
-        Identifiable,
-        FormInput,
-        AdditionalFormRelatedData>> extends StatelessWidget {
+FORM_MODEL extends FormModel<
+    Object, //
+    Identifiable,
+    FormInput,
+    AdditionalFormRelatedData>> extends StatelessWidget {
   final FORM_MODEL formModel;
   final QuickSuggestionMode quickSuggestionMode;
 

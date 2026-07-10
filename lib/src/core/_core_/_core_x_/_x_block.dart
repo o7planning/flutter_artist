@@ -1,9 +1,9 @@
 part of '../core.dart';
 
 class XBlock<
-    ID extends Object, //
-    ITEM extends Identifiable<ID>,
-    ITEM_DETAIL extends Identifiable<ID>> {
+ID extends Object, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> {
   XShelf get xShelf => xFilterModel.xShelf;
 
   int get xShelfId => xShelf.xShelfId;
@@ -48,6 +48,7 @@ class XBlock<
 
   QueryType get queryType => __queryType;
 
+  bool _isQueryMoreFlow = false;
   ListUpdateStrategy? __listUpdateStrategy;
   SuggestedSelection? __suggestedSelection;
   BlockAfterQueryDirective? __afterQueryDirective;
@@ -55,7 +56,7 @@ class XBlock<
 
   // TODO: Chuyen sang BlockQueryResult?
   late final PrepareItemCreationResult itemCreationResult =
-      block._createEmptyItemCreationResult();
+  block._createEmptyItemCreationResult();
   final queryResult = BlockQueryResult._();
 
   // ***************************************************************************
@@ -183,11 +184,11 @@ class XBlock<
       return true;
     }
     final ID currItemIdToReload =
-        block._getItemIdInternal(currItemInternalEVT!);
+    block._getItemIdInternal(currItemInternalEVT!);
     // TODO: Check throw pending exception.
     final ITEM? currItem = block.currentItem;
     ID? currItemId =
-        currItem == null ? null : block._getItemIdInternal(currItem);
+    currItem == null ? null : block._getItemIdInternal(currItem);
     if (currItemId != currItemIdToReload) {
       return true;
     }
@@ -230,9 +231,11 @@ class XBlock<
     __setCurrentItemDirective = setCurrentItemDirective;
   }
 
-  ListUpdateStrategy get listUpdateStrategy {
+  bool get isQueryMoreFlow => _isQueryMoreFlow;
+
+  ListUpdateStrategy? get listUpdateStrategy {
     // TODO: Xem lai gia tri mac dinh
-    return __listUpdateStrategy ?? ListUpdateStrategy.replace;
+    return __listUpdateStrategy; // ?? ListUpdateStrategy.replace;
   }
 
   set suggestedSelection(value) {

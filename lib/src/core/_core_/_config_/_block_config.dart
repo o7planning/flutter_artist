@@ -48,15 +48,17 @@ class BlockConfig {
       pageSize: 20,
     ),
     this.clientSideSortStrategy = SortStrategy.none,
-  })  : this.onHideAction = BlockHiddenAction.none,
+  })
+      : this.onHideAction = BlockHiddenAction.none,
         emitExternalShelfEvents =
-            List.unmodifiable(emitExternalShelfEvents?.toSet() ?? []);
+        List.unmodifiable(emitExternalShelfEvents?.toSet() ?? []);
 
   BlockConfig copy() {
     return BlockConfig(
       unifiedItemRefreshPolicy: unifiedItemRefreshPolicy,
       itemAbsentRepresentativePolicy: itemAbsentRepresentativePolicy,
       preventUnsavedChangesLoss: preventUnsavedChangesLoss,
+      enforceParentLinkConstraint: enforceParentLinkConstraint,
       // onHideAction: onHideAction,
       pageable: pageable.copy(),
       //

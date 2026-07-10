@@ -435,23 +435,6 @@ class _BlockData<
         processedQueryResult,
     required List<ID> removeItemIds,
   }) {
-    if (removeItemIds.isNotEmpty) {
-      FaItemsUtils.removeItemsFromListByIds(
-        removeItemIds: removeItemIds,
-        targetList: _items,
-        getItemId: block._getItemIdInternal,
-      );
-      FaItemsUtils.removeItemsFromListByIds(
-        removeItemIds: removeItemIds,
-        targetList: _selectedItems,
-        getItemId: block._getItemIdInternal,
-      );
-      FaItemsUtils.removeItemsFromListByIds(
-        removeItemIds: removeItemIds,
-        targetList: _checkedItems,
-        getItemId: block._getItemIdInternal,
-      );
-    }
     if (processedQueryResult.errorItems.isNotEmpty) {
       FaItemsUtils.removeItemsFromList(
         removeItems: processedQueryResult.errorItems,
@@ -501,6 +484,23 @@ class _BlockData<
       );
       FaItemsUtils.replaceItemsInList(
         replacementItems: processedQueryResult.validItems,
+        targetList: _checkedItems,
+        getItemId: block._getItemIdInternal,
+      );
+    }
+    if (removeItemIds.isNotEmpty) {
+      FaItemsUtils.removeItemsFromListByIds(
+        removeItemIds: removeItemIds,
+        targetList: _items,
+        getItemId: block._getItemIdInternal,
+      );
+      FaItemsUtils.removeItemsFromListByIds(
+        removeItemIds: removeItemIds,
+        targetList: _selectedItems,
+        getItemId: block._getItemIdInternal,
+      );
+      FaItemsUtils.removeItemsFromListByIds(
+        removeItemIds: removeItemIds,
         targetList: _checkedItems,
         getItemId: block._getItemIdInternal,
       );

@@ -78,7 +78,7 @@ class FilterConditionGroupVal implements IConditionVal {
     return {
       "connector": connector.text,
       "conditions":
-          conditions.map((m) => m._toCriterionBasedMapData()).toList(),
+      conditions.map((m) => m._toCriterionBasedMapData()).toList(),
     };
   }
 
@@ -88,10 +88,11 @@ class FilterConditionGroupVal implements IConditionVal {
       "connector": connector.text,
       "conditions": conditions
           .map(
-            (m) => m._toFieldBasedMapData(
+            (m) =>
+            m._toFieldBasedMapData(
               throwIfError: throwIfError,
             ),
-          )
+      )
           .toList(),
     };
   }

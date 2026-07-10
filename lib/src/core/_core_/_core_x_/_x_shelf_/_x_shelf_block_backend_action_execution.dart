@@ -7,9 +7,9 @@ class _XShelfBlockBackendActionExecution extends XShelf {
     required BlockViewportSyncStrategy? viewportSyncStrategy,
     // required AfterBlockBackendAction afterBackendAction,
   }) : super(
-    xShelfType: XShelfType.blockBackendActionExecution,
-    shelf: block.shelf,
-  ) {
+          xShelfType: XShelfType.blockBackendActionExecution,
+          shelf: block.shelf,
+        ) {
     QryHint queryHint = QryHint.none;
     bool forceReloadItem = false;
     //
@@ -31,7 +31,7 @@ class _XShelfBlockBackendActionExecution extends XShelf {
       case BlockViewportSyncStrategy.convergeAll:
       case BlockViewportSyncStrategy.incrementalMerge:
       case BlockViewportSyncStrategy.forceNativeQuery:
-      // case BlockViewportSyncStrategy.refreshCurrentOnly:
+        // case BlockViewportSyncStrategy.refreshCurrentOnly:
         queryHint = QryHint.force;
         forceReloadItem = false;
     }

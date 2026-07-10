@@ -32,7 +32,7 @@ class _Storage extends _StorageCore {
       tipDocument: TipDocument.projection,
     );
     final List<ProjectionFamily> projectionFamilies =
-        appConfiguration.projectionFamilies();
+    appConfiguration.projectionFamilies();
     // This method may throw Fatal Error cause stop app.
     _projectionManager._init(
       executionTrace: executionTrace,
@@ -120,7 +120,8 @@ class _Storage extends _StorageCore {
     executionTrace._addTraceStep(
       codeId: "#75000",
       shortDesc:
-          "Calling ${debugObjHtml(this)}.__canBackendAction() to check before execute the action.",
+      "Calling ${debugObjHtml(
+          this)}.__canBackendAction() to check before execute the action.",
       parameters: {
         "checkBusy": checkBusyTrue,
       },
@@ -129,7 +130,7 @@ class _Storage extends _StorageCore {
     // @Same-Code-Precheck-01
     //
     final Actionable<StorageBackendActionPrecheck> actionable =
-        __canBackendAction(
+    __canBackendAction(
       checkBusy: checkBusyTrue,
     );
     //
@@ -217,7 +218,7 @@ class _Storage extends _StorageCore {
     executionTrace._addTraceStep(
       codeId: "#35000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+      "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -247,7 +248,8 @@ class _Storage extends _StorageCore {
       executionTrace._addTraceStep(
         codeId: "#35200",
         shortDesc:
-            "The ${debugObjHtml(action)}.performBackendOperation() method was called with an error!",
+        "The ${debugObjHtml(
+            action)}.performBackendOperation() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -293,7 +295,7 @@ class _Storage extends _StorageCore {
   // Show Dialog then freeze Shelf Reaction until closed.
   @_RootMethodAnnotation()
   Future<DialogDeferralResult<V?>>
-      showDialogAndDeferExternalShelfEventsUntilClosed<V>({
+  showDialogAndDeferExternalShelfEventsUntilClosed<V>({
     required String path,
     required FaRouteBuilder builder,
   }) async {
@@ -316,9 +318,9 @@ class _Storage extends _StorageCore {
   // openDrawerThenFreezeQueuedEventsUntil Closed (OLD)
   @_RootMethodAnnotation()
   Future<void> openDrawerAndDeferExternalShelfEventsUntilClosed(
-    BuildContext context, {
-    bool showSuggestionIfNeed = true,
-  }) async {
+      BuildContext context, {
+        bool showSuggestionIfNeed = true,
+      }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: 'openDrawerAndDeferExternalShelfEventsUntilClosed',
@@ -339,9 +341,9 @@ class _Storage extends _StorageCore {
   // openEndDrawerThenFreezeReactionBetweenShelvesUntil Closed
   @_RootMethodAnnotation()
   Future<void> openEndDrawerAndDeferExternalShelfEventsUntilClosed(
-    BuildContext context, {
-    bool showSuggestionIfNeed = true,
-  }) async {
+      BuildContext context, {
+        bool showSuggestionIfNeed = true,
+      }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: 'openEndDrawerAndDeferExternalShelfEventsUntilClosed',
