@@ -5,7 +5,7 @@ import '../action/storage_backend_action.dart';
 import '../typedef/typedefs.dart';
 
 class FireBackendEventsAction extends StorageBackendAction {
-  final List<Event> events;
+  final List<Type> events;
 
   FireBackendEventsAction({
     required super.needToConfirm,
@@ -17,7 +17,6 @@ class FireBackendEventsAction extends StorageBackendAction {
   StorageBackendActionConfig initDefaultConfig() {
     return StorageBackendActionConfig(
       emitEvents: events,
-      // afterBackendAction: AfterStorageBackendAction.query,
     );
   }
 

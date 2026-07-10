@@ -270,6 +270,18 @@ abstract class Scalar<
 
   // ***************************************************************************
 
+  /// Checks if this Block exposes or is associated with the given [type].
+  /// All comments are in English for global users to read.
+  bool _exposesDataType(Type type) {
+    // 1. Check against the core data types of the Block
+    if (type == VALUE) {
+      return true;
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+
   XScalar<VALUE> _createXScalar({
     required XFilterModel xFilterModel,
   }) {
@@ -283,11 +295,22 @@ abstract class Scalar<
   // ***************************************************************************
 
   // TODO: Rename.
-  List<Event> getOutsideDataTypesToListen() {
-    final List<Event> list = [];
-    //
-    list.addAll(config.onExternalShelfEvents.scalarLevelReactionOn);
-    //
+  // List<Event> getOutsideDataTypesToListen() {
+  //   final List<Event> list = [];
+  //   //
+  //   list.addAll(config.onExternalShelfEvents.scalarLevelReactionOn);
+  //   //
+  //   return list.toSet().toList();
+  // }
+
+  // TODO: Rename.
+  /// Returns the list of data types that this scalar wants to listen to from outside.
+  /// All comments are in English for global users to read.
+  List<Type> getOutsideDataTypesToListen() {
+    final List<Type> list = [];
+    for (var reaction in config.reactions) {
+      list.add(reaction.dataType);
+    }
     return list.toSet().toList();
   }
 

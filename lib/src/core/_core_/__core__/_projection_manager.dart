@@ -88,17 +88,16 @@ class _ProjectionManager {
 
   // ***************************************************************************
 
-  Set<Event> getProjectionEvents(Set<Event> originEvents) {
+  Set<Type> getProjectionEvents(Set<Type> originEvents) {
     final Set<Type> polyTypes = {};
-    for (Event event in originEvents) {
-      polyTypes.add(event.dataType);
-      final ProjectionFamily? family =
-      findProjectionFamilyByType(type: event.dataType);
+    for (Type event in originEvents) {
+      polyTypes.add(event);
+      final ProjectionFamily? family = findProjectionFamilyByType(type: event);
       if (family == null) {
         continue;
       }
       polyTypes.addAll(family._members);
     }
-    return polyTypes.map((type) => Event(type)).toSet();
+    return polyTypes;
   }
 }

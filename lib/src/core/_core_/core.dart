@@ -105,6 +105,9 @@ import '../enums/_tip_document.dart';
 import '../enums/_unified_item_refresh_policy.dart';
 import '../enums/_x_shelf_type.dart';
 import '../enums/after_backend_action.dart';
+import '../enums/block_reaction_target.dart';
+import '../enums/event_scope.dart';
+import '../enums/scalar_reaction_target.dart';
 import '../error/_block_error_info.dart';
 import '../error/_dev_error.dart';
 import '../error/_filter_error_info.dart';
@@ -330,8 +333,6 @@ part '_code_flow_/_trace_step.dart';
 part '_code_flow_/_func_call_info.dart';
 
 part '_code_flow_/_func_call_info_utils.dart';
-
-part '_config_/_event_configs.dart';
 
 part '_config_/_hook_config.dart';
 

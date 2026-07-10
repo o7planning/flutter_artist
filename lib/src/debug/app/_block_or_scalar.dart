@@ -131,7 +131,7 @@ class BlockOrScalar extends Equatable {
     }
   }
 
-  List<Event> getListenItemTypes() {
+  List<Type> getListenItemTypes() {
     if (block != null) {
       return block!.getOutsideDataTypesToListen();
     } else {

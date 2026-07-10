@@ -42,6 +42,8 @@ export 'src/core/built_in_ui/popup_sort_panel.dart';
 export 'src/core/built_in_ui/popup_sort_panel_style.dart';
 export 'src/core/built_in_ui/segmented_sort_panel.dart';
 export 'src/core/built_in_ui/segmented_sort_panel_style.dart';
+export 'src/core/enums/scalar_reaction_target.dart';
+export 'src/core/enums/block_reaction_target.dart';
 export 'src/core/enums/_action_confirmation_type.dart';
 export 'src/core/enums/_action_result_state.dart';
 export 'src/core/enums/_after_query_action.dart';

@@ -503,6 +503,25 @@ abstract class Block<
 
   // ***************************************************************************
 
+  /// Checks if this Block exposes or is associated with the given [type].
+  /// All comments are in English for global users to read.
+  bool _exposesDataType(Type type) {
+    // 1. Check against the core data types of the Block
+    if (type == ITEM || type == ITEM_DETAIL) {
+      return true;
+    }
+
+    // 2. Check against custom emitted events configured in BlockConfig
+    // (Mapping to the types this block is explicitly allowed to broadcast)
+    if (config.emitExternalShelfEvents.any((event) => event  == type)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // ***************************************************************************
+
   XBlock<ID, ITEM, ITEM_DETAIL> _createXBlock({
     required XFilterModel xFilterModel,
     required XFormModel? xFormModel,
@@ -517,14 +536,30 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Rename.
-  List<Event> getOutsideDataTypesToListen() {
-    List<Event> itemTypeEvents = [];
-    //
-    itemTypeEvents.addAll(config.onExternalShelfEvents.blockLevelReactionOn);
-    //
-    return itemTypeEvents.toSet().toList();
+
+  // // TODO: Rename.
+  // List<Event> getOutsideDataTypesToListen() {
+  //   List<Event> itemTypeEvents = [];
+  //   //
+  //   itemTypeEvents.addAll(config.onExternalShelfEvents.blockLevelReactionOn);
+  //   //
+  //   return itemTypeEvents.toSet().toList();
+  // }
+
+
+  // // TODO: Rename.
+  /// Returns the list of data types that this block wants to listen to from outside.
+  /// All comments are in English for global users to read.
+  List<Type> getOutsideDataTypesToListen() {
+    final List<Type> itemDataTypes = [];
+
+    for (var reaction in config.reactions) {
+      itemDataTypes.add(reaction.dataType);
+    }
+
+    return itemDataTypes.toSet().toList();
   }
+
 
   // ***************************************************************************
   // ***************************************************************************

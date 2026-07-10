@@ -1,5 +1,7 @@
 part of '../core.dart';
 
+int __shelfSequence = 0;
+
 abstract class Shelf extends _Core {
   Shelf get shelf => this;
 
@@ -90,7 +92,11 @@ abstract class Shelf extends _Core {
 
   int __lazyLoadId = 0;
 
+  late final int _shelfLocalId = __shelfSequence++;
+
   String get name => FlutterArtist.storage._getShelfName(runtimeType);
+
+  String get shelfId => "${name}_$_shelfLocalId";
 
   late final ui = _ShelfUiComponents(shelf: this);
 
@@ -183,138 +189,223 @@ abstract class Shelf extends _Core {
     //
     // -------- SHELF INTERNAL EVENTS ------------
     //
+    // for (String blockName in __blockMap.keys) {
+    //   Block listenerBlock = __blockMap[blockName]!;
+    //   // TODO: ERROR!!
+    //   if (listenerBlock
+    //       .config.onInternalShelfEvents.blockLevelSelfReactionEnabled) {
+    //     listenerBlock._internalEffectedShelfMembers
+    //         ._addRequeryBlock(listenerBlock);
+    //   }
+    //   // TODO: ERROR!!
+    //   if (listenerBlock
+    //       .config.onInternalShelfEvents.currentItemSelfReactionEnabled) {
+    //     listenerBlock._internalEffectedShelfMembers
+    //         ._addRefreshCurrItmBlock(listenerBlock);
+    //   }
+    //   // TODO: ERROR!!
+    //   for (Evt evt
+    //       in listenerBlock.config.onInternalShelfEvents.blockLevelReactionOn) {
+    //     // BLOCK EVENT:
+    //     if (evt.srcType == SrcType.block) {
+    //       Block? eventBlock = __blockMap[evt.srcName];
+    //       if (eventBlock == null) {
+    //         throw ___registerError(
+    //           "Configuration Error! --> No Block Name: '${evt.srcName}'. \n"
+    //           " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
+    //           " > config > executeBlockLevelReactionToEvts > '${evt.srcName}'.",
+    //         );
+    //       } else if (identical(listenerBlock, eventBlock)) {
+    //         throw ___registerError(
+    //           "Configuration Error! --> Do not use: '${evt.srcName}', let use 'selfReQueryable:true' property. \n"
+    //           " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
+    //           " > config > executeBlockLevelReactionToEvts > '${evt.srcName}'.",
+    //         );
+    //       }
+    //       // BLOCK EVENT
+    //       eventBlock._internalEffectedShelfMembers
+    //           ._addRequeryBlock(listenerBlock);
+    //     }
+    //     // SCALAR EVENT:
+    //     else if (evt.srcType == SrcType.scalar) {
+    //       Scalar? eventScalar = __scalarMap[evt.srcName];
+    //       if (eventScalar == null) {
+    //         throw ___registerError(
+    //           "Configuration Error! --> No Scalar Name: ${evt.srcName}. \n"
+    //           " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
+    //           " > config > executeScalarLevelReactionToEvts > '${evt.srcName}'.",
+    //         );
+    //       }
+    //       // SCALAR EVENT: update (Only One Events).
+    //       eventScalar._internalEffectedShelfMembers
+    //           ._addRequeryBlock(listenerBlock);
+    //     }
+    //   }
+    //   // TODO: ERROR!!
+    //   for (Evt evt
+    //       in listenerBlock.config.onInternalShelfEvents.itemLevelReactionOn) {
+    //     // BLOCK EVENT:
+    //     if (evt.srcType == SrcType.block) {
+    //       Block? eventBlock = __blockMap[evt.srcName];
+    //       if (eventBlock == null) {
+    //         throw ___registerError(
+    //           "Configuration Error! --> No Block Name: ${evt.srcName}. \n"
+    //           " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
+    //           " > config > executeItemLevelReactionToEvts > '${evt.srcName}'.",
+    //         );
+    //       } else if (identical(listenerBlock, eventBlock)) {
+    //         throw ___registerError(
+    //           "Configuration Error! --> Do not use: '${evt.srcName}', let use 'currentItemSelfRefreshable:true' property. \n"
+    //           " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
+    //           " > config > executeItemLevelReactionToEvts > '${evt.srcName}'.",
+    //         );
+    //       }
+    //       // BLOCK EVENTS
+    //       eventBlock._internalEffectedShelfMembers
+    //           ._addRefreshCurrItmBlock(listenerBlock);
+    //     }
+    //     // SCALAR EVENT:
+    //     else if (evt.srcType == SrcType.scalar) {
+    //       Scalar? eventScalar = __scalarMap[evt.srcName];
+    //       if (eventScalar == null) {
+    //         throw ___registerError(
+    //           "Configuration Error! --> No Scalar Name: ${evt.srcName}.\n"
+    //           " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
+    //           " > config > executeItemLevelReactionToEvts > '${evt.srcName}'.",
+    //         );
+    //       }
+    //       // SCALAR EVENT: update (Only One Events).
+    //       eventScalar._internalEffectedShelfMembers
+    //           ._addRefreshCurrItmBlock(listenerBlock);
+    //     }
+    //   }
+    // }
     for (String blockName in __blockMap.keys) {
       Block listenerBlock = __blockMap[blockName]!;
-      //
-      if (listenerBlock
-          .config.onInternalShelfEvents.blockLevelSelfReactionEnabled) {
-        listenerBlock._internalEffectedShelfMembers
-            ._addRequeryBlock(listenerBlock);
-      }
-      if (listenerBlock
-          .config.onInternalShelfEvents.currentItemSelfReactionEnabled) {
-        listenerBlock._internalEffectedShelfMembers
-            ._addRefreshCurrItmBlock(listenerBlock);
-      }
-      for (Evt evt
-          in listenerBlock.config.onInternalShelfEvents.blockLevelReactionOn) {
-        // BLOCK EVENT:
-        if (evt.srcType == SrcType.block) {
-          Block? eventBlock = __blockMap[evt.srcName];
-          if (eventBlock == null) {
-            throw ___registerError(
-              "Configuration Error! --> No Block Name: '${evt.srcName}'. \n"
-              " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-              " > config > executeBlockLevelReactionToEvts > '${evt.srcName}'.",
-            );
-          } else if (identical(listenerBlock, eventBlock)) {
-            throw ___registerError(
-              "Configuration Error! --> Do not use: '${evt.srcName}', let use 'selfReQueryable:true' property. \n"
-              " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-              " > config > executeBlockLevelReactionToEvts > '${evt.srcName}'.",
-            );
+
+      // Scan through the new unified reactions config inside the Block
+      for (var reaction in listenerBlock.config.reactions) {
+        // Find if the target data type event belongs to an internal Block emitter
+        for (Block eventBlock in __blockMap.values) {
+          // If the eventBlock produces or matches the data type the listener is looking for
+          // (Note: You can refine this check based on how your Block exposes its output data types)
+          if (eventBlock._exposesDataType(reaction.dataType)) {
+            if (identical(listenerBlock, eventBlock)) {
+              if (reaction.target == BlockReactionTarget.block) {
+                listenerBlock._internalEffectedShelfMembers
+                    ._addRequeryBlock(listenerBlock);
+              } else if (reaction.target == BlockReactionTarget.currentItem) {
+                listenerBlock._internalEffectedShelfMembers
+                    ._addRefreshCurrItmBlock(listenerBlock);
+              }
+            } else {
+              // Cross-block internal reaction within the same shelf
+              if (reaction.target == BlockReactionTarget.block) {
+                eventBlock._internalEffectedShelfMembers
+                    ._addRequeryBlock(listenerBlock);
+              } else if (reaction.target == BlockReactionTarget.currentItem) {
+                eventBlock._internalEffectedShelfMembers
+                    ._addRefreshCurrItmBlock(listenerBlock);
+              }
+            }
           }
-          // BLOCK EVENT
-          eventBlock._internalEffectedShelfMembers
-              ._addRequeryBlock(listenerBlock);
         }
-        // SCALAR EVENT:
-        else if (evt.srcType == SrcType.scalar) {
-          Scalar? eventScalar = __scalarMap[evt.srcName];
-          if (eventScalar == null) {
-            throw ___registerError(
-              "Configuration Error! --> No Scalar Name: ${evt.srcName}. \n"
-              " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-              " > config > executeScalarLevelReactionToEvts > '${evt.srcName}'.",
-            );
+
+        // Find if the target data type event belongs to an internal Scalar emitter
+        for (Scalar eventScalar in __scalarMap.values) {
+          if (eventScalar._exposesDataType(reaction.dataType)) {
+            if (reaction.target == BlockReactionTarget.block) {
+              eventScalar._internalEffectedShelfMembers
+                  ._addRequeryBlock(listenerBlock);
+            } else if (reaction.target == BlockReactionTarget.currentItem) {
+              eventScalar._internalEffectedShelfMembers
+                  ._addRefreshCurrItmBlock(listenerBlock);
+            }
           }
-          // SCALAR EVENT: update (Only One Events).
-          eventScalar._internalEffectedShelfMembers
-              ._addRequeryBlock(listenerBlock);
-        }
-      }
-      //
-      for (Evt evt
-          in listenerBlock.config.onInternalShelfEvents.itemLevelReactionOn) {
-        // BLOCK EVENT:
-        if (evt.srcType == SrcType.block) {
-          Block? eventBlock = __blockMap[evt.srcName];
-          if (eventBlock == null) {
-            throw ___registerError(
-              "Configuration Error! --> No Block Name: ${evt.srcName}. \n"
-              " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-              " > config > executeItemLevelReactionToEvts > '${evt.srcName}'.",
-            );
-          } else if (identical(listenerBlock, eventBlock)) {
-            throw ___registerError(
-              "Configuration Error! --> Do not use: '${evt.srcName}', let use 'currentItemSelfRefreshable:true' property. \n"
-              " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-              " > config > executeItemLevelReactionToEvts > '${evt.srcName}'.",
-            );
-          }
-          // BLOCK EVENTS
-          eventBlock._internalEffectedShelfMembers
-              ._addRefreshCurrItmBlock(listenerBlock);
-        }
-        // SCALAR EVENT:
-        else if (evt.srcType == SrcType.scalar) {
-          Scalar? eventScalar = __scalarMap[evt.srcName];
-          if (eventScalar == null) {
-            throw ___registerError(
-              "Configuration Error! --> No Scalar Name: ${evt.srcName}.\n"
-              " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-              " > config > executeItemLevelReactionToEvts > '${evt.srcName}'.",
-            );
-          }
-          // SCALAR EVENT: update (Only One Events).
-          eventScalar._internalEffectedShelfMembers
-              ._addRefreshCurrItmBlock(listenerBlock);
         }
       }
     }
     //
+    // for (String scalarName in __scalarMap.keys) {
+    //   Scalar listenerScalar = __scalarMap[scalarName]!;
+    //   if (listenerScalar
+    //       .config.onInternalShelfEvents.scalarLevelSelfReactionEnabled) {
+    //     listenerScalar._internalEffectedShelfMembers
+    //         ._addRequeryScalar(listenerScalar);
+    //   }
+    //   for (Evt evt in listenerScalar
+    //       .config.onInternalShelfEvents.scalarLevelReactionOn) {
+    //     // BLOCK EVENT:
+    //     if (evt.srcType == SrcType.block) {
+    //       Block? eventBlock = __blockMap[evt.srcName];
+    //       if (eventBlock == null) {
+    //         throw ___registerError(
+    //           "Configuration Error! --> No Block Name: ${evt.srcName}. \n"
+    //           " ${getClassName(listenerScalar.shelf)} > defineShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
+    //           " > config > executeBlockLevelReactionToEvts > '${evt.srcName}'.",
+    //         );
+    //       }
+    //       // BLOCK EVENT:
+    //       eventBlock._internalEffectedShelfMembers
+    //           ._addRequeryScalar(listenerScalar);
+    //     }
+    //     // SCALAR EVENT:
+    //     else if (evt.srcType == SrcType.scalar) {
+    //       Scalar? eventScalar = __scalarMap[evt.srcName];
+    //       if (eventScalar == null) {
+    //         throw ___registerError(
+    //           "Configuration Error! --> No Scalar Name: ${evt.srcName}. \n"
+    //           " ${getClassName(listenerScalar.shelf)} > defineShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
+    //           " > config > executeScalarLevelReactionToEvts > '${evt.srcName}'.",
+    //         );
+    //       } else if (identical(listenerScalar, eventScalar)) {
+    //         throw ___registerError(
+    //           "Configuration Error! --> Do not use: '${evt.srcName}', let use 'selfReQueryable:true' property.\n"
+    //           " ${getClassName(listenerScalar.shelf)} > defineShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
+    //           " > config > executeScalarLevelReactionToEvts > '${evt.srcName}'.",
+    //         );
+    //       }
+    //       // SCALAR EVENT: update (Only One Events).
+    //       eventScalar._internalEffectedShelfMembers
+    //           ._addRequeryScalar(listenerScalar);
+    //     }
+    //   }
+    // }
+
+
+    //
+    // -------- SHELF INTERNAL SCALAR EVENTS ------------
+    //
     for (String scalarName in __scalarMap.keys) {
       Scalar listenerScalar = __scalarMap[scalarName]!;
-      if (listenerScalar
-          .config.onInternalShelfEvents.scalarLevelSelfReactionEnabled) {
-        listenerScalar._internalEffectedShelfMembers
-            ._addRequeryScalar(listenerScalar);
-      }
-      for (Evt evt in listenerScalar
-          .config.onInternalShelfEvents.scalarLevelReactionOn) {
-        // BLOCK EVENT:
-        if (evt.srcType == SrcType.block) {
-          Block? eventBlock = __blockMap[evt.srcName];
-          if (eventBlock == null) {
-            throw ___registerError(
-              "Configuration Error! --> No Block Name: ${evt.srcName}. \n"
-              " ${getClassName(listenerScalar.shelf)} > defineShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
-              " > config > executeBlockLevelReactionToEvts > '${evt.srcName}'.",
-            );
+
+      // Scan through the new unified reactions configuration inside the Scalar
+      for (var reaction in listenerScalar.config.reactions) {
+        // Find if the target data type event belongs to an internal Block emitter
+        for (Block eventBlock in __blockMap.values) {
+          if (eventBlock._exposesDataType(reaction.dataType)) {
+            if (reaction.target == ScalarReactionTarget.scalar) {
+              eventBlock._internalEffectedShelfMembers
+                  ._addRequeryScalar(listenerScalar);
+            }
           }
-          // BLOCK EVENT:
-          eventBlock._internalEffectedShelfMembers
-              ._addRequeryScalar(listenerScalar);
         }
-        // SCALAR EVENT:
-        else if (evt.srcType == SrcType.scalar) {
-          Scalar? eventScalar = __scalarMap[evt.srcName];
-          if (eventScalar == null) {
-            throw ___registerError(
-              "Configuration Error! --> No Scalar Name: ${evt.srcName}. \n"
-              " ${getClassName(listenerScalar.shelf)} > defineShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
-              " > config > executeScalarLevelReactionToEvts > '${evt.srcName}'.",
-            );
-          } else if (identical(listenerScalar, eventScalar)) {
-            throw ___registerError(
-              "Configuration Error! --> Do not use: '${evt.srcName}', let use 'selfReQueryable:true' property.\n"
-              " ${getClassName(listenerScalar.shelf)} > defineShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
-              " > config > executeScalarLevelReactionToEvts > '${evt.srcName}'.",
-            );
+
+        // Find if the target data type event belongs to an internal Scalar emitter
+        for (Scalar eventScalar in __scalarMap.values) {
+          if (eventScalar._exposesDataType(reaction.dataType)) {
+            if (identical(listenerScalar, eventScalar)) {
+              if (reaction.target == ScalarReactionTarget.scalar) {
+                listenerScalar._internalEffectedShelfMembers
+                    ._addRequeryScalar(listenerScalar);
+              }
+            } else {
+              if (reaction.target == ScalarReactionTarget.scalar) {
+                eventScalar._internalEffectedShelfMembers
+                    ._addRequeryScalar(listenerScalar);
+              }
+            }
           }
-          // SCALAR EVENT: update (Only One Events).
-          eventScalar._internalEffectedShelfMembers
-              ._addRequeryScalar(listenerScalar);
         }
       }
     }
@@ -611,7 +702,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   EffectedShelfMembers _calculateEffectedShelfMembersByEvents(
-    List<Event> events,
+    List<Type> events,
   ) {
     return _shelfExternalUtils.calculateEffectedShelfMembersByEvents(events);
   }

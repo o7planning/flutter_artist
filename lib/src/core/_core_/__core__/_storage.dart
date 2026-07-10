@@ -274,7 +274,7 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
 
   Future<StorageBackendActionResult> emitBackendActionEvents({
-    required List<Event> events,
+    required List<Type> events,
     required bool needToConfirm,
     String? actionInfo,
   }) async {

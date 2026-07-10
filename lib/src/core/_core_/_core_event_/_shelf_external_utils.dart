@@ -7,37 +7,37 @@ class _ShelfExternalUtils {
   _ShelfExternalUtils(this.shelf);
 
   // Test Cases: [99a]
+  /// Calculates which local members are affected by the emitted external data types.
+  /// All comments are in English for global users to read.
   EffectedShelfMembers calculateEffectedShelfMembersByEvents(
-    List<Event> events,
+    List<Type> affectedDataTypes,
   ) {
     EffectedShelfMembers ret = EffectedShelfMembers.ofNothing();
-    for (Block block in shelf.blocks) {
-      List<Event> typeEvents =
-          block.config.onExternalShelfEvents.blockLevelReactionOn;
-      if (_hasIntersection(events, typeEvents)) {
-        ret._addRequeryBlock(block);
-      }
-      // typeEvents = block.config.executeItemLevelReactionToEvents;
-      // if (_hasIntersection(events, typeEvents)) {
-      //   ret._addRefreshCurrItmBlock(block);
-      // }
-    }
-    for (Scalar scalar in shelf.scalars) {
-      List<Event> typeEvents =
-          scalar.config.onExternalShelfEvents.scalarLevelReactionOn;
-      if (_hasIntersection(events, typeEvents)) {
-        ret._addRequeryScalar(scalar);
-      }
-    }
-    return ret;
-  }
 
-  bool _hasIntersection(List<Event> typeEvent1s, List<Event> typeEvent2s) {
-    for (Event te1 in typeEvent1s) {
-      if (typeEvent2s.contains(te1)) {
-        return true;
+    // Evaluate Block reactions to external events
+    for (Block block in shelf.blocks) {
+      for (var reaction in block.config.reactions) {
+        if (affectedDataTypes.contains(reaction.dataType)) {
+          if (reaction.target == BlockReactionTarget.block) {
+            ret._addRequeryBlock(block);
+          } else if (reaction.target == BlockReactionTarget.currentItem) {
+            ret._addRefreshCurrItmBlock(block);
+          }
+        }
       }
     }
-    return false;
+
+    // Evaluate Scalar reactions to external events
+    for (Scalar scalar in shelf.scalars) {
+      for (var reaction in scalar.config.reactions) {
+        if (affectedDataTypes.contains(reaction.dataType)) {
+          if (reaction.target == ScalarReactionTarget.scalar) {
+            ret._addRequeryScalar(scalar);
+          }
+        }
+      }
+    }
+
+    return ret;
   }
 }

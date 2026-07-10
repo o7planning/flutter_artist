@@ -22,11 +22,9 @@ abstract class StorageBackendAction extends Action {
 }
 
 class StorageBackendActionConfig {
-  // final AfterStorageBackendAction afterBackendAction;
-  final List<Event> emitEvents;
+  final List<Type> emitEvents;
 
   const StorageBackendActionConfig({
     required this.emitEvents,
-    // required this.afterBackendAction,
   });
 }

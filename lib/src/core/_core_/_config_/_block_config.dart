@@ -15,16 +15,20 @@ class BlockConfig {
   final Pageable pageable;
 
   ///
-  final List<Event> emitExternalShelfEvents;
+  final List<Type> emitExternalShelfEvents;
 
   ///
   /// Reaction to External Events. Docs: 14769/27a
   ///
-  final ExternalShelfEventBlockRecipient onExternalShelfEvents;
+  // final ExternalShelfEventBlockRecipient onExternalShelfEvents;
 
-  final InternalShelfEventBlockRecipient onInternalShelfEvents;
+  // final InternalShelfEventBlockRecipient onInternalShelfEvents;
 
   final SortStrategy clientSideSortStrategy;
+
+  /// Unified event recipient configuration.
+  /// No more separation between internal and external configuration blocks.
+  final List<BlockEventReaction> reactions;
 
   BlockConfig({
     this.enforceParentLinkConstraint = false,
@@ -32,26 +36,17 @@ class BlockConfig {
         ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
     this.unifiedItemRefreshPolicy = UnifiedItemRefreshPolicy.auto,
     this.preventUnsavedChangesLoss = true,
-    List<Event>? emitExternalShelfEvents,
-    //
-    List<Event>? executeItemLevelReactionToEvents,
-    this.onExternalShelfEvents = const ExternalShelfEventBlockRecipient(
-      blockLevelReactionOn: [],
-    ),
-    this.onInternalShelfEvents = const InternalShelfEventBlockRecipient(
-      blockLevelReactionOn: [],
-      itemLevelReactionOn: [],
-    ),
+    List<Type>? emitExternalShelfEvents,
     //
     this.pageable = const Pageable(
       page: 1,
       pageSize: 20,
     ),
     this.clientSideSortStrategy = SortStrategy.none,
-  })
-      : this.onHideAction = BlockHiddenAction.none,
+    this.reactions = const [],
+  })  : this.onHideAction = BlockHiddenAction.none,
         emitExternalShelfEvents =
-        List.unmodifiable(emitExternalShelfEvents?.toSet() ?? []);
+            List.unmodifiable(emitExternalShelfEvents?.toSet() ?? []);
 
   BlockConfig copy() {
     return BlockConfig(
@@ -64,8 +59,9 @@ class BlockConfig {
       //
       emitExternalShelfEvents: emitExternalShelfEvents,
       //
-      onExternalShelfEvents: onExternalShelfEvents,
-      onInternalShelfEvents: onInternalShelfEvents,
+      // onExternalShelfEvents: onExternalShelfEvents,
+      // onInternalShelfEvents: onInternalShelfEvents,
+      reactions:reactions,
       //
       clientSideSortStrategy: clientSideSortStrategy,
     );
