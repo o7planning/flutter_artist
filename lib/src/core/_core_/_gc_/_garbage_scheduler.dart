@@ -7,7 +7,7 @@ class _GarbageScheduler {
 
   void start() {
     _timer ??= Timer.periodic(
-      Duration(seconds: FlutterArtist.garbageCollectionIntervalInSeconds),
+      FlutterArtist.appConfig.garbageCollectionInterval,
       (_) {
         FlutterArtist.garbageCollector.runOnce();
       },

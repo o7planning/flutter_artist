@@ -44,7 +44,6 @@ import '../../debug/app/_block_or_scalar.dart';
 import '../../debug/utils/_debug.dart';
 import '../action/_background_action.dart';
 import '../action/block_backend_action.dart';
-import '../action/block_multi_item_creation_backend_action.dart';
 import '../action/block_quick_item_creation_action.dart';
 import '../action/block_quick_item_update_action.dart';
 import '../action/scalar_quick_extra_data_load_action.dart';
@@ -157,7 +156,6 @@ import '../precheck/block_set_current_item_precheck.dart';
 import '../precheck/block_item_deletion_precheck.dart';
 import '../precheck/block_item_edit_precheck.dart';
 import '../precheck/block_items_deletion_precheck.dart';
-import '../precheck/block_multi_item_creation_backend_action_precheck.dart';
 import '../precheck/block_query_precheck.dart';
 import '../precheck/block_backend_action_precheck.dart';
 import '../precheck/block_quick_item_creation_precheck.dart';
@@ -175,7 +173,7 @@ import '../utils/_hive_utils.dart';
 import '../utils/_html_utils.dart';
 import '../utils/_locale_utils.dart';
 import '../utils/_name_utils.dart';
-import '../event/emit_backend_events_action.dart';
+import '../event/broadcast_backend_events_action.dart';
 import '../enums/_control_bar_item_type.dart';
 import '../notification/firebase/firebase_notification_service.dart';
 import '../utils/query_state_calculator.dart';
@@ -285,6 +283,10 @@ part '__core__/_projection_manager.dart';
 part '__core__/_storage_natural_query_queue.dart';
 
 part '_config_/_app_configuration.dart';
+
+part '_config_/_app_config.dart';
+
+part '_config_/_debug_register.dart';
 
 part '__core__/_projection_family.dart';
 
@@ -418,8 +420,6 @@ part '_core_x_/_x_shelf_/_x_shelf_prepare_form_to_create_item.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_clear_current_item.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_block_quick_multi_item_creation.dart';
-
 part '_core_x_/_x_shelf_/_x_shelf_block_quick_item_update.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_quick_item_creation.dart';
@@ -552,8 +552,6 @@ part '_task_result_/_block_quick_item_creation_result.dart';
 
 part '_task_result_/_block_quick_item_update_result.dart';
 
-part '_task_result_/_block_multi_item_creation_backend_action_result.dart';
-
 part '_task_result_/_form_model_data_load_result.dart';
 
 part '_task_result_/_filter_model_data_load_result.dart';
@@ -593,8 +591,6 @@ part '_task_unit_/_block_query_task_unit.dart';
 part '_task_unit_/_block_backend_action_task_unit.dart';
 
 part '_task_unit_/_block_quick_item_creation_task_unit.dart';
-
-part '_task_unit_/_block_multi_item_creation_backend_action_task_unit.dart';
 
 part '_task_unit_/_block_quick_item_update_task_unit.dart';
 
@@ -991,10 +987,6 @@ class _BlockBackendActionAnnotation {
 
 class _BlockQuickItemCreationActionAnnotation {
   const _BlockQuickItemCreationActionAnnotation();
-}
-
-class _BlockMultiItemCreationBackendActionAnnotation {
-  const _BlockMultiItemCreationBackendActionAnnotation();
 }
 
 class _BlockQuickItemUpdateActionAnnotation {

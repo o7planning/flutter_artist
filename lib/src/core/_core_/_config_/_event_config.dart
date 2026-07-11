@@ -51,8 +51,9 @@ class BlockEventReaction {
   final BlockReactionTarget target;
 
   /// Custom filter strategy to evaluate if this block should react.
-  /// [isLocal] tells the block if the event originated from its own Shelf.
-  final bool Function(ArtistEvent event, bool isLocal)? shouldTrigger;
+  /// [isShelfInternalEvent] tells the block if the event originated from its own Shelf.
+  final bool Function(ArtistEvent event, bool isShelfInternalEvent)?
+      shouldTrigger;
 
   const BlockEventReaction({
     required this.dataType,

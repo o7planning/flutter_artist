@@ -5,6 +5,7 @@ final FlutterArtist = _FlutterArtist();
 const _isOverlayMode = false;
 
 class _FlutterArtist extends _Core {
+  bool __started = false;
   bool _lockAddMoreQuery = false;
   _FlutterArtistNavigatorObserver? __navigatorObserver;
 
@@ -26,14 +27,6 @@ class _FlutterArtist extends _Core {
 
   final debugRegister = _DebugRegister();
 
-  var __debugOptions = DebugOptions();
-
-  DebugOptions get debugOptions => __debugOptions;
-
-  var __consoleDebugOptions = ConsoleDebugOptions(enabled: false);
-
-  ConsoleDebugOptions get consoleDebugOptions => __consoleDebugOptions;
-
   final clock = FaSystemClock();
 
   final garbageCollector = _GarbageCollector();
@@ -50,22 +43,13 @@ class _FlutterArtist extends _Core {
 
   DebugXRootQueue get debugTaskUnitQueue => _rootQueue.toDebugXRootQueue();
 
-  int _notificationFetchPeriodInSeconds = 60;
-
-  int get notificationFetchPeriodInSeconds => _notificationFetchPeriodInSeconds;
-
-  int _garbageCollectionIntervalInSeconds = 30;
-
-  int get garbageCollectionIntervalInSeconds =>
-      _garbageCollectionIntervalInSeconds;
-
-  FlutterArtistOverlayAdapter? __overlayAdapter;
-
   late final GlobalsManager globalsManager;
 
   late final LocaleManager localeManager;
 
   late final ThemeManager themeManager;
+
+  late final RuntimeAppConfig appConfig;
 
   BlockAfterQueryDirective _defaultAfterQueryDirective =
       BlockAfterQueryDirective.setAnItemAsCurrentIfNeed;
@@ -82,8 +66,6 @@ class _FlutterArtist extends _Core {
   final List<INotificationListener> _notificationListeners = [];
 
   final List<Future<dynamic>> __futureTaskList = [];
-
-  late final ShowDebugNetworkInspector _showDebugNetworkInspector;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -132,15 +114,6 @@ class _FlutterArtist extends _Core {
     storage._recentShelves.clear();
     await globalsManager._logout();
     offAllAndGotoRoute();
-  }
-
-  FlutterArtistOverlayAdapter get overlayAdapter {
-    if (__overlayAdapter == null) {
-      throw DebugUtils.getFatalError(
-          " >>>>>> $FlutterArtistOverlayAdapter is not registered!. "
-          "\n >>>>>> You need to call $FlutterArtist.start() in main.dart");
-    }
-    return __overlayAdapter!;
   }
 
   // docs: [14683].
@@ -212,43 +185,22 @@ class _FlutterArtist extends _Core {
     required FlutterArtistRouter router,
   }) async {
     print("[FLUTTER-ARTIST] - FlutterArtist.start() - BEGIN");
-    if (__overlayAdapter != null) {
-      throw DebugUtils.getFatalError(
-          "${getClassName(__overlayAdapter)} already registered!");
+    if (__started) {
+      throw DebugUtils.getFatalError("App already started!");
     }
+    __started = true;
+    //
+    appConfig = RuntimeAppConfig.fromConfiguration(appConfiguration);
     this.router = router;
     // IMPORTANT: Call this before using ExecutionTrace.
     codeFlowLogger = CodeFlowLogger(
-      codeFlowRetentionPeriodInSeconds:
-          appConfiguration.codeFlowRetentionPeriod.inSeconds,
+      codeFlowRetentionPeriod: appConfig.codeFlowRetentionPeriod,
     );
 
     final executionTrace =
         FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
     try {
-      await __start(
-        executionTrace: executionTrace,
-        appConfiguration: appConfiguration,
-        showDebugNetworkInspector: appConfiguration.showDebugNetworkInspector,
-        debugOptions: appConfiguration.debugOptions,
-        consoleDebugOptions: appConfiguration.consoleDebugOptions,
-        overlayAdapter: appConfiguration.overlayAdapter,
-        notificationAdapter: appConfiguration.notificationAdapter,
-        loginLogoutAdapter: appConfiguration.loginLogoutAdapter,
-        globalDataAdapter: appConfiguration.globalDataAdapter,
-        localeAdapter: FlutterArtistLocaleAdapter(
-          updateLocale: (Locale locale) async {
-            await appConfiguration.updateLocale(locale: locale);
-          },
-        ),
-        garbageCollectionIntervalInSeconds:
-            appConfiguration.garbageCollectionInterval.inSeconds,
-        notificationFetchPeriodInSeconds:
-            appConfiguration.notificationFetchInterval.inSeconds,
-        maxStoredLogEntryCount: appConfiguration.maxStoredLogEntryCount,
-        codeFlowRetentionPeriodInSeconds:
-            appConfiguration.codeFlowRetentionPeriod.inSeconds,
-      );
+      await __start(executionTrace: executionTrace);
       garbageScheduler.start();
     } catch (e, _) {
       executionTrace.printToConsole();
@@ -261,55 +213,24 @@ class _FlutterArtist extends _Core {
 
   Future<void> __start({
     required ExecutionTrace executionTrace,
-    required AppConfiguration appConfiguration,
-    required ShowDebugNetworkInspector showDebugNetworkInspector,
-    required DebugOptions? debugOptions,
-    required ConsoleDebugOptions? consoleDebugOptions,
-    required FlutterArtistOverlayAdapter overlayAdapter,
-    required FlutterArtistNotificationAdapter? notificationAdapter,
-    required FlutterArtistLoginLogoutAdapter loginLogoutAdapter,
-    required FlutterArtistGlobalDataAdapter globalDataAdapter,
-    required FlutterArtistLocaleAdapter localeAdapter,
-    required int garbageCollectionIntervalInSeconds,
-    required int notificationFetchPeriodInSeconds,
-    required int maxStoredLogEntryCount,
-    required int codeFlowRetentionPeriodInSeconds,
   }) async {
     await FaIsarStorage.init();
-    logger = Logger(maxStoredLogEntryCount: maxStoredLogEntryCount);
-    _showDebugNetworkInspector = showDebugNetworkInspector;
+    logger = Logger(maxStoredLogEntryCount: appConfig.maxStoredLogEntryCount);
     //
     executionTrace._addTraceStep(
       codeId: "#S0000",
       shortDesc: "Begin FlutterArtist Config...\n"
           "Note: You see this debug information because the <b>FlutterArtist.start()</b> method is called in <b>main.dart</b>.",
-      parameters: {
-        "appConfiguration": appConfiguration,
-        "overlayAdapter": overlayAdapter,
-        "loginLogoutAdapter": loginLogoutAdapter,
-        "globalDataAdapter": globalDataAdapter,
-        "notificationAdapter": notificationAdapter,
-        "maxStoredLogEntryCount": maxStoredLogEntryCount,
-        "notificationFetchPeriodInSeconds": notificationFetchPeriodInSeconds,
-      },
+      parameters: {},
       traceStepType: TraceStepType.debug,
       tipDocument: TipDocument.start,
     );
-    //
-    __overlayAdapter = overlayAdapter;
-    //
-    if (debugOptions != null) {
-      __debugOptions = debugOptions;
-    }
-    if (consoleDebugOptions != null) {
-      __consoleDebugOptions = consoleDebugOptions;
-    }
     //
     executionTrace._addTraceStep(
       codeId: "#S0200",
       shortDesc: "Calling <b>storage._init()</b> with parameters:",
       parameters: {
-        "appConfiguration": appConfiguration,
+        "appConfig": appConfig,
       },
       traceStepType: TraceStepType.nonControllableCalling,
       tipDocument: TipDocument.appConfiguration,
@@ -317,7 +238,7 @@ class _FlutterArtist extends _Core {
     // This method may throw error and stop app.
     storage._init(
       executionTrace: executionTrace,
-      appConfiguration: appConfiguration,
+      appConfig: appConfig,
     );
     //
     // Global Manager:
@@ -328,8 +249,8 @@ class _FlutterArtist extends _Core {
       tipDocument: TipDocument.globalData,
     );
     globalsManager = GlobalsManager._(
-      loginLogoutAdapter: loginLogoutAdapter,
-      globalDataAdapter: globalDataAdapter,
+      loginLogoutAdapter: appConfig._loginLogoutAdapter,
+      globalDataAdapter: appConfig._globalDataAdapter,
     );
     executionTrace._addTraceStep(
       codeId: "#S0500",
@@ -351,7 +272,11 @@ class _FlutterArtist extends _Core {
     //
     localeManager = LocaleManager._(
       globalsManager: globalsManager,
-      localeAdapter: localeAdapter,
+      localeAdapter: FlutterArtistLocaleAdapter(
+        updateLocale: (Locale locale) async {
+          await appConfig._updateLocale(locale: locale);
+        },
+      ),
     );
     //
     final ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
@@ -377,21 +302,20 @@ class _FlutterArtist extends _Core {
         shortDesc: "Got stored @locale: ${debugObjHtml(locale)}.",
       );
     }
-    _garbageCollectionIntervalInSeconds = garbageCollectionIntervalInSeconds;
     //
     // Notification:
     //
-    _notificationFetchPeriodInSeconds = notificationFetchPeriodInSeconds;
-    if (notificationAdapter == null) {
+    final notiAdapter = appConfig._notificationAdapter;
+    if (notiAdapter == null) {
       __notificationService = null;
-    } else if (notificationAdapter is SimpleNotificationAdapter) {
-      __notificationService = SimpleNotificationService(notificationAdapter);
-    } else if (notificationAdapter is FirebaseNotificationAdapter) {
-      __notificationService = FirebaseNotificationService(notificationAdapter);
-    } else if (notificationAdapter is SSENotificationAdapter) {
-      __notificationService = SSENotificationService(notificationAdapter);
+    } else if (notiAdapter is SimpleNotificationAdapter) {
+      __notificationService = SimpleNotificationService(notiAdapter);
+    } else if (notiAdapter is FirebaseNotificationAdapter) {
+      __notificationService = FirebaseNotificationService(notiAdapter);
+    } else if (notiAdapter is SSENotificationAdapter) {
+      __notificationService = SSENotificationService(notiAdapter);
     } else {
-      throw UnimplementedError("TODO: Notification: $notificationAdapter");
+      throw UnimplementedError("TODO: Notification: $notiAdapter");
     }
     //
     executionTrace._addTraceStep(
@@ -473,21 +397,21 @@ class _FlutterArtist extends _Core {
   Future<void> _runWithOverlay({
     required Future<dynamic> Function() asyncFunction,
   }) async {
-    await overlayAdapter.runWithOverlay(
+    await appConfig._overlayAdapter.runWithOverlay(
       opacity: _isOverlayMode ? 0.3 : 0.02,
       asyncFunction: asyncFunction,
     );
   }
 
   bool get isOverlayOpen {
-    return overlayAdapter.isOverlayOpen;
+    return appConfig._overlayAdapter.isOverlayOpen;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   Future<void> showDebugNetworkInspector() async {
-    await _showDebugNetworkInspector(FlutterArtistCore.context);
+    await appConfig._showDebugNetworkInspector(FlutterArtistCore.context);
   }
 
   // ***************************************************************************

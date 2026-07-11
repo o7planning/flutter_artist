@@ -511,9 +511,9 @@ abstract class Block<
       return true;
     }
 
-    // 2. Check against custom emitted events configured in BlockConfig
+    // 2. Check against custom broadcasted events configured in BlockConfig
     // (Mapping to the types this block is explicitly allowed to broadcast)
-    if (config.emitExternalShelfEvents.any((event) => event  == type)) {
+    if (config.broadcastExternalShelfEvents.any((event) => event == type)) {
       return true;
     }
 
@@ -536,30 +536,44 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-
-  // // TODO: Rename.
-  // List<Event> getOutsideDataTypesToListen() {
-  //   List<Event> itemTypeEvents = [];
-  //   //
-  //   itemTypeEvents.addAll(config.onExternalShelfEvents.blockLevelReactionOn);
-  //   //
-  //   return itemTypeEvents.toSet().toList();
-  // }
-
-
-  // // TODO: Rename.
-  /// Returns the list of data types that this block wants to listen to from outside.
-  /// All comments are in English for global users to read.
-  List<Type> getOutsideDataTypesToListen() {
-    final List<Type> itemDataTypes = [];
-
-    for (var reaction in config.reactions) {
-      itemDataTypes.add(reaction.dataType);
-    }
-
-    return itemDataTypes.toSet().toList();
+  Set<Type> getDeclaredBroadcastDataTypes() {
+    return config.broadcastExternalShelfEvents.toSet();
   }
 
+  Set<Type> getResolvedBroadcastDataTypes() {
+    final declaredTypes = getDeclaredBroadcastDataTypes();
+    final Set<Type> allEffectiveTypes = {...declaredTypes, ITEM, ITEM_DETAIL};
+
+    for (var family in FlutterArtist.appConfig.projectionFamilies) {
+      if (declaredTypes.any((type) => family.members.contains(type))) {
+        allEffectiveTypes.addAll(family.members);
+      }
+    }
+    return allEffectiveTypes;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Returns the data types explicitly declared in the configuration
+  /// that this block should react to.
+  Set<Type> getDeclaredReactionDataTypes() {
+    return config.reactions.map((r) => r.dataType).toSet();
+  }
+
+  /// Resolves and returns all data types—including those within the same
+  /// [ProjectionFamily]—that will actually trigger a reaction in this block.
+  Set<Type> getResolvedReactionDataTypes() {
+    final declaredTypes = getDeclaredReactionDataTypes();
+    final Set<Type> allEffectiveTypes = {...declaredTypes};
+
+    for (var family in FlutterArtist.appConfig.projectionFamilies) {
+      if (declaredTypes.any((type) => family.members.contains(type))) {
+        allEffectiveTypes.addAll(family.members);
+      }
+    }
+    return allEffectiveTypes;
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -704,7 +718,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _emitBlockHidden() {
+  void _broadcastBlockHidden() {
     // FlutterArtist.codeFlowLogger._addEvent(
     //   ownerClassInstance: this,
     //   event: "Block '${getClassName(this)}' just hides all UI Components!",
@@ -2387,12 +2401,12 @@ abstract class Block<
         codeId: "#08180",
         shortDesc:
             "${debugObjHtml(this)} > Fire event after deleting ${_debugItemTypeHtml()}($itemId).",
-        traceStepType: TraceStepType.emitEvent,
+        traceStepType: TraceStepType.broadcastEvent,
       );
       //
       // External React:
       //
-      __emitEventFromBlockToOtherShelves(
+      __broadcastEventFromBlockToOtherShelves(
         executionTrace: executionTrace,
         eventType: EventType.deletion,
       );
@@ -3032,10 +3046,10 @@ abstract class Block<
         codeId: "#42900",
         shortDesc:
             "${debugObjHtml(this)} > Fire event after deleting. (${deletionResult.deletedItems.length} items deleted!).",
-        traceStepType: TraceStepType.emitEvent,
+        traceStepType: TraceStepType.broadcastEvent,
       );
       //
-      __emitEventFromBlockToOtherShelves(
+      __broadcastEventFromBlockToOtherShelves(
         executionTrace: executionTrace,
         eventType: EventType.deletion,
       );
@@ -3296,168 +3310,6 @@ abstract class Block<
   // ***************************************************************************
 
   @_TaskUnitMethodAnnotation()
-  @_BlockMultiItemCreationBackendActionAnnotation()
-  Future<bool> _unitCreateMultiItemBackendAction({
-    required ExecutionTrace executionTrace,
-    required TaskType taskType,
-    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockMultiItemCreationBackendAction<ID> action,
-  }) async {
-    __assertThisXBlock(thisXBlock);
-    //
-    executionTrace._addTraceStep(
-      codeId: "#44000",
-      shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
-      traceStepType: TraceStepType.debug,
-    );
-    //
-    final FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
-    //
-    ApiResult<ListData<ID>> actionResult;
-    try {
-      executionTrace._addTraceStep(
-        codeId: "#44100",
-        shortDesc: "Calling ${debugObjHtml(action)}.performCreateMultiItems().",
-        parameters: {
-          "parentBlockItem": parent?.currentItem,
-          "filterCriteria": blockCurrentFilterCriteria,
-        },
-        traceStepType: TraceStepType.controllableCalling,
-      );
-      //
-      actionResult = await action.performCreateMultiItems(
-        parentBlockItem: parent?.currentItem,
-      );
-    } catch (e, stackTrace) {
-      final ErrorInfo errorInfo = _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(action)}.performCreateMultiItems',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-        tipDocument: TipDocument
-            .blockMultiItemCreationBackendActionPerformCreateMultiItems,
-      );
-      executionTrace._addTraceStep(
-        codeId: "#44200",
-        shortDesc:
-            "The ${debugObjHtml(action)}.performCreateMultiItems() method was called with an error!",
-        errorInfo: errorInfo,
-      );
-      //
-      return false;
-    }
-    if (actionResult.error != null) {
-      _handleRestError(
-        shelf: shelf,
-        methodName: "${getClassName(action)}.performCreateMultiItems",
-        message: actionResult.error!.errorMessage,
-        errorDetails: actionResult.error!.errorDetails,
-        showSnackBar: true,
-        tipDocument: null,
-      );
-      return false;
-    }
-    // *new*
-    ApiResult<ListData<ITEM>?> listDataResult;
-    // Call performQueryByItemIds()
-    try {
-      final List<ID> performQueryItemIds = actionResult.data?.items ?? [];
-      final SortableCriteria sortableCriteria;
-      if (serverSideSortModel != null) {
-        sortableCriteria = serverSideSortModel!.getSortableCriteria();
-      } else {
-        sortableCriteria = SortableCriteria._empty();
-      }
-      //
-      //
-      executionTrace._addTraceStep(
-        codeId: "#44300",
-        shortDesc: "Calling ${debugObjHtml(this)}.performQueryByItemIds().",
-        parameters: {
-          "parentBlockItem": parent?.currentItem,
-          "filterCriteria": blockCurrentFilterCriteria,
-          "sortableCriteria": sortableCriteria,
-          "performQueryItemIds": performQueryItemIds,
-        },
-        traceStepType: TraceStepType.controllableCalling,
-      );
-      debug.__performQueryByItemIdsCount++;
-      debug.requeryCondition._lastPerformQueryItemIds =
-          performQueryItemIds.toSet();
-
-      // #######################################################################
-      // ############# XOA DI ##################################################
-      // #######################################################################
-      listDataResult = await performQueryByItemIds(
-        parentBlockCurrentItem: parent?.currentItem,
-        filterCriteria: blockCurrentFilterCriteria,
-        sortableCriteria: sortableCriteria,
-        itemIds: performQueryItemIds,
-      );
-    } catch (e, stackTrace) {
-      final ErrorInfo errorInfo = _handleError(
-        shelf: shelf,
-        methodName: '${getClassName(this)}.performQueryByItemIds',
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-        tipDocument: TipDocument
-            .blockMultiItemCreationBackendActionPerformCreateMultiItems,
-      );
-      executionTrace._addTraceStep(
-        codeId: "#44400",
-        shortDesc:
-            "The ${debugObjHtml(this)}.performQueryByItemIds() method was called with an error!",
-        errorInfo: errorInfo,
-      );
-      //
-      return false;
-    }
-    //
-    try {
-      executionTrace._addTraceStep(
-        codeId: "#44700",
-        shortDesc:
-            "Calling ${debugObjHtml(this)}._processCreateMultiItemActionResult()..",
-        traceStepType: TraceStepType.nonControllableCalling,
-      );
-      // TODO: Hardcode.
-      final viewportSyncStrategy = BlockViewportSyncStrategy.forceNativeQuery;
-      //
-      return await _processCreateMultiItemActionResult(
-        executionTrace: executionTrace,
-        thisXBlock: thisXBlock,
-        blockCurrentFilterCriteria: blockCurrentFilterCriteria,
-        calledMethodName: "${getClassName(action)}.performCreateMultiItems",
-        result: listDataResult,
-        viewportSyncStrategy: viewportSyncStrategy,
-      );
-    } catch (e, stackTrace) {
-      final ErrorInfo errorInfo = _handleError(
-        shelf: shelf,
-        methodName: "${getClassName(action)}.performCreateMultiItems",
-        error: e,
-        stackTrace: stackTrace,
-        showSnackBar: true,
-        tipDocument: TipDocument
-            .blockMultiItemCreationBackendActionPerformCreateMultiItems,
-      );
-      executionTrace._addTraceStep(
-        codeId: "#44800",
-        shortDesc:
-            "The ${debugObjHtml(this)}._processCreateMultiItemActionResult() method was called with an error!",
-        errorInfo: errorInfo,
-      );
-      //
-      return false;
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_TaskUnitMethodAnnotation()
   @_BlockQuickItemUpdateActionAnnotation()
   Future<void> _unitQuickUpdateItem({
     required ExecutionTrace executionTrace,
@@ -3648,9 +3500,9 @@ abstract class Block<
       codeId: "#45300",
       shortDesc:
           "${debugObjHtml(this)} > Fire event after execute backend action.",
-      traceStepType: TraceStepType.emitEvent,
+      traceStepType: TraceStepType.broadcastEvent,
     );
-    __emitEventFromBlockToOtherShelves(
+    __broadcastEventFromBlockToOtherShelves(
       executionTrace: executionTrace,
       eventType: EventType.unknown,
     );
@@ -3718,7 +3570,7 @@ abstract class Block<
       // TODO-Review.
       return;
     }
-    bool emitExternalShelfEvent = false;
+    bool broadcastExternalShelfEvent = false;
     final ITEM_DETAIL? savedItemDetail = result.data;
     //
     executionTrace._addTraceStep(
@@ -3731,12 +3583,12 @@ abstract class Block<
     if (savedItemDetail == null) {
       keepInList = false;
       if (isNew) {
-        emitExternalShelfEvent = false;
+        broadcastExternalShelfEvent = false;
       } else {
-        emitExternalShelfEvent = true;
+        broadcastExternalShelfEvent = true;
       }
     } else {
-      emitExternalShelfEvent = true;
+      broadcastExternalShelfEvent = true;
       //
       executionTrace._addTraceStep(
         codeId: "#16140",
@@ -3757,16 +3609,16 @@ abstract class Block<
       );
     }
     //
-    if (emitExternalShelfEvent) {
+    if (broadcastExternalShelfEvent) {
       executionTrace._addLineFlowSeparator();
       //
       executionTrace._addTraceStep(
         codeId: "#16200",
         shortDesc:
-            "${debugObjHtml(this)} > Save successful --> An event occurred --> checking if it should be emitted.",
-        traceStepType: TraceStepType.emitEvent,
+            "${debugObjHtml(this)} > Save successful --> An event occurred --> checking if it should be broadcasted.",
+        traceStepType: TraceStepType.broadcastEvent,
       );
-      __emitEventFromBlockToOtherShelves(
+      __broadcastEventFromBlockToOtherShelves(
         executionTrace: executionTrace,
         eventType: isNew ? EventType.creation : EventType.update,
       );
@@ -3985,7 +3837,7 @@ abstract class Block<
     //
     // External React:
     //
-    __emitEventFromBlockToOtherShelves(
+    __broadcastEventFromBlockToOtherShelves(
       executionTrace: executionTrace,
       eventType: EventType.creation,
     );
@@ -5250,106 +5102,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @Deprecated("TODO: Delete")
-  @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
-  @_BlockMultiItemCreationBackendActionAnnotation()
-  Future<BlockMultiItemCreationBackendActionResult>
-      executeMultiItemCreationBackendAction({
-    required BlockMultiItemCreationBackendAction<ID> action,
-  }) async {
-    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
-      ownerClassInstance: this,
-      methodName: "executeMultiItemCreationBackendAction",
-      parameters: {
-        "action": action,
-      },
-      isLibMethod: true,
-    );
-    //
-    final bool checkBusyTrue = true;
-    final bool checkAllowTrue = true;
-    //
-    executionTrace._addTraceStep(
-      codeId: "#74000",
-      shortDesc:
-          "Calling ${debugObjHtml(this)}.__canCreateMultiItem() to check before execute the action.",
-      parameters: {
-        "checkBusy": checkBusyTrue,
-        "checkAllow": checkAllowTrue,
-      },
-    );
-    //
-    // @Same-Code-Precheck-01
-    //
-    Actionable<BlockMultiItemCreationBackendActionPrecheck> actionable =
-        __canCreateMultiItem(
-      checkBusy: checkBusyTrue,
-      checkAllow: checkAllowTrue,
-    );
-    if (!actionable.yes) {
-      executionTrace._addTraceStep(
-        codeId: "#74040",
-        shortDesc: "Got @actionable:",
-        actionable: actionable,
-        traceStepType: TraceStepType.debug,
-      );
-      // _refreshErrorCount++;
-      _addErrorLogActionable(
-        shelf: shelf,
-        actionableFalse: actionable,
-        showErrSnackBar: true,
-        tipDocument: null,
-      );
-      return BlockMultiItemCreationBackendActionResult(
-        precheck: actionable.errCode,
-        errorInfo: actionable.errorInfo,
-      );
-    }
-    //
-    // Confirmation:
-    //
-    bool confirm = true;
-    if (action.needToConfirm) {
-      confirm = await _showActionConfirmation(
-        shelf: shelf,
-        defaultConfirmation: action.defaultConfirmation,
-        customConfirmation: action.createCustomConfirmation(),
-      );
-    }
-    if (!confirm) {
-      return BlockMultiItemCreationBackendActionResult(
-        precheck: BlockMultiItemCreationBackendActionPrecheck.cancelled,
-      );
-    }
-    //
-    final XShelf xShelf =
-        _XShelfBlockMultiItemCreationBackendAction(block: this);
-    //
-    final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-    //
-    executionTrace._addTraceStep(
-      codeId: "#74340",
-      shortDesc:
-          "Creating <b>_BlockMultiItemCreationBackendActionTaskUnit</b>.",
-      traceStepType: TraceStepType.addTaskUnit,
-    );
-    final _ResultedSTaskUnit taskUnit =
-        _BlockMultiItemCreationBackendActionTaskUnit(
-      xBlock: thisXBlock,
-      action: action,
-    );
-    //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
-    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
-    //
-    return taskUnit.taskResult;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   @_RootMethodAnnotation()
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickItemUpdateActionAnnotation()
@@ -5983,12 +5735,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __emitEventFromBlockToOtherShelves({
+  void __broadcastEventFromBlockToOtherShelves({
     required ExecutionTrace executionTrace,
     required EventType eventType,
   }) {
     // TODO: Chuyen di noi khac.
-    FlutterArtist.storage.ev._emitEventFromBlockToOtherShelves(
+    FlutterArtist.storage.ev._broadcastEventFromBlockToOtherShelves(
       executionTrace: executionTrace,
       eventType: eventType,
       eventBlock: this,
@@ -6468,59 +6220,6 @@ abstract class Block<
     }
     //
     return Actionable<BlockBackendActionPrecheck>.yes();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_PrecheckPrivateMethod()
-  Actionable<BlockMultiItemCreationBackendActionPrecheck> __canCreateMultiItem({
-    required bool checkBusy,
-    required bool checkAllow,
-  }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockMultiItemCreationBackendActionPrecheck>.no(
-        errCode: BlockMultiItemCreationBackendActionPrecheck.busy,
-      );
-    }
-    switch (dataState) {
-      case DataState.pending:
-        return Actionable<BlockMultiItemCreationBackendActionPrecheck>.no(
-          errCode:
-              BlockMultiItemCreationBackendActionPrecheck.blockInPendingState,
-        );
-      case DataState.error:
-        return Actionable<BlockMultiItemCreationBackendActionPrecheck>.no(
-          errCode:
-              BlockMultiItemCreationBackendActionPrecheck.blockInErrorState,
-        );
-      case DataState.none:
-        return Actionable<BlockMultiItemCreationBackendActionPrecheck>.no(
-          errCode: BlockMultiItemCreationBackendActionPrecheck.blockInNoneState,
-        );
-      case DataState.ready:
-        break;
-    }
-    //
-    if (checkAllow) {
-      CheckAllowResult result = __isItemCreationAllowed();
-      switch (result.result) {
-        case CheckAllow.allow:
-          return Actionable<BlockMultiItemCreationBackendActionPrecheck>.yes();
-        case CheckAllow.notAllow:
-          return Actionable<BlockMultiItemCreationBackendActionPrecheck>.no(
-            errCode: BlockMultiItemCreationBackendActionPrecheck.notAllow,
-          );
-        case CheckAllow.error:
-          return Actionable<BlockMultiItemCreationBackendActionPrecheck>.no(
-            errCode: BlockMultiItemCreationBackendActionPrecheck
-                .checkAllowMethodError,
-            errorInfo: result.errorInfo,
-          );
-      }
-    }
-    //
-    return Actionable<BlockMultiItemCreationBackendActionPrecheck>.yes();
   }
 
   // ***************************************************************************

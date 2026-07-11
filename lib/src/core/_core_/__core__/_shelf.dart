@@ -372,7 +372,6 @@ abstract class Shelf extends _Core {
     //   }
     // }
 
-
     //
     // -------- SHELF INTERNAL SCALAR EVENTS ------------
     //

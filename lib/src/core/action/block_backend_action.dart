@@ -12,10 +12,10 @@ abstract class BlockBackendAction<ID extends Object> extends Action {
     required super.needToConfirm,
     required super.actionInfo,
   }) {
-    _config = initDefaultConfig();
+    _config = defineActionConfig();
   }
 
-  BlockBackendActionConfig initDefaultConfig();
+  BlockBackendActionConfig defineActionConfig();
 
   Future<ApiResult<ListData<ID>?>> performBackendOperation({
     required Object? parentBlockItem,
@@ -26,8 +26,10 @@ abstract class BlockBackendAction<ID extends Object> extends Action {
 
 class BlockBackendActionConfig {
   final BlockViewportSyncStrategy? viewportSyncStrategy;
+  final List<Type>? broadcastEvents;
 
   const BlockBackendActionConfig({
     required this.viewportSyncStrategy,
+    this.broadcastEvents,
   });
 }

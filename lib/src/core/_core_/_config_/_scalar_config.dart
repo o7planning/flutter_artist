@@ -8,8 +8,9 @@ class ScalarEventReaction {
   final ScalarReactionTarget target;
 
   /// Custom filter strategy to evaluate if this scalar should react.
-  /// [isLocal] tells the scalar if the event originated from its own Shelf.
-  final bool Function(ArtistEvent event, bool isLocal)? shouldTrigger;
+  /// [isShelfInternalEvent] tells the scalar if the event originated from its own Shelf.
+  final bool Function(ArtistEvent event, bool isShelfInternalEvent)?
+      shouldTrigger;
 
   const ScalarEventReaction({
     required this.dataType,
@@ -23,7 +24,7 @@ class ScalarConfig {
 
   final List<ScalarEventReaction> reactions;
 
-  ScalarConfig({
+  const ScalarConfig({
     this.reactions = const [],
   }) : onHideAction = ScalarHiddenAction.none;
 

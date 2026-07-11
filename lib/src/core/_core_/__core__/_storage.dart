@@ -23,16 +23,16 @@ class _Storage extends _StorageCore {
 
   void _init({
     required ExecutionTrace executionTrace,
-    required AppConfiguration appConfiguration,
+    required RuntimeAppConfig appConfig,
   }) {
     TraceStep item = executionTrace._addTraceStep(
       codeId: "#SS000",
-      shortDesc: "${debugObjHtml(appConfiguration)}.projectionFamilies().",
+      shortDesc: "${debugObjHtml(appConfig)}.projectionFamilies().",
       traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.projection,
     );
     final List<ProjectionFamily> projectionFamilies =
-    appConfiguration.projectionFamilies();
+        appConfig.projectionFamilies;
     // This method may throw Fatal Error cause stop app.
     _projectionManager._init(
       executionTrace: executionTrace,
@@ -43,30 +43,30 @@ class _Storage extends _StorageCore {
       ..sort();
     item = executionTrace._addTraceStep(
       codeId: "#SS040",
-      shortDesc: "${debugObjHtml(appConfiguration)}.registerActivities().",
+      shortDesc: "${debugObjHtml(appConfig)}.registerActivities().",
       traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.activity,
     );
-    appConfiguration.registerActivities();
+    appConfig._registerActivities();
     item._extraInfos = FlutterArtist.debugRegister.debugRegisterActivities
       ..sort();
     //
     item = executionTrace._addTraceStep(
       codeId: "#SS060",
-      shortDesc: "${debugObjHtml(appConfiguration)}.registerShelves().",
+      shortDesc: "${debugObjHtml(appConfig)}.registerShelves().",
       traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.shelf,
     );
-    appConfiguration.registerShelves();
+    appConfig._registerShelves();
     item._extraInfos = FlutterArtist.debugRegister.debugRegisterShelves..sort();
     //
     item = executionTrace._addTraceStep(
       codeId: "#SS160",
-      shortDesc: "${debugObjHtml(appConfiguration)}.additionalThemes().",
+      shortDesc: "${debugObjHtml(appConfig)}.additionalThemes().",
       traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.theme,
     );
-    List<FaTheme> faThemes = appConfiguration.additionalThemes();
+    List<FaTheme> faThemes = appConfig.additionalThemes;
     FaThemeHub.instance.registerAll(faThemes);
   }
 
@@ -120,8 +120,7 @@ class _Storage extends _StorageCore {
     executionTrace._addTraceStep(
       codeId: "#75000",
       shortDesc:
-      "Calling ${debugObjHtml(
-          this)}.__canBackendAction() to check before execute the action.",
+          "Calling ${debugObjHtml(this)}.__canBackendAction() to check before execute the action.",
       parameters: {
         "checkBusy": checkBusyTrue,
       },
@@ -130,7 +129,7 @@ class _Storage extends _StorageCore {
     // @Same-Code-Precheck-01
     //
     final Actionable<StorageBackendActionPrecheck> actionable =
-    __canBackendAction(
+        __canBackendAction(
       checkBusy: checkBusyTrue,
     );
     //
@@ -218,7 +217,7 @@ class _Storage extends _StorageCore {
     executionTrace._addTraceStep(
       codeId: "#35000",
       shortDesc:
-      "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -248,8 +247,7 @@ class _Storage extends _StorageCore {
       executionTrace._addTraceStep(
         codeId: "#35200",
         shortDesc:
-        "The ${debugObjHtml(
-            action)}.performBackendOperation() method was called with an error!",
+            "The ${debugObjHtml(action)}.performBackendOperation() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -258,13 +256,13 @@ class _Storage extends _StorageCore {
     executionTrace._addTraceStep(
       codeId: "#35300",
       shortDesc: "${debugObjHtml(this)} > Fire event after backend action.",
-      traceStepType: TraceStepType.emitEvent,
+      traceStepType: TraceStepType.broadcastEvent,
     );
-    FlutterArtist.storage.ev._emitEventFromShelfToOtherShelves(
+    FlutterArtist.storage.ev._broadcastEventFromShelfToOtherShelves(
       executionTrace: executionTrace,
       eventType: EventType.unknown,
       eventShelf: null,
-      events: action.config.emitEvents,
+      events: action.config.broadcastEvents,
     );
     //
     return true;
@@ -273,12 +271,12 @@ class _Storage extends _StorageCore {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<StorageBackendActionResult> emitBackendActionEvents({
+  Future<StorageBackendActionResult> broadcastBackendActionEvents({
     required List<Type> events,
     required bool needToConfirm,
     String? actionInfo,
   }) async {
-    StorageBackendAction action = FireBackendEventsAction(
+    StorageBackendAction action = BroadcastBackendEventsAction(
       needToConfirm: needToConfirm,
       events: events,
       actionInfo: actionInfo,
@@ -295,7 +293,7 @@ class _Storage extends _StorageCore {
   // Show Dialog then freeze Shelf Reaction until closed.
   @_RootMethodAnnotation()
   Future<DialogDeferralResult<V?>>
-  showDialogAndDeferExternalShelfEventsUntilClosed<V>({
+      showDialogAndDeferExternalShelfEventsUntilClosed<V>({
     required String path,
     required FaRouteBuilder builder,
   }) async {
@@ -318,9 +316,9 @@ class _Storage extends _StorageCore {
   // openDrawerThenFreezeQueuedEventsUntil Closed (OLD)
   @_RootMethodAnnotation()
   Future<void> openDrawerAndDeferExternalShelfEventsUntilClosed(
-      BuildContext context, {
-        bool showSuggestionIfNeed = true,
-      }) async {
+    BuildContext context, {
+    bool showSuggestionIfNeed = true,
+  }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: 'openDrawerAndDeferExternalShelfEventsUntilClosed',
@@ -341,9 +339,9 @@ class _Storage extends _StorageCore {
   // openEndDrawerThenFreezeReactionBetweenShelvesUntil Closed
   @_RootMethodAnnotation()
   Future<void> openEndDrawerAndDeferExternalShelfEventsUntilClosed(
-      BuildContext context, {
-        bool showSuggestionIfNeed = true,
-      }) async {
+    BuildContext context, {
+    bool showSuggestionIfNeed = true,
+  }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: 'openEndDrawerAndDeferExternalShelfEventsUntilClosed',

@@ -1,14 +1,14 @@
 part of '../core.dart';
 
 class CodeFlowLogger {
-  final int codeFlowRetentionPeriodInSeconds;
+  final Duration codeFlowRetentionPeriod;
 
   final List<ExecutionTrace> _executionTraces = [];
 
   List<ExecutionTrace> get executionTraces =>
       List.unmodifiable(_executionTraces);
 
-  CodeFlowLogger({required this.codeFlowRetentionPeriodInSeconds});
+  CodeFlowLogger({required this.codeFlowRetentionPeriod});
 
   void clear() {
     _executionTraces.clear();
@@ -21,7 +21,7 @@ class CodeFlowLogger {
     _executionTraces.removeWhere((item) {
       DateTime now = DateTime.now();
       Duration duration = now.difference(item.createdDateTime);
-      if (duration.inSeconds > codeFlowRetentionPeriodInSeconds) {
+      if (duration >= codeFlowRetentionPeriod) {
         return true;
       }
       return false;

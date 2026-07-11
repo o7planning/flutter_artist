@@ -228,7 +228,7 @@ abstract class _Core {
     if (FlutterArtist.testCaseMode) {
       // return;
     }
-    FlutterArtist.overlayAdapter.showWarningSnackBar(
+    FlutterArtist.appConfig._overlayAdapter.showWarningSnackBar(
       message: message,
       details: null,
     );
@@ -241,7 +241,7 @@ abstract class _Core {
     if (FlutterArtist.testCaseMode) {
       // return;
     }
-    FlutterArtist.overlayAdapter.showErrorSnackBar(
+    FlutterArtist.appConfig._overlayAdapter.showErrorSnackBar(
       message: message,
       details: errorDetails,
     );
@@ -254,18 +254,18 @@ abstract class _Core {
     if (FlutterArtist.testCaseMode) {
       return;
     }
-    FlutterArtist.overlayAdapter.showErrorSnackBar(
+    FlutterArtist.appConfig._overlayAdapter.showErrorSnackBar(
       message: message,
       details: details,
     );
   }
 
   void showSavedSnackBar() {
-    FlutterArtist.overlayAdapter.showSavedSnackBar();
+    FlutterArtist.appConfig._overlayAdapter.showSavedSnackBar();
   }
 
   void showDeletedSnackBar({String? customMessage}) {
-    FlutterArtist.overlayAdapter.showDeletedSnackBar(
+    FlutterArtist.appConfig._overlayAdapter.showDeletedSnackBar(
       customMessage: customMessage,
     );
   }

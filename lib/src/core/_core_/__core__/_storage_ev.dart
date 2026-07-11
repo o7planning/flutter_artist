@@ -9,24 +9,24 @@ class _StorageEventHandler {
   // ***************************************************************************
 
   @_ImportantMethodAnnotation("Called after saving or deleting in the Block")
-  void _emitEventFromBlockToOtherShelves({
+  void _broadcastEventFromBlockToOtherShelves({
     required ExecutionTrace executionTrace,
     required EventType eventType,
     required Block eventBlock,
     required String? itemIdString,
   }) {
-    final List<Type> events  = eventBlock.config.emitExternalShelfEvents;
+    final List<Type> events = eventBlock.config.broadcastExternalShelfEvents;
     if (events.isEmpty) {
       executionTrace._addTraceStep(
         codeId: "#25000",
         shortDesc:
-            "${debugObjHtml(eventBlock)}.getOutsideDataTypesToListen() is empty! --> This event will be ignored.",
+            "${debugObjHtml(eventBlock)}.getDeclaredReactionDataTypes() is empty! --> This event will be ignored.",
         traceStepType: TraceStepType.debug,
       );
       return;
     }
     // Appends TaskUnits to QUEUE (No need to call execute).
-    ___emitEventFromBlockToOtherShelves(
+    ___broadcastEventFromBlockToOtherShelves(
       executionTrace: executionTrace,
       eventType: eventType,
       srcEventBlock: eventBlock,
@@ -39,7 +39,7 @@ class _StorageEventHandler {
   // ***************************************************************************
 
   // PRIVATE METHOD.
-  void ___emitEventFromBlockToOtherShelves({
+  void ___broadcastEventFromBlockToOtherShelves({
     required ExecutionTrace executionTrace,
     required EventType eventType,
     required Block? srcEventBlock,
@@ -92,7 +92,7 @@ class _StorageEventHandler {
 
   @_ImportantMethodAnnotation(
       "Called after executing QuickAction in the Block or Scalar")
-  void _emitEventFromShelfToOtherShelves({
+  void _broadcastEventFromShelfToOtherShelves({
     required ExecutionTrace executionTrace,
     required EventType eventType,
     required Shelf? eventShelf,
@@ -142,7 +142,7 @@ class _StorageEventHandler {
   List<Scalar> __getListenerScalarsByBlock({
     required Block eventBlock,
   }) {
-    List<Type> itemTypeEvents = eventBlock.getOutsideDataTypesToListen();
+    Set<Type> itemTypeEvents = eventBlock.getResolvedBroadcastDataTypes();
     if (itemTypeEvents.isEmpty) {
       return [];
     }
@@ -183,7 +183,7 @@ class _StorageEventHandler {
   List<Block> __getListenerBlocksByBlock({
     required Block eventBlock,
   }) {
-    List<Type> itemTypeEvents = eventBlock.getOutsideDataTypesToListen();
+    Set<Type> itemTypeEvents = eventBlock.getDeclaredBroadcastDataTypes();
     if (itemTypeEvents.isEmpty) {
       return [];
     }
@@ -203,7 +203,7 @@ class _StorageEventHandler {
   // Callable.
   List<Block> __getListenerBlocksByAffectedItemTypes({
     required Shelf eventShelf,
-    required List<Type> affectedItemTypeEvents,
+    required Set<Type> affectedItemTypeEvents,
   }) {
     // FullName, Block
     Map<String, Block> foundMap = {};
@@ -217,7 +217,7 @@ class _StorageEventHandler {
         for (Type affectedType in affectedItemTypeEvents) {
           // FIXED TODO: Compared directly with Type lists
           if (_contains(
-              blockToCheck.getOutsideDataTypesToListen(), affectedType)) {
+              blockToCheck.getDeclaredReactionDataTypes(), affectedType)) {
             foundMap[blockToCheck._shortPathName] = blockToCheck;
             break;
           }
@@ -232,7 +232,7 @@ class _StorageEventHandler {
 
   List<Scalar> __getListenerScalarsByAffectedItemTypes({
     required Shelf eventShelf,
-    required List<Type> affectedItemTypeEvents,
+    required Set<Type> affectedItemTypeEvents,
   }) {
     // FullName, Scalar
     Map<String, Scalar> foundMap = {};
@@ -244,7 +244,7 @@ class _StorageEventHandler {
       }
       for (Scalar scalar in shelf.scalars) {
         // FIXED TODO: Compared directly with Type lists
-        List<Type> listenerTypeEvents = scalar.getOutsideDataTypesToListen();
+        Set<Type> listenerTypeEvents = scalar.getDeclaredReactionDataTypes();
         for (Type affectedType in affectedItemTypeEvents) {
           if (_contains(listenerTypeEvents, affectedType)) {
             foundMap[scalar._shortPathName] = scalar;
@@ -269,12 +269,12 @@ class _StorageEventHandler {
     for (Shelf shelf in storage.getAllShelves()) {
       List<Block> allBlocks = shelf.blocks;
       for (Block blk in allBlocks) {
-        if (blk.getOutsideDataTypesToListen().isEmpty) {
+        if (blk.getDeclaredReactionDataTypes().isEmpty) {
           continue;
         }
         // FIXED TODO: Evaluated directly via core structural types exposed
-        final List<Type> listenToDataTypes =
-            listenerBlock.getOutsideDataTypesToListen();
+        final Set<Type> listenToDataTypes =
+            listenerBlock.getDeclaredReactionDataTypes();
         final Type itemType = blk.getItemType();
         final Type itemDetailType = blk.getItemDetailType();
 
@@ -345,10 +345,11 @@ class _StorageEventHandler {
 
     for (Shelf shelf in storage.getAllShelves()) {
       for (Block blk in shelf.blocks) {
-        if (blk.getOutsideDataTypesToListen().isEmpty) {
+        if (blk.getDeclaredReactionDataTypes().isEmpty) {
           continue;
         }
-        List<Type> listenerTypes = listenerScalar.getOutsideDataTypesToListen();
+        Set<Type> listenerTypes =
+            listenerScalar.getDeclaredReactionDataTypes();
         if (listenerTypes.isEmpty) {
           continue;
         }
@@ -529,7 +530,7 @@ class _StorageEventHandler {
   // ***************************************************************************
 
   /// Validates directly against raw Type objects instead of old Event wrappers.
-  bool _contains(List<Type> listenTypeEvents, Type targetType) {
+  bool _contains(Set<Type> listenTypeEvents, Type targetType) {
     for (Type t in listenTypeEvents) {
       if (t == targetType) {
         return true;

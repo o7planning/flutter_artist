@@ -7,7 +7,7 @@ class _ShelfExternalUtils {
   _ShelfExternalUtils(this.shelf);
 
   // Test Cases: [99a]
-  /// Calculates which local members are affected by the emitted external data types.
+  /// Calculates which local members are affected by the broadcasted external data types.
   /// All comments are in English for global users to read.
   EffectedShelfMembers calculateEffectedShelfMembersByEvents(
     List<Type> affectedDataTypes,

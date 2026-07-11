@@ -294,24 +294,24 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Rename.
-  // List<Event> getOutsideDataTypesToListen() {
-  //   final List<Event> list = [];
-  //   //
-  //   list.addAll(config.onExternalShelfEvents.scalarLevelReactionOn);
-  //   //
-  //   return list.toSet().toList();
-  // }
+  /// Returns the data types explicitly declared in the configuration
+  /// that this scalar should react to.
+  Set<Type> getDeclaredReactionDataTypes() {
+    return config.reactions.map((r) => r.dataType).toSet();
+  }
 
-  // TODO: Rename.
-  /// Returns the list of data types that this scalar wants to listen to from outside.
-  /// All comments are in English for global users to read.
-  List<Type> getOutsideDataTypesToListen() {
-    final List<Type> list = [];
-    for (var reaction in config.reactions) {
-      list.add(reaction.dataType);
+  /// Resolves and returns all data types—including those within the same
+  /// [ProjectionFamily]—that will actually trigger a reaction in this scalar.
+  Set<Type> getResolvedReactionDataTypes() {
+    final declaredTypes = getDeclaredReactionDataTypes();
+    final Set<Type> allEffectiveTypes = {...declaredTypes};
+
+    for (var family in FlutterArtist.appConfig.projectionFamilies) {
+      if (declaredTypes.any((type) => family.members.contains(type))) {
+        allEffectiveTypes.addAll(family.members);
+      }
     }
-    return list.toSet().toList();
+    return allEffectiveTypes;
   }
 
   // ***************************************************************************
@@ -1175,7 +1175,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _emitScalarHidden() {
+  void _broadcastScalarHidden() {
     // FlutterArtist.codeFlowLogger._addEvent(
     //   ownerClassInstance: this,
     //   event: "Scalar '${getClassName(this)}' just hides all UI Components!",

@@ -15,19 +15,14 @@ class BlockConfig {
   final Pageable pageable;
 
   ///
-  final List<Type> emitExternalShelfEvents;
-
-  ///
-  /// Reaction to External Events. Docs: 14769/27a
-  ///
-  // final ExternalShelfEventBlockRecipient onExternalShelfEvents;
-
-  // final InternalShelfEventBlockRecipient onInternalShelfEvents;
+  final List<Type> broadcastExternalShelfEvents;
 
   final SortStrategy clientSideSortStrategy;
 
   /// Unified event recipient configuration.
   /// No more separation between internal and external configuration blocks.
+  ///
+  /// Docs: 14769/27a
   final List<BlockEventReaction> reactions;
 
   BlockConfig({
@@ -36,7 +31,7 @@ class BlockConfig {
         ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
     this.unifiedItemRefreshPolicy = UnifiedItemRefreshPolicy.auto,
     this.preventUnsavedChangesLoss = true,
-    List<Type>? emitExternalShelfEvents,
+    List<Type>? broadcastExternalShelfEvents,
     //
     this.pageable = const Pageable(
       page: 1,
@@ -45,8 +40,8 @@ class BlockConfig {
     this.clientSideSortStrategy = SortStrategy.none,
     this.reactions = const [],
   })  : this.onHideAction = BlockHiddenAction.none,
-        emitExternalShelfEvents =
-            List.unmodifiable(emitExternalShelfEvents?.toSet() ?? []);
+        broadcastExternalShelfEvents =
+            List.unmodifiable(broadcastExternalShelfEvents?.toSet() ?? []);
 
   BlockConfig copy() {
     return BlockConfig(
@@ -57,11 +52,9 @@ class BlockConfig {
       // onHideAction: onHideAction,
       pageable: pageable.copy(),
       //
-      emitExternalShelfEvents: emitExternalShelfEvents,
+      broadcastExternalShelfEvents: broadcastExternalShelfEvents,
       //
-      // onExternalShelfEvents: onExternalShelfEvents,
-      // onInternalShelfEvents: onInternalShelfEvents,
-      reactions:reactions,
+      reactions: reactions,
       //
       clientSideSortStrategy: clientSideSortStrategy,
     );

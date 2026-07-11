@@ -131,11 +131,11 @@ class BlockOrScalar extends Equatable {
     }
   }
 
-  List<Type> getListenItemTypes() {
+  Set<Type> getDeclaredReactionDataTypes() {
     if (block != null) {
-      return block!.getOutsideDataTypesToListen();
+      return block!.getDeclaredReactionDataTypes();
     } else {
-      return scalar!.getOutsideDataTypesToListen();
+      return scalar!.getDeclaredReactionDataTypes();
     }
   }
 
@@ -143,12 +143,12 @@ class BlockOrScalar extends Equatable {
   List<String> getListenItemTypesAsStrings() {
     if (block != null) {
       return block!
-          .getOutsideDataTypesToListen()
+          .getDeclaredReactionDataTypes()
           .map((type) => type.toString())
           .toList();
     } else {
       return scalar!
-          .getOutsideDataTypesToListen()
+          .getDeclaredReactionDataTypes()
           .map((type) => type.toString())
           .toList();
     }
