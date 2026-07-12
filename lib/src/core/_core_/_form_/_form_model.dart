@@ -1,11 +1,11 @@
 part of '../core.dart';
 
 abstract class FormModel<
-    ID extends Object,
-    ITEM_DETAIL extends Identifiable<ID>,
-    FORM_INPUT extends FormInput,
-    ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData // AdditionalFormRelatedData
-    > extends _Core {
+        ID extends Object,
+        ITEM_DETAIL extends Identifiable<ID>,
+        FORM_INPUT extends FormInput,
+        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
+    extends _Core {
   final FormModelConfig config;
 
   late final _FormModelDebugInfo debug = _FormModelDebugInfo();
@@ -2214,7 +2214,6 @@ abstract class FormModel<
     );
     //
     final bool checkBusyTrue = true;
-    final bool checkAllowTrue = true;
     //
     executionTrace._addTraceStep(
       codeId: "#78000",

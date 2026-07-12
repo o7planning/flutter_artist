@@ -25,7 +25,7 @@ class MultiOptMsTildeFilterCriterionModel<V>
         actualValue: value,
       );
     }
-    value as List;
+    // value as List;
     for (dynamic v in value) {
       if (v == null) {
         continue;

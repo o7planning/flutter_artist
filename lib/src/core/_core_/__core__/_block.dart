@@ -2893,7 +2893,6 @@ abstract class Block<
     deletionResult._setCandidateItems(candidateItems: items);
     //
     final ID? currItemId = currentItemId;
-    final ITEM? currItem = currentItem;
     ITEM? siblingItem;
     //
     bool currentItemDeleted = false;
@@ -3212,9 +3211,7 @@ abstract class Block<
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemCreationResult taskResult,
-    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL,
-            FILTER_CRITERIA>
-        action,
+    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -3239,7 +3236,6 @@ abstract class Block<
       //
       result = await action.performQuickCreateItem(
         parentBlockItem: parent?.currentItem,
-        filterCriteria: blockCurrentFilterCriteria,
       );
     } catch (e, stackTrace) {
       // Test Cases: [90b].
@@ -3316,8 +3312,7 @@ abstract class Block<
     required TaskType taskType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemUpdateResult taskResult,
-    required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL, FILTER_CRITERIA>
-        action,
+    required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -3347,9 +3342,7 @@ abstract class Block<
       //
       result = await action.performQuickUpdateItem(
         parentBlockItem: parent?.currentItem,
-        filterCriteria: blockCurrentFilterCriteria,
       );
-      //
     } catch (e, stackTrace) {
       // Test Cases: [90b].
       final ErrorInfo errorInfo = _handleError(
@@ -4188,7 +4181,7 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeTaskUnitQueue();
     //
-    var result = taskUnit.taskResult as BlockSetCurrentItemResult<ITEM>;
+    var result = taskUnit.taskResult;
     return result;
   }
 
@@ -5006,12 +4999,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickItemCreationActionAnnotation()
   Future<BlockQuickItemCreationResult> executeQuickItemCreationAction({
-    required BlockQuickItemCreationAction<
-            ID, //
-            ITEM,
-            ITEM_DETAIL,
-            FILTER_CRITERIA>
-        action,
+    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
@@ -5106,12 +5094,7 @@ abstract class Block<
   @_ReturnTaskResultMethodAnnotation()
   @_BlockQuickItemUpdateActionAnnotation()
   Future<BlockQuickItemUpdateResult> executeQuickItemUpdateAction({
-    required BlockQuickItemUpdateAction<
-            ID, //
-            ITEM,
-            ITEM_DETAIL,
-            FILTER_CRITERIA>
-        action,
+    required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,

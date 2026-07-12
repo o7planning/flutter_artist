@@ -133,7 +133,7 @@ class _Executor {
         executionTrace: executionTrace,
         taskType: taskUnit.taskType,
         thisXFilterModel: taskUnit.xFilterModel,
-        taskResult: taskUnit.taskResult as FilterModelDataLoadResult,
+        taskResult: taskUnit.taskResult,
       );
     }
     // FilterPanel Change:
@@ -197,8 +197,7 @@ class _Executor {
         newQueriedList: taskUnit.newQueriedList,
         inputCandidateCurrItem: taskUnit.candidateItem,
         thisXBlock: taskUnit.xBlock,
-        blockSetCurrentItemResult:
-            taskUnit.taskResult as BlockSetCurrentItemResult<Identifiable>,
+        blockSetCurrentItemResult: taskUnit.taskResult,
       );
     }
     // Block Delete Item:
@@ -231,7 +230,7 @@ class _Executor {
         taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
-        taskResult: taskUnit.taskResult as BlockQuickItemCreationResult,
+        taskResult: taskUnit.taskResult,
       );
     }
     // Block QuickUpdateItem:
@@ -241,7 +240,7 @@ class _Executor {
         taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
-        taskResult: taskUnit.taskResult as BlockQuickItemUpdateResult,
+        taskResult: taskUnit.taskResult,
       );
     }
     // Block Quick Action:
@@ -251,7 +250,7 @@ class _Executor {
         taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
-        taskResult: taskUnit.taskResult as BlockBackendActionResult,
+        taskResult: taskUnit.taskResult,
       );
     }
     // FormModel LoadForm:
@@ -260,7 +259,7 @@ class _Executor {
         executionTrace: executionTrace,
         taskType: taskUnit.taskType,
         thisXFormModel: taskUnit.xFormModel,
-        taskResult: taskUnit.taskResult as FormModelDataLoadResult,
+        taskResult: taskUnit.taskResult,
       );
     }
     // FormModel Save:
@@ -269,7 +268,7 @@ class _Executor {
         executionTrace: executionTrace,
         taskType: taskUnit.taskType,
         thisXFormModel: taskUnit.xFormModel,
-        taskResult: taskUnit.taskResult as FormSaveResult,
+        taskResult: taskUnit.taskResult,
       );
     }
     // FormModel QuickFormInputAction:
