@@ -6,7 +6,7 @@ import '_action.dart';
 ///
 ///
 ///
-// TODO: Hoàn thành logic.
+@Deprecated("TODO: Do it?")
 abstract class BlockQuickItemReplacementAction<
     ID extends Object, //
     ITEM extends Identifiable<ID>,

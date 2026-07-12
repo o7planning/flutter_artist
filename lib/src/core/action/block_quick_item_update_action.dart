@@ -1,13 +1,11 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../_core_/core.dart';
 import '_action.dart';
 
 abstract class BlockQuickItemUpdateAction<
     ID extends Object, //
     ITEM extends Identifiable<ID>,
-    ITEM_DETAIL extends Identifiable<ID>,
-    FILTER_CRITERIA extends FilterCriteria> extends Action {
+    ITEM_DETAIL extends Identifiable<ID>> extends Action {
   final BlockQuickItemUpdateActionConfig config;
   final ITEM item;
 
@@ -20,7 +18,6 @@ abstract class BlockQuickItemUpdateAction<
 
   Future<ApiResult<ITEM_DETAIL>> performQuickUpdateItem({
     required Object? parentBlockItem,
-    required FILTER_CRITERIA filterCriteria,
   });
 }
 

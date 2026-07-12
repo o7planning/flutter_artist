@@ -5,23 +5,19 @@ class _BlockRequeryCondition<ID extends Object> extends Equatable {
       FilterCriteria, FormInput, AdditionalFormRelatedData> _block;
   Object? _parentItemId;
 
-  @override
   Object? get parentItemId => _parentItemId;
 
   FilterCriteria? _filterCriteria;
 
-  @override
   FilterCriteria? get filterCriteria => _filterCriteria;
 
   // IMPORTANT: Initial null, do not change!
   BlockViewportSyncStrategy? __viewportSyncStrategy;
 
-  @override
   BlockViewportSyncStrategy? get viewportSyncStrategy => __viewportSyncStrategy;
 
   Set<ID> __effectiveItemIds = {};
 
-  @override
   Set<ID> get effectiveItemIds => __effectiveItemIds;
 
   _BlockRequeryCondition({
@@ -77,7 +73,7 @@ class _BlockRequeryCondition<ID extends Object> extends Equatable {
         parentItemId,
         filterCriteria,
         __viewportSyncStrategy,
-        ...(__effectiveItemIds ?? [])
+        ...__effectiveItemIds
       ];
 
   @override
