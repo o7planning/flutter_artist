@@ -4,19 +4,20 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(
-          xShelfType: XShelfType.shelfExternalReaction,
-        ) {
+    xShelfType: XShelfType.shelfExternalReaction,
+  ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk._blockReQryCon == null && xBlk._blockItemRefreshCon == null) {
         continue;
       }
       // @@@hasActiveBlockFragment
       bool blockXBlockRep =
-          xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
+      xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
         alsoCheckChildren: true,
       );
       print(
-          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk.block} - blockXBlockRep: $blockXBlockRep");
+          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk
+              .block} - blockXBlockRep: $blockXBlockRep");
       QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //
@@ -41,7 +42,7 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
         }
         // @@@hasActiveBlockFragment
         bool blockXBlockRep =
-            xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
+        xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
         if (blockXBlockRep) {

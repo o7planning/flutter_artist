@@ -274,7 +274,7 @@ abstract class ExecutionTrace {
 
   TraceStep? getLineFlowEvent() {
     for (TraceStep item in __traceSteps) {
-      if (item.traceStepType == TraceStepType.emitEvent) {
+      if (item.traceStepType == TraceStepType.broadcastEvent) {
         return item;
       }
     }

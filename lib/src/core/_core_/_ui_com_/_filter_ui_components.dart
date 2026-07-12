@@ -6,7 +6,7 @@ class _FilterUiComponents extends _UiComponents {
   final Map<_ContextProviderViewState, XState> _filterBaseViewWidgetStates = {};
 
   final Map<_ContextProviderViewState, XState> __filterControlBarWidgetStates =
-      {};
+  {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -21,7 +21,11 @@ class _FilterUiComponents extends _UiComponents {
     List<_ContextProviderViewState> list = [
       ..._filterBaseViewWidgetStates.keys,
     ];
-    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
+    return list
+        .map((v) => v.faRoute)
+        .nonNulls
+        .toList()
+        .toSet();
   }
 
   // ***************************************************************************
@@ -73,7 +77,7 @@ class _FilterUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (_ContextProviderViewState widgetState
-        in _filterBaseViewWidgetStates.keys) {
+    in _filterBaseViewWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -88,7 +92,7 @@ class _FilterUiComponents extends _UiComponents {
       }
     }
     for (_ContextProviderViewState widgetState
-        in __filterControlBarWidgetStates.keys) {
+    in __filterControlBarWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -159,8 +163,10 @@ class _FilterUiComponents extends _UiComponents {
   }) {
     _filterBaseViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setBuilding(isBuilding),
-      ifAbsent: () => XState().._setBuilding(isBuilding),
+          (xState) => xState.._setBuilding(isBuilding),
+      ifAbsent: () =>
+      XState()
+        .._setBuilding(isBuilding),
     );
   }
 
@@ -174,8 +180,10 @@ class _FilterUiComponents extends _UiComponents {
     bool activeOLD = hasActiveUiComponent();
     _filterBaseViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     bool activeCURRENT = hasActiveUiComponent();
 
@@ -190,7 +198,7 @@ class _FilterUiComponents extends _UiComponents {
       FlutterArtist.storage._naturalQueryQueue.addShelf(filterModel.shelf);
     } else if (activeOLD && !activeCURRENT) {
       // TODO: (Kiem tra phuong thuc cung ten trong Block).
-      // block._emitBlockHidden();
+      // block._broadcastBlockHidden();
     }
   }
 
@@ -213,8 +221,10 @@ class _FilterUiComponents extends _UiComponents {
     bool activeOLD = hasActiveUiComponent();
     __filterControlBarWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     bool activeCURRENT = hasActiveUiComponent();
 
@@ -228,7 +238,7 @@ class _FilterUiComponents extends _UiComponents {
       FlutterArtist.storage._naturalQueryQueue.addShelf(filterModel.shelf);
     } else if (activeOLD && !activeCURRENT) {
       // TODO: (Kiem tra phuong thuc cung ten trong Block).
-      // block._emitBlockHidden();
+      // block._broadcastBlockHidden();
     }
   }
 

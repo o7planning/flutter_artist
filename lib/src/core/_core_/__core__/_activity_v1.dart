@@ -106,7 +106,7 @@ abstract class ActivityV1 extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _emitActivityHidden() {
+  void _broadcastActivityHidden() {
     // switch (config.onHideAction) {
     //   case ActivityHiddenBehavior.none:
     //     break;

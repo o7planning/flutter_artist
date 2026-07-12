@@ -54,7 +54,7 @@ String __debugObjHtml(Object? obj, bool asHtml) {
   } else if (obj is SortableCriteria) {
     return "${b1}${getClassName(obj)}(${obj.toSignedString()})${b2}";
   } else if (obj is List) {
-    if (obj is List<Event>) {
+    if (obj is List<Type>) {
       return "${b1}${obj.toString()}${b2}";
     }
     return "${b1}${getClassName(obj)}(${obj.length} items)${b2}";

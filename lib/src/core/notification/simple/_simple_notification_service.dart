@@ -17,7 +17,7 @@ class SimpleNotificationService
     print("${getClassName(this)}.initialize()");
     await __getNotificationSummary();
     Timer.periodic(
-      Duration(seconds: FlutterArtist.notificationFetchPeriodInSeconds),
+      FlutterArtist.appConfig.notificationFetchInterval,
       (Timer timer) {
         __getNotificationSummary();
       },
@@ -73,8 +73,7 @@ class SimpleNotificationService
       if (lastFetch != null) {
         DateTime now = DateTime.now();
         Duration diff = now.difference(lastFetch);
-        if (diff.inSeconds <
-                FlutterArtist.notificationFetchPeriodInSeconds - 1 &&
+        if (diff <= FlutterArtist.appConfig.notificationFetchInterval &&
             notificationSummaryLocal != null) {
           print("Ignore to fetch notification..");
           FlutterArtist._notifyNotification(notificationSummaryLocal);

@@ -2,11 +2,11 @@ part of '../core.dart';
 
 class SourceAndSummaryEvents {
   final String? srcShelfName;
-  final Set<Event> _events = {};
+  final Set<Type> _events = {};
 
   SourceAndSummaryEvents({required this.srcShelfName});
 
-  void addEvents(List<Event> events) {
+  void addEvents(List<Type> events) {
     _events.addAll(events);
   }
 }
@@ -21,11 +21,11 @@ class _DeferredEventManager {
     _list.add(deferredEvent);
   }
 
-  Set<Event> _findEventsForListenerShelf({
+  Set<Type> _findEventsForListenerShelf({
     required List<DeferredEvent> deferredEvents,
     required String listenerShelfName,
   }) {
-    Set<Event> events = {};
+    Set<Type> events = {};
     for (DeferredEvent deferredEvent in deferredEvents) {
       final String? eventShelfName = deferredEvent.eventShelfName;
       if (eventShelfName == listenerShelfName) {
@@ -77,7 +77,7 @@ class _DeferredEventManager {
     //
     bool hasSeparator = false;
     for (String listenerShelfName in storage._shelfMap.keys) {
-      Set<Event> originEvents = _findEventsForListenerShelf(
+      Set<Type> originEvents = _findEventsForListenerShelf(
         deferredEvents: deferredEvents,
         listenerShelfName: listenerShelfName,
       );
@@ -96,7 +96,7 @@ class _DeferredEventManager {
             "\n - @originEvents: <b>${originEvents.toList()}</b>.",
         traceStepType: TraceStepType.debug,
       );
-      Set<Event> projectionEvents = FlutterArtist.storage._projectionManager
+      Set<Type> projectionEvents = FlutterArtist.storage._projectionManager
           .getProjectionEvents(originEvents);
       executionTrace._addTraceStep(
         codeId: "#27160",
@@ -166,7 +166,7 @@ class _DeferredEventManager {
   void __markReactionConditionsForEvents({
     required ExecutionTrace executionTrace,
     required Shelf listenerShelf,
-    required List<Event> outsideEvents,
+    required List<Type> outsideEvents,
   }) {
     if (listenerShelf.isFullyPending) {
       executionTrace._addTraceStep(

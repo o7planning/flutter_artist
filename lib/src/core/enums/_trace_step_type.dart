@@ -7,7 +7,7 @@ enum TraceStepType {
   addTaskUnit,
   controllableCalling,
   nonControllableCalling,
-  emitEvent,
+  broadcastEvent,
   eventInfo,
   separator;
 
@@ -30,7 +30,7 @@ enum TraceStepType {
       case TraceStepType.debug:
         return Icons.bug_report_outlined;
 
-      case TraceStepType.emitEvent:
+      case TraceStepType.broadcastEvent:
         return Icons.electric_bolt_outlined;
       case TraceStepType.eventInfo:
         return Icons.electric_bolt_outlined;
@@ -49,7 +49,7 @@ enum TraceStepType {
 
       case TraceStepType.addTaskUnit:
         return colorScheme.tertiary;
-      case TraceStepType.emitEvent:
+      case TraceStepType.broadcastEvent:
         return colorScheme.tertiary;
       case TraceStepType.info:
       case TraceStepType.eventInfo:

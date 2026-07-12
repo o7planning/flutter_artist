@@ -32,7 +32,7 @@ class _Executor {
       return;
     }
     bool showOverlay2 = showOverlay;
-    if (FlutterArtist.debugOptions.showTaskUnitQueue) {
+    if (FlutterArtist.appConfig.debugOptions.showTaskUnitQueue) {
       showOverlay2 = false;
     }
     await FlutterArtist._executeTask(
@@ -50,7 +50,7 @@ class _Executor {
                 break;
               }
             }
-            if (FlutterArtist.debugOptions.showTaskUnitQueue) {
+            if (FlutterArtist.appConfig.debugOptions.showTaskUnitQueue) {
               BuildContext context = FlutterArtistCore.context;
               await DebugExecutorDialog.open(
                 context: context,
@@ -232,15 +232,6 @@ class _Executor {
         thisXBlock: taskUnit.xBlock,
         action: taskUnit.action,
         taskResult: taskUnit.taskResult as BlockQuickItemCreationResult,
-      );
-    }
-    // Block QuickCreateMultiItem:
-    else if (taskUnit is _BlockMultiItemCreationBackendActionTaskUnit) {
-      await taskUnit.xBlock.block._unitCreateMultiItemBackendAction(
-        executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXBlock: taskUnit.xBlock,
-        action: taskUnit.action,
       );
     }
     // Block QuickUpdateItem:

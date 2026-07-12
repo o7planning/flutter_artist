@@ -5,7 +5,7 @@ class DeferredEvent<ID extends Object> {
 
   final EventType eventType;
   final ID? itemId;
-  final List<Event> events;
+  final List<Type> events;
 
   DeferredEvent({
     required this.eventType,

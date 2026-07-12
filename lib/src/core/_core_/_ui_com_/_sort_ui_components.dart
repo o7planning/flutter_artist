@@ -110,8 +110,10 @@ class _SortUiComponents extends _UiComponents {
   }) {
     _sortWidgetStates.update(
       widgetState,
-      (xState) => xState.._setBuilding(isBuilding),
-      ifAbsent: () => XState().._setBuilding(isBuilding),
+          (xState) => xState.._setBuilding(isBuilding),
+      ifAbsent: () =>
+      XState()
+        .._setBuilding(isBuilding),
     );
   }
 
@@ -125,8 +127,10 @@ class _SortUiComponents extends _UiComponents {
     bool activeOLD = hasActiveUiComponent();
     _sortWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     bool activeCURRENT = hasActiveUiComponent();
 
@@ -141,7 +145,7 @@ class _SortUiComponents extends _UiComponents {
       FlutterArtist.storage._naturalQueryQueue.addShelf(sortModel.shelf);
     } else if (activeOLD && !activeCURRENT) {
       // TODO: (Kiem tra phuong thuc cung ten trong Block).
-      // block._emitBlockHidden();
+      // block._broadcastBlockHidden();
     }
   }
 

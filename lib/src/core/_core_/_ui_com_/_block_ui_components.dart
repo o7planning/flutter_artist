@@ -556,7 +556,7 @@ class _BlockUiComponents extends _UiComponents {
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
     } else if (blockXBlockRepOLD && !blockXBlockRepCURRENT) {
-      block._emitBlockHidden();
+      block._broadcastBlockHidden();
     }
   }
 
@@ -598,7 +598,7 @@ class _BlockUiComponents extends _UiComponents {
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
     } else if (blockXBlockRepOLD && !blockXBlockRepCURRENT) {
-      block._emitBlockHidden();
+      block._broadcastBlockHidden();
     }
   }
 
@@ -640,7 +640,7 @@ class _BlockUiComponents extends _UiComponents {
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
     } else if (hasXBlockRepOLD && !hasXBlockRepCURRENT) {
-      block._emitBlockHidden();
+      block._broadcastBlockHidden();
     }
   }
 
@@ -653,7 +653,7 @@ class _BlockUiComponents extends _UiComponents {
     bool activeCURRENT = hasActiveUiComponent();
     //
     if (activeOLD && !activeCURRENT) {
-      block._emitBlockHidden();
+      block._broadcastBlockHidden();
     }
   }
 

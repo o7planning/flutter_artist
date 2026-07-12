@@ -13,7 +13,6 @@ enum XShelfType {
   blockBackendActionExecution,
   blockQuickItemCreation,
   blockQuickItemUpdate,
-  blockMultiItemCreationBackendAction,
   //
   shelfExternalReaction,
   //

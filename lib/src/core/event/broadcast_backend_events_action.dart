@@ -4,20 +4,19 @@ import '../_core_/core.dart';
 import '../action/storage_backend_action.dart';
 import '../typedef/typedefs.dart';
 
-class FireBackendEventsAction extends StorageBackendAction {
-  final List<Event> events;
+class BroadcastBackendEventsAction extends StorageBackendAction {
+  final List<Type> events;
 
-  FireBackendEventsAction({
+  BroadcastBackendEventsAction({
     required super.needToConfirm,
     String? actionInfo,
     required this.events,
-  }) : super(actionInfo: actionInfo ?? "Emit event $events");
+  }) : super(actionInfo: actionInfo ?? "Broadcast events $events");
 
   @override
-  StorageBackendActionConfig initDefaultConfig() {
+  StorageBackendActionConfig defineActionConfig() {
     return StorageBackendActionConfig(
-      emitEvents: events,
-      // afterBackendAction: AfterStorageBackendAction.query,
+      broadcastEvents: events,
     );
   }
 

@@ -13,7 +13,6 @@ enum TaskType {
   blockQuickChildBlockItems,
   blockQuickCreateItem,
   blockBackendCreateItem,
-  blockMultiItemCreationBackendAction,
   blockQuickUpdateItem,
   blockBackendUpdateItem,
   blockSetItemAsCurrent,

@@ -42,7 +42,7 @@ abstract class _StorageCore extends _Core {
       if (orphanedAt == null) continue;
 
       if (now.difference(orphanedAt).inMilliseconds >=
-          FlutterArtist.garbageCollectionIntervalInSeconds * 1000) {
+          FlutterArtist.appConfig.garbageCollectionInterval.inMilliseconds) {
         Shelf? shelf = _shelfMap.remove(key);
         if (shelf != null) {
           _recentShelves.remove(shelf);

@@ -4,7 +4,6 @@ export 'src/core/_core_/core.dart'
 export 'src/core/action/_action.dart';
 export 'src/core/action/background_web_download_action.dart';
 export 'src/core/action/block_backend_action.dart';
-export 'src/core/action/block_multi_item_creation_backend_action.dart';
 export 'src/core/action/block_quick_item_creation_action.dart';
 export 'src/core/action/block_quick_item_replacement_action.dart';
 export 'src/core/action/block_quick_item_update_action.dart';
@@ -91,7 +90,9 @@ export 'src/core/enums/_task_flow_type.dart';
 export 'src/core/enums/_task_type.dart';
 export 'src/core/enums/_unified_item_refresh_policy.dart';
 export 'src/core/enums/after_backend_action.dart';
-export 'src/core/event/emit_backend_events_action.dart';
+export 'src/core/enums/block_reaction_target.dart';
+export 'src/core/enums/scalar_reaction_target.dart';
+export 'src/core/event/broadcast_backend_events_action.dart';
 export 'src/core/icon/icon_constants.dart';
 export 'src/core/logger/_logger.dart';
 export 'src/core/precheck/__actionable.dart';
