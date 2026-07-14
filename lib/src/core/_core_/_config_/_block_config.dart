@@ -19,6 +19,8 @@ class BlockConfig {
 
   final SortStrategy clientSideSortStrategy;
 
+  final BlockViewportSyncConfig viewportSyncConfig;
+
   /// Unified event recipient configuration.
   /// No more separation between internal and external configuration blocks.
   ///
@@ -31,7 +33,9 @@ class BlockConfig {
         ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
     this.unifiedItemRefreshPolicy = UnifiedItemRefreshPolicy.auto,
     this.preventUnsavedChangesLoss = true,
+    this.viewportSyncConfig = const BlockViewportSyncConfig(),
     List<Type>? broadcastExternalShelfEvents,
+
     //
     this.pageable = const Pageable(
       page: 1,

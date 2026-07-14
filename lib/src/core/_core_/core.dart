@@ -105,6 +105,7 @@ import '../enums/_unified_item_refresh_policy.dart';
 import '../enums/_x_shelf_type.dart';
 import '../enums/after_backend_action.dart';
 import '../enums/block_reaction_target.dart';
+import '../enums/block_viewport_sync_hierarchy_mode.dart';
 import '../enums/event_scope.dart';
 import '../enums/scalar_reaction_target.dart';
 import '../error/_block_error_info.dart';
@@ -339,6 +340,8 @@ part '_code_flow_/_func_call_info_utils.dart';
 part '_config_/_hook_config.dart';
 
 part '_config_/_activity_config.dart';
+
+part '_config_/_block_viewport_sync_config.dart';
 
 part '_config_/_block_config.dart';
 

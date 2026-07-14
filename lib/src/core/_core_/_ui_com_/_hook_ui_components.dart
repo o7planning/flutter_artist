@@ -18,7 +18,11 @@ class _HookUiComponents extends _UiComponents {
     List<_ContextProviderViewState> list = [
       ...__hookBaseViewWidgetStates.keys,
     ];
-    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
+    return list
+        .map((v) => v.faRoute)
+        .nonNulls
+        .toList()
+        .toSet();
   }
 
   // ***************************************************************************
@@ -26,7 +30,7 @@ class _HookUiComponents extends _UiComponents {
 
   void updateHookBaseViews({bool force = false}) {
     for (_ContextProviderViewState widgetState
-        in __hookBaseViewWidgetStates.keys) {
+    in __hookBaseViewWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -166,8 +170,10 @@ class _HookUiComponents extends _UiComponents {
     );
     __hookBaseViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     bool hasXHookRepCURRENT = hasActiveUiComponentHookRepresentative(
       alsoCheckChildren: true,

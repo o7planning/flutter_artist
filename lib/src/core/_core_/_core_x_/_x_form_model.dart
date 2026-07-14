@@ -1,8 +1,8 @@
 part of '../core.dart';
 
 class XFormModel<
-    ID extends Object, //
-    ITEM_DETAIL extends Identifiable<ID>> {
+ID extends Object, //
+ITEM_DETAIL extends Identifiable<ID>> {
   XShelf get xShelf => xBlock.xShelf;
 
   final FormModel formModel;
@@ -39,6 +39,7 @@ class XFormModel<
 
   @override
   String toString() {
-    return "${getClassName(formModel)} - lazy: $lazy - needQuery: $forceTypeForForm";
+    return "${getClassName(
+        formModel)} - lazy: $lazy - needQuery: $forceTypeForForm";
   }
 }

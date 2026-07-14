@@ -91,6 +91,7 @@ export 'src/core/enums/_task_type.dart';
 export 'src/core/enums/_unified_item_refresh_policy.dart';
 export 'src/core/enums/after_backend_action.dart';
 export 'src/core/enums/block_reaction_target.dart';
+export 'src/core/enums/block_viewport_sync_hierarchy_mode.dart';
 export 'src/core/enums/scalar_reaction_target.dart';
 export 'src/core/event/broadcast_backend_events_action.dart';
 export 'src/core/icon/icon_constants.dart';
