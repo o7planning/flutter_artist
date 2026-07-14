@@ -28,9 +28,9 @@ class _XShelfBlockBackendActionExecution extends XShelf {
     switch (viewportSyncStrategy) {
       case null:
         break;
-      case BlockViewportSyncStrategy.convergeAll:
-      case BlockViewportSyncStrategy.incrementalMerge:
-      case BlockViewportSyncStrategy.forceNativeQuery:
+      case BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery:
+      case BlockViewportSyncStrategy.effectedItemIdsQuery:
+      case BlockViewportSyncStrategy.nativeQuery:
         // case BlockViewportSyncStrategy.refreshCurrentOnly:
         queryHint = QryHint.force;
         forceReloadItem = false;

@@ -795,7 +795,7 @@ abstract class Shelf extends _Core {
       Block block = __blockMap[blockName]!;
       block._createBlockRequeryConditionIfNeed(
         executionTrace: executionTrace,
-        viewportSyncStrategy: BlockViewportSyncStrategy.forceNativeQuery,
+        viewportSyncStrategy: BlockViewportSyncStrategy.nativeQuery,
         addedEffectiveIds: null,
         blockCurrentFilterCriteria: null,
       );

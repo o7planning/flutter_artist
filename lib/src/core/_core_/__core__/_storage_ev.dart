@@ -348,8 +348,7 @@ class _StorageEventHandler {
         if (blk.getDeclaredReactionDataTypes().isEmpty) {
           continue;
         }
-        Set<Type> listenerTypes =
-            listenerScalar.getDeclaredReactionDataTypes();
+        Set<Type> listenerTypes = listenerScalar.getDeclaredReactionDataTypes();
         if (listenerTypes.isEmpty) {
           continue;
         }

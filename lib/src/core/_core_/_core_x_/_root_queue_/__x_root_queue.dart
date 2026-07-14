@@ -41,7 +41,7 @@ class _XRootQueue {
         return null;
       }
       XRootQueueItem rootQueueItem =
-          __xRootQueueItemMap[firstRootQueueItemName]!;
+      __xRootQueueItemMap[firstRootQueueItemName]!;
       if (rootQueueItem.isEmptyTask()) {
         __xRootQueueItemMap.remove(firstRootQueueItemName);
         continue;
@@ -57,8 +57,7 @@ class _XRootQueue {
   }
 
   void _addStorageBackendActionTaskUnit(
-    _StorageBackendActionTaskUnit storageBackendActionTaskUnit,
-  ) {
+      _StorageBackendActionTaskUnit storageBackendActionTaskUnit,) {
     _xStorage._addStorageBackendActionTaskUnit(storageBackendActionTaskUnit);
   }
 

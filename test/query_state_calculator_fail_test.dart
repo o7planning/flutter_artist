@@ -18,7 +18,7 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.fail,
           currentDataState: DataState.ready,
-          syncStrategy: BlockViewportSyncStrategy.convergeAll,
+          syncStrategy: BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
           parentOrCriteriaChanged: true,
           // Context mutation active
           isQueryMore: false,
@@ -42,7 +42,7 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.fail,
           currentDataState: DataState.ready,
-          syncStrategy: BlockViewportSyncStrategy.incrementalMerge,
+          syncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
           parentOrCriteriaChanged: true,
           // Context mutated takes supreme priority
           isQueryMore: true,
@@ -71,7 +71,7 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.fail,
           currentDataState: DataState.ready,
-          syncStrategy: BlockViewportSyncStrategy.forceNativeQuery,
+          syncStrategy: BlockViewportSyncStrategy.nativeQuery,
           parentOrCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: true,
@@ -102,7 +102,7 @@ void main() {
           final input = QueryCalculatorInput(
             queryResultState: ActionResultState.fail,
             currentDataState: DataState.ready,
-            syncStrategy: BlockViewportSyncStrategy.forceNativeQuery,
+            syncStrategy: BlockViewportSyncStrategy.nativeQuery,
             parentOrCriteriaChanged: false,
             isQueryMore: trigger['queryMore']!,
             isPageShifting: trigger['pageShift']!,
@@ -126,7 +126,7 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.fail,
           currentDataState: DataState.ready,
-          syncStrategy: BlockViewportSyncStrategy.forceNativeQuery,
+          syncStrategy: BlockViewportSyncStrategy.nativeQuery,
           parentOrCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: true,
@@ -149,7 +149,7 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.fail,
           currentDataState: DataState.ready,
-          syncStrategy: BlockViewportSyncStrategy.forceNativeQuery,
+          syncStrategy: BlockViewportSyncStrategy.nativeQuery,
           parentOrCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: false,

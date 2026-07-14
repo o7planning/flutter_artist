@@ -16,9 +16,9 @@ void main() {
           '2.1.1 - Valid payloads on fresh contexts must overwrite the active list completely',
           () {
         final strategies = [
-          BlockViewportSyncStrategy.forceNativeQuery,
-          BlockViewportSyncStrategy.convergeAll,
-          BlockViewportSyncStrategy.incrementalMerge
+          BlockViewportSyncStrategy.nativeQuery,
+          BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
+          BlockViewportSyncStrategy.effectedItemIdsQuery
         ];
 
         for (var strategy in strategies) {
@@ -50,12 +50,12 @@ void main() {
     group('Branch 2.2 - Context Stabilized (Parent or Filter Criteria Intact)',
         () {
       test(
-          '2.2.1 - Should proxy directly to the fallback configuration mapping when forceNativeQuery stands active',
+          '2.2.1 - Should proxy directly to the fallback configuration mapping when nativeQuery stands active',
           () {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
           currentDataState: DataState.ready,
-          syncStrategy: BlockViewportSyncStrategy.forceNativeQuery,
+          syncStrategy: BlockViewportSyncStrategy.nativeQuery,
           parentOrCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: false,
@@ -73,12 +73,12 @@ void main() {
       });
 
       test(
-          '2.2.2 - Full viewport overwrite constraint must be honored when executing convergeAll synchronization',
+          '2.2.2 - Full viewport overwrite constraint must be honored when executing effectedAndViewportItemIdsQuery synchronization',
           () {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
           currentDataState: DataState.ready,
-          syncStrategy: BlockViewportSyncStrategy.convergeAll,
+          syncStrategy: BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
           parentOrCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: false,
@@ -100,7 +100,7 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
           currentDataState: DataState.ready,
-          syncStrategy: BlockViewportSyncStrategy.incrementalMerge,
+          syncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
           parentOrCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: false,
@@ -127,7 +127,7 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
           currentDataState: DataState.ready,
-          syncStrategy: BlockViewportSyncStrategy.incrementalMerge,
+          syncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
           // Normally commands an inline merge
           parentOrCriteriaChanged: false,
           isQueryMore: false,

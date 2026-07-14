@@ -59,11 +59,11 @@ class _BlockRequeryCondition<ID extends Object> extends Equatable {
   Set<ID> getPerformQueryItemIds(List<ID> blockItemIds) {
     switch (viewportSyncStrategy) {
       case null:
-      case BlockViewportSyncStrategy.forceNativeQuery:
+      case BlockViewportSyncStrategy.nativeQuery:
         return {};
-      case BlockViewportSyncStrategy.convergeAll:
+      case BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery:
         return {...blockItemIds, ...__effectiveItemIds};
-      case BlockViewportSyncStrategy.incrementalMerge:
+      case BlockViewportSyncStrategy.effectedItemIdsQuery:
         return {...__effectiveItemIds};
     }
   }

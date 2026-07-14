@@ -863,10 +863,10 @@ abstract class Block<
     //
     thisXBlock._printParameters(provideBlockContext: provideBlockContext);
     final viewportSyncStrategy = thisXBlock.viewportSyncStrategy ??
-        BlockViewportSyncStrategy.forceNativeQuery;
+        BlockViewportSyncStrategy.nativeQuery;
     //
     final performQryMethod =
-        viewportSyncStrategy == BlockViewportSyncStrategy.forceNativeQuery
+        viewportSyncStrategy == BlockViewportSyncStrategy.nativeQuery
             ? BlockErrorMethod.performQuery
             : BlockErrorMethod.performQueryByItemIds;
 
@@ -1117,8 +1117,7 @@ abstract class Block<
           );
         }
         //
-        if (viewportSyncStrategy ==
-            BlockViewportSyncStrategy.forceNativeQuery) {
+        if (viewportSyncStrategy == BlockViewportSyncStrategy.nativeQuery) {
           executionTrace._addTraceStep(
             codeId: "#03340",
             shortDesc: "Calling ${debugObjHtml(this)}.performQuery()...",
@@ -1145,7 +1144,7 @@ abstract class Block<
           //
           _resetBlockRequeryCondition(executionTrace: executionTrace);
         }
-        // viewportSyncStrategy != BlockViewportSyncStrategy.forceNativeQuery
+        // viewportSyncStrategy != BlockViewportSyncStrategy.nativeQuery
         else {
           executionTrace._addTraceStep(
             codeId: "#03350",
@@ -2567,7 +2566,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    final bool forceRequery = viewportSyncStrategy?.forceRequery ?? false;
+    final bool forceRequery = viewportSyncStrategy != null;
     // @DEL-01
     thisXBlock.setCandidateCurrItem(candidateCurrItem);
     //

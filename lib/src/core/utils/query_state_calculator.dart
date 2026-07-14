@@ -129,14 +129,14 @@ class QueryStateCalculator {
       else {
         resolvedState = DataState.ready;
         switch (input.syncStrategy) {
-          case BlockViewportSyncStrategy.forceNativeQuery:
+          case BlockViewportSyncStrategy.nativeQuery:
             resolvedStrategy =
                 input.suggestedListUpdateStrategy ?? ListUpdateStrategy.replace;
             break;
-          case BlockViewportSyncStrategy.convergeAll:
+          case BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery:
             resolvedStrategy = ListUpdateStrategy.replace;
             break;
-          case BlockViewportSyncStrategy.incrementalMerge:
+          case BlockViewportSyncStrategy.effectedItemIdsQuery:
             resolvedStrategy = ListUpdateStrategy.merge;
             break;
         }
