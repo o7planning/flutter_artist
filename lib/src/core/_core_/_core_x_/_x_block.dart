@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class XBlock<
-    ID extends Object, //
+    ID extends Comparable, //
     ITEM extends Identifiable<ID>,
     ITEM_DETAIL extends Identifiable<ID>> {
   XShelf get xShelf => xFilterModel.xShelf;
@@ -85,13 +85,6 @@ class XBlock<
   // ***************************************************************************
   // ***************************************************************************
 
-  _BlockRequeryCondition? _blockReQryCon;
-
-  _BlockItemRefreshCon? _blockItemRefreshCon;
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   ///
   /// IMPORTANT: To create new XBlock, use 'block._createXBlock' method
   /// to have the same Generics Parameters with the block.
@@ -100,13 +93,7 @@ class XBlock<
     required this.block,
     required this.xFilterModel,
     required this.xFormModel,
-  }) {
-    _blockReQryCon = block._blockReqryCondition;
-    _blockItemRefreshCon = block._blockItemRefreshCondition;
-    //
-    block._blockReqryCondition = null;
-    block._blockItemRefreshCondition = null;
-  }
+  });
 
   // ***************************************************************************
   // ***************************************************************************
@@ -296,17 +283,17 @@ class XBlock<
   String toDebugHtmlString() {
     return " - <b>XBlock (${getClassName(block)})</b>"
         "\n    - <b>qryHint</b>: $queryHint"
-        "\n    - <b>blockReqryCondition</b>: $_blockReQryCon"
+        "\n    - <b>blockSyncSessionState</b>: ${block._blockSyncSessionState}"
         "\n    - <b>forceReloadItem</b>: $__forceReloadCurrItem"
-        "\n    - <b>blockItemRefreshCondition</b>: $_blockItemRefreshCon"
+        "\n    - <b>blockItemRefreshCondition</b>: ${block._blockItemRefreshCondition}"
         "\n    - <b>xFormModel</b>: $xFormModel";
   }
 
   @override
   String toString() {
     return "XBlock (${getClassName(block)}) \n"
-        "      - qryHint: $queryHint / blockReQryCon: $_blockReQryCon \n"
-        "      - forceReloadItem: $__forceReloadCurrItem / blockItemRefreshCon: $_blockItemRefreshCon \n"
+        "      - qryHint: $queryHint / blockReQryCon: ${block._blockSyncSessionState}\n"
+        "      - forceReloadItem: $__forceReloadCurrItem / blockItemRefreshCon: ${block._blockItemRefreshCondition} \n"
         "      - xFormModel: $xFormModel";
   }
 }

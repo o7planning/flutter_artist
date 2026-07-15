@@ -41,6 +41,7 @@ import '../../debug/executor/model/_debug_task_unit.dart';
 import '../../debug/executor/model/_debug_x_root_queue.dart';
 import '../../debug/menu/_debug_menu_builder.dart';
 import '../../debug/app/_block_or_scalar.dart';
+import '../../debug/state_view/dialogs/block_sync_session_state_dialog.dart';
 import '../../debug/utils/_debug.dart';
 import '../action/_background_action.dart';
 import '../action/block_backend_action.dart';
@@ -52,61 +53,64 @@ import '../annotation/annotation.dart';
 import '../built_in/empty_form_input.dart';
 import '../built_in/empty_filter_criteria.dart';
 import '../built_in/empty_filter_input.dart';
-import '../enums/_action_confirmation_type.dart';
-import '../enums/_action_result_state.dart';
-import '../enums/_activity_hidden_action.dart';
-import '../enums/_block_viewport_sync_strategy.dart';
-import '../enums/_filter_connector.dart';
-import '../enums/_sort_strategy.dart';
-import '../enums/_default_setting_policy.dart';
-import '../enums/_filter_operator.dart';
-import '../enums/_filter_error_method.dart';
-import '../enums/_hook_hidden_action.dart';
-import '../enums/_block_control_action_type.dart';
-import '../enums/_block_error_method.dart';
-import '../enums/_block_hidden_action.dart';
-import '../enums/_item_absent_representative_policy.dart';
-import '../enums/_trace_step_type.dart';
-import '../enums/_execution_trace_type.dart';
-import '../enums/_block_set_current_item_directive.dart';
-import '../enums/_data_mode.dart';
-import '../enums/_data_state.dart';
-import '../enums/_debug_cat.dart';
-import '../enums/_err_code_if_item_is_null.dart';
-import '../enums/_filter_activity_type.dart';
-import '../enums/_force_type.dart';
-import '../enums/_form_action.dart';
-import '../enums/_form_activity_type.dart';
-import '../enums/_form_error_method.dart';
-import '../enums/_form_mode.dart';
-import '../enums/_deferment_source.dart';
-import '../enums/_item_creation_type.dart';
-import '../enums/_list_update_strategy.dart';
-import '../enums/_multi_opt_prop_reload.dart';
-import '../enums/_after_query_action.dart';
-import '../enums/_qry_hint.dart';
-import '../enums/_qry_pagination_type.dart';
-import '../enums/_quick_suggestion_mode.dart';
-import '../enums/_quick_suggestion_type.dart';
-import '../enums/_context_provider_view_type.dart';
-import '../enums/_context_kind.dart';
-import '../enums/_scalar_control_action_type.dart';
-import '../enums/_scalar_error_method.dart';
-import '../enums/_scalar_hidden_action.dart';
-import '../enums/_selection_type.dart';
-import '../enums/_shelf_release_policy.dart';
-import '../enums/_show_mode.dart';
-import '../enums/_sort_direction.dart';
-import '../enums/_sort_mode.dart';
-import '../enums/_sorting_side.dart';
-import '../enums/_task_type.dart';
-import '../enums/_tip_document.dart';
-import '../enums/_unified_item_refresh_policy.dart';
-import '../enums/_x_shelf_type.dart';
+import '../enums/action_confirmation_type.dart';
+import '../enums/action_result_state.dart';
+import '../enums/activity_hidden_action.dart';
+import '../enums/block_viewport_sync_strategy.dart';
+import '../enums/filter_connector.dart';
+import '../enums/sort_strategy.dart';
+import '../enums/default_setting_policy.dart';
+import '../enums/filter_operator.dart';
+import '../enums/filter_error_method.dart';
+import '../enums/hook_hidden_action.dart';
+import '../enums/block_control_action_type.dart';
+import '../enums/block_error_method.dart';
+import '../enums/block_hidden_action.dart';
+import '../enums/item_absent_representative_policy.dart';
+import '../enums/trace_step_type.dart';
+import '../enums/execution_trace_type.dart';
+import '../enums/block_set_current_item_directive.dart';
+import '../enums/data_mode.dart';
+import '../enums/data_state.dart';
+import '../enums/debug_cat.dart';
+import '../enums/err_code_if_item_is_null.dart';
+import '../enums/filter_activity_type.dart';
+import '../enums/force_type.dart';
+import '../enums/form_action.dart';
+import '../enums/form_activity_type.dart';
+import '../enums/form_error_method.dart';
+import '../enums/form_mode.dart';
+import '../enums/deferment_source.dart';
+import '../enums/item_creation_type.dart';
+import '../enums/list_update_strategy.dart';
+import '../enums/multi_opt_prop_reload.dart';
+import '../enums/after_query_action.dart';
+import '../enums/qry_hint.dart';
+import '../enums/qry_pagination_type.dart';
+import '../enums/quick_suggestion_mode.dart';
+import '../enums/quick_suggestion_type.dart';
+import '../enums/context_provider_view_type.dart';
+import '../enums/context_kind.dart';
+import '../enums/scalar_control_action_type.dart';
+import '../enums/scalar_error_method.dart';
+import '../enums/scalar_hidden_action.dart';
+import '../enums/selection_type.dart';
+import '../enums/shelf_release_policy.dart';
+import '../enums/show_mode.dart';
+import '../enums/sort_direction.dart';
+import '../enums/sort_mode.dart';
+import '../enums/sorting_side.dart';
+import '../enums/task_type.dart';
+import '../enums/tip_document.dart';
+import '../enums/unified_item_refresh_policy.dart';
+import '../enums/x_shelf_type.dart';
 import '../enums/after_backend_action.dart';
+import '../enums/block_error_origin.dart';
+import '../enums/block_native_query_mode.dart';
 import '../enums/block_reaction_target.dart';
-import '../enums/block_viewport_sync_hierarchy_mode.dart';
 import '../enums/event_scope.dart';
+import '../enums/event_source_type.dart';
+import '../enums/resolved_query_action.dart';
 import '../enums/scalar_reaction_target.dart';
 import '../error/_block_error_info.dart';
 import '../error/_dev_error.dart';
@@ -137,6 +141,7 @@ import '../error/filter_register/tilde_filter_criterion_suffix_invalid_error.dar
 import '../error/form/form_multi_opt_ms_mismatch_error.dart';
 import '../error/form/form_prop_type_mismatch_error.dart';
 import '../error/form_register/form_prop_invalid_name_error.dart';
+import '../event/data_type_event_utils.dart';
 import '../icon/icon_constants.dart';
 import '../isar/fa_isar_storage.dart';
 import '../isar/fa_metadata.dart';
@@ -175,7 +180,7 @@ import '../utils/_html_utils.dart';
 import '../utils/_locale_utils.dart';
 import '../utils/_name_utils.dart';
 import '../event/broadcast_backend_events_action.dart';
-import '../enums/_control_bar_item_type.dart';
+import '../enums/control_bar_item_type.dart';
 import '../notification/firebase/firebase_notification_service.dart';
 import '../utils/query_state_calculator.dart';
 
@@ -215,7 +220,9 @@ part '__core__/_default_filter_model.dart';
 
 part '__core__/_deferred_event.dart';
 
-part '__core__/_deferred_event_manager.dart';
+part '__core__/_pending_deferred_event_manager.dart';
+
+part '__core__/_pending_event_processor.dart';
 
 part '_core_event_/_eff_block.dart';
 
@@ -303,7 +310,9 @@ part '__core__/_shelf_debug_info.dart';
 
 part '__core__/_dialog_deferral_result.dart';
 
-part '__core__/_block_debug_requery_condition.dart';
+part '__core__/_block_debug_sync_session_state.dart';
+
+part '__core__/_block_query_plan.dart';
 
 part '__core__/_shelf_block_scalar_type.dart';
 
@@ -324,6 +333,8 @@ part '_sort_/_sort_criteria.dart';
 part '__core__/_storage.dart';
 
 part '__core__/_storage_ev.dart';
+
+part '_utils_/_event_dispatcher.dart';
 
 part '__core__/_suggested_selection.dart';
 
@@ -348,6 +359,12 @@ part '_config_/_block_config.dart';
 part '_config_/_coordinator_config.dart';
 
 part '_config_/_event_config.dart';
+
+part '_event_/_block_received_event_info.dart';
+
+part '_event_/_scalar_received_event_info.dart';
+
+part '_event_/_block_event_reaction.dart';
 
 part '_config_/_filter_model_config.dart';
 
@@ -385,7 +402,7 @@ part '_core_x_/_root_queue_/_x_shelf.dart';
 
 part '__core__/_scalar_requery_condition.dart';
 
-part '__core__/_block_requery_condition.dart';
+part '__core__/_block_sync_session_state.dart';
 
 part '__core__/_block_item_refresh_condition.dart';
 
@@ -782,6 +799,8 @@ part '_ui_control_/_scalar_control_outlined_button.dart';
 part '_ui_control_/_scalar_control_text_button.dart';
 
 part '_utils_/_app_utils.dart';
+
+part '_utils_/_block_query_strategy_resolver.dart';
 
 part '_xdata_/_x_data.dart';
 

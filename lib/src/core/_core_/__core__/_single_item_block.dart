@@ -21,7 +21,7 @@ part of '../core.dart';
 /// ```
 ///
 abstract class SingleItemBlock<
-        ID extends Object, //
+        ID extends Comparable, //
         ITEM_DETAIL extends Identifiable<ID>,
         FILTER_INPUT extends FilterInput,
         FILTER_CRITERIA extends FilterCriteria,

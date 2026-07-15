@@ -10,6 +10,7 @@ class DebugBlockOptions {
   final bool showFilterCriteriaChangeCount;
   final bool showFilterCriteria;
   final bool showHasCurrentItem;
+  final bool showHasParentBlockCurrentItem;
 
   const DebugBlockOptions({
     this.showLastQueryType = true,
@@ -22,6 +23,7 @@ class DebugBlockOptions {
     this.showFilterCriteriaChangeCount = true,
     this.showFilterCriteria = true,
     this.showHasCurrentItem = true,
+    this.showHasParentBlockCurrentItem = true,
     this.showLastQueryResultState = true,
   });
 
@@ -36,6 +38,7 @@ class DebugBlockOptions {
     this.showFilterCriteria = false,
     this.showFilterCriteriaChangeCount = false,
     this.showHasCurrentItem = false,
+    this.showHasParentBlockCurrentItem = false,
     this.showLastQueryResultState = false,
   });
 }

@@ -1,0 +1,4 @@
+enum EventSourceType {
+  internal,
+  external;
+}

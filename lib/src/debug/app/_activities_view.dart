@@ -1,5 +1,5 @@
 import '../../core/_core_/core.dart';
-import '../../core/enums/_tip_document.dart';
+import '../../core/enums/tip_document.dart';
 import '_html_text_list_view.dart';
 
 class ActivitiesView extends HtmlTextListView {

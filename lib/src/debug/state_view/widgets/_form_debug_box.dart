@@ -4,6 +4,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import '../../../core/_core_/core.dart';
 import '../options/_debug_form_options.dart';
 import '_debug_box.dart';
+import '_debug_style_utils.dart';
 
 class FormDebugBox extends BaseDebugBox {
   final FormModel formModel;
@@ -26,50 +27,50 @@ class FormDebugBox extends BaseDebugBox {
           label: "Form UI Active?: ",
           text:
               "${formModel.ui.hasActiveUiComponent()}/${formModel.debug.loadTimeUiActive}*",
-          labelStyle: getLabelStyle0(context),
-          textStyle: getTextStyle0(context),
+          labelStyle: DebugStyleUtils.getLabelStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (options.showFormEnable)
         IconLabelText(
           label: "Form Enable?: ",
           text: "${formModel.isEnabled()}",
-          labelStyle: getLabelStyle0(context),
-          textStyle: getTextStyle0(context),
+          labelStyle: DebugStyleUtils.getLabelStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (options.showFormDataState)
         IconLabelText(
           label: "Form State: ",
           text: formModel.dataState.name.toString(),
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
         ),
       if (options.showFormMode)
         IconLabelText(
           label: "Form Mode: ",
           text: formModel.formMode.name.toString(),
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
         ),
       if (options.showFormLoadCount)
         IconLabelText(
           label: "Form Load Count: ",
           text: formModel.debug.loadCount.toString(),
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
         ),
       if (options.showFormActivityCount)
         IconLabelText(
           label: "Form Activity Count: ",
           text: formModel.debug.formActivityCount.toString(),
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
         ),
       if (options.showFormDirty)
         IconLabelText(
           label: "Form Dirty: ",
           text: formModel.isDirty().toString(),
-          labelStyle: getLabelStyle0(context),
-          textStyle: getTextStyle0(context),
+          labelStyle: DebugStyleUtils.getLabelStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
     ];
 
@@ -79,8 +80,8 @@ class FormDebugBox extends BaseDebugBox {
           (optProp) => IconLabelText(
             label: "Load Count (${optProp.propName}): ",
             text: optProp.loadCount.toString(),
-            labelStyle: getLabelStyle0(context),
-            textStyle: getTextStyle0(context),
+            labelStyle: DebugStyleUtils.getLabelStyle0(context),
+            textStyle: DebugStyleUtils.getTextStyle0(context),
           ),
         ),
     ];

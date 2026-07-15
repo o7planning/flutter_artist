@@ -1,7 +1,7 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/_data_state.dart';
-import '../enums/_scalar_error_method.dart';
+import '../enums/data_state.dart';
+import '../enums/scalar_error_method.dart';
 
 class ScalarErrorInfo {
   final DataState scalarDataState;

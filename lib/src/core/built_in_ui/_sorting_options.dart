@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart' as cupertino;
 import 'package:flutter/material.dart';
 
 import '../_core_/core.dart';
-import '../enums/_sort_direction.dart';
+import '../enums/sort_direction.dart';
 import '_sort_panel_helper.dart';
 
 typedef SortCriterionItemBuilder = Widget Function(

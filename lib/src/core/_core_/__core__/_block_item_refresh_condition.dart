@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class _BlockItemRefreshCon<ID extends Object> extends Equatable {
+class _BlockItemRefreshCon<ID extends Comparable> extends Equatable {
   final ID itemId;
 
   const _BlockItemRefreshCon({

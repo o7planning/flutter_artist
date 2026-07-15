@@ -5,10 +5,11 @@ part of '../core.dart';
 @_BlockDeleteCheckedItemsAnnotation()
 @_BlockDeleteCurrentItemAnnotation()
 @_BlockDeleteItemAnnotation()
-class _BlockMultiItemDeletionTaskUnit
+class _BlockMultiItemDeletionTaskUnit<ID extends Comparable,
+        ITEM extends Identifiable<ID>>
     extends _ResultedSTaskUnit<BlockItemsDeletionResult> {
   XBlock xBlock;
-  final List<Identifiable> items;
+  final List<ITEM> items;
   final bool stopIfError;
 
   _BlockMultiItemDeletionTaskUnit({

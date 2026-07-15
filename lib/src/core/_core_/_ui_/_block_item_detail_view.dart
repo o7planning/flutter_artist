@@ -2,9 +2,9 @@ part of '../core.dart';
 
 abstract class BlockItemDetailView<
     BLOCK extends Block<
-        Object, //
-        Identifiable,
-        Identifiable,
+        Comparable, //
+        Identifiable<Comparable>,
+        Identifiable<Comparable>,
         FilterInput,
         FilterCriteria,
         FormInput,

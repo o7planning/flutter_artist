@@ -1,0 +1,4 @@
+enum BlockNativeQueryMode {
+  fullQuery,
+  pageableQuery;
+}

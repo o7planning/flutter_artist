@@ -7,7 +7,8 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
           xShelfType: XShelfType.shelfExternalReaction,
         ) {
     for (XBlock xBlk in allXBlocks) {
-      if (xBlk._blockReQryCon == null && xBlk._blockItemRefreshCon == null) {
+      if (xBlk.block._blockSyncSessionState == null &&
+          xBlk.block._blockItemRefreshCondition == null) {
         continue;
       }
       // @@@hasActiveBlockFragment
@@ -20,12 +21,13 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
       QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //
-      if (xBlk._blockReQryCon != null &&
-          xBlk.block._isMatchBlockReQryCon(xBlk._blockReQryCon)) {
+      if (xBlk.block._blockSyncSessionState != null &&
+          xBlk.block._isMatchBlockReQryCon(xBlk.block._blockSyncSessionState)) {
         queryHint = blockXBlockRep ? QryHint.force : QryHint.markAsPending;
       }
-      if (xBlk._blockItemRefreshCon != null &&
-          xBlk.block._isMatchBlockItemRefreshCon(xBlk._blockItemRefreshCon)) {
+      if (xBlk.block._blockItemRefreshCondition != null &&
+          xBlk.block._isMatchBlockItemRefreshCon(
+              xBlk.block._blockItemRefreshCondition)) {
         forceReloadItem = true;
       }
       //

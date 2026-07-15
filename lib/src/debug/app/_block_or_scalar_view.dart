@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
-import '../../core/enums/_tip_document.dart';
+import '../../core/enums/tip_document.dart';
 import '../../core/icon/icon_constants.dart';
 import '../dialog/_tip_document_viewer_dialog.dart';
 import '../shelf/widget/_block_or_scalar_info_view.dart';

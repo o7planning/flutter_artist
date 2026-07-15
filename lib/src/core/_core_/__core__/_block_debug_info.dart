@@ -1,32 +1,39 @@
 part of '../core.dart';
 
-class _BlockDebugInfo<ID extends Object> {
+class _BlockDebugInfo<ID extends Comparable> {
   final Block<ID, Identifiable<ID>, Identifiable<ID>, FilterInput,
       FilterCriteria, FormInput, AdditionalFormRelatedData> _block;
 
-  int __performQueryCount = 0;
-
-  int __performQueryByItemIdsCount = 0;
-
   int _lazyLoadCount = 0;
+
+  int get lazyLoadCount => _lazyLoadCount;
 
   int __performLoadItemDetailByIdCount = 0;
 
-  int get lazyLoadCount => _lazyLoadCount;
+  int get performLoadItemDetailByIdCount => __performLoadItemDetailByIdCount;
 
   int _deletionErrorCount = 0;
 
   int get deletionErrorCount => _deletionErrorCount;
 
-  int get performLoadItemDetailByIdCount => __performLoadItemDetailByIdCount;
+  int __performQueryCount = 0;
 
   int get performQueryCount => __performQueryCount;
 
+  int __performQueryByItemIdsCount = 0;
+
   int get performQueryByItemIdsCount => __performQueryByItemIdsCount;
 
-  int get currentItemChangeCount => _block.__blockData._currentItemChangeCount;
+  DebugBlockSyncSessionState? get syncSessionState =>
+      _block._blockSyncSessionState;
 
-  late final requeryCondition = _DebugBlockRequeryCondition<ID>();
+  int _filterCriteriaChangeCount = 0;
+
+  int get filterCriteriaChangeCount => _filterCriteriaChangeCount;
+
+  int _currentItemChangeCount = 0;
+
+  int get currentItemChangeCount => _currentItemChangeCount;
 
   ListUpdateStrategy? get lastForceListUpdateStrategy =>
       _block.__blockData._lastForceListUpdateStrategy;
@@ -41,12 +48,36 @@ class _BlockDebugInfo<ID extends Object> {
         "${_block.getFormInputType()}, ${_block.getFormRelatedDataType()}>";
   }
 
-  int get filterCriteriaChangeCount =>
-      _block.__blockData._filterCriteriaChangeCount;
+  Set<ID> _lastEffectiveItemIds = {};
 
-  _BlockDebugInfo(
-      {required Block<ID, Identifiable<ID>, Identifiable<ID>, FilterInput,
-              FilterCriteria, FormInput, AdditionalFormRelatedData>
-          block})
-      : _block = block;
+  Set<ID> get lastEffectiveItemIds => _lastEffectiveItemIds;
+
+  Set<ID> _lastPerformQueryItemIds = {};
+
+  Set<ID> get lastPerformQueryItemIds => _lastPerformQueryItemIds;
+
+  BlockViewportSyncStrategy? _lastViewportSyncStrategy;
+
+  BlockViewportSyncStrategy? get lastViewportSyncStrategy =>
+      _lastViewportSyncStrategy;
+
+  int _querySessionCount = 0;
+
+  int get querySessionCount => _querySessionCount;
+
+  int _viewportSyncStrategyChangeCount = 0;
+
+  int get viewportSyncStrategyChangeCount => _viewportSyncStrategyChangeCount;
+
+  _BlockDebugInfo({
+    required Block<
+            ID, //
+            Identifiable<ID>,
+            Identifiable<ID>,
+            FilterInput,
+            FilterCriteria,
+            FormInput,
+            AdditionalFormRelatedData>
+        block,
+  }) : _block = block;
 }

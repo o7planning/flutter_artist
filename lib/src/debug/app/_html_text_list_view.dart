@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../core/enums/_tip_document.dart';
+import '../../core/enums/tip_document.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/widgets/_html_selectable_rich_text.dart';
 import '../dialog/_tip_document_viewer_dialog.dart';

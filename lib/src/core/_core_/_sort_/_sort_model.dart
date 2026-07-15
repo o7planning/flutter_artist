@@ -28,12 +28,12 @@ abstract class SortModel<ITEM extends Object> {
     required this.sortModelBuilder,
     required this.sortingSide,
   }) : sortMode = sortingSide == SortingSide.server
-      ? sortModelBuilder?.serverSideSortMode ?? SortMode.single
-      : sortModelBuilder?.clientSideSortMode ?? SortMode.single {
+            ? sortModelBuilder?.serverSideSortMode ?? SortMode.single
+            : sortModelBuilder?.clientSideSortMode ?? SortMode.single {
     int optCount = 0;
     if (sortModelBuilder != null) {
       SortModelStructure structure =
-      sortModelBuilder!.defineSortModelStructure();
+          sortModelBuilder!.defineSortModelStructure();
       for (SortCriterionDef criterionDef in structure._sortCriteriaMap.values) {
         SortDirection? sortDirection = sortingSide == SortingSide.server
             ? criterionDef.serverSideConfig.initialSortDirection
@@ -87,9 +87,7 @@ abstract class SortModel<ITEM extends Object> {
   // ***************************************************************************
 
   SortCriterion? findFirstCriterionHasDirection() {
-    return _criteria
-        .where((c) => c._direction != null)
-        .firstOrNull;
+    return _criteria.where((c) => c._direction != null).firstOrNull;
   }
 
   // ***************************************************************************
@@ -98,16 +96,15 @@ abstract class SortModel<ITEM extends Object> {
   ///
   /// Returns the criteria used for sorting.
   ///
-  SortableCriteria getSortableCriteria() {
+  SortableCriteria get sortableCriteria {
     List<SortableCriterion> list = _criteria
         .where((sc) => sc.hasDirection)
         .map(
-          (sc) =>
-          SortableCriterion._(
+          (sc) => SortableCriterion._(
             direction: sc.direction!,
             criterionName: sc.criterionName,
           ),
-    )
+        )
         .toList();
     //
     if (sortMode == SortMode.single) {

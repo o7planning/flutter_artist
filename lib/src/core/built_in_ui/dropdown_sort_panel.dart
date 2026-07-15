@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../_core_/core.dart';
-import '../enums/_sort_direction.dart';
+import '../enums/sort_direction.dart';
 import '_sort_panel_helper.dart';
 import '_sorting_options.dart';
 import 'dropdown_sort_panel_style.dart';

@@ -11,6 +11,7 @@ class SourceAndSummaryEvents {
   }
 }
 
+@Deprecated("DELETE, No longer use")
 class _DeferredEventManager {
   final _Storage storage;
   final List<DeferredEvent> _list = [];
@@ -111,6 +112,7 @@ class _DeferredEventManager {
       __markReactionConditionsForEvents(
         executionTrace: executionTrace,
         listenerShelf: listenerShelf,
+        requiresMaxSyncStrategy: false, // TODO: Xem lai.
         outsideEvents: projectionEvents.toList(),
       );
       if (listenerShelf._hasReactionBookmark()) {
@@ -166,6 +168,7 @@ class _DeferredEventManager {
   void __markReactionConditionsForEvents({
     required ExecutionTrace executionTrace,
     required Shelf listenerShelf,
+    required bool requiresMaxSyncStrategy,
     required List<Type> outsideEvents,
   }) {
     if (listenerShelf.isFullyPending) {
@@ -197,6 +200,7 @@ class _DeferredEventManager {
     //
     listenerShelf._markReactionToExternalShelfEvents(
       executionTrace: executionTrace,
+      requiresMaxSyncStrategy: requiresMaxSyncStrategy,
       effectedShelfMembers: effectedShelfMembers,
     );
   }

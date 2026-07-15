@@ -1,5 +1,5 @@
 import 'package:flutter_artist/flutter_artist.dart';
-import 'package:flutter_artist/src/core/enums/_fallback_dilemma_strategy.dart';
+import 'package:flutter_artist/src/core/enums/fallback_dilemma_strategy.dart';
 import 'package:flutter_artist/src/core/utils/query_state_calculator.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -25,6 +25,7 @@ void main() {
           final input = QueryCalculatorInput(
             queryResultState: ActionResultState.success,
             currentDataState: DataState.none,
+            currentHasPendingInvalidation: false,
             syncStrategy: strategy,
             parentOrCriteriaChanged: true,
             // Context shift active
@@ -55,6 +56,7 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
           currentDataState: DataState.ready,
+          currentHasPendingInvalidation: false,
           syncStrategy: BlockViewportSyncStrategy.nativeQuery,
           parentOrCriteriaChanged: false,
           isQueryMore: false,
@@ -78,7 +80,9 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
           currentDataState: DataState.ready,
-          syncStrategy: BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
+          currentHasPendingInvalidation: false,
+          syncStrategy:
+              BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
           parentOrCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: false,
@@ -100,6 +104,7 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
           currentDataState: DataState.ready,
+          currentHasPendingInvalidation: false,
           syncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
           parentOrCriteriaChanged: false,
           isQueryMore: false,
@@ -127,6 +132,7 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
           currentDataState: DataState.ready,
+          currentHasPendingInvalidation: false,
           syncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
           // Normally commands an inline merge
           parentOrCriteriaChanged: false,

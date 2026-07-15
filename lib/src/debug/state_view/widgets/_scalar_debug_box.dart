@@ -5,6 +5,7 @@ import '../../../core/_core_/core.dart';
 import '../options/_debug_scalar_options.dart';
 import '_active_info_widget.dart';
 import '_debug_box.dart';
+import '_debug_style_utils.dart';
 
 class ScalarDebugBox extends BaseDebugBox {
   final Scalar scalar;
@@ -27,8 +28,8 @@ class ScalarDebugBox extends BaseDebugBox {
           activeElementType: ActiveElementType.scalar,
           activeUiComponentName: activeUI,
           xActiveUiComponentName: xActiveUI,
-          labelStyle: getLabelStyle0(context),
-          textStyle: getTextStyle0(context),
+          labelStyle: DebugStyleUtils.getLabelStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
           checkAgain: () {
             String? activeUI = scalar.ui.findActiveUiComponent();
             print("Check again: $activeUI");
@@ -38,49 +39,49 @@ class ScalarDebugBox extends BaseDebugBox {
         IconLabelText(
           label: "Last Query Type: ",
           text: scalar.lastQueryType.name,
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle0(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (options.showScalarDataState)
         IconLabelText(
           label: "Data State: ",
           text: scalar.dataState.name.toString(),
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
         ),
       if (options.showLastQueryResultState)
         IconLabelText(
           label: "Last Query Result: ",
           text: scalar.lastQueryResultState?.name ?? "",
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle0(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (options.showPerformQueryCount)
         IconLabelText(
           label: "Query Count: ",
           text: scalar.debug.performQueryCount.toString(),
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
         ),
       if (scalar.filterModel != null && options.showFilterCriteria)
         IconLabelText(
           label: "Filter Criteria: ",
           text: scalar.filterCriteria == null ? "null" : "[Not Null]",
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle0(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (options.showFilterCriteriaChangeCount)
         IconLabelText(
           label: "Filter Criteria Change Count: ",
           text: scalar.debug.filterCriteriaChangeCount.toString(),
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle0(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       IconLabelText(
         label: "Has Value?: ",
         text: (scalar.value != null).toString(),
-        labelStyle: getLabelStyle(context),
-        textStyle: getTextStyle0(context),
+        labelStyle: DebugStyleUtils.getLabelStyle(context),
+        textStyle: DebugStyleUtils.getTextStyle0(context),
       ),
     ];
   }

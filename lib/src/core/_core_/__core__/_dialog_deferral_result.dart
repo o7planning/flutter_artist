@@ -46,7 +46,7 @@ class _StorageDeferment {
     // SAME-AS: #0003
     Future.delayed(
       Duration.zero,
-          () {
+      () {
         for (String shelfName in _storage._shelfMap.keys) {
           Shelf reactionShelf = _storage._shelfMap[shelfName]!;
           if (reactionShelf._hasReactionBookmark()) {
@@ -73,7 +73,7 @@ class _StorageDeferment {
     // SAME-AS:
     Future.delayed(
       Duration.zero,
-          () {
+      () {
         for (String shelfName in _storage._shelfMap.keys) {
           Shelf reactionShelf = _storage._shelfMap[shelfName]!;
           if (reactionShelf._hasReactionBookmark()) {
@@ -105,7 +105,7 @@ class _StorageDeferment {
   /// Dialog:
   ///
   Future<DialogDeferralResult<V?>>
-  _showDialogAndDeferExternalShelfEventsUntilClosed<V>({
+      _showDialogAndDeferExternalShelfEventsUntilClosed<V>({
     required String path,
     required FaRouteBuilder builder,
     required ExecutionTrace executionTrace,
@@ -133,10 +133,10 @@ class _StorageDeferment {
   /// Drawer:
   ///
   Future<void> _openDrawerAndDeferExternalShelfEventsUntilClosed(
-      BuildContext context, {
-        required ExecutionTrace executionTrace,
-        bool showSuggestionIfNeed = true,
-      }) async {
+    BuildContext context, {
+    required ExecutionTrace executionTrace,
+    bool showSuggestionIfNeed = true,
+  }) async {
     if (!__ensureDefermentSourceIsNull()) {
       return;
     }
@@ -158,12 +158,11 @@ class _StorageDeferment {
     // }
 
     await Future.doWhile(
-          () =>
-          Future.delayed(const Duration(milliseconds: 1)).then(
-                (_) {
-              return _storage.drawer.isOpen == true;
-            },
-          ),
+      () => Future.delayed(const Duration(milliseconds: 1)).then(
+        (_) {
+          return _storage.drawer.isOpen == true;
+        },
+      ),
     );
     __defermentSource = null;
     __checkDrawerOrEndDrawerAndResumeReactionIfCan(
@@ -178,10 +177,10 @@ class _StorageDeferment {
   /// EndDrawer:
   ///
   Future<void> _openEndDrawerAndDeferExternalShelfEventsUntilClosed(
-      BuildContext context, {
-        required ExecutionTrace executionTrace,
-        bool showSuggestionIfNeed = true,
-      }) async {
+    BuildContext context, {
+    required ExecutionTrace executionTrace,
+    bool showSuggestionIfNeed = true,
+  }) async {
     if (!__ensureDefermentSourceIsNull()) {
       return;
     }
@@ -203,12 +202,11 @@ class _StorageDeferment {
     // }
 
     await Future.doWhile(
-          () =>
-          Future.delayed(const Duration(milliseconds: 1)).then(
-                (_) {
-              return _storage.endDrawer.isOpen == true;
-            },
-          ),
+      () => Future.delayed(const Duration(milliseconds: 1)).then(
+        (_) {
+          return _storage.endDrawer.isOpen == true;
+        },
+      ),
     );
     __defermentSource = null;
     __checkDrawerOrEndDrawerAndResumeReactionIfCan(

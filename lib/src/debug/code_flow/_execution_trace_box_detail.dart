@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/_trace_step_type.dart';
+import '../../core/enums/trace_step_type.dart';
 import '../../core/widgets/_iconed_checkbox.dart';
 import '../../core/widgets/_simple_copy_button.dart';
 import '../shelf/widget/_shelf_info_view.dart';

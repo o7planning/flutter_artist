@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class ProjectionFamily<ID extends Object> {
+class ProjectionFamily<ID extends Comparable> {
   final String familyName;
   final Set<Type> _members;
 

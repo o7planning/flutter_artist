@@ -2,8 +2,8 @@ part of '../core.dart';
 
 abstract class FormView<
     FORM_MODEL extends FormModel<
-        Object, //
-        Identifiable,
+        Comparable, //
+        Identifiable<Comparable>,
         FormInput,
         AdditionalFormRelatedData>> extends StatelessWidget {
   final FORM_MODEL formModel;

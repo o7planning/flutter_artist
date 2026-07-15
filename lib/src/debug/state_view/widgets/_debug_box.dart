@@ -1,32 +1,6 @@
 import 'package:flutter/material.dart';
 
 abstract class BaseDebugBox extends StatelessWidget {
-  TextStyle getLabelStyle0(BuildContext context) => TextStyle(
-        color: Theme.of(context).colorScheme.primary,
-        fontWeight: FontWeight.bold,
-        fontSize: 11.5,
-      );
-
-  TextStyle getTextStyle0(BuildContext context) => TextStyle(
-        color: Theme.of(context).colorScheme.tertiary,
-        fontSize: 11.5,
-      );
-
-  TextStyle getLabelStyle(BuildContext context) => const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 11.5,
-      );
-
-  TextStyle getLabelStyle1(BuildContext context) => const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 11.5,
-      );
-
-  TextStyle getTextStyle(BuildContext context) => const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 11.5,
-      );
-
   const BaseDebugBox({super.key});
 
   List<Widget> getChildIconLabelTexts(BuildContext context);

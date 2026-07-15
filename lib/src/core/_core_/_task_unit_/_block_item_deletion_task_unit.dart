@@ -5,10 +5,11 @@ part of '../core.dart';
 @_BlockDeleteCheckedItemsAnnotation()
 @_BlockDeleteCurrentItemAnnotation()
 @_BlockDeleteItemAnnotation()
-class _BlockItemDeletionTaskUnit
-    extends _ResultedSTaskUnit<BlockItemDeletionResult> {
+class _BlockItemDeletionTaskUnit<ID extends Comparable,
+        ITEM extends Identifiable<ID>>
+    extends _ResultedSTaskUnit<BlockItemDeletionResult<ITEM>> {
   XBlock xBlock;
-  final Identifiable item;
+  final ITEM item;
 
   _BlockItemDeletionTaskUnit({
     required this.xBlock,

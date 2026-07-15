@@ -12,10 +12,15 @@ class BlockConfig {
   final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy;
   final BlockHiddenAction onHideAction;
 
+  final bool isNativeQueryModeLocked;
+  final BlockNativeQueryMode nativeQueryMode;
   final Pageable pageable;
 
   ///
-  final List<Type> broadcastExternalShelfEvents;
+  // final List<Type> broadcastExternalShelfEvents;
+
+  final bool eventBroadcastEnabled;
+  final List<Type> extraBroadcastEvents;
 
   final SortStrategy clientSideSortStrategy;
 
@@ -34,18 +39,21 @@ class BlockConfig {
     this.unifiedItemRefreshPolicy = UnifiedItemRefreshPolicy.auto,
     this.preventUnsavedChangesLoss = true,
     this.viewportSyncConfig = const BlockViewportSyncConfig(),
-    List<Type>? broadcastExternalShelfEvents,
-
+    // List<Type>? broadcastExternalShelfEvents,
+    this.eventBroadcastEnabled = false,
+    List<Type>? extraBroadcastEvents,
     //
+    this.isNativeQueryModeLocked = true,
+    this.nativeQueryMode = BlockNativeQueryMode.pageableQuery,
     this.pageable = const Pageable(
       page: 1,
       pageSize: 20,
     ),
     this.clientSideSortStrategy = SortStrategy.none,
     this.reactions = const [],
-  })  : this.onHideAction = BlockHiddenAction.none,
-        broadcastExternalShelfEvents =
-            List.unmodifiable(broadcastExternalShelfEvents?.toSet() ?? []);
+  })  : onHideAction = BlockHiddenAction.none,
+        extraBroadcastEvents =
+            List.unmodifiable(extraBroadcastEvents?.toSet() ?? []);
 
   BlockConfig copy() {
     return BlockConfig(
@@ -53,10 +61,11 @@ class BlockConfig {
       itemAbsentRepresentativePolicy: itemAbsentRepresentativePolicy,
       preventUnsavedChangesLoss: preventUnsavedChangesLoss,
       enforceParentLinkConstraint: enforceParentLinkConstraint,
-      // onHideAction: onHideAction,
+      nativeQueryMode: nativeQueryMode,
       pageable: pageable.copy(),
       //
-      broadcastExternalShelfEvents: broadcastExternalShelfEvents,
+      eventBroadcastEnabled: eventBroadcastEnabled,
+      extraBroadcastEvents: extraBroadcastEvents,
       //
       reactions: reactions,
       //

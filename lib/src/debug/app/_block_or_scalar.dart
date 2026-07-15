@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_artist_router/flutter_artist_router.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/_data_state.dart';
+import '../../core/enums/data_state.dart';
 import '../../core/utils/_class_utils.dart';
 
 class BlockOrScalar extends Equatable {
@@ -132,26 +132,28 @@ class BlockOrScalar extends Equatable {
   }
 
   Set<Type> getDeclaredReactionDataTypes() {
-    if (block != null) {
-      return block!.getDeclaredReactionDataTypes();
-    } else {
-      return scalar!.getDeclaredReactionDataTypes();
-    }
+    // if (block != null) {
+    //   return block!.getDeclaredReactionDataTypes();
+    // } else {
+    //   return scalar!.getDeclaredReactionDataTypes();
+    // }
+    throw UnimplementedError();
   }
 
   // TODO-Rename
   List<String> getListenItemTypesAsStrings() {
-    if (block != null) {
-      return block!
-          .getDeclaredReactionDataTypes()
-          .map((type) => type.toString())
-          .toList();
-    } else {
-      return scalar!
-          .getDeclaredReactionDataTypes()
-          .map((type) => type.toString())
-          .toList();
-    }
+    // if (block != null) {
+    //   return block!
+    //       .getDeclaredReactionDataTypes()
+    //       .map((type) => type.toString())
+    //       .toList();
+    // } else {
+    //   return scalar!
+    //       .getDeclaredReactionDataTypes()
+    //       .map((type) => type.toString())
+    //       .toList();
+    // }
+    throw UnimplementedError();
   }
 
   bool hasActiveUiComponent() {

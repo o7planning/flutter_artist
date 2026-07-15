@@ -1,5 +1,6 @@
 enum QryHint {
   force(2),
+  @Deprecated("No longer use")
   markAsPending(1),
   none(0);
 

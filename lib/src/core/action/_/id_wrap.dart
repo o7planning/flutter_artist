@@ -1,7 +1,7 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 //
-class IdWrap<ID extends Object> {
+class IdWrap<ID> {
   final ID? id;
 
   IdWrap(this.id);

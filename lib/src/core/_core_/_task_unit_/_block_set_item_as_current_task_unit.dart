@@ -6,7 +6,7 @@ part of '../core.dart';
 @_BlockSelectNextItemAsCurrentAnnotation()
 @_BlockSelectFirstItemAsCurrentAnnotation()
 @_BlockSelectPreviousItemAsCurrentAnnotation()
-class _BlockSetItemAsCurrentTaskUnit<ID extends Object,
+class _BlockSetItemAsCurrentTaskUnit<ID extends Comparable,
         ITEM extends Identifiable<ID>>
     extends _ResultedSTaskUnit<BlockSetCurrentItemResult<ITEM>> {
   final XBlock xBlock;

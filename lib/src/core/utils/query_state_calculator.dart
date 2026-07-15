@@ -1,8 +1,8 @@
-import '../enums/_action_result_state.dart';
-import '../enums/_block_viewport_sync_strategy.dart';
-import '../enums/_data_state.dart';
-import '../enums/_fallback_dilemma_strategy.dart';
-import '../enums/_list_update_strategy.dart';
+import '../enums/action_result_state.dart';
+import '../enums/block_viewport_sync_strategy.dart';
+import '../enums/data_state.dart';
+import '../enums/fallback_dilemma_strategy.dart';
+import '../enums/list_update_strategy.dart';
 
 /// Immutable parameter blueprint feeding into the state calculator engine.
 class QueryCalculatorInput {
@@ -11,6 +11,8 @@ class QueryCalculatorInput {
 
   /// The current state ledger bound to the active runtime block.
   final DataState currentDataState;
+
+  final bool currentHasPendingInvalidation;
 
   /// The viewport alignment boundary requested by the triggering mutation or refresh task.
   final BlockViewportSyncStrategy syncStrategy;
@@ -39,6 +41,7 @@ class QueryCalculatorInput {
   const QueryCalculatorInput({
     required this.queryResultState,
     required this.currentDataState,
+    required this.currentHasPendingInvalidation,
     required this.syncStrategy,
     required this.parentOrCriteriaChanged,
     required this.isQueryMore,
@@ -58,12 +61,15 @@ class QueryCalculatorResult {
   /// The next structural lifecycle state target assigned onto the running block.
   final DataState newBlockDataState;
 
+  final bool newHasPendingInvalidation;
+
   /// Indicator commanding the processor to forcefully prune missing locally cached items.
   final bool forcePruneMissingIds;
 
   const QueryCalculatorResult({
     required this.realListUpdateStrategy,
     required this.newBlockDataState,
+    required this.newHasPendingInvalidation,
     required this.forcePruneMissingIds,
   });
 }
@@ -75,12 +81,14 @@ class QueryStateCalculator {
   static QueryCalculatorResult calculate(QueryCalculatorInput input) {
     ListUpdateStrategy resolvedStrategy;
     DataState resolvedState;
+    bool resolvedHasPendingInvalidation;
     bool shouldPrune = false;
 
     // =========================================================================
     //  BRANCH 1: REMOTE RE-QUERY LIFECYCLE FAILED
     // =========================================================================
     if (input.queryResultState == ActionResultState.fail) {
+      resolvedHasPendingInvalidation = input.currentHasPendingInvalidation;
       // Case 1.1: Context shifted -> Outdated data must be completely scrubbed
       if (input.parentOrCriteriaChanged) {
         resolvedStrategy = ListUpdateStrategy.replace;
@@ -120,6 +128,8 @@ class QueryStateCalculator {
     //  BRANCH 2: REMOTE RE-QUERY LIFECYCLE SUCCEEDED
     // =========================================================================
     else {
+      resolvedHasPendingInvalidation = false;
+
       // Case 2.1: Fresh context loaded successfully -> Flush and mount the new grid rows
       if (input.parentOrCriteriaChanged) {
         resolvedStrategy = ListUpdateStrategy.replace;
@@ -151,6 +161,7 @@ class QueryStateCalculator {
     return QueryCalculatorResult(
       realListUpdateStrategy: resolvedStrategy,
       newBlockDataState: resolvedState,
+      newHasPendingInvalidation: resolvedHasPendingInvalidation,
       forcePruneMissingIds: shouldPrune,
     );
   }

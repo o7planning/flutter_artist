@@ -35,6 +35,7 @@ class _Executor {
     if (FlutterArtist.appConfig.debugOptions.showTaskUnitQueue) {
       showOverlay2 = false;
     }
+    bool pendingEventProcessed = false;
     await FlutterArtist._executeTask(
       showOverlay: showOverlay2,
       asyncFunction: () async {
@@ -43,8 +44,16 @@ class _Executor {
           while (true) {
             bool hasNext = FlutterArtist._rootQueue.hasNext();
             if (!hasNext) {
-              FlutterArtist.storage._deferredEventManager
-                  .addTaskUnitForDeferredEvents();
+              if (pendingEventProcessed) {
+                break;
+              }
+              pendingEventProcessed = true;
+              // FlutterArtist.storage._deferredEventManager
+              //     .addTaskUnitForDeferredEvents();
+              print(
+                  "@TEMP executor: ########## _pendingEventProcessor.addTaskUnitForPendingEvents");
+              FlutterArtist.storage._pendingEventProcessor
+                  .addTaskUnitForPendingEvents();
               hasNext = FlutterArtist._rootQueue.hasNext();
               if (!hasNext) {
                 break;
@@ -207,8 +216,7 @@ class _Executor {
         taskType: taskUnit.taskType,
         thisXBlock: taskUnit.xBlock,
         item: taskUnit.item,
-        deletionResult:
-            taskUnit.taskResult as BlockItemDeletionResult<Identifiable>,
+        deletionResult: taskUnit.taskResult,
       );
     }
     // Block Delete Items:
@@ -219,8 +227,8 @@ class _Executor {
         thisXBlock: taskUnit.xBlock,
         items: taskUnit.items,
         stopIfError: taskUnit.stopIfError,
-        deletionResult:
-            taskUnit.taskResult as BlockItemsDeletionResult<Identifiable>,
+        deletionResult: taskUnit.taskResult
+            as BlockItemsDeletionResult<Identifiable<Comparable<dynamic>>>,
       );
     }
     // Block QuickCreateItem:

@@ -3,7 +3,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/_execution_trace_type.dart';
+import '../../core/enums/execution_trace_type.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../../core/widgets/_iconed_checkbox.dart';
 import '../dialog/_code_flow_settings_dialog.dart';

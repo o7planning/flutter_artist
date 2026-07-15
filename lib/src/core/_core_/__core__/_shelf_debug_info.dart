@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class _ShelfDebugInfo<ID extends Object> {
+class _ShelfDebugInfo {
   final Shelf _shelf;
 
   int _initQueryTaskUnitsCount = 0;

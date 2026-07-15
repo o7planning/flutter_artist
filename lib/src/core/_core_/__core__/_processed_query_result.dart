@@ -1,10 +1,10 @@
 part of '../core.dart';
 
 class _ProcessedQueryResult<
-    ID extends Object, //
+    ID extends Comparable, //
     ITEM extends Identifiable<ID>,
     FILTER_CRITERIA extends FilterCriteria> {
-  final Object? parentBlockCurrentItemId;
+  final Comparable? parentBlockCurrentItemId;
   final XFilterCriteria<FILTER_CRITERIA>? usedXFilterCriteria;
   final Pageable? usedPageable;
 
@@ -15,6 +15,7 @@ class _ProcessedQueryResult<
   // final PageData<ITEM>? queriedPageData;
   final ActionResultState queryResultState;
   final DataState newBlockDataState;
+  final bool newHasPendingInvalidation;
 
   //
   final List<ITEM> validItems;
@@ -33,6 +34,7 @@ class _ProcessedQueryResult<
     required this.queriedPaginationInfo,
     required this.queryResultState,
     required this.newBlockDataState,
+    required this.newHasPendingInvalidation,
     required this.validItems,
     required this.invalidItems,
     required this.errorItems,

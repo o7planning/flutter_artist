@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class _BlockData<
-    ID extends Object,
+    ID extends Comparable,
     ITEM extends Identifiable<ID>,
     ITEM_DETAIL extends Identifiable<ID>,
     FILTER_INPUT extends FilterInput,
@@ -154,8 +154,6 @@ class _BlockData<
 
   XFilterCriteria<FILTER_CRITERIA>? _xFilterCriteria;
 
-  int _filterCriteriaChangeCount = 0;
-
   PageData<ITEM>? _lastQueryResult;
 
   ActionResultState? _lastQueryResultState;
@@ -173,9 +171,13 @@ class _BlockData<
   ///
   Pageable? get _emptyPageable => _initialPageable;
 
-  late PaginationInfo? _paginationInfo;
+  late BlockNativeQueryMode _pendingNativeQueryMode;
 
-  int _currentItemChangeCount = 0;
+  late BlockNativeQueryMode _nativeQueryMode;
+
+  BlockNativeQueryMode get nativeQueryMode => _nativeQueryMode;
+
+  late PaginationInfo? _paginationInfo;
 
   _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL> __current = _BlockItem2Wrap.ofNull();
 
@@ -185,26 +187,52 @@ class _BlockData<
 
   DataState _selectionDataState = DataState.pending;
 
+  BlockErrorOrigin? _errorOrigin;
+
+  late bool _hasPendingInvalidation;
+
   // ***************************************************************************
   // ***************************************************************************
 
-  _BlockData._(
-    this.block,
-    Pageable? pageable,
-  )   : _pageable = pageable,
+  _BlockData._({
+    required this.block,
+    required Pageable? pageable,
+    required BlockNativeQueryMode nativeQueryMode,
+  })  : _pageable = pageable,
+        _nativeQueryMode = nativeQueryMode,
+        _pendingNativeQueryMode = nativeQueryMode,
         _initialPageable = pageable,
         _paginationInfo = PaginationInfo.empty() {
     _blockDataState = block.isRoot ? DataState.pending : DataState.none;
+    _hasPendingInvalidation = false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _setPendingNativeQueryMode(BlockNativeQueryMode mode) {
+    _pendingNativeQueryMode = mode;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void _clearItemsWithDataState({
-    required DataState qryDataState,
+    required DataState blockDataState,
+    required bool hasPendingInvalidation,
     required bool errorInFilter,
+    required bool resetSyncSessionState,
+    required bool resetRefreshItemCondition,
   }) {
-    _blockDataState = qryDataState;
+    _blockDataState = blockDataState;
+    _hasPendingInvalidation = hasPendingInvalidation;
+    if (resetSyncSessionState) {
+      block._resetSyncSessionState(executionTrace: null);
+    }
+    if (resetRefreshItemCondition) {
+      // TODO:..
+    }
+    //
     if (_blockDataState == DataState.error) {
       _lastQueryResultState = ActionResultState.fail;
       //
@@ -302,7 +330,7 @@ class _BlockData<
     final bool changed = oldId != id;
     //
     if (changed) {
-      _currentItemChangeCount++;
+      block.debug._currentItemChangeCount++;
       if (block.formModel != null) {
         block.formModel!._triggerItemIdChanged();
       }
@@ -406,6 +434,7 @@ class _BlockData<
     _parentBlockCurrentItemId = processedQueryResult.parentBlockCurrentItemId;
     _lastQueryResult = lastQueriedPageData;
     _blockDataState = processedQueryResult.newBlockDataState;
+    _hasPendingInvalidation = processedQueryResult.newHasPendingInvalidation;
     //
     // Update FilterCriteria:
     //
@@ -518,7 +547,7 @@ class _BlockData<
     final bool changed = _xFilterCriteria != newXFilterCriteria;
     _xFilterCriteria = newXFilterCriteria;
     if (changed) {
-      _filterCriteriaChangeCount++;
+      block.debug._filterCriteriaChangeCount++;
       if (block.formModel != null) {
         block.formModel!._triggerFilterCriteriaChanged();
       }

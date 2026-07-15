@@ -3,7 +3,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
     as dialogs;
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/_tip_document.dart';
+import '../../core/enums/tip_document.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../form/_form_model_view.dart';

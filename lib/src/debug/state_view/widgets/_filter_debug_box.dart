@@ -4,6 +4,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import '../../../core/_core_/core.dart';
 import '../options/_debug_filter_options.dart';
 import '_debug_box.dart';
+import '_debug_style_utils.dart';
 
 class FilterDebugBox extends BaseDebugBox {
   final FilterModel filterModel;
@@ -26,15 +27,15 @@ class FilterDebugBox extends BaseDebugBox {
         IconLabelText(
           label: "Filter UI Active?: ",
           text: "${filterModel.ui.hasActiveUiComponent()}",
-          labelStyle: getLabelStyle0(context),
-          textStyle: getTextStyle0(context),
+          labelStyle: DebugStyleUtils.getLabelStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (options.showInitiatedAtLeastOnce)
         IconLabelText(
           label: "Initiated At Least Once?: ",
           text: "${filterModel.initiatedAtLeastOnce}",
-          labelStyle: getLabelStyle0(context),
-          textStyle: getTextStyle0(context),
+          labelStyle: DebugStyleUtils.getLabelStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       // if (options.showFilterEnable)
       //   IconLabelText(
@@ -47,8 +48,8 @@ class FilterDebugBox extends BaseDebugBox {
         IconLabelText(
           label: "Filter State: ",
           text: filterModel.dataState.name.toString(),
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
         ),
       // if (options.showFilterMode)
       //   IconLabelText(
@@ -61,15 +62,15 @@ class FilterDebugBox extends BaseDebugBox {
         IconLabelText(
           label: "Filter Load Count: ",
           text: filterModel.debug.loadCount.toString(),
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
         ),
       if (options.showFilterActivityCount)
         IconLabelText(
           label: "Filter Activity Count: ",
           text: filterModel.debug.filterActivityCount.toString(),
-          labelStyle: getLabelStyle(context),
-          textStyle: getTextStyle(context),
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
         ),
       // if (options.showFilterDirty)
       //   IconLabelText(
@@ -86,8 +87,8 @@ class FilterDebugBox extends BaseDebugBox {
           (optCriterion) => IconLabelText(
             label: "Load Count (${optCriterion.tildeCriterionName}): ",
             text: optCriterion.loadCount.toString(),
-            labelStyle: getLabelStyle0(context),
-            textStyle: getTextStyle0(context),
+            labelStyle: DebugStyleUtils.getLabelStyle0(context),
+            textStyle: DebugStyleUtils.getTextStyle0(context),
           ),
         ),
     ];

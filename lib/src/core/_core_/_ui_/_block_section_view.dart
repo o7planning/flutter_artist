@@ -2,9 +2,9 @@ part of '../core.dart';
 
 abstract class BlockSectionView<
     BLOCK extends Block<
-        Object, //
-        Identifiable,
-        Identifiable,
+        Comparable, //
+        Identifiable<Comparable>,
+        Identifiable<Comparable>,
         FilterInput,
         FilterCriteria,
         FormInput,

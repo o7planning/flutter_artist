@@ -202,7 +202,8 @@ abstract class XShelf extends XRootQueueItem {
   void _updateInternalReactionByEvtBlock({
     required ExecutionTrace executionTrace,
     required XBlock eventXBlock,
-    required bool forceRequery,
+    required bool forceRequeryEventBlock,
+    required BlockViewportSyncStrategy? viewportSyncStrategyEventBlock,
   }) {
     __assertXShelf(eventXBlock.xShelf);
     //
@@ -220,7 +221,7 @@ abstract class XShelf extends XRootQueueItem {
       traceStepType: TraceStepType.debug,
     );
 
-    if (forceRequery) {
+    if (forceRequeryEventBlock) {
       final forceQryHint = QryHint.force;
       //
       executionTrace._addTraceStep(
@@ -229,8 +230,10 @@ abstract class XShelf extends XRootQueueItem {
             "Set ${debugObjHtml(eventXBlock.block)} qryHint: ${debugObjHtml(forceQryHint)}.",
       );
       eventXBlock.setQueryHintToGreater(forceQryHint);
+      if (viewportSyncStrategyEventBlock != null) {
+        eventXBlock.setViewportSyncStrategy(viewportSyncStrategyEventBlock);
+      }
     }
-
     //
     Set<String> listenerBlockNames = {}
       ..addAll(effectedShelfMembers._requeryBlockMAP.keys)

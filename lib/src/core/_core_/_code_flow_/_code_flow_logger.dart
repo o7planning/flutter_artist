@@ -133,6 +133,7 @@ class CodeFlowLogger {
     return log;
   }
 
+  // TODO: Rename.
   ExecutionTrace _initTaskUnitForDeferredEvent({
     required Object ownerClassInstance,
   }) {

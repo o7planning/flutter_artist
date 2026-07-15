@@ -39,6 +39,7 @@ class XFilterModel {
 
   @override
   String toString() {
-    return "${getClassName(filterModel)} - Queried: $queried >>> FILTER_INPUT: $filterInput";
+    return "${getClassName(
+        filterModel)} - Queried: $queried >>> FILTER_INPUT: $filterInput";
   }
 }

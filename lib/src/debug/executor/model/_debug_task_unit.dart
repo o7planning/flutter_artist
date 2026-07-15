@@ -1,4 +1,4 @@
-import '../../../core/enums/_task_type.dart';
+import '../../../core/enums/task_type.dart';
 
 class DebugTaskUnit {
   final TaskType taskType;

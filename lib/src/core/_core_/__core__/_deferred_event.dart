@@ -1,6 +1,7 @@
 part of '../core.dart';
 
-class DeferredEvent<ID extends Object> {
+@Deprecated("Delete, replaced by BlockReceivedEventInfo")
+class DeferredEvent<ID> {
   final Shelf? eventShelf;
 
   final EventType eventType;

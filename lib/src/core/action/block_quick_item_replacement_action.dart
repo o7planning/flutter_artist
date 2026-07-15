@@ -8,7 +8,7 @@ import '_action.dart';
 ///
 @Deprecated("TODO: Do it?")
 abstract class BlockQuickItemReplacementAction<
-    ID extends Object, //
+    ID extends Comparable, //
     ITEM extends Identifiable<ID>,
     ITEM_DETAIL extends Identifiable<ID>,
     FILTER_CRITERIA extends FilterCriteria> extends Action {

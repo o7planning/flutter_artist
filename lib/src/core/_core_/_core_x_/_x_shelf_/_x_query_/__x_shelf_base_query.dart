@@ -23,6 +23,7 @@ class _XShelfSbQuery extends XShelf {
     if (filterModel.isDefaultFilterModel) {
       // return;
     }
+    print("@TEMP 3");
     //
     final thisXFilterModel = xFilterModelMap[filterModel.name]!;
     thisXFilterModel.filterInput = filterInput;
@@ -49,22 +50,28 @@ class _XShelfSbQuery extends XShelf {
       );
       setRootVipXScalar(descendantXScalar: srcXScalar);
     }
+    print("@TEMP 4");
     //
     for (XBlock xBlock in thisXFilterModel.xBlocks) {
+      print("@TEMP 4.1");
+
       final Block block = xBlock.block;
       QryHint queryHint = forceQueryAll ? QryHint.force : QryHint.markAsPending;
+      bool isSrcBlock = false;
       if (srcBlockAndOptions != null) {
         final Block srcBlock = srcBlockAndOptions.block;
 
         if (srcBlock.isSameWith(block)) {
-          // No need to review Ancestors??
-          continue;
+          print("@TEMP 4.1.1");
+          isSrcBlock = true;
+          queryHint = QryHint.force;
         }
         // Search: LOGIC-02.
         if (block.isAncestorOf(srcBlock)) {
           queryHint = QryHint.force;
         }
       }
+      print("@TEMP 4.2");
       bool hasXBlockRep = block.ui.hasActiveUiComponentBlockRepresentative(
         alsoCheckChildren: true,
       );
@@ -73,43 +80,34 @@ class _XShelfSbQuery extends XShelf {
       }
       //
       xBlock.setQueryHintToGreater(queryHint);
-      // Set Default Options. They will be replaced if need.
-      xBlock.setOptions(
-        queryType: QueryType.realQuery,
-        listUpdateStrategy: ListUpdateStrategy.replace,
-        suggestedSelection: null,
-        afterQueryDirective: null,
-        pageable: null,
-      );
-      //
+      if (!isSrcBlock) {
+        // Set Default Options. They will be replaced if need.
+        xBlock.setOptions(
+          queryType: QueryType.realQuery,
+          listUpdateStrategy: ListUpdateStrategy.replace,
+          suggestedSelection: null,
+          afterQueryDirective: null,
+          pageable: null,
+        );
+      }
       if (queryHint == QryHint.force) {
         XBlock? parentXBlock = xBlock.parentXBlock;
-        while (true) {
-          if (parentXBlock == null) {
-            break;
+        while (parentXBlock != null) {
+          final Block parentBlock = parentXBlock.block;
+
+          // Check if parent block has stale data or needs baseline initialization
+          final bool isParentStaleOrPending = parentBlock.dataState ==
+                  DataState.pending ||
+              parentBlock.dataState == DataState.error ||
+              parentBlock.hasPendingInvalidation; // (***) Standardized Check
+
+          // If this parent is directly along the ancestry chain of a forced target block,
+          // we MUST force-query the parent first to guarantee data integrity,
+          // regardless of whether the parent UI component is active or visible!
+          if (isParentStaleOrPending) {
+            parentXBlock.setQueryHintToGreater(QryHint.force);
           }
-          // @@@hasActiveBlockFragment
-          final hasXBlockRep =
-              parentXBlock.block.ui.hasActiveUiComponentBlockRepresentative(
-            alsoCheckChildren: true,
-          );
-          if (hasXBlockRep) {
-            if (parentXBlock.block.dataState == DataState.pending ||
-                parentXBlock.block.dataState == DataState.error) {
-              parentXBlock.setQueryHintToGreater(QryHint.force);
-            }
-          }
-          // TODO: Need? Remove this code?
-          // XFormModel? parentXFormModel = parentXBlock.xFormModel;
-          // if (parentXFormModel != null &&
-          //     parentXFormModel.formModel.ui.hasActiveUiComponent()) {
-          //   if (parentXFormModel.formModel.dataState == DataState.pending ||
-          //       parentXFormModel.formModel.dataState == DataState.error ||
-          //       parentXFormModel.formModel.dataState == DataState.none) {
-          //     parentXFormModel.setForceType(ForceType.decidedAtRuntime);
-          //   }
-          // }
-          //
+
           parentXBlock = parentXBlock.parentXBlock;
         }
       }

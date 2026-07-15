@@ -37,7 +37,8 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
         );
         if (blockXBlockRep) {
           if (xBlock.block.dataState == DataState.pending ||
-              xBlock.block.dataState == DataState.error) {
+              xBlock.block.dataState == DataState.error ||
+              xBlock.block.hasPendingInvalidation) {
             xBlock.setQueryHintToGreater(QryHint.force);
           }
         }

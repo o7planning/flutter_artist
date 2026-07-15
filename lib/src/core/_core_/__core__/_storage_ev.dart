@@ -9,30 +9,32 @@ class _StorageEventHandler {
   // ***************************************************************************
 
   @_ImportantMethodAnnotation("Called after saving or deleting in the Block")
-  void _broadcastEventFromBlockToOtherShelves({
+  void _broadcastEventFromBlockToOtherShelves1({
     required ExecutionTrace executionTrace,
     required EventType eventType,
     required Block eventBlock,
     required String? itemIdString,
   }) {
-    final List<Type> events = eventBlock.config.broadcastExternalShelfEvents;
-    if (events.isEmpty) {
-      executionTrace._addTraceStep(
-        codeId: "#25000",
-        shortDesc:
-            "${debugObjHtml(eventBlock)}.getDeclaredReactionDataTypes() is empty! --> This event will be ignored.",
-        traceStepType: TraceStepType.debug,
-      );
-      return;
-    }
-    // Appends TaskUnits to QUEUE (No need to call execute).
-    ___broadcastEventFromBlockToOtherShelves(
-      executionTrace: executionTrace,
-      eventType: eventType,
-      srcEventBlock: eventBlock,
-      events: events,
-      itemIdString: itemIdString,
-    );
+    // final List<Type> events = eventBlock.config.broadcastExternalShelfEvents;
+    // if (events.isEmpty) {
+    //   executionTrace._addTraceStep(
+    //     codeId: "#25000",
+    //     shortDesc:
+    //         "${debugObjHtml(eventBlock)}.broadcastExternalShelfEvents is empty! "
+    //             "--> Cancel to broadcast events from this block to other shelves.",
+    //     traceStepType: TraceStepType.debug,
+    //   );
+    //   return;
+    // }
+    // // Appends TaskUnits to QUEUE (No need to call execute).
+    // ___broadcastEventFromBlockToOtherShelves(
+    //   executionTrace: executionTrace,
+    //   eventType: eventType,
+    //   srcEventBlock: eventBlock,
+    //   events: events,
+    //   itemIdString: itemIdString,
+    // );
+    throw UnimplementedError();
   }
 
   // ***************************************************************************
@@ -142,18 +144,19 @@ class _StorageEventHandler {
   List<Scalar> __getListenerScalarsByBlock({
     required Block eventBlock,
   }) {
-    Set<Type> itemTypeEvents = eventBlock.getResolvedBroadcastDataTypes();
-    if (itemTypeEvents.isEmpty) {
-      return [];
-    }
-    //
-    List<Scalar> scalarList = __getListenerScalarsByAffectedItemTypes(
-      eventShelf: eventBlock.shelf,
-      affectedItemTypeEvents: itemTypeEvents,
-    );
-    return scalarList
-        .where((scalar) => !identical(scalar.shelf, eventBlock.shelf))
-        .toList();
+    // Set<Type> itemTypeEvents = eventBlock.getResolvedBroadcastDataTypes();
+    // if (itemTypeEvents.isEmpty) {
+    //   return [];
+    // }
+    // //
+    // List<Scalar> scalarList = __getListenerScalarsByAffectedItemTypes(
+    //   eventShelf: eventBlock.shelf,
+    //   affectedItemTypeEvents: itemTypeEvents,
+    // );
+    // return scalarList
+    //     .where((scalar) => !identical(scalar.shelf, eventBlock.shelf))
+    //     .toList();
+    throw UnimplementedError();
   }
 
   // ***************************************************************************
@@ -183,49 +186,50 @@ class _StorageEventHandler {
   List<Block> __getListenerBlocksByBlock({
     required Block eventBlock,
   }) {
-    Set<Type> itemTypeEvents = eventBlock.getDeclaredBroadcastDataTypes();
-    if (itemTypeEvents.isEmpty) {
-      return [];
-    }
-    //
-    List<Block> blockList = __getListenerBlocksByAffectedItemTypes(
-      eventShelf: eventBlock.shelf,
-      affectedItemTypeEvents: itemTypeEvents,
-    );
-    return blockList
-        .where((block) => !identical(block.shelf, eventBlock.shelf))
-        .toList();
+    // Set<Type> itemTypeEvents = eventBlock.getDeclaredBroadcastDataTypes();
+    // if (itemTypeEvents.isEmpty) {
+    //   return [];
+    // }
+    // //
+    // List<Block> blockList = __getListenerBlocksByAffectedItemTypes(
+    //   eventShelf: eventBlock.shelf,
+    //   affectedItemTypeEvents: itemTypeEvents,
+    // );
+    // return blockList
+    //     .where((block) => !identical(block.shelf, eventBlock.shelf))
+    //     .toList();
+    throw UnimplementedError();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   // Callable.
-  List<Block> __getListenerBlocksByAffectedItemTypes({
-    required Shelf eventShelf,
-    required Set<Type> affectedItemTypeEvents,
-  }) {
-    // FullName, Block
-    Map<String, Block> foundMap = {};
-
-    for (String shelfName in storage.activeShelfNames) {
-      Shelf? shelf = storage.findShelfByName(shelfName);
-      if (shelf == null) {
-        continue;
-      }
-      for (Block blockToCheck in shelf.blocks) {
-        for (Type affectedType in affectedItemTypeEvents) {
-          // FIXED TODO: Compared directly with Type lists
-          if (_contains(
-              blockToCheck.getDeclaredReactionDataTypes(), affectedType)) {
-            foundMap[blockToCheck._shortPathName] = blockToCheck;
-            break;
-          }
-        }
-      }
-    }
-    return foundMap.values.toList();
-  }
+  // List<Block> __getListenerBlocksByAffectedItemTypes({
+  //   required Shelf eventShelf,
+  //   required Set<Type> affectedItemTypeEvents,
+  // }) {
+  //   // FullName, Block
+  //   Map<String, Block> foundMap = {};
+  //
+  //   for (String shelfName in storage.activeShelfNames) {
+  //     Shelf? shelf = storage.findShelfByName(shelfName);
+  //     if (shelf == null) {
+  //       continue;
+  //     }
+  //     for (Block blockToCheck in shelf.blocks) {
+  //       for (Type affectedType in affectedItemTypeEvents) {
+  //         // FIXED TODO: Compared directly with Type lists
+  //         if (_contains(
+  //             blockToCheck.getDeclaredReactionDataTypes(), affectedType)) {
+  //           foundMap[blockToCheck._shortPathName] = blockToCheck;
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   }
+  //   return foundMap.values.toList();
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -263,28 +267,29 @@ class _StorageEventHandler {
   List<Block> _getEventBlocksByBlock({
     required Block listenerBlock,
   }) {
-    // FullName, Block
-    Map<String, Block> foundMap = {};
-
-    for (Shelf shelf in storage.getAllShelves()) {
-      List<Block> allBlocks = shelf.blocks;
-      for (Block blk in allBlocks) {
-        if (blk.getDeclaredReactionDataTypes().isEmpty) {
-          continue;
-        }
-        // FIXED TODO: Evaluated directly via core structural types exposed
-        final Set<Type> listenToDataTypes =
-            listenerBlock.getDeclaredReactionDataTypes();
-        final Type itemType = blk.getItemType();
-        final Type itemDetailType = blk.getItemDetailType();
-
-        if (_contains(listenToDataTypes, itemType) ||
-            _contains(listenToDataTypes, itemDetailType)) {
-          foundMap[blk._shortPathName] = blk;
-        }
-      }
-    }
-    return foundMap.values.toList();
+    // // FullName, Block
+    // Map<String, Block> foundMap = {};
+    //
+    // for (Shelf shelf in storage.getAllShelves()) {
+    //   List<Block> allBlocks = shelf.blocks;
+    //   for (Block blk in allBlocks) {
+    //     if (blk.getDeclaredReactionDataTypes().isEmpty) {
+    //       continue;
+    //     }
+    //     // FIXED TODO: Evaluated directly via core structural types exposed
+    //     final Set<Type> listenToDataTypes =
+    //         listenerBlock.getDeclaredReactionDataTypes();
+    //     final Type itemType = blk.getItemType();
+    //     final Type itemDetailType = blk.getItemDetailType();
+    //
+    //     if (_contains(listenToDataTypes, itemType) ||
+    //         _contains(listenToDataTypes, itemDetailType)) {
+    //       foundMap[blk._shortPathName] = blk;
+    //     }
+    //   }
+    // }
+    // return foundMap.values.toList();
+    throw UnimplementedError();
   }
 
   // ***************************************************************************
@@ -340,28 +345,29 @@ class _StorageEventHandler {
   List<Block> _getEventBlocksByScalar({
     required Scalar listenerScalar,
   }) {
-    // FullName, Block
-    Map<String, Block> foundMap = {};
-
-    for (Shelf shelf in storage.getAllShelves()) {
-      for (Block blk in shelf.blocks) {
-        if (blk.getDeclaredReactionDataTypes().isEmpty) {
-          continue;
-        }
-        Set<Type> listenerTypes = listenerScalar.getDeclaredReactionDataTypes();
-        if (listenerTypes.isEmpty) {
-          continue;
-        }
-        final Type itemType = blk.getItemType();
-        final Type itemDetailType = blk.getItemDetailType();
-
-        if (_contains(listenerTypes, itemType) ||
-            _contains(listenerTypes, itemDetailType)) {
-          foundMap[blk._shortPathName] = blk;
-        }
-      }
-    }
-    return foundMap.values.toList();
+    // // FullName, Block
+    // Map<String, Block> foundMap = {};
+    //
+    // for (Shelf shelf in storage.getAllShelves()) {
+    //   for (Block blk in shelf.blocks) {
+    //     if (blk.getDeclaredReactionDataTypes().isEmpty) {
+    //       continue;
+    //     }
+    //     Set<Type> listenerTypes = listenerScalar.getDeclaredReactionDataTypes();
+    //     if (listenerTypes.isEmpty) {
+    //       continue;
+    //     }
+    //     final Type itemType = blk.getItemType();
+    //     final Type itemDetailType = blk.getItemDetailType();
+    //
+    //     if (_contains(listenerTypes, itemType) ||
+    //         _contains(listenerTypes, itemDetailType)) {
+    //       foundMap[blk._shortPathName] = blk;
+    //     }
+    //   }
+    // }
+    // return foundMap.values.toList();
+    throw UnimplementedError();
   }
 
   // ***************************************************************************

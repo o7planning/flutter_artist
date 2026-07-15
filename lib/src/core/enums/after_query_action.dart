@@ -1,4 +1,4 @@
-import '_block_set_current_item_directive.dart';
+import 'block_set_current_item_directive.dart';
 
 enum BlockAfterQueryDirective {
   /// Clear Current Item.

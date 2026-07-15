@@ -5,7 +5,6 @@ class _XShelfBlockBackendActionExecution extends XShelf {
     required Block block,
     required FilterInput? filterInput,
     required BlockViewportSyncStrategy? viewportSyncStrategy,
-    // required AfterBlockBackendAction afterBackendAction,
   }) : super(
           xShelfType: XShelfType.blockBackendActionExecution,
           shelf: block.shelf,
@@ -16,14 +15,6 @@ class _XShelfBlockBackendActionExecution extends XShelf {
     final thisXBlock = xBlockMap[block.name]!;
     final xFilterModel = thisXBlock.xFilterModel;
     xFilterModel.filterInput = filterInput;
-    //
-    // switch (afterBackendAction) {
-    //   case AfterBlockBackendAction.none:
-    //     break;
-    //   case AfterBlockBackendAction.query:
-    //     queryHint = QryHint.force;
-    //     forceReloadItem = false;
-    // }
     //
     switch (viewportSyncStrategy) {
       case null:
