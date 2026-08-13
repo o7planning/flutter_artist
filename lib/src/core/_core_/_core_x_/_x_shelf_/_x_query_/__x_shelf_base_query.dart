@@ -96,10 +96,8 @@ class _XShelfSbQuery extends XShelf {
           final Block parentBlock = parentXBlock.block;
 
           // Check if parent block has stale data or needs baseline initialization
-          final bool isParentStaleOrPending = parentBlock.dataState ==
-                  DataState.pending ||
-              parentBlock.dataState == DataState.error ||
-              parentBlock.hasPendingInvalidation; // (***) Standardized Check
+          final bool isParentStaleOrPending = parentBlock.dataState.isPending ||
+              parentBlock.dataState.isStale; // (***) Standardized Check
 
           // If this parent is directly along the ancestry chain of a forced target block,
           // we MUST force-query the parent first to guarantee data integrity,
@@ -151,8 +149,8 @@ class _XShelfSbQuery extends XShelf {
             alsoCheckChildren: true,
           );
           if (hasXActiveUI) {
-            if (parentXScalar.scalar.dataState == DataState.pending ||
-                parentXScalar.scalar.dataState == DataState.error) {
+            if (parentXScalar.scalar.dataState == ScalarDataState.pending ||
+                parentXScalar.scalar.isLoadedAndStale) {
               parentXScalar.setQueryHintToGreater(QryHint.force);
             }
           }

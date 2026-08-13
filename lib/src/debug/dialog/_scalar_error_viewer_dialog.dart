@@ -36,16 +36,19 @@ class ScalarErrorViewerDialog extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("${scalarErrorInfo.scalarDataState}"),
-        if (scalarErrorInfo.scalarDataState == DataState.error)
-          IconLabelText(
-            icon: Icon(
-              FaIconConstants.formErrorDisabledIconData2,
-              color: Colors.red,
-              size: 20,
-            ),
-            text: "Scalar query data error.",
-          ),
+        Text("TODO - 1"),
+        // TODO: Tạm thời rào lại.
+        // Text("${scalarErrorInfo.scalarDataState}"),
+        // TODO: Tạm thời rào lại.
+        // if (scalarErrorInfo.scalarDataState == DataState.error)
+        //   IconLabelText(
+        //     icon: Icon(
+        //       FaIconConstants.formErrorDisabledIconData2,
+        //       color: Colors.red,
+        //       size: 20,
+        //     ),
+        //     text: "Scalar query data error.",
+        //   ),
         Divider(),
         ListTile(
           dense: true,

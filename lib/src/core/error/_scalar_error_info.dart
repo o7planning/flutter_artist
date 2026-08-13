@@ -4,13 +4,11 @@ import '../enums/data_state.dart';
 import '../enums/scalar_error_method.dart';
 
 class ScalarErrorInfo {
-  final DataState scalarDataState;
   final ScalarErrorMethod scalarErrorMethod;
   final AppError error;
   final StackTrace errorStackTrace;
 
   ScalarErrorInfo({
-    required this.scalarDataState,
     required this.scalarErrorMethod,
     required Object error,
     required this.errorStackTrace,

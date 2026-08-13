@@ -66,7 +66,7 @@ class _ScalarSectionViewBuilderState
       return Stack(
         children: [
           widget.build(),
-          if (widget.scalar.dataState == DataState.error)
+          if (widget.scalar.hasError)
             Positioned(
               top: 5,
               right: 5,

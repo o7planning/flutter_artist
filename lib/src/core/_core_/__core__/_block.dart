@@ -300,9 +300,22 @@ abstract class Block<
     nativeQueryMode: config.nativeQueryMode,
   );
 
-  BlockErrorInfo? _blockErrorInfo;
+  /// Indicates whether the block or its underlying filter model currently has an active error.
+  bool get hasError {
+    return blockErrorInfo != null || filterErrorInfo != null;
+  }
 
-  BlockErrorInfo? get blockErrorInfo => _blockErrorInfo;
+  /// Resolves the active [BlockErrorInfo] attached to this block, if any.
+  BlockErrorInfo? get blockErrorInfo {
+    return switch (dataState) {
+      BlockDataStatePending(:final errorInfo?) => errorInfo,
+      _ => null,
+    };
+  }
+
+  ErrorInfo? get filterErrorInfo {
+    return filterModel?._errorInfo;
+  }
 
   late final ui = _BlockUiComponents(block: this);
 
@@ -328,20 +341,25 @@ abstract class Block<
   ActionResultState? get lastQueryResultState =>
       __blockData._lastQueryResultState;
 
-  bool get hasPendingInvalidation => __blockData._hasPendingInvalidation;
+  // LoadedStatus? get loadedStatus => __blockData._loadedStatus;
+  // PendingReason? get pendingReason => __blockData._pendingReason;
+  //  BlockLoadedStatePhase? get _loadedStatePhase => __blockData._loadedStatePhase;
 
-  DataState get dataState => __blockData._blockDataState;
+  BlockDataState get dataState => __blockData._blockDataState;
 
-  BlockErrorOrigin? get errorOrigin => __blockData._errorOrigin;
+  BlockDataState get selectionDataState => __blockData._selectionDataState;
 
-  DataState get selectionDataState => __blockData._selectionDataState;
+  /// Does the FilterPanel contain uncommitted draft criteria that differs
+  /// from the currently applied dataset criteria?
+  bool get hasUnappliedFilter =>
+      filterModel != null && filterModel!.filterCriteria != filterCriteria;
 
   // nearestAncestorNonNoneDataState?
-  DataState get ancestralNonNoneDataState {
+  BlockDataState get ancestralNonNoneDataState {
     if (parent == null) {
-      return DataState.ready;
+      return BlockDataStateLoadedFresh();
     }
-    if (parent!.dataState != DataState.none) {
+    if (parent!.dataState! is BlockDataStateNone) {
       return parent!.dataState;
     }
     return parent!.ancestralNonNoneDataState;
@@ -481,11 +499,11 @@ abstract class Block<
         filterCriteria: filterCriteria,
       );
     }
-    if (__blockData._blockDataState == DataState.ready) {
-      __blockData._hasPendingInvalidation = true;
-    } else {
-      __blockData._hasPendingInvalidation = false;
-    }
+    // if (__blockData._blockDataState == DataState.loaded) {
+    //   __blockData._hasPendingInvalidation = true;
+    // } else {
+    //   __blockData._hasPendingInvalidation = false;
+    // }
     executionTrace._addTraceStep(
       codeId: "#83400",
       shortDesc:
@@ -651,7 +669,7 @@ abstract class Block<
     required BlockViewportSyncStrategy? syncStrategyOnPageableQueryMode,
     required List<Comparable> effectedItemIds,
   }) {
-    if (dataState == DataState.none) {
+    if (dataState.isNone) {
       return;
     }
     print(
@@ -714,9 +732,9 @@ abstract class Block<
 
   void __clearItemsWithDataState({
     required XBlock thisXBlock,
-    required DataState blockDataState,
+    required BlockDataState blockDataState,
     required bool currentHasPendingInvalidation,
-    required DataState formDataState,
+    required FormDataState formDataState,
     required bool errorInFilter,
     required bool resetSyncSessionState,
     required bool resetRefreshItemCondition,
@@ -725,7 +743,6 @@ abstract class Block<
     //
     __blockData._clearItemsWithDataState(
       blockDataState: blockDataState,
-      hasPendingInvalidation: currentHasPendingInvalidation,
       errorInFilter: errorInFilter,
       resetSyncSessionState: resetSyncSessionState,
       resetRefreshItemCondition: resetRefreshItemCondition,
@@ -739,11 +756,32 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  void __keepBlockStateOnError({
+    required ExecutionTrace executionTrace,
+    required bool errorInFilter,
+  }) {
+    final BlockDataState currentDataState = dataState;
+    switch (currentDataState) {
+      case BlockDataStateNone():
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case BlockDataStatePending():
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case BlockDataStateLoaded():
+        // TODO: Handle this case.
+        throw UnimplementedError();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __clearWithDataStateAndChildrenToNonCascade({
     required XBlock thisXBlock,
-    required DataState blkDataState,
+    required BlockDataState blkDataState,
     required bool currentHasPendingInvalidation,
-    required DataState frmDataState,
+    required FormDataState frmDataState,
     required bool errorInFilter,
     required bool resetSyncSessionState,
     required bool resetRefreshItemCondition,
@@ -763,9 +801,9 @@ abstract class Block<
     for (var childXBlock in thisXBlock.childXBlocks) {
       childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: childXBlock,
-        blkDataState: DataState.none,
+        blkDataState: BlockDataStateNone(),
         currentHasPendingInvalidation: false,
-        frmDataState: DataState.none,
+        frmDataState: FormDataState.none,
         errorInFilter: false,
         resetSyncSessionState: true,
         resetRefreshItemCondition: true,
@@ -784,9 +822,9 @@ abstract class Block<
     for (var childXBlock in thisXBlock.childXBlocks) {
       childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: childXBlock,
-        blkDataState: DataState.none,
+        blkDataState: BlockDataStateNone(),
         currentHasPendingInvalidation: false,
-        frmDataState: DataState.none,
+        frmDataState: FormDataState.none,
         errorInFilter: false,
         resetSyncSessionState: true,
         resetRefreshItemCondition: true,
@@ -802,9 +840,9 @@ abstract class Block<
     for (var childXBlock in thisXBlock.childXBlocks) {
       childXBlock.block.__clearWithDataStateAndChildrenToNonCascade(
         thisXBlock: childXBlock,
-        blkDataState: DataState.pending,
+        blkDataState: BlockDataStatePending(),
         currentHasPendingInvalidation: false,
-        frmDataState: DataState.none,
+        frmDataState: FormDataState.none,
         errorInFilter: false,
         resetSyncSessionState: true,
         resetRefreshItemCondition: true,
@@ -849,7 +887,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool _needToQuery() {
-    if (dataState != DataState.ready) {
+    if (!dataState.isFresh ) {
       return true;
     }
     //
@@ -915,9 +953,9 @@ abstract class Block<
     );
     __clearWithDataStateAndChildrenToNonCascade(
       thisXBlock: thisXBlock,
-      blkDataState: DataState.pending,
+      blkDataState: BlockDataStatePending(),
       currentHasPendingInvalidation: false,
-      frmDataState: DataState.none,
+      frmDataState: FormDataState.none,
       errorInFilter: false,
       resetSyncSessionState: true,
       resetRefreshItemCondition: true,
@@ -957,7 +995,7 @@ abstract class Block<
         shortDesc:
             "${debugObjHtml(formModel)} clear data and set state to <b>none</b>.",
       );
-      formModel!._clearDataWithDataState(formDataState: DataState.none);
+      formModel!._clearDataWithDataState(formDataState: FormDataState.none);
     }
     //
     executionTrace._addTraceStep(
@@ -1008,10 +1046,7 @@ abstract class Block<
     //
     QryHint queryHint = thisXBlock.queryHint;
     if (queryHint != QryHint.force) {
-      if (provideBlockContext &&
-          (dataState == DataState.error ||
-              dataState == DataState.pending ||
-              (dataState == DataState.ready && hasPendingInvalidation))) {
+      if (provideBlockContext && (dataState.isPending || dataState.isStale)) {
         queryHint = QryHint.force;
       }
     }
@@ -1034,7 +1069,6 @@ abstract class Block<
         BlockQueryStrategyResolver.resolveQueryPlan<ID>(
       block: this,
       syncSessionState: currentSyncSessionState,
-      errorOrigin: errorOrigin,
     );
     //
     final ResolvedQueryAction resolvedQueryAction;
@@ -1064,8 +1098,7 @@ abstract class Block<
       },
       traceStepType: TraceStepType.debug,
     );
-    bool newHasPendingInvalidation = hasPendingInvalidation;
-    DataState newBlockDataState = dataState;
+    BlockDataState newBlockDataState = dataState;
     // PageData<ITEM>? queriedPageData;
     List<ITEM>? queriedItemList;
     PaginationInfo? queriedPaginationInfo;
@@ -1158,9 +1191,9 @@ abstract class Block<
         );
         __clearWithDataStateAndChildrenToNonCascade(
           thisXBlock: thisXBlock,
-          blkDataState: DataState.pending,
+          blkDataState: BlockDataStatePending(),
           currentHasPendingInvalidation: false,
-          frmDataState: DataState.none,
+          frmDataState: FormDataState.none,
           errorInFilter: false,
           resetSyncSessionState: true,
           resetRefreshItemCondition: true,
@@ -1172,7 +1205,7 @@ abstract class Block<
     }
     //
     // FORCE QUERY:
-    // thisXBlock.queryHint || (provideBlockContext && this.dataState != DataState.ready)
+    // thisXBlock.queryHint || (provideBlockContext && this.dataState != DataState.loaded)
     //
     XFilterCriteria<FILTER_CRITERIA>? xFilterCriteriaOfFilterModel;
     try {
@@ -1204,7 +1237,7 @@ abstract class Block<
           executionTrace._addTraceStep(
             codeId: "#03220",
             shortDesc:
-                "${debugObjHtml(filterModel)} data ready --> no need to load data.",
+                "${debugObjHtml(filterModel)} data loaded --> no need to load data.",
           );
         }
         xFilterCriteriaOfFilterModel =
@@ -1226,19 +1259,21 @@ abstract class Block<
       executionTrace._addTraceStep(
         codeId: "#03260",
         shortDesc:
-            "Clear all items of ${debugObjHtml(this)} and set dataState to <b>error</b>. "
-            "Clear data of all child blocks and set them to <b>none</b>."
-            "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
+            "Error in FilterModel of ${debugObjHtml(this)}, keep block data state",
       );
       // Test Cases: [23a].
       // Set Block to error cascade.
-      __clearWithDataStateAndChildrenToNonCascade(
-        thisXBlock: thisXBlock,
-        blkDataState: DataState.error,
-        currentHasPendingInvalidation: false,
-        resetSyncSessionState: true,
-        resetRefreshItemCondition: true,
-        frmDataState: DataState.none,
+      // __clearWithDataStateAndChildrenToNonCascade(
+      //   thisXBlock: thisXBlock,
+      //   blkDataState: DataState.error,
+      //   currentHasPendingInvalidation: false,
+      //   resetSyncSessionState: true,
+      //   resetRefreshItemCondition: true,
+      //   frmDataState: DataState.none,
+      //   errorInFilter: true,
+      // );
+      __keepBlockStateOnError(
+        executionTrace: executionTrace,
         errorInFilter: true,
       );
       thisXBlock.queryResult._setFilterError();
@@ -1276,12 +1311,13 @@ abstract class Block<
       final QueryType newQueryType = thisXBlock.queryType;
       final queryTypeChanged = __lastQueryType != newQueryType;
       __lastQueryType = newQueryType;
+
+      BlockErrorInfo? blockErrorInfo;
       //
       // Call Query API:
       //
       try {
         __blockData._backupManualArrangementBeforeQueryIfNeed();
-        __clearBlockError();
         __refreshQueryingState(isQuerying: true);
         //
         final SortableCriteria sortableCriteria;
@@ -1413,13 +1449,11 @@ abstract class Block<
         queriedItemList = null;
         queriedPaginationInfo = null;
         //
-        final blockErrorInfo = BlockErrorInfo(
-          blockDataState: dataState,
+        blockErrorInfo = BlockErrorInfo(
           blockErrorMethod: performQryMethod,
           error: e, // AppError, ApiError or others.
           errorStackTrace: stackTrace,
         );
-        __setBlockErrorInfo(blockErrorInfo);
         //
         final errorInfo = _handleError(
           shelf: shelf,
@@ -1444,10 +1478,12 @@ abstract class Block<
         __refreshQueryingState(isQuerying: false);
       }
 
+      print("@TEMP XXX-1 blockErrorInfo: $blockErrorInfo");
+
       final calculationInput = QueryCalculatorInput(
         queryResultState: queryResultState,
+        blockErrorInfo: blockErrorInfo,
         currentDataState: dataState,
-        currentHasPendingInvalidation: hasPendingInvalidation,
         syncStrategy: viewportSyncStrategy,
         parentOrCriteriaChanged: parentOrCriteriaChanged,
         isQueryMore: thisXBlock.isQueryMoreFlow,
@@ -1463,7 +1499,6 @@ abstract class Block<
       // Extract variables directly into your pre-existing downstream fields securely
       realListUpdateStrategy = calculationResult.realListUpdateStrategy;
       newBlockDataState = calculationResult.newBlockDataState;
-      newHasPendingInvalidation = calculationResult.newHasPendingInvalidation;
     }
     // Query Empty:
     else {
@@ -1479,8 +1514,7 @@ abstract class Block<
       //
       __lastQueryType = thisXBlock.queryType;
       realListUpdateStrategy = ListUpdateStrategy.replace;
-      newBlockDataState = DataState.ready;
-      newHasPendingInvalidation = false;
+      newBlockDataState = BlockDataStateLoadedFresh();
       queriedItemList = [];
       queriedPaginationInfo = null;
       queryResultState = ActionResultState.success;
@@ -1531,7 +1565,6 @@ abstract class Block<
         queriedItemList: queriedItemList,
         queriedPaginationInfo: queriedPaginationInfo,
         newBlockDataState: newBlockDataState,
-        newHasPendingInvalidation: newHasPendingInvalidation,
         queryResultState: queryResultState,
       );
       //
@@ -1590,7 +1623,7 @@ abstract class Block<
               "Clear ${debugObjHtml(formModel)} data and set to <b>none</b>.",
           traceStepType: TraceStepType.info,
         );
-        formModel!._clearDataWithDataState(formDataState: DataState.none);
+        formModel!._clearDataWithDataState(formDataState: FormDataState.none);
       }
       executionTrace._addTraceStep(
         codeId: "#03620",
@@ -1607,32 +1640,41 @@ abstract class Block<
     }
     // currentItemInList.
     else {
+      // switch (newBlockDataState) {
+      //   case DataState.none:
+      //     // @@TODO@@ 04.
+      //     // Never run:
+      //     __clearAllChildrenBlocksToNone(
+      //       thisXBlock: thisXBlock,
+      //     );
+      //   case DataState.pending:
+      //     // @@TODO@@ 05.
+      //     // Never run:
+      //     __clearAllChildrenBlocksToNone(
+      //       thisXBlock: thisXBlock,
+      //     );
+      //   case DataState.loaded:
+      //     break;
+      // }
       switch (newBlockDataState) {
-        case DataState.none:
+        case BlockDataStateNone():
           // @@TODO@@ 04.
           // Never run:
           __clearAllChildrenBlocksToNone(
             thisXBlock: thisXBlock,
           );
-        case DataState.pending:
+        case BlockDataStatePending():
           // @@TODO@@ 05.
           // Never run:
           __clearAllChildrenBlocksToNone(
             thisXBlock: thisXBlock,
           );
-        case DataState.error:
-          // TODO: Test Cases.
-          executionTrace._addTraceStep(
-            codeId: "#03640",
-            shortDesc:
-                "@newBlockDataState: $newBlockDataState --> Clear data of all child blocks and set them to <b>none</b> state."
-                "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-            traceStepType: TraceStepType.info,
-          );
+        case BlockDataStateLoadedStale():
+          // TODO: Xem lai
           __clearAllChildrenBlocksToNone(
             thisXBlock: thisXBlock,
           );
-        case DataState.ready:
+        case BlockDataStateLoadedFresh():
           break;
       }
     }
@@ -1799,43 +1841,51 @@ abstract class Block<
       blockSetCurrentItemResult._addCandidateItem(inputCandidateCurrItem);
     }
     //
-    if (dataState == DataState.pending) {
-      executionTrace._addTraceStep(
-        codeId: "#28040",
-        shortDesc:
-            "${debugObjHtml(this)} dataState is pending -> clear all data in child blocks and set them to <b>none</b>."
-            "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-        traceStepType: TraceStepType.info,
-      );
-      __clearWithDataStateAndChildrenToNonCascade(
-        thisXBlock: thisXBlock,
-        blkDataState: dataState,
-        currentHasPendingInvalidation: false,
-        resetSyncSessionState: true,
-        resetRefreshItemCondition: true,
-        frmDataState: DataState.none,
-        errorInFilter: false,
-      );
-      return;
-    }
-    //
-    if (dataState == DataState.error) {
-      executionTrace._addTraceStep(
-        codeId: "#28060",
-        shortDesc:
-            "${debugObjHtml(this)} dataState is error -> clear all data in child blocks and set them to <b>none</b>."
-            "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-        traceStepType: TraceStepType.info,
-      );
-      __clearWithDataStateAndChildrenToNonCascade(
-        thisXBlock: thisXBlock,
-        blkDataState: DataState.error,
-        currentHasPendingInvalidation: false,
-        resetSyncSessionState: true,
-        resetRefreshItemCondition: true,
-        frmDataState: DataState.none,
-        errorInFilter: false,
-      );
+    // if (dataState == DataState.pending) {
+    //   executionTrace._addTraceStep(
+    //     codeId: "#28040",
+    //     shortDesc:
+    //         "${debugObjHtml(this)} dataState is pending -> clear all data in child blocks and set them to <b>none</b>."
+    //         "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
+    //     traceStepType: TraceStepType.info,
+    //   );
+    //   __clearWithDataStateAndChildrenToNonCascade(
+    //     thisXBlock: thisXBlock,
+    //     blkDataState: dataState,
+    //     currentHasPendingInvalidation: false,
+    //     resetSyncSessionState: true,
+    //     resetRefreshItemCondition: true,
+    //     frmDataState: DataState.none,
+    //     errorInFilter: false,
+    //   );
+    //   return;
+    // }
+    // //
+    // if (dataState == DataState.error) {
+    //   executionTrace._addTraceStep(
+    //     codeId: "#28060",
+    //     shortDesc:
+    //         "${debugObjHtml(this)} dataState is error -> clear all data in child blocks and set them to <b>none</b>."
+    //         "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
+    //     traceStepType: TraceStepType.info,
+    //   );
+    //   __clearWithDataStateAndChildrenToNonCascade(
+    //     thisXBlock: thisXBlock,
+    //     blkDataState: DataState.error,
+    //     currentHasPendingInvalidation: false,
+    //     resetSyncSessionState: true,
+    //     resetRefreshItemCondition: true,
+    //     frmDataState: DataState.none,
+    //     errorInFilter: false,
+    //   );
+    //   return;
+    // }
+    // In: _unitSetItemAsCurrent
+    if (dataState.isPending || dataState.isStale) {
+      // TODO: Review.
+      // throw "TODO pending or isLoadedAndStale";
+      print("@TEMP: dataState.isPending || dataState.isStale");
+      // Do nothing.
       return;
     }
     //
@@ -2345,7 +2395,7 @@ abstract class Block<
           shortDesc:
               "Set ${debugObjHtml(formModel!)} dataState to <b>none</b>.",
         );
-        formModel?._clearDataWithDataState(formDataState: DataState.none);
+        formModel?._clearDataWithDataState(formDataState: FormDataState.none);
       }
       //
       executionTrace._addTraceStep(
@@ -2436,7 +2486,7 @@ abstract class Block<
       }
       //
       //
-      __blockData._selectionDataState = DataState.ready;
+      __blockData._selectionDataState = BlockDataStateLoadedFresh();
       if (candidateCurrItem != null) {
         executionTrace._addTraceStep(
           codeId: "#29480",
@@ -2492,7 +2542,8 @@ abstract class Block<
                 "Set FormModel ${debugObjHtml(thisXBlock.xFormModel!.formModel)} dataState to <b>pending</b>.",
           );
           // TODO: Test Cases.
-          formModel!._clearDataWithDataState(formDataState: DataState.pending);
+          formModel!
+              ._clearDataWithDataState(formDataState: FormDataState.pending);
         } else {
           // Do nothing.
         }
@@ -2750,7 +2801,7 @@ abstract class Block<
       );
       // Clear Form:
       formModel!._clearDataWithDataState(
-        formDataState: DataState.none,
+        formDataState: FormDataState.none,
       );
     }
     // TODO Test Cases.
@@ -3234,7 +3285,7 @@ abstract class Block<
             // Clear Form:
             //
             formModel!._clearDataWithDataState(
-              formDataState: DataState.none,
+              formDataState: FormDataState.none,
             );
           }
           executionTrace._addTraceStep(
@@ -3394,7 +3445,7 @@ abstract class Block<
     );
     formModel!._formModelStructure._setFormMode_TODO_DELETE(
       formMode: FormMode.creation,
-      formDataState: DataState.ready,
+      formDataState: FormDataState.loaded,
     );
     //
     bool success = false;
@@ -4057,7 +4108,7 @@ abstract class Block<
           );
           // Clear Form:
           formModel!._clearDataWithDataState(
-            formDataState: DataState.none,
+            formDataState: FormDataState.none,
           );
         }
         //
@@ -4089,23 +4140,26 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Opens the diagnostic error viewer dialog reflecting either Block or Filter error payloads.
   @_RootMethodAnnotation()
   Future<void> showBlockErrorViewerDialog(BuildContext context) async {
-    if (dataState == DataState.error) {
-      if (_blockErrorInfo != null) {
-        await BlockErrorViewerDialog.open(
-          context: context,
-          blockErrorInfo: _blockErrorInfo!,
-        );
-      } else if (filterModel != null) {
-        if (filterModel!.dataState == DataState.error &&
-            filterModel!._errorInfo != null) {
-          await ErrorViewerDialog.open(
-            context: context,
-            errorInfo: filterModel!._errorInfo!,
-          );
-        }
-      }
+    if (!hasError) return;
+
+    final BlockErrorInfo? activeBlockErrorInfo = blockErrorInfo;
+
+    if (activeBlockErrorInfo != null) {
+      await BlockErrorViewerDialog.open(
+        context: context,
+        blockErrorInfo: activeBlockErrorInfo,
+      );
+      return;
+    }
+    final ErrorInfo? errorInfo = filterErrorInfo;
+    if (errorInfo != null) {
+      await ErrorViewerDialog.open(
+        context: context,
+        errorInfo: errorInfo,
+      );
     }
   }
 
@@ -5094,13 +5148,13 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __clearBlockError() {
-    _blockErrorInfo = null;
-  }
-
-  void __setBlockErrorInfo(BlockErrorInfo errorInfo) {
-    _blockErrorInfo = errorInfo;
-  }
+  // void __clearBlockError() {
+  //   _blockErrorInfo = null;
+  // }
+  //
+  // void __setBlockErrorInfo(BlockErrorInfo errorInfo) {
+  //   _blockErrorInfo = errorInfo;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -5112,22 +5166,22 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __setChildrenForParent() {
-    try {
-      Object? itemParent = parent?.currentItemDetail;
-      if (itemParent != null && dataState == DataState.ready) {
-        setChildrenForParent(
-          currentItemOfParentBlock: itemParent,
-          items: items,
-        );
-      }
-    } catch (e, stackTrace) {
-      print(stackTrace);
-    }
-    for (var childBlock in _childBlocks) {
-      childBlock.__setChildrenForParent();
-    }
-  }
+  // void __setChildrenForParent() {
+  //   try {
+  //     Object? itemParent = parent?.currentItemDetail;
+  //     if (itemParent != null && dataState == DataState.loaded) {
+  //       setChildrenForParent(
+  //         currentItemOfParentBlock: itemParent,
+  //         items: items,
+  //       );
+  //     }
+  //   } catch (e, stackTrace) {
+  //     print(stackTrace);
+  //   }
+  //   for (var childBlock in _childBlocks) {
+  //     childBlock.__setChildrenForParent();
+  //   }
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -6482,24 +6536,43 @@ abstract class Block<
         errCode: BlockBackendActionPrecheck.busy,
       );
     }
+    // switch (dataState) {
+    //   case DataState.pending:
+    //     return Actionable<BlockBackendActionPrecheck>.no(
+    //       errCode: BlockBackendActionPrecheck.blockInPendingState,
+    //     );
+    //   // case DataState.error:
+    //   //   return Actionable<BlockBackendActionPrecheck>.no(
+    //   //     errCode: BlockBackendActionPrecheck.blockInErrorState,
+    //   //   );
+    //   case DataState.none:
+    //     return Actionable<BlockBackendActionPrecheck>.no(
+    //       errCode: BlockBackendActionPrecheck.blockInNoneState,
+    //     );
+    //   case DataState.loaded:
+    //     if (isLoadedAndStale) {
+    //       return Actionable<BlockBackendActionPrecheck>.no(
+    //         errCode: BlockBackendActionPrecheck.blockInStaleState,
+    //       );
+    //     }
+    //     break;
+    // }
     switch (dataState) {
-      case DataState.pending:
-        return Actionable<BlockBackendActionPrecheck>.no(
-          errCode: BlockBackendActionPrecheck.blockInPendingState,
-        );
-      case DataState.error:
-        return Actionable<BlockBackendActionPrecheck>.no(
-          errCode: BlockBackendActionPrecheck.blockInErrorState,
-        );
-      case DataState.none:
+      case BlockDataStateNone():
         return Actionable<BlockBackendActionPrecheck>.no(
           errCode: BlockBackendActionPrecheck.blockInNoneState,
         );
-      case DataState.ready:
-        break;
+      case BlockDataStatePending():
+        return Actionable<BlockBackendActionPrecheck>.no(
+          errCode: BlockBackendActionPrecheck.blockInPendingState,
+        );
+      case BlockDataStateLoadedStale():
+        return Actionable<BlockBackendActionPrecheck>.no(
+          errCode: BlockBackendActionPrecheck.blockInStaleState,
+        );
+      case BlockDataStateLoadedFresh():
+        return Actionable<BlockBackendActionPrecheck>.yes();
     }
-    //
-    return Actionable<BlockBackendActionPrecheck>.yes();
   }
 
   // ***************************************************************************
@@ -6523,20 +6596,37 @@ abstract class Block<
         );
       }
     }
+    // switch (dataState) {
+    //   case DataState.pending:
+    //     return Actionable<BlockItemCreationPrecheck>.no(
+    //       errCode: BlockItemCreationPrecheck.blockInPendingState,
+    //     );
+    //   case DataState.none:
+    //     return Actionable<BlockItemCreationPrecheck>.no(
+    //       errCode: BlockItemCreationPrecheck.blockInNoneState,
+    //     );
+    //   case DataState.loaded:
+    //     if (this.isLoadedAndStale) {
+    //       return Actionable<BlockItemCreationPrecheck>.no(
+    //         errCode: BlockItemCreationPrecheck.blockInStaleState,
+    //       );
+    //     }
+    //     break;
+    // }
     switch (dataState) {
-      case DataState.pending:
-        return Actionable<BlockItemCreationPrecheck>.no(
-          errCode: BlockItemCreationPrecheck.blockInPendingState,
-        );
-      case DataState.error:
-        return Actionable<BlockItemCreationPrecheck>.no(
-          errCode: BlockItemCreationPrecheck.blockInErrorState,
-        );
-      case DataState.none:
+      case BlockDataStateNone():
         return Actionable<BlockItemCreationPrecheck>.no(
           errCode: BlockItemCreationPrecheck.blockInNoneState,
         );
-      case DataState.ready:
+      case BlockDataStatePending():
+        return Actionable<BlockItemCreationPrecheck>.no(
+          errCode: BlockItemCreationPrecheck.blockInPendingState,
+        );
+      case BlockDataStateLoadedStale():
+        return Actionable<BlockItemCreationPrecheck>.no(
+          errCode: BlockItemCreationPrecheck.blockInStaleState,
+        );
+      case BlockDataStateLoadedFresh():
         break;
     }
     //
@@ -6598,20 +6688,37 @@ abstract class Block<
         errCode: BlockItemEditPrecheck.busy,
       );
     }
+    // switch (dataState) {
+    //   case DataState.pending:
+    //     return Actionable<BlockItemEditPrecheck>.no(
+    //       errCode: BlockItemEditPrecheck.inPendingState,
+    //     );
+    //   case DataState.none:
+    //     return Actionable<BlockItemEditPrecheck>.no(
+    //       errCode: BlockItemEditPrecheck.blockInNoneState,
+    //     );
+    //   case DataState.loaded:
+    //     if (isLoadedAndStale) {
+    //       return Actionable<BlockItemEditPrecheck>.no(
+    //         errCode: BlockItemEditPrecheck.blockInStaleState,
+    //       );
+    //     }
+    //     break;
+    // }
     switch (dataState) {
-      case DataState.pending:
-        return Actionable<BlockItemEditPrecheck>.no(
-          errCode: BlockItemEditPrecheck.inPendingState,
-        );
-      case DataState.error:
-        return Actionable<BlockItemEditPrecheck>.no(
-          errCode: BlockItemEditPrecheck.blockInErrorState,
-        );
-      case DataState.none:
+      case BlockDataStateNone():
         return Actionable<BlockItemEditPrecheck>.no(
           errCode: BlockItemEditPrecheck.blockInNoneState,
         );
-      case DataState.ready:
+      case BlockDataStatePending():
+        return Actionable<BlockItemEditPrecheck>.no(
+          errCode: BlockItemEditPrecheck.inPendingState,
+        );
+      case BlockDataStateLoadedStale():
+        return Actionable<BlockItemEditPrecheck>.no(
+          errCode: BlockItemEditPrecheck.blockInStaleState,
+        );
+      case BlockDataStateLoadedFresh():
         break;
     }
     //
@@ -6650,20 +6757,37 @@ abstract class Block<
         errCode: BlockQuickItemUpdatePrecheck.busy,
       );
     }
+    // switch (dataState) {
+    //   case DataState.pending:
+    //     return Actionable<BlockQuickItemUpdatePrecheck>.no(
+    //       errCode: BlockQuickItemUpdatePrecheck.blockInPendingState,
+    //     );
+    //   case DataState.none:
+    //     return Actionable<BlockQuickItemUpdatePrecheck>.no(
+    //       errCode: BlockQuickItemUpdatePrecheck.blockInNoneState,
+    //     );
+    //   case DataState.loaded:
+    //     if (isLoadedAndStale) {
+    //       return Actionable<BlockQuickItemUpdatePrecheck>.no(
+    //         errCode: BlockQuickItemUpdatePrecheck.blockInStaleState,
+    //       );
+    //     }
+    //     break;
+    // }
     switch (dataState) {
-      case DataState.pending:
-        return Actionable<BlockQuickItemUpdatePrecheck>.no(
-          errCode: BlockQuickItemUpdatePrecheck.blockInPendingState,
-        );
-      case DataState.error:
-        return Actionable<BlockQuickItemUpdatePrecheck>.no(
-          errCode: BlockQuickItemUpdatePrecheck.blockInErrorState,
-        );
-      case DataState.none:
+      case BlockDataStateNone():
         return Actionable<BlockQuickItemUpdatePrecheck>.no(
           errCode: BlockQuickItemUpdatePrecheck.blockInNoneState,
         );
-      case DataState.ready:
+      case BlockDataStatePending():
+        return Actionable<BlockQuickItemUpdatePrecheck>.no(
+          errCode: BlockQuickItemUpdatePrecheck.blockInPendingState,
+        );
+      case BlockDataStateLoadedStale():
+        return Actionable<BlockQuickItemUpdatePrecheck>.no(
+          errCode: BlockQuickItemUpdatePrecheck.blockInStaleState,
+        );
+      case BlockDataStateLoadedFresh():
         break;
     }
     //
@@ -6708,20 +6832,37 @@ abstract class Block<
         errCode: BlockQuickItemCreationPrecheck.busy,
       );
     }
+    // switch (dataState) {
+    //   case DataState.pending:
+    //     return Actionable<BlockQuickItemCreationPrecheck>.no(
+    //       errCode: BlockQuickItemCreationPrecheck.blockInPendingState,
+    //     );
+    //   case DataState.none:
+    //     return Actionable<BlockQuickItemCreationPrecheck>.no(
+    //       errCode: BlockQuickItemCreationPrecheck.blockInNoneState,
+    //     );
+    //   case DataState.loaded:
+    //     if (isLoadedAndStale) {
+    //       return Actionable<BlockQuickItemCreationPrecheck>.no(
+    //         errCode: BlockQuickItemCreationPrecheck.blockInStaleState,
+    //       );
+    //     }
+    //     break;
+    // }
     switch (dataState) {
-      case DataState.pending:
-        return Actionable<BlockQuickItemCreationPrecheck>.no(
-          errCode: BlockQuickItemCreationPrecheck.blockInPendingState,
-        );
-      case DataState.error:
-        return Actionable<BlockQuickItemCreationPrecheck>.no(
-          errCode: BlockQuickItemCreationPrecheck.blockInErrorState,
-        );
-      case DataState.none:
+      case BlockDataStateNone():
         return Actionable<BlockQuickItemCreationPrecheck>.no(
           errCode: BlockQuickItemCreationPrecheck.blockInNoneState,
         );
-      case DataState.ready:
+      case BlockDataStatePending():
+        return Actionable<BlockQuickItemCreationPrecheck>.no(
+          errCode: BlockQuickItemCreationPrecheck.blockInPendingState,
+        );
+      case BlockDataStateLoadedStale():
+        return Actionable<BlockQuickItemCreationPrecheck>.no(
+          errCode: BlockQuickItemCreationPrecheck.blockInStaleState,
+        );
+      case BlockDataStateLoadedFresh():
         break;
     }
     //
@@ -6882,7 +7023,7 @@ abstract class Block<
         errCode: BlockItemEditPrecheck.noForm,
       );
     }
-    if (formModel!.dataState == DataState.error) {
+    if (formModel!.dataState == FormDataState.error) {
       // Test Case: TODO
       return Actionable<BlockItemEditPrecheck>.no(
         errCode: BlockItemEditPrecheck.formInErrorState,
@@ -7023,7 +7164,7 @@ abstract class Block<
           errCode: BlockFormEnablementPrecheck.formInNoneMode,
         );
       case FormMode.creation:
-        if (formModel!.dataState == DataState.error) {
+        if (formModel!.dataState == FormDataState.error) {
           // Test Cases: [16a].
           if (!formModel!.formInitialDataReady) {
             return Actionable<BlockFormEnablementPrecheck>.no(
@@ -7033,7 +7174,7 @@ abstract class Block<
         }
         return Actionable<BlockFormEnablementPrecheck>.yes();
       case FormMode.edit:
-        if (formModel!.dataState == DataState.error) {
+        if (formModel!.dataState == FormDataState.error) {
           // Test Cases: [16b].
           if (!formModel!.formInitialDataReady) {
             return Actionable<BlockFormEnablementPrecheck>.no(
@@ -7951,8 +8092,7 @@ abstract class Block<
     //
     required List<ITEM>? queriedItemList,
     required PaginationInfo? queriedPaginationInfo,
-    required DataState newBlockDataState,
-    required bool newHasPendingInvalidation,
+    required BlockDataState newBlockDataState,
     required ActionResultState queryResultState,
   }) {
     final List<ITEM> queriedItems = queriedItemList ?? [];
@@ -8017,7 +8157,6 @@ abstract class Block<
       queriedPaginationInfo: queriedPaginationInfo,
       queryResultState: queryResultState,
       newBlockDataState: newBlockDataState,
-      newHasPendingInvalidation: newHasPendingInvalidation,
       //
       validItems: validItems,
       invalidItems: invalidItems,

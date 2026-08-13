@@ -2,7 +2,7 @@
 /// when a page-shifting or re-query invocation encounters a network failure.
 enum FallbackDilemmaStrategy {
   /// **Preserve Stable Cache (Default)**: Keeps historical on-screen rows intact,
-  /// maintaining a [DataState.ready] posture to avoid user panic.
+  /// maintaining a [DataState.loaded] posture to avoid user panic.
   ///
   /// *Ideal for fluid user experiences during temporary network drops.*
   preserveStableCache,

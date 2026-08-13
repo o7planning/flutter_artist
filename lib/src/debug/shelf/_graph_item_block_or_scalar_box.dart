@@ -395,17 +395,17 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     FormModel formModel,
   ) {
     String className = getClassName(formModel);
-    final DataState dataState = formModel.dataState;
+    final FormDataState formDataState = formModel.dataState;
     final bool active = formModel.ui.hasActiveUiComponent();
     //
     return "FORM MODEL: $className \n"
-        "Data State: ${dataState.name.toUpperCase()} "
+        "Data State: ${formDataState.name.toUpperCase()} "
         "| Visibility: ${active ? 'VISIBLE' : 'HIDDEN'} "
         "| Mode: ${formModel.formMode.name.toUpperCase()}";
   }
 
   String _blockOrScalarTooltipMessage(
-      BlockOrScalar blockOrScalar, DataState dataState, bool active) {
+      BlockOrScalar blockOrScalar, ScalarDataState dataState, bool active) {
     String className = blockOrScalar.blockOrScalarClassName;
     return "${blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}: $className \n"
         "Data State: ${dataState.name.toUpperCase()} "
@@ -413,15 +413,26 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
         "| Items: ${blockOrScalar.itemCount}";
   }
 
-  IconData _dataStateIconData(DataState dataState) {
+  IconData _formDataStateIconData(FormDataState dataState) {
     switch (dataState) {
-      case DataState.pending:
+      case FormDataState.pending:
         return FaIconConstants.dataStatePendingIconData;
-      case DataState.ready:
-        return FaIconConstants.dataStateReadyIconData;
-      case DataState.error:
+      case FormDataState.loaded:
+        return FaIconConstants.dataStateLoadedIconData;
+      case FormDataState.error:
         return FaIconConstants.dataStateErrorIconData;
-      case DataState.none:
+      case FormDataState.none:
+        return FaIconConstants.dataStateNoneIconData;
+    }
+  }
+
+  IconData _dataStateIconData(ScalarDataState dataState) {
+    switch (dataState) {
+      case ScalarDataState.pending:
+        return FaIconConstants.dataStatePendingIconData;
+      case ScalarDataState.loaded:
+        return FaIconConstants.dataStateLoadedIconData;
+      case ScalarDataState.none:
         return FaIconConstants.dataStateNoneIconData;
     }
   }
@@ -435,21 +446,32 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     }
   }
 
-  Color _dataStateBgColor(DataState dataState) {
+  Color _formDataStateBgColor(FormDataState dataState) {
     switch (dataState) {
-      case DataState.pending:
+      case FormDataState.pending:
         return DebugConstants.graphBoxDataStatePendingBgColor(context);
-      case DataState.ready:
+      case FormDataState.loaded:
         return DebugConstants.graphBoxDataStateReadyBgColor(context);
-      case DataState.error:
+      case FormDataState.error:
         return DebugConstants.graphBoxDataStateErrorBgColor(context);
-      case DataState.none:
+      case FormDataState.none:
+        return DebugConstants.graphBoxDataStateNoneBgColor(context);
+    }
+  }
+
+  Color _dataStateBgColor(ScalarDataState dataState) {
+    switch (dataState) {
+      case ScalarDataState.pending:
+        return DebugConstants.graphBoxDataStatePendingBgColor(context);
+      case ScalarDataState.loaded:
+        return DebugConstants.graphBoxDataStateReadyBgColor(context);
+      case ScalarDataState.none:
         return DebugConstants.graphBoxDataStateNoneBgColor(context);
     }
   }
 
   Widget _buildDataState(BlockOrScalar blockOrScalar) {
-    final DataState dataState = blockOrScalar.dataState;
+    final ScalarDataState dataState = blockOrScalar.dataState;
     bool active = blockOrScalar.hasActiveUiComponent();
     //
     return Container(
@@ -490,7 +512,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
   Widget _buildFormDataState(FormModel formModel) {
     return Container(
       padding: const EdgeInsets.all(3),
-      color: _dataStateBgColor(formModel.dataState),
+      color: _formDataStateBgColor(formModel.dataState),
       child: TooltipUtils.buildCustomTooltip(
         message: _formTooltipMessage(
           formModel,
@@ -499,7 +521,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(
-              _dataStateIconData(formModel.dataState),
+              _formDataStateIconData(formModel.dataState),
               size: 16,
               color: DebugConstants.graphBoxTextColor(context),
             ),

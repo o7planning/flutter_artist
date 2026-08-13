@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 /// Centralized strategy resolver calculating execution plans and target ID sets
-/// for a [Block] based on its current data state, error origin, query mode,
+/// for a [Block] based on its current [BlockDataState], query mode,
 /// and boundary rules defined in [BlockViewportSyncConfig].
 class BlockQueryStrategyResolver {
   /// Resolves the exact query execution plan for a given [block].
@@ -16,61 +16,37 @@ class BlockQueryStrategyResolver {
             AdditionalFormRelatedData>
         block,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
-    required BlockErrorOrigin? errorOrigin,
   }) {
-    // print("TEMP 83b.1: block.dataState: ${block.dataState}");
-    // print("TEMP 83b.2: block.pendingNativeQueryMode: ${block.pendingNativeQueryMode}");
-    // print("TEMP 83b.3: block.hasPendingInvalidation: ${block.hasPendingInvalidation}");
-    // print("TEMP 83b.4: block.itemIds: ${block.itemIds}");
-    // print("TEMP 83b.5: block.config: ${block.config}");
-    // print("TEMP 83b.6: syncSessionState: ${syncSessionState}");
-    // print("TEMP 83b.7: errorOrigin: ${errorOrigin}");
-
     return resolveQueryPlanInternal<ID>(
       dataState: block.dataState,
       pendingNativeQueryMode: block.pendingNativeQueryMode,
-      hasPendingInvalidation: block.hasPendingInvalidation,
-      itemIds: block.itemIds,
+      itemIds: block.items.map((i) => i.id).toList(),
       config: block.config,
       syncSessionState: syncSessionState,
-      errorOrigin: errorOrigin,
     );
   }
 
-  /// Resolves the exact query execution plan for a given [block].
+  /// Resolves the exact query execution plan using explicit runtime parameters.
   static BlockQueryPlan<ID> resolveQueryPlanInternal<ID extends Comparable>({
-    required DataState dataState,
+    required BlockDataState dataState,
     required BlockNativeQueryMode pendingNativeQueryMode,
-    required bool hasPendingInvalidation,
     required List<ID> itemIds,
     required BlockConfig config,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
-    required BlockErrorOrigin? errorOrigin,
   }) {
     // -------------------------------------------------------------------------
-    // 1. UNINITIALIZED STATE (DataState.none): Skip execution
+    // 1. UNINITIALIZED STATE (BlockDataStateNone): Skip execution
     // -------------------------------------------------------------------------
-    if (dataState == DataState.none) {
+    if (dataState.isNone) {
       return const BlockQueryPlan.none();
     }
-
-    // -------------------------------------------------------------------------
-    // 2. EFFECTIVE STATE MAPPING (Mapping Error Origins)
-    // -------------------------------------------------------------------------
-    final bool isEffectivePending = dataState == DataState.pending ||
-        (dataState == DataState.error &&
-            errorOrigin == BlockErrorOrigin.fromPending);
-
-    final bool isEffectiveReady = dataState == DataState.ready ||
-        (dataState == DataState.error &&
-            errorOrigin == BlockErrorOrigin.fromReady);
 
     final BlockViewportSyncConfig syncConfig = config.viewportSyncConfig;
 
     // -------------------------------------------------------------------------
-    // CASE A: Effective PENDING State (Cold Query / Baseline Initialization)
+    // 2. PENDING STATE (Cold Query / Baseline Initialization)
     // -------------------------------------------------------------------------
-    if (isEffectivePending) {
+    if (dataState.isPending) {
       // Unbounded Flat Mode: Full Native Query is mandatory to establish baseline
       if (config.nativeQueryMode == BlockNativeQueryMode.fullQuery) {
         return const BlockQueryPlan(
@@ -100,11 +76,13 @@ class BlockQueryStrategyResolver {
     }
 
     // -------------------------------------------------------------------------
-    // CASE B: Effective READY State (Warm Re-query / Invalidation Reconcile)
+    // 3. LOADED STATE (Warm Re-query / Invalidation Reconcile)
     // -------------------------------------------------------------------------
-    if (isEffectiveReady) {
+    if (dataState.isLoaded) {
+      final bool isStale = dataState.isStale;
+
       // If block is clean and has no pending invalidation or events, do nothing
-      if (!hasPendingInvalidation && syncSessionState == null) {
+      if (!isStale && syncSessionState == null) {
         return const BlockQueryPlan.none();
       }
 

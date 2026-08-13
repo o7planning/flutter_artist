@@ -37,9 +37,9 @@ class FormModelStructure {
 
   FormMode get formMode => _formMode;
 
-  DataState _formDataState = DataState.none;
+  FormDataState _formDataState = FormDataState.none;
 
-  DataState get formDataState => _formDataState;
+  FormDataState get formDataState => _formDataState;
 
   FormErrorInfo? __formErrorInfo;
 
@@ -224,7 +224,7 @@ class FormModelStructure {
   }
 
   void _setFormDataState({
-    required DataState formDataState,
+    required FormDataState formDataState,
     required dynamic error,
   }) {
     _formDataState = formDataState;
@@ -233,7 +233,7 @@ class FormModelStructure {
   // TODO: Xem lai, xoa di?
   void _setFormMode_TODO_DELETE({
     required FormMode formMode,
-    required DataState formDataState,
+    required FormDataState formDataState,
   }) {
     _formMode = formMode;
     _formDataState = formDataState;
@@ -305,7 +305,7 @@ class FormModelStructure {
     }
   }
 
-  void _clearFormDataWithState({required DataState formDataState}) {
+  void _clearFormDataWithState({required FormDataState formDataState}) {
     _justInitialized = true;
     _formDataState = formDataState;
     _formMode = FormMode.none;

@@ -9,6 +9,7 @@ import '_active_info_widget.dart';
 import '_block_requery_info_widget.dart';
 import '_debug_box.dart';
 import '_debug_style_utils.dart';
+import 'block_data_state_widget.dart';
 
 class BlockDebugBox extends BaseDebugBox {
   final Block block;
@@ -77,21 +78,11 @@ class BlockDebugBox extends BaseDebugBox {
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (options.showBlockDataState)
-        IconLabelText(
-          label: "Data State: ",
-          text: block.dataState.name.toString(),
+        BlockDataStateWidget(
+          block: block,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle(context),
-          endIcon: block.hasPendingInvalidation
-              ? Tooltip(
-                  message: "Has Pending Invalidation",
-                  child: Icon(
-                    Icons.pending_actions,
-                    size: 18,
-                    color: context.faColors.ink.error,
-                  ),
-                )
-              : null,
+          checkAgain: () {},
         ),
       if (options.showLastQueryResultState)
         IconLabelText(

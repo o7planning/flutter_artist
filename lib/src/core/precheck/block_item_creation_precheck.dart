@@ -22,10 +22,10 @@ enum BlockItemCreationPrecheck implements Precheck {
     details: ["The block is in a 'pending' state."],
   ),
   // Test Cases: [01b]
-  blockInErrorState(
-    precheckCode: PrecheckCode.inErrorState,
+  blockInStaleState(
+    precheckCode: PrecheckCode.inStaleState,
     message: "New item creation is disabled.",
-    details: ["The block is in an 'error' state."],
+    details: ["The block is in a 'stale' state."],
   ),
   // Test Cases: [01a]
   blockInNoneState(

@@ -302,8 +302,8 @@ abstract class XShelf extends XRootQueueItem {
           alsoCheckChildren: true,
         );
         if (hasXBlockRep) {
-          if (xBlock.block.dataState == DataState.pending ||
-              xBlock.block.dataState == DataState.error) {
+          if (xBlock.block.dataState.isPending ||
+              xBlock.block.dataState.isStale) {
             xBlock.setQueryHintToGreater(QryHint.force);
           }
         }
@@ -312,9 +312,9 @@ abstract class XShelf extends XRootQueueItem {
         // Current: updateInternalReactionByEvtBlock.
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUiComponent()) {
-          if (xFormModel.formModel.dataState == DataState.pending ||
-              xFormModel.formModel.dataState == DataState.error ||
-              xFormModel.formModel.dataState == DataState.none) {
+          if (xFormModel.formModel.dataState == FormDataState.pending ||
+              xFormModel.formModel.dataState == FormDataState.error ||
+              xFormModel.formModel.dataState == FormDataState.none) {
             xFormModel.lazy = true;
 
             if (naturalMode) {

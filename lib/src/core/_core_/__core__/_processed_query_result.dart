@@ -14,8 +14,7 @@ class _ProcessedQueryResult<
 
   // final PageData<ITEM>? queriedPageData;
   final ActionResultState queryResultState;
-  final DataState newBlockDataState;
-  final bool newHasPendingInvalidation;
+  final BlockDataState newBlockDataState;
 
   //
   final List<ITEM> validItems;
@@ -34,7 +33,6 @@ class _ProcessedQueryResult<
     required this.queriedPaginationInfo,
     required this.queryResultState,
     required this.newBlockDataState,
-    required this.newHasPendingInvalidation,
     required this.validItems,
     required this.invalidItems,
     required this.errorItems,

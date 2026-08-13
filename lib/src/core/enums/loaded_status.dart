@@ -1,0 +1,4 @@
+enum LoadedStatus {
+  fresh,
+  stale;
+}

@@ -115,12 +115,14 @@ class BlockOrScalar extends Equatable {
     }
   }
 
-  DataState get dataState {
-    if (block != null) {
-      return block!.dataState;
-    } else {
-      return scalar!.dataState;
-    }
+  ScalarDataState get dataState {
+    // if (block != null) {
+    //   return block!.dataState;
+    // } else {
+    //   return scalar!.dataState;
+    // }
+    // TODO: Hardcode
+    return ScalarDataState.none;
   }
 
   FilterCriteria? get filterCriteria {

@@ -16,7 +16,7 @@ class _ScalarData<
 
   _ScalarValueWrap<VALUE> get current => __current;
 
-  DataState _scalarDataState = DataState.pending;
+  ScalarDataState _scalarDataState = ScalarDataState.pending;
 
   PageData<VALUE>? _lastQueryResult;
 
@@ -32,7 +32,7 @@ class _ScalarData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _clearWithDataState({required DataState scalarDataState}) {
+  void _clearWithDataState({required ScalarDataState scalarDataState}) {
     _scalarDataState = scalarDataState;
     __current = _ScalarValueWrap<VALUE>(id: null, value: null);
     _xFilterCriteria = null; // ???
@@ -54,26 +54,30 @@ class _ScalarData<
   // ***************************************************************************
 
   void _setToPending() {
-    _scalarDataState = DataState.pending;
+    _scalarDataState = ScalarDataState.pending;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   void _clearValueWithDataState({
-    required DataState scalarDataState,
+    required ScalarDataState scalarDataState,
     required bool errorInFilter,
   }) {
     _scalarDataState = scalarDataState;
-    if (_scalarDataState == DataState.error) {
-      _lastQueryResultState = ActionResultState.fail;
-      //
-      // Update FilterCriteria:
-      //
-      if (errorInFilter) {
-        __setNewFilterCriteria(null);
-      }
+    if (true) {
+      throw "TODO: Tạm thời rào cái này lại.";
     }
+    // TODO: Tạm thời rào cái này lại.
+    // if (_scalarDataState == DataState.error) {
+    //   _lastQueryResultState = ActionResultState.fail;
+    //   //
+    //   // Update FilterCriteria:
+    //   //
+    //   if (errorInFilter) {
+    //     __setNewFilterCriteria(null);
+    //   }
+    // }
     //
     __current = _ScalarValueWrap<VALUE>(id: null, value: null);
   }
@@ -85,7 +89,7 @@ class _ScalarData<
     required XFilterCriteria<FILTER_CRITERIA>? xFilterCriteria,
     required String? valueId,
     required VALUE? value,
-    required DataState dataState,
+    required ScalarDataState dataState,
     required ActionResultState queryResultState,
   }) {
     __setNewFilterCriteria(xFilterCriteria);

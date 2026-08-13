@@ -1,0 +1,21 @@
+StaleReason
+├── externalChange
+├── queryFail
+└── ...
+
+
+
+BlockState
+│
+├── none
+│
+├── pending
+│   └── PendingReason (initial, fetchFailed)
+│
+└── loaded
+    └── LoadedStatus
+        ├── fresh
+        └── stale
+            └── LoadedStateStaleReason
+                  ├── event
+              -   └── fetchFailed

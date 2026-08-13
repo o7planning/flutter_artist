@@ -58,6 +58,8 @@ import '../enums/action_result_state.dart';
 import '../enums/activity_hidden_action.dart';
 import '../enums/block_viewport_sync_strategy.dart';
 import '../enums/filter_connector.dart';
+import '../enums/loaded_state_stale_reason.dart';
+import '../enums/loaded_status.dart';
 import '../enums/sort_strategy.dart';
 import '../enums/default_setting_policy.dart';
 import '../enums/filter_operator.dart';
@@ -105,7 +107,6 @@ import '../enums/tip_document.dart';
 import '../enums/unified_item_refresh_policy.dart';
 import '../enums/x_shelf_type.dart';
 import '../enums/after_backend_action.dart';
-import '../enums/block_error_origin.dart';
 import '../enums/block_native_query_mode.dart';
 import '../enums/block_reaction_target.dart';
 import '../enums/event_scope.dart';
@@ -182,7 +183,7 @@ import '../utils/_name_utils.dart';
 import '../event/broadcast_backend_events_action.dart';
 import '../enums/control_bar_item_type.dart';
 import '../notification/firebase/firebase_notification_service.dart';
-import '../utils/query_state_calculator.dart';
+import '_utils_/query_state_calculator.dart';
 
 part '../../startup_error_viewer.dart';
 
@@ -203,6 +204,8 @@ part '__core__/_block.dart';
 part '__core__/_scalar_debug_info.dart';
 
 part '__core__/_block_data.dart';
+
+part '__core__/_block_data_state.dart';
 
 part '__core__/_coordinator.dart';
 

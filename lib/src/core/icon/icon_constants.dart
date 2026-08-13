@@ -11,7 +11,7 @@ class FaIconConstants {
   static const IconData dataStatePendingIconData =
       cupertino.CupertinoIcons.slowmo;
 
-  static const IconData dataStateReadyIconData =
+  static const IconData dataStateLoadedIconData =
       cupertino.CupertinoIcons.checkmark_alt_circle;
 
   static const IconData formErrorRollbackIconData =

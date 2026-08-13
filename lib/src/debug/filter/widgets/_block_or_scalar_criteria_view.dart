@@ -53,7 +53,7 @@ class BlockOrScalarCriteriaView extends StatelessWidget {
 
   Widget _buildStatusBar(BuildContext context, BlockOrScalar blockOrScalar) {
     final colorScheme = Theme.of(context).colorScheme;
-    DataState dataState = blockOrScalar.dataState;
+    // DataState dataState = blockOrScalar.dataState;
     FilterCriteria? filterCriteria = blockOrScalar.filterCriteria;
 
     final labelStyle = TextStyle(
@@ -66,18 +66,19 @@ class BlockOrScalarCriteriaView extends StatelessWidget {
     return Wrap(
       spacing: 12,
       children: [
-        _buildStatusItem(
-          context,
-          label: 'Data State: ',
-          value: dataState.name.toUpperCase(),
-          valueColor: dataState == DataState.error
-              ? colorScheme.error
-              : (dataState == DataState.ready
-                  ? Colors.green
-                  : colorScheme.onSurface),
-          labelStyle: labelStyle,
-          textStyle: textStyle,
-        ),
+        // TODO: Tạm thời rào lại.
+        // _buildStatusItem(
+        //   context,
+        //   label: 'Data State: ',
+        //   value: dataState.name.toUpperCase(),
+        //   valueColor: dataState == DataState.error
+        //       ? colorScheme.error
+        //       : (dataState == DataState.loaded
+        //           ? Colors.green
+        //           : colorScheme.onSurface),
+        //   labelStyle: labelStyle,
+        //   textStyle: textStyle,
+        // ),
         _buildStatusItem(
           context,
           label: "Filter Criteria: ",

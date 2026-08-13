@@ -85,7 +85,7 @@ class _BlockItemsViewBuilderState
       return Stack(
         children: [
           widget.build(),
-          if (widget.block.dataState == DataState.error)
+          if (widget.block.hasError)
             Positioned(
               top: 5,
               right: 5,

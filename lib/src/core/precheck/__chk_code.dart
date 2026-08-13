@@ -15,6 +15,7 @@ enum PrecheckCode {
   inPendingState, // State
   inErrorState, // State
   inNoneState, // State
+  inStaleState, // State
   //
   inNoneMode, // Mode
   //

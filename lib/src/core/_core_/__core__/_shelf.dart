@@ -162,8 +162,7 @@ abstract class Shelf extends _Core {
       if (__hookMap.containsKey(hook.name)) {
         throw ___registerError(
             "Duplicate Hook '${hook.name}' in '${getClassName(this)}'"
-                "\nDouble-check ${getClassName(
-                this)}.defineShelfStructure() method");
+            "\nDouble-check ${getClassName(this)}.defineShelfStructure() method");
       } else {
         __hookMap[hook.name] = hook;
       }
@@ -418,8 +417,7 @@ abstract class Shelf extends _Core {
     if (__scalarMap.containsKey(scalar.name)) {
       throw ___registerError(
           "Duplicate scalar '${scalar.name}' in '${getClassName(this)}'\n"
-              "Double-check ${getClassName(
-              this)}.defineShelfStructure() method");
+          "Double-check ${getClassName(this)}.defineShelfStructure() method");
     } else {
       __scalarMap[scalar.name] = scalar;
     }
@@ -427,13 +425,11 @@ abstract class Shelf extends _Core {
     scalar.shelf = this;
     if (scalar.registeredFilterModelName != null) {
       FilterModel? filterModel =
-      _shelfStruct.filterModels[scalar.registeredFilterModelName!];
+          _shelfStruct.filterModels[scalar.registeredFilterModelName!];
       if (filterModel == null) {
         throw ___registerError(
-            "FilterModel not found '${scalar
-                .registeredFilterModelName}' in '${getClassName(this)}'\n"
-                "Double-check ${getClassName(
-                this)}.defineShelfStructure() method");
+            "FilterModel not found '${scalar.registeredFilterModelName}' in '${getClassName(this)}'\n"
+            "Double-check ${getClassName(this)}.defineShelfStructure() method");
       }
       //
       //
@@ -445,18 +441,15 @@ abstract class Shelf extends _Core {
       if (filterInputBF == filterInputBase) {
         throw ___registerError(
             "You need to create your own class that extends the '$filterInputBase' class \n"
-                "or use the 'EmptyFilterInput' class to use in the '${getClassName(
-                filterModel)}' declaration \n\n"
-                " >> Currently, ${getClassName(
-                filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+            "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
       }
       //
       if (filterInputBF != filterInputB) {
         throw ___registerError(
             "The Scalar and its FilterModel must have the same FILTER_INPUT type.\n\n"
-                " >> ${getClassName(scalar)}<FILTER_INPUT> = <$filterInputB> \n"
-                " >> ${getClassName(
-                filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+            " >> ${getClassName(scalar)}<FILTER_INPUT> = <$filterInputB> \n"
+            " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
       }
       // -----------------
       const Type filterCriteriaType = FilterCriteria;
@@ -467,18 +460,15 @@ abstract class Shelf extends _Core {
       if (filterCriteriaBF == filterCriteriaBase) {
         throw ___registerError(
             "You need to create your own class that extends from '$filterCriteriaBase' "
-                "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
-                " >> Currently, ${getClassName(
-                filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+            "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       if (filterCriteriaBF != filterCriteriaB) {
         throw ___registerError(
             "The Scalar and its Filter-Model must have the same FILTER_CRITERIA type. \n"
-                " >> ${getClassName(
-                scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
-                " >> ${getClassName(
-                filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+            " >> ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
+            " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       filterModel._scalars.add(scalar);
@@ -499,11 +489,9 @@ abstract class Shelf extends _Core {
       //
       if (filterCriteriaB != filterCriteriaEmpty) {
         throw ___registerError(
-            "Filter-Criteria of '${getClassName(
-                scalar)}' scalar must be '$filterCriteriaEmpty' "
-                "because this scalar does not have a FILTER_MODEL.\n\n"
-                " >> Currently, ${getClassName(
-                scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
+            "Filter-Criteria of '${getClassName(scalar)}' scalar must be '$filterCriteriaEmpty' "
+            "because this scalar does not have a FILTER_MODEL.\n\n"
+            " >> Currently, ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
       }
     }
     //
@@ -519,8 +507,7 @@ abstract class Shelf extends _Core {
     if (__blockMap.containsKey(block.name)) {
       throw ___registerError(
           "Duplicate block '${block.name}' in '${getClassName(this)}'\n"
-              "Double-check ${getClassName(
-              this)}.defineShelfStructure() method");
+          "Double-check ${getClassName(this)}.defineShelfStructure() method");
     } else {
       __blockMap[block.name] = block;
       if (block.formModel != null) {
@@ -531,13 +518,11 @@ abstract class Shelf extends _Core {
     block.shelf = this;
     if (block.registeredFilterModelName != null) {
       FilterModel? filterModel =
-      _shelfStruct.filterModels[block.registeredFilterModelName!];
+          _shelfStruct.filterModels[block.registeredFilterModelName!];
       if (filterModel == null) {
         throw ___registerError(
-            "FilterModel not found '${block
-                .registeredFilterModelName}' in '${getClassName(this)}'\n"
-                "Double-check ${getClassName(
-                this)}.defineShelfStructure() method");
+            "FilterModel not found '${block.registeredFilterModelName}' in '${getClassName(this)}'\n"
+            "Double-check ${getClassName(this)}.defineShelfStructure() method");
       }
       //
       //
@@ -549,18 +534,15 @@ abstract class Shelf extends _Core {
       if (filterInputBF == filterInputBase) {
         throw ___registerError(
             "You need to create your own class that extends the '$filterInputBase' class \n"
-                "or use the 'EmptyFilterInput' class to use in the '${getClassName(
-                filterModel)}' declaration \n\n"
-                " >> Currently, ${getClassName(
-                filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+            "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
       }
       //
       if (filterInputBF != filterInputB) {
         throw ___registerError(
             "The Block and its FilterModel must have the same FILTER_INPUT type.\n\n"
-                " >> ${getClassName(block)}<FILTER_INPUT> = <$filterInputB> \n"
-                " >> ${getClassName(
-                filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+            " >> ${getClassName(block)}<FILTER_INPUT> = <$filterInputB> \n"
+            " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
       }
       // -----------------
       const Type filterCriteriaType = FilterCriteria;
@@ -571,18 +553,15 @@ abstract class Shelf extends _Core {
       if (filterCriteriaBF == filterCriteriaBase) {
         throw ___registerError(
             "You need to create your own class that extends from '$filterCriteriaBase' "
-                "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
-                " >> Currently, ${getClassName(
-                filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+            "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       if (filterCriteriaBF != filterCriteriaB) {
         throw ___registerError(
             "The Block and its Filter-Model must have the same FILTER_CRITERIA type. \n"
-                " >> ${getClassName(
-                block)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
-                " >> ${getClassName(
-                filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+            " >> ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
+            " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       filterModel._blocks.add(block);
@@ -603,11 +582,9 @@ abstract class Shelf extends _Core {
       //
       if (filterCriteriaB != filterCriteriaEmpty) {
         throw ___registerError(
-            "Filter-Criteria of '${getClassName(
-                block)}' block must be '$filterCriteriaEmpty' "
-                "because this block does not have a FILTER_MODEL.\n\n"
-                " >> Currently, ${getClassName(
-                block)}<FILTER_CRITERIA> = <$filterCriteriaB>");
+            "Filter-Criteria of '${getClassName(block)}' block must be '$filterCriteriaEmpty' "
+            "because this block does not have a FILTER_MODEL.\n\n"
+            " >> Currently, ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB>");
       }
     }
     //
@@ -618,10 +595,8 @@ abstract class Shelf extends _Core {
     if (formInputTypeStr == formInputTypeB) {
       throw ___registerError(
           "You need to create your own class that extends the '$formInputTypeB' class \n"
-              "or use the 'EmptyFormInput' class to use in the '${getClassName(
-              block)}' declaration \n\n"
-              " >> Currently, ${getClassName(
-              block)}<FORM_INPUT> = <$formInputTypeStr>");
+          "or use the 'EmptyFormInput' class to use in the '${getClassName(block)}' declaration \n\n"
+          " >> Currently, ${getClassName(block)}<FORM_INPUT> = <$formInputTypeStr>");
     }
     //
     for (Block childBlock in block.childBlocks) {
@@ -710,12 +685,12 @@ abstract class Shelf extends _Core {
 
   bool get isFullyPending {
     for (Scalar scalar in rootScalars) {
-      if (scalar.dataState != DataState.pending) {
+      if (scalar.dataState != ScalarDataState.pending) {
         return false;
       }
     }
     for (Block block in rootBlocks) {
-      if (block.dataState != DataState.pending) {
+      if (!block.dataState.isPending ) {
         return false;
       }
     }
@@ -726,7 +701,8 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
 
   EffectedShelfMembers _calculateEffectedShelfMembersByEvents(
-      List<Type> events,) {
+    List<Type> events,
+  ) {
     return _shelfExternalUtils.calculateEffectedShelfMembersByEvents(events);
   }
 
@@ -743,7 +719,7 @@ abstract class Shelf extends _Core {
     executionTrace._addTraceStep(
       codeId: "#02000",
       shortDesc:
-      "Find lazy model-components (block, scalar or formModel) that are in a state where they need to query or load data.",
+          "Find lazy model-components (block, scalar or formModel) that are in a state where they need to query or load data.",
     );
     //
     // Natural Query:
@@ -755,7 +731,7 @@ abstract class Shelf extends _Core {
       executionTrace._addTraceStep(
         codeId: "#02020",
         shortDesc:
-        "No lazy model-components found. Just update All UI components and nothing else. "
+            "No lazy model-components found. Just update All UI components and nothing else. "
             "Calling ${debugObjHtml(this)}.ui.updateAllUiComponents().",
         traceStepType: TraceStepType.nonControllableCalling,
       );
@@ -775,13 +751,12 @@ abstract class Shelf extends _Core {
         codeId: "#02100",
         shortDesc: "Create ${debugObjHtml(xShelf)} for <b>Natural-Load</b>.",
         note:
-        "<b>XShelf</b> is a <b>RootQueueItem</b> and contains multiple <b>Task Units</b>.",
+            "<b>XShelf</b> is a <b>RootQueueItem</b> and contains multiple <b>Task Units</b>.",
       );
       executionTrace._addTraceStep(
         codeId: "#02120",
         shortDesc:
-        "Calling ${debugObjHtml(
-            xShelf)}._initQueryTaskUnits() to create <b>Natural-Load</b> task units...",
+            "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits() to create <b>Natural-Load</b> task units...",
         traceStepType: TraceStepType.nonControllableCalling,
       );
       //
@@ -792,14 +767,14 @@ abstract class Shelf extends _Core {
       executionTrace._addTraceStep(
         codeId: "#02160",
         shortDesc:
-        "Add ${debugObjHtml(xShelf)} (RootQueueItem) to <b>Root-Queue</b>.",
+            "Add ${debugObjHtml(xShelf)} (RootQueueItem) to <b>Root-Queue</b>.",
       );
       FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
       //
       executionTrace._addTraceStep(
         codeId: "#02200",
         shortDesc:
-        "Calling <b>FlutterArtist.executor._executeTaskUnitQueue()</b> "
+            "Calling <b>FlutterArtist.executor._executeTaskUnitQueue()</b> "
             "to execute <b>RootQueueItem(s)</b> on the queue and its <b>Task Units</b>...",
         traceStepType: TraceStepType.nonControllableCalling,
       );
@@ -850,20 +825,19 @@ abstract class Shelf extends _Core {
       executionTrace._addTraceStep(
         codeId: "#50000",
         shortDesc: " - <b>$blockName</b>:"
-            "\n  --> @blockSyncSessionState: <b>${block
-            ._blockSyncSessionState}</b>.",
+            "\n  --> @blockSyncSessionState: <b>${block._blockSyncSessionState}</b>.",
       );
     }
     //
     for (String blockName
-    in effectedShelfMembers._refreshCurrItmBlockMAP.keys) {
+        in effectedShelfMembers._refreshCurrItmBlockMAP.keys) {
       Block block = __blockMap[blockName]!;
       Comparable? itemId = block.currentItemId;
       final blockItemRefreshCondition = itemId == null
           ? null
           : block._createBlockItemRefreshCon(
-        itemId: itemId,
-      );
+              itemId: itemId,
+            );
       block._blockItemRefreshCondition = blockItemRefreshCondition;
       executionTrace._addTraceStep(
         codeId: "#50100",
@@ -897,8 +871,7 @@ abstract class Shelf extends _Core {
     executionTrace._addTraceStep(
       codeId: "#52000",
       shortDesc:
-      "Creating <b>$_XShelfShelfExternalReaction</b> for ${debugObjHtml(
-          this)}..",
+          "Creating <b>$_XShelfShelfExternalReaction</b> for ${debugObjHtml(this)}..",
     );
     //
     final XShelf xShelf = _XShelfShelfExternalReaction(
@@ -922,7 +895,7 @@ abstract class Shelf extends _Core {
   }
 
   Future<ShelfDeferredEventExecutionResult>
-  executeDelayedExternalReactionTaskUnit() async {
+      executeDelayedExternalReactionTaskUnit() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "executeDelayedExternalReactionTaskUnit",
@@ -932,10 +905,10 @@ abstract class Shelf extends _Core {
     executionTrace._addTraceStep(
       codeId: "#68000",
       shortDesc:
-      "Checking before <b>executeDelayedExternalReactionTaskUnit</b>..",
+          "Checking before <b>executeDelayedExternalReactionTaskUnit</b>..",
     );
     Actionable<ShelfDeferredEventExecutionPrecheck> actionable =
-    __canExecuteDelayedExternalReaction(checkBusy: true);
+        __canExecuteDelayedExternalReaction(checkBusy: true);
     //
     if (!actionable.yes) {
       // _createItemErrorCount++;
@@ -962,7 +935,7 @@ abstract class Shelf extends _Core {
 
   @_PrecheckPrivateMethod()
   Actionable<ShelfDeferredEventExecutionPrecheck>
-  __canExecuteDelayedExternalReaction({
+      __canExecuteDelayedExternalReaction({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
@@ -976,7 +949,7 @@ abstract class Shelf extends _Core {
 
   @_PrecheckPrivateMethod()
   Actionable<ShelfDeferredEventExecutionPrecheck>
-  canExecuteDelayedExternalReaction() {
+      canExecuteDelayedExternalReaction() {
     return __canExecuteDelayedExternalReaction(checkBusy: true);
   }
 

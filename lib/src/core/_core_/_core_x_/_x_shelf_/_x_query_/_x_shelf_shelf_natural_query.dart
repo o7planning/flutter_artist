@@ -15,8 +15,8 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
-          if (xScalar.scalar.dataState == DataState.pending ||
-              xScalar.scalar.dataState == DataState.error) {
+          if (xScalar.scalar.dataState == ScalarDataState.pending ||
+              xScalar.scalar.isLoadedAndStale) {
             xScalar.setQueryHintToGreater(QryHint.force);
           }
         }
@@ -36,18 +36,17 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
           alsoCheckChildren: true,
         );
         if (blockXBlockRep) {
-          if (xBlock.block.dataState == DataState.pending ||
-              xBlock.block.dataState == DataState.error ||
-              xBlock.block.hasPendingInvalidation) {
+          if (xBlock.block.dataState.isPending ||
+              xBlock.block.dataState.isStale) {
             xBlock.setQueryHintToGreater(QryHint.force);
           }
         }
         XFormModel? xFormModel = xBlock.xFormModel;
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUiComponent()) {
-          if (xFormModel.formModel.dataState == DataState.pending ||
-              xFormModel.formModel.dataState == DataState.error ||
-              xFormModel.formModel.dataState == DataState.none) {
+          if (xFormModel.formModel.dataState == FormDataState.pending ||
+              xFormModel.formModel.dataState == FormDataState.error ||
+              xFormModel.formModel.dataState == FormDataState.none) {
             xFormModel.lazy = true;
             if (naturalMode) {
               xFormModel.setForceType(ForceType.decidedAtRuntime);

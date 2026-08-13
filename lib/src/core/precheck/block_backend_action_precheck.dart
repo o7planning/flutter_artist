@@ -14,10 +14,10 @@ enum BlockBackendActionPrecheck implements Precheck {
     details: ["The block is in a 'pending' state."],
   ),
   //
-  blockInErrorState(
-    precheckCode: PrecheckCode.inErrorState,
+  blockInStaleState(
+    precheckCode: PrecheckCode.inStaleState,
     message: "Backend Action is disabled.",
-    details: ["The block is in an 'error' state."],
+    details: ["The block is in an 'stale' state."],
   ),
   //
   blockInNoneState(

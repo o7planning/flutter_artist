@@ -49,10 +49,14 @@ abstract class FilterModel<
 
   FilterModelStructure get filterModelStructure => _filterModelStructure;
 
-  DataState get dataState => _filterModelStructure._filterDataState;
+  FilterDataState get dataState => _filterModelStructure._filterDataState;
 
   // TODO: Test case.
   ErrorInfo? _errorInfo;
+
+  bool get hasError {
+    return _errorInfo != null;
+  }
 
   // GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
 
@@ -332,7 +336,7 @@ abstract class FilterModel<
       traceStepType: TraceStepType.debug,
     );
     //
-    _filterModelStructure._setFilterDataState(DataState.pending);
+    _filterModelStructure._setFilterDataState(FilterDataState.pending);
     //
     XFilterCriteria<FILTER_CRITERIA>? xFilterCriteria =
         await _startNewFilterActivity(
@@ -613,7 +617,7 @@ abstract class FilterModel<
         errorInfo: errorInfo,
       );
       //
-      _filterModelStructure._setFilterDataState(DataState.error);
+      _filterModelStructure._setFilterDataState(FilterDataState.error);
       _xFilterCriteria = null;
       return _xFilterCriteria;
     }
@@ -653,7 +657,7 @@ abstract class FilterModel<
       }
     } catch (e, stackTrace) {
       final FilterErrorInfo filterErrorInfo;
-      final dataStateError = DataState.error;
+      final dataStateError = FilterDataState.error;
       if (e is FilterCriterionTypeMismatchError) {
         // Bug: #Bug#001
         filterErrorInfo = FilterErrorInfo(
@@ -758,7 +762,7 @@ abstract class FilterModel<
           errorInfo: errorInfo,
         );
         //
-        _filterModelStructure._setFilterDataState(DataState.error);
+        _filterModelStructure._setFilterDataState(FilterDataState.error);
         _xFilterCriteria = null;
         return _xFilterCriteria;
       }
@@ -810,7 +814,7 @@ abstract class FilterModel<
           errorInfo: errorInfo,
         );
         //
-        _filterModelStructure._setFilterDataState(DataState.error);
+        _filterModelStructure._setFilterDataState(FilterDataState.error);
         _xFilterCriteria = null;
         return _xFilterCriteria;
       }
@@ -871,7 +875,7 @@ abstract class FilterModel<
       _xFilterCriteria = newXFilterCriteria;
       //
       __initiatedAtLeastOnce = true;
-      _filterModelStructure._setFilterDataState(DataState.ready);
+      _filterModelStructure._setFilterDataState(FilterDataState.loaded);
       //
       return _xFilterCriteria;
     } catch (e, stackTrace) {
@@ -885,7 +889,7 @@ abstract class FilterModel<
         tipDocument: null,
       );
       //
-      _filterModelStructure._setFilterDataState(DataState.error);
+      _filterModelStructure._setFilterDataState(FilterDataState.error);
       __setErrorInfo(errorInfo);
       //
       // IMPORTANT:

@@ -2,26 +2,29 @@ import 'package:flutter_artist/flutter_artist.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:flutter_artist/flutter_artist.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_test/flutter_test.dart';
+
 void main() {
   group('BlockQueryStrategyResolver.resolveQueryPlanInternal Unit Tests', () {
     // -------------------------------------------------------------------------
-    // TEST 1: Uninitialized State (DataState.none)
+    // TEST 1: Uninitialized State (BlockDataStateNone)
     // -------------------------------------------------------------------------
     test(
-        '1. Should resolve to NULL action plan when dataState is DataState.none',
+        '1. Should resolve to NULL action plan when dataState is BlockDataStateNone',
         () {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
-        dataState: DataState.none,
+        dataState: const BlockDataStateNone(),
         pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
-        hasPendingInvalidation: false,
         itemIds: const [],
         config: BlockConfig(
           nativeQueryMode: BlockNativeQueryMode.fullQuery,
           viewportSyncConfig: BlockViewportSyncConfig.strict(),
         ),
         syncSessionState: null,
-        errorOrigin: null,
       );
+
       expect(plan.action, isNull);
       expect(plan.viewportSyncStrategy, isNull);
       expect(plan.targetItemIds, isEmpty);
@@ -34,16 +37,14 @@ void main() {
         '2. Cold PENDING under fullQuery mode MUST always resolve to performQuery (nativeQuery)',
         () {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
-        dataState: DataState.pending,
+        dataState: const BlockDataStatePending(),
         pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
-        hasPendingInvalidation: false,
         itemIds: const [],
         config: BlockConfig(
           nativeQueryMode: BlockNativeQueryMode.fullQuery,
           viewportSyncConfig: BlockViewportSyncConfig.strict(),
         ),
         syncSessionState: null,
-        errorOrigin: null,
       );
 
       expect(plan.action, equals(ResolvedQueryAction.performQuery));
@@ -59,16 +60,14 @@ void main() {
         '3a. Cold PENDING under pageableQuery without effected IDs resolves to performQuery (Page 1)',
         () {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
-        dataState: DataState.pending,
+        dataState: const BlockDataStatePending(),
         pendingNativeQueryMode: BlockNativeQueryMode.pageableQuery,
-        hasPendingInvalidation: false,
         itemIds: const [],
         config: BlockConfig(
           nativeQueryMode: BlockNativeQueryMode.pageableQuery,
           viewportSyncConfig: BlockViewportSyncConfig(),
         ),
         syncSessionState: null,
-        errorOrigin: null,
       );
 
       expect(plan.action, equals(ResolvedQueryAction.performQuery));
@@ -94,16 +93,14 @@ void main() {
       );
 
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
-        dataState: DataState.pending,
+        dataState: const BlockDataStatePending(),
         pendingNativeQueryMode: BlockNativeQueryMode.pageableQuery,
-        hasPendingInvalidation: false,
         itemIds: const [],
         config: BlockConfig(
           nativeQueryMode: BlockNativeQueryMode.pageableQuery,
           viewportSyncConfig: BlockViewportSyncConfig(),
         ),
         syncSessionState: mockSession,
-        errorOrigin: null,
       );
 
       expect(plan.action, equals(ResolvedQueryAction.performQueryByItemIds));
@@ -113,21 +110,21 @@ void main() {
     });
 
     // -------------------------------------------------------------------------
-    // TEST 4: Error State Origin Mapping
+    // TEST 4: PENDING State with Previous Error / Retry
     // -------------------------------------------------------------------------
-    test('4a. Error state originating from PENDING behaves as Cold PENDING',
+    test(
+        '4. PENDING state after a failed query attempt still resolves as standard PENDING',
         () {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
-        dataState: DataState.error,
+        dataState: const BlockDataStatePending(
+            reason: PendingReasonFetchFailed(errorInfo: null)),
         pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
-        hasPendingInvalidation: false,
         itemIds: const [],
         config: BlockConfig(
           nativeQueryMode: BlockNativeQueryMode.fullQuery,
           viewportSyncConfig: BlockViewportSyncConfig.strict(),
         ),
         syncSessionState: null,
-        errorOrigin: BlockErrorOrigin.fromPending,
       );
 
       expect(plan.action, equals(ResolvedQueryAction.performQuery));
@@ -135,44 +132,12 @@ void main() {
           equals(BlockViewportSyncStrategy.nativeQuery));
     });
 
-    test('4b. Error state originating from READY behaves as Warm READY', () {
-      final mockSession = TestSyncSession<String>(
-        receivedEventInfos: [
-          BlockReceivedEventInfo<String>(
-            eventSourceType: EventSourceType.external,
-            requiresMaxSyncStrategy: false,
-            syncStrategyOnFullQueryMode: BlockViewportSyncStrategy.nativeQuery,
-            syncStrategyOnPageableQueryMode:
-                BlockViewportSyncStrategy.effectedItemIdsQuery,
-            dataTypes: const [],
-            effectedItemIds: const ['user-3'],
-          ),
-        ],
-      );
-
-      final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
-        dataState: DataState.error,
-        pendingNativeQueryMode: BlockNativeQueryMode.pageableQuery,
-        hasPendingInvalidation: true,
-        itemIds: const ['user-1', 'user-2'],
-        config: BlockConfig(
-          nativeQueryMode: BlockNativeQueryMode.pageableQuery,
-          viewportSyncConfig: BlockViewportSyncConfig(),
-        ),
-        syncSessionState: mockSession,
-        errorOrigin: BlockErrorOrigin.fromReady,
-      );
-
-      expect(plan.action, equals(ResolvedQueryAction.performQueryByItemIds));
-    });
-
     // -------------------------------------------------------------------------
-    // TEST 5: Warm READY in fullQuery Mode under STRICT Config (Scenario 83b)
+    // TEST 5: Warm LOADED STALE in fullQuery Mode under STRICT Config (Scenario 83b)
     // -------------------------------------------------------------------------
     test(
-        '5. [SCENARIO 83b] Warm READY under fullQuery + STRICT config MUST resolve to performQuery (nativeQuery)',
+        '5. [SCENARIO 83b] Warm LOADED STALE under fullQuery + STRICT config MUST resolve to performQuery (nativeQuery)',
         () {
-      // In Scenario 83b: fullQuery mode + strict() config + broadcast event requiring MAX SYNC
       final mockSession = TestSyncSession<String>(
         receivedEventInfos: [
           BlockReceivedEventInfo<String>.maxSyncStrategy(
@@ -183,9 +148,9 @@ void main() {
       );
 
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
-        dataState: DataState.ready,
+        dataState: const BlockDataStateLoadedStale(
+            reason: LoadedStateStaleReason.event),
         pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
-        hasPendingInvalidation: true,
         itemIds: const ['333-beer', 'heineken-beer', 'tiger-beer'],
         config: BlockConfig(
           nativeQueryMode: BlockNativeQueryMode.fullQuery,
@@ -193,10 +158,8 @@ void main() {
               .strict(), // Strict floor on fullQuery = nativeQuery
         ),
         syncSessionState: mockSession,
-        errorOrigin: null,
       );
 
-      // EXPECTATION: Must trigger full performQuery, NOT performQueryByItemIds!
       expect(plan.action, equals(ResolvedQueryAction.performQuery));
       expect(plan.viewportSyncStrategy,
           equals(BlockViewportSyncStrategy.nativeQuery));
@@ -204,10 +167,10 @@ void main() {
     });
 
     // -------------------------------------------------------------------------
-    // TEST 6: Warm READY in fullQuery Mode under LENIENT Config
+    // TEST 6: Warm LOADED STALE in fullQuery Mode under LENIENT Config
     // -------------------------------------------------------------------------
     test(
-        '6. Warm READY under fullQuery + LENIENT config permits localized performQueryByItemIds if explicit IDs present',
+        '6. Warm LOADED STALE under fullQuery + LENIENT config permits localized performQueryByItemIds if explicit IDs present',
         () {
       final mockSession = TestSyncSession<String>(
         receivedEventInfos: [
@@ -225,9 +188,9 @@ void main() {
       );
 
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
-        dataState: DataState.ready,
+        dataState: const BlockDataStateLoadedStale(
+            reason: LoadedStateStaleReason.event),
         pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
-        hasPendingInvalidation: true,
         itemIds: const ['item-1', 'item-2'],
         config: BlockConfig(
           nativeQueryMode: BlockNativeQueryMode.fullQuery,
@@ -235,7 +198,6 @@ void main() {
               .lenient(), // Lenient floor on fullQuery = effectedItemIdsQuery
         ),
         syncSessionState: mockSession,
-        errorOrigin: null,
       );
 
       expect(plan.action, equals(ResolvedQueryAction.performQueryByItemIds));
@@ -245,10 +207,10 @@ void main() {
     });
 
     // -------------------------------------------------------------------------
-    // TEST 7: Warm READY in pageableQuery Mode under STRICT Config
+    // TEST 7: Warm LOADED STALE in pageableQuery Mode under STRICT Config
     // -------------------------------------------------------------------------
     test(
-        '7. Warm READY under pageableQuery + STRICT config forces effectedAndViewportItemIdsQuery',
+        '7. Warm LOADED STALE under pageableQuery + STRICT config forces effectedAndViewportItemIdsQuery',
         () {
       final mockSession = TestSyncSession<String>(
         receivedEventInfos: [
@@ -265,9 +227,9 @@ void main() {
       );
 
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
-        dataState: DataState.ready,
+        dataState: const BlockDataStateLoadedStale(
+            reason: LoadedStateStaleReason.event),
         pendingNativeQueryMode: BlockNativeQueryMode.pageableQuery,
-        hasPendingInvalidation: true,
         itemIds: const ['page2-item1', 'page2-item2'],
         config: BlockConfig(
           nativeQueryMode: BlockNativeQueryMode.pageableQuery,
@@ -275,7 +237,6 @@ void main() {
               .strict(), // Strict floor on pageable = effectedAndViewport
         ),
         syncSessionState: mockSession,
-        errorOrigin: null,
       );
 
       expect(plan.action, equals(ResolvedQueryAction.performQueryByItemIds));
@@ -286,22 +247,20 @@ void main() {
     });
 
     // -------------------------------------------------------------------------
-    // TEST 8: Clean READY State (No Invalidation, No Session)
+    // TEST 8: Clean LOADED FRESH State (No Stale, No Session)
     // -------------------------------------------------------------------------
     test(
-        '8. Clean READY block without pending invalidation resolves to NULL action plan',
+        '8. Clean LOADED FRESH block without session resolves to NULL action plan',
         () {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
-        dataState: DataState.ready,
+        dataState: const BlockDataStateLoadedFresh(),
         pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
-        hasPendingInvalidation: false,
         itemIds: const ['user-1'],
         config: BlockConfig(
           nativeQueryMode: BlockNativeQueryMode.fullQuery,
           viewportSyncConfig: BlockViewportSyncConfig.strict(),
         ),
         syncSessionState: null,
-        errorOrigin: null,
       );
 
       expect(plan.action, isNull);

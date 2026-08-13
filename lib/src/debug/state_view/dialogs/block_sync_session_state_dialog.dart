@@ -42,7 +42,6 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
     final queryPlan = BlockQueryStrategyResolver.resolveQueryPlan<ID>(
       block: block,
       syncSessionState: syncSessionState,
-      errorOrigin: block.errorOrigin,
     );
 
     // Extract parent item ID and filter criteria from Session Snapshot or directly from Live Block
@@ -360,7 +359,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
               Expanded(
                 child: _buildPlanDetailItem(
                   "Block Data State",
-                  "${block.dataState.name.toUpperCase()} ${block.hasPendingInvalidation ? '(Stale Invalidated)' : ''}",
+                  "${block.dataState.toString()} ${block.dataState.isStale ? '(Stale)' : ''}",
                 ),
               ),
               Expanded(

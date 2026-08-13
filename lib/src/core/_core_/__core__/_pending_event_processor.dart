@@ -7,7 +7,7 @@ class _PendingEventProcessor {
 
   void addTaskUnitForPendingEvents() {
     ExecutionTrace executionTrace =
-    FlutterArtist.codeFlowLogger._initTaskUnitForDeferredEvent(
+        FlutterArtist.codeFlowLogger._initTaskUnitForDeferredEvent(
       ownerClassInstance: this,
     );
     executionTrace._addTraceStep(

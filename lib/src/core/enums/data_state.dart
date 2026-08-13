@@ -2,47 +2,54 @@ import 'package:flutter/material.dart';
 
 import '../icon/icon_constants.dart';
 
-enum DataState {
-  ready,
+enum FilterDataState {
+  none,
   pending,
   error,
-  none;
+  loaded;
+}
+
+enum FormDataState {
+  none,
+  pending,
+  error,
+  loaded;
+}
+
+enum ScalarDataState {
+  none,
+  pending,
+  loaded;
 
   IconData get iconData {
     switch (this) {
-      case DataState.ready:
-        return FaIconConstants.dataStateReadyIconData;
-      case DataState.pending:
+      case ScalarDataState.loaded:
+        return FaIconConstants.dataStateLoadedIconData;
+      case ScalarDataState.pending:
         return FaIconConstants.dataStatePendingIconData;
-      case DataState.error:
-        return FaIconConstants.dataStateErrorIconData;
-      case DataState.none:
+      case ScalarDataState.none:
         return FaIconConstants.dataStateNoneIconData;
     }
   }
 
   String get name {
     switch (this) {
-      case DataState.ready:
-        return "ready";
-      case DataState.pending:
+      case ScalarDataState.loaded:
+        return "loaded";
+      case ScalarDataState.pending:
         return "pending";
-      case DataState.error:
-        return "error";
-      case DataState.none:
+      case ScalarDataState.none:
         return "none";
     }
   }
 
   Color get color {
     switch (this) {
-      case DataState.ready:
+      case ScalarDataState.loaded:
         return Colors.indigo;
-      case DataState.pending:
+      case ScalarDataState.pending:
         return Colors.green;
-      case DataState.error:
-        return Colors.red;
-      case DataState.none:
+      case ScalarDataState.none:
         return Colors.black12;
     }
   }

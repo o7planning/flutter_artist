@@ -1,18 +1,23 @@
-import '../enums/action_result_state.dart';
-import '../enums/block_viewport_sync_strategy.dart';
-import '../enums/data_state.dart';
-import '../enums/fallback_dilemma_strategy.dart';
-import '../enums/list_update_strategy.dart';
+import '../../enums/action_result_state.dart';
+import '../../enums/block_viewport_sync_strategy.dart';
+import '../../enums/data_state.dart';
+import '../../enums/fallback_dilemma_strategy.dart';
+import '../../enums/list_update_strategy.dart';
+import '../../enums/block_loaded_state_phase.dart';
+
+import '../../enums/loaded_state_stale_reason.dart';
+import '../../error/_block_error_info.dart';
+import '../core.dart';
 
 /// Immutable parameter blueprint feeding into the state calculator engine.
 class QueryCalculatorInput {
   /// The resulting outcome of the active remote data fetch cycle.
   final ActionResultState queryResultState;
 
-  /// The current state ledger bound to the active runtime block.
-  final DataState currentDataState;
+  final BlockErrorInfo? blockErrorInfo;
 
-  final bool currentHasPendingInvalidation;
+  /// The current state ledger bound to the active runtime block.
+  final BlockDataState currentDataState;
 
   /// The viewport alignment boundary requested by the triggering mutation or refresh task.
   final BlockViewportSyncStrategy syncStrategy;
@@ -40,8 +45,8 @@ class QueryCalculatorInput {
 
   const QueryCalculatorInput({
     required this.queryResultState,
+    required this.blockErrorInfo,
     required this.currentDataState,
-    required this.currentHasPendingInvalidation,
     required this.syncStrategy,
     required this.parentOrCriteriaChanged,
     required this.isQueryMore,
@@ -59,9 +64,10 @@ class QueryCalculatorResult {
   final ListUpdateStrategy realListUpdateStrategy;
 
   /// The next structural lifecycle state target assigned onto the running block.
-  final DataState newBlockDataState;
+  final BlockDataState newBlockDataState;
 
-  final bool newHasPendingInvalidation;
+  /// The fine-grained operational phase when [newBlockDataState] resolves to [BlockDataStateLoaded].
+  final BlockLoadedStatePhase? newLoadedPhase;
 
   /// Indicator commanding the processor to forcefully prune missing locally cached items.
   final bool forcePruneMissingIds;
@@ -69,7 +75,7 @@ class QueryCalculatorResult {
   const QueryCalculatorResult({
     required this.realListUpdateStrategy,
     required this.newBlockDataState,
-    required this.newHasPendingInvalidation,
+    this.newLoadedPhase,
     required this.forcePruneMissingIds,
   });
 }
@@ -80,64 +86,96 @@ class QueryStateCalculator {
   /// Guarantees absolute isolation, making state modifications completely side-effect free.
   static QueryCalculatorResult calculate(QueryCalculatorInput input) {
     ListUpdateStrategy resolvedStrategy;
-    DataState resolvedState;
-    bool resolvedHasPendingInvalidation;
+    BlockDataState resolvedState;
+    BlockLoadedStatePhase? resolvedPhase;
     bool shouldPrune = false;
 
     // =========================================================================
-    //  BRANCH 1: REMOTE RE-QUERY LIFECYCLE FAILED
+    // 🛑 BRANCH 1: REMOTE RE-QUERY LIFECYCLE FAILED
     // =========================================================================
     if (input.queryResultState == ActionResultState.fail) {
-      resolvedHasPendingInvalidation = input.currentHasPendingInvalidation;
-      // Case 1.1: Context shifted -> Outdated data must be completely scrubbed
+      // Case 1.1: Context shifted (Parent or Filter Criteria changed)
+      // Since context is new and query failed, fallback to cold PENDING state
       if (input.parentOrCriteriaChanged) {
         resolvedStrategy = ListUpdateStrategy.replace;
-        resolvedState = DataState.error;
+        resolvedState = BlockDataStatePending(
+          reason: PendingReasonFetchFailed(errorInfo: input.blockErrorInfo),
+        );
+        resolvedPhase = null;
       }
       // Case 1.2: Context preserved -> Evaluate based on previous structural stability
       else {
-        if (input.currentDataState == DataState.ready) {
+        if (input.currentDataState.isLoaded) {
           if (input.hasRemoveItemIds) {
-            // EAGER LOCAL PRUNING: Keep non-mutated rows ready, but flag for local trash removal
+            // EAGER LOCAL PRUNING: Keep non-mutated rows loaded, flag for local trash removal
             resolvedStrategy = ListUpdateStrategy.merge;
-            resolvedState = DataState.ready;
+            resolvedState = const BlockDataStateLoadedStale(
+              reason: LoadedStateStaleReason.fetchFailed,
+            );
+            resolvedPhase = BlockLoadedStatePhase.mutationFailed;
             shouldPrune = true;
           } else if (input.isQueryMore || input.isPageShifting) {
             // EVALUATE FALLBACK DILEMMA POLICY FOR INLINE PAGE SHIFTS & LAZY LOADS
             if (input.dilemmaStrategy ==
                 FallbackDilemmaStrategy.evictStaleContent) {
               resolvedStrategy = ListUpdateStrategy.replace;
-              resolvedState = DataState.error;
+              resolvedState = BlockDataStatePending(
+                reason:
+                    PendingReasonFetchFailed(errorInfo: input.blockErrorInfo),
+              );
+              resolvedPhase = null;
             } else {
               resolvedStrategy = ListUpdateStrategy.merge;
-              resolvedState = DataState.ready;
+              // Preserve existing loaded state or mark stale due to fetch failure
+              resolvedState = input.currentDataState.isStale
+                  ? input.currentDataState
+                  : const BlockDataStateLoadedStale(
+                      reason: LoadedStateStaleReason.fetchFailed,
+                    );
+              resolvedPhase = BlockLoadedStatePhase.fetchMoreFailed;
             }
           } else {
-            // Standard root refresh/re-query failures collapse whole viewport consistency bounds
-            resolvedStrategy = ListUpdateStrategy.replace;
-            resolvedState = DataState.error;
+            // Standard root refresh/re-query failure preserves baseline cache under modern UX rules
+            if (input.dilemmaStrategy ==
+                FallbackDilemmaStrategy.evictStaleContent) {
+              resolvedStrategy = ListUpdateStrategy.replace;
+              resolvedState = BlockDataStatePending(
+                reason:
+                    PendingReasonFetchFailed(errorInfo: input.blockErrorInfo),
+              );
+              resolvedPhase = null;
+            } else {
+              resolvedStrategy = ListUpdateStrategy.merge;
+              resolvedState = const BlockDataStateLoadedStale(
+                reason: LoadedStateStaleReason.fetchFailed,
+              );
+              resolvedPhase = BlockLoadedStatePhase.refetchFailed;
+            }
           }
         } else {
-          // Viewport was already unstable before the crash -> Force strict error boundary
+          // Viewport was already uninitialized or pending before the crash -> Stay in PENDING
           resolvedStrategy = ListUpdateStrategy.replace;
-          resolvedState = DataState.error;
+          resolvedState = BlockDataStatePending(
+            reason: PendingReasonFetchFailed(errorInfo: input.blockErrorInfo),
+          );
+          resolvedPhase = null;
         }
       }
     }
     // =========================================================================
-    //  BRANCH 2: REMOTE RE-QUERY LIFECYCLE SUCCEEDED
+    // 🎉 BRANCH 2: REMOTE RE-QUERY LIFECYCLE SUCCEEDED
     // =========================================================================
     else {
-      resolvedHasPendingInvalidation = false;
+      // Successful remote sync mounts fresh loaded baseline data
+      resolvedState = const BlockDataStateLoadedFresh();
+      resolvedPhase = BlockLoadedStatePhase.idle;
 
       // Case 2.1: Fresh context loaded successfully -> Flush and mount the new grid rows
       if (input.parentOrCriteriaChanged) {
         resolvedStrategy = ListUpdateStrategy.replace;
-        resolvedState = DataState.ready;
       }
       // Case 2.2: Fetch complete for an unchanged stable context -> Distribute via sync rules
       else {
-        resolvedState = DataState.ready;
         switch (input.syncStrategy) {
           case BlockViewportSyncStrategy.nativeQuery:
             resolvedStrategy =
@@ -161,7 +199,7 @@ class QueryStateCalculator {
     return QueryCalculatorResult(
       realListUpdateStrategy: resolvedStrategy,
       newBlockDataState: resolvedState,
-      newHasPendingInvalidation: resolvedHasPendingInvalidation,
+      newLoadedPhase: resolvedPhase,
       forcePruneMissingIds: shouldPrune,
     );
   }

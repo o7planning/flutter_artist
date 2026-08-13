@@ -7,7 +7,7 @@ import '../enums/filter_error_method.dart';
 class FilterErrorInfo {
   final FilterActivityType activityType;
   final String? tildeCriterionName;
-  final DataState filterDataState;
+  final FilterDataState filterDataState;
   final FilterErrorMethod filterErrorMethod;
   final AppError error;
   final StackTrace errorStackTrace;

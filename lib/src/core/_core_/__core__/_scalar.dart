@@ -213,11 +213,24 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
+  bool get hasError {
+    // TODO: Xem lai.
+    return _scalarErrorInfo != null ||
+        (filterModel != null &&
+            filterModel!.dataState == FilterDataState.error &&
+            filterModel!._errorInfo != null);
+  }
+
   ScalarErrorInfo? _scalarErrorInfo;
 
   ScalarErrorInfo? get scalarErrorInfo => _scalarErrorInfo;
 
-  DataState get dataState => __scalarData._scalarDataState;
+  ScalarDataState get dataState => __scalarData._scalarDataState;
+
+  bool get isLoadedAndStale {
+    // TODO: Hardcode.
+    return false;
+  }
 
   FILTER_CRITERIA? get filterCriteria =>
       __scalarData._xFilterCriteria?.filterCriteria;
@@ -229,7 +242,7 @@ abstract class Scalar<
 
   void _setToPending() {
     __scalarData._clearValueWithDataState(
-      scalarDataState: DataState.pending,
+      scalarDataState: ScalarDataState.pending,
       errorInFilter: false,
     );
   }
@@ -360,7 +373,7 @@ abstract class Scalar<
     QryHint queryHint = thisXScalar.queryHint;
 
     if (queryHint != QryHint.force) {
-      if (this.dataState != DataState.ready && hasXActiveUI) {
+      if (dataState != ScalarDataState.loaded && hasXActiveUI) {
         queryHint = QryHint.force;
       }
     }
@@ -376,7 +389,7 @@ abstract class Scalar<
             "@queryHint: $queryHint, @dataState: $dataState, @value: ${debugObjHtml(this.value)}.",
       );
       //
-      if (this.dataState == DataState.ready && this.value != null) {
+      if ( dataState == ScalarDataState.loaded && this.value != null) {
         executionTrace._addTraceStep(
           codeId: "#12100",
           shortDesc: "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) "
@@ -417,16 +430,16 @@ abstract class Scalar<
       //
       this.__clearWithDataStateAndChildrenToNonCascade(
         thisXScalar: thisXScalar,
-        scalarDataState: DataState.pending,
+        scalarDataState: ScalarDataState.pending,
         errorInFilter: false,
       );
       thisXScalar.setReQueryDone();
       return;
     }
     //
-    // this.dataState != DataState.ready || thisXScalar.queryHint
+    // this.dataState != DataState.loaded || thisXScalar.queryHint
     //
-    DataState newScalarDataState = this.dataState;
+    ScalarDataState newScalarDataState = this.dataState;
     //
     XFilterCriteria<FILTER_CRITERIA>? xFilterCriteriaOfFilterModel;
     try {
@@ -473,12 +486,16 @@ abstract class Scalar<
             "Clear data of child scalar and set them to <b>none</b>.",
         traceStepType: TraceStepType.info,
       );
+      if (true) {
+        throw "TODO: Tạm thời rào cái này lại.";
+      }
+      // TODO: Tạm thời rào cái này lại.
       // Set Scalar to error cascade.
-      this.__clearWithDataStateAndChildrenToNonCascade(
-        thisXScalar: thisXScalar,
-        scalarDataState: DataState.error,
-        errorInFilter: true,
-      );
+      // this.__clearWithDataStateAndChildrenToNonCascade(
+      //   thisXScalar: thisXScalar,
+      //   scalarDataState: DataState.error,
+      //   errorInFilter: true,
+      // );
       thisXScalar.queryResult._setFilterError();
       return;
     }
@@ -530,7 +547,6 @@ abstract class Scalar<
       isQueryError = true;
       //
       final scalarErrorInfo = ScalarErrorInfo(
-        scalarDataState: DataState.error,
         scalarErrorMethod: performQueryMethod,
         error: e, // AppError, ApiError or others.
         errorStackTrace: stackTrace,
@@ -563,7 +579,8 @@ abstract class Scalar<
     }
     // Test Cases: [12a], [12b].
     if (isQueryError) {
-      newScalarDataState = DataState.error;
+      // newScalarDataState = DataState.error;
+      newScalarDataState = dataState;
       //
       executionTrace._addTraceStep(
         codeId: "#12500",
@@ -595,9 +612,9 @@ abstract class Scalar<
     executionTrace._addTraceStep(
       codeId: "#12600",
       shortDesc:
-          "${debugObjHtml(this)} --> set state to ready and set value to ${debugObjHtml(value)}.",
+          "${debugObjHtml(this)} --> set state to loađed and set value to ${debugObjHtml(value)}.",
     );
-    newScalarDataState = DataState.ready;
+    newScalarDataState = ScalarDataState.loaded;
     __setQueryDataWithState(
       thisXScalar: thisXScalar,
       xFilterCriteria: xFilterCriteriaOfFilterModel,
@@ -684,7 +701,7 @@ abstract class Scalar<
     //
     __clearWithDataStateAndChildrenToNonCascade(
       thisXScalar: thisXScalar,
-      scalarDataState: DataState.pending,
+      scalarDataState: ScalarDataState.pending,
       errorInFilter: false,
     );
   }
@@ -818,14 +835,14 @@ abstract class Scalar<
 
   @_RootMethodAnnotation()
   void showScalarErrorViewerDialog(BuildContext context) {
-    if (dataState == DataState.error) {
+    if (hasError) {
       if (_scalarErrorInfo != null) {
         ScalarErrorViewerDialog.open(
           context: context,
           scalarErrorInfo: _scalarErrorInfo!,
         );
       } else if (filterModel != null) {
-        if (filterModel!.dataState == DataState.error &&
+        if (filterModel!.dataState == FilterDataState.error &&
             filterModel!._errorInfo != null) {
           ErrorViewerDialog.open(
             context: context,
@@ -841,7 +858,7 @@ abstract class Scalar<
 
   void __clearWithDataStateAndChildrenToNonCascade({
     required XScalar thisXScalar,
-    required DataState scalarDataState,
+    required ScalarDataState scalarDataState,
     required bool errorInFilter,
   }) {
     __assertThisXScalar(thisXScalar);
@@ -855,7 +872,7 @@ abstract class Scalar<
     for (var childXScalar in thisXScalar.childXScalars) {
       childXScalar.scalar.__clearWithDataStateAndChildrenToNonCascade(
         thisXScalar: childXScalar,
-        scalarDataState: DataState.none,
+        scalarDataState: ScalarDataState.none,
         errorInFilter: false,
       );
     }
@@ -867,7 +884,7 @@ abstract class Scalar<
   void __setQueryDataWithState({
     required XScalar thisXScalar,
     required XFilterCriteria<FILTER_CRITERIA>? xFilterCriteria,
-    required DataState dataState,
+    required ScalarDataState dataState,
     required String? valueId,
     required VALUE? value,
     required ActionResultState queryResultState,
@@ -894,7 +911,7 @@ abstract class Scalar<
     for (var childXScalar in thisXScalar.childXScalars) {
       childXScalar.scalar.__clearWithDataStateAndChildrenToNonCascade(
         thisXScalar: childXScalar,
-        scalarDataState: DataState.none,
+        scalarDataState: ScalarDataState.none,
         errorInFilter: false,
       );
     }
@@ -908,7 +925,7 @@ abstract class Scalar<
     for (var childXScalar in thisXScalar.childXScalars) {
       childXScalar.scalar.__clearWithDataStateAndChildrenToNonCascade(
         thisXScalar: childXScalar,
-        scalarDataState: DataState.pending,
+        scalarDataState: ScalarDataState.pending,
         errorInFilter: false,
       );
     }
@@ -919,7 +936,7 @@ abstract class Scalar<
 
   void __clearWithDataState({
     required XScalar thisXScalar,
-    required DataState scalarDataState,
+    required ScalarDataState scalarDataState,
   }) {
     __assertThisXScalar(thisXScalar);
     //
@@ -1169,7 +1186,7 @@ abstract class Scalar<
 
   void __clearValueWithDataState({
     required XScalar thisXScalar,
-    required DataState scalarDataState,
+    required ScalarDataState scalarDataState,
     required bool errorInFilter,
   }) {
     __assertThisXScalar(thisXScalar);

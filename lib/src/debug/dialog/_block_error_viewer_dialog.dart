@@ -36,16 +36,16 @@ class BlockErrorViewerDialog extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("${blockErrorInfo.blockDataState}"),
-        if (blockErrorInfo.blockDataState == DataState.error)
-          IconLabelText(
-            icon: Icon(
-              FaIconConstants.formErrorDisabledIconData2,
-              color: Colors.red,
-              size: 20,
-            ),
-            text: "Block query data error.",
-          ),
+        // TODO: Tạm thời rào lại.
+        // if (blockErrorInfo.blockDataState == DataState.error)
+        //   IconLabelText(
+        //     icon: Icon(
+        //       FaIconConstants.formErrorDisabledIconData2,
+        //       color: Colors.red,
+        //       size: 20,
+        //     ),
+        //     text: "Block query data error.",
+        //   ),
         Divider(),
         ListTile(
           dense: true,

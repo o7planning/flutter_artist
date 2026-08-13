@@ -15,10 +15,10 @@ enum BlockQuickItemUpdatePrecheck implements Precheck {
     details: ["The block is in a 'pending' state."],
   ),
   // Test Cases: [91b].
-  blockInErrorState(
-    precheckCode: PrecheckCode.inErrorState,
+  blockInStaleState(
+    precheckCode: PrecheckCode.inStaleState,
     message: "Item update is disabled.",
-    details: ["The block is in an 'error' state."],
+    details: ["The block is in an 'stale' state."],
   ),
   // Test Cases: [91b].
   blockInNoneState(

@@ -1,11 +1,12 @@
 import 'package:flutter_artist/flutter_artist.dart';
+import 'package:flutter_artist/src/core/enums/block_loaded_state_phase.dart';
 import 'package:flutter_artist/src/core/enums/fallback_dilemma_strategy.dart';
-import 'package:flutter_artist/src/core/utils/query_state_calculator.dart';
+import 'package:flutter_artist/src/core/_core_/_utils_/query_state_calculator.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group(
-      '️ QueryStateCalculator - Success Scenario Matrices (ActionResultState.success)',
+      '🛡️ QueryStateCalculator - Success Scenario Matrices (ActionResultState.success)',
       () {
     // =========================================================================
     // BRANCH 2.1: CONTEXT BOUNDARY MUTATED (parentOrCriteriaChanged == true)
@@ -24,8 +25,8 @@ void main() {
         for (var strategy in strategies) {
           final input = QueryCalculatorInput(
             queryResultState: ActionResultState.success,
-            currentDataState: DataState.none,
-            currentHasPendingInvalidation: false,
+            blockErrorInfo: null,
+            currentDataState: const BlockDataStateNone(),
             syncStrategy: strategy,
             parentOrCriteriaChanged: true,
             // Context shift active
@@ -39,8 +40,10 @@ void main() {
 
           final result = QueryStateCalculator.calculate(input);
 
-          expect(result.newBlockDataState, DataState.ready);
+          expect(result.newBlockDataState, const BlockDataStateLoadedFresh());
+          expect(result.newLoadedPhase, BlockLoadedStatePhase.idle);
           expect(result.realListUpdateStrategy, ListUpdateStrategy.replace);
+          expect(result.forcePruneMissingIds, false);
         }
       });
     });
@@ -55,8 +58,11 @@ void main() {
           () {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
-          currentDataState: DataState.ready,
-          currentHasPendingInvalidation: false,
+          blockErrorInfo: null,
+          currentDataState: BlockDataStateLoadedStale(
+            reason: LoadedStateStaleReason.event,
+          ),
+          // Stale state before query
           syncStrategy: BlockViewportSyncStrategy.nativeQuery,
           parentOrCriteriaChanged: false,
           isQueryMore: false,
@@ -70,7 +76,8 @@ void main() {
 
         final result = QueryStateCalculator.calculate(input);
 
-        expect(result.newBlockDataState, DataState.ready);
+        expect(result.newBlockDataState, const BlockDataStateLoadedFresh());
+        expect(result.newLoadedPhase, BlockLoadedStatePhase.idle);
         expect(result.realListUpdateStrategy, ListUpdateStrategy.merge);
       });
 
@@ -79,8 +86,8 @@ void main() {
           () {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
-          currentDataState: DataState.ready,
-          currentHasPendingInvalidation: false,
+          blockErrorInfo: null,
+          currentDataState: BlockDataStateLoadedFresh(),
           syncStrategy:
               BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
           parentOrCriteriaChanged: false,
@@ -94,7 +101,8 @@ void main() {
 
         final result = QueryStateCalculator.calculate(input);
 
-        expect(result.newBlockDataState, DataState.ready);
+        expect(result.newBlockDataState, const BlockDataStateLoadedFresh());
+        expect(result.newLoadedPhase, BlockLoadedStatePhase.idle);
         expect(result.realListUpdateStrategy, ListUpdateStrategy.replace);
       });
 
@@ -103,8 +111,8 @@ void main() {
           () {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
-          currentDataState: DataState.ready,
-          currentHasPendingInvalidation: false,
+          blockErrorInfo: null,
+          currentDataState: BlockDataStateLoadedFresh(),
           syncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
           parentOrCriteriaChanged: false,
           isQueryMore: false,
@@ -117,7 +125,8 @@ void main() {
 
         final result = QueryStateCalculator.calculate(input);
 
-        expect(result.newBlockDataState, DataState.ready);
+        expect(result.newBlockDataState, const BlockDataStateLoadedFresh());
+        expect(result.newLoadedPhase, BlockLoadedStatePhase.idle);
         expect(result.realListUpdateStrategy, ListUpdateStrategy.merge);
       });
     });
@@ -131,15 +140,15 @@ void main() {
           () {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
-          currentDataState: DataState.ready,
-          currentHasPendingInvalidation: false,
+          blockErrorInfo: null,
+          currentDataState: BlockDataStateLoadedFresh(),
           syncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
           // Normally commands an inline merge
           parentOrCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: false,
           queryTypeChanged: true,
-          //  Layout structural type shift triggered
+          // Layout structural type shift triggered
           suggestedListUpdateStrategy: ListUpdateStrategy.merge,
           hasRemoveItemIds: false,
           dilemmaStrategy: FallbackDilemmaStrategy.preserveStableCache,
@@ -147,7 +156,8 @@ void main() {
 
         final result = QueryStateCalculator.calculate(input);
 
-        expect(result.newBlockDataState, DataState.ready);
+        expect(result.newBlockDataState, const BlockDataStateLoadedFresh());
+        expect(result.newLoadedPhase, BlockLoadedStatePhase.idle);
         expect(result.realListUpdateStrategy,
             ListUpdateStrategy.replace); // Overridden successfully
       });

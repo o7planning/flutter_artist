@@ -28,6 +28,57 @@ class _BlockData<
 
   // ***************************************************************************
 
+  Object? _parentBlockCurrentItemId;
+
+  XFilterCriteria<FILTER_CRITERIA>? _xFilterCriteria;
+
+  PageData<ITEM>? _lastQueryResult;
+
+  ActionResultState? _lastQueryResultState;
+
+  ListUpdateStrategy? _lastForceListUpdateStrategy;
+
+  late final Pageable? _initialPageable;
+
+  late Pageable? _pageable;
+
+  Pageable? get pageable => _pageable;
+
+  ///
+  /// The Pageable will be set for [_pageable] when [Block.queryEmpty()] is called.
+  ///
+  Pageable? get _emptyPageable => _initialPageable;
+
+  late BlockNativeQueryMode _pendingNativeQueryMode;
+
+  late BlockNativeQueryMode _nativeQueryMode;
+
+  BlockNativeQueryMode get nativeQueryMode => _nativeQueryMode;
+
+  late PaginationInfo? _paginationInfo;
+
+  _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL> __current = _BlockItem2Wrap.ofNull();
+
+  _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL> get current => __current;
+
+  late BlockDataState _blockDataState;
+
+  // OLD Logic: _blockDataState == DataState.error
+  bool get hasError {
+    // TODO: Hardcode.
+    return false;
+  }
+
+  BlockDataState _selectionDataState = BlockDataStatePending();
+
+  // PendingReason? _pendingReason;
+  //
+  // BlockLoadedStatePhase? _loadedStatePhase;
+  //
+  // LoadedStatus? _loadedStatus;
+
+  // ***************************************************************************
+
   void _backupManualArrangementBeforeQueryIfNeed() {
     if (block.config.clientSideSortStrategy == SortStrategy.manual) {
       __itemsManualArrangementBk
@@ -149,49 +200,6 @@ class _BlockData<
   }
 
   // ***************************************************************************
-
-  Object? _parentBlockCurrentItemId;
-
-  XFilterCriteria<FILTER_CRITERIA>? _xFilterCriteria;
-
-  PageData<ITEM>? _lastQueryResult;
-
-  ActionResultState? _lastQueryResultState;
-
-  ListUpdateStrategy? _lastForceListUpdateStrategy;
-
-  late final Pageable? _initialPageable;
-
-  late Pageable? _pageable;
-
-  Pageable? get pageable => _pageable;
-
-  ///
-  /// The Pageable will be set for [_pageable] when [Block.queryEmpty()] is called.
-  ///
-  Pageable? get _emptyPageable => _initialPageable;
-
-  late BlockNativeQueryMode _pendingNativeQueryMode;
-
-  late BlockNativeQueryMode _nativeQueryMode;
-
-  BlockNativeQueryMode get nativeQueryMode => _nativeQueryMode;
-
-  late PaginationInfo? _paginationInfo;
-
-  _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL> __current = _BlockItem2Wrap.ofNull();
-
-  _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL> get current => __current;
-
-  late DataState _blockDataState;
-
-  DataState _selectionDataState = DataState.pending;
-
-  BlockErrorOrigin? _errorOrigin;
-
-  late bool _hasPendingInvalidation;
-
-  // ***************************************************************************
   // ***************************************************************************
 
   _BlockData._({
@@ -203,8 +211,8 @@ class _BlockData<
         _pendingNativeQueryMode = nativeQueryMode,
         _initialPageable = pageable,
         _paginationInfo = PaginationInfo.empty() {
-    _blockDataState = block.isRoot ? DataState.pending : DataState.none;
-    _hasPendingInvalidation = false;
+    _blockDataState =
+        block.isRoot ? BlockDataStatePending() : BlockDataStateNone();
   }
 
   // ***************************************************************************
@@ -218,22 +226,20 @@ class _BlockData<
   // ***************************************************************************
 
   void _clearItemsWithDataState({
-    required DataState blockDataState,
-    required bool hasPendingInvalidation,
+    required BlockDataState blockDataState,
     required bool errorInFilter,
     required bool resetSyncSessionState,
     required bool resetRefreshItemCondition,
   }) {
     _blockDataState = blockDataState;
-    _hasPendingInvalidation = hasPendingInvalidation;
     if (resetSyncSessionState) {
       block._resetSyncSessionState(executionTrace: null);
     }
     if (resetRefreshItemCondition) {
       // TODO:..
     }
-    //
-    if (_blockDataState == DataState.error) {
+    // OLD Logic: _blockDataState == DataState.error
+    if (hasError) {
       _lastQueryResultState = ActionResultState.fail;
       //
       // Update FilterCriteria:
@@ -303,7 +309,7 @@ class _BlockData<
   // ***************************************************************************
 
   void _setToPending() {
-    _blockDataState = DataState.pending;
+    _blockDataState = BlockDataStatePending();
   }
 
   // ***************************************************************************
@@ -434,7 +440,6 @@ class _BlockData<
     _parentBlockCurrentItemId = processedQueryResult.parentBlockCurrentItemId;
     _lastQueryResult = lastQueriedPageData;
     _blockDataState = processedQueryResult.newBlockDataState;
-    _hasPendingInvalidation = processedQueryResult.newHasPendingInvalidation;
     //
     // Update FilterCriteria:
     //

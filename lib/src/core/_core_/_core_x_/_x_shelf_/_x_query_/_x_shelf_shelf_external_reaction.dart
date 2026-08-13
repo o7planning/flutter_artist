@@ -47,8 +47,8 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
           alsoCheckChildren: true,
         );
         if (blockXBlockRep) {
-          if (xBlock.block.dataState == DataState.pending ||
-              xBlock.block.dataState == DataState.error) {
+          if (xBlock.block.dataState.isPending ||
+              xBlock.block.dataState.isStale) {
             xBlock.setQueryHintToGreater(QryHint.force);
           }
         }
@@ -63,8 +63,8 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
             // xBlock.setQueryHintToGreater(QryHint.force);
             // break;
             // Test Cases: [65a].
-            if (xBlock.block.dataState == DataState.pending ||
-                xBlock.block.dataState == DataState.error) {
+            if (xBlock.block.dataState.isPending ||
+                xBlock.block.dataState.isStale) {
               xBlock.setQueryHintToGreater(QryHint.force);
               break;
             }
@@ -75,9 +75,9 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
         // Current: forShelfExternalReaction
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUiComponent()) {
-          if (xFormModel.formModel.dataState == DataState.pending ||
-              xFormModel.formModel.dataState == DataState.error ||
-              xFormModel.formModel.dataState == DataState.none) {
+          if (xFormModel.formModel.dataState == FormDataState.pending ||
+              xFormModel.formModel.dataState == FormDataState.error ||
+              xFormModel.formModel.dataState == FormDataState.none) {
             xFormModel.lazy = true;
             if (naturalMode) {
               xFormModel.setForceType(ForceType.decidedAtRuntime);
@@ -119,8 +119,8 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
-          if (xScalar.scalar.dataState == DataState.pending ||
-              xScalar.scalar.dataState == DataState.error) {
+          if (xScalar.scalar.dataState == ScalarDataState.pending ||
+              xScalar.scalar.isLoadedAndStale) {
             xScalar.setQueryHintToGreater(QryHint.force);
           }
         }
@@ -135,8 +135,8 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
             // xScalar.setQueryHintToGreater(QryHint.force);
             // break;
             // Test Cases:
-            if (xScalar.scalar.dataState == DataState.pending ||
-                xScalar.scalar.dataState == DataState.error) {
+            if (xScalar.scalar.dataState == ScalarDataState.pending ||
+                xScalar.scalar.isLoadedAndStale) {
               xScalar.setQueryHintToGreater(QryHint.force);
               break;
             }

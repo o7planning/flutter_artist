@@ -45,7 +45,7 @@ TODO: buildInputForCreationForm trong truong hop SingleItemBlock can xu ly the n
 
 
 
-Đổi tên emptyQuery() thành clear({newDataState: pending/ready})
+Đổi tên emptyQuery() thành clear({newDataState: pending/loaded})
 
 
 Loai bo: ActionConfirmationType.

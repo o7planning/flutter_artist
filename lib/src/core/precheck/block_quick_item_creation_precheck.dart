@@ -14,10 +14,10 @@ enum BlockQuickItemCreationPrecheck implements Precheck {
     details: ["The block is in a 'pending' state."],
   ),
   // Test Cases: [91a].
-  blockInErrorState(
-    precheckCode: PrecheckCode.inErrorState,
+  blockInStaleState(
+    precheckCode: PrecheckCode.inStaleState,
     message: "New item creation is disabled.",
-    details: ["The block is in an 'error' state."],
+    details: ["The block is in an 'stale' state."],
   ),
   // Test Cases: [91a].
   blockInNoneState(

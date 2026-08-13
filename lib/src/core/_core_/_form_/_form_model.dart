@@ -21,7 +21,7 @@ abstract class FormModel<
 
   FormMode get formMode => _formModelStructure.formMode;
 
-  DataState get dataState => _formModelStructure._formDataState;
+  FormDataState get dataState => _formModelStructure._formDataState;
 
   FormErrorInfo? get formErrorInfo => _formModelStructure.formErrorInfo;
 
@@ -360,7 +360,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<void> showFormErrorViewerDialog(BuildContext context) async {
-    if (dataState != DataState.error) {
+    if (dataState != FormDataState.error) {
       return;
     }
     await FormErrorViewerDialog.open(
@@ -437,7 +437,7 @@ abstract class FormModel<
         forceReloadForm = true;
       case ForceType.decidedAtRuntime:
         // forceReloadForm =
-        //     formDataState != DataState.ready && hasActiveUiComponent();
+        //     formDataState != DataState.loaded && hasActiveUiComponent();
         forceReloadForm = false;
     }
     //
@@ -448,13 +448,13 @@ abstract class FormModel<
     );
     //
     if (!forceReloadForm) {
-      if (dataState != DataState.ready) {
+      if (dataState != FormDataState.loaded) {
         executionTrace._addTraceStep(
           codeId: "#37100",
           shortDesc:
               "${debugObjHtml(this)} - @dataState: ${debugObjHtml(dataState)} --> Clear data and set to <b>pending</b>.",
         );
-        _clearDataWithDataState(formDataState: DataState.pending);
+        _clearDataWithDataState(formDataState: FormDataState.pending);
       }
       executionTrace._addTraceStep(
         codeId: "#37120",
@@ -736,7 +736,7 @@ abstract class FormModel<
         //
         _formModelStructure._clearFormError();
         _formModelStructure._setFormDataState(
-          formDataState: DataState.pending,
+          formDataState: FormDataState.pending,
           error: null,
         );
         if (currentFormMode == FormMode.creation) {
@@ -885,7 +885,7 @@ abstract class FormModel<
           );
           //
           __endFormActivityWithDataState(
-            formDataState: DataState.error,
+            formDataState: FormDataState.error,
             activityType: activityType,
             error: e,
           );
@@ -969,7 +969,7 @@ abstract class FormModel<
             );
             //
             __endFormActivityWithDataState(
-              formDataState: DataState.error,
+              formDataState: FormDataState.error,
               activityType: activityType,
               error: e,
             );
@@ -1049,7 +1049,7 @@ abstract class FormModel<
             );
             //
             __endFormActivityWithDataState(
-              formDataState: DataState.error,
+              formDataState: FormDataState.error,
               error: e,
               activityType: activityType,
             );
@@ -1134,7 +1134,7 @@ abstract class FormModel<
           );
           //
           __endFormActivityWithDataState(
-            formDataState: DataState.error,
+            formDataState: FormDataState.error,
             activityType: activityType,
             error: e,
           );
@@ -1228,7 +1228,7 @@ abstract class FormModel<
       );
       //
       __endFormActivityWithDataState(
-        formDataState: DataState.error,
+        formDataState: FormDataState.error,
         activityType: activityType,
         error: e,
       );
@@ -1242,7 +1242,7 @@ abstract class FormModel<
     }
     //
     return __endFormActivityWithDataState(
-      formDataState: DataState.ready,
+      formDataState: FormDataState.loaded,
       activityType: activityType,
       error: null,
     );
@@ -1270,7 +1270,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   bool __endFormActivityWithDataState({
-    required DataState formDataState,
+    required FormDataState formDataState,
     required FormActivityType activityType,
     required dynamic error,
   }) {
@@ -1297,7 +1297,7 @@ abstract class FormModel<
       );
       //
       if (activityType == FormActivityType.startCreatingOrEditing) {
-        if (formDataState == DataState.ready) {
+        if (formDataState == FormDataState.loaded) {
           _formModelStructure._formInitialDataReady = true;
         }
       }
@@ -1343,7 +1343,7 @@ abstract class FormModel<
       );
       //
       _formModelStructure._setFormDataState(
-        formDataState: DataState.error,
+        formDataState: FormDataState.error,
         error: e,
       );
       return false;
@@ -2013,7 +2013,7 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _clearDataWithDataState({required DataState formDataState}) {
+  void _clearDataWithDataState({required FormDataState formDataState}) {
     try {
       // Disable Auto validation.
       __disableAutovalidation();
@@ -2167,7 +2167,7 @@ abstract class FormModel<
         errCode: PatchFormFieldsPrecheck.formInNoneMode,
       );
     }
-    if (dataState == DataState.error) {
+    if (dataState == FormDataState.error) {
       return Actionable<PatchFormFieldsPrecheck>.no(
         errCode: PatchFormFieldsPrecheck.formInErrorState,
       );
