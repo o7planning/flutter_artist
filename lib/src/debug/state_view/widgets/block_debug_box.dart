@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
-import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../../core/_core_/core.dart';
+import '../../../core/enums/active_element_type.dart';
 import '../../utils/_debug.dart';
 import '../options/_debug_block_options.dart';
-import '_active_info_widget.dart';
-import '_block_requery_info_widget.dart';
+import 'widgets/active_info_widget.dart';
+import 'widgets/block_query_preview_info_widget.dart';
 import '_debug_box.dart';
-import '_debug_style_utils.dart';
-import 'block_data_state_widget.dart';
+import 'debug_style_utils.dart';
+import 'widgets/block_data_state_info_widget.dart';
+import 'widgets/filter_criteria_info_widget.dart';
 
 class BlockDebugBox extends BaseDebugBox {
   final Block block;
@@ -78,11 +79,10 @@ class BlockDebugBox extends BaseDebugBox {
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (options.showBlockDataState)
-        BlockDataStateWidget(
+        BlockDataStateInfoWidget(
           block: block,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle(context),
-          checkAgain: () {},
         ),
       if (options.showLastQueryResultState)
         IconLabelText(
@@ -92,7 +92,7 @@ class BlockDebugBox extends BaseDebugBox {
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (options.showPerformQueryCount)
-        BlockQueryInfoWidget(
+        BlockQueryPreviewInfoWidget(
           block: block,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle(context),
@@ -119,9 +119,8 @@ class BlockDebugBox extends BaseDebugBox {
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (block.filterModel != null && options.showFilterCriteria)
-        IconLabelText(
-          label: "Filter Criteria: ",
-          text: block.filterCriteria == null ? "null" : "[Not Null]",
+        FilterCriteriaInfoWidget(
+          block: block,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),

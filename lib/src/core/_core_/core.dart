@@ -58,8 +58,6 @@ import '../enums/action_result_state.dart';
 import '../enums/activity_hidden_action.dart';
 import '../enums/block_viewport_sync_strategy.dart';
 import '../enums/filter_connector.dart';
-import '../enums/loaded_state_stale_reason.dart';
-import '../enums/loaded_status.dart';
 import '../enums/sort_strategy.dart';
 import '../enums/default_setting_policy.dart';
 import '../enums/filter_operator.dart';

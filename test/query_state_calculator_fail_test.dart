@@ -15,12 +15,11 @@ void main() {
       '🛡️ QueryStateCalculator - Failure Scenario Matrices (ActionResultState.fail)',
       () {
     // =========================================================================
-    // BRANCH 1.1: CONTEXT BOUNDARY MUTATED (parentOrCriteriaChanged == true)
+    // BRANCH 1.1: CRITERIA BOUNDARY MUTATED (filterCriteriaChanged == true)
     // =========================================================================
-    group('Branch 1.1 - Context Mutated (Parent or Filter Criteria Changed)',
-        () {
+    group('Branch 1.1 - Criteria Mutated (Filter Criteria Changed)', () {
       test(
-          '1.1.1 - Should fallback to PENDING and replace list if context changes during failure',
+          '1.1.1 - Should preserve cache as STALE when filter changes during failure under preserveStableCache',
           () {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.fail,
@@ -28,8 +27,69 @@ void main() {
           currentDataState: BlockDataStateLoadedFresh(),
           syncStrategy:
               BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
-          parentOrCriteriaChanged: true,
-          // Context mutation active
+          filterCriteriaChanged: true, // Criteria mutation active
+          isQueryMore: false,
+          isPageShifting: false,
+          queryTypeChanged: false,
+          suggestedListUpdateStrategy: ListUpdateStrategy.replace,
+          hasRemoveItemIds: false,
+          dilemmaStrategy: FallbackDilemmaStrategy.preserveStableCache,
+        );
+
+        final result = QueryStateCalculator.calculate(input);
+
+        // Retains previous dataset on screen, but flags as STALE due to criteria mismatch
+        expect(
+          result.newBlockDataState,
+          BlockDataStateLoadedStale(
+            reason: LoadedStateStaleReasonFetchFailed(errorInfo: null),
+          ),
+        );
+        expect(result.newLoadedPhase, BlockLoadedStatePhase.refetchFailed);
+        expect(result.realListUpdateStrategy, ListUpdateStrategy.merge);
+        expect(result.forcePruneMissingIds, false);
+      });
+
+      test(
+          '1.1.2 - Should evict and fallback to PENDING when filter changes during failure under evictStaleContent',
+          () {
+        const input = QueryCalculatorInput(
+          queryResultState: ActionResultState.fail,
+          blockErrorInfo: null,
+          currentDataState: BlockDataStateLoadedFresh(),
+          syncStrategy:
+              BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
+          filterCriteriaChanged: true, // Criteria mutation active
+          isQueryMore: false,
+          isPageShifting: false,
+          queryTypeChanged: false,
+          suggestedListUpdateStrategy: ListUpdateStrategy.merge,
+          hasRemoveItemIds: false,
+          dilemmaStrategy: FallbackDilemmaStrategy.evictStaleContent,
+        );
+
+        final result = QueryStateCalculator.calculate(input);
+
+        expect(
+          result.newBlockDataState,
+          const BlockDataStatePending(
+            reason: PendingReasonFetchFailed(errorInfo: null),
+          ),
+        );
+        expect(result.newLoadedPhase, isNull);
+        expect(result.realListUpdateStrategy, ListUpdateStrategy.replace);
+        expect(result.forcePruneMissingIds, false);
+      });
+
+      test(
+          '1.1.3 - Cold baseline with mutated filter criteria MUST always fallback to PENDING on failure',
+          () {
+        const input = QueryCalculatorInput(
+          queryResultState: ActionResultState.fail,
+          blockErrorInfo: null,
+          currentDataState: BlockDataStateNone(), // Cold uninitialized state
+          syncStrategy: BlockViewportSyncStrategy.nativeQuery,
+          filterCriteriaChanged: true,
           isQueryMore: false,
           isPageShifting: false,
           queryTypeChanged: false,
@@ -43,23 +103,23 @@ void main() {
         expect(
           result.newBlockDataState,
           const BlockDataStatePending(
-              reason: PendingReasonFetchFailed(errorInfo: null)),
+            reason: PendingReasonFetchFailed(errorInfo: null),
+          ),
         );
         expect(result.newLoadedPhase, isNull);
         expect(result.realListUpdateStrategy, ListUpdateStrategy.replace);
-        expect(result.forcePruneMissingIds, false);
       });
 
       test(
-          '1.1.2 - Context mutation must override and block infinite scroll lazy load bounds',
+          '1.1.4 - Criteria mutation takes priority over lazy load bounds on failure under preserveStableCache',
           () {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.fail,
           blockErrorInfo: null,
           currentDataState: BlockDataStateLoadedFresh(),
           syncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
-          parentOrCriteriaChanged: true,
-          // Context mutated takes supreme priority
+          filterCriteriaChanged:
+              true, // Filter criteria shift overrides queryMore
           isQueryMore: true,
           isPageShifting: false,
           queryTypeChanged: false,
@@ -72,19 +132,19 @@ void main() {
 
         expect(
           result.newBlockDataState,
-          const BlockDataStatePending(
-              reason: PendingReasonFetchFailed(errorInfo: null)),
+          BlockDataStateLoadedStale(
+            reason: LoadedStateStaleReasonFetchFailed(errorInfo: null),
+          ),
         );
-        expect(result.newLoadedPhase, isNull);
-        expect(result.realListUpdateStrategy, ListUpdateStrategy.replace);
+        expect(result.newLoadedPhase, BlockLoadedStatePhase.refetchFailed);
+        expect(result.realListUpdateStrategy, ListUpdateStrategy.merge);
       });
     });
 
     // =========================================================================
-    // BRANCH 1.2: CONTEXT PRESERVED (parentOrCriteriaChanged == false)
+    // BRANCH 1.2: CRITERIA PRESERVED (filterCriteriaChanged == false)
     // =========================================================================
-    group('Branch 1.2 - Context Stabilized (Parent or Filter Criteria Intact)',
-        () {
+    group('Branch 1.2 - Criteria Stabilized (Filter Criteria Intact)', () {
       test(
           '1.2.1 - EAGER LOCAL PRUNING GATE: Should drop deleted item IDs immediately even if re-query fails',
           () {
@@ -93,23 +153,23 @@ void main() {
           blockErrorInfo: null,
           currentDataState: BlockDataStateLoadedFresh(),
           syncStrategy: BlockViewportSyncStrategy.nativeQuery,
-          parentOrCriteriaChanged: false,
+          filterCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: true,
           queryTypeChanged: false,
           suggestedListUpdateStrategy: ListUpdateStrategy.replace,
-          hasRemoveItemIds: true,
-          // Destructive operation footprint active
+          hasRemoveItemIds: true, // Destructive operation footprint active
           dilemmaStrategy: FallbackDilemmaStrategy.preserveStableCache,
         );
 
         final result = QueryStateCalculator.calculate(input);
 
-        // UX Check: Keeps valid rows on screen, preserves LOADED STALE, but flags for mutation failure & local prune
+        // Keeps valid rows on screen, marks stale due to reconciliation failure, flags for local prune
         expect(
           result.newBlockDataState,
-          const BlockDataStateLoadedStale(
-              reason: LoadedStateStaleReason.fetchFailed),
+          BlockDataStateLoadedStale(
+            reason: LoadedStateStaleReasonFetchFailed(errorInfo: null),
+          ),
         );
         expect(result.newLoadedPhase, BlockLoadedStatePhase.mutationFailed);
         expect(result.realListUpdateStrategy, ListUpdateStrategy.merge);
@@ -117,7 +177,7 @@ void main() {
       });
 
       test(
-          '1.2.2 - Should maintain readiness when page shifting or lazy loading under preserveStableCache rules',
+          '1.2.2 - Should retain FRESH state and attach transientErrorInfo when page shifting or lazy loading under preserveStableCache rules',
           () {
         final flowTriggers = [
           {'queryMore': true, 'pageShift': false},
@@ -130,22 +190,21 @@ void main() {
             blockErrorInfo: null,
             currentDataState: const BlockDataStateLoadedFresh(),
             syncStrategy: BlockViewportSyncStrategy.nativeQuery,
-            parentOrCriteriaChanged: false,
+            filterCriteriaChanged: false,
             isQueryMore: trigger['queryMore']!,
             isPageShifting: trigger['pageShift']!,
             queryTypeChanged: false,
             suggestedListUpdateStrategy: ListUpdateStrategy.replace,
             hasRemoveItemIds: false,
-            dilemmaStrategy: FallbackDilemmaStrategy
-                .preserveStableCache, // Default protective policy
+            dilemmaStrategy: FallbackDilemmaStrategy.preserveStableCache,
           );
 
           final result = QueryStateCalculator.calculate(input);
 
+          // Baseline data remains FRESH while attaching transientErrorInfo
           expect(
             result.newBlockDataState,
-            const BlockDataStateLoadedStale(
-                reason: LoadedStateStaleReason.fetchFailed),
+            const BlockDataStateLoadedFresh(transientErrorInfo: null),
           );
           expect(result.newLoadedPhase, BlockLoadedStatePhase.fetchMoreFailed);
           expect(result.realListUpdateStrategy, ListUpdateStrategy.merge);
@@ -160,10 +219,10 @@ void main() {
           blockErrorInfo: null,
           currentDataState: BlockDataStateLoadedFresh(),
           syncStrategy: BlockViewportSyncStrategy.nativeQuery,
-          parentOrCriteriaChanged: false,
+          filterCriteriaChanged: false,
           isQueryMore: false,
-          isPageShifting: true,
-          // Transitioning pages (e.g. NextPage or Jump to Page 10)
+          isPageShifting:
+              true, // Transitioning pages (e.g. NextPage or Jump to Page 10)
           queryTypeChanged: false,
           suggestedListUpdateStrategy: ListUpdateStrategy.merge,
           hasRemoveItemIds: false,
@@ -175,7 +234,8 @@ void main() {
         expect(
           result.newBlockDataState,
           const BlockDataStatePending(
-              reason: PendingReasonFetchFailed(errorInfo: null)),
+            reason: PendingReasonFetchFailed(errorInfo: null),
+          ),
         );
         expect(result.newLoadedPhase, isNull);
         expect(result.realListUpdateStrategy, ListUpdateStrategy.replace);
@@ -189,10 +249,9 @@ void main() {
           blockErrorInfo: null,
           currentDataState: BlockDataStateLoadedFresh(),
           syncStrategy: BlockViewportSyncStrategy.nativeQuery,
-          parentOrCriteriaChanged: false,
+          filterCriteriaChanged: false,
           isQueryMore: false,
-          isPageShifting: false,
-          // Standard pull-to-refresh style re-query
+          isPageShifting: false, // Standard pull-to-refresh style re-query
           queryTypeChanged: false,
           suggestedListUpdateStrategy: ListUpdateStrategy.merge,
           hasRemoveItemIds: false,
@@ -203,8 +262,9 @@ void main() {
 
         expect(
           result.newBlockDataState,
-          const BlockDataStateLoadedStale(
-              reason: LoadedStateStaleReason.fetchFailed),
+          BlockDataStateLoadedStale(
+            reason: LoadedStateStaleReasonFetchFailed(errorInfo: null),
+          ),
         );
         expect(result.newLoadedPhase, BlockLoadedStatePhase.refetchFailed);
         expect(result.realListUpdateStrategy, ListUpdateStrategy.merge);
@@ -218,7 +278,7 @@ void main() {
           blockErrorInfo: null,
           currentDataState: BlockDataStateLoadedFresh(),
           syncStrategy: BlockViewportSyncStrategy.nativeQuery,
-          parentOrCriteriaChanged: false,
+          filterCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: false,
           queryTypeChanged: false,
@@ -232,7 +292,8 @@ void main() {
         expect(
           result.newBlockDataState,
           const BlockDataStatePending(
-              reason: PendingReasonFetchFailed(errorInfo: null)),
+            reason: PendingReasonFetchFailed(errorInfo: null),
+          ),
         );
         expect(result.newLoadedPhase, isNull);
         expect(result.realListUpdateStrategy, ListUpdateStrategy.replace);

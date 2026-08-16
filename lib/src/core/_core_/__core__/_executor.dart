@@ -50,8 +50,6 @@ class _Executor {
               pendingEventProcessed = true;
               // FlutterArtist.storage._deferredEventManager
               //     .addTaskUnitForDeferredEvents();
-              print(
-                  "@TEMP executor: ########## _pendingEventProcessor.addTaskUnitForPendingEvents");
               FlutterArtist.storage._pendingEventProcessor
                   .addTaskUnitForPendingEvents();
               hasNext = FlutterArtist._rootQueue.hasNext();

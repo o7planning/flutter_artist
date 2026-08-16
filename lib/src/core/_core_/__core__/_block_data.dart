@@ -71,12 +71,41 @@ class _BlockData<
 
   BlockDataState _selectionDataState = BlockDataStatePending();
 
-  // PendingReason? _pendingReason;
-  //
-  // BlockLoadedStatePhase? _loadedStatePhase;
-  //
-  // LoadedStatus? _loadedStatus;
+  // ***************************************************************************
+  // ***************************************************************************
 
+  // Query Error in FilterModel.
+  void _setDataStateOnErrorInFilter({required BlockErrorInfo? errorInfo}) {
+    final BlockDataState newBlockDataState;
+    switch (_blockDataState) {
+      case BlockDataStateNone():
+        newBlockDataState =
+            BlockDataStatePending.fetchFailed(errorInfo: errorInfo);
+      case BlockDataStatePending():
+        newBlockDataState =
+            BlockDataStatePending.fetchFailed(errorInfo: errorInfo);
+      case BlockDataStateLoadedFresh():
+        LoadedStateStaleReason reason =
+            LoadedStateStaleReasonFetchFailed(errorInfo: errorInfo);
+        newBlockDataState = BlockDataStateLoadedStale(reason: reason);
+      case BlockDataStateLoadedStale():
+        LoadedStateStaleReason reason =
+            LoadedStateStaleReasonFetchFailed(errorInfo: errorInfo);
+        newBlockDataState = BlockDataStateLoadedStale(reason: reason);
+    }
+    _lastQueryResultState = ActionResultState.fail;
+    _blockDataState = newBlockDataState;
+  }
+
+  void _setDataStateOnErrorInBlock({
+    required BlockErrorInfo? errorInfo,
+    required BlockDataState newBlockDataState,
+  }) {
+    _lastQueryResultState = ActionResultState.fail;
+    _blockDataState = newBlockDataState;
+  }
+
+  // ***************************************************************************
   // ***************************************************************************
 
   void _backupManualArrangementBeforeQueryIfNeed() {
@@ -268,13 +297,9 @@ class _BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isParentOrFilterCriteriaChanged({
-    required Object? newCurrentParentItemId,
+  bool _isFilterCriteriaChanged({
     required XFilterCriteria<FILTER_CRITERIA> newXFilterCriteria,
   }) {
-    if (newCurrentParentItemId != _parentBlockCurrentItemId) {
-      return true;
-    }
     if (newXFilterCriteria != _xFilterCriteria) {
       return true;
     }

@@ -309,6 +309,7 @@ abstract class Block<
   BlockErrorInfo? get blockErrorInfo {
     return switch (dataState) {
       BlockDataStatePending(:final errorInfo?) => errorInfo,
+      BlockDataStateLoadedStale(:final errorInfo?) => errorInfo,
       _ => null,
     };
   }
@@ -359,7 +360,7 @@ abstract class Block<
     if (parent == null) {
       return BlockDataStateLoadedFresh();
     }
-    if (parent!.dataState! is BlockDataStateNone) {
+    if (parent!.dataState is BlockDataStateNone) {
       return parent!.dataState;
     }
     return parent!.ancestralNonNoneDataState;
@@ -469,7 +470,6 @@ abstract class Block<
       codeId: "#84000",
       shortDesc: "Reset _blockSyncSessionState",
     );
-    print("@TEMP @._resetSyncSessionState");
     _blockSyncSessionState = null;
   }
 
@@ -672,8 +672,6 @@ abstract class Block<
     if (dataState.isNone) {
       return;
     }
-    print(
-        "@TEMP xxx mainDataTypes: $mainDataTypes, extraDataTypes: $extraDataTypes");
     if (mainDataTypes.isEmpty && extraDataTypes.isEmpty) {
       return;
     }
@@ -750,27 +748,6 @@ abstract class Block<
     //
     if (formModel != null) {
       formModel!._clearDataWithDataState(formDataState: formDataState);
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __keepBlockStateOnError({
-    required ExecutionTrace executionTrace,
-    required bool errorInFilter,
-  }) {
-    final BlockDataState currentDataState = dataState;
-    switch (currentDataState) {
-      case BlockDataStateNone():
-        // TODO: Handle this case.
-        throw UnimplementedError();
-      case BlockDataStatePending():
-        // TODO: Handle this case.
-        throw UnimplementedError();
-      case BlockDataStateLoaded():
-        // TODO: Handle this case.
-        throw UnimplementedError();
     }
   }
 
@@ -887,7 +864,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool _needToQuery() {
-    if (!dataState.isFresh ) {
+    if (!dataState.isFresh) {
       return true;
     }
     //
@@ -1272,28 +1249,25 @@ abstract class Block<
       //   frmDataState: DataState.none,
       //   errorInFilter: true,
       // );
-      __keepBlockStateOnError(
-        executionTrace: executionTrace,
-        errorInFilter: true,
-      );
+      __blockData._setDataStateOnErrorInFilter(errorInfo: null);
       thisXBlock.queryResult._setFilterError();
       return;
     }
     //
     // Ready FilterCriteria:
     //
-    final bool parentOrCriteriaChanged =
-        __blockData._isParentOrFilterCriteriaChanged(
-      newCurrentParentItemId: parentBlockCurrentItemId,
+    final bool filterCriteriaChanged = __blockData._isFilterCriteriaChanged(
       newXFilterCriteria: xFilterCriteriaOfFilterModel,
     );
     //
     ActionResultState queryResultState;
     //
     ListUpdateStrategy realListUpdateStrategy;
-    //
-    final Pageable? usedPageable;
+    // Will be used for Query:
+    final Pageable? willBeUsedPageable =
+        thisXBlock.getWillBeUsedPageable(thisXBlock.queryType);
     List<ID>? itemIdsToQry;
+    BlockErrorInfo? blkErrorInfo;
     //
     if (thisXBlock.queryType == QueryType.realQuery) {
       //
@@ -1303,16 +1277,13 @@ abstract class Block<
         traceStepType: TraceStepType.debug,
         tipDocument: TipDocument.blockQueryType,
       );
-      usedPageable = pendingNativeQueryMode == BlockNativeQueryMode.fullQuery
-          ? null
-          : (thisXBlock.pageable ?? config.pageable);
+      //
       __blockData._nativeQueryMode = __blockData._pendingNativeQueryMode;
 
       final QueryType newQueryType = thisXBlock.queryType;
       final queryTypeChanged = __lastQueryType != newQueryType;
       __lastQueryType = newQueryType;
 
-      BlockErrorInfo? blockErrorInfo;
       //
       // Call Query API:
       //
@@ -1356,7 +1327,7 @@ abstract class Block<
               "parentBlockCurrentItem": parent?.currentItem,
               "filterCriteria": xFilterCriteriaOfFilterModel.filterCriteria,
               "sortableCriteria": sortableCriteria,
-              "pageable": usedPageable,
+              "pageable": willBeUsedPageable,
             },
             traceStepType: TraceStepType.controllableCalling,
           );
@@ -1368,7 +1339,7 @@ abstract class Block<
               parentBlockCurrentItem: parent?.currentItem,
               filterCriteria: xFilterCriteriaOfFilterModel.filterCriteria,
               sortableCriteria: sortableCriteria,
-              pageable: usedPageable,
+              pageable: willBeUsedPageable,
             );
             // Throw ApiError:
             result.throwIfError();
@@ -1406,7 +1377,7 @@ abstract class Block<
               "parentBlockCurrentItem": parent?.currentItem,
               "filterCriteria": xFilterCriteriaOfFilterModel.filterCriteria,
               "sortableCriteria": sortableCriteria,
-              "pageable": usedPageable,
+              "pageable": willBeUsedPageable,
             },
             traceStepType: TraceStepType.controllableCalling,
           );
@@ -1449,7 +1420,7 @@ abstract class Block<
         queriedItemList = null;
         queriedPaginationInfo = null;
         //
-        blockErrorInfo = BlockErrorInfo(
+        blkErrorInfo = BlockErrorInfo(
           blockErrorMethod: performQryMethod,
           error: e, // AppError, ApiError or others.
           errorStackTrace: stackTrace,
@@ -1478,16 +1449,24 @@ abstract class Block<
         __refreshQueryingState(isQuerying: false);
       }
 
-      print("@TEMP XXX-1 blockErrorInfo: $blockErrorInfo");
+      final bool isPageShifting;
+      // Full Query
+      if (willBeUsedPageable == null) {
+        isPageShifting = !filterCriteriaChanged;
+      } else {
+        int currentPage = __blockData._paginationInfo?.currentPage ?? 0;
+        int targetPage = willBeUsedPageable.page;
+        isPageShifting = !filterCriteriaChanged && currentPage != targetPage;
+      }
 
       final calculationInput = QueryCalculatorInput(
         queryResultState: queryResultState,
-        blockErrorInfo: blockErrorInfo,
+        blockErrorInfo: blkErrorInfo,
         currentDataState: dataState,
         syncStrategy: viewportSyncStrategy,
-        parentOrCriteriaChanged: parentOrCriteriaChanged,
+        filterCriteriaChanged: filterCriteriaChanged,
         isQueryMore: thisXBlock.isQueryMoreFlow,
-        isPageShifting: !parentOrCriteriaChanged,
+        isPageShifting: isPageShifting,
         hasRemoveItemIds: false,
         queryTypeChanged: queryTypeChanged,
         suggestedListUpdateStrategy: thisXBlock.listUpdateStrategy,
@@ -1496,9 +1475,26 @@ abstract class Block<
       final calculationResult =
           QueryStateCalculator.calculate(calculationInput);
 
+      print("@TEMP INPUT: ");
+      calculationInput.printDebug();
+
+      print("@TEMP XXX-1 blockErrorInfo: $blkErrorInfo");
+      print(
+          "@TEMP XXX-2 newBlockDataState: ${calculationResult.newBlockDataState}");
+      print("@TEMP XXX-3 newLoadedPhase: ${calculationResult.newLoadedPhase}");
+
       // Extract variables directly into your pre-existing downstream fields securely
       realListUpdateStrategy = calculationResult.realListUpdateStrategy;
       newBlockDataState = calculationResult.newBlockDataState;
+
+      if (blkErrorInfo != null) {
+        // Test case [42a], [22a].
+        __blockData._setDataStateOnErrorInBlock(
+          errorInfo: blkErrorInfo,
+          newBlockDataState: newBlockDataState,
+        );
+        return;
+      }
     }
     // Query Empty:
     else {
@@ -1507,11 +1503,7 @@ abstract class Block<
         shortDesc: "@queryType: ${thisXBlock.queryType}.",
       );
       //
-      usedPageable = pendingNativeQueryMode == BlockNativeQueryMode.fullQuery
-          ? null
-          : __blockData._emptyPageable;
       __blockData._nativeQueryMode = __blockData._pendingNativeQueryMode;
-      //
       __lastQueryType = thisXBlock.queryType;
       realListUpdateStrategy = ListUpdateStrategy.replace;
       newBlockDataState = BlockDataStateLoadedFresh();
@@ -1528,6 +1520,7 @@ abstract class Block<
       },
       traceStepType: TraceStepType.debug,
     );
+
     final List<ID> removeItemIds = [];
     if (queriedItemList != null &&
         realListUpdateStrategy == ListUpdateStrategy.merge) {
@@ -1551,7 +1544,7 @@ abstract class Block<
             "Calling ${debugObjHtml(this)}.__processQueryResult() to process queried data.",
         parameters: {
           "usedXFilterCriteria": xFilterCriteriaOfFilterModel,
-          "usedPageable": usedPageable,
+          "usedPageable": willBeUsedPageable,
           "queriedItemList": queriedItemList,
           "queriedPaginationInfo": queriedPaginationInfo,
           "queryResultState": queryResultState,
@@ -1560,7 +1553,7 @@ abstract class Block<
       );
       final processedQueryResult = __processQueryResult(
         usedXFilterCriteria: xFilterCriteriaOfFilterModel,
-        usedPageable: usedPageable,
+        usedPageable: willBeUsedPageable,
         //
         queriedItemList: queriedItemList,
         queriedPaginationInfo: queriedPaginationInfo,
@@ -6125,7 +6118,6 @@ abstract class Block<
         }
     }
     //
-    print("@TEMP 1");
     final XShelf xShelf = _XShelfBlockQuery(
       block: this,
       filterInput: filterInput,

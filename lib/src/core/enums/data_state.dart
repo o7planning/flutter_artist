@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../icon/icon_constants.dart';
 
 enum FilterDataState {
-  none,
   pending,
   error,
   loaded;

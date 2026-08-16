@@ -1,11 +1,8 @@
 import '../../enums/action_result_state.dart';
+import '../../enums/block_loaded_state_phase.dart';
 import '../../enums/block_viewport_sync_strategy.dart';
-import '../../enums/data_state.dart';
 import '../../enums/fallback_dilemma_strategy.dart';
 import '../../enums/list_update_strategy.dart';
-import '../../enums/block_loaded_state_phase.dart';
-
-import '../../enums/loaded_state_stale_reason.dart';
 import '../../error/_block_error_info.dart';
 import '../core.dart';
 
@@ -14,6 +11,7 @@ class QueryCalculatorInput {
   /// The resulting outcome of the active remote data fetch cycle.
   final ActionResultState queryResultState;
 
+  /// Structured diagnostic details regarding the failed query attempt, if any.
   final BlockErrorInfo? blockErrorInfo;
 
   /// The current state ledger bound to the active runtime block.
@@ -22,8 +20,8 @@ class QueryCalculatorInput {
   /// The viewport alignment boundary requested by the triggering mutation or refresh task.
   final BlockViewportSyncStrategy syncStrategy;
 
-  /// Context boundary mutation flag indicating parent shifts or search criteria changes.
-  final bool parentOrCriteriaChanged;
+  /// Criteria shift flag indicating whether search criteria or filter inputs mutated for this query.
+  final bool filterCriteriaChanged;
 
   /// Infinite scroll / lazy append trigger flag mapped from [TaskType.queryMore].
   final bool isQueryMore;
@@ -45,10 +43,10 @@ class QueryCalculatorInput {
 
   const QueryCalculatorInput({
     required this.queryResultState,
-    required this.blockErrorInfo,
+    this.blockErrorInfo,
     required this.currentDataState,
     required this.syncStrategy,
-    required this.parentOrCriteriaChanged,
+    required this.filterCriteriaChanged,
     required this.isQueryMore,
     required this.isPageShifting,
     required this.queryTypeChanged,
@@ -56,6 +54,19 @@ class QueryCalculatorInput {
     required this.hasRemoveItemIds,
     this.dilemmaStrategy = FallbackDilemmaStrategy.preserveStableCache,
   });
+
+  void printDebug() {
+    print("----- QueryCalculatorInput: ------ \n"
+        "  blockErrorInfo: $blockErrorInfo \n"
+        "  currentDataState: $currentDataState \n"
+        "  syncStrategy: $syncStrategy \n"
+        "  filterCriteriaChanged: $filterCriteriaChanged \n"
+        "  isQueryMore: $isQueryMore \n"
+        "  isPageShifting: $isPageShifting \n"
+        "  queryTypeChanged: $queryTypeChanged \n"
+        "  suggestedListUpdateStrategy: $suggestedListUpdateStrategy \n"
+        "  hasRemoveItemIds: $hasRemoveItemIds \n");
+  }
 }
 
 /// Consolidated execution blueprint resolved by the calculator matrix.
@@ -94,23 +105,38 @@ class QueryStateCalculator {
     // 🛑 BRANCH 1: REMOTE RE-QUERY LIFECYCLE FAILED
     // =========================================================================
     if (input.queryResultState == ActionResultState.fail) {
-      // Case 1.1: Context shifted (Parent or Filter Criteria changed)
-      // Since context is new and query failed, fallback to cold PENDING state
-      if (input.parentOrCriteriaChanged) {
-        resolvedStrategy = ListUpdateStrategy.replace;
-        resolvedState = BlockDataStatePending(
-          reason: PendingReasonFetchFailed(errorInfo: input.blockErrorInfo),
-        );
-        resolvedPhase = null;
+      // Case 1.1: Criteria mutated (Search/Filter changed)
+      if (input.filterCriteriaChanged) {
+        if (input.currentDataState.isLoaded &&
+            input.dilemmaStrategy ==
+                FallbackDilemmaStrategy.preserveStableCache) {
+          // Preserve previous dataset on screen, but mark as STALE due to criteria mismatch & fetch error
+          resolvedStrategy = ListUpdateStrategy.merge;
+          resolvedState = BlockDataStateLoadedStale(
+            reason: LoadedStateStaleReasonFetchFailed(
+              errorInfo: input.blockErrorInfo,
+            ),
+          );
+          resolvedPhase = BlockLoadedStatePhase.refetchFailed;
+        } else {
+          // Hard eviction or cold baseline failure -> Fallback to cold PENDING
+          resolvedStrategy = ListUpdateStrategy.replace;
+          resolvedState = BlockDataStatePending(
+            reason: PendingReasonFetchFailed(errorInfo: input.blockErrorInfo),
+          );
+          resolvedPhase = null;
+        }
       }
-      // Case 1.2: Context preserved -> Evaluate based on previous structural stability
+      // Case 1.2: Criteria preserved -> Evaluate based on previous structural stability
       else {
         if (input.currentDataState.isLoaded) {
           if (input.hasRemoveItemIds) {
             // EAGER LOCAL PRUNING: Keep non-mutated rows loaded, flag for local trash removal
             resolvedStrategy = ListUpdateStrategy.merge;
-            resolvedState = const BlockDataStateLoadedStale(
-              reason: LoadedStateStaleReason.fetchFailed,
+            resolvedState = BlockDataStateLoadedStale(
+              reason: LoadedStateStaleReasonFetchFailed(
+                errorInfo: input.blockErrorInfo,
+              ),
             );
             resolvedPhase = BlockLoadedStatePhase.mutationFailed;
             shouldPrune = true;
@@ -120,17 +146,18 @@ class QueryStateCalculator {
                 FallbackDilemmaStrategy.evictStaleContent) {
               resolvedStrategy = ListUpdateStrategy.replace;
               resolvedState = BlockDataStatePending(
-                reason:
-                    PendingReasonFetchFailed(errorInfo: input.blockErrorInfo),
+                reason: PendingReasonFetchFailed(
+                  errorInfo: input.blockErrorInfo,
+                ),
               );
               resolvedPhase = null;
             } else {
               resolvedStrategy = ListUpdateStrategy.merge;
-              // Preserve existing loaded state or mark stale due to fetch failure
+              // Incremental fetch/pagination failure preserves baseline data freshness while attaching transient error
               resolvedState = input.currentDataState.isStale
                   ? input.currentDataState
-                  : const BlockDataStateLoadedStale(
-                      reason: LoadedStateStaleReason.fetchFailed,
+                  : BlockDataStateLoadedFresh(
+                      transientErrorInfo: input.blockErrorInfo,
                     );
               resolvedPhase = BlockLoadedStatePhase.fetchMoreFailed;
             }
@@ -140,14 +167,17 @@ class QueryStateCalculator {
                 FallbackDilemmaStrategy.evictStaleContent) {
               resolvedStrategy = ListUpdateStrategy.replace;
               resolvedState = BlockDataStatePending(
-                reason:
-                    PendingReasonFetchFailed(errorInfo: input.blockErrorInfo),
+                reason: PendingReasonFetchFailed(
+                  errorInfo: input.blockErrorInfo,
+                ),
               );
               resolvedPhase = null;
             } else {
               resolvedStrategy = ListUpdateStrategy.merge;
-              resolvedState = const BlockDataStateLoadedStale(
-                reason: LoadedStateStaleReason.fetchFailed,
+              resolvedState = BlockDataStateLoadedStale(
+                reason: LoadedStateStaleReasonFetchFailed(
+                  errorInfo: input.blockErrorInfo,
+                ),
               );
               resolvedPhase = BlockLoadedStatePhase.refetchFailed;
             }
@@ -166,15 +196,15 @@ class QueryStateCalculator {
     // 🎉 BRANCH 2: REMOTE RE-QUERY LIFECYCLE SUCCEEDED
     // =========================================================================
     else {
-      // Successful remote sync mounts fresh loaded baseline data
+      // Successful remote sync mounts fresh loaded baseline data (clearing transient errors)
       resolvedState = const BlockDataStateLoadedFresh();
       resolvedPhase = BlockLoadedStatePhase.idle;
 
-      // Case 2.1: Fresh context loaded successfully -> Flush and mount the new grid rows
-      if (input.parentOrCriteriaChanged) {
+      // Case 2.1: Criteria mutated successfully -> Flush and mount the new grid rows
+      if (input.filterCriteriaChanged) {
         resolvedStrategy = ListUpdateStrategy.replace;
       }
-      // Case 2.2: Fetch complete for an unchanged stable context -> Distribute via sync rules
+      // Case 2.2: Fetch complete for unchanged criteria -> Distribute via sync rules
       else {
         switch (input.syncStrategy) {
           case BlockViewportSyncStrategy.nativeQuery:

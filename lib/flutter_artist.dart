@@ -41,7 +41,6 @@ export 'src/core/built_in_ui/popup_sort_panel.dart';
 export 'src/core/built_in_ui/popup_sort_panel_style.dart';
 export 'src/core/built_in_ui/segmented_sort_panel.dart';
 export 'src/core/built_in_ui/segmented_sort_panel_style.dart';
-export 'src/core/enums/loaded_state_stale_reason.dart';
 export 'src/core/enums/loaded_status.dart';
 export 'src/core/enums/resolved_query_action.dart';
 export 'src/core/enums/block_native_query_mode.dart';

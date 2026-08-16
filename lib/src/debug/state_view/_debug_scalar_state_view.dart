@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/_core_/core.dart';
 import '../../core/widgets/_table_container.dart';
 import 'options/_debug_scalar_options.dart';
-import 'widgets/_scalar_debug_box.dart';
+import 'widgets/scalar_debug_box.dart';
 
 class DebugScalarStateView extends StatelessWidget {
   final Scalar scalar;

@@ -23,7 +23,6 @@ class _XShelfSbQuery extends XShelf {
     if (filterModel.isDefaultFilterModel) {
       // return;
     }
-    print("@TEMP 3");
     //
     final thisXFilterModel = xFilterModelMap[filterModel.name]!;
     thisXFilterModel.filterInput = filterInput;
@@ -50,11 +49,8 @@ class _XShelfSbQuery extends XShelf {
       );
       setRootVipXScalar(descendantXScalar: srcXScalar);
     }
-    print("@TEMP 4");
     //
     for (XBlock xBlock in thisXFilterModel.xBlocks) {
-      print("@TEMP 4.1");
-
       final Block block = xBlock.block;
       QryHint queryHint = forceQueryAll ? QryHint.force : QryHint.markAsPending;
       bool isSrcBlock = false;
@@ -62,7 +58,6 @@ class _XShelfSbQuery extends XShelf {
         final Block srcBlock = srcBlockAndOptions.block;
 
         if (srcBlock.isSameWith(block)) {
-          print("@TEMP 4.1.1");
           isSrcBlock = true;
           queryHint = QryHint.force;
         }
@@ -71,7 +66,6 @@ class _XShelfSbQuery extends XShelf {
           queryHint = QryHint.force;
         }
       }
-      print("@TEMP 4.2");
       bool hasXBlockRep = block.ui.hasActiveUiComponentBlockRepresentative(
         alsoCheckChildren: true,
       );

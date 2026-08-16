@@ -6,10 +6,10 @@ import 'options/_debug_block_options.dart';
 import 'options/_debug_filter_options.dart';
 import 'options/_debug_form_options.dart';
 import 'options/_debug_pagination_options.dart';
-import 'widgets/_block_debug_box.dart';
-import 'widgets/_filter_debug_box.dart';
-import 'widgets/_form_debug_box.dart';
-import 'widgets/_pagination_debug_box.dart';
+import 'widgets/block_debug_box.dart';
+import 'widgets/filter_debug_box.dart';
+import 'widgets/form_debug_box.dart';
+import 'widgets/pagination_debug_box.dart';
 
 class DebugBlockStateView extends StatelessWidget {
   final Block block;

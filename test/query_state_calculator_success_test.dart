@@ -9,7 +9,7 @@ void main() {
       '🛡️ QueryStateCalculator - Success Scenario Matrices (ActionResultState.success)',
       () {
     // =========================================================================
-    // BRANCH 2.1: CONTEXT BOUNDARY MUTATED (parentOrCriteriaChanged == true)
+    // BRANCH 2.1: CONTEXT BOUNDARY MUTATED (filterCriteriaChanged == true)
     // =========================================================================
     group('Branch 2.1 - Context Mutated (Parent or Filter Criteria Changed)',
         () {
@@ -28,8 +28,7 @@ void main() {
             blockErrorInfo: null,
             currentDataState: const BlockDataStateNone(),
             syncStrategy: strategy,
-            parentOrCriteriaChanged: true,
-            // Context shift active
+            filterCriteriaChanged: true, // Context shift active
             isQueryMore: false,
             isPageShifting: false,
             queryTypeChanged: false,
@@ -49,7 +48,7 @@ void main() {
     });
 
     // =========================================================================
-    // BRANCH 2.2: CONTEXT PRESERVED (parentOrCriteriaChanged == false)
+    // BRANCH 2.2: CONTEXT PRESERVED (filterCriteriaChanged == false)
     // =========================================================================
     group('Branch 2.2 - Context Stabilized (Parent or Filter Criteria Intact)',
         () {
@@ -61,15 +60,13 @@ void main() {
           blockErrorInfo: null,
           currentDataState: BlockDataStateLoadedStale(
             reason: LoadedStateStaleReason.event,
-          ),
-          // Stale state before query
+          ), // Stale state before query
           syncStrategy: BlockViewportSyncStrategy.nativeQuery,
-          parentOrCriteriaChanged: false,
+          filterCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: false,
           queryTypeChanged: false,
           suggestedListUpdateStrategy: ListUpdateStrategy.merge,
-          // Expected proxy feedback strategy
           hasRemoveItemIds: false,
           dilemmaStrategy: FallbackDilemmaStrategy.preserveStableCache,
         );
@@ -87,10 +84,10 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
           blockErrorInfo: null,
-          currentDataState: BlockDataStateLoadedFresh(),
+          currentDataState: const BlockDataStateLoadedFresh(),
           syncStrategy:
               BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
-          parentOrCriteriaChanged: false,
+          filterCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: false,
           queryTypeChanged: false,
@@ -112,9 +109,9 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
           blockErrorInfo: null,
-          currentDataState: BlockDataStateLoadedFresh(),
+          currentDataState: const BlockDataStateLoadedFresh(),
           syncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
-          parentOrCriteriaChanged: false,
+          filterCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: false,
           queryTypeChanged: false,
@@ -141,14 +138,12 @@ void main() {
         const input = QueryCalculatorInput(
           queryResultState: ActionResultState.success,
           blockErrorInfo: null,
-          currentDataState: BlockDataStateLoadedFresh(),
+          currentDataState: const BlockDataStateLoadedFresh(),
           syncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
-          // Normally commands an inline merge
-          parentOrCriteriaChanged: false,
+          filterCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: false,
-          queryTypeChanged: true,
-          // Layout structural type shift triggered
+          queryTypeChanged: true, // Layout structural type shift triggered
           suggestedListUpdateStrategy: ListUpdateStrategy.merge,
           hasRemoveItemIds: false,
           dilemmaStrategy: FallbackDilemmaStrategy.preserveStableCache,
@@ -158,8 +153,7 @@ void main() {
 
         expect(result.newBlockDataState, const BlockDataStateLoadedFresh());
         expect(result.newLoadedPhase, BlockLoadedStatePhase.idle);
-        expect(result.realListUpdateStrategy,
-            ListUpdateStrategy.replace); // Overridden successfully
+        expect(result.realListUpdateStrategy, ListUpdateStrategy.replace);
       });
     });
   });

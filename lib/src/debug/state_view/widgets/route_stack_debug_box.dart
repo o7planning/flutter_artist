@@ -3,7 +3,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_router/flutter_artist_router.dart';
 
 import '_debug_box.dart';
-import '_debug_style_utils.dart';
+import 'debug_style_utils.dart';
 
 class RouteStackDebugBox extends BaseDebugBox {
   final List<RouteKey> stack;

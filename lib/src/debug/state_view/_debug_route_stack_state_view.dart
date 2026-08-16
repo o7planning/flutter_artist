@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_router/flutter_artist_router.dart';
 
 import '../../core/_core_/core.dart';
-import 'widgets/_route_stack_debug_box.dart';
+import 'widgets/route_stack_debug_box.dart';
 
 class DebugRouteStackStateView extends StatelessWidget {
   final bool showTitle;

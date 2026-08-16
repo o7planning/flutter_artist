@@ -1,1 +1,0 @@
-enum LoadedStateStaleReason { event, fetchFailed }
