@@ -5,12 +5,12 @@ import '../../../core/_core_/core.dart';
 import '../../../core/enums/active_element_type.dart';
 import '../../utils/_debug.dart';
 import '../options/_debug_block_options.dart';
-import 'widgets/active_info_widget.dart';
-import 'widgets/block_query_preview_info_widget.dart';
 import '_debug_box.dart';
 import 'debug_style_utils.dart';
+import 'widgets/active_info_widget.dart';
 import 'widgets/block_data_state_info_widget.dart';
-import 'widgets/filter_criteria_info_widget.dart';
+import 'widgets/block_filter_criteria_info_widget.dart';
+import 'widgets/block_query_preview_info_widget.dart';
 
 class BlockDebugBox extends BaseDebugBox {
   final Block block;
@@ -119,7 +119,7 @@ class BlockDebugBox extends BaseDebugBox {
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (block.filterModel != null && options.showFilterCriteria)
-        FilterCriteriaInfoWidget(
+        BlockFilterCriteriaInfoWidget(
           block: block,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),

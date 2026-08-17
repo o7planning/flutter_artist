@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/data_state.dart';
 import '../../core/enums/selection_type.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
@@ -155,7 +154,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           if (data is FormModel) {
             title = getClassName(data);
             prefixIconData = FaIconConstants.formModelIconData;
-            isError = data.dataState == FormDataState.error;
+            isError = data.dataState.isFatalError;
           } else if (data is SimpleFormPropModel) {
             title = data.propName;
             tooltip =

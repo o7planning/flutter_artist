@@ -24,11 +24,11 @@ abstract class FilterModel<
 
   List<Scalar> get scalars => List.unmodifiable(_scalars);
 
-  XFilterCriteria<FILTER_CRITERIA>? _xFilterCriteria;
+  FilterCriteriaMappedValue<FILTER_CRITERIA>? _xFilterCriteria;
 
   FILTER_CRITERIA? get filterCriteria => _xFilterCriteria?.filterCriteria;
 
-  XFilterCriteria<FILTER_CRITERIA>? get debugXFilterCriteria =>
+  FilterCriteriaMappedValue<FILTER_CRITERIA>? get debugXFilterCriteria =>
       _xFilterCriteria;
 
   late final _FilterModelDebugInfo debug = _FilterModelDebugInfo();
@@ -51,14 +51,16 @@ abstract class FilterModel<
 
   FilterDataState get dataState => _filterModelStructure._filterDataState;
 
-  // TODO: Test case.
-  ErrorInfo? _errorInfo;
-
-  bool get hasError {
-    return _errorInfo != null;
+  ErrorInfo? get errorInfo {
+    return switch (dataState) {
+      FilterDataStateError(:final errorInfo) => errorInfo,
+      _ => null
+    };
   }
 
-  // GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  bool get hasError {
+    return dataState.isError;
+  }
 
   late final ui = _FilterUiComponents(filterModel: this);
 
@@ -71,16 +73,17 @@ abstract class FilterModel<
     __defineFilterModelStructure();
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __clearFilterError() {
-    _errorInfo = null;
-  }
-
-  void __setErrorInfo(ErrorInfo? errorInfo) {
-    _errorInfo = errorInfo;
-  }
+  //
+  // // ***************************************************************************
+  // // ***************************************************************************
+  //
+  // void __clearFilterError() {
+  //   _errorInfo = null;
+  // }
+  //
+  // void __setErrorInfo(ErrorInfo? errorInfo) {
+  //   _errorInfo = errorInfo;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -231,7 +234,7 @@ abstract class FilterModel<
     required Map<String, dynamic> tildeCriteriaMap,
   });
 
-  XFilterCriteria<FILTER_CRITERIA> __createXFilterCriteria({
+  FilterCriteriaMappedValue<FILTER_CRITERIA> __createXFilterCriteria({
     required Map<String, dynamic> tildeCriteriaMap,
     required FilterConditionGroupVal baseCriteria,
     required bool isPrecheck,
@@ -243,7 +246,7 @@ abstract class FilterModel<
       baseCriteria: baseCriteria,
       isPrecheck: isPrecheck,
     );
-    return XFilterCriteria<FILTER_CRITERIA>(
+    return FilterCriteriaMappedValue<FILTER_CRITERIA>(
       filterCriteria: filterCriteria,
       filterCriteriaMap: tildeCriteriaMap,
     );
@@ -336,9 +339,9 @@ abstract class FilterModel<
       traceStepType: TraceStepType.debug,
     );
     //
-    _filterModelStructure._setFilterDataState(FilterDataState.pending);
+    _filterModelStructure._setFilterDataState(FilterDataStatePending());
     //
-    XFilterCriteria<FILTER_CRITERIA>? xFilterCriteria =
+    FilterCriteriaMappedValue<FILTER_CRITERIA>? xFilterCriteria =
         await _startNewFilterActivity(
       executionTrace: executionTrace,
       activityType: FilterActivityType.updateFromFilterPanel,
@@ -556,7 +559,7 @@ abstract class FilterModel<
   ///
   @_ImportantMethodAnnotation(
       "Called after changing in FilterPanel or Querying in Block or Scalar.")
-  Future<XFilterCriteria<FILTER_CRITERIA>?> _startNewFilterActivity({
+  Future<FilterCriteriaMappedValue<FILTER_CRITERIA>?> _startNewFilterActivity({
     required ExecutionTrace executionTrace,
     required FILTER_INPUT? filterInput,
     required FilterActivityType activityType,
@@ -566,7 +569,6 @@ abstract class FilterModel<
     //
     if (activityType == FilterActivityType.newFilt) {
       debug.__loadCount++;
-      __clearFilterError();
     }
     // final Map<String, dynamic> formKeyInstantValues =
     //     _formKey.currentState?.instantValue ?? {};
@@ -617,7 +619,8 @@ abstract class FilterModel<
         errorInfo: errorInfo,
       );
       //
-      _filterModelStructure._setFilterDataState(FilterDataState.error);
+      final dataStateError = FilterDataStateError(errorInfo: errorInfo);
+      _filterModelStructure._setFilterDataState(dataStateError);
       _xFilterCriteria = null;
       return _xFilterCriteria;
     }
@@ -657,11 +660,10 @@ abstract class FilterModel<
       }
     } catch (e, stackTrace) {
       final FilterErrorInfo filterErrorInfo;
-      final dataStateError = FilterDataState.error;
+
       if (e is FilterCriterionTypeMismatchError) {
         // Bug: #Bug#001
         filterErrorInfo = FilterErrorInfo(
-          filterDataState: dataStateError,
           filterErrorMethod: FilterErrorMethod.unknown,
           activityType: activityType,
           tildeCriterionName: null,
@@ -673,7 +675,6 @@ abstract class FilterModel<
       } else if (e is FilterMethodError) {
         // TODO-xxx
         filterErrorInfo = FilterErrorInfo(
-          filterDataState: dataStateError,
           filterErrorMethod: e.filterErrorMethod,
           activityType: activityType,
           tildeCriterionName: e.tildeCriterionName,
@@ -682,7 +683,6 @@ abstract class FilterModel<
         );
       } else {
         filterErrorInfo = FilterErrorInfo(
-          filterDataState: dataStateError,
           filterErrorMethod: FilterErrorMethod.unknown,
           activityType: activityType,
           tildeCriterionName: null,
@@ -705,8 +705,8 @@ abstract class FilterModel<
         errorInfo: errorInfo,
       );
       //
+      final dataStateError = FilterDataStateError(errorInfo: errorInfo);
       _filterModelStructure._setFilterDataState(dataStateError);
-      __setErrorInfo(errorInfo);
       _xFilterCriteria = null;
       return _xFilterCriteria;
     }
@@ -762,7 +762,8 @@ abstract class FilterModel<
           errorInfo: errorInfo,
         );
         //
-        _filterModelStructure._setFilterDataState(FilterDataState.error);
+        final dataStateError = FilterDataStateError(errorInfo: errorInfo);
+        _filterModelStructure._setFilterDataState(dataStateError);
         _xFilterCriteria = null;
         return _xFilterCriteria;
       }
@@ -814,7 +815,8 @@ abstract class FilterModel<
           errorInfo: errorInfo,
         );
         //
-        _filterModelStructure._setFilterDataState(FilterDataState.error);
+        final dataStateError = FilterDataStateError(errorInfo: errorInfo);
+        _filterModelStructure._setFilterDataState(dataStateError);
         _xFilterCriteria = null;
         return _xFilterCriteria;
       }
@@ -854,7 +856,7 @@ abstract class FilterModel<
           .toFilterCriteriaGroupVal();
 
       // Convert Map Data to FilterCriteria Object.
-      final XFilterCriteria<FILTER_CRITERIA> newXFilterCriteria =
+      final FilterCriteriaMappedValue<FILTER_CRITERIA> newXFilterCriteria =
           __createXFilterCriteria(
         tildeCriteriaMap: newCriteriaMap,
         baseCriteria: baseCriteria,
@@ -875,7 +877,7 @@ abstract class FilterModel<
       _xFilterCriteria = newXFilterCriteria;
       //
       __initiatedAtLeastOnce = true;
-      _filterModelStructure._setFilterDataState(FilterDataState.loaded);
+      _filterModelStructure._setFilterDataState(FilterDataStateLoaded());
       //
       return _xFilterCriteria;
     } catch (e, stackTrace) {
@@ -889,8 +891,8 @@ abstract class FilterModel<
         tipDocument: null,
       );
       //
-      _filterModelStructure._setFilterDataState(FilterDataState.error);
-      __setErrorInfo(errorInfo);
+      final newDataState = FilterDataStateError(errorInfo: errorInfo);
+      _filterModelStructure._setFilterDataState(newDataState);
       //
       // IMPORTANT:
       //
@@ -1445,7 +1447,8 @@ abstract class FilterModel<
       },
       isLibMethod: true,
     );
-    // Test Cases: [48b] - query() & queryAll().
+    // Test Cases: [48b] - query() & queryAll() - Block.
+    // Test Cases: [80b] - query() & queryAll() - Scalar.
     return await __query(
       executionTrace: executionTrace,
       methodName: "queryAll",

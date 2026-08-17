@@ -312,9 +312,9 @@ abstract class XShelf extends XRootQueueItem {
         // Current: updateInternalReactionByEvtBlock.
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUiComponent()) {
-          if (xFormModel.formModel.dataState == FormDataState.pending ||
-              xFormModel.formModel.dataState == FormDataState.error ||
-              xFormModel.formModel.dataState == FormDataState.none) {
+          if (xFormModel.formModel.dataState.isPending ||
+              xFormModel.formModel.dataState.isFatalError ||
+              xFormModel.formModel.dataState.isNone) {
             xFormModel.lazy = true;
 
             if (naturalMode) {

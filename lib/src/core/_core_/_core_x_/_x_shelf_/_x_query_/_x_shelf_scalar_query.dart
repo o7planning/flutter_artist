@@ -5,9 +5,9 @@ class _XShelfScalarQuery extends _XShelfSbQuery {
     required Scalar scalar,
     required FilterInput? filterInput,
   }) : super(
-          xShelfType: XShelfType.scalarQuery,
-          shelf: scalar.shelf,
-        ) {
+    xShelfType: XShelfType.scalarQuery,
+    shelf: scalar.shelf,
+  ) {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: scalar.registeredOrDefaultFilterModel,
       filterInput: filterInput,

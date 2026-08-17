@@ -1,5 +1,4 @@
 import 'package:flutter_artist/flutter_artist.dart';
-import 'package:flutter_artist/src/core/enums/block_native_query_mode.dart';
 import 'package:test/test.dart';
 
 void main() {

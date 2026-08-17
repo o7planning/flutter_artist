@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist/src/core/enums/debug_btn_type.dart';
-import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../../../core/enums/active_element_type.dart';
 import '_base_info_widget.dart';

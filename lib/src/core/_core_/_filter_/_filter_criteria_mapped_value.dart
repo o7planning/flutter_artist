@@ -1,11 +1,11 @@
 part of '../core.dart';
 
-class XFilterCriteria<FILTER_CRITERIA extends FilterCriteria>
+class FilterCriteriaMappedValue<FILTER_CRITERIA extends FilterCriteria>
     extends Equatable {
   final FILTER_CRITERIA filterCriteria;
   final Map<String, dynamic> filterCriteriaMap;
 
-  const XFilterCriteria({
+  const FilterCriteriaMappedValue({
     required this.filterCriteria,
     required this.filterCriteriaMap,
   });

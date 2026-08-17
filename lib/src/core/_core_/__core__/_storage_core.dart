@@ -41,9 +41,7 @@ abstract class _StorageCore extends _Core {
       final orphanedAt = shelf.orphanedAt;
       if (orphanedAt == null) continue;
 
-      if (now
-          .difference(orphanedAt)
-          .inMilliseconds >=
+      if (now.difference(orphanedAt).inMilliseconds >=
           FlutterArtist.appConfig.garbageCollectionInterval.inMilliseconds) {
         Shelf? shelf = _shelfMap.remove(key);
         if (shelf != null) {
@@ -154,7 +152,7 @@ abstract class _StorageCore extends _Core {
     if (creator == null) {
       throw DebugUtils.getFatalError(
           " ERROR: '$shelfName' not found. You need to call:\n "
-              " FlutterArtist.storage.registerShelf(()=> $shelfName())");
+          " FlutterArtist.storage.registerShelf(()=> $shelfName())");
     }
     shelf = creator() as F;
     if (__started) {
@@ -177,7 +175,7 @@ abstract class _StorageCore extends _Core {
     if (creator == null) {
       throw DebugUtils.getFatalError(
           " ERROR: '$activityName' not found. You need to call:\n "
-              " FlutterArtist.storage.registerActivity(()=> $activityName())");
+          " FlutterArtist.storage.registerActivity(()=> $activityName())");
     }
     activity = creator() as F;
     if (__started) {
@@ -294,20 +292,17 @@ abstract class _StorageCore extends _Core {
       switch (shelf.config.releasePolicy) {
         case ShelfReleasePolicy.retain:
           print(
-              "[FLUTTER_ARTIST] ---------> RETAIN_IN_MEMORY: ${getClassName(
-                  shelf)}");
+              "[FLUTTER_ARTIST] ---------> RETAIN_IN_MEMORY: ${getClassName(shelf)}");
           return;
         case ShelfReleasePolicy.unmount:
           print(
-              "[FLUTTER_ARTIST] ---------> MARK_TO_RELEASE_AND_PRUNE: ${getClassName(
-                  shelf)} - ${DateTime.now()}");
+              "[FLUTTER_ARTIST] ---------> MARK_TO_RELEASE_AND_PRUNE: ${getClassName(shelf)} - ${DateTime.now()}");
           shelf._markAsOrphaned(true);
           return;
       }
     } else {
       print(
-          "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(
-              shelf)} - ${DateTime.now()}");
+          "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(shelf)} - ${DateTime.now()}");
       shelf._markAsOrphaned(false);
     }
   }

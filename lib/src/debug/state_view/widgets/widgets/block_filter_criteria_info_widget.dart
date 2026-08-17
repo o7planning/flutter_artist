@@ -6,10 +6,10 @@ import '../../../../core/_core_/core.dart';
 import '../../../../core/enums/debug_btn_type.dart';
 import '_base_info_widget.dart';
 
-class FilterCriteriaInfoWidget extends BaseInfoWidget {
+class BlockFilterCriteriaInfoWidget extends BaseInfoWidget {
   final Block block;
 
-  const FilterCriteriaInfoWidget({
+  const BlockFilterCriteriaInfoWidget({
     super.key,
     required this.block,
     required super.labelStyle,

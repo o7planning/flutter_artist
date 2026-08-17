@@ -1,7 +1,6 @@
 import 'package:flutter_artist/flutter_artist.dart';
-import 'package:flutter_artist/src/core/enums/block_loaded_state_phase.dart';
+import 'package:flutter_artist/src/core/_core_/_utils_/block_query_state_calculator.dart';
 import 'package:flutter_artist/src/core/enums/fallback_dilemma_strategy.dart';
-import 'package:flutter_artist/src/core/_core_/_utils_/query_state_calculator.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -23,12 +22,14 @@ void main() {
         ];
 
         for (var strategy in strategies) {
-          final input = QueryCalculatorInput(
+          final input = BlockQueryCalculatorInput(
             queryResultState: ActionResultState.success,
+            blockErrorOrigin: null,
             blockErrorInfo: null,
             currentDataState: const BlockDataStateNone(),
             syncStrategy: strategy,
-            filterCriteriaChanged: true, // Context shift active
+            filterCriteriaChanged: true,
+            // Context shift active
             isQueryMore: false,
             isPageShifting: false,
             queryTypeChanged: false,
@@ -37,7 +38,7 @@ void main() {
             dilemmaStrategy: FallbackDilemmaStrategy.preserveStableCache,
           );
 
-          final result = QueryStateCalculator.calculate(input);
+          final result = BlockQueryStateCalculator.calculate(input);
 
           expect(result.newBlockDataState, const BlockDataStateLoadedFresh());
           expect(result.newLoadedPhase, BlockLoadedStatePhase.idle);
@@ -55,12 +56,14 @@ void main() {
       test(
           '2.2.1 - Should proxy directly to the fallback configuration mapping when nativeQuery stands active',
           () {
-        const input = QueryCalculatorInput(
+        const input = BlockQueryCalculatorInput(
           queryResultState: ActionResultState.success,
+          blockErrorOrigin: null,
           blockErrorInfo: null,
           currentDataState: BlockDataStateLoadedStale(
-            reason: LoadedStateStaleReason.event,
-          ), // Stale state before query
+            reason: BlockLoadedStateStaleReason.event,
+          ),
+          // Stale state before query
           syncStrategy: BlockViewportSyncStrategy.nativeQuery,
           filterCriteriaChanged: false,
           isQueryMore: false,
@@ -71,7 +74,7 @@ void main() {
           dilemmaStrategy: FallbackDilemmaStrategy.preserveStableCache,
         );
 
-        final result = QueryStateCalculator.calculate(input);
+        final result = BlockQueryStateCalculator.calculate(input);
 
         expect(result.newBlockDataState, const BlockDataStateLoadedFresh());
         expect(result.newLoadedPhase, BlockLoadedStatePhase.idle);
@@ -81,8 +84,9 @@ void main() {
       test(
           '2.2.2 - Full viewport overwrite constraint must be honored when executing effectedAndViewportItemIdsQuery synchronization',
           () {
-        const input = QueryCalculatorInput(
+        const input = BlockQueryCalculatorInput(
           queryResultState: ActionResultState.success,
+          blockErrorOrigin: null,
           blockErrorInfo: null,
           currentDataState: const BlockDataStateLoadedFresh(),
           syncStrategy:
@@ -96,7 +100,7 @@ void main() {
           dilemmaStrategy: FallbackDilemmaStrategy.preserveStableCache,
         );
 
-        final result = QueryStateCalculator.calculate(input);
+        final result = BlockQueryStateCalculator.calculate(input);
 
         expect(result.newBlockDataState, const BlockDataStateLoadedFresh());
         expect(result.newLoadedPhase, BlockLoadedStatePhase.idle);
@@ -106,8 +110,9 @@ void main() {
       test(
           '2.2.3 - Incremental content merges should apply localized row injections without wiping other elements',
           () {
-        const input = QueryCalculatorInput(
+        const input = BlockQueryCalculatorInput(
           queryResultState: ActionResultState.success,
+          blockErrorOrigin: null,
           blockErrorInfo: null,
           currentDataState: const BlockDataStateLoadedFresh(),
           syncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
@@ -120,7 +125,7 @@ void main() {
           dilemmaStrategy: FallbackDilemmaStrategy.preserveStableCache,
         );
 
-        final result = QueryStateCalculator.calculate(input);
+        final result = BlockQueryStateCalculator.calculate(input);
 
         expect(result.newBlockDataState, const BlockDataStateLoadedFresh());
         expect(result.newLoadedPhase, BlockLoadedStatePhase.idle);
@@ -135,21 +140,23 @@ void main() {
       test(
           '2.3.1 - Should forcefully redirect any strategy to clear-and-replace if a structural query type shift drops',
           () {
-        const input = QueryCalculatorInput(
+        const input = BlockQueryCalculatorInput(
           queryResultState: ActionResultState.success,
+          blockErrorOrigin: null,
           blockErrorInfo: null,
           currentDataState: const BlockDataStateLoadedFresh(),
           syncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
           filterCriteriaChanged: false,
           isQueryMore: false,
           isPageShifting: false,
-          queryTypeChanged: true, // Layout structural type shift triggered
+          queryTypeChanged: true,
+          // Layout structural type shift triggered
           suggestedListUpdateStrategy: ListUpdateStrategy.merge,
           hasRemoveItemIds: false,
           dilemmaStrategy: FallbackDilemmaStrategy.preserveStableCache,
         );
 
-        final result = QueryStateCalculator.calculate(input);
+        final result = BlockQueryStateCalculator.calculate(input);
 
         expect(result.newBlockDataState, const BlockDataStateLoadedFresh());
         expect(result.newLoadedPhase, BlockLoadedStatePhase.idle);

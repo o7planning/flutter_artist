@@ -31,7 +31,7 @@ class XFilterModel {
     if (!filterModel.ui.hasActiveUiComponent()) {
       return false;
     }
-    if (filterModel.dataState == FilterDataState.loaded) {
+    if (filterModel.dataState.isLoaded) {
       return false;
     }
     return true;
@@ -39,6 +39,7 @@ class XFilterModel {
 
   @override
   String toString() {
-    return "${getClassName(filterModel)} - Queried: $queried >>> FILTER_INPUT: $filterInput";
+    return "${getClassName(
+        filterModel)} - Queried: $queried >>> FILTER_INPUT: $filterInput";
   }
 }

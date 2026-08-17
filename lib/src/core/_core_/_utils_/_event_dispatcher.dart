@@ -46,7 +46,7 @@ class _EventDispatcher {
           requiresMaxSyncStrategy: true,
           syncStrategyOnFullQueryMode: BlockViewportSyncStrategy.nativeQuery,
           syncStrategyOnPageableQueryMode:
-              BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
+          BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
           effectedItemIds: const [],
         );
       }

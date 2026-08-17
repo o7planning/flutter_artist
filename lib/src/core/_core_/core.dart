@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart'
     hide FlutterArtistLocaleAdapter;
@@ -57,6 +57,8 @@ import '../enums/action_confirmation_type.dart';
 import '../enums/action_result_state.dart';
 import '../enums/activity_hidden_action.dart';
 import '../enums/block_viewport_sync_strategy.dart';
+import '../enums/error_origin.dart';
+import '../enums/fallback_dilemma_strategy.dart';
 import '../enums/filter_connector.dart';
 import '../enums/sort_strategy.dart';
 import '../enums/default_setting_policy.dart';
@@ -71,7 +73,6 @@ import '../enums/trace_step_type.dart';
 import '../enums/execution_trace_type.dart';
 import '../enums/block_set_current_item_directive.dart';
 import '../enums/data_mode.dart';
-import '../enums/data_state.dart';
 import '../enums/debug_cat.dart';
 import '../enums/err_code_if_item_is_null.dart';
 import '../enums/filter_activity_type.dart';
@@ -181,7 +182,8 @@ import '../utils/_name_utils.dart';
 import '../event/broadcast_backend_events_action.dart';
 import '../enums/control_bar_item_type.dart';
 import '../notification/firebase/firebase_notification_service.dart';
-import '_utils_/query_state_calculator.dart';
+import '_utils_/block_query_state_calculator.dart';
+import '_utils_/scalar_query_state_calculator.dart';
 
 part '../../startup_error_viewer.dart';
 
@@ -200,6 +202,8 @@ part '__core__/_block_debug_info.dart';
 part '__core__/_block.dart';
 
 part '__core__/_scalar_debug_info.dart';
+
+part '__core__/_data_state.dart';
 
 part '__core__/_block_data.dart';
 
@@ -267,11 +271,15 @@ part '_filter_/_name_/_filter_field_name_obj.dart';
 
 part '_filter_/_filter_input.dart';
 
+part '_filter_/_filter_data_state.dart';
+
 part '_filter_/_filter_model.dart';
 
-part '_filter_/_x_filter_criteria.dart';
+part '_filter_/_filter_criteria_mapped_value.dart';
 
 part '_form_/_form_leave_safely.dart';
+
+part '_form_/_form_data_state.dart';
 
 part '_form_/_form_model.dart';
 
@@ -302,6 +310,8 @@ part '__core__/_projection_family.dart';
 part '__core__/_scalar.dart';
 
 part '__core__/_scalar_data.dart';
+
+part '__core__/_scalar_data_state.dart';
 
 part '__core__/_scalar_value_wrap.dart';
 
@@ -401,7 +411,7 @@ part '_core_x_/_root_queue_/_x_root_queue_item.dart';
 
 part '_core_x_/_root_queue_/_x_shelf.dart';
 
-part '__core__/_scalar_requery_condition.dart';
+part '__core__/_scalar_sync_session_state.dart';
 
 part '__core__/_block_sync_session_state.dart';
 
@@ -872,10 +882,6 @@ class _ImportantMethodAnnotation {
 
 class _MayThrowFormTempErrorAnnotation {
   const _MayThrowFormTempErrorAnnotation();
-}
-
-class _BlockShelfQueryAnnotation {
-  const _BlockShelfQueryAnnotation();
 }
 
 class _BlockPrepareFormToCreateItemAnnotation {

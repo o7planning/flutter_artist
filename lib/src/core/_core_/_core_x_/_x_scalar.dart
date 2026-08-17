@@ -21,7 +21,20 @@ class XScalar<VALUE extends Object> {
   late final XScalar? parentXScalar;
   final List<XScalar> childXScalars = [];
 
-  //
+  List<XScalar> getDecendentXScalars({required bool sameFilterOnly}) {
+    final List<XScalar> ret = [];
+    final thisFm = scalar.registeredOrDefaultFilterModel;
+    for (XScalar childXScalar in childXScalars) {
+      FilterModel fmc = childXScalar.scalar.registeredOrDefaultFilterModel;
+      if (!sameFilterOnly || (sameFilterOnly && fmc == thisFm)) {
+        ret.add(childXScalar);
+      }
+      ret.addAll(
+        childXScalar.getDecendentXScalars(sameFilterOnly: sameFilterOnly),
+      );
+    }
+    return ret;
+  }
 
   QryHint __qryHint = QryHint.none;
 
@@ -52,7 +65,7 @@ class XScalar<VALUE extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
-  _ScalarRequeryCondition? _scalarReQryCon;
+  _ScalarSyncSessionState? _scalarReQryCon;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -65,8 +78,8 @@ class XScalar<VALUE extends Object> {
     required this.scalar,
     required this.xFilterModel,
   }) {
-    _scalarReQryCon = scalar._scalarReQryCondition;
-    scalar._scalarReQryCondition = null;
+    _scalarReQryCon = scalar._scalarSyncSessionState;
+    scalar._scalarSyncSessionState = null;
   }
 
   QryHint get queryHint {

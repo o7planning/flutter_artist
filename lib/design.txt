@@ -10,7 +10,7 @@ BlockState
 ├── none
 │
 ├── pending
-│   └── PendingReason (initial, fetchFailed)
+│   └── PendingReason (initial, failed)
 │
 └── loaded
     └── LoadedStatus
@@ -18,4 +18,4 @@ BlockState
         └── stale
             └── LoadedStateStaleReason
                   ├── event
-              -   └── fetchFailed
+              -   └── failed

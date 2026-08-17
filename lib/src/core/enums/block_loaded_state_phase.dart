@@ -1,5 +1,5 @@
 /// Represents the fine-grained operational phase or execution footprint
-/// of a [Block] while maintaining a valid baseline dataset in [DataState.loaded].
+/// of a [Block] while maintaining a valid baseline dataset in [BlockDataStateLoaded].
 enum BlockLoadedStatePhase {
   /// **Idle / Baseline Normal**
   /// The block is fully rendered, stable, and has no pending background errors or active operations.
@@ -29,10 +29,10 @@ enum BlockLoadedStatePhase {
   /// A [BlockBackendAction] succeeded on the database, but the subsequent automated
   /// dataset reload / reconciliation phase failed.
   /// Local baseline items are preserved, while an error indicator is dispatched to notify the user.
-  ///
-  /// *(Note: Single-item operations like local deletion or quick-updates modify items
-  /// directly in memory without disrupting the overall dataset state).*
   mutationFailed;
+
+  /// Helper flag indicating if the block is fully idle with no active background task or localized phase error.
+  bool get isIdle => this == idle;
 
   /// Helper flag indicating if the block is currently performing an active async network operation.
   bool get isWorking => this == refetching || this == fetchingMore;

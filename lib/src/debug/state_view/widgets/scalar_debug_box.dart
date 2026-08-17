@@ -7,6 +7,8 @@ import '../options/_debug_scalar_options.dart';
 import 'widgets/active_info_widget.dart';
 import '_debug_box.dart';
 import 'debug_style_utils.dart';
+import 'widgets/scalar_data_state_info_widget.dart';
+import 'widgets/scalar_filter_criteria_info_widget.dart';
 
 class ScalarDebugBox extends BaseDebugBox {
   final Scalar scalar;
@@ -44,9 +46,8 @@ class ScalarDebugBox extends BaseDebugBox {
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (options.showScalarDataState)
-        IconLabelText(
-          label: "Data State: ",
-          text: scalar.dataState.name.toString(),
+        ScalarDataStateInfoWidget(
+          scalar: scalar,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle(context),
         ),
@@ -65,9 +66,8 @@ class ScalarDebugBox extends BaseDebugBox {
           textStyle: DebugStyleUtils.getTextStyle(context),
         ),
       if (scalar.filterModel != null && options.showFilterCriteria)
-        IconLabelText(
-          label: "Filter Criteria: ",
-          text: scalar.filterCriteria == null ? "null" : "[Not Null]",
+        ScalarFilterCriteriaInfoWidget(
+          scalar: scalar,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),

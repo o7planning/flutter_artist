@@ -29,19 +29,10 @@ class _BlockSyncSessionState<ID extends Comparable> extends Equatable
       List.unmodifiable(_receivedEventInfos);
 
   _BlockSyncSessionState({
-    required Block<
-            ID, //
-            Identifiable<ID>,
-            Identifiable<ID>,
-            FilterInput,
-            FilterCriteria,
-            FormInput,
-            AdditionalFormRelatedData>
-        block,
+    required this.block,
     required Comparable? parentItemId,
     required FilterCriteria? filterCriteria,
-  })  : block = block,
-        _parentBlockItemId = parentItemId,
+  })  : _parentBlockItemId = parentItemId,
         _filterCriteria = filterCriteria {
     block.debug._querySessionCount++;
     block.debug._lastViewportSyncStrategy = null;

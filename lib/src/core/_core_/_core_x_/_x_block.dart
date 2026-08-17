@@ -32,6 +32,21 @@ class XBlock<
   final XFilterModel xFilterModel;
   final XFormModel? xFormModel;
 
+  List<XBlock> getDecendentXBlocks({required bool sameFilterOnly}) {
+    final List<XBlock> ret = [];
+    final thisFm = block.registeredOrDefaultFilterModel;
+    for (XBlock childXBlock in childXBlocks) {
+      FilterModel fmc = childXBlock.block.registeredOrDefaultFilterModel;
+      if (!sameFilterOnly || (sameFilterOnly && fmc == thisFm)) {
+        ret.add(childXBlock);
+      }
+      ret.addAll(
+        childXBlock.getDecendentXBlocks(sameFilterOnly: sameFilterOnly),
+      );
+    }
+    return ret;
+  }
+
   String get name => block.name;
 
   BlockSetCurrentItemDirective? __setCurrentItemDirective;

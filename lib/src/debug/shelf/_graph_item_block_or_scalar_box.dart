@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/data_state.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../../core/utils/_text_size_utils.dart';
@@ -405,36 +404,29 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
   }
 
   String _blockOrScalarTooltipMessage(
-      BlockOrScalar blockOrScalar, ScalarDataState dataState, bool active) {
+      BlockOrScalar blockOrScalar, bool active) {
     String className = blockOrScalar.blockOrScalarClassName;
     return "${blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}: $className \n"
-        "Data State: ${dataState.name.toUpperCase()} "
+        "Data State: ${blockOrScalar.getDataStateName().toUpperCase()} "
         "| Visibility: ${active ? 'VISIBLE' : 'HIDDEN'} "
         "| Items: ${blockOrScalar.itemCount}";
   }
 
   IconData _formDataStateIconData(FormDataState dataState) {
-    switch (dataState) {
-      case FormDataState.pending:
-        return FaIconConstants.dataStatePendingIconData;
-      case FormDataState.loaded:
-        return FaIconConstants.dataStateLoadedIconData;
-      case FormDataState.error:
-        return FaIconConstants.dataStateErrorIconData;
-      case FormDataState.none:
-        return FaIconConstants.dataStateNoneIconData;
-    }
+    return switch (dataState) {
+      FormDataStatePending() => FaIconConstants.dataStatePendingIconData,
+      FormDataStateLoaded() => FaIconConstants.dataStateLoadedIconData,
+      FormDataStateFatalError() => FaIconConstants.dataStateErrorIconData,
+      FormDataStateNone() => FaIconConstants.dataStateNoneIconData,
+    };
   }
 
   IconData _dataStateIconData(ScalarDataState dataState) {
-    switch (dataState) {
-      case ScalarDataState.pending:
-        return FaIconConstants.dataStatePendingIconData;
-      case ScalarDataState.loaded:
-        return FaIconConstants.dataStateLoadedIconData;
-      case ScalarDataState.none:
-        return FaIconConstants.dataStateNoneIconData;
-    }
+    return switch (dataState) {
+      ScalarDataStatePending() => FaIconConstants.dataStatePendingIconData,
+      ScalarDataStateLoaded() => FaIconConstants.dataStateLoadedIconData,
+      ScalarDataStateNone() => FaIconConstants.dataStateNoneIconData,
+    };
   }
 
   IconData _visibilityIconData(bool visible) {
@@ -447,43 +439,42 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
   }
 
   Color _formDataStateBgColor(FormDataState dataState) {
-    switch (dataState) {
-      case FormDataState.pending:
-        return DebugConstants.graphBoxDataStatePendingBgColor(context);
-      case FormDataState.loaded:
-        return DebugConstants.graphBoxDataStateReadyBgColor(context);
-      case FormDataState.error:
-        return DebugConstants.graphBoxDataStateErrorBgColor(context);
-      case FormDataState.none:
-        return DebugConstants.graphBoxDataStateNoneBgColor(context);
-    }
+    return switch (dataState) {
+      FormDataStatePending() =>
+        DebugConstants.graphBoxDataStatePendingBgColor(context),
+      FormDataStateLoaded() =>
+        DebugConstants.graphBoxDataStateReadyBgColor(context),
+      FormDataStateFatalError() =>
+        DebugConstants.graphBoxDataStateErrorBgColor(context),
+      FormDataStateNone() =>
+        DebugConstants.graphBoxDataStateNoneBgColor(context),
+    };
   }
 
   Color _dataStateBgColor(ScalarDataState dataState) {
-    switch (dataState) {
-      case ScalarDataState.pending:
-        return DebugConstants.graphBoxDataStatePendingBgColor(context);
-      case ScalarDataState.loaded:
-        return DebugConstants.graphBoxDataStateReadyBgColor(context);
-      case ScalarDataState.none:
-        return DebugConstants.graphBoxDataStateNoneBgColor(context);
-    }
+    return switch (dataState) {
+      ScalarDataStatePending() =>
+        DebugConstants.graphBoxDataStatePendingBgColor(context),
+      ScalarDataStateLoaded() =>
+        DebugConstants.graphBoxDataStateReadyBgColor(context),
+      ScalarDataStateNone() =>
+        DebugConstants.graphBoxDataStateNoneBgColor(context),
+    };
   }
 
   Widget _buildDataState(BlockOrScalar blockOrScalar) {
-    final ScalarDataState dataState = blockOrScalar.dataState;
     bool active = blockOrScalar.hasActiveUiComponent();
     //
     return Container(
       padding: const EdgeInsets.all(3),
-      color: _dataStateBgColor(dataState),
+      color: blockOrScalar.getBgColor(context),
       child: TooltipUtils.buildCustomTooltip(
-        message: _blockOrScalarTooltipMessage(blockOrScalar, dataState, active),
+        message: _blockOrScalarTooltipMessage(blockOrScalar, active),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Icon(
-              _dataStateIconData(dataState),
+              blockOrScalar.getIconData(),
               size: iconSize,
               color: DebugConstants.graphBoxTextColor(context),
             ),

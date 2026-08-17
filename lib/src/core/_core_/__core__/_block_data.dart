@@ -30,7 +30,7 @@ class _BlockData<
 
   Object? _parentBlockCurrentItemId;
 
-  XFilterCriteria<FILTER_CRITERIA>? _xFilterCriteria;
+  FilterCriteriaMappedValue<FILTER_CRITERIA>? _filterCriteriaMappedValue;
 
   PageData<ITEM>? _lastQueryResult;
 
@@ -74,31 +74,7 @@ class _BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  // Query Error in FilterModel.
-  void _setDataStateOnErrorInFilter({required BlockErrorInfo? errorInfo}) {
-    final BlockDataState newBlockDataState;
-    switch (_blockDataState) {
-      case BlockDataStateNone():
-        newBlockDataState =
-            BlockDataStatePending.fetchFailed(errorInfo: errorInfo);
-      case BlockDataStatePending():
-        newBlockDataState =
-            BlockDataStatePending.fetchFailed(errorInfo: errorInfo);
-      case BlockDataStateLoadedFresh():
-        LoadedStateStaleReason reason =
-            LoadedStateStaleReasonFetchFailed(errorInfo: errorInfo);
-        newBlockDataState = BlockDataStateLoadedStale(reason: reason);
-      case BlockDataStateLoadedStale():
-        LoadedStateStaleReason reason =
-            LoadedStateStaleReasonFetchFailed(errorInfo: errorInfo);
-        newBlockDataState = BlockDataStateLoadedStale(reason: reason);
-    }
-    _lastQueryResultState = ActionResultState.fail;
-    _blockDataState = newBlockDataState;
-  }
-
-  void _setDataStateOnErrorInBlock({
-    required BlockErrorInfo? errorInfo,
+  void _updateStateAfterQueryError({
     required BlockDataState newBlockDataState,
   }) {
     _lastQueryResultState = ActionResultState.fail;
@@ -267,16 +243,14 @@ class _BlockData<
     if (resetRefreshItemCondition) {
       // TODO:..
     }
-    // OLD Logic: _blockDataState == DataState.error
+    // OLD Code: _blockDataState == DataState.error
     if (hasError) {
       _lastQueryResultState = ActionResultState.fail;
       //
       // Update FilterCriteria:
       //
       if (errorInFilter) {
-        __setNewFilterCriteria(
-          newXFilterCriteria: null,
-        );
+        __setNewFilterCriteria(newXFilterCriteria: null);
       }
     }
     //
@@ -297,10 +271,11 @@ class _BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isFilterCriteriaChanged({
-    required XFilterCriteria<FILTER_CRITERIA> newXFilterCriteria,
+  bool _isFilterCriteriaMappedValueChanged({
+    required FilterCriteriaMappedValue<FILTER_CRITERIA>
+        newFilterCriteriaMappedValue,
   }) {
-    if (newXFilterCriteria != _xFilterCriteria) {
+    if (newFilterCriteriaMappedValue != _filterCriteriaMappedValue) {
       return true;
     }
     return false;
@@ -435,7 +410,8 @@ class _BlockData<
     if (forceListUpdateStrategy == ListUpdateStrategy.replace ||
         _parentBlockCurrentItemId !=
             processedQueryResult.parentBlockCurrentItemId ||
-        _xFilterCriteria != processedQueryResult.usedXFilterCriteria) {
+        _filterCriteriaMappedValue !=
+            processedQueryResult.usedXFilterCriteria) {
       _items.clear();
       cleared = true;
     }
@@ -451,7 +427,8 @@ class _BlockData<
     _pageable = processedQueryResult.usedPageable?.copy();
     if (_parentBlockCurrentItemId !=
             processedQueryResult.parentBlockCurrentItemId ||
-        _xFilterCriteria != processedQueryResult.usedXFilterCriteria) {
+        _filterCriteriaMappedValue !=
+            processedQueryResult.usedXFilterCriteria) {
       _paginationInfo = PaginationInfo.copy(ap.paginationInfo);
     } else {
       // Query Error:
@@ -572,10 +549,10 @@ class _BlockData<
   // ***************************************************************************
 
   void __setNewFilterCriteria({
-    required XFilterCriteria<FILTER_CRITERIA>? newXFilterCriteria,
+    required FilterCriteriaMappedValue<FILTER_CRITERIA>? newXFilterCriteria,
   }) {
-    final bool changed = _xFilterCriteria != newXFilterCriteria;
-    _xFilterCriteria = newXFilterCriteria;
+    final bool changed = _filterCriteriaMappedValue != newXFilterCriteria;
+    _filterCriteriaMappedValue = newXFilterCriteria;
     if (changed) {
       block.debug._filterCriteriaChangeCount++;
       if (block.formModel != null) {

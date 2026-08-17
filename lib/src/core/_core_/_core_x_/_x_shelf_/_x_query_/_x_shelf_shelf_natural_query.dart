@@ -15,8 +15,8 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
-          if (xScalar.scalar.dataState == ScalarDataState.pending ||
-              xScalar.scalar.isLoadedAndStale) {
+          if (xScalar.scalar.dataState.isPending ||
+              xScalar.scalar.dataState.isStale) {
             xScalar.setQueryHintToGreater(QryHint.force);
           }
         }
@@ -44,9 +44,10 @@ class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
         XFormModel? xFormModel = xBlock.xFormModel;
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUiComponent()) {
-          if (xFormModel.formModel.dataState == FormDataState.pending ||
-              xFormModel.formModel.dataState == FormDataState.error ||
-              xFormModel.formModel.dataState == FormDataState.none) {
+          if (xFormModel.formModel.dataState.isPending ||
+              xFormModel.formModel.dataState.isFatalError ||
+              xFormModel.formModel.dataState.isNone) {
+            // Test case: [39b]
             xFormModel.lazy = true;
             if (naturalMode) {
               xFormModel.setForceType(ForceType.decidedAtRuntime);

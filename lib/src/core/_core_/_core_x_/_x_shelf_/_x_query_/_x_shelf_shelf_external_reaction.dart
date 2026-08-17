@@ -4,8 +4,8 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(
-          xShelfType: XShelfType.shelfExternalReaction,
-        ) {
+    xShelfType: XShelfType.shelfExternalReaction,
+  ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk.block._blockSyncSessionState == null &&
           xBlk.block._blockItemRefreshCondition == null) {
@@ -13,11 +13,12 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
       }
       // @@@hasActiveBlockFragment
       bool blockXBlockRep =
-          xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
+      xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
         alsoCheckChildren: true,
       );
       print(
-          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk.block} - blockXBlockRep: $blockXBlockRep");
+          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk
+              .block} - blockXBlockRep: $blockXBlockRep");
       QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //
@@ -43,7 +44,7 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
         }
         // @@@hasActiveBlockFragment
         bool blockXBlockRep =
-            xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
+        xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
         if (blockXBlockRep) {
@@ -75,9 +76,9 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
         // Current: forShelfExternalReaction
         if (xFormModel != null &&
             xFormModel.formModel.ui.hasActiveUiComponent()) {
-          if (xFormModel.formModel.dataState == FormDataState.pending ||
-              xFormModel.formModel.dataState == FormDataState.error ||
-              xFormModel.formModel.dataState == FormDataState.none) {
+          if (xFormModel.formModel.dataState.isPending ||
+              xFormModel.formModel.dataState.isFatalError ||
+              xFormModel.formModel.dataState.isNone) {
             xFormModel.lazy = true;
             if (naturalMode) {
               xFormModel.setForceType(ForceType.decidedAtRuntime);
@@ -119,8 +120,8 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
           alsoCheckChildren: true,
         );
         if (hasXActiveUI) {
-          if (xScalar.scalar.dataState == ScalarDataState.pending ||
-              xScalar.scalar.isLoadedAndStale) {
+          if (xScalar.scalar.dataState.isPending ||
+              xScalar.scalar.dataState.isStale) {
             xScalar.setQueryHintToGreater(QryHint.force);
           }
         }
@@ -135,8 +136,8 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
             // xScalar.setQueryHintToGreater(QryHint.force);
             // break;
             // Test Cases:
-            if (xScalar.scalar.dataState == ScalarDataState.pending ||
-                xScalar.scalar.isLoadedAndStale) {
+            if (xScalar.scalar.dataState.isPending ||
+                xScalar.scalar.dataState.isStale) {
               xScalar.setQueryHintToGreater(QryHint.force);
               break;
             }

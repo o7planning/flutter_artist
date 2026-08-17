@@ -37,10 +37,11 @@ class FormModelStructure {
 
   FormMode get formMode => _formMode;
 
-  FormDataState _formDataState = FormDataState.none;
+  FormDataState _formDataState = FormDataStateNone();
 
   FormDataState get formDataState => _formDataState;
 
+  // TODO: Delete???
   FormErrorInfo? __formErrorInfo;
 
   bool get isNew => _formMode == FormMode.creation;

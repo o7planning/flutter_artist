@@ -685,12 +685,12 @@ abstract class Shelf extends _Core {
 
   bool get isFullyPending {
     for (Scalar scalar in rootScalars) {
-      if (scalar.dataState != ScalarDataState.pending) {
+      if (!scalar.dataState.isPending) {
         return false;
       }
     }
     for (Block block in rootBlocks) {
-      if (!block.dataState.isPending ) {
+      if (!block.dataState.isPending) {
         return false;
       }
     }
@@ -848,16 +848,17 @@ abstract class Shelf extends _Core {
     //
     for (String scalarName in effectedShelfMembers._requeryScalarMAP.keys) {
       Scalar scalar = __scalarMap[scalarName]!;
-      final scalarReQryCondition = _ScalarRequeryCondition(
+      final sclrSyncSessionState = _ScalarSyncSessionState(
+        scalar: scalar,
         parentScalarValueId: scalar.parentScalarValueId, //
         filterCriteria: scalar.filterCriteria,
       );
-      scalar._scalarReQryCondition = scalarReQryCondition;
+      scalar._scalarSyncSessionState = sclrSyncSessionState;
       //
       executionTrace._addTraceStep(
         codeId: "#50200",
         shortDesc: " - <b>$scalarName</b>:"
-            "\n  --> @scalarReQryCondition: <b>$scalarReQryCondition</b>.",
+            "\n  --> @scalarSyncSessionState: <b>$sclrSyncSessionState</b>.",
       );
     }
   }

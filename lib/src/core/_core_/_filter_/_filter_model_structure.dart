@@ -40,7 +40,7 @@ class FilterModelStructure {
   [];
 
   late final FilterModel filterModel;
-  FilterDataState _filterDataState = FilterDataState.pending;
+  FilterDataState _filterDataState = FilterDataStatePending();
 
   // ***************************************************************************
 

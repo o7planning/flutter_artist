@@ -184,7 +184,7 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
       return Stack(
         children: [
           _buildAbsorbPointer(),
-          if (widget.formModel.dataState == FormDataState.error)
+          if (widget.formModel.dataState.isFatalError)
             Positioned(
               top: 5,
               right: 5,

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist/src/core/enums/debug_btn_type.dart';
+import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
+import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../../../core/_core_/core.dart';
 import '_base_info_widget.dart';
 
-class BlockDataStateInfoWidget extends BaseInfoWidget {
-  final Block block;
+class ScalarDataStateInfoWidget extends BaseInfoWidget {
+  final Scalar scalar;
 
-  const BlockDataStateInfoWidget({
+  const ScalarDataStateInfoWidget({
     super.key,
-    required this.block,
+    required this.scalar,
     required super.labelStyle,
     required super.textStyle,
   });
@@ -31,48 +33,48 @@ class BlockDataStateInfoWidget extends BaseInfoWidget {
 
   @override
   String getText() {
-    return block.dataState.name;
+    return scalar.dataState.name;
   }
 
   @override
   ButtonFunction? getButtonFunction() {
-    switch (block.dataState) {
-      case BlockDataStateNone():
+    switch (scalar.dataState) {
+      case ScalarDataStateNone():
         return null;
-      case BlockDataStatePending(reason: BlockPendingReasonInitial()):
+      case ScalarDataStatePending(reason: ScalarPendingReasonInitial()):
         return null;
-      case BlockDataStatePending(reason: BlockPendingReasonFailed()):
+      case ScalarDataStatePending(reason: ScalarPendingReasonFailed()):
         return ButtonFunction(
           btnType: DebugBtnType.error,
           onPressed: (BuildContext context) {
-            block.showBlockErrorViewerDialog(context);
+            scalar.showScalarErrorViewerDialog(context);
           },
         );
-      case BlockDataStateLoadedFresh(:final transientErrorInfo):
+      case ScalarDataStateLoadedFresh(:final transientErrorInfo):
         if (transientErrorInfo == null) {
           return null;
         }
         return ButtonFunction(
           btnType: DebugBtnType.warning,
           onPressed: (BuildContext context) {
-            // block.showBlockErrorViewerDialog(context);
+            // scalar.showScalarErrorViewerDialog(context);
           },
         );
-      case BlockDataStateLoadedStale(
-          reason: BlockLoadedStateStaleReasonEvent()
+      case ScalarDataStateLoadedStale(
+          reason: ScalarLoadedStateStaleReasonEvent()
         ):
         return null;
-      case BlockDataStateLoadedStale(
-          reason: BlockLoadedStateStaleReasonFailed(errorInfo: null)
+      case ScalarDataStateLoadedStale(
+          reason: ScalarLoadedStateStaleReasonFailed(errorInfo: null)
         ):
         return null;
-      case BlockDataStateLoadedStale(
-          reason: BlockLoadedStateStaleReasonFailed(:final errorInfo?)
+      case ScalarDataStateLoadedStale(
+          reason: ScalarLoadedStateStaleReasonFailed(:final errorInfo?)
         ):
         return ButtonFunction(
           btnType: DebugBtnType.error,
           onPressed: (BuildContext context) {
-            block.showBlockErrorViewerDialog(context);
+            scalar.showScalarErrorViewerDialog(context);
           },
         );
     }

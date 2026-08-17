@@ -315,7 +315,7 @@ abstract class Block<
   }
 
   ErrorInfo? get filterErrorInfo {
-    return filterModel?._errorInfo;
+    return filterModel?.errorInfo;
   }
 
   late final ui = _BlockUiComponents(block: this);
@@ -396,10 +396,10 @@ abstract class Block<
   SortModel<ITEM>? get serverSideSortModel => _serverSideSortModel;
 
   FILTER_CRITERIA? get filterCriteria =>
-      __blockData._xFilterCriteria?.filterCriteria;
+      __blockData._filterCriteriaMappedValue?.filterCriteria;
 
-  XFilterCriteria<FILTER_CRITERIA>? get debugXFilterCriteria =>
-      __blockData._xFilterCriteria;
+  FilterCriteriaMappedValue<FILTER_CRITERIA>? get debugXFilterCriteria =>
+      __blockData._filterCriteriaMappedValue;
 
   ///
   /// return a copied list of items.
@@ -431,10 +431,6 @@ abstract class Block<
 
   PaginationInfo? get paginationInfo {
     return PaginationInfo.copy(__blockData._paginationInfo);
-  }
-
-  void _setToPending() {
-    __blockData._setToPending();
   }
 
   /// Sets the candidate native query mode to be applied on the next query execution.
@@ -780,7 +776,7 @@ abstract class Block<
         thisXBlock: childXBlock,
         blkDataState: BlockDataStateNone(),
         currentHasPendingInvalidation: false,
-        frmDataState: FormDataState.none,
+        frmDataState: FormDataStateNone(),
         errorInFilter: false,
         resetSyncSessionState: true,
         resetRefreshItemCondition: true,
@@ -801,7 +797,7 @@ abstract class Block<
         thisXBlock: childXBlock,
         blkDataState: BlockDataStateNone(),
         currentHasPendingInvalidation: false,
-        frmDataState: FormDataState.none,
+        frmDataState: FormDataStateNone(),
         errorInFilter: false,
         resetSyncSessionState: true,
         resetRefreshItemCondition: true,
@@ -819,7 +815,7 @@ abstract class Block<
         thisXBlock: childXBlock,
         blkDataState: BlockDataStatePending(),
         currentHasPendingInvalidation: false,
-        frmDataState: FormDataState.none,
+        frmDataState: FormDataStateNone(),
         errorInFilter: false,
         resetSyncSessionState: true,
         resetRefreshItemCondition: true,
@@ -932,7 +928,7 @@ abstract class Block<
       thisXBlock: thisXBlock,
       blkDataState: BlockDataStatePending(),
       currentHasPendingInvalidation: false,
-      frmDataState: FormDataState.none,
+      frmDataState: FormDataStateNone(),
       errorInFilter: false,
       resetSyncSessionState: true,
       resetRefreshItemCondition: true,
@@ -972,7 +968,7 @@ abstract class Block<
         shortDesc:
             "${debugObjHtml(formModel)} clear data and set state to <b>none</b>.",
       );
-      formModel!._clearDataWithDataState(formDataState: FormDataState.none);
+      formModel!._clearDataWithDataState(formDataState: FormDataStateNone());
     }
     //
     executionTrace._addTraceStep(
@@ -1170,7 +1166,7 @@ abstract class Block<
           thisXBlock: thisXBlock,
           blkDataState: BlockDataStatePending(),
           currentHasPendingInvalidation: false,
-          frmDataState: FormDataState.none,
+          frmDataState: FormDataStateNone(),
           errorInFilter: false,
           resetSyncSessionState: true,
           resetRefreshItemCondition: true,
@@ -1184,7 +1180,7 @@ abstract class Block<
     // FORCE QUERY:
     // thisXBlock.queryHint || (provideBlockContext && this.dataState != DataState.loaded)
     //
-    XFilterCriteria<FILTER_CRITERIA>? xFilterCriteriaOfFilterModel;
+    FilterCriteriaMappedValue<FILTER_CRITERIA>? filterCriteriaMvOfFilterModel;
     try {
       final XFilterModel xFilterModel = thisXBlock.xFilterModel;
       final FilterModel filterModel = xFilterModel.filterModel;
@@ -1198,13 +1194,13 @@ abstract class Block<
         }
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
-        xFilterCriteriaOfFilterModel =
+        filterCriteriaMvOfFilterModel =
             await filterModel._startNewFilterActivity(
           executionTrace: executionTrace,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
           formKeyInstantValuesInUI: null,
-        ) as XFilterCriteria<FILTER_CRITERIA>?;
+        ) as FilterCriteriaMappedValue<FILTER_CRITERIA>?;
         //
         xFilterModel.queried = true;
       }
@@ -1217,8 +1213,8 @@ abstract class Block<
                 "${debugObjHtml(filterModel)} data loaded --> no need to load data.",
           );
         }
-        xFilterCriteriaOfFilterModel =
-            filterModel._xFilterCriteria! as XFilterCriteria<FILTER_CRITERIA>;
+        filterCriteriaMvOfFilterModel = filterModel._xFilterCriteria!
+            as FilterCriteriaMappedValue<FILTER_CRITERIA>;
       }
     } catch (e, stackTrace) {
       executionTrace._addTraceStep(
@@ -1232,7 +1228,7 @@ abstract class Block<
     //
     // Has Error in FilterModel.
     //
-    if (xFilterCriteriaOfFilterModel == null) {
+    if (filterCriteriaMvOfFilterModel == null) {
       executionTrace._addTraceStep(
         codeId: "#03260",
         shortDesc:
@@ -1240,34 +1236,29 @@ abstract class Block<
       );
       // Test Cases: [23a].
       // Set Block to error cascade.
-      // __clearWithDataStateAndChildrenToNonCascade(
-      //   thisXBlock: thisXBlock,
-      //   blkDataState: DataState.error,
-      //   currentHasPendingInvalidation: false,
-      //   resetSyncSessionState: true,
-      //   resetRefreshItemCondition: true,
-      //   frmDataState: DataState.none,
-      //   errorInFilter: true,
-      // );
-      __blockData._setDataStateOnErrorInFilter(errorInfo: null);
-      thisXBlock.queryResult._setFilterError();
+      __stopQueryWithFilterErrorCascade(
+        thisXBlock: thisXBlock,
+        blockErrorInfo: null,
+      );
+
       return;
     }
     //
     // Ready FilterCriteria:
     //
-    final bool filterCriteriaChanged = __blockData._isFilterCriteriaChanged(
-      newXFilterCriteria: xFilterCriteriaOfFilterModel,
+    final bool filterCriteriaChanged =
+        __blockData._isFilterCriteriaMappedValueChanged(
+      newFilterCriteriaMappedValue: filterCriteriaMvOfFilterModel,
     );
     //
     ActionResultState queryResultState;
+    BlockErrorInfo? blkErrorInfo;
     //
     ListUpdateStrategy realListUpdateStrategy;
     // Will be used for Query:
     final Pageable? willBeUsedPageable =
         thisXBlock.getWillBeUsedPageable(thisXBlock.queryType);
     List<ID>? itemIdsToQry;
-    BlockErrorInfo? blkErrorInfo;
     //
     if (thisXBlock.queryType == QueryType.realQuery) {
       //
@@ -1325,7 +1316,7 @@ abstract class Block<
                 "Calling ${debugObjHtml(this)}.${performQryMethod.name}()...",
             parameters: {
               "parentBlockCurrentItem": parent?.currentItem,
-              "filterCriteria": xFilterCriteriaOfFilterModel.filterCriteria,
+              "filterCriteria": filterCriteriaMvOfFilterModel.filterCriteria,
               "sortableCriteria": sortableCriteria,
               "pageable": willBeUsedPageable,
             },
@@ -1337,7 +1328,7 @@ abstract class Block<
             debug.__performQueryCount++;
             final ApiResult<PageData<ITEM>?> result = await performQuery(
               parentBlockCurrentItem: parent?.currentItem,
-              filterCriteria: xFilterCriteriaOfFilterModel.filterCriteria,
+              filterCriteria: filterCriteriaMvOfFilterModel.filterCriteria,
               sortableCriteria: sortableCriteria,
               pageable: willBeUsedPageable,
             );
@@ -1353,7 +1344,7 @@ abstract class Block<
             final ApiResult<ListData<ITEM>?> result =
                 await performQueryByItemIds(
               parentBlockCurrentItem: parent?.currentItem,
-              filterCriteria: xFilterCriteriaOfFilterModel.filterCriteria,
+              filterCriteria: filterCriteriaMvOfFilterModel.filterCriteria,
               sortableCriteria: sortableCriteria,
               itemIds: queryPlan.targetItemIds.toList(),
             );
@@ -1375,7 +1366,7 @@ abstract class Block<
                 "Calling ${debugObjHtml(this)}.performQueryByItemIds()...",
             parameters: {
               "parentBlockCurrentItem": parent?.currentItem,
-              "filterCriteria": xFilterCriteriaOfFilterModel.filterCriteria,
+              "filterCriteria": filterCriteriaMvOfFilterModel.filterCriteria,
               "sortableCriteria": sortableCriteria,
               "pageable": willBeUsedPageable,
             },
@@ -1391,7 +1382,7 @@ abstract class Block<
 
           final ApiResult<ListData<ITEM>?> result = await performQueryByItemIds(
             parentBlockCurrentItem: parent?.currentItem,
-            filterCriteria: xFilterCriteriaOfFilterModel.filterCriteria,
+            filterCriteria: filterCriteriaMvOfFilterModel.filterCriteria,
             sortableCriteria: sortableCriteria,
             itemIds: itemIdsToQry,
           );
@@ -1459,8 +1450,9 @@ abstract class Block<
         isPageShifting = !filterCriteriaChanged && currentPage != targetPage;
       }
 
-      final calculationInput = QueryCalculatorInput(
+      final calculationInput = BlockQueryCalculatorInput(
         queryResultState: queryResultState,
+        blockErrorOrigin: BlockErrorOrigin.directFetch,
         blockErrorInfo: blkErrorInfo,
         currentDataState: dataState,
         syncStrategy: viewportSyncStrategy,
@@ -1472,26 +1464,33 @@ abstract class Block<
         suggestedListUpdateStrategy: thisXBlock.listUpdateStrategy,
       );
 
-      final calculationResult =
-          QueryStateCalculator.calculate(calculationInput);
+      final BlockQueryCalculatorResult calculationResult =
+          BlockQueryStateCalculator.calculate(calculationInput);
 
       print("@TEMP INPUT: ");
-      calculationInput.printDebug();
-
-      print("@TEMP XXX-1 blockErrorInfo: $blkErrorInfo");
-      print(
-          "@TEMP XXX-2 newBlockDataState: ${calculationResult.newBlockDataState}");
-      print("@TEMP XXX-3 newLoadedPhase: ${calculationResult.newLoadedPhase}");
+      print(calculationInput.getDebugInfo());
+      print(calculationResult.getDebugInfo());
 
       // Extract variables directly into your pre-existing downstream fields securely
       realListUpdateStrategy = calculationResult.realListUpdateStrategy;
       newBlockDataState = calculationResult.newBlockDataState;
 
       if (blkErrorInfo != null) {
+        executionTrace._addTraceStep(
+          codeId: "#03460",
+          shortDesc:
+              "${debugObjHtml(this)} --> Query error -> newBlockDataState: $newBlockDataState",
+        );
         // Test case [42a], [22a].
-        __blockData._setDataStateOnErrorInBlock(
-          errorInfo: blkErrorInfo,
+        __blockData._updateStateAfterQueryError(
           newBlockDataState: newBlockDataState,
+        );
+        final List<XBlock> descendantXBlocks =
+            thisXBlock.getDecendentXBlocks(sameFilterOnly: true);
+
+        __stopDecendentQueryWithError(
+          descendantXBlocks: descendantXBlocks,
+          blockErrorOrigin: BlockErrorOrigin.directFetch,
         );
         return;
       }
@@ -1543,7 +1542,7 @@ abstract class Block<
         shortDesc:
             "Calling ${debugObjHtml(this)}.__processQueryResult() to process queried data.",
         parameters: {
-          "usedXFilterCriteria": xFilterCriteriaOfFilterModel,
+          "usedXFilterCriteria": filterCriteriaMvOfFilterModel,
           "usedPageable": willBeUsedPageable,
           "queriedItemList": queriedItemList,
           "queriedPaginationInfo": queriedPaginationInfo,
@@ -1552,7 +1551,7 @@ abstract class Block<
         traceStepType: TraceStepType.nonControllableCalling,
       );
       final processedQueryResult = __processQueryResult(
-        usedXFilterCriteria: xFilterCriteriaOfFilterModel,
+        usedXFilterCriteria: filterCriteriaMvOfFilterModel,
         usedPageable: willBeUsedPageable,
         //
         queriedItemList: queriedItemList,
@@ -1616,7 +1615,7 @@ abstract class Block<
               "Clear ${debugObjHtml(formModel)} data and set to <b>none</b>.",
           traceStepType: TraceStepType.info,
         );
-        formModel!._clearDataWithDataState(formDataState: FormDataState.none);
+        formModel!._clearDataWithDataState(formDataState: FormDataStateNone());
       }
       executionTrace._addTraceStep(
         codeId: "#03620",
@@ -1633,22 +1632,6 @@ abstract class Block<
     }
     // currentItemInList.
     else {
-      // switch (newBlockDataState) {
-      //   case DataState.none:
-      //     // @@TODO@@ 04.
-      //     // Never run:
-      //     __clearAllChildrenBlocksToNone(
-      //       thisXBlock: thisXBlock,
-      //     );
-      //   case DataState.pending:
-      //     // @@TODO@@ 05.
-      //     // Never run:
-      //     __clearAllChildrenBlocksToNone(
-      //       thisXBlock: thisXBlock,
-      //     );
-      //   case DataState.loaded:
-      //     break;
-      // }
       switch (newBlockDataState) {
         case BlockDataStateNone():
           // @@TODO@@ 04.
@@ -2388,7 +2371,7 @@ abstract class Block<
           shortDesc:
               "Set ${debugObjHtml(formModel!)} dataState to <b>none</b>.",
         );
-        formModel?._clearDataWithDataState(formDataState: FormDataState.none);
+        formModel?._clearDataWithDataState(formDataState: FormDataStateNone());
       }
       //
       executionTrace._addTraceStep(
@@ -2535,8 +2518,9 @@ abstract class Block<
                 "Set FormModel ${debugObjHtml(thisXBlock.xFormModel!.formModel)} dataState to <b>pending</b>.",
           );
           // TODO: Test Cases.
-          formModel!
-              ._clearDataWithDataState(formDataState: FormDataState.pending);
+          formModel!._clearDataWithDataState(
+            formDataState: FormDataStatePending(),
+          );
         } else {
           // Do nothing.
         }
@@ -2794,7 +2778,7 @@ abstract class Block<
       );
       // Clear Form:
       formModel!._clearDataWithDataState(
-        formDataState: FormDataState.none,
+        formDataState: FormDataStateNone(),
       );
     }
     // TODO Test Cases.
@@ -3278,7 +3262,7 @@ abstract class Block<
             // Clear Form:
             //
             formModel!._clearDataWithDataState(
-              formDataState: FormDataState.none,
+              formDataState: FormDataStateNone(),
             );
           }
           executionTrace._addTraceStep(
@@ -3438,7 +3422,7 @@ abstract class Block<
     );
     formModel!._formModelStructure._setFormMode_TODO_DELETE(
       formMode: FormMode.creation,
-      formDataState: FormDataState.loaded,
+      formDataState: FormDataStateLoaded(),
     );
     //
     bool success = false;
@@ -3842,6 +3826,64 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  void __stopQueryWithFilterErrorCascade({
+    required XBlock thisXBlock,
+    required BlockErrorInfo? blockErrorInfo,
+  }) {
+    __assertThisXBlock(thisXBlock);
+    thisXBlock.queryResult._setFilterError();
+
+    final blockErrorOrigin = BlockErrorOrigin.filterModel;
+
+    final fallbackDilemmaStrategy = FallbackDilemmaStrategy.preserveStableCache;
+
+    final BlockDataState newBlockDataState =
+        BlockQueryStateCalculator.calculateOnFilterError(
+      currentDataState: dataState,
+      blockErrorOrigin: blockErrorOrigin,
+      blockErrorInfo: blockErrorInfo,
+      dilemmaStrategy: fallbackDilemmaStrategy,
+    );
+
+    __blockData._lastQueryResultState = ActionResultState.fail;
+    __blockData._blockDataState = newBlockDataState;
+
+    final List<XBlock> descendantXBlocks =
+        thisXBlock.getDecendentXBlocks(sameFilterOnly: true);
+
+    __stopDecendentQueryWithError(
+      descendantXBlocks: descendantXBlocks,
+      blockErrorOrigin: blockErrorOrigin.toCascadedOrigin(),
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __stopDecendentQueryWithError({
+    required List<XBlock> descendantXBlocks,
+    required BlockErrorOrigin blockErrorOrigin,
+  }) {
+    FallbackDilemmaStrategy fallbackDilemmaStrategy =
+        FallbackDilemmaStrategy.preserveStableCache;
+
+    for (final descendant in descendantXBlocks) {
+      final descendantState = BlockQueryStateCalculator.calculateOnFilterError(
+        currentDataState: descendant.block.dataState,
+        blockErrorOrigin: blockErrorOrigin,
+        blockErrorInfo: null,
+        dilemmaStrategy: fallbackDilemmaStrategy,
+      );
+
+      descendant.block.__blockData._lastQueryResultState =
+          ActionResultState.fail;
+      descendant.block.__blockData._blockDataState = descendantState;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<void> _processSaveActionRestResult({
     required ExecutionTrace executionTrace,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
@@ -4101,7 +4143,7 @@ abstract class Block<
           );
           // Clear Form:
           formModel!._clearDataWithDataState(
-            formDataState: FormDataState.none,
+            formDataState: FormDataStateNone(),
           );
         }
         //
@@ -7015,7 +7057,7 @@ abstract class Block<
         errCode: BlockItemEditPrecheck.noForm,
       );
     }
-    if (formModel!.dataState == FormDataState.error) {
+    if (formModel!.dataState.isFatalError) {
       // Test Case: TODO
       return Actionable<BlockItemEditPrecheck>.no(
         errCode: BlockItemEditPrecheck.formInErrorState,
@@ -7156,7 +7198,7 @@ abstract class Block<
           errCode: BlockFormEnablementPrecheck.formInNoneMode,
         );
       case FormMode.creation:
-        if (formModel!.dataState == FormDataState.error) {
+        if (formModel!.dataState.isFatalError) {
           // Test Cases: [16a].
           if (!formModel!.formInitialDataReady) {
             return Actionable<BlockFormEnablementPrecheck>.no(
@@ -7166,7 +7208,7 @@ abstract class Block<
         }
         return Actionable<BlockFormEnablementPrecheck>.yes();
       case FormMode.edit:
-        if (formModel!.dataState == FormDataState.error) {
+        if (formModel!.dataState.isFatalError) {
           // Test Cases: [16b].
           if (!formModel!.formInitialDataReady) {
             return Actionable<BlockFormEnablementPrecheck>.no(
@@ -8079,7 +8121,7 @@ abstract class Block<
   // ***************************************************************************
 
   _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA> __processQueryResult({
-    required XFilterCriteria<FILTER_CRITERIA>? usedXFilterCriteria,
+    required FilterCriteriaMappedValue<FILTER_CRITERIA>? usedXFilterCriteria,
     required Pageable? usedPageable,
     //
     required List<ITEM>? queriedItemList,

@@ -143,8 +143,8 @@ class _XShelfSbQuery extends XShelf {
             alsoCheckChildren: true,
           );
           if (hasXActiveUI) {
-            if (parentXScalar.scalar.dataState == ScalarDataState.pending ||
-                parentXScalar.scalar.isLoadedAndStale) {
+            if (parentXScalar.scalar.dataState.isPending ||
+                parentXScalar.scalar.dataState.isStale) {
               parentXScalar.setQueryHintToGreater(QryHint.force);
             }
           }

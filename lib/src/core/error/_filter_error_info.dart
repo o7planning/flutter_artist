@@ -1,13 +1,11 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/data_state.dart';
 import '../enums/filter_activity_type.dart';
 import '../enums/filter_error_method.dart';
 
 class FilterErrorInfo {
   final FilterActivityType activityType;
   final String? tildeCriterionName;
-  final FilterDataState filterDataState;
   final FilterErrorMethod filterErrorMethod;
   final AppError error;
   final StackTrace errorStackTrace;
@@ -15,7 +13,6 @@ class FilterErrorInfo {
   FilterErrorInfo({
     required this.activityType,
     required this.tildeCriterionName,
-    required this.filterDataState,
     required this.filterErrorMethod,
     required Object error,
     required this.errorStackTrace,

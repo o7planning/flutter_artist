@@ -360,7 +360,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   Future<void> showFormErrorViewerDialog(BuildContext context) async {
-    if (dataState != FormDataState.error) {
+    if (!dataState.isFatalError) {
       return;
     }
     await FormErrorViewerDialog.open(
@@ -448,13 +448,13 @@ abstract class FormModel<
     );
     //
     if (!forceReloadForm) {
-      if (dataState != FormDataState.loaded) {
+      if (!dataState.isLoaded) {
         executionTrace._addTraceStep(
           codeId: "#37100",
           shortDesc:
               "${debugObjHtml(this)} - @dataState: ${debugObjHtml(dataState)} --> Clear data and set to <b>pending</b>.",
         );
-        _clearDataWithDataState(formDataState: FormDataState.pending);
+        _clearDataWithDataState(formDataState: FormDataStatePending());
       }
       executionTrace._addTraceStep(
         codeId: "#37120",
@@ -709,7 +709,7 @@ abstract class FormModel<
     required ExecutionTrace executionTrace,
     required ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData,
     required FORM_INPUT? formInput,
-    required FormActivityType activityType,
+    required final FormActivityType activityType,
     required Map<String, dynamic>? formKeyInstantValuesInUI,
   }) async {
     debug.__formActivityCount++;
@@ -736,7 +736,7 @@ abstract class FormModel<
         //
         _formModelStructure._clearFormError();
         _formModelStructure._setFormDataState(
-          formDataState: FormDataState.pending,
+          formDataState: FormDataStatePending(),
           error: null,
         );
         if (currentFormMode == FormMode.creation) {
@@ -883,9 +883,11 @@ abstract class FormModel<
             showSnackBar: true,
             tipDocument: null,
           );
+          // IN CASE OF activityType = startCreatingOrEditing.
+          final fatalErrorInfo = FormDataStateFatalError(errorInfo: errorInfo);
           //
           __endFormActivityWithDataState(
-            formDataState: FormDataState.error,
+            formDataState: fatalErrorInfo,
             activityType: activityType,
             error: e,
           );
@@ -924,7 +926,7 @@ abstract class FormModel<
               },
               traceStepType: TraceStepType.controllableCalling,
             );
-            // In case of activityType = startCreatingOrEditing.
+            // IN CASE OF activityType = startCreatingOrEditing.
             simplePropValueDefault = specifyDefaultValuesForSimpleProps(
                   parentBlockCurrentItemId: block.parentBlockCurrentItemId,
                 ) ??
@@ -967,9 +969,12 @@ abstract class FormModel<
               tipDocument:
                   TipDocument.formModelSpecifyDefaultValuesForSimpleProps,
             );
+            // IN CASE OF activityType = startCreatingOrEditing.
+            final fatalErrorState =
+                FormDataStateFatalError(errorInfo: errorInfo);
             //
             __endFormActivityWithDataState(
-              formDataState: FormDataState.error,
+              formDataState: fatalErrorState,
               activityType: activityType,
               error: e,
             );
@@ -1047,9 +1052,12 @@ abstract class FormModel<
               showSnackBar: true,
               tipDocument: TipDocument.formModelGetUpdatedValuesForSimpleProps,
             );
+            // IN CASE OF activityType = startCreatingOrEditing.
+            final fatalErrorState =
+                FormDataStateFatalError(errorInfo: errorInfo);
             //
             __endFormActivityWithDataState(
-              formDataState: FormDataState.error,
+              formDataState: fatalErrorState,
               error: e,
               activityType: activityType,
             );
@@ -1124,7 +1132,7 @@ abstract class FormModel<
           );
           _formModelStructure._setFormError(formErrorInfo);
           //
-          final ErrorInfo errorInfo = _handleError(
+          final ErrorInfo transientErrorInfo = _handleError(
             shelf: shelf,
             methodName: formErrorInfo.methodName,
             error: formErrorInfo.error,
@@ -1132,9 +1140,12 @@ abstract class FormModel<
             showSnackBar: true,
             tipDocument: TipDocument.formModelGetUpdatedValuesForSimpleProps,
           );
+          // IN CASE OF activityType = patchFormFields.
+          final formDataState =
+              FormDataStateLoaded(transientErrorInfo: transientErrorInfo);
           //
           __endFormActivityWithDataState(
-            formDataState: FormDataState.error,
+            formDataState: formDataState,
             activityType: activityType,
             error: e,
           );
@@ -1142,7 +1153,7 @@ abstract class FormModel<
             codeId: "#06760",
             shortDesc:
                 "The ${debugObjHtml(this)}.extractUpdateValuesForSimpleProps() method was called with an error!",
-            errorInfo: errorInfo,
+            errorInfo: transientErrorInfo,
           );
           return false;
         }
@@ -1226,9 +1237,18 @@ abstract class FormModel<
         showSnackBar: true,
         tipDocument: null,
       );
+      // IN any case of activityType:
+      final FormDataState formDataState = switch (activityType) {
+        FormActivityType.startCreatingOrEditing =>
+          FormDataStateFatalError(errorInfo: errorInfo),
+        FormActivityType.updateFromFormView =>
+          FormDataStateLoaded(transientErrorInfo: errorInfo),
+        FormActivityType.patchFormFields =>
+          FormDataStateLoaded(transientErrorInfo: errorInfo)
+      };
       //
       __endFormActivityWithDataState(
-        formDataState: FormDataState.error,
+        formDataState: formDataState,
         activityType: activityType,
         error: e,
       );
@@ -1242,7 +1262,7 @@ abstract class FormModel<
     }
     //
     return __endFormActivityWithDataState(
-      formDataState: FormDataState.loaded,
+      formDataState: FormDataStateLoaded(),
       activityType: activityType,
       error: null,
     );
@@ -1297,7 +1317,7 @@ abstract class FormModel<
       );
       //
       if (activityType == FormActivityType.startCreatingOrEditing) {
-        if (formDataState == FormDataState.loaded) {
+        if (formDataState.isLoaded) {
           _formModelStructure._formInitialDataReady = true;
         }
       }
@@ -1309,11 +1329,6 @@ abstract class FormModel<
       else {
         // Validate Form
         if (activityType == FormActivityType.startCreatingOrEditing) {
-          // if (formMode == FormMode.edit && _formKey.currentState != null) {
-          //   if (_formModelStructure._formInitialDataReady) {
-          //     _formKey.currentState!.validate(focusOnInvalid: false);
-          //   }
-          // }
           if (formMode == FormMode.edit &&
               _formModelStructure._formInitialDataReady) {
             final List<FormBuilderState> activeForms =
@@ -1327,7 +1342,7 @@ abstract class FormModel<
       //
       return true;
     } catch (e, stackTrace) {
-      _handleError(
+      ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: "__applyWithDataState",
         error: e,
@@ -1341,9 +1356,17 @@ abstract class FormModel<
       _formKeyPatchValue(
         newCurrentValue: _formModelStructure._currentFormData,
       );
+      final formDataState = switch (activityType) {
+        FormActivityType.startCreatingOrEditing =>
+          FormDataStateFatalError(errorInfo: errorInfo),
+        FormActivityType.updateFromFormView =>
+          FormDataStateLoaded(transientErrorInfo: errorInfo),
+        FormActivityType.patchFormFields =>
+          FormDataStateLoaded(transientErrorInfo: errorInfo),
+      };
       //
       _formModelStructure._setFormDataState(
-        formDataState: FormDataState.error,
+        formDataState: formDataState,
         error: e,
       );
       return false;
@@ -2167,9 +2190,14 @@ abstract class FormModel<
         errCode: PatchFormFieldsPrecheck.formInNoneMode,
       );
     }
-    if (dataState == FormDataState.error) {
+    if (dataState.isPending) {
       return Actionable<PatchFormFieldsPrecheck>.no(
-        errCode: PatchFormFieldsPrecheck.formInErrorState,
+        errCode: PatchFormFieldsPrecheck.formInPendingState,
+      );
+    }
+    if (dataState.isFatalError) {
+      return Actionable<PatchFormFieldsPrecheck>.no(
+        errCode: PatchFormFieldsPrecheck.formInFatalErrorState,
       );
     }
     return Actionable<PatchFormFieldsPrecheck>.yes();

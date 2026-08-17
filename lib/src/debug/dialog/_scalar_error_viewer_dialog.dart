@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../core/enums/data_state.dart';
 import '../../core/error/_scalar_error_info.dart';
 import '../../core/icon/icon_constants.dart';
 

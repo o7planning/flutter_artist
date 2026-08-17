@@ -1,9 +1,13 @@
+import 'dart:ui';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_artist_router/flutter_artist_router.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/data_state.dart';
+import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
+import '../constants/_debug_constants.dart';
 
 class BlockOrScalar extends Equatable {
   final Block? block;
@@ -12,6 +16,52 @@ class BlockOrScalar extends Equatable {
   const BlockOrScalar.block(this.block) : scalar = null;
 
   const BlockOrScalar.scalar(this.scalar) : block = null;
+
+  String getDataStateName() {
+    if (block != null) {
+      return block!.dataState.name;
+    } else {
+      return scalar!.dataState.name;
+    }
+  }
+
+  Color getBgColor(BuildContext context) {
+    if (block != null) {
+      return switch (block!.dataState) {
+        BlockDataStatePending() =>
+          DebugConstants.graphBoxDataStatePendingBgColor(context),
+        BlockDataStateLoaded() =>
+          DebugConstants.graphBoxDataStateReadyBgColor(context),
+        BlockDataStateNone() =>
+          DebugConstants.graphBoxDataStateNoneBgColor(context),
+      };
+    } else {
+      return switch (scalar!.dataState) {
+        ScalarDataStatePending() =>
+          DebugConstants.graphBoxDataStatePendingBgColor(context),
+        ScalarDataStateLoaded() =>
+          DebugConstants.graphBoxDataStateReadyBgColor(context),
+        ScalarDataStateNone() =>
+          DebugConstants.graphBoxDataStateNoneBgColor(context),
+      };
+    }
+  }
+
+  IconData getIconData() {
+    if (block != null) {
+      return switch (block!.dataState) {
+        BlockDataStatePending() => FaIconConstants.dataStatePendingIconData,
+        BlockDataStateLoaded() => FaIconConstants.dataStateLoadedIconData,
+        BlockDataStateNone() => FaIconConstants.dataStateNoneIconData,
+      };
+    } else {
+      return switch (scalar!.dataState) {
+        ScalarDataStatePending() => FaIconConstants.dataStatePendingIconData,
+        ScalarDataStateLoaded() => FaIconConstants.dataStateLoadedIconData,
+        ScalarDataStateNone() => FaIconConstants.dataStateNoneIconData,
+      };
+    }
+  }
 
   Set<FaRouteData> get faRoutes {
     if (block != null) {
@@ -115,15 +165,15 @@ class BlockOrScalar extends Equatable {
     }
   }
 
-  ScalarDataState get dataState {
-    // if (block != null) {
-    //   return block!.dataState;
-    // } else {
-    //   return scalar!.dataState;
-    // }
-    // TODO: Hardcode
-    return ScalarDataState.none;
-  }
+  // ScalarDataState get dataState {
+  //   // if (block != null) {
+  //   //   return block!.dataState;
+  //   // } else {
+  //   //   return scalar!.dataState;
+  //   // }
+  //   // TODO: Hardcode
+  //   return ScalarDataState.none;
+  // }
 
   FilterCriteria? get filterCriteria {
     if (block != null) {

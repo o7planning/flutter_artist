@@ -3,7 +3,6 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/enums/data_state.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
@@ -58,10 +57,10 @@ class FormModelDebugView extends StatelessWidget {
               size: 20,
             ),
           ),
-          if (formModel.dataState == FormDataState.error &&
+          if (formModel.dataState.isFatalError &&
               !formModel.formInitialDataReady)
             SizedBox(height: 5),
-          if (formModel.dataState == FormDataState.error &&
+          if (formModel.dataState.isFatalError &&
               !formModel.formInitialDataReady)
             ListTile(
               dense: true,
@@ -97,10 +96,10 @@ class FormModelDebugView extends StatelessWidget {
                 ),
               ),
             ),
-          if (formModel.dataState == FormDataState.error &&
+          if (formModel.dataState.isFatalError &&
               formModel.formErrorInfo != null)
             SizedBox(height: 10),
-          if (formModel.dataState == FormDataState.error &&
+          if (formModel.dataState.isFatalError &&
               formModel.formErrorInfo != null)
             IconLabelText(
               label: "Error Method: ",
@@ -110,10 +109,10 @@ class FormModelDebugView extends StatelessWidget {
                 color: Colors.red,
               ),
             ),
-          if (formModel.dataState == FormDataState.error &&
+          if (formModel.dataState.isFatalError &&
               formModel.formErrorInfo != null)
             SizedBox(height: 10),
-          if (formModel.dataState == FormDataState.error &&
+          if (formModel.dataState.isFatalError &&
               formModel.formErrorInfo != null)
             IconLabelText(
               label: "Error Message: ",

@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-/// Root sealed state container for Block data lifecycle
+/// Root sealed state container for Block data lifecycle.
 sealed class BlockDataState {
   const BlockDataState();
 
@@ -24,7 +24,7 @@ sealed class BlockDataState {
   int get hashCode;
 }
 
-/// Uninitialized context (Child block whose parent has no selected item)
+/// Uninitialized context (Child block whose parent has no selected item).
 final class BlockDataStateNone extends BlockDataState {
   const BlockDataStateNone();
 
@@ -42,27 +42,33 @@ final class BlockDataStateNone extends BlockDataState {
   String toString() => 'BlockDataState.none()';
 }
 
-/// Cold baseline loading (No data in memory)
+/// Cold baseline loading state (No prior active dataset in RAM, or evicted).
 final class BlockDataStatePending extends BlockDataState {
-  final PendingReason reason;
+  final BlockPendingReason reason;
 
   const BlockDataStatePending({
-    this.reason = const PendingReasonInitial(),
+    this.reason = const BlockPendingReasonInitial(),
   });
 
-  /// Factory for standard initial loading
-  const BlockDataStatePending.initial() : reason = const PendingReasonInitial();
+  /// Factory constructor for standard cold initial loading.
+  const BlockDataStatePending.initial()
+      : reason = const BlockPendingReasonInitial();
 
-  /// Factory for failed baseline loading with optional diagnostic payload
-  BlockDataStatePending.fetchFailed({BlockErrorInfo? errorInfo})
-      : reason = PendingReasonFetchFailed(errorInfo: errorInfo);
+  /// Factory constructor for blocked baseline state caused by direct query, filter, or upstream cascade failures.
+  BlockDataStatePending.failed({
+    required BlockErrorOrigin errorOrigin,
+    BlockErrorInfo? errorInfo,
+  }) : reason = BlockPendingReasonFailed(
+          errorOrigin: errorOrigin,
+          errorInfo: errorInfo,
+        );
 
   @override
   String get name => "pending";
 
-  /// Quick accessor to diagnostic error info if available
+  /// Quick accessor to diagnostic error info if available.
   BlockErrorInfo? get errorInfo => switch (reason) {
-        PendingReasonFetchFailed(:final errorInfo) => errorInfo,
+        BlockPendingReasonFailed(:final errorInfo) => errorInfo,
         _ => null,
       };
 
@@ -80,12 +86,12 @@ final class BlockDataStatePending extends BlockDataState {
   String toString() => 'BlockDataState.pending(reason: $reason)';
 }
 
-/// Data is loaded in RAM
+/// Base sealed class for states where data is loaded and retained in RAM.
 sealed class BlockDataStateLoaded extends BlockDataState {
   const BlockDataStateLoaded();
 }
 
-/// Data is fully fresh and synchronized
+/// Active dataset in RAM is fully fresh, synchronized, and matching active criteria.
 final class BlockDataStateLoadedFresh extends BlockDataStateLoaded {
   /// Structured diagnostic details for errors occurring during non-destructive,
   /// secondary fetch operations while the active baseline dataset remains completely
@@ -127,19 +133,19 @@ final class BlockDataStateLoadedFresh extends BlockDataStateLoaded {
       'BlockDataState.loadedFresh(transientError: $transientErrorInfo)';
 }
 
-/// Data is loaded in RAM but marked stale.
+/// Dataset is loaded in RAM but marked stale due to criteria shifts, background failures, or external events.
 final class BlockDataStateLoadedStale extends BlockDataStateLoaded {
-  final LoadedStateStaleReason reason;
+  final BlockLoadedStateStaleReason reason;
 
   const BlockDataStateLoadedStale({required this.reason});
 
   /// Factory constructor for event-driven stale state.
   const BlockDataStateLoadedStale.event()
-      : reason = const LoadedStateStaleReasonEvent();
+      : reason = const BlockLoadedStateStaleReasonEvent();
 
-  /// Factory constructor for fetch-failure stale state.
-  BlockDataStateLoadedStale.fetchFailed({BlockErrorInfo? errorInfo})
-      : reason = LoadedStateStaleReasonFetchFailed(errorInfo: errorInfo);
+  /// Factory constructor for query-failure stale state.
+  BlockDataStateLoadedStale.failed({BlockErrorInfo? errorInfo})
+      : reason = BlockLoadedStateStaleReasonFailed(errorInfo: errorInfo);
 
   @override
   String get name => "loaded + stale";
@@ -162,31 +168,33 @@ final class BlockDataStateLoadedStale extends BlockDataStateLoaded {
 }
 
 /// Baseline dataset is marked stale due to an external mutation event or sync trigger.
-final class LoadedStateStaleReasonEvent extends LoadedStateStaleReason {
-  const LoadedStateStaleReasonEvent();
+final class BlockLoadedStateStaleReasonEvent
+    extends BlockLoadedStateStaleReason {
+  const BlockLoadedStateStaleReasonEvent();
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is LoadedStateStaleReasonEvent;
+      identical(this, other) || other is BlockLoadedStateStaleReasonEvent;
 
   @override
   int get hashCode => runtimeType.hashCode;
 
   @override
-  String toString() => 'LoadedStateStaleReason.event';
+  String toString() => 'BlockLoadedStateStaleReason.event';
 }
 
-/// Baseline dataset is marked stale because a subsequent remote refetch / re-query failed.
-final class LoadedStateStaleReasonFetchFailed extends LoadedStateStaleReason {
+/// Baseline dataset is marked stale because a subsequent remote refetch, filter change, or query failed.
+final class BlockLoadedStateStaleReasonFailed
+    extends BlockLoadedStateStaleReason {
   /// Structured diagnostic details regarding the failed fetch attempt.
   final BlockErrorInfo? errorInfo;
 
-  LoadedStateStaleReasonFetchFailed({this.errorInfo});
+  BlockLoadedStateStaleReasonFailed({this.errorInfo});
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is LoadedStateStaleReasonFetchFailed &&
+      other is BlockLoadedStateStaleReasonFailed &&
           runtimeType == other.runtimeType &&
           errorInfo == other.errorInfo;
 
@@ -195,25 +203,28 @@ final class LoadedStateStaleReasonFetchFailed extends LoadedStateStaleReason {
 
   @override
   String toString() =>
-      'LoadedStateStaleReason.fetchFailed(errorInfo: $errorInfo)';
+      'BlockLoadedStateStaleReason.failed(errorInfo: $errorInfo)';
 }
 
 /// Sealed hierarchy representing the specific rationale behind a [BlockDataStatePending].
-sealed class PendingReason {
-  const PendingReason();
+sealed class BlockPendingReason {
+  const BlockPendingReason();
 
-  /// Quick check whether this pending state was caused by a fetch failure.
-  bool get isFetchFailed => this is PendingReasonFetchFailed;
+  /// Quick check whether this pending state was caused by an execution failure (direct query, filter, or cascade).
+  bool get isFailed => this is BlockPendingReasonFailed;
 
   /// Quick check whether this pending state is uninitialized / initial loading.
-  bool get isInitial => this is PendingReasonInitial;
+  bool get isInitial => this is BlockPendingReasonInitial;
 
   /// Convenience factory for initial pending state.
-  static const PendingReason initial = PendingReasonInitial();
+  static const BlockPendingReason initial = BlockPendingReasonInitial();
 
-  /// Convenience factory for fetch failed pending state.
-  static PendingReason fetchFailed({BlockErrorInfo? errorInfo}) =>
-      PendingReasonFetchFailed(errorInfo: errorInfo);
+  /// Convenience factory for failed pending state.
+  static BlockPendingReason failed({
+    required BlockErrorOrigin errorOrigin,
+    BlockErrorInfo? errorInfo,
+  }) =>
+      BlockPendingReasonFailed(errorOrigin: errorOrigin, errorInfo: errorInfo);
 
   @override
   bool operator ==(Object other);
@@ -223,12 +234,12 @@ sealed class PendingReason {
 }
 
 /// Initial cold baseline loading (First-time loading, no errors encountered yet).
-final class PendingReasonInitial extends PendingReason {
-  const PendingReasonInitial();
+final class BlockPendingReasonInitial extends BlockPendingReason {
+  const BlockPendingReasonInitial();
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is PendingReasonInitial;
+      identical(this, other) || other is BlockPendingReasonInitial;
 
   @override
   int get hashCode => runtimeType.hashCode;
@@ -237,49 +248,58 @@ final class PendingReasonInitial extends PendingReason {
   String toString() => 'PendingReason.initial';
 }
 
-/// Baseline fetch failure where no prior dataset exists or context was scrubbed.
-final class PendingReasonFetchFailed extends PendingReason {
-  /// Structured diagnostic details regarding the failed query attempt.
+/// Baseline loading failure where no prior dataset exists (caused by direct query, filter model, or upstream parent cascade).
+final class BlockPendingReasonFailed extends BlockPendingReason {
+  /// Identifies the root architectural layer or trigger source that caused this failure.
+  final BlockErrorOrigin errorOrigin;
+
+  /// Structured diagnostic details regarding the failed query attempt, if available.
   final BlockErrorInfo? errorInfo;
 
-  const PendingReasonFetchFailed({required this.errorInfo});
+  const BlockPendingReasonFailed({
+    required this.errorOrigin,
+    required this.errorInfo,
+  });
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PendingReasonFetchFailed &&
+      other is BlockPendingReasonFailed &&
           runtimeType == other.runtimeType &&
+          errorOrigin == other.errorOrigin &&
           errorInfo == other.errorInfo;
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorInfo);
+  int get hashCode => Object.hash(runtimeType, errorOrigin, errorInfo);
 
   @override
-  String toString() => 'PendingReason.fetchFailed(errorInfo: $errorInfo)';
+  String toString() =>
+      'PendingReason.failed(origin: $errorOrigin, errorInfo: $errorInfo)';
 }
 
-/// Sealed hierarchy representing the specific rationale behind marking loaded dataset as stale.
-sealed class LoadedStateStaleReason {
-  const LoadedStateStaleReason();
+/// Sealed hierarchy representing the specific rationale behind marking a loaded dataset as stale.
+sealed class BlockLoadedStateStaleReason {
+  const BlockLoadedStateStaleReason();
 
   /// Quick check whether data became stale due to an incoming domain event / notification.
-  bool get isEvent => this is LoadedStateStaleReasonEvent;
+  bool get isEvent => this is BlockLoadedStateStaleReasonEvent;
 
   /// Quick check whether data is stale because a background re-query attempt failed.
-  bool get isFetchFailed => this is LoadedStateStaleReasonFetchFailed;
+  bool get isFailed => this is BlockLoadedStateStaleReasonFailed;
 
   /// Quick accessor to diagnostic error payload if available.
   BlockErrorInfo? get errorInfo => switch (this) {
-        LoadedStateStaleReasonFetchFailed(:final errorInfo) => errorInfo,
+        BlockLoadedStateStaleReasonFailed(:final errorInfo) => errorInfo,
         _ => null,
       };
 
   /// Convenience constant for event-induced stale reason.
-  static const LoadedStateStaleReason event = LoadedStateStaleReasonEvent();
+  static const BlockLoadedStateStaleReason event =
+      BlockLoadedStateStaleReasonEvent();
 
-  /// Convenience factory for fetch-failure stale reason.
-  static LoadedStateStaleReason fetchFailed({BlockErrorInfo? errorInfo}) =>
-      LoadedStateStaleReasonFetchFailed(errorInfo: errorInfo);
+  /// Convenience factory for query-failure stale reason.
+  static BlockLoadedStateStaleReason failed({BlockErrorInfo? errorInfo}) =>
+      BlockLoadedStateStaleReasonFailed(errorInfo: errorInfo);
 
   @override
   bool operator ==(Object other);

@@ -1,15 +1,19 @@
 import '../../enums/action_result_state.dart';
 import '../../enums/block_loaded_state_phase.dart';
 import '../../enums/block_viewport_sync_strategy.dart';
+import '../../enums/error_origin.dart';
 import '../../enums/fallback_dilemma_strategy.dart';
 import '../../enums/list_update_strategy.dart';
 import '../../error/_block_error_info.dart';
 import '../core.dart';
 
 /// Immutable parameter blueprint feeding into the state calculator engine.
-class QueryCalculatorInput {
+class BlockQueryCalculatorInput {
   /// The resulting outcome of the active remote data fetch cycle.
   final ActionResultState queryResultState;
+
+  /// Identifies the architectural source/trigger of the failure, or null if no error occurred.
+  final BlockErrorOrigin? blockErrorOrigin;
 
   /// Structured diagnostic details regarding the failed query attempt, if any.
   final BlockErrorInfo? blockErrorInfo;
@@ -41,9 +45,10 @@ class QueryCalculatorInput {
   /// The explicit rule dictating how to resolve cached data when pagination operations fail.
   final FallbackDilemmaStrategy dilemmaStrategy;
 
-  const QueryCalculatorInput({
+  const BlockQueryCalculatorInput({
     required this.queryResultState,
-    this.blockErrorInfo,
+    required this.blockErrorOrigin,
+    required this.blockErrorInfo,
     required this.currentDataState,
     required this.syncStrategy,
     required this.filterCriteriaChanged,
@@ -55,22 +60,24 @@ class QueryCalculatorInput {
     this.dilemmaStrategy = FallbackDilemmaStrategy.preserveStableCache,
   });
 
-  void printDebug() {
-    print("----- QueryCalculatorInput: ------ \n"
-        "  blockErrorInfo: $blockErrorInfo \n"
-        "  currentDataState: $currentDataState \n"
-        "  syncStrategy: $syncStrategy \n"
-        "  filterCriteriaChanged: $filterCriteriaChanged \n"
-        "  isQueryMore: $isQueryMore \n"
-        "  isPageShifting: $isPageShifting \n"
-        "  queryTypeChanged: $queryTypeChanged \n"
-        "  suggestedListUpdateStrategy: $suggestedListUpdateStrategy \n"
-        "  hasRemoveItemIds: $hasRemoveItemIds \n");
+  String getDebugInfo() {
+    return "--------- BlockQueryCalculatorInput -------------- \n"
+        "   - blockErrorOrigin: $blockErrorOrigin \n"
+        "   - blockErrorInfo: $blockErrorInfo \n"
+        "   - currentDataState: $currentDataState \n"
+        "   - syncStrategy: $syncStrategy \n"
+        "   - filterCriteriaChanged: $filterCriteriaChanged \n"
+        "   - isQueryMore: $isQueryMore \n"
+        "   - isPageShifting: $isPageShifting \n"
+        "   - queryTypeChanged: $queryTypeChanged \n"
+        "   - suggestedListUpdateStrategy: $suggestedListUpdateStrategy \n"
+        "   - hasRemoveItemIds: $hasRemoveItemIds \n"
+        "   - dilemmaStrategy: $dilemmaStrategy \n";
   }
 }
 
 /// Consolidated execution blueprint resolved by the calculator matrix.
-class QueryCalculatorResult {
+class BlockQueryCalculatorResult {
   /// The final storage mutation strategy passed onto the active rendering dataset list.
   final ListUpdateStrategy realListUpdateStrategy;
 
@@ -83,19 +90,27 @@ class QueryCalculatorResult {
   /// Indicator commanding the processor to forcefully prune missing locally cached items.
   final bool forcePruneMissingIds;
 
-  const QueryCalculatorResult({
+  const BlockQueryCalculatorResult({
     required this.realListUpdateStrategy,
     required this.newBlockDataState,
     this.newLoadedPhase,
     required this.forcePruneMissingIds,
   });
+
+  String getDebugInfo() {
+    return "--------- BlockQueryCalculatorResult -------------- \n"
+        "   - realListUpdateStrategy: $realListUpdateStrategy \n"
+        "   - newBlockDataState: $newBlockDataState \n"
+        "   - newLoadedPhase: $newLoadedPhase \n"
+        "   - forcePruneMissingIds: $forcePruneMissingIds \n";
+  }
 }
 
-class QueryStateCalculator {
+class BlockQueryStateCalculator {
   /// Pure mathematical evaluation matrix resolving viewport mutations and data lifecycles safely.
   ///
   /// Guarantees absolute isolation, making state modifications completely side-effect free.
-  static QueryCalculatorResult calculate(QueryCalculatorInput input) {
+  static BlockQueryCalculatorResult calculate(BlockQueryCalculatorInput input) {
     ListUpdateStrategy resolvedStrategy;
     BlockDataState resolvedState;
     BlockLoadedStatePhase? resolvedPhase;
@@ -105,6 +120,9 @@ class QueryStateCalculator {
     // 🛑 BRANCH 1: REMOTE RE-QUERY LIFECYCLE FAILED
     // =========================================================================
     if (input.queryResultState == ActionResultState.fail) {
+      final effectiveOrigin =
+          input.blockErrorOrigin ?? BlockErrorOrigin.directFetch;
+
       // Case 1.1: Criteria mutated (Search/Filter changed)
       if (input.filterCriteriaChanged) {
         if (input.currentDataState.isLoaded &&
@@ -113,7 +131,7 @@ class QueryStateCalculator {
           // Preserve previous dataset on screen, but mark as STALE due to criteria mismatch & fetch error
           resolvedStrategy = ListUpdateStrategy.merge;
           resolvedState = BlockDataStateLoadedStale(
-            reason: LoadedStateStaleReasonFetchFailed(
+            reason: BlockLoadedStateStaleReasonFailed(
               errorInfo: input.blockErrorInfo,
             ),
           );
@@ -121,8 +139,9 @@ class QueryStateCalculator {
         } else {
           // Hard eviction or cold baseline failure -> Fallback to cold PENDING
           resolvedStrategy = ListUpdateStrategy.replace;
-          resolvedState = BlockDataStatePending(
-            reason: PendingReasonFetchFailed(errorInfo: input.blockErrorInfo),
+          resolvedState = BlockDataStatePending.failed(
+            errorOrigin: effectiveOrigin,
+            errorInfo: input.blockErrorInfo,
           );
           resolvedPhase = null;
         }
@@ -134,7 +153,7 @@ class QueryStateCalculator {
             // EAGER LOCAL PRUNING: Keep non-mutated rows loaded, flag for local trash removal
             resolvedStrategy = ListUpdateStrategy.merge;
             resolvedState = BlockDataStateLoadedStale(
-              reason: LoadedStateStaleReasonFetchFailed(
+              reason: BlockLoadedStateStaleReasonFailed(
                 errorInfo: input.blockErrorInfo,
               ),
             );
@@ -145,10 +164,9 @@ class QueryStateCalculator {
             if (input.dilemmaStrategy ==
                 FallbackDilemmaStrategy.evictStaleContent) {
               resolvedStrategy = ListUpdateStrategy.replace;
-              resolvedState = BlockDataStatePending(
-                reason: PendingReasonFetchFailed(
-                  errorInfo: input.blockErrorInfo,
-                ),
+              resolvedState = BlockDataStatePending.failed(
+                errorOrigin: effectiveOrigin,
+                errorInfo: input.blockErrorInfo,
               );
               resolvedPhase = null;
             } else {
@@ -166,16 +184,15 @@ class QueryStateCalculator {
             if (input.dilemmaStrategy ==
                 FallbackDilemmaStrategy.evictStaleContent) {
               resolvedStrategy = ListUpdateStrategy.replace;
-              resolvedState = BlockDataStatePending(
-                reason: PendingReasonFetchFailed(
-                  errorInfo: input.blockErrorInfo,
-                ),
+              resolvedState = BlockDataStatePending.failed(
+                errorOrigin: effectiveOrigin,
+                errorInfo: input.blockErrorInfo,
               );
               resolvedPhase = null;
             } else {
               resolvedStrategy = ListUpdateStrategy.merge;
               resolvedState = BlockDataStateLoadedStale(
-                reason: LoadedStateStaleReasonFetchFailed(
+                reason: BlockLoadedStateStaleReasonFailed(
                   errorInfo: input.blockErrorInfo,
                 ),
               );
@@ -185,8 +202,9 @@ class QueryStateCalculator {
         } else {
           // Viewport was already uninitialized or pending before the crash -> Stay in PENDING
           resolvedStrategy = ListUpdateStrategy.replace;
-          resolvedState = BlockDataStatePending(
-            reason: PendingReasonFetchFailed(errorInfo: input.blockErrorInfo),
+          resolvedState = BlockDataStatePending.failed(
+            errorOrigin: effectiveOrigin,
+            errorInfo: input.blockErrorInfo,
           );
           resolvedPhase = null;
         }
@@ -226,11 +244,41 @@ class QueryStateCalculator {
       }
     }
 
-    return QueryCalculatorResult(
+    return BlockQueryCalculatorResult(
       realListUpdateStrategy: resolvedStrategy,
       newBlockDataState: resolvedState,
       newLoadedPhase: resolvedPhase,
       forcePruneMissingIds: shouldPrune,
+    );
+  }
+
+  /// Pure state calculator when criteria extraction or FilterModel fails directly.
+  static BlockDataState calculateOnFilterError({
+    required BlockDataState currentDataState,
+    required BlockErrorOrigin blockErrorOrigin,
+    required BlockErrorInfo? blockErrorInfo,
+    required FallbackDilemmaStrategy dilemmaStrategy,
+  }) {
+    if (currentDataState.isNone) {
+      return const BlockDataStateNone();
+    }
+
+    if (currentDataState.isPending) {
+      return BlockDataStatePending.failed(
+        errorOrigin: blockErrorOrigin,
+        errorInfo: blockErrorInfo,
+      );
+    }
+
+    // Loaded
+    if (dilemmaStrategy == FallbackDilemmaStrategy.preserveStableCache) {
+      return BlockDataStateLoadedStale(
+        reason: BlockLoadedStateStaleReasonFailed(errorInfo: blockErrorInfo),
+      );
+    }
+    return BlockDataStatePending.failed(
+      errorOrigin: BlockErrorOrigin.filterModel,
+      errorInfo: blockErrorInfo,
     );
   }
 }

@@ -2,10 +2,6 @@ import 'package:flutter_artist/flutter_artist.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_artist/flutter_artist.dart';
-import 'package:flutter_artist_core/flutter_artist_core.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 void main() {
   group('BlockQueryStrategyResolver.resolveQueryPlanInternal Unit Tests', () {
     // -------------------------------------------------------------------------
@@ -117,7 +113,11 @@ void main() {
         () {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStatePending(
-            reason: PendingReasonFetchFailed(errorInfo: null)),
+          reason: BlockPendingReasonFailed(
+            errorOrigin: BlockErrorOrigin.directFetch,
+            errorInfo: null,
+          ),
+        ),
         pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
         itemIds: const [],
         config: BlockConfig(
@@ -149,7 +149,7 @@ void main() {
 
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStateLoadedStale(
-            reason: LoadedStateStaleReason.event),
+            reason: BlockLoadedStateStaleReason.event),
         pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
         itemIds: const ['333-beer', 'heineken-beer', 'tiger-beer'],
         config: BlockConfig(
@@ -189,7 +189,7 @@ void main() {
 
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStateLoadedStale(
-            reason: LoadedStateStaleReason.event),
+            reason: BlockLoadedStateStaleReason.event),
         pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
         itemIds: const ['item-1', 'item-2'],
         config: BlockConfig(
@@ -228,7 +228,7 @@ void main() {
 
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStateLoadedStale(
-            reason: LoadedStateStaleReason.event),
+            reason: BlockLoadedStateStaleReason.event),
         pendingNativeQueryMode: BlockNativeQueryMode.pageableQuery,
         itemIds: const ['page2-item1', 'page2-item2'],
         config: BlockConfig(

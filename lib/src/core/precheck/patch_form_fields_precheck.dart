@@ -16,11 +16,18 @@ enum PatchFormFieldsPrecheck implements Precheck {
       "The form in 'none' mode.",
     ],
   ),
-  formInErrorState(
+  formInPendingState(
     precheckCode: PrecheckCode.inErrorState,
     message: "Enter-form-fields feature is disabled",
     details: [
-      "The form in 'error' state.",
+      "The form in 'pending' state.",
+    ],
+  ),
+  formInFatalErrorState(
+    precheckCode: PrecheckCode.inErrorState,
+    message: "Enter-form-fields feature is disabled",
+    details: [
+      "The form in 'fatal error' state.",
     ],
   );
 

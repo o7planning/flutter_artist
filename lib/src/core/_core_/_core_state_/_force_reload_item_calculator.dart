@@ -759,5 +759,5 @@ _ForceReloadItemState _calculateBlockState({
 }
 
 bool __isLoaded(FormModel formModel) {
-  return formModel.dataState == FormDataState.loaded;
+  return formModel.dataState.isLoaded;
 }
