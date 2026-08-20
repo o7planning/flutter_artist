@@ -132,6 +132,7 @@ class BlockQueryStateCalculator {
           resolvedStrategy = ListUpdateStrategy.merge;
           resolvedState = BlockDataStateLoadedStale(
             reason: BlockLoadedStateStaleReasonFailed(
+              errorOrigin: effectiveOrigin,
               errorInfo: input.blockErrorInfo,
             ),
           );
@@ -154,6 +155,7 @@ class BlockQueryStateCalculator {
             resolvedStrategy = ListUpdateStrategy.merge;
             resolvedState = BlockDataStateLoadedStale(
               reason: BlockLoadedStateStaleReasonFailed(
+                errorOrigin: effectiveOrigin,
                 errorInfo: input.blockErrorInfo,
               ),
             );
@@ -193,6 +195,7 @@ class BlockQueryStateCalculator {
               resolvedStrategy = ListUpdateStrategy.merge;
               resolvedState = BlockDataStateLoadedStale(
                 reason: BlockLoadedStateStaleReasonFailed(
+                  errorOrigin: effectiveOrigin,
                   errorInfo: input.blockErrorInfo,
                 ),
               );
@@ -252,8 +255,9 @@ class BlockQueryStateCalculator {
     );
   }
 
-  /// Pure state calculator when criteria extraction or FilterModel fails directly.
-  static BlockDataState calculateOnFilterError({
+  /// Pure state calculator when an operational error occurs before executing queries
+  /// (e.g., criteria extraction, filter evaluation, or parent cascade propagation).
+  static BlockDataState calculateDataStateOnError({
     required BlockDataState currentDataState,
     required BlockErrorOrigin blockErrorOrigin,
     required BlockErrorInfo? blockErrorInfo,
@@ -270,14 +274,18 @@ class BlockQueryStateCalculator {
       );
     }
 
-    // Loaded
+    // Loaded: evaluate fallback dilemma rule
     if (dilemmaStrategy == FallbackDilemmaStrategy.preserveStableCache) {
       return BlockDataStateLoadedStale(
-        reason: BlockLoadedStateStaleReasonFailed(errorInfo: blockErrorInfo),
+        reason: BlockLoadedStateStaleReasonFailed(
+          errorOrigin: blockErrorOrigin,
+          errorInfo: blockErrorInfo,
+        ),
       );
     }
+
     return BlockDataStatePending.failed(
-      errorOrigin: BlockErrorOrigin.filterModel,
+      errorOrigin: blockErrorOrigin,
       errorInfo: blockErrorInfo,
     );
   }

@@ -48,7 +48,7 @@ class _FormModelViewState extends State<FormModelView> {
   void initState() {
     super.initState();
     //
-    listeners = FlutterArtist.storage.ev.getListenerShelfBlockScalarTypes(
+    listeners = FlutterArtist.storage.eventHelper.getListenerShelfBlockScalarTypes(
       eventBlockOrScalar: BlockOrScalar.block(widget.formModel.block),
     );
     _controller = TabbedViewController(_createTabs());

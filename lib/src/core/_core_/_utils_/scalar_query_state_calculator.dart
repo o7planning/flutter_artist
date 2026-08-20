@@ -86,6 +86,7 @@ class ScalarQueryStateCalculator {
           // Preserve previous scalar metric on screen, mark as STALE due to criteria mismatch
           resolvedState = ScalarDataStateLoadedStale(
             reason: ScalarLoadedStateStaleReasonFailed(
+              errorOrigin: effectiveOrigin,
               errorInfo: input.scalarErrorInfo,
             ),
           );
@@ -118,6 +119,7 @@ class ScalarQueryStateCalculator {
             } else {
               resolvedState = ScalarDataStateLoadedStale(
                 reason: ScalarLoadedStateStaleReasonFailed(
+                  errorOrigin: effectiveOrigin,
                   errorInfo: input.scalarErrorInfo,
                 ),
               );
@@ -145,18 +147,20 @@ class ScalarQueryStateCalculator {
     );
   }
 
-  /// Pure state calculator when criteria extraction or FilterModel fails directly.
-  static ScalarDataState calculateOnFilterError({
+  /// Pure state calculator when an operational error occurs before executing queries
+  /// (e.g., criteria extraction, filter evaluation, or parent cascade propagation).
+  static ScalarDataState calculateDataStateOnError({
     required ScalarDataState currentDataState,
     required ScalarErrorOrigin scalarErrorOrigin,
     required ScalarErrorInfo? scalarErrorInfo,
     required FallbackDilemmaStrategy dilemmaStrategy,
   }) {
-    // If child scalar is in None state (parent has no active item context) -> Preserve None
+    // 1. If child scalar is in None state (parent has no active item context) -> Preserve None
     if (currentDataState.isNone) {
       return const ScalarDataStateNone();
     }
 
+    // 2. If scalar is in Pending state -> Propagate failure to Pending.failed
     if (currentDataState.isPending) {
       return ScalarDataStatePending.failed(
         errorOrigin: scalarErrorOrigin,
@@ -164,16 +168,18 @@ class ScalarQueryStateCalculator {
       );
     }
 
-    // Loaded:
+    // 3. Loaded: evaluate fallback dilemma rule
     if (dilemmaStrategy == FallbackDilemmaStrategy.preserveStableCache) {
       return ScalarDataStateLoadedStale(
         reason: ScalarLoadedStateStaleReasonFailed(
+          errorOrigin: scalarErrorOrigin,
           errorInfo: scalarErrorInfo,
         ),
       );
     }
+
     return ScalarDataStatePending.failed(
-      errorOrigin: ScalarErrorOrigin.filterModel,
+      errorOrigin: scalarErrorOrigin,
       errorInfo: scalarErrorInfo,
     );
   }

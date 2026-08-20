@@ -165,47 +165,12 @@ class BlockOrScalar extends Equatable {
     }
   }
 
-  // ScalarDataState get dataState {
-  //   // if (block != null) {
-  //   //   return block!.dataState;
-  //   // } else {
-  //   //   return scalar!.dataState;
-  //   // }
-  //   // TODO: Hardcode
-  //   return ScalarDataState.none;
-  // }
-
   FilterCriteria? get filterCriteria {
     if (block != null) {
       return block!.filterCriteria;
     } else {
       return scalar!.filterCriteria;
     }
-  }
-
-  Set<Type> getDeclaredReactionDataTypes() {
-    // if (block != null) {
-    //   return block!.getDeclaredReactionDataTypes();
-    // } else {
-    //   return scalar!.getDeclaredReactionDataTypes();
-    // }
-    throw UnimplementedError();
-  }
-
-  // TODO-Rename
-  List<String> getListenItemTypesAsStrings() {
-    // if (block != null) {
-    //   return block!
-    //       .getDeclaredReactionDataTypes()
-    //       .map((type) => type.toString())
-    //       .toList();
-    // } else {
-    //   return scalar!
-    //       .getDeclaredReactionDataTypes()
-    //       .map((type) => type.toString())
-    //       .toList();
-    // }
-    throw UnimplementedError();
   }
 
   bool hasActiveUiComponent() {

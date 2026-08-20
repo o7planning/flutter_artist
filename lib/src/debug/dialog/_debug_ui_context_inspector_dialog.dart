@@ -67,7 +67,7 @@ class _DebugUiContextInspectorDialogState
     } else if (widget.scalar != null) {
       return "Mounted UI Components of the Scalar";
     } else {
-      throw UnimplementedError();
+      throw UnimplementedError("_title");
     }
   }
 
@@ -105,7 +105,7 @@ class _DebugUiContextInspectorDialogState
         withScalarControlBar: true,
       );
     } else {
-      throw UnimplementedError();
+      throw UnimplementedError("_findWidgetStates");
     }
   }
 

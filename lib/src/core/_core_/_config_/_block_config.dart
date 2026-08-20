@@ -20,6 +20,7 @@ class BlockConfig {
   // final List<Type> broadcastExternalShelfEvents;
 
   final bool eventBroadcastEnabled;
+
   final List<Type> extraBroadcastEvents;
 
   final SortStrategy clientSideSortStrategy;

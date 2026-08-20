@@ -16,7 +16,7 @@ class BlockDataStateInfoWidget extends BaseInfoWidget {
 
   @override
   String? getButtonTooltip() {
-    return null;
+    return block.dataState.toBriefInfo();
   }
 
   @override
@@ -26,12 +26,12 @@ class BlockDataStateInfoWidget extends BaseInfoWidget {
 
   @override
   String? getLeftTooltip() {
-    return null;
+    return block.dataState.toBriefInfo();
   }
 
   @override
   String getText() {
-    return block.dataState.name;
+    return  block.dataState.toBriefInfo();
   }
 
   @override
@@ -63,18 +63,20 @@ class BlockDataStateInfoWidget extends BaseInfoWidget {
         ):
         return null;
       case BlockDataStateLoadedStale(
-          reason: BlockLoadedStateStaleReasonFailed(errorInfo: null)
+          reason: BlockLoadedStateStaleReasonFailed(
+            :final errorOrigin,
+            :final errorInfo
+          )
         ):
+        if (errorInfo != null) {
+          return ButtonFunction(
+            btnType: DebugBtnType.error,
+            onPressed: (BuildContext context) {
+              block.showBlockErrorViewerDialog(context);
+            },
+          );
+        }
         return null;
-      case BlockDataStateLoadedStale(
-          reason: BlockLoadedStateStaleReasonFailed(:final errorInfo?)
-        ):
-        return ButtonFunction(
-          btnType: DebugBtnType.error,
-          onPressed: (BuildContext context) {
-            block.showBlockErrorViewerDialog(context);
-          },
-        );
     }
   }
 }

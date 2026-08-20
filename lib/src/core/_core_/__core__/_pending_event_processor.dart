@@ -33,8 +33,9 @@ class _PendingEventProcessor {
       if (listenerShelf.markedAsOrphan) {
         continue;
       }
-      bool hasAccumulatedEvents = listenerShelf.hasAccumulatedEvents();
-      if (!hasAccumulatedEvents) {
+      bool hasPendingOrStaleMember =
+          listenerShelf.hasPendingOrStaleMember(requiresVisible: true);
+      if (!hasPendingOrStaleMember) {
         continue;
       }
       listenerShelf._addShelfExternalReactionTaskUnit(

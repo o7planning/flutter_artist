@@ -495,11 +495,7 @@ abstract class Block<
         filterCriteria: filterCriteria,
       );
     }
-    // if (__blockData._blockDataState == DataState.loaded) {
-    //   __blockData._hasPendingInvalidation = true;
-    // } else {
-    //   __blockData._hasPendingInvalidation = false;
-    // }
+    //
     executionTrace._addTraceStep(
       codeId: "#83400",
       shortDesc:
@@ -515,6 +511,22 @@ abstract class Block<
       mainDataTypes: [ITEM, ITEM_DETAIL],
       effectedItemIds: addedEffectiveIds ?? <ID>[],
     );
+
+    // 🚀 Recalculate BlockDataState upon incoming event
+    if (_blockSyncSessionState != null) {
+      final nextState =
+          _blockSyncSessionState!.calculateNextDataState(dataState);
+
+      // Test case: [63a], [63b].
+      if (nextState != dataState) {
+        __blockData._blockDataState = nextState;
+        executionTrace._addTraceStep(
+          codeId: "#83500",
+          shortDesc:
+              "Transitioned dataState to $nextState due to SyncSession update",
+        );
+      }
+    }
   }
 
   bool _hasReactionBookmark() {
@@ -600,20 +612,49 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  Set<Type> getDeclaredBroadcastDataTypes() {
+    if (!config.eventBroadcastEnabled) {
+      return {};
+    }
+    return {ITEM, ITEM_DETAIL, ...config.extraBroadcastEvents};
+  }
+
   Set<Type> getDeclaredMainBroadcastDataTypes() {
+    if (!config.eventBroadcastEnabled) {
+      return {};
+    }
     return {ITEM, ITEM_DETAIL};
   }
 
   Set<Type> getDeclaredExtraBroadcastDataTypes() {
+    if (!config.eventBroadcastEnabled) {
+      return {};
+    }
     return config.extraBroadcastEvents.toSet();
   }
 
+  Set<Type> getResolvedBroadcastDataTypes() {
+    if (!config.eventBroadcastEnabled) {
+      return {};
+    }
+    return {
+      ...getResolvedMainBroadcastDataTypes(),
+      ...getResolvedExtraBroadcastDataTypes()
+    };
+  }
+
   Set<Type> getResolvedExtraBroadcastDataTypes() {
+    if (!config.eventBroadcastEnabled) {
+      return {};
+    }
     final declaredTypes = getDeclaredExtraBroadcastDataTypes();
     return DataTypeEventUtils.getProjectionsDataTypes(declaredTypes);
   }
 
   Set<Type> getResolvedMainBroadcastDataTypes() {
+    if (!config.eventBroadcastEnabled) {
+      return {};
+    }
     final mainTypes = getDeclaredMainBroadcastDataTypes();
     return DataTypeEventUtils.getProjectionsDataTypes(mainTypes);
   }
@@ -624,10 +665,10 @@ abstract class Block<
   /// Returns the data types explicitly declared in the configuration
   /// that this block should react to.
   Set<Type> getDeclaredReactionDataTypes({
-    required BlockReactionTarget target,
+    required BlockReactionTarget? target,
   }) {
     return config.reactions
-        .where((reaction) => reaction.target == target)
+        .where((reaction) => target == null || reaction.target == target)
         .map((r) => r.dataType)
         .toSet();
   }
@@ -635,10 +676,23 @@ abstract class Block<
   /// Resolves and returns all data types—including those within the same
   /// [ProjectionFamily]—that will actually trigger a reaction in this block.
   Set<Type> getResolvedReactionDataTypes({
-    required BlockReactionTarget target,
+    required BlockReactionTarget? target,
   }) {
     final declaredTypes = getDeclaredReactionDataTypes(target: target);
     return DataTypeEventUtils.getProjectionsDataTypes(declaredTypes);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isPendingOrStale({required bool requiresVisible}) {
+    final bool visible = ui.hasActiveUiComponent(alsoCheckChildren: true);
+    if (requiresVisible) {
+      if (!visible) {
+        return false;
+      }
+    }
+    return dataState.isPending || dataState.isStale;
   }
 
   // ***************************************************************************
@@ -1026,7 +1080,7 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#03040",
-      shortDesc: "@queryHint: ${debugObjHtml(queryHint)}.",
+      shortDesc: "Current State: ${dataState.toBriefInfo()}, @queryHint: ${debugObjHtml(queryHint)}.",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -3838,7 +3892,7 @@ abstract class Block<
     final fallbackDilemmaStrategy = FallbackDilemmaStrategy.preserveStableCache;
 
     final BlockDataState newBlockDataState =
-        BlockQueryStateCalculator.calculateOnFilterError(
+        BlockQueryStateCalculator.calculateDataStateOnError(
       currentDataState: dataState,
       blockErrorOrigin: blockErrorOrigin,
       blockErrorInfo: blockErrorInfo,
@@ -3868,7 +3922,8 @@ abstract class Block<
         FallbackDilemmaStrategy.preserveStableCache;
 
     for (final descendant in descendantXBlocks) {
-      final descendantState = BlockQueryStateCalculator.calculateOnFilterError(
+      final descendantState =
+          BlockQueryStateCalculator.calculateDataStateOnError(
         currentDataState: descendant.block.dataState,
         blockErrorOrigin: blockErrorOrigin,
         blockErrorInfo: null,

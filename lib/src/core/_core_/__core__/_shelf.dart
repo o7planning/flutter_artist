@@ -802,6 +802,20 @@ abstract class Shelf extends _Core {
     return false;
   }
 
+  bool hasPendingOrStaleMember({required bool requiresVisible})  {
+    for (Block block in blocks) {
+      if (block.isPendingOrStale(requiresVisible:requiresVisible)) {
+        return true;
+      }
+    }
+    for (Scalar scalar in scalars) {
+      if (scalar.isPendingOrStale(requiresVisible:requiresVisible)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 

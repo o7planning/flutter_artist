@@ -42,13 +42,16 @@ abstract class BaseInfoWidget extends StatelessWidget {
           ),
         ),
         if (btnFunc != null)
-          SimpleSmallIconButton(
-            iconData: DebugBtnType.getIconData(btnFunc.btnType),
-            iconSize: 14,
-            iconColor: btnFunc.btnType.getColor(context),
-            onPressed: () {
-              btnFunc.onPressed(context);
-            },
+          Tooltip(
+            message: getButtonTooltip() ?? "",
+            child: SimpleSmallIconButton(
+              iconData: DebugBtnType.getIconData(btnFunc.btnType),
+              iconSize: 14,
+              iconColor: btnFunc.btnType.getColor(context),
+              onPressed: () {
+                btnFunc.onPressed(context);
+              },
+            ),
           ),
       ],
     );

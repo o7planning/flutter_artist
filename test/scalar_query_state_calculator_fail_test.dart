@@ -31,7 +31,10 @@ void main() {
         expect(
           result.newScalarDataState,
           ScalarDataStateLoadedStale(
-            reason: ScalarLoadedStateStaleReasonFailed(errorInfo: null),
+            reason: ScalarLoadedStateStaleReasonFailed(
+              errorOrigin: ScalarErrorOrigin.directFetch,
+              errorInfo: null,
+            ),
           ),
         );
       });
@@ -137,7 +140,10 @@ void main() {
         expect(
           result.newScalarDataState,
           ScalarDataStateLoadedStale(
-            reason: ScalarLoadedStateStaleReasonFailed(errorInfo: null),
+            reason: ScalarLoadedStateStaleReasonFailed(
+              errorOrigin: ScalarErrorOrigin.directFetch,
+              errorInfo: null,
+            ),
           ),
         );
       });

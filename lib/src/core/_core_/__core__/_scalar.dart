@@ -240,13 +240,6 @@ abstract class Scalar<
 
   VALUE? get value => __scalarData.current._value;
 
-  // void _setToPending() {
-  //   __scalarData._clearValueWithDataState(
-  //     scalarDataState: ScalarDataStatePending(),
-  //     errorInFilter: false,
-  //   );
-  // }
-
   void _resetSyncSessionState({
     required ExecutionTrace? executionTrace,
   }) {
@@ -333,19 +326,110 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
+  bool isPendingOrStale({required bool requiresVisible}) {
+    final bool visible = ui.hasActiveUiComponent(alsoCheckChildren: true);
+    if (requiresVisible) {
+      if (!visible) {
+        return false;
+      }
+    }
+    return dataState.isPending || dataState.isStale;
+  }
+
   // TODO: Rename (+ `Visible` in name)
   bool hasAccumulatedEvents() {
-    return false;
+    if (_scalarSyncSessionState == null) {
+      return false;
+    }
+    return ui.hasActiveUiComponent(alsoCheckChildren: true);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Entry point called when this Scalar receives an event dispatched from internal/external sources.
   void _receiveEvent({
     required ExecutionTrace executionTrace,
-    required ScalarReceivedEventInfo event,
+    required EventSourceType eventSourceType,
+    required List<Type> dataTypes,
   }) {
-    //
+    if (dataState.isNone) {
+      return;
+    }
+    if (dataTypes.isEmpty) {
+      return;
+    }
+
+    final Set<Type> scalarReactionTypes = getResolvedReactionDataTypes();
+
+    if (scalarReactionTypes.isEmpty) {
+      print("@TEMP scalarReactionTypes is null --> Ignore..");
+      return;
+    }
+
+    final bool isEffected = dataTypes.isNotEmpty &&
+        DataTypeEventUtils.hasIntersection(
+          scalarReactionTypes,
+          dataTypes.toSet(),
+        );
+
+    if (isEffected) {
+      _updateSyncSessionState(
+        executionTrace: executionTrace,
+        eventSourceType: eventSourceType,
+        dataTypes: dataTypes,
+      );
+    }
+  }
+
+  /// Manages session instantiation, appends the received event info, and recalculates [_dataState].
+  void _updateSyncSessionState({
+    required ExecutionTrace executionTrace,
+    required EventSourceType eventSourceType,
+    required List<Type> dataTypes,
+  }) {
+    executionTrace._addTraceStep(
+      codeId: "#86000",
+      shortDesc: "Calling Scalar._updateSyncSessionState()",
+      traceStepType: TraceStepType.nonControllableCalling,
+    );
+
+    // Initialize or reset session if boundary constraints (filter criteria or parent context) shifted
+    if (_scalarSyncSessionState == null ||
+        _scalarSyncSessionState!.filterCriteria != filterCriteria ||
+        _scalarSyncSessionState!.parentScalarValueId != parent?.valueId) {
+      _scalarSyncSessionState = _ScalarSyncSessionState(
+        scalar: this,
+        parentScalarValueId: parent?.valueId,
+        filterCriteria: filterCriteria,
+      );
+    }
+
+    // Append received event metadata
+    _scalarSyncSessionState?.addReceivedEventInfo(
+      eventSourceType: eventSourceType,
+      dataTypes: dataTypes,
+    );
+
+    executionTrace._addTraceStep(
+      codeId: "#86300",
+      shortDesc: "Added ScalarReceivedEventInfo to session",
+    );
+
+    // Recalculate ScalarDataState upon incoming event invalidation
+    if (_scalarSyncSessionState != null) {
+      final nextState =
+          _scalarSyncSessionState!.calculateNextDataState(dataState);
+      // Test Case: [84b].
+      if (nextState != dataState) {
+        __scalarData._scalarDataState = nextState;
+        executionTrace._addTraceStep(
+          codeId: "#86400",
+          shortDesc:
+              "Transitioned Scalar dataState to $nextState due to SyncSession update",
+        );
+      }
+    }
   }
 
   // ***************************************************************************
@@ -858,7 +942,7 @@ abstract class Scalar<
     final fallbackDilemmaStrategy = FallbackDilemmaStrategy.preserveStableCache;
 
     final ScalarDataState newScalarDataState =
-        ScalarQueryStateCalculator.calculateOnFilterError(
+        ScalarQueryStateCalculator.calculateDataStateOnError(
       currentDataState: dataState,
       scalarErrorOrigin: scalarErrorOrigin,
       scalarErrorInfo: scalarErrorInfo,
@@ -888,12 +972,14 @@ abstract class Scalar<
         FallbackDilemmaStrategy.preserveStableCache;
 
     for (final descendant in descendantXScalars) {
-      final descendantState = ScalarQueryStateCalculator.calculateOnFilterError(
+      final descendantState =
+          ScalarQueryStateCalculator.calculateDataStateOnError(
         currentDataState: descendant.scalar.dataState,
         scalarErrorOrigin: scalarErrorOrigin,
         scalarErrorInfo: null,
         dilemmaStrategy: fallbackDilemmaStrategy,
       );
+      print("*** scalarErrorOrigin $scalarErrorOrigin");
       print("descendant: $descendant, descendantState: $descendantState");
 
       descendant.scalar.__scalarData._lastQueryResultState =

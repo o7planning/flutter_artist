@@ -3,11 +3,11 @@ part of '../core.dart';
 interface class IContextProviderViewState {
   ShowMode showMode = ShowMode.production;
 
-  ContextProviderViewType get type => throw UnimplementedError();
+  ContextProviderViewType get type => throw UnimplementedError("type");
 
-  String get locationInfo => throw UnimplementedError();
+  String get locationInfo => throw UnimplementedError("locationInfo");
 
-  String get description => throw UnimplementedError();
+  String get description => throw UnimplementedError("description");
 
   void setState(Function() func) {}
 }

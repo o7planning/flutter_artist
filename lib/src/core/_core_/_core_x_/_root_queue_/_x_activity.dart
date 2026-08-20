@@ -36,7 +36,6 @@ class XActivity extends XRootQueueItem {
 
   @override
   DebugXRootQueueItem toDebugXRootQueueItem() {
-    // TODO: implement toDebugXRootQueueItem
-    throw UnimplementedError();
+    throw UnimplementedError("toDebugXRootQueueItem");
   }
 }

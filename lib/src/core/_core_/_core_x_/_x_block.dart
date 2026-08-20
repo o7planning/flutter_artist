@@ -223,6 +223,10 @@ class XBlock<
   }
 
   void setQueryHintToGreater(QryHint queryHint) {
+    if(queryHint == QryHint.markAsPending) {
+      print("******** setQueryHintToGreater *************\n");
+      print(StackTrace.current);
+    }
     if (__qryHint.isLessThan(queryHint)) {
       __qryHint = queryHint;
     }

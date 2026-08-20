@@ -91,6 +91,32 @@ class _BlockSyncSessionState<ID extends Comparable> extends Equatable
     }
   }
 
+  /// Evaluates and recalculates the next [BlockDataState] when new events mutate this sync session.
+  BlockDataState calculateNextDataState(BlockDataState currentDataState) {
+    // 1. Cold baseline states remain unaffected by external incoming events
+    if (currentDataState.isNone || currentDataState.isPending) {
+      return currentDataState;
+    }
+
+    // 2. If already STALE, preserve the stale state
+    if (currentDataState.isStale) {
+      return currentDataState;
+    }
+
+    // 3. If currently FRESH, mark as STALE due to incoming event invalidation
+    if (currentDataState.isFresh) {
+      final isFromInternalShelf = _receivedEventInfos.any(
+        (info) => info.eventSourceType == EventSourceType.internal,
+      );
+
+      return BlockDataStateLoadedStale(
+        reason: BlockLoadedStateStaleReasonEvent(),
+      );
+    }
+
+    return currentDataState;
+  }
+
   @override
   List<Object?> get props {
     return [

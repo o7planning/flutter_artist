@@ -48,8 +48,7 @@ class _Executor {
                 break;
               }
               pendingEventProcessed = true;
-              // FlutterArtist.storage._deferredEventManager
-              //     .addTaskUnitForDeferredEvents();
+              //
               FlutterArtist.storage._pendingEventProcessor
                   .addTaskUnitForPendingEvents();
               hasNext = FlutterArtist._rootQueue.hasNext();

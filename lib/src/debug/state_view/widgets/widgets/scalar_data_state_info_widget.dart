@@ -18,7 +18,7 @@ class ScalarDataStateInfoWidget extends BaseInfoWidget {
 
   @override
   String? getButtonTooltip() {
-    return null;
+    return scalar.dataState.toBriefInfo();
   }
 
   @override
@@ -28,12 +28,12 @@ class ScalarDataStateInfoWidget extends BaseInfoWidget {
 
   @override
   String? getLeftTooltip() {
-    return null;
+    return scalar.dataState.toBriefInfo();
   }
 
   @override
   String getText() {
-    return scalar.dataState.name;
+    return scalar.dataState.toBriefInfo();
   }
 
   @override
@@ -65,18 +65,20 @@ class ScalarDataStateInfoWidget extends BaseInfoWidget {
         ):
         return null;
       case ScalarDataStateLoadedStale(
-          reason: ScalarLoadedStateStaleReasonFailed(errorInfo: null)
+          reason: ScalarLoadedStateStaleReasonFailed(
+            :final errorOrigin,
+            :final errorInfo
+          )
         ):
+        if (errorInfo != null) {
+          return ButtonFunction(
+            btnType: DebugBtnType.error,
+            onPressed: (BuildContext context) {
+              scalar.showScalarErrorViewerDialog(context);
+            },
+          );
+        }
         return null;
-      case ScalarDataStateLoadedStale(
-          reason: ScalarLoadedStateStaleReasonFailed(:final errorInfo?)
-        ):
-        return ButtonFunction(
-          btnType: DebugBtnType.error,
-          onPressed: (BuildContext context) {
-            scalar.showScalarErrorViewerDialog(context);
-          },
-        );
     }
   }
 }

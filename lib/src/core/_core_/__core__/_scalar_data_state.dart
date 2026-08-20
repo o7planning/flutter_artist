@@ -6,6 +6,8 @@ sealed class ScalarDataState {
 
   String get name;
 
+  String toBriefInfo();
+
   // Common quick getters
   bool get isNone => this is ScalarDataStateNone;
 
@@ -37,6 +39,11 @@ final class ScalarDataStateNone extends ScalarDataState {
 
   @override
   int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toBriefInfo() {
+    return "none()";
+  }
 
   @override
   String toString() => 'ScalarDataState.none()';
@@ -83,6 +90,11 @@ final class ScalarDataStatePending extends ScalarDataState {
   int get hashCode => Object.hash(runtimeType, reason);
 
   @override
+  String toBriefInfo() {
+    return "pending(${reason.toBriefInfo()})";
+  }
+
+  @override
   String toString() => 'ScalarDataState.pending(reason: $reason)';
 }
 
@@ -126,6 +138,11 @@ final class ScalarDataStateLoadedFresh extends ScalarDataStateLoaded {
   int get hashCode => Object.hash(runtimeType, transientErrorInfo);
 
   @override
+  String toBriefInfo() {
+    return "fresh(${transientErrorInfo == null ? '' : 'err'})";
+  }
+
+  @override
   String toString() =>
       'ScalarDataState.loadedFresh(transientError: $transientErrorInfo)';
 }
@@ -141,8 +158,13 @@ final class ScalarDataStateLoadedStale extends ScalarDataStateLoaded {
       : reason = const ScalarLoadedStateStaleReasonEvent();
 
   /// Factory constructor for query-failure stale state.
-  ScalarDataStateLoadedStale.failed({ScalarErrorInfo? errorInfo})
-      : reason = ScalarLoadedStateStaleReasonFailed(errorInfo: errorInfo);
+  ScalarDataStateLoadedStale.failed({
+    required ScalarErrorOrigin errorOrigin,
+    ScalarErrorInfo? errorInfo,
+  }) : reason = ScalarLoadedStateStaleReasonFailed(
+          errorOrigin: errorOrigin,
+          errorInfo: errorInfo,
+        );
 
   @override
   String get name => "loaded + stale";
@@ -161,6 +183,11 @@ final class ScalarDataStateLoadedStale extends ScalarDataStateLoaded {
   int get hashCode => Object.hash(runtimeType, reason);
 
   @override
+  String toBriefInfo() {
+    return "stale(${reason.toBriefInfo()})";
+  }
+
+  @override
   String toString() => 'ScalarDataState.loadedStale(reason: $reason)';
 }
 
@@ -177,17 +204,27 @@ final class ScalarLoadedStateStaleReasonEvent
   int get hashCode => runtimeType.hashCode;
 
   @override
+  String toBriefInfo() {
+    return "event()";
+  }
+
+  @override
   String toString() => 'ScalarLoadedStateStaleReason.event';
 }
 
 /// Baseline scalar value is marked stale because a subsequent remote refetch, filter change, or query failed.
 final class ScalarLoadedStateStaleReasonFailed
     extends ScalarLoadedStateStaleReason {
+  final ScalarErrorOrigin errorOrigin;
+
   /// Structured diagnostic details regarding the failed fetch attempt.
   @override
   final ScalarErrorInfo? errorInfo;
 
-  ScalarLoadedStateStaleReasonFailed({this.errorInfo});
+  ScalarLoadedStateStaleReasonFailed({
+    required this.errorOrigin,
+    this.errorInfo,
+  });
 
   @override
   bool operator ==(Object other) =>
@@ -200,13 +237,20 @@ final class ScalarLoadedStateStaleReasonFailed
   int get hashCode => Object.hash(runtimeType, errorInfo);
 
   @override
+  String toBriefInfo() {
+    return "failed(${errorOrigin.name}${errorInfo == null ? '' : ',err'})";
+  }
+
+  @override
   String toString() =>
-      'ScalarLoadedStateStaleReason.failed(errorInfo: $errorInfo)';
+      'ScalarLoadedStateStaleReason.failed(origin: $errorOrigin, errorInfo: $errorInfo)';
 }
 
 /// Sealed hierarchy representing the specific rationale behind a [ScalarDataStatePending].
 sealed class ScalarPendingReason {
   const ScalarPendingReason();
+
+  String toBriefInfo();
 
   /// Quick check whether this pending state was caused by an execution failure (direct query, filter, or cascade).
   bool get isFailed => this is ScalarPendingReasonFailed;
@@ -247,6 +291,11 @@ final class ScalarPendingReasonInitial extends ScalarPendingReason {
 
   @override
   String toString() => 'ScalarPendingReason.initial';
+
+  @override
+  String toBriefInfo() {
+    return "initial()";
+  }
 }
 
 /// Baseline loading failure where no prior scalar exists (caused by direct query, filter model, or upstream parent cascade).
@@ -274,6 +323,11 @@ final class ScalarPendingReasonFailed extends ScalarPendingReason {
   int get hashCode => Object.hash(runtimeType, errorOrigin, errorInfo);
 
   @override
+  String toBriefInfo() {
+    return "failed(${errorOrigin.name}${errorInfo == null ? '' : ',err'})";
+  }
+
+  @override
   String toString() =>
       'ScalarPendingReason.failed(origin: $errorOrigin, errorInfo: $errorInfo)';
 }
@@ -299,12 +353,20 @@ sealed class ScalarLoadedStateStaleReason {
       ScalarLoadedStateStaleReasonEvent();
 
   /// Convenience factory for query-failure stale reason.
-  static ScalarLoadedStateStaleReason failed({ScalarErrorInfo? errorInfo}) =>
-      ScalarLoadedStateStaleReasonFailed(errorInfo: errorInfo);
+  static ScalarLoadedStateStaleReason failed({
+    required ScalarErrorOrigin errorOrigin,
+    ScalarErrorInfo? errorInfo,
+  }) =>
+      ScalarLoadedStateStaleReasonFailed(
+        errorOrigin: errorOrigin,
+        errorInfo: errorInfo,
+      );
 
   @override
   bool operator ==(Object other);
 
   @override
   int get hashCode;
+
+  String toBriefInfo();
 }

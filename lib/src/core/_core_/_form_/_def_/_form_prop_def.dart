@@ -121,7 +121,7 @@ class CalculatedPropDef<V> extends FormPropDef<V> {
     return CalculatedFormPropModel<V>(
       propName: propName,
       calculate: () {
-        throw UnimplementedError();
+        throw UnimplementedError("CalculatedPropDef");
       },
     );
   }

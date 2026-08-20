@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-as dialogs;
+    as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart'
     hide FlutterArtistLocaleAdapter;
@@ -225,8 +225,6 @@ part '__core__/_default_filter_model.dart';
 
 part '__core__/_deferred_event.dart';
 
-part '__core__/_pending_deferred_event_manager.dart';
-
 part '__core__/_pending_event_processor.dart';
 
 part '_core_event_/_eff_block.dart';
@@ -343,7 +341,7 @@ part '_sort_/_sort_criteria.dart';
 
 part '__core__/_storage.dart';
 
-part '__core__/_storage_ev.dart';
+part '_event_/_event_helper.dart';
 
 part '_utils_/_event_dispatcher.dart';
 
@@ -380,6 +378,8 @@ part '_event_/_block_event_reaction.dart';
 part '_config_/_filter_model_config.dart';
 
 part '_config_/_form_model_config.dart';
+
+part '_event_/_scalar_event_reaction.dart';
 
 part '_config_/_scalar_config.dart';
 

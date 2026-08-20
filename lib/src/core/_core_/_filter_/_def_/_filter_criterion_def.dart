@@ -250,7 +250,7 @@ class CalculatedCriterionDef<V extends Object> extends FilterCriterionDef<V> {
       criterionName: criterionName,
       tildeSuffix: tildeSuffix,
       calculate: () {
-        throw UnimplementedError();
+        throw UnimplementedError("CalculatedTildeFilterCriterionModel");
       },
     );
   }

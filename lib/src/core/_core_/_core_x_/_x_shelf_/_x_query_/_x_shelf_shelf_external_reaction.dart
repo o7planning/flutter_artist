@@ -24,6 +24,7 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
       //
       if (xBlk.block._blockSyncSessionState != null &&
           xBlk.block._isMatchBlockReQryCon(xBlk.block._blockSyncSessionState)) {
+        print("@TEMP: *** CURRENT block state ***: ${xBlk.block.dataState}");
         queryHint = blockXBlockRep ? QryHint.force : QryHint.markAsPending;
       }
       if (xBlk.block._blockItemRefreshCondition != null &&

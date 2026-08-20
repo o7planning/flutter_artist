@@ -22,6 +22,7 @@ class _EventDispatcher {
     // Thus, mainDataTypes is empty and all types are treated as extraDataTypes.
     final List<Type> mainDataTypes = const [];
     final List<Type> extraDataTypes = events;
+    final List<Type> allDataTypes = [...mainDataTypes, ...extraDataTypes];
 
     final _Storage storage = FlutterArtist.storage;
 
@@ -46,14 +47,18 @@ class _EventDispatcher {
           requiresMaxSyncStrategy: true,
           syncStrategyOnFullQueryMode: BlockViewportSyncStrategy.nativeQuery,
           syncStrategyOnPageableQueryMode:
-          BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
+              BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
           effectedItemIds: const [],
         );
       }
 
       // Dispatch to scalars.
       for (Scalar scalar in shelf.scalars) {
-        // TODO: Implement scalar event reception when Scalar structure refactor is ready.
+        scalar._receiveEvent(
+          executionTrace: executionTrace,
+          eventSourceType: EventSourceType.external,
+          dataTypes: allDataTypes,
+        );
       }
     }
   }

@@ -22,6 +22,8 @@ sealed class BlockDataState {
 
   @override
   int get hashCode;
+
+  String toBriefInfo();
 }
 
 /// Uninitialized context (Child block whose parent has no selected item).
@@ -37,6 +39,11 @@ final class BlockDataStateNone extends BlockDataState {
 
   @override
   int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toBriefInfo() {
+    return "none()";
+  }
 
   @override
   String toString() => 'BlockDataState.none()';
@@ -81,6 +88,11 @@ final class BlockDataStatePending extends BlockDataState {
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
+
+  @override
+  String toBriefInfo() {
+    return "pending(${reason.toBriefInfo()})";
+  }
 
   @override
   String toString() => 'BlockDataState.pending(reason: $reason)';
@@ -129,6 +141,11 @@ final class BlockDataStateLoadedFresh extends BlockDataStateLoaded {
   int get hashCode => Object.hash(runtimeType, transientErrorInfo);
 
   @override
+  String toBriefInfo() {
+    return "fresh(${transientErrorInfo == null ? '' : 'err'})";
+  }
+
+  @override
   String toString() =>
       'BlockDataState.loadedFresh(transientError: $transientErrorInfo)';
 }
@@ -144,8 +161,13 @@ final class BlockDataStateLoadedStale extends BlockDataStateLoaded {
       : reason = const BlockLoadedStateStaleReasonEvent();
 
   /// Factory constructor for query-failure stale state.
-  BlockDataStateLoadedStale.failed({BlockErrorInfo? errorInfo})
-      : reason = BlockLoadedStateStaleReasonFailed(errorInfo: errorInfo);
+  BlockDataStateLoadedStale.failed({
+    required BlockErrorOrigin errorOrigin,
+    BlockErrorInfo? errorInfo,
+  }) : reason = BlockLoadedStateStaleReasonFailed(
+          errorOrigin: errorOrigin,
+          errorInfo: errorInfo,
+        );
 
   @override
   String get name => "loaded + stale";
@@ -162,6 +184,11 @@ final class BlockDataStateLoadedStale extends BlockDataStateLoaded {
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
+
+  @override
+  String toBriefInfo() {
+    return "stale(${reason.toBriefInfo()})";
+  }
 
   @override
   String toString() => 'BlockDataState.loadedStale(reason: $reason)';
@@ -181,15 +208,25 @@ final class BlockLoadedStateStaleReasonEvent
 
   @override
   String toString() => 'BlockLoadedStateStaleReason.event';
+
+  @override
+  String toBriefInfo() {
+    return "event()";
+  }
 }
 
 /// Baseline dataset is marked stale because a subsequent remote refetch, filter change, or query failed.
 final class BlockLoadedStateStaleReasonFailed
     extends BlockLoadedStateStaleReason {
+  final BlockErrorOrigin errorOrigin;
+
   /// Structured diagnostic details regarding the failed fetch attempt.
   final BlockErrorInfo? errorInfo;
 
-  BlockLoadedStateStaleReasonFailed({this.errorInfo});
+  BlockLoadedStateStaleReasonFailed({
+    required this.errorOrigin,
+    this.errorInfo,
+  });
 
   @override
   bool operator ==(Object other) =>
@@ -202,8 +239,13 @@ final class BlockLoadedStateStaleReasonFailed
   int get hashCode => Object.hash(runtimeType, errorInfo);
 
   @override
+  String toBriefInfo() {
+    return "failed(${errorOrigin.name}${errorInfo == null ? '' : ',err'})";
+  }
+
+  @override
   String toString() =>
-      'BlockLoadedStateStaleReason.failed(errorInfo: $errorInfo)';
+      'BlockLoadedStateStaleReason.failed(origin:$errorOrigin, errorInfo: $errorInfo)';
 }
 
 /// Sealed hierarchy representing the specific rationale behind a [BlockDataStatePending].
@@ -231,6 +273,8 @@ sealed class BlockPendingReason {
 
   @override
   int get hashCode;
+
+  String toBriefInfo();
 }
 
 /// Initial cold baseline loading (First-time loading, no errors encountered yet).
@@ -243,6 +287,11 @@ final class BlockPendingReasonInitial extends BlockPendingReason {
 
   @override
   int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toBriefInfo() {
+    return "initial()";
+  }
 
   @override
   String toString() => 'PendingReason.initial';
@@ -273,6 +322,11 @@ final class BlockPendingReasonFailed extends BlockPendingReason {
   int get hashCode => Object.hash(runtimeType, errorOrigin, errorInfo);
 
   @override
+  String toBriefInfo() {
+    return "failed(${errorOrigin.name}${errorInfo == null ? '' : ',err'})";
+  }
+
+  @override
   String toString() =>
       'PendingReason.failed(origin: $errorOrigin, errorInfo: $errorInfo)';
 }
@@ -298,12 +352,20 @@ sealed class BlockLoadedStateStaleReason {
       BlockLoadedStateStaleReasonEvent();
 
   /// Convenience factory for query-failure stale reason.
-  static BlockLoadedStateStaleReason failed({BlockErrorInfo? errorInfo}) =>
-      BlockLoadedStateStaleReasonFailed(errorInfo: errorInfo);
+  static BlockLoadedStateStaleReason failed({
+    required BlockErrorOrigin errorOrigin,
+    BlockErrorInfo? errorInfo,
+  }) =>
+      BlockLoadedStateStaleReasonFailed(
+        errorOrigin: errorOrigin,
+        errorInfo: errorInfo,
+      );
 
   @override
   bool operator ==(Object other);
 
   @override
   int get hashCode;
+
+  String toBriefInfo();
 }

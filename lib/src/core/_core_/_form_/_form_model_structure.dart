@@ -432,7 +432,7 @@ class FormModelStructure {
             }
           } else {
             // Never throw.
-            throw UnimplementedError();
+            throw UnimplementedError("_setupTemporaryStateForNewActivity");
           }
         case FormActivityType.updateFromFormView:
           prop._tempCurrentValue = prop._currentValue;
