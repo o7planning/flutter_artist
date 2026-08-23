@@ -87,16 +87,16 @@ class XBlock<
   Pageable? getWillBeUsedPageable(QueryType queryType) {
     switch (queryType) {
       case QueryType.realQuery:
-        Pageable? usedPageable =
-            block.pendingNativeQueryMode == BlockNativeQueryMode.fullQuery
-                ? null
-                : (pageable ?? block.config.pageable);
+        Pageable? usedPageable = block.effectiveConfig.nativeQueryMode ==
+                BlockNativeQueryMode.fullQuery
+            ? null
+            : (pageable ?? block.config.pageable);
         return usedPageable;
       case QueryType.emptyQuery:
-        Pageable? usedPageable =
-            block.pendingNativeQueryMode == BlockNativeQueryMode.fullQuery
-                ? null
-                : block.__blockData._emptyPageable;
+        Pageable? usedPageable = block.effectiveConfig.nativeQueryMode ==
+                BlockNativeQueryMode.fullQuery
+            ? null
+            : block.__blockData._emptyPageable;
         return usedPageable;
     }
   }
@@ -223,7 +223,7 @@ class XBlock<
   }
 
   void setQueryHintToGreater(QryHint queryHint) {
-    if(queryHint == QryHint.markAsPending) {
+    if (queryHint == QryHint.markAsPending) {
       print("******** setQueryHintToGreater *************\n");
       print(StackTrace.current);
     }

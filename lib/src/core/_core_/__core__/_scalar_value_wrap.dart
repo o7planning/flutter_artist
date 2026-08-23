@@ -1,11 +1,11 @@
 part of '../core.dart';
 
-class _ScalarValueWrap<VALUE> {
-  final String? _id;
+class _ScalarValueWrap<ID, VALUE> {
+  final ID? _id;
   final VALUE? _value;
 
   _ScalarValueWrap({
-    required String? id,
+    required ID? id,
     required VALUE? value,
   })  : _id = id,
         _value = value,

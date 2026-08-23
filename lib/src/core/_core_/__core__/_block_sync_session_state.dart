@@ -70,11 +70,12 @@ class _BlockSyncSessionState<ID extends Comparable> extends Equatable
     return set;
   }
 
+  @override
   Set<ID> getPerformQueryItemIds(List<ID> blockItemIds) {
     final viewportSyncStrategy =
         BlockViewportSyncStrategy.resolveViewportSyncStrategy(
-      nativeQueryMode: block.pendingNativeQueryMode,
-      syncConfig: block.config.viewportSyncConfig,
+      nativeQueryMode: block.effectiveConfig.nativeQueryMode,
+      syncConfig: block.effectiveConfig.viewportSyncConfig,
       receivedEventInfos: _receivedEventInfos,
     );
     //

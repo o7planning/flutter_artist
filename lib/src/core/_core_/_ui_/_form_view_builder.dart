@@ -138,7 +138,7 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
 
   @override
   Widget buildContent(BuildContext context) {
-    if (widget.formModel.block.config.preventUnsavedChangesLoss) {
+    if (widget.formModel.block.effectiveConfig.preventUnsavedChangesLoss) {
       return PopScope(
         // TODO: In Error, check again late.
         canPop: !widget.formModel.isDirty(),

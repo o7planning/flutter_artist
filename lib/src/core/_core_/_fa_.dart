@@ -7,6 +7,9 @@ const _isOverlayMode = false;
 class _FlutterArtist extends _Core {
   bool __started = false;
   bool _lockAddMoreQuery = false;
+
+  final _Backstage backstage = _Backstage();
+
   _FlutterArtistNavigatorObserver? __navigatorObserver;
 
   _FlutterArtistNavigatorObserver get navigatorObserver {
@@ -34,6 +37,8 @@ class _FlutterArtist extends _Core {
   final garbageScheduler = _GarbageScheduler();
 
   late final storage = _Storage();
+
+  late final desk = _Desk();
 
   final executor = _Executor();
 
@@ -198,7 +203,7 @@ class _FlutterArtist extends _Core {
     );
 
     final executionTrace =
-    FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
+        FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
     try {
       await __start(executionTrace: executionTrace);
       garbageScheduler.start();
@@ -256,7 +261,7 @@ class _FlutterArtist extends _Core {
       codeId: "#S0500",
       shortDesc: "Calling <b>globalsManager._init()</b>...",
       note:
-      "This method will read all the user data that was previously stored in <b>Local</b>.",
+          "This method will read all the user data that was previously stored in <b>Local</b>.",
       traceStepType: TraceStepType.nonControllableCalling,
       tipDocument: TipDocument.globalData,
     );
@@ -292,7 +297,7 @@ class _FlutterArtist extends _Core {
       executionTrace._addTraceStep(
         codeId: "#S0560",
         shortDesc:
-        "Calling <b>localeManager._getStoredLocalLocale()</b> to read saved locale from <b>Local</b>...",
+            "Calling <b>localeManager._getStoredLocalLocale()</b> to read saved locale from <b>Local</b>...",
         traceStepType: TraceStepType.nonControllableCalling,
       );
       final Locale? locale = localeManager.storedLocale;
@@ -327,8 +332,7 @@ class _FlutterArtist extends _Core {
     //
     if (__notificationService != null) {
       print(
-          "[FLUTTER_ARTIST] ${getClassNameWithoutGenerics(
-              __notificationService)}.initialize()");
+          "[FLUTTER_ARTIST] ${getClassNameWithoutGenerics(__notificationService)}.initialize()");
       __notificationService.initialize();
     }
   }
@@ -382,15 +386,14 @@ class _FlutterArtist extends _Core {
     _runWithOverlay(
       asyncFunction: () async {
         await Future.doWhile(
-              () =>
-              Future.delayed(
-                // Default?
-                const Duration(milliseconds: 0),
-              ).then(
-                    (_) {
-                  return __futureTaskList.isNotEmpty;
-                },
-              ),
+          () => Future.delayed(
+            // Default?
+            const Duration(milliseconds: 0),
+          ).then(
+            (_) {
+              return __futureTaskList.isNotEmpty;
+            },
+          ),
         );
       },
     );
@@ -481,7 +484,7 @@ class _FlutterArtist extends _Core {
   void internalNotifyLog() {
     Future.delayed(
       Duration.zero,
-          () {
+      () {
         for (ILogListener listener in [..._logListeners]) {
           if (listener is State) {
             State state = listener as State;

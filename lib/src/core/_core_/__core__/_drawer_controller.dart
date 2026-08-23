@@ -1,15 +1,13 @@
 part of '../core.dart';
 
 abstract class _DrawerCtrl {
-  final _Storage _storage;
-
   bool get isOpen;
 
-  _DrawerCtrl(_Storage storage) : _storage = storage;
+  _DrawerCtrl();
 }
 
 class _DrawerController extends _DrawerCtrl {
-  _DrawerController(super.storage);
+  _DrawerController();
 
   @override
   bool get isOpen {
@@ -37,7 +35,7 @@ class _DrawerController extends _DrawerCtrl {
 }
 
 class _EndDrawerController extends _DrawerCtrl {
-  _EndDrawerController(super.storage);
+  _EndDrawerController();
 
   @override
   bool get isOpen {

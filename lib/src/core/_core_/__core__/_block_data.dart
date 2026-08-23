@@ -49,8 +49,6 @@ class _BlockData<
   ///
   Pageable? get _emptyPageable => _initialPageable;
 
-  late BlockNativeQueryMode _pendingNativeQueryMode;
-
   late BlockNativeQueryMode _nativeQueryMode;
 
   BlockNativeQueryMode get nativeQueryMode => _nativeQueryMode;
@@ -62,12 +60,6 @@ class _BlockData<
   _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL> get current => __current;
 
   late BlockDataState _blockDataState;
-
-  // OLD Logic: _blockDataState == DataState.error
-  bool get hasError {
-    // TODO: Hardcode.
-    return false;
-  }
 
   BlockDataState _selectionDataState = BlockDataStatePending();
 
@@ -85,7 +77,7 @@ class _BlockData<
   // ***************************************************************************
 
   void _backupManualArrangementBeforeQueryIfNeed() {
-    if (block.config.clientSideSortStrategy == SortStrategy.manual) {
+    if (block.effectiveConfig.clientSideSortStrategy == SortStrategy.manual) {
       __itemsManualArrangementBk
         ..clear()
         ..addAll(_items);
@@ -93,7 +85,7 @@ class _BlockData<
   }
 
   void __restoreManualArrangementIfNeed() {
-    if (block.config.clientSideSortStrategy == SortStrategy.manual) {
+    if (block.effectiveConfig.clientSideSortStrategy == SortStrategy.manual) {
       // TODO...
     }
   }
@@ -213,18 +205,10 @@ class _BlockData<
     required BlockNativeQueryMode nativeQueryMode,
   })  : _pageable = pageable,
         _nativeQueryMode = nativeQueryMode,
-        _pendingNativeQueryMode = nativeQueryMode,
         _initialPageable = pageable,
         _paginationInfo = PaginationInfo.empty() {
     _blockDataState =
         block.isRoot ? BlockDataStatePending() : BlockDataStateNone();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _setPendingNativeQueryMode(BlockNativeQueryMode mode) {
-    _pendingNativeQueryMode = mode;
   }
 
   // ***************************************************************************
@@ -243,14 +227,15 @@ class _BlockData<
     if (resetRefreshItemCondition) {
       // TODO:..
     }
-    // OLD Code: _blockDataState == DataState.error
+    // TODO: OLD Code: _blockDataState == DataState.error
+    final hasError = false;
     if (hasError) {
       _lastQueryResultState = ActionResultState.fail;
       //
       // Update FilterCriteria:
       //
       if (errorInFilter) {
-        __setNewFilterCriteria(newXFilterCriteria: null);
+        __setNewFilterCriteria(filterCriteriaMappedValue: null);
       }
     }
     //
@@ -286,7 +271,7 @@ class _BlockData<
 
   void _clientSideSortItems() {
     try {
-      switch (block.config.clientSideSortStrategy) {
+      switch (block.effectiveConfig.clientSideSortStrategy) {
         case SortStrategy.none:
           // Do nothing
           break;
@@ -446,7 +431,7 @@ class _BlockData<
     // Update FilterCriteria:
     //
     __setNewFilterCriteria(
-      newXFilterCriteria: processedQueryResult.usedXFilterCriteria,
+      filterCriteriaMappedValue: processedQueryResult.usedXFilterCriteria,
     );
     //
     // Append to _items:
@@ -549,10 +534,12 @@ class _BlockData<
   // ***************************************************************************
 
   void __setNewFilterCriteria({
-    required FilterCriteriaMappedValue<FILTER_CRITERIA>? newXFilterCriteria,
+    required FilterCriteriaMappedValue<FILTER_CRITERIA>?
+        filterCriteriaMappedValue,
   }) {
-    final bool changed = _filterCriteriaMappedValue != newXFilterCriteria;
-    _filterCriteriaMappedValue = newXFilterCriteria;
+    final bool changed =
+        _filterCriteriaMappedValue != filterCriteriaMappedValue;
+    _filterCriteriaMappedValue = filterCriteriaMappedValue;
     if (changed) {
       block.debug._filterCriteriaChangeCount++;
       if (block.formModel != null) {

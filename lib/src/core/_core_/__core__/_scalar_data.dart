@@ -1,20 +1,21 @@
 part of '../core.dart';
 
 class _ScalarData<
-    VALUE extends Object, //
+    ID extends Comparable,
+    VALUE extends Identifiable<ID>, //
     FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria> {
   ///
   /// Owner Scalar.
   ///
-  final Scalar<VALUE, FILTER_INPUT, FILTER_CRITERIA> scalar;
+  final Scalar<ID, VALUE, FILTER_INPUT, FILTER_CRITERIA> scalar;
 
   FilterCriteriaMappedValue<FILTER_CRITERIA>? _filterCriteriaMappedValue;
 
-  _ScalarValueWrap<VALUE> __current =
-      _ScalarValueWrap<VALUE>(id: null, value: null);
+  _ScalarValueWrap<ID, VALUE> __current =
+      _ScalarValueWrap<ID, VALUE>(id: null, value: null);
 
-  _ScalarValueWrap<VALUE> get current => __current;
+  _ScalarValueWrap<ID, VALUE> get current => __current;
 
   late ScalarDataState _scalarDataState;
 
@@ -53,7 +54,7 @@ class _ScalarData<
 
   void _clearWithDataState({required ScalarDataState scalarDataState}) {
     _scalarDataState = scalarDataState;
-    __current = _ScalarValueWrap<VALUE>(id: null, value: null);
+    __current = _ScalarValueWrap<ID, VALUE>(id: null, value: null);
     _filterCriteriaMappedValue = null; // ???
   }
 
@@ -100,7 +101,7 @@ class _ScalarData<
       }
     }
 
-    __current = _ScalarValueWrap<VALUE>(id: null, value: null);
+    __current = _ScalarValueWrap<ID, VALUE>(id: null, value: null);
   }
 
   // ***************************************************************************
@@ -109,14 +110,14 @@ class _ScalarData<
   void _updateData({
     required FilterCriteriaMappedValue<FILTER_CRITERIA>?
         filterCriteriaMappedValue,
-    required String? valueId,
+    required ID? valueId,
     required VALUE? value,
     required ScalarDataState dataState,
     required ActionResultState queryResultState,
   }) {
     __setNewFilterCriteriaMappedValue(
         newXFilterCriteria: filterCriteriaMappedValue);
-    __current = _ScalarValueWrap<VALUE>(id: valueId, value: value);
+    __current = _ScalarValueWrap<ID, VALUE>(id: valueId, value: value);
     _scalarDataState = dataState;
     _lastQueryResultState = queryResultState;
   }

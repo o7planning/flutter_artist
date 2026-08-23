@@ -1,18 +1,24 @@
 part of '../core.dart';
 
-class _ScalarSyncSessionState extends Equatable {
+class _ScalarSyncSessionState<ID extends Comparable> extends Equatable
+    implements DebugScalarSyncSessionState<ID> {
+  @override
   final Scalar<
-      Object, //
+      Comparable,
+      Identifiable<Comparable>, //
       FilterInput,
       FilterCriteria> scalar;
 
-  final String? parentScalarValueId;
-  final FilterCriteria? filterCriteria;
-
-  List<ScalarReceivedEventInfo> _receivedEventInfos = [];
+  @override
+  final Comparable? parentScalarValueId;
 
   @override
-  List<ScalarReceivedEventInfo> get receivedEventInfos =>
+  final FilterCriteria? filterCriteria;
+
+  List<ScalarReceivedEventInfo<ID>> _receivedEventInfos = [];
+
+  @override
+  List<ScalarReceivedEventInfo<ID>> get receivedEventInfos =>
       List.unmodifiable(_receivedEventInfos);
 
   _ScalarSyncSessionState({
@@ -25,7 +31,7 @@ class _ScalarSyncSessionState extends Equatable {
     required EventSourceType eventSourceType,
     required List<Type> dataTypes,
   }) {
-    final eventInfo = ScalarReceivedEventInfo(
+    final eventInfo = ScalarReceivedEventInfo<ID>(
       eventSourceType: eventSourceType,
       dataTypes: dataTypes,
     );

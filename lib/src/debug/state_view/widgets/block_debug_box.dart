@@ -60,14 +60,14 @@ class BlockDebugBox extends BaseDebugBox {
       if (block.getItemType() == block.getItemDetailType())
         IconLabelText(
           label: "Behavior (*): ",
-          text: block.config.itemAbsentRepresentativePolicy.name,
+          text: block.effectiveConfig.itemAbsentRepresentativePolicy.name,
           labelStyle: DebugStyleUtils.getLabelStyle1(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (block.getItemType() == block.getItemDetailType())
         IconLabelText(
           label: "RefreshMode (*): ",
-          text: block.config.unifiedItemRefreshPolicy.name,
+          text: block.effectiveConfig.unifiedItemRefreshPolicy.name,
           labelStyle: DebugStyleUtils.getLabelStyle1(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),

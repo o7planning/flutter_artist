@@ -4,8 +4,8 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(
-    xShelfType: XShelfType.shelfExternalReaction,
-  ) {
+          xShelfType: XShelfType.shelfExternalReaction,
+        ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk.block._blockSyncSessionState == null &&
           xBlk.block._blockItemRefreshCondition == null) {
@@ -13,19 +13,21 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
       }
       // @@@hasActiveBlockFragment
       bool blockXBlockRep =
-      xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
+          xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
         alsoCheckChildren: true,
       );
       print(
-          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk
-              .block} - blockXBlockRep: $blockXBlockRep");
+          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk.block} - blockXBlockRep: $blockXBlockRep");
       QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //
       if (xBlk.block._blockSyncSessionState != null &&
           xBlk.block._isMatchBlockReQryCon(xBlk.block._blockSyncSessionState)) {
         print("@TEMP: *** CURRENT block state ***: ${xBlk.block.dataState}");
-        queryHint = blockXBlockRep ? QryHint.force : QryHint.markAsPending;
+        // queryHint = blockXBlockRep ? QryHint.force : QryHint.markAsPending;
+        if (blockXBlockRep) {
+          queryHint = QryHint.force;
+        }
       }
       if (xBlk.block._blockItemRefreshCondition != null &&
           xBlk.block._isMatchBlockItemRefreshCon(
@@ -45,7 +47,7 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
         }
         // @@@hasActiveBlockFragment
         bool blockXBlockRep =
-        xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
+            xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
         if (blockXBlockRep) {
@@ -93,22 +95,23 @@ class _XShelfShelfExternalReaction extends _XShelfSbQuery {
     }
     // -------------------------------------------------------------------------
     for (XScalar xScalar in allXScalars) {
-      if (xScalar._scalarReQryCon == null) {
+      if (xScalar.scalar._scalarSyncSessionState == null) {
         continue;
       }
       bool scalarXVisible = xScalar.scalar.ui.hasActiveUiComponent(
         alsoCheckChildren: true,
       );
+      QryHint queryHint = QryHint.none;
       //
-      if (xScalar.scalar._isMatchScalarReQryCon(xScalar._scalarReQryCon)) {
+      if (xScalar.scalar._scalarSyncSessionState != null &&
+          xScalar.scalar
+              ._isMatchScalarReQryCon(xScalar.scalar._scalarSyncSessionState)) {
         if (scalarXVisible) {
           // Test Cases: [84a].
           xScalar.setQueryHintToGreater(QryHint.force);
-        } else {
-          // Test Cases: [84b].
-          xScalar.setQueryHintToGreater(QryHint.markAsPending);
         }
       }
+      xScalar.setQueryHintToGreater(queryHint);
     }
     // -------------------------------------------------------------------------
     for (XScalar leafXScalar in allLeafXScalars) {

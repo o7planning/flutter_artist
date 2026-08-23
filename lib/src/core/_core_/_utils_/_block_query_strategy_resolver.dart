@@ -19,9 +19,9 @@ class BlockQueryStrategyResolver {
   }) {
     return resolveQueryPlanInternal<ID>(
       dataState: block.dataState,
-      pendingNativeQueryMode: block.pendingNativeQueryMode,
+      nativeQueryMode: block.config.nativeQueryMode,
       itemIds: block.items.map((i) => i.id).toList(),
-      config: block.config,
+      config: block.effectiveConfig,
       syncSessionState: syncSessionState,
     );
   }
@@ -29,9 +29,9 @@ class BlockQueryStrategyResolver {
   /// Resolves the exact query execution plan using explicit runtime parameters.
   static BlockQueryPlan<ID> resolveQueryPlanInternal<ID extends Comparable>({
     required BlockDataState dataState,
-    required BlockNativeQueryMode pendingNativeQueryMode,
+    required BlockNativeQueryMode nativeQueryMode,
     required List<ID> itemIds,
-    required BlockConfig config,
+    required BlockEffectiveConfig config,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
   }) {
     // -------------------------------------------------------------------------
@@ -50,7 +50,7 @@ class BlockQueryStrategyResolver {
       // Unbounded Flat Mode: Full Native Query is mandatory to establish baseline
       if (config.nativeQueryMode == BlockNativeQueryMode.fullQuery) {
         return const BlockQueryPlan(
-          action: ResolvedQueryAction.performQuery,
+          action: BlockResolvedQueryAction.performQuery,
           viewportSyncStrategy: BlockViewportSyncStrategy.nativeQuery,
         );
       }
@@ -62,13 +62,13 @@ class BlockQueryStrategyResolver {
       if (accumulatedEffectedIds.isEmpty) {
         // No pending mutated IDs: Sweep initial page (Page 1)
         return const BlockQueryPlan(
-          action: ResolvedQueryAction.performQuery,
+          action: BlockResolvedQueryAction.performQuery,
           viewportSyncStrategy: BlockViewportSyncStrategy.nativeQuery,
         );
       } else {
         // Mutated IDs present: Perform targeted ID query to preserve off-page items
         return BlockQueryPlan(
-          action: ResolvedQueryAction.performQueryByItemIds,
+          action: BlockResolvedQueryAction.performQueryByItemIds,
           viewportSyncStrategy: BlockViewportSyncStrategy.effectedItemIdsQuery,
           targetItemIds: accumulatedEffectedIds,
         );
@@ -92,7 +92,7 @@ class BlockQueryStrategyResolver {
       // Resolve final strategy using block's viewportSyncConfig
       final BlockViewportSyncStrategy? resolvedStrategy =
           BlockViewportSyncStrategy.resolveViewportSyncStrategy(
-        nativeQueryMode: pendingNativeQueryMode,
+        nativeQueryMode: nativeQueryMode,
         syncConfig: syncConfig,
         receivedEventInfos: receivedEvents,
       );
@@ -101,7 +101,7 @@ class BlockQueryStrategyResolver {
         case null:
         case BlockViewportSyncStrategy.nativeQuery:
           return const BlockQueryPlan(
-            action: ResolvedQueryAction.performQuery,
+            action: BlockResolvedQueryAction.performQuery,
             viewportSyncStrategy: BlockViewportSyncStrategy.nativeQuery,
           );
 
@@ -112,13 +112,13 @@ class BlockQueryStrategyResolver {
           // Fallback to full native query if no specific item IDs exist
           if (effectedIds.isEmpty) {
             return const BlockQueryPlan(
-              action: ResolvedQueryAction.performQuery,
+              action: BlockResolvedQueryAction.performQuery,
               viewportSyncStrategy: BlockViewportSyncStrategy.nativeQuery,
             );
           }
 
           return BlockQueryPlan(
-            action: ResolvedQueryAction.performQueryByItemIds,
+            action: BlockResolvedQueryAction.performQueryByItemIds,
             viewportSyncStrategy:
                 BlockViewportSyncStrategy.effectedItemIdsQuery,
             targetItemIds: effectedIds,
@@ -134,13 +134,13 @@ class BlockQueryStrategyResolver {
           // Fallback to full query if target ID pool resolves empty
           if (performQueryIds.isEmpty) {
             return const BlockQueryPlan(
-              action: ResolvedQueryAction.performQuery,
+              action: BlockResolvedQueryAction.performQuery,
               viewportSyncStrategy: BlockViewportSyncStrategy.nativeQuery,
             );
           }
 
           return BlockQueryPlan(
-            action: ResolvedQueryAction.performQueryByItemIds,
+            action: BlockResolvedQueryAction.performQueryByItemIds,
             viewportSyncStrategy:
                 BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
             targetItemIds: performQueryIds,

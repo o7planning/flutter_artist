@@ -1,13 +1,13 @@
 part of '../core.dart';
 
-class XScalar<VALUE extends Object> {
+class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   XShelf get xShelf => xFilterModel.xShelf;
 
   QueryType __queryType = QueryType.realQuery;
 
   QueryType get queryType => __queryType;
 
-  final Scalar<VALUE, FilterInput, FilterCriteria> scalar;
+  final Scalar<ID, VALUE, FilterInput, FilterCriteria> scalar;
 
   final XFilterModel xFilterModel;
 
@@ -65,11 +65,6 @@ class XScalar<VALUE extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
-  _ScalarSyncSessionState? _scalarReQryCon;
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   ///
   /// IMPORTANT: To create new XScalar, use 'scalar._createXScalar' method
   /// to have the same Generics Parameters with the scalar.
@@ -77,10 +72,7 @@ class XScalar<VALUE extends Object> {
   XScalar._({
     required this.scalar,
     required this.xFilterModel,
-  }) {
-    _scalarReQryCon = scalar._scalarSyncSessionState;
-    scalar._scalarSyncSessionState = null;
-  }
+  });
 
   QryHint get queryHint {
     return __qryHint;
@@ -111,13 +103,12 @@ class XScalar<VALUE extends Object> {
 
   String toDebugHtmlString() {
     return " - <b>XScalar (${getClassName(scalar)})</b>"
-        "\n    - <b>needQuery</b>: $queryHint"
-        "\n    - <b>scalarReQryCondition</b>: $_scalarReQryCon";
+        "\n    - <b>queryHint</b>: $queryHint";
   }
 
   @override
   String toString() {
     return "XScalar (${getClassName(scalar)}) \n"
-        "            - needQuery: $queryHint) / scalarReQryCon: $_scalarReQryCon";
+        "            - queryHint: $queryHint";
   }
 }

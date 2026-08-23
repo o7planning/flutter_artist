@@ -31,7 +31,7 @@ class BlockDataStateInfoWidget extends BaseInfoWidget {
 
   @override
   String getText() {
-    return  block.dataState.toBriefInfo();
+    return block.dataState.toBriefInfo();
   }
 
   @override

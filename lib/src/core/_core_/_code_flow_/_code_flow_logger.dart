@@ -133,11 +133,20 @@ class CodeFlowLogger {
     return log;
   }
 
-  // TODO: Rename.
-  ExecutionTrace _initTaskUnitForDeferredEvent({
+  ExecutionTrace _createPendingEventProcessorExecutionTrace({
     required Object ownerClassInstance,
   }) {
-    ExecutionTrace log = DeferredEventExecutionTrace(
+    ExecutionTrace log = ReactionProcessorExecutionTrace(
+      ownerClassInstance: ownerClassInstance,
+    );
+    __addExecutionTrace(log);
+    return log;
+  }
+
+  ExecutionTrace _createEventDispatcherExecutionTrace({
+    required Object ownerClassInstance,
+  }) {
+    ExecutionTrace log = EventDispatcherExecutionTrace(
       ownerClassInstance: ownerClassInstance,
     );
     __addExecutionTrace(log);

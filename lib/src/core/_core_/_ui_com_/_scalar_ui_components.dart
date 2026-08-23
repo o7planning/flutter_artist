@@ -4,9 +4,9 @@ class _ScalarUiComponents extends _UiComponents {
   final Scalar scalar;
 
   final Map<_ContextProviderViewState, XState> __scalarBaseViewWidgetStates =
-  {};
+      {};
   final Map<_ContextProviderViewState, XState> __scalarControlBarWidgetStates =
-  {};
+      {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -22,11 +22,7 @@ class _ScalarUiComponents extends _UiComponents {
       ...__scalarBaseViewWidgetStates.keys,
       ...__scalarControlBarWidgetStates.keys,
     ];
-    return list
-        .map((v) => v.faRoute)
-        .nonNulls
-        .toList()
-        .toSet();
+    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
   }
 
   // ***************************************************************************
@@ -119,7 +115,7 @@ class _ScalarUiComponents extends _UiComponents {
 
   void updateControlBars({bool force = false}) {
     for (_ContextProviderViewState widgetState
-    in __scalarControlBarWidgetStates.keys) {
+        in __scalarControlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -189,7 +185,7 @@ class _ScalarUiComponents extends _UiComponents {
     if (alsoCheckChildren) {
       for (Scalar childScalar in scalar._childScalars) {
         String? componentName =
-        childScalar.ui.findActiveScalarBaseViewWithContextKind(
+            childScalar.ui.findActiveScalarBaseViewWithContextKind(
           contextKind: contextKind,
           alsoCheckChildren: true,
         );
@@ -214,7 +210,7 @@ class _ScalarUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (_ContextProviderViewState widgetState
-    in __scalarControlBarWidgetStates.keys) {
+        in __scalarControlBarWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -358,10 +354,8 @@ class _ScalarUiComponents extends _UiComponents {
     );
     __scalarControlBarWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
     bool scalarXScalarRepCURRENT = hasActiveUiComponentScalarRepresentative(
       alsoCheckChildren: true,
@@ -400,10 +394,8 @@ class _ScalarUiComponents extends _UiComponents {
     bool activeOLD = hasActiveUiComponent();
     __scalarControlBarWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
     bool activeCURRENT = hasActiveUiComponent();
     //
@@ -444,10 +436,8 @@ class _ScalarUiComponents extends _UiComponents {
     bool activeOLD = hasActiveUiComponent();
     __scalarBaseViewWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
     bool activeCURRENT = hasActiveUiComponent();
     //

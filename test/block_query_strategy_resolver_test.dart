@@ -12,11 +12,13 @@ void main() {
         () {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStateNone(),
-        pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
+        nativeQueryMode: BlockNativeQueryMode.fullQuery,
         itemIds: const [],
-        config: BlockConfig(
-          nativeQueryMode: BlockNativeQueryMode.fullQuery,
-          viewportSyncConfig: BlockViewportSyncConfig.strict(),
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.fullQuery,
+            viewportSyncConfig: BlockViewportSyncConfig.strict(),
+          ),
         ),
         syncSessionState: null,
       );
@@ -34,16 +36,18 @@ void main() {
         () {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStatePending(),
-        pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
+        nativeQueryMode: BlockNativeQueryMode.fullQuery,
         itemIds: const [],
-        config: BlockConfig(
-          nativeQueryMode: BlockNativeQueryMode.fullQuery,
-          viewportSyncConfig: BlockViewportSyncConfig.strict(),
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.fullQuery,
+            viewportSyncConfig: BlockViewportSyncConfig.strict(),
+          ),
         ),
         syncSessionState: null,
       );
 
-      expect(plan.action, equals(ResolvedQueryAction.performQuery));
+      expect(plan.action, equals(BlockResolvedQueryAction.performQuery));
       expect(plan.viewportSyncStrategy,
           equals(BlockViewportSyncStrategy.nativeQuery));
       expect(plan.targetItemIds, isEmpty);
@@ -57,16 +61,18 @@ void main() {
         () {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStatePending(),
-        pendingNativeQueryMode: BlockNativeQueryMode.pageableQuery,
+        nativeQueryMode: BlockNativeQueryMode.pageableQuery,
         itemIds: const [],
-        config: BlockConfig(
-          nativeQueryMode: BlockNativeQueryMode.pageableQuery,
-          viewportSyncConfig: BlockViewportSyncConfig(),
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.pageableQuery,
+            viewportSyncConfig: BlockViewportSyncConfig(),
+          ),
         ),
         syncSessionState: null,
       );
 
-      expect(plan.action, equals(ResolvedQueryAction.performQuery));
+      expect(plan.action, equals(BlockResolvedQueryAction.performQuery));
       expect(plan.viewportSyncStrategy,
           equals(BlockViewportSyncStrategy.nativeQuery));
     });
@@ -90,16 +96,18 @@ void main() {
 
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStatePending(),
-        pendingNativeQueryMode: BlockNativeQueryMode.pageableQuery,
+        nativeQueryMode: BlockNativeQueryMode.pageableQuery,
         itemIds: const [],
-        config: BlockConfig(
-          nativeQueryMode: BlockNativeQueryMode.pageableQuery,
-          viewportSyncConfig: BlockViewportSyncConfig(),
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.pageableQuery,
+            viewportSyncConfig: BlockViewportSyncConfig(),
+          ),
         ),
         syncSessionState: mockSession,
       );
 
-      expect(plan.action, equals(ResolvedQueryAction.performQueryByItemIds));
+      expect(plan.action, equals(BlockResolvedQueryAction.performQueryByItemIds));
       expect(plan.viewportSyncStrategy,
           equals(BlockViewportSyncStrategy.effectedItemIdsQuery));
       expect(plan.targetItemIds, containsAll(['user-10', 'user-20']));
@@ -118,16 +126,18 @@ void main() {
             errorInfo: null,
           ),
         ),
-        pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
+        nativeQueryMode: BlockNativeQueryMode.fullQuery,
         itemIds: const [],
-        config: BlockConfig(
-          nativeQueryMode: BlockNativeQueryMode.fullQuery,
-          viewportSyncConfig: BlockViewportSyncConfig.strict(),
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.fullQuery,
+            viewportSyncConfig: BlockViewportSyncConfig.strict(),
+          ),
         ),
         syncSessionState: null,
       );
 
-      expect(plan.action, equals(ResolvedQueryAction.performQuery));
+      expect(plan.action, equals(BlockResolvedQueryAction.performQuery));
       expect(plan.viewportSyncStrategy,
           equals(BlockViewportSyncStrategy.nativeQuery));
     });
@@ -150,17 +160,19 @@ void main() {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStateLoadedStale(
             reason: BlockLoadedStateStaleReason.event),
-        pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
+        nativeQueryMode: BlockNativeQueryMode.fullQuery,
         itemIds: const ['333-beer', 'heineken-beer', 'tiger-beer'],
-        config: BlockConfig(
-          nativeQueryMode: BlockNativeQueryMode.fullQuery,
-          viewportSyncConfig: BlockViewportSyncConfig
-              .strict(), // Strict floor on fullQuery = nativeQuery
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.fullQuery,
+            viewportSyncConfig: BlockViewportSyncConfig
+                .strict(), // Strict floor on fullQuery = nativeQuery
+          ),
         ),
         syncSessionState: mockSession,
       );
 
-      expect(plan.action, equals(ResolvedQueryAction.performQuery));
+      expect(plan.action, equals(BlockResolvedQueryAction.performQuery));
       expect(plan.viewportSyncStrategy,
           equals(BlockViewportSyncStrategy.nativeQuery));
       expect(plan.targetItemIds, isEmpty);
@@ -190,17 +202,19 @@ void main() {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStateLoadedStale(
             reason: BlockLoadedStateStaleReason.event),
-        pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
+        nativeQueryMode: BlockNativeQueryMode.fullQuery,
         itemIds: const ['item-1', 'item-2'],
-        config: BlockConfig(
-          nativeQueryMode: BlockNativeQueryMode.fullQuery,
-          viewportSyncConfig: BlockViewportSyncConfig
-              .lenient(), // Lenient floor on fullQuery = effectedItemIdsQuery
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.fullQuery,
+            viewportSyncConfig: BlockViewportSyncConfig
+                .lenient(), // Lenient floor on fullQuery = effectedItemIdsQuery
+          ),
         ),
         syncSessionState: mockSession,
       );
 
-      expect(plan.action, equals(ResolvedQueryAction.performQueryByItemIds));
+      expect(plan.action, equals(BlockResolvedQueryAction.performQueryByItemIds));
       expect(plan.viewportSyncStrategy,
           equals(BlockViewportSyncStrategy.effectedItemIdsQuery));
       expect(plan.targetItemIds, equals({'item-99'}));
@@ -229,17 +243,19 @@ void main() {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStateLoadedStale(
             reason: BlockLoadedStateStaleReason.event),
-        pendingNativeQueryMode: BlockNativeQueryMode.pageableQuery,
+        nativeQueryMode: BlockNativeQueryMode.pageableQuery,
         itemIds: const ['page2-item1', 'page2-item2'],
-        config: BlockConfig(
-          nativeQueryMode: BlockNativeQueryMode.pageableQuery,
-          viewportSyncConfig: BlockViewportSyncConfig
-              .strict(), // Strict floor on pageable = effectedAndViewport
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.pageableQuery,
+            viewportSyncConfig: BlockViewportSyncConfig
+                .strict(), // Strict floor on pageable = effectedAndViewport
+          ),
         ),
         syncSessionState: mockSession,
       );
 
-      expect(plan.action, equals(ResolvedQueryAction.performQueryByItemIds));
+      expect(plan.action, equals(BlockResolvedQueryAction.performQueryByItemIds));
       expect(plan.viewportSyncStrategy,
           equals(BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery));
       expect(plan.targetItemIds,
@@ -254,11 +270,13 @@ void main() {
         () {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStateLoadedFresh(),
-        pendingNativeQueryMode: BlockNativeQueryMode.fullQuery,
+        nativeQueryMode: BlockNativeQueryMode.fullQuery,
         itemIds: const ['user-1'],
-        config: BlockConfig(
-          nativeQueryMode: BlockNativeQueryMode.fullQuery,
-          viewportSyncConfig: BlockViewportSyncConfig.strict(),
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.fullQuery,
+            viewportSyncConfig: BlockViewportSyncConfig.strict(),
+          ),
         ),
         syncSessionState: null,
       );

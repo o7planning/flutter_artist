@@ -8,7 +8,8 @@ enum ExecutionTraceType {
   userMethodCall,
   libMethodCall,
   navigationIntent,
-  deferredEvent;
+  deferredEvent,
+  dispatchExternalEvents;
 
   String get desc {
     return name;
@@ -27,9 +28,11 @@ enum ExecutionTraceType {
       case ExecutionTraceType.libMethodCall:
         return Icons.call;
       case ExecutionTraceType.deferredEvent:
-        return Icons.star;
+        return Icons.star; // settings_suggest
       case ExecutionTraceType.navigationIntent:
         return Icons.navigation;
+      case ExecutionTraceType.dispatchExternalEvents:
+        return Icons.podcasts;
     }
   }
 
@@ -51,6 +54,8 @@ enum ExecutionTraceType {
       case ExecutionTraceType.navigationIntent:
         return context.faColors.action.ink.success;
       case ExecutionTraceType.deferredEvent:
+        return Colors.orangeAccent;
+      case ExecutionTraceType.dispatchExternalEvents:
         return Colors.orangeAccent;
       case ExecutionTraceType.startup:
         return theme.colorScheme.onSurface.withValues(alpha: 0.5);
@@ -77,6 +82,8 @@ enum ExecutionTraceType {
         return "Init Task Unit for Deferred Events";
       case ExecutionTraceType.navigationIntent:
         return "Navigation Intent";
+      case ExecutionTraceType.dispatchExternalEvents:
+        return "Dispatch Events";
     }
   }
 }

@@ -181,19 +181,36 @@ class StartupExecutionTrace extends ExecutionTrace {
   }
 }
 
-class DeferredEventExecutionTrace extends ExecutionTrace {
-  DeferredEventExecutionTrace({
+class EventDispatcherExecutionTrace extends ExecutionTrace {
+  EventDispatcherExecutionTrace({
+    required super.ownerClassInstance,
+  }) : super(executionTraceType: ExecutionTraceType.dispatchExternalEvents);
+
+  @override
+  String getSubtitle() {
+    return "Dispatch External Events...";
+  }
+
+  @override
+  String getTitle() {
+    return "DispatchExternalEvents";
+  }
+}
+
+
+class ReactionProcessorExecutionTrace extends ExecutionTrace {
+  ReactionProcessorExecutionTrace({
     required super.ownerClassInstance,
   }) : super(executionTraceType: ExecutionTraceType.deferredEvent);
 
   @override
   String getSubtitle() {
-    return "Observe Incoming Events...";
+    return "Process Reactions...";
   }
 
   @override
   String getTitle() {
-    return "IncomingEvents";
+    return "ReactionProcessor";
   }
 }
 

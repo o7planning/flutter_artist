@@ -58,6 +58,7 @@ import '../enums/action_result_state.dart';
 import '../enums/activity_hidden_action.dart';
 import '../enums/block_viewport_sync_strategy.dart';
 import '../enums/error_origin.dart';
+import '../enums/event_data_kind.dart';
 import '../enums/fallback_dilemma_strategy.dart';
 import '../enums/filter_connector.dart';
 import '../enums/sort_strategy.dart';
@@ -223,9 +224,7 @@ part '../debug/_debug_options.dart';
 
 part '__core__/_default_filter_model.dart';
 
-part '__core__/_deferred_event.dart';
-
-part '__core__/_pending_event_processor.dart';
+part '__core__/_reaction_processor.dart';
 
 part '_core_event_/_eff_block.dart';
 
@@ -321,6 +320,8 @@ part '__core__/_dialog_deferral_result.dart';
 
 part '__core__/_block_debug_sync_session_state.dart';
 
+part '__core__/_scalar_debug_sync_session_state.dart';
+
 part '__core__/_block_query_plan.dart';
 
 part '__core__/_shelf_block_scalar_type.dart';
@@ -340,6 +341,8 @@ part '_sort_/_sortable_criterion.dart';
 part '_sort_/_sort_criteria.dart';
 
 part '__core__/_storage.dart';
+
+part '__core__/_desk.dart';
 
 part '_event_/_event_helper.dart';
 
@@ -363,6 +366,8 @@ part '_config_/_activity_config.dart';
 
 part '_config_/_block_viewport_sync_config.dart';
 
+part '_config_/_block_effective_config.dart';
+
 part '_config_/_block_config.dart';
 
 part '_config_/_coordinator_config.dart';
@@ -380,6 +385,8 @@ part '_config_/_filter_model_config.dart';
 part '_config_/_form_model_config.dart';
 
 part '_event_/_scalar_event_reaction.dart';
+
+part '_config_/_scalar_effective_config.dart';
 
 part '_config_/_scalar_config.dart';
 
@@ -484,6 +491,8 @@ part '_core_state_/_force_reload_item_calculator.dart';
 part '_core_state_/_force_reload_state.dart';
 
 part '_fa_.dart';
+
+part '_backstage.dart';
 
 part '_filter_/_model_/_tilde_filter_criterion_model.dart';
 
@@ -812,6 +821,8 @@ part '_ui_control_/_scalar_control_text_button.dart';
 part '_utils_/_app_utils.dart';
 
 part '_utils_/_block_query_strategy_resolver.dart';
+
+part '_utils_/_scalar_query_strategy_resolver.dart';
 
 part '_xdata_/_x_data.dart';
 

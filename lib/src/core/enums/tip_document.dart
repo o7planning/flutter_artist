@@ -27,7 +27,7 @@ enum TipDocument {
   sorting(enabled: true),
   scalarActiveUiComponents(enabled: true),
   dataState(enabled: true),
-  deferringEvent(enabled: true),
+  deferringReactions(enabled: true),
   debugState(enabled: true),
   canDoAction(enabled: true),
   //
@@ -127,7 +127,7 @@ enum TipDocument {
         return "DataState";
       case TipDocument.sorting:
         return "Sorting";
-      case TipDocument.deferringEvent:
+      case TipDocument.deferringReactions:
         return "Deferred-Event Freezing";
       case TipDocument.debugState:
         return "Debug State";
@@ -232,7 +232,7 @@ enum TipDocument {
         return "DataState";
       case TipDocument.sorting:
         return "Sorting";
-      case TipDocument.deferringEvent:
+      case TipDocument.deferringReactions:
         return "Deferred-Event";
       case TipDocument.debugState:
         return "Debug State";
@@ -387,7 +387,7 @@ enum TipDocument {
           "14793", // FlutterArtist Multi Sort ex1 (***)
           "14743", // FlutterArtist Sort DropdownSortPanel Example (***)
         ];
-      case TipDocument.deferringEvent:
+      case TipDocument.deferringReactions:
         return [
           "14881", // FlutterArtist Deferring External Shelf Events (ví dụ)
         ];

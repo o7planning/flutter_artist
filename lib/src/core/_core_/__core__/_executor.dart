@@ -48,9 +48,12 @@ class _Executor {
                 break;
               }
               pendingEventProcessed = true;
+              final Set<String> excludeShelfNames = shelfMap.keys.toSet();
               //
-              FlutterArtist.storage._pendingEventProcessor
-                  .addTaskUnitForPendingEvents();
+              FlutterArtist.desk._reactionProcessor
+                  .addReactionTaskUnits(
+                excludeShelfNames: excludeShelfNames,
+              );
               hasNext = FlutterArtist._rootQueue.hasNext();
               if (!hasNext) {
                 break;
@@ -86,7 +89,7 @@ class _Executor {
           FlutterArtist.storage.ui.updateAllUiComponents();
           //
           __executingXShelfId = null;
-          FlutterArtist.storage.__deferment._resetFreezeTemporarilyOnce();
+          FlutterArtist.backstage._consumeSingleDeferral();
         }
       },
     );
@@ -126,7 +129,7 @@ class _Executor {
     }
     // Storage Backend Action TaskUnit:
     else if (taskUnit is _StorageBackendActionTaskUnit) {
-      await FlutterArtist.storage._unitBackendAction(
+      await FlutterArtist.desk._unitBackendAction(
         executionTrace: executionTrace,
         taskType: taskUnit.taskType,
         action: taskUnit.action,

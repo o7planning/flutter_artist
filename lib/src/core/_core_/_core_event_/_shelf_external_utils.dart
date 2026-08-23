@@ -16,7 +16,7 @@ class _ShelfExternalUtils {
 
     // Evaluate Block reactions to external events
     for (Block block in shelf.blocks) {
-      for (var reaction in block.config.reactions) {
+      for (var reaction in block.effectiveConfig.reactions) {
         if (affectedDataTypes.contains(reaction.dataType)) {
           if (reaction.target == BlockReactionTarget.block) {
             ret._addRequeryBlock(block);
@@ -29,7 +29,7 @@ class _ShelfExternalUtils {
 
     // Evaluate Scalar reactions to external events
     for (Scalar scalar in shelf.scalars) {
-      for (var reaction in scalar.config.reactions) {
+      for (var reaction in scalar.effectiveConfig.reactions) {
         if (affectedDataTypes.contains(reaction.dataType)) {
           if (reaction.target == ScalarReactionTarget.scalar) {
             ret._addRequeryScalar(scalar);

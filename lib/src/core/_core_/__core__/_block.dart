@@ -111,6 +111,8 @@ abstract class Block<
 
   final BlockConfig config;
 
+  final BlockEffectiveConfig effectiveConfig;
+
   late final _internalEffectedShelfMembers = EffectedShelfMembers.ofBlock(
     eventBlock: this,
   );
@@ -297,7 +299,7 @@ abstract class Block<
       FORM_INPUT>._(
     block: this,
     pageable: config.pageable,
-    nativeQueryMode: config.nativeQueryMode,
+    nativeQueryMode: effectiveConfig.nativeQueryMode,
   );
 
   /// Indicates whether the block or its underlying filter model currently has an active error.
@@ -416,8 +418,8 @@ abstract class Block<
 
   BlockNativeQueryMode get nativeQueryMode => __blockData._nativeQueryMode;
 
-  BlockNativeQueryMode get pendingNativeQueryMode =>
-      __blockData._pendingNativeQueryMode;
+  // BlockNativeQueryMode get pendingNativeQueryMode =>
+  //     __blockData._pendingNativeQueryMode;
 
   Pageable? get pageable => __blockData._pageable;
 
@@ -431,22 +433,6 @@ abstract class Block<
 
   PaginationInfo? get paginationInfo {
     return PaginationInfo.copy(__blockData._paginationInfo);
-  }
-
-  /// Sets the candidate native query mode to be applied on the next query execution.
-  ///
-  /// If the block is configured with a locked query mode, this operation
-  /// will throw an [AssertionError] in debug mode to enforce strict architecture boundaries.
-  void setPendingNativeQueryMode(BlockNativeQueryMode mode) {
-    if (config.isNativeQueryModeLocked) {
-      assert(
-          false,
-          ' [FlutterArtist Architecture Guard] - Security Breach! '
-          'The Block "${getClassName(this)}" is strictly configured with a locked query mode. '
-          'Dynamic runtime query mode alterations are prohibited.');
-      return;
-    }
-    __blockData._setPendingNativeQueryMode(mode);
   }
 
   // ***************************************************************************
@@ -464,7 +450,7 @@ abstract class Block<
   }) {
     executionTrace?._addTraceStep(
       codeId: "#84000",
-      shortDesc: "Reset _blockSyncSessionState",
+      shortDesc: "${debugObjHtml(this)} - Reset _blockSyncSessionState",
     );
     _blockSyncSessionState = null;
   }
@@ -483,7 +469,14 @@ abstract class Block<
   }) {
     executionTrace._addTraceStep(
       codeId: "#83100",
-      shortDesc: "Calling _updateSyncSessionState()",
+      shortDesc: "Calling ${debugObjHtml(this)}._updateSyncSessionState()",
+      parameters: {
+        "eventSourceType": eventSourceType,
+        "requiresMaxSyncStrategy": requiresMaxSyncStrategy,
+        "syncStrategyOnFullQueryMode": syncStrategyOnFullQueryMode,
+        "syncStrategyOnPageableQueryMode": syncStrategyOnPageableQueryMode,
+        "addedEffectiveIds": addedEffectiveIds,
+      },
       traceStepType: TraceStepType.nonControllableCalling,
     );
     if (_blockSyncSessionState == null ||
@@ -499,7 +492,13 @@ abstract class Block<
     executionTrace._addTraceStep(
       codeId: "#83400",
       shortDesc:
-          "Calling addReceivedEventInfo() item length: ${addedEffectiveIds?.length}",
+          "Calling ${debugObjHtml(this)}.addReceivedEventInfo() item length: ${addedEffectiveIds?.length}",
+      parameters: {
+        "requiresMaxSyncStrategy": requiresMaxSyncStrategy,
+        "syncStrategyOnFullQueryMode": syncStrategyOnFullQueryMode,
+        "syncStrategyOnPageableQueryMode": syncStrategyOnPageableQueryMode,
+        "eventSourceType": eventSourceType,
+      },
     );
     // Add effected itemIds.
     _blockSyncSessionState?.addReceivedEventInfo(
@@ -523,7 +522,7 @@ abstract class Block<
         executionTrace._addTraceStep(
           codeId: "#83500",
           shortDesc:
-              "Transitioned dataState to $nextState due to SyncSession update",
+              "${debugObjHtml(this)} - transitioned dataState to $nextState due to SyncSession update",
         );
       }
     }
@@ -562,6 +561,7 @@ abstract class Block<
     SortModelBuilder<ITEM>? sortModelBuilder,
   })  : registeredFilterModelName = filterModelName,
         config = config.copy(),
+        effectiveConfig = BlockEffectiveConfig._fromConfig(config),
         _childBlocks = childBlocks ?? [] {
     for (Block childBlock in _childBlocks) {
       childBlock.parent = this;
@@ -589,7 +589,7 @@ abstract class Block<
 
     // 2. Check against custom broadcasted events configured in BlockConfig
     // (Mapping to the types this block is explicitly allowed to broadcast)
-    if (config.extraBroadcastEvents.any((event) => event == type)) {
+    if (effectiveConfig.extraBroadcastEvents.any((event) => event == type)) {
       return true;
     }
 
@@ -612,29 +612,38 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Set<Type> getDeclaredBroadcastDataTypes() {
-    if (!config.eventBroadcastEnabled) {
-      return {};
-    }
-    return {ITEM, ITEM_DETAIL, ...config.extraBroadcastEvents};
-  }
-
-  Set<Type> getDeclaredMainBroadcastDataTypes() {
-    if (!config.eventBroadcastEnabled) {
-      return {};
-    }
+  Set<Type> getDeclaredMainDataTypes() {
     return {ITEM, ITEM_DETAIL};
   }
 
-  Set<Type> getDeclaredExtraBroadcastDataTypes() {
-    if (!config.eventBroadcastEnabled) {
+  Set<Type> getResolvedMainDataTypes() {
+    Set<Type> types = getDeclaredMainDataTypes();
+    return DataTypeEventUtils.getProjectionsDataTypes(types);
+  }
+
+  Set<Type> getDeclaredBroadcastDataTypes() {
+    if (!effectiveConfig.eventBroadcastEnabled) {
       return {};
     }
-    return config.extraBroadcastEvents.toSet();
+    return {ITEM, ITEM_DETAIL, ...effectiveConfig.extraBroadcastEvents};
+  }
+
+  Set<Type> getDeclaredMainBroadcastDataTypes() {
+    if (!effectiveConfig.eventBroadcastEnabled) {
+      return {};
+    }
+    return getDeclaredMainDataTypes();
+  }
+
+  Set<Type> getDeclaredExtraBroadcastDataTypes() {
+    if (!effectiveConfig.eventBroadcastEnabled) {
+      return {};
+    }
+    return effectiveConfig.extraBroadcastEvents.toSet();
   }
 
   Set<Type> getResolvedBroadcastDataTypes() {
-    if (!config.eventBroadcastEnabled) {
+    if (!effectiveConfig.eventBroadcastEnabled) {
       return {};
     }
     return {
@@ -644,7 +653,7 @@ abstract class Block<
   }
 
   Set<Type> getResolvedExtraBroadcastDataTypes() {
-    if (!config.eventBroadcastEnabled) {
+    if (!effectiveConfig.eventBroadcastEnabled) {
       return {};
     }
     final declaredTypes = getDeclaredExtraBroadcastDataTypes();
@@ -652,10 +661,18 @@ abstract class Block<
   }
 
   Set<Type> getResolvedMainBroadcastDataTypes() {
-    if (!config.eventBroadcastEnabled) {
+    if (!effectiveConfig.eventBroadcastEnabled) {
       return {};
     }
     final mainTypes = getDeclaredMainBroadcastDataTypes();
+    return DataTypeEventUtils.getProjectionsDataTypes(mainTypes);
+  }
+
+  Set<Type> getResolvedMainReactionDataTypes() {
+    if (!effectiveConfig.eventReactionEnabled) {
+      return {};
+    }
+    final mainTypes = getDeclaredMainDataTypes();
     return DataTypeEventUtils.getProjectionsDataTypes(mainTypes);
   }
 
@@ -667,7 +684,7 @@ abstract class Block<
   Set<Type> getDeclaredReactionDataTypes({
     required BlockReactionTarget? target,
   }) {
-    return config.reactions
+    return effectiveConfig.reactions
         .where((reaction) => target == null || reaction.target == target)
         .map((r) => r.dataType)
         .toSet();
@@ -709,47 +726,97 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _receiveEvent({
+  void _receiveSystemWideProjection({
     required ExecutionTrace executionTrace,
-    required List<Type> mainDataTypes,
-    required List<Type> extraDataTypes,
     required EventSourceType eventSourceType,
-    required bool requiresMaxSyncStrategy,
-    required BlockViewportSyncStrategy? syncStrategyOnFullQueryMode,
-    required BlockViewportSyncStrategy? syncStrategyOnPageableQueryMode,
-    required List<Comparable> effectedItemIds,
+    required List<Type> eventDataTypes,
   }) {
     if (dataState.isNone) {
       return;
     }
-    if (mainDataTypes.isEmpty && extraDataTypes.isEmpty) {
+    if (eventDataTypes.isEmpty) {
       return;
     }
+    final Set<Type> resolvedEventDataTypes =
+        DataTypeEventUtils.getProjectionsDataTypes(eventDataTypes);
 
     // Resolve registered target reaction types for block-level re-query.
-    final Set<Type> blockReactionTypes =
+    final Set<Type> resolvedReactionTypesBlkLevel =
         getResolvedReactionDataTypes(target: BlockReactionTarget.block);
 
-    if (blockReactionTypes.isEmpty) {
-      print("@TEMP blockReactionTypes is null --> Ignore..");
+    final bool isEffected = DataTypeEventUtils.hasIntersection(
+      resolvedEventDataTypes,
+      resolvedReactionTypesBlkLevel,
+    );
+    if (isEffected) {
+      executionTrace._addTraceStep(
+        codeId: "#87300",
+        shortDesc: "${getClassNameWithoutGenerics(this)}. Effected.",
+        parameters: {"eventDataTypes": eventDataTypes},
+        traceStepType: TraceStepType.debug,
+      );
+      // Direct entity match: use specific affected item IDs and original sync strategies.
+      _updateSyncSessionState(
+        executionTrace: executionTrace,
+        eventSourceType: eventSourceType,
+        requiresMaxSyncStrategy: true,
+        syncStrategyOnFullQueryMode: BlockViewportSyncStrategy.nativeQuery,
+        syncStrategyOnPageableQueryMode:
+            BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
+        addedEffectiveIds: null,
+      );
+    }
+  }
+
+  void _receiveEvent({
+    required ExecutionTrace executionTrace,
+    required EventSourceType eventSourceType,
+    required EventDataKind eventDataKind,
+    required List<Type> eventDataTypes,
+    // required bool requiresMaxSyncStrategy,
+    required BlockViewportSyncStrategy? syncStrategyOnFullQueryMode,
+    required BlockViewportSyncStrategy? syncStrategyOnPageableQueryMode,
+    required List<Comparable>? effectedItemIds,
+  }) {
+    if (dataState.isNone) {
       return;
     }
+    if (eventDataTypes.isEmpty) {
+      return;
+    }
+    final Set<Type> resolvedEventDataTypes =
+        DataTypeEventUtils.getProjectionsDataTypes(eventDataTypes);
+    final Set<Type> resolvedMainReactionDataTypes =
+        getResolvedMainReactionDataTypes();
+    // Resolve registered target reaction types for block-level re-query.
+    final Set<Type> resolvedReactionTypesBlkLevel =
+        getResolvedReactionDataTypes(target: BlockReactionTarget.block);
 
     // Check intersection with main data types (direct domain entity changes).
-    final bool isMainEffected = mainDataTypes.isNotEmpty &&
-        DataTypeEventUtils.hasIntersection(
-          blockReactionTypes,
-          mainDataTypes.toSet(),
-        );
-
-    // Check intersection with extra data types (cross-entity / side-effect broadcasts).
-    final bool isExtraEffected = extraDataTypes.isNotEmpty &&
-        DataTypeEventUtils.hasIntersection(
-          blockReactionTypes,
-          extraDataTypes.toSet(),
-        );
+    final bool isMainEffected = DataTypeEventUtils.hasIntersection3(
+      resolvedEventDataTypes,
+      resolvedMainReactionDataTypes,
+      resolvedReactionTypesBlkLevel,
+    );
 
     if (isMainEffected) {
+      executionTrace._addTraceStep(
+        codeId: "#85300",
+        shortDesc: "${getClassNameWithoutGenerics(this)}. Main Effective.",
+        parameters: {"eventDataTypes": eventDataTypes},
+        traceStepType: TraceStepType.debug,
+      );
+      //
+      final List<ID>? addedEffectiveIds;
+      final bool requiresMaxSyncStrategy;
+      switch (eventDataKind) {
+        case EventDataKind.main:
+          requiresMaxSyncStrategy = false;
+          addedEffectiveIds = effectedItemIds?.whereType<ID>().toList();
+        case EventDataKind.extra:
+          requiresMaxSyncStrategy = true;
+          addedEffectiveIds = null;
+      }
       // Direct entity match: use specific affected item IDs and original sync strategies.
       _updateSyncSessionState(
         executionTrace: executionTrace,
@@ -757,9 +824,22 @@ abstract class Block<
         requiresMaxSyncStrategy: requiresMaxSyncStrategy,
         syncStrategyOnFullQueryMode: syncStrategyOnFullQueryMode,
         syncStrategyOnPageableQueryMode: syncStrategyOnPageableQueryMode,
-        addedEffectiveIds: effectedItemIds.whereType<ID>().toList(),
+        addedEffectiveIds: addedEffectiveIds,
       );
-    } else if (isExtraEffected) {
+      return;
+    }
+    bool isExtraEffected = DataTypeEventUtils.hasIntersection(
+      resolvedEventDataTypes,
+      resolvedReactionTypesBlkLevel,
+    );
+
+    if (isExtraEffected) {
+      executionTrace._addTraceStep(
+        codeId: "#85600",
+        shortDesc: "${getClassNameWithoutGenerics(this)}. Extra Effective.",
+        parameters: {"eventDataTypes": eventDataTypes},
+        traceStepType: TraceStepType.debug,
+      );
       // Cross-entity broadcast match (e.g., SupplierBlock emitting ProductInfo as extra type):
       // The affected IDs belong to the source entity (Supplier ID), not this block's entity type (Product ID).
       // Force fallback to maximum sync strategy without specific item IDs.
@@ -944,7 +1024,7 @@ abstract class Block<
     //   event: "Block '${getClassName(this)}' just hides all UI Components!",
     //   isLibCode: true,
     // );
-    if (config.onHideAction == BlockHiddenAction.clear) {
+    if (effectiveConfig.onHideAction == BlockHiddenAction.clear) {
       Future.delayed(
         const Duration(seconds: 0),
         () {
@@ -1080,40 +1160,40 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#03040",
-      shortDesc: "Current State: ${dataState.toBriefInfo()}, @queryHint: ${debugObjHtml(queryHint)}.",
+      shortDesc:
+          "Current State: ${dataState.toBriefInfo()}, @queryHint: ${debugObjHtml(queryHint)}.",
       traceStepType: TraceStepType.debug,
     );
     //
     thisXBlock._printParameters(provideBlockContext: provideBlockContext);
-    final viewportSyncStrategy = thisXBlock.viewportSyncStrategy ??
-        BlockViewportSyncStrategy.nativeQuery;
 
     // TODO Validate ???????????????????????????????????????????????????????????
     final DebugBlockSyncSessionState<ID>? currentSyncSessionState =
         _blockSyncSessionState;
 
-    BlockQueryPlan<ID> queryPlan =
+    final BlockQueryPlan<ID> queryPlan =
         BlockQueryStrategyResolver.resolveQueryPlan<ID>(
       block: this,
       syncSessionState: currentSyncSessionState,
     );
+    final viewportSyncStrategy = thisXBlock.viewportSyncStrategy ??
+        queryPlan.viewportSyncStrategy ??
+        BlockViewportSyncStrategy.nativeQuery;
+
     //
-    final ResolvedQueryAction resolvedQueryAction;
+    final BlockResolvedQueryAction resolvedQueryAction;
     final BlockErrorMethod performQryMethod;
     switch (queryPlan.action) {
       case null:
         performQryMethod = BlockErrorMethod.performQuery;
-        resolvedQueryAction = ResolvedQueryAction.performQuery;
-      case ResolvedQueryAction.performQuery:
+        resolvedQueryAction = BlockResolvedQueryAction.performQuery;
+      case BlockResolvedQueryAction.performQuery:
         performQryMethod = BlockErrorMethod.performQuery;
         resolvedQueryAction = queryPlan.action!;
-      case ResolvedQueryAction.performQueryByItemIds:
+      case BlockResolvedQueryAction.performQueryByItemIds:
         performQryMethod = BlockErrorMethod.performQueryByItemIds;
         resolvedQueryAction = queryPlan.action!;
     }
-
-    print(
-        "@TEMP 2 - QUERY METHOD: $performQryMethod, resolvedQueryAction: $resolvedQueryAction");
 
     executionTrace._addTraceStep(
       codeId: "#03050",
@@ -1137,7 +1217,7 @@ abstract class Block<
         executionTrace._addTraceStep(
           codeId: "#03060",
           shortDesc: "@queryHint: ${debugObjHtml(queryHint)}, "
-              "@viewportSyncStrategy: ${debugObjHtml(thisXBlock.viewportSyncStrategy)}.",
+              "@viewportSyncStrategy: ${debugObjHtml(viewportSyncStrategy)}.",
         );
         candidateCurrItem = null;
         //
@@ -1323,7 +1403,7 @@ abstract class Block<
         tipDocument: TipDocument.blockQueryType,
       );
       //
-      __blockData._nativeQueryMode = __blockData._pendingNativeQueryMode;
+      __blockData._nativeQueryMode = effectiveConfig.nativeQueryMode;
 
       final QueryType newQueryType = thisXBlock.queryType;
       final queryTypeChanged = __lastQueryType != newQueryType;
@@ -1378,7 +1458,7 @@ abstract class Block<
           );
           itemIdsToQry = null;
           // performQuery
-          if (resolvedQueryAction == ResolvedQueryAction.performQuery) {
+          if (resolvedQueryAction == BlockResolvedQueryAction.performQuery) {
             debug.__performQueryCount++;
             final ApiResult<PageData<ITEM>?> result = await performQuery(
               parentBlockCurrentItem: parent?.currentItem,
@@ -1393,7 +1473,7 @@ abstract class Block<
           }
           // performQueryByItemIds
           else if (resolvedQueryAction ==
-              ResolvedQueryAction.performQueryByItemIds) {
+              BlockResolvedQueryAction.performQueryByItemIds) {
             debug.__performQueryByItemIdsCount++;
             final ApiResult<ListData<ITEM>?> result =
                 await performQueryByItemIds(
@@ -1493,7 +1573,6 @@ abstract class Block<
       } finally {
         __refreshQueryingState(isQuerying: false);
       }
-
       final bool isPageShifting;
       // Full Query
       if (willBeUsedPageable == null) {
@@ -1521,7 +1600,7 @@ abstract class Block<
       final BlockQueryCalculatorResult calculationResult =
           BlockQueryStateCalculator.calculate(calculationInput);
 
-      print("@TEMP INPUT: ");
+      print("@TEMP INPUT ${getClassNameWithoutGenerics(this)}: ");
       print(calculationInput.getDebugInfo());
       print(calculationResult.getDebugInfo());
 
@@ -1556,7 +1635,7 @@ abstract class Block<
         shortDesc: "@queryType: ${thisXBlock.queryType}.",
       );
       //
-      __blockData._nativeQueryMode = __blockData._pendingNativeQueryMode;
+      __blockData._nativeQueryMode = effectiveConfig.nativeQueryMode;
       __lastQueryType = thisXBlock.queryType;
       realListUpdateStrategy = ListUpdateStrategy.replace;
       newBlockDataState = BlockDataStateLoadedFresh();
@@ -2164,8 +2243,9 @@ abstract class Block<
         "hasBlockXRepresentative": hasBlockXRepresentative,
         "hasItemXRepresentative": hasItemXRepresentative,
         "provideFormContext": provideFormContext,
-        "itemAbsentRepresentativePolicy": config.itemAbsentRepresentativePolicy,
-        "unifiedItemRefreshPolicy": config.unifiedItemRefreshPolicy,
+        "itemAbsentRepresentativePolicy":
+            effectiveConfig.itemAbsentRepresentativePolicy,
+        "unifiedItemRefreshPolicy": effectiveConfig.unifiedItemRefreshPolicy,
         "setCurrentItemDirective": setCurrentItemDirective,
         "isCandidateCurrentItemInNewQueriedList":
             isCandidateCurrentItemInNewQueriedList,
@@ -2183,8 +2263,9 @@ abstract class Block<
       hasBlockXRepresentative: hasBlockXRepresentative,
       hasItemXRepresentative: hasItemXRepresentative,
       provideFormContext: provideFormContext,
-      itemAbsentRepresentativePolicy: config.itemAbsentRepresentativePolicy,
-      unifiedItemRefreshPolicy: config.unifiedItemRefreshPolicy,
+      itemAbsentRepresentativePolicy:
+          effectiveConfig.itemAbsentRepresentativePolicy,
+      unifiedItemRefreshPolicy: effectiveConfig.unifiedItemRefreshPolicy,
       setCurrentItemDirective: setCurrentItemDirective,
       isCandidateCurrentItemInNewQueriedList:
           isCandidateCurrentItemInNewQueriedList,
@@ -2237,7 +2318,8 @@ abstract class Block<
         "isCandidateIsCurrent": isCandidateIsCurrent,
         "isCandidateCurrentItemInNewQueriedList":
             isCandidateCurrentItemInNewQueriedList,
-        "itemAbsentRepresentativePolicy": config.itemAbsentRepresentativePolicy,
+        "itemAbsentRepresentativePolicy":
+            effectiveConfig.itemAbsentRepresentativePolicy,
       },
       traceStepType: TraceStepType.debug,
     );
@@ -2889,7 +2971,7 @@ abstract class Block<
       backendIntentInFullQueryMode: syncStrategyOnFullQueryModeThisBlock,
       backendIntentInPageableQueryMode:
           syncStrategyOnPageableQueryModeThisBlock,
-      syncConfig: config.viewportSyncConfig,
+      syncConfig: effectiveConfig.viewportSyncConfig,
     );
     final bool forceRequeryThisBlock = viewportSyncStrategyThisBlock != null;
     // @DEL-01
@@ -5393,7 +5475,7 @@ abstract class Block<
       backendIntentInFullQueryMode: action.config.syncStrategyOnFullQueryMode,
       backendIntentInPageableQueryMode:
           action.config.syncStrategyOnPageableQueryMode,
-      syncConfig: config.viewportSyncConfig,
+      syncConfig: effectiveConfig.viewportSyncConfig,
     );
     executionTrace._addTraceStep(
       codeId: "#71346",
@@ -6157,17 +6239,16 @@ abstract class Block<
     required EventType eventType,
     required List<ID> effectedItemIds,
   }) {
-    if (!config.eventBroadcastEnabled) {
+    if (!effectiveConfig.eventBroadcastEnabled) {
       return;
     }
     //
     _EventDispatcher.broadcastTargetedFootprint<ID>(
-      executionTrace: executionTrace,
       eventType: eventType,
       eventBlock: this,
       mainEvents: getDeclaredMainBroadcastDataTypes().toList(),
       effectedItemIds: effectedItemIds,
-      extraEvents: config.extraBroadcastEvents,
+      extraEvents: effectiveConfig.extraBroadcastEvents,
     );
   }
 
@@ -8101,7 +8182,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool __checkBeforeChangeTheItemPositionManually() {
-    if (config.clientSideSortStrategy != SortStrategy.manual) {
+    if (effectiveConfig.clientSideSortStrategy != SortStrategy.manual) {
       showErrorSnackBar(
         message: "Can not change the position",
         errorDetails: [
@@ -8195,7 +8276,7 @@ abstract class Block<
     if (parentBlkCurrItemId == null) {
       validItems.addAll(queriedItems);
     } else {
-      if (config.enforceParentLinkConstraint) {
+      if (effectiveConfig.enforceParentLinkConstraint) {
         for (var item in queriedItems) {
           try {
             Object parentBlkItemId = resolveParentBlockItemId(item: item);

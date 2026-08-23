@@ -20,7 +20,8 @@ sealed class FormDataState {
   bool get isLoaded => this is FormDataStateLoaded;
 
   /// Quick accessor to diagnostic error payload if in [FormDataStateFatalError] or [FormDataStateLoaded] carrying transient error.
-  ErrorInfo? get errorInfo => switch (this) {
+  ErrorInfo? get errorInfo =>
+      switch (this) {
         FormDataStateFatalError(:final errorInfo) => errorInfo,
         FormDataStateLoaded(:final transientErrorInfo) => transientErrorInfo,
         _ => null,
@@ -82,9 +83,9 @@ final class FormDataStateFatalError extends FormDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FormDataStateFatalError &&
-          runtimeType == other.runtimeType &&
-          errorInfo == other.errorInfo;
+          other is FormDataStateFatalError &&
+              runtimeType == other.runtimeType &&
+              errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);
@@ -111,9 +112,9 @@ final class FormDataStateLoaded extends FormDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FormDataStateLoaded &&
-          runtimeType == other.runtimeType &&
-          transientErrorInfo == other.transientErrorInfo;
+          other is FormDataStateLoaded &&
+              runtimeType == other.runtimeType &&
+              transientErrorInfo == other.transientErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, transientErrorInfo);

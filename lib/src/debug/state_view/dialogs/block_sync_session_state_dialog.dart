@@ -299,13 +299,13 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
       case null:
         actionColor = Colors.grey.shade700;
         actionLabel = "NONE (No Query Required)";
-      case ResolvedQueryAction.performQuery:
+      case BlockResolvedQueryAction.performQuery:
         actionColor = Colors.teal.shade800;
-        actionLabel =
-            block.config.nativeQueryMode == BlockNativeQueryMode.fullQuery
-                ? "PERFORM QUERY (Full Query)"
-                : "PERFORM QUERY (Pageable Query)";
-      case ResolvedQueryAction.performQueryByItemIds:
+        actionLabel = block.effectiveConfig.nativeQueryMode ==
+                BlockNativeQueryMode.fullQuery
+            ? "PERFORM QUERY (Full Query)"
+            : "PERFORM QUERY (Pageable Query)";
+      case BlockResolvedQueryAction.performQueryByItemIds:
         actionColor = Colors.purple.shade800;
         actionLabel =
             "PERFORM QUERY BY ITEM IDS (${queryPlan.targetItemIds.length} IDs)";
@@ -371,13 +371,13 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
               Expanded(
                 child: _buildPlanDetailItem(
                   "Native Query Mode",
-                  block.config.nativeQueryMode.name,
+                  block.effectiveConfig.nativeQueryMode.name,
                 ),
               ),
             ],
           ),
           if (queryPlan.action ==
-              ResolvedQueryAction.performQueryByItemIds) ...[
+              BlockResolvedQueryAction.performQueryByItemIds) ...[
             const SizedBox(height: 8),
             Row(
               children: [

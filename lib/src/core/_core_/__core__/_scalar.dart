@@ -21,7 +21,8 @@ part of '../core.dart';
 /// ```
 ///
 abstract class Scalar<
-    VALUE extends Object,
+    ID extends Comparable,
+    VALUE extends Identifiable<ID>,
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     > extends _Core {
@@ -171,6 +172,8 @@ abstract class Scalar<
 
   final ScalarConfig config;
 
+  final ScalarEffectiveConfig effectiveConfig;
+
   late final _internalEffectedShelfMembers = EffectedShelfMembers.ofScalar(
     eventScalar: this,
   );
@@ -206,7 +209,7 @@ abstract class Scalar<
   }
 
   late final __scalarData =
-      _ScalarData<VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
+      _ScalarData<ID, VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   late final ui = _ScalarUiComponents(scalar: this);
 
@@ -246,7 +249,7 @@ abstract class Scalar<
     _scalarSyncSessionState = null;
   }
 
-  _ScalarSyncSessionState? _scalarSyncSessionState;
+  _ScalarSyncSessionState<ID>? _scalarSyncSessionState;
 
   bool _hasReactionBookmark() {
     return _scalarSyncSessionState != null;
@@ -270,6 +273,7 @@ abstract class Scalar<
     required String? filterModelName,
     required List<Scalar>? childScalars,
   })  : config = config.copy(),
+        effectiveConfig = ScalarEffectiveConfig._fromConfig(config),
         registeredFilterModelName = filterModelName,
         _childScalars = childScalars ?? [] {
     for (Scalar childScalar in _childScalars) {
@@ -291,10 +295,10 @@ abstract class Scalar<
 
   // ***************************************************************************
 
-  XScalar<VALUE> _createXScalar({
+  XScalar<ID, VALUE> _createXScalar({
     required XFilterModel xFilterModel,
   }) {
-    return XScalar<VALUE>._(
+    return XScalar<ID, VALUE>._(
       scalar: this,
       xFilterModel: xFilterModel,
     );
@@ -306,7 +310,7 @@ abstract class Scalar<
   /// Returns the data types explicitly declared in the configuration
   /// that this scalar should react to.
   Set<Type> getDeclaredReactionDataTypes() {
-    return config.reactions.map((r) => r.dataType).toSet();
+    return effectiveConfig.reactions.map((r) => r.dataType).toSet();
   }
 
   /// Resolves and returns all data types—including those within the same
@@ -351,12 +355,12 @@ abstract class Scalar<
   void _receiveEvent({
     required ExecutionTrace executionTrace,
     required EventSourceType eventSourceType,
-    required List<Type> dataTypes,
+    required List<Type> eventDataTypes,
   }) {
     if (dataState.isNone) {
       return;
     }
-    if (dataTypes.isEmpty) {
+    if (eventDataTypes.isEmpty) {
       return;
     }
 
@@ -367,17 +371,17 @@ abstract class Scalar<
       return;
     }
 
-    final bool isEffected = dataTypes.isNotEmpty &&
+    final bool isEffected = eventDataTypes.isNotEmpty &&
         DataTypeEventUtils.hasIntersection(
           scalarReactionTypes,
-          dataTypes.toSet(),
+          eventDataTypes.toSet(),
         );
 
     if (isEffected) {
       _updateSyncSessionState(
         executionTrace: executionTrace,
         eventSourceType: eventSourceType,
-        dataTypes: dataTypes,
+        dataTypes: eventDataTypes,
       );
     }
   }
@@ -394,16 +398,23 @@ abstract class Scalar<
       traceStepType: TraceStepType.nonControllableCalling,
     );
 
+    print("########## - 1: _updateSyncSessionState");
+
     // Initialize or reset session if boundary constraints (filter criteria or parent context) shifted
     if (_scalarSyncSessionState == null ||
         _scalarSyncSessionState!.filterCriteria != filterCriteria ||
         _scalarSyncSessionState!.parentScalarValueId != parent?.valueId) {
+      print("########## - 2: _updateSyncSessionState");
+
       _scalarSyncSessionState = _ScalarSyncSessionState(
         scalar: this,
         parentScalarValueId: parent?.valueId,
         filterCriteria: filterCriteria,
       );
     }
+
+    print(
+        "########## - 3: _scalarSyncSessionState: $_scalarSyncSessionState, dataState: $dataState");
 
     // Append received event metadata
     _scalarSyncSessionState?.addReceivedEventInfo(
@@ -420,9 +431,13 @@ abstract class Scalar<
     if (_scalarSyncSessionState != null) {
       final nextState =
           _scalarSyncSessionState!.calculateNextDataState(dataState);
+      print("########## - 4: nextState: $nextState");
+
       // Test Case: [84b].
       if (nextState != dataState) {
         __scalarData._scalarDataState = nextState;
+        print(
+            "########## - 5: __scalarData._scalarDataState: ${__scalarData._scalarDataState}");
         executionTrace._addTraceStep(
           codeId: "#86400",
           shortDesc:
@@ -450,17 +465,18 @@ abstract class Scalar<
       traceStepType: TraceStepType.debug,
     );
     //
-    bool hasXActiveUI = ui.hasActiveUiComponent(alsoCheckChildren: true);
+    bool provideScalarContext =
+        ui.hasActiveUiComponent(alsoCheckChildren: true);
     //
     executionTrace._addTraceStep(
       codeId: "#12020",
-      shortDesc: "${debugObjHtml(this)} has UIX Visible? $hasXActiveUI",
+      shortDesc: "${debugObjHtml(this)} has UIX Visible? $provideScalarContext",
     );
     //
     QryHint queryHint = thisXScalar.queryHint;
 
     if (queryHint != QryHint.force) {
-      if (!dataState.isLoaded && hasXActiveUI) {
+      if (provideScalarContext && (dataState.isPending || dataState.isStale)) {
         queryHint = QryHint.force;
       }
     }
@@ -468,6 +484,17 @@ abstract class Scalar<
       codeId: "#12040",
       shortDesc: "Calculated: @queryHint: $queryHint.",
     );
+
+    final DebugScalarSyncSessionState<ID>? currentSyncSessionState =
+        _scalarSyncSessionState;
+
+    final ScalarQueryPlan<ID> queryPlan =
+        ScalarQueryStrategyResolver.resolveQueryPlan<ID>(
+      scalar: this,
+      syncSessionState: currentSyncSessionState,
+    );
+
+    print("&&&&&&&&&&&&&&& Scalar queryHint: $queryHint");
 
     if (queryHint == QryHint.none) {
       executionTrace._addTraceStep(
@@ -594,8 +621,8 @@ abstract class Scalar<
     //
     final performQueryMethod = ScalarErrorMethod.performQuery;
     bool isQueryError = false;
-    final String? oldValueId = __scalarData.current._id;
-    String? valueId;
+    final ID? oldValueId = __scalarData.current._id;
+    ID? valueId;
     VALUE? value;
     //
     try {
@@ -625,12 +652,7 @@ abstract class Scalar<
       thisXScalar.setReQueryDone();
       queryResultState = ActionResultState.success;
       value = result.data;
-      valueId = value == null
-          ? null
-          : toValueId(
-              filterCriteria: filterCriteriaMvOfFilterModel.filterCriteria,
-              value: value,
-            );
+      valueId = value?.id;
       _resetSyncSessionState(executionTrace: executionTrace);
     } catch (e, stackTrace) {
       queryResultState = ActionResultState.fail;
@@ -1048,7 +1070,7 @@ abstract class Scalar<
     required XScalar thisXScalar,
     required FilterCriteriaMappedValue<FILTER_CRITERIA>? xFilterCriteria,
     required ScalarDataState dataState,
-    required String? valueId,
+    required ID? valueId,
     required VALUE? value,
     required ActionResultState queryResultState,
   }) {
@@ -1134,16 +1156,6 @@ abstract class Scalar<
 
   String? get parentScalarValueId {
     return parent?.valueId;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  String toValueId({
-    required FILTER_CRITERIA filterCriteria,
-    required VALUE value,
-  }) {
-    return "";
   }
 
   // ***************************************************************************
@@ -1384,7 +1396,7 @@ abstract class Scalar<
     //   event: "Scalar '${getClassName(this)}' just hides all UI Components!",
     //   isLibCode: true,
     // );
-    switch (config.onHideAction) {
+    switch (effectiveConfig.onHideAction) {
       case ScalarHiddenAction.none:
         break;
       case ScalarHiddenAction.clear:

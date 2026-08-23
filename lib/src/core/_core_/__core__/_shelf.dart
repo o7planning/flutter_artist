@@ -5,6 +5,18 @@ int __shelfSequence = 0;
 abstract class Shelf extends _Core {
   Shelf get shelf => this;
 
+  bool get deferReactions {
+    Set<Type>? excludeDeferShelfTypes =
+        FlutterArtist.backstage._defermentInfo?.excludeShelfTypes;
+    if (excludeDeferShelfTypes == null) {
+      return false;
+    }
+    if (excludeDeferShelfTypes.contains(this.runtimeType)) {
+      return false;
+    }
+    return true;
+  }
+
   late final debug = _ShelfDebugInfo(shelf: this);
 
   late final ShelfConfig config;
@@ -284,7 +296,7 @@ abstract class Shelf extends _Core {
       Block listenerBlock = __blockMap[blockName]!;
 
       // Scan through the new unified reactions config inside the Block
-      for (var reaction in listenerBlock.config.reactions) {
+      for (var reaction in listenerBlock.effectiveConfig.reactions) {
         // Find if the target data type event belongs to an internal Block emitter
         for (Block eventBlock in __blockMap.values) {
           // If the eventBlock produces or matches the data type the listener is looking for
@@ -379,7 +391,7 @@ abstract class Shelf extends _Core {
       Scalar listenerScalar = __scalarMap[scalarName]!;
 
       // Scan through the new unified reactions configuration inside the Scalar
-      for (var reaction in listenerScalar.config.reactions) {
+      for (var reaction in listenerScalar.effectiveConfig.reactions) {
         // Find if the target data type event belongs to an internal Block emitter
         for (Block eventBlock in __blockMap.values) {
           if (eventBlock._exposesDataType(reaction.dataType)) {
@@ -802,14 +814,14 @@ abstract class Shelf extends _Core {
     return false;
   }
 
-  bool hasPendingOrStaleMember({required bool requiresVisible})  {
+  bool hasPendingOrStaleMember({required bool requiresVisible}) {
     for (Block block in blocks) {
-      if (block.isPendingOrStale(requiresVisible:requiresVisible)) {
+      if (block.isPendingOrStale(requiresVisible: requiresVisible)) {
         return true;
       }
     }
     for (Scalar scalar in scalars) {
-      if (scalar.isPendingOrStale(requiresVisible:requiresVisible)) {
+      if (scalar.isPendingOrStale(requiresVisible: requiresVisible)) {
         return true;
       }
     }
