@@ -24,7 +24,7 @@ class BlockQueryPlan<ID extends Comparable> {
 }
 
 /// Result object holding the resolved query strategy and target item IDs.
-class ScalarQueryPlan<ID extends Comparable> { 
+class ScalarQueryPlan<ID extends Comparable> {
   final ScalarResolvedQueryAction? action;
 
   const ScalarQueryPlan({

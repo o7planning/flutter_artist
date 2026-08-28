@@ -28,6 +28,13 @@ class _BlockPaginationState extends _ContextProviderViewState<BlockPagination> {
   }
 
   @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+
+
+  @override
   bool get provideScalarContext {
     return false;
   }
@@ -44,11 +51,6 @@ class _BlockPaginationState extends _ContextProviderViewState<BlockPagination> {
 
   @override
   bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideHookContext {
     return false;
   }
 

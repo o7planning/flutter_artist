@@ -30,8 +30,8 @@ class _XRootQueue {
     return isNotEmpty;
   }
 
-  _TaskUnit? getNextTaskUnit() {
-    _TaskUnit? tu = _xStorage._getNextTaskUnit();
+  _ExecutionUnit? getNextExecutionUnit() {
+    _ExecutionUnit? tu = _xStorage._getNextExecutionUnit();
     if (tu != null) {
       return tu;
     }
@@ -47,19 +47,19 @@ class _XRootQueue {
         continue;
       }
       if (rootQueueItem is XShelf) {
-        return rootQueueItem._getNextTaskUnit();
-      } else if (rootQueueItem is XActivity) {
-        return rootQueueItem._getNextTaskUnit();
+        return rootQueueItem._getNextExecutionUnit();
+      } else if (rootQueueItem is XActivityV1) {
+        return rootQueueItem._getNextExecutionUnit();
       } else {
         throw "TODO";
       }
     }
   }
 
-  void _addStorageBackendActionTaskUnit(
-    _StorageBackendActionTaskUnit storageBackendActionTaskUnit,
+  void _addStorageBackendActionExecutionUnit(
+    _StorageBackendActionExecutionUnit storageBackendActionExecutionUnit,
   ) {
-    _xStorage._addStorageBackendActionTaskUnit(storageBackendActionTaskUnit);
+    _xStorage._addStorageBackendActionExecutionUnit(storageBackendActionExecutionUnit);
   }
 
   void _addXRootQueueItem({required XRootQueueItem xRootQueueItem}) {

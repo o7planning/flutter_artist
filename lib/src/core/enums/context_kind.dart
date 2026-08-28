@@ -3,6 +3,5 @@ enum ContextKind {
   block,
   item,
   form,
-  hook,
   activity;
 }

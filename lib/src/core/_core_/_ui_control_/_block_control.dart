@@ -33,6 +33,12 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
   }
 
   @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
@@ -58,11 +64,6 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
 
   @override
   bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideHookContext {
     return false;
   }
 

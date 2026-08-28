@@ -5,22 +5,22 @@ import '../../dialog/_x_shelf_dialog.dart';
 import '../model/_debug_x_root_queue_item.dart';
 import '_debug_task_unit_view.dart';
 
-class DebugXShelfTaskUnitQueueView extends StatefulWidget {
-  final DebugXRootQueueItem debugXShelfTaskUnitQueue;
+class DebugXShelfExecutionUnitQueueView extends StatefulWidget {
+  final DebugXRootQueueItem debugXShelfExecutionUnitQueue;
 
-  const DebugXShelfTaskUnitQueueView({
+  const DebugXShelfExecutionUnitQueueView({
     super.key,
-    required this.debugXShelfTaskUnitQueue,
+    required this.debugXShelfExecutionUnitQueue,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _DebugXShelfTaskUnitQueueViewState();
+    return _DebugXShelfExecutionUnitQueueViewState();
   }
 }
 
-class _DebugXShelfTaskUnitQueueViewState
-    extends State<DebugXShelfTaskUnitQueueView> {
+class _DebugXShelfExecutionUnitQueueViewState
+    extends State<DebugXShelfExecutionUnitQueueView> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,13 +41,13 @@ class _DebugXShelfTaskUnitQueueViewState
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ...widget.debugXShelfTaskUnitQueue.mainTaskUnits.map(
-                  (taskUnit) => DebugTaskUnitView(
-                      taskUnit: taskUnit, isInMainQueue: true),
+                ...widget.debugXShelfExecutionUnitQueue.mainExecutionUnits.map(
+                  (executionUnit) => DebugExecutionUnitView(
+                      executionUnit: executionUnit, isInMainQueue: true),
                 ),
-                ...widget.debugXShelfTaskUnitQueue.secondaryTaskUnits.map(
-                    (taskUnit) => DebugTaskUnitView(
-                        taskUnit: taskUnit, isInMainQueue: false))
+                ...widget.debugXShelfExecutionUnitQueue.secondaryExecutionUnits.map(
+                    (executionUnit) => DebugExecutionUnitView(
+                        executionUnit: executionUnit, isInMainQueue: false))
               ],
             ),
           ),
@@ -62,12 +62,12 @@ class _DebugXShelfTaskUnitQueueViewState
       visualDensity: VisualDensity(horizontal: -3, vertical: -3),
       contentPadding: EdgeInsets.all(0),
       leading: Tooltip(
-        message: "XShelfID: ${widget.debugXShelfTaskUnitQueue.xShelf.xShelfId}",
+        message: "XShelfID: ${widget.debugXShelfExecutionUnitQueue.xShelf.xShelfId}",
         child: CircleAvatar(
           radius: 18,
           child: Center(
             child: Text(
-              widget.debugXShelfTaskUnitQueue.xShelf.xShelfId.toString(),
+              widget.debugXShelfExecutionUnitQueue.xShelf.xShelfId.toString(),
               style: TextStyle(fontSize: 12),
             ),
           ),
@@ -82,10 +82,10 @@ class _DebugXShelfTaskUnitQueueViewState
         ),
       ),
       title: Text(
-          "Task Units in the Queue of XShelf (${widget.debugXShelfTaskUnitQueue.xShelf.shelf.name})"),
+          "Execution Units in the Queue of XShelf (${widget.debugXShelfExecutionUnitQueue.xShelf.shelf.name})"),
       subtitle: IconLabelText(
         label: "XShelf Task Type: ",
-        text: widget.debugXShelfTaskUnitQueue.xShelf.xShelfType.name,
+        text: widget.debugXShelfExecutionUnitQueue.xShelf.xShelfType.name,
         textStyle: TextStyle(color: Colors.indigo, fontSize: 13),
       ),
     );
@@ -94,7 +94,7 @@ class _DebugXShelfTaskUnitQueueViewState
   void _openXShelfDialog() {
     XShelfDialog.open(
       context: context,
-      xShelf: widget.debugXShelfTaskUnitQueue.xShelf,
+      xShelf: widget.debugXShelfExecutionUnitQueue.xShelf,
     );
   }
 }

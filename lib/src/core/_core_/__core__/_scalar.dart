@@ -21,11 +21,11 @@ part of '../core.dart';
 /// ```
 ///
 abstract class Scalar<
-    ID extends Comparable,
-    VALUE extends Identifiable<ID>,
-    FILTER_INPUT extends FilterInput, // EmptyFilterInput
-    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-    > extends _Core {
+ID extends Comparable,
+VALUE extends Identifiable<ID>,
+FILTER_INPUT extends FilterInput, // EmptyFilterInput
+FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+> extends _Core {
   late final Shelf shelf;
 
   PageData<VALUE>? get lastQueryResult => __scalarData._lastQueryResult;
@@ -187,14 +187,14 @@ abstract class Scalar<
   /// If this scalar does not declare a FilterModel, it will have the default FilterModel.
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-      _registeredOrDefaultFilterModel;
+  _registeredOrDefaultFilterModel;
 
   ///
   /// This field is not null.
   /// If this scalar does not declare a FilterModel, it will have the default FilterModel.
   ///
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-      get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
+  get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.defineShelfStructure()] method.
@@ -209,7 +209,7 @@ abstract class Scalar<
   }
 
   late final __scalarData =
-      _ScalarData<ID, VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
+  _ScalarData<ID, VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   late final ui = _ScalarUiComponents(scalar: this);
 
@@ -272,7 +272,8 @@ abstract class Scalar<
     required ScalarConfig config,
     required String? filterModelName,
     required List<Scalar>? childScalars,
-  })  : config = config.copy(),
+  })
+      : config = config.copy(),
         effectiveConfig = ScalarEffectiveConfig._fromConfig(config),
         registeredFilterModelName = filterModelName,
         _childScalars = childScalars ?? [] {
@@ -430,18 +431,19 @@ abstract class Scalar<
     // Recalculate ScalarDataState upon incoming event invalidation
     if (_scalarSyncSessionState != null) {
       final nextState =
-          _scalarSyncSessionState!.calculateNextDataState(dataState);
+      _scalarSyncSessionState!.calculateNextDataState(dataState);
       print("########## - 4: nextState: $nextState");
 
       // Test Case: [84b].
       if (nextState != dataState) {
         __scalarData._scalarDataState = nextState;
         print(
-            "########## - 5: __scalarData._scalarDataState: ${__scalarData._scalarDataState}");
+            "########## - 5: __scalarData._scalarDataState: ${__scalarData
+                ._scalarDataState}");
         executionTrace._addTraceStep(
           codeId: "#86400",
           shortDesc:
-              "Transitioned Scalar dataState to $nextState due to SyncSession update",
+          "Transitioned Scalar dataState to $nextState due to SyncSession update",
         );
       }
     }
@@ -450,23 +452,23 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_ScalarQueryAnnotation()
   Future<void> _unitQuery({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XScalar thisXScalar,
   }) async {
     __assertThisXScalar(thisXScalar);
     //
     executionTrace._addTraceStep(
       codeId: "#12000",
-      shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      shortDesc: "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
     //
     bool provideScalarContext =
-        ui.hasActiveUiComponent(alsoCheckChildren: true);
+    ui.hasActiveUiComponent(alsoCheckChildren: true);
     //
     executionTrace._addTraceStep(
       codeId: "#12020",
@@ -489,7 +491,7 @@ abstract class Scalar<
         _scalarSyncSessionState;
 
     final ScalarQueryPlan<ID> queryPlan =
-        ScalarQueryStrategyResolver.resolveQueryPlan<ID>(
+    ScalarQueryStrategyResolver.resolveQueryPlan<ID>(
       scalar: this,
       syncSessionState: currentSyncSessionState,
     );
@@ -500,28 +502,31 @@ abstract class Scalar<
       executionTrace._addTraceStep(
         codeId: "#12080",
         shortDesc:
-            "@queryHint: $queryHint, @dataState: $dataState, @value: ${debugObjHtml(this.value)}.",
+        "@queryHint: $queryHint, @dataState: $dataState, @value: ${debugObjHtml(
+            this.value)}.",
       );
       //
       if (dataState.isLoaded && this.value != null) {
         executionTrace._addTraceStep(
           codeId: "#12100",
-          shortDesc: "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) "
+          shortDesc: "Create ${ExecutionUnitType.scalarQuery.asDebugExecutionUnit()}(s) "
               "for all child scalars and add to Queue."
-              "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
+              "${_childScalars.isEmpty
+              ? '\n   ** No children -> Nothing to do!'
+              : ''}",
           traceStepType: TraceStepType.info,
         );
         for (XScalar childXScalar in thisXScalar.childXScalars) {
-          final taskUnit = _ScalarQueryTaskUnit(
+          final executionUnit = _ScalarQueryExecutionUnit(
             xScalar: childXScalar,
           );
           executionTrace._addTraceStep(
             codeId: "#12120",
-            shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
-            traceStepType: TraceStepType.addTaskUnit,
+            shortDesc: "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
+            traceStepType: TraceStepType.addExecutionUnit,
           );
-          thisXScalar.xShelf._addTaskUnit(
-            taskUnit: taskUnit,
+          thisXScalar.xShelf._addExecutionUnit(
+            executionUnit: executionUnit,
           );
         }
       }
@@ -530,15 +535,18 @@ abstract class Scalar<
       executionTrace._addTraceStep(
         codeId: "#12140",
         shortDesc:
-            "@queryHint: $queryHint, @dataState: $dataState, @value: ${debugObjHtml(this.value)}.",
+        "@queryHint: $queryHint, @dataState: $dataState, @value: ${debugObjHtml(
+            this.value)}.",
       );
       //
       executionTrace._addTraceStep(
         codeId: "#12180",
         shortDesc:
-            "${debugObjHtml(this)} --> clear data and set to <b>pending</b> state. "
+        "${debugObjHtml(this)} --> clear data and set to <b>pending</b> state. "
             "Clear data of child scalars and set them to <b>none</b>."
-            "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
+            "${_childScalars.isEmpty
+            ? '\n   ** No children -> Nothing to do!'
+            : ''}",
         traceStepType: TraceStepType.info,
       );
       //
@@ -565,12 +573,13 @@ abstract class Scalar<
         executionTrace._addTraceStep(
           codeId: "#12220",
           shortDesc:
-              "${debugObjHtml(this)} @queried: ${xFilterModel.queried} --> need to load data",
+          "${debugObjHtml(this)} @queried: ${xFilterModel
+              .queried} --> need to load data",
         );
         FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
         //
         filterCriteriaMvOfFilterModel =
-            await filterModel._startNewFilterActivity(
+        await filterModel._startNewFilterActivity(
           executionTrace: executionTrace,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
@@ -582,10 +591,11 @@ abstract class Scalar<
         executionTrace._addTraceStep(
           codeId: "#12300",
           shortDesc:
-              "${debugObjHtml(this)} @queried: ${xFilterModel.queried} --> no need to load data.",
+          "${debugObjHtml(this)} @queried: ${xFilterModel
+              .queried} --> no need to load data.",
         );
         filterCriteriaMvOfFilterModel = filterModel._xFilterCriteria!
-            as FilterCriteriaMappedValue<FILTER_CRITERIA>;
+        as FilterCriteriaMappedValue<FILTER_CRITERIA>;
       }
     } catch (e, _) {
       /* Never Error */
@@ -597,7 +607,8 @@ abstract class Scalar<
       executionTrace._addTraceStep(
         codeId: "#12340",
         shortDesc:
-            "${debugObjHtml(filterModel)} error --> clear data of ${debugObjHtml(this)} and set to <b>error</b>. "
+        "${debugObjHtml(filterModel)} error --> clear data of ${debugObjHtml(
+            this)} and set to <b>error</b>. "
             "Clear data of child scalar and set them to <b>none</b>.",
         traceStepType: TraceStepType.info,
       );
@@ -612,7 +623,7 @@ abstract class Scalar<
     // Ready FilterCriteria:
     //
     final bool filterCriteriaChanged =
-        __scalarData._isFilterCriteriaMappedValueChanged(
+    __scalarData._isFilterCriteriaMappedValueChanged(
       newFilterCriteriaMappedValue: filterCriteriaMvOfFilterModel,
     );
     //
@@ -681,7 +692,7 @@ abstract class Scalar<
       executionTrace._addTraceStep(
         codeId: "#12440",
         shortDesc:
-            "The ${debugObjHtml(this)}.performQuery() was called with an error!",
+        "The ${debugObjHtml(this)}.performQuery() was called with an error!",
         errorInfo: errorInfo,
       );
     } finally {
@@ -696,7 +707,7 @@ abstract class Scalar<
       filterCriteriaChanged: filterCriteriaChanged,
     );
     final ScalarQueryCalculatorResult calculationResult =
-        ScalarQueryStateCalculator.calculate(calculationInput);
+    ScalarQueryStateCalculator.calculate(calculationInput);
 
     print("@TEMP INPUT: ");
     print(calculationInput.getDebugInfo());
@@ -711,13 +722,14 @@ abstract class Scalar<
       executionTrace._addTraceStep(
         codeId: "#12500",
         shortDesc:
-            "${debugObjHtml(this)} --> Query error -> newScalarDataState: $newScalarDataState",
+        "${debugObjHtml(
+            this)} --> Query error -> newScalarDataState: $newScalarDataState",
       );
       __scalarData._updateStateAfterQueryError(
         newScalarDataState: newScalarDataState,
       );
       final List<XScalar> descendantXScalars =
-          thisXScalar.getDecendentXScalars(sameFilterOnly: true);
+      thisXScalar.getDecendentXScalars(sameFilterOnly: true);
 
       __stopDecendentQueryWithError(
         descendantXScalars: descendantXScalars,
@@ -730,7 +742,9 @@ abstract class Scalar<
     executionTrace._addTraceStep(
       codeId: "#12600",
       shortDesc:
-          "${debugObjHtml(this)} --> set state to loađed and set value to ${debugObjHtml(value)}.",
+      "${debugObjHtml(
+          this)} --> set state to loađed and set value to ${debugObjHtml(
+          value)}.",
     );
     newScalarDataState = ScalarDataStateLoadedFresh();
     __setQueryDataWithState(
@@ -746,8 +760,11 @@ abstract class Scalar<
       executionTrace._addTraceStep(
         codeId: "#12680",
         shortDesc:
-            "${debugObjHtml(this)} --> @value: null --> clear data of all child scalars and set them to <b>none</b>."
-            "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
+        "${debugObjHtml(
+            this)} --> @value: null --> clear data of all child scalars and set them to <b>none</b>."
+            "${_childScalars.isEmpty
+            ? '\n   ** No children -> Nothing to do!'
+            : ''}",
         traceStepType: TraceStepType.info,
       );
       __clearAllChildrenScalarsToNone(thisXScalar: thisXScalar);
@@ -758,8 +775,11 @@ abstract class Scalar<
       executionTrace._addTraceStep(
         codeId: "#12700",
         shortDesc:
-            "${debugObjHtml(this)} --> @filterCriteria changed --> clear data of child scalars and set them to <b>pending</b>."
-            "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
+        "${debugObjHtml(
+            this)} --> @filterCriteria changed --> clear data of child scalars and set them to <b>pending</b>."
+            "${_childScalars.isEmpty
+            ? '\n   ** No children -> Nothing to do!'
+            : ''}",
         traceStepType: TraceStepType.info,
       );
       this.__clearAllChildrenScalarsToPending(
@@ -769,22 +789,24 @@ abstract class Scalar<
     //
     executionTrace._addTraceStep(
       codeId: "#12800",
-      shortDesc: "Create ${TaskType.scalarQuery.asDebugTaskUnit()}(s) "
+      shortDesc: "Create ${ExecutionUnitType.scalarQuery.asDebugExecutionUnit()}(s) "
           "for all child scalars and add to queue."
-          "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
+          "${_childScalars.isEmpty
+          ? '\n   ** No children -> Nothing to do!'
+          : ''}",
       traceStepType: TraceStepType.info,
     );
     for (XScalar childXScalar in thisXScalar.childXScalars) {
-      final taskUnit = _ScalarQueryTaskUnit(
+      final executionUnit = _ScalarQueryExecutionUnit(
         xScalar: childXScalar,
       );
       executionTrace._addTraceStep(
         codeId: "#12840",
-        shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
-        traceStepType: TraceStepType.addTaskUnit,
+        shortDesc: "Create ${executionUnit.asDebugExecutionUnit()} and add to queue.",
+        traceStepType: TraceStepType.addExecutionUnit,
       );
-      thisXScalar.xShelf._addTaskUnit(
-        taskUnit: taskUnit,
+      thisXScalar.xShelf._addExecutionUnit(
+        executionUnit: executionUnit,
       );
     }
   }
@@ -792,11 +814,11 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_ScalarClearAnnotation()
   Future<void> _unitClear({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XScalar thisXScalar,
   }) async {
     __assertThisXScalar(thisXScalar);
@@ -804,16 +826,18 @@ abstract class Scalar<
     executionTrace._addTraceStep(
       codeId: "#39000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+      "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
     //
     executionTrace._addTraceStep(
       codeId: "#39000",
       shortDesc:
-          "${debugObjHtml(this)} ->  Clear data and set to <b>pending</b>. "
+      "${debugObjHtml(this)} ->  Clear data and set to <b>pending</b>. "
           "Clear data of child scalars and set its to <b>none</b>."
-          "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
+          "${_childScalars.isEmpty
+          ? '\n   ** No children -> Nothing to do!'
+          : ''}",
       traceStepType: TraceStepType.info,
     );
     //
@@ -828,11 +852,11 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_ScalarLoadExtraDataQuickActionAnnotation()
   Future<bool> _unitLoadExtraDataQuickAction<DATA extends Object>({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XScalar thisXScalar,
     required ScalarQuickExtraDataLoadAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
@@ -842,7 +866,7 @@ abstract class Scalar<
     executionTrace._addTraceStep(
       codeId: "#40000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+      "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -867,7 +891,8 @@ abstract class Scalar<
       executionTrace._addTraceStep(
         codeId: "#40200",
         shortDesc:
-            "The ${debugObjHtml(action)}.performLoadExtraData() method was called with an error!",
+        "The ${debugObjHtml(
+            action)}.performLoadExtraData() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -888,7 +913,8 @@ abstract class Scalar<
       executionTrace._addTraceStep(
         codeId: "#40300",
         shortDesc:
-            "The ${debugObjHtml(action)}.performLoadExtraData() method was called with an error!",
+        "The ${debugObjHtml(
+            action)}.performLoadExtraData() method was called with an error!",
         errorInfo: errorInfo,
       );
     }
@@ -935,7 +961,8 @@ abstract class Scalar<
       executionTrace._addTraceStep(
         codeId: "#41300",
         shortDesc:
-            "The ${debugObjHtml(action)}.onExtraDataLoaded() method was called with an error!",
+        "The ${debugObjHtml(
+            action)}.onExtraDataLoaded() method was called with an error!",
         errorInfo: errorInfo,
       );
       success2 = false;
@@ -964,7 +991,7 @@ abstract class Scalar<
     final fallbackDilemmaStrategy = FallbackDilemmaStrategy.preserveStableCache;
 
     final ScalarDataState newScalarDataState =
-        ScalarQueryStateCalculator.calculateDataStateOnError(
+    ScalarQueryStateCalculator.calculateDataStateOnError(
       currentDataState: dataState,
       scalarErrorOrigin: scalarErrorOrigin,
       scalarErrorInfo: scalarErrorInfo,
@@ -975,7 +1002,7 @@ abstract class Scalar<
     __scalarData._scalarDataState = newScalarDataState;
 
     final List<XScalar> descendantXScalars =
-        thisXScalar.getDecendentXScalars(sameFilterOnly: true);
+    thisXScalar.getDecendentXScalars(sameFilterOnly: true);
 
     __stopDecendentQueryWithError(
       descendantXScalars: descendantXScalars,
@@ -995,7 +1022,7 @@ abstract class Scalar<
 
     for (final descendant in descendantXScalars) {
       final descendantState =
-          ScalarQueryStateCalculator.calculateDataStateOnError(
+      ScalarQueryStateCalculator.calculateDataStateOnError(
         currentDataState: descendant.scalar.dataState,
         scalarErrorOrigin: scalarErrorOrigin,
         scalarErrorInfo: null,
@@ -1227,18 +1254,18 @@ abstract class Scalar<
     //
     executionTrace._addTraceStep(
       codeId: "#80340",
-      shortDesc: "Creating <b>_ScalarLoadExtraDataQuickActionTaskUnit</b>.",
-      traceStepType: TraceStepType.addTaskUnit,
+      shortDesc: "Creating <b>_ScalarLoadExtraDataQuickActionExecutionUnit</b>.",
+      traceStepType: TraceStepType.addExecutionUnit,
     );
-    _STaskUnit taskUnit = _ScalarLoadExtraDataQuickActionTaskUnit(
+    _SExecutionUnit executionUnit = _ScalarLoadExtraDataQuickActionExecutionUnit(
       xScalar: thisXScalar,
       action: action,
       afterQuickAction: afterQuickAction,
     );
     //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
+    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     return true;
   }
@@ -1275,13 +1302,13 @@ abstract class Scalar<
     //
     executionTrace._addTraceStep(
       codeId: "#54100",
-      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()..",
+      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()..",
       traceStepType: TraceStepType.nonControllableCalling,
     );
-    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
+    xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
     //
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     XScalar xScalar = xShelf.findXScalarByName(this.name)!;
     ScalarQueryResult result = xScalar.queryResult;
@@ -1311,7 +1338,8 @@ abstract class Scalar<
     executionTrace._addTraceStep(
       codeId: "#80000",
       shortDesc:
-          "Calling ${debugObjHtml(this)}.__canClearScalar() to check before execute the action.",
+      "Calling ${debugObjHtml(
+          this)}.__canClearScalar() to check before execute the action.",
       parameters: {
         "checkBusy": checkBusyTrue,
       },
@@ -1346,17 +1374,17 @@ abstract class Scalar<
     //
     executionTrace._addTraceStep(
       codeId: "#80340",
-      shortDesc: "Creating <b>_ScalarClearTaskUnit</b>.",
-      traceStepType: TraceStepType.addTaskUnit,
+      shortDesc: "Creating <b>_ScalarClearExecutionUnit</b>.",
+      traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSTaskUnit taskUnit = _ScalarClearTaskUnit(
+    final _ResultedSExecutionUnit executionUnit = _ScalarClearExecutionUnit(
       xScalar: thisXScalar,
     );
     //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
+    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
-    return taskUnit.taskResult;
+    await FlutterArtist.executor._executeExecutionUnitQueue();
+    return executionUnit.taskResult;
   }
 
   // ***************************************************************************

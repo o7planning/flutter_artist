@@ -34,6 +34,12 @@ class _SortPanelBuilderState
   }
 
   @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.sortModel);
   }
@@ -56,11 +62,6 @@ class _SortPanelBuilderState
   @override
   bool get provideFormContext {
     return widget.provideFormContext;
-  }
-
-  @override
-  bool get provideHookContext {
-    return false;
   }
 
   @override

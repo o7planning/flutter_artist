@@ -52,19 +52,19 @@ class _Backstage {
     _deferOnce = false;
     _defermentInfo = null;
 
-    // Dispatch queued reaction task units once overlay is dismissed
+    // Dispatch queued reaction execution units once overlay is dismissed
     Future.delayed(
       Duration.zero,
       () {
         for (String shelfName in FlutterArtist.storage._shelfMap.keys) {
           Shelf reactionShelf = FlutterArtist.storage._shelfMap[shelfName]!;
           if (reactionShelf._hasReactionBookmark()) {
-            reactionShelf._addShelfExternalReactionTaskUnit(
+            reactionShelf._addShelfExternalReactionExecutionUnit(
               executionTrace: executionTrace,
             );
           }
         }
-        FlutterArtist.executor._executeTaskUnitQueue();
+        FlutterArtist.executor._executeExecutionUnitQueue();
       },
     );
   }

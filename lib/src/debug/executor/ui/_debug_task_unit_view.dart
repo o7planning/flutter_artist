@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../model/_debug_task_unit.dart';
+import '../model/_debug_execution_unit.dart';
 
-class DebugTaskUnitView extends StatefulWidget {
-  final DebugTaskUnit taskUnit;
+class DebugExecutionUnitView extends StatefulWidget {
+  final DebugExecutionUnit executionUnit;
   final bool isInMainQueue;
 
-  const DebugTaskUnitView({
+  const DebugExecutionUnitView({
     super.key,
-    required this.taskUnit,
+    required this.executionUnit,
     required this.isInMainQueue,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _DebugTaskUnitViewState();
+    return _DebugExecutionUnitViewState();
   }
 }
 
-class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
+class _DebugExecutionUnitViewState extends State<DebugExecutionUnitView> {
   final double fontSize = 14;
 
   @override
@@ -45,7 +45,7 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
             children: [
               IconLabelText(
                 label: "Task: ",
-                text: widget.taskUnit.taskType.name,
+                text: widget.executionUnit.executionUnitType.name,
                 textStyle: TextStyle(
                   fontSize: fontSize,
                   color: Colors.blue,
@@ -62,7 +62,7 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
               //     onPressed: () {
               //       _showXShelfDialog();
               //     },
-              //     child: Text("${widget.taskUnit.xShelf.xShelfId}"),
+              //     child: Text("${widget.executionUnit.xShelf.xShelfId}"),
               //   ),
               // ),
             ],
@@ -70,7 +70,7 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
           Divider(),
           IconLabelText(
             label: "Name: ",
-            text: widget.taskUnit.taskName,
+            text: widget.executionUnit.taskName,
             style: TextStyle(fontSize: fontSize),
           ),
         ],
@@ -81,7 +81,7 @@ class _DebugTaskUnitViewState extends State<DebugTaskUnitView> {
 // void _showXShelfDialog() {
 //   XShelfDialog.showXShelfDialog(
 //     context: context,
-//     xShelf: widget.taskUnit.xShelf,
+//     xShelf: widget.executionUnit.xShelf,
 //   );
 // }
 }

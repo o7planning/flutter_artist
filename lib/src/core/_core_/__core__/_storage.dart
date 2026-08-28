@@ -7,7 +7,6 @@ class _Storage extends _StorageCore {
   late final eventHelper = _EventHelper(this);
   final _naturalQueryQueue = _StorageNaturalQueryQueue();
 
-
   // ***************************************************************************
   // ***************************************************************************
 

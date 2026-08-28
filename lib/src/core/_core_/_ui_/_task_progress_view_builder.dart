@@ -5,10 +5,9 @@ class TaskProgressViewBuilder extends _ContextProviderView {
   final EdgeInsets progressOffMargin;
 
   //
-  final List<TaskType> taskTypes;
+  final List<ExecutionUnitType> executionUnitTypes;
   final List<Block> blocks;
   final List<Scalar> scalars;
-  final List<Hook> hooks;
 
   final Widget Function(
     bool onProgress,
@@ -20,10 +19,9 @@ class TaskProgressViewBuilder extends _ContextProviderView {
     this.progressOffMargin = const EdgeInsets.all(0),
     required super.ownerClassInstance,
     super.description,
-    required this.taskTypes,
+    required this.executionUnitTypes,
     required this.blocks,
     required this.scalars,
-    required this.hooks,
     required this.build,
   });
 
@@ -40,6 +38,11 @@ class _TaskProgressBuilderState
 
   @override
   Shelf? _getRelatedShelf() {
+    return null;
+  }
+
+  @override
+  Activity? _getRelatedActivity() {
     return null;
   }
 
@@ -66,13 +69,9 @@ class _TaskProgressBuilderState
     return false;
   }
 
-  @override
-  bool get provideHookContext {
-    return false;
-  }
-
-  bool isMatches({required Object owner, required TaskType taskType}) {
-    if (!widget.taskTypes.contains(taskType)) {
+  bool isMatches(
+      {required Object owner, required ExecutionUnitType executionUnitType}) {
+    if (!widget.executionUnitTypes.contains(executionUnitType)) {
       return false;
     }
     for (Block block in widget.blocks) {
@@ -82,11 +81,6 @@ class _TaskProgressBuilderState
     }
     for (Scalar scalar in widget.scalars) {
       if (identical(scalar, owner)) {
-        return true;
-      }
-    }
-    for (Hook hook in widget.hooks) {
-      if (identical(hook, owner)) {
         return true;
       }
     }

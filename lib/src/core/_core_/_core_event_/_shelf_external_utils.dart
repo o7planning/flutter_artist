@@ -10,8 +10,7 @@ class _ShelfExternalUtils {
   /// Calculates which local members are affected by the broadcasted external data types.
   /// All comments are in English for global users to read.
   EffectedShelfMembers calculateEffectedShelfMembersByEvents(
-    List<Type> affectedDataTypes,
-  ) {
+      List<Type> affectedDataTypes,) {
     EffectedShelfMembers ret = EffectedShelfMembers.ofNothing();
 
     // Evaluate Block reactions to external events

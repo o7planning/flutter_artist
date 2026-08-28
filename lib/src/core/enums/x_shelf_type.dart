@@ -25,7 +25,5 @@ enum XShelfType {
   scalarQuery,
   scalarClear,
   scalarBackendAction,
-  scalarQuickExtraDataLoadAction,
-  //
-  hook;
+  scalarQuickExtraDataLoadAction;
 }

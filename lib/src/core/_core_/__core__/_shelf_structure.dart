@@ -6,7 +6,6 @@ class ShelfStructure {
   final Map<String, FilterModel> filterModels;
   final List<Block> blocks;
   final List<Scalar> scalars;
-  final List<Hook> hooks = [];
 
   ShelfStructure({
     ShelfConfig config = const ShelfConfig(),

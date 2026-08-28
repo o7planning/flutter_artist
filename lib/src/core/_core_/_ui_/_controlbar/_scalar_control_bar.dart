@@ -43,13 +43,16 @@ class _ScalarControlBarState extends _BaseControlBarState<
   }
 
   @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+
+  @override
   bool get provideScalarContext => true;
 
   @override
   bool get provideBlockContext => false;
-
-  @override
-  bool get provideHookContext => false;
 
   @override
   bool get provideItemContext => false;

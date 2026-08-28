@@ -42,13 +42,16 @@ class _FilterControlBarState extends _BaseControlBarState<
   }
 
   @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+
+  @override
   bool get provideScalarContext => false;
 
   @override
   bool get provideBlockContext => false;
-
-  @override
-  bool get provideHookContext => false;
 
   @override
   bool get provideItemContext => false;

@@ -29,7 +29,7 @@ class DebugExecutorDialog extends StatelessWidget {
     Widget contentWidget = _buildMainWidget();
 
     FaDialog alert = FaDialog(
-      titleText: "Task Unit Queue Viewer",
+      titleText: "Execution Unit Queue Viewer",
       preferredContentWidth: preferContentSize.width,
       preferredContentHeight: preferContentSize.height,
       content: contentWidget,
@@ -40,7 +40,7 @@ class DebugExecutorDialog extends StatelessWidget {
 
   Widget _buildMainWidget() {
     return DebugExecutorView(
-      debugXShelfQueue: FlutterArtist.debugTaskUnitQueue,
+      debugXShelfQueue: FlutterArtist.debugExecutionUnitQueue,
     );
   }
 }

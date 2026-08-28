@@ -33,6 +33,12 @@ class _BlockSectionViewBuilderState
   }
 
   @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
@@ -55,11 +61,6 @@ class _BlockSectionViewBuilderState
   @override
   bool get provideFormContext {
     return widget.provideFormContext;
-  }
-
-  @override
-  bool get provideHookContext {
-    return false;
   }
 
   @override

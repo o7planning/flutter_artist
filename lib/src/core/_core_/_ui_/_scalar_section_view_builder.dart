@@ -31,6 +31,12 @@ class _ScalarSectionViewBuilderState
   }
 
   @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.scalar);
   }
@@ -52,11 +58,6 @@ class _ScalarSectionViewBuilderState
 
   @override
   bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideHookContext {
     return false;
   }
 

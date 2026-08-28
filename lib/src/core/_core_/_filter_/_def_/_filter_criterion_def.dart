@@ -22,7 +22,8 @@ abstract class FilterCriterionDef<V extends Object> {
     required this.description,
     required String? fieldName,
     required SimpleValConverter<V>? toFieldValue,
-  })  : fieldName = fieldName ?? criterionBaseName,
+  })
+      : fieldName = fieldName ?? criterionBaseName,
         __toFieldValue = toFieldValue {
     // Check the validity of the name:
     FilterCriterionNameObj.parse(criterionBaseName: criterionBaseName);
@@ -54,9 +55,14 @@ abstract class FilterCriterionDef<V extends Object> {
       return null;
     }
     if (baseValue is List) {
-      return baseValue.map((e) => __toFieldValue.call(e).value).toList();
+      return baseValue.map((e) =>
+      __toFieldValue
+          .call(e)
+          .value).toList();
     }
-    return __toFieldValue.call(baseValue).value;
+    return __toFieldValue
+        .call(baseValue)
+        .value;
   }
 
   void _printDebugTildeSuffixes() {
@@ -133,7 +139,8 @@ class MultiOptFilterCriterionDef<V extends Object>
     required this.tildeCriterionConfigs,
     required List<MultiOptFilterCriterionDef> children,
     required this.selectionType,
-  })  : _children = children,
+  })
+      : _children = children,
         super._() {
     for (TildeCriterionConfig config in tildeCriterionConfigs) {
       bool value1 = NameUtils.isValidTildeSuffix(config.suffix);
@@ -207,21 +214,21 @@ class MultiOptFilterCriterionDef<V extends Object>
   }) {
     return selectionType == SelectionType.single
         ? MultiOptSsTildeFilterCriterionModel<V>(
-            tildeCriterionName: tildeCriterionName,
-            criterionName: criterionName,
-            tildeSuffix: tildeSuffix,
-            defaultSettingPolicy: defaultSettingPolicy,
-            parentMatchSuffix: parentMatchSuffix,
-            parent: parent,
-          )
+      tildeCriterionName: tildeCriterionName,
+      criterionName: criterionName,
+      tildeSuffix: tildeSuffix,
+      defaultSettingPolicy: defaultSettingPolicy,
+      parentMatchSuffix: parentMatchSuffix,
+      parent: parent,
+    )
         : MultiOptMsTildeFilterCriterionModel<V>(
-            tildeCriterionName: tildeCriterionName,
-            criterionName: criterionName,
-            tildeSuffix: tildeSuffix,
-            defaultSettingPolicy: defaultSettingPolicy,
-            parentMatchSuffix: parentMatchSuffix,
-            parent: parent,
-          );
+      tildeCriterionName: tildeCriterionName,
+      criterionName: criterionName,
+      tildeSuffix: tildeSuffix,
+      defaultSettingPolicy: defaultSettingPolicy,
+      parentMatchSuffix: parentMatchSuffix,
+      parent: parent,
+    );
   }
 
   void printDebugSuffixes() {

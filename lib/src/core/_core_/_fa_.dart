@@ -5,7 +5,8 @@ final FlutterArtist = _FlutterArtist();
 const _isOverlayMode = false;
 
 class _FlutterArtist extends _Core {
-  bool __started = false;
+  bool __appStarted = false;
+  bool _navigatorStated = false;
   bool _lockAddMoreQuery = false;
 
   final _Backstage backstage = _Backstage();
@@ -16,7 +17,7 @@ class _FlutterArtist extends _Core {
     if (__navigatorObserver == null) {
       // IMPORTANT:
       // LOGIC: #0001
-      storage._setStarted();
+      FlutterArtist._navigatorStated = true;
       __navigatorObserver = _FlutterArtistNavigatorObserver();
     }
     return __navigatorObserver!;
@@ -46,7 +47,7 @@ class _FlutterArtist extends _Core {
 
   final _rootQueue = _XRootQueue();
 
-  DebugXRootQueue get debugTaskUnitQueue => _rootQueue.toDebugXRootQueue();
+  DebugXRootQueue get debugExecutionUnitQueue => _rootQueue.toDebugXRootQueue();
 
   late final GlobalsManager globalsManager;
 
@@ -190,10 +191,10 @@ class _FlutterArtist extends _Core {
     required FlutterArtistRouter router,
   }) async {
     print("[FLUTTER-ARTIST] - FlutterArtist.start() - BEGIN");
-    if (__started) {
+    if (__appStarted) {
       throw DebugUtils.getFatalError("App already started!");
     }
-    __started = true;
+    __appStarted = true;
     //
     appConfig = RuntimeAppConfig.fromConfiguration(appConfiguration);
     this.router = router;
@@ -203,7 +204,7 @@ class _FlutterArtist extends _Core {
     );
 
     final executionTrace =
-        FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
+    FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
     try {
       await __start(executionTrace: executionTrace);
       garbageScheduler.start();
@@ -261,7 +262,7 @@ class _FlutterArtist extends _Core {
       codeId: "#S0500",
       shortDesc: "Calling <b>globalsManager._init()</b>...",
       note:
-          "This method will read all the user data that was previously stored in <b>Local</b>.",
+      "This method will read all the user data that was previously stored in <b>Local</b>.",
       traceStepType: TraceStepType.nonControllableCalling,
       tipDocument: TipDocument.globalData,
     );
@@ -297,7 +298,7 @@ class _FlutterArtist extends _Core {
       executionTrace._addTraceStep(
         codeId: "#S0560",
         shortDesc:
-            "Calling <b>localeManager._getStoredLocalLocale()</b> to read saved locale from <b>Local</b>...",
+        "Calling <b>localeManager._getStoredLocalLocale()</b> to read saved locale from <b>Local</b>...",
         traceStepType: TraceStepType.nonControllableCalling,
       );
       final Locale? locale = localeManager.storedLocale;
@@ -332,7 +333,8 @@ class _FlutterArtist extends _Core {
     //
     if (__notificationService != null) {
       print(
-          "[FLUTTER_ARTIST] ${getClassNameWithoutGenerics(__notificationService)}.initialize()");
+          "[FLUTTER_ARTIST] ${getClassNameWithoutGenerics(
+              __notificationService)}.initialize()");
       __notificationService.initialize();
     }
   }
@@ -386,14 +388,15 @@ class _FlutterArtist extends _Core {
     _runWithOverlay(
       asyncFunction: () async {
         await Future.doWhile(
-          () => Future.delayed(
-            // Default?
-            const Duration(milliseconds: 0),
-          ).then(
-            (_) {
-              return __futureTaskList.isNotEmpty;
-            },
-          ),
+              () =>
+              Future.delayed(
+                // Default?
+                const Duration(milliseconds: 0),
+              ).then(
+                    (_) {
+                  return __futureTaskList.isNotEmpty;
+                },
+              ),
         );
       },
     );
@@ -484,7 +487,7 @@ class _FlutterArtist extends _Core {
   void internalNotifyLog() {
     Future.delayed(
       Duration.zero,
-      () {
+          () {
         for (ILogListener listener in [..._logListeners]) {
           if (listener is State) {
             State state = listener as State;
@@ -534,5 +537,13 @@ class _FlutterArtist extends _Core {
     required Object error,
   }) {
     runApp(_StartupErrorViewer(executionTrace: executionTrace, error: error));
+  }
+
+  ///
+  /// Very Dangerous Method. Call Internal only.
+  ///
+  void _clearActivitiesAndShelves() {
+    storage.__clearShelves();
+    desk.__clearActivities();
   }
 }

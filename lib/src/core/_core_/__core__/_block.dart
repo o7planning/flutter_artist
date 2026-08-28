@@ -1037,18 +1037,18 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_BlockClearAnnotation()
   Future<void> _unitClear({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XBlock thisXBlock,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
     executionTrace._addTraceStep(
       codeId: "#07000",
-      shortDesc: "Begin ${debugObjHtml(this)} > ${taskType.asDebugTaskUnit()}.",
+      shortDesc: "Begin ${debugObjHtml(this)} > ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
     executionTrace._addTraceStep(
@@ -1072,18 +1072,18 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_BlockClearCurrentItemAnnotation()
   Future<void> _unitClearCurrent({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XBlock thisXBlock,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
     executionTrace._addTraceStep(
       codeId: "#13000",
-      shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      shortDesc: "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -1119,7 +1119,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_BlockQueryAnnotation()
   @_BlockQueryMorePageAnnotation()
   @_BlockQueryNextPageAnnotation()
@@ -1128,7 +1128,7 @@ abstract class Block<
   @_BlockQueryAndPrepareToCreateAnnotation()
   Future<void> _unitQuery({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XBlock thisXBlock,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -1136,7 +1136,7 @@ abstract class Block<
     executionTrace._addTraceStep(
       codeId: "#03000",
       shortDesc:
-          "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -1266,7 +1266,7 @@ abstract class Block<
           return;
         }
         //
-        final taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
+        final executionUnit = _BlockSetItemAsCurrentExecutionUnit<ID, ITEM>(
           setCurrentItemDirective: setCurrentItemDirective ??
               BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
           xBlock: thisXBlock,
@@ -1277,11 +1277,11 @@ abstract class Block<
         );
         executionTrace._addTraceStep(
           codeId: "#03140",
-          shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
-          traceStepType: TraceStepType.addTaskUnit,
+          shortDesc: "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
+          traceStepType: TraceStepType.addExecutionUnit,
         );
-        thisXBlock.xShelf._addTaskUnit(
-          taskUnit: taskUnit,
+        thisXBlock.xShelf._addExecutionUnit(
+          executionUnit: executionUnit,
         );
         return;
       case QryHint.markAsPending:
@@ -1817,24 +1817,24 @@ abstract class Block<
     // Begin AfterQueryDirective
     //
     if (afterQueryDirective == BlockAfterQueryDirective.clearCurrentItem) {
-      final taskUnit = _BlockClearCurrentTaskUnit<ITEM>(
+      final executionUnit = _BlockClearCurrentExecutionUnit<ITEM>(
         xBlock: thisXBlock,
       );
       executionTrace._addTraceStep(
         codeId: "#03720",
         shortDesc:
             "@afterQueryDirective: ${debugObjHtml(afterQueryDirective)} --> "
-            "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
-        traceStepType: TraceStepType.addTaskUnit,
+            "Create ${executionUnit.asDebugExecutionUnit()} and add to queue.",
+        traceStepType: TraceStepType.addExecutionUnit,
       );
-      thisXBlock.xShelf._addTaskUnit(
-        taskUnit: taskUnit,
+      thisXBlock.xShelf._addExecutionUnit(
+        executionUnit: executionUnit,
       );
       return;
     }
     // createNewItem
     else if (afterQueryDirective == BlockAfterQueryDirective.createNewItem) {
-      final taskUnit = _BlockPrepareFormToCreateItemTaskUnit(
+      final executionUnit = _BlockPrepareFormToCreateItemExecutionUnit(
         xBlock: thisXBlock,
         initDirty: false,
         formInput: null,
@@ -1842,11 +1842,11 @@ abstract class Block<
       executionTrace._addTraceStep(
         codeId: "#03740",
         shortDesc: "@afterQueryDirective: $afterQueryDirective --> "
-            "Create ${taskUnit.asDebugTaskUnit()} and add to queue.",
-        traceStepType: TraceStepType.addTaskUnit,
+            "Create ${executionUnit.asDebugExecutionUnit()} and add to queue.",
+        traceStepType: TraceStepType.addExecutionUnit,
       );
-      thisXBlock.xShelf._addTaskUnit(
-        taskUnit: taskUnit,
+      thisXBlock.xShelf._addExecutionUnit(
+        executionUnit: executionUnit,
       );
       return;
     }
@@ -1875,7 +1875,7 @@ abstract class Block<
       traceStepType: TraceStepType.debug,
     );
     //
-    final taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
+    final executionUnit = _BlockSetItemAsCurrentExecutionUnit<ID, ITEM>(
       setCurrentItemDirective: setCurrentItemDirective,
       xBlock: thisXBlock,
       newQueriedList: queriedItemList ?? [],
@@ -1885,19 +1885,19 @@ abstract class Block<
     );
     executionTrace._addTraceStep(
       codeId: "#03800",
-      shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
-      traceStepType: TraceStepType.addTaskUnit,
+      shortDesc: "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
+      traceStepType: TraceStepType.addExecutionUnit,
     );
     //
-    thisXBlock.xShelf._addTaskUnit(
-      taskUnit: taskUnit,
+    thisXBlock.xShelf._addExecutionUnit(
+      executionUnit: executionUnit,
     );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_FormModelLoadDataAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
   @_BlockSetItemAsCurrentAnnotation()
@@ -1906,7 +1906,7 @@ abstract class Block<
   @_BlockSelectPreviousItemAsCurrentAnnotation()
   Future<void> _unitSetItemAsCurrent({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockSetCurrentItemDirective setCurrentItemDirective,
     required List<ITEM> newQueriedList,
@@ -1918,7 +1918,7 @@ abstract class Block<
     executionTrace._addTraceStep(
       codeId: "#28000",
       shortDesc:
-          "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}.",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}.",
       parameters: {
         "inputCandidateCurrItem": inputCandidateCurrItem,
         "newQueriedList": newQueriedList,
@@ -2465,8 +2465,8 @@ abstract class Block<
               "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
         );
         //
-        thisXBlock.xShelf._addTaskUnit(
-          taskUnit: _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
+        thisXBlock.xShelf._addExecutionUnit(
+          executionUnit: _BlockSetItemAsCurrentExecutionUnit<ID, ITEM>(
             setCurrentItemDirective: setCurrentItemDirective,
             xBlock: thisXBlock,
             newQueriedList: newQueriedList,
@@ -2524,8 +2524,8 @@ abstract class Block<
           shortDesc:
               "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
         );
-        thisXBlock.xShelf._addTaskUnit(
-          taskUnit: _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
+        thisXBlock.xShelf._addExecutionUnit(
+          executionUnit: _BlockSetItemAsCurrentExecutionUnit<ID, ITEM>(
             setCurrentItemDirective: setCurrentItemDirective,
             xBlock: thisXBlock,
             newQueriedList: newQueriedList,
@@ -2627,19 +2627,19 @@ abstract class Block<
     //
     if (thisXBlock.xFormModel != null) {
       if (forceReloadForm) {
-        final taskUnit = _FormModelLoadDataTaskUnit(
+        final executionUnit = _FormModelLoadDataExecutionUnit(
           xFormModel: thisXBlock.xFormModel!,
         );
         executionTrace._addTraceStep(
           codeId: "#29540",
           shortDesc: "@forceReloadForm: ${debugObjHtml(forceReloadForm)}.\n"
-              "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
+              "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
           note:
-              "This task unit will load data for ${debugObjHtml(thisXBlock.xFormModel!.formModel)}.",
-          traceStepType: TraceStepType.addTaskUnit,
+              "This execution unit will load data for ${debugObjHtml(thisXBlock.xFormModel!.formModel)}.",
+          traceStepType: TraceStepType.addExecutionUnit,
         );
-        thisXBlock.xShelf._addTaskUnit(
-          taskUnit: taskUnit,
+        thisXBlock.xShelf._addExecutionUnit(
+          executionUnit: executionUnit,
         );
       }
       // !forceReloadForm
@@ -2684,22 +2684,22 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#29700",
-      shortDesc: "Create ${TaskType.blockQuery.asDebugTaskUnit()}(s) "
+      shortDesc: "Create ${ExecutionUnitType.blockQuery.asDebugExecutionUnit()}(s) "
           "for all child blocks of ${debugObjHtml(this)} and add to Queue."
           "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       traceStepType: TraceStepType.info,
     );
     for (XBlock childXBlock in thisXBlock.childXBlocks) {
-      final taskUnit = _BlockQueryTaskUnit(
+      final executionUnit = _BlockQueryExecutionUnit(
         xBlock: childXBlock,
       );
       executionTrace._addTraceStep(
         codeId: "#29740",
-        shortDesc: "Create ${taskUnit.asDebugTaskUnit()} and add to Queue.",
-        traceStepType: TraceStepType.addTaskUnit,
+        shortDesc: "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
+        traceStepType: TraceStepType.addExecutionUnit,
       );
-      thisXBlock.xShelf._addTaskUnit(
-        taskUnit: taskUnit,
+      thisXBlock.xShelf._addExecutionUnit(
+        executionUnit: executionUnit,
       );
     }
   }
@@ -2707,14 +2707,14 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_BlockDeleteSelectedItemsAnnotation()
   @_BlockDeleteCheckedItemsAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
   @_BlockDeleteItemAnnotation()
   Future<void> _unitDeleteItem({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required ITEM item,
     required BlockItemDeletionResult<ITEM> deletionResult,
@@ -2724,7 +2724,7 @@ abstract class Block<
     executionTrace._addTraceStep(
       codeId: "#08000",
       shortDesc:
-          "${debugObjHtml(this)} --> Begin ${taskType.asDebugTaskUnit()} for ${debugObjHtml(this)}.",
+          "${debugObjHtml(this)} --> Begin ${executionUnitType.asDebugExecutionUnit()} for ${debugObjHtml(this)}.",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -3028,37 +3028,37 @@ abstract class Block<
         executionTrace._addTraceStep(
           codeId: "#70320",
           shortDesc:
-              "Creating <b>_BlockQueryTaskUnit</b>. viewportSyncStrategy: $viewportSyncStrategyThisBlock",
-          traceStepType: TraceStepType.addTaskUnit,
+              "Creating <b>_BlockQueryExecutionUnit</b>. viewportSyncStrategy: $viewportSyncStrategyThisBlock",
+          traceStepType: TraceStepType.addExecutionUnit,
         );
         thisXBlock.setViewportSyncStrategy(viewportSyncStrategyThisBlock);
         // Test Cases: [72a].
-        final _STaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
-        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+        final _SExecutionUnit executionUnit = _BlockQueryExecutionUnit(xBlock: thisXBlock);
+        thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
       }
       // !forceRequeryThisBlock (In !hasInternalReaction).
       else {
         executionTrace._addTraceStep(
           codeId: "#70380",
-          shortDesc: "Creating <b>_BlockSetItemAsCurrentTaskUnit</b>.",
+          shortDesc: "Creating <b>_BlockSetItemAsCurrentExecutionUnit</b>.",
           parameters: {
             "setCurrentItemDirective": setCurrentItemDirective,
             "candidateItem": candidateCurrItem,
             "forceReloadItem": false,
             "forceTypeForForm": null,
           },
-          traceStepType: TraceStepType.addTaskUnit,
+          traceStepType: TraceStepType.addExecutionUnit,
         );
         //
-        final _STaskUnit taskUnit =
-            thisXBlock.createBlockSetItemAsCurrentTaskUnit(
+        final _SExecutionUnit executionUnit =
+            thisXBlock.createBlockSetItemAsCurrentExecutionUnit(
           setCurrentItemDirective: setCurrentItemDirective,
           newQueriedList: [],
           candidateItem: candidateCurrItem,
           forceReloadItem: false,
           forceTypeForForm: null,
         );
-        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+        thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
       }
       return;
     } // End of !hasInternalReaction.
@@ -3105,7 +3105,7 @@ abstract class Block<
       // Test Case: [62a] - __test_event_62a_test_DELETE.
       // Test Case: [62b] - __test_event_62b_test_DELETE.
       // Add Query Tasks to the Queue of XShelf.
-      thisXBlock.xShelf._initQueryTaskUnits(executionTrace: executionTrace);
+      thisXBlock.xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
       return;
     }
     //
@@ -3125,25 +3125,25 @@ abstract class Block<
       executionTrace._addTraceStep(
         codeId: "#70620",
         shortDesc:
-            "Creating <b>_BlockSetItemAsCurrentTaskUnit</b> for <b>${thisXBlock.name}</b>:",
+            "Creating <b>_BlockSetItemAsCurrentExecutionUnit</b> for <b>${thisXBlock.name}</b>:",
         parameters: {
           "newQueriedList": [],
           "candidateItem": candidateCurrItem,
           "forceReloadItem": false,
           "forceTypeForForm": null,
         },
-        traceStepType: TraceStepType.addTaskUnit,
+        traceStepType: TraceStepType.addExecutionUnit,
       );
       // Test Case:
-      final _STaskUnit taskUnit =
-          thisXBlock.createBlockSetItemAsCurrentTaskUnit(
+      final _SExecutionUnit executionUnit =
+          thisXBlock.createBlockSetItemAsCurrentExecutionUnit(
         setCurrentItemDirective: setCurrentItemDirective,
         newQueriedList: [],
         candidateItem: candidateCurrItem,
         forceReloadItem: false,
         forceTypeForForm: null,
       );
-      thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+      thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
     }
     // topEffBlockInfo is NOT NULL:
     else if (topEffBlockInfo != null) {
@@ -3163,12 +3163,12 @@ abstract class Block<
         executionTrace._addTraceStep(
           codeId: "#70660",
           shortDesc:
-              "Create <b>_BlockQueryTaskUnit</b> for <b>${topXBlock.name}</b>:",
-          traceStepType: TraceStepType.addTaskUnit,
+              "Create <b>_BlockQueryExecutionUnit</b> for <b>${topXBlock.name}</b>:",
+          traceStepType: TraceStepType.addExecutionUnit,
         );
         // Note: candidateCurrItem already set. (See @DEL-01)
-        final _STaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: topXBlock);
-        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+        final _SExecutionUnit executionUnit = _BlockQueryExecutionUnit(xBlock: topXBlock);
+        thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
         // TODO: Test Case?
         if (topEffBlockInfo.refreshCurrItem) {
           //
@@ -3191,7 +3191,7 @@ abstract class Block<
         executionTrace._addTraceStep(
           codeId: "#70740",
           shortDesc:
-              "Create <b>_BlockSetItemAsCurrentTaskUnit</b> for <b>${topXBlock.name}</b>:",
+              "Create <b>_BlockSetItemAsCurrentExecutionUnit</b> for <b>${topXBlock.name}</b>:",
           parameters: {
             "newQueriedList": [],
             "candidateItem": null,
@@ -3199,18 +3199,18 @@ abstract class Block<
             "forceReloadItem": true,
             "forceTypeForForm": null,
           },
-          traceStepType: TraceStepType.addTaskUnit,
+          traceStepType: TraceStepType.addExecutionUnit,
         );
         //
-        final _STaskUnit taskUnit =
-            topXBlock.createBlockSetItemAsCurrentTaskUnit(
+        final _SExecutionUnit executionUnit =
+            topXBlock.createBlockSetItemAsCurrentExecutionUnit(
           setCurrentItemDirective: setCurrentItemDirective,
           newQueriedList: [],
           candidateItem: null,
           forceReloadItem: true,
           forceTypeForForm: null,
         );
-        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+        thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
         return;
       }
     }
@@ -3232,12 +3232,12 @@ abstract class Block<
         executionTrace._addTraceStep(
           codeId: "#70840",
           shortDesc:
-              "Creating <b>_BlockQueryTaskUnit</b> for <b>${thisXBlock.name}</b>.",
-          traceStepType: TraceStepType.addTaskUnit,
+              "Creating <b>_BlockQueryExecutionUnit</b> for <b>${thisXBlock.name}</b>.",
+          traceStepType: TraceStepType.addExecutionUnit,
         );
         // Note: candidateCurrItem already set. (See @DEL-01)
-        _STaskUnit taskUnit = _BlockQueryTaskUnit(xBlock: thisXBlock);
-        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+        _SExecutionUnit executionUnit = _BlockQueryExecutionUnit(xBlock: thisXBlock);
+        thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
       }
       // effSelfInfo.refreshCurrItem.
       else {
@@ -3251,21 +3251,21 @@ abstract class Block<
         executionTrace._addTraceStep(
           codeId: "#70880",
           shortDesc:
-              "Creating <b>_BlockSetItemAsCurrentTaskUnit</b> for <b>${thisXBlock.name}</b>.",
-          traceStepType: TraceStepType.addTaskUnit,
+              "Creating <b>_BlockSetItemAsCurrentExecutionUnit</b> for <b>${thisXBlock.name}</b>.",
+          traceStepType: TraceStepType.addExecutionUnit,
         );
         //
         // Select an Item as Current.
         //
-        final _STaskUnit taskUnit =
-            thisXBlock.createBlockSetItemAsCurrentTaskUnit(
+        final _SExecutionUnit executionUnit =
+            thisXBlock.createBlockSetItemAsCurrentExecutionUnit(
           setCurrentItemDirective: setCurrentItemDirective,
           newQueriedList: [],
           candidateItem: candidateCurrItem,
           forceReloadItem: forceReloadItem,
           forceTypeForForm: null,
         );
-        thisXBlock.xShelf._addTaskUnit(taskUnit: taskUnit);
+        thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
       }
     }
   }
@@ -3273,11 +3273,11 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_BlockDeleteItemsAnnotation()
   Future<void> _unitDeleteItems({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required List<ITEM> items,
     required BlockItemsDeletionResult<ITEM> deletionResult,
@@ -3288,7 +3288,7 @@ abstract class Block<
     executionTrace._addTraceStep(
       codeId: "#42000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+          "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       parameters: {
         "items": items,
         "stopIfError": stopIfError,
@@ -3509,11 +3509,11 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
   Future<bool> _unitPrepareFormToCreateItem({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required bool initDirty,
     required FORM_INPUT? formInput,
@@ -3522,7 +3522,7 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#04000",
-      shortDesc: "Begin ${taskType.asDebugTaskUnit()}.",
+      shortDesc: "Begin ${executionUnitType.asDebugExecutionUnit()}.",
       parameters: {
         "formInput": formInput,
         "initDirty": initDirty,
@@ -3616,11 +3616,11 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_BlockQuickItemCreationActionAnnotation()
   Future<void> _unitQuickCreateItem({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemCreationResult taskResult,
     required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
@@ -3629,7 +3629,7 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#09000",
-      shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      shortDesc: "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -3719,11 +3719,11 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_BlockQuickItemUpdateActionAnnotation()
   Future<void> _unitQuickUpdateItem({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemUpdateResult taskResult,
     required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
@@ -3732,7 +3732,7 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#14000",
-      shortDesc: "${debugObjHtml(this)} -> Begin ${taskType.asDebugTaskUnit()}",
+      shortDesc: "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -3828,11 +3828,11 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_TaskUnitMethodAnnotation()
+  @_ExecutionUnitMethodAnnotation()
   @_BlockBackendActionAnnotation()
   Future<void> _unitBackendAction({
     required ExecutionTrace executionTrace,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockBackendAction<ID> action,
     required BlockBackendActionResult taskResult,
@@ -3842,7 +3842,7 @@ abstract class Block<
     executionTrace._addTraceStep(
       codeId: "#45000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} ->  ${taskType.asDebugTaskUnit()}.",
+          "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -4363,13 +4363,13 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    _STaskUnit taskUnit = _BlockClearCurrentTaskUnit(
+    _SExecutionUnit executionUnit = _BlockClearCurrentExecutionUnit(
       xBlock: thisXBlock,
     );
     //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
+    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
   }
 
   // ***************************************************************************
@@ -4448,18 +4448,18 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#76340",
-      shortDesc: "Creating <b>_BlockItemDeletionTaskUnit</b>.",
-      traceStepType: TraceStepType.addTaskUnit,
+      shortDesc: "Creating <b>_BlockItemDeletionExecutionUnit</b>.",
+      traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSTaskUnit taskUnit = _BlockItemDeletionTaskUnit<ID, ITEM>(
+    final _ResultedSExecutionUnit executionUnit = _BlockItemDeletionExecutionUnit<ID, ITEM>(
       xBlock: thisXBlock,
       item: item!,
       taskResult: taskResult,
     );
     //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
+    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     return taskResult;
   }
@@ -4537,17 +4537,17 @@ abstract class Block<
     final taskResult = _createEmptyItemsDeletionResult(
       candidateItems: candidateDeleteItems,
     );
-    final _ResultedSTaskUnit taskUnit =
-        _BlockMultiItemDeletionTaskUnit<ID, ITEM>(
+    final _ResultedSExecutionUnit executionUnit =
+        _BlockMultiItemDeletionExecutionUnit<ID, ITEM>(
       xBlock: thisXBlock,
       items: candidateDeleteItems,
       stopIfError: stopIfError,
       taskResult: taskResult,
     );
     //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
+    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     return taskResult;
   }
@@ -4626,7 +4626,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    final taskUnit = _BlockSetItemAsCurrentTaskUnit<ID, ITEM>(
+    final executionUnit = _BlockSetItemAsCurrentExecutionUnit<ID, ITEM>(
       setCurrentItemDirective: setCurrentItemDirective,
       xBlock: thisXBlock,
       newQueriedList: [],
@@ -4636,11 +4636,11 @@ abstract class Block<
           ? ForceType.force
           : ForceType.decidedAtRuntime,
     );
-    xShelf._addTaskUnit(taskUnit: taskUnit);
+    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    var result = taskUnit.taskResult;
+    var result = executionUnit.taskResult;
     return result;
   }
 
@@ -4723,15 +4723,15 @@ abstract class Block<
     final XShelf xShelf = _XShelfBlockClear(block: this);
 
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-    final _ResultedSTaskUnit taskUnit = _BlockClearTaskUnit(
+    final _ResultedSExecutionUnit executionUnit = _BlockClearExecutionUnit(
       xBlock: thisXBlock,
     );
     //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
+    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return taskUnit.taskResult;
+    return executionUnit.taskResult;
   }
 
   // ***************************************************************************
@@ -4998,9 +4998,9 @@ abstract class Block<
       suggestedSelection: suggestedSelection,
     );
     //
-    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
+    xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     XBlock xBlock = xShelf.findXBlockByName(name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
@@ -5044,13 +5044,13 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#57000",
-      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()...",
+      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()...",
       traceStepType: TraceStepType.nonControllableCalling,
     );
-    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
+    xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
     //
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     XBlock xBlock = xShelf.findXBlockByName(name)!;
     BlockQueryResult queryResult = xBlock.queryResult;
@@ -5493,19 +5493,19 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#71340",
-      shortDesc: "Creating <b>_BlockBackendActionTaskUnit</b>.",
-      traceStepType: TraceStepType.addTaskUnit,
+      shortDesc: "Creating <b>_BlockBackendActionExecutionUnit</b>.",
+      traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSTaskUnit taskUnit = _BlockBackendActionTaskUnit(
+    final _ResultedSExecutionUnit executionUnit = _BlockBackendActionExecutionUnit(
       xBlock: thisXBlock,
       action: action,
     );
     //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
+    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return taskUnit.taskResult;
+    return executionUnit.taskResult;
   }
 
   // ***************************************************************************
@@ -5588,19 +5588,19 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#73340",
-      shortDesc: "Creating <b>_BlockQuickItemCreationTaskUnit</b>.",
-      traceStepType: TraceStepType.addTaskUnit,
+      shortDesc: "Creating <b>_BlockQuickItemCreationExecutionUnit</b>.",
+      traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSTaskUnit taskUnit = _BlockQuickItemCreationTaskUnit(
+    final _ResultedSExecutionUnit executionUnit = _BlockQuickItemCreationExecutionUnit(
       xBlock: thisXBlock,
       action: action,
     );
     //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
+    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return taskUnit.taskResult;
+    return executionUnit.taskResult;
   }
 
   // ***************************************************************************
@@ -5686,19 +5686,19 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#72340",
-      shortDesc: "Creating <b>_BlockQuickItemUpdateTaskUnit</b>.",
-      traceStepType: TraceStepType.addTaskUnit,
+      shortDesc: "Creating <b>_BlockQuickItemUpdateExecutionUnit</b>.",
+      traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSTaskUnit taskUnit = _BlockQuickItemUpdateTaskUnit(
+    final _ResultedSExecutionUnit executionUnit = _BlockQuickItemUpdateExecutionUnit(
       xBlock: thisXBlock,
       action: action,
     );
     //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
+    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return taskUnit.taskResult;
+    return executionUnit.taskResult;
   }
 
   // ***************************************************************************
@@ -5875,18 +5875,18 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#77340",
-      shortDesc: "Creating <b>_BlockPrepareFormToCreateItemTaskUnit</b>.",
-      traceStepType: TraceStepType.addTaskUnit,
+      shortDesc: "Creating <b>_BlockPrepareFormToCreateItemExecutionUnit</b>.",
+      traceStepType: TraceStepType.addExecutionUnit,
     );
-    _STaskUnit taskUnit = _BlockPrepareFormToCreateItemTaskUnit(
+    _SExecutionUnit executionUnit = _BlockPrepareFormToCreateItemExecutionUnit(
       xBlock: thisXBlock,
       initDirty: initDirty,
       formInput: formInput,
     );
     //
-    xShelf._addTaskUnit(taskUnit: taskUnit);
+    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     return thisXBlock.itemCreationResult;
   }
@@ -6307,9 +6307,9 @@ abstract class Block<
     XBlock xBlock = xShelf.findXBlockByName(name)!;
     xBlock._isQueryMoreFlow = isQueryMoreFlow;
     //
-    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
+    xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     BlockQueryResult queryResult = xBlock.queryResult;
     return queryResult;
@@ -6345,12 +6345,12 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#53100",
-      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()..",
+      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()..",
       traceStepType: TraceStepType.nonControllableCalling,
     );
-    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
+    xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     XBlock xBlock = xShelf.findXBlockByName(name)!;
     BlockQueryResult queryResult = xBlock.queryResult;

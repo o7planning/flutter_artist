@@ -1,10 +1,10 @@
 part of '../_core_/core.dart';
 
 class DebugOptions {
-  final bool showTaskUnitQueue;
+  final bool showExecutionUnitQueue;
 
   DebugOptions({
-    this.showTaskUnitQueue = false,
+    this.showExecutionUnitQueue = false,
   });
 }
 

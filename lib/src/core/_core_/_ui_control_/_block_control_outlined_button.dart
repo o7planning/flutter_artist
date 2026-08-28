@@ -18,20 +18,20 @@ class BlockControlOutlinedButton extends BlockControl {
     WidgetStatesController? statesController,
     Widget? child,
   }) : super(
-    build: (VoidCallback? onPressed) {
-      return OutlinedButton(
-        onPressed: onPressed,
-        onHover: onHover,
-        onFocusChange: onFocusChange,
-        style: style,
-        focusNode: focusNode,
-        autofocus: autofocus,
-        clipBehavior: clipBehavior,
-        statesController: statesController,
-        child: child,
-      );
-    },
-  );
+          build: (VoidCallback? onPressed) {
+            return OutlinedButton(
+              onPressed: onPressed,
+              onHover: onHover,
+              onFocusChange: onFocusChange,
+              style: style,
+              focusNode: focusNode,
+              autofocus: autofocus,
+              clipBehavior: clipBehavior,
+              statesController: statesController,
+              child: child,
+            );
+          },
+        );
 
   BlockControlOutlinedButton.icon({
     super.key,
@@ -52,20 +52,20 @@ class BlockControlOutlinedButton extends BlockControl {
     Widget? icon,
     IconAlignment iconAlignment = IconAlignment.start,
   }) : super(
-    build: (VoidCallback? onPressed) {
-      return OutlinedButton.icon(
-        onPressed: onPressed,
-        onHover: onHover,
-        onFocusChange: onFocusChange,
-        style: style,
-        focusNode: focusNode,
-        autofocus: autofocus,
-        clipBehavior: clipBehavior,
-        statesController: statesController,
-        iconAlignment: iconAlignment,
-        label: label,
-        icon: icon,
-      );
-    },
-  );
+          build: (VoidCallback? onPressed) {
+            return OutlinedButton.icon(
+              onPressed: onPressed,
+              onHover: onHover,
+              onFocusChange: onFocusChange,
+              style: style,
+              focusNode: focusNode,
+              autofocus: autofocus,
+              clipBehavior: clipBehavior,
+              statesController: statesController,
+              iconAlignment: iconAlignment,
+              label: label,
+              icon: icon,
+            );
+          },
+        );
 }

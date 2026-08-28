@@ -1,10 +1,10 @@
 part of '../core.dart';
 
 class _Executor {
-  int __taskUnitCount = 0;
+  int __executionUnitCount = 0;
   int? __executingXShelfId;
 
-  int get taskUnitCount => __taskUnitCount;
+  int get executionUnitCount => __executionUnitCount;
 
   int? get executingXShelfId => __executingXShelfId;
 
@@ -27,12 +27,12 @@ class _Executor {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _executeTaskUnitQueue({bool showOverlay = true}) async {
+  Future<void> _executeExecutionUnitQueue({bool showOverlay = true}) async {
     if (__executingXShelfId != null) {
       return;
     }
     bool showOverlay2 = showOverlay;
-    if (FlutterArtist.appConfig.debugOptions.showTaskUnitQueue) {
+    if (FlutterArtist.appConfig.debugOptions.showExecutionUnitQueue) {
       showOverlay2 = false;
     }
     bool pendingEventProcessed = false;
@@ -50,8 +50,7 @@ class _Executor {
               pendingEventProcessed = true;
               final Set<String> excludeShelfNames = shelfMap.keys.toSet();
               //
-              FlutterArtist.desk._reactionProcessor
-                  .addReactionTaskUnits(
+              FlutterArtist.desk._reactionProcessor.addReactionExecutionUnits(
                 excludeShelfNames: excludeShelfNames,
               );
               hasNext = FlutterArtist._rootQueue.hasNext();
@@ -59,23 +58,23 @@ class _Executor {
                 break;
               }
             }
-            if (FlutterArtist.appConfig.debugOptions.showTaskUnitQueue) {
+            if (FlutterArtist.appConfig.debugOptions.showExecutionUnitQueue) {
               BuildContext context = FlutterArtistCore.context;
               await DebugExecutorDialog.open(
                 context: context,
               );
             }
             //
-            _TaskUnit taskUnit = FlutterArtist._rootQueue.getNextTaskUnit()!;
+            _ExecutionUnit executionUnit = FlutterArtist._rootQueue.getNextExecutionUnit()!;
             //
-            await __executeTaskUnit(taskUnit: taskUnit, shelfMap: shelfMap);
+            await __executeExecutionUnit(executionUnit: executionUnit, shelfMap: shelfMap);
           }
           //
-          __taskUnitCount++;
+          __executionUnitCount++;
           //
           _updateProgressViews(
             owner: null,
-            taskType: null,
+            executionUnitType: null,
           );
         }
         // May be AppError (FatalException).
@@ -98,220 +97,220 @@ class _Executor {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> __executeTaskUnit({
-    required _TaskUnit taskUnit,
+  Future<void> __executeExecutionUnit({
+    required _ExecutionUnit executionUnit,
     required Map<String, Shelf> shelfMap,
   }) async {
-    if (taskUnit is _STaskUnit) {
+    if (executionUnit is _SExecutionUnit) {
       _updateProgressViews(
-        owner: taskUnit.owner,
-        taskType: taskUnit.taskType,
+        owner: executionUnit.owner,
+        executionUnitType: executionUnit.executionUnitType,
       );
       //
-      __executingXShelfId = taskUnit.xShelfId;
+      __executingXShelfId = executionUnit.xShelfId;
       //
-      shelfMap[taskUnit.shelf.name] = taskUnit.shelf;
+      shelfMap[executionUnit.shelf.name] = executionUnit.shelf;
     } else {
       __executingXShelfId = -1000;
     }
     //
     final executionTrace = FlutterArtist.codeFlowLogger._addTaskCall(
-      ownerClassInstance: taskUnit.owner,
-      taskType: taskUnit.taskType,
+      ownerClassInstance: executionUnit.owner,
+      executionUnitType: executionUnit.executionUnitType,
     );
     //
-    if (taskUnit is _ActivityTaskUnit) {
-      await taskUnit.xActivity.activity._unitExecuteActivity(
+    if (executionUnit is _ActivityExecutionUnit) {
+      await executionUnit.xActivity.activity._unitExecuteActivity(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXActivity: taskUnit.xActivity,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXActivity: executionUnit.xActivity,
       );
     }
-    // Storage Backend Action TaskUnit:
-    else if (taskUnit is _StorageBackendActionTaskUnit) {
+    // Storage Backend Action ExecutionUnit:
+    else if (executionUnit is _StorageBackendActionExecutionUnit) {
       await FlutterArtist.desk._unitBackendAction(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        action: taskUnit.action,
-        taskResult: taskUnit.taskResult,
+        executionUnitType: executionUnit.executionUnitType,
+        action: executionUnit.action,
+        taskResult: executionUnit.taskResult,
       );
     }
     // Filter FilterModel:
-    else if (taskUnit is _FilterModelLoadDataTaskUnit) {
-      await taskUnit.xFilterModel.filterModel._unitLoadFilterData(
+    else if (executionUnit is _FilterModelLoadDataExecutionUnit) {
+      await executionUnit.xFilterModel.filterModel._unitLoadFilterData(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXFilterModel: taskUnit.xFilterModel,
-        taskResult: taskUnit.taskResult,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXFilterModel: executionUnit.xFilterModel,
+        taskResult: executionUnit.taskResult,
       );
     }
     // FilterPanel Change:
-    else if (taskUnit is _FilterPanelChangeTaskUnit) {
-      await taskUnit.xFilterModel.filterModel._unitFilterPanelChanged(
+    else if (executionUnit is _FilterPanelChangeExecutionUnit) {
+      await executionUnit.xFilterModel.filterModel._unitFilterPanelChanged(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        xFilterModel: taskUnit.xFilterModel,
-        formKeyInstantValuesInUI: taskUnit.formKeyInstantValuesInUI,
+        executionUnitType: executionUnit.executionUnitType,
+        xFilterModel: executionUnit.xFilterModel,
+        formKeyInstantValuesInUI: executionUnit.formKeyInstantValuesInUI,
       );
     }
     //
-    else if (taskUnit is _FormViewChangeTaskUnit) {
-      await taskUnit.xFormModel.formModel._unitFormViewChanged(
+    else if (executionUnit is _FormViewChangeExecutionUnit) {
+      await executionUnit.xFormModel.formModel._unitFormViewChanged(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        xFormModel: taskUnit.xFormModel,
-        formKeyInstantValuesInUI: taskUnit.formKeyInstantValuesInUI,
+        executionUnitType: executionUnit.executionUnitType,
+        xFormModel: executionUnit.xFormModel,
+        formKeyInstantValuesInUI: executionUnit.formKeyInstantValuesInUI,
       );
     }
     // Block Clear Current:
-    else if (taskUnit is _BlockClearCurrentTaskUnit) {
-      await taskUnit.xBlock.block._unitClearCurrent(
+    else if (executionUnit is _BlockClearCurrentExecutionUnit) {
+      await executionUnit.xBlock.block._unitClearCurrent(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXBlock: taskUnit.xBlock,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXBlock: executionUnit.xBlock,
       );
     }
     // Block Clear All Items:
-    else if (taskUnit is _BlockClearTaskUnit) {
-      await taskUnit.xBlock.block._unitClear(
+    else if (executionUnit is _BlockClearExecutionUnit) {
+      await executionUnit.xBlock.block._unitClear(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXBlock: taskUnit.xBlock,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXBlock: executionUnit.xBlock,
       );
     }
     // Block Query:
-    else if (taskUnit is _BlockQueryTaskUnit) {
-      await taskUnit.xBlock.block._unitQuery(
+    else if (executionUnit is _BlockQueryExecutionUnit) {
+      await executionUnit.xBlock.block._unitQuery(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXBlock: taskUnit.xBlock,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXBlock: executionUnit.xBlock,
       );
     }
     // Block PrepareCreate:
-    else if (taskUnit is _BlockPrepareFormToCreateItemTaskUnit) {
-      await taskUnit.xBlock.block._unitPrepareFormToCreateItem(
+    else if (executionUnit is _BlockPrepareFormToCreateItemExecutionUnit) {
+      await executionUnit.xBlock.block._unitPrepareFormToCreateItem(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXBlock: taskUnit.xBlock,
-        initDirty: taskUnit.initDirty,
-        formInput: taskUnit.formInput,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXBlock: executionUnit.xBlock,
+        initDirty: executionUnit.initDirty,
+        formInput: executionUnit.formInput,
       );
     }
     // Block Select Item as Current:
-    else if (taskUnit is _BlockSetItemAsCurrentTaskUnit) {
-      await taskUnit.xBlock.block._unitSetItemAsCurrent(
+    else if (executionUnit is _BlockSetItemAsCurrentExecutionUnit) {
+      await executionUnit.xBlock.block._unitSetItemAsCurrent(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        setCurrentItemDirective: taskUnit.setCurrentItemDirective,
-        newQueriedList: taskUnit.newQueriedList,
-        inputCandidateCurrItem: taskUnit.candidateItem,
-        thisXBlock: taskUnit.xBlock,
-        blockSetCurrentItemResult: taskUnit.taskResult,
+        executionUnitType: executionUnit.executionUnitType,
+        setCurrentItemDirective: executionUnit.setCurrentItemDirective,
+        newQueriedList: executionUnit.newQueriedList,
+        inputCandidateCurrItem: executionUnit.candidateItem,
+        thisXBlock: executionUnit.xBlock,
+        blockSetCurrentItemResult: executionUnit.taskResult,
       );
     }
     // Block Delete Item:
-    else if (taskUnit is _BlockItemDeletionTaskUnit) {
-      await taskUnit.xBlock.block._unitDeleteItem(
+    else if (executionUnit is _BlockItemDeletionExecutionUnit) {
+      await executionUnit.xBlock.block._unitDeleteItem(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXBlock: taskUnit.xBlock,
-        item: taskUnit.item,
-        deletionResult: taskUnit.taskResult,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXBlock: executionUnit.xBlock,
+        item: executionUnit.item,
+        deletionResult: executionUnit.taskResult,
       );
     }
     // Block Delete Items:
-    else if (taskUnit is _BlockMultiItemDeletionTaskUnit) {
-      await taskUnit.xBlock.block._unitDeleteItems(
+    else if (executionUnit is _BlockMultiItemDeletionExecutionUnit) {
+      await executionUnit.xBlock.block._unitDeleteItems(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXBlock: taskUnit.xBlock,
-        items: taskUnit.items,
-        stopIfError: taskUnit.stopIfError,
-        deletionResult: taskUnit.taskResult
+        executionUnitType: executionUnit.executionUnitType,
+        thisXBlock: executionUnit.xBlock,
+        items: executionUnit.items,
+        stopIfError: executionUnit.stopIfError,
+        deletionResult: executionUnit.taskResult
             as BlockItemsDeletionResult<Identifiable<Comparable<dynamic>>>,
       );
     }
     // Block QuickCreateItem:
-    else if (taskUnit is _BlockQuickItemCreationTaskUnit) {
-      await taskUnit.xBlock.block._unitQuickCreateItem(
+    else if (executionUnit is _BlockQuickItemCreationExecutionUnit) {
+      await executionUnit.xBlock.block._unitQuickCreateItem(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXBlock: taskUnit.xBlock,
-        action: taskUnit.action,
-        taskResult: taskUnit.taskResult,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXBlock: executionUnit.xBlock,
+        action: executionUnit.action,
+        taskResult: executionUnit.taskResult,
       );
     }
     // Block QuickUpdateItem:
-    else if (taskUnit is _BlockQuickItemUpdateTaskUnit) {
-      await taskUnit.xBlock.block._unitQuickUpdateItem(
+    else if (executionUnit is _BlockQuickItemUpdateExecutionUnit) {
+      await executionUnit.xBlock.block._unitQuickUpdateItem(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXBlock: taskUnit.xBlock,
-        action: taskUnit.action,
-        taskResult: taskUnit.taskResult,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXBlock: executionUnit.xBlock,
+        action: executionUnit.action,
+        taskResult: executionUnit.taskResult,
       );
     }
     // Block Quick Action:
-    else if (taskUnit is _BlockBackendActionTaskUnit) {
-      await taskUnit.xBlock.block._unitBackendAction(
+    else if (executionUnit is _BlockBackendActionExecutionUnit) {
+      await executionUnit.xBlock.block._unitBackendAction(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXBlock: taskUnit.xBlock,
-        action: taskUnit.action,
-        taskResult: taskUnit.taskResult,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXBlock: executionUnit.xBlock,
+        action: executionUnit.action,
+        taskResult: executionUnit.taskResult,
       );
     }
     // FormModel LoadForm:
-    else if (taskUnit is _FormModelLoadDataTaskUnit) {
-      await taskUnit.xFormModel.formModel._unitLoadFormData(
+    else if (executionUnit is _FormModelLoadDataExecutionUnit) {
+      await executionUnit.xFormModel.formModel._unitLoadFormData(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXFormModel: taskUnit.xFormModel,
-        taskResult: taskUnit.taskResult,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXFormModel: executionUnit.xFormModel,
+        taskResult: executionUnit.taskResult,
       );
     }
     // FormModel Save:
-    else if (taskUnit is _FormModelSaveFormTaskUnit) {
-      await taskUnit.xFormModel.formModel._unitSaveForm(
+    else if (executionUnit is _FormModelSaveFormExecutionUnit) {
+      await executionUnit.xFormModel.formModel._unitSaveForm(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXFormModel: taskUnit.xFormModel,
-        taskResult: taskUnit.taskResult,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXFormModel: executionUnit.xFormModel,
+        taskResult: executionUnit.taskResult,
       );
     }
     // FormModel QuickFormInputAction:
-    else if (taskUnit is _FormModelPatchFormFieldsTaskUnit) {
-      await taskUnit.xFormModel.formModel._unitPatchFormFields(
+    else if (executionUnit is _FormModelPatchFormFieldsExecutionUnit) {
+      await executionUnit.xFormModel.formModel._unitPatchFormFields(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXFormModel: taskUnit.xFormModel,
-        formInput: taskUnit.formInput,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXFormModel: executionUnit.xFormModel,
+        formInput: executionUnit.formInput,
       );
     }
     // Scalar:
-    else if (taskUnit is _ScalarQueryTaskUnit) {
-      await taskUnit.xScalar.scalar._unitQuery(
+    else if (executionUnit is _ScalarQueryExecutionUnit) {
+      await executionUnit.xScalar.scalar._unitQuery(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXScalar: taskUnit.xScalar,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXScalar: executionUnit.xScalar,
       );
     }
     // Scalar Clear Value:
-    else if (taskUnit is _ScalarClearTaskUnit) {
-      await taskUnit.xScalar.scalar._unitClear(
+    else if (executionUnit is _ScalarClearExecutionUnit) {
+      await executionUnit.xScalar.scalar._unitClear(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXScalar: taskUnit.xScalar,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXScalar: executionUnit.xScalar,
       );
     }
     // Scalar Quick Action:
-    else if (taskUnit is _ScalarLoadExtraDataQuickActionTaskUnit) {
-      await taskUnit.xScalar.scalar._unitLoadExtraDataQuickAction(
+    else if (executionUnit is _ScalarLoadExtraDataQuickActionExecutionUnit) {
+      await executionUnit.xScalar.scalar._unitLoadExtraDataQuickAction(
         executionTrace: executionTrace,
-        taskType: taskUnit.taskType,
-        thisXScalar: taskUnit.xScalar,
-        action: taskUnit.action,
-        afterQuickAction: taskUnit.afterQuickAction,
+        executionUnitType: executionUnit.executionUnitType,
+        thisXScalar: executionUnit.xScalar,
+        action: executionUnit.action,
+        afterQuickAction: executionUnit.afterQuickAction,
       );
     }
   }
@@ -321,7 +320,7 @@ class _Executor {
 
   void _updateProgressViews({
     required Object? owner,
-    required TaskType? taskType,
+    required ExecutionUnitType? executionUnitType,
   }) {
     for (_TaskProgressBuilderState state in [
       ..._taskProgressViewWidgetStates.keys
@@ -330,11 +329,11 @@ class _Executor {
         _taskProgressViewWidgetStates.remove(state);
         continue;
       }
-      bool onProgress = owner == null || taskType == null
+      bool onProgress = owner == null || executionUnitType == null
           ? false
           : state.isMatches(
               owner: owner,
-              taskType: taskType,
+              executionUnitType: executionUnitType,
             );
       //
       state.onProgress = onProgress;

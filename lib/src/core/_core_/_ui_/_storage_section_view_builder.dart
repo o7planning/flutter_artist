@@ -27,6 +27,12 @@ class _StorageSectionViewState
   }
 
   @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+
+  @override
   String getWidgetOwnerClassName() {
     return "StorageSectionView";
   }
@@ -48,11 +54,6 @@ class _StorageSectionViewState
 
   @override
   bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideHookContext {
     return false;
   }
 

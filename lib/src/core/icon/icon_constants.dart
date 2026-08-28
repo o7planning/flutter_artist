@@ -152,9 +152,6 @@ class FaIconConstants {
 
   static const IconData scalarValueIconData = cupertino.CupertinoIcons.pano;
 
-  static const IconData hookFragmentIconData =
-      cupertino.CupertinoIcons.pencil_circle;
-
   static const IconData paginationIconData =
       cupertino.CupertinoIcons.ellipsis_circle;
 
@@ -166,6 +163,9 @@ class FaIconConstants {
 
   static const IconData taskProgressViewIconData =
       cupertino.CupertinoIcons.timelapse;
+
+  static const IconData stageViewIconData =
+      cupertino.CupertinoIcons.asterisk_circle;
 
   static const IconData loggedUserIconData =
       cupertino.CupertinoIcons.person_crop_circle;

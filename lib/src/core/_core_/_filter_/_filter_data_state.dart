@@ -17,7 +17,8 @@ sealed class FilterDataState {
   bool get isLoaded => this is FilterDataStateLoaded;
 
   /// Quick accessor to diagnostic error payload if in [FilterDataStateError], otherwise null.
-  ErrorInfo? get errorInfo => switch (this) {
+  ErrorInfo? get errorInfo =>
+      switch (this) {
         FilterDataStateError(:final errorInfo) => errorInfo,
         _ => null,
       };
@@ -58,9 +59,9 @@ final class FilterDataStateError extends FilterDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FilterDataStateError &&
-          runtimeType == other.runtimeType &&
-          errorInfo == other.errorInfo;
+          other is FilterDataStateError &&
+              runtimeType == other.runtimeType &&
+              errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);

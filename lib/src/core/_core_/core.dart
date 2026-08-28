@@ -37,7 +37,7 @@ import '../../debug/dialog/_scalar_error_viewer_dialog.dart';
 import '../../debug/dialog/_debug_app_inspector_dialog.dart';
 import '../../debug/dialog/_debug_ui_context_inspector_dialog.dart';
 import '../../debug/executor/model/_debug_x_root_queue_item.dart';
-import '../../debug/executor/model/_debug_task_unit.dart';
+import '../../debug/executor/model/_debug_execution_unit.dart';
 import '../../debug/executor/model/_debug_x_root_queue.dart';
 import '../../debug/menu/_debug_menu_builder.dart';
 import '../../debug/app/_block_or_scalar.dart';
@@ -65,7 +65,6 @@ import '../enums/sort_strategy.dart';
 import '../enums/default_setting_policy.dart';
 import '../enums/filter_operator.dart';
 import '../enums/filter_error_method.dart';
-import '../enums/hook_hidden_action.dart';
 import '../enums/block_control_action_type.dart';
 import '../enums/block_error_method.dart';
 import '../enums/block_hidden_action.dart';
@@ -102,7 +101,7 @@ import '../enums/show_mode.dart';
 import '../enums/sort_direction.dart';
 import '../enums/sort_mode.dart';
 import '../enums/sorting_side.dart';
-import '../enums/task_type.dart';
+import '../enums/execution_unit_type.dart';
 import '../enums/tip_document.dart';
 import '../enums/unified_item_refresh_policy.dart';
 import '../enums/x_shelf_type.dart';
@@ -192,15 +191,61 @@ part '_bridge.dart';
 
 part '__core__/___core.dart';
 
-part '__core__/_hook.dart';
-
-part '__core__/_activity_v1.dart';
+part '_v1_/_activity_v1.dart';
 
 part '__core__/_background_executor.dart';
 
 part '__core__/_block_debug_info.dart';
 
 part '__core__/_block.dart';
+
+part '_v2_/view/_stage_view.dart';
+
+part '_v2_/view/_stage_view_builder.dart';
+
+part '_v2_/ui/_activity_ui_components.dart';
+
+part '_v2_/ui/_stage_ui_components.dart';
+
+part '_v2_/ui/_flow_ui_components.dart';
+
+part '_v2_/_workflow_transition_result.dart';
+
+part '_v2_/data/_fllow_context_data.dart';
+
+part '_v2_/data/_stage_data.dart';
+
+part '_v2_/data/_task_data.dart';
+
+part '_v2_/_stage_form_model.dart';
+
+part '_v2_/_task_form_model.dart';
+
+part '_v2_/_flow.dart';
+
+part '_v2_/_task.dart';
+
+part '_v2_/_activity.dart';
+
+part '_v2_/_activity_structure.dart';
+
+part '_v2_/_flow_structure.dart';
+
+part '_v2_/_stage.dart';
+
+part '_v2_/config/_flow_config.dart';
+
+part '_v2_/config/_stage_config.dart';
+
+part '_v2_/config/_task_config.dart';
+
+part '_v2_/enums/_stage_data_state.dart';
+
+part '_v2_/enums/_task_data_state.dart';
+
+part '_v2_/config/_activity_config.dart';
+
+part '_v2_/enums/_flow_data_state.dart';
 
 part '__core__/_scalar_debug_info.dart';
 
@@ -344,6 +389,8 @@ part '__core__/_storage.dart';
 
 part '__core__/_desk.dart';
 
+part '__core__/_desk_core.dart';
+
 part '_event_/_event_helper.dart';
 
 part '_utils_/_event_dispatcher.dart';
@@ -359,10 +406,6 @@ part '_code_flow_/_trace_step.dart';
 part '_code_flow_/_func_call_info.dart';
 
 part '_code_flow_/_func_call_info_utils.dart';
-
-part '_config_/_hook_config.dart';
-
-part '_config_/_activity_config.dart';
 
 part '_config_/_block_viewport_sync_config.dart';
 
@@ -402,11 +445,9 @@ part '_core_x_/_lazy_obj_/_lazy_scalar.dart';
 
 part '_core_x_/_lazy_obj_/_lazy_objects.dart';
 
-part '_core_x_/_root_queue_/_x_activity.dart';
+part '_v1_/_x_activity_v1.dart';
 
 part '_core_x_/_x_block.dart';
-
-part '_core_x_/_x_hook.dart';
 
 part '_core_x_/_x_filter_model.dart';
 
@@ -433,8 +474,6 @@ part '_core_x_/_x_shelf_/_x_query_/_x_shelf_shelf_natural_query.dart';
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_shelf_external_reaction.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/__x_shelf_base_query.dart';
-
-part '_core_x_/_x_shelf_/_x_query_/_x_shelf_hook.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_block_query.dart';
 
@@ -602,69 +641,63 @@ part '_task_result_/_scalar_query_result.dart';
 
 part '_task_result_/_storage_backend_action_result.dart';
 
-part '_task_unit_/_hook_task_unit.dart';
+part '_execution_unit_/__resulted_s_execution_unit.dart';
 
-part '_task_unit_/__resulted_s_task_unit.dart';
+part '_execution_unit_/__x_shelf_execution_unit_queue.dart';
 
-part '_task_unit_/__x_shelf_task_unit_queue.dart';
-
-part '_task_unit_/__task_unit.dart';
+part '_execution_unit_/__execution_unit.dart';
 
 part '_core_x_/_root_queue_/__x_root_queue.dart';
 
-part '_task_unit_/_block_clear_task_unit.dart';
+part '_execution_unit_/_block_clear_execution_unit.dart';
 
-part '_task_unit_/_scalar_clear_task_unit.dart';
+part '_execution_unit_/_scalar_clear_execution_unit.dart';
 
-part '_task_unit_/_block_clear_current_task_unit.dart';
+part '_execution_unit_/_block_clear_current_execution_unit.dart';
 
-part '_task_unit_/_block_item_deletion_task_unit.dart';
+part '_execution_unit_/_block_item_deletion_execution_unit.dart';
 
-part '_task_unit_/_activity_task_unit.dart';
+part '_execution_unit_/_activity_execution_unit.dart';
 
-part '_task_unit_/_block_multi_item_deletion_task_unit.dart';
+part '_execution_unit_/_block_multi_item_deletion_execution_unit.dart';
 
-part '_task_unit_/_block_prepare_form_to_create_item_task_unit.dart';
+part '_execution_unit_/_block_prepare_form_to_create_item_execution_unit.dart';
 
-part '_task_unit_/_block_query_task_unit.dart';
+part '_execution_unit_/_block_query_execution_unit.dart';
 
-part '_task_unit_/_block_backend_action_task_unit.dart';
+part '_execution_unit_/_block_backend_action_execution_unit.dart';
 
-part '_task_unit_/_block_quick_item_creation_task_unit.dart';
+part '_execution_unit_/_block_quick_item_creation_execution_unit.dart';
 
-part '_task_unit_/_block_quick_item_update_task_unit.dart';
+part '_execution_unit_/_block_quick_item_update_execution_unit.dart';
 
-part '_task_unit_/_block_set_item_as_current_task_unit.dart';
+part '_execution_unit_/_block_set_item_as_current_execution_unit.dart';
 
-part '_task_unit_/_filter_panel_change_task_unit.dart';
+part '_execution_unit_/_filter_panel_change_execution_unit.dart';
 
-part '_task_unit_/_form_model_patch_form_fields_task_unit.dart';
+part '_execution_unit_/_form_model_patch_form_fields_execution_unit.dart';
 
-part '_task_unit_/_filter_model_load_data_task_unit.dart';
+part '_execution_unit_/_filter_model_load_data_execution_unit.dart';
 
-part '_task_unit_/_form_model_load_data_task_unit.dart';
+part '_execution_unit_/_form_model_load_data_execution_unit.dart';
 
-part '_task_unit_/_form_model_save_form_task_unit.dart';
+part '_execution_unit_/_form_model_save_form_execution_unit.dart';
 
-part '_task_unit_/_form_view_change_task_unit.dart';
+part '_execution_unit_/_form_view_change_execution_unit.dart';
 
-part '_task_unit_/_scalar_load_extra_data_quick_action_task_unit.dart';
+part '_execution_unit_/_scalar_load_extra_data_quick_action_execution_unit.dart';
 
-part '_task_unit_/_scalar_query_task_unit.dart';
+part '_execution_unit_/_scalar_query_execution_unit.dart';
 
-part '_task_unit_/_storage_backend_action_task_unit.dart';
+part '_execution_unit_/_storage_backend_action_execution_unit.dart';
 
 part '_ui_/__context_provider_view.dart';
 
 part '_ui_/__context_provider_view_state.dart';
 
-part '_ui_/_activity_section_view.dart';
+part '_v1_/_activity_v1_section_view.dart';
 
-part '_ui_/_activity_section_view_builder.dart';
-
-part '_ui_/_hook_section_view.dart';
-
-part '_ui_/_hook_section_view_builder.dart';
+part '_v1_/_activity_v1_section_view_builder.dart';
 
 part '_navigation_intent_/_navigation_to_intent.dart';
 
@@ -766,13 +799,11 @@ part '_ui_/_x_state.dart';
 
 part '_ui_com_/__ui_components.dart';
 
-part '_ui_com_/_activity_v1_ui_components.dart';
+part '_v1_/_activity_v1_ui_components.dart';
 
 part '_ui_com_/_block_ui_components.dart';
 
 part '_ui_com_/_filter_ui_components.dart';
-
-part '_ui_com_/_hook_ui_components.dart';
 
 part '_ui_com_/_sort_ui_components.dart';
 
@@ -869,20 +900,16 @@ class _OverridableMethodAnnotation {
   const _OverridableMethodAnnotation();
 }
 
-class _TaskUnitClassAnnotation {
-  const _TaskUnitClassAnnotation();
-}
-
-class _HookAnnotation {
-  const _HookAnnotation();
+class _ExecutionUnitClassAnnotation {
+  const _ExecutionUnitClassAnnotation();
 }
 
 class _ActivityAnnotation {
   const _ActivityAnnotation();
 }
 
-class _TaskUnitMethodAnnotation {
-  const _TaskUnitMethodAnnotation();
+class _ExecutionUnitMethodAnnotation {
+  const _ExecutionUnitMethodAnnotation();
 }
 
 class _ImportantMethodAnnotation {

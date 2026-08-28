@@ -60,11 +60,11 @@ class CodeFlowLogger {
 
   ExecutionTrace _addTaskCall({
     required Object ownerClassInstance,
-    required TaskType taskType,
+    required ExecutionUnitType executionUnitType,
   }) {
-    final executionTrace = TaskUnitExecutionTrace(
+    final executionTrace = ExecutionUnitExecutionTrace(
       ownerClassInstance: ownerClassInstance,
-      taskType: taskType,
+      executionUnitType: executionUnitType,
     );
     __addExecutionTrace(executionTrace);
     return executionTrace;

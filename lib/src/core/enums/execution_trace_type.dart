@@ -4,7 +4,7 @@ import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 enum ExecutionTraceType {
   startup,
   naturalLoad,
-  taskUnitCall,
+  executionUnitCall,
   userMethodCall,
   libMethodCall,
   navigationIntent,
@@ -21,7 +21,7 @@ enum ExecutionTraceType {
         return Icons.start;
       case ExecutionTraceType.naturalLoad:
         return Icons.event_note_rounded;
-      case ExecutionTraceType.taskUnitCall:
+      case ExecutionTraceType.executionUnitCall:
         return Icons.miscellaneous_services_outlined;
       case ExecutionTraceType.userMethodCall:
         return Icons.call;
@@ -47,7 +47,7 @@ enum ExecutionTraceType {
     switch (this) {
       case ExecutionTraceType.userMethodCall:
         return colorScheme.primary;
-      case ExecutionTraceType.taskUnitCall:
+      case ExecutionTraceType.executionUnitCall:
         return colorScheme.tertiary;
       case ExecutionTraceType.naturalLoad:
         return colorScheme.secondary;
@@ -72,14 +72,14 @@ enum ExecutionTraceType {
         return "Startup";
       case ExecutionTraceType.naturalLoad:
         return "Detect newly displayed UI Component";
-      case ExecutionTraceType.taskUnitCall:
-        return "Task Unit.";
+      case ExecutionTraceType.executionUnitCall:
+        return "Execution Unit.";
       case ExecutionTraceType.userMethodCall:
         return "User's Method";
       case ExecutionTraceType.libMethodCall:
         return "Lib's Method";
       case ExecutionTraceType.deferredEvent:
-        return "Init Task Unit for Deferred Events";
+        return "Init Execution Unit for Deferred Events";
       case ExecutionTraceType.navigationIntent:
         return "Navigation Intent";
       case ExecutionTraceType.dispatchExternalEvents:

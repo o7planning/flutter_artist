@@ -33,6 +33,11 @@ class _ControlButtonState extends _ContextProviderViewState<ScalarControl> {
   }
 
   @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.scalar);
   }
@@ -58,11 +63,6 @@ class _ControlButtonState extends _ContextProviderViewState<ScalarControl> {
 
   @override
   bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideHookContext {
     return false;
   }
 

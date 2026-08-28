@@ -64,10 +64,6 @@ enum ContextProviderViewType {
     name: "ScalarValue",
     iconData: FaIconConstants.scalarFragmentIconData,
   ),
-  hookFragment(
-    name: "ActivityFragment",
-    iconData: FaIconConstants.hookFragmentIconData,
-  ),
   loggedInUser(
     name: "LoggedInUser",
     iconData: FaIconConstants.loggedUserIconData,
@@ -76,7 +72,12 @@ enum ContextProviderViewType {
   taskProgressView(
     name: "Task Progress View",
     iconData: FaIconConstants.taskProgressViewIconData,
-  );
+  ),
+  stageView(
+    name: "Activity Step View",
+    iconData: FaIconConstants.stageViewIconData,
+  ),
+  ;
 
   final String name;
   final IconData iconData;

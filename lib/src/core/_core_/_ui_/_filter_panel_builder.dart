@@ -34,6 +34,11 @@ class _FilterPanelBuilderState
   }
 
   @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.filterModel);
   }
@@ -55,11 +60,6 @@ class _FilterPanelBuilderState
 
   @override
   bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideHookContext {
     return false;
   }
 

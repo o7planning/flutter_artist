@@ -7,7 +7,8 @@ abstract class XShelf extends XRootQueueItem {
   final Shelf shelf;
   late final int xShelfId;
 
-  late final __xShelfTaskUnitQueue = _XShelfTaskUnitQueue(xShelf: this);
+  late final __xShelfExecutionUnitQueue =
+      _XShelfExecutionUnitQueue(xShelf: this);
 
   @override
   String get _fullName => "@XShelf-${shelf.name}";
@@ -217,8 +218,7 @@ abstract class XShelf extends XRootQueueItem {
     executionTrace._addTraceStep(
       codeId: "#10000",
       shortDesc:
-      "Registered Effected Shelf Members:${effectedShelfMembers
-          .getDebugInfoHtml()}",
+          "Registered Effected Shelf Members:${effectedShelfMembers.getDebugInfoHtml()}",
       traceStepType: TraceStepType.debug,
     );
 
@@ -228,8 +228,7 @@ abstract class XShelf extends XRootQueueItem {
       executionTrace._addTraceStep(
         codeId: "#10100",
         shortDesc:
-        "Set ${debugObjHtml(eventXBlock.block)} qryHint: ${debugObjHtml(
-            forceQryHint)}.",
+            "Set ${debugObjHtml(eventXBlock.block)} qryHint: ${debugObjHtml(forceQryHint)}.",
       );
       eventXBlock.setQueryHintToGreater(forceQryHint);
       if (viewportSyncStrategyEventBlock != null) {
@@ -237,15 +236,15 @@ abstract class XShelf extends XRootQueueItem {
       }
     }
     //
-    Set<String> listenerBlockNames = {}..addAll(
-        effectedShelfMembers._requeryBlockMAP.keys)..addAll(
-        effectedShelfMembers._refreshCurrItmBlockMAP.keys);
+    Set<String> listenerBlockNames = {}
+      ..addAll(effectedShelfMembers._requeryBlockMAP.keys)
+      ..addAll(effectedShelfMembers._refreshCurrItmBlockMAP.keys);
 
     for (String listenerBlkName in listenerBlockNames) {
       final Block? reQryBlock =
-      effectedShelfMembers._requeryBlockMAP[listenerBlkName];
+          effectedShelfMembers._requeryBlockMAP[listenerBlkName];
       final Block? refreshCurrBlock =
-      effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
+          effectedShelfMembers._refreshCurrItmBlockMAP[listenerBlkName];
       //
       bool hasXBlockRep = false;
       bool hasXItemRep = false;
@@ -264,8 +263,8 @@ abstract class XShelf extends XRootQueueItem {
         // @@@hasActiveBlockFragment
         hasXItemRep =
             refreshCurrBlock.ui.hasActiveUiComponentItemRepresentative(
-              alsoCheckChildren: true,
-            );
+          alsoCheckChildren: true,
+        );
         forceReloadCurrItem = true;
         XBlock refreshCurrXBlock = findXBlockByName(refreshCurrBlock.name)!;
         refreshCurrXBlock.setCurrItemToReload(refreshCurrBlock.currentItem);
@@ -300,7 +299,7 @@ abstract class XShelf extends XRootQueueItem {
         }
         // @@@hasActiveBlockFragment
         bool hasXBlockRep =
-        xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
+            xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
         if (hasXBlockRep) {
@@ -336,23 +335,12 @@ abstract class XShelf extends XRootQueueItem {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _initHookTaskUnit() {
-    shelf.debug._initQueryTaskUnitsCount++;
-    //
-    // _addTaskUnit(
-    //   taskUnit: _HookTaskUnit(
-    //       xHook: null,
-    //   ),
-    //   toMainQueue: toMainQueue,
-    // );
-  }
-
   // debug [#01000]
-  void _initQueryTaskUnits({required ExecutionTrace executionTrace}) {
+  void _initQueryExecutionUnits({required ExecutionTrace executionTrace}) {
     if (rootVipXScalar != null && rootVipXBlock != null) {
       throw "Development Logic Error";
     }
-    shelf.debug._initQueryTaskUnitsCount++;
+    shelf.debug._initQueryExecutionUnitsCount++;
     //
     executionTrace._addTraceStep(
       codeId: "#01000",
@@ -367,80 +355,76 @@ abstract class XShelf extends XRootQueueItem {
         if (!xFilterModel.isVisibleNeedToQuery()) {
           continue;
         }
-        final taskUnit = _FilterModelLoadDataTaskUnit(
+        final executionUnit = _FilterModelLoadDataExecutionUnit(
           xFilterModel: xFilterModel,
         );
         executionTrace._addTraceStep(
           codeId: "#01060",
           shortDesc:
-          "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(
-              this)}.",
-          traceStepType: TraceStepType.addTaskUnit,
+              "Create ${executionUnit.asDebugExecutionUnit()} and add to ${debugObjHtml(this)}.",
+          traceStepType: TraceStepType.addExecutionUnit,
         );
         //
         // Execute xFilterModel first!!
         //
-        _addTaskUnit(
-          taskUnit: taskUnit,
+        _addExecutionUnit(
+          executionUnit: executionUnit,
           toMainQueue: toMainQueue,
         );
       }
     }
     //
     if (rootVipXScalar != null) {
-      final taskUnit = _ScalarQueryTaskUnit(
+      final executionUnit = _ScalarQueryExecutionUnit(
         xScalar: rootVipXScalar!,
       );
       executionTrace._addTraceStep(
         codeId: "#01080",
         shortDesc:
-        "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(
-            this)}.",
-        traceStepType: TraceStepType.addTaskUnit,
+            "Create ${executionUnit.asDebugExecutionUnit()} and add to ${debugObjHtml(this)}.",
+        traceStepType: TraceStepType.addExecutionUnit,
       );
       //
       // Execute vipXScalar before XBlock(s)!!
       //
-      _addTaskUnit(
-        taskUnit: taskUnit,
+      _addExecutionUnit(
+        executionUnit: executionUnit,
         toMainQueue: toMainQueue,
       );
     }
     //
     else if (rootVipXBlock != null) {
-      final taskUnit = _BlockQueryTaskUnit(
+      final executionUnit = _BlockQueryExecutionUnit(
         xBlock: rootVipXBlock!,
       );
       executionTrace._addTraceStep(
         codeId: "#01120",
         shortDesc:
-        "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(
-            this)}.",
-        traceStepType: TraceStepType.addTaskUnit,
+            "Create ${executionUnit.asDebugExecutionUnit()} and add to ${debugObjHtml(this)}.",
+        traceStepType: TraceStepType.addExecutionUnit,
       );
       //
       // Execute rootVipXBlock!!
       //
-      _addTaskUnit(
-        taskUnit: taskUnit,
+      _addExecutionUnit(
+        executionUnit: executionUnit,
         toMainQueue: toMainQueue,
       );
     }
     //
     for (XScalar xScalar in allRootXScalars) {
       if (xScalar != rootVipXScalar) {
-        final taskUnit = _ScalarQueryTaskUnit(
+        final executionUnit = _ScalarQueryExecutionUnit(
           xScalar: xScalar,
         );
         executionTrace._addTraceStep(
           codeId: "#01160",
           shortDesc:
-          "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(
-              this)}.",
-          traceStepType: TraceStepType.addTaskUnit,
+              "Create ${executionUnit.asDebugExecutionUnit()} and add to ${debugObjHtml(this)}.",
+          traceStepType: TraceStepType.addExecutionUnit,
         );
-        _addTaskUnit(
-          taskUnit: taskUnit,
+        _addExecutionUnit(
+          executionUnit: executionUnit,
           toMainQueue: toMainQueue,
         );
       }
@@ -448,18 +432,17 @@ abstract class XShelf extends XRootQueueItem {
     //
     for (XBlock rootXBlock in allRootXBlocks) {
       if (rootXBlock != rootVipXBlock) {
-        final taskUnit = _BlockQueryTaskUnit(
+        final executionUnit = _BlockQueryExecutionUnit(
           xBlock: rootXBlock,
         );
         executionTrace._addTraceStep(
           codeId: "#01200",
           shortDesc:
-          "Create ${taskUnit.asDebugTaskUnit()} and add to ${debugObjHtml(
-              this)}.",
-          traceStepType: TraceStepType.addTaskUnit,
+              "Create ${executionUnit.asDebugExecutionUnit()} and add to ${debugObjHtml(this)}.",
+          traceStepType: TraceStepType.addExecutionUnit,
         );
-        _addTaskUnit(
-          taskUnit: taskUnit,
+        _addExecutionUnit(
+          executionUnit: executionUnit,
           toMainQueue: toMainQueue,
         );
       }
@@ -472,7 +455,7 @@ abstract class XShelf extends XRootQueueItem {
 
   String toDebugXShelfStateAsHtml() {
     String s = "${debugObjHtml(this)}\n"
-        " --- STATE BEFORE CREATING TASK UNITS ---";
+        " --- STATE BEFORE CREATING EXECUTION UNITS ---";
     for (String key in xBlockMap.keys) {
       final XBlock xBlock = xBlockMap[key]!;
       s += "\n${xBlock.toDebugHtmlString()}";
@@ -531,26 +514,27 @@ abstract class XShelf extends XRootQueueItem {
 
   @override
   DebugXRootQueueItem toDebugXRootQueueItem() {
-    return __xShelfTaskUnitQueue.toDebugXRootQueueItem();
+    return __xShelfExecutionUnitQueue.toDebugXRootQueueItem();
   }
 
   @override
   bool isEmptyTask() {
-    return __xShelfTaskUnitQueue.isEmpty;
+    return __xShelfExecutionUnitQueue.isEmpty;
   }
 
-  _STaskUnit? _getNextTaskUnit() {
-    return __xShelfTaskUnitQueue.getNextTaskUnit();
+  _SExecutionUnit? _getNextExecutionUnit() {
+    return __xShelfExecutionUnitQueue.getNextExecutionUnit();
   }
 
-  void _addTaskUnit({required _STaskUnit taskUnit, bool toMainQueue = true}) {
-    if (taskUnit.xShelf != this) {
+  void _addExecutionUnit(
+      {required _SExecutionUnit executionUnit, bool toMainQueue = true}) {
+    if (executionUnit.xShelf != this) {
       throw FatalAppError(
         errorMessage: "Development Logic Error.",
       );
     }
-    __xShelfTaskUnitQueue.addTaskUnit(
-      taskUnit: taskUnit,
+    __xShelfExecutionUnitQueue.addExecutionUnit(
+      executionUnit: executionUnit,
       toMainQueue: toMainQueue,
     );
   }

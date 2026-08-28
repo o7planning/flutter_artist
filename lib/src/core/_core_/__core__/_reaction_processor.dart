@@ -3,14 +3,14 @@ part of '../core.dart';
 class _ReactionProcessor {
   _ReactionProcessor();
 
-  void addReactionTaskUnits({required Set<String> excludeShelfNames}) {
+  void addReactionExecutionUnits({required Set<String> excludeShelfNames}) {
     ExecutionTrace executionTrace =
         FlutterArtist.codeFlowLogger._createPendingEventProcessorExecutionTrace(
       ownerClassInstance: this,
     );
     executionTrace._addTraceStep(
       codeId: "#27000",
-      shortDesc: "addReactionTaskUnits",
+      shortDesc: "addReactionExecutionUnits",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -58,10 +58,10 @@ class _ReactionProcessor {
       executionTrace._addTraceStep(
         codeId: "#27400",
         shortDesc:
-            "${debugObjHtml(listenerShelf)}: Add Shelf External Reaction Task Unit.",
+            "${debugObjHtml(listenerShelf)}: Add Shelf External Reaction Execution Unit.",
         traceStepType: TraceStepType.separator,
       );
-      listenerShelf._addShelfExternalReactionTaskUnit(
+      listenerShelf._addShelfExternalReactionExecutionUnit(
         executionTrace: executionTrace,
       );
     }

@@ -57,8 +57,6 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
 
   bool get provideItemContext;
 
-  bool get provideHookContext;
-
   bool get provideFormContext;
 
   bool get isActivityRepresentative => false;
@@ -76,8 +74,6 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
         return provideItemContext;
       case ContextKind.form:
         return provideFormContext;
-      case ContextKind.hook:
-        return provideHookContext;
       case ContextKind.activity:
         return isActivityRepresentative;
     }
@@ -117,8 +113,8 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     if (force) {
       setState(() {});
     } else {
-      if (_refreshCount < FlutterArtist.executor.taskUnitCount) {
-        _refreshCount = FlutterArtist.executor.taskUnitCount;
+      if (_refreshCount < FlutterArtist.executor.executionUnitCount) {
+        _refreshCount = FlutterArtist.executor.executionUnitCount;
         setState(() {});
       }
     }
@@ -139,6 +135,8 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
   }
 
   Shelf? _getRelatedShelf();
+
+  Activity? _getRelatedActivity();
 
   void __addWidgetState({required bool isVisible}) {
     addWidgetState(isVisible: isVisible);

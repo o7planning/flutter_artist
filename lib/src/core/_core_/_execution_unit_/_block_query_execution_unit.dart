@@ -1,0 +1,38 @@
+part of '../core.dart';
+
+@_ExecutionUnitClassAnnotation()
+@_BlockQueryAnnotation()
+@_BlockQueryMorePageAnnotation()
+@_BlockQueryNextPageAnnotation()
+@_BlockQueryPreviousPageAnnotation()
+@_BlockQueryAndPrepareToEditAnnotation()
+@_BlockQueryAndPrepareToCreateAnnotation()
+class _BlockQueryExecutionUnit extends _SExecutionUnit {
+  XBlock xBlock;
+
+  _BlockQueryExecutionUnit({
+    required this.xBlock,
+  }) : super(executionUnitType: ExecutionUnitType.blockQuery);
+
+  @override
+  XShelf get xShelf => xBlock.xShelf;
+
+  @override
+  int get xShelfId => xBlock.xShelfId;
+
+  @override
+  Shelf get shelf => xBlock.block.shelf;
+
+  @override
+  Block get owner => xBlock.block;
+
+  @override
+  String getObjectName() {
+    return xBlock.block.name;
+  }
+
+  @override
+  String toString() {
+    return "${getClassName(this)}(${getClassName(xBlock.block)})";
+  }
+}

@@ -33,6 +33,12 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
   }
 
   @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.formModel);
   }
@@ -55,11 +61,6 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
   @override
   bool get provideFormContext {
     return true;
-  }
-
-  @override
-  bool get provideHookContext {
-    return false;
   }
 
   @override

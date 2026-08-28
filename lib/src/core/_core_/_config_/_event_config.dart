@@ -28,11 +28,11 @@ class ArtistEvent {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ArtistEvent &&
-          runtimeType == other.runtimeType &&
-          dataType == other.dataType &&
-          scope == other.scope &&
-          sourceShelfId == other.sourceShelfId;
+          other is ArtistEvent &&
+              runtimeType == other.runtimeType &&
+              dataType == other.dataType &&
+              scope == other.scope &&
+              sourceShelfId == other.sourceShelfId;
 
   @override
   int get hashCode =>

@@ -37,6 +37,12 @@ class _CustomControlBarState
   }
 
   @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
@@ -69,11 +75,6 @@ class _CustomControlBarState
   @override
   void addWidgetState({required bool isVisible}) {
     // TODO: implement addWidgetState
-  }
-
-  @override
-  bool get provideHookContext {
-    return false;
   }
 
   @override

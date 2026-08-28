@@ -13,3 +13,14 @@ class ShelfConfig {
     );
   }
 }
+
+class ShelfEffectiveConfig {
+  final ShelfConfig _baselineConfig;
+
+  ShelfEffectiveConfig._fromConfig(this._baselineConfig);
+
+  factory ShelfEffectiveConfig.fromConfig(ShelfConfig config) =>
+      ShelfEffectiveConfig._fromConfig(config);
+
+  ShelfReleasePolicy get releasePolicy => _baselineConfig.releasePolicy;
+}

@@ -4,7 +4,7 @@ enum TraceStepType {
   line, // Default.
   info,
   debug,
-  addTaskUnit,
+  addExecutionUnit,
   controllableCalling,
   nonControllableCalling,
   broadcastEvent,
@@ -25,7 +25,7 @@ enum TraceStepType {
         return Icons.call;
       case TraceStepType.nonControllableCalling:
         return Icons.call;
-      case TraceStepType.addTaskUnit:
+      case TraceStepType.addExecutionUnit:
         return Icons.miscellaneous_services_outlined;
       case TraceStepType.debug:
         return Icons.bug_report_outlined;
@@ -47,7 +47,7 @@ enum TraceStepType {
       case TraceStepType.controllableCalling:
         return colorScheme.primary;
 
-      case TraceStepType.addTaskUnit:
+      case TraceStepType.addExecutionUnit:
         return colorScheme.tertiary;
       case TraceStepType.broadcastEvent:
         return colorScheme.tertiary;

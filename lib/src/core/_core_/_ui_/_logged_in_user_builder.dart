@@ -26,6 +26,13 @@ class _LoggedInUserBuilderState
     return null;
   }
 
+
+  @override
+  Activity? _getRelatedActivity() {
+    return null;
+  }
+
+
   @override
   String getWidgetOwnerClassName() {
     return "LoggedInUserBuilder";
@@ -48,11 +55,6 @@ class _LoggedInUserBuilderState
 
   @override
   bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideHookContext {
     return false;
   }
 

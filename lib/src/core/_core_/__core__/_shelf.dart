@@ -20,6 +20,7 @@ abstract class Shelf extends _Core {
   late final debug = _ShelfDebugInfo(shelf: this);
 
   late final ShelfConfig config;
+  late final ShelfEffectiveConfig effectiveConfig;
 
   void _markAsOrphaned(bool orphaned) {
     if (orphaned) {
@@ -47,12 +48,6 @@ abstract class Shelf extends _Core {
 
   // All formModels.
   final List<FormModel> _allFormModels = [];
-
-  final Map<String, Hook> __hookMap = {};
-
-  final List<Hook> __hooks = [];
-
-  List<Hook> get hooks => List.unmodifiable(__hooks);
 
   final Map<String, Scalar> __scalarMap = {};
 
@@ -147,7 +142,7 @@ abstract class Shelf extends _Core {
   /// Very Dangerous Method. Call Internal only.
   ///
   String ___registerError(String message) {
-    FlutterArtist.storage.__clear();
+    FlutterArtist._clearActivitiesAndShelves();
     //
     return _createFatalAppError(message);
   }
@@ -158,6 +153,7 @@ abstract class Shelf extends _Core {
   void __onInit() {
     _shelfStruct = defineShelfStructure();
     config = _shelfStruct._config;
+    effectiveConfig = ShelfEffectiveConfig._fromConfig(_shelfStruct._config);
 
     for (String filterModelName in _shelfStruct.filterModels.keys) {
       FilterModel filterModel = _shelfStruct.filterModels[filterModelName]!;
@@ -165,20 +161,6 @@ abstract class Shelf extends _Core {
       filterModel.shelf = this;
       //
       _allFilterModels.add(filterModel);
-    }
-    //
-    // Hook:
-    //
-    final List<Hook> hooks = _shelfStruct.hooks;
-    for (Hook hook in hooks) {
-      if (__hookMap.containsKey(hook.name)) {
-        throw ___registerError(
-            "Duplicate Hook '${hook.name}' in '${getClassName(this)}'"
-            "\nDouble-check ${getClassName(this)}.defineShelfStructure() method");
-      } else {
-        __hookMap[hook.name] = hook;
-      }
-      hook.shelf = this;
     }
     //
     // Scalar:
@@ -199,99 +181,6 @@ abstract class Shelf extends _Core {
       __registerBlockCascade(rootBlock);
     }
     //
-    // -------- SHELF INTERNAL EVENTS ------------
-    //
-    // for (String blockName in __blockMap.keys) {
-    //   Block listenerBlock = __blockMap[blockName]!;
-    //   // TODO: ERROR!!
-    //   if (listenerBlock
-    //       .config.onInternalShelfEvents.blockLevelSelfReactionEnabled) {
-    //     listenerBlock._internalEffectedShelfMembers
-    //         ._addRequeryBlock(listenerBlock);
-    //   }
-    //   // TODO: ERROR!!
-    //   if (listenerBlock
-    //       .config.onInternalShelfEvents.currentItemSelfReactionEnabled) {
-    //     listenerBlock._internalEffectedShelfMembers
-    //         ._addRefreshCurrItmBlock(listenerBlock);
-    //   }
-    //   // TODO: ERROR!!
-    //   for (Evt evt
-    //       in listenerBlock.config.onInternalShelfEvents.blockLevelReactionOn) {
-    //     // BLOCK EVENT:
-    //     if (evt.srcType == SrcType.block) {
-    //       Block? eventBlock = __blockMap[evt.srcName];
-    //       if (eventBlock == null) {
-    //         throw ___registerError(
-    //           "Configuration Error! --> No Block Name: '${evt.srcName}'. \n"
-    //           " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-    //           " > config > executeBlockLevelReactionToEvts > '${evt.srcName}'.",
-    //         );
-    //       } else if (identical(listenerBlock, eventBlock)) {
-    //         throw ___registerError(
-    //           "Configuration Error! --> Do not use: '${evt.srcName}', let use 'selfReQueryable:true' property. \n"
-    //           " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-    //           " > config > executeBlockLevelReactionToEvts > '${evt.srcName}'.",
-    //         );
-    //       }
-    //       // BLOCK EVENT
-    //       eventBlock._internalEffectedShelfMembers
-    //           ._addRequeryBlock(listenerBlock);
-    //     }
-    //     // SCALAR EVENT:
-    //     else if (evt.srcType == SrcType.scalar) {
-    //       Scalar? eventScalar = __scalarMap[evt.srcName];
-    //       if (eventScalar == null) {
-    //         throw ___registerError(
-    //           "Configuration Error! --> No Scalar Name: ${evt.srcName}. \n"
-    //           " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-    //           " > config > executeScalarLevelReactionToEvts > '${evt.srcName}'.",
-    //         );
-    //       }
-    //       // SCALAR EVENT: update (Only One Events).
-    //       eventScalar._internalEffectedShelfMembers
-    //           ._addRequeryBlock(listenerBlock);
-    //     }
-    //   }
-    //   // TODO: ERROR!!
-    //   for (Evt evt
-    //       in listenerBlock.config.onInternalShelfEvents.itemLevelReactionOn) {
-    //     // BLOCK EVENT:
-    //     if (evt.srcType == SrcType.block) {
-    //       Block? eventBlock = __blockMap[evt.srcName];
-    //       if (eventBlock == null) {
-    //         throw ___registerError(
-    //           "Configuration Error! --> No Block Name: ${evt.srcName}. \n"
-    //           " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-    //           " > config > executeItemLevelReactionToEvts > '${evt.srcName}'.",
-    //         );
-    //       } else if (identical(listenerBlock, eventBlock)) {
-    //         throw ___registerError(
-    //           "Configuration Error! --> Do not use: '${evt.srcName}', let use 'currentItemSelfRefreshable:true' property. \n"
-    //           " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-    //           " > config > executeItemLevelReactionToEvts > '${evt.srcName}'.",
-    //         );
-    //       }
-    //       // BLOCK EVENTS
-    //       eventBlock._internalEffectedShelfMembers
-    //           ._addRefreshCurrItmBlock(listenerBlock);
-    //     }
-    //     // SCALAR EVENT:
-    //     else if (evt.srcType == SrcType.scalar) {
-    //       Scalar? eventScalar = __scalarMap[evt.srcName];
-    //       if (eventScalar == null) {
-    //         throw ___registerError(
-    //           "Configuration Error! --> No Scalar Name: ${evt.srcName}.\n"
-    //           " ${getClassName(listenerBlock.shelf)} > defineShelfStructure > ShelfStructure > blocks > ${getClassName(listenerBlock)}"
-    //           " > config > executeItemLevelReactionToEvts > '${evt.srcName}'.",
-    //         );
-    //       }
-    //       // SCALAR EVENT: update (Only One Events).
-    //       eventScalar._internalEffectedShelfMembers
-    //           ._addRefreshCurrItmBlock(listenerBlock);
-    //     }
-    //   }
-    // }
     for (String blockName in __blockMap.keys) {
       Block listenerBlock = __blockMap[blockName]!;
 
@@ -684,13 +573,6 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Hook? findHook(String hookName) {
-    return __hookMap[hookName];
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   FilterModel? findFilterModel(String filterModelName) {
     return _shelfStruct.filterModels[filterModelName];
   }
@@ -763,18 +645,18 @@ abstract class Shelf extends _Core {
         codeId: "#02100",
         shortDesc: "Create ${debugObjHtml(xShelf)} for <b>Natural-Load</b>.",
         note:
-            "<b>XShelf</b> is a <b>RootQueueItem</b> and contains multiple <b>Task Units</b>.",
+            "<b>XShelf</b> is a <b>RootQueueItem</b> and contains multiple <b>Execution Units</b>.",
       );
       executionTrace._addTraceStep(
         codeId: "#02120",
         shortDesc:
-            "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits() to create <b>Natural-Load</b> task units...",
+            "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits() to create <b>Natural-Load</b> execution units...",
         traceStepType: TraceStepType.nonControllableCalling,
       );
       //
       // TODO: Handle Error:
       //
-      xShelf._initQueryTaskUnits(executionTrace: executionTrace);
+      xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
       //
       executionTrace._addTraceStep(
         codeId: "#02160",
@@ -786,11 +668,11 @@ abstract class Shelf extends _Core {
       executionTrace._addTraceStep(
         codeId: "#02200",
         shortDesc:
-            "Calling <b>FlutterArtist.executor._executeTaskUnitQueue()</b> "
-            "to execute <b>RootQueueItem(s)</b> on the queue and its <b>Task Units</b>...",
+            "Calling <b>FlutterArtist.executor._executeExecutionUnitQueue()</b> "
+            "to execute <b>RootQueueItem(s)</b> on the queue and its <b>Execution Units</b>...",
         traceStepType: TraceStepType.nonControllableCalling,
       );
-      await FlutterArtist.executor._executeTaskUnitQueue();
+      await FlutterArtist.executor._executeExecutionUnitQueue();
     } finally {
       // Nothing
     }
@@ -892,7 +774,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addShelfExternalReactionTaskUnit({
+  void _addShelfExternalReactionExecutionUnit({
     required ExecutionTrace executionTrace,
   }) async {
     executionTrace._addTraceStep(
@@ -907,10 +789,10 @@ abstract class Shelf extends _Core {
     //
     executionTrace._addTraceStep(
       codeId: "#52100",
-      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryTaskUnits()..",
+      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()..",
       traceStepType: TraceStepType.nonControllableCalling,
     );
-    xShelf._initQueryTaskUnits(executionTrace: executionTrace);
+    xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
     //
     executionTrace._addTraceStep(
       codeId: "#52200",
@@ -922,17 +804,17 @@ abstract class Shelf extends _Core {
   }
 
   Future<ShelfDeferredEventExecutionResult>
-      executeDelayedExternalReactionTaskUnit() async {
+      executeDelayedExternalReactionExecutionUnit() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "executeDelayedExternalReactionTaskUnit",
+      methodName: "executeDelayedExternalReactionExecutionUnit",
       parameters: null,
       isLibMethod: true,
     );
     executionTrace._addTraceStep(
       codeId: "#68000",
       shortDesc:
-          "Checking before <b>executeDelayedExternalReactionTaskUnit</b>..",
+          "Checking before <b>executeDelayedExternalReactionExecutionUnit</b>..",
     );
     Actionable<ShelfDeferredEventExecutionPrecheck> actionable =
         __canExecuteDelayedExternalReaction(checkBusy: true);
@@ -955,8 +837,8 @@ abstract class Shelf extends _Core {
         errorInfo: actionable.errorInfo,
       );
     }
-    _addShelfExternalReactionTaskUnit(executionTrace: executionTrace);
-    await FlutterArtist.executor._executeTaskUnitQueue();
+    _addShelfExternalReactionExecutionUnit(executionTrace: executionTrace);
+    await FlutterArtist.executor._executeExecutionUnitQueue();
     return ShelfDeferredEventExecutionResult();
   }
 

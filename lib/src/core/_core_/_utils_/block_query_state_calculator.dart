@@ -27,7 +27,7 @@ class BlockQueryCalculatorInput {
   /// Criteria shift flag indicating whether search criteria or filter inputs mutated for this query.
   final bool filterCriteriaChanged;
 
-  /// Infinite scroll / lazy append trigger flag mapped from [TaskType.queryMore].
+  /// Infinite scroll / lazy append trigger flag mapped from [ExecutionUnitType.queryMore].
   final bool isQueryMore;
 
   /// Page movement flag indicating sequential hard pagination changes (next, previous, or jump).
