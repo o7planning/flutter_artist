@@ -73,17 +73,15 @@ abstract class FilterModel<
     __defineFilterModelStructure();
   }
 
-  //
-  // // ***************************************************************************
-  // // ***************************************************************************
-  //
-  // void __clearFilterError() {
-  //   _errorInfo = null;
-  // }
-  //
-  // void __setErrorInfo(ErrorInfo? errorInfo) {
-  //   _errorInfo = errorInfo;
-  // }
+  // ***************************************************************************
+  // ***************************************************************************
+
+  XFilterModel _createXFilterModel({required XShelf xShelf}) {
+    return XFilterModel._(
+      xShelf: xShelf,
+      filterModel: this,
+    );
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -1382,7 +1380,8 @@ abstract class FilterModel<
     final XShelf xShelf = _XShelfFilterPanelChange(filterModel: this);
     //
     final XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
-    _FilterPanelChangeExecutionUnit executionUnit = _FilterPanelChangeExecutionUnit(
+    _FilterPanelChangeExecutionUnit executionUnit =
+        _FilterPanelChangeExecutionUnit(
       xFilterModel: xFilterModel,
       formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );

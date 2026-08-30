@@ -74,6 +74,8 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
     required this.xFilterModel,
   });
 
+  // ***************************************************************************
+
   QryHint get queryHint {
     return __qryHint;
   }
@@ -97,8 +99,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   void printInfo() {
     bool hasActiveUI = scalar.ui.hasActiveUiComponent();
     String msg =
-        "${getClassName(this)}(${getClassName(
-        scalar)} - UiActive: $hasActiveUI - needQuery: $queryHint)";
+        "${getClassName(this)}(${getClassName(scalar)} - UiActive: $hasActiveUI - needQuery: $queryHint)";
     print(msg);
   }
 

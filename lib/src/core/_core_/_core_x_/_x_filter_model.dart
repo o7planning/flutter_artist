@@ -21,8 +21,14 @@ class XFilterModel {
 
   int get xShelfId => xShelf.xShelfId;
 
-  XFilterModel({required this.xShelf, required this.filterModel})
-      : _xFilterModelId = __xFilterModelSeq++;
+  // ***************************************************************************
+
+  XFilterModel._({
+    required this.xShelf,
+    required this.filterModel,
+  }) : _xFilterModelId = __xFilterModelSeq++;
+
+  // ***************************************************************************
 
   bool isVisibleNeedToQuery() {
     if (isDefaultFilterModel) {

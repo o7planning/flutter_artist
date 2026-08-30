@@ -13,7 +13,7 @@ class _XRootQueue {
       return false;
     }
     for (XRootQueueItem item in __xRootQueueItemMap.values) {
-      if (!item.isEmptyTask()) {
+      if (!item.isEmptyExecutionUnit()) {
         return false;
       }
     }
@@ -42,7 +42,7 @@ class _XRootQueue {
       }
       XRootQueueItem rootQueueItem =
           __xRootQueueItemMap[firstRootQueueItemName]!;
-      if (rootQueueItem.isEmptyTask()) {
+      if (rootQueueItem.isEmptyExecutionUnit()) {
         __xRootQueueItemMap.remove(firstRootQueueItemName);
         continue;
       }

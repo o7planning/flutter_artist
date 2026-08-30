@@ -30,7 +30,7 @@ class XActivityV1 extends XRootQueueItem {
   }
 
   @override
-  bool isEmptyTask() {
+  bool isEmptyExecutionUnit() {
     return _tasked;
   }
 

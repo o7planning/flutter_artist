@@ -53,10 +53,10 @@ abstract class XShelf extends XRootQueueItem {
     required this.shelf,
   }) : xShelfId = __xShelfSequence++ {
     for (FilterModel filterModel in shelf._allFilterModels) {
-      final xFilterModel = XFilterModel(
-        xShelf: this,
-        filterModel: filterModel,
-      );
+      //
+      // Create XFilterModel from filterModel.
+      //
+      final xFilterModel = filterModel._createXFilterModel(xShelf: this);
       //
       xFilterModelMap[filterModel.name] = xFilterModel;
       allXFilterModels.add(xFilterModel);
@@ -165,7 +165,7 @@ abstract class XShelf extends XRootQueueItem {
     final _LazyObjects ret = _LazyObjects();
     for (XBlock xBlock in allXBlocks) {
       // Test Case: [06b] - Only Filter in the Screen.
-      XFilterModel xFilterModel = xBlock.xFilterModel;
+      final XFilterModel xFilterModel = xBlock.xFilterModel;
       if (xFilterModel.isVisibleNeedToQuery()) {
         ret.addLazyFilterModel(filterModel: xFilterModel.filterModel);
       }
@@ -177,7 +177,7 @@ abstract class XShelf extends XRootQueueItem {
       }
     }
     for (XScalar xScalar in allXScalars) {
-      XFilterModel xFilterModel = xScalar.xFilterModel;
+      final XFilterModel xFilterModel = xScalar.xFilterModel;
       if (xFilterModel.isVisibleNeedToQuery()) {
         ret.addLazyFilterModel(filterModel: xFilterModel.filterModel);
       }
@@ -518,7 +518,7 @@ abstract class XShelf extends XRootQueueItem {
   }
 
   @override
-  bool isEmptyTask() {
+  bool isEmptyExecutionUnit() {
     return __xShelfExecutionUnitQueue.isEmpty;
   }
 

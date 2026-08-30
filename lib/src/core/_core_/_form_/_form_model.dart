@@ -64,8 +64,6 @@ abstract class FormModel<
 
   FormModelStructure get formModelStructure => _formModelStructure;
 
-  // GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
-
   // ***************************************************************************
   // ***************************************************************************
 
@@ -79,15 +77,6 @@ abstract class FormModel<
 
   // ***************************************************************************
 
-  void __disableAutovalidation() {
-    AutovalidateMode temp = _autovalidateMode;
-    _autovalidateMode = AutovalidateMode.disabled;
-    ui.updateAllUiComponents(force: true);
-    _autovalidateMode = temp;
-  }
-
-  // ***************************************************************************
-
   XFormModel<ID, ITEM_DETAIL> _createXFormModel({
     required FORM_INPUT? formInput,
   }) {
@@ -95,6 +84,15 @@ abstract class FormModel<
       formModel: this,
       formInput: formInput,
     );
+  }
+
+  // ***************************************************************************
+
+  void __disableAutovalidation() {
+    AutovalidateMode temp = _autovalidateMode;
+    _autovalidateMode = AutovalidateMode.disabled;
+    ui.updateAllUiComponents(force: true);
+    _autovalidateMode = temp;
   }
 
   // ***************************************************************************
@@ -560,7 +558,8 @@ abstract class FormModel<
     //
     executionTrace._addTraceStep(
       codeId: "#11000",
-      shortDesc: "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
+      shortDesc:
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -2290,7 +2289,8 @@ abstract class FormModel<
     final taskResult = FormModelPatchFormFieldsResult(
       precheck: null,
     );
-    _ResultedSExecutionUnit executionUnit = _FormModelPatchFormFieldsExecutionUnit(
+    _ResultedSExecutionUnit executionUnit =
+        _FormModelPatchFormFieldsExecutionUnit(
       xFormModel: xFormModel,
       formInput: formInput,
       taskResult: taskResult,
@@ -2363,7 +2363,8 @@ abstract class FormModel<
       shortDesc: "Creating <b>_FormModelSaveFormExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSExecutionUnit executionUnit = _FormModelSaveFormExecutionUnit(
+    final _ResultedSExecutionUnit executionUnit =
+        _FormModelSaveFormExecutionUnit(
       xFormModel: xFormModel,
     );
     //

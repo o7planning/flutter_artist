@@ -579,6 +579,19 @@ abstract class Block<
 
   // ***************************************************************************
 
+  XBlock<ID, ITEM, ITEM_DETAIL> _createXBlock({
+    required XFilterModel xFilterModel,
+    required XFormModel? xFormModel,
+  }) {
+    return XBlock<ID, ITEM, ITEM_DETAIL>._(
+      block: this,
+      xFilterModel: xFilterModel,
+      xFormModel: xFormModel,
+    );
+  }
+
+  // ***************************************************************************
+
   /// Checks if this Block exposes or is associated with the given [type].
   /// All comments are in English for global users to read.
   bool _exposesDataType(Type type) {
@@ -594,19 +607,6 @@ abstract class Block<
     }
 
     return false;
-  }
-
-  // ***************************************************************************
-
-  XBlock<ID, ITEM, ITEM_DETAIL> _createXBlock({
-    required XFilterModel xFilterModel,
-    required XFormModel? xFormModel,
-  }) {
-    return XBlock<ID, ITEM, ITEM_DETAIL>._(
-      block: this,
-      xFilterModel: xFilterModel,
-      xFormModel: xFormModel,
-    );
   }
 
   // ***************************************************************************
