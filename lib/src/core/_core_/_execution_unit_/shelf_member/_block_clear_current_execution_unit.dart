@@ -8,7 +8,9 @@ class _BlockClearCurrentExecutionUnit<ITEM extends Identifiable>
 
   _BlockClearCurrentExecutionUnit({
     required this.xBlock,
-  }) : super(executionUnitType: ExecutionUnitType.blockClearCurrentItem);
+  }) : super(
+          executionUnitType: ExecutionUnitType.blockClearCurrentItem,
+        );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

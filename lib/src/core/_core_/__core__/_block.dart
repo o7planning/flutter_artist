@@ -1622,9 +1622,9 @@ abstract class Block<
           newBlockDataState: newBlockDataState,
         );
         final List<XBlock> descendantXBlocks =
-            thisXBlock.getDecendentXBlocks(sameFilterOnly: true);
+            thisXBlock.getDescendantXBlocks(sameFilterOnly: true);
 
-        __stopDecendentQueryWithError(
+        __stopDescendantQueryWithError(
           descendantXBlocks: descendantXBlocks,
           blockErrorOrigin: BlockErrorOrigin.directFetch,
         );
@@ -3997,9 +3997,9 @@ abstract class Block<
     __blockData._blockDataState = newBlockDataState;
 
     final List<XBlock> descendantXBlocks =
-        thisXBlock.getDecendentXBlocks(sameFilterOnly: true);
+        thisXBlock.getDescendantXBlocks(sameFilterOnly: true);
 
-    __stopDecendentQueryWithError(
+    __stopDescendantQueryWithError(
       descendantXBlocks: descendantXBlocks,
       blockErrorOrigin: blockErrorOrigin.toCascadedOrigin(),
     );
@@ -4008,7 +4008,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __stopDecendentQueryWithError({
+  void __stopDescendantQueryWithError({
     required List<XBlock> descendantXBlocks,
     required BlockErrorOrigin blockErrorOrigin,
   }) {

@@ -720,9 +720,9 @@ abstract class Scalar<
         newScalarDataState: newScalarDataState,
       );
       final List<XScalar> descendantXScalars =
-          thisXScalar.getDecendentXScalars(sameFilterOnly: true);
+          thisXScalar.getDescendantXScalars(sameFilterOnly: true);
 
-      __stopDecendentQueryWithError(
+      __stopDescendantQueryWithError(
         descendantXScalars: descendantXScalars,
         scalarErrorOrigin: ScalarErrorOrigin.directFetch.toCascadedOrigin(),
       );
@@ -980,9 +980,9 @@ abstract class Scalar<
     __scalarData._scalarDataState = newScalarDataState;
 
     final List<XScalar> descendantXScalars =
-        thisXScalar.getDecendentXScalars(sameFilterOnly: true);
+        thisXScalar.getDescendantXScalars(sameFilterOnly: true);
 
-    __stopDecendentQueryWithError(
+    __stopDescendantQueryWithError(
       descendantXScalars: descendantXScalars,
       scalarErrorOrigin: scalarErrorOrigin.toCascadedOrigin(),
     );
@@ -991,7 +991,7 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __stopDecendentQueryWithError({
+  void __stopDescendantQueryWithError({
     required List<XScalar> descendantXScalars,
     required ScalarErrorOrigin scalarErrorOrigin,
   }) {

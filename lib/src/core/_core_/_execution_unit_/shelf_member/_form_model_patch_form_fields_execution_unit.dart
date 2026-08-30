@@ -10,11 +10,10 @@ class _FormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
   _FormModelPatchFormFieldsExecutionUnit({
     required this.xFormModel,
     required this.formInput,
-    required FormModelPatchFormFieldsResult taskResult,
+    required FormModelPatchFormFieldsResult super.taskResult,
   }) : super(
-    executionUnitType: ExecutionUnitType.formModelPatchFormFields,
-    taskResult: taskResult,
-  );
+          executionUnitType: ExecutionUnitType.formModelPatchFormFields,
+        );
 
   @override
   XShelf get xShelf => xFormModel.xShelf;

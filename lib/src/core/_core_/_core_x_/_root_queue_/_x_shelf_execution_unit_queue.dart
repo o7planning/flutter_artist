@@ -25,9 +25,10 @@ class _XShelfExecutionUnitQueue {
     return _mainExecutionUnits.isEmpty && _secondaryExecutionUnits.isEmpty;
   }
 
-  void addExecutionUnit(
-      {required _ShelfMemberExecutionUnit executionUnit,
-      required bool toMainQueue}) {
+  void addExecutionUnit({
+    required _ShelfMemberExecutionUnit executionUnit,
+    required bool toMainQueue,
+  }) {
     if (toMainQueue) {
       _mainExecutionUnits.add(executionUnit);
     } else {
@@ -40,7 +41,7 @@ class _XShelfExecutionUnitQueue {
       xShelf: xShelf,
       mainExecutionUnits: _mainExecutionUnits
           .map(
-            (tu) => tu.toDebugExecutionUnit(),
+            (exeUnit) => exeUnit.toDebugExecutionUnit(),
           )
           .toList(),
       secondaryExecutionUnits: _secondaryExecutionUnits

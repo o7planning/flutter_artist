@@ -6,8 +6,8 @@ part of '../../core.dart';
 @_BlockDeleteCurrentItemAnnotation()
 @_BlockDeleteItemAnnotation()
 class _BlockMultiItemDeletionExecutionUnit<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>>
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>>
     extends _ShelfMemberResultedExecutionUnit<BlockItemsDeletionResult> {
   XBlock xBlock;
   final List<ITEM> items;
@@ -18,7 +18,9 @@ ITEM extends Identifiable<ID>>
     required this.items,
     required super.taskResult,
     required this.stopIfError,
-  }) : super(executionUnitType: ExecutionUnitType.blockDeleteItems);
+  }) : super(
+          executionUnitType: ExecutionUnitType.blockDeleteItems,
+        );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

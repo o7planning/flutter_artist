@@ -1,8 +1,9 @@
 part of '../../core.dart';
 
 class _XShelfFormModelSave extends XShelf {
-  _XShelfFormModelSave({required FormModel formModel})
-      : super(
+  _XShelfFormModelSave({
+    required FormModel formModel,
+  }) : super(
           xShelfType: XShelfType.formModelSave,
           shelf: formModel.block.shelf,
         ) {

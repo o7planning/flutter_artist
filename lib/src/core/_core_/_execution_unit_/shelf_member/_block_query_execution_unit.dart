@@ -12,7 +12,9 @@ class _BlockQueryExecutionUnit extends _ShelfMemberExecutionUnit {
 
   _BlockQueryExecutionUnit({
     required this.xBlock,
-  }) : super(executionUnitType: ExecutionUnitType.blockQuery);
+  }) : super(
+          executionUnitType: ExecutionUnitType.blockQuery,
+        );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

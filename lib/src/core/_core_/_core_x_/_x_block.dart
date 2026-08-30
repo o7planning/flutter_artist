@@ -32,7 +32,7 @@ class XBlock<
   final XFilterModel xFilterModel;
   final XFormModel? xFormModel;
 
-  List<XBlock> getDecendentXBlocks({required bool sameFilterOnly}) {
+  List<XBlock> getDescendantXBlocks({required bool sameFilterOnly}) {
     final List<XBlock> ret = [];
     final thisFm = block.registeredOrDefaultFilterModel;
     for (XBlock childXBlock in childXBlocks) {
@@ -41,7 +41,7 @@ class XBlock<
         ret.add(childXBlock);
       }
       ret.addAll(
-        childXBlock.getDecendentXBlocks(sameFilterOnly: sameFilterOnly),
+        childXBlock.getDescendantXBlocks(sameFilterOnly: sameFilterOnly),
       );
     }
     return ret;

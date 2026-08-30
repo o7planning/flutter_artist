@@ -16,7 +16,9 @@ class _BlockItemDeletionExecutionUnit<
     required this.xBlock,
     required this.item,
     required super.taskResult,
-  }) : super(executionUnitType: ExecutionUnitType.blockDeleteItem);
+  }) : super(
+          executionUnitType: ExecutionUnitType.blockDeleteItem,
+        );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

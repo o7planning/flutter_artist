@@ -8,7 +8,9 @@ class _StorageBackendActionExecutionUnit extends _ExecutionUnit {
 
   _StorageBackendActionExecutionUnit({
     required this.action,
-  }) : super(executionUnitType: ExecutionUnitType.storageBackendAction);
+  }) : super(
+          executionUnitType: ExecutionUnitType.storageBackendAction,
+        );
 
   @override
   Object get owner => FlutterArtist.storage;

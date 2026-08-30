@@ -21,7 +21,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   late final XScalar? parentXScalar;
   final List<XScalar> childXScalars = [];
 
-  List<XScalar> getDecendentXScalars({required bool sameFilterOnly}) {
+  List<XScalar> getDescendantXScalars({required bool sameFilterOnly}) {
     final List<XScalar> ret = [];
     final thisFm = scalar.registeredOrDefaultFilterModel;
     for (XScalar childXScalar in childXScalars) {
@@ -30,7 +30,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
         ret.add(childXScalar);
       }
       ret.addAll(
-        childXScalar.getDecendentXScalars(sameFilterOnly: sameFilterOnly),
+        childXScalar.getDescendantXScalars(sameFilterOnly: sameFilterOnly),
       );
     }
     return ret;

@@ -85,7 +85,7 @@ class _Executor {
         }
         // May be AppError (FatalException).
         catch (e, _) {
-          FlutterArtist._rootQueue.clear();
+          // FlutterArtist._rootQueue.clear();
           rethrow;
         } finally {
           for (Shelf shelf in executedShelfMap.values) {

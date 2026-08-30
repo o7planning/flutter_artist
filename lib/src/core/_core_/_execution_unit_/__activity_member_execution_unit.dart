@@ -7,7 +7,9 @@ class _ActivityMemberExecutionUnit extends _ExecutionUnit {
 
   _ActivityMemberExecutionUnit({
     required this.xActivity,
-  }) : super(executionUnitType: ExecutionUnitType.activity);
+  }) : super(
+          executionUnitType: ExecutionUnitType.activity,
+        );
 
   @override
   ActivityV1 get owner => xActivity.activity;

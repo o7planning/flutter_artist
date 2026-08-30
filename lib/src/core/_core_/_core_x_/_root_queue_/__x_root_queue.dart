@@ -3,12 +3,15 @@ part of '../../core.dart';
 final class _XRootQueue {
   final _xStorage = XStorage();
 
-  //
-  // LinkedHashMap<String fullName, XRootQueueItem>().
-  //
-  // XRootQueueItem
-  //    |_ XShelf
-  //
+  ///
+  /// LinkedHashMap<String fullName, XRootQueueItem>().
+  ///
+  /// XRootQueueItem
+  ///   │
+  ///   ├── XShelf
+  ///   │
+  ///   └── XActivity
+  ///
   final __xRootQueueItemMap = <String, XRootQueueItem>{};
 
   bool get isEmpty {
@@ -24,10 +27,6 @@ final class _XRootQueue {
   }
 
   bool get isNotEmpty => !isEmpty;
-
-  void clear() {
-    // TODO: Remove.
-  }
 
   bool hasNext() {
     return isNotEmpty;
@@ -55,7 +54,7 @@ final class _XRootQueue {
       } else if (rootQueueItem is XActivityV1) {
         return rootQueueItem._getNextExecutionUnit();
       } else {
-        throw "TODO";
+        throw "TODO getNextExecutionUnit";
       }
     }
   }

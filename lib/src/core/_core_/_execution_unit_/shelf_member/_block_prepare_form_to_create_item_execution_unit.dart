@@ -12,7 +12,9 @@ class _BlockPrepareFormToCreateItemExecutionUnit
     required this.xBlock,
     required this.initDirty,
     required this.formInput,
-  }) : super(executionUnitType: ExecutionUnitType.blockPrepareToCreateItem);
+  }) : super(
+          executionUnitType: ExecutionUnitType.blockPrepareToCreateItem,
+        );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

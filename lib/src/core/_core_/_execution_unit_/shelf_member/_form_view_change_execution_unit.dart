@@ -9,7 +9,9 @@ class _FormViewChangeExecutionUnit extends _ShelfMemberExecutionUnit {
   _FormViewChangeExecutionUnit({
     required this.xFormModel,
     required this.formKeyInstantValuesInUI,
-  }) : super(executionUnitType: ExecutionUnitType.formModelFormViewChanged);
+  }) : super(
+          executionUnitType: ExecutionUnitType.formModelFormViewChanged,
+        );
 
   @override
   XShelf get xShelf => xFormModel.xShelf;

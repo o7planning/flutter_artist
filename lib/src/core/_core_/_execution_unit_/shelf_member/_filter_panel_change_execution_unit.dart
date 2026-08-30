@@ -10,7 +10,8 @@ class _FilterPanelChangeExecutionUnit extends _ShelfMemberExecutionUnit {
     required this.xFilterModel,
     required this.formKeyInstantValuesInUI,
   }) : super(
-      executionUnitType: ExecutionUnitType.filterModelFilterPanelChanged);
+          executionUnitType: ExecutionUnitType.filterModelFilterPanelChanged,
+        );
 
   @override
   XShelf get xShelf => xFilterModel.xShelf;

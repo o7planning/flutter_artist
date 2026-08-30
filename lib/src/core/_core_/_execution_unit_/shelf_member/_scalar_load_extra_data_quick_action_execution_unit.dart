@@ -12,7 +12,9 @@ class _ScalarLoadExtraDataQuickActionExecutionUnit<DATA extends Object>
     required this.xScalar,
     required this.action,
     required this.afterQuickAction,
-  }) : super(executionUnitType: ExecutionUnitType.scalarLoadExtraData);
+  }) : super(
+          executionUnitType: ExecutionUnitType.scalarLoadExtraData,
+        );
 
   @override
   XShelf get xShelf => xScalar.xShelf;
