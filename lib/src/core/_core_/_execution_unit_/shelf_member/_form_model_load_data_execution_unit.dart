@@ -1,9 +1,9 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_FormModelLoadDataAnnotation()
 class _FormModelLoadDataExecutionUnit
-    extends _ResultedSExecutionUnit<FormModelDataLoadResult> {
+    extends _ShelfMemberResultedExecutionUnit<FormModelDataLoadResult> {
   XFormModel xFormModel;
 
   _FormModelLoadDataExecutionUnit({

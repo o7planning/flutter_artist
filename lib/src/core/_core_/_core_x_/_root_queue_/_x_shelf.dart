@@ -522,12 +522,12 @@ abstract class XShelf extends XRootQueueItem {
     return __xShelfExecutionUnitQueue.isEmpty;
   }
 
-  _SExecutionUnit? _getNextExecutionUnit() {
+  _ShelfMemberExecutionUnit? _getNextExecutionUnit() {
     return __xShelfExecutionUnitQueue.getNextExecutionUnit();
   }
 
   void _addExecutionUnit(
-      {required _SExecutionUnit executionUnit, bool toMainQueue = true}) {
+      {required _ShelfMemberExecutionUnit executionUnit, bool toMainQueue = true}) {
     if (executionUnit.xShelf != this) {
       throw FatalAppError(
         errorMessage: "Development Logic Error.",

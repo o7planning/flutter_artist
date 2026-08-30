@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_BlockRefreshCurrentItemAnnotation()
@@ -6,9 +6,10 @@ part of '../core.dart';
 @_BlockSelectNextItemAsCurrentAnnotation()
 @_BlockSelectFirstItemAsCurrentAnnotation()
 @_BlockSelectPreviousItemAsCurrentAnnotation()
-class _BlockSetItemAsCurrentExecutionUnit<ID extends Comparable,
-ITEM extends Identifiable<ID>>
-    extends _ResultedSExecutionUnit<BlockSetCurrentItemResult<ITEM>> {
+class _BlockSetItemAsCurrentExecutionUnit<
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>>
+    extends _ShelfMemberResultedExecutionUnit<BlockSetCurrentItemResult<ITEM>> {
   final XBlock xBlock;
   final ForceType? forceTypeForForm;
   final BlockSetCurrentItemDirective setCurrentItemDirective;
@@ -23,16 +24,16 @@ ITEM extends Identifiable<ID>>
     required bool forceReloadItem,
     required this.forceTypeForForm,
   }) : super(
-    executionUnitType: ExecutionUnitType.blockSetItemAsCurrent,
-    taskResult: BlockSetCurrentItemResult<ITEM>(
-      precheck: null,
-      setCurrentItemDirective: setCurrentItemDirective,
-      getItemId: xBlock.block._getItemIdInternal,
-      candidateItem: candidateItem,
-      oldCurrentItem: xBlock.block.currentItem as ITEM?,
-      currentItem: xBlock.block.currentItem as ITEM?,
-    ),
-  ) {
+          executionUnitType: ExecutionUnitType.blockSetItemAsCurrent,
+          taskResult: BlockSetCurrentItemResult<ITEM>(
+            precheck: null,
+            setCurrentItemDirective: setCurrentItemDirective,
+            getItemId: xBlock.block._getItemIdInternal,
+            candidateItem: candidateItem,
+            oldCurrentItem: xBlock.block.currentItem as ITEM?,
+            currentItem: xBlock.block.currentItem as ITEM?,
+          ),
+        ) {
     xBlock.setForceReloadCurrItem(forceReloadItem);
     //
     if (forceTypeForForm != null) {

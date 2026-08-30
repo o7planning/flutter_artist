@@ -1,13 +1,14 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_BlockDeleteSelectedItemsAnnotation()
 @_BlockDeleteCheckedItemsAnnotation()
 @_BlockDeleteCurrentItemAnnotation()
 @_BlockDeleteItemAnnotation()
-class _BlockMultiItemDeletionExecutionUnit<ID extends Comparable,
-        ITEM extends Identifiable<ID>>
-    extends _ResultedSExecutionUnit<BlockItemsDeletionResult> {
+class _BlockMultiItemDeletionExecutionUnit<
+ID extends Comparable, //
+ITEM extends Identifiable<ID>>
+    extends _ShelfMemberResultedExecutionUnit<BlockItemsDeletionResult> {
   XBlock xBlock;
   final List<ITEM> items;
   final bool stopIfError;

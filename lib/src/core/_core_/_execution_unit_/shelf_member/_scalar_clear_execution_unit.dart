@@ -1,7 +1,8 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
-class _ScalarClearExecutionUnit extends _ResultedSExecutionUnit<ScalarClearResult> {
+class _ScalarClearExecutionUnit
+    extends _ShelfMemberResultedExecutionUnit<ScalarClearResult> {
   final XScalar xScalar;
 
   _ScalarClearExecutionUnit({

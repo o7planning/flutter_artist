@@ -1,15 +1,16 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_FilterPanelChangeAnnotation()
-class _FilterPanelChangeExecutionUnit extends _SExecutionUnit {
+class _FilterPanelChangeExecutionUnit extends _ShelfMemberExecutionUnit {
   XFilterModel xFilterModel;
   final Map<String, dynamic> formKeyInstantValuesInUI;
 
   _FilterPanelChangeExecutionUnit({
     required this.xFilterModel,
     required this.formKeyInstantValuesInUI,
-  }) : super(executionUnitType: ExecutionUnitType.filterModelFilterPanelChanged);
+  }) : super(
+      executionUnitType: ExecutionUnitType.filterModelFilterPanelChanged);
 
   @override
   XShelf get xShelf => xFilterModel.xShelf;

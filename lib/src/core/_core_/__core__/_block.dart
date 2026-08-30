@@ -3039,7 +3039,7 @@ abstract class Block<
         );
         thisXBlock.setViewportSyncStrategy(viewportSyncStrategyThisBlock);
         // Test Cases: [72a].
-        final _SExecutionUnit executionUnit =
+        final _ShelfMemberExecutionUnit executionUnit =
             _BlockQueryExecutionUnit(xBlock: thisXBlock);
         thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
       }
@@ -3057,7 +3057,7 @@ abstract class Block<
           traceStepType: TraceStepType.addExecutionUnit,
         );
         //
-        final _SExecutionUnit executionUnit =
+        final _ShelfMemberExecutionUnit executionUnit =
             thisXBlock.createBlockSetItemAsCurrentExecutionUnit(
           setCurrentItemDirective: setCurrentItemDirective,
           newQueriedList: [],
@@ -3143,7 +3143,7 @@ abstract class Block<
         traceStepType: TraceStepType.addExecutionUnit,
       );
       // Test Case:
-      final _SExecutionUnit executionUnit =
+      final _ShelfMemberExecutionUnit executionUnit =
           thisXBlock.createBlockSetItemAsCurrentExecutionUnit(
         setCurrentItemDirective: setCurrentItemDirective,
         newQueriedList: [],
@@ -3175,7 +3175,7 @@ abstract class Block<
           traceStepType: TraceStepType.addExecutionUnit,
         );
         // Note: candidateCurrItem already set. (See @DEL-01)
-        final _SExecutionUnit executionUnit =
+        final _ShelfMemberExecutionUnit executionUnit =
             _BlockQueryExecutionUnit(xBlock: topXBlock);
         thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
         // TODO: Test Case?
@@ -3211,7 +3211,7 @@ abstract class Block<
           traceStepType: TraceStepType.addExecutionUnit,
         );
         //
-        final _SExecutionUnit executionUnit =
+        final _ShelfMemberExecutionUnit executionUnit =
             topXBlock.createBlockSetItemAsCurrentExecutionUnit(
           setCurrentItemDirective: setCurrentItemDirective,
           newQueriedList: [],
@@ -3245,7 +3245,7 @@ abstract class Block<
           traceStepType: TraceStepType.addExecutionUnit,
         );
         // Note: candidateCurrItem already set. (See @DEL-01)
-        _SExecutionUnit executionUnit =
+        _ShelfMemberExecutionUnit executionUnit =
             _BlockQueryExecutionUnit(xBlock: thisXBlock);
         thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
       }
@@ -3267,7 +3267,7 @@ abstract class Block<
         //
         // Select an Item as Current.
         //
-        final _SExecutionUnit executionUnit =
+        final _ShelfMemberExecutionUnit executionUnit =
             thisXBlock.createBlockSetItemAsCurrentExecutionUnit(
           setCurrentItemDirective: setCurrentItemDirective,
           newQueriedList: [],
@@ -4375,7 +4375,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    _SExecutionUnit executionUnit = _BlockClearCurrentExecutionUnit(
+    _ShelfMemberExecutionUnit executionUnit = _BlockClearCurrentExecutionUnit(
       xBlock: thisXBlock,
     );
     //
@@ -4463,7 +4463,7 @@ abstract class Block<
       shortDesc: "Creating <b>_BlockItemDeletionExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSExecutionUnit executionUnit =
+    final _ShelfMemberResultedExecutionUnit executionUnit =
         _BlockItemDeletionExecutionUnit<ID, ITEM>(
       xBlock: thisXBlock,
       item: item!,
@@ -4550,7 +4550,7 @@ abstract class Block<
     final taskResult = _createEmptyItemsDeletionResult(
       candidateItems: candidateDeleteItems,
     );
-    final _ResultedSExecutionUnit executionUnit =
+    final _ShelfMemberResultedExecutionUnit executionUnit =
         _BlockMultiItemDeletionExecutionUnit<ID, ITEM>(
       xBlock: thisXBlock,
       items: candidateDeleteItems,
@@ -4736,7 +4736,7 @@ abstract class Block<
     final XShelf xShelf = _XShelfBlockClear(block: this);
 
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-    final _ResultedSExecutionUnit executionUnit = _BlockClearExecutionUnit(
+    final _ShelfMemberResultedExecutionUnit executionUnit = _BlockClearExecutionUnit(
       xBlock: thisXBlock,
     );
     //
@@ -5510,7 +5510,7 @@ abstract class Block<
       shortDesc: "Creating <b>_BlockBackendActionExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSExecutionUnit executionUnit =
+    final _ShelfMemberResultedExecutionUnit executionUnit =
         _BlockBackendActionExecutionUnit(
       xBlock: thisXBlock,
       action: action,
@@ -5606,7 +5606,7 @@ abstract class Block<
       shortDesc: "Creating <b>_BlockQuickItemCreationExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSExecutionUnit executionUnit =
+    final _ShelfMemberResultedExecutionUnit executionUnit =
         _BlockQuickItemCreationExecutionUnit(
       xBlock: thisXBlock,
       action: action,
@@ -5705,7 +5705,7 @@ abstract class Block<
       shortDesc: "Creating <b>_BlockQuickItemUpdateExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSExecutionUnit executionUnit =
+    final _ShelfMemberResultedExecutionUnit executionUnit =
         _BlockQuickItemUpdateExecutionUnit(
       xBlock: thisXBlock,
       action: action,
@@ -5895,7 +5895,7 @@ abstract class Block<
       shortDesc: "Creating <b>_BlockPrepareFormToCreateItemExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    _SExecutionUnit executionUnit = _BlockPrepareFormToCreateItemExecutionUnit(
+    _ShelfMemberExecutionUnit executionUnit = _BlockPrepareFormToCreateItemExecutionUnit(
       xBlock: thisXBlock,
       initDirty: initDirty,
       formInput: formInput,

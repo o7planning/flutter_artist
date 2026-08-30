@@ -1,8 +1,8 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_FormViewChangeAnnotation()
-class _FormViewChangeExecutionUnit extends _SExecutionUnit {
+class _FormViewChangeExecutionUnit extends _ShelfMemberExecutionUnit {
   XFormModel xFormModel;
   final Map<String, dynamic> formKeyInstantValuesInUI;
 

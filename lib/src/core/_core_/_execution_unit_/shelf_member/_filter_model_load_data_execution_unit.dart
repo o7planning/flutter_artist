@@ -1,17 +1,17 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_FilterModelLoadDataAnnotation()
 class _FilterModelLoadDataExecutionUnit
-    extends _ResultedSExecutionUnit<FilterModelDataLoadResult> {
+    extends _ShelfMemberResultedExecutionUnit<FilterModelDataLoadResult> {
   XFilterModel xFilterModel;
 
   _FilterModelLoadDataExecutionUnit({
     required this.xFilterModel,
   }) : super(
-    executionUnitType: ExecutionUnitType.filterModelLoadData,
-    taskResult: FilterModelDataLoadResult(),
-  );
+          executionUnitType: ExecutionUnitType.filterModelLoadData,
+          taskResult: FilterModelDataLoadResult(),
+        );
 
   @override
   XShelf get xShelf => xFilterModel.xShelf;

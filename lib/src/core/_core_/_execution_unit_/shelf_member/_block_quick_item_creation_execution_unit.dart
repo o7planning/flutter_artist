@@ -1,9 +1,9 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_BlockQuickItemCreationActionAnnotation()
 class _BlockQuickItemCreationExecutionUnit
-    extends _ResultedSExecutionUnit<BlockQuickItemCreationResult> {
+    extends _ShelfMemberResultedExecutionUnit<BlockQuickItemCreationResult> {
   XBlock xBlock;
   BlockQuickItemCreationAction action;
 

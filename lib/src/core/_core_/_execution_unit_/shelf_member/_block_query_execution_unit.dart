@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_BlockQueryAnnotation()
@@ -7,7 +7,7 @@ part of '../core.dart';
 @_BlockQueryPreviousPageAnnotation()
 @_BlockQueryAndPrepareToEditAnnotation()
 @_BlockQueryAndPrepareToCreateAnnotation()
-class _BlockQueryExecutionUnit extends _SExecutionUnit {
+class _BlockQueryExecutionUnit extends _ShelfMemberExecutionUnit {
   XBlock xBlock;
 
   _BlockQueryExecutionUnit({

@@ -1,13 +1,13 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 class _XShelfExecutionUnitQueue {
   final XShelf xShelf;
-  final List<_SExecutionUnit> _mainExecutionUnits = [];
-  final List<_SExecutionUnit> _secondaryExecutionUnits = [];
+  final List<_ShelfMemberExecutionUnit> _mainExecutionUnits = [];
+  final List<_ShelfMemberExecutionUnit> _secondaryExecutionUnits = [];
 
   _XShelfExecutionUnitQueue({required this.xShelf});
 
-  _SExecutionUnit? getNextExecutionUnit() {
+  _ShelfMemberExecutionUnit? getNextExecutionUnit() {
     if (_mainExecutionUnits.isEmpty) {
       if (_secondaryExecutionUnits.isNotEmpty) {
         _mainExecutionUnits.addAll(_secondaryExecutionUnits);
@@ -25,7 +25,9 @@ class _XShelfExecutionUnitQueue {
     return _mainExecutionUnits.isEmpty && _secondaryExecutionUnits.isEmpty;
   }
 
-  void addExecutionUnit({required _SExecutionUnit executionUnit, required bool toMainQueue}) {
+  void addExecutionUnit(
+      {required _ShelfMemberExecutionUnit executionUnit,
+      required bool toMainQueue}) {
     if (toMainQueue) {
       _mainExecutionUnits.add(executionUnit);
     } else {
@@ -39,12 +41,12 @@ class _XShelfExecutionUnitQueue {
       mainExecutionUnits: _mainExecutionUnits
           .map(
             (tu) => tu.toDebugExecutionUnit(),
-      )
+          )
           .toList(),
       secondaryExecutionUnits: _secondaryExecutionUnits
           .map(
             (tu) => tu.toDebugExecutionUnit(),
-      )
+          )
           .toList(),
     );
   }

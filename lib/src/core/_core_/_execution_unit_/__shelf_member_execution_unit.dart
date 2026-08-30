@@ -1,23 +1,8 @@
 part of '../core.dart';
 
 @_ExecutionUnitClassAnnotation()
-abstract class _ExecutionUnit {
-  final ExecutionUnitType executionUnitType;
-
-  Object get owner;
-
-  _ExecutionUnit({required this.executionUnitType});
-
-  String getObjectName();
-
-  String asDebugExecutionUnit() {
-    return executionUnitType.asDebugExecutionUnit(getObjectName());
-  }
-}
-
-@_ExecutionUnitClassAnnotation()
-abstract class _SExecutionUnit extends _ExecutionUnit {
-  _SExecutionUnit({
+abstract class _ShelfMemberExecutionUnit extends _ExecutionUnit {
+  _ShelfMemberExecutionUnit({
     required super.executionUnitType,
   });
 
@@ -28,8 +13,6 @@ abstract class _SExecutionUnit extends _ExecutionUnit {
   XShelf get xShelf;
 
   int get xShelfId;
-
-  String getObjectName();
 
   Shelf get shelf;
 

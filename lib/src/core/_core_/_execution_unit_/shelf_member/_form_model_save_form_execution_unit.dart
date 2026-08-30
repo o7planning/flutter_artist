@@ -1,19 +1,16 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
-@_FormModelPatchFormFieldsAnnotation()
-class _FormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
-    extends _ResultedSExecutionUnit {
+@_FormModelSaveFormAnnotation()
+class _FormModelSaveFormExecutionUnit
+    extends _ShelfMemberResultedExecutionUnit<FormSaveResult> {
   XFormModel xFormModel;
-  FORM_INPUT formInput;
 
-  _FormModelPatchFormFieldsExecutionUnit({
+  _FormModelSaveFormExecutionUnit({
     required this.xFormModel,
-    required this.formInput,
-    required FormModelPatchFormFieldsResult taskResult,
   }) : super(
-    executionUnitType: ExecutionUnitType.formModelPatchFormFields,
-    taskResult: taskResult,
+    executionUnitType: ExecutionUnitType.formModelSaveForm,
+    taskResult: FormSaveResult(precheck: null),
   );
 
   @override

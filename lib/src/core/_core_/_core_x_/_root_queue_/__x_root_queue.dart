@@ -1,10 +1,13 @@
 part of '../../core.dart';
 
-class _XRootQueue {
+final class _XRootQueue {
   final _xStorage = XStorage();
 
   //
   // LinkedHashMap<String fullName, XRootQueueItem>().
+  //
+  // XRootQueueItem
+  //    |_ XShelf
   //
   final __xRootQueueItemMap = <String, XRootQueueItem>{};
 
@@ -31,16 +34,17 @@ class _XRootQueue {
   }
 
   _ExecutionUnit? getNextExecutionUnit() {
-    _ExecutionUnit? tu = _xStorage._getNextExecutionUnit();
-    if (tu != null) {
-      return tu;
+    _ExecutionUnit? exeUnit = _xStorage._getNextExecutionUnit();
+    if (exeUnit != null) {
+      return exeUnit;
     }
     while (true) {
       String? firstRootQueueItemName = __xRootQueueItemMap.keys.firstOrNull;
       if (firstRootQueueItemName == null) {
         return null;
       }
-      XRootQueueItem rootQueueItem =
+      // XShelf or XActivity:
+      final XRootQueueItem rootQueueItem =
           __xRootQueueItemMap[firstRootQueueItemName]!;
       if (rootQueueItem.isEmptyExecutionUnit()) {
         __xRootQueueItemMap.remove(firstRootQueueItemName);
@@ -59,7 +63,8 @@ class _XRootQueue {
   void _addStorageBackendActionExecutionUnit(
     _StorageBackendActionExecutionUnit storageBackendActionExecutionUnit,
   ) {
-    _xStorage._addStorageBackendActionExecutionUnit(storageBackendActionExecutionUnit);
+    _xStorage._addStorageBackendActionExecutionUnit(
+        storageBackendActionExecutionUnit);
   }
 
   void _addXRootQueueItem({required XRootQueueItem xRootQueueItem}) {

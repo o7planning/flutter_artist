@@ -1,8 +1,9 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_BlockClearCurrentItemAnnotation()
-class _BlockClearCurrentExecutionUnit<ITEM extends Identifiable> extends _SExecutionUnit {
+class _BlockClearCurrentExecutionUnit<ITEM extends Identifiable>
+    extends _ShelfMemberExecutionUnit {
   final XBlock xBlock;
 
   _BlockClearCurrentExecutionUnit({

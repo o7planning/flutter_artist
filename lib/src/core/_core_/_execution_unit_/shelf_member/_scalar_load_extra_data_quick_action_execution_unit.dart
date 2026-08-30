@@ -1,9 +1,9 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_ScalarLoadExtraDataQuickActionAnnotation()
 class _ScalarLoadExtraDataQuickActionExecutionUnit<DATA extends Object>
-    extends _SExecutionUnit {
+    extends _ShelfMemberExecutionUnit {
   final XScalar xScalar;
   final ScalarQuickExtraDataLoadAction<DATA> action;
   final AfterScalarLoadExtraDataQuickAction afterQuickAction;

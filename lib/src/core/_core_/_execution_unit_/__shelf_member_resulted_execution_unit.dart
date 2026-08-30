@@ -1,10 +1,11 @@
 part of '../core.dart';
 
 @_ExecutionUnitClassAnnotation()
-abstract class _ResultedSExecutionUnit<RESULT> extends _SExecutionUnit {
+abstract class _ShelfMemberResultedExecutionUnit<RESULT>
+    extends _ShelfMemberExecutionUnit {
   final RESULT taskResult;
 
-  _ResultedSExecutionUnit({
+  _ShelfMemberResultedExecutionUnit({
     required super.executionUnitType,
     required this.taskResult,
   });

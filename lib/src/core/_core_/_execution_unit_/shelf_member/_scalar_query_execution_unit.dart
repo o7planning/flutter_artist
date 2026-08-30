@@ -1,8 +1,8 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_ScalarQueryAnnotation()
-class _ScalarQueryExecutionUnit extends _SExecutionUnit {
+class _ScalarQueryExecutionUnit extends _ShelfMemberExecutionUnit {
   XScalar xScalar;
 
   _ScalarQueryExecutionUnit({

@@ -1236,7 +1236,7 @@ abstract class Scalar<
           "Creating <b>_ScalarLoadExtraDataQuickActionExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    _SExecutionUnit executionUnit =
+    _ShelfMemberExecutionUnit executionUnit =
         _ScalarLoadExtraDataQuickActionExecutionUnit(
       xScalar: thisXScalar,
       action: action,
@@ -1356,7 +1356,7 @@ abstract class Scalar<
       shortDesc: "Creating <b>_ScalarClearExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSExecutionUnit executionUnit = _ScalarClearExecutionUnit(
+    final _ShelfMemberResultedExecutionUnit executionUnit = _ScalarClearExecutionUnit(
       xScalar: thisXScalar,
     );
     //

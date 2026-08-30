@@ -26,7 +26,7 @@ class XActivityV1 extends XRootQueueItem {
       return null;
     }
     _tasked = true;
-    return _ActivityExecutionUnit(xActivity: this);
+    return _ActivityMemberExecutionUnit(xActivity: this);
   }
 
   @override

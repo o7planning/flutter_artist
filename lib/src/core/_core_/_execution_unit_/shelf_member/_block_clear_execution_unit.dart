@@ -1,18 +1,17 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
-@_BlockBackendActionAnnotation()
-class _BlockBackendActionExecutionUnit
-    extends _ResultedSExecutionUnit<BlockBackendActionResult> {
+class _BlockClearExecutionUnit
+    extends _ShelfMemberResultedExecutionUnit<BlockClearResult> {
   final XBlock xBlock;
-  final BlockBackendAction action;
 
-  _BlockBackendActionExecutionUnit({
+  _BlockClearExecutionUnit({
     required this.xBlock,
-    required this.action,
   }) : super(
-          executionUnitType: ExecutionUnitType.blockBackendAction,
-          taskResult: BlockBackendActionResult(),
+          executionUnitType: ExecutionUnitType.blockClear,
+          taskResult: BlockClearResult(
+            precheck: null,
+          ),
         );
 
   @override
