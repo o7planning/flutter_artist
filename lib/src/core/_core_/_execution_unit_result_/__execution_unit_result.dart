@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-abstract class TaskResult<PRECHECK> {
+abstract class ExecutionUnitResult<PRECHECK> {
   PRECHECK? _precheck;
   ErrorInfo? _errorInfo;
 
@@ -8,11 +8,10 @@ abstract class TaskResult<PRECHECK> {
 
   ErrorInfo? get errorInfo => _errorInfo;
 
-  TaskResult({
+  ExecutionUnitResult({
     PRECHECK? precheck,
     ErrorInfo? errorInfo,
-  })
-      : _precheck = precheck,
+  })  : _precheck = precheck,
         _errorInfo = errorInfo;
 
   bool get successForFirst;

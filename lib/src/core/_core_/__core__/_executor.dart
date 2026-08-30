@@ -8,7 +8,8 @@ class _Executor {
 
   int? get executingXShelfId => __executingXShelfId;
 
-  final Map<_TaskProgressBuilderState, bool> _taskProgressViewWidgetStates = {};
+  final Map<_ExecutionProgressBuilderState, bool>
+      _executionProgressViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -36,7 +37,7 @@ class _Executor {
       applyShowOverlay = false;
     }
     bool pendingEventProcessed = false;
-    await FlutterArtist._executeTask(
+    await FlutterArtist._executeExecutionUnit(
       showOverlay: applyShowOverlay,
       asyncFunction: () async {
         // Executed Shelf Map:
@@ -120,7 +121,7 @@ class _Executor {
       __executingXShelfId = -1000;
     }
     //
-    final executionTrace = FlutterArtist.codeFlowLogger._addTaskCall(
+    final executionTrace = FlutterArtist.codeFlowLogger._addExecutionUnitCall(
       ownerClassInstance: executionUnit.owner,
       executionUnitType: executionUnit.executionUnitType,
     );
@@ -138,7 +139,7 @@ class _Executor {
         executionTrace: executionTrace,
         executionUnitType: executionUnit.executionUnitType,
         action: executionUnit.action,
-        taskResult: executionUnit.taskResult,
+        executionUnitResult: executionUnit.executionUnitResult,
       );
     }
     // Filter FilterModel:
@@ -147,7 +148,7 @@ class _Executor {
         executionTrace: executionTrace,
         executionUnitType: executionUnit.executionUnitType,
         thisXFilterModel: executionUnit.xFilterModel,
-        taskResult: executionUnit.taskResult,
+        executionUnitResult: executionUnit.executionUnitResult,
       );
     }
     // FilterPanel Change:
@@ -211,7 +212,7 @@ class _Executor {
         newQueriedList: executionUnit.newQueriedList,
         inputCandidateCurrItem: executionUnit.candidateItem,
         thisXBlock: executionUnit.xBlock,
-        blockSetCurrentItemResult: executionUnit.taskResult,
+        blockSetCurrentItemResult: executionUnit.executionUnitResult,
       );
     }
     // Block Delete Item:
@@ -221,7 +222,7 @@ class _Executor {
         executionUnitType: executionUnit.executionUnitType,
         thisXBlock: executionUnit.xBlock,
         item: executionUnit.item,
-        deletionResult: executionUnit.taskResult,
+        deletionResult: executionUnit.executionUnitResult,
       );
     }
     // Block Delete Items:
@@ -232,7 +233,7 @@ class _Executor {
         thisXBlock: executionUnit.xBlock,
         items: executionUnit.items,
         stopIfError: executionUnit.stopIfError,
-        deletionResult: executionUnit.taskResult
+        deletionResult: executionUnit.executionUnitResult
             as BlockItemsDeletionResult<Identifiable<Comparable<dynamic>>>,
       );
     }
@@ -243,7 +244,7 @@ class _Executor {
         executionUnitType: executionUnit.executionUnitType,
         thisXBlock: executionUnit.xBlock,
         action: executionUnit.action,
-        taskResult: executionUnit.taskResult,
+        executionUnitResult: executionUnit.executionUnitResult,
       );
     }
     // Block QuickUpdateItem:
@@ -253,7 +254,7 @@ class _Executor {
         executionUnitType: executionUnit.executionUnitType,
         thisXBlock: executionUnit.xBlock,
         action: executionUnit.action,
-        taskResult: executionUnit.taskResult,
+        executionUnitResult: executionUnit.executionUnitResult,
       );
     }
     // Block Quick Action:
@@ -263,7 +264,7 @@ class _Executor {
         executionUnitType: executionUnit.executionUnitType,
         thisXBlock: executionUnit.xBlock,
         action: executionUnit.action,
-        taskResult: executionUnit.taskResult,
+        executionUnitResult: executionUnit.executionUnitResult,
       );
     }
     // FormModel LoadForm:
@@ -272,7 +273,7 @@ class _Executor {
         executionTrace: executionTrace,
         executionUnitType: executionUnit.executionUnitType,
         thisXFormModel: executionUnit.xFormModel,
-        taskResult: executionUnit.taskResult,
+        executionUnitResult: executionUnit.executionUnitResult,
       );
     }
     // FormModel Save:
@@ -281,7 +282,7 @@ class _Executor {
         executionTrace: executionTrace,
         executionUnitType: executionUnit.executionUnitType,
         thisXFormModel: executionUnit.xFormModel,
-        taskResult: executionUnit.taskResult,
+        executionUnitResult: executionUnit.executionUnitResult,
       );
     }
     // FormModel QuickFormInputAction:
@@ -328,11 +329,11 @@ class _Executor {
     required Object? owner,
     required ExecutionUnitType? executionUnitType,
   }) {
-    for (_TaskProgressBuilderState state in [
-      ..._taskProgressViewWidgetStates.keys
+    for (_ExecutionProgressBuilderState state in [
+      ..._executionProgressViewWidgetStates.keys
     ]) {
       if (!state.mounted) {
-        _taskProgressViewWidgetStates.remove(state);
+        _executionProgressViewWidgetStates.remove(state);
         continue;
       }
       bool onProgress = owner == null || executionUnitType == null
@@ -347,16 +348,16 @@ class _Executor {
     }
   }
 
-  void _addTaskProgressViewWidgetState({
-    required _TaskProgressBuilderState widgetState,
+  void _addExecutionProgressViewWidgetState({
+    required _ExecutionProgressBuilderState widgetState,
     required bool isVisible,
   }) {
-    _taskProgressViewWidgetStates[widgetState] = isVisible;
+    _executionProgressViewWidgetStates[widgetState] = isVisible;
   }
 
-  void _removeTaskProgressViewWidgetState({
-    required _TaskProgressBuilderState widgetState,
+  void _removeExecutionProgressViewWidgetState({
+    required _ExecutionProgressBuilderState widgetState,
   }) {
-    _taskProgressViewWidgetStates.remove(widgetState);
+    _executionProgressViewWidgetStates.remove(widgetState);
   }
 }

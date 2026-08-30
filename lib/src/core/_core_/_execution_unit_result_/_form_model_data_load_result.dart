@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-class BackgroundActionResult extends TaskResult<BackgroundActionPrecheck> {
-  BackgroundActionResult({super.precheck});
+class FormModelDataLoadResult extends ExecutionUnitResult<FormModelDataLoadPrecheck> {
+  FormModelDataLoadResult({super.precheck});
 
   @override
   bool get successForFirst {

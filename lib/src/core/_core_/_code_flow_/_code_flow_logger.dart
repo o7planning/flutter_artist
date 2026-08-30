@@ -58,7 +58,7 @@ class CodeFlowLogger {
   // ===========================================================================
   // ===========================================================================
 
-  ExecutionTrace _addTaskCall({
+  ExecutionTrace _addExecutionUnitCall({
     required Object ownerClassInstance,
     required ExecutionUnitType executionUnitType,
   }) {

@@ -16,7 +16,7 @@ class _BlockMultiItemDeletionExecutionUnit<
   _BlockMultiItemDeletionExecutionUnit({
     required this.xBlock,
     required this.items,
-    required super.taskResult,
+    required super.executionUnitResult,
     required this.stopIfError,
   }) : super(
           executionUnitType: ExecutionUnitType.blockDeleteItems,

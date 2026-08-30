@@ -85,7 +85,7 @@ class _Desk extends _DeskCore {
     FlutterArtist._rootQueue._addStorageBackendActionExecutionUnit(executionUnit);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return executionUnit.taskResult;
+    return executionUnit.executionUnitResult;
   }
 
   // ***************************************************************************
@@ -113,7 +113,7 @@ class _Desk extends _DeskCore {
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required StorageBackendAction action,
-    required StorageBackendActionResult taskResult,
+    required StorageBackendActionResult executionUnitResult,
   }) async {
     ApiResult<void>? result;
     //
@@ -144,7 +144,7 @@ class _Desk extends _DeskCore {
         tipDocument: TipDocument.storagePerformAction,
       );
       //
-      taskResult._setErrorInfo(
+      executionUnitResult._setErrorInfo(
         errorInfo: errorInfo,
       );
       executionTrace._addTraceStep(

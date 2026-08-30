@@ -69,15 +69,14 @@ enum ContextProviderViewType {
     iconData: FaIconConstants.loggedUserIconData,
   ),
   //
-  taskProgressView(
-    name: "Task Progress View",
-    iconData: FaIconConstants.taskProgressViewIconData,
+  executionProgressView(
+    name: "Execution Progress View",
+    iconData: FaIconConstants.executionProgressViewIconData,
   ),
   stageView(
-    name: "Activity Step View",
+    name: "Stage View",
     iconData: FaIconConstants.stageViewIconData,
-  ),
-  ;
+  );
 
   final String name;
   final IconData iconData;

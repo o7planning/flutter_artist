@@ -1,7 +1,8 @@
 part of '../core.dart';
 
-class BlockBackendActionResult extends TaskResult<BlockBackendActionPrecheck> {
-  BlockBackendActionResult({
+@RenameAnnotation()
+class PrepareItemCreationResult extends ExecutionUnitResult<BlockItemCreationPrecheck> {
+  PrepareItemCreationResult({
     super.precheck,
     super.errorInfo,
   });

@@ -12,7 +12,7 @@ class _BlockBackendActionExecutionUnit
     required this.action,
   }) : super(
           executionUnitType: ExecutionUnitType.blockBackendAction,
-          taskResult: BlockBackendActionResult(),
+          executionUnitResult: BlockBackendActionResult(),
         );
 
   @override

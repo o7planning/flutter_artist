@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class BlockSetCurrentItemResult<ITEM>
-    extends TaskResult<BlockSetCurrentItemPrecheck> {
+    extends ExecutionUnitResult<BlockSetCurrentItemPrecheck> {
   final BlockSetCurrentItemDirective setCurrentItemDirective;
   final List<ITEM> _candidateItems = [];
   ITEM? _oldCurrentItem;

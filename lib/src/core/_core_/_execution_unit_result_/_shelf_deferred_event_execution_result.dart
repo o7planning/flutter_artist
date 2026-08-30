@@ -1,9 +1,8 @@
 part of '../core.dart';
 
-@RenameAnnotation()
-class BlockQuickItemUpdateResult
-    extends TaskResult<BlockQuickItemUpdatePrecheck> {
-  BlockQuickItemUpdateResult({
+class ShelfDeferredEventExecutionResult
+    extends ExecutionUnitResult<ShelfDeferredEventExecutionPrecheck> {
+  ShelfDeferredEventExecutionResult({
     super.precheck,
     super.errorInfo,
   });

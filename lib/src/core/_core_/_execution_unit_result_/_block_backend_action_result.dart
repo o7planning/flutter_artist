@@ -1,8 +1,7 @@
 part of '../core.dart';
 
-class ShelfDeferredEventExecutionResult
-    extends TaskResult<ShelfDeferredEventExecutionPrecheck> {
-  ShelfDeferredEventExecutionResult({
+class BlockBackendActionResult extends ExecutionUnitResult<BlockBackendActionPrecheck> {
+  BlockBackendActionResult({
     super.precheck,
     super.errorInfo,
   });

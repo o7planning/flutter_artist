@@ -1,8 +1,7 @@
 part of '../core.dart';
 
-class FilterModelDataLoadResult
-    extends TaskResult<FilterModelDataLoadPrecheck> {
-  FilterModelDataLoadResult({super.precheck});
+class BackgroundActionResult extends ExecutionUnitResult<BackgroundActionPrecheck> {
+  BackgroundActionResult({super.precheck});
 
   @override
   bool get successForFirst {

@@ -1,7 +1,8 @@
 part of '../core.dart';
 
-class FormSaveResult extends TaskResult<BlockFormSavePrecheck> {
-  FormSaveResult({required super.precheck});
+class FilterModelDataLoadResult
+    extends ExecutionUnitResult<FilterModelDataLoadPrecheck> {
+  FilterModelDataLoadResult({super.precheck});
 
   @override
   bool get successForFirst {

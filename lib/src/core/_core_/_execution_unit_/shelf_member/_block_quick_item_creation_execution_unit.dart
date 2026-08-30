@@ -12,7 +12,7 @@ class _BlockQuickItemCreationExecutionUnit
     required this.action,
   }) : super(
           executionUnitType: ExecutionUnitType.blockQuickCreateItem,
-          taskResult: BlockQuickItemCreationResult(),
+          executionUnitResult: BlockQuickItemCreationResult(),
         );
 
   @override

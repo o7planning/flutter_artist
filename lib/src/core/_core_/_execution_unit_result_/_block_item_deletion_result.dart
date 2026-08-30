@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class BlockItemDeletionResult<ITEM>
-    extends TaskResult<BlockItemDeletionPrecheck> {
+    extends ExecutionUnitResult<BlockItemDeletionPrecheck> {
   ITEM? _candidateItem;
   ITEM? _deletedItem;
   ITEM? _failedItem;

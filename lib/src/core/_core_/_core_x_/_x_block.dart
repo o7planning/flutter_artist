@@ -163,7 +163,7 @@ class XBlock<
     return false;
   }
 
-  bool hasAncestorTask() {
+  bool hasAncestorWork() {
     XBlock? prXBlock = parentXBlock;
     if (prXBlock == null) {
       return false;
@@ -171,7 +171,7 @@ class XBlock<
     if (prXBlock.needToReQuery() || prXBlock.needToReloadCurrItem()) {
       return true;
     }
-    return prXBlock.hasAncestorTask();
+    return prXBlock.hasAncestorWork();
   }
 
   bool isRoot() {

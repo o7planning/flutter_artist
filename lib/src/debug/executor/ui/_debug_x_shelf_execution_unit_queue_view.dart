@@ -3,7 +3,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../dialog/_x_shelf_dialog.dart';
 import '../model/_debug_x_root_queue_item.dart';
-import '_debug_task_unit_view.dart';
+import '_debug_execution_unit_view.dart';
 
 class DebugXShelfExecutionUnitQueueView extends StatefulWidget {
   final DebugXRootQueueItem debugXShelfExecutionUnitQueue;
@@ -45,8 +45,8 @@ class _DebugXShelfExecutionUnitQueueViewState
                   (executionUnit) => DebugExecutionUnitView(
                       executionUnit: executionUnit, isInMainQueue: true),
                 ),
-                ...widget.debugXShelfExecutionUnitQueue.secondaryExecutionUnits.map(
-                    (executionUnit) => DebugExecutionUnitView(
+                ...widget.debugXShelfExecutionUnitQueue.secondaryExecutionUnits
+                    .map((executionUnit) => DebugExecutionUnitView(
                         executionUnit: executionUnit, isInMainQueue: false))
               ],
             ),
@@ -62,7 +62,8 @@ class _DebugXShelfExecutionUnitQueueViewState
       visualDensity: VisualDensity(horizontal: -3, vertical: -3),
       contentPadding: EdgeInsets.all(0),
       leading: Tooltip(
-        message: "XShelfID: ${widget.debugXShelfExecutionUnitQueue.xShelf.xShelfId}",
+        message:
+            "XShelfID: ${widget.debugXShelfExecutionUnitQueue.xShelf.xShelfId}",
         child: CircleAvatar(
           radius: 18,
           child: Center(
@@ -84,7 +85,7 @@ class _DebugXShelfExecutionUnitQueueViewState
       title: Text(
           "Execution Units in the Queue of XShelf (${widget.debugXShelfExecutionUnitQueue.xShelf.shelf.name})"),
       subtitle: IconLabelText(
-        label: "XShelf Task Type: ",
+        label: "XShelf Execution Unit Type: ",
         text: widget.debugXShelfExecutionUnitQueue.xShelf.xShelfType.name,
         textStyle: TextStyle(color: Colors.indigo, fontSize: 13),
       ),

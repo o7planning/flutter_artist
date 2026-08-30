@@ -10,7 +10,7 @@ class _FormModelLoadDataExecutionUnit
     required this.xFormModel,
   }) : super(
           executionUnitType: ExecutionUnitType.formModelLoadData,
-          taskResult: FormModelDataLoadResult(),
+          executionUnitResult: FormModelDataLoadResult(),
         );
 
   @override

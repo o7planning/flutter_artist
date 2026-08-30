@@ -15,7 +15,7 @@ class _BlockItemDeletionExecutionUnit<
   _BlockItemDeletionExecutionUnit({
     required this.xBlock,
     required this.item,
-    required super.taskResult,
+    required super.executionUnitResult,
   }) : super(
           executionUnitType: ExecutionUnitType.blockDeleteItem,
         );

@@ -1,8 +1,9 @@
 part of '../core.dart';
 
-class StorageBackendActionResult
-    extends TaskResult<StorageBackendActionPrecheck> {
-  StorageBackendActionResult({
+@RenameAnnotation()
+class BlockQuickItemCreationResult
+    extends ExecutionUnitResult<BlockQuickItemCreationPrecheck> {
+  BlockQuickItemCreationResult({
     super.precheck,
     super.errorInfo,
   });

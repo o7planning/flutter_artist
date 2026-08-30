@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class TaskProgressViewBuilder extends _ContextProviderView {
+class ExecutionProgressViewBuilder extends _ContextProviderView {
   final EdgeInsets progressOnMargin;
   final EdgeInsets progressOffMargin;
 
@@ -13,7 +13,7 @@ class TaskProgressViewBuilder extends _ContextProviderView {
     bool onProgress,
   ) build;
 
-  const TaskProgressViewBuilder({
+  const ExecutionProgressViewBuilder({
     super.key,
     this.progressOnMargin = const EdgeInsets.all(0),
     this.progressOffMargin = const EdgeInsets.all(0),
@@ -27,14 +27,14 @@ class TaskProgressViewBuilder extends _ContextProviderView {
 
   @override
   State<StatefulWidget> createState() {
-    return _TaskProgressBuilderState();
+    return _ExecutionProgressBuilderState();
   }
 }
 
-class _TaskProgressBuilderState
-    extends _ContextProviderViewState<TaskProgressViewBuilder> {
+class _ExecutionProgressBuilderState
+    extends _ContextProviderViewState<ExecutionProgressViewBuilder> {
   @override
-  ContextProviderViewType get type => ContextProviderViewType.taskProgressView;
+  ContextProviderViewType get type => ContextProviderViewType.executionProgressView;
 
   @override
   Shelf? _getRelatedShelf() {
@@ -94,7 +94,7 @@ class _TaskProgressBuilderState
 
   @override
   void addWidgetState({required bool isVisible}) {
-    FlutterArtist.executor._addTaskProgressViewWidgetState(
+    FlutterArtist.executor._addExecutionProgressViewWidgetState(
       widgetState: this,
       isVisible: isVisible,
     );
@@ -102,7 +102,7 @@ class _TaskProgressBuilderState
 
   @override
   void removeWidgetState() {
-    FlutterArtist.executor._removeTaskProgressViewWidgetState(
+    FlutterArtist.executor._removeExecutionProgressViewWidgetState(
       widgetState: this,
     );
   }

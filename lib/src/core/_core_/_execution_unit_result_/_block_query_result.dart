@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class BlockQueryResult extends TaskResult<BlockQueryPrecheck> {
+class BlockQueryResult extends ExecutionUnitResult<BlockQueryPrecheck> {
   BlockQueryResult._();
 
   BlockQueryResult._queryBlockedTemporarily()

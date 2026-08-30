@@ -9,7 +9,7 @@ class _BlockClearExecutionUnit
     required this.xBlock,
   }) : super(
           executionUnitType: ExecutionUnitType.blockClear,
-          taskResult: BlockClearResult(
+          executionUnitResult: BlockClearResult(
             precheck: null,
           ),
         );

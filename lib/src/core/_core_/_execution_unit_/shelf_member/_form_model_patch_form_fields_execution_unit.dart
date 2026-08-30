@@ -10,7 +10,7 @@ class _FormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
   _FormModelPatchFormFieldsExecutionUnit({
     required this.xFormModel,
     required this.formInput,
-    required FormModelPatchFormFieldsResult super.taskResult,
+    required FormModelPatchFormFieldsResult super.executionUnitResult,
   }) : super(
           executionUnitType: ExecutionUnitType.formModelPatchFormFields,
         );

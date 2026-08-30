@@ -283,7 +283,7 @@ abstract class FilterModel<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XFilterModel thisXFilterModel,
-    required FilterModelDataLoadResult taskResult,
+    required FilterModelDataLoadResult executionUnitResult,
   }) async {
     __assertThisXFilterModel(thisXFilterModel);
     //

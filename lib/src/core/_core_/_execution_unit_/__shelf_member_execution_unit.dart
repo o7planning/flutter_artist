@@ -19,7 +19,7 @@ abstract class _ShelfMemberExecutionUnit extends _ExecutionUnit {
   DebugExecutionUnit toDebugExecutionUnit() {
     return DebugExecutionUnit(
       executionUnitType: executionUnitType,
-      taskName: getObjectName(),
+      executionUnitName: getObjectName(),
     );
   }
 

@@ -25,7 +25,7 @@ class _BlockSetItemAsCurrentExecutionUnit<
     required this.forceTypeForForm,
   }) : super(
           executionUnitType: ExecutionUnitType.blockSetItemAsCurrent,
-          taskResult: BlockSetCurrentItemResult<ITEM>(
+          executionUnitResult: BlockSetCurrentItemResult<ITEM>(
             precheck: null,
             setCurrentItemDirective: setCurrentItemDirective,
             getItemId: xBlock.block._getItemIdInternal,

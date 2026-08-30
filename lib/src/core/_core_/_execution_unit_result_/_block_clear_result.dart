@@ -1,7 +1,7 @@
 part of '../core.dart';
 
-class ScalarClearResult extends TaskResult<ScalarClearPrecheck> {
-  ScalarClearResult({super.precheck});
+class BlockClearResult extends ExecutionUnitResult<BlockClearPrecheck> {
+  BlockClearResult({super.precheck});
 
   @override
   bool get successForFirst {

@@ -12,7 +12,7 @@ class _BlockQuickItemUpdateExecutionUnit
     required this.action,
   }) : super(
           executionUnitType: ExecutionUnitType.blockQuickUpdateItem,
-          taskResult: BlockQuickItemUpdateResult(),
+          executionUnitResult: BlockQuickItemUpdateResult(),
         );
 
   @override

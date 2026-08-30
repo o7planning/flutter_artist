@@ -4,7 +4,7 @@ part of '../../core.dart';
 @_StorageBackendActionAnnotation()
 class _StorageBackendActionExecutionUnit extends _ExecutionUnit {
   final StorageBackendAction action;
-  final StorageBackendActionResult taskResult = StorageBackendActionResult();
+  final StorageBackendActionResult executionUnitResult = StorageBackendActionResult();
 
   _StorageBackendActionExecutionUnit({
     required this.action,

@@ -44,7 +44,7 @@ class _DebugExecutionUnitViewState extends State<DebugExecutionUnitView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               IconLabelText(
-                label: "Task: ",
+                label: "Execution Unit: ",
                 text: widget.executionUnit.executionUnitType.name,
                 textStyle: TextStyle(
                   fontSize: fontSize,
@@ -70,7 +70,7 @@ class _DebugExecutionUnitViewState extends State<DebugExecutionUnitView> {
           Divider(),
           IconLabelText(
             label: "Name: ",
-            text: widget.executionUnit.taskName,
+            text: widget.executionUnit.executionUnitName,
             style: TextStyle(fontSize: fontSize),
           ),
         ],

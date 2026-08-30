@@ -10,7 +10,7 @@ class _FilterModelLoadDataExecutionUnit
     required this.xFilterModel,
   }) : super(
           executionUnitType: ExecutionUnitType.filterModelLoadData,
-          taskResult: FilterModelDataLoadResult(),
+          executionUnitResult: FilterModelDataLoadResult(),
         );
 
   @override

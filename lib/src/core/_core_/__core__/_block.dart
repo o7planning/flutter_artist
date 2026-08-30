@@ -3632,7 +3632,7 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockQuickItemCreationResult taskResult,
+    required BlockQuickItemCreationResult executionUnitResult,
     required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -3672,7 +3672,7 @@ abstract class Block<
             TipDocument.blockQuickItemCreationActionPerformQuickCreateItem,
       );
       //
-      taskResult._setErrorInfo(
+      executionUnitResult._setErrorInfo(
         errorInfo: errorInfo,
       );
       //
@@ -3714,7 +3714,7 @@ abstract class Block<
             TipDocument.blockQuickItemCreationActionPerformQuickCreateItem,
       );
       //
-      taskResult._setErrorInfo(
+      executionUnitResult._setErrorInfo(
         errorInfo: errorInfo,
       );
       //
@@ -3736,7 +3736,7 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockQuickItemUpdateResult taskResult,
+    required BlockQuickItemUpdateResult executionUnitResult,
     required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
   }) async {
     __assertThisXBlock(thisXBlock);
@@ -3781,7 +3781,7 @@ abstract class Block<
             TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem,
       );
       //
-      taskResult._setErrorInfo(
+      executionUnitResult._setErrorInfo(
         errorInfo: errorInfo,
       );
       //
@@ -3823,7 +3823,7 @@ abstract class Block<
             TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem,
       );
       //
-      taskResult._setErrorInfo(
+      executionUnitResult._setErrorInfo(
         errorInfo: errorInfo,
       );
       //
@@ -3847,7 +3847,7 @@ abstract class Block<
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockBackendAction<ID> action,
-    required BlockBackendActionResult taskResult,
+    required BlockBackendActionResult executionUnitResult,
   }) async {
     __assertThisXBlock(thisXBlock);
     //
@@ -3885,7 +3885,7 @@ abstract class Block<
         tipDocument: TipDocument.blockBackendActionPerformAction,
       );
       //
-      taskResult._setErrorInfo(
+      executionUnitResult._setErrorInfo(
         errorInfo: errorInfo,
       );
       executionTrace._addTraceStep(
@@ -4387,7 +4387,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockItemDeletionResult<ITEM>> __deleteItem({
     required ExecutionTrace executionTrace,
     required String methodName,
@@ -4456,7 +4456,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    final taskResult = _createEmptyItemDeletionResult();
+    final executionUnitResult = _createEmptyItemDeletionResult();
     //
     executionTrace._addTraceStep(
       codeId: "#76340",
@@ -4467,20 +4467,20 @@ abstract class Block<
         _BlockItemDeletionExecutionUnit<ID, ITEM>(
       xBlock: thisXBlock,
       item: item!,
-      taskResult: taskResult,
+      executionUnitResult: executionUnitResult,
     );
     //
     xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return taskResult;
+    return executionUnitResult;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockItemsDeletionResult<ITEM>> __deleteItems({
     required ExecutionTrace executionTrace,
     required String methodName,
@@ -4547,7 +4547,7 @@ abstract class Block<
     //
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
     //
-    final taskResult = _createEmptyItemsDeletionResult(
+    final executionUnitResult = _createEmptyItemsDeletionResult(
       candidateItems: candidateDeleteItems,
     );
     final _ShelfMemberResultedExecutionUnit executionUnit =
@@ -4555,21 +4555,21 @@ abstract class Block<
       xBlock: thisXBlock,
       items: candidateDeleteItems,
       stopIfError: stopIfError,
-      taskResult: taskResult,
+      executionUnitResult: executionUnitResult,
     );
     //
     xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return taskResult;
+    return executionUnitResult;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_BlockSetItemAsCurrentAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockSetCurrentItemResult<ITEM>> __refreshItemAndSetAsCurrent({
     required ExecutionTrace executionTrace,
     required String methodName,
@@ -4653,7 +4653,7 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    var result = executionUnit.taskResult;
+    var result = executionUnit.executionUnitResult;
     return result;
   }
 
@@ -4661,7 +4661,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSetItemAsCurrentAnnotation()
   Future<BlockSetCurrentItemResult<ITEM>> refreshItemAndSetAsCurrent({
     required ITEM item,
@@ -4693,7 +4693,7 @@ abstract class Block<
   /// Clear and set block to "Pending State".
   ///
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockClearAnnotation()
   Future<BlockClearResult> clear() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -4744,7 +4744,7 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return executionUnit.taskResult;
+    return executionUnit.executionUnitResult;
   }
 
   // ***************************************************************************
@@ -4755,7 +4755,7 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_BlockQueryNextPageAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockQueryResult> queryNextPage({
     BlockAfterQueryDirective afterQueryDirective =
         BlockAfterQueryDirective.setAnItemAsCurrentIfNeed,
@@ -4793,7 +4793,7 @@ abstract class Block<
   /// Query the previous page and replace the current items in the list.
   ///
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockQueryPreviousPageAnnotation()
   Future<BlockQueryResult> queryPreviousPage({
     BlockAfterQueryDirective afterQueryDirective =
@@ -4833,7 +4833,7 @@ abstract class Block<
   ///
   @_RootMethodAnnotation()
   @_BlockQueryMorePageAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockQueryResult> queryMore({
     BlockAfterQueryDirective afterQueryDirective =
         BlockAfterQueryDirective.setAnItemAsCurrentIfNeed,
@@ -4868,7 +4868,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   Future<bool> queryEmptyAndPrepareToCreate({
     FILTER_INPUT? filterInput,
   }) async {
@@ -4896,7 +4896,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   Future<bool> queryEmpty({
     FILTER_INPUT? filterInput,
     bool prepareFormToCreateItem = false,
@@ -4932,7 +4932,7 @@ abstract class Block<
   @nonVirtual
   @_RootMethodAnnotation()
   @_BlockQueryAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockQueryResult> query({
     // ListUpdateStrategy suggestedListUpdateStrategy = ListUpdateStrategy.replace,
     BlockAfterQueryDirective afterQueryDirective =
@@ -4980,8 +4980,8 @@ abstract class Block<
   ///
   @nonVirtual
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockQueryAndPrepareToEditAnnotation()
   Future<BlockQueryResult> queryAndPrepareToEdit({
     FILTER_INPUT? filterInput,
@@ -5028,7 +5028,7 @@ abstract class Block<
   /// If this block has a FormModel its data state set to "Ready", else its data state set to "Pending".
   ///
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockQueryAndPrepareToCreateAnnotation()
   Future<BlockQueryResult> queryAndPrepareToCreate({
     FILTER_INPUT? filterInput,
@@ -5416,7 +5416,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockBackendActionAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockBackendActionResult> executeBackendAction({
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
@@ -5520,14 +5520,14 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return executionUnit.taskResult;
+    return executionUnit.executionUnitResult;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockQuickItemCreationActionAnnotation()
   Future<BlockQuickItemCreationResult> executeQuickItemCreationAction({
     required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
@@ -5616,14 +5616,14 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return executionUnit.taskResult;
+    return executionUnit.executionUnitResult;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockQuickItemUpdateActionAnnotation()
   Future<BlockQuickItemUpdateResult> executeQuickItemUpdateAction({
     required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
@@ -5715,14 +5715,14 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return executionUnit.taskResult;
+    return executionUnit.executionUnitResult;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSelectFirstItemAsCurrentAnnotation()
   Future<BlockSetCurrentItemResult<ITEM>> refreshFirstItemAndSetAsCurrent({
     bool forceLoadForm = false,
@@ -5749,7 +5749,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSelectNextItemAsCurrentAnnotation()
   Future<BlockSetCurrentItemResult<ITEM>> refreshNextItemAndSetAsCurrent({
     bool forceLoadForm = false,
@@ -5779,7 +5779,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSelectPreviousItemAsCurrentAnnotation()
   Future<BlockSetCurrentItemResult<ITEM>> refreshPreviousItemAndSetAsCurrent({
     bool forceLoadForm = false,
@@ -5829,7 +5829,7 @@ abstract class Block<
   /// Prepare to create an item in a Form.
   ///
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
   Future<PrepareItemCreationResult> prepareFormToCreateItem({
     FORM_INPUT? formInput,
@@ -5912,7 +5912,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockDeleteSelectedItemsAnnotation()
   Future<BlockItemsDeletionResult<ITEM>> deleteSelectedItems({
     required CurrentItemInclusion currentItemInclusion,
@@ -5947,7 +5947,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockDeleteCheckedItemsAnnotation()
   Future<BlockItemsDeletionResult> deleteCheckedItems({
     required CurrentItemInclusion currentItemInclusion,
@@ -5982,7 +5982,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockItemsDeletionResult<ITEM>> deleteItems({
     required List<ITEM> items,
     required bool stopIfError,
@@ -6012,7 +6012,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
   Future<BlockItemDeletionResult<ITEM>> deleteCurrentItem() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -6037,7 +6037,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_BlockDeleteItemAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockItemDeletionResult<ITEM>> deleteItem({
     required ITEM item,
     bool errorIfItemNotInTheBlock = true,
@@ -6067,7 +6067,7 @@ abstract class Block<
   ///
   ///
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
   Future<BlockSetCurrentItemResult<ITEM>> refreshCurrentItem({
     bool forceLoadForm = false,
@@ -6096,7 +6096,7 @@ abstract class Block<
 
   void _processNavigationIntent({
     required BuildContext context,
-    required TaskResult result,
+    required ExecutionUnitResult result,
     required NavigationIntent intent,
   }) {
     try {
@@ -6272,7 +6272,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockQueryResult> __queryBlock({
     required ExecutionTrace executionTrace,
     required BlockQryMethodName qryMethod,

@@ -1302,7 +1302,7 @@ abstract class Scalar<
   /// Clear and set block to "Pending State".
   ///
   @_RootMethodAnnotation()
-  @_ReturnTaskResultMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
   @_ScalarClearAnnotation()
   Future<ScalarClearResult> clear() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -1363,7 +1363,7 @@ abstract class Scalar<
     xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    return executionUnit.taskResult;
+    return executionUnit.executionUnitResult;
   }
 
   // ***************************************************************************

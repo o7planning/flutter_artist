@@ -1,8 +1,7 @@
 part of '../core.dart';
 
-class FormModelPatchFormFieldsResult
-    extends TaskResult<PatchFormFieldsPrecheck> {
-  FormModelPatchFormFieldsResult({super.precheck});
+class FormSaveResult extends ExecutionUnitResult<BlockFormSavePrecheck> {
+  FormSaveResult({required super.precheck});
 
   @override
   bool get successForFirst {

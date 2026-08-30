@@ -1,5 +1,5 @@
 enum CodeFlowType {
-  taskCalled,
+  executionUnitCalled,
   methodCalled,
   info,
   error;

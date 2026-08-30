@@ -58,7 +58,7 @@ abstract class NavigationIntent {
   /// Standard intent to pop the top-most route (Page or Dialog) from the stack.
   /// Defaults [executeOnFailure] to true so closures can always trigger.
   factory NavigationIntent.pop({
-    // required TaskResult result,
+    // required ExcutionUnitResult result,
     bool executeOnFailure = false,
   }) {
     return _NavigationPopIntent(

@@ -161,7 +161,7 @@ class FaIconConstants {
 
   static const IconData scalarControlButtonIconData = Icons.smart_button;
 
-  static const IconData taskProgressViewIconData =
+  static const IconData executionProgressViewIconData =
       cupertino.CupertinoIcons.timelapse;
 
   static const IconData stageViewIconData =

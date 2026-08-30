@@ -9,7 +9,7 @@ class _ScalarClearExecutionUnit
     required this.xScalar,
   }) : super(
           executionUnitType: ExecutionUnitType.scalarClear,
-          taskResult: ScalarClearResult(
+          executionUnitResult: ScalarClearResult(
             precheck: null,
           ),
         );

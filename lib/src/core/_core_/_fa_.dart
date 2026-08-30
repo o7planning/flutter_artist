@@ -71,7 +71,7 @@ class _FlutterArtist extends _Core {
   final List<ILogListener> _logListeners = [];
   final List<INotificationListener> _notificationListeners = [];
 
-  final List<Future<dynamic>> __futureTaskList = [];
+  final List<Future<dynamic>> __futureExecutionUnitList = [];
 
   // ***************************************************************************
   // ***************************************************************************
@@ -359,20 +359,20 @@ class _FlutterArtist extends _Core {
     _notificationListeners.remove(listener);
   }
 
-  Future<dynamic> _executeTask({
+  Future<dynamic> _executeExecutionUnit({
     bool showOverlay = true,
     required Future<dynamic> Function() asyncFunction,
   }) {
     Future<dynamic> future = asyncFunction();
-    __futureTaskList.add(future);
+    __futureExecutionUnitList.add(future);
     future.whenComplete(() {
       if (_isOverlayMode) {
         // Default 30:
         Future.delayed(const Duration(milliseconds: 0), () {
-          __futureTaskList.remove(future);
+          __futureExecutionUnitList.remove(future);
         });
       } else {
-        __futureTaskList.remove(future);
+        __futureExecutionUnitList.remove(future);
       }
     });
     if (showOverlay) {
@@ -394,7 +394,7 @@ class _FlutterArtist extends _Core {
                 const Duration(milliseconds: 0),
               ).then(
                     (_) {
-                  return __futureTaskList.isNotEmpty;
+                  return __futureExecutionUnitList.isNotEmpty;
                 },
               ),
         );
