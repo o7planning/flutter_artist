@@ -269,7 +269,7 @@ part '../debug/_debug_options.dart';
 
 part '__core__/_default_filter_model.dart';
 
-part '__core__/_reaction_processor.dart';
+part '_utils_/_reaction_processor.dart';
 
 part '_core_event_/_eff_block.dart';
 

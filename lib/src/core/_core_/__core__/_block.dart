@@ -1048,7 +1048,8 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#07000",
-      shortDesc: "Begin ${debugObjHtml(this)} > ${executionUnitType.asDebugExecutionUnit()}.",
+      shortDesc:
+          "Begin ${debugObjHtml(this)} > ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
     executionTrace._addTraceStep(
@@ -1083,7 +1084,8 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#13000",
-      shortDesc: "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
+      shortDesc:
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -1277,7 +1279,8 @@ abstract class Block<
         );
         executionTrace._addTraceStep(
           codeId: "#03140",
-          shortDesc: "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
+          shortDesc:
+              "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
           traceStepType: TraceStepType.addExecutionUnit,
         );
         thisXBlock.xShelf._addExecutionUnit(
@@ -1885,7 +1888,8 @@ abstract class Block<
     );
     executionTrace._addTraceStep(
       codeId: "#03800",
-      shortDesc: "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
+      shortDesc:
+          "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
     //
@@ -2684,7 +2688,8 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#29700",
-      shortDesc: "Create ${ExecutionUnitType.blockQuery.asDebugExecutionUnit()}(s) "
+      shortDesc:
+          "Create ${ExecutionUnitType.blockQuery.asDebugExecutionUnit()}(s) "
           "for all child blocks of ${debugObjHtml(this)} and add to Queue."
           "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       traceStepType: TraceStepType.info,
@@ -2695,7 +2700,8 @@ abstract class Block<
       );
       executionTrace._addTraceStep(
         codeId: "#29740",
-        shortDesc: "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
+        shortDesc:
+            "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
         traceStepType: TraceStepType.addExecutionUnit,
       );
       thisXBlock.xShelf._addExecutionUnit(
@@ -2965,7 +2971,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    final viewportSyncStrategyThisBlock =
+    final BlockViewportSyncStrategy viewportSyncStrategyThisBlock =
         BlockViewportSyncStrategy.resolveViewportSyncStrategy2(
       nativeQueryMode: nativeQueryMode,
       backendIntentInFullQueryMode: syncStrategyOnFullQueryModeThisBlock,
@@ -3033,7 +3039,8 @@ abstract class Block<
         );
         thisXBlock.setViewportSyncStrategy(viewportSyncStrategyThisBlock);
         // Test Cases: [72a].
-        final _SExecutionUnit executionUnit = _BlockQueryExecutionUnit(xBlock: thisXBlock);
+        final _SExecutionUnit executionUnit =
+            _BlockQueryExecutionUnit(xBlock: thisXBlock);
         thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
       }
       // !forceRequeryThisBlock (In !hasInternalReaction).
@@ -3105,7 +3112,8 @@ abstract class Block<
       // Test Case: [62a] - __test_event_62a_test_DELETE.
       // Test Case: [62b] - __test_event_62b_test_DELETE.
       // Add Query Tasks to the Queue of XShelf.
-      thisXBlock.xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
+      thisXBlock.xShelf
+          ._initQueryExecutionUnits(executionTrace: executionTrace);
       return;
     }
     //
@@ -3167,7 +3175,8 @@ abstract class Block<
           traceStepType: TraceStepType.addExecutionUnit,
         );
         // Note: candidateCurrItem already set. (See @DEL-01)
-        final _SExecutionUnit executionUnit = _BlockQueryExecutionUnit(xBlock: topXBlock);
+        final _SExecutionUnit executionUnit =
+            _BlockQueryExecutionUnit(xBlock: topXBlock);
         thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
         // TODO: Test Case?
         if (topEffBlockInfo.refreshCurrItem) {
@@ -3236,7 +3245,8 @@ abstract class Block<
           traceStepType: TraceStepType.addExecutionUnit,
         );
         // Note: candidateCurrItem already set. (See @DEL-01)
-        _SExecutionUnit executionUnit = _BlockQueryExecutionUnit(xBlock: thisXBlock);
+        _SExecutionUnit executionUnit =
+            _BlockQueryExecutionUnit(xBlock: thisXBlock);
         thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
       }
       // effSelfInfo.refreshCurrItem.
@@ -3629,7 +3639,8 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#09000",
-      shortDesc: "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
+      shortDesc:
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -3732,7 +3743,8 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#14000",
-      shortDesc: "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
+      shortDesc:
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -4451,7 +4463,8 @@ abstract class Block<
       shortDesc: "Creating <b>_BlockItemDeletionExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSExecutionUnit executionUnit = _BlockItemDeletionExecutionUnit<ID, ITEM>(
+    final _ResultedSExecutionUnit executionUnit =
+        _BlockItemDeletionExecutionUnit<ID, ITEM>(
       xBlock: thisXBlock,
       item: item!,
       taskResult: taskResult,
@@ -5044,7 +5057,8 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#57000",
-      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()...",
+      shortDesc:
+          "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()...",
       traceStepType: TraceStepType.nonControllableCalling,
     );
     xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
@@ -5496,7 +5510,8 @@ abstract class Block<
       shortDesc: "Creating <b>_BlockBackendActionExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSExecutionUnit executionUnit = _BlockBackendActionExecutionUnit(
+    final _ResultedSExecutionUnit executionUnit =
+        _BlockBackendActionExecutionUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -5591,7 +5606,8 @@ abstract class Block<
       shortDesc: "Creating <b>_BlockQuickItemCreationExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSExecutionUnit executionUnit = _BlockQuickItemCreationExecutionUnit(
+    final _ResultedSExecutionUnit executionUnit =
+        _BlockQuickItemCreationExecutionUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -5689,7 +5705,8 @@ abstract class Block<
       shortDesc: "Creating <b>_BlockQuickItemUpdateExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ResultedSExecutionUnit executionUnit = _BlockQuickItemUpdateExecutionUnit(
+    final _ResultedSExecutionUnit executionUnit =
+        _BlockQuickItemUpdateExecutionUnit(
       xBlock: thisXBlock,
       action: action,
     );
@@ -6243,7 +6260,7 @@ abstract class Block<
       return;
     }
     //
-    _EventDispatcher.broadcastTargetedFootprint<ID>(
+    _EventDispatcher.broadcastExternal<ID>(
       eventType: eventType,
       eventBlock: this,
       mainEvents: getDeclaredMainBroadcastDataTypes().toList(),

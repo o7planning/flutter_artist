@@ -161,7 +161,7 @@ class _Desk extends _DeskCore {
       shortDesc: "${debugObjHtml(this)} > Fire event after backend action.",
       traceStepType: TraceStepType.broadcastEvent,
     );
-    _EventDispatcher.broadcastSystemWideProjection(
+    _EventDispatcher.broadcastSystemWide(
       eventType: EventType.mix,
       eventDataTypes: action.config.broadcastEvents,
     );

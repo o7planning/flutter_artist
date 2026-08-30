@@ -1,13 +1,13 @@
 part of '../core.dart';
 
 class _BlockData<
-ID extends Comparable,
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>,
-FILTER_INPUT extends FilterInput,
-FILTER_CRITERIA extends FilterCriteria,
-ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData,
-FORM_INPUT extends FormInput> {
+    ID extends Comparable,
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>,
+    FILTER_INPUT extends FilterInput,
+    FILTER_CRITERIA extends FilterCriteria,
+    ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData,
+    FORM_INPUT extends FormInput> {
   ///
   /// Owner block
   ///
@@ -49,6 +49,7 @@ FORM_INPUT extends FormInput> {
   ///
   Pageable? get _emptyPageable => _initialPageable;
 
+  // TODO: Remove, use in effectiveConfig?
   late BlockNativeQueryMode _nativeQueryMode;
 
   BlockNativeQueryMode get nativeQueryMode => _nativeQueryMode;
@@ -103,8 +104,8 @@ FORM_INPUT extends FormInput> {
     List<ITEM> newList = [...itemList];
     final itemCount = newList.length;
     newList.removeWhere(
-          (it) =>
-      block._getItemIdInternal(it) == block._getItemIdInternal(currItem),
+      (it) =>
+          block._getItemIdInternal(it) == block._getItemIdInternal(currItem),
     );
     if (itemCount > newList.length) {
       newList.add(currItem);
@@ -123,7 +124,7 @@ FORM_INPUT extends FormInput> {
     //
     if (currItem != null) {
       List<ITEM> chkItems =
-      _checkedItems.where((it) => it != currItem).toList();
+          _checkedItems.where((it) => it != currItem).toList();
       switch (currentItemInclusion) {
         case CurrentItemInclusion.exclude: // withoutCurrentItem
           break;
@@ -151,7 +152,7 @@ FORM_INPUT extends FormInput> {
     //
     if (currItem != null) {
       List<ITEM> selItems =
-      _selectedItems.where((it) => it != currItem).toList();
+          _selectedItems.where((it) => it != currItem).toList();
       switch (currentItemInclusion) {
         case CurrentItemInclusion.exclude: // withoutCurrentItem
           break;
@@ -203,13 +204,12 @@ FORM_INPUT extends FormInput> {
     required this.block,
     required Pageable? pageable,
     required BlockNativeQueryMode nativeQueryMode,
-  })
-      : _pageable = pageable,
+  })  : _pageable = pageable,
         _nativeQueryMode = nativeQueryMode,
         _initialPageable = pageable,
         _paginationInfo = PaginationInfo.empty() {
     _blockDataState =
-    block.isRoot ? BlockDataStatePending() : BlockDataStateNone();
+        block.isRoot ? BlockDataStatePending() : BlockDataStateNone();
   }
 
   // ***************************************************************************
@@ -259,7 +259,7 @@ FORM_INPUT extends FormInput> {
 
   bool _isFilterCriteriaMappedValueChanged({
     required FilterCriteriaMappedValue<FILTER_CRITERIA>
-    newFilterCriteriaMappedValue,
+        newFilterCriteriaMappedValue,
   }) {
     if (newFilterCriteriaMappedValue != _filterCriteriaMappedValue) {
       return true;
@@ -274,7 +274,7 @@ FORM_INPUT extends FormInput> {
     try {
       switch (block.effectiveConfig.clientSideSortStrategy) {
         case SortStrategy.none:
-        // Do nothing
+          // Do nothing
           break;
         case SortStrategy.modelBased:
           SortModel<ITEM>? sortModel = block.clientSideSortModel;
@@ -282,7 +282,7 @@ FORM_INPUT extends FormInput> {
             _items.sort((a, b) => sortModel._compare(a, b));
           }
         case SortStrategy.manual:
-        // TODO
+          // TODO
           break;
       }
     } catch (e, _) {
@@ -314,10 +314,10 @@ FORM_INPUT extends FormInput> {
     __current = id == null
         ? _BlockItem2Wrap.ofNull()
         : _BlockItem2Wrap(
-      id: id,
-      item: refreshedItem!,
-      itemDetail: refreshedItemDetail!,
-    );
+            id: id,
+            item: refreshedItem!,
+            itemDetail: refreshedItemDetail!,
+          );
     //
     final bool changed = oldId != id;
     //
@@ -386,7 +386,7 @@ FORM_INPUT extends FormInput> {
     required ExecutionTrace executionTrace,
     required ListUpdateStrategy forceListUpdateStrategy,
     required _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA>
-    processedQueryResult,
+        processedQueryResult,
     required List<ID> removeItemIds,
   }) {
     _lastQueryResultState = processedQueryResult.queryResultState;
@@ -403,16 +403,16 @@ FORM_INPUT extends FormInput> {
     }
     //
     final PageData<ITEM>? lastQueriedPageData =
-    processedQueryResult.queriedItemList == null
-        ? null
-        : PageData<ITEM>(
-        items: processedQueryResult.queriedItemList!,
-        paginationInfo: processedQueryResult.queriedPaginationInfo);
+        processedQueryResult.queriedItemList == null
+            ? null
+            : PageData<ITEM>(
+                items: processedQueryResult.queriedItemList!,
+                paginationInfo: processedQueryResult.queriedPaginationInfo);
 
     final PageData<ITEM> ap = lastQueriedPageData ?? PageData<ITEM>.empty();
     _pageable = processedQueryResult.usedPageable?.copy();
     if (_parentBlockCurrentItemId !=
-        processedQueryResult.parentBlockCurrentItemId ||
+            processedQueryResult.parentBlockCurrentItemId ||
         _filterCriteriaMappedValue !=
             processedQueryResult.usedXFilterCriteria) {
       _paginationInfo = PaginationInfo.copy(ap.paginationInfo);
@@ -454,7 +454,7 @@ FORM_INPUT extends FormInput> {
   void __appendQueriedItems({
     required ExecutionTrace executionTrace,
     required _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA>
-    processedQueryResult,
+        processedQueryResult,
     required List<ID> removeItemIds,
   }) {
     if (processedQueryResult.errorItems.isNotEmpty) {
@@ -536,7 +536,7 @@ FORM_INPUT extends FormInput> {
 
   void __setNewFilterCriteria({
     required FilterCriteriaMappedValue<FILTER_CRITERIA>?
-    filterCriteriaMappedValue,
+        filterCriteriaMappedValue,
   }) {
     final bool changed =
         _filterCriteriaMappedValue != filterCriteriaMappedValue;
