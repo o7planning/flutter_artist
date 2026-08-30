@@ -1,6 +1,6 @@
 part of '../../../core.dart';
 
-class _XShelfShelfExternalReaction extends _XShelfSbQuery {
+class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(

@@ -1954,46 +1954,8 @@ abstract class Block<
       blockSetCurrentItemResult._addCandidateItem(inputCandidateCurrItem);
     }
     //
-    // if (dataState == DataState.pending) {
-    //   executionTrace._addTraceStep(
-    //     codeId: "#28040",
-    //     shortDesc:
-    //         "${debugObjHtml(this)} dataState is pending -> clear all data in child blocks and set them to <b>none</b>."
-    //         "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-    //     traceStepType: TraceStepType.info,
-    //   );
-    //   __clearWithDataStateAndChildrenToNonCascade(
-    //     thisXBlock: thisXBlock,
-    //     blkDataState: dataState,
-    //     currentHasPendingInvalidation: false,
-    //     resetSyncSessionState: true,
-    //     resetRefreshItemCondition: true,
-    //     frmDataState: DataState.none,
-    //     errorInFilter: false,
-    //   );
-    //   return;
-    // }
-    // //
-    // if (dataState == DataState.error) {
-    //   executionTrace._addTraceStep(
-    //     codeId: "#28060",
-    //     shortDesc:
-    //         "${debugObjHtml(this)} dataState is error -> clear all data in child blocks and set them to <b>none</b>."
-    //         "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-    //     traceStepType: TraceStepType.info,
-    //   );
-    //   __clearWithDataStateAndChildrenToNonCascade(
-    //     thisXBlock: thisXBlock,
-    //     blkDataState: DataState.error,
-    //     currentHasPendingInvalidation: false,
-    //     resetSyncSessionState: true,
-    //     resetRefreshItemCondition: true,
-    //     frmDataState: DataState.none,
-    //     errorInFilter: false,
-    //   );
-    //   return;
-    // }
     // In: _unitSetItemAsCurrent
+    //
     if (dataState.isPending || dataState.isStale) {
       // TODO: Review.
       // throw "TODO pending or isLoadedAndStale";
@@ -4736,7 +4698,8 @@ abstract class Block<
     final XShelf xShelf = _XShelfBlockClear(block: this);
 
     final XBlock thisXBlock = xShelf.findXBlockByName(name)!;
-    final _ShelfMemberResultedExecutionUnit executionUnit = _BlockClearExecutionUnit(
+    final _ShelfMemberResultedExecutionUnit executionUnit =
+        _BlockClearExecutionUnit(
       xBlock: thisXBlock,
     );
     //
@@ -5895,7 +5858,8 @@ abstract class Block<
       shortDesc: "Creating <b>_BlockPrepareFormToCreateItemExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    _ShelfMemberExecutionUnit executionUnit = _BlockPrepareFormToCreateItemExecutionUnit(
+    _ShelfMemberExecutionUnit executionUnit =
+        _BlockPrepareFormToCreateItemExecutionUnit(
       xBlock: thisXBlock,
       initDirty: initDirty,
       formInput: formInput,
@@ -6328,7 +6292,7 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    BlockQueryResult queryResult = xBlock.queryResult;
+    final BlockQueryResult queryResult = xBlock.queryResult;
     return queryResult;
   }
 

@@ -1,7 +1,7 @@
 part of '../../../core.dart';
 
-class _XShelfSbQuery extends XShelf {
-  _XShelfSbQuery({
+class _XShelfBaseQuery extends XShelf {
+  _XShelfBaseQuery({
     required super.xShelfType,
     required super.shelf,
   });
@@ -21,7 +21,7 @@ class _XShelfSbQuery extends XShelf {
         (srcBlockAndOptions == null && srcScalarAndOptions == null));
     //
     if (filterModel.isDefaultFilterModel) {
-      // return;
+      // Do Nothing.
     }
     //
     final thisXFilterModel = xFilterModelMap[filterModel.name]!;
@@ -41,8 +41,8 @@ class _XShelfSbQuery extends XShelf {
       setRootVipXBlock(descendantXBlock: srcXBlock);
     }
     if (srcScalarAndOptions != null) {
-      Scalar srcScalar = srcScalarAndOptions.scalar;
-      XScalar srcXScalar = xScalarMap[srcScalar.name]!;
+      final Scalar srcScalar = srcScalarAndOptions.scalar;
+      final XScalar srcXScalar = xScalarMap[srcScalar.name]!;
       srcXScalar.setQueryHintToGreater(QryHint.force);
       srcXScalar.setOptions(
         queryType: srcScalarAndOptions.queryType,
@@ -66,10 +66,10 @@ class _XShelfSbQuery extends XShelf {
           queryHint = QryHint.force;
         }
       }
-      bool hasXBlockRep = block.ui.hasActiveUiComponentBlockRepresentative(
+      bool hasBlockContextX = block.ui.hasActiveUiComponentBlockRepresentative(
         alsoCheckChildren: true,
       );
-      if (hasXBlockRep) {
+      if (hasBlockContextX) {
         queryHint = QryHint.force;
       }
       //
@@ -134,21 +134,20 @@ class _XShelfSbQuery extends XShelf {
       //
       if (queryHint == QryHint.force) {
         XScalar? parentXScalar = xScalar.parentXScalar;
-        while (true) {
-          if (parentXScalar == null) {
-            break;
+        while (parentXScalar != null) {
+          final Scalar parentScalar = parentXScalar.scalar;
+
+          // Check if parent block has stale data or needs baseline initialization
+          final bool isParentStaleOrPending =
+              parentScalar.dataState.isPending ||
+                  parentScalar.dataState.isStale; // (***) Standardized Check
+
+          // If this parent is directly along the ancestry chain of a forced target scalar,
+          // we MUST force-query the parent first to guarantee data integrity,
+          // regardless of whether the parent UI component is active or visible!
+          if (isParentStaleOrPending) {
+            parentXScalar.setQueryHintToGreater(QryHint.force);
           }
-          //
-          final hasXActiveUI = parentXScalar.scalar.ui.hasActiveScalarBaseView(
-            alsoCheckChildren: true,
-          );
-          if (hasXActiveUI) {
-            if (parentXScalar.scalar.dataState.isPending ||
-                parentXScalar.scalar.dataState.isStale) {
-              parentXScalar.setQueryHintToGreater(QryHint.force);
-            }
-          }
-          //
           parentXScalar = parentXScalar.parentXScalar;
         }
       }

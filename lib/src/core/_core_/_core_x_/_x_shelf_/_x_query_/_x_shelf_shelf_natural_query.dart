@@ -1,6 +1,6 @@
 part of '../../../core.dart';
 
-class _XShelfShelfNaturalQuery extends _XShelfSbQuery {
+class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
   _XShelfShelfNaturalQuery({
     required super.shelf,
   }) : super(
