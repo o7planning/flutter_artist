@@ -168,7 +168,7 @@ class ExecutionTraceBox extends StatelessWidget {
   }
 
   void _showErrorDialog(BuildContext context, ErrorInfo errorInfo) {
-    ErrorViewerDialog.open(
+    ErrorViewerDialog.show(
       context: context,
       title: "Error Viewer",
       errorInfo: errorInfo,

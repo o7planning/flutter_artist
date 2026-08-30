@@ -13,7 +13,7 @@ class CodeFlowSettingsDialog extends StatefulWidget {
     return _CodeFlowSettingsDialogState();
   }
 
-  static Future<void> open({
+  static Future<void> show({
     required BuildContext context,
   }) async {
     await showDialog(

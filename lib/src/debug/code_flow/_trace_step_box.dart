@@ -150,7 +150,7 @@ class TraceStepBox extends StatelessWidget {
   }
 
   void _showExtraInfoDialog(BuildContext context) {
-    ExtraInfoViewerDialog.open(
+    ExtraInfoViewerDialog.show(
       context: context,
       title: "Extra Info",
       extraInfos: traceStep.extraInfos ?? [],
@@ -159,7 +159,7 @@ class TraceStepBox extends StatelessWidget {
 
   void _showErrorDialog(BuildContext context) {
     if (traceStep.errorInfo != null) {
-      ErrorViewerDialog.open(
+      ErrorViewerDialog.show(
         context: context,
         title: "Error Viewer",
         errorInfo: traceStep.errorInfo!,

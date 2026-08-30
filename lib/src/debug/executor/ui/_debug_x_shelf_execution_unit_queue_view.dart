@@ -93,7 +93,7 @@ class _DebugXShelfExecutionUnitQueueViewState
   }
 
   void _openXShelfDialog() {
-    XShelfDialog.open(
+    XShelfDialog.show(
       context: context,
       xShelf: widget.debugXShelfExecutionUnitQueue.xShelf,
     );

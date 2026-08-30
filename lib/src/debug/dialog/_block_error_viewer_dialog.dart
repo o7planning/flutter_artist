@@ -111,7 +111,7 @@ class BlockErrorViewerDialog extends StatelessWidget {
     );
   }
 
-  static Future<void> open({
+  static Future<void> show({
     required BuildContext context,
     required BlockErrorInfo blockErrorInfo,
   }) async {

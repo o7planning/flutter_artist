@@ -1025,7 +1025,7 @@ abstract class Scalar<
     final ScalarErrorInfo? activeScalarErrorInfo = scalarErrorInfo;
 
     if (activeScalarErrorInfo != null) {
-      await ScalarErrorViewerDialog.open(
+      await ScalarErrorViewerDialog.show(
         context: context,
         scalarErrorInfo: activeScalarErrorInfo,
       );
@@ -1033,7 +1033,7 @@ abstract class Scalar<
     }
     final ErrorInfo? errorInfo = filterErrorInfo;
     if (errorInfo != null) {
-      await ErrorViewerDialog.open(
+      await ErrorViewerDialog.show(
         context: context,
         errorInfo: errorInfo,
       );

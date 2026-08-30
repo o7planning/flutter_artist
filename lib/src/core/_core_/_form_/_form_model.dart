@@ -361,7 +361,7 @@ abstract class FormModel<
     if (!dataState.isFatalError) {
       return;
     }
-    await FormErrorViewerDialog.open(
+    await FormErrorViewerDialog.show(
       context: context,
       formErrorInfo: formErrorInfo!,
       formInitialDataReady: formInitialDataReady,
@@ -2381,7 +2381,7 @@ abstract class FormModel<
   Future<void> showDebugFormModelnspector() async {
     BuildContext context = FlutterArtistCore.context;
     //
-    await DebugFormModelInspectorDialog.open(
+    await DebugFormModelInspectorDialog.show(
       context: context,
       locationInfo: getClassName(this),
       formModel: this,

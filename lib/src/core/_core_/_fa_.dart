@@ -440,7 +440,7 @@ class _FlutterArtist extends _Core {
   Future<void> showDebugAppInspectorDialog() async {
     BuildContext context = FlutterArtistCore.context;
     //
-    await DebugAppInspectorDialog.open(
+    await DebugAppInspectorDialog.show(
       context: context,
       shelf: null,
     );
@@ -476,7 +476,7 @@ class _FlutterArtist extends _Core {
 
   Future<void> showLogViewerDialog({int? logEntryId}) async {
     BuildContext context = FlutterArtistCore.context;
-    await LogViewerDialog.open(
+    await LogViewerDialog.show(
       context: context,
       logger: logger,
       logEntryId: logEntryId,

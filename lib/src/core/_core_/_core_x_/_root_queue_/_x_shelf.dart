@@ -487,31 +487,6 @@ abstract class XShelf extends XRootQueueItem {
   // ***************************************************************************
   // ***************************************************************************
 
-  XScalar? nextXScalarTask() {
-    for (XScalar xScalar in allXScalars) {
-      if (xScalar.queryHint == QryHint.none) {
-        continue;
-      }
-      return xScalar;
-    }
-    return null;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  XBlock? nextRootXBlockTask() {
-    for (XBlock xBlock in allRootXBlocks) {
-      if (xBlock.hasQryHintInTreeBranchAndNotProcessed()) {
-        return xBlock;
-      }
-    }
-    return null;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   @override
   DebugXRootQueueItem toDebugXRootQueueItem() {
     return __xShelfExecutionUnitQueue.toDebugXRootQueueItem();
@@ -526,8 +501,10 @@ abstract class XShelf extends XRootQueueItem {
     return __xShelfExecutionUnitQueue.getNextExecutionUnit();
   }
 
-  void _addExecutionUnit(
-      {required _ShelfMemberExecutionUnit executionUnit, bool toMainQueue = true}) {
+  void _addExecutionUnit({
+    required _ShelfMemberExecutionUnit executionUnit,
+    bool toMainQueue = true,
+  }) {
     if (executionUnit.xShelf != this) {
       throw FatalAppError(
         errorMessage: "Development Logic Error.",

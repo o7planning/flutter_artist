@@ -31,7 +31,7 @@ class LogViewerDialog extends StatefulWidget {
     return _LogViewerDialogState();
   }
 
-  static Future<void> open({
+  static Future<void> show({
     required BuildContext context,
     required Logger logger,
     int? logEntryId,

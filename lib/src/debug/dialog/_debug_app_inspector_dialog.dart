@@ -20,7 +20,7 @@ class DebugAppInspectorDialog extends StatefulWidget {
   State<DebugAppInspectorDialog> createState() =>
       _DebugAppInspectorDialogState();
 
-  static Future<void> open({
+  static Future<void> show({
     required BuildContext context,
     required Shelf? shelf,
   }) async {

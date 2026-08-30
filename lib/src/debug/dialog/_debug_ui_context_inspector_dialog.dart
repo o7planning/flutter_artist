@@ -40,7 +40,7 @@ class DebugUiContextInspectorDialog extends StatefulWidget {
     return _DebugUiContextInspectorDialogState();
   }
 
-  static Future<void> open({
+  static Future<void> show({
     required BuildContext context,
     required Shelf shelf,
   }) async {

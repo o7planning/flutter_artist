@@ -32,7 +32,8 @@ class _DebugExecutorViewState extends State<DebugExecutorView> {
             .where((sq) => sq.isNotEmpty)
             .map(
               (subQueue) => DebugXShelfExecutionUnitQueueView(
-                  debugXShelfExecutionUnitQueue: subQueue),
+                debugXShelfExecutionUnitQueue: subQueue,
+              ),
             )
             .toList(),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
+import '../../dialog/_x_shelf_dialog.dart';
 import '../model/_debug_execution_unit.dart';
 
 class DebugExecutionUnitView extends StatefulWidget {
@@ -51,20 +52,21 @@ class _DebugExecutionUnitViewState extends State<DebugExecutionUnitView> {
                   color: Colors.blue,
                 ),
               ),
-              // Spacer(),
-              // Tooltip(
-              //   message: "XShelf ID",
-              //   child: ElevatedButton(
-              //     style: ElevatedButton.styleFrom(
-              //       minimumSize: Size.zero,
-              //       padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-              //     ),
-              //     onPressed: () {
-              //       _showXShelfDialog();
-              //     },
-              //     child: Text("${widget.executionUnit.xShelf.xShelfId}"),
-              //   ),
-              // ),
+              Spacer(),
+              Tooltip(
+                message: "XShelf ID",
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size.zero,
+                    padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                  ),
+                  onPressed: () {
+                    _showXShelfDialog();
+                  },
+                  // child: Text("${widget.executionUnit.xShelf.xShelfId}"),
+                  child: Text("?"),
+                ),
+              ),
             ],
           ),
           Divider(),
@@ -78,10 +80,10 @@ class _DebugExecutionUnitViewState extends State<DebugExecutionUnitView> {
     );
   }
 
-// void _showXShelfDialog() {
-//   XShelfDialog.showXShelfDialog(
-//     context: context,
-//     xShelf: widget.executionUnit.xShelf,
-//   );
-// }
+  void _showXShelfDialog() {
+    // XShelfDialog.show(
+    //   context: context,
+    //   xShelf: widget.executionUnit.xShelf,
+    // );
+  }
 }

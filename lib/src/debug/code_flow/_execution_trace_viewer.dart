@@ -209,6 +209,6 @@ class _ExecutionTraceViewerState extends State<ExecutionTraceViewer> {
   }
 
   void _showCodeFlowSetting() {
-    CodeFlowSettingsDialog.open(context: context);
+    CodeFlowSettingsDialog.show(context: context);
   }
 }

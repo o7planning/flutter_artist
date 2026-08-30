@@ -253,7 +253,7 @@ class _BlockControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: actionable.yes
               ? () {
-            DebugFormModelInspectorDialog.open(
+            DebugFormModelInspectorDialog.show(
               context: context,
               locationInfo:
               getClassNameWithoutGenerics(widget.ownerClassInstance),

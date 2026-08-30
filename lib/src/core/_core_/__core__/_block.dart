@@ -4332,7 +4332,7 @@ abstract class Block<
     final BlockErrorInfo? activeBlockErrorInfo = blockErrorInfo;
 
     if (activeBlockErrorInfo != null) {
-      await BlockErrorViewerDialog.open(
+      await BlockErrorViewerDialog.show(
         context: context,
         blockErrorInfo: activeBlockErrorInfo,
       );
@@ -4340,7 +4340,7 @@ abstract class Block<
     }
     final ErrorInfo? errorInfo = filterErrorInfo;
     if (errorInfo != null) {
-      await ErrorViewerDialog.open(
+      await ErrorViewerDialog.show(
         context: context,
         errorInfo: errorInfo,
       );

@@ -26,7 +26,7 @@ class DebugFormModelInspectorDialog extends StatefulWidget {
     return _DebugFormModelInspectorDialogState();
   }
 
-  static Future<void> open({
+  static Future<void> show({
     required BuildContext context,
     required String locationInfo,
     required FormModel formModel,

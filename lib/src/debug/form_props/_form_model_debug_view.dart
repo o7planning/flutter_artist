@@ -130,7 +130,7 @@ class FormModelDebugView extends StatelessWidget {
   void _showErrorDetails(BuildContext context) {
     ErrorInfo? errorInfo = formModel.formErrorInfo?.toErrorInfo();
     if (errorInfo != null) {
-      ErrorViewerDialog.open(
+      ErrorViewerDialog.show(
         context: context,
         title: "Error",
         errorInfo: errorInfo,

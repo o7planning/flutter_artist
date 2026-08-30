@@ -161,7 +161,7 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
   }
 
   Future<bool> __showDebugFormModelnspector() async {
-    DebugFormModelInspectorDialog.open(
+    DebugFormModelInspectorDialog.show(
       context: context,
       locationInfo: getClassName(widget.ownerClassInstance),
       formModel: widget.block.formModel!,
