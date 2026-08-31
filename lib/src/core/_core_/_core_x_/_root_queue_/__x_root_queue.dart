@@ -14,47 +14,75 @@ final class _XRootQueue {
   ///
   final __xRootQueueItemMap = <String, XRootQueueItem>{};
 
-  bool get isEmpty {
-    if (_xStorage.isNotEmpty) {
-      return false;
-    }
-    for (XRootQueueItem item in __xRootQueueItemMap.values) {
-      if (!item.isEmptyExecutionUnit()) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  bool get isNotEmpty => !isEmpty;
+  // bool get isEmpty {
+  //   if (_xStorage.isNotEmpty) {
+  //     // return false;
+  //   }
+  //   for (XRootQueueItem item in __xRootQueueItemMap.values) {
+  //     if (!item.isEmptyExecutionUnit()) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
+  //
+  // bool get isNotEmpty => !isEmpty;
 
   bool hasNext() {
-    return isNotEmpty;
+    // _ExecutionUnit? exeUnit = getNextExecutionUnit(
+    //   removeEmptyRootQuery: false,
+    // );
+    // return exeUnit != null;
+    for (XRootQueueItem item in __xRootQueueItemMap.values) {
+      if (item is XShelf) {
+        return item._getNextExecutionUnit(debug: false) != null;
+      } else if (item is XActivityV1) {
+        // return item._getNextExecutionUnit()!= null;
+        return true;
+      }
+    }
+    return false;
   }
 
-  _ExecutionUnit? getNextExecutionUnit() {
+  _ExecutionUnit? getNextExecutionUnit({required bool removeEmptyRootQuery}) {
+    final bool debug = removeEmptyRootQuery;
     _ExecutionUnit? exeUnit = _xStorage._getNextExecutionUnit();
     if (exeUnit != null) {
-      return exeUnit;
+      // return exeUnit;
     }
+    final Set<String> rootQueueKeys = __xRootQueueItemMap.keys.toSet();
     while (true) {
-      String? firstRootQueueItemName = __xRootQueueItemMap.keys.firstOrNull;
+      String? firstRootQueueItemName = rootQueueKeys.firstOrNull;
       if (firstRootQueueItemName == null) {
         return null;
       }
+      PrintUtils.debug(debug,
+          "\n\n------------------------------------------------------------------------------");
+      PrintUtils.debug(debug,
+          "(***) @FOUND RootQueueName: `$firstRootQueueItemName`  in rootQueueKeys: $rootQueueKeys");
+
       // XShelf or XActivity:
       final XRootQueueItem rootQueueItem =
           __xRootQueueItemMap[firstRootQueueItemName]!;
-      if (rootQueueItem.isEmptyExecutionUnit()) {
-        __xRootQueueItemMap.remove(firstRootQueueItemName);
-        continue;
-      }
+
+      final NextExecutionUnit? next;
       if (rootQueueItem is XShelf) {
-        return rootQueueItem._getNextExecutionUnit();
+        next = rootQueueItem._getNextExecutionUnit(debug: debug);
       } else if (rootQueueItem is XActivityV1) {
-        return rootQueueItem._getNextExecutionUnit();
+        next = rootQueueItem._getNextExecutionUnit(debug: debug);
       } else {
         throw "TODO getNextExecutionUnit";
+      }
+
+      if (next == null) {
+        rootQueueKeys.remove(firstRootQueueItemName);
+        if (removeEmptyRootQuery) {
+          PrintUtils.debug(
+              debug, "\n(***) <<< @REMOVE >>> RootQueueName: $firstRootQueueItemName.\n");
+          __xRootQueueItemMap.remove(firstRootQueueItemName);
+        }
+      } else {
+        return next.executionUnit!;
       }
     }
   }

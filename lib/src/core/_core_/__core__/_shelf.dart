@@ -591,13 +591,14 @@ abstract class Shelf extends _Core {
     return true;
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
+  Future<void> _unitExecutionStarter({
+    required ExecutionTrace executionTrace,
+    required ExecutionUnitType executionUnitType,
+    required XShelf thisXShelf,
+  }) async {
+    __assertThisXShelf(thisXShelf);
 
-  EffectedShelfMembers _calculateEffectedShelfMembersByEvents(
-    List<Type> events,
-  ) {
-    return _shelfExternalUtils.calculateEffectedShelfMembersByEvents(events);
+    print("####### - _unitExecutionStarter (_ShelfStarterExecutionUnit)");
   }
 
   // ***************************************************************************
@@ -868,5 +869,17 @@ abstract class Shelf extends _Core {
   @override
   String toString() {
     return "${getClassName(this)}($name)";
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __assertThisXShelf(XShelf thisXShelf) {
+    if (thisXShelf.shelf != this) {
+      String message = "Error Assert shelf: ${thisXShelf.shelf} - $this";
+      print("FATAL ERROR: $message");
+      throw message;
+    }
   }
 }

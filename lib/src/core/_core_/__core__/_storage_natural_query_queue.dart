@@ -34,7 +34,7 @@ class _StorageNaturalQueryQueue {
   // LOGIC: #0000 (**)
   Future<void> _executeNaturalQueryQueue() async {
     List<Shelf> lazyShelves =
-    getAllRemoveAll().where((s) => !s.markedAsOrphan).toList();
+    getAllRemoveAll().toList();
 
     if (lazyShelves.isEmpty) {
       return;
@@ -53,7 +53,7 @@ class _StorageNaturalQueryQueue {
     );
     for (Shelf lazyShelf in lazyShelves) {
       if (lazyShelf.markedAsOrphan) {
-        continue;
+        // continue;
       }
       executionTrace._addTraceStep(
         codeId: "#00100",

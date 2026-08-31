@@ -15,6 +15,10 @@ class _ScalarClearExecutionUnit
         );
 
   @override
+  BlockTodo? get executionTodo => null;
+
+
+  @override
   XShelf get xShelf => xScalar.xShelf;
 
   @override

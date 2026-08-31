@@ -15,6 +15,7 @@ class _XShelfFilterModelQuery extends _XShelfBaseQuery {
       srcBlockAndOptions: null,
       srcScalarAndOptions: null,
       forceQueryAll: forceQueryAll,
+      forceReloadFilter: true,
     );
   }
 }

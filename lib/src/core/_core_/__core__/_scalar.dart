@@ -587,7 +587,7 @@ abstract class Scalar<
           shortDesc:
               "${debugObjHtml(this)} @queried: ${xFilterModel.queried} --> no need to load data.",
         );
-        filterCriteriaMvOfFilterModel = filterModel._xFilterCriteria!
+        filterCriteriaMvOfFilterModel = filterModel._filterCriteriaMappedValue!
             as FilterCriteriaMappedValue<FILTER_CRITERIA>;
       }
     } catch (e, _) {

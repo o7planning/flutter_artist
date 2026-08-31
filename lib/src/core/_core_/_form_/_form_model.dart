@@ -387,10 +387,11 @@ abstract class FormModel<
   Future<bool> _unitFormViewChanged({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XFormModel xFormModel,
-    required Map<String, dynamic>? formKeyInstantValuesInUI,
+    required XFormModel thisXFormModel,
+    required FormModelTodoViewChange executionTodo,
   }) async {
-    __assertThisXFormModel(xFormModel);
+    __assertThisXFormModel(thisXFormModel);
+    thisXFormModel._createAndSetFormModelTodoDone();
     //
     executionTrace._addTraceStep(
       codeId: "#36000",
@@ -404,7 +405,7 @@ abstract class FormModel<
       additionalFormRelatedData: null,
       formInput: null,
       activityType: FormActivityType.updateFromFormView,
-      formKeyInstantValuesInUI: formKeyInstantValuesInUI,
+      formKeyInstantValuesInUI: executionTodo.formKeyInstantValuesInUI,
     );
     return true;
   }
@@ -421,6 +422,7 @@ abstract class FormModel<
     required FormModelDataLoadResult executionUnitResult,
   }) async {
     __assertThisXFormModel(thisXFormModel);
+    thisXFormModel._createAndSetFormModelTodoDone();
     //
     executionTrace._addTraceStep(
       codeId: "#37000",
@@ -507,9 +509,9 @@ abstract class FormModel<
     required ExecutionUnitType executionUnitType,
     required XFormModel thisXFormModel,
     required FORM_INPUT formInput,
-    // required FormModelPatchFormFieldsResult executionUnitResult,
   }) async {
     __assertThisXFormModel(thisXFormModel);
+    thisXFormModel._createAndSetFormModelTodoDone();
     //
     executionTrace._addTraceStep(
       codeId: "#38000",
@@ -555,6 +557,7 @@ abstract class FormModel<
     required FormSaveResult executionUnitResult,
   }) async {
     __assertThisXFormModel(thisXFormModel);
+    thisXFormModel._createAndSetFormModelTodoDone();
     //
     executionTrace._addTraceStep(
       codeId: "#11000",
@@ -796,12 +799,8 @@ abstract class FormModel<
       }
     }
     //
-    // final Map<String, dynamic> formKeyInstantValues =
-    //     _formKey.currentState?.instantValue ?? {};
     final Map<String, dynamic> formKeyInstantValues =
         formKeyInstantValuesInUI ?? _formModelStructure._currentFormData;
-
-    print("formKeyInstantValues : $formKeyInstantValues");
     //
     _formModelStructure._setupTemporaryStateForNewActivity(
       activityType: activityType,
@@ -1140,8 +1139,9 @@ abstract class FormModel<
             tipDocument: TipDocument.formModelGetUpdatedValuesForSimpleProps,
           );
           // IN CASE OF activityType = patchFormFields.
-          final formDataState =
-              FormDataStateLoaded(transientErrorInfo: transientErrorInfo);
+          final formDataState = FormDataStateLoadedStale.failed(
+            errorInfo: transientErrorInfo,
+          );
           //
           __endFormActivityWithDataState(
             formDataState: formDataState,
@@ -1241,9 +1241,9 @@ abstract class FormModel<
         FormActivityType.startCreatingOrEditing =>
           FormDataStateFatalError(errorInfo: errorInfo),
         FormActivityType.updateFromFormView =>
-          FormDataStateLoaded(transientErrorInfo: errorInfo),
+          FormDataStateLoadedFresh(transientErrorInfo: errorInfo),
         FormActivityType.patchFormFields =>
-          FormDataStateLoaded(transientErrorInfo: errorInfo)
+          FormDataStateLoadedFresh(transientErrorInfo: errorInfo)
       };
       //
       __endFormActivityWithDataState(
@@ -1261,7 +1261,7 @@ abstract class FormModel<
     }
     //
     return __endFormActivityWithDataState(
-      formDataState: FormDataStateLoaded(),
+      formDataState: FormDataStateLoadedFresh(),
       activityType: activityType,
       error: null,
     );
@@ -1359,9 +1359,9 @@ abstract class FormModel<
         FormActivityType.startCreatingOrEditing =>
           FormDataStateFatalError(errorInfo: errorInfo),
         FormActivityType.updateFromFormView =>
-          FormDataStateLoaded(transientErrorInfo: errorInfo),
+          FormDataStateLoadedFresh(transientErrorInfo: errorInfo),
         FormActivityType.patchFormFields =>
-          FormDataStateLoaded(transientErrorInfo: errorInfo),
+          FormDataStateLoadedFresh(transientErrorInfo: errorInfo),
       };
       //
       _formModelStructure._setFormDataState(
@@ -2110,17 +2110,7 @@ abstract class FormModel<
       //
       // Patch _formKey:
       //
-      // TODO: DELETE
-      // Map<String, dynamic> initData = {..._formModelStructure.initialFormData};
-      // for (String key in _formKey.currentState?.instantValue.keys ?? []) {
-      //   if (!initData.containsKey(key)) {
-      //     initData[key] = null;
-      //   }
-      // }
-      // _formKey.currentState?.patchValue(initData);
-
       Map<String, dynamic> initData = {..._formModelStructure._initialFormData};
-      print("^^^^^^^^^^ initData: $initData");
       final activeForms = ui._activeFormBuilderStates;
 
       for (FormBuilderState formState in activeForms) {
@@ -2130,7 +2120,6 @@ abstract class FormModel<
             localInitData[key] = null;
           }
         }
-        print("^^^^^^^^^^ localInitData: $localInitData");
         formState.patchValue(localInitData);
       }
       //
@@ -2149,20 +2138,15 @@ abstract class FormModel<
   Future<void> _onChangeFromFormView({
     required Map<String, dynamic> formKeyInstantValuesInUI,
   }) async {
-    print("#~~~~~~~~~~~~~~~> _onChangeFromFormView");
-    //
     final XShelf xShelf = _XShelfFormViewChange(formModel: this);
     //
     XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     XFormModel xFormModel = xBlock.xFormModel!;
-    _FormViewChangeExecutionUnit executionUnit = _FormViewChangeExecutionUnit(
-      xFormModel: xFormModel,
+
+    xFormModel._createAndSetFormModelTodoViewChange(
       formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );
-    //
-    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    //
     await FlutterArtist.executor._executeExecutionUnitQueue(showOverlay: false);
   }
 
@@ -2363,16 +2347,22 @@ abstract class FormModel<
       shortDesc: "Creating <b>_FormModelSaveFormExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    final _ShelfMemberResultedExecutionUnit executionUnit =
-        _FormModelSaveFormExecutionUnit(
-      xFormModel: xFormModel,
-    );
-    //
-    xShelf._addExecutionUnit(executionUnit: executionUnit);
+    FormModelTodoSave executionTodo =
+        xFormModel._createAndSetFormModelTodoSave();
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    //
-    return executionUnit.executionUnitResult;
+    return executionTodo.result;
+
+    // final _ShelfMemberResultedExecutionUnit executionUnit =
+    //     _FormModelSaveFormExecutionUnit(
+    //   xFormModel: xFormModel,
+    // );
+    // //
+    // xShelf._addExecutionUnit(executionUnit: executionUnit);
+    // FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
+    // await FlutterArtist.executor._executeExecutionUnitQueue();
+    // //
+    // return executionUnit.executionUnitResult;
   }
 
   // ***************************************************************************

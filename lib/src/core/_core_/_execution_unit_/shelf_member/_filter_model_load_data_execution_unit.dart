@@ -6,8 +6,12 @@ class _FilterModelLoadDataExecutionUnit
     extends _ShelfMemberResultedExecutionUnit<FilterModelDataLoadResult> {
   XFilterModel xFilterModel;
 
+  @override
+  FilterModelTodoLoad executionTodo;
+
   _FilterModelLoadDataExecutionUnit({
     required this.xFilterModel,
+    required this.executionTodo,
   }) : super(
           executionUnitType: ExecutionUnitType.filterModelLoadData,
           executionUnitResult: FilterModelDataLoadResult(),

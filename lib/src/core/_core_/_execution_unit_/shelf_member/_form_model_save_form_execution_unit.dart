@@ -4,14 +4,18 @@ part of '../../core.dart';
 @_FormModelSaveFormAnnotation()
 class _FormModelSaveFormExecutionUnit
     extends _ShelfMemberResultedExecutionUnit<FormSaveResult> {
-  XFormModel xFormModel;
+  final XFormModel xFormModel;
+
+  @override
+  final FormModelTodoSave executionTodo;
 
   _FormModelSaveFormExecutionUnit({
     required this.xFormModel,
+    required this.executionTodo,
   }) : super(
-    executionUnitType: ExecutionUnitType.formModelSaveForm,
-    executionUnitResult: FormSaveResult(precheck: null),
-  );
+          executionUnitType: ExecutionUnitType.formModelSaveForm,
+          executionUnitResult: FormSaveResult(precheck: null),
+        );
 
   @override
   XShelf get xShelf => xFormModel.xShelf;

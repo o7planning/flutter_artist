@@ -7,17 +7,22 @@ part of '../../core.dart';
 @_BlockDeleteItemAnnotation()
 class _BlockItemDeletionExecutionUnit<
         ID extends Comparable, //
-        ITEM extends Identifiable<ID>>
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>>
     extends _ShelfMemberResultedExecutionUnit<BlockItemDeletionResult<ITEM>> {
   XBlock xBlock;
-  final ITEM item;
+
+  @override
+  final BlockTodoDeleteItem<ID, ITEM, ITEM_DETAIL> executionTodo;
 
   _BlockItemDeletionExecutionUnit({
     required this.xBlock,
-    required this.item,
-    required super.executionUnitResult,
+    required this.executionTodo,
+    // required super.executionUnitResult,
   }) : super(
           executionUnitType: ExecutionUnitType.blockDeleteItem,
+          executionUnitResult:
+              BlockItemDeletionResult(candidateItem: executionTodo.item),
         );
 
   @override

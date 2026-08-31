@@ -28,3 +28,8 @@ abstract class ExecutionUnitResult<PRECHECK> {
     _errorInfo = errorInfo;
   }
 }
+
+class EmptyExecutionUnitResult extends ExecutionUnitResult<dynamic> {
+  @override
+  bool get successForFirst => true;
+}

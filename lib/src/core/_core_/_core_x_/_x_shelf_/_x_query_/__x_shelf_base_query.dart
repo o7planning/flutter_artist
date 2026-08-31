@@ -16,6 +16,7 @@ class _XShelfBaseQuery extends XShelf {
     required FilterModel filterModel,
     required FilterInput? filterInput,
     required bool forceQueryAll,
+    required bool forceReloadFilter,
   }) {
     assert(!forceQueryAll ||
         (srcBlockAndOptions == null && srcScalarAndOptions == null));
@@ -26,6 +27,9 @@ class _XShelfBaseQuery extends XShelf {
     //
     final thisXFilterModel = xFilterModelMap[filterModel.name]!;
     thisXFilterModel.filterInput = filterInput;
+    if (forceReloadFilter) {
+      thisXFilterModel._filterLoadHint = FilterLoadHint.force;
+    }
     //
     if (srcBlockAndOptions != null) {
       final Block srcBlock = srcBlockAndOptions.block;

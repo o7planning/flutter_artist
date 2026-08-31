@@ -30,3 +30,25 @@ abstract class _ExecutionUnit {
     return executionUnitType.asDebugExecutionUnit(getObjectName());
   }
 }
+
+class NextExecutionUnit {
+  final _ExecutionUnit? executionUnit;
+  final bool yes;
+  final String info;
+
+  NextExecutionUnit.yes({
+    required this.executionUnit,
+    required this.info,
+    required bool debug,
+  }) : yes = true {
+    PrintUtils.debug(debug, " --> [$yes] - $info");
+  }
+
+  NextExecutionUnit.no({
+    required this.info,
+    required bool debug,
+  })  : yes = false,
+        executionUnit = null {
+    PrintUtils.debug(debug, " --> [$yes] - $info");
+  }
+}

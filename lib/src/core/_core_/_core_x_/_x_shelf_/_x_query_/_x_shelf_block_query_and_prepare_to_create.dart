@@ -25,6 +25,7 @@ class _XShelfBlockQueryThenPrepareToCreate extends _XShelfBaseQuery {
       ),
       srcScalarAndOptions: null,
       forceQueryAll: false,
+      forceReloadFilter: false,
     );
   }
 }

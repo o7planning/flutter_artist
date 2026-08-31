@@ -24,12 +24,13 @@ abstract class FilterModel<
 
   List<Scalar> get scalars => List.unmodifiable(_scalars);
 
-  FilterCriteriaMappedValue<FILTER_CRITERIA>? _xFilterCriteria;
+  FilterCriteriaMappedValue<FILTER_CRITERIA>? _filterCriteriaMappedValue;
 
-  FILTER_CRITERIA? get filterCriteria => _xFilterCriteria?.filterCriteria;
+  FILTER_CRITERIA? get filterCriteria =>
+      _filterCriteriaMappedValue?.filterCriteria;
 
-  FilterCriteriaMappedValue<FILTER_CRITERIA>? get debugXFilterCriteria =>
-      _xFilterCriteria;
+  FilterCriteriaMappedValue<FILTER_CRITERIA>?
+      get debugFilterCriteriaMappedValue => _filterCriteriaMappedValue;
 
   late final _FilterModelDebugInfo debug = _FilterModelDebugInfo();
 
@@ -232,7 +233,7 @@ abstract class FilterModel<
     required Map<String, dynamic> tildeCriteriaMap,
   });
 
-  FilterCriteriaMappedValue<FILTER_CRITERIA> __createXFilterCriteria({
+  FilterCriteriaMappedValue<FILTER_CRITERIA> __createFilterCriteriaMappedValue({
     required Map<String, dynamic> tildeCriteriaMap,
     required FilterConditionGroupVal baseCriteria,
     required bool isPrecheck,
@@ -258,7 +259,7 @@ abstract class FilterModel<
       return;
     }
     try {
-      final xFilterCriteria = __createXFilterCriteria(
+      final xFilterCriteria = __createFilterCriteriaMappedValue(
         tildeCriteriaMap: {},
         baseCriteria: FilterConditionGroupVal.empty(),
         isPrecheck: true,
@@ -283,6 +284,7 @@ abstract class FilterModel<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XFilterModel thisXFilterModel,
+    required FilterModelTodoLoad executionTodo,
     required FilterModelDataLoadResult executionUnitResult,
   }) async {
     __assertThisXFilterModel(thisXFilterModel);
@@ -296,10 +298,9 @@ abstract class FilterModel<
     try {
       // SAME-AS: #0004
       if (!thisXFilterModel.queried) {
-        FILTER_INPUT? filterInput =
-            thisXFilterModel.filterInput as FILTER_INPUT?;
+        final filterInput = thisXFilterModel.filterInput as FILTER_INPUT?;
         //
-        _xFilterCriteria = await _startNewFilterActivity(
+        _filterCriteriaMappedValue = await _startNewFilterActivity(
           executionTrace: executionTrace,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
@@ -313,6 +314,8 @@ abstract class FilterModel<
       // @@TODO@@ 12 Test.
       print("ERROR _unitQuery: $stackTrace");
       /* Never Error */
+    } finally {
+      thisXFilterModel._createAndSetFilterModelTodoDone();
     }
     return false;
   }
@@ -325,10 +328,10 @@ abstract class FilterModel<
   Future<bool> _unitFilterPanelChanged({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XFilterModel xFilterModel,
-    required Map<String, dynamic> formKeyInstantValuesInUI,
+    required XFilterModel thisXFilterModel,
+    required FilterModelTodoPanelChange executionTodo,
   }) async {
-    __assertThisXFilterModel(xFilterModel);
+    __assertThisXFilterModel(thisXFilterModel);
     //
     executionTrace._addTraceStep(
       codeId: "#30000",
@@ -339,14 +342,18 @@ abstract class FilterModel<
     //
     _filterModelStructure._setFilterDataState(FilterDataStatePending());
     //
-    FilterCriteriaMappedValue<FILTER_CRITERIA>? xFilterCriteria =
-        await _startNewFilterActivity(
-      executionTrace: executionTrace,
-      activityType: FilterActivityType.updateFromFilterPanel,
-      filterInput: null,
-      formKeyInstantValuesInUI: formKeyInstantValuesInUI,
-    );
-    return xFilterCriteria != null;
+    try {
+      FilterCriteriaMappedValue<FILTER_CRITERIA>? xFilterCriteria =
+          await _startNewFilterActivity(
+        executionTrace: executionTrace,
+        activityType: FilterActivityType.updateFromFilterPanel,
+        filterInput: null,
+        formKeyInstantValuesInUI: executionTodo.formKeyInstantValuesInUI,
+      );
+      return xFilterCriteria != null;
+    } finally {
+      thisXFilterModel._createAndSetFilterModelTodoLoad();
+    }
   }
 
   // ***************************************************************************
@@ -568,8 +575,6 @@ abstract class FilterModel<
     if (activityType == FilterActivityType.newFilt) {
       debug.__loadCount++;
     }
-    // final Map<String, dynamic> formKeyInstantValues =
-    //     _formKey.currentState?.instantValue ?? {};
 
     final Map<String, dynamic> formKeyInstantValues =
         formKeyInstantValuesInUI ??
@@ -619,8 +624,8 @@ abstract class FilterModel<
       //
       final dataStateError = FilterDataStateError(errorInfo: errorInfo);
       _filterModelStructure._setFilterDataState(dataStateError);
-      _xFilterCriteria = null;
-      return _xFilterCriteria;
+      _filterCriteriaMappedValue = null;
+      return _filterCriteriaMappedValue;
     }
     //
     // Load OptProp Data:
@@ -705,8 +710,8 @@ abstract class FilterModel<
       //
       final dataStateError = FilterDataStateError(errorInfo: errorInfo);
       _filterModelStructure._setFilterDataState(dataStateError);
-      _xFilterCriteria = null;
-      return _xFilterCriteria;
+      _filterCriteriaMappedValue = null;
+      return _filterCriteriaMappedValue;
     }
     //
     if (filterInput != null) {
@@ -762,8 +767,8 @@ abstract class FilterModel<
         //
         final dataStateError = FilterDataStateError(errorInfo: errorInfo);
         _filterModelStructure._setFilterDataState(dataStateError);
-        _xFilterCriteria = null;
-        return _xFilterCriteria;
+        _filterCriteriaMappedValue = null;
+        return _filterCriteriaMappedValue;
       }
     }
     // filterInput is null
@@ -815,8 +820,8 @@ abstract class FilterModel<
         //
         final dataStateError = FilterDataStateError(errorInfo: errorInfo);
         _filterModelStructure._setFilterDataState(dataStateError);
-        _xFilterCriteria = null;
-        return _xFilterCriteria;
+        _filterCriteriaMappedValue = null;
+        return _filterCriteriaMappedValue;
       }
     }
     //
@@ -855,7 +860,7 @@ abstract class FilterModel<
 
       // Convert Map Data to FilterCriteria Object.
       final FilterCriteriaMappedValue<FILTER_CRITERIA> newXFilterCriteria =
-          __createXFilterCriteria(
+          __createFilterCriteriaMappedValue(
         tildeCriteriaMap: newCriteriaMap,
         baseCriteria: baseCriteria,
         isPrecheck: false,
@@ -872,12 +877,12 @@ abstract class FilterModel<
         );
       }
       //
-      _xFilterCriteria = newXFilterCriteria;
+      _filterCriteriaMappedValue = newXFilterCriteria;
       //
       __initiatedAtLeastOnce = true;
       _filterModelStructure._setFilterDataState(FilterDataStateLoaded());
       //
-      return _xFilterCriteria;
+      return _filterCriteriaMappedValue;
     } catch (e, stackTrace) {
       print(stackTrace);
       final ErrorInfo errorInfo = _handleError(
@@ -898,14 +903,14 @@ abstract class FilterModel<
         newCurrentValue: _filterModelStructure._currentCriteriaValues,
       );
       //
-      _xFilterCriteria = null;
+      _filterCriteriaMappedValue = null;
       executionTrace._addTraceStep(
         codeId: "#31500",
         shortDesc:
             "The ${debugObjHtml(this)}.createNewFilterCriteria() method was called with an error!",
         errorInfo: errorInfo,
       );
-      return _xFilterCriteria;
+      return _filterCriteriaMappedValue;
     }
   }
 
@@ -1375,17 +1380,13 @@ abstract class FilterModel<
   Future<void> _onChangeFromFilterPanel({
     required Map<String, dynamic> formKeyInstantValuesInUI,
   }) async {
-    print("#~~~~~~~~~~~~~~~> _onChangeFromFilterPanel");
-    //
     final XShelf xShelf = _XShelfFilterPanelChange(filterModel: this);
     //
-    final XFilterModel xFilterModel = xShelf.findXFilterModelByName(name)!;
-    _FilterPanelChangeExecutionUnit executionUnit =
-        _FilterPanelChangeExecutionUnit(
-      xFilterModel: xFilterModel,
+    final XFilterModel thisXFilterModel = xShelf.findXFilterModelByName(name)!;
+    // Add
+    thisXFilterModel._createAndSetFilterModelTodoPanelChange(
       formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );
-    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
   }
@@ -1438,6 +1439,7 @@ abstract class FilterModel<
     if (__lockAddMoreQuery) {
       return false;
     }
+    print("\n FILTER MODEL queryAll() \n");
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryAll",
@@ -1508,17 +1510,21 @@ abstract class FilterModel<
       forceQueryAll: forceQueryAll,
     );
     //
-    executionTrace._addTraceStep(
-      codeId: "#55100",
-      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()..",
-      traceStepType: TraceStepType.nonControllableCalling,
-    );
-    xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
-    //
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    //
     return true;
+    //
+    // executionTrace._addTraceStep(
+    //   codeId: "#55100",
+    //   shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()..",
+    //   traceStepType: TraceStepType.nonControllableCalling,
+    // );
+    // xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
+    // //
+    // FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
+    // await FlutterArtist.executor._executeExecutionUnitQueue();
+    // //
+    // return true;
   }
 
   // ***************************************************************************

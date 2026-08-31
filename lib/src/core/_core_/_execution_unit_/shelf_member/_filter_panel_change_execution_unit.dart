@@ -4,11 +4,11 @@ part of '../../core.dart';
 @_FilterPanelChangeAnnotation()
 class _FilterPanelChangeExecutionUnit extends _ShelfMemberExecutionUnit {
   XFilterModel xFilterModel;
-  final Map<String, dynamic> formKeyInstantValuesInUI;
+  final FilterModelTodoPanelChange executionTodo;
 
   _FilterPanelChangeExecutionUnit({
     required this.xFilterModel,
-    required this.formKeyInstantValuesInUI,
+    required this.executionTodo,
   }) : super(
           executionUnitType: ExecutionUnitType.filterModelFilterPanelChanged,
         );

@@ -2,16 +2,16 @@ part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_BlockPrepareFormToCreateItemAnnotation()
-class _BlockPrepareFormToCreateItemExecutionUnit
-    extends _ShelfMemberExecutionUnit {
-  XBlock xBlock;
-  FormInput? formInput;
-  final bool initDirty;
+class _BlockPrepareFormToCreateItemExecutionUnit<
+    ID extends Comparable, //
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
+  final XBlock xBlock;
+  final BlockTodoPrepareFormToCreateItem<ID, ITEM, ITEM_DETAIL> executionTodo;
 
   _BlockPrepareFormToCreateItemExecutionUnit({
     required this.xBlock,
-    required this.initDirty,
-    required this.formInput,
+    required this.executionTodo,
   }) : super(
           executionUnitType: ExecutionUnitType.blockPrepareToCreateItem,
         );

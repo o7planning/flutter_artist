@@ -1,6 +1,7 @@
 export 'src/_wcfg.dart';
-export 'src/core/_core_/core.dart'
-    hide XBlock, XShelf, XFilterModel, XFormModel, XScalar;
+export 'src/core/_core_/core.dart';
+// export 'src/core/_core_/core.dart'
+//     hide XBlock, XShelf, XFilterModel, XFormModel, XScalar;
 export 'src/core/action/_action.dart';
 export 'src/core/action/background_web_download_action.dart';
 export 'src/core/action/block_backend_action.dart';
@@ -104,7 +105,7 @@ export 'src/core/precheck/__chk_code.dart';
 export 'src/core/precheck/__precheck.dart';
 export 'src/core/precheck/_check_allow.dart';
 export 'src/core/precheck/block_backend_action_precheck.dart';
-export 'src/core/precheck/block_clear_precheck.dart';
+export 'src/core/precheck/block_clear_items_precheck.dart';
 export 'src/core/precheck/block_form_enablement_precheck.dart';
 export 'src/core/precheck/block_form_reset_precheck.dart';
 export 'src/core/precheck/block_form_save_precheck.dart';

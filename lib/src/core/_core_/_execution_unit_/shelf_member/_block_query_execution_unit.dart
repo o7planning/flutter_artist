@@ -9,9 +9,11 @@ part of '../../core.dart';
 @_BlockQueryAndPrepareToCreateAnnotation()
 class _BlockQueryExecutionUnit extends _ShelfMemberExecutionUnit {
   XBlock xBlock;
+  BlockTodoQuery? blockTodoQuery;
 
   _BlockQueryExecutionUnit({
     required this.xBlock,
+    required this.blockTodoQuery,
   }) : super(
           executionUnitType: ExecutionUnitType.blockQuery,
         );

@@ -7,6 +7,7 @@ class _XShelfFilterPanelChange extends XShelf {
           xShelfType: XShelfType.filterPanelChange,
           shelf: filterModel.shelf,
         ) {
-    // Nothing?
+    XFilterModel thisXFilterModel = xFilterModelMap[filterModel.name]!;
+    thisXFilterModel._filterLoadHint = FilterLoadHint.force;
   }
 }

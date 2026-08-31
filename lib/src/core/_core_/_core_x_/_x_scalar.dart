@@ -9,6 +9,14 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   final Scalar<ID, VALUE, FilterInput, FilterCriteria> scalar;
 
+  ScalarTodo<ID, VALUE>? _scalarTodo;
+
+  bool _reviewed = false;
+
+  bool get isLazy {
+    return scalar.dataState.isPending || scalar.dataState.isStale;
+  }
+
   final XFilterModel xFilterModel;
 
   XScalar get rootXScalar {
@@ -95,6 +103,19 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   }) {
     __queryType = queryType;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  _ShelfMemberExecutionUnit? _getNextExecutionUnit() {
+    if (_scalarTodo is ScalarTodoDone) {
+      return null;
+    }
+    return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void printInfo() {
     bool hasActiveUI = scalar.ui.hasActiveUiComponent();

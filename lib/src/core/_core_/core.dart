@@ -56,6 +56,7 @@ import '../built_in/empty_filter_input.dart';
 import '../enums/action_confirmation_type.dart';
 import '../enums/action_result_state.dart';
 import '../enums/activity_hidden_action.dart';
+
 import '../enums/block_viewport_sync_strategy.dart';
 import '../enums/error_origin.dart';
 import '../enums/event_data_kind.dart';
@@ -151,7 +152,8 @@ import '../pagination/number/number_pagination.dart';
 import '../precheck/__actionable.dart';
 import '../precheck/_check_allow.dart';
 import '../precheck/background_action_precheck.dart';
-import '../precheck/block_clear_precheck.dart';
+import '../precheck/block_clear_current_item_precheck.dart';
+import '../precheck/block_clear_items_precheck.dart';
 import '../precheck/filter_model_data_load_precheck.dart';
 import '../precheck/scalar_clear_precheck.dart';
 import '../precheck/block_form_enablement_precheck.dart';
@@ -182,6 +184,7 @@ import '../utils/_name_utils.dart';
 import '../event/broadcast_backend_events_action.dart';
 import '../enums/control_bar_item_type.dart';
 import '../notification/firebase/firebase_notification_service.dart';
+import '../utils/print_utils.dart';
 import '_utils_/block_query_state_calculator.dart';
 import '_utils_/scalar_query_state_calculator.dart';
 
@@ -226,6 +229,14 @@ part '_v2_/_flow.dart';
 part '_v2_/_task.dart';
 
 part '_v2_/_activity.dart';
+
+part '_core_x_/_todo_/filter_model_todo.dart';
+
+part '_core_x_/_todo_/form_model_todo.dart';
+
+part '_core_x_/_todo_/block_todo.dart';
+
+part '_core_x_/_todo_/scalar_todo.dart';
 
 part '_v2_/_activity_structure.dart';
 
@@ -505,7 +516,7 @@ part '_core_x_/_x_shelf_/_x_shelf_block_backend_action_execution.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_set_item_as_current.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_block_clear.dart';
+part '_core_x_/_x_shelf_/_x_shelf_block_clear_items.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_scalar_clear.dart';
 
@@ -611,7 +622,9 @@ part '_execution_unit_result_/_form_model_patch_form_fields_result.dart';
 
 part '_execution_unit_result_/_background_action_result.dart';
 
-part '_execution_unit_result_/_block_clear_result.dart';
+part '_execution_unit_result_/_block_clear_items_result.dart';
+
+part '_execution_unit_result_/_block_clear_current_item_result.dart';
 
 part '_execution_unit_result_/_scalar_clear_result.dart';
 
@@ -650,6 +663,8 @@ part '_execution_unit_/___execution_unit.dart';
 part '_execution_unit_/__shelf_member_execution_unit.dart';
 
 part '_core_x_/_root_queue_/__x_root_queue.dart';
+
+part '_execution_unit_/shelf_member/_shelf_starter_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_clear_execution_unit.dart';
 
@@ -932,8 +947,8 @@ class _BlockSetItemAsCurrentAnnotation {
   const _BlockSetItemAsCurrentAnnotation();
 }
 
-class _BlockClearAnnotation {
-  const _BlockClearAnnotation();
+class _BlockClearItemsAnnotation {
+  const _BlockClearItemsAnnotation();
 }
 
 class _BlockClearCurrentItemAnnotation {

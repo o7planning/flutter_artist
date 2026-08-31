@@ -4,11 +4,12 @@ part of '../../core.dart';
 @_FormViewChangeAnnotation()
 class _FormViewChangeExecutionUnit extends _ShelfMemberExecutionUnit {
   XFormModel xFormModel;
-  final Map<String, dynamic> formKeyInstantValuesInUI;
+
+  final FormModelTodoViewChange executionTodo;
 
   _FormViewChangeExecutionUnit({
     required this.xFormModel,
-    required this.formKeyInstantValuesInUI,
+    required this.executionTodo,
   }) : super(
           executionUnitType: ExecutionUnitType.formModelFormViewChanged,
         );

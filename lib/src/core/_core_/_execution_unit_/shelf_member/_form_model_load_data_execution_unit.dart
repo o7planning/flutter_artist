@@ -4,10 +4,14 @@ part of '../../core.dart';
 @_FormModelLoadDataAnnotation()
 class _FormModelLoadDataExecutionUnit
     extends _ShelfMemberResultedExecutionUnit<FormModelDataLoadResult> {
-  XFormModel xFormModel;
+  final XFormModel xFormModel;
+
+  @override
+  final FormModelTodoLoad executionTodo;
 
   _FormModelLoadDataExecutionUnit({
     required this.xFormModel,
+    required this.executionTodo,
   }) : super(
           executionUnitType: ExecutionUnitType.formModelLoadData,
           executionUnitResult: FormModelDataLoadResult(),

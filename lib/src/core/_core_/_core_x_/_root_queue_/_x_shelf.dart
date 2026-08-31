@@ -34,6 +34,9 @@ abstract class XShelf extends XRootQueueItem {
   final List<XFilterModel> allXFilterModels = [];
   final List<XFormModel> allXFormModels = [];
 
+  late Set<XBlock> _frontierXBlocks;
+  late Set<XScalar> _frontierXScalars;
+
   XBlock? __rootVipXBlock;
 
   XBlock? get rootVipXBlock => __rootVipXBlock;
@@ -143,6 +146,206 @@ abstract class XShelf extends XRootQueueItem {
         xBlock.parentXBlock = null;
       }
     }
+    _updateFromShelfForFirstTime();
+    _frontierXBlocks = _determineFrontierXBlocks();
+    _frontierXScalars = _determineFrontierXScalars();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _updateFromShelfForFirstTime() {
+    for (XScalar leafXScalar in allLeafXScalars) {
+      XScalar? xScalar = leafXScalar;
+      QryHint maxQryHint = leafXScalar.queryHint;
+      while (xScalar != null) {
+        maxQryHint = QryHint.max(maxQryHint, xScalar.queryHint);
+        final ScalarDataState dataState = xScalar.scalar.dataState;
+        bool hasActiveUiX = xScalar.scalar.ui.hasActiveScalarBaseView(
+          alsoCheckChildren: true,
+        );
+        if (hasActiveUiX) {
+          switch (dataState) {
+            case ScalarDataStateNone():
+              break;
+            case ScalarDataStateLoadedFresh():
+              break;
+            case ScalarDataStatePending():
+              maxQryHint = QryHint.force;
+            case ScalarDataStateLoadedStale():
+              maxQryHint = QryHint.force;
+          }
+        }
+        // !hasActiveUiX
+        else {
+          switch (dataState) {
+            case ScalarDataStateNone():
+              break;
+            case ScalarDataStateLoadedFresh():
+              break;
+            case ScalarDataStatePending():
+              break;
+            case ScalarDataStateLoadedStale():
+              break;
+          }
+        }
+        xScalar.setQueryHintToGreater(maxQryHint);
+        xScalar = xScalar.parentXScalar;
+      }
+    }
+    //
+    for (XBlock leafXBlock in allLeafXBlocks) {
+      XBlock? xBlock = leafXBlock;
+      while (xBlock != null) {
+        bool blockXBlockRep =
+            xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
+          alsoCheckChildren: true,
+        );
+        if (blockXBlockRep) {
+          if (xBlock.block.dataState.isPending ||
+              xBlock.block.dataState.isStale) {
+            xBlock.setQueryHintToGreater(QryHint.force);
+          }
+        }
+        XFormModel? xFormModel = xBlock.xFormModel;
+        if (xFormModel != null &&
+            xFormModel.formModel.ui.hasActiveUiComponent()) {
+          if (xFormModel.formModel.dataState.isPending ||
+              xFormModel.formModel.dataState.isFatalError ||
+              xFormModel.formModel.dataState.isNone) {
+            // Test case: [39b]
+            xFormModel.lazy = true;
+            if (naturalMode) {
+              xFormModel.setForceType(ForceType.decidedAtRuntime);
+            } else {
+              xFormModel.setForceType(ForceType.force);
+            }
+          }
+        }
+        xBlock = xBlock.parentXBlock;
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Set<XBlock> _determineFrontierXBlocks() {
+    final Set<XBlock> result = {};
+    for (XBlock xBlock in allRootXBlocks) {
+      _collectFrontierXBlockCascade(xBlock: xBlock, result: result);
+    }
+    return result;
+  }
+
+  void _collectFrontierXBlockCascade({
+    required XBlock xBlock,
+    required Set<XBlock> result,
+  }) {
+    final BlockDataState dataState = xBlock.block.dataState;
+    if (dataState.isPending || dataState.isStale) {
+      result.add(xBlock);
+    } else {
+      for (XBlock childXBlock in xBlock.childXBlocks) {
+        _collectFrontierXBlockCascade(xBlock: childXBlock, result: result);
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Set<XScalar> _determineFrontierXScalars() {
+    final Set<XScalar> result = {};
+    for (XScalar xScalar in allRootXScalars) {
+      _collectFrontierXScalarCascade(xScalar: xScalar, result: result);
+    }
+    return result;
+  }
+
+  void _collectFrontierXScalarCascade({
+    required XScalar xScalar,
+    required Set<XScalar> result,
+  }) {
+    final ScalarDataState dataState = xScalar.scalar.dataState;
+    if (dataState.isPending || dataState.isStale) {
+      result.add(xScalar);
+    } else {
+      for (XScalar childXScalar in xScalar.childXScalars) {
+        _collectFrontierXScalarCascade(xScalar: childXScalar, result: result);
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
+  NextExecutionUnit? _getNextExecutionUnit({required bool debug}) {
+    PrintUtils.debug(debug,
+        "\nBEGIN >>> ${getClassNameWithoutGenerics(this)}._getNextExecutionUnit()...");
+    NextExecutionUnit? next = _findBlockNextExecutionUnit(debug: debug);
+    if (next != null) {
+      return next;
+    }
+    return null;
+  }
+
+  // ***************************************************************************
+
+  NextExecutionUnit? _findBlockNextExecutionUnit({required bool debug}) {
+    for (final root in allRootXBlocks) {
+      final NextExecutionUnit? next =
+          _findBlockNextExecutionUnitCascade(xBlock: root, debug: debug);
+      if (next != null && next.yes) {
+        return next;
+      }
+    }
+    return null;
+  }
+
+  NextExecutionUnit? _findBlockNextExecutionUnitCascade({
+    required XBlock xBlock,
+    required bool debug,
+  }) {
+    NextExecutionUnit next1 = xBlock._getNextExecutionUnit(debug: debug);
+    if (next1.yes) {
+      return next1;
+    }
+    for (final XBlock childXBlock in xBlock.childXBlocks) {
+      NextExecutionUnit? next2 =
+          _findBlockNextExecutionUnitCascade(xBlock: childXBlock, debug: debug);
+      if (next2 != null && next2.yes) {
+        return next2;
+      }
+    }
+    return null;
+  }
+
+  // ***************************************************************************
+
+  XScalar? _findScalarNextExecutionUnit() {
+    for (final root in allRootXScalars) {
+      final XScalar? result = _findScalarNextExecutionUnitCascade(root);
+      if (result != null) {
+        return result;
+      }
+    }
+    return null;
+  }
+
+  XScalar? _findScalarNextExecutionUnitCascade(XScalar xScalar) {
+    if (xScalar.isLazy) {
+      return xScalar;
+    }
+    for (final XScalar childXScalar in xScalar.childXScalars) {
+      final XScalar? result = _findScalarNextExecutionUnitCascade(childXScalar);
+      if (result != null) {
+        return result;
+      }
+    }
+    return null;
   }
 
   // ***************************************************************************
@@ -335,8 +538,39 @@ abstract class XShelf extends XRootQueueItem {
   // ***************************************************************************
   // ***************************************************************************
 
-  // debug [#01000]
+  // debug [#01000] _EmptyExecutionUnit
+  @Deprecated("Xoa di")
   void _initQueryExecutionUnits({required ExecutionTrace executionTrace}) {
+    if (rootVipXScalar != null && rootVipXBlock != null) {
+      // throw "Development Logic Error";
+    }
+    shelf.debug._initQueryExecutionUnitsCount++;
+    //
+    executionTrace._addTraceStep(
+      codeId: "#01000",
+      shortDesc: toDebugXShelfStateAsHtml(),
+      traceStepType: TraceStepType.debug,
+    );
+    //
+    final executionUnit = _ShelfStarterExecutionUnit(
+      xShelf: this,
+    );
+    executionTrace._addTraceStep(
+      codeId: "#01060",
+      shortDesc:
+          "Create ${executionUnit.asDebugExecutionUnit()} and add to ${debugObjHtml(this)}.",
+      traceStepType: TraceStepType.addExecutionUnit,
+    );
+    //
+    _addExecutionUnit(
+      executionUnit: executionUnit,
+      toMainQueue: true,
+    );
+  }
+
+  // debug [#01000]
+  @Deprecated("No longer used")
+  void _initQueryExecutionUnitsOLD({required ExecutionTrace executionTrace}) {
     if (rootVipXScalar != null && rootVipXBlock != null) {
       throw "Development Logic Error";
     }
@@ -357,6 +591,7 @@ abstract class XShelf extends XRootQueueItem {
         }
         final executionUnit = _FilterModelLoadDataExecutionUnit(
           xFilterModel: xFilterModel,
+          executionTodo: FilterModelTodoLoad(),
         );
         executionTrace._addTraceStep(
           codeId: "#01060",
@@ -396,6 +631,7 @@ abstract class XShelf extends XRootQueueItem {
     else if (rootVipXBlock != null) {
       final executionUnit = _BlockQueryExecutionUnit(
         xBlock: rootVipXBlock!,
+        blockTodoQuery: null,
       );
       executionTrace._addTraceStep(
         codeId: "#01120",
@@ -434,6 +670,7 @@ abstract class XShelf extends XRootQueueItem {
       if (rootXBlock != rootVipXBlock) {
         final executionUnit = _BlockQueryExecutionUnit(
           xBlock: rootXBlock,
+          blockTodoQuery: null,
         );
         executionTrace._addTraceStep(
           codeId: "#01200",
@@ -497,7 +734,7 @@ abstract class XShelf extends XRootQueueItem {
     return __xShelfExecutionUnitQueue.isEmpty;
   }
 
-  _ShelfMemberExecutionUnit? _getNextExecutionUnit() {
+  _ShelfMemberExecutionUnit? _getNextExecutionUnitOLD() {
     return __xShelfExecutionUnitQueue.getNextExecutionUnit();
   }
 

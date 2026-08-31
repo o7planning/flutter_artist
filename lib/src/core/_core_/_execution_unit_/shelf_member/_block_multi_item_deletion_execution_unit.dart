@@ -23,6 +23,10 @@ class _BlockMultiItemDeletionExecutionUnit<
         );
 
   @override
+  BlockTodo? get executionTodo => null;
+
+
+  @override
   XShelf get xShelf => xBlock.xShelf;
 
   @override

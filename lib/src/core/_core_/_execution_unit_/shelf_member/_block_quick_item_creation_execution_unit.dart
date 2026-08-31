@@ -15,6 +15,11 @@ class _BlockQuickItemCreationExecutionUnit
           executionUnitResult: BlockQuickItemCreationResult(),
         );
 
+
+  @override
+  BlockTodo? get executionTodo => null;
+
+
   @override
   XShelf get xShelf => xBlock.xShelf;
 

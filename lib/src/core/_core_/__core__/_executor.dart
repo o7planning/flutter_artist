@@ -20,7 +20,12 @@ class _Executor {
   // ***************************************************************************
 
   bool get isBusy {
-    return __executingXShelfId != null && FlutterArtist._rootQueue.isNotEmpty;
+    if (__executingXShelfId == null) {
+      return false;
+    }
+    final _ExecutionUnit? unit = FlutterArtist._rootQueue
+        .getNextExecutionUnit(removeEmptyRootQuery: false);
+    return unit != null;
   }
 
   bool get isFree => !isBusy;
@@ -42,10 +47,15 @@ class _Executor {
       asyncFunction: () async {
         // Executed Shelf Map:
         final Map<String, Shelf> executedShelfMap = {};
+        print("BEGIN executor: _rootQueue: ${FlutterArtist._rootQueue}");
         try {
           while (true) {
-            bool hasNext = FlutterArtist._rootQueue.hasNext();
-            if (!hasNext) {
+            _ExecutionUnit? executionUnit =
+                FlutterArtist._rootQueue.getNextExecutionUnit(
+              removeEmptyRootQuery: true,
+            );
+            //
+            if (executionUnit == null) {
               if (pendingEventProcessed) {
                 break;
               }
@@ -56,20 +66,21 @@ class _Executor {
               FlutterArtist.desk._reactionProcessor.addReactionExecutionUnits(
                 excludeShelfNames: excludeShelfNames,
               );
-              hasNext = FlutterArtist._rootQueue.hasNext();
-              if (!hasNext) {
+              executionUnit = FlutterArtist._rootQueue.getNextExecutionUnit(
+                removeEmptyRootQuery: true,
+              );
+              if (executionUnit == null) {
                 break;
               }
             }
+            //
             if (FlutterArtist.appConfig.debugOptions.showExecutionUnitQueue) {
               BuildContext context = FlutterArtistCore.context;
               await DebugExecutorDialog.show(
                 context: context,
               );
             }
-            //
-            _ExecutionUnit executionUnit =
-                FlutterArtist._rootQueue.getNextExecutionUnit()!;
+            print("\n EXECUTE ExecutionUnit: $executionUnit \n");
             //
             await __executeExecutionUnit(
               executionUnit: executionUnit,
@@ -126,199 +137,219 @@ class _Executor {
       executionUnitType: executionUnit.executionUnitType,
     );
     //
-    if (executionUnit is _ActivityMemberExecutionUnit) {
-      await executionUnit.xActivity.activity._unitExecuteActivity(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXActivity: executionUnit.xActivity,
-      );
-    }
-    // Storage Backend Action ExecutionUnit:
-    else if (executionUnit is _StorageBackendActionExecutionUnit) {
-      await FlutterArtist.desk._unitBackendAction(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        action: executionUnit.action,
-        executionUnitResult: executionUnit.executionUnitResult,
-      );
-    }
-    // Filter FilterModel:
-    else if (executionUnit is _FilterModelLoadDataExecutionUnit) {
-      await executionUnit.xFilterModel.filterModel._unitLoadFilterData(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXFilterModel: executionUnit.xFilterModel,
-        executionUnitResult: executionUnit.executionUnitResult,
-      );
-    }
-    // FilterPanel Change:
-    else if (executionUnit is _FilterPanelChangeExecutionUnit) {
-      await executionUnit.xFilterModel.filterModel._unitFilterPanelChanged(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        xFilterModel: executionUnit.xFilterModel,
-        formKeyInstantValuesInUI: executionUnit.formKeyInstantValuesInUI,
-      );
-    }
-    //
-    else if (executionUnit is _FormViewChangeExecutionUnit) {
-      await executionUnit.xFormModel.formModel._unitFormViewChanged(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        xFormModel: executionUnit.xFormModel,
-        formKeyInstantValuesInUI: executionUnit.formKeyInstantValuesInUI,
-      );
-    }
-    // Block Clear Current:
-    else if (executionUnit is _BlockClearCurrentExecutionUnit) {
-      await executionUnit.xBlock.block._unitClearCurrent(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXBlock: executionUnit.xBlock,
-      );
-    }
-    // Block Clear All Items:
-    else if (executionUnit is _BlockClearExecutionUnit) {
-      await executionUnit.xBlock.block._unitClear(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXBlock: executionUnit.xBlock,
-      );
-    }
-    // Block Query:
-    else if (executionUnit is _BlockQueryExecutionUnit) {
-      await executionUnit.xBlock.block._unitQuery(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXBlock: executionUnit.xBlock,
-      );
-    }
-    // Block PrepareCreate:
-    else if (executionUnit is _BlockPrepareFormToCreateItemExecutionUnit) {
-      await executionUnit.xBlock.block._unitPrepareFormToCreateItem(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXBlock: executionUnit.xBlock,
-        initDirty: executionUnit.initDirty,
-        formInput: executionUnit.formInput,
-      );
-    }
-    // Block Select Item as Current:
-    else if (executionUnit is _BlockSetItemAsCurrentExecutionUnit) {
-      await executionUnit.xBlock.block._unitSetItemAsCurrent(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        setCurrentItemDirective: executionUnit.setCurrentItemDirective,
-        newQueriedList: executionUnit.newQueriedList,
-        inputCandidateCurrItem: executionUnit.candidateItem,
-        thisXBlock: executionUnit.xBlock,
-        blockSetCurrentItemResult: executionUnit.executionUnitResult,
-      );
-    }
-    // Block Delete Item:
-    else if (executionUnit is _BlockItemDeletionExecutionUnit) {
-      await executionUnit.xBlock.block._unitDeleteItem(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXBlock: executionUnit.xBlock,
-        item: executionUnit.item,
-        deletionResult: executionUnit.executionUnitResult,
-      );
-    }
-    // Block Delete Items:
-    else if (executionUnit is _BlockMultiItemDeletionExecutionUnit) {
-      await executionUnit.xBlock.block._unitDeleteItems(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXBlock: executionUnit.xBlock,
-        items: executionUnit.items,
-        stopIfError: executionUnit.stopIfError,
-        deletionResult: executionUnit.executionUnitResult
-            as BlockItemsDeletionResult<Identifiable<Comparable<dynamic>>>,
-      );
-    }
-    // Block QuickCreateItem:
-    else if (executionUnit is _BlockQuickItemCreationExecutionUnit) {
-      await executionUnit.xBlock.block._unitQuickCreateItem(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXBlock: executionUnit.xBlock,
-        action: executionUnit.action,
-        executionUnitResult: executionUnit.executionUnitResult,
-      );
-    }
-    // Block QuickUpdateItem:
-    else if (executionUnit is _BlockQuickItemUpdateExecutionUnit) {
-      await executionUnit.xBlock.block._unitQuickUpdateItem(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXBlock: executionUnit.xBlock,
-        action: executionUnit.action,
-        executionUnitResult: executionUnit.executionUnitResult,
-      );
-    }
-    // Block Quick Action:
-    else if (executionUnit is _BlockBackendActionExecutionUnit) {
-      await executionUnit.xBlock.block._unitBackendAction(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXBlock: executionUnit.xBlock,
-        action: executionUnit.action,
-        executionUnitResult: executionUnit.executionUnitResult,
-      );
-    }
-    // FormModel LoadForm:
-    else if (executionUnit is _FormModelLoadDataExecutionUnit) {
-      await executionUnit.xFormModel.formModel._unitLoadFormData(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXFormModel: executionUnit.xFormModel,
-        executionUnitResult: executionUnit.executionUnitResult,
-      );
-    }
-    // FormModel Save:
-    else if (executionUnit is _FormModelSaveFormExecutionUnit) {
-      await executionUnit.xFormModel.formModel._unitSaveForm(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXFormModel: executionUnit.xFormModel,
-        executionUnitResult: executionUnit.executionUnitResult,
-      );
-    }
-    // FormModel QuickFormInputAction:
-    else if (executionUnit is _FormModelPatchFormFieldsExecutionUnit) {
-      await executionUnit.xFormModel.formModel._unitPatchFormFields(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXFormModel: executionUnit.xFormModel,
-        formInput: executionUnit.formInput,
-      );
-    }
-    // Scalar:
-    else if (executionUnit is _ScalarQueryExecutionUnit) {
-      await executionUnit.xScalar.scalar._unitQuery(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXScalar: executionUnit.xScalar,
-      );
-    }
-    // Scalar Clear Value:
-    else if (executionUnit is _ScalarClearExecutionUnit) {
-      await executionUnit.xScalar.scalar._unitClear(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXScalar: executionUnit.xScalar,
-      );
-    }
-    // Scalar Quick Action:
-    else if (executionUnit is _ScalarLoadExtraDataQuickActionExecutionUnit) {
-      await executionUnit.xScalar.scalar._unitLoadExtraDataQuickAction(
-        executionTrace: executionTrace,
-        executionUnitType: executionUnit.executionUnitType,
-        thisXScalar: executionUnit.xScalar,
-        action: executionUnit.action,
-        afterQuickAction: executionUnit.afterQuickAction,
-      );
+    try {
+      if (executionUnit is _ShelfStarterExecutionUnit) {
+        await executionUnit.xShelf.shelf._unitExecutionStarter(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXShelf: executionUnit.xShelf,
+        );
+      }
+      // _ActivityMemberExecutionUnit
+      else if (executionUnit is _ActivityMemberExecutionUnit) {
+        await executionUnit.xActivity.activity._unitExecuteActivity(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXActivity: executionUnit.xActivity,
+        );
+      }
+      // Storage Backend Action ExecutionUnit:
+      else if (executionUnit is _StorageBackendActionExecutionUnit) {
+        await FlutterArtist.desk._unitBackendAction(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          action: executionUnit.action,
+          executionUnitResult: executionUnit.executionUnitResult,
+        );
+      }
+      // Filter FilterModel:
+      else if (executionUnit is _FilterModelLoadDataExecutionUnit) {
+        await executionUnit.xFilterModel.filterModel._unitLoadFilterData(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXFilterModel: executionUnit.xFilterModel,
+          executionTodo: executionUnit.executionTodo,
+          executionUnitResult: executionUnit.executionUnitResult,
+        );
+      }
+      // FilterPanel Change:
+      else if (executionUnit is _FilterPanelChangeExecutionUnit) {
+        await executionUnit.xFilterModel.filterModel._unitFilterPanelChanged(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXFilterModel: executionUnit.xFilterModel,
+          executionTodo: executionUnit.executionTodo,
+        );
+      }
+      //
+      else if (executionUnit is _FormViewChangeExecutionUnit) {
+        await executionUnit.xFormModel.formModel._unitFormViewChanged(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXFormModel: executionUnit.xFormModel,
+          executionTodo: executionUnit.executionTodo,
+        );
+      }
+      // Block Clear Current:
+      else if (executionUnit is _BlockClearCurrentExecutionUnit) {
+        await executionUnit.xBlock.block._unitClearCurrentItem(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlock: executionUnit.xBlock,
+          executionTodo: executionUnit.executionTodo,
+        );
+      }
+      // Block Clear All Items:
+      else if (executionUnit is _BlockClearItemsExecutionUnit) {
+        await executionUnit.xBlock.block._unitClearItems(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlock: executionUnit.xBlock,
+        );
+      }
+      // Block Query:
+      else if (executionUnit is _BlockQueryExecutionUnit) {
+        await executionUnit.xBlock.block._unitQuery(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlock: executionUnit.xBlock,
+          blockTodoQuery: executionUnit.blockTodoQuery!,
+        );
+      }
+      // Block PrepareCreate:
+      else if (executionUnit is _BlockPrepareFormToCreateItemExecutionUnit) {
+        await executionUnit.xBlock.block._unitPrepareFormToCreateItem(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlock: executionUnit.xBlock,
+          executionTodo: executionUnit.executionTodo,
+        );
+      }
+      // Block Select Item as Current:
+      else if (executionUnit is _BlockSetItemAsCurrentExecutionUnit) {
+        await executionUnit.xBlock.block._unitSetItemAsCurrent(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlock: executionUnit.xBlock,
+          blockTodo: executionUnit.executionTodo,
+          blockSetCurrentItemResult: executionUnit.executionUnitResult,
+        );
+      }
+      // Block Delete Item:
+      else if (executionUnit is _BlockItemDeletionExecutionUnit) {
+        await executionUnit.xBlock.block._unitDeleteItem(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlock: executionUnit.xBlock,
+          blockTodo: executionUnit.executionTodo,
+          deletionResult: executionUnit.executionUnitResult,
+        );
+      }
+      // Block Delete Items:
+      else if (executionUnit is _BlockMultiItemDeletionExecutionUnit) {
+        await executionUnit.xBlock.block._unitDeleteItems(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlock: executionUnit.xBlock,
+          items: executionUnit.items,
+          stopIfError: executionUnit.stopIfError,
+          deletionResult: executionUnit.executionUnitResult
+              as BlockItemsDeletionResult<Identifiable<Comparable<dynamic>>>,
+        );
+      }
+      // Block QuickCreateItem:
+      else if (executionUnit is _BlockQuickItemCreationExecutionUnit) {
+        await executionUnit.xBlock.block._unitQuickCreateItem(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlock: executionUnit.xBlock,
+          action: executionUnit.action,
+          executionUnitResult: executionUnit.executionUnitResult,
+        );
+      }
+      // Block QuickUpdateItem:
+      else if (executionUnit is _BlockQuickItemUpdateExecutionUnit) {
+        await executionUnit.xBlock.block._unitQuickUpdateItem(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlock: executionUnit.xBlock,
+          action: executionUnit.action,
+          executionUnitResult: executionUnit.executionUnitResult,
+        );
+      }
+      // Block Quick Action:
+      else if (executionUnit is _BlockBackendActionExecutionUnit) {
+        await executionUnit.xBlock.block._unitBackendAction(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlock: executionUnit.xBlock,
+          action: executionUnit.action,
+          executionUnitResult: executionUnit.executionUnitResult,
+        );
+      }
+      // FormModel LoadForm:
+      else if (executionUnit is _FormModelLoadDataExecutionUnit) {
+        await executionUnit.xFormModel.formModel._unitLoadFormData(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXFormModel: executionUnit.xFormModel,
+          executionUnitResult: executionUnit.executionUnitResult,
+        );
+      }
+      // FormModel Save:
+      else if (executionUnit is _FormModelSaveFormExecutionUnit) {
+        await executionUnit.xFormModel.formModel._unitSaveForm(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXFormModel: executionUnit.xFormModel,
+          executionUnitResult: executionUnit.executionUnitResult,
+        );
+      }
+      // FormModel QuickFormInputAction:
+      else if (executionUnit is _FormModelPatchFormFieldsExecutionUnit) {
+        await executionUnit.xFormModel.formModel._unitPatchFormFields(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXFormModel: executionUnit.xFormModel,
+          formInput: executionUnit.formInput,
+        );
+      }
+      // Scalar:
+      else if (executionUnit is _ScalarQueryExecutionUnit) {
+        await executionUnit.xScalar.scalar._unitQuery(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXScalar: executionUnit.xScalar,
+        );
+      }
+      // Scalar Clear Value:
+      else if (executionUnit is _ScalarClearExecutionUnit) {
+        await executionUnit.xScalar.scalar._unitClear(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXScalar: executionUnit.xScalar,
+        );
+      }
+      // Scalar Quick Action:
+      else if (executionUnit is _ScalarLoadExtraDataQuickActionExecutionUnit) {
+        await executionUnit.xScalar.scalar._unitLoadExtraDataQuickAction(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXScalar: executionUnit.xScalar,
+          action: executionUnit.action,
+          afterQuickAction: executionUnit.afterQuickAction,
+        );
+      }
+    } finally {
+      if (executionUnit is _ShelfMemberResultedExecutionUnit) {
+        ExecutionTodo? executionTodo = executionUnit.executionTodo;
+        if (executionTodo != null
+            // TODO: Xem lai cho nay:
+            &&
+            !executionTodo.completer.isCompleted) {
+          executionTodo.completer.complete(executionUnit.executionUnitResult);
+        }
+      }
     }
   }
 

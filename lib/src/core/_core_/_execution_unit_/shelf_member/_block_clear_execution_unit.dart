@@ -1,18 +1,23 @@
 part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
-class _BlockClearExecutionUnit
-    extends _ShelfMemberResultedExecutionUnit<BlockClearResult> {
+class _BlockClearItemsExecutionUnit
+    extends _ShelfMemberResultedExecutionUnit<BlockClearItemsResult> {
   final XBlock xBlock;
 
-  _BlockClearExecutionUnit({
+  _BlockClearItemsExecutionUnit({
     required this.xBlock,
   }) : super(
           executionUnitType: ExecutionUnitType.blockClear,
-          executionUnitResult: BlockClearResult(
+          executionUnitResult: BlockClearItemsResult(
             precheck: null,
           ),
         );
+
+
+  @override
+  BlockTodo? get executionTodo => null;
+
 
   @override
   XShelf get xShelf => xBlock.xShelf;

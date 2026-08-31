@@ -3,6 +3,7 @@ enum ExecutionUnitType {
   shelfInternalReact,
   //
   storageBackendAction,
+  empty,
   //
   blockClearCurrentItem,
   blockDeleteItem,

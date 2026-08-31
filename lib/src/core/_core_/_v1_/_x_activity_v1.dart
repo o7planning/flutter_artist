@@ -21,12 +21,15 @@ class XActivityV1 extends XRootQueueItem {
     required this.activity,
   });
 
-  _ExecutionUnit? _getNextExecutionUnit() {
+  NextExecutionUnit? _getNextExecutionUnit({required bool debug}) {
     if (_tasked) {
       return null;
     }
     _tasked = true;
-    return _ActivityMemberExecutionUnit(xActivity: this);
+    return NextExecutionUnit.yes(
+        debug: debug,
+        executionUnit: _ActivityMemberExecutionUnit(xActivity: this),
+        info: '_getNextExecutionUnit');
   }
 
   @override

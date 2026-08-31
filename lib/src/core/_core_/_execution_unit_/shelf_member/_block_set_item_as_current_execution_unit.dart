@@ -8,36 +8,30 @@ part of '../../core.dart';
 @_BlockSelectPreviousItemAsCurrentAnnotation()
 class _BlockSetItemAsCurrentExecutionUnit<
         ID extends Comparable, //
-        ITEM extends Identifiable<ID>>
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>>
     extends _ShelfMemberResultedExecutionUnit<BlockSetCurrentItemResult<ITEM>> {
-  final XBlock xBlock;
-  final ForceType? forceTypeForForm;
-  final BlockSetCurrentItemDirective setCurrentItemDirective;
-  final ITEM? candidateItem;
-  final List<ITEM> newQueriedList;
+  final XBlock<ID, ITEM, ITEM_DETAIL> xBlock;
+  final BlockTodoSetCurrentItem<ID, ITEM, ITEM_DETAIL> executionTodo;
 
   _BlockSetItemAsCurrentExecutionUnit({
-    required this.setCurrentItemDirective,
     required this.xBlock,
-    required this.newQueriedList,
-    required this.candidateItem,
-    required bool forceReloadItem,
-    required this.forceTypeForForm,
+    required this.executionTodo,
   }) : super(
           executionUnitType: ExecutionUnitType.blockSetItemAsCurrent,
           executionUnitResult: BlockSetCurrentItemResult<ITEM>(
             precheck: null,
-            setCurrentItemDirective: setCurrentItemDirective,
+            setCurrentItemDirective: executionTodo.setCurrentItemDirective,
             getItemId: xBlock.block._getItemIdInternal,
-            candidateItem: candidateItem,
+            candidateItem: executionTodo.inputCandidateCurrItem,
             oldCurrentItem: xBlock.block.currentItem as ITEM?,
             currentItem: xBlock.block.currentItem as ITEM?,
           ),
         ) {
-    xBlock.setForceReloadCurrItem(forceReloadItem);
+    xBlock.setForceReloadCurrItem(executionTodo.forceReloadItem);
     //
-    if (forceTypeForForm != null) {
-      xBlock.xFormModel?.setForceType(forceTypeForForm!);
+    if (executionTodo.forceTypeForForm != null) {
+      xBlock.xFormModel?.setForceType(executionTodo.forceTypeForForm!);
     }
   }
 
