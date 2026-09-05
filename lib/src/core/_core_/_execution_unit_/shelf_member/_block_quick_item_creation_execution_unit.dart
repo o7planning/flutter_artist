@@ -2,23 +2,23 @@ part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_BlockQuickItemCreationActionAnnotation()
-class _BlockQuickItemCreationExecutionUnit
+class _BlockQuickItemCreationExecutionUnit<
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>>
     extends _ShelfMemberResultedExecutionUnit<BlockQuickItemCreationResult> {
-  XBlock xBlock;
-  BlockQuickItemCreationAction action;
+  final XBlock xBlock;
+
+  @override
+  final BlockTodoQuickItemCreation executionTodo;
 
   _BlockQuickItemCreationExecutionUnit({
     required this.xBlock,
-    required this.action,
+    required this.executionTodo,
   }) : super(
           executionUnitType: ExecutionUnitType.blockQuickCreateItem,
           executionUnitResult: BlockQuickItemCreationResult(),
         );
-
-
-  @override
-  BlockTodo? get executionTodo => null;
-
 
   @override
   XShelf get xShelf => xBlock.xShelf;

@@ -1513,18 +1513,6 @@ abstract class FilterModel<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     return true;
-    //
-    // executionTrace._addTraceStep(
-    //   codeId: "#55100",
-    //   shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()..",
-    //   traceStepType: TraceStepType.nonControllableCalling,
-    // );
-    // xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
-    // //
-    // FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    // await FlutterArtist.executor._executeExecutionUnitQueue();
-    // //
-    // return true;
   }
 
   // ***************************************************************************

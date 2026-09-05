@@ -1,5 +1,6 @@
 part of '../core.dart';
 
+@Deprecated("Xoa di")
 @_InternalEventReactAnnotation()
 class EffectedShelfMembers {
   final Block? eventBlock;

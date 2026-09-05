@@ -200,9 +200,7 @@ class _EventDispatcher {
   static void broadcastInternal<ID extends Comparable>({
     required EventType eventType,
     required Block eventBlock,
-    required List<Type> mainEvents,
     required List<ID> effectedItemIds,
-    required List<Type> extraEvents,
   }) {
     ExecutionTrace executionTrace =
         FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
@@ -210,132 +208,116 @@ class _EventDispatcher {
     );
     executionTrace._addTraceStep(
       codeId: "#88000",
-      shortDesc: "broadcastTargetedFootprint()",
+      shortDesc: "broadcastInternal()",
       parameters: {
         "eventType": eventType,
         "eventBlock": eventBlock,
-        "mainEvents": mainEvents,
-        "extraEvents": extraEvents,
         "effectedItemIds": effectedItemIds,
       },
       traceStepType: TraceStepType.debug,
     );
+    print("@Chay vao day 1 ");
     //
-    if (mainEvents.isEmpty) {
-      executionTrace._addTraceStep(
-        codeId: "#88100",
-        shortDesc: "Events list is empty! --> Broadcast skipped.",
-        traceStepType: TraceStepType.eventInfo,
-      );
-      return;
-    }
     if (effectedItemIds.isEmpty) {
       executionTrace._addTraceStep(
-        codeId: "#25200",
+        codeId: "#88200",
         shortDesc: "effectedItemIds is empty! --> Broadcast skipped.",
         traceStepType: TraceStepType.eventInfo,
       );
       return;
     }
-
-    final List<Type> mainDataTypes = mainEvents;
-    final List<Type> extraDataTypes = extraEvents;
+    final List<Type> mainDataTypes =
+        eventBlock.getDeclaredMainBroadcastDataTypes().toList();
+    final List<Type> extraDataTypes =
+        eventBlock.getDeclaredExtraBroadcastDataTypes().toList();
     final List<Type> allDataType =
         {...mainDataTypes, ...extraDataTypes}.toList();
 
-    final _Storage storage = FlutterArtist.storage;
+    print("@Chay vao day 2.1 mainDataTypes: $mainDataTypes");
+    print("@Chay vao day 2.2 extraDataTypes: $extraDataTypes");
 
-    for (String shelfName in storage._shelfMap.keys) {
-      Shelf? shelf = storage.findShelfByName(shelfName);
-      if (shelf == null) {
-        continue;
-      }
-      Shelf eventShelf = eventBlock.shelf;
-      // Skip internal shelf dispatch if explicit target eventBlock is provided.
-      if (shelf == eventShelf) {
+    Shelf shelf = eventBlock.shelf;
+
+    executionTrace._addTraceStep(
+      codeId: "#88300",
+      shortDesc:
+          "Broadcast Internal Event in ${getClassNameWithoutGenerics(shelf)}.",
+      traceStepType: TraceStepType.separator,
+    );
+    final EventSourceType internalEventSourceType = EventSourceType.internal;
+
+    final bool requiresMaxSyncStrategy = false;
+    // Dispatch to blocks.
+    for (Block block in shelf.blocks) {
+      if (block == eventBlock) {
         continue;
       }
       executionTrace._addTraceStep(
-        codeId: "#25300",
-        shortDesc: "Broadcast Event to ${getClassNameWithoutGenerics(shelf)}.",
-        traceStepType: TraceStepType.separator,
+        codeId: "#88600",
+        shortDesc:
+            "Calling ${getClassNameWithoutGenerics(block)}._receiveEvent()",
+        parameters: {
+          "eventSourceType": internalEventSourceType,
+          "eventDataKind": EventDataKind.main,
+          "eventDataTypes": mainDataTypes,
+          "syncStrategyOnFullQueryMode": null,
+          "syncStrategyOnPageableQueryMode": null,
+          "effectedItemIds": effectedItemIds,
+        },
+        traceStepType: TraceStepType.nonControllableCalling,
       );
-      executionTrace._addTraceStep(
-        codeId: "#25340",
-        shortDesc: "Broadcast Event to ${getClassNameWithoutGenerics(shelf)}.",
-        traceStepType: TraceStepType.info,
+      block._receiveEvent(
+        executionTrace: executionTrace,
+        eventSourceType: internalEventSourceType,
+        eventDataKind: EventDataKind.main,
+        eventDataTypes: mainDataTypes,
+        syncStrategyOnFullQueryMode: null,
+        syncStrategyOnPageableQueryMode: null,
+        effectedItemIds: effectedItemIds,
       );
-      final EventSourceType externalEventSourceType = EventSourceType.external;
-      final bool requiresMaxSyncStrategy = false;
-      // Dispatch to blocks.
-      for (Block block in shelf.blocks) {
+      if (extraDataTypes.isNotEmpty) {
         executionTrace._addTraceStep(
-          codeId: "#25600",
+          codeId: "#88640",
           shortDesc:
               "Calling ${getClassNameWithoutGenerics(block)}._receiveEvent()",
           parameters: {
-            "eventSourceType": externalEventSourceType,
-            "eventDataKind": EventDataKind.main,
-            "eventDataTypes": mainDataTypes,
+            "eventSourceType": internalEventSourceType,
+            "eventDataKind": EventDataKind.extra,
+            "eventDataTypes": extraDataTypes,
             "syncStrategyOnFullQueryMode": null,
             "syncStrategyOnPageableQueryMode": null,
-            "effectedItemIds": effectedItemIds,
+            "effectedItemIds": null,
           },
           traceStepType: TraceStepType.nonControllableCalling,
         );
         block._receiveEvent(
           executionTrace: executionTrace,
-          eventSourceType: externalEventSourceType,
-          eventDataKind: EventDataKind.main,
-          eventDataTypes: mainDataTypes,
+          eventSourceType: internalEventSourceType,
+          eventDataKind: EventDataKind.extra,
+          eventDataTypes: extraDataTypes,
           syncStrategyOnFullQueryMode: null,
           syncStrategyOnPageableQueryMode: null,
-          effectedItemIds: effectedItemIds,
-        );
-        if (extraDataTypes.isNotEmpty) {
-          executionTrace._addTraceStep(
-            codeId: "#25640",
-            shortDesc:
-                "Calling ${getClassNameWithoutGenerics(block)}._receiveEvent()",
-            parameters: {
-              "eventSourceType": externalEventSourceType,
-              "eventDataKind": EventDataKind.extra,
-              "eventDataTypes": extraDataTypes,
-              "syncStrategyOnFullQueryMode": null,
-              "syncStrategyOnPageableQueryMode": null,
-              "effectedItemIds": null,
-            },
-            traceStepType: TraceStepType.nonControllableCalling,
-          );
-          block._receiveEvent(
-            executionTrace: executionTrace,
-            eventSourceType: externalEventSourceType,
-            eventDataKind: EventDataKind.extra,
-            eventDataTypes: extraDataTypes,
-            syncStrategyOnFullQueryMode: null,
-            syncStrategyOnPageableQueryMode: null,
-            effectedItemIds: null,
-          );
-        }
-      }
-      // Dispatch to scalars.
-      for (Scalar scalar in shelf.scalars) {
-        executionTrace._addTraceStep(
-          codeId: "#25700",
-          shortDesc:
-              "Calling ${getClassNameWithoutGenerics(scalar)}._receiveEvent()",
-          parameters: {
-            "eventSourceType": externalEventSourceType,
-            "dataTypes": allDataType,
-          },
-          traceStepType: TraceStepType.nonControllableCalling,
-        );
-        scalar._receiveEvent(
-          executionTrace: executionTrace,
-          eventSourceType: externalEventSourceType,
-          eventDataTypes: allDataType,
+          effectedItemIds: null,
         );
       }
+    }
+    // Dispatch to scalars.
+    for (Scalar scalar in shelf.scalars) {
+      executionTrace._addTraceStep(
+        codeId: "#88700",
+        shortDesc:
+            "Calling ${getClassNameWithoutGenerics(scalar)}._receiveEvent()",
+        parameters: {
+          "eventSourceType": internalEventSourceType,
+          "dataTypes": allDataType,
+        },
+        traceStepType: TraceStepType.nonControllableCalling,
+      );
+      scalar._receiveEvent(
+        executionTrace: executionTrace,
+        eventSourceType: internalEventSourceType,
+        eventDataTypes: allDataType,
+      );
     }
   }
 }

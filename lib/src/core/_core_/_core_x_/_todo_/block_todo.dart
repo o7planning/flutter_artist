@@ -27,6 +27,51 @@ final class BlockTodoQuery<
   });
 }
 
+final class BlockTodoBackendAction<
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>> //
+    extends BlockTodo<
+        ID, //
+        ITEM,
+        ITEM_DETAIL,
+        BlockBackendActionPrecheck,
+        BlockBackendActionResult> {
+  final BlockBackendAction<ID> action;
+
+  BlockTodoBackendAction({required this.action});
+}
+
+final class BlockTodoQuickItemUpdate<
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>> //
+    extends BlockTodo<
+        ID, //
+        ITEM,
+        ITEM_DETAIL,
+        BlockQuickItemUpdatePrecheck,
+        BlockQuickItemUpdateResult> {
+  final BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action;
+
+  BlockTodoQuickItemUpdate({required this.action});
+}
+
+final class BlockTodoQuickItemCreation<
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>> //
+    extends BlockTodo<
+        ID, //
+        ITEM,
+        ITEM_DETAIL,
+        BlockQuickItemCreationPrecheck,
+        BlockQuickItemCreationResult> {
+  final BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action;
+
+  BlockTodoQuickItemCreation({required this.action});
+}
+
 final class BlockTodoPrepareFormToCreateItem<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
@@ -123,4 +168,15 @@ final class BlockTodoDone<
   final String lastTodoInfo;
 
   BlockTodoDone({required this.lastTodoInfo});
+}
+
+final class BlockTodoNull<
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>>
+    extends BlockTodo<ID, ITEM, ITEM_DETAIL, dynamic,
+        EmptyExecutionUnitResult> {
+  final String lastTodoInfo;
+
+  BlockTodoNull({required this.lastTodoInfo});
 }

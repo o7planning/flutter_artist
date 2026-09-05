@@ -313,8 +313,10 @@ class XBlock<
 
   // Block only (Not find in FilterModel, FormModel)
   NextExecutionUnit __getNextExecutionUnit({required bool debug}) {
+    final bool isVisibleX =
+        block.ui.hasActiveUiComponent(alsoCheckChildren: true);
+    final blockDataState = block.dataState;
     if (_executionTodo == null) {
-      final blockDataState = block.dataState;
       // (IN _executionTodo = null). dataState = None
       if (blockDataState.isNone) {
         return NextExecutionUnit.no(
@@ -325,8 +327,6 @@ class XBlock<
       }
       // (IN _executionTodo = null). dataState = Pending
       else if (blockDataState.isPending) {
-        bool isVisibleX =
-            block.ui.hasActiveUiComponent(alsoCheckChildren: true);
         if (__qryHint == QryHint.force || isVisibleX) {
           _createAndSetBlockTodoQuery();
           //
@@ -350,9 +350,7 @@ class XBlock<
         }
       }
       // (IN _executionTodo = null). dataState = Stale.
-      else if (blockDataState.isPending) {
-        bool isVisibleX =
-            block.ui.hasActiveUiComponent(alsoCheckChildren: true);
+      else if (blockDataState.isStale) {
         if (__qryHint == QryHint.force || isVisibleX) {
           _createAndSetBlockTodoQuery();
           //
@@ -377,15 +375,31 @@ class XBlock<
       }
       // (IN _executionTodo = null). dataState = Fresh.
       else if (blockDataState.isFresh) {
-        return NextExecutionUnit.no(
-          debug: debug,
-          info:
-              "Block (1.4), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo, dataState: ${blockDataState.toBriefInfo()}. ",
-        );
+        if (__qryHint == QryHint.force) {
+          _createAndSetBlockTodoQuery();
+          //
+          return NextExecutionUnit.yes(
+            debug: debug,
+            executionUnit: _BlockQueryExecutionUnit(
+              xBlock: this,
+              blockTodoQuery: _executionTodo as BlockTodoQuery,
+            ),
+            info:
+                "Block (1.4.1), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo, dataState: ${blockDataState.toBriefInfo()}. "
+                " qryHint: $__qryHint, isVisibleX: $isVisibleX",
+          );
+        } else {
+          return NextExecutionUnit.no(
+            debug: debug,
+            info:
+                "Block (1.4.2), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo, dataState: ${blockDataState.toBriefInfo()}. "
+                " qryHint: $__qryHint, isVisibleX: $isVisibleX",
+          );
+        }
       }
       // (IN _executionTodo = null). dataState = OTHERS
       else {
-        throw UnimplementedError("Never run (XBlock)");
+        throw UnimplementedError("Never run (XBlock) - 1, dataState: ${blockDataState.toBriefInfo()}");
       }
     }
     //
@@ -397,8 +411,50 @@ class XBlock<
       return NextExecutionUnit.no(
         debug: debug,
         info:
-            "Block (2), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo",
+            "Block (2), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
       );
+    }
+    // BlockTodoNull
+    else if (blockTodo is BlockTodoNull) {
+      if (blockDataState.isNone) {
+        return NextExecutionUnit.no(
+          debug: debug,
+          info:
+              "Block (3.1), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+        );
+      } else if (blockDataState.isPending) {
+        _createAndSetBlockTodoQuery();
+        //
+        return NextExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _BlockQueryExecutionUnit(
+            xBlock: this,
+            blockTodoQuery: _executionTodo as BlockTodoQuery,
+          ),
+          info:
+              "Block (3.2), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+        );
+      } else if (blockDataState.isStale) {
+        _createAndSetBlockTodoQuery();
+        //
+        return NextExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _BlockQueryExecutionUnit(
+            xBlock: this,
+            blockTodoQuery: _executionTodo as BlockTodoQuery,
+          ),
+          info:
+              "Block (3.3), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+        );
+      } else if (blockDataState.isFresh) {
+        return NextExecutionUnit.no(
+          debug: debug,
+          info:
+              "Block (3.4), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+        );
+      } else {
+        throw UnimplementedError("Never run (XBlock) - 2");
+      }
     }
     // BlockTodoQuery
     else if (blockTodo is BlockTodoQuery) {
@@ -410,7 +466,7 @@ class XBlock<
           blockTodoQuery: _executionTodo as BlockTodoQuery,
         ),
         info:
-            "Block (3), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo",
+            "Block (4), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
     // BlockTodoSetCurrentItem
@@ -424,7 +480,7 @@ class XBlock<
           executionTodo: blockTodo,
         ),
         info:
-            "Block (4), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo",
+            "Block (5), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
     // BlockTodoClearCurrentItem
@@ -437,7 +493,7 @@ class XBlock<
           executionTodo: blockTodo,
         ),
         info:
-            "Block (5), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo",
+            "Block (6), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
     // BlockTodoDeleteItem
@@ -450,7 +506,7 @@ class XBlock<
           executionTodo: blockTodo,
         ),
         info:
-            "Block (6), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo",
+            "Block (7), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
     // BlockTodoPrepareFormToCreateItem
@@ -464,16 +520,58 @@ class XBlock<
           executionTodo: blockTodo,
         ),
         info:
-            "Block (7), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo",
+            "Block (8), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+      );
+    }
+    // BlockTodoQuickItemUpdate
+    else if (blockTodo is BlockTodoQuickItemUpdate) {
+      blockTodo as BlockTodoQuickItemUpdate<ID, ITEM, ITEM_DETAIL>;
+      return NextExecutionUnit.yes(
+        debug: debug,
+        executionUnit:
+            _BlockQuickItemUpdateExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+          xBlock: this,
+          executionTodo: blockTodo,
+        ),
+        info:
+            "Block (9), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+      );
+    }
+    // BlockTodoQuickItemCreation
+    else if (blockTodo is BlockTodoQuickItemCreation) {
+      blockTodo as BlockTodoQuickItemCreation<ID, ITEM, ITEM_DETAIL>;
+      return NextExecutionUnit.yes(
+        debug: debug,
+        executionUnit:
+            _BlockQuickItemCreationExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+          xBlock: this,
+          executionTodo: blockTodo,
+        ),
+        info:
+            "Block (10), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+      );
+    }
+    // BlockTodoBackendAction
+    else if (blockTodo is BlockTodoBackendAction) {
+      blockTodo as BlockTodoBackendAction<ID, ITEM, ITEM_DETAIL>;
+      return NextExecutionUnit.yes(
+        debug: debug,
+        executionUnit: _BlockBackendActionExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+          xBlock: this,
+          executionTodo: blockTodo,
+        ),
+        info:
+            "Block (11), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
     //
     // Else
+    //
     else {
       return NextExecutionUnit.no(
         debug: debug,
         info:
-            "Block (8), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo, **** TODO ****",
+            "Block (12), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. **** TODO ****",
       );
     }
   }
@@ -533,6 +631,35 @@ class XBlock<
     return blockTodo;
   }
 
+  BlockTodoBackendAction<ID, ITEM, ITEM_DETAIL> _createAndSetBackendAction({
+    required BlockBackendAction<ID> action,
+  }) {
+    final blockTodo =
+        BlockTodoBackendAction<ID, ITEM, ITEM_DETAIL>(action: action);
+    _executionTodo = blockTodo;
+    return blockTodo;
+  }
+
+  BlockTodoQuickItemUpdate<ID, ITEM, ITEM_DETAIL>
+      _createAndSetBlockQuickItemUpdate({
+    required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
+  }) {
+    final blockTodo =
+        BlockTodoQuickItemUpdate<ID, ITEM, ITEM_DETAIL>(action: action);
+    _executionTodo = blockTodo;
+    return blockTodo;
+  }
+
+  BlockTodoQuickItemCreation<ID, ITEM, ITEM_DETAIL>
+      _createAndSetBlockQuickItemCreation({
+    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
+  }) {
+    final blockTodo =
+        BlockTodoQuickItemCreation<ID, ITEM, ITEM_DETAIL>(action: action);
+    _executionTodo = blockTodo;
+    return blockTodo;
+  }
+
   BlockTodoClearCurrentItem<ID, ITEM, ITEM_DETAIL>
       _createAndSetBlockTodoClearCurrentItem() {
     final blockTodo = BlockTodoClearCurrentItem<ID, ITEM, ITEM_DETAIL>();
@@ -551,6 +678,14 @@ class XBlock<
     required String lastTodoInfo,
   }) {
     _executionTodo = BlockTodoDone<ID, ITEM, ITEM_DETAIL>(
+      lastTodoInfo: lastTodoInfo,
+    );
+  }
+
+  void _createAndSetBlockTodoNull({
+    required String lastTodoInfo,
+  }) {
+    _executionTodo = BlockTodoNull<ID, ITEM, ITEM_DETAIL>(
       lastTodoInfo: lastTodoInfo,
     );
   }

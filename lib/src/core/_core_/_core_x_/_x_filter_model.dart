@@ -72,14 +72,6 @@ class XFilterModel {
             "default?: ${filterModel.isDefaultFilterModel}",
       );
     }
-    if (_filterModelTodo is FilterModelTodoDone) {
-      return NextExecutionUnit.no(
-        debug: debug,
-        info: "FilterModel (2), ${getClassNameWithoutGenerics(filterModel)}, "
-            "default?: ${filterModel.isDefaultFilterModel}, "
-            "dataState: $filterDataState, executionTodo: $_filterModelTodo",
-      );
-    }
     //
     if (_filterModelTodo == null) {
       // IN: `_filterModelTodo == null`
@@ -87,7 +79,7 @@ class XFilterModel {
         return NextExecutionUnit.no(
           debug: debug,
           info:
-              "FilterModel (3.1), ${getClassNameWithoutGenerics(filterModel)}, "
+              "FilterModel (2.1), ${getClassNameWithoutGenerics(filterModel)}, "
               "default?: ${filterModel.isDefaultFilterModel}, "
               "dataState: $filterDataState, executionTodo: $_filterModelTodo",
         );
@@ -105,7 +97,7 @@ class XFilterModel {
             executionTodo: _filterModelTodo as FilterModelTodoLoad,
           ),
           info:
-              "FilterModel (3.2), ${getClassNameWithoutGenerics(filterModel)}, "
+              "FilterModel (2.2), ${getClassNameWithoutGenerics(filterModel)}, "
               "default?: ${filterModel.isDefaultFilterModel}, "
               "dataState: $filterDataState, executionTodo: $_filterModelTodo",
         );
@@ -123,7 +115,7 @@ class XFilterModel {
             executionTodo: _filterModelTodo as FilterModelTodoLoad,
           ),
           info:
-              "FilterModel (3.3), ${getClassNameWithoutGenerics(filterModel)}, "
+              "FilterModel (2.3), ${getClassNameWithoutGenerics(filterModel)}, "
               "default?: ${filterModel.isDefaultFilterModel}, "
               "dataState: $filterDataState, executionTodo: $_filterModelTodo",
         );
@@ -141,17 +133,24 @@ class XFilterModel {
             executionTodo: _filterModelTodo as FilterModelTodoLoad,
           ),
           info:
-              "FilterModel (3.4), ${getClassNameWithoutGenerics(filterModel)}, "
+              "FilterModel (2.4), ${getClassNameWithoutGenerics(filterModel)}, "
               "default?: ${filterModel.isDefaultFilterModel}, "
               "dataState: $filterDataState, executionTodo: $_filterModelTodo",
         );
       }
     }
     //
-    final filterModelTodo = _filterModelTodo;
+    // _filterModelTodo != null.
+    //
+    final filterModelTodo = _filterModelTodo!;
     // FilterModelTodoDone
     if (filterModelTodo is FilterModelTodoDone) {
-      throw UnimplementedError("Never run, see above!");
+      return NextExecutionUnit.no(
+        debug: debug,
+        info: "FilterModel (3), ${getClassNameWithoutGenerics(filterModel)}, "
+            "default?: ${filterModel.isDefaultFilterModel}, "
+            "dataState: $filterDataState, executionTodo: $filterModelTodo",
+      );
     }
     // FilterModelTodoPanelChange
     else if (filterModelTodo is FilterModelTodoPanelChange) {

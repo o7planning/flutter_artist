@@ -461,6 +461,7 @@ abstract class Block<
 
   void _updateSyncSessionState({
     required ExecutionTrace executionTrace,
+    required XBlock? xBlock,
     required EventSourceType eventSourceType,
     required bool requiresMaxSyncStrategy,
     required BlockViewportSyncStrategy? syncStrategyOnFullQueryMode,
@@ -518,6 +519,7 @@ abstract class Block<
 
       // Test case: [63a], [63b].
       if (nextState != dataState) {
+        xBlock?._createAndSetBlockTodoNull(lastTodoInfo: "Test Wait More");
         __blockData._blockDataState = nextState;
         executionTrace._addTraceStep(
           codeId: "#83500",
@@ -758,6 +760,7 @@ abstract class Block<
       // Direct entity match: use specific affected item IDs and original sync strategies.
       _updateSyncSessionState(
         executionTrace: executionTrace,
+        xBlock: null,
         eventSourceType: eventSourceType,
         requiresMaxSyncStrategy: true,
         syncStrategyOnFullQueryMode: BlockViewportSyncStrategy.nativeQuery,
@@ -773,7 +776,6 @@ abstract class Block<
     required EventSourceType eventSourceType,
     required EventDataKind eventDataKind,
     required List<Type> eventDataTypes,
-    // required bool requiresMaxSyncStrategy,
     required BlockViewportSyncStrategy? syncStrategyOnFullQueryMode,
     required BlockViewportSyncStrategy? syncStrategyOnPageableQueryMode,
     required List<Comparable>? effectedItemIds,
@@ -820,6 +822,7 @@ abstract class Block<
       // Direct entity match: use specific affected item IDs and original sync strategies.
       _updateSyncSessionState(
         executionTrace: executionTrace,
+        xBlock: null,
         eventSourceType: eventSourceType,
         requiresMaxSyncStrategy: requiresMaxSyncStrategy,
         syncStrategyOnFullQueryMode: syncStrategyOnFullQueryMode,
@@ -845,6 +848,7 @@ abstract class Block<
       // Force fallback to maximum sync strategy without specific item IDs.
       _updateSyncSessionState(
         executionTrace: executionTrace,
+        xBlock: null,
         eventSourceType: eventSourceType,
         requiresMaxSyncStrategy: true,
         syncStrategyOnFullQueryMode: BlockViewportSyncStrategy.nativeQuery,
@@ -1138,6 +1142,7 @@ abstract class Block<
     required BlockTodoQuery<ID, ITEM, ITEM_DETAIL> blockTodoQuery,
   }) async {
     __assertThisXBlock(thisXBlock);
+    thisXBlock._createAndSetBlockTodoDone(lastTodoInfo: "Query");
     //
     executionTrace._addTraceStep(
       codeId: "#03000",
@@ -1288,20 +1293,6 @@ abstract class Block<
           forceTypeForForm: null,
         );
         return;
-      // TODO: Delete
-      // final executionUnit = _BlockSetItemAsCurrentExecutionUnit<ID, ITEM>(
-      //   setCurrentItemDirective: setCurrentItemDirective ??
-      //       BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
-      //   xBlock: thisXBlock,
-      //   newQueriedList: [],
-      //   candidateItem: candidateCurrItem,
-      //   forceReloadItem: thisXBlock.forceReloadCurrItem,
-      //   forceTypeForForm: null,
-      // );
-      // thisXBlock.xShelf. _addExecutionUnit(
-      //   executionUnit: executionUnit,
-      // );
-      // return;
       case QryHint.markAsPending:
         executionTrace._addTraceStep(
           codeId: "#03160",
@@ -1639,6 +1630,7 @@ abstract class Block<
         final List<XBlock> descendantXBlocks =
             thisXBlock.getDescendantXBlocks(sameFilterOnly: true);
 
+        // TODO: Xoa di.
         __stopDescendantQueryWithError(
           descendantXBlocks: descendantXBlocks,
           blockErrorOrigin: BlockErrorOrigin.directFetch,
@@ -1843,15 +1835,6 @@ abstract class Block<
       );
       thisXBlock._createAndSetBlockTodoClearCurrentItem();
       return;
-      // TODO: Delete
-      // final executionUnit = _BlockClearCurrentExecutionUnit<ITEM>(
-      //   xBlock: thisXBlock,
-      //   executionTodo: null,
-      // );
-      // thisXBlock.xShelf. _addExecutionUnit(
-      //   executionUnit: executionUnit,
-      // );
-      // return;
     }
     // createNewItem (IN _unitQuery)
     else if (afterQueryDirective == BlockAfterQueryDirective.createNewItem) {
@@ -1867,22 +1850,6 @@ abstract class Block<
         formInput: null,
       );
       return;
-      // TODO: Delete
-      // final executionUnit = _BlockPrepareFormToCreateItemExecutionUnit(
-      //   xBlock: thisXBlock,
-      //   initDirty: false,
-      //   formInput: null,
-      // );
-      // executionTrace._addTraceStep(
-      //   codeId: "#03740",
-      //   shortDesc: "@afterQueryDirective: $afterQueryDirective --> "
-      //       "Create ${executionUnit.asDebugExecutionUnit()} and add to queue.",
-      //   traceStepType: TraceStepType.addExecutionUnit,
-      // );
-      // thisXBlock.xShelf. _addExecutionUnit(
-      //   executionUnit: executionUnit,
-      // );
-      // return;
     }
     //
     final BlockSetCurrentItemDirective setCurrentItemDirective;
@@ -1922,18 +1889,6 @@ abstract class Block<
       forceReloadItem: false,
       forceTypeForForm: null,
     );
-    // TODO: Delete.
-    // final executionUnit = _BlockSetItemAsCurrentExecutionUnit<ID, ITEM>(
-    //   xBlock: thisXBlock,
-    //   // setCurrentItemDirective: setCurrentItemDirective,
-    //   // newQueriedList: queriedItemList ?? [],
-    //   // candidateItem: candidateCurrItem,
-    //   // forceReloadItem: false,
-    //   // forceTypeForForm: null,
-    // );
-    // thisXBlock.xShelf. _addExecutionUnit(
-    //   executionUnit: executionUnit,
-    // );
   }
 
   // ***************************************************************************
@@ -2651,6 +2606,7 @@ abstract class Block<
           error: null,
         );
       }
+      // [IN _unitSetItemAsCurrent method].
       if (forceReloadForm) {
         executionTrace._addTraceStep(
           codeId: "#29540",
@@ -2661,22 +2617,6 @@ abstract class Block<
           traceStepType: TraceStepType.executionTodo,
         );
         thisXBlock.xFormModel!._createAndSetFormModelTodoLoad();
-
-        // TODO: Delete
-        // final executionUnit = _FormModelLoadDataExecutionUnit(
-        //   xFormModel: thisXBlock.xFormModel!,
-        // );
-        // executionTrace._addTraceStep(
-        //   codeId: "#29540",
-        //   shortDesc: "@forceReloadForm: ${debugObjHtml(forceReloadForm)}.\n"
-        //       "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
-        //   note:
-        //       "This execution unit will load data for ${debugObjHtml(thisXBlock.xFormModel!.formModel)}.",
-        //   traceStepType: TraceStepType.addExecutionUnit,
-        // );
-        // thisXBlock.xShelf ._addExecutionUnit(
-        //   executionUnit: executionUnit,
-        // );
       }
     }
     // (On _unitSetItemAsCurrent method).
@@ -2697,30 +2637,6 @@ abstract class Block<
         thisXBlock: thisXBlock,
       );
     }
-    // TODO: Delete
-    // executionTrace._addTraceStep(
-    //   codeId: "#29700",
-    //   shortDesc:
-    //       "Create ${ExecutionUnitType.blockQuery.asDebugExecutionUnit()}(s) "
-    //       "for all child blocks of ${debugObjHtml(this)} and add to Queue."
-    //       "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-    //   traceStepType: TraceStepType.info,
-    // );
-    // for (XBlock childXBlock in thisXBlock.childXBlocks) {
-    //   final executionUnit = _BlockQueryExecutionUnit(
-    //     xBlock: childXBlock,
-    //     blockTodoQuery: null,
-    //   );
-    //   executionTrace._addTraceStep(
-    //     codeId: "#29740",
-    //     shortDesc:
-    //         "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
-    //     traceStepType: TraceStepType.addExecutionUnit,
-    //   );
-    //   thisXBlock.xShelf. _addExecutionUnit(
-    //     executionUnit: executionUnit,
-    //   );
-    // }
   }
 
   // ***************************************************************************
@@ -2793,6 +2709,7 @@ abstract class Block<
     //
     final String methodName = "performDeleteItemById";
     ApiResult<void> result;
+    final List<ID> effectedItemIds = [];
     try {
       final ID itemId = __getItemIdShowErr(blockTodo.item, showErr: true);
       __refreshDeletingState(isDeleting: true);
@@ -2817,13 +2734,14 @@ abstract class Block<
             "${debugObjHtml(this)} > Fire event after deleting ${_debugItemTypeHtml()}($itemId).",
         traceStepType: TraceStepType.broadcastEvent,
       );
+      effectedItemIds.add(itemId);
       //
       // External React:
       //
       __broadcastEventFromBlockToOtherShelves(
         executionTrace: executionTrace,
         eventType: EventType.deletion,
-        effectedItemIds: [itemId],
+        effectedItemIds: effectedItemIds,
       );
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
@@ -2946,6 +2864,18 @@ abstract class Block<
     __clearAllChildrenBlocksToNone(
       thisXBlock: thisXBlock,
     );
+    if (siblingItem != null) {
+      final setCurrentItemDirective =
+          BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
+      //
+      thisXBlock._createAndSetBlockTodoSetCurrentItem(
+        setCurrentItemDirective: setCurrentItemDirective,
+        newQueriedList: [],
+        inputCandidateCurrItem: siblingItem,
+        forceReloadItem: false,
+        forceTypeForForm: null,
+      );
+    }
     //
     executionTrace._addLineFlowSeparator();
     //
@@ -2965,10 +2895,8 @@ abstract class Block<
     // SAME-AS: #0013 (Same as _unitDeleteItems() method)
     await _processInternalReaction(
       executionTrace: executionTrace,
-      thisXBlock: thisXBlock,
-      candidateCurrItem: siblingItem,
-      syncStrategyOnFullQueryModeThisBlock: null,
-      syncStrategyOnPageableQueryModeThisBlock: null,
+      thisEventXBlock: thisXBlock,
+      effectiveItemIds: effectedItemIds,
     );
   }
 
@@ -2977,329 +2905,16 @@ abstract class Block<
 
   Future<void> _processInternalReaction({
     required ExecutionTrace executionTrace,
-    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockViewportSyncStrategy? syncStrategyOnFullQueryModeThisBlock,
-    required BlockViewportSyncStrategy?
-        syncStrategyOnPageableQueryModeThisBlock,
-    required ITEM? candidateCurrItem,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisEventXBlock,
+    required List<ID> effectiveItemIds,
   }) async {
-    __assertThisXBlock(thisXBlock);
+    __assertThisXBlock(thisEventXBlock);
     //
-    final BlockViewportSyncStrategy viewportSyncStrategyThisBlock =
-        BlockViewportSyncStrategy.resolveViewportSyncStrategy2(
-      nativeQueryMode: nativeQueryMode,
-      backendIntentInFullQueryMode: syncStrategyOnFullQueryModeThisBlock,
-      backendIntentInPageableQueryMode:
-          syncStrategyOnPageableQueryModeThisBlock,
-      syncConfig: effectiveConfig.viewportSyncConfig,
+    _EventDispatcher.broadcastInternal<ID>(
+      eventType: EventType.mix, // TODO Review again.
+      eventBlock: thisEventXBlock.block,
+      effectedItemIds: effectiveItemIds,
     );
-    final bool forceRequeryThisBlock = viewportSyncStrategyThisBlock != null;
-    // @DEL-01
-    thisXBlock.setCandidateCurrItem(candidateCurrItem);
-    //
-    // Fire Internal Event.
-    //
-    final setCurrentItemDirective =
-        BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
-    thisXBlock.setBlockSetCurrentItemDirective(setCurrentItemDirective);
-    //
-    final bool hasInternalReaction = _internalEffectedShelfMembers.hasMember();
-    //
-    // Has Effected Member outside of Lineage (Ancestors + this + Descendants).
-    //
-    final bool hasEffectedOutsideLineage =
-        _internalEffectedShelfMembers._hasEffectedMemberOutsideLineageOfBlock(
-      eventBlock: this,
-    );
-    final _EffBlock? effSelfInfo =
-        _internalEffectedShelfMembers._getSelfEffectedBlockInfo(
-      forEventBlock: this,
-      viewportSyncStrategy: viewportSyncStrategyThisBlock,
-    );
-    final _EffBlock? topEffBlockInfo =
-        _internalEffectedShelfMembers._getTopEffectedAncestor(
-      forEventBlock: this,
-      viewportSyncStrategy: viewportSyncStrategyThisBlock,
-    );
-    //
-    executionTrace._addTraceStep(
-      codeId: "#70260",
-      shortDesc: "Processing INTERNAL EVENT [$name]...",
-      parameters: {
-        "hasInternalReaction": hasInternalReaction,
-        "hasEffectedOutsideLineage": hasEffectedOutsideLineage,
-        "effectedSelfBlock": effSelfInfo,
-        "topEffBlockInfo": topEffBlockInfo,
-      },
-      traceStepType: TraceStepType.debug,
-    );
-    //
-    if (!hasInternalReaction) {
-      executionTrace._addTraceStep(
-        codeId: "#70300",
-        shortDesc: "Calculated:",
-        parameters: {
-          "hasInternalReaction": hasInternalReaction,
-        },
-        traceStepType: TraceStepType.debug,
-      );
-      // forceRequeryThisBlock (In !hasInternalReaction).
-      if (forceRequeryThisBlock) {
-        executionTrace._addTraceStep(
-          codeId: "#70320",
-          shortDesc:
-              "Creating <b>_BlockQueryExecutionUnit</b>. viewportSyncStrategy: $viewportSyncStrategyThisBlock",
-          traceStepType: TraceStepType.addExecutionUnit,
-        );
-        thisXBlock.setViewportSyncStrategy(viewportSyncStrategyThisBlock);
-        // Test Cases: [72a].
-        final _ShelfMemberExecutionUnit executionUnit =
-            _BlockQueryExecutionUnit(
-          xBlock: thisXBlock,
-          blockTodoQuery: null,
-        );
-        thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
-      }
-      // !forceRequeryThisBlock (In !hasInternalReaction).
-      else {
-        executionTrace._addTraceStep(
-          codeId: "#70380",
-          shortDesc: "Creating <b>_BlockSetItemAsCurrentExecutionUnit</b>.",
-          parameters: {
-            "setCurrentItemDirective": setCurrentItemDirective,
-            "candidateItem": candidateCurrItem,
-            "forceReloadItem": false,
-            "forceTypeForForm": null,
-          },
-          traceStepType: TraceStepType.addExecutionUnit,
-        );
-        //
-        final _ShelfMemberExecutionUnit executionUnit =
-            thisXBlock.createBlockSetItemAsCurrentExecutionUnit(
-          setCurrentItemDirective: setCurrentItemDirective,
-          newQueriedList: [],
-          candidateItem: candidateCurrItem,
-          forceReloadItem: false,
-          forceTypeForForm: null,
-        );
-        thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
-      }
-      return;
-    } // End of !hasInternalReaction.
-    //
-    if (hasInternalReaction) {
-      executionTrace._addTraceStep(
-        codeId: "#70400",
-        shortDesc: "Calling <b>xShelf._updateInternalReactionByEvtBlock()</b>.",
-        parameters: {
-          "forceRequeryThisBlock": forceRequeryThisBlock,
-          "viewportSyncStrategyThisBlock": viewportSyncStrategyThisBlock,
-        },
-        traceStepType: TraceStepType.nonControllableCalling,
-      );
-      //
-      // Update only (No add to queue).
-      //
-      thisXBlock.xShelf._updateInternalReactionByEvtBlock(
-        executionTrace: executionTrace,
-        eventXBlock: thisXBlock,
-        forceRequeryEventBlock: forceRequeryThisBlock,
-        viewportSyncStrategyEventBlock: viewportSyncStrategyThisBlock,
-      );
-      //
-      String debugHtmlString = thisXBlock.xShelf.toDebugXShelfStateAsHtml();
-      executionTrace._addTraceStep(
-        codeId: "#70440",
-        shortDesc: debugHtmlString,
-        traceStepType: TraceStepType.debug,
-      );
-    }
-    //
-    // IMPORTANT: If has effected member Outside Lineage ==> Init Query Tasks for Shelf.
-    //
-    if (hasEffectedOutsideLineage) {
-      executionTrace._addTraceStep(
-        codeId: "#70500",
-        shortDesc: "Calculated:",
-        parameters: {
-          "hasEffectedOutsideLineage": hasEffectedOutsideLineage,
-        },
-        traceStepType: TraceStepType.debug,
-      );
-      // Test Case: [62a] - __test_event_62a_test_DELETE.
-      // Test Case: [62b] - __test_event_62b_test_DELETE.
-      // Add Query Tasks to the Queue of XShelf.
-      thisXBlock.xShelf
-          ._initQueryExecutionUnits(executionTrace: executionTrace);
-      return;
-    }
-    //
-    // The Internal Event effects to current branch only.
-    //
-    if (effSelfInfo == null && topEffBlockInfo == null) {
-      executionTrace._addTraceStep(
-        codeId: "#70600",
-        shortDesc: "Calculated:",
-        parameters: {
-          "hasEffectedOutsideLineage": hasEffectedOutsideLineage, // true
-          "effSelfInfo": effSelfInfo, // null
-          "topEffBlockInfo": topEffBlockInfo?.getDebugInfo(), // null
-        },
-        traceStepType: TraceStepType.debug,
-      );
-      executionTrace._addTraceStep(
-        codeId: "#70620",
-        shortDesc:
-            "Creating <b>_BlockSetItemAsCurrentExecutionUnit</b> for <b>${thisXBlock.name}</b>:",
-        parameters: {
-          "newQueriedList": [],
-          "candidateItem": candidateCurrItem,
-          "forceReloadItem": false,
-          "forceTypeForForm": null,
-        },
-        traceStepType: TraceStepType.addExecutionUnit,
-      );
-      // Test Case:
-      final _ShelfMemberExecutionUnit executionUnit =
-          thisXBlock.createBlockSetItemAsCurrentExecutionUnit(
-        setCurrentItemDirective: setCurrentItemDirective,
-        newQueriedList: [],
-        candidateItem: candidateCurrItem,
-        forceReloadItem: false,
-        forceTypeForForm: null,
-      );
-      thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
-    }
-    // topEffBlockInfo is NOT NULL:
-    else if (topEffBlockInfo != null) {
-      executionTrace._addTraceStep(
-        codeId: "#70640",
-        shortDesc: "Calculated:",
-        parameters: {
-          "hasEffectedOutsideLineage": hasEffectedOutsideLineage, // true
-          "topEffBlockInfo": topEffBlockInfo.getDebugInfo(), // Not null.
-        },
-        traceStepType: TraceStepType.debug,
-      );
-      if (topEffBlockInfo.requery) {
-        final XBlock topXBlock = topEffBlockInfo.getXBlock(
-          xShelf: thisXBlock.xShelf,
-        );
-        executionTrace._addTraceStep(
-          codeId: "#70660",
-          shortDesc:
-              "Create <b>_BlockQueryExecutionUnit</b> for <b>${topXBlock.name}</b>:",
-          traceStepType: TraceStepType.addExecutionUnit,
-        );
-        // Note: candidateCurrItem already set. (See @DEL-01)
-        final _ShelfMemberExecutionUnit executionUnit =
-            _BlockQueryExecutionUnit(
-          xBlock: topXBlock,
-          blockTodoQuery: null,
-        );
-        thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
-        // TODO: Test Case?
-        if (topEffBlockInfo.refreshCurrItem) {
-          //
-        }
-        return;
-      } else if (topEffBlockInfo.refreshCurrItem) {
-        executionTrace._addTraceStep(
-          codeId: "#70700",
-          shortDesc: "Calculated:",
-          parameters: {
-            "hasEffectedOutsideLineage": hasEffectedOutsideLineage, // true
-            "refreshCurrItem": topEffBlockInfo.refreshCurrItem, // true
-          },
-          traceStepType: TraceStepType.debug,
-        );
-        final XBlock topXBlock = topEffBlockInfo.getXBlock(
-          xShelf: thisXBlock.xShelf,
-        );
-        //
-        executionTrace._addTraceStep(
-          codeId: "#70740",
-          shortDesc:
-              "Create <b>_BlockSetItemAsCurrentExecutionUnit</b> for <b>${topXBlock.name}</b>:",
-          parameters: {
-            "newQueriedList": [],
-            "candidateItem": null,
-            "setCurrentItemDirective": setCurrentItemDirective,
-            "forceReloadItem": true,
-            "forceTypeForForm": null,
-          },
-          traceStepType: TraceStepType.addExecutionUnit,
-        );
-        //
-        final _ShelfMemberExecutionUnit executionUnit =
-            topXBlock.createBlockSetItemAsCurrentExecutionUnit(
-          setCurrentItemDirective: setCurrentItemDirective,
-          newQueriedList: [],
-          candidateItem: null,
-          forceReloadItem: true,
-          forceTypeForForm: null,
-        );
-        thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
-        return;
-      }
-    }
-    // effSelfInfo is NOT NULL:
-    else if (effSelfInfo != null) {
-      executionTrace._addTraceStep(
-        codeId: "#70800",
-        shortDesc: "Calculated:",
-        parameters: {
-          "hasEffectedOutsideLineage": hasEffectedOutsideLineage, // true
-          "effSelfInfo": effSelfInfo, // Not null
-        },
-        traceStepType: TraceStepType.debug,
-      );
-      // Value is Updated:
-      QryHint queryHint = thisXBlock.queryHint;
-      if (queryHint == QryHint.force) {
-        // effSelfInfo.requery
-        executionTrace._addTraceStep(
-          codeId: "#70840",
-          shortDesc:
-              "Creating <b>_BlockQueryExecutionUnit</b> for <b>${thisXBlock.name}</b>.",
-          traceStepType: TraceStepType.addExecutionUnit,
-        );
-        // Note: candidateCurrItem already set. (See @DEL-01)
-        _ShelfMemberExecutionUnit executionUnit = _BlockQueryExecutionUnit(
-          xBlock: thisXBlock,
-          blockTodoQuery: null,
-        );
-        thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
-      }
-      // effSelfInfo.refreshCurrItem.
-      else {
-        // Current Item to Reload (INTERNAL EVENT).
-        ITEM? currItemInternalEVT = thisXBlock.currItemInternalEVT;
-        //
-        bool isCurrInternalEV = currItemInternalEVT == null
-            ? false // Will be decided laster.
-            : isCurrentItem(currItemInternalEVT);
-        final bool forceReloadItem = isCurrInternalEV;
-        executionTrace._addTraceStep(
-          codeId: "#70880",
-          shortDesc:
-              "Creating <b>_BlockSetItemAsCurrentExecutionUnit</b> for <b>${thisXBlock.name}</b>.",
-          traceStepType: TraceStepType.addExecutionUnit,
-        );
-        //
-        // Select an Item as Current.
-        //
-        final _ShelfMemberExecutionUnit executionUnit =
-            thisXBlock.createBlockSetItemAsCurrentExecutionUnit(
-          setCurrentItemDirective: setCurrentItemDirective,
-          newQueriedList: [],
-          candidateItem: candidateCurrItem,
-          forceReloadItem: forceReloadItem,
-          forceTypeForForm: null,
-        );
-        thisXBlock.xShelf._addExecutionUnit(executionUnit: executionUnit);
-      }
-    }
   }
 
   // ***************************************************************************
@@ -3478,6 +3093,7 @@ abstract class Block<
         __refreshDeletingState(isDeleting: false);
       }
     }
+    final List<ID> effectedItemIds = [];
     //
     // External React:
     //
@@ -3488,8 +3104,8 @@ abstract class Block<
             "${debugObjHtml(this)} > Fire event after deleting. (${deletionResult.deletedItems.length} items deleted!).",
         traceStepType: TraceStepType.broadcastEvent,
       );
-      //
-      final List<ID> effectedItemIds = items.map((i) => i.id).toList();
+      // TODO: Review add all item of Block?
+      effectedItemIds.addAll(items.map((i) => i.id).toList());
       __broadcastEventFromBlockToOtherShelves(
         executionTrace: executionTrace,
         eventType: EventType.deletion,
@@ -3531,10 +3147,8 @@ abstract class Block<
     // Test Cases: [52a] (Multi Deletions with Internal Event).
     await _processInternalReaction(
       executionTrace: executionTrace,
-      thisXBlock: thisXBlock,
-      candidateCurrItem: siblingItem,
-      syncStrategyOnFullQueryModeThisBlock: null,
-      syncStrategyOnPageableQueryModeThisBlock: null,
+      thisEventXBlock: thisXBlock,
+      effectiveItemIds: effectedItemIds,
     );
   }
 
@@ -3656,10 +3270,11 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockQuickItemCreationResult executionUnitResult,
-    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
+    required BlockTodoQuickItemCreation<ID, ITEM, ITEM_DETAIL> executionTodo,
   }) async {
     __assertThisXBlock(thisXBlock);
+    thisXBlock._createAndSetBlockTodoDone(
+        lastTodoInfo: "Quick Item Creation Action");
     //
     executionTrace._addTraceStep(
       codeId: "#09000",
@@ -3667,6 +3282,9 @@ abstract class Block<
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
+    final action = executionTodo.action;
+    final BlockQuickItemCreationResult executionUnitResult =
+        BlockQuickItemCreationResult();
     //
     // (No Precheck Again)
     //
@@ -3760,10 +3378,12 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockQuickItemUpdateResult executionUnitResult,
-    required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
+    // required BlockQuickItemUpdateResult executionUnitResult,
+    required BlockTodoQuickItemUpdate<ID, ITEM, ITEM_DETAIL> executionTodo,
   }) async {
     __assertThisXBlock(thisXBlock);
+    thisXBlock._createAndSetBlockTodoDone(
+        lastTodoInfo: "Quick Item Update Action");
     //
     executionTrace._addTraceStep(
       codeId: "#14000",
@@ -3771,6 +3391,9 @@ abstract class Block<
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
+    final action = executionTodo.action;
+    final BlockQuickItemUpdateResult executionUnitResult =
+        BlockQuickItemUpdateResult();
     //
     // No Need Precheck Again.
     //
@@ -3870,10 +3493,10 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockBackendAction<ID> action,
-    required BlockBackendActionResult executionUnitResult,
+    required BlockTodoBackendAction<ID, ITEM, ITEM_DETAIL> executionTodo,
   }) async {
     __assertThisXBlock(thisXBlock);
+    thisXBlock._createAndSetBlockTodoDone(lastTodoInfo: "Block Backend Action");
     //
     executionTrace._addTraceStep(
       codeId: "#45000",
@@ -3881,6 +3504,8 @@ abstract class Block<
           "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
+    final action = executionTodo.action;
+    final executionUnitResult = BlockBackendActionResult();
     //
     final FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
@@ -3943,8 +3568,10 @@ abstract class Block<
       },
       traceStepType: TraceStepType.nonControllableCalling,
     );
+    //
     _updateSyncSessionState(
       executionTrace: executionTrace,
+      xBlock: thisXBlock,
       eventSourceType: EventSourceType.internal,
       requiresMaxSyncStrategy: false,
       //
@@ -3962,10 +3589,13 @@ abstract class Block<
           "${debugObjHtml(this)} > Fire event after execute backend action.",
       traceStepType: TraceStepType.broadcastEvent,
     );
+    //
+    final List<ID> effectedItemIds = actionResult.data?.items ?? [];
+
     __broadcastEventFromBlockToOtherShelves(
       executionTrace: executionTrace,
       eventType: EventType.mix,
-      effectedItemIds: actionResult.data?.items ?? [],
+      effectedItemIds: effectedItemIds,
     );
     //
     final ITEM? candidateCurrItem = null;
@@ -3982,16 +3612,13 @@ abstract class Block<
       traceStepType: TraceStepType.nonControllableCalling,
     );
     //
+    // IN: _unitBackendAction()
     // Process Internal Reaction:
     //
     await _processInternalReaction(
       executionTrace: executionTrace,
-      thisXBlock: thisXBlock,
-      syncStrategyOnFullQueryModeThisBlock:
-          action.config.syncStrategyOnFullQueryMode,
-      syncStrategyOnPageableQueryModeThisBlock:
-          action.config.syncStrategyOnPageableQueryMode,
-      candidateCurrItem: candidateCurrItem,
+      thisEventXBlock: thisXBlock,
+      effectiveItemIds: effectedItemIds,
     );
   }
 
@@ -4032,6 +3659,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @Deprecated("Xoa di")
   void __stopDescendantQueryWithError({
     required List<XBlock> descendantXBlocks,
     required BlockErrorOrigin blockErrorOrigin,
@@ -4134,6 +3762,15 @@ abstract class Block<
       );
     }
     //
+    final ID? effectedItemId;
+    if (item != null) {
+      effectedItemId = item.id;
+    } else {
+      effectedItemId = savedItemDetail?.id;
+    }
+    final List<ID> effectiveItemIds =
+        effectedItemId == null ? [] : [effectedItemId];
+    //
     if (broadcastExternalShelfEvent) {
       executionTrace._addLineFlowSeparator();
       //
@@ -4143,16 +3780,10 @@ abstract class Block<
             "${debugObjHtml(this)} > Save successful --> An event occurred --> checking if it should be broadcasted.",
         traceStepType: TraceStepType.broadcastEvent,
       );
-      final ID? effectedItemId;
-      if (item != null) {
-        effectedItemId = item.id;
-      } else {
-        effectedItemId = savedItemDetail?.id;
-      }
       __broadcastEventFromBlockToOtherShelves(
         executionTrace: executionTrace,
         eventType: isNew ? EventType.creation : EventType.update,
-        effectedItemIds: effectedItemId == null ? [] : [effectedItemId],
+        effectedItemIds: effectiveItemIds,
       );
       //
       executionTrace._addLineFlowSeparator();
@@ -4341,10 +3972,8 @@ abstract class Block<
     //
     await _processInternalReaction(
       executionTrace: executionTrace,
-      thisXBlock: thisXBlock,
-      candidateCurrItem: siblingItem,
-      syncStrategyOnFullQueryModeThisBlock: null,
-      syncStrategyOnPageableQueryModeThisBlock: null,
+      thisEventXBlock: thisXBlock,
+      effectiveItemIds: effectiveItemIds,
     );
   }
 
@@ -4500,20 +4129,6 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     return blockTodo.result;
-
-    // TODO: Delete
-    // final _ShelfMemberResultedExecutionUnit executionUnit =
-    //     _BlockItemDeletionExecutionUnit<ID, ITEM>(
-    //   xBlock: thisXBlock,
-    //   item: item!,
-    //   executionUnitResult: executionUnitResult,
-    // );
-    // //
-    // xShelf. _addExecutionUnit(executionUnit: executionUnit);
-    // FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    // await FlutterArtist.executor._executeExecutionUnitQueue();
-    // //
-    // return executionUnitResult;
   }
 
   // ***************************************************************************
@@ -4777,18 +4392,6 @@ abstract class Block<
     final BlockTodoClearItems<ID, ITEM, ITEM_DETAIL> executionTodo =
         thisXBlock._createAndSetBlockTodoClearItems();
     return executionTodo.result;
-
-    // TODO: Delete.
-    // final _ShelfMemberResultedExecutionUnit executionUnit =
-    //     _BlockClearItemsExecutionUnit(
-    //   xBlock: thisXBlock,
-    // );
-    // //
-    // xShelf._addExecutionUnit(executionUnit: executionUnit);
-    // FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    // await FlutterArtist.executor._executeExecutionUnitQueue();
-    // //
-    // return executionUnit.executionUnitResult;
   }
 
   // ***************************************************************************
@@ -5554,20 +5157,14 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#71340",
-      shortDesc: "Creating <b>_BlockBackendActionExecutionUnit</b>.",
-      traceStepType: TraceStepType.addExecutionUnit,
+      shortDesc: "Creating ${debugObjHtml(BlockTodoBackendAction)}.",
+      traceStepType: TraceStepType.executionTodo,
     );
-    final _ShelfMemberResultedExecutionUnit executionUnit =
-        _BlockBackendActionExecutionUnit(
-      xBlock: thisXBlock,
-      action: action,
-    );
-    //
-    xShelf._addExecutionUnit(executionUnit: executionUnit);
+    final BlockTodoBackendAction<ID, ITEM, ITEM_DETAIL> executionTodo =
+        thisXBlock._createAndSetBackendAction(action: action);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    //
-    return executionUnit.executionUnitResult;
+    return executionTodo.result;
   }
 
   // ***************************************************************************
@@ -5651,20 +5248,15 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#73340",
-      shortDesc: "Creating <b>_BlockQuickItemCreationExecutionUnit</b>.",
-      traceStepType: TraceStepType.addExecutionUnit,
+      shortDesc: "Creating ${debugObjHtml(BlockTodoQuickItemCreation)}.",
+      traceStepType: TraceStepType.executionTodo,
     );
-    final _ShelfMemberResultedExecutionUnit executionUnit =
-        _BlockQuickItemCreationExecutionUnit(
-      xBlock: thisXBlock,
-      action: action,
-    );
-    //
-    xShelf._addExecutionUnit(executionUnit: executionUnit);
+
+    final BlockTodoQuickItemCreation<ID, ITEM, ITEM_DETAIL> executionTodo =
+        thisXBlock._createAndSetBlockQuickItemCreation(action: action);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    //
-    return executionUnit.executionUnitResult;
+    return executionTodo.result;
   }
 
   // ***************************************************************************
@@ -5751,20 +5343,14 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#72340",
-      shortDesc: "Creating <b>_BlockQuickItemUpdateExecutionUnit</b>.",
-      traceStepType: TraceStepType.addExecutionUnit,
+      shortDesc: "Creating ${debugObjHtml(BlockTodoQuickItemUpdate)}.",
+      traceStepType: TraceStepType.executionTodo,
     );
-    final _ShelfMemberResultedExecutionUnit executionUnit =
-        _BlockQuickItemUpdateExecutionUnit(
-      xBlock: thisXBlock,
-      action: action,
-    );
-    //
-    xShelf._addExecutionUnit(executionUnit: executionUnit);
+    final BlockTodoQuickItemUpdate<ID, ITEM, ITEM_DETAIL> executionTodo =
+        thisXBlock._createAndSetBlockQuickItemUpdate(action: action);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    //
-    return executionUnit.executionUnitResult;
+    return executionTodo.result;
   }
 
   // ***************************************************************************
@@ -5954,29 +5540,6 @@ abstract class Block<
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     return thisXBlock.itemCreationResult;
-
-    // TODO: Delete.
-    // final XShelf xShelf = _XShelfPrepareFormToCreateItem(block: this);
-    // final thisXBlock =
-    //     xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
-    // //
-    // executionTrace._addTraceStep(
-    //   codeId: "#77340",
-    //   shortDesc: "Creating <b>_BlockPrepareFormToCreateItemExecutionUnit</b>.",
-    //   traceStepType: TraceStepType.addExecutionUnit,
-    // );
-    // _ShelfMemberExecutionUnit executionUnit =
-    //     _BlockPrepareFormToCreateItemExecutionUnit(
-    //   xBlock: thisXBlock,
-    //   initDirty: initDirty,
-    //   formInput: formInput,
-    // );
-    // //
-    // xShelf._addExecutionUnit(executionUnit: executionUnit);
-    // FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    // await FlutterArtist.executor._executeExecutionUnitQueue();
-    // //
-    // return thisXBlock.itemCreationResult;
   }
 
   // ***************************************************************************

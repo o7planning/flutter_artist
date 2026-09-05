@@ -714,6 +714,7 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
+
   Future<void> _markReactionToExternalShelfEvents({
     required ExecutionTrace executionTrace,
     required bool requiresMaxSyncStrategy,
@@ -724,6 +725,7 @@ abstract class Shelf extends _Core {
       //
       block._updateSyncSessionState(
         executionTrace: executionTrace,
+        xBlock: null,
         eventSourceType: EventSourceType.external,
         requiresMaxSyncStrategy: requiresMaxSyncStrategy,
         syncStrategyOnFullQueryMode: null,

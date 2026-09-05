@@ -2,22 +2,23 @@ part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_BlockBackendActionAnnotation()
-class _BlockBackendActionExecutionUnit
-    extends _ShelfMemberResultedExecutionUnit<BlockBackendActionResult> {
+class _BlockBackendActionExecutionUnit<
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>>
+    extends  _ShelfMemberResultedExecutionUnit<BlockBackendActionResult> {
   final XBlock xBlock;
-  final BlockBackendAction action;
+
+  @override
+  final BlockTodoBackendAction<ID,ITEM,ITEM_DETAIL> executionTodo;
 
   _BlockBackendActionExecutionUnit({
     required this.xBlock,
-    required this.action,
+    required this.executionTodo,
   }) : super(
           executionUnitType: ExecutionUnitType.blockBackendAction,
           executionUnitResult: BlockBackendActionResult(),
         );
-
-  @override
-  BlockTodo? get executionTodo => null;
-
 
   @override
   XShelf get xShelf => xBlock.xShelf;
@@ -35,5 +36,4 @@ class _BlockBackendActionExecutionUnit
   String getObjectName() {
     return xBlock.block.name;
   }
-
- }
+}
