@@ -107,8 +107,6 @@ abstract class Shelf extends _Core {
 
   late final ui = _ShelfUiComponents(shelf: this);
 
-  late final _shelfExternalUtils = _ShelfExternalUtils(this);
-
   // ***************************************************************************
   // ***************************************************************************
 
@@ -179,135 +177,6 @@ abstract class Shelf extends _Core {
       rootBlock.parent = null;
       _rootBlocks.add(rootBlock);
       __registerBlockCascade(rootBlock);
-    }
-    //
-    for (String blockName in __blockMap.keys) {
-      Block listenerBlock = __blockMap[blockName]!;
-
-      // Scan through the new unified reactions config inside the Block
-      for (var reaction in listenerBlock.effectiveConfig.reactions) {
-        // Find if the target data type event belongs to an internal Block emitter
-        for (Block eventBlock in __blockMap.values) {
-          // If the eventBlock produces or matches the data type the listener is looking for
-          // (Note: You can refine this check based on how your Block exposes its output data types)
-          if (eventBlock._exposesDataType(reaction.dataType)) {
-            if (identical(listenerBlock, eventBlock)) {
-              if (reaction.target == BlockReactionTarget.block) {
-                listenerBlock._internalEffectedShelfMembers
-                    ._addRequeryBlock(listenerBlock);
-              } else if (reaction.target == BlockReactionTarget.currentItem) {
-                listenerBlock._internalEffectedShelfMembers
-                    ._addRefreshCurrItmBlock(listenerBlock);
-              }
-            } else {
-              // Cross-block internal reaction within the same shelf
-              if (reaction.target == BlockReactionTarget.block) {
-                eventBlock._internalEffectedShelfMembers
-                    ._addRequeryBlock(listenerBlock);
-              } else if (reaction.target == BlockReactionTarget.currentItem) {
-                eventBlock._internalEffectedShelfMembers
-                    ._addRefreshCurrItmBlock(listenerBlock);
-              }
-            }
-          }
-        }
-
-        // Find if the target data type event belongs to an internal Scalar emitter
-        for (Scalar eventScalar in __scalarMap.values) {
-          if (eventScalar._exposesDataType(reaction.dataType)) {
-            if (reaction.target == BlockReactionTarget.block) {
-              eventScalar._internalEffectedShelfMembers
-                  ._addRequeryBlock(listenerBlock);
-            } else if (reaction.target == BlockReactionTarget.currentItem) {
-              eventScalar._internalEffectedShelfMembers
-                  ._addRefreshCurrItmBlock(listenerBlock);
-            }
-          }
-        }
-      }
-    }
-    //
-    // for (String scalarName in __scalarMap.keys) {
-    //   Scalar listenerScalar = __scalarMap[scalarName]!;
-    //   if (listenerScalar
-    //       .config.onInternalShelfEvents.scalarLevelSelfReactionEnabled) {
-    //     listenerScalar._internalEffectedShelfMembers
-    //         ._addRequeryScalar(listenerScalar);
-    //   }
-    //   for (Evt evt in listenerScalar
-    //       .config.onInternalShelfEvents.scalarLevelReactionOn) {
-    //     // BLOCK EVENT:
-    //     if (evt.srcType == SrcType.block) {
-    //       Block? eventBlock = __blockMap[evt.srcName];
-    //       if (eventBlock == null) {
-    //         throw ___registerError(
-    //           "Configuration Error! --> No Block Name: ${evt.srcName}. \n"
-    //           " ${getClassName(listenerScalar.shelf)} > defineShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
-    //           " > config > executeBlockLevelReactionToEvts > '${evt.srcName}'.",
-    //         );
-    //       }
-    //       // BLOCK EVENT:
-    //       eventBlock._internalEffectedShelfMembers
-    //           ._addRequeryScalar(listenerScalar);
-    //     }
-    //     // SCALAR EVENT:
-    //     else if (evt.srcType == SrcType.scalar) {
-    //       Scalar? eventScalar = __scalarMap[evt.srcName];
-    //       if (eventScalar == null) {
-    //         throw ___registerError(
-    //           "Configuration Error! --> No Scalar Name: ${evt.srcName}. \n"
-    //           " ${getClassName(listenerScalar.shelf)} > defineShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
-    //           " > config > executeScalarLevelReactionToEvts > '${evt.srcName}'.",
-    //         );
-    //       } else if (identical(listenerScalar, eventScalar)) {
-    //         throw ___registerError(
-    //           "Configuration Error! --> Do not use: '${evt.srcName}', let use 'selfReQueryable:true' property.\n"
-    //           " ${getClassName(listenerScalar.shelf)} > defineShelfStructure > ShelfStructure > scalars > ${getClassName(listenerScalar)}"
-    //           " > config > executeScalarLevelReactionToEvts > '${evt.srcName}'.",
-    //         );
-    //       }
-    //       // SCALAR EVENT: update (Only One Events).
-    //       eventScalar._internalEffectedShelfMembers
-    //           ._addRequeryScalar(listenerScalar);
-    //     }
-    //   }
-    // }
-
-    //
-    // -------- SHELF INTERNAL SCALAR EVENTS ------------
-    //
-    for (String scalarName in __scalarMap.keys) {
-      Scalar listenerScalar = __scalarMap[scalarName]!;
-
-      // Scan through the new unified reactions configuration inside the Scalar
-      for (var reaction in listenerScalar.effectiveConfig.reactions) {
-        // Find if the target data type event belongs to an internal Block emitter
-        for (Block eventBlock in __blockMap.values) {
-          if (eventBlock._exposesDataType(reaction.dataType)) {
-            if (reaction.target == ScalarReactionTarget.scalar) {
-              eventBlock._internalEffectedShelfMembers
-                  ._addRequeryScalar(listenerScalar);
-            }
-          }
-        }
-
-        // Find if the target data type event belongs to an internal Scalar emitter
-        for (Scalar eventScalar in __scalarMap.values) {
-          if (eventScalar._exposesDataType(reaction.dataType)) {
-            if (identical(listenerScalar, eventScalar)) {
-              if (reaction.target == ScalarReactionTarget.scalar) {
-                listenerScalar._internalEffectedShelfMembers
-                    ._addRequeryScalar(listenerScalar);
-              }
-            } else {
-              if (reaction.target == ScalarReactionTarget.scalar) {
-                eventScalar._internalEffectedShelfMembers
-                    ._addRequeryScalar(listenerScalar);
-              }
-            }
-          }
-        }
-      }
     }
   }
 
@@ -620,27 +489,27 @@ abstract class Shelf extends _Core {
     // Natural Query:
     //
     final XShelf xShelf = _XShelfShelfNaturalQuery(shelf: shelf);
-    _LazyObjects lazyObjects = xShelf.getLazyObjectInfos();
-    //
-    if (lazyObjects.isEmpty) {
-      executionTrace._addTraceStep(
-        codeId: "#02020",
-        shortDesc:
-            "No lazy model-components found. Just update All UI components and nothing else. "
-            "Calling ${debugObjHtml(this)}.ui.updateAllUiComponents().",
-        traceStepType: TraceStepType.nonControllableCalling,
-      );
-      // IMPORTANT: No Lazy entities, but need to refresh UiComponents:
-      ui.updateAllUiComponents();
-      FlutterArtist.storage.ui.updateAllUiComponents();
-      return;
-    }
-    executionTrace._addTraceStep(
-      codeId: "#02060",
-      shortDesc: "Found some lazy model-components.\n"
-          "${lazyObjects.toDebugString()}",
-      traceStepType: TraceStepType.debug,
-    );
+    // _LazyObjects lazyObjects = xShelf.getLazyObjectInfos();
+    // //
+    // if (lazyObjects.isEmpty) {
+    //   executionTrace._addTraceStep(
+    //     codeId: "#02020",
+    //     shortDesc:
+    //         "No lazy model-components found. Just update All UI components and nothing else. "
+    //         "Calling ${debugObjHtml(this)}.ui.updateAllUiComponents().",
+    //     traceStepType: TraceStepType.nonControllableCalling,
+    //   );
+    //   // IMPORTANT: No Lazy entities, but need to refresh UiComponents:
+    //   ui.updateAllUiComponents();
+    //   FlutterArtist.storage.ui.updateAllUiComponents();
+    //   return;
+    // }
+    // executionTrace._addTraceStep(
+    //   codeId: "#02060",
+    //   shortDesc: "Found some lazy model-components.\n"
+    //       "${lazyObjects.toDebugString()}",
+    //   traceStepType: TraceStepType.debug,
+    // );
     try {
       executionTrace._addTraceStep(
         codeId: "#02100",
@@ -654,10 +523,10 @@ abstract class Shelf extends _Core {
             "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits() to create <b>Natural-Load</b> execution units...",
         traceStepType: TraceStepType.nonControllableCalling,
       );
-      //
-      // TODO: Handle Error:
-      //
-      xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
+      // //
+      // // TODO: Handle Error:
+      // //
+      // xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
       //
       executionTrace._addTraceStep(
         codeId: "#02160",
@@ -714,69 +583,6 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-
-  Future<void> _markReactionToExternalShelfEvents({
-    required ExecutionTrace executionTrace,
-    required bool requiresMaxSyncStrategy,
-    required EffectedShelfMembers effectedShelfMembers,
-  }) async {
-    for (String blockName in effectedShelfMembers._requeryBlockMAP.keys) {
-      Block block = __blockMap[blockName]!;
-      //
-      block._updateSyncSessionState(
-        executionTrace: executionTrace,
-        xBlock: null,
-        eventSourceType: EventSourceType.external,
-        requiresMaxSyncStrategy: requiresMaxSyncStrategy,
-        syncStrategyOnFullQueryMode: null,
-        syncStrategyOnPageableQueryMode: null,
-        addedEffectiveIds: null,
-      );
-      //
-      executionTrace._addTraceStep(
-        codeId: "#50000",
-        shortDesc: " - <b>$blockName</b>:"
-            "\n  --> @blockSyncSessionState: <b>${block._blockSyncSessionState}</b>.",
-      );
-    }
-    //
-    for (String blockName
-        in effectedShelfMembers._refreshCurrItmBlockMAP.keys) {
-      Block block = __blockMap[blockName]!;
-      Comparable? itemId = block.currentItemId;
-      final blockItemRefreshCondition = itemId == null
-          ? null
-          : block._createBlockItemRefreshCon(
-              itemId: itemId,
-            );
-      block._blockItemRefreshCondition = blockItemRefreshCondition;
-      executionTrace._addTraceStep(
-        codeId: "#50100",
-        shortDesc: " - <b>$blockName</b>:"
-            "\n  --> @blockItemRefreshCondition: <b>$blockItemRefreshCondition</b>.",
-      );
-    }
-    //
-    for (String scalarName in effectedShelfMembers._requeryScalarMAP.keys) {
-      Scalar scalar = __scalarMap[scalarName]!;
-      final sclrSyncSessionState = _ScalarSyncSessionState(
-        scalar: scalar,
-        parentScalarValueId: scalar.parentScalarValueId, //
-        filterCriteria: scalar.filterCriteria,
-      );
-      scalar._scalarSyncSessionState = sclrSyncSessionState;
-      //
-      executionTrace._addTraceStep(
-        codeId: "#50200",
-        shortDesc: " - <b>$scalarName</b>:"
-            "\n  --> @scalarSyncSessionState: <b>$sclrSyncSessionState</b>.",
-      );
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   void _addShelfExternalReactionExecutionUnit({
     required ExecutionTrace executionTrace,
   }) async {
@@ -790,12 +596,12 @@ abstract class Shelf extends _Core {
       shelf: this,
     );
     //
-    executionTrace._addTraceStep(
-      codeId: "#52100",
-      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()..",
-      traceStepType: TraceStepType.nonControllableCalling,
-    );
-    xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
+    // executionTrace._addTraceStep(
+    //   codeId: "#52100",
+    //   shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()..",
+    //   traceStepType: TraceStepType.nonControllableCalling,
+    // );
+    // xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
     //
     executionTrace._addTraceStep(
       codeId: "#52200",

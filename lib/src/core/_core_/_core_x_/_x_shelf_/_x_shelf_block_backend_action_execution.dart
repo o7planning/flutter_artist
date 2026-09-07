@@ -6,9 +6,9 @@ class _XShelfBlockBackendActionExecution extends XShelf {
     required FilterInput? filterInput,
     required BlockViewportSyncStrategy? viewportSyncStrategy,
   }) : super(
-    xShelfType: XShelfType.blockBackendActionExecution,
-    shelf: block.shelf,
-  ) {
+          xShelfType: XShelfType.blockBackendActionExecution,
+          shelf: block.shelf,
+        ) {
     QryHint queryHint = QryHint.none;
     bool forceReloadItem = false;
     //
@@ -22,7 +22,7 @@ class _XShelfBlockBackendActionExecution extends XShelf {
       case BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery:
       case BlockViewportSyncStrategy.effectedItemIdsQuery:
       case BlockViewportSyncStrategy.nativeQuery:
-      // case BlockViewportSyncStrategy.refreshCurrentOnly:
+        // case BlockViewportSyncStrategy.refreshCurrentOnly:
         queryHint = QryHint.force;
         forceReloadItem = false;
     }
@@ -40,11 +40,5 @@ class _XShelfBlockBackendActionExecution extends XShelf {
       afterQueryDirective: null,
       pageable: null,
     );
-    //
-    // IMPORTANT:
-    //
-    XBlock xBlock = xBlockMap[block.name]!;
-    setRootVipXBlock(descendantXBlock: xBlock);
-    thisXBlock.xShelf.printInfo();
   }
 }

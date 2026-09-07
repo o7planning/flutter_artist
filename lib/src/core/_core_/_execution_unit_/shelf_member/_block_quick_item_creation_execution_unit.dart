@@ -10,14 +10,14 @@ class _BlockQuickItemCreationExecutionUnit<
   final XBlock xBlock;
 
   @override
-  final BlockTodoQuickItemCreation executionTodo;
+  final BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL> executionIntent;
 
   _BlockQuickItemCreationExecutionUnit({
     required this.xBlock,
-    required this.executionTodo,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.blockQuickCreateItem,
-          executionUnitResult: BlockQuickItemCreationResult(),
+          executionIntent: executionIntent,
         );
 
   @override

@@ -8,9 +8,5 @@ class _XShelfScalarBackendAction extends XShelf {
           shelf: scalar.shelf,
         ) {
     //
-    // IMPORTANT:
-    //
-    XScalar xScalar = xScalarMap[scalar.name]!;
-    setRootVipXScalar(descendantXScalar: xScalar);
   }
 }

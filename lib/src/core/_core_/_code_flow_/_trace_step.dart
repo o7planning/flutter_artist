@@ -75,7 +75,7 @@ class TraceStep {
 
   String getText() {
     String sd =
-    HtmlUtils.removeTags("$shortDesc${getParametersAsHtmlString()}");
+        HtmlUtils.removeTags("$shortDesc${getParametersAsHtmlString()}");
     String s = "$lineId: $sd";
     if (errorInfo != null) {
       s += "\n@errorMessage: ${errorInfo!.errorMessage}";

@@ -10,8 +10,8 @@ class ExecutionProgressViewBuilder extends _ContextProviderView {
   final List<Scalar> scalars;
 
   final Widget Function(
-    bool onProgress,
-  ) build;
+      bool onProgress,
+      ) build;
 
   const ExecutionProgressViewBuilder({
     super.key,
@@ -34,7 +34,8 @@ class ExecutionProgressViewBuilder extends _ContextProviderView {
 class _ExecutionProgressBuilderState
     extends _ContextProviderViewState<ExecutionProgressViewBuilder> {
   @override
-  ContextProviderViewType get type => ContextProviderViewType.executionProgressView;
+  ContextProviderViewType get type =>
+      ContextProviderViewType.executionProgressView;
 
   @override
   Shelf? _getRelatedShelf() {

@@ -42,7 +42,6 @@ class _XShelfBaseQuery extends XShelf {
         afterQueryDirective: srcBlockAndOptions.afterQueryDirective,
         pageable: srcBlockAndOptions.pageable,
       );
-      setRootVipXBlock(descendantXBlock: srcXBlock);
     }
     if (srcScalarAndOptions != null) {
       final Scalar srcScalar = srcScalarAndOptions.scalar;
@@ -51,7 +50,6 @@ class _XShelfBaseQuery extends XShelf {
       srcXScalar.setOptions(
         queryType: srcScalarAndOptions.queryType,
       );
-      setRootVipXScalar(descendantXScalar: srcXScalar);
     }
     //
     for (XBlock xBlock in thisXFilterModel.xBlocks) {

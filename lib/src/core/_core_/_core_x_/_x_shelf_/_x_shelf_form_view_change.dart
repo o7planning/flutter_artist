@@ -8,9 +8,5 @@ class _XShelfFormViewChange extends XShelf {
           shelf: formModel.shelf,
         ) {
     //
-    // IMPORTANT:
-    //
-    XBlock xBlock = xBlockMap[formModel.block.name]!;
-    setRootVipXBlock(descendantXBlock: xBlock);
   }
 }

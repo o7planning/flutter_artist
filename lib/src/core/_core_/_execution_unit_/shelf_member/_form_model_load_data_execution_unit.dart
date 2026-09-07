@@ -7,15 +7,15 @@ class _FormModelLoadDataExecutionUnit
   final XFormModel xFormModel;
 
   @override
-  final FormModelTodoLoad executionTodo;
+  final FormModelDataLoadIntent executionIntent;
 
   _FormModelLoadDataExecutionUnit({
     required this.xFormModel,
-    required this.executionTodo,
+    required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.formModelLoadData,
-          executionUnitResult: FormModelDataLoadResult(),
-        );
+    executionUnitType: ExecutionUnitType.formModelLoadData,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xFormModel.xShelf;

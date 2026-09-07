@@ -6,7 +6,7 @@ enum BlockFormSavePrecheck implements Precheck {
   busy(
     precheckCode: PrecheckCode.busy,
     message: "Form saving is disabled.",
-    details: ["The block has no form."],
+    details: ["The system is busy."],
   ),
   noForm(
     precheckCode: PrecheckCode.noForm,

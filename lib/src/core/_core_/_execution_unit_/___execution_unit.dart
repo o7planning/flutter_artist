@@ -17,12 +17,16 @@ part of '../core.dart';
 ///   └── _StorageBackendActionExecutionUnit
 ///
 @_ExecutionUnitClassAnnotation()
-abstract class _ExecutionUnit {
+abstract class  _ExecutionUnit {
   final ExecutionUnitType executionUnitType;
+  final ExecutionIntent executionIntent;
 
   Object get owner;
 
-  _ExecutionUnit({required this.executionUnitType});
+  _ExecutionUnit({
+    required this.executionUnitType,
+    required this.executionIntent,
+  });
 
   String getObjectName();
 

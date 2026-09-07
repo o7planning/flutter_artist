@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class FormModelPatchFormFieldsResult
-    extends ExecutionUnitResult<PatchFormFieldsPrecheck> {
+    extends ExecutionUnitResult<FormModelPatchFormFieldsPrecheck> {
   FormModelPatchFormFieldsResult({super.precheck});
 
   @override

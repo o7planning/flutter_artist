@@ -10,12 +10,16 @@ abstract class Flow<STAGE_ENUM extends Enum,
   late final FLOW_CONTEXT_DATA _flowContextData;
 
   STAGE_ENUM get currentStageId => _currentStageId;
+
   FlowDataState get dataState => _dataState;
+
   FLOW_CONTEXT_DATA get contextData => _flowContextData;
+
   List<STAGE_ENUM> get stageHistory => List.unmodifiable(_stageHistory);
 
   final Map<STAGE_ENUM, Stage> __stageMap = {};
   final List<Stage> _stages = [];
+
   List<Stage> get stages => List.unmodifiable(_stages);
 
   late final Activity activity;

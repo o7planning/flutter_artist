@@ -31,7 +31,6 @@ class _StorageSectionViewState
     return null;
   }
 
-
   @override
   String getWidgetOwnerClassName() {
     return "StorageSectionView";

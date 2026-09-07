@@ -20,7 +20,7 @@ class XFormModel<
   ForceType get forceTypeForForm => __forceTypeForForm;
   bool lazy = false;
 
-  FormModelTodo? _formModelTodo;
+  FormModelExecutionIntent? _executionIntent;
   FormProcessHint _formProcessHint = FormProcessHint.auto;
 
   ///
@@ -38,43 +38,53 @@ class XFormModel<
 
   // ***************************************************************************
 
-  FormModelTodoSave _createAndSetFormModelTodoSave() {
-    final formModelTodo = FormModelTodoSave();
+  FormModelSaveIntent _createAndSetFormModelExecutionIntentSave() {
+    final executionIntent = FormModelSaveIntent();
     _formProcessHint = FormProcessHint.force;
-    _formModelTodo = formModelTodo;
-    return formModelTodo;
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
   // ***************************************************************************
 
-  FormModelTodoViewChange _createAndSetFormModelTodoViewChange({
+  FormModelViewChangeIntent _createAndSetFormModelExecutionIntentViewChange({
     required Map<String, dynamic> formKeyInstantValuesInUI,
   }) {
-    final formModelTodo = FormModelTodoViewChange(
+    final executionIntent = FormModelViewChangeIntent(
       formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );
     _formProcessHint = FormProcessHint.force;
-    _formModelTodo = formModelTodo;
-    return formModelTodo;
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
   // ***************************************************************************
 
-  FormModelTodoLoad _createAndSetFormModelTodoLoad() {
-    final formModelTodo = FormModelTodoLoad();
-    _formModelTodo = formModelTodo;
-
-    print(
-        "~~~~~~~~~~~ XFormModel._createAndSetFormModelTodoLoad _formModelTodo: $_formModelTodo");
-    return formModelTodo;
+  FormModelDataLoadIntent _createAndSetFormModelExecutionIntentLoad() {
+    final executionIntent = FormModelDataLoadIntent();
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
   // ***************************************************************************
 
-  FormModelTodoDone _createAndSetFormModelTodoDone() {
-    final formModelTodo = FormModelTodoDone();
-    _formModelTodo = formModelTodo;
-    return formModelTodo;
+  FormModelPatchFormFieldsIntent
+      _createAndSetFormModelExecutionIntentPatchFormFields<
+          FORM_INPUT extends FormInput>({
+    required FORM_INPUT formInput,
+  }) {
+    final executionIntent =
+        FormModelPatchFormFieldsIntent(formInput: formInput);
+    _executionIntent = executionIntent;
+    return executionIntent;
+  }
+
+  // ***************************************************************************
+
+  FormModelDoneIntent _createAndSetFormModelExecutionIntentDone() {
+    final executionIntent = FormModelDoneIntent();
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
   // ***************************************************************************
@@ -82,158 +92,158 @@ class XFormModel<
   NextExecutionUnit _getNextExecutionUnit({required bool debug}) {
     final formModelDataState = formModel.dataState;
     final bool visibleX = formModel.ui.hasActiveUiComponent();
-    if (_formModelTodo == null) {
-      // [IN: _formModelTodo: null] - dataState: None.
+    if (_executionIntent == null) {
+      // [IN: _executionIntent: null] - dataState: None.
       if (formModelDataState.isNone) {
         return NextExecutionUnit.no(
           debug: debug,
           info:
-              "FormModel (1.1) (${formModel.block.name}), _formModelTodo: $_formModelTodo, dataState: $formModelDataState. ",
+              "FormModel (1.1) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. ",
         );
       }
-      // [IN: _formModelTodo: null] - dataState: Pending.
+      // [IN: _executionIntent: null] - dataState: Pending.
       else if (formModelDataState.isPending) {
         if (__forceTypeForForm == ForceType.force || visibleX) {
-          _createAndSetFormModelTodoLoad();
+          _createAndSetFormModelExecutionIntentLoad();
           return NextExecutionUnit.yes(
             debug: debug,
             executionUnit: _FormModelLoadDataExecutionUnit(
               xFormModel: this,
-              executionTodo: _formModelTodo as FormModelTodoLoad,
+              executionIntent: _executionIntent as FormModelDataLoadIntent,
             ),
             info:
-                "FormModel (1.2.1) (${formModel.block.name}), _formModelTodo: $_formModelTodo, dataState: $formModelDataState. "
+                "FormModel (1.2.1) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         } else {
           return NextExecutionUnit.no(
             debug: debug,
             info:
-                "FormModel (1.2.2) (${formModel.block.name}), _formModelTodo: $_formModelTodo, dataState: $formModelDataState. "
+                "FormModel (1.2.2) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         }
       }
-      // [IN: _formModelTodo: null] - dataState: FatalError.
+      // [IN: _executionIntent: null] - dataState: FatalError.
       else if (formModelDataState.isFatalError) {
         if (__forceTypeForForm == ForceType.force || visibleX) {
-          _createAndSetFormModelTodoLoad();
+          _createAndSetFormModelExecutionIntentLoad();
           return NextExecutionUnit.yes(
             debug: debug,
             executionUnit: _FormModelLoadDataExecutionUnit(
               xFormModel: this,
-              executionTodo: _formModelTodo as FormModelTodoLoad,
+              executionIntent: _executionIntent as FormModelDataLoadIntent,
             ),
             info:
-                "FormModel (1.3.1) (${formModel.block.name}), _formModelTodo: $_formModelTodo, dataState: $formModelDataState. "
+                "FormModel (1.3.1) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         } else {
           return NextExecutionUnit.no(
             debug: debug,
             info:
-                "FormModel (1.3.2) (${formModel.block.name}), _formModelTodo: $_formModelTodo, dataState: $formModelDataState. "
+                "FormModel (1.3.2) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         }
       }
-      // [IN: _formModelTodo: null] - dataState: Stale.
+      // [IN: _executionIntent: null] - dataState: Stale.
       else if (formModelDataState.isStale) {
         if (__forceTypeForForm == ForceType.force || visibleX) {
-          _createAndSetFormModelTodoLoad();
+          _createAndSetFormModelExecutionIntentLoad();
           return NextExecutionUnit.yes(
             debug: debug,
             executionUnit: _FormModelLoadDataExecutionUnit(
               xFormModel: this,
-              executionTodo: _formModelTodo as FormModelTodoLoad,
+              executionIntent: _executionIntent as FormModelDataLoadIntent,
             ),
             info:
-                "FormModel (1.4.1) (${formModel.block.name}), _formModelTodo: $_formModelTodo, dataState: $formModelDataState. "
+                "FormModel (1.4.1) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         } else {
           return NextExecutionUnit.no(
             debug: debug,
             info:
-                "FormModel (1.4.2) (${formModel.block.name}), _formModelTodo: $_formModelTodo, dataState: $formModelDataState. "
+                "FormModel (1.4.2) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         }
       }
-      // [IN: _formModelTodo: null] - dataState: Fresh.
+      // [IN: _executionIntent: null] - dataState: Fresh.
       else if (formModelDataState.isFresh) {
         return NextExecutionUnit.no(
           debug: debug,
           info:
-              "FormModel (1.5.1) (${formModel.block.name}), _formModelTodo: $_formModelTodo, dataState: $formModelDataState. "
+              "FormModel (1.5.1) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
               "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
         );
       }
-      // [IN: _formModelTodo: null] - dataState: OTHERS.
+      // [IN: _executionIntent: null] - dataState: OTHERS.
       else {
         throw UnimplementedError("Never Run (XFormModel)");
       }
     }
     //
-    // _formModelTodo != null.
+    // _executionIntent != null.
     //
-    final formModelTodo = _formModelTodo!;
+    final executionIntent = _executionIntent!;
     //
-    if (formModelTodo is FormModelTodoDone) {
+    if (executionIntent is FormModelDoneIntent) {
       return NextExecutionUnit.no(
         debug: debug,
         info:
-            "FormModel (2) ${formModel.block.name}, _formModelTodo: $_formModelTodo. "
+            "FormModel (2) ${formModel.block.name}, _executionIntent: $_executionIntent. "
             "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
       );
     }
-    // FormModelTodoDone
-    if (formModelTodo is FormModelTodoDone) {
+    // FormModelDoneIntent
+    if (executionIntent is FormModelDoneIntent) {
       throw UnimplementedError("Never run, see above!");
     }
-    // FormModelTodoViewChange
-    else if (formModelTodo is FormModelTodoViewChange) {
+    // FormModelViewChangeIntent
+    else if (executionIntent is FormModelViewChangeIntent) {
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit: _FormViewChangeExecutionUnit(
           xFormModel: this,
-          executionTodo: formModelTodo,
+          executionIntent: executionIntent,
         ),
         info:
-            "FormModel (3) ${formModel.block.name}, _formModelTodo: $_formModelTodo. "
+            "FormModel (3) ${formModel.block.name}, _executionIntent: $_executionIntent. "
             "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
       );
     }
-    // FormModelTodoLoad
-    else if (formModelTodo is FormModelTodoLoad) {
+    // FormModelLoadIntent
+    else if (executionIntent is FormModelDataLoadIntent) {
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit: _FormModelLoadDataExecutionUnit(
           xFormModel: this,
-          executionTodo: formModelTodo,
+          executionIntent: executionIntent,
         ),
         info:
-            "FormModel (4) ${formModel.block.name}, _formModelTodo: $_formModelTodo. "
+            "FormModel (4) ${formModel.block.name}, _executionIntent: $_executionIntent. "
             "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
       );
     }
-    // FormModelTodoSave
-    else if (formModelTodo is FormModelTodoSave) {
+    // FormModelSaveIntent
+    else if (executionIntent is FormModelSaveIntent) {
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit: _FormModelSaveFormExecutionUnit(
           xFormModel: this,
-          executionTodo: formModelTodo,
+          executionIntent: executionIntent,
         ),
         info:
-            "FormModel (5) ${formModel.block.name}, _formModelTodo: $_formModelTodo. "
+            "FormModel (5) ${formModel.block.name}, _executionIntent: $_executionIntent. "
             "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
       );
     }
     return NextExecutionUnit.no(
       debug: debug,
       info:
-          "FormModel (6) ${formModel.block.name}, _formModelTodo: $_formModelTodo, OTHER CASE. "
+          "FormModel (6) ${formModel.block.name}, _executionIntent: $_executionIntent, OTHER CASE. "
           "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
     );
   }

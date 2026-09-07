@@ -3,21 +3,21 @@ part of '../../core.dart';
 @_ExecutionUnitClassAnnotation()
 @_BlockBackendActionAnnotation()
 class _BlockBackendActionExecutionUnit<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>>
-    extends  _ShelfMemberResultedExecutionUnit<BlockBackendActionResult> {
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>>
+    extends _ShelfMemberResultedExecutionUnit<BlockBackendActionResult> {
   final XBlock xBlock;
 
   @override
-  final BlockTodoBackendAction<ID,ITEM,ITEM_DETAIL> executionTodo;
+  final BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL> executionIntent;
 
   _BlockBackendActionExecutionUnit({
     required this.xBlock,
-    required this.executionTodo,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.blockBackendAction,
-          executionUnitResult: BlockBackendActionResult(),
+          executionIntent: executionIntent,
         );
 
   @override

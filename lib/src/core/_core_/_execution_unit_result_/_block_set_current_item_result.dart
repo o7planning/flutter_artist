@@ -1,26 +1,24 @@
 part of '../core.dart';
 
-class BlockSetCurrentItemResult<ITEM>
+class BlockSetCurrentItemResult<
+        ITEM extends Identifiable<Comparable>>
     extends ExecutionUnitResult<BlockSetCurrentItemPrecheck> {
   final BlockSetCurrentItemDirective setCurrentItemDirective;
   final List<ITEM> _candidateItems = [];
   ITEM? _oldCurrentItem;
   ITEM? _currentItem;
-  final Object Function(ITEM item) _getItemId;
   bool _apiError = false;
   bool _convertError = false;
 
   BlockSetCurrentItemResult({
     required super.precheck,
     required this.setCurrentItemDirective,
-    required Object Function(ITEM item) getItemId,
     //
     required ITEM? candidateItem,
     required ITEM? oldCurrentItem,
     required ITEM? currentItem,
   })  : _oldCurrentItem = oldCurrentItem,
-        _currentItem = currentItem,
-        _getItemId = getItemId {
+        _currentItem = currentItem {
     if (candidateItem != null) {
       _candidateItems.add(candidateItem);
     }
@@ -71,7 +69,7 @@ class BlockSetCurrentItemResult<ITEM>
     if (_candidateItems.isEmpty || _currentItem == null) {
       return false;
     }
-    if (_getItemId(_candidateItems[0]) != _getItemId(_currentItem!)) {
+    if (_candidateItems[0].id != _currentItem!.id) {
       return false;
     }
     return true;
@@ -81,7 +79,7 @@ class BlockSetCurrentItemResult<ITEM>
     if (_candidateItems.isEmpty || _currentItem == null) {
       return false;
     }
-    if (_getItemId(_candidateItems[0]!) != _getItemId(_currentItem!)) {
+    if (_candidateItems[0].id != _currentItem!.id) {
       return false;
     }
     return true;
@@ -92,7 +90,7 @@ class BlockSetCurrentItemResult<ITEM>
     if (_candidateItems.isEmpty || _currentItem == null) {
       return false;
     }
-    if (_getItemId(_candidateItems[0]!) != _getItemId(_currentItem!)) {
+    if (_candidateItems[0].id != _currentItem!.id) {
       return false;
     }
     return true;

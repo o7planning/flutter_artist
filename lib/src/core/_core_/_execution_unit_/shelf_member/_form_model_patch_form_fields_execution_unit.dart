@@ -4,20 +4,18 @@ part of '../../core.dart';
 @_FormModelPatchFormFieldsAnnotation()
 class _FormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
     extends _ShelfMemberResultedExecutionUnit {
-  XFormModel xFormModel;
-  FORM_INPUT formInput;
+  final XFormModel xFormModel;
+
+  @override
+  final FormModelPatchFormFieldsIntent executionIntent;
 
   _FormModelPatchFormFieldsExecutionUnit({
     required this.xFormModel,
-    required this.formInput,
-    required FormModelPatchFormFieldsResult super.executionUnitResult,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.formModelPatchFormFields,
+          executionIntent: executionIntent,
         );
-
-  @override
-  BlockTodo? get executionTodo => null;
-
 
   @override
   XShelf get xShelf => xFormModel.xShelf;

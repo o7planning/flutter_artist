@@ -65,6 +65,7 @@ abstract class ActivityV1 extends _Core {
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XActivityV1 thisXActivity,
+    required DefaultActivityExecutionIntent executionIntent,
   }) async {
     __assertThisXActivity(thisXActivity);
     //
@@ -74,6 +75,9 @@ abstract class ActivityV1 extends _Core {
           "Begin ${debugObjHtml(this)} > ${executionUnitType.asDebugExecutionUnit()}.\n"
           "Note: This is called because you called the ${debugObjHtml(this)}.executeActivity() method.",
       traceStepType: TraceStepType.debug,
+    );
+    final activityResult = executionIntent.resultWrapper._setResult(
+      ActivityResult(),
     );
     //
     try {
@@ -94,6 +98,7 @@ abstract class ActivityV1 extends _Core {
         showSnackBar: true,
         tipDocument: TipDocument.activity,
       );
+      activityResult._setErrorInfo(errorInfo: errorInfo);
       executionTrace._addTraceStep(
         codeId: "#19200",
         shortDesc:

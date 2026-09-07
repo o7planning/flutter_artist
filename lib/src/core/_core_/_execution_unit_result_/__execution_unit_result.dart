@@ -1,5 +1,22 @@
 part of '../core.dart';
 
+class ExecutionUnitResultWrapper<
+    PRECHECK, //
+    EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>> {
+  EXECUTION_RESULT? _result;
+  EXECUTION_RESULT? get result => _result;
+
+  ExecutionUnitResultWrapper();
+
+  EXECUTION_RESULT _setResult(EXECUTION_RESULT result) {
+    if (_result != null) {
+      throw StateError("Internal library error: Invalid Logic");
+    }
+    _result = result;
+    return result;
+  }
+}
+
 abstract class ExecutionUnitResult<PRECHECK> {
   PRECHECK? _precheck;
   ErrorInfo? _errorInfo;

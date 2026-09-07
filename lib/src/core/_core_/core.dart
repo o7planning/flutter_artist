@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart'
     hide FlutterArtistLocaleAdapter;
@@ -142,7 +142,10 @@ import '../error/filter_register/tilde_filter_criterion_suffix_invalid_error.dar
 import '../error/form/form_multi_opt_ms_mismatch_error.dart';
 import '../error/form/form_prop_type_mismatch_error.dart';
 import '../error/form_register/form_prop_invalid_name_error.dart';
-import '../event/data_type_event_utils.dart';
+import '../precheck/activity_precheck.dart';
+import '../precheck/form_model_view_changed_precheck.dart';
+import '../precheck/scalar_load_extra_data_precheck.dart';
+import '_utils_/data_type_event_utils.dart';
 import '../icon/icon_constants.dart';
 import '../isar/fa_isar_storage.dart';
 import '../isar/fa_metadata.dart';
@@ -168,7 +171,7 @@ import '../precheck/block_query_precheck.dart';
 import '../precheck/block_backend_action_precheck.dart';
 import '../precheck/block_quick_item_creation_precheck.dart';
 import '../precheck/block_quick_item_update_precheck.dart';
-import '../precheck/patch_form_fields_precheck.dart';
+import '../precheck/form_model_patch_form_fields_precheck.dart';
 import '../precheck/form_model_data_load_precheck.dart';
 import '../precheck/scalar_query_precheck.dart';
 import '../precheck/scalar_quick_action_precheck.dart';
@@ -230,13 +233,19 @@ part '_v2_/_task.dart';
 
 part '_v2_/_activity.dart';
 
-part '_core_x_/_todo_/filter_model_todo.dart';
+part '_core_x_/_execution_intent_/filter_model_execution_intent.dart';
 
-part '_core_x_/_todo_/form_model_todo.dart';
+part '_core_x_/_execution_intent_/form_model_execution_intent.dart';
 
-part '_core_x_/_todo_/block_todo.dart';
+part '_core_x_/_execution_intent_/block_execution_intent.dart';
 
-part '_core_x_/_todo_/scalar_todo.dart';
+part '_core_x_/_execution_intent_/scalar_execution_intent.dart';
+
+part '_core_x_/_execution_intent_/_execution_intent.dart';
+
+part '_core_x_/_execution_intent_/storage_execution_intent.dart';
+
+part '_core_x_/_execution_intent_/activity_execution_intent.dart';
 
 part '_v2_/_activity_structure.dart';
 
@@ -281,12 +290,6 @@ part '../debug/_debug_options.dart';
 part '__core__/_default_filter_model.dart';
 
 part '_utils_/_reaction_processor.dart';
-
-part '_core_event_/_eff_block.dart';
-
-part '_core_event_/_eff_scalar.dart';
-
-part '_core_event_/_effected_shelf_members.dart';
 
 part '__core__/_log_listener.dart';
 
@@ -382,8 +385,6 @@ part '__core__/_block_query_plan.dart';
 
 part '__core__/_shelf_block_scalar_type.dart';
 
-part '_core_event_/_shelf_external_utils.dart';
-
 part '__core__/_shelf_structure.dart';
 
 part '__core__/_single_item_block.dart';
@@ -445,16 +446,6 @@ part '_config_/_scalar_effective_config.dart';
 part '_config_/_scalar_config.dart';
 
 part '_config_/_shelf_config.dart';
-
-part '_core_x_/_lazy_obj_/_lazy_filter_model.dart';
-
-part '_core_x_/_lazy_obj_/_lazy_form_model.dart';
-
-part '_core_x_/_lazy_obj_/_lazy_block.dart';
-
-part '_core_x_/_lazy_obj_/_lazy_scalar.dart';
-
-part '_core_x_/_lazy_obj_/_lazy_objects.dart';
 
 part '_v1_/_x_activity_v1.dart';
 
@@ -616,6 +607,8 @@ part '_observer_/_navigator_observer.dart';
 
 part '_execution_unit_result_/__execution_unit_result.dart';
 
+part '_execution_unit_result_/_scalar_load_extra_data_result.dart';
+
 part '_execution_unit_result_/_shelf_deferred_event_execution_result.dart';
 
 part '_execution_unit_result_/_form_model_patch_form_fields_result.dart';
@@ -646,9 +639,13 @@ part '_execution_unit_result_/_block_quick_item_update_result.dart';
 
 part '_execution_unit_result_/_form_model_data_load_result.dart';
 
+part '_execution_unit_result_/_form_model_view_changed_result.dart';
+
 part '_execution_unit_result_/_filter_model_data_load_result.dart';
 
-part '_execution_unit_result_/_form_save_result.dart';
+part '_execution_unit_result_/_form_model_save_result.dart';
+
+part '_execution_unit_result_/_activity_result.dart';
 
 part '_execution_unit_result_/_scalar_query_result.dart';
 
@@ -663,8 +660,6 @@ part '_execution_unit_/___execution_unit.dart';
 part '_execution_unit_/__shelf_member_execution_unit.dart';
 
 part '_core_x_/_root_queue_/__x_root_queue.dart';
-
-part '_execution_unit_/shelf_member/_shelf_starter_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_clear_execution_unit.dart';
 
@@ -681,6 +676,8 @@ part '_execution_unit_/shelf_member/_block_multi_item_deletion_execution_unit.da
 part '_execution_unit_/shelf_member/_block_prepare_form_to_create_item_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_query_execution_unit.dart';
+
+part '_execution_unit_/activity_member/_default_activity_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_backend_action_execution_unit.dart';
 

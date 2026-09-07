@@ -33,8 +33,7 @@ class _StorageNaturalQueryQueue {
 
   // LOGIC: #0000 (**)
   Future<void> _executeNaturalQueryQueue() async {
-    List<Shelf> lazyShelves =
-    getAllRemoveAll().toList();
+    List<Shelf> lazyShelves = getAllRemoveAll().toList();
 
     if (lazyShelves.isEmpty) {
       return;
@@ -46,7 +45,7 @@ class _StorageNaturalQueryQueue {
     executionTrace._addTraceStep(
       codeId: "#00000",
       shortDesc:
-      "Just detected some <b>UI Components</b> that have just been displayed. "
+          "Just detected some <b>UI Components</b> that have just been displayed. "
           "This will trigger a query execution on the associated <b>Shelves</b>:\n"
           " - ${lazyShelves.map((s) => debugObjHtml(s)).join(", ")}",
       tipDocument: TipDocument.naturalQuery,
@@ -58,7 +57,7 @@ class _StorageNaturalQueryQueue {
       executionTrace._addTraceStep(
         codeId: "#00100",
         shortDesc:
-        "Start checking lazy model-components of ${debugObjHtml(lazyShelf)}...",
+            "Start checking lazy model-components of ${debugObjHtml(lazyShelf)}...",
       );
       await lazyShelf._startLoadDataForLazyUiComponentsIfNeed(
         executionTrace: executionTrace,

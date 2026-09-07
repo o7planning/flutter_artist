@@ -1,7 +1,8 @@
 part of '../core.dart';
 
 @RenameAnnotation()
-class PrepareItemCreationResult extends ExecutionUnitResult<BlockItemCreationPrecheck> {
+class PrepareItemCreationResult
+    extends ExecutionUnitResult<BlockItemCreationPrecheck> {
   PrepareItemCreationResult({
     super.precheck,
     super.errorInfo,

@@ -1,7 +1,8 @@
 part of '../core.dart';
 
-class FormSaveResult extends ExecutionUnitResult<BlockFormSavePrecheck> {
-  FormSaveResult({required super.precheck});
+class FormModelViewChangedResult
+    extends ExecutionUnitResult<FormModelViewChangedPrecheck> {
+  FormModelViewChangedResult({super.precheck});
 
   @override
   bool get successForFirst {

@@ -7,24 +7,21 @@ part of '../../core.dart';
 @_BlockDeleteItemAnnotation()
 class _BlockMultiItemDeletionExecutionUnit<
         ID extends Comparable, //
-        ITEM extends Identifiable<ID>>
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>>
     extends _ShelfMemberResultedExecutionUnit<BlockItemsDeletionResult> {
-  XBlock xBlock;
-  final List<ITEM> items;
-  final bool stopIfError;
+  final XBlock xBlock;
+
+  @override
+  final BlockDeleteItemsIntent<ID, ITEM, ITEM_DETAIL> executionIntent;
 
   _BlockMultiItemDeletionExecutionUnit({
     required this.xBlock,
-    required this.items,
-    required super.executionUnitResult,
-    required this.stopIfError,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.blockDeleteItems,
+          executionIntent: executionIntent,
         );
-
-  @override
-  BlockTodo? get executionTodo => null;
-
 
   @override
   XShelf get xShelf => xBlock.xShelf;

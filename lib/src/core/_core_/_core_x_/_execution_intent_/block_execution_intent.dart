@@ -1,20 +1,20 @@
 part of '../../core.dart';
 
-sealed class BlockTodo<
+sealed class BlockExecutionIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>,
         PRECHECK,
         EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
-    extends ExecutionTodo<PRECHECK, EXECUTION_RESULT> {
-  BlockTodo();
+    extends ExecutionIntent<PRECHECK, EXECUTION_RESULT> {
+  BlockExecutionIntent();
 }
 
-final class BlockTodoQuery<
+final class BlockQueryIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>> //
-    extends BlockTodo<
+    extends BlockExecutionIntent<
         ID, //
         ITEM,
         ITEM_DETAIL,
@@ -22,16 +22,16 @@ final class BlockTodoQuery<
         BlockQueryResult> {
   final bool isQueryMoreFlow;
 
-  BlockTodoQuery({
+  BlockQueryIntent({
     required this.isQueryMoreFlow,
   });
 }
 
-final class BlockTodoBackendAction<
+final class BlockBackendActionIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>> //
-    extends BlockTodo<
+    extends BlockExecutionIntent<
         ID, //
         ITEM,
         ITEM_DETAIL,
@@ -39,14 +39,14 @@ final class BlockTodoBackendAction<
         BlockBackendActionResult> {
   final BlockBackendAction<ID> action;
 
-  BlockTodoBackendAction({required this.action});
+  BlockBackendActionIntent({required this.action});
 }
 
-final class BlockTodoQuickItemUpdate<
+final class BlockQuickItemUpdateIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>> //
-    extends BlockTodo<
+    extends BlockExecutionIntent<
         ID, //
         ITEM,
         ITEM_DETAIL,
@@ -54,14 +54,14 @@ final class BlockTodoQuickItemUpdate<
         BlockQuickItemUpdateResult> {
   final BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action;
 
-  BlockTodoQuickItemUpdate({required this.action});
+  BlockQuickItemUpdateIntent({required this.action});
 }
 
-final class BlockTodoQuickItemCreation<
+final class BlockQuickItemCreationIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>> //
-    extends BlockTodo<
+    extends BlockExecutionIntent<
         ID, //
         ITEM,
         ITEM_DETAIL,
@@ -69,33 +69,33 @@ final class BlockTodoQuickItemCreation<
         BlockQuickItemCreationResult> {
   final BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action;
 
-  BlockTodoQuickItemCreation({required this.action});
+  BlockQuickItemCreationIntent({required this.action});
 }
 
-final class BlockTodoPrepareFormToCreateItem<
+final class BlockPrepareFormToCreateItemIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>> //
-    extends BlockTodo<
+    extends BlockExecutionIntent<
         ID, //
         ITEM,
         ITEM_DETAIL,
-        BlockItemDeletionPrecheck,
-        BlockItemDeletionResult<ITEM>> {
+        BlockItemCreationPrecheck,
+        PrepareItemCreationResult> {
   final bool initDirty;
   final FormInput? formInput;
 
-  BlockTodoPrepareFormToCreateItem({
+  BlockPrepareFormToCreateItemIntent({
     required this.initDirty,
     required this.formInput,
   });
 }
 
-final class BlockTodoDeleteItem<
+final class BlockDeleteItemIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>> //
-    extends BlockTodo<
+    extends BlockExecutionIntent<
         ID, //
         ITEM,
         ITEM_DETAIL,
@@ -103,42 +103,61 @@ final class BlockTodoDeleteItem<
         BlockItemDeletionResult<ITEM>> {
   final ITEM item;
 
-  BlockTodoDeleteItem({
+  BlockDeleteItemIntent({
     required this.item,
   });
 }
 
-final class BlockTodoClearCurrentItem<
+final class BlockDeleteItemsIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>> //
-    extends BlockTodo<
+    extends BlockExecutionIntent<
+        ID, //
+        ITEM,
+        ITEM_DETAIL,
+        BlockItemsDeletionPrecheck,
+        BlockItemsDeletionResult<ITEM>> {
+  final List<ITEM> items;
+  final bool stopIfError;
+
+  BlockDeleteItemsIntent({
+    required this.items,
+    required this.stopIfError,
+  });
+}
+
+final class BlockClearCurrentItemIntent<
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>> //
+    extends BlockExecutionIntent<
         ID, //
         ITEM,
         ITEM_DETAIL,
         BlockClearCurrentItemPrecheck,
         BlockClearCurrentItemResult> {
-  BlockTodoClearCurrentItem();
+  BlockClearCurrentItemIntent();
 }
 
-final class BlockTodoClearItems<
+final class BlockClearItemsIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>> //
-    extends BlockTodo<
+    extends BlockExecutionIntent<
         ID, //
         ITEM,
         ITEM_DETAIL,
         BlockClearItemsPrecheck,
         BlockClearItemsResult> {
-  BlockTodoClearItems();
+  BlockClearItemsIntent();
 }
 
-final class BlockTodoSetCurrentItem<
+final class BlockSetCurrentItemIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>> //
-    extends BlockTodo<
+    extends BlockExecutionIntent<
         ID, //
         ITEM,
         ITEM_DETAIL,
@@ -150,7 +169,7 @@ final class BlockTodoSetCurrentItem<
   final bool forceReloadItem;
   final ForceType? forceTypeForForm;
 
-  BlockTodoSetCurrentItem({
+  BlockSetCurrentItemIntent({
     required this.setCurrentItemDirective,
     required this.newQueriedList,
     required this.inputCandidateCurrItem,
@@ -159,24 +178,24 @@ final class BlockTodoSetCurrentItem<
   });
 }
 
-final class BlockTodoDone<
+final class BlockDoneIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockTodo<ID, ITEM, ITEM_DETAIL, dynamic,
+    extends BlockExecutionIntent<ID, ITEM, ITEM_DETAIL, dynamic,
         EmptyExecutionUnitResult> {
-  final String lastTodoInfo;
+  final String lastIntentInfo;
 
-  BlockTodoDone({required this.lastTodoInfo});
+  BlockDoneIntent({required this.lastIntentInfo});
 }
 
-final class BlockTodoNull<
+final class BlockNullIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockTodo<ID, ITEM, ITEM_DETAIL, dynamic,
+    extends BlockExecutionIntent<ID, ITEM, ITEM_DETAIL, dynamic,
         EmptyExecutionUnitResult> {
-  final String lastTodoInfo;
+  final String lastIntentInfo;
 
-  BlockTodoNull({required this.lastTodoInfo});
+  BlockNullIntent({required this.lastIntentInfo});
 }

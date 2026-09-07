@@ -41,7 +41,6 @@ class _CustomControlBarState
     return null;
   }
 
-
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);

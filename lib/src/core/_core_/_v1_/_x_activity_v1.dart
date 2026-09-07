@@ -27,9 +27,13 @@ class XActivityV1 extends XRootQueueItem {
     }
     _tasked = true;
     return NextExecutionUnit.yes(
-        debug: debug,
-        executionUnit: _ActivityMemberExecutionUnit(xActivity: this),
-        info: '_getNextExecutionUnit');
+      debug: debug,
+      executionUnit: _DefaultActivityExecutionUnit(
+        xActivity: this,
+        executionIntent: DefaultActivityExecutionIntent(),
+      ),
+      info: '_getNextExecutionUnit',
+    );
   }
 
   @override

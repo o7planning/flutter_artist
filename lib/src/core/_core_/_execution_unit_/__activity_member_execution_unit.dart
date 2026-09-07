@@ -3,10 +3,11 @@ part of '../core.dart';
 @_ExecutionUnitClassAnnotation()
 @_ActivityAnnotation()
 class _ActivityMemberExecutionUnit extends _ExecutionUnit {
-  XActivityV1 xActivity;
+  final XActivityV1 xActivity;
 
   _ActivityMemberExecutionUnit({
     required this.xActivity,
+    required super.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.activity,
         );

@@ -8,9 +8,5 @@ class _XShelfBlockSetItemAsCurrent extends XShelf {
           shelf: block.shelf,
         ) {
     //
-    // IMPORTANT:
-    //
-    XBlock xBlock = xBlockMap[block.name]!;
-    setRootVipXBlock(descendantXBlock: xBlock);
   }
 }

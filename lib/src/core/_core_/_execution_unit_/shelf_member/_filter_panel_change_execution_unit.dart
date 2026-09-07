@@ -4,13 +4,16 @@ part of '../../core.dart';
 @_FilterPanelChangeAnnotation()
 class _FilterPanelChangeExecutionUnit extends _ShelfMemberExecutionUnit {
   XFilterModel xFilterModel;
-  final FilterModelTodoPanelChange executionTodo;
+
+  @override
+  final FilterModelFilterPanelChangeIntent executionIntent;
 
   _FilterPanelChangeExecutionUnit({
     required this.xFilterModel,
-    required this.executionTodo,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.filterModelFilterPanelChanged,
+          executionIntent: executionIntent,
         );
 
   @override

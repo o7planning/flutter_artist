@@ -8,12 +8,12 @@ class XBlock<
 
   int get xShelfId => xShelf.xShelfId;
 
-  BlockTodo<
+  BlockExecutionIntent<
       ID, //
       ITEM,
       ITEM_DETAIL,
       dynamic,
-      ExecutionUnitResult<dynamic>>? _executionTodo;
+      ExecutionUnitResult<dynamic>>? _executionIntent;
 
   bool _reviewed = false;
 
@@ -72,16 +72,14 @@ class XBlock<
 
   QueryType get queryType => __queryType;
 
-  // @Deprecated("Xoa di")
-  // bool _isQueryMoreFlow = false;
   ListUpdateStrategy? __listUpdateStrategy;
   SuggestedSelection? __suggestedSelection;
   BlockAfterQueryDirective? __afterQueryDirective;
   Pageable? __pageable;
 
-  // TODO: Chuyen sang BlockQueryResult?
-  late final PrepareItemCreationResult itemCreationResult =
-      block._createEmptyItemCreationResult();
+  // // TODO: Chuyen sang BlockQueryResult?
+  // late final PrepareItemCreationResult itemCreationResult =
+  //     block._createEmptyItemCreationResult();
   final queryResult = BlockQueryResult._();
 
   // ***************************************************************************
@@ -187,10 +185,6 @@ class XBlock<
 
   bool isRoot() {
     return parentXBlock == null;
-  }
-
-  bool isVipBranch() {
-    return rootXBlock == xShelf.rootVipXBlock;
   }
 
   bool isReQueryDone() {
@@ -316,252 +310,254 @@ class XBlock<
     final bool isVisibleX =
         block.ui.hasActiveUiComponent(alsoCheckChildren: true);
     final blockDataState = block.dataState;
-    if (_executionTodo == null) {
-      // (IN _executionTodo = null). dataState = None
+    if (_executionIntent == null) {
+      // (IN _executionIntent = null). dataState = None
       if (blockDataState.isNone) {
         return NextExecutionUnit.no(
           debug: debug,
           info:
-              "Block (1.1), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+              "Block (1.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: $_executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
         );
       }
-      // (IN _executionTodo = null). dataState = Pending
+      // (IN _executionIntent = null). dataState = Pending
       else if (blockDataState.isPending) {
         if (__qryHint == QryHint.force || isVisibleX) {
-          _createAndSetBlockTodoQuery();
+          _createAndSetBlockExecutionIntentQuery();
           //
           return NextExecutionUnit.yes(
             debug: debug,
             executionUnit: _BlockQueryExecutionUnit(
               xBlock: this,
-              blockTodoQuery: _executionTodo as BlockTodoQuery,
+              executionIntent: _executionIntent as BlockQueryIntent,
             ),
             info:
-                "Block (1.2.1), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo, dataState: ${blockDataState.toBriefInfo()}. "
+                "Block (1.2.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: $_executionIntent, dataState: ${blockDataState.toBriefInfo()}. "
                 " qryHint: $__qryHint, isVisibleX: $isVisibleX",
           );
         } else {
           return NextExecutionUnit.no(
             debug: debug,
             info:
-                "Block (1.2.2), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo, dataState: ${blockDataState.toBriefInfo()}. "
+                "Block (1.2.2), ${getClassNameWithoutGenerics(block)}, _executionIntent: $_executionIntent, dataState: ${blockDataState.toBriefInfo()}. "
                 " qryHint: $__qryHint, isVisibleX: $isVisibleX",
           );
         }
       }
-      // (IN _executionTodo = null). dataState = Stale.
+      // (IN _executionIntent = null). dataState = Stale.
       else if (blockDataState.isStale) {
         if (__qryHint == QryHint.force || isVisibleX) {
-          _createAndSetBlockTodoQuery();
+          _createAndSetBlockExecutionIntentQuery();
           //
           return NextExecutionUnit.yes(
             debug: debug,
             executionUnit: _BlockQueryExecutionUnit(
               xBlock: this,
-              blockTodoQuery: _executionTodo as BlockTodoQuery,
+              executionIntent: _executionIntent as BlockQueryIntent,
             ),
             info:
-                "Block (1.3.1), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo, dataState: ${blockDataState.toBriefInfo()}. "
+                "Block (1.3.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: $_executionIntent, dataState: ${blockDataState.toBriefInfo()}. "
                 " qryHint: $__qryHint, isVisibleX: $isVisibleX",
           );
         } else {
           return NextExecutionUnit.no(
             debug: debug,
             info:
-                "Block (1.3.2), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo, dataState: ${blockDataState.toBriefInfo()}. "
+                "Block (1.3.2), ${getClassNameWithoutGenerics(block)}, _executionIntent: $_executionIntent, dataState: ${blockDataState.toBriefInfo()}. "
                 " qryHint: $__qryHint, isVisibleX: $isVisibleX",
           );
         }
       }
-      // (IN _executionTodo = null). dataState = Fresh.
+      // (IN _executionIntent = null). dataState = Fresh.
       else if (blockDataState.isFresh) {
         if (__qryHint == QryHint.force) {
-          _createAndSetBlockTodoQuery();
+          _createAndSetBlockExecutionIntentQuery();
           //
           return NextExecutionUnit.yes(
             debug: debug,
             executionUnit: _BlockQueryExecutionUnit(
               xBlock: this,
-              blockTodoQuery: _executionTodo as BlockTodoQuery,
+              executionIntent: _executionIntent as BlockQueryIntent,
             ),
             info:
-                "Block (1.4.1), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo, dataState: ${blockDataState.toBriefInfo()}. "
+                "Block (1.4.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: $_executionIntent, dataState: ${blockDataState.toBriefInfo()}. "
                 " qryHint: $__qryHint, isVisibleX: $isVisibleX",
           );
         } else {
           return NextExecutionUnit.no(
             debug: debug,
             info:
-                "Block (1.4.2), ${getClassNameWithoutGenerics(block)}, _executionTodo: $_executionTodo, dataState: ${blockDataState.toBriefInfo()}. "
+                "Block (1.4.2), ${getClassNameWithoutGenerics(block)}, _executionIntent: $_executionIntent, dataState: ${blockDataState.toBriefInfo()}. "
                 " qryHint: $__qryHint, isVisibleX: $isVisibleX",
           );
         }
       }
-      // (IN _executionTodo = null). dataState = OTHERS
+      // (IN _executionIntent = null). dataState = OTHERS
       else {
-        throw UnimplementedError("Never run (XBlock) - 1, dataState: ${blockDataState.toBriefInfo()}");
+        throw UnimplementedError(
+            "Never run (XBlock) - 1, dataState: ${blockDataState.toBriefInfo()}");
       }
     }
     //
-    // _executionTodo != null.
+    // _executionIntent != null.
     //
-    final blockTodo = _executionTodo!;
-    // BlockTodoDone
-    if (blockTodo is BlockTodoDone) {
+    final executionIntent = _executionIntent!;
+    // BlockDoneIntent
+    if (executionIntent is BlockDoneIntent) {
       return NextExecutionUnit.no(
         debug: debug,
         info:
-            "Block (2), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+            "Block (2), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
-    // BlockTodoNull
-    else if (blockTodo is BlockTodoNull) {
+    // BlockNullIntent
+    else if (executionIntent is BlockNullIntent) {
       if (blockDataState.isNone) {
         return NextExecutionUnit.no(
           debug: debug,
           info:
-              "Block (3.1), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+              "Block (3.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
         );
       } else if (blockDataState.isPending) {
-        _createAndSetBlockTodoQuery();
+        _createAndSetBlockExecutionIntentQuery();
         //
         return NextExecutionUnit.yes(
           debug: debug,
           executionUnit: _BlockQueryExecutionUnit(
             xBlock: this,
-            blockTodoQuery: _executionTodo as BlockTodoQuery,
+            executionIntent: _executionIntent as BlockQueryIntent,
           ),
           info:
-              "Block (3.2), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+              "Block (3.2), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
         );
       } else if (blockDataState.isStale) {
-        _createAndSetBlockTodoQuery();
+        _createAndSetBlockExecutionIntentQuery();
         //
         return NextExecutionUnit.yes(
           debug: debug,
           executionUnit: _BlockQueryExecutionUnit(
             xBlock: this,
-            blockTodoQuery: _executionTodo as BlockTodoQuery,
+            executionIntent: _executionIntent as BlockQueryIntent,
           ),
           info:
-              "Block (3.3), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+              "Block (3.3), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
         );
       } else if (blockDataState.isFresh) {
         return NextExecutionUnit.no(
           debug: debug,
           info:
-              "Block (3.4), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+              "Block (3.4), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
         );
       } else {
         throw UnimplementedError("Never run (XBlock) - 2");
       }
     }
-    // BlockTodoQuery
-    else if (blockTodo is BlockTodoQuery) {
-      blockTodo as BlockTodoQuery<ID, ITEM, ITEM_DETAIL>;
+    // BlockQueryIntent
+    else if (executionIntent is BlockQueryIntent) {
+      executionIntent as BlockQueryIntent<ID, ITEM, ITEM_DETAIL>;
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit: _BlockQueryExecutionUnit(
           xBlock: this,
-          blockTodoQuery: _executionTodo as BlockTodoQuery,
+          executionIntent: _executionIntent as BlockQueryIntent,
         ),
         info:
-            "Block (4), ${getClassNameWithoutGenerics(block)}, _executionTodo: $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+            "Block (4), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
-    // BlockTodoSetCurrentItem
-    else if (blockTodo is BlockTodoSetCurrentItem) {
-      blockTodo as BlockTodoSetCurrentItem<ID, ITEM, ITEM_DETAIL>;
+    // BlockSetCurrentItemIntent
+    else if (executionIntent is BlockSetCurrentItemIntent) {
+      executionIntent as BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>;
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit:
             _BlockSetItemAsCurrentExecutionUnit<ID, ITEM, ITEM_DETAIL>(
           xBlock: this,
-          executionTodo: blockTodo,
+          executionIntent: executionIntent,
         ),
         info:
-            "Block (5), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+            "Block (5), ${getClassNameWithoutGenerics(block)}, $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
-    // BlockTodoClearCurrentItem
-    else if (blockTodo is BlockTodoClearCurrentItem) {
-      blockTodo as BlockTodoClearCurrentItem<ID, ITEM, ITEM_DETAIL>;
+    // BlockClearCurrentItemIntent
+    else if (executionIntent is BlockClearCurrentItemIntent) {
+      executionIntent as BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>;
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit: _BlockClearCurrentExecutionUnit<ID, ITEM, ITEM_DETAIL>(
           xBlock: this,
-          executionTodo: blockTodo,
+          executionIntent: executionIntent,
         ),
         info:
-            "Block (6), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+            "Block (6), ${getClassNameWithoutGenerics(block)}, $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
-    // BlockTodoDeleteItem
-    else if (blockTodo is BlockTodoDeleteItem) {
-      blockTodo as BlockTodoDeleteItem<ID, ITEM, ITEM_DETAIL>;
+    // BlockDeleteItemIntent
+    else if (executionIntent is BlockDeleteItemIntent) {
+      executionIntent as BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>;
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit: _BlockItemDeletionExecutionUnit<ID, ITEM, ITEM_DETAIL>(
           xBlock: this,
-          executionTodo: blockTodo,
+          executionIntent: executionIntent,
         ),
         info:
-            "Block (7), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+            "Block (7), ${getClassNameWithoutGenerics(block)}, $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
-    // BlockTodoPrepareFormToCreateItem
-    else if (blockTodo is BlockTodoPrepareFormToCreateItem) {
-      blockTodo as BlockTodoPrepareFormToCreateItem<ID, ITEM, ITEM_DETAIL>;
+    // BlockPrepareFormToCreateItemIntent
+    else if (executionIntent is BlockPrepareFormToCreateItemIntent) {
+      executionIntent
+          as BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>;
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit:
             _BlockPrepareFormToCreateItemExecutionUnit<ID, ITEM, ITEM_DETAIL>(
           xBlock: this,
-          executionTodo: blockTodo,
+          executionIntent: executionIntent,
         ),
         info:
-            "Block (8), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+            "Block (8), ${getClassNameWithoutGenerics(block)}, $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
-    // BlockTodoQuickItemUpdate
-    else if (blockTodo is BlockTodoQuickItemUpdate) {
-      blockTodo as BlockTodoQuickItemUpdate<ID, ITEM, ITEM_DETAIL>;
+    // BlockQuickItemUpdateIntent
+    else if (executionIntent is BlockQuickItemUpdateIntent) {
+      executionIntent as BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>;
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit:
             _BlockQuickItemUpdateExecutionUnit<ID, ITEM, ITEM_DETAIL>(
           xBlock: this,
-          executionTodo: blockTodo,
+          executionIntent: executionIntent,
         ),
         info:
-            "Block (9), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+            "Block (9), ${getClassNameWithoutGenerics(block)}, $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
-    // BlockTodoQuickItemCreation
-    else if (blockTodo is BlockTodoQuickItemCreation) {
-      blockTodo as BlockTodoQuickItemCreation<ID, ITEM, ITEM_DETAIL>;
+    // BlockQuickItemCreationIntent
+    else if (executionIntent is BlockQuickItemCreationIntent) {
+      executionIntent as BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>;
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit:
             _BlockQuickItemCreationExecutionUnit<ID, ITEM, ITEM_DETAIL>(
           xBlock: this,
-          executionTodo: blockTodo,
+          executionIntent: executionIntent,
         ),
         info:
-            "Block (10), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+            "Block (10), ${getClassNameWithoutGenerics(block)}, $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
-    // BlockTodoBackendAction
-    else if (blockTodo is BlockTodoBackendAction) {
-      blockTodo as BlockTodoBackendAction<ID, ITEM, ITEM_DETAIL>;
+    // BlockBackendActionIntent
+    else if (executionIntent is BlockBackendActionIntent) {
+      executionIntent as BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL>;
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit: _BlockBackendActionExecutionUnit<ID, ITEM, ITEM_DETAIL>(
           xBlock: this,
-          executionTodo: blockTodo,
+          executionIntent: executionIntent,
         ),
         info:
-            "Block (11), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. ",
+            "Block (11), ${getClassNameWithoutGenerics(block)}, $executionIntent, dataState: ${blockDataState.toBriefInfo()}. ",
       );
     }
     //
@@ -571,7 +567,7 @@ class XBlock<
       return NextExecutionUnit.no(
         debug: debug,
         info:
-            "Block (12), ${getClassNameWithoutGenerics(block)}, $blockTodo, dataState: ${blockDataState.toBriefInfo()}. **** TODO ****",
+            "Block (12), ${getClassNameWithoutGenerics(block)}, $executionIntent, dataState: ${blockDataState.toBriefInfo()}. **** TODO ****",
       );
     }
   }
@@ -597,116 +593,133 @@ class XBlock<
   // ***************************************************************************
   // ***************************************************************************
 
-  BlockTodoPrepareFormToCreateItem<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockTodoPrepareFormToCreateItem({
+  BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>
+      _createAndSetBlockExecutionIntentPrepareFormToCreateItem({
     required XBlock<ID, ITEM, ITEM_DETAIL> xBlock,
     required bool initDirty,
     required FormInput? formInput,
   }) {
-    final blockTodo = BlockTodoPrepareFormToCreateItem<ID, ITEM, ITEM_DETAIL>(
+    final executionIntent =
+        BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>(
       initDirty: initDirty,
       formInput: formInput,
     );
-    _executionTodo = blockTodo;
-    return blockTodo;
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
-  BlockTodoQuery<ID, ITEM, ITEM_DETAIL> _createAndSetBlockTodoQuery({
+  BlockQueryIntent<ID, ITEM, ITEM_DETAIL>
+      _createAndSetBlockExecutionIntentQuery({
     bool isQueryMoreFlow = false,
   }) {
-    final blockTodo = BlockTodoQuery<ID, ITEM, ITEM_DETAIL>(
+    final executionIntent = BlockQueryIntent<ID, ITEM, ITEM_DETAIL>(
       isQueryMoreFlow: isQueryMoreFlow,
     );
-    _executionTodo = blockTodo;
-    return blockTodo;
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
-  BlockTodoDeleteItem<ID, ITEM, ITEM_DETAIL> _createAndSetBlockTodoDeleteItem({
+  BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>
+      _createAndSetBlockExecutionIntentDeleteItem({
     required ITEM item,
   }) {
-    final blockTodo = BlockTodoDeleteItem<ID, ITEM, ITEM_DETAIL>(
+    final executionIntent = BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>(
       item: item,
     );
-    _executionTodo = blockTodo;
-    return blockTodo;
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
-  BlockTodoBackendAction<ID, ITEM, ITEM_DETAIL> _createAndSetBackendAction({
+  BlockDeleteItemsIntent<ID, ITEM, ITEM_DETAIL>
+      _createAndSetBlockExecutionIntentDeleteItems({
+    required List<ITEM> items,
+    required bool stopIfError,
+  }) {
+    final executionIntent = BlockDeleteItemsIntent<ID, ITEM, ITEM_DETAIL>(
+      items: items,
+      stopIfError: stopIfError,
+    );
+    _executionIntent = executionIntent;
+    return executionIntent;
+  }
+
+  BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL> _createAndSetBackendAction({
     required BlockBackendAction<ID> action,
   }) {
-    final blockTodo =
-        BlockTodoBackendAction<ID, ITEM, ITEM_DETAIL>(action: action);
-    _executionTodo = blockTodo;
-    return blockTodo;
+    final executionIntent =
+        BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL>(action: action);
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
-  BlockTodoQuickItemUpdate<ID, ITEM, ITEM_DETAIL>
+  BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>
       _createAndSetBlockQuickItemUpdate({
     required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
   }) {
-    final blockTodo =
-        BlockTodoQuickItemUpdate<ID, ITEM, ITEM_DETAIL>(action: action);
-    _executionTodo = blockTodo;
-    return blockTodo;
+    final executionIntent =
+        BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>(action: action);
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
-  BlockTodoQuickItemCreation<ID, ITEM, ITEM_DETAIL>
+  BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>
       _createAndSetBlockQuickItemCreation({
     required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
   }) {
-    final blockTodo =
-        BlockTodoQuickItemCreation<ID, ITEM, ITEM_DETAIL>(action: action);
-    _executionTodo = blockTodo;
-    return blockTodo;
+    final executionIntent =
+        BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>(action: action);
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
-  BlockTodoClearCurrentItem<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockTodoClearCurrentItem() {
-    final blockTodo = BlockTodoClearCurrentItem<ID, ITEM, ITEM_DETAIL>();
-    _executionTodo = blockTodo;
-    return blockTodo;
+  BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
+      _createAndSetBlockExecutionIntentClearCurrentItem() {
+    final executionIntent =
+        BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>();
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
-  BlockTodoClearItems<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockTodoClearItems() {
-    final blockTodo = BlockTodoClearItems<ID, ITEM, ITEM_DETAIL>();
-    _executionTodo = blockTodo;
-    return blockTodo;
+  BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL>
+      _createAndSetBlockExecutionIntentClearItems() {
+    final executionIntent = BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL>();
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
-  void _createAndSetBlockTodoDone({
-    required String lastTodoInfo,
+  void _createAndSetBlockExecutionIntentDone({
+    required String lastIntentInfo,
   }) {
-    _executionTodo = BlockTodoDone<ID, ITEM, ITEM_DETAIL>(
-      lastTodoInfo: lastTodoInfo,
+    _executionIntent = BlockDoneIntent<ID, ITEM, ITEM_DETAIL>(
+      lastIntentInfo: lastIntentInfo,
     );
   }
 
-  void _createAndSetBlockTodoNull({
-    required String lastTodoInfo,
+  void _createAndSetBlockExecutionIntentNull({
+    required String lastIntentInfo,
   }) {
-    _executionTodo = BlockTodoNull<ID, ITEM, ITEM_DETAIL>(
-      lastTodoInfo: lastTodoInfo,
+    _executionIntent = BlockNullIntent<ID, ITEM, ITEM_DETAIL>(
+      lastIntentInfo: lastIntentInfo,
     );
   }
 
-  BlockTodoSetCurrentItem<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockTodoSetCurrentItem({
+  BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
+      _createAndSetBlockExecutionIntentSetCurrentItem({
     required BlockSetCurrentItemDirective setCurrentItemDirective,
     required List<ITEM> newQueriedList,
     required ITEM? inputCandidateCurrItem,
     required bool forceReloadItem,
     required ForceType? forceTypeForForm,
   }) {
-    final blockTodo = BlockTodoSetCurrentItem<ID, ITEM, ITEM_DETAIL>(
+    final executionIntent = BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>(
       setCurrentItemDirective: setCurrentItemDirective,
       newQueriedList: newQueriedList,
       inputCandidateCurrItem: inputCandidateCurrItem,
       forceReloadItem: forceReloadItem,
       forceTypeForForm: forceTypeForForm,
     );
-    _executionTodo = blockTodo;
-    return blockTodo;
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
   // ***************************************************************************

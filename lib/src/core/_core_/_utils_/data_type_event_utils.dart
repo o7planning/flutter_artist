@@ -1,4 +1,4 @@
-import '../_core_/core.dart';
+import '../core.dart';
 
 class DataTypeEventUtils {
   /// Evaluates whether at least one common [Type] exists across all three provided sets (3-way intersection).

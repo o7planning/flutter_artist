@@ -14,25 +14,7 @@ final class _XRootQueue {
   ///
   final __xRootQueueItemMap = <String, XRootQueueItem>{};
 
-  // bool get isEmpty {
-  //   if (_xStorage.isNotEmpty) {
-  //     // return false;
-  //   }
-  //   for (XRootQueueItem item in __xRootQueueItemMap.values) {
-  //     if (!item.isEmptyExecutionUnit()) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
-  //
-  // bool get isNotEmpty => !isEmpty;
-
   bool hasNext() {
-    // _ExecutionUnit? exeUnit = getNextExecutionUnit(
-    //   removeEmptyRootQuery: false,
-    // );
-    // return exeUnit != null;
     for (XRootQueueItem item in __xRootQueueItemMap.values) {
       if (item is XShelf) {
         return item._getNextExecutionUnit(debug: false) != null;
@@ -77,8 +59,8 @@ final class _XRootQueue {
       if (next == null) {
         rootQueueKeys.remove(firstRootQueueItemName);
         if (removeEmptyRootQuery) {
-          PrintUtils.debug(
-              debug, "\n(***) <<< @REMOVE >>> RootQueueName: $firstRootQueueItemName.\n");
+          PrintUtils.debug(debug,
+              "\n(***) <<< @REMOVE >>> RootQueueName: $firstRootQueueItemName.\n");
           __xRootQueueItemMap.remove(firstRootQueueItemName);
         }
       } else {

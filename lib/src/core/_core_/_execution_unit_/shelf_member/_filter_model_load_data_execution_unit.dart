@@ -4,17 +4,17 @@ part of '../../core.dart';
 @_FilterModelLoadDataAnnotation()
 class _FilterModelLoadDataExecutionUnit
     extends _ShelfMemberResultedExecutionUnit<FilterModelDataLoadResult> {
-  XFilterModel xFilterModel;
+  final XFilterModel xFilterModel;
 
   @override
-  FilterModelTodoLoad executionTodo;
+  final FilterModelLoadIntent executionIntent;
 
   _FilterModelLoadDataExecutionUnit({
     required this.xFilterModel,
-    required this.executionTodo,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.filterModelLoadData,
-          executionUnitResult: FilterModelDataLoadResult(),
+          executionIntent: executionIntent,
         );
 
   @override

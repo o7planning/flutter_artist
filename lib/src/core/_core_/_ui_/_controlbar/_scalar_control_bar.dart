@@ -47,7 +47,6 @@ class _ScalarControlBarState extends _BaseControlBarState<
     return null;
   }
 
-
   @override
   bool get provideScalarContext => true;
 
@@ -92,12 +91,12 @@ class _ScalarControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: show
               ? () {
-            DebugViewerDialog.openDebugFilterCriteriaInspector(
-              context: context,
-              locationInfo: '',
-              filterModel: widget.scalar.registeredOrDefaultFilterModel,
-            );
-          }
+                  DebugViewerDialog.openDebugFilterCriteriaInspector(
+                    context: context,
+                    locationInfo: '',
+                    filterModel: widget.scalar.registeredOrDefaultFilterModel,
+                  );
+                }
               : null,
         );
 
@@ -109,8 +108,8 @@ class _ScalarControlBarState extends _BaseControlBarState<
           onPressed: item.onPressed == null
               ? null
               : () {
-            item.onPressed!.call(widget.scalar, type);
-          },
+                  item.onPressed!.call(widget.scalar, type);
+                },
         );
       default:
         return null;
@@ -146,9 +145,8 @@ class _ScalarControlBarState extends _BaseControlBarState<
       getClassNameWithoutGenerics(widget.scalar);
 
   @override
-  void addWidgetState({required bool isVisible}) =>
-      widget.scalar.ui
-          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) => widget.scalar.ui
+      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

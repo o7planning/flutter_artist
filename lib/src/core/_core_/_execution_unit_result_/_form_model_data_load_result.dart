@@ -1,6 +1,7 @@
 part of '../core.dart';
 
-class FormModelDataLoadResult extends ExecutionUnitResult<FormModelDataLoadPrecheck> {
+class FormModelDataLoadResult
+    extends ExecutionUnitResult<FormModelDataLoadPrecheck> {
   FormModelDataLoadResult({super.precheck});
 
   @override

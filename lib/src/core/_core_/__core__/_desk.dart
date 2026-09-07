@@ -78,14 +78,12 @@ class _Desk extends _DeskCore {
       shortDesc: "Creating <b>_StorageBackendActionExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    final executionUnit = _StorageBackendActionExecutionUnit(
-      action: action,
-    );
+    final executionIntent =
+        _createAndSetStorageExecutionIntentBackendAction(action: action);
     //
-    FlutterArtist._rootQueue._addStorageBackendActionExecutionUnit(executionUnit);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return executionUnit.executionUnitResult;
+    return executionIntent.result;
   }
 
   // ***************************************************************************
@@ -112,8 +110,7 @@ class _Desk extends _DeskCore {
   Future<bool> _unitBackendAction({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required StorageBackendAction action,
-    required StorageBackendActionResult executionUnitResult,
+    required StorageBackendActionIntent executionIntent,
   }) async {
     ApiResult<void>? result;
     //
@@ -123,21 +120,25 @@ class _Desk extends _DeskCore {
           "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
+    final executionUnitResult =
+        executionIntent.resultWrapper._setResult(StorageBackendActionResult());
     //
     try {
       executionTrace._addTraceStep(
         codeId: "#35100",
-        shortDesc: "Calling ${debugObjHtml(action)}.performBackendOperation().",
+        shortDesc:
+            "Calling ${debugObjHtml(executionIntent.action)}.performBackendOperation().",
         traceStepType: TraceStepType.controllableCalling,
       );
       //
-      result = await action.performBackendOperation();
+      result = await executionIntent.action.performBackendOperation();
       // Throw ApiError.
       result.throwIfError();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: null,
-        methodName: '${getClassName(action)}.performBackendOperation',
+        methodName:
+            '${getClassName(executionIntent.action)}.performBackendOperation',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -150,7 +151,7 @@ class _Desk extends _DeskCore {
       executionTrace._addTraceStep(
         codeId: "#35200",
         shortDesc:
-            "The ${debugObjHtml(action)}.performBackendOperation() method was called with an error!",
+            "The ${debugObjHtml(executionIntent.action)}.performBackendOperation() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -163,7 +164,7 @@ class _Desk extends _DeskCore {
     );
     _EventDispatcher.broadcastSystemWide(
       eventType: EventType.mix,
-      eventDataTypes: action.config.broadcastEvents,
+      eventDataTypes: executionIntent.action.config.broadcastEvents,
     );
     //
     return true;
@@ -186,5 +187,16 @@ class _Desk extends _DeskCore {
       actionConfirmationType: ActionConfirmationType.custom,
       action: action,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  StorageBackendActionIntent _createAndSetStorageExecutionIntentBackendAction({
+    required StorageBackendAction action,
+  }) {
+    final executionIntent = StorageBackendActionIntent(action: action);
+    // _executionIntent = executionIntent;
+    return executionIntent;
   }
 }

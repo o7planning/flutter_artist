@@ -21,7 +21,7 @@ class XFilterModel {
 
   int get xShelfId => xShelf.xShelfId;
 
-  FilterModelTodo? _filterModelTodo;
+  FilterModelExecutionIntent? _executionIntent;
 
   FilterLoadHint _filterLoadHint = FilterLoadHint.auto;
 
@@ -35,30 +35,31 @@ class XFilterModel {
   // ***************************************************************************
   // ***************************************************************************
 
-  FilterModelTodoPanelChange _createAndSetFilterModelTodoPanelChange({
+  FilterModelFilterPanelChangeIntent
+      _createAndSetFilterModelExecutionIntentPanelChange({
     required Map<String, dynamic> formKeyInstantValuesInUI,
   }) {
-    final filterModelTodo = FilterModelTodoPanelChange(
+    final executionIntent = FilterModelFilterPanelChangeIntent(
       formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );
-    _filterModelTodo = filterModelTodo;
-    return filterModelTodo;
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
   // ***************************************************************************
 
-  FilterModelTodoLoad _createAndSetFilterModelTodoLoad() {
-    FilterModelTodoLoad filterModelTodo = FilterModelTodoLoad();
-    _filterModelTodo = filterModelTodo;
-    return filterModelTodo;
+  FilterModelLoadIntent _createAndSetFilterModelExecutionIntentLoad() {
+    FilterModelLoadIntent executionIntent = FilterModelLoadIntent();
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
   // ***************************************************************************
 
-  FilterModelTodoDone _createAndSetFilterModelTodoDone() {
-    FilterModelTodoDone filterModelTodo = FilterModelTodoDone();
-    _filterModelTodo = filterModelTodo;
-    return filterModelTodo;
+  FilterModelDoneIntent _createAndSetFilterModelExecutionIntentDone() {
+    FilterModelDoneIntent executionIntent = FilterModelDoneIntent();
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
   // ***************************************************************************
@@ -73,116 +74,114 @@ class XFilterModel {
       );
     }
     //
-    if (_filterModelTodo == null) {
-      // IN: `_filterModelTodo == null`
+    if (_executionIntent == null) {
+      // IN: `_executionIntent == null`
       if (filterDataState.isLoaded) {
         return NextExecutionUnit.no(
           debug: debug,
           info:
               "FilterModel (2.1), ${getClassNameWithoutGenerics(filterModel)}, "
               "default?: ${filterModel.isDefaultFilterModel}, "
-              "dataState: $filterDataState, executionTodo: $_filterModelTodo",
+              "dataState: $filterDataState, executionIntent: $_executionIntent",
         );
       }
-      // IN: `_filterModelTodo == null`
+      // IN: `_executionIntent == null`
       else if (filterDataState.isPending) {
         PrintUtils.debug(debug,
-            " (**) FilterModel _filterModelTodo: null, create FilterModelTodoLoad");
-        _createAndSetFilterModelTodoLoad();
+            " (**) FilterModel _executionIntent: null, create FilterModelLoadIntent.");
+        _createAndSetFilterModelExecutionIntentLoad();
         //
         return NextExecutionUnit.yes(
           debug: debug,
           executionUnit: _FilterModelLoadDataExecutionUnit(
             xFilterModel: this,
-            executionTodo: _filterModelTodo as FilterModelTodoLoad,
+            executionIntent: _executionIntent as FilterModelLoadIntent,
           ),
           info:
               "FilterModel (2.2), ${getClassNameWithoutGenerics(filterModel)}, "
               "default?: ${filterModel.isDefaultFilterModel}, "
-              "dataState: $filterDataState, executionTodo: $_filterModelTodo",
+              "dataState: $filterDataState, executionIntent: $_executionIntent",
         );
       }
-      // IN: `_filterModelTodo == null`
+      // IN: `_executionIntent == null`
       else if (filterDataState.isError) {
         PrintUtils.debug(debug,
-            " (**) FilterModel _filterModelTodo: null, create FilterModelTodoLoad");
-        _createAndSetFilterModelTodoLoad();
+            " (**) FilterModel _executionIntent: null, create ${debugObjHtml(FilterModelLoadIntent)}");
+        _createAndSetFilterModelExecutionIntentLoad();
         //
         return NextExecutionUnit.yes(
           debug: debug,
           executionUnit: _FilterModelLoadDataExecutionUnit(
             xFilterModel: this,
-            executionTodo: _filterModelTodo as FilterModelTodoLoad,
+            executionIntent: _executionIntent as FilterModelLoadIntent,
           ),
           info:
               "FilterModel (2.3), ${getClassNameWithoutGenerics(filterModel)}, "
               "default?: ${filterModel.isDefaultFilterModel}, "
-              "dataState: $filterDataState, executionTodo: $_filterModelTodo",
+              "dataState: $filterDataState, executionIntent: $_executionIntent",
         );
       }
-      // IN: `_filterModelTodo == null`
+      // IN: `_executionIntent == null`
       else {
-        PrintUtils.debug(debug,
-            " (**) FilterModel _filterModelTodo: null, create FilterModelTodoLoad");
-        _createAndSetFilterModelTodoLoad();
+        _createAndSetFilterModelExecutionIntentLoad();
         //
         return NextExecutionUnit.yes(
           debug: debug,
           executionUnit: _FilterModelLoadDataExecutionUnit(
             xFilterModel: this,
-            executionTodo: _filterModelTodo as FilterModelTodoLoad,
+            executionIntent: _executionIntent as FilterModelLoadIntent,
           ),
           info:
               "FilterModel (2.4), ${getClassNameWithoutGenerics(filterModel)}, "
               "default?: ${filterModel.isDefaultFilterModel}, "
-              "dataState: $filterDataState, executionTodo: $_filterModelTodo",
+              "dataState: $filterDataState, executionIntent: $_executionIntent",
         );
       }
     }
     //
-    // _filterModelTodo != null.
+    // _executionIntent != null.
     //
-    final filterModelTodo = _filterModelTodo!;
-    // FilterModelTodoDone
-    if (filterModelTodo is FilterModelTodoDone) {
+    final executionIntent = _executionIntent!;
+    // FilterModelDoneIntent
+    if (executionIntent is FilterModelDoneIntent) {
       return NextExecutionUnit.no(
         debug: debug,
         info: "FilterModel (3), ${getClassNameWithoutGenerics(filterModel)}, "
             "default?: ${filterModel.isDefaultFilterModel}, "
-            "dataState: $filterDataState, executionTodo: $filterModelTodo",
+            "dataState: $filterDataState, executionIntent: $executionIntent",
       );
     }
-    // FilterModelTodoPanelChange
-    else if (filterModelTodo is FilterModelTodoPanelChange) {
+    // FilterModelFilterPanelChangeIntent
+    else if (executionIntent is FilterModelFilterPanelChangeIntent) {
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit: _FilterPanelChangeExecutionUnit(
           xFilterModel: this,
-          executionTodo: filterModelTodo,
+          executionIntent: executionIntent,
         ),
         info: "FilterModel (4), ${getClassNameWithoutGenerics(filterModel)}, "
             "default?: ${filterModel.isDefaultFilterModel}, "
-            "dataState: $filterDataState, executionTodo: $_filterModelTodo",
+            "dataState: $filterDataState, executionIntent: $_executionIntent",
       );
     }
-    // FilterModelTodoLoad
-    else if (filterModelTodo is FilterModelTodoLoad) {
+    // FilterModelLoadIntent
+    else if (executionIntent is FilterModelLoadIntent) {
       return NextExecutionUnit.yes(
         debug: debug,
         executionUnit: _FilterModelLoadDataExecutionUnit(
           xFilterModel: this,
-          executionTodo: filterModelTodo,
+          executionIntent: executionIntent,
         ),
         info: "FilterModel (5), ${getClassNameWithoutGenerics(filterModel)}, "
             "default?: ${filterModel.isDefaultFilterModel}, "
-            "dataState: $filterDataState, executionTodo: $_filterModelTodo",
+            "dataState: $filterDataState, executionIntent: $_executionIntent",
       );
     }
     return NextExecutionUnit.no(
       debug: debug,
       info: "FilterModel (6), ${getClassNameWithoutGenerics(filterModel)}, "
           "default?: ${filterModel.isDefaultFilterModel}, "
-          "dataState: $filterDataState, executionTodo: $_filterModelTodo  *** OTHER ***",
+          "dataState: $filterDataState, executionIntent: $_executionIntent  *** OTHER ***",
     );
   }
 

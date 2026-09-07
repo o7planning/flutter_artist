@@ -3,14 +3,18 @@ part of '../../core.dart';
 @_ExecutionUnitClassAnnotation()
 @_StorageBackendActionAnnotation()
 class _StorageBackendActionExecutionUnit extends _ExecutionUnit {
-  final StorageBackendAction action;
-  final StorageBackendActionResult executionUnitResult = StorageBackendActionResult();
+
+  @override
+  final  StorageBackendActionIntent executionIntent;
+
 
   _StorageBackendActionExecutionUnit({
-    required this.action,
+    required this.executionIntent,
+
   }) : super(
-          executionUnitType: ExecutionUnitType.storageBackendAction,
-        );
+    executionUnitType: ExecutionUnitType.storageBackendAction,
+      executionIntent:executionIntent,
+  );
 
   @override
   Object get owner => FlutterArtist.storage;

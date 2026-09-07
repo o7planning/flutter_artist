@@ -4,8 +4,8 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(
-          xShelfType: XShelfType.shelfExternalReaction,
-        ) {
+    xShelfType: XShelfType.shelfExternalReaction,
+  ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk.block._blockSyncSessionState == null &&
           xBlk.block._blockItemRefreshCondition == null) {
@@ -13,11 +13,12 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       }
       // @@@hasActiveBlockFragment
       bool blockXBlockRep =
-          xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
+      xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
         alsoCheckChildren: true,
       );
       print(
-          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk.block} - blockXBlockRep: $blockXBlockRep");
+          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk
+              .block} - blockXBlockRep: $blockXBlockRep");
       QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //
@@ -47,7 +48,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
         }
         // @@@hasActiveBlockFragment
         bool blockXBlockRep =
-            xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
+        xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
         if (blockXBlockRep) {

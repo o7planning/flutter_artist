@@ -150,7 +150,6 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
           String title;
           String? tooltip;
           IconData prefixIconData;
-          bool rootVip = false;
           bool showReQueryIcon = false;
           bool showRefreshCurrItemIcon = false;
           Color textColor = Colors.black;
@@ -159,7 +158,6 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
             title = "${data.shelf.name} (ID: ${data.xShelfId})";
             tooltip = "XShelf: $title";
             prefixIconData = FaIconConstants.shelfStructureIconData;
-            rootVip = false;
           } else if (data is XScalar) {
             title = data.name;
             tooltip = "Scalar: $title";
@@ -168,7 +166,6 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
               textColor = Colors.red;
               showReQueryIcon = true;
             }
-            rootVip = data.isVipBranch();
           } else if (data is XBlock) {
             title = data.name;
             tooltip = "Block: $title";
@@ -181,12 +178,10 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
               textColor = Colors.red;
               showRefreshCurrItemIcon = true;
             }
-            rootVip = data.isRoot() && data.isVipBranch();
           } else if (data is XFormModel) {
             title = data.name;
             tooltip = "FormModel: $title";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
-            rootVip = false;
           } else {
             prefixIconData = FaIconConstants.uknownIconData;
             title = "UKNOWN";
@@ -238,15 +233,6 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
                       child: Icon(
                         FaIconConstants.formRefreshIconData,
                         size: 16,
-                      ),
-                    ),
-                  if (rootVip)
-                    Tooltip(
-                      message: "VIP Branch",
-                      child: Icon(
-                        FaIconConstants.vipBranchIconData,
-                        size: 16,
-                        color: Colors.red,
                       ),
                     ),
                 ],

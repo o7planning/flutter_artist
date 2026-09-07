@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../dialog/_x_shelf_dialog.dart';
 import '../model/_debug_execution_unit.dart';
 
 class DebugExecutionUnitView extends StatefulWidget {

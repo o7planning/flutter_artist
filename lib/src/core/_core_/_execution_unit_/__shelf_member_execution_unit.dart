@@ -4,6 +4,7 @@ part of '../core.dart';
 abstract class _ShelfMemberExecutionUnit extends _ExecutionUnit {
   _ShelfMemberExecutionUnit({
     required super.executionUnitType,
+    required super.executionIntent,
   });
 
   String getExecutionUnitId() {

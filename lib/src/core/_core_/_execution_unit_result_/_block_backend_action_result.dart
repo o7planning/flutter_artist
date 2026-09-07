@@ -1,6 +1,7 @@
 part of '../core.dart';
 
-class BlockBackendActionResult extends ExecutionUnitResult<BlockBackendActionPrecheck> {
+class BlockBackendActionResult
+    extends ExecutionUnitResult<BlockBackendActionPrecheck> {
   BlockBackendActionResult({
     super.precheck,
     super.errorInfo,

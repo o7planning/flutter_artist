@@ -37,7 +37,6 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
     return null;
   }
 
-
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.formModel);
@@ -117,7 +116,7 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
     }
     switch (selection) {
       case dialogs.YesNoCancel.yes:
-        FormSaveResult result = await widget.formModel.saveForm();
+        BlockFormSaveResult result = await widget.formModel.saveForm();
         if (!result.successForAll) {
           return;
         }

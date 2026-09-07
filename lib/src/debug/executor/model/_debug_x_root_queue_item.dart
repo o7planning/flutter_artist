@@ -12,7 +12,8 @@ class DebugXRootQueueItem {
     required this.secondaryExecutionUnits,
   });
 
-  bool get isEmpty => mainExecutionUnits.isEmpty && secondaryExecutionUnits.isEmpty;
+  bool get isEmpty =>
+      mainExecutionUnits.isEmpty && secondaryExecutionUnits.isEmpty;
 
   bool get isNotEmpty => !isEmpty;
 }

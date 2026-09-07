@@ -93,9 +93,10 @@ class BlockConfig {
     ),
     this.clientSideSortStrategy = SortStrategy.none,
     this.reactions = const [],
-  })  : onHideAction = BlockHiddenAction.none,
+  })
+      : onHideAction = BlockHiddenAction.none,
         extraBroadcastEvents =
-            List.unmodifiable(extraBroadcastEvents?.toSet() ?? []);
+        List.unmodifiable(extraBroadcastEvents?.toSet() ?? []);
 
   /// Creates an immutable copy of this [BlockConfig] with the current configuration values.
   BlockConfig copy() {

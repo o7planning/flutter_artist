@@ -16,7 +16,7 @@ class XStorage {
   }
 
   _StorageBackendActionExecutionUnit? _getNextExecutionUnit() {
-    _StorageBackendActionExecutionUnit? tu = __storageBackendActionExecutionUnit;
+    final tu = __storageBackendActionExecutionUnit;
     __storageBackendActionExecutionUnit = null;
     return tu;
   }

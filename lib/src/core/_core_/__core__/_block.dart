@@ -113,10 +113,6 @@ abstract class Block<
 
   final BlockEffectiveConfig effectiveConfig;
 
-  late final _internalEffectedShelfMembers = EffectedShelfMembers.ofBlock(
-    eventBlock: this,
-  );
-
   // TODO: LOGIC-01
   final bool _alwaysTrySelectAnItemAsCurrent = true;
 
@@ -519,7 +515,8 @@ abstract class Block<
 
       // Test case: [63a], [63b].
       if (nextState != dataState) {
-        xBlock?._createAndSetBlockTodoNull(lastTodoInfo: "Test Wait More");
+        xBlock?._createAndSetBlockExecutionIntentNull(
+            lastIntentInfo: "Test Wait More");
         __blockData._blockDataState = nextState;
         executionTrace._addTraceStep(
           codeId: "#83500",
@@ -1047,9 +1044,12 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
+    required BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL> executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
-    thisXBlock._createAndSetBlockTodoDone(lastTodoInfo: "Clear Items");
+    thisXBlock._createAndSetBlockExecutionIntentDone(
+      lastIntentInfo: "Clear Items",
+    );
     //
     executionTrace._addTraceStep(
       codeId: "#07000",
@@ -1063,6 +1063,10 @@ abstract class Block<
           "Clear all item of ${debugObjHtml(this)} and set to <b>pending</b>. "
           "Clear all data of child blocks and set them to <b>none</b>."
           "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
+    );
+    //
+    executionIntent.resultWrapper._setResult(
+      BlockClearItemsResult(precheck: null),
     );
     __clearWithDataStateAndChildrenToNonCascade(
       thisXBlock: thisXBlock,
@@ -1084,10 +1088,11 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockTodoClearCurrentItem<ID, ITEM, ITEM_DETAIL> executionTodo,
+    required BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL> executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
-    thisXBlock._createAndSetBlockTodoDone(lastTodoInfo: "Clear Current Item");
+    thisXBlock._createAndSetBlockExecutionIntentDone(
+        lastIntentInfo: "Clear Current Item");
     //
     executionTrace._addTraceStep(
       codeId: "#13000",
@@ -1099,6 +1104,9 @@ abstract class Block<
     executionTrace._addTraceStep(
       codeId: "#13100",
       shortDesc: "${debugObjHtml(this)} -> set currentItem to null.",
+    );
+    executionIntent.resultWrapper._setResult(
+      BlockClearCurrentItemResult(precheck: null),
     );
     __setCurrentItemOnly(
       id: null,
@@ -1139,10 +1147,10 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockTodoQuery<ID, ITEM, ITEM_DETAIL> blockTodoQuery,
+    required BlockQueryIntent<ID, ITEM, ITEM_DETAIL> executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
-    thisXBlock._createAndSetBlockTodoDone(lastTodoInfo: "Query");
+    thisXBlock._createAndSetBlockExecutionIntentDone(lastIntentInfo: "Query");
     //
     executionTrace._addTraceStep(
       codeId: "#03000",
@@ -1150,6 +1158,9 @@ abstract class Block<
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
+    // Important:
+    final executionResult =
+        executionIntent.resultWrapper._setResult(BlockQueryResult._());
     //
     bool provideBlockContext = ui.hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
@@ -1280,11 +1291,11 @@ abstract class Block<
         executionTrace._addTraceStep(
           codeId: "#03140",
           shortDesc:
-              "${debugObjHtml(this)}: XBlock._createAndSetBlockTodoSetCurrentItem().",
-          traceStepType: TraceStepType.executionTodo,
+              "${debugObjHtml(this)}: XBlock._createAndSetBlockExecutionIntentSetCurrentItem().",
+          traceStepType: TraceStepType.executionIntent,
         );
         // IN: Case QryHint.none
-        thisXBlock._createAndSetBlockTodoSetCurrentItem(
+        thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
           setCurrentItemDirective: setCurrentItemDirective ??
               BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
           newQueriedList: [],
@@ -1599,7 +1610,7 @@ abstract class Block<
         currentDataState: dataState,
         syncStrategy: viewportSyncStrategy,
         filterCriteriaChanged: filterCriteriaChanged,
-        isQueryMore: blockTodoQuery.isQueryMoreFlow,
+        isQueryMore: executionIntent.isQueryMoreFlow,
         isPageShifting: isPageShifting,
         hasRemoveItemIds: false,
         queryTypeChanged: queryTypeChanged,
@@ -1830,10 +1841,10 @@ abstract class Block<
       executionTrace._addTraceStep(
         codeId: "#03720",
         shortDesc:
-            "@afterQueryDirective: ${debugObjHtml(afterQueryDirective)} --> Add Execution Todo: clear current item.",
-        traceStepType: TraceStepType.executionTodo,
+            "@afterQueryDirective: ${debugObjHtml(afterQueryDirective)} --> Add Execution Intent: clear current item.",
+        traceStepType: TraceStepType.executionIntent,
       );
-      thisXBlock._createAndSetBlockTodoClearCurrentItem();
+      thisXBlock._createAndSetBlockExecutionIntentClearCurrentItem();
       return;
     }
     // createNewItem (IN _unitQuery)
@@ -1841,10 +1852,10 @@ abstract class Block<
       executionTrace._addTraceStep(
         codeId: "#03740",
         shortDesc: "@afterQueryDirective: $afterQueryDirective --> "
-            "Create ${debugObjHtml(BlockTodoPrepareFormToCreateItem)}.",
-        traceStepType: TraceStepType.executionTodo,
+            "Create ${debugObjHtml(BlockPrepareFormToCreateItemIntent)}.",
+        traceStepType: TraceStepType.executionIntent,
       );
-      thisXBlock._createAndSetBlockTodoPrepareFormToCreateItem(
+      thisXBlock._createAndSetBlockExecutionIntentPrepareFormToCreateItem(
         xBlock: thisXBlock,
         initDirty: false,
         formInput: null,
@@ -1878,11 +1889,11 @@ abstract class Block<
     executionTrace._addTraceStep(
       codeId: "#03800",
       shortDesc:
-          "Calling ${debugObjHtml(thisXBlock)}._initBlockTodoSetCurrentItem() for ${debugObjHtml(thisXBlock.block)}.",
-      traceStepType: TraceStepType.executionTodo,
+          "Create ${debugObjHtml(BlockSetCurrentItemIntent)} for ${debugObjHtml(thisXBlock.block)}.",
+      traceStepType: TraceStepType.executionIntent,
     );
     //
-    thisXBlock._createAndSetBlockTodoSetCurrentItem(
+    thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
       setCurrentItemDirective: setCurrentItemDirective,
       newQueriedList: queriedItemList ?? [],
       inputCandidateCurrItem: candidateCurrItem,
@@ -1905,22 +1916,21 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required final BlockTodoSetCurrentItem<ID, ITEM, ITEM_DETAIL> blockTodo,
-    required BlockSetCurrentItemResult<ITEM> blockSetCurrentItemResult,
+    required final BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
+        executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
-    thisXBlock._createAndSetBlockTodoDone(lastTodoInfo: "Set Item As Current");
+    thisXBlock._createAndSetBlockExecutionIntentDone(
+        lastIntentInfo: "Set Item As Current");
     //
-    thisXBlock._createAndSetBlockTodoDone(lastTodoInfo: "Set Item As Current.");
-
     executionTrace._addTraceStep(
       codeId: "#28000",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}.",
       parameters: {
-        "inputCandidateCurrItem": blockTodo.inputCandidateCurrItem,
-        "newQueriedList": blockTodo.newQueriedList,
-        "setCurrentItemDirective": blockTodo.setCurrentItemDirective,
+        "inputCandidateCurrItem": executionIntent.inputCandidateCurrItem,
+        "newQueriedList": executionIntent.newQueriedList,
+        "setCurrentItemDirective": executionIntent.setCurrentItemDirective,
       },
       traceStepType: TraceStepType.debug,
     );
@@ -1935,7 +1945,7 @@ abstract class Block<
       formModel?._formModelStructure._setManualDirty(manualDirty);
     }
     //
-    ITEM? inputCandidateCurrItem = blockTodo.inputCandidateCurrItem;
+    ITEM? inputCandidateCurrItem = executionIntent.inputCandidateCurrItem;
     if (thisXBlock.candidateCurrItem != null) {
       executionTrace._addTraceStep(
         codeId: "#28030",
@@ -1945,6 +1955,16 @@ abstract class Block<
       //
       inputCandidateCurrItem ??= (thisXBlock.candidateCurrItem as ITEM);
     }
+    //
+    final blockSetCurrentItemResult = executionIntent.resultWrapper._setResult(
+      BlockSetCurrentItemResult<ITEM>(
+        precheck: null,
+        setCurrentItemDirective: executionIntent.setCurrentItemDirective,
+        candidateItem: executionIntent.inputCandidateCurrItem,
+        oldCurrentItem: currentItem,
+        currentItem: currentItem,
+      ),
+    );
     if (inputCandidateCurrItem != null) {
       blockSetCurrentItemResult._addCandidateItem(inputCandidateCurrItem);
     }
@@ -1953,7 +1973,7 @@ abstract class Block<
     //
     if (dataState.isPending || dataState.isStale) {
       // TODO: Review.
-      // throw "TODO pending or isLoadedAndStale";
+      // This case never run!
       print("@TEMP: dataState.isPending || dataState.isStale");
       // Do nothing.
       return;
@@ -2056,7 +2076,7 @@ abstract class Block<
           isInNewQueryList2 = false;
         } else {
           isInNewQueryList2 = FaItemsUtils.isListContainItem(
-            targetList: blockTodo.newQueriedList,
+            targetList: executionIntent.newQueriedList,
             item: candidateCurrItem2,
             getItemId: _getItemIdInternal,
           );
@@ -2073,18 +2093,18 @@ abstract class Block<
           codeId: "#28300",
           shortDesc: "State:"
               "\n - ITEM == ITEM_DETAIL?: <b>${ITEM == ITEM_DETAIL}</b>."
-              "\n - @setCurrentItemDirective: <b>${blockTodo.setCurrentItemDirective}</b>.",
+              "\n - @setCurrentItemDirective: <b>${executionIntent.setCurrentItemDirective}</b>.",
           traceStepType: TraceStepType.debug,
         );
         //
         if (hasItemRep ||
-            blockTodo.setCurrentItemDirective ==
+            executionIntent.setCurrentItemDirective ==
                 BlockSetCurrentItemDirective.setAnItemAsCurrent ||
-            blockTodo.setCurrentItemDirective ==
+            executionIntent.setCurrentItemDirective ==
                 BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm) {
           candidateCurrItem = candidateCurrItem2;
           currItemWillChanged = candidateCurrItem != null;
-        } else if (blockTodo.setCurrentItemDirective ==
+        } else if (executionIntent.setCurrentItemDirective ==
                 BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed &&
             (ITEM == ITEM_DETAIL && isInNewQueryList2)) {
           candidateCurrItem = isInNewQueryList2 ? candidateCurrItem2 : null;
@@ -2162,7 +2182,7 @@ abstract class Block<
     //
     final bool isCandidateCurrentItemInNewQueriedList =
         FaItemsUtils.isListContainItem(
-      targetList: blockTodo.newQueriedList,
+      targetList: executionIntent.newQueriedList,
       item: candidateCurrItem,
       getItemId: _getItemIdInternal,
     );
@@ -2208,7 +2228,7 @@ abstract class Block<
         "itemAbsentRepresentativePolicy":
             effectiveConfig.itemAbsentRepresentativePolicy,
         "unifiedItemRefreshPolicy": effectiveConfig.unifiedItemRefreshPolicy,
-        "setCurrentItemDirective": blockTodo.setCurrentItemDirective,
+        "setCurrentItemDirective": executionIntent.setCurrentItemDirective,
         "isCandidateCurrentItemInNewQueriedList":
             isCandidateCurrentItemInNewQueriedList,
         "currentItemChanged": currItemWillChanged,
@@ -2228,7 +2248,7 @@ abstract class Block<
       itemAbsentRepresentativePolicy:
           effectiveConfig.itemAbsentRepresentativePolicy,
       unifiedItemRefreshPolicy: effectiveConfig.unifiedItemRefreshPolicy,
-      setCurrentItemDirective: blockTodo.setCurrentItemDirective,
+      setCurrentItemDirective: executionIntent.setCurrentItemDirective,
       isCandidateCurrentItemInNewQueriedList:
           isCandidateCurrentItemInNewQueriedList,
       currentItemIdChanged: currItemWillChanged,
@@ -2305,7 +2325,7 @@ abstract class Block<
       final ITEM? candidateCurrItemInNewQueriedList =
           FaItemsUtils.findItemInList(
         item: candidateCurrItem,
-        targetList: blockTodo.newQueriedList,
+        targetList: executionIntent.newQueriedList,
         getItemId: _getItemIdInternal,
       );
       if (ITEM == ITEM_DETAIL && isCandidateCurrentItemInNewQueriedList) {
@@ -2426,12 +2446,13 @@ abstract class Block<
           shortDesc:
               "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
         );
-        thisXBlock._createAndSetBlockTodoSetCurrentItem(
-          setCurrentItemDirective: blockTodo.setCurrentItemDirective,
-          newQueriedList: blockTodo.newQueriedList,
+        thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
+          setCurrentItemDirective: executionIntent.setCurrentItemDirective,
+          newQueriedList: executionIntent.newQueriedList,
           inputCandidateCurrItem: siblingItem,
-          forceReloadItem: blockTodo.forceReloadItem, // false (Origin)
-          forceTypeForForm: blockTodo.forceTypeForForm, // null (Origin)
+          forceReloadItem: executionIntent.forceReloadItem,
+          // false (Origin)
+          forceTypeForForm: executionIntent.forceTypeForForm, // null (Origin)
         );
         return;
       }
@@ -2483,14 +2504,15 @@ abstract class Block<
               "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
         );
         // IN: refreshedCurrentItemDetail == null
-        thisXBlock._createAndSetBlockTodoSetCurrentItem(
-          setCurrentItemDirective: blockTodo.setCurrentItemDirective,
-          newQueriedList: blockTodo.newQueriedList,
+        thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
+          setCurrentItemDirective: executionIntent.setCurrentItemDirective,
+          newQueriedList: executionIntent.newQueriedList,
           inputCandidateCurrItem: siblingItem,
           // false (origin)
-          forceReloadItem: false, // blockTodo.forceReloadItem,
+          forceReloadItem: false,
+          // executionIntent.forceReloadItem,
           // null (origin)
-          forceTypeForForm: null, // blockTodo.forceTypeForForm,
+          forceTypeForForm: null, // executionIntent.forceTypeForForm,
         );
         return;
       }
@@ -2611,12 +2633,12 @@ abstract class Block<
         executionTrace._addTraceStep(
           codeId: "#29540",
           shortDesc:
-              "@forceReloadForm: ${debugObjHtml(forceReloadForm)}. Create FormModelTodoLoad.",
+              "@forceReloadForm: ${debugObjHtml(forceReloadForm)}. Create FormModelLoadIntent.",
           note:
               "This execution unit will load data for ${debugObjHtml(thisXBlock.xFormModel!.formModel)}.",
-          traceStepType: TraceStepType.executionTodo,
+          traceStepType: TraceStepType.executionIntent,
         );
-        thisXBlock.xFormModel!._createAndSetFormModelTodoLoad();
+        thisXBlock.xFormModel!._createAndSetFormModelExecutionIntentLoad();
       }
     }
     // (On _unitSetItemAsCurrent method).
@@ -2651,11 +2673,12 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockTodoDeleteItem<ID, ITEM, ITEM_DETAIL> blockTodo,
-    required BlockItemDeletionResult<ITEM> deletionResult,
+    required BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL> executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
-    thisXBlock._createAndSetBlockTodoDone(lastTodoInfo: "Delete Item");
+    thisXBlock._createAndSetBlockExecutionIntentDone(
+      lastIntentInfo: "Delete Item",
+    );
     //
     executionTrace._addTraceStep(
       codeId: "#08000",
@@ -2670,7 +2693,7 @@ abstract class Block<
       codeId: "#08020",
       shortDesc: "Calling ${debugObjHtml(this)}.canDeleteItem().",
       parameters: {
-        "item": blockTodo.item,
+        "item": executionIntent.item,
         "errorIfItemNotInTheBlock": errorIfItemNotInTheBlock,
       },
       note: "Call this method to check before deleting an item. "
@@ -2678,32 +2701,25 @@ abstract class Block<
       traceStepType: TraceStepType.nonControllableCalling,
     );
     //
-    // No need to check again?
-    //
-    Actionable<BlockItemDeletionPrecheck> actionable = canDeleteItem(
-      item: blockTodo.item,
-      errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
+    final deletionResult = executionIntent.resultWrapper._setResult(
+      BlockItemDeletionResult<ITEM>(
+        candidateItem: executionIntent.item,
+        precheck: null,
+        errorInfo: null,
+      ),
     );
-    if (!actionable.yes) {
-      executionTrace._addTraceStep(
-        codeId: "#08040",
-        shortDesc:
-            "Can not delete ${debugObjHtml(blockTodo.item)}. Cause: ${actionable.message}.",
-      );
-      return;
-    }
     //
     // Candidate Item to delete.
     //
-    deletionResult._setCandidateItem(candidateItem: blockTodo.item);
+    deletionResult._setCandidateItem(candidateItem: executionIntent.item);
     //
-    final bool isCurrent = isCurrentItem(blockTodo.item);
+    final bool isCurrent = isCurrentItem(executionIntent.item);
     //
     executionTrace._addTraceStep(
       codeId: "#08060",
       shortDesc: isCurrent
-          ? "You are deleting the current item - ${debugObjHtml(blockTodo.item)}."
-          : "You are deleting an item that is not the current item - ${debugObjHtml(blockTodo.item)}.",
+          ? "You are deleting the current item - ${debugObjHtml(executionIntent.item)}."
+          : "You are deleting an item that is not the current item - ${debugObjHtml(executionIntent.item)}.",
       traceStepType: TraceStepType.info,
     );
     //
@@ -2711,7 +2727,7 @@ abstract class Block<
     ApiResult<void> result;
     final List<ID> effectedItemIds = [];
     try {
-      final ID itemId = __getItemIdShowErr(blockTodo.item, showErr: true);
+      final ID itemId = __getItemIdShowErr(executionIntent.item, showErr: true);
       __refreshDeletingState(isDeleting: true);
       //
       executionTrace._addTraceStep(
@@ -2754,7 +2770,7 @@ abstract class Block<
       );
       //
       deletionResult._setFailedItem(
-        failedItem: blockTodo.item,
+        failedItem: executionIntent.item,
         errorInfo: errorInfo,
       );
       //
@@ -2772,7 +2788,7 @@ abstract class Block<
     //
     // Delete Successful.
     //
-    deletionResult._setDeletedItem(deletedItem: blockTodo.item);
+    deletionResult._setDeletedItem(deletedItem: executionIntent.item);
     //
     showDeletedSnackBar();
     //
@@ -2781,11 +2797,11 @@ abstract class Block<
       executionTrace._addTraceStep(
         codeId: "#08240",
         shortDesc:
-            "Remove ${debugObjHtml(blockTodo.item)} from ${debugObjHtml(this)}. (*) This item was not current item.",
+            "Remove ${debugObjHtml(executionIntent.item)} from ${debugObjHtml(this)}. (*) This item was not current item.",
       );
       await __removeItemFromList(
         executionTrace: executionTrace,
-        removeItem: blockTodo.item,
+        removeItem: executionIntent.item,
       );
       return;
     }
@@ -2811,7 +2827,7 @@ abstract class Block<
       //
       // Finding sibling.
       //
-      siblingItem = findSiblingItem(item: blockTodo.item);
+      siblingItem = findSiblingItem(item: executionIntent.item);
     } else {
       siblingItem = null;
     }
@@ -2826,12 +2842,12 @@ abstract class Block<
     executionTrace._addTraceStep(
       codeId: "#08280",
       shortDesc:
-          "Remove ${debugObjHtml(blockTodo.item)} from ${debugObjHtml(this)}. (*) This item was current item.",
+          "Remove ${debugObjHtml(executionIntent.item)} from ${debugObjHtml(this)}. (*) This item was current item.",
     );
     // Remove Item (Current Item)
     await __removeItemFromList(
       executionTrace: executionTrace,
-      removeItem: blockTodo.item,
+      removeItem: executionIntent.item,
     );
     //
     executionTrace._addTraceStep(
@@ -2868,7 +2884,7 @@ abstract class Block<
       final setCurrentItemDirective =
           BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
       //
-      thisXBlock._createAndSetBlockTodoSetCurrentItem(
+      thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
         setCurrentItemDirective: setCurrentItemDirective,
         newQueriedList: [],
         inputCandidateCurrItem: siblingItem,
@@ -2891,7 +2907,7 @@ abstract class Block<
       },
       traceStepType: TraceStepType.nonControllableCalling,
     );
-    // This: _unitDeleteItem() method.
+    // IN: _unitDeleteItem() method.
     // SAME-AS: #0013 (Same as _unitDeleteItems() method)
     await _processInternalReaction(
       executionTrace: executionTrace,
@@ -2926,11 +2942,12 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required List<ITEM> items,
-    required BlockItemsDeletionResult<ITEM> deletionResult,
-    required bool stopIfError,
+    required BlockDeleteItemsIntent<ID, ITEM, ITEM_DETAIL> executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
+    thisXBlock._createAndSetBlockExecutionIntentDone(
+      lastIntentInfo: "Delete Items",
+    );
     //
     executionTrace._addTraceStep(
       codeId: "#42000",
@@ -2938,9 +2955,13 @@ abstract class Block<
           "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       parameters: {
         "items": items,
-        "stopIfError": stopIfError,
+        "stopIfError": executionIntent.stopIfError,
       },
       traceStepType: TraceStepType.debug,
+    );
+    //
+    final deletionResult = executionIntent.resultWrapper._setResult(
+      BlockItemsDeletionResult<ITEM>(candidateItems: executionIntent.items),
     );
     //
     // Precheck: No need to check again!.
@@ -3080,11 +3101,11 @@ abstract class Block<
           errorInfo: errorInfo,
         );
         //
-        if (stopIfError) {
+        if (executionIntent.stopIfError) {
           executionTrace._addTraceStep(
             codeId: "#42860",
             shortDesc:
-                "@stopIfError: ${debugObjHtml(stopIfError)} --> Stop deleting!",
+                "@stopIfError: ${debugObjHtml(executionIntent.stopIfError)} --> Stop deleting!",
             errorInfo: errorInfo,
           );
           break;
@@ -3161,19 +3182,20 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockTodoPrepareFormToCreateItem<ID, ITEM, ITEM_DETAIL>
-        executionTodo,
+    required BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>
+        executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
-    thisXBlock._createAndSetBlockTodoDone(
-        lastTodoInfo: "Prepare Form To Create Item");
+    thisXBlock._createAndSetBlockExecutionIntentDone(
+      lastIntentInfo: "Prepare Form To Create Item",
+    );
     //
     executionTrace._addTraceStep(
       codeId: "#04000",
       shortDesc: "Begin ${executionUnitType.asDebugExecutionUnit()}.",
       parameters: {
-        "formInput": executionTodo.formInput,
-        "initDirty": executionTodo.initDirty,
+        "formInput": executionIntent.formInput,
+        "initDirty": executionIntent.initDirty,
       },
       traceStepType: TraceStepType.debug,
     );
@@ -3182,6 +3204,11 @@ abstract class Block<
       codeId: "#04020",
       shortDesc: "${debugObjHtml(this)} set currentItem to null.",
     );
+    //
+    final executionResult = executionIntent.resultWrapper._setResult(
+      PrepareItemCreationResult(),
+    );
+    //
     const ID? nullId = null;
     const ITEM? nullItem = null;
     const ITEM_DETAIL? nullItemDetail = null;
@@ -3233,7 +3260,7 @@ abstract class Block<
             "Calling ${debugObjHtml(formModel)}._startNewFormActivity() with parameters:",
         parameters: {
           "activityType": activityType,
-          "formInput": executionTodo.formInput,
+          "formInput": executionIntent.formInput,
           "additionalFormRelatedData": additionalFormRelatedData,
         },
         traceStepType: TraceStepType.nonControllableCalling,
@@ -3241,7 +3268,7 @@ abstract class Block<
       success = await formModel!._startNewFormActivity(
         executionTrace: executionTrace,
         additionalFormRelatedData: additionalFormRelatedData,
-        formInput: executionTodo.formInput as FORM_INPUT?,
+        formInput: executionIntent.formInput as FORM_INPUT?,
         activityType: activityType,
         formKeyInstantValuesInUI: null,
       );
@@ -3249,9 +3276,10 @@ abstract class Block<
         executionTrace._addTraceStep(
           codeId: "#04120",
           shortDesc:
-              "${debugObjHtml(formModel)} manually set dirty to ${executionTodo.initDirty}.",
+              "${debugObjHtml(formModel)} manually set dirty to ${executionIntent.initDirty}.",
         );
-        formModel!._formModelStructure._setManualDirty(executionTodo.initDirty);
+        formModel!._formModelStructure
+            ._setManualDirty(executionIntent.initDirty);
       }
     } finally {
       __refreshPreparingFormCreationState(
@@ -3270,11 +3298,12 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockTodoQuickItemCreation<ID, ITEM, ITEM_DETAIL> executionTodo,
+    required BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>
+        executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
-    thisXBlock._createAndSetBlockTodoDone(
-        lastTodoInfo: "Quick Item Creation Action");
+    thisXBlock._createAndSetBlockExecutionIntentDone(
+        lastIntentInfo: "Quick Item Creation Action");
     //
     executionTrace._addTraceStep(
       codeId: "#09000",
@@ -3282,9 +3311,10 @@ abstract class Block<
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
-    final action = executionTodo.action;
-    final BlockQuickItemCreationResult executionUnitResult =
-        BlockQuickItemCreationResult();
+    final action = executionIntent.action;
+    final BlockQuickItemCreationResult executionUnitResult = executionIntent
+        .resultWrapper
+        ._setResult(BlockQuickItemCreationResult());
     //
     // (No Precheck Again)
     //
@@ -3378,12 +3408,12 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    // required BlockQuickItemUpdateResult executionUnitResult,
-    required BlockTodoQuickItemUpdate<ID, ITEM, ITEM_DETAIL> executionTodo,
+    required BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL> executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
-    thisXBlock._createAndSetBlockTodoDone(
-        lastTodoInfo: "Quick Item Update Action");
+    thisXBlock._createAndSetBlockExecutionIntentDone(
+      lastIntentInfo: "Quick Item Update Action",
+    );
     //
     executionTrace._addTraceStep(
       codeId: "#14000",
@@ -3391,9 +3421,9 @@ abstract class Block<
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
-    final action = executionTodo.action;
+    final action = executionIntent.action;
     final BlockQuickItemUpdateResult executionUnitResult =
-        BlockQuickItemUpdateResult();
+        executionIntent.resultWrapper._setResult(BlockQuickItemUpdateResult());
     //
     // No Need Precheck Again.
     //
@@ -3493,10 +3523,11 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockTodoBackendAction<ID, ITEM, ITEM_DETAIL> executionTodo,
+    required BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL> executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
-    thisXBlock._createAndSetBlockTodoDone(lastTodoInfo: "Block Backend Action");
+    thisXBlock._createAndSetBlockExecutionIntentDone(
+        lastIntentInfo: "Block Backend Action");
     //
     executionTrace._addTraceStep(
       codeId: "#45000",
@@ -3504,8 +3535,10 @@ abstract class Block<
           "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
-    final action = executionTodo.action;
-    final executionUnitResult = BlockBackendActionResult();
+    final action = executionIntent.action;
+    final executionUnitResult = executionIntent.resultWrapper._setResult(
+      BlockBackendActionResult(),
+    );
     //
     final FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
     //
@@ -3856,12 +3889,12 @@ abstract class Block<
         executionTrace._addTraceStep(
           codeId: "#16400",
           shortDesc:
-              "${debugObjHtml(formModel)} -> After Saving Form, create ${debugObjHtml(FormModelTodoLoad)}.",
-          traceStepType: TraceStepType.executionTodo,
+              "${debugObjHtml(formModel)} -> After Saving Form, create ${debugObjHtml(FormModelDataLoadIntent)}.",
+          traceStepType: TraceStepType.executionIntent,
         );
         // IMPORTANT:
         thisXBlock.xFormModel!.setForceType(newForceType);
-        thisXBlock.xFormModel!._createAndSetFormModelTodoLoad();
+        thisXBlock.xFormModel!._createAndSetFormModelExecutionIntentLoad();
       }
     }
     // savedItemDetail = null or !keepInList
@@ -4031,7 +4064,7 @@ abstract class Block<
     //
     final thisXBlock =
         xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
-    thisXBlock._createAndSetBlockTodoClearCurrentItem();
+    thisXBlock._createAndSetBlockExecutionIntentClearCurrentItem();
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     // //
@@ -4117,18 +4150,16 @@ abstract class Block<
     final thisXBlock =
         xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     //
-    final executionUnitResult = _createEmptyItemDeletionResult();
-    //
     executionTrace._addTraceStep(
       codeId: "#76340",
-      shortDesc: "Creating <b>_BlockItemDeletionExecutionUnit</b>.",
-      traceStepType: TraceStepType.addExecutionUnit,
+      shortDesc: "Creating ${debugObjHtml(BlockDeleteItemIntent)}.",
+      traceStepType: TraceStepType.executionIntent,
     );
-    final BlockTodoDeleteItem<ID, ITEM, ITEM_DETAIL> blockTodo =
-        thisXBlock._createAndSetBlockTodoDeleteItem(item: item!);
+    final BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
+        thisXBlock._createAndSetBlockExecutionIntentDeleteItem(item: item!);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    return blockTodo.result;
+    return executionIntent.result;
   }
 
   // ***************************************************************************
@@ -4202,22 +4233,33 @@ abstract class Block<
     final thisXBlock =
         xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     //
-    final executionUnitResult = _createEmptyItemsDeletionResult(
-      candidateItems: candidateDeleteItems,
-    );
-    final _ShelfMemberResultedExecutionUnit executionUnit =
-        _BlockMultiItemDeletionExecutionUnit<ID, ITEM>(
-      xBlock: thisXBlock,
+    final BlockDeleteItemsIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
+        thisXBlock._createAndSetBlockExecutionIntentDeleteItems(
       items: candidateDeleteItems,
       stopIfError: stopIfError,
-      executionUnitResult: executionUnitResult,
     );
     //
-    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return executionUnitResult;
+    return executionIntent.result;
+
+    // final executionUnitResult = _createEmptyItemsDeletionResult(
+    //   candidateItems: candidateDeleteItems,
+    // );
+    // final _ShelfMemberResultedExecutionUnit executionUnit =
+    //     _BlockMultiItemDeletionExecutionUnit<ID, ITEM>(
+    //   xBlock: thisXBlock,
+    //   items: candidateDeleteItems,
+    //   stopIfError: stopIfError,
+    //   executionUnitResult: executionUnitResult,
+    // );
+    // //
+    // xShelf._addExecutionUnit(executionUnit: executionUnit);
+    // FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
+    // await FlutterArtist.executor._executeExecutionUnitQueue();
+    // //
+    // return executionUnitResult;
   }
 
   // ***************************************************************************
@@ -4280,7 +4322,6 @@ abstract class Block<
       return BlockSetCurrentItemResult<ITEM>(
         precheck: actionable.errCode,
         setCurrentItemDirective: setCurrentItemDirective,
-        getItemId: _getItemIdInternal,
         candidateItem: item,
         oldCurrentItem: currentItem,
         currentItem: currentItem,
@@ -4295,7 +4336,8 @@ abstract class Block<
     //
     final thisXBlock =
         xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
-    final blockTodo = thisXBlock._createAndSetBlockTodoSetCurrentItem(
+    final executionIntent =
+        thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
       setCurrentItemDirective: setCurrentItemDirective,
       newQueriedList: [],
       inputCandidateCurrItem: item,
@@ -4307,7 +4349,7 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     // Future<BlockSetCurrentItemResult<ITEM>>
-    return blockTodo.result;
+    return executionIntent.result;
   }
 
   // ***************************************************************************
@@ -4389,9 +4431,9 @@ abstract class Block<
     final XShelf xShelf = _XShelfBlockClearItems(block: this);
     final thisXBlock =
         xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
-    final BlockTodoClearItems<ID, ITEM, ITEM_DETAIL> executionTodo =
-        thisXBlock._createAndSetBlockTodoClearItems();
-    return executionTodo.result;
+    final BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
+        thisXBlock._createAndSetBlockExecutionIntentClearItems();
+    return executionIntent.result;
   }
 
   // ***************************************************************************
@@ -4658,7 +4700,7 @@ abstract class Block<
       suggestedSelection: suggestedSelection,
     );
     //
-    xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
+    // xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
@@ -4703,13 +4745,13 @@ abstract class Block<
       suggestedSelection: null,
     );
     //
-    executionTrace._addTraceStep(
-      codeId: "#57000",
-      shortDesc:
-          "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()...",
-      traceStepType: TraceStepType.nonControllableCalling,
-    );
-    xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
+    // executionTrace._addTraceStep(
+    //   codeId: "#57000",
+    //   shortDesc:
+    //       "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()...",
+    //   traceStepType: TraceStepType.nonControllableCalling,
+    // );
+    // xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
     //
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -5157,14 +5199,14 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#71340",
-      shortDesc: "Creating ${debugObjHtml(BlockTodoBackendAction)}.",
-      traceStepType: TraceStepType.executionTodo,
+      shortDesc: "Creating ${debugObjHtml(BlockBackendActionIntent)}.",
+      traceStepType: TraceStepType.executionIntent,
     );
-    final BlockTodoBackendAction<ID, ITEM, ITEM_DETAIL> executionTodo =
+    final BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
         thisXBlock._createAndSetBackendAction(action: action);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    return executionTodo.result;
+    return executionIntent.result;
   }
 
   // ***************************************************************************
@@ -5248,15 +5290,15 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#73340",
-      shortDesc: "Creating ${debugObjHtml(BlockTodoQuickItemCreation)}.",
-      traceStepType: TraceStepType.executionTodo,
+      shortDesc: "Creating ${debugObjHtml(BlockQuickItemCreationIntent)}.",
+      traceStepType: TraceStepType.executionIntent,
     );
 
-    final BlockTodoQuickItemCreation<ID, ITEM, ITEM_DETAIL> executionTodo =
+    final BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
         thisXBlock._createAndSetBlockQuickItemCreation(action: action);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    return executionTodo.result;
+    return executionIntent.result;
   }
 
   // ***************************************************************************
@@ -5343,14 +5385,14 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#72340",
-      shortDesc: "Creating ${debugObjHtml(BlockTodoQuickItemUpdate)}.",
-      traceStepType: TraceStepType.executionTodo,
+      shortDesc: "Creating ${debugObjHtml(BlockQuickItemUpdateIntent)}.",
+      traceStepType: TraceStepType.executionIntent,
     );
-    final BlockTodoQuickItemUpdate<ID, ITEM, ITEM_DETAIL> executionTodo =
+    final BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
         thisXBlock._createAndSetBlockQuickItemUpdate(action: action);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    return executionTodo.result;
+    return executionIntent.result;
   }
 
   // ***************************************************************************
@@ -5528,10 +5570,12 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#77340",
-      shortDesc: "Creating ${debugObjHtml(BlockTodoPrepareFormToCreateItem)}.",
-      traceStepType: TraceStepType.executionTodo,
+      shortDesc:
+          "Creating ${debugObjHtml(BlockPrepareFormToCreateItemIntent)}.",
+      traceStepType: TraceStepType.executionIntent,
     );
-    thisXBlock._createAndSetBlockTodoPrepareFormToCreateItem(
+    final executionIntent =
+        thisXBlock._createAndSetBlockExecutionIntentPrepareFormToCreateItem(
       xBlock: thisXBlock,
       initDirty: initDirty,
       formInput: formInput,
@@ -5539,7 +5583,7 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return thisXBlock.itemCreationResult;
+    return await executionIntent.result;
   }
 
   // ***************************************************************************
@@ -5958,14 +6002,14 @@ abstract class Block<
     final xBlock =
         xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
 
-    final BlockTodoQuery<ID, ITEM, ITEM_DETAIL> blockTodo =
-        xBlock._createAndSetBlockTodoQuery(
+    final BlockQueryIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
+        xBlock._createAndSetBlockExecutionIntentQuery(
       isQueryMoreFlow: isQueryMoreFlow,
     );
     //
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    return blockTodo.result;
+    return executionIntent.result;
 
     // final XShelf xShelf = _XShelfBlockQuery(
     //   block: this,
@@ -6014,12 +6058,12 @@ abstract class Block<
       suggestedSelection: null,
     );
     //
-    executionTrace._addTraceStep(
-      codeId: "#53100",
-      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()..",
-      traceStepType: TraceStepType.nonControllableCalling,
-    );
-    xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
+    // executionTrace._addTraceStep(
+    //   codeId: "#53100",
+    //   shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()..",
+    //   traceStepType: TraceStepType.nonControllableCalling,
+    // );
+    // xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //

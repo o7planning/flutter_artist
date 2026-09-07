@@ -3,18 +3,18 @@ part of '../../core.dart';
 @_ExecutionUnitClassAnnotation()
 @_FormModelSaveFormAnnotation()
 class _FormModelSaveFormExecutionUnit
-    extends _ShelfMemberResultedExecutionUnit<FormSaveResult> {
+    extends _ShelfMemberResultedExecutionUnit<BlockFormSaveResult> {
   final XFormModel xFormModel;
 
   @override
-  final FormModelTodoSave executionTodo;
+  final FormModelSaveIntent executionIntent;
 
   _FormModelSaveFormExecutionUnit({
     required this.xFormModel,
-    required this.executionTodo,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.formModelSaveForm,
-          executionUnitResult: FormSaveResult(precheck: null),
+          executionIntent: executionIntent,
         );
 
   @override

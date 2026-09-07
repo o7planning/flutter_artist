@@ -388,10 +388,10 @@ abstract class FormModel<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XFormModel thisXFormModel,
-    required FormModelTodoViewChange executionTodo,
+    required FormModelViewChangeIntent executionIntent,
   }) async {
     __assertThisXFormModel(thisXFormModel);
-    thisXFormModel._createAndSetFormModelTodoDone();
+    thisXFormModel._createAndSetFormModelExecutionIntentDone();
     //
     executionTrace._addTraceStep(
       codeId: "#36000",
@@ -399,13 +399,15 @@ abstract class FormModel<
           "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
+    final executionResult =
+        executionIntent.resultWrapper._setResult(FormModelViewChangedResult());
     //
     await _startNewFormActivity(
       executionTrace: executionTrace,
       additionalFormRelatedData: null,
       formInput: null,
       activityType: FormActivityType.updateFromFormView,
-      formKeyInstantValuesInUI: executionTodo.formKeyInstantValuesInUI,
+      formKeyInstantValuesInUI: executionIntent.formKeyInstantValuesInUI,
     );
     return true;
   }
@@ -419,10 +421,10 @@ abstract class FormModel<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XFormModel thisXFormModel,
-    required FormModelDataLoadResult executionUnitResult,
+    required FormModelDataLoadIntent executionIntent,
   }) async {
     __assertThisXFormModel(thisXFormModel);
-    thisXFormModel._createAndSetFormModelTodoDone();
+    thisXFormModel._createAndSetFormModelExecutionIntentDone();
     //
     executionTrace._addTraceStep(
       codeId: "#37000",
@@ -430,6 +432,9 @@ abstract class FormModel<
           "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
+    //
+    final executionResult =
+        executionIntent.resultWrapper._setResult(FormModelDataLoadResult());
     //
     final bool forceReloadForm;
     switch (thisXFormModel.forceTypeForForm) {
@@ -508,10 +513,10 @@ abstract class FormModel<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XFormModel thisXFormModel,
-    required FORM_INPUT formInput,
+    required FormModelPatchFormFieldsIntent<FORM_INPUT> executionIntent,
   }) async {
     __assertThisXFormModel(thisXFormModel);
-    thisXFormModel._createAndSetFormModelTodoDone();
+    thisXFormModel._createAndSetFormModelExecutionIntentDone();
     //
     executionTrace._addTraceStep(
       codeId: "#38000",
@@ -519,6 +524,8 @@ abstract class FormModel<
           "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
+    final executionResult = executionIntent.resultWrapper
+        ._setResult(FormModelPatchFormFieldsResult());
     //
     final ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData = null;
     final activityType = FormActivityType.patchFormFields;
@@ -528,7 +535,7 @@ abstract class FormModel<
       shortDesc: "Calling ${debugObjHtml(this)}._startNewFormActivity().",
       parameters: {
         "activityType": activityType,
-        "formInput": formInput,
+        "formInput": executionIntent.formInput,
         "additionalFormRelatedData": additionalFormRelatedData,
       },
       traceStepType: TraceStepType.nonControllableCalling,
@@ -538,7 +545,7 @@ abstract class FormModel<
       executionTrace: executionTrace,
       additionalFormRelatedData: additionalFormRelatedData,
       // null
-      formInput: formInput,
+      formInput: executionIntent.formInput,
       activityType: activityType,
       formKeyInstantValuesInUI: null,
     );
@@ -554,10 +561,10 @@ abstract class FormModel<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XFormModel<ID, ITEM_DETAIL> thisXFormModel,
-    required FormSaveResult executionUnitResult,
+    required FormModelSaveIntent executionIntent,
   }) async {
     __assertThisXFormModel(thisXFormModel);
-    thisXFormModel._createAndSetFormModelTodoDone();
+    thisXFormModel._createAndSetFormModelExecutionIntentDone();
     //
     executionTrace._addTraceStep(
       codeId: "#11000",
@@ -566,16 +573,13 @@ abstract class FormModel<
       traceStepType: TraceStepType.debug,
     );
     //
-    // No need to check again?
-    //
-    Actionable<BlockFormSavePrecheck> actionable = block.__canSaveForm(
-      checkBusy: true,
-      checkAllow: true,
-      checkValidate: true,
+    final executionResult = executionIntent.resultWrapper._setResult(
+      BlockFormSaveResult(precheck: null),
     );
-    if (!actionable.yes) {
-      return;
-    }
+    //
+    final executionUnitResult = executionIntent.resultWrapper._setResult(
+      BlockFormSaveResult(precheck: null),
+    );
     final Map<String, dynamic> formMapData =
         _formModelStructure._currentFormData;
     //
@@ -605,14 +609,15 @@ abstract class FormModel<
       saveError = true;
       //
       final ErrorInfo errorInfo = _handleError(
-          shelf: shelf,
-          methodName: calledMethodName,
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-          tipDocument: isNew
-              ? TipDocument.formModelPerformCreateItem
-              : TipDocument.formModelPerformUpdateItem);
+        shelf: shelf,
+        methodName: calledMethodName,
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: isNew
+            ? TipDocument.formModelPerformCreateItem
+            : TipDocument.formModelPerformUpdateItem,
+      );
       //
       executionUnitResult._setErrorInfo(
         errorInfo: errorInfo,
@@ -2143,7 +2148,7 @@ abstract class FormModel<
     XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     XFormModel xFormModel = xBlock.xFormModel!;
 
-    xFormModel._createAndSetFormModelTodoViewChange(
+    xFormModel._createAndSetFormModelExecutionIntentViewChange(
       formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
@@ -2160,30 +2165,30 @@ abstract class FormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Actionable<PatchFormFieldsPrecheck> __canPatchFormFields({
+  Actionable<FormModelPatchFormFieldsPrecheck> __canPatchFormFields({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<PatchFormFieldsPrecheck>.no(
-        errCode: PatchFormFieldsPrecheck.busy,
+      return Actionable<FormModelPatchFormFieldsPrecheck>.no(
+        errCode: FormModelPatchFormFieldsPrecheck.busy,
       );
     }
     if (formMode == FormMode.none) {
-      return Actionable<PatchFormFieldsPrecheck>.no(
-        errCode: PatchFormFieldsPrecheck.formInNoneMode,
+      return Actionable<FormModelPatchFormFieldsPrecheck>.no(
+        errCode: FormModelPatchFormFieldsPrecheck.formInNoneMode,
       );
     }
     if (dataState.isPending) {
-      return Actionable<PatchFormFieldsPrecheck>.no(
-        errCode: PatchFormFieldsPrecheck.formInPendingState,
+      return Actionable<FormModelPatchFormFieldsPrecheck>.no(
+        errCode: FormModelPatchFormFieldsPrecheck.formInPendingState,
       );
     }
     if (dataState.isFatalError) {
-      return Actionable<PatchFormFieldsPrecheck>.no(
-        errCode: PatchFormFieldsPrecheck.formInFatalErrorState,
+      return Actionable<FormModelPatchFormFieldsPrecheck>.no(
+        errCode: FormModelPatchFormFieldsPrecheck.formInFatalErrorState,
       );
     }
-    return Actionable<PatchFormFieldsPrecheck>.yes();
+    return Actionable<FormModelPatchFormFieldsPrecheck>.yes();
   }
 
   bool __checkBeforePatchFormFields({
@@ -2237,7 +2242,8 @@ abstract class FormModel<
       },
     );
     //
-    final Actionable<PatchFormFieldsPrecheck> actionable = __canPatchFormFields(
+    final Actionable<FormModelPatchFormFieldsPrecheck> actionable =
+        __canPatchFormFields(
       checkBusy: checkBusyTrue,
     );
     if (!actionable.yes) {
@@ -2261,37 +2267,46 @@ abstract class FormModel<
     //
     final XShelf xShelf = _XShelfFormModelPatchFormFields(formModel: this);
     //
-    XBlock xBlock = xShelf.findXBlockByName(this.block.name)!;
+    XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     XFormModel xFormModel = xBlock.xFormModel!;
     //
     executionTrace._addTraceStep(
       codeId: "#78340",
       shortDesc: "Creating <b>_FormModelPatchFormFieldsExecutionUnit</b>.",
-      traceStepType: TraceStepType.addExecutionUnit,
+      traceStepType: TraceStepType.executionIntent,
     );
-    // Create TaskResult:
-    final executionUnitResult = FormModelPatchFormFieldsResult(
-      precheck: null,
-    );
-    _ShelfMemberResultedExecutionUnit executionUnit =
-        _FormModelPatchFormFieldsExecutionUnit(
-      xFormModel: xFormModel,
-      formInput: formInput,
-      executionUnitResult: executionUnitResult,
-    );
+    final executionIntent = xFormModel
+        ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_INPUT>(
+            formInput: formInput);
     //
-    xShelf._addExecutionUnit(executionUnit: executionUnit);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    return executionUnitResult;
+    return executionIntent.result;
+
+    // // Create TaskResult:
+    // final executionUnitResult = FormModelPatchFormFieldsResult(
+    //   precheck: null,
+    // );
+    // _ShelfMemberResultedExecutionUnit executionUnit =
+    //     _FormModelPatchFormFieldsExecutionUnit(
+    //   xFormModel: xFormModel,
+    //   formInput: formInput,
+    //   executionUnitResult: executionUnitResult,
+    // );
+    // //
+    // xShelf._addExecutionUnit(executionUnit: executionUnit);
+    // FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
+    // await FlutterArtist.executor._executeExecutionUnitQueue();
+    // //
+    // return executionUnitResult;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_FormModelSaveFormAnnotation()
-  Future<FormSaveResult> saveForm() async {
+  Future<BlockFormSaveResult> saveForm() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "saveForm",
@@ -2334,7 +2349,7 @@ abstract class FormModel<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return FormSaveResult(precheck: actionable.errCode);
+      return BlockFormSaveResult(precheck: actionable.errCode);
     }
     //
     final XShelf xShelf = _XShelfFormModelSave(formModel: this);
@@ -2347,11 +2362,11 @@ abstract class FormModel<
       shortDesc: "Creating <b>_FormModelSaveFormExecutionUnit</b>.",
       traceStepType: TraceStepType.addExecutionUnit,
     );
-    FormModelTodoSave executionTodo =
-        xFormModel._createAndSetFormModelTodoSave();
+    FormModelSaveIntent executionIntent =
+        xFormModel._createAndSetFormModelExecutionIntentSave();
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    return executionTodo.result;
+    return executionIntent.result;
 
     // final _ShelfMemberResultedExecutionUnit executionUnit =
     //     _FormModelSaveFormExecutionUnit(

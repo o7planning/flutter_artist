@@ -10,19 +10,17 @@ class _BlockItemDeletionExecutionUnit<
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>>
     extends _ShelfMemberResultedExecutionUnit<BlockItemDeletionResult<ITEM>> {
-  XBlock xBlock;
+  final XBlock xBlock;
 
   @override
-  final BlockTodoDeleteItem<ID, ITEM, ITEM_DETAIL> executionTodo;
+  final BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL> executionIntent;
 
   _BlockItemDeletionExecutionUnit({
     required this.xBlock,
-    required this.executionTodo,
-    // required super.executionUnitResult,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.blockDeleteItem,
-          executionUnitResult:
-              BlockItemDeletionResult(candidateItem: executionTodo.item),
+          executionIntent: executionIntent,
         );
 
   @override

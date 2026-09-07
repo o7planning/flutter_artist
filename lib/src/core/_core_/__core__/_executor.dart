@@ -138,19 +138,13 @@ class _Executor {
     );
     //
     try {
-      if (executionUnit is _ShelfStarterExecutionUnit) {
-        await executionUnit.xShelf.shelf._unitExecutionStarter(
-          executionTrace: executionTrace,
-          executionUnitType: executionUnit.executionUnitType,
-          thisXShelf: executionUnit.xShelf,
-        );
-      }
       // _ActivityMemberExecutionUnit
-      else if (executionUnit is _ActivityMemberExecutionUnit) {
+      if (executionUnit is _DefaultActivityExecutionUnit) {
         await executionUnit.xActivity.activity._unitExecuteActivity(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXActivity: executionUnit.xActivity,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Storage Backend Action ExecutionUnit:
@@ -158,8 +152,7 @@ class _Executor {
         await FlutterArtist.desk._unitBackendAction(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
-          action: executionUnit.action,
-          executionUnitResult: executionUnit.executionUnitResult,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Filter FilterModel:
@@ -168,8 +161,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXFilterModel: executionUnit.xFilterModel,
-          executionTodo: executionUnit.executionTodo,
-          executionUnitResult: executionUnit.executionUnitResult,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // FilterPanel Change:
@@ -178,7 +170,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXFilterModel: executionUnit.xFilterModel,
-          executionTodo: executionUnit.executionTodo,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       //
@@ -187,7 +179,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXFormModel: executionUnit.xFormModel,
-          executionTodo: executionUnit.executionTodo,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Block Clear Current:
@@ -196,7 +188,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
-          executionTodo: executionUnit.executionTodo,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Block Clear All Items:
@@ -205,6 +197,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Block Query:
@@ -213,7 +206,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
-          blockTodoQuery: executionUnit.blockTodoQuery!,
+          executionIntent: executionUnit.executionIntent!,
         );
       }
       // Block PrepareCreate:
@@ -222,7 +215,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
-          executionTodo: executionUnit.executionTodo,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Block Select Item as Current:
@@ -231,8 +224,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
-          blockTodo: executionUnit.executionTodo,
-          blockSetCurrentItemResult: executionUnit.executionUnitResult,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Block Delete Item:
@@ -241,8 +233,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
-          blockTodo: executionUnit.executionTodo,
-          deletionResult: executionUnit.executionUnitResult,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Block Delete Items:
@@ -251,10 +242,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
-          items: executionUnit.items,
-          stopIfError: executionUnit.stopIfError,
-          deletionResult: executionUnit.executionUnitResult
-              as BlockItemsDeletionResult<Identifiable<Comparable<dynamic>>>,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Block QuickCreateItem:
@@ -263,7 +251,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
-          executionTodo: executionUnit.executionTodo,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Block QuickUpdateItem:
@@ -272,7 +260,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
-          executionTodo: executionUnit.executionTodo,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Block Quick Action:
@@ -281,7 +269,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
-          executionTodo: executionUnit.executionTodo,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // FormModel LoadForm:
@@ -290,7 +278,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXFormModel: executionUnit.xFormModel,
-          executionUnitResult: executionUnit.executionUnitResult,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // FormModel Save:
@@ -299,7 +287,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXFormModel: executionUnit.xFormModel,
-          executionUnitResult: executionUnit.executionUnitResult,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // FormModel QuickFormInputAction:
@@ -308,7 +296,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXFormModel: executionUnit.xFormModel,
-          formInput: executionUnit.formInput,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Scalar:
@@ -317,6 +305,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXScalar: executionUnit.xScalar,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Scalar Clear Value:
@@ -325,6 +314,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXScalar: executionUnit.xScalar,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Scalar Quick Action:
@@ -333,20 +323,12 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXScalar: executionUnit.xScalar,
-          action: executionUnit.action,
-          afterQuickAction: executionUnit.afterQuickAction,
+          executionIntent: executionUnit.executionIntent,
         );
       }
     } finally {
-      if (executionUnit is _ShelfMemberResultedExecutionUnit) {
-        ExecutionTodo? executionTodo = executionUnit.executionTodo;
-        if (executionTodo != null
-            // TODO: Xem lai cho nay:
-            &&
-            !executionTodo.completer.isCompleted) {
-          executionTodo.completer.complete(executionUnit.executionUnitResult);
-        }
-      }
+      ExecutionIntent executionIntent = executionUnit.executionIntent;
+      executionIntent.complete();
     }
   }
 

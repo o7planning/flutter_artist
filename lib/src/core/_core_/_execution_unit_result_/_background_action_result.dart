@@ -1,6 +1,7 @@
 part of '../core.dart';
 
-class BackgroundActionResult extends ExecutionUnitResult<BackgroundActionPrecheck> {
+class BackgroundActionResult
+    extends ExecutionUnitResult<BackgroundActionPrecheck> {
   BackgroundActionResult({super.precheck});
 
   @override

@@ -1,5 +1,6 @@
 export 'src/_wcfg.dart';
 export 'src/core/_core_/core.dart';
+
 // export 'src/core/_core_/core.dart'
 //     hide XBlock, XShelf, XFilterModel, XFormModel, XScalar;
 export 'src/core/action/_action.dart';
@@ -103,6 +104,8 @@ export 'src/core/logger/_logger.dart';
 export 'src/core/precheck/__actionable.dart';
 export 'src/core/precheck/__chk_code.dart';
 export 'src/core/precheck/__precheck.dart';
+export 'src/core/precheck/form_model_view_changed_precheck.dart';
+export 'src/core/precheck/scalar_load_extra_data_precheck.dart';
 export 'src/core/precheck/_check_allow.dart';
 export 'src/core/precheck/block_backend_action_precheck.dart';
 export 'src/core/precheck/block_clear_items_precheck.dart';
@@ -118,7 +121,7 @@ export 'src/core/precheck/block_quick_item_update_precheck.dart';
 export 'src/core/precheck/block_set_current_item_precheck.dart';
 export 'src/core/precheck/filter_model_data_load_precheck.dart';
 export 'src/core/precheck/form_model_data_load_precheck.dart';
-export 'src/core/precheck/patch_form_fields_precheck.dart';
+export 'src/core/precheck/form_model_patch_form_fields_precheck.dart';
 export 'src/core/precheck/scalar_query_precheck.dart';
 export 'src/core/precheck/show_form_info_precheck.dart';
 export 'src/core/typedef/typedefs.dart';

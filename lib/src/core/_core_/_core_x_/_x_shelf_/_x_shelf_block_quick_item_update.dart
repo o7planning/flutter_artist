@@ -8,9 +8,5 @@ class _XShelfBlockQuickItemUpdate extends XShelf {
           xShelfType: XShelfType.blockQuickItemUpdate,
         ) {
     //
-    // IMPORTANT:
-    //
-    XBlock xBlock = xBlockMap[block.name]!;
-    setRootVipXBlock(descendantXBlock: xBlock);
   }
 }

@@ -2,13 +2,20 @@ part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_ScalarQueryAnnotation()
-class _ScalarQueryExecutionUnit extends _ShelfMemberExecutionUnit {
-  XScalar xScalar;
+class _ScalarQueryExecutionUnit<
+    ID extends Comparable, //
+    VALUE extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
+  final XScalar xScalar;
+
+  @override
+  final ScalarQueryIntent<ID, VALUE> executionIntent;
 
   _ScalarQueryExecutionUnit({
     required this.xScalar,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.scalarQuery,
+          executionIntent: executionIntent,
         );
 
   @override

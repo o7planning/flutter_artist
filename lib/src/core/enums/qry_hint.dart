@@ -12,19 +12,20 @@ enum QryHint {
     return value < other.value;
   }
 
-  static QryHint max(QryHint a, QryHint b)  {
-    if(a.isLessThan(b)) {
+  static QryHint max(QryHint a, QryHint b) {
+    if (a.isLessThan(b)) {
       return b;
     }
     return a;
   }
 }
 
-enum FilterLoadHint  {
-  force, auto;
+enum FilterLoadHint {
+  force,
+  auto;
 }
 
-
-enum FormProcessHint  {
-  force, auto;
+enum FormProcessHint {
+  force,
+  auto;
 }

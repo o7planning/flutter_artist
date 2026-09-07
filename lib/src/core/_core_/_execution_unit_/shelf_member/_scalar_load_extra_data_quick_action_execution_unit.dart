@@ -2,18 +2,21 @@ part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_ScalarLoadExtraDataQuickActionAnnotation()
-class _ScalarLoadExtraDataQuickActionExecutionUnit<DATA extends Object>
-    extends _ShelfMemberExecutionUnit {
+class _ScalarLoadExtraDataQuickActionExecutionUnit<
+    ID extends Comparable, //
+    VALUE extends Identifiable<ID>,
+    DATA extends Object> extends _ShelfMemberExecutionUnit {
   final XScalar xScalar;
-  final ScalarQuickExtraDataLoadAction<DATA> action;
-  final AfterScalarLoadExtraDataQuickAction afterQuickAction;
+
+  @override
+  final ScalarLoadExtraDataQuickActionIntent<ID, VALUE, DATA> executionIntent;
 
   _ScalarLoadExtraDataQuickActionExecutionUnit({
     required this.xScalar,
-    required this.action,
-    required this.afterQuickAction,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.scalarLoadExtraData,
+          executionIntent: executionIntent,
         );
 
   @override

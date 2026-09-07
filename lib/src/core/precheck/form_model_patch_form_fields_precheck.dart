@@ -1,7 +1,7 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
-enum PatchFormFieldsPrecheck implements Precheck {
+enum FormModelPatchFormFieldsPrecheck implements Precheck {
   busy(
     precheckCode: PrecheckCode.busy,
     message: "Patch-form-fields feature is disabled",
@@ -40,7 +40,7 @@ enum PatchFormFieldsPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const PatchFormFieldsPrecheck({
+  const FormModelPatchFormFieldsPrecheck({
     required this.precheckCode,
     required this.message,
     required this.details,

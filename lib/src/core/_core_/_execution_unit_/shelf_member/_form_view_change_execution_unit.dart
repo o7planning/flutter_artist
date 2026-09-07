@@ -5,13 +5,15 @@ part of '../../core.dart';
 class _FormViewChangeExecutionUnit extends _ShelfMemberExecutionUnit {
   XFormModel xFormModel;
 
-  final FormModelTodoViewChange executionTodo;
+  @override
+  final FormModelViewChangeIntent executionIntent;
 
   _FormViewChangeExecutionUnit({
     required this.xFormModel,
-    required this.executionTodo,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.formModelFormViewChanged,
+          executionIntent: executionIntent,
         );
 
   @override

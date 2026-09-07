@@ -7,13 +7,17 @@ class _BlockPrepareFormToCreateItemExecutionUnit<
     ITEM extends Identifiable<ID>,
     ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
   final XBlock xBlock;
-  final BlockTodoPrepareFormToCreateItem<ID, ITEM, ITEM_DETAIL> executionTodo;
+
+  @override
+  final BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>
+      executionIntent;
 
   _BlockPrepareFormToCreateItemExecutionUnit({
     required this.xBlock,
-    required this.executionTodo,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.blockPrepareToCreateItem,
+          executionIntent: executionIntent,
         );
 
   @override

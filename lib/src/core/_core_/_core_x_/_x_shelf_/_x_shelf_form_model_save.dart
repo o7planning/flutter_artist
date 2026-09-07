@@ -11,6 +11,5 @@ class _XShelfFormModelSave extends XShelf {
     // IMPORTANT:
     //
     XBlock xBlock = xBlockMap[formModel.block.name]!;
-    setRootVipXBlock(descendantXBlock: xBlock);
   }
 }

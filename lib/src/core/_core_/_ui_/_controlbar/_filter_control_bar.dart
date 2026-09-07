@@ -46,7 +46,6 @@ class _FilterControlBarState extends _BaseControlBarState<
     return null;
   }
 
-
   @override
   bool get provideScalarContext => false;
 

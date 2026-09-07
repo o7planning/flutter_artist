@@ -12,26 +12,29 @@ class _BlockSetItemAsCurrentExecutionUnit<
         ITEM_DETAIL extends Identifiable<ID>>
     extends _ShelfMemberResultedExecutionUnit<BlockSetCurrentItemResult<ITEM>> {
   final XBlock<ID, ITEM, ITEM_DETAIL> xBlock;
-  final BlockTodoSetCurrentItem<ID, ITEM, ITEM_DETAIL> executionTodo;
+
+  @override
+  final BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL> executionIntent;
 
   _BlockSetItemAsCurrentExecutionUnit({
     required this.xBlock,
-    required this.executionTodo,
+    required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.blockSetItemAsCurrent,
-          executionUnitResult: BlockSetCurrentItemResult<ITEM>(
-            precheck: null,
-            setCurrentItemDirective: executionTodo.setCurrentItemDirective,
-            getItemId: xBlock.block._getItemIdInternal,
-            candidateItem: executionTodo.inputCandidateCurrItem,
-            oldCurrentItem: xBlock.block.currentItem as ITEM?,
-            currentItem: xBlock.block.currentItem as ITEM?,
-          ),
+          executionIntent: executionIntent,
+          // executionUnitResult: BlockSetCurrentItemResult<ITEM>(
+          //   precheck: null,
+          //   setCurrentItemDirective: executionIntent.setCurrentItemDirective,
+          //   getItemId: xBlock.block._getItemIdInternal,
+          //   candidateItem: executionIntent.inputCandidateCurrItem,
+          //   oldCurrentItem: xBlock.block.currentItem,
+          //   currentItem: xBlock.block.currentItem,
+          // ),
         ) {
-    xBlock.setForceReloadCurrItem(executionTodo.forceReloadItem);
+    xBlock.setForceReloadCurrItem(executionIntent.forceReloadItem);
     //
-    if (executionTodo.forceTypeForForm != null) {
-      xBlock.xFormModel?.setForceType(executionTodo.forceTypeForForm!);
+    if (executionIntent.forceTypeForForm != null) {
+      xBlock.xFormModel?.setForceType(executionIntent.forceTypeForForm!);
     }
   }
 

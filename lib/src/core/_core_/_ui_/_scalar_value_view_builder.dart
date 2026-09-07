@@ -35,7 +35,6 @@ class _ScalarValueViewBuilderState
     return null;
   }
 
-
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.scalar);

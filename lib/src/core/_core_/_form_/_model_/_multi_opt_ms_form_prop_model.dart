@@ -24,7 +24,6 @@ class MultiOptMsFormPropModel<V> extends MultiOptFormPropModel<V> {
         actualValue: value,
       );
     }
-    value as List;
     for (dynamic v in value) {
       if (v == null) {
         continue;

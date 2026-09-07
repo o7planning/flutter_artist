@@ -14,17 +14,21 @@ abstract class Activity extends _Core {
 
   final Map<String, Task> __taskMap = {};
   final List<Task> _tasks = [];
+
   List<Task> get tasks => List.unmodifiable(_tasks);
 
   final Map<String, Flow> __flowMap = {};
   final List<Flow> _flows = [];
+
   List<Flow> get flows => List.unmodifiable(_flows);
 
   final List<TaskFormModel> _allTaskFormModels = [];
   final List<StageFormModel> _allStageFormModels = [];
 
   late final int _activityLocalId = __activitySequence++;
+
   String get name => FlutterArtist.desk._getActivityName(runtimeType);
+
   String get activityId => "${name}_$_activityLocalId";
 
   late final _ActivityUiComponents ui = _ActivityUiComponents(activity: this);

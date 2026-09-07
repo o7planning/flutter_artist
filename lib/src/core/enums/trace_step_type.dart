@@ -5,7 +5,7 @@ enum TraceStepType {
   info,
   debug,
   addExecutionUnit,
-  executionTodo,
+  executionIntent,
   controllableCalling,
   nonControllableCalling,
   broadcastEvent,
@@ -37,7 +37,7 @@ enum TraceStepType {
         return Icons.electric_bolt_outlined;
       case TraceStepType.separator:
         return Icons.linear_scale;
-      case TraceStepType.executionTodo:
+      case TraceStepType.executionIntent:
         return Icons.add_to_drive_outlined;
     }
   }

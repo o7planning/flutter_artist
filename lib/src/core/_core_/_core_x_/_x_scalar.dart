@@ -9,7 +9,11 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   final Scalar<ID, VALUE, FilterInput, FilterCriteria> scalar;
 
-  ScalarTodo<ID, VALUE>? _scalarTodo;
+  ScalarExecutionIntent<
+      ID, //
+      VALUE,
+      dynamic,
+      ExecutionUnitResult<dynamic>>? _executionIntent;
 
   bool _reviewed = false;
 
@@ -48,10 +52,6 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   bool isRoot() {
     return parentXScalar == null;
-  }
-
-  bool isVipBranch() {
-    return rootXScalar == xShelf.rootVipXScalar;
   }
 
   void setReQueryDone() {
@@ -108,10 +108,35 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   // ***************************************************************************
 
   _ShelfMemberExecutionUnit? _getNextExecutionUnit() {
-    if (_scalarTodo is ScalarTodoDone) {
+    if (_executionIntent is ScalarDoneIntent) {
       return null;
     }
     return null;
+  }
+
+  // ***************************************************************************
+
+  ScalarLoadExtraDataQuickActionIntent
+      _createAndSetScalarExecutionIntentLoadExtraDataQuickAction<
+          DATA extends Object>({
+    required ScalarQuickExtraDataLoadAction<DATA> action,
+    required AfterScalarLoadExtraDataQuickAction afterQuickAction,
+  }) {
+    final executionIntent =
+        ScalarLoadExtraDataQuickActionIntent<ID, VALUE, DATA>(
+      action: action,
+      afterQuickAction: afterQuickAction,
+    );
+    _executionIntent = executionIntent;
+    return executionIntent;
+  }
+
+  // ***************************************************************************
+
+  ScalarClearIntent _createAndSetScalarExecutionIntentClear() {
+    final executionIntent = ScalarClearIntent<ID, VALUE>();
+    _executionIntent = executionIntent;
+    return executionIntent;
   }
 
   // ***************************************************************************

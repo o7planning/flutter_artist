@@ -284,16 +284,19 @@ abstract class FilterModel<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XFilterModel thisXFilterModel,
-    required FilterModelTodoLoad executionTodo,
-    required FilterModelDataLoadResult executionUnitResult,
+    required FilterModelLoadIntent executionIntent,
   }) async {
     __assertThisXFilterModel(thisXFilterModel);
+    thisXFilterModel._createAndSetFilterModelExecutionIntentDone();
     //
     executionTrace._addTraceStep(
       codeId: "#24000",
       shortDesc: "Begin ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
+    //
+    final executionResult =
+        executionIntent.resultWrapper._setResult(EmptyExecutionUnitResult());
     //
     try {
       // SAME-AS: #0004
@@ -315,7 +318,7 @@ abstract class FilterModel<
       print("ERROR _unitQuery: $stackTrace");
       /* Never Error */
     } finally {
-      thisXFilterModel._createAndSetFilterModelTodoDone();
+      thisXFilterModel._createAndSetFilterModelExecutionIntentDone();
     }
     return false;
   }
@@ -329,9 +332,10 @@ abstract class FilterModel<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XFilterModel thisXFilterModel,
-    required FilterModelTodoPanelChange executionTodo,
+    required FilterModelFilterPanelChangeIntent executionIntent,
   }) async {
     __assertThisXFilterModel(thisXFilterModel);
+    thisXFilterModel._createAndSetFilterModelExecutionIntentDone();
     //
     executionTrace._addTraceStep(
       codeId: "#30000",
@@ -339,6 +343,8 @@ abstract class FilterModel<
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
+    final executionResult =
+        executionIntent.resultWrapper._setResult(EmptyExecutionUnitResult());
     //
     _filterModelStructure._setFilterDataState(FilterDataStatePending());
     //
@@ -348,11 +354,11 @@ abstract class FilterModel<
         executionTrace: executionTrace,
         activityType: FilterActivityType.updateFromFilterPanel,
         filterInput: null,
-        formKeyInstantValuesInUI: executionTodo.formKeyInstantValuesInUI,
+        formKeyInstantValuesInUI: executionIntent.formKeyInstantValuesInUI,
       );
       return xFilterCriteria != null;
     } finally {
-      thisXFilterModel._createAndSetFilterModelTodoLoad();
+      thisXFilterModel._createAndSetFilterModelExecutionIntentLoad();
     }
   }
 
@@ -1384,7 +1390,7 @@ abstract class FilterModel<
     //
     final XFilterModel thisXFilterModel = xShelf.findXFilterModelByName(name)!;
     // Add
-    thisXFilterModel._createAndSetFilterModelTodoPanelChange(
+    thisXFilterModel._createAndSetFilterModelExecutionIntentPanelChange(
       formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
