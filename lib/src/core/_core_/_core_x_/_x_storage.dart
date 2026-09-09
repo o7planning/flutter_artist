@@ -1,23 +1,35 @@
 part of '../core.dart';
 
 class XStorage {
-  _StorageBackendActionExecutionUnit? __storageBackendActionExecutionUnit;
+  ExecutionIntent? _executionIntent;
 
   bool get isEmpty {
-    return __storageBackendActionExecutionUnit == null;
+    return _executionIntent == null;
   }
 
   bool get isNotEmpty => !isEmpty;
 
-  void _addStorageBackendActionExecutionUnit(
-    _StorageBackendActionExecutionUnit storageBackendActionExecutionUnit,
+  void _addExecutionIntent(
+    ExecutionIntent executionIntent,
   ) {
-    __storageBackendActionExecutionUnit = storageBackendActionExecutionUnit;
+    _executionIntent = executionIntent;
   }
 
-  _StorageBackendActionExecutionUnit? _getNextExecutionUnit() {
-    final tu = __storageBackendActionExecutionUnit;
-    __storageBackendActionExecutionUnit = null;
-    return tu;
+  _StorageBackendActionExecutionUnit? _getNextExecutionUnit(
+      {required bool remove}) {
+    if (_executionIntent == null) {
+      return null;
+    }
+    final ExecutionIntent executionIntent = _executionIntent!;
+    if (remove) {
+      _executionIntent = null;
+    }
+    if (executionIntent is StorageBackendActionIntent) {
+      return _StorageBackendActionExecutionUnit(
+        executionIntent: executionIntent,
+      );
+    } else {
+      throw "TODO - _getNextExecutionUnit - 1";
+    }
   }
 }

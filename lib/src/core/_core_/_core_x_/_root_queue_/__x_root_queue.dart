@@ -28,9 +28,11 @@ final class _XRootQueue {
 
   _ExecutionUnit? getNextExecutionUnit({required bool removeEmptyRootQuery}) {
     final bool debug = removeEmptyRootQuery;
-    _ExecutionUnit? exeUnit = _xStorage._getNextExecutionUnit();
+    final _ExecutionUnit? exeUnit = _xStorage._getNextExecutionUnit(
+      remove: removeEmptyRootQuery,
+    );
     if (exeUnit != null) {
-      // return exeUnit;
+      return exeUnit;
     }
     final Set<String> rootQueueKeys = __xRootQueueItemMap.keys.toSet();
     while (true) {
@@ -47,7 +49,7 @@ final class _XRootQueue {
       final XRootQueueItem rootQueueItem =
           __xRootQueueItemMap[firstRootQueueItemName]!;
 
-      final NextExecutionUnit? next;
+      final NxtExecutionUnit? next;
       if (rootQueueItem is XShelf) {
         next = rootQueueItem._getNextExecutionUnit(debug: debug);
       } else if (rootQueueItem is XActivityV1) {
@@ -69,11 +71,12 @@ final class _XRootQueue {
     }
   }
 
-  void _addStorageBackendActionExecutionUnit(
-    _StorageBackendActionExecutionUnit storageBackendActionExecutionUnit,
+  void _addStorageBackendActionExecutionIntent(
+    StorageBackendActionIntent executionIntent,
   ) {
-    _xStorage._addStorageBackendActionExecutionUnit(
-        storageBackendActionExecutionUnit);
+    _xStorage._addExecutionIntent(
+      executionIntent,
+    );
   }
 
   void _addXRootQueueItem({required XRootQueueItem xRootQueueItem}) {

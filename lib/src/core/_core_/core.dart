@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-as dialogs;
+    as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart'
     hide FlutterArtistLocaleAdapter;
@@ -41,6 +41,7 @@ import '../../debug/executor/model/_debug_execution_unit.dart';
 import '../../debug/executor/model/_debug_x_root_queue.dart';
 import '../../debug/menu/_debug_menu_builder.dart';
 import '../../debug/app/_block_or_scalar.dart';
+import '../../debug/state_view/dialogs/block_item_sync_session_state_dialog.dart';
 import '../../debug/state_view/dialogs/block_sync_session_state_dialog.dart';
 import '../../debug/utils/_debug.dart';
 import '../action/_background_action.dart';
@@ -275,6 +276,8 @@ part '__core__/_block_data.dart';
 
 part '__core__/_block_data_state.dart';
 
+part '__core__/_block_item_data_state.dart';
+
 part '__core__/_coordinator.dart';
 
 part '__core__/_drawer_controller.dart';
@@ -377,9 +380,9 @@ part '__core__/_shelf_debug_info.dart';
 
 part '__core__/_dialog_deferral_result.dart';
 
-part '__core__/_block_debug_sync_session_state.dart';
+part '_sync_/_debug_block_sync_session_state.dart';
 
-part '__core__/_scalar_debug_sync_session_state.dart';
+part '_sync_/_debug_scalar_sync_session_state.dart';
 
 part '__core__/_block_query_plan.dart';
 
@@ -461,11 +464,15 @@ part '_core_x_/_root_queue_/_x_root_queue_item.dart';
 
 part '_core_x_/_root_queue_/_x_shelf.dart';
 
-part '__core__/_scalar_sync_session_state.dart';
+part '_sync_/_scalar_sync_session_state.dart';
 
-part '__core__/_block_sync_session_state.dart';
+part '_sync_/_block_sync_session_state.dart';
 
-part '__core__/_block_item_refresh_condition.dart';
+part '_sync_/_block_item_sync_session_state.dart';
+
+part '_sync_/_debug_block_item_sync_session_state.dart';
+
+part '_sync_/_block_item_refresh_condition.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/__src_block_and_options.dart';
 
@@ -605,49 +612,53 @@ part '../notification/simple/_simple_notification_service.dart';
 
 part '_observer_/_navigator_observer.dart';
 
+part '_execution_unit_step_/block_operation_step.dart';
+
+part '_execution_unit_result_/_block_eur/__block_execution_unit_result.dart';
+
 part '_execution_unit_result_/__execution_unit_result.dart';
 
-part '_execution_unit_result_/_scalar_load_extra_data_result.dart';
+part '_execution_unit_result_/_scalar_eur/_scalar_load_extra_data_result.dart';
 
 part '_execution_unit_result_/_shelf_deferred_event_execution_result.dart';
 
-part '_execution_unit_result_/_form_model_patch_form_fields_result.dart';
+part '_execution_unit_result_/_form_eur/_form_model_patch_form_fields_result.dart';
 
 part '_execution_unit_result_/_background_action_result.dart';
 
-part '_execution_unit_result_/_block_clear_items_result.dart';
+part '_execution_unit_result_/_block_eur/_block_clear_items_result.dart';
 
-part '_execution_unit_result_/_block_clear_current_item_result.dart';
+part '_execution_unit_result_/_block_eur/_block_clear_current_item_result.dart';
 
-part '_execution_unit_result_/_scalar_clear_result.dart';
+part '_execution_unit_result_/_scalar_eur/_scalar_clear_result.dart';
 
-part '_execution_unit_result_/_block_item_creation_result.dart';
+part '_execution_unit_result_/_block_eur/_block_item_creation_result.dart';
 
-part '_execution_unit_result_/_block_set_current_item_result.dart';
+part '_execution_unit_result_/_block_eur/_block_set_current_item_result.dart';
 
-part '_execution_unit_result_/_block_item_deletion_result.dart';
+part '_execution_unit_result_/_block_eur/_block_item_deletion_result.dart';
 
-part '_execution_unit_result_/_block_items_deletion_result.dart';
+part '_execution_unit_result_/_block_eur/_block_items_deletion_result.dart';
 
-part '_execution_unit_result_/_block_query_result.dart';
+part '_execution_unit_result_/_block_eur/_block_query_result.dart';
 
-part '_execution_unit_result_/_block_backend_action_result.dart';
+part '_execution_unit_result_/_block_eur/_block_backend_action_result.dart';
 
-part '_execution_unit_result_/_block_quick_item_creation_result.dart';
+part '_execution_unit_result_/_block_eur/_block_quick_item_creation_result.dart';
 
-part '_execution_unit_result_/_block_quick_item_update_result.dart';
+part '_execution_unit_result_/_block_eur/_block_quick_item_update_result.dart';
 
-part '_execution_unit_result_/_form_model_data_load_result.dart';
+part '_execution_unit_result_/_form_eur/_form_model_data_load_result.dart';
 
-part '_execution_unit_result_/_form_model_view_changed_result.dart';
+part '_execution_unit_result_/_form_eur/_form_model_view_changed_result.dart';
 
-part '_execution_unit_result_/_filter_model_data_load_result.dart';
+part '_execution_unit_result_/_filter_eur/_filter_model_data_load_result.dart';
 
-part '_execution_unit_result_/_form_model_save_result.dart';
+part '_execution_unit_result_/_form_eur/_form_model_save_result.dart';
 
 part '_execution_unit_result_/_activity_result.dart';
 
-part '_execution_unit_result_/_scalar_query_result.dart';
+part '_execution_unit_result_/_scalar_eur/_scalar_query_result.dart';
 
 part '_execution_unit_result_/_storage_backend_action_result.dart';
 

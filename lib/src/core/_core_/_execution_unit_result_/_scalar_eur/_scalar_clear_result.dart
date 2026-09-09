@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 class ScalarClearResult extends ExecutionUnitResult<ScalarClearPrecheck> {
   ScalarClearResult({super.precheck});

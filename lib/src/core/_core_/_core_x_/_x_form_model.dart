@@ -89,13 +89,13 @@ class XFormModel<
 
   // ***************************************************************************
 
-  NextExecutionUnit _getNextExecutionUnit({required bool debug}) {
+  NxtExecutionUnit _getNextExecutionUnit({required bool debug}) {
     final formModelDataState = formModel.dataState;
     final bool visibleX = formModel.ui.hasActiveUiComponent();
     if (_executionIntent == null) {
       // [IN: _executionIntent: null] - dataState: None.
       if (formModelDataState.isNone) {
-        return NextExecutionUnit.no(
+        return NxtExecutionUnit.no(
           debug: debug,
           info:
               "FormModel (1.1) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. ",
@@ -105,7 +105,7 @@ class XFormModel<
       else if (formModelDataState.isPending) {
         if (__forceTypeForForm == ForceType.force || visibleX) {
           _createAndSetFormModelExecutionIntentLoad();
-          return NextExecutionUnit.yes(
+          return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _FormModelLoadDataExecutionUnit(
               xFormModel: this,
@@ -116,7 +116,7 @@ class XFormModel<
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         } else {
-          return NextExecutionUnit.no(
+          return NxtExecutionUnit.no(
             debug: debug,
             info:
                 "FormModel (1.2.2) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
@@ -128,7 +128,7 @@ class XFormModel<
       else if (formModelDataState.isFatalError) {
         if (__forceTypeForForm == ForceType.force || visibleX) {
           _createAndSetFormModelExecutionIntentLoad();
-          return NextExecutionUnit.yes(
+          return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _FormModelLoadDataExecutionUnit(
               xFormModel: this,
@@ -139,7 +139,7 @@ class XFormModel<
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         } else {
-          return NextExecutionUnit.no(
+          return NxtExecutionUnit.no(
             debug: debug,
             info:
                 "FormModel (1.3.2) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
@@ -151,7 +151,7 @@ class XFormModel<
       else if (formModelDataState.isStale) {
         if (__forceTypeForForm == ForceType.force || visibleX) {
           _createAndSetFormModelExecutionIntentLoad();
-          return NextExecutionUnit.yes(
+          return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _FormModelLoadDataExecutionUnit(
               xFormModel: this,
@@ -162,7 +162,7 @@ class XFormModel<
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         } else {
-          return NextExecutionUnit.no(
+          return NxtExecutionUnit.no(
             debug: debug,
             info:
                 "FormModel (1.4.2) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
@@ -172,7 +172,7 @@ class XFormModel<
       }
       // [IN: _executionIntent: null] - dataState: Fresh.
       else if (formModelDataState.isFresh) {
-        return NextExecutionUnit.no(
+        return NxtExecutionUnit.no(
           debug: debug,
           info:
               "FormModel (1.5.1) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
@@ -190,7 +190,7 @@ class XFormModel<
     final executionIntent = _executionIntent!;
     //
     if (executionIntent is FormModelDoneIntent) {
-      return NextExecutionUnit.no(
+      return NxtExecutionUnit.no(
         debug: debug,
         info:
             "FormModel (2) ${formModel.block.name}, _executionIntent: $_executionIntent. "
@@ -203,7 +203,7 @@ class XFormModel<
     }
     // FormModelViewChangeIntent
     else if (executionIntent is FormModelViewChangeIntent) {
-      return NextExecutionUnit.yes(
+      return NxtExecutionUnit.yes(
         debug: debug,
         executionUnit: _FormViewChangeExecutionUnit(
           xFormModel: this,
@@ -216,7 +216,7 @@ class XFormModel<
     }
     // FormModelLoadIntent
     else if (executionIntent is FormModelDataLoadIntent) {
-      return NextExecutionUnit.yes(
+      return NxtExecutionUnit.yes(
         debug: debug,
         executionUnit: _FormModelLoadDataExecutionUnit(
           xFormModel: this,
@@ -229,7 +229,7 @@ class XFormModel<
     }
     // FormModelSaveIntent
     else if (executionIntent is FormModelSaveIntent) {
-      return NextExecutionUnit.yes(
+      return NxtExecutionUnit.yes(
         debug: debug,
         executionUnit: _FormModelSaveFormExecutionUnit(
           xFormModel: this,
@@ -240,7 +240,7 @@ class XFormModel<
             "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
       );
     }
-    return NextExecutionUnit.no(
+    return NxtExecutionUnit.no(
       debug: debug,
       info:
           "FormModel (6) ${formModel.block.name}, _executionIntent: $_executionIntent, OTHER CASE. "

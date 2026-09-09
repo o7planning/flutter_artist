@@ -8,7 +8,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
   ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk.block._blockSyncSessionState == null &&
-          xBlk.block._blockItemRefreshCondition == null) {
+          xBlk.block._blockItemSyncSessionState == null) {
         continue;
       }
       // @@@hasActiveBlockFragment
@@ -16,25 +16,25 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
         alsoCheckChildren: true,
       );
-      print(
-          "~~~~~~~~~~~~~~~~> _XShelfShelfExternalReaction / ${xBlk
-              .block} - blockXBlockRep: $blockXBlockRep");
       QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //
       if (xBlk.block._blockSyncSessionState != null &&
           xBlk.block._isMatchBlockReQryCon(xBlk.block._blockSyncSessionState)) {
-        print("@TEMP: *** CURRENT block state ***: ${xBlk.block.dataState}");
         // queryHint = blockXBlockRep ? QryHint.force : QryHint.markAsPending;
         if (blockXBlockRep) {
           queryHint = QryHint.force;
         }
       }
-      if (xBlk.block._blockItemRefreshCondition != null &&
-          xBlk.block._isMatchBlockItemRefreshCon(
-              xBlk.block._blockItemRefreshCondition)) {
-        forceReloadItem = true;
+      if (xBlk.block._blockItemSyncSessionState != null &&
+          xBlk.block._blockItemSyncSessionState!.isValidFor(xBlk.block.currentItemId)) {
+        forceReloadItem = true; // Sẽ kích hoạt _unitSetItemAsCurrent với forceReloadItem = true!
       }
+      // if (xBlk.block._blockItemRefreshCondition != null &&
+      //     xBlk.block._isMatchBlockItemRefreshCon(
+      //         xBlk.block._blockItemRefreshCondition)) {
+      //   forceReloadItem = true;
+      // }
       //
       xBlk.setQueryHintToGreater(queryHint);
       xBlk.setForceReloadCurrItem(forceReloadItem);

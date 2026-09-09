@@ -9,7 +9,8 @@ class _BlockItemDeletionExecutionUnit<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>>
-    extends _ShelfMemberResultedExecutionUnit<BlockItemDeletionResult<ITEM>> {
+    extends _ShelfMemberResultedExecutionUnit<
+        BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>> {
   final XBlock xBlock;
 
   @override

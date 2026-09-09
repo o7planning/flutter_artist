@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 class FilterModelDataLoadResult
     extends ExecutionUnitResult<FilterModelDataLoadPrecheck> {

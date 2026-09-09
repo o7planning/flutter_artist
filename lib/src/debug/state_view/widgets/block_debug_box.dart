@@ -10,6 +10,7 @@ import 'debug_style_utils.dart';
 import 'widgets/active_info_widget.dart';
 import 'widgets/block_data_state_info_widget.dart';
 import 'widgets/block_filter_criteria_info_widget.dart';
+import 'widgets/block_item_refresh_preview_info_widget.dart';
 import 'widgets/block_query_preview_info_widget.dart';
 
 class BlockDebugBox extends BaseDebugBox {
@@ -98,9 +99,8 @@ class BlockDebugBox extends BaseDebugBox {
           textStyle: DebugStyleUtils.getTextStyle(context),
         ),
       if (options.showPerformLoadItemCount)
-        IconLabelText(
-          label: "Item Refresh Count: ",
-          text: block.debug.performLoadItemDetailByIdCount.toString(),
+        BlockItemRefreshPreviewInfoWidget(
+          block: block,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle(context),
         ),

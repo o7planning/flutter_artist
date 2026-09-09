@@ -219,11 +219,11 @@ abstract class XShelf extends XRootQueueItem {
   // ***************************************************************************
   // ***************************************************************************
 
-  NextExecutionUnit? _getNextExecutionUnit({required bool debug}) {
+  NxtExecutionUnit? _getNextExecutionUnit({required bool debug}) {
     PrintUtils.debug(debug,
         "\nBEGIN >>> ${getClassNameWithoutGenerics(
             this)}._getNextExecutionUnit()...");
-    NextExecutionUnit? next = _findBlockNextExecutionUnit(debug: debug);
+    NxtExecutionUnit? next = _findBlockNextExecutionUnit(debug: debug);
     if (next != null) {
       return next;
     }
@@ -232,9 +232,9 @@ abstract class XShelf extends XRootQueueItem {
 
   // ***************************************************************************
 
-  NextExecutionUnit? _findBlockNextExecutionUnit({required bool debug}) {
+  NxtExecutionUnit? _findBlockNextExecutionUnit({required bool debug}) {
     for (final root in allRootXBlocks) {
-      final NextExecutionUnit? next =
+      final NxtExecutionUnit? next =
       _findBlockNextExecutionUnitCascade(xBlock: root, debug: debug);
       if (next != null && next.yes) {
         return next;
@@ -243,16 +243,16 @@ abstract class XShelf extends XRootQueueItem {
     return null;
   }
 
-  NextExecutionUnit? _findBlockNextExecutionUnitCascade({
+  NxtExecutionUnit? _findBlockNextExecutionUnitCascade({
     required XBlock xBlock,
     required bool debug,
   }) {
-    NextExecutionUnit next1 = xBlock._getNextExecutionUnit(debug: debug);
+    NxtExecutionUnit next1 = xBlock._getNextExecutionUnit(debug: debug);
     if (next1.yes) {
       return next1;
     }
     for (final XBlock childXBlock in xBlock.childXBlocks) {
-      NextExecutionUnit? next2 =
+      NxtExecutionUnit? next2 =
       _findBlockNextExecutionUnitCascade(xBlock: childXBlock, debug: debug);
       if (next2 != null && next2.yes) {
         return next2;
@@ -325,19 +325,19 @@ abstract class XShelf extends XRootQueueItem {
   // ***************************************************************************
   // ***************************************************************************
 
-  String toDebugXShelfStateAsHtml() {
-    String s = "${debugObjHtml(this)}\n"
-        " --- STATE BEFORE CREATING EXECUTION UNITS ---";
-    for (String key in xBlockMap.keys) {
-      final XBlock xBlock = xBlockMap[key]!;
-      s += "\n${xBlock.toDebugHtmlString()}";
-    }
-    for (String key in xScalarMap.keys) {
-      final XScalar xScalar = xScalarMap[key]!;
-      s += "\n${xScalar.toDebugHtmlString()}";
-    }
-    return s;
-  }
+  // String toDebugXShelfStateAsHtml() {
+  //   String s = "${debugObjHtml(this)}\n"
+  //       " --- STATE BEFORE CREATING EXECUTION UNITS ---";
+  //   for (String key in xBlockMap.keys) {
+  //     final XBlock xBlock = xBlockMap[key]!;
+  //     s += "\n${xBlock.toDebugHtmlString()}";
+  //   }
+  //   for (String key in xScalarMap.keys) {
+  //     final XScalar xScalar = xScalarMap[key]!;
+  //     s += "\n${xScalar.toDebugHtmlString()}";
+  //   }
+  //   return s;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************

@@ -62,7 +62,7 @@ class _BlockData<
 
   late BlockDataState _blockDataState;
 
-  BlockDataState _selectionDataState = BlockDataStatePending();
+  BlockItemDataState _blockItemDataState = BlockItemDataStateNone();
 
   // ***************************************************************************
   // ***************************************************************************
@@ -223,7 +223,7 @@ class _BlockData<
   }) {
     _blockDataState = blockDataState;
     if (resetSyncSessionState) {
-      block._resetSyncSessionState(executionTrace: null);
+      block._resetBlockSyncSessionState(executionTrace: null);
     }
     if (resetRefreshItemCondition) {
       // TODO:..
@@ -294,13 +294,6 @@ class _BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setToPending() {
-    _blockDataState = BlockDataStatePending();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   ///
   /// Set item as current, and no more other actions (Insert, Update list).
   ///
@@ -326,6 +319,8 @@ class _BlockData<
       if (block.formModel != null) {
         block.formModel!._triggerItemIdChanged();
       }
+      // 🛑 RESET ITEM SESSION STATE
+      block._resetBlockItemSyncSessionState(executionTrace: null);
     }
   }
 

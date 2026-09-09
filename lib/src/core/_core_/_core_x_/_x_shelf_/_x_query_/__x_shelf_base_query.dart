@@ -26,9 +26,13 @@ class _XShelfBaseQuery extends XShelf {
     }
     //
     final thisXFilterModel = xFilterModelMap[filterModel.name]!;
-    thisXFilterModel.filterInput = filterInput;
+    if (thisXFilterModel.filterInput != filterInput) {
+      thisXFilterModel.filterInput = filterInput;
+      thisXFilterModel.queried = false;
+    }
     if (forceReloadFilter) {
       thisXFilterModel._filterLoadHint = FilterLoadHint.force;
+      thisXFilterModel.queried = false;
     }
     //
     if (srcBlockAndOptions != null) {

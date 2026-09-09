@@ -33,6 +33,14 @@ class XFilterModel {
   }) : _xFilterModelId = __xFilterModelSeq++;
 
   // ***************************************************************************
+
+  /// Resets query status and load hints for this filter session.
+  void resetExecutionHints() {
+    _filterLoadHint = FilterLoadHint.auto;
+    queried = false;
+  }
+
+  // ***************************************************************************
   // ***************************************************************************
 
   FilterModelFilterPanelChangeIntent
@@ -64,10 +72,10 @@ class XFilterModel {
 
   // ***************************************************************************
 
-  NextExecutionUnit _getNextExecutionUnit({required bool debug}) {
+  NxtExecutionUnit _getNextExecutionUnit({required bool debug}) {
     final filterDataState = filterModel.dataState;
     if (filterModel.isDefaultFilterModel) {
-      return NextExecutionUnit.no(
+      return NxtExecutionUnit.no(
         debug: debug,
         info: "FilterModel (1), ${getClassNameWithoutGenerics(filterModel)}, "
             "default?: ${filterModel.isDefaultFilterModel}",
@@ -75,9 +83,24 @@ class XFilterModel {
     }
     //
     if (_executionIntent == null) {
+      if (_filterLoadHint == FilterLoadHint.force) {
+        _createAndSetFilterModelExecutionIntentLoad();
+        //
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _FilterModelLoadDataExecutionUnit(
+            xFilterModel: this,
+            executionIntent: _executionIntent as FilterModelLoadIntent,
+          ),
+          info:
+              "FilterModel (Force Reload), ${getClassNameWithoutGenerics(filterModel)}, "
+              "default?: ${filterModel.isDefaultFilterModel}, "
+              "dataState: $filterDataState, executionIntent: $_executionIntent",
+        );
+      }
       // IN: `_executionIntent == null`
       if (filterDataState.isLoaded) {
-        return NextExecutionUnit.no(
+        return NxtExecutionUnit.no(
           debug: debug,
           info:
               "FilterModel (2.1), ${getClassNameWithoutGenerics(filterModel)}, "
@@ -91,7 +114,7 @@ class XFilterModel {
             " (**) FilterModel _executionIntent: null, create FilterModelLoadIntent.");
         _createAndSetFilterModelExecutionIntentLoad();
         //
-        return NextExecutionUnit.yes(
+        return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _FilterModelLoadDataExecutionUnit(
             xFilterModel: this,
@@ -109,7 +132,7 @@ class XFilterModel {
             " (**) FilterModel _executionIntent: null, create ${debugObjHtml(FilterModelLoadIntent)}");
         _createAndSetFilterModelExecutionIntentLoad();
         //
-        return NextExecutionUnit.yes(
+        return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _FilterModelLoadDataExecutionUnit(
             xFilterModel: this,
@@ -125,7 +148,7 @@ class XFilterModel {
       else {
         _createAndSetFilterModelExecutionIntentLoad();
         //
-        return NextExecutionUnit.yes(
+        return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _FilterModelLoadDataExecutionUnit(
             xFilterModel: this,
@@ -144,7 +167,7 @@ class XFilterModel {
     final executionIntent = _executionIntent!;
     // FilterModelDoneIntent
     if (executionIntent is FilterModelDoneIntent) {
-      return NextExecutionUnit.no(
+      return NxtExecutionUnit.no(
         debug: debug,
         info: "FilterModel (3), ${getClassNameWithoutGenerics(filterModel)}, "
             "default?: ${filterModel.isDefaultFilterModel}, "
@@ -153,7 +176,7 @@ class XFilterModel {
     }
     // FilterModelFilterPanelChangeIntent
     else if (executionIntent is FilterModelFilterPanelChangeIntent) {
-      return NextExecutionUnit.yes(
+      return NxtExecutionUnit.yes(
         debug: debug,
         executionUnit: _FilterPanelChangeExecutionUnit(
           xFilterModel: this,
@@ -166,7 +189,7 @@ class XFilterModel {
     }
     // FilterModelLoadIntent
     else if (executionIntent is FilterModelLoadIntent) {
-      return NextExecutionUnit.yes(
+      return NxtExecutionUnit.yes(
         debug: debug,
         executionUnit: _FilterModelLoadDataExecutionUnit(
           xFilterModel: this,
@@ -177,7 +200,7 @@ class XFilterModel {
             "dataState: $filterDataState, executionIntent: $_executionIntent",
       );
     }
-    return NextExecutionUnit.no(
+    return NxtExecutionUnit.no(
       debug: debug,
       info: "FilterModel (6), ${getClassNameWithoutGenerics(filterModel)}, "
           "default?: ${filterModel.isDefaultFilterModel}, "

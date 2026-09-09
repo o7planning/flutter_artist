@@ -399,8 +399,11 @@ abstract class FormModel<
           "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
-    final executionResult =
-        executionIntent.resultWrapper._setResult(FormModelViewChangedResult());
+    final executionResult = executionIntent.resultWrapper._setResult(
+      FormModelViewChangedResult(),
+      objectCaller: this,
+      methodName: '_unitFormViewChanged',
+    );
     //
     await _startNewFormActivity(
       executionTrace: executionTrace,
@@ -433,8 +436,11 @@ abstract class FormModel<
       traceStepType: TraceStepType.debug,
     );
     //
-    final executionResult =
-        executionIntent.resultWrapper._setResult(FormModelDataLoadResult());
+    final executionResult = executionIntent.resultWrapper._setResult(
+      FormModelDataLoadResult(),
+      objectCaller: this,
+      methodName: '_unitLoadFormData',
+    );
     //
     final bool forceReloadForm;
     switch (thisXFormModel.forceTypeForForm) {
@@ -524,8 +530,11 @@ abstract class FormModel<
           "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
-    final executionResult = executionIntent.resultWrapper
-        ._setResult(FormModelPatchFormFieldsResult());
+    final executionResult = executionIntent.resultWrapper._setResult(
+      FormModelPatchFormFieldsResult(),
+      objectCaller: this,
+      methodName: '_unitPatchFormFields',
+    );
     //
     final ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData = null;
     final activityType = FormActivityType.patchFormFields;
@@ -575,11 +584,10 @@ abstract class FormModel<
     //
     final executionResult = executionIntent.resultWrapper._setResult(
       BlockFormSaveResult(precheck: null),
+      objectCaller: this,
+      methodName: '_unitSaveForm',
     );
     //
-    final executionUnitResult = executionIntent.resultWrapper._setResult(
-      BlockFormSaveResult(precheck: null),
-    );
     final Map<String, dynamic> formMapData =
         _formModelStructure._currentFormData;
     //
@@ -619,7 +627,7 @@ abstract class FormModel<
             : TipDocument.formModelPerformUpdateItem,
       );
       //
-      executionUnitResult._setErrorInfo(
+      executionResult._setErrorInfo(
         errorInfo: errorInfo,
       );
       //
@@ -663,7 +671,7 @@ abstract class FormModel<
         tipDocument: null,
       );
       //
-      executionUnitResult._setErrorInfo(
+      executionResult._setErrorInfo(
         errorInfo: errorInfo,
       );
       //

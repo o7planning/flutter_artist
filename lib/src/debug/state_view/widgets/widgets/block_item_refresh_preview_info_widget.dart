@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_artist/src/core/enums/debug_btn_type.dart';
 
 import '../../../../core/_core_/core.dart';
-import '../../../../core/enums/debug_btn_type.dart';
 import '_base_info_widget.dart';
 
-class BlockQueryPreviewInfoWidget extends BaseInfoWidget {
+class BlockItemRefreshPreviewInfoWidget extends BaseInfoWidget {
   final Block block;
 
-  const BlockQueryPreviewInfoWidget({
+  const BlockItemRefreshPreviewInfoWidget({
     super.key,
     required this.block,
     required super.labelStyle,
@@ -16,17 +16,19 @@ class BlockQueryPreviewInfoWidget extends BaseInfoWidget {
 
   @override
   String? getButtonTooltip() {
-    return null;
+    return block.blockItemSyncSessionState == null
+        ? "Clean item state (No active item sync session)"
+        : "Item has accumulated refresh reactions";
   }
 
   @override
   ButtonFunction? getButtonFunction() {
     return ButtonFunction(
-      btnType: block.blockSyncSessionState == null
+      btnType: block.blockItemSyncSessionState == null
           ? DebugBtnType.success
           : DebugBtnType.warning,
       onPressed: (BuildContext context) {
-        block.showDebugSyncSessionState(
+        block.showDebugItemSyncSessionState(
           context: context,
         );
       },
@@ -35,16 +37,16 @@ class BlockQueryPreviewInfoWidget extends BaseInfoWidget {
 
   @override
   String getLabel() {
-    return "Query Count: ";
+    return "Item Refresh Count: ";
   }
 
   @override
   String? getLeftTooltip() {
-    return "performQueryCount / performQueryByItemIdsCount";
+    return "performLoadItemDetailByIdCount";
   }
 
   @override
   String getText() {
-    return "${block.debug.performQueryCount} / ${block.debug.performQueryByItemIdsCount}";
+    return block.debug.performLoadItemDetailByIdCount.toString();
   }
 }

@@ -239,7 +239,7 @@ abstract class Scalar<
 
   VALUE? get value => __scalarData.current._value;
 
-  void _resetSyncSessionState({
+  void _resetBlockSyncSessionState({
     required ExecutionTrace? executionTrace,
   }) {
     _scalarSyncSessionState = null;
@@ -374,7 +374,7 @@ abstract class Scalar<
         );
 
     if (isEffected) {
-      _updateSyncSessionState(
+      _updateScalarSyncSessionState(
         executionTrace: executionTrace,
         eventSourceType: eventSourceType,
         dataTypes: eventDataTypes,
@@ -383,25 +383,20 @@ abstract class Scalar<
   }
 
   /// Manages session instantiation, appends the received event info, and recalculates [_dataState].
-  void _updateSyncSessionState({
+  void _updateScalarSyncSessionState({
     required ExecutionTrace executionTrace,
     required EventSourceType eventSourceType,
     required List<Type> dataTypes,
   }) {
     executionTrace._addTraceStep(
       codeId: "#86000",
-      shortDesc: "Calling Scalar._updateSyncSessionState()",
+      shortDesc: "Calling Scalar._updateScalarSyncSessionState()",
       traceStepType: TraceStepType.nonControllableCalling,
     );
-
-    print("########## - 1: _updateSyncSessionState");
-
     // Initialize or reset session if boundary constraints (filter criteria or parent context) shifted
     if (_scalarSyncSessionState == null ||
         _scalarSyncSessionState!.filterCriteria != filterCriteria ||
         _scalarSyncSessionState!.parentScalarValueId != parent?.valueId) {
-      print("########## - 2: _updateSyncSessionState");
-
       _scalarSyncSessionState = _ScalarSyncSessionState(
         scalar: this,
         parentScalarValueId: parent?.valueId,
@@ -492,8 +487,6 @@ abstract class Scalar<
       syncSessionState: currentSyncSessionState,
     );
 
-    print("&&&&&&&&&&&&&&& Scalar queryHint: $queryHint");
-
     if (queryHint == QryHint.none) {
       executionTrace._addTraceStep(
         codeId: "#12080",
@@ -510,21 +503,21 @@ abstract class Scalar<
               "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
           traceStepType: TraceStepType.info,
         );
-        for (XScalar childXScalar in thisXScalar.childXScalars) {
-          // TODO: Review again .........................................
-          // final executionUnit = _ScalarQueryExecutionUnit(
-          //   xScalar: childXScalar,
-          // );
-          // executionTrace._addTraceStep(
-          //   codeId: "#12120",
-          //   shortDesc:
-          //       "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
-          //   traceStepType: TraceStepType.addExecutionUnit,
-          // );
-          // thisXScalar.xShelf._addExecutionUnit(
-          //   executionUnit: executionUnit,
-          // );
-        }
+        // for (XScalar childXScalar in thisXScalar.childXScalars) {
+        //   // TODO: Review again .........................................
+        //   // final executionUnit = _ScalarQueryExecutionUnit(
+        //   //   xScalar: childXScalar,
+        //   // );
+        //   // executionTrace._addTraceStep(
+        //   //   codeId: "#12120",
+        //   //   shortDesc:
+        //   //       "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
+        //   //   traceStepType: TraceStepType.addExecutionUnit,
+        //   // );
+        //   // thisXScalar.xShelf._addExecutionUnit(
+        //   //   executionUnit: executionUnit,
+        //   // );
+        // }
       }
       return;
     } else if (queryHint == QryHint.markAsPending) {
@@ -648,13 +641,10 @@ abstract class Scalar<
       // Throw ApiError:
       result.throwIfError();
       //
-      // Query DONE!
-      //
-      thisXScalar.setReQueryDone();
       queryResultState = ActionResultState.success;
       value = result.data;
       valueId = value?.id;
-      _resetSyncSessionState(executionTrace: executionTrace);
+      _resetBlockSyncSessionState(executionTrace: executionTrace);
     } catch (e, stackTrace) {
       queryResultState = ActionResultState.fail;
       isQueryError = true;
@@ -686,6 +676,11 @@ abstract class Scalar<
         errorInfo: errorInfo,
       );
     } finally {
+      //
+      // Query DONE!
+      //
+      thisXScalar.setReQueryDone();
+      //
       __refreshQueryingState(isQuerying: false);
     }
     //
@@ -823,6 +818,8 @@ abstract class Scalar<
     //
     executionIntent.resultWrapper._setResult(
       ScalarClearResult(precheck: null),
+      objectCaller: this,
+      methodName: '_unitClear',
     );
     //
     __clearWithDataStateAndChildrenToNonCascade(
@@ -854,8 +851,11 @@ abstract class Scalar<
       traceStepType: TraceStepType.debug,
     );
     //
-    final loadResult =
-        executionIntent.resultWrapper._setResult(ScalarLoadExtraDataResult());
+    final loadResult = executionIntent.resultWrapper._setResult(
+      ScalarLoadExtraDataResult(),
+      objectCaller: this,
+      methodName: '_unitLoadExtraDataQuickAction',
+    );
     //
     ApiResult<DATA>? result;
     try {
@@ -1407,6 +1407,10 @@ abstract class Scalar<
     required bool resetSyncSessionState,
   }) {
     __assertThisXScalar(thisXScalar);
+    //
+    // 🛑 RESET
+    //
+    thisXScalar.resetExecutionHints();
     //
     __scalarData._clearValueWithDataState(
       scalarDataState: scalarDataState,

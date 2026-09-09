@@ -10,7 +10,8 @@ class _BlockSetItemAsCurrentExecutionUnit<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,
         ITEM_DETAIL extends Identifiable<ID>>
-    extends _ShelfMemberResultedExecutionUnit<BlockSetCurrentItemResult<ITEM>> {
+    extends _ShelfMemberResultedExecutionUnit<
+        BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> {
   final XBlock<ID, ITEM, ITEM_DETAIL> xBlock;
 
   @override
@@ -22,7 +23,7 @@ class _BlockSetItemAsCurrentExecutionUnit<
   }) : super(
           executionUnitType: ExecutionUnitType.blockSetItemAsCurrent,
           executionIntent: executionIntent,
-          // executionUnitResult: BlockSetCurrentItemResult<ITEM>(
+          // executionUnitResult: BlockSetCurrentItemResult<ID,ITEM,ITEM_DETAIL>(
           //   precheck: null,
           //   setCurrentItemDirective: executionIntent.setCurrentItemDirective,
           //   getItemId: xBlock.block._getItemIdInternal,

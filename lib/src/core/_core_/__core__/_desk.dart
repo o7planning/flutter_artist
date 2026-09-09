@@ -75,8 +75,8 @@ class _Desk extends _DeskCore {
     //
     executionTrace._addTraceStep(
       codeId: "#75340",
-      shortDesc: "Creating <b>_StorageBackendActionExecutionUnit</b>.",
-      traceStepType: TraceStepType.addExecutionUnit,
+      shortDesc: "Creating ${debugObjHtml(StorageBackendActionIntent)}.",
+      traceStepType: TraceStepType.executionIntent,
     );
     final executionIntent =
         _createAndSetStorageExecutionIntentBackendAction(action: action);
@@ -120,8 +120,11 @@ class _Desk extends _DeskCore {
           "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
-    final executionUnitResult =
-        executionIntent.resultWrapper._setResult(StorageBackendActionResult());
+    final executionUnitResult = executionIntent.resultWrapper._setResult(
+      StorageBackendActionResult(),
+      objectCaller: this,
+      methodName: '_unitBackendAction',
+    );
     //
     try {
       executionTrace._addTraceStep(
@@ -196,7 +199,8 @@ class _Desk extends _DeskCore {
     required StorageBackendAction action,
   }) {
     final executionIntent = StorageBackendActionIntent(action: action);
-    // _executionIntent = executionIntent;
+    FlutterArtist._rootQueue
+        ._addStorageBackendActionExecutionIntent(executionIntent);
     return executionIntent;
   }
 }

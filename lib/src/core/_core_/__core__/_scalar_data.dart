@@ -88,7 +88,7 @@ class _ScalarData<
   }) {
     _scalarDataState = scalarDataState;
     if (resetSyncSessionState) {
-      scalar._resetSyncSessionState(executionTrace: null);
+      scalar._resetBlockSyncSessionState(executionTrace: null);
     }
     // OLD Code: _scalarDataState == DataState.error
     if (hasError) {

@@ -78,6 +78,8 @@ abstract class ActivityV1 extends _Core {
     );
     final activityResult = executionIntent.resultWrapper._setResult(
       ActivityResult(),
+      objectCaller: this,
+      methodName: '_unitExecuteActivity',
     );
     //
     try {

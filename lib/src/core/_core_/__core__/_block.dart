@@ -340,13 +340,9 @@ abstract class Block<
   ActionResultState? get lastQueryResultState =>
       __blockData._lastQueryResultState;
 
-  // LoadedStatus? get loadedStatus => __blockData._loadedStatus;
-  // PendingReason? get pendingReason => __blockData._pendingReason;
-  //  BlockLoadedStatePhase? get _loadedStatePhase => __blockData._loadedStatePhase;
-
   BlockDataState get dataState => __blockData._blockDataState;
 
-  BlockDataState get selectionDataState => __blockData._selectionDataState;
+  BlockItemDataState get blockItemDataState => __blockData._blockItemDataState;
 
   /// Does the FilterPanel contain uncommitted draft criteria that differs
   /// from the currently applied dataset criteria?
@@ -439,23 +435,29 @@ abstract class Block<
   _BlockSyncSessionState<ID>? get blockSyncSessionState =>
       _blockSyncSessionState;
 
-  _BlockItemRefreshCon<ID>? _blockItemRefreshCondition;
+  _BlockItemSyncSessionState<ID>? _blockItemSyncSessionState;
 
-  void _resetSyncSessionState({
+  _BlockItemSyncSessionState<ID>? get blockItemSyncSessionState =>
+      _blockItemSyncSessionState;
+
+  // ***************************************************************************
+
+  void _resetBlockSyncSessionState({
     required ExecutionTrace? executionTrace,
   }) {
-    executionTrace?._addTraceStep(
-      codeId: "#84000",
-      shortDesc: "${debugObjHtml(this)} - Reset _blockSyncSessionState",
-    );
     _blockSyncSessionState = null;
   }
+  // ***************************************************************************
 
-  _BlockItemRefreshCon _createBlockItemRefreshCon({required ID itemId}) {
-    return _BlockItemRefreshCon<ID>(itemId: itemId);
+  void _resetBlockItemSyncSessionState({
+    required ExecutionTrace? executionTrace,
+  }) {
+    _blockItemSyncSessionState = null;
   }
 
-  void _updateSyncSessionState({
+  // ***************************************************************************
+
+  void _updateBlockSyncSessionState({
     required ExecutionTrace executionTrace,
     required XBlock? xBlock,
     required EventSourceType eventSourceType,
@@ -466,7 +468,7 @@ abstract class Block<
   }) {
     executionTrace._addTraceStep(
       codeId: "#83100",
-      shortDesc: "Calling ${debugObjHtml(this)}._updateSyncSessionState()",
+      shortDesc: "Calling ${debugObjHtml(this)}._updateBlockSyncSessionState()",
       parameters: {
         "eventSourceType": eventSourceType,
         "requiresMaxSyncStrategy": requiresMaxSyncStrategy,
@@ -527,8 +529,67 @@ abstract class Block<
     }
   }
 
+  // ***************************************************************************
+
+  /// Manages item-level sync session instantiation, appends received events,
+  /// and marks the active item's selection data state as stale.
+  void _updateItemSyncSessionState({
+    required ExecutionTrace executionTrace,
+    required XBlock? xBlock,
+    required EventSourceType eventSourceType,
+    required List<Type> eventDataTypes,
+    required List<ID>? addedEffectiveIds,
+  }) {
+    final ID? activeItemId = currentItemId;
+    if (activeItemId == null) {
+      return;
+    }
+
+    executionTrace._addTraceStep(
+      codeId: "#83700",
+      shortDesc: "Calling ${debugObjHtml(this)}._updateItemSyncSessionState()",
+      parameters: {
+        "eventSourceType": eventSourceType,
+        "activeItemId": activeItemId,
+        "addedEffectiveIds": addedEffectiveIds,
+      },
+      traceStepType: TraceStepType.nonControllableCalling,
+    );
+
+    // Initialize or reset session if target item identity changed
+    if (_blockItemSyncSessionState == null ||
+        !_blockItemSyncSessionState!.isValidFor(activeItemId)) {
+      _blockItemSyncSessionState = _BlockItemSyncSessionState<ID>(
+        block: this,
+        targetItemId: activeItemId,
+      );
+    }
+
+    // Append received event metadata to current item sync session
+    _blockItemSyncSessionState?.addReceivedEventInfo(
+      eventSourceType: eventSourceType,
+      mainDataTypes: eventDataTypes,
+      extraDataTypes: [],
+      effectedItemIds: addedEffectiveIds ?? <ID>[],
+    );
+
+    // Transition the selection data state to stale
+    __blockData._blockItemDataState = const BlockItemDataStateStale();
+
+    // Mark XBlock to force reload the current item on next scheduler sweep
+    xBlock?.setForceReloadCurrItem(true);
+
+    executionTrace._addTraceStep(
+      codeId: "#83750",
+      shortDesc:
+          "${debugObjHtml(this)} - marked current item ($activeItemId) as stale due to event reaction",
+    );
+  }
+
+  // ***************************************************************************
+
   bool _hasReactionBookmark() {
-    return _blockSyncSessionState != null || _blockItemRefreshCondition != null;
+    return _blockSyncSessionState != null || _blockItemSyncSessionState != null;
   }
 
   bool _isMatchBlockReQryCon(_BlockSyncSessionState? blockReQryCon) {
@@ -716,7 +777,7 @@ abstract class Block<
 
   // TODO: Rename (+ `Visible` in name)
   bool hasAccumulatedEvents() {
-    if (_blockSyncSessionState == null && _blockItemRefreshCondition == null) {
+    if (_blockSyncSessionState == null && _blockItemSyncSessionState == null) {
       return false;
     }
     return ui.hasActiveUiComponent(alsoCheckChildren: true);
@@ -755,7 +816,7 @@ abstract class Block<
         traceStepType: TraceStepType.debug,
       );
       // Direct entity match: use specific affected item IDs and original sync strategies.
-      _updateSyncSessionState(
+      _updateBlockSyncSessionState(
         executionTrace: executionTrace,
         xBlock: null,
         eventSourceType: eventSourceType,
@@ -768,6 +829,8 @@ abstract class Block<
     }
   }
 
+  /// Entry point called when this Block receives a domain event dispatched from internal or external sources.
+  /// Handles both block-level query invalidation and current-item-level refresh reactions.
   void _receiveEvent({
     required ExecutionTrace executionTrace,
     required EventSourceType eventSourceType,
@@ -783,11 +846,17 @@ abstract class Block<
     if (eventDataTypes.isEmpty) {
       return;
     }
+
     final Set<Type> resolvedEventDataTypes =
         DataTypeEventUtils.getProjectionsDataTypes(eventDataTypes);
     final Set<Type> resolvedMainReactionDataTypes =
         getResolvedMainReactionDataTypes();
-    // Resolve registered target reaction types for block-level re-query.
+
+    // =========================================================================
+    // 1. BLOCK-LEVEL REACTION DISPATCH (target: BlockReactionTarget.block)
+    // =========================================================================
+
+    // Resolve registered reaction types configured for block-level re-query.
     final Set<Type> resolvedReactionTypesBlkLevel =
         getResolvedReactionDataTypes(target: BlockReactionTarget.block);
 
@@ -805,7 +874,7 @@ abstract class Block<
         parameters: {"eventDataTypes": eventDataTypes},
         traceStepType: TraceStepType.debug,
       );
-      //
+
       final List<ID>? addedEffectiveIds;
       final bool requiresMaxSyncStrategy;
       switch (eventDataKind) {
@@ -816,8 +885,9 @@ abstract class Block<
           requiresMaxSyncStrategy = true;
           addedEffectiveIds = null;
       }
+
       // Direct entity match: use specific affected item IDs and original sync strategies.
-      _updateSyncSessionState(
+      _updateBlockSyncSessionState(
         executionTrace: executionTrace,
         xBlock: null,
         eventSourceType: eventSourceType,
@@ -828,7 +898,8 @@ abstract class Block<
       );
       return;
     }
-    bool isExtraEffected = DataTypeEventUtils.hasIntersection(
+
+    final bool isExtraEffected = DataTypeEventUtils.hasIntersection(
       resolvedEventDataTypes,
       resolvedReactionTypesBlkLevel,
     );
@@ -840,10 +911,11 @@ abstract class Block<
         parameters: {"eventDataTypes": eventDataTypes},
         traceStepType: TraceStepType.debug,
       );
+
       // Cross-entity broadcast match (e.g., SupplierBlock emitting ProductInfo as extra type):
       // The affected IDs belong to the source entity (Supplier ID), not this block's entity type (Product ID).
       // Force fallback to maximum sync strategy without specific item IDs.
-      _updateSyncSessionState(
+      _updateBlockSyncSessionState(
         executionTrace: executionTrace,
         xBlock: null,
         eventSourceType: eventSourceType,
@@ -852,6 +924,44 @@ abstract class Block<
         syncStrategyOnPageableQueryMode:
             BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
         addedEffectiveIds: null,
+      );
+      return;
+    }
+
+    // =========================================================================
+    // 2. CURRENT-ITEM-LEVEL REACTION DISPATCH (target: BlockReactionTarget.currentItem)
+    // =========================================================================
+
+    // Resolve registered reaction types configured specifically to refresh current active item.
+    final Set<Type> resolvedReactionTypesItemLevel =
+        getResolvedReactionDataTypes(target: BlockReactionTarget.currentItem);
+
+    final bool isCurrentItemEffected = DataTypeEventUtils.hasIntersection(
+      resolvedEventDataTypes,
+      resolvedReactionTypesItemLevel,
+    );
+
+    if (isCurrentItemEffected) {
+      executionTrace._addTraceStep(
+        codeId: "#85700",
+        shortDesc:
+            "${getClassNameWithoutGenerics(this)}. CurrentItem Target Effective.",
+        parameters: {
+          "eventDataTypes": eventDataTypes,
+          "currentItemId": currentItemId,
+        },
+        traceStepType: TraceStepType.debug,
+      );
+
+      final List<ID>? addedEffectiveIds =
+          effectedItemIds?.whereType<ID>().toList();
+
+      _updateItemSyncSessionState(
+        executionTrace: executionTrace,
+        xBlock: null,
+        eventSourceType: eventSourceType,
+        eventDataTypes: eventDataTypes,
+        addedEffectiveIds: addedEffectiveIds,
       );
     }
   }
@@ -869,6 +979,10 @@ abstract class Block<
     required bool resetRefreshItemCondition,
   }) {
     __assertThisXBlock(thisXBlock);
+    //
+    // 🛑 RESET
+    //
+    thisXBlock.resetExecutionHints();
     //
     __blockData._clearItemsWithDataState(
       blockDataState: blockDataState,
@@ -1067,6 +1181,8 @@ abstract class Block<
     //
     executionIntent.resultWrapper._setResult(
       BlockClearItemsResult(precheck: null),
+      objectCaller: this,
+      methodName: '_unitClearItems',
     );
     __clearWithDataStateAndChildrenToNonCascade(
       thisXBlock: thisXBlock,
@@ -1107,6 +1223,8 @@ abstract class Block<
     );
     executionIntent.resultWrapper._setResult(
       BlockClearCurrentItemResult(precheck: null),
+      objectCaller: this,
+      methodName: '_unitClearCurrentItem',
     );
     __setCurrentItemOnly(
       id: null,
@@ -1159,8 +1277,11 @@ abstract class Block<
       traceStepType: TraceStepType.debug,
     );
     // Important:
-    final executionResult =
-        executionIntent.resultWrapper._setResult(BlockQueryResult._());
+    final executionResult = executionIntent.resultWrapper._setResult(
+      BlockQueryResult._(),
+      objectCaller: this,
+      methodName: '_unitQuery',
+    );
     //
     bool provideBlockContext = ui.hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
@@ -1510,7 +1631,7 @@ abstract class Block<
             throw UnimplementedError("Never Run");
           }
           //
-          _resetSyncSessionState(executionTrace: executionTrace);
+          _resetBlockSyncSessionState(executionTrace: executionTrace);
         }
         // viewportSyncStrategy != BlockViewportSyncStrategy.nativeQuery
         else {
@@ -1545,12 +1666,9 @@ abstract class Block<
           queriedItemList = result.data?.items;
           queriedPaginationInfo = null;
           //
-          _resetSyncSessionState(executionTrace: executionTrace);
+          _resetBlockSyncSessionState(executionTrace: executionTrace);
         }
         //
-        // Query DONE!
-        //
-        thisXBlock.setReQueryDone();
         queried = true;
         queryResultState = ActionResultState.success;
         //
@@ -1580,7 +1698,7 @@ abstract class Block<
           showSnackBar: true,
           tipDocument: TipDocument.blockPerformQuery,
         );
-        thisXBlock.queryResult._setErrorInfo(
+        executionResult._setErrorInfo(
           errorInfo: errorInfo,
         );
         //
@@ -1591,6 +1709,11 @@ abstract class Block<
           errorInfo: errorInfo,
         );
       } finally {
+        //
+        // Query DONE!
+        //
+        thisXBlock.setReQueryDone();
+        //
         __refreshQueryingState(isQuerying: false);
       }
       final bool isPageShifting;
@@ -1731,7 +1854,7 @@ abstract class Block<
         showSnackBar: true,
         tipDocument: null,
       );
-      thisXBlock.queryResult._setErrorInfo(
+      executionResult._setErrorInfo(
         errorInfo: errorInfo,
       );
       executionTrace._addTraceStep(
@@ -1957,16 +2080,21 @@ abstract class Block<
     }
     //
     final blockSetCurrentItemResult = executionIntent.resultWrapper._setResult(
-      BlockSetCurrentItemResult<ITEM>(
+      BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>(
         precheck: null,
         setCurrentItemDirective: executionIntent.setCurrentItemDirective,
         candidateItem: executionIntent.inputCandidateCurrItem,
         oldCurrentItem: currentItem,
         currentItem: currentItem,
       ),
+      objectCaller: this,
+      methodName: '_unitSetItemAsCurrent',
     );
+    thisXBlock.attachToPredecessorIfAny(blockSetCurrentItemResult);
+    //
     if (inputCandidateCurrItem != null) {
-      blockSetCurrentItemResult._addCandidateItem(inputCandidateCurrItem);
+      // TODO: Old code (DELETE)
+      // blockSetCurrentItemResult._addCandidateItem(inputCandidateCurrItem);
     }
     //
     // In: _unitSetItemAsCurrent
@@ -1974,7 +2102,7 @@ abstract class Block<
     if (dataState.isPending || dataState.isStale) {
       // TODO: Review.
       // This case never run!
-      print("@TEMP: dataState.isPending || dataState.isStale");
+      print("NEVER RUN: dataState.isPending || dataState.isStale");
       // Do nothing.
       return;
     }
@@ -1988,6 +2116,24 @@ abstract class Block<
         traceStepType: TraceStepType.info,
       );
 
+      // Record transition to null as there are no items available
+      blockSetCurrentItemResult.recordCurrentTransition(
+        previousItem: currentItem,
+        candidateItem: null,
+        finalItem: null,
+        trigger: CurrentItemTransitionTrigger.resetToNull,
+      );
+
+      // Record cascaded state changes for child blocks
+      for (final child in thisXBlock.childXBlocks) {
+        blockSetCurrentItemResult.recordCascadedEviction(
+          childBlockName: child.name,
+          targetState: const BlockDataStateNone(),
+        );
+      }
+      //
+      __blockData._blockItemDataState = const BlockItemDataStateNone();
+      _resetBlockItemSyncSessionState(executionTrace: executionTrace);
       // TODO: Test Cases.
       __clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
@@ -2163,6 +2309,24 @@ abstract class Block<
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         traceStepType: TraceStepType.info,
       );
+
+      // Record transition to null when candidate cannot be determined
+      blockSetCurrentItemResult.recordCurrentTransition(
+        previousItem: currentItem,
+        candidateItem: null,
+        finalItem: null,
+        trigger: CurrentItemTransitionTrigger.resetToNull,
+      );
+
+      for (final child in thisXBlock.childXBlocks) {
+        blockSetCurrentItemResult.recordCascadedEviction(
+          childBlockName: child.name,
+          targetState: const BlockDataStateNone(),
+        );
+      }
+      // New Code.
+      __blockData._blockItemDataState = const BlockItemDataStateNone();
+      _resetBlockItemSyncSessionState(executionTrace: executionTrace);
       // Test Cases: [74a].
       __clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
@@ -2177,7 +2341,8 @@ abstract class Block<
       item2: candidateCurrItem,
     );
     if (!isSameCandidateItem) {
-      blockSetCurrentItemResult._addCandidateItem(candidateCurrItem);
+      // TODO: Old code (DELETE).
+      // blockSetCurrentItemResult._addCandidateItem(candidateCurrItem);
     }
     //
     final bool isCandidateCurrentItemInNewQueriedList =
@@ -2267,6 +2432,22 @@ abstract class Block<
             "@candidateItemAccepted: <b>false</b> --> Clean all data of child blocks and set them to none.",
         traceStepType: TraceStepType.info,
       );
+
+      // Record candidate rejection step
+      blockSetCurrentItemResult.recordCurrentTransition(
+        previousItem: currentItem,
+        candidateItem: candidateCurrItem,
+        finalItem: null,
+        trigger: CurrentItemTransitionTrigger.resetToNull,
+      );
+
+      for (final child in thisXBlock.childXBlocks) {
+        blockSetCurrentItemResult.recordCascadedEviction(
+          childBlockName: child.name,
+          targetState: const BlockDataStateNone(),
+        );
+      }
+
       __clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
       );
@@ -2390,6 +2571,14 @@ abstract class Block<
           blockSetCurrentItemResult._setErrorInfo(
             errorInfo: errorInfo,
           );
+
+          // Record item loading failure
+          blockSetCurrentItemResult.recordItemOperationFailure(
+            item: candidateCurrItem,
+            operation: methodName,
+            errorInfo: errorInfo,
+          );
+
           executionTrace._addTraceStep(
             codeId: "#29000",
             shortDesc:
@@ -2416,6 +2605,13 @@ abstract class Block<
             "Candidate ${debugObjHtml(candidateCurrItem)} seems to have been deleted from the system "
             "--> remove it from the block..",
       );
+
+      // Record eviction due to remote deletion
+      blockSetCurrentItemResult.recordEviction(
+        item: candidateCurrItem,
+        reason: ItemEvictionReason.remoteNotFound,
+      );
+
       //
       final ITEM? siblingItem = findSiblingItem(
         item: candidateCurrItem,
@@ -2446,6 +2642,15 @@ abstract class Block<
           shortDesc:
               "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
         );
+
+        // Record sibling fallback transition
+        blockSetCurrentItemResult.recordCurrentTransition(
+          previousItem: currentItem,
+          candidateItem: candidateCurrItem,
+          finalItem: siblingItem,
+          trigger: CurrentItemTransitionTrigger.siblingFallback,
+        );
+
         thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
           setCurrentItemDirective: executionIntent.setCurrentItemDirective,
           newQueriedList: executionIntent.newQueriedList,
@@ -2494,6 +2699,14 @@ abstract class Block<
         shortDesc: "Clear all data in child blocks and set them to <b>none</b>."
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       );
+
+      for (final child in thisXBlock.childXBlocks) {
+        blockSetCurrentItemResult.recordCascadedEviction(
+          childBlockName: child.name,
+          targetState: const BlockDataStateNone(),
+        );
+      }
+
       // Test Case: [46a].
       __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
       //
@@ -2503,6 +2716,15 @@ abstract class Block<
           shortDesc:
               "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
         );
+
+        // Record fallback to sibling when current item was evicted
+        blockSetCurrentItemResult.recordCurrentTransition(
+          previousItem: candidateCurrItem,
+          candidateItem: siblingItem,
+          finalItem: siblingItem,
+          trigger: CurrentItemTransitionTrigger.siblingFallback,
+        );
+
         // IN: refreshedCurrentItemDetail == null
         thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
           setCurrentItemDirective: executionIntent.setCurrentItemDirective,
@@ -2562,6 +2784,14 @@ abstract class Block<
           showSnackBar: true,
           tipDocument: TipDocument.blockConvertItemDetailToItem,
         );
+
+        // Record conversion error on this specific candidate
+        blockSetCurrentItemResult.recordItemOperationFailure(
+          item: candidateCurrItem,
+          operation: methodName,
+          errorInfo: errorInfo,
+        );
+
         executionTrace._addTraceStep(
           codeId: "#29440",
           shortDesc:
@@ -2570,7 +2800,7 @@ abstract class Block<
         );
       }
       if (convertError) {
-        blockSetCurrentItemResult._convertError = true;
+        // blockSetCurrentItemResult._convertError = true;
         // TODO Always return??
         // If currentItemChanged or not currentItemChanged
         // Always return. Nothing to do if has error!!
@@ -2578,7 +2808,7 @@ abstract class Block<
       }
       //
       //
-      __blockData._selectionDataState = BlockDataStateLoadedFresh();
+      __blockData._blockItemDataState = BlockItemDataStateFresh();
       if (candidateCurrItem != null) {
         executionTrace._addTraceStep(
           codeId: "#29480",
@@ -2596,11 +2826,25 @@ abstract class Block<
         codeId: "#29500",
         shortDesc: "Set ${debugObjHtml(candidateCurrItem)} as current.",
       );
+
+      // Record explicit selection or refresh transition
+      blockSetCurrentItemResult.recordCurrentTransition(
+        previousItem: currItemOrigin,
+        candidateItem: inputCandidateCurrItem,
+        finalItem: candidateCurrItem,
+        trigger: itemRefreshed
+            ? CurrentItemTransitionTrigger.explicitSelect
+            : CurrentItemTransitionTrigger.initialQueryDefault,
+      );
+
       __setCurrentItemOnly(
         id: itemId,
         item: candidateCurrItem,
         itemDetail: refreshedCurrentItemDetail,
       );
+      //
+      __blockData._blockItemDataState = const BlockItemDataStateFresh();
+      _resetBlockItemSyncSessionState(executionTrace: executionTrace);
     }
     //
     // FormModel:
@@ -2653,6 +2897,14 @@ abstract class Block<
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         traceStepType: TraceStepType.info,
       );
+
+      for (final child in thisXBlock.childXBlocks) {
+        blockSetCurrentItemResult.recordCascadedEviction(
+          childBlockName: child.name,
+          targetState: const BlockDataStatePending(),
+        );
+      }
+
       //
       // TODO: Test Cases!
       __clearAllChildrenBlocksToPending(
@@ -2702,11 +2954,13 @@ abstract class Block<
     );
     //
     final deletionResult = executionIntent.resultWrapper._setResult(
-      BlockItemDeletionResult<ITEM>(
+      BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>(
         candidateItem: executionIntent.item,
         precheck: null,
         errorInfo: null,
       ),
+      objectCaller: this,
+      methodName: '_unitDeleteItem',
     );
     //
     // Candidate Item to delete.
@@ -2880,6 +3134,7 @@ abstract class Block<
     __clearAllChildrenBlocksToNone(
       thisXBlock: thisXBlock,
     );
+    // IN: _unitDeleteItem() method.
     if (siblingItem != null) {
       final setCurrentItemDirective =
           BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
@@ -2891,6 +3146,7 @@ abstract class Block<
         forceReloadItem: false,
         forceTypeForForm: null,
       );
+      thisXBlock.stagePredecessorResult(deletionResult);
     }
     //
     executionTrace._addLineFlowSeparator();
@@ -2961,7 +3217,11 @@ abstract class Block<
     );
     //
     final deletionResult = executionIntent.resultWrapper._setResult(
-      BlockItemsDeletionResult<ITEM>(candidateItems: executionIntent.items),
+      BlockItemsDeletionResult<ID, ITEM, ITEM_DETAIL>(
+        candidateItems: executionIntent.items,
+      ),
+      objectCaller: this,
+      methodName: '_unitDeleteItems',
     );
     //
     // Precheck: No need to check again!.
@@ -3207,6 +3467,8 @@ abstract class Block<
     //
     final executionResult = executionIntent.resultWrapper._setResult(
       PrepareItemCreationResult(),
+      objectCaller: this,
+      methodName: '_unitPrepareFormToCreateItem',
     );
     //
     const ID? nullId = null;
@@ -3312,9 +3574,12 @@ abstract class Block<
       traceStepType: TraceStepType.debug,
     );
     final action = executionIntent.action;
-    final BlockQuickItemCreationResult executionUnitResult = executionIntent
-        .resultWrapper
-        ._setResult(BlockQuickItemCreationResult());
+    final BlockQuickItemCreationResult executionUnitResult =
+        executionIntent.resultWrapper._setResult(
+      BlockQuickItemCreationResult(),
+      objectCaller: this,
+      methodName: '_unitQuickCreateItem',
+    );
     //
     // (No Precheck Again)
     //
@@ -3423,7 +3688,11 @@ abstract class Block<
     );
     final action = executionIntent.action;
     final BlockQuickItemUpdateResult executionUnitResult =
-        executionIntent.resultWrapper._setResult(BlockQuickItemUpdateResult());
+        executionIntent.resultWrapper._setResult(
+      BlockQuickItemUpdateResult(),
+      objectCaller: this,
+      methodName: '_unitQuickUpdateItem',
+    );
     //
     // No Need Precheck Again.
     //
@@ -3538,6 +3807,8 @@ abstract class Block<
     final action = executionIntent.action;
     final executionUnitResult = executionIntent.resultWrapper._setResult(
       BlockBackendActionResult(),
+      objectCaller: this,
+      methodName: '_unitBackendAction',
     );
     //
     final FILTER_CRITERIA blockCurrentFilterCriteria = filterCriteria!;
@@ -3592,7 +3863,7 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#45400",
-      shortDesc: "Calling _updateSyncSessionState()",
+      shortDesc: "Calling _updateBlockSyncSessionState()",
       parameters: {
         "syncStrategyOnFullQueryMode":
             action.config.syncStrategyOnFullQueryMode,
@@ -3602,7 +3873,7 @@ abstract class Block<
       traceStepType: TraceStepType.nonControllableCalling,
     );
     //
-    _updateSyncSessionState(
+    _updateBlockSyncSessionState(
       executionTrace: executionTrace,
       xBlock: thisXBlock,
       eventSourceType: EventSourceType.internal,
@@ -4081,7 +4352,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_ReturnExecutionUnitResultMethodAnnotation()
-  Future<BlockItemDeletionResult<ITEM>> __deleteItem({
+  Future<BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>> __deleteItem({
     required ExecutionTrace executionTrace,
     required String methodName,
     required ITEM? item,
@@ -4126,7 +4397,7 @@ abstract class Block<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return BlockItemDeletionResult<ITEM>(
+      return BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>(
         candidateItem: item,
         precheck: actionable.errCode,
         errorInfo: actionable.errorInfo,
@@ -4139,7 +4410,7 @@ abstract class Block<
       details: getClassName(item),
     );
     if (!confirm) {
-      return BlockItemDeletionResult<ITEM>(
+      return BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>(
         candidateItem: item,
         precheck: BlockItemDeletionPrecheck.cancelled,
       );
@@ -4166,7 +4437,7 @@ abstract class Block<
   // ***************************************************************************
 
   @_ReturnExecutionUnitResultMethodAnnotation()
-  Future<BlockItemsDeletionResult<ITEM>> __deleteItems({
+  Future<BlockItemsDeletionResult<ID, ITEM, ITEM_DETAIL>> __deleteItems({
     required ExecutionTrace executionTrace,
     required String methodName,
     required List<ITEM> items,
@@ -4201,7 +4472,7 @@ abstract class Block<
         shortDesc: "@actionable = ${debugObjHtml(actionable)}.",
         errorInfo: errorInfo,
       );
-      return BlockItemsDeletionResult<ITEM>(
+      return BlockItemsDeletionResult<ID, ITEM, ITEM_DETAIL>(
         candidateItems: candidateDeleteItems,
         precheck: actionable.errCode,
         errorInfo: actionable.errorInfo,
@@ -4218,7 +4489,7 @@ abstract class Block<
         codeId: "#65200",
         shortDesc: "@confirm = <b>false</b> --> Cancelled!",
       );
-      return BlockItemsDeletionResult<ITEM>(
+      return BlockItemsDeletionResult<ID, ITEM, ITEM_DETAIL>(
         candidateItems: candidateDeleteItems,
         precheck: BlockItemsDeletionPrecheck.cancelled,
       );
@@ -4267,7 +4538,8 @@ abstract class Block<
 
   @_BlockSetItemAsCurrentAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
-  Future<BlockSetCurrentItemResult<ITEM>> __refreshItemAndSetAsCurrent({
+  Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
+      __refreshItemAndSetAsCurrent({
     required ExecutionTrace executionTrace,
     required String methodName,
     required ITEM? item,
@@ -4319,7 +4591,7 @@ abstract class Block<
         errorInfo: errorInfo,
       );
       //
-      return BlockSetCurrentItemResult<ITEM>(
+      return BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>(
         precheck: actionable.errCode,
         setCurrentItemDirective: setCurrentItemDirective,
         candidateItem: item,
@@ -4348,7 +4620,7 @@ abstract class Block<
     );
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    // Future<BlockSetCurrentItemResult<ITEM>>
+    // Future<BlockSetCurrentItemResult<ID,ITEM,ITEM_DETAIL>>
     return executionIntent.result;
   }
 
@@ -4358,7 +4630,8 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSetItemAsCurrentAnnotation()
-  Future<BlockSetCurrentItemResult<ITEM>> refreshItemAndSetAsCurrent({
+  Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
+      refreshItemAndSetAsCurrent({
     required ITEM item,
     bool forceLoadForm = false,
   }) async {
@@ -5401,7 +5674,8 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSelectFirstItemAsCurrentAnnotation()
-  Future<BlockSetCurrentItemResult<ITEM>> refreshFirstItemAndSetAsCurrent({
+  Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
+      refreshFirstItemAndSetAsCurrent({
     bool forceLoadForm = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5428,7 +5702,8 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSelectNextItemAsCurrentAnnotation()
-  Future<BlockSetCurrentItemResult<ITEM>> refreshNextItemAndSetAsCurrent({
+  Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
+      refreshNextItemAndSetAsCurrent({
     bool forceLoadForm = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5458,7 +5733,8 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSelectPreviousItemAsCurrentAnnotation()
-  Future<BlockSetCurrentItemResult<ITEM>> refreshPreviousItemAndSetAsCurrent({
+  Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
+      refreshPreviousItemAndSetAsCurrent({
     bool forceLoadForm = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5592,7 +5868,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockDeleteSelectedItemsAnnotation()
-  Future<BlockItemsDeletionResult<ITEM>> deleteSelectedItems({
+  Future<BlockItemsDeletionResult<ID, ITEM, ITEM_DETAIL>> deleteSelectedItems({
     required CurrentItemInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
@@ -5661,7 +5937,7 @@ abstract class Block<
 
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
-  Future<BlockItemsDeletionResult<ITEM>> deleteItems({
+  Future<BlockItemsDeletionResult<ID, ITEM, ITEM_DETAIL>> deleteItems({
     required List<ITEM> items,
     required bool stopIfError,
   }) async {
@@ -5692,7 +5968,8 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
-  Future<BlockItemDeletionResult<ITEM>> deleteCurrentItem() async {
+  Future<BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>>
+      deleteCurrentItem() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "deleteCurrentItem",
@@ -5716,7 +5993,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_BlockDeleteItemAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
-  Future<BlockItemDeletionResult<ITEM>> deleteItem({
+  Future<BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>> deleteItem({
     required ITEM item,
     bool errorIfItemNotInTheBlock = true,
   }) async {
@@ -5747,7 +6024,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
-  Future<BlockSetCurrentItemResult<ITEM>> refreshCurrentItem({
+  Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> refreshCurrentItem({
     bool forceLoadForm = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -8130,14 +8407,17 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  BlockItemDeletionResult<ITEM> _createEmptyItemDeletionResult() {
-    return BlockItemDeletionResult<ITEM>(candidateItem: null);
+  BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>
+      _createEmptyItemDeletionResult() {
+    return BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>(candidateItem: null);
   }
 
-  BlockItemsDeletionResult<ITEM> _createEmptyItemsDeletionResult({
+  BlockItemsDeletionResult<ID, ITEM, ITEM_DETAIL>
+      _createEmptyItemsDeletionResult({
     required List<ITEM> candidateItems,
   }) {
-    return BlockItemsDeletionResult<ITEM>(candidateItems: candidateItems);
+    return BlockItemsDeletionResult<ID, ITEM, ITEM_DETAIL>(
+        candidateItems: candidateItems);
   }
 
   PrepareItemCreationResult _createEmptyItemCreationResult() {
@@ -8181,6 +8461,25 @@ abstract class Block<
         return DebugBlockSyncSessionStateDialog<ID>(
           title: title,
           syncSessionState: _blockSyncSessionState,
+          block: this,
+        );
+      },
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> showDebugItemSyncSessionState({
+    required BuildContext context,
+    String title = "Block Item Sync Session State Inspector",
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DebugBlockItemSyncSessionStateDialog<ID>(
+          title: title,
+          itemSyncSessionState: _blockItemSyncSessionState,
           block: this,
         );
       },

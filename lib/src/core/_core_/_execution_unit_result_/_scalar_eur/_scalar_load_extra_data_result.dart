@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 class ScalarLoadExtraDataResult
     extends ExecutionUnitResult<ScalarLoadExtraDataPrecheck> {

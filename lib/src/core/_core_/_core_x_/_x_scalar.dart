@@ -54,6 +54,10 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
     return parentXScalar == null;
   }
 
+  void resetExecutionHints() {
+    __qryHint = QryHint.none;
+  }
+
   void setReQueryDone() {
     __qryHint = QryHint.none;
   }

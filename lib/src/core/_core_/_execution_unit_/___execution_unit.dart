@@ -17,7 +17,7 @@ part of '../core.dart';
 ///   └── _StorageBackendActionExecutionUnit
 ///
 @_ExecutionUnitClassAnnotation()
-abstract class  _ExecutionUnit {
+abstract class _ExecutionUnit {
   final ExecutionUnitType executionUnitType;
   final ExecutionIntent executionIntent;
 
@@ -35,12 +35,12 @@ abstract class  _ExecutionUnit {
   }
 }
 
-class NextExecutionUnit {
+class NxtExecutionUnit {
   final _ExecutionUnit? executionUnit;
   final bool yes;
   final String info;
 
-  NextExecutionUnit.yes({
+  NxtExecutionUnit.yes({
     required this.executionUnit,
     required this.info,
     required bool debug,
@@ -48,7 +48,7 @@ class NextExecutionUnit {
     PrintUtils.debug(debug, " --> [$yes] - $info");
   }
 
-  NextExecutionUnit.no({
+  NxtExecutionUnit.no({
     required this.info,
     required bool debug,
   })  : yes = false,

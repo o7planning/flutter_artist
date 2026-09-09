@@ -1,5 +1,5 @@
 part of '../core.dart';
 
-abstract class FilterInput {
+abstract class FilterInput extends Equatable {
   const FilterInput();
 }

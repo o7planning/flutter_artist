@@ -295,8 +295,11 @@ abstract class FilterModel<
       traceStepType: TraceStepType.debug,
     );
     //
-    final executionResult =
-        executionIntent.resultWrapper._setResult(EmptyExecutionUnitResult());
+    final executionResult = executionIntent.resultWrapper._setResult(
+      EmptyExecutionUnitResult(),
+      objectCaller: this,
+      methodName: '_unitLoadFilterData',
+    );
     //
     try {
       // SAME-AS: #0004
@@ -318,7 +321,7 @@ abstract class FilterModel<
       print("ERROR _unitQuery: $stackTrace");
       /* Never Error */
     } finally {
-      thisXFilterModel._createAndSetFilterModelExecutionIntentDone();
+      thisXFilterModel.resetExecutionHints();
     }
     return false;
   }
@@ -343,8 +346,11 @@ abstract class FilterModel<
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
-    final executionResult =
-        executionIntent.resultWrapper._setResult(EmptyExecutionUnitResult());
+    final executionResult = executionIntent.resultWrapper._setResult(
+      EmptyExecutionUnitResult(),
+      objectCaller: this,
+      methodName: '_unitFilterPanelChanged',
+    );
     //
     _filterModelStructure._setFilterDataState(FilterDataStatePending());
     //

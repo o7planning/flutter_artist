@@ -1,4 +1,4 @@
-part of '../core.dart';
+part of '../../core.dart';
 
 class ScalarQueryResult extends ExecutionUnitResult<ScalarQueryPrecheck> {
   ScalarQueryResult({required super.precheck});
