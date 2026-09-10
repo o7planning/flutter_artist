@@ -2,21 +2,19 @@ part of '../core.dart';
 
 /// Mô hình quản lý biểu mẫu và validation chuyên biệt cho Task.
 abstract class TaskFormModel<
-        TASK_DATA extends TaskData,
-        FORM_INPUT extends FormInput,
-        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends _Core {
+TASK_DATA extends TaskData,
+FORM_INPUT extends FormInput,
+ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core {
   late final Task<
       TASK_DATA, //
       FORM_INPUT,
       ADDITIONAL_FORM_RELATED_DATA> task;
 
-  void _bindToTask(
-      Task<
-              TASK_DATA, //
-              FORM_INPUT,
-              ADDITIONAL_FORM_RELATED_DATA>
-          task) {
+  void _bindToTask(Task<
+      TASK_DATA, //
+      FORM_INPUT,
+      ADDITIONAL_FORM_RELATED_DATA>
+  task) {
     this.task = task;
   }
 

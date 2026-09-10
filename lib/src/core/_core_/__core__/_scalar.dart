@@ -520,30 +520,6 @@ abstract class Scalar<
         // }
       }
       return;
-    } else if (queryHint == QryHint.markAsPending) {
-      executionTrace._addTraceStep(
-        codeId: "#12140",
-        shortDesc:
-            "@queryHint: $queryHint, @dataState: $dataState, @value: ${debugObjHtml(this.value)}.",
-      );
-      //
-      executionTrace._addTraceStep(
-        codeId: "#12180",
-        shortDesc:
-            "${debugObjHtml(this)} --> clear data and set to <b>pending</b> state. "
-            "Clear data of child scalars and set them to <b>none</b>."
-            "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-        traceStepType: TraceStepType.info,
-      );
-      //
-      this.__clearWithDataStateAndChildrenToNonCascade(
-        thisXScalar: thisXScalar,
-        scalarDataState: ScalarDataStatePending(),
-        errorInFilter: false,
-        resetSyncSessionState: true,
-      );
-      thisXScalar.setReQueryDone();
-      return;
     }
     //
     // this.dataState != DataState.loaded || thisXScalar.queryHint

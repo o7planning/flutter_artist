@@ -1,7 +1,5 @@
 enum QryHint {
-  force(2),
-  @Deprecated("No longer use")
-  markAsPending(1),
+  force(1),
   none(0);
 
   final int value;

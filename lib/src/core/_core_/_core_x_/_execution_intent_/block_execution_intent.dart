@@ -100,7 +100,7 @@ final class BlockDeleteItemIntent<
         ITEM,
         ITEM_DETAIL,
         BlockItemDeletionPrecheck,
-        BlockItemDeletionResult<ID,ITEM,ITEM_DETAIL>> {
+        BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>> {
   final ITEM item;
 
   BlockDeleteItemIntent({
@@ -117,7 +117,7 @@ final class BlockDeleteItemsIntent<
         ITEM,
         ITEM_DETAIL,
         BlockItemsDeletionPrecheck,
-        BlockItemsDeletionResult<ID,ITEM,ITEM_DETAIL>> {
+        BlockItemsDeletionResult<ID, ITEM, ITEM_DETAIL>> {
   final List<ITEM> items;
   final bool stopIfError;
 
@@ -162,7 +162,7 @@ final class BlockSetCurrentItemIntent<
         ITEM,
         ITEM_DETAIL,
         BlockSetCurrentItemPrecheck,
-        BlockSetCurrentItemResult<ID,ITEM,ITEM_DETAIL>> {
+        BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> {
   final BlockSetCurrentItemDirective setCurrentItemDirective;
   final List<ITEM> newQueriedList;
   final ITEM? inputCandidateCurrItem;

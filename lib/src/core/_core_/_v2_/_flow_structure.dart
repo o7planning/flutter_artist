@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class FlowStructure<STAGE_ENUM extends Enum,
-FLOW_CONTEXT_DATA extends FlowContextData> {
+    FLOW_CONTEXT_DATA extends FlowContextData> {
   final FlowConfig config;
   final String? description;
   final List<

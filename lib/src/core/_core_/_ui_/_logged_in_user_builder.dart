@@ -26,12 +26,10 @@ class _LoggedInUserBuilderState
     return null;
   }
 
-
   @override
   Activity? _getRelatedActivity() {
     return null;
   }
-
 
   @override
   String getWidgetOwnerClassName() {

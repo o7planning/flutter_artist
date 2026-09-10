@@ -7,8 +7,8 @@ sealed class FormModelExecutionIntent<
   //
 }
 
-final class FormModelSaveIntent
-    extends FormModelExecutionIntent<BlockFormSavePrecheck, BlockFormSaveResult> {
+final class FormModelSaveIntent extends FormModelExecutionIntent<
+    BlockFormSavePrecheck, BlockFormSaveResult> {
   FormModelSaveIntent();
 }
 

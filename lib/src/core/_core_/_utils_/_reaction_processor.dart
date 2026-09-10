@@ -5,7 +5,7 @@ class _ReactionProcessor {
 
   void addReactionExecutionUnits({required Set<String> excludeShelfNames}) {
     ExecutionTrace executionTrace =
-    FlutterArtist.codeFlowLogger._createPendingEventProcessorExecutionTrace(
+        FlutterArtist.codeFlowLogger._createPendingEventProcessorExecutionTrace(
       ownerClassInstance: this,
     );
     executionTrace._addTraceStep(
@@ -45,12 +45,12 @@ class _ReactionProcessor {
         continue;
       }
       bool hasPendingOrStaleMember =
-      listenerShelf.hasPendingOrStaleMember(requiresVisible: true);
+          listenerShelf.hasPendingOrStaleMember(requiresVisible: true);
       if (!hasPendingOrStaleMember) {
         executionTrace._addTraceStep(
           codeId: "#27300",
           shortDesc:
-          "${debugObjHtml(listenerShelf)}: Has no pending or stale members.",
+              "${debugObjHtml(listenerShelf)}: Has no pending or stale members.",
           traceStepType: TraceStepType.separator,
         );
         continue;
@@ -58,8 +58,7 @@ class _ReactionProcessor {
       executionTrace._addTraceStep(
         codeId: "#27400",
         shortDesc:
-        "${debugObjHtml(
-            listenerShelf)}: Add Shelf External Reaction Execution Unit.",
+            "${debugObjHtml(listenerShelf)}: Add Shelf External Reaction Execution Unit.",
         traceStepType: TraceStepType.separator,
       );
       listenerShelf._addShelfExternalReactionExecutionUnit(

@@ -89,7 +89,7 @@ class _EventHelper {
       for (Block blockToCheck in shelf.blocks) {
         // Resolve all reaction data types for the listener block
         final Set<Type> listenerResolvedTypes =
-        blockToCheck.getResolvedReactionDataTypes(target: null);
+            blockToCheck.getResolvedReactionDataTypes(target: null);
 
         // Check if any affected type matches the resolved listener reaction types
         if (affectedItemTypeEvents
@@ -138,7 +138,7 @@ class _EventHelper {
   }) {
     Map<String, Block> foundMap = {};
     final Set<Type> listenerResolvedTypes =
-    listenerBlock.getResolvedReactionDataTypes(target: null);
+        listenerBlock.getResolvedReactionDataTypes(target: null);
 
     if (listenerResolvedTypes.isEmpty) {
       return [];
@@ -147,7 +147,7 @@ class _EventHelper {
     for (Shelf shelf in storage.getAllShelves()) {
       for (Block blk in shelf.blocks) {
         final Set<Type> broadcastResolvedTypes =
-        blk.getResolvedBroadcastDataTypes();
+            blk.getResolvedBroadcastDataTypes();
 
         if (broadcastResolvedTypes.isEmpty) {
           continue;
@@ -219,7 +219,7 @@ class _EventHelper {
   }) {
     Map<String, Block> foundMap = {};
     Set<Type> listenerResolvedTypes =
-    listenerScalar.getResolvedReactionDataTypes();
+        listenerScalar.getResolvedReactionDataTypes();
 
     if (listenerResolvedTypes.isEmpty) {
       return [];
@@ -228,7 +228,7 @@ class _EventHelper {
     for (Shelf shelf in storage.getAllShelves()) {
       for (Block blk in shelf.blocks) {
         final Set<Type> broadcastResolvedTypes =
-        blk.getResolvedBroadcastDataTypes();
+            blk.getResolvedBroadcastDataTypes();
 
         if (broadcastResolvedTypes.isEmpty) {
           continue;
@@ -286,7 +286,7 @@ class _EventHelper {
       }
 
       List<Block> eventBlocks =
-      _getEventBlocksByShelf(listenerShelf: listenerShelf);
+          _getEventBlocksByShelf(listenerShelf: listenerShelf);
       if (eventBlocks.isNotEmpty) {
         foundShelfMap[shelfName] = listenerShelf;
         continue;
@@ -314,7 +314,7 @@ class _EventHelper {
             blockType: listenerBlock.runtimeType,
             classDefinition: listenerBlock.debug.classDefinition,
             classParameterDefinition:
-            listenerBlock.debug.classParametersDefinition,
+                listenerBlock.debug.classParametersDefinition,
           ),
         );
       }
@@ -325,7 +325,7 @@ class _EventHelper {
             scalarType: listenerScalar.runtimeType,
             classDefinition: listenerScalar.debug.classDefinition,
             classParameterDefinition:
-            listenerScalar.debug.classParametersDefinition,
+                listenerScalar.debug.classParametersDefinition,
           ),
         );
       }
@@ -340,8 +340,8 @@ class _EventHelper {
     Map<String, Shelf> listenerMap = _getListenerShelves();
     Map<String, Shelf> map = {}..addAll(storage._shelfMap);
     map.removeWhere(
-          (shelfName, shelf) =>
-      eventMap.keys.contains(shelfName) ||
+      (shelfName, shelf) =>
+          eventMap.keys.contains(shelfName) ||
           listenerMap.keys.contains(shelfName),
     );
     return map;

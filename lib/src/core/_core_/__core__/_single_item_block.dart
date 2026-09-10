@@ -21,12 +21,12 @@ part of '../core.dart';
 /// ```
 ///
 abstract class SingleItemBlock<
-ID extends Comparable, //
-ITEM_DETAIL extends Identifiable<ID>,
-FILTER_INPUT extends FilterInput,
-FILTER_CRITERIA extends FilterCriteria,
-FORM_INPUT extends FormInput,
-ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> //
+        ID extends Comparable, //
+        ITEM_DETAIL extends Identifiable<ID>,
+        FILTER_INPUT extends FilterInput,
+        FILTER_CRITERIA extends FilterCriteria,
+        FORM_INPUT extends FormInput,
+        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> //
     extends Block<
         ID, //
         ITEM_DETAIL,

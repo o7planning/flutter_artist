@@ -4,6 +4,7 @@ class ExecutionUnitResultWrapper<
     PRECHECK, //
     EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>> {
   EXECUTION_RESULT? _result;
+
   EXECUTION_RESULT? get result => _result;
 
   ExecutionUnitResultWrapper();

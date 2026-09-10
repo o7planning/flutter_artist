@@ -29,9 +29,8 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
     }
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
-      '[NavigatorObserver] -----------------> Route didPush: ${route.settings
-          .name}'
-          ' - previousRoute: ${previousRoute?.settings.name}',
+      '[NavigatorObserver] -----------------> Route didPush: ${route.settings.name}'
+      ' - previousRoute: ${previousRoute?.settings.name}',
     );
     //
     super.didPush(route, previousRoute);
@@ -41,8 +40,7 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
   bool debugObservingRoute(ModalRoute route) {
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
-      '[NavigatorObserver] -----------------> Route debugObservingRoute: ${route
-          .settings.name}',
+      '[NavigatorObserver] -----------------> Route debugObservingRoute: ${route.settings.name}',
     );
     //
     return super.debugObservingRoute(route);
@@ -56,9 +54,8 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
     }
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
-      '[NavigatorObserver] -----------------> Route didPop: ${route.settings
-          .name}'
-          ' - previousRoute: ${previousRoute?.settings.name}',
+      '[NavigatorObserver] -----------------> Route didPop: ${route.settings.name}'
+      ' - previousRoute: ${previousRoute?.settings.name}',
     );
     //
     super.didPop(route, previousRoute);
@@ -68,9 +65,8 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
   void didChangeTop(Route<dynamic> topRoute, Route<dynamic>? previousTopRoute) {
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
-      '[NavigatorObserver] -----------------> Route didChangeTop: ${topRoute
-          .settings.name}'
-          ' - previousTopRoute: ${previousTopRoute?.settings.name}',
+      '[NavigatorObserver] -----------------> Route didChangeTop: ${topRoute.settings.name}'
+      ' - previousTopRoute: ${previousTopRoute?.settings.name}',
     );
     //
     if (topRoute is ModalRoute) {
@@ -88,9 +84,8 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
     }
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
-      '[NavigatorObserver] -----------------> Route didRemove: ${route.settings
-          .name}'
-          ' - previousRoute: ${previousRoute?.settings.name}',
+      '[NavigatorObserver] -----------------> Route didRemove: ${route.settings.name}'
+      ' - previousRoute: ${previousRoute?.settings.name}',
     );
     //
     super.didRemove(route, previousRoute);
@@ -107,22 +102,20 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
     }
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
-      '[NavigatorObserver] -----------------> Route didReplace: ${newRoute
-          ?.settings.name}'
-          ' - oldRoute: ${oldRoute?.settings.name}',
+      '[NavigatorObserver] -----------------> Route didReplace: ${newRoute?.settings.name}'
+      ' - oldRoute: ${oldRoute?.settings.name}',
     );
     //
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
   }
 
   @override
-  void didStartUserGesture(Route<dynamic> route,
-      Route<dynamic>? previousRoute) {
+  void didStartUserGesture(
+      Route<dynamic> route, Route<dynamic>? previousRoute) {
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
-      '[NavigatorObserver] -----------------> Route didStartUserGesture: ${route
-          .settings.name}'
-          ' - previousRoute: ${previousRoute?.settings.name}',
+      '[NavigatorObserver] -----------------> Route didStartUserGesture: ${route.settings.name}'
+      ' - previousRoute: ${previousRoute?.settings.name}',
     );
     //
     super.didStartUserGesture(route, previousRoute);
@@ -142,9 +135,8 @@ class _FlutterArtistNavigatorObserver extends RouteObserver<ModalRoute> {
   void subscribe(RouteAware routeAware, ModalRoute route) {
     DebugPrinter.printDebug(
       DebugCat.navigatorObserver,
-      '[NavigatorObserver] -----------------> Route subscribe: ${route.settings
-          .name}'
-          ' - routeAware: $routeAware',
+      '[NavigatorObserver] -----------------> Route subscribe: ${route.settings.name}'
+      ' - routeAware: $routeAware',
     );
     //
     super.subscribe(routeAware, route);

@@ -13,9 +13,9 @@ class _FormModelLoadDataExecutionUnit
     required this.xFormModel,
     required this.executionIntent,
   }) : super(
-    executionUnitType: ExecutionUnitType.formModelLoadData,
-    executionIntent: executionIntent,
-  );
+          executionUnitType: ExecutionUnitType.formModelLoadData,
+          executionIntent: executionIntent,
+        );
 
   @override
   XShelf get xShelf => xFormModel.xShelf;

@@ -13,9 +13,9 @@ class _FormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
     required this.xFormModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.formModelPatchFormFields,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.formModelPatchFormFields,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xFormModel.xShelf;

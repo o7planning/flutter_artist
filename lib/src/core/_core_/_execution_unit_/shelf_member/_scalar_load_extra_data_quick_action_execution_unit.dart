@@ -3,9 +3,9 @@ part of '../../core.dart';
 @_ExecutionUnitClassAnnotation()
 @_ScalarLoadExtraDataQuickActionAnnotation()
 class _ScalarLoadExtraDataQuickActionExecutionUnit<
-    ID extends Comparable, //
-    VALUE extends Identifiable<ID>,
-    DATA extends Object> extends _ShelfMemberExecutionUnit {
+ID extends Comparable, //
+VALUE extends Identifiable<ID>,
+DATA extends Object> extends _ShelfMemberExecutionUnit {
   final XScalar xScalar;
 
   @override
@@ -15,9 +15,9 @@ class _ScalarLoadExtraDataQuickActionExecutionUnit<
     required this.xScalar,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.scalarLoadExtraData,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.scalarLoadExtraData,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xScalar.xShelf;

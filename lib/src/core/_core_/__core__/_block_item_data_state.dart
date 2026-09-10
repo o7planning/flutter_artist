@@ -6,8 +6,11 @@ sealed class BlockItemDataState {
   const BlockItemDataState();
 
   bool get isNone => this is BlockItemDataStateNone;
+
   bool get isPending => this is BlockItemDataStatePending;
+
   bool get isFresh => this is BlockItemDataStateFresh;
+
   bool get isStale => this is BlockItemDataStateStale;
 
   String toBriefInfo();

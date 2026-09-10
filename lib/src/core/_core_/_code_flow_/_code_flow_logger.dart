@@ -145,9 +145,11 @@ class CodeFlowLogger {
 
   ExecutionTrace _createEventDispatcherExecutionTrace({
     required Object ownerClassInstance,
+    required EventSourceType eventSourceType,
   }) {
     ExecutionTrace log = EventDispatcherExecutionTrace(
       ownerClassInstance: ownerClassInstance,
+      eventSourceType: eventSourceType,
     );
     __addExecutionTrace(log);
     return log;

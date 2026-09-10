@@ -23,8 +23,7 @@ class FuncCallInfo {
   FuncCallInfo({
     required this.funcName,
     this.arguments,
-  })
-      : callerFuncName = null,
+  })  : callerFuncName = null,
         filePath = null,
         lineNumber = null,
         columnNumber = null;

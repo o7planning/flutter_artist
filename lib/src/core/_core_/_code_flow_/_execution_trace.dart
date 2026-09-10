@@ -9,8 +9,8 @@ class NavigationIntentExecutionTrace extends ExecutionTrace {
     required super.ownerClassInstance,
     required this.navigationIntent,
   }) : super(
-          executionTraceType: ExecutionTraceType.navigationIntent,
-        );
+    executionTraceType: ExecutionTraceType.navigationIntent,
+  );
 
   @override
   String getSubtitle() {
@@ -34,37 +34,39 @@ class MethodCallExecutionTrace extends ExecutionTrace {
     required this.funcCallInfo,
     required this.isLibMethod,
   }) : super(
-          executionTraceType: isLibMethod
-              ? ExecutionTraceType.libMethodCall
-              : ExecutionTraceType.userMethodCall,
-        );
+    executionTraceType: isLibMethod
+        ? ExecutionTraceType.libMethodCall
+        : ExecutionTraceType.userMethodCall,
+  );
 
   MethodCallExecutionTrace._methodCallFromStackTrace({
     required super.ownerClassInstance,
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? arguments,
     required this.isLibMethod,
-  })  : funcCallInfo = FuncCallInfo.fromCurrentStackTrace(
-          currentStackTrace: currentStackTrace,
-          arguments: arguments,
-        ),
+  })
+      : funcCallInfo = FuncCallInfo.fromCurrentStackTrace(
+    currentStackTrace: currentStackTrace,
+    arguments: arguments,
+  ),
         super(
-          executionTraceType: isLibMethod
-              ? ExecutionTraceType.libMethodCall
-              : ExecutionTraceType.userMethodCall,
-        );
+        executionTraceType: isLibMethod
+            ? ExecutionTraceType.libMethodCall
+            : ExecutionTraceType.userMethodCall,
+      );
 
   MethodCallExecutionTrace._methodCall({
     required super.ownerClassInstance,
     required String methodName,
     required Map<String, dynamic>? arguments,
     required this.isLibMethod,
-  })  : funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
+  })
+      : funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
         super(
-          executionTraceType: isLibMethod
-              ? ExecutionTraceType.libMethodCall
-              : ExecutionTraceType.userMethodCall,
-        );
+        executionTraceType: isLibMethod
+            ? ExecutionTraceType.libMethodCall
+            : ExecutionTraceType.userMethodCall,
+      );
 
   @override
   String getSubtitle() {
@@ -90,11 +92,6 @@ class MethodCallExecutionTrace extends ExecutionTrace {
 
   Color titleIconColor() {
     if (isLibMethod) {
-      // if (isLibPublicMethod) {
-      //   return CodeFlowConstants.libPublicCodeIconColor;
-      // } else {
-      //   return CodeFlowConstants.libPrivateCodeIconColor;
-      // }
       return CodeFlowConstants.libPrivateCodeIconColor;
     } else {
       return CodeFlowConstants.devCodeIconColor;
@@ -156,7 +153,8 @@ class ExecutionUnitExecutionTrace extends ExecutionTrace {
 
   @override
   String getSubtitle() {
-    return "${getClassNameWithoutGenerics(ownerClassInstance)} - (${traceSteps.length})";
+    return "${getClassNameWithoutGenerics(ownerClassInstance)} - (${traceSteps
+        .length})";
   }
 
   @override
@@ -182,18 +180,38 @@ class StartupExecutionTrace extends ExecutionTrace {
 }
 
 class EventDispatcherExecutionTrace extends ExecutionTrace {
+  final EventSourceType eventSourceType;
+
   EventDispatcherExecutionTrace({
     required super.ownerClassInstance,
-  }) : super(executionTraceType: ExecutionTraceType.dispatchExternalEvents);
+    required this.eventSourceType,
+  }) : super(
+    executionTraceType: switch (eventSourceType) {
+      EventSourceType.internal =>
+      ExecutionTraceType.dispatchInternalEvents,
+      EventSourceType.external =>
+      ExecutionTraceType.dispatchExternalEvents,
+    },
+  );
 
   @override
   String getSubtitle() {
-    return "Dispatch External Events...";
+    switch (eventSourceType) {
+      case EventSourceType.internal:
+        return "Dispatch Internal Events...";
+      case EventSourceType.external:
+        return "Dispatch External Events...";
+    }
   }
 
   @override
   String getTitle() {
-    return "DispatchExternalEvents";
+    switch (eventSourceType) {
+      case EventSourceType.internal:
+        return "EventDispatcher";
+      case EventSourceType.external:
+        return "EventDispatcher";
+    }
   }
 }
 

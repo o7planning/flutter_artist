@@ -174,10 +174,10 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
               textColor = Colors.red;
               showReQueryIcon = true;
             }
-            if (!data.isReloadCurrItemDone()) {
-              textColor = Colors.red;
-              showRefreshCurrItemIcon = true;
-            }
+            // if (!data.isReloadCurrItemDone()) {
+            //   textColor = Colors.red;
+            //   showRefreshCurrItemIcon = true;
+            // }
           } else if (data is XFormModel) {
             title = data.name;
             tooltip = "FormModel: $title";

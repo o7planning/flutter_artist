@@ -1,6 +1,5 @@
 part of '../../core.dart';
 
-
 sealed class FilterModelExecutionIntent<
         PRECHECK, //
         EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>

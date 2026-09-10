@@ -9,6 +9,7 @@ enum ExecutionTraceType {
   libMethodCall,
   navigationIntent,
   deferredEvent,
+  dispatchInternalEvents,
   dispatchExternalEvents;
 
   String get desc {
@@ -31,8 +32,10 @@ enum ExecutionTraceType {
         return Icons.star; // settings_suggest
       case ExecutionTraceType.navigationIntent:
         return Icons.navigation;
+      case ExecutionTraceType.dispatchInternalEvents:
+        return Icons.sensors;
       case ExecutionTraceType.dispatchExternalEvents:
-        return Icons.podcasts;
+        return Icons.cell_tower;
     }
   }
 
@@ -55,8 +58,10 @@ enum ExecutionTraceType {
         return context.faColors.action.ink.success;
       case ExecutionTraceType.deferredEvent:
         return Colors.orangeAccent;
+      case ExecutionTraceType.dispatchInternalEvents:
+        return Colors.orangeAccent[800] ?? Colors.orangeAccent;
       case ExecutionTraceType.dispatchExternalEvents:
-        return Colors.orangeAccent;
+        return Colors.orangeAccent[900] ?? Colors.orangeAccent;
       case ExecutionTraceType.startup:
         return theme.colorScheme.onSurface.withValues(alpha: 0.5);
       case ExecutionTraceType.libMethodCall:
@@ -82,8 +87,10 @@ enum ExecutionTraceType {
         return "Init Execution Unit for Deferred Events";
       case ExecutionTraceType.navigationIntent:
         return "Navigation Intent";
+      case ExecutionTraceType.dispatchInternalEvents:
+        return "Dispatch Internal Events";
       case ExecutionTraceType.dispatchExternalEvents:
-        return "Dispatch Events";
+        return "Dispatch External Events";
     }
   }
 }

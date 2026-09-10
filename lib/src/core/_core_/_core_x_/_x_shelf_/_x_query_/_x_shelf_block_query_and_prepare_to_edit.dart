@@ -9,9 +9,9 @@ class _XShelfBlockQueryThenPrepareToEdit extends _XShelfBaseQuery {
     required BlockAfterQueryDirective? afterQueryDirective,
     required SuggestedSelection<dynamic>? suggestedSelection,
   }) : super(
-          xShelfType: XShelfType.blockQueryAndPrepareToEdit,
-          shelf: block.shelf,
-        ) {
+    xShelfType: XShelfType.blockQueryAndPrepareToEdit,
+    shelf: block.shelf,
+  ) {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: block.registeredOrDefaultFilterModel,
       filterInput: filterInput,

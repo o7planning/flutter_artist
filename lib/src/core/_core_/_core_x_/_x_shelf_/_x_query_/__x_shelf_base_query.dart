@@ -26,8 +26,11 @@ class _XShelfBaseQuery extends XShelf {
     }
     //
     final thisXFilterModel = xFilterModelMap[filterModel.name]!;
-    if (thisXFilterModel.filterInput != filterInput) {
-      thisXFilterModel.filterInput = filterInput;
+    // Important:
+    final oldFilterInput = thisXFilterModel.filterInput;
+    // Always set.
+    thisXFilterModel.filterInput = filterInput;
+    if (oldFilterInput != filterInput) {
       thisXFilterModel.queried = false;
     }
     if (forceReloadFilter) {
@@ -58,7 +61,7 @@ class _XShelfBaseQuery extends XShelf {
     //
     for (XBlock xBlock in thisXFilterModel.xBlocks) {
       final Block block = xBlock.block;
-      QryHint queryHint = forceQueryAll ? QryHint.force : QryHint.markAsPending;
+      QryHint queryHint = forceQueryAll ? QryHint.force : QryHint.none;
       bool isSrcBlock = false;
       if (srcBlockAndOptions != null) {
         final Block srcBlock = srcBlockAndOptions.block;
@@ -113,7 +116,7 @@ class _XShelfBaseQuery extends XShelf {
     //
     for (XScalar xScalar in thisXFilterModel.xScalars) {
       final Scalar scalar = xScalar.scalar;
-      QryHint queryHint = forceQueryAll ? QryHint.force : QryHint.markAsPending;
+      QryHint queryHint = forceQueryAll ? QryHint.force : QryHint.none;
       if (srcScalarAndOptions != null) {
         final Scalar srcScalar = srcScalarAndOptions.scalar;
         if (srcScalar.isSameWith(scalar)) {

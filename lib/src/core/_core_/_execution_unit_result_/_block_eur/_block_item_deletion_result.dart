@@ -1,11 +1,12 @@
 part of '../../core.dart';
 
 class BlockItemDeletionResult<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockExecutionUnitResult<ID, ITEM, ITEM_DETAIL,
-        BlockItemDeletionPrecheck> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionUnitResult<ID,
+    ITEM,
+    ITEM_DETAIL,
+    BlockItemDeletionPrecheck> {
   ITEM? _candidateItem;
   ITEM? _deletedItem;
   ITEM? _failedItem;

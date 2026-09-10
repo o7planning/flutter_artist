@@ -53,7 +53,7 @@ class _ScalarSyncSessionState<ID extends Comparable> extends Equatable
     // 3. If currently FRESH, transition to STALE due to received event invalidation
     if (currentDataState.isFresh) {
       final isFromInternalShelf = _receivedEventInfos.any(
-        (info) => info.eventSourceType == EventSourceType.internal,
+            (info) => info.eventSourceType == EventSourceType.internal,
       );
 
       return ScalarDataStateLoadedStale(
@@ -69,6 +69,7 @@ class _ScalarSyncSessionState<ID extends Comparable> extends Equatable
 
   @override
   String toString() {
-    return "parentScalarValueId: $parentScalarValueId, filterCriteria: ${filterCriteria == null ? 'null' : 'OK'}";
+    return "parentScalarValueId: $parentScalarValueId, filterCriteria: ${filterCriteria ==
+        null ? 'null' : 'OK'}";
   }
 }

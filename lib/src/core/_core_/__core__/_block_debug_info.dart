@@ -1,13 +1,8 @@
 part of '../core.dart';
 
 class _BlockDebugInfo<ID extends Comparable> {
-  final Block<ID,
-      Identifiable<ID>,
-      Identifiable<ID>,
-      FilterInput,
-      FilterCriteria,
-      FormInput,
-      AdditionalFormRelatedData> _block;
+  final Block<ID, Identifiable<ID>, Identifiable<ID>, FilterInput,
+      FilterCriteria, FormInput, AdditionalFormRelatedData> _block;
 
   int _lazyLoadCount = 0;
 
@@ -48,8 +43,7 @@ class _BlockDebugInfo<ID extends Comparable> {
   }
 
   String get classParametersDefinition {
-    return "<${_block.getItemIdType()}, ${_block.getItemType()}, ${_block
-        .getItemDetailType()}, "
+    return "<${_block.getItemIdType()}, ${_block.getItemType()}, ${_block.getItemDetailType()}, "
         "${_block.getFilterInputType()}, ${_block.getFilterCriteriaType()}, "
         "${_block.getFormInputType()}, ${_block.getFormRelatedDataType()}>";
   }
@@ -77,13 +71,13 @@ class _BlockDebugInfo<ID extends Comparable> {
 
   _BlockDebugInfo({
     required Block<
-        ID, //
-        Identifiable<ID>,
-        Identifiable<ID>,
-        FilterInput,
-        FilterCriteria,
-        FormInput,
-        AdditionalFormRelatedData>
-    block,
+            ID, //
+            Identifiable<ID>,
+            Identifiable<ID>,
+            FilterInput,
+            FilterCriteria,
+            FormInput,
+            AdditionalFormRelatedData>
+        block,
   }) : _block = block;
 }

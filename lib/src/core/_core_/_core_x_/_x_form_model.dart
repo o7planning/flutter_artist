@@ -1,8 +1,8 @@
 part of '../core.dart';
 
 class XFormModel<
-    ID extends Comparable, //
-    ITEM_DETAIL extends Identifiable<ID>> {
+ID extends Comparable, //
+ITEM_DETAIL extends Identifiable<ID>> {
   XShelf get xShelf => xBlock.xShelf;
 
   final FormModel formModel;
@@ -69,12 +69,12 @@ class XFormModel<
   // ***************************************************************************
 
   FormModelPatchFormFieldsIntent
-      _createAndSetFormModelExecutionIntentPatchFormFields<
-          FORM_INPUT extends FormInput>({
+  _createAndSetFormModelExecutionIntentPatchFormFields<
+  FORM_INPUT extends FormInput>({
     required FORM_INPUT formInput,
   }) {
     final executionIntent =
-        FormModelPatchFormFieldsIntent(formInput: formInput);
+    FormModelPatchFormFieldsIntent(formInput: formInput);
     _executionIntent = executionIntent;
     return executionIntent;
   }
@@ -98,7 +98,8 @@ class XFormModel<
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "FormModel (1.1) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. ",
+          "FormModel (1.1) (${formModel.block
+              .name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. ",
         );
       }
       // [IN: _executionIntent: null] - dataState: Pending.
@@ -112,14 +113,16 @@ class XFormModel<
               executionIntent: _executionIntent as FormModelDataLoadIntent,
             ),
             info:
-                "FormModel (1.2.1) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
+            "FormModel (1.2.1) (${formModel.block
+                .name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "FormModel (1.2.2) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
+            "FormModel (1.2.2) (${formModel.block
+                .name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         }
@@ -135,14 +138,16 @@ class XFormModel<
               executionIntent: _executionIntent as FormModelDataLoadIntent,
             ),
             info:
-                "FormModel (1.3.1) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
+            "FormModel (1.3.1) (${formModel.block
+                .name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "FormModel (1.3.2) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
+            "FormModel (1.3.2) (${formModel.block
+                .name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         }
@@ -158,14 +163,16 @@ class XFormModel<
               executionIntent: _executionIntent as FormModelDataLoadIntent,
             ),
             info:
-                "FormModel (1.4.1) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
+            "FormModel (1.4.1) (${formModel.block
+                .name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "FormModel (1.4.2) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
+            "FormModel (1.4.2) (${formModel.block
+                .name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
                 "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
           );
         }
@@ -175,7 +182,8 @@ class XFormModel<
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "FormModel (1.5.1) (${formModel.block.name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
+          "FormModel (1.5.1) (${formModel.block
+              .name}), _executionIntent: $_executionIntent, dataState: $formModelDataState. "
               "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
         );
       }
@@ -193,7 +201,8 @@ class XFormModel<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "FormModel (2) ${formModel.block.name}, _executionIntent: $_executionIntent. "
+        "FormModel (2) ${formModel.block
+            .name}, _executionIntent: $_executionIntent. "
             "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
       );
     }
@@ -210,7 +219,8 @@ class XFormModel<
           executionIntent: executionIntent,
         ),
         info:
-            "FormModel (3) ${formModel.block.name}, _executionIntent: $_executionIntent. "
+        "FormModel (3) ${formModel.block
+            .name}, _executionIntent: $_executionIntent. "
             "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
       );
     }
@@ -223,7 +233,8 @@ class XFormModel<
           executionIntent: executionIntent,
         ),
         info:
-            "FormModel (4) ${formModel.block.name}, _executionIntent: $_executionIntent. "
+        "FormModel (4) ${formModel.block
+            .name}, _executionIntent: $_executionIntent. "
             "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
       );
     }
@@ -236,14 +247,16 @@ class XFormModel<
           executionIntent: executionIntent,
         ),
         info:
-            "FormModel (5) ${formModel.block.name}, _executionIntent: $_executionIntent. "
+        "FormModel (5) ${formModel.block
+            .name}, _executionIntent: $_executionIntent. "
             "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
       );
     }
     return NxtExecutionUnit.no(
       debug: debug,
       info:
-          "FormModel (6) ${formModel.block.name}, _executionIntent: $_executionIntent, OTHER CASE. "
+      "FormModel (6) ${formModel.block
+          .name}, _executionIntent: $_executionIntent, OTHER CASE. "
           "__forceTypeForForm: $__forceTypeForForm, visibleX: $visibleX",
     );
   }
@@ -256,6 +269,7 @@ class XFormModel<
 
   @override
   String toString() {
-    return "${getClassName(formModel)} - lazy: $lazy - needQuery: $forceTypeForForm";
+    return "${getClassName(
+        formModel)} - lazy: $lazy - needQuery: $forceTypeForForm";
   }
 }

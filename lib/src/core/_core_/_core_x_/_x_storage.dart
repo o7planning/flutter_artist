@@ -9,9 +9,7 @@ class XStorage {
 
   bool get isNotEmpty => !isEmpty;
 
-  void _addExecutionIntent(
-    ExecutionIntent executionIntent,
-  ) {
+  void _addExecutionIntent(ExecutionIntent executionIntent,) {
     _executionIntent = executionIntent;
   }
 

@@ -15,8 +15,6 @@ class XBlock<
       dynamic,
       ExecutionUnitResult<dynamic>>? _executionIntent;
 
-  bool _reviewed = false;
-
   final _recentLoadedItemMap = <ID, _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL>>{};
 
   final Block<
@@ -111,19 +109,6 @@ class XBlock<
   // ***************************************************************************
   // ***************************************************************************
 
-  // Only Used for INTERNAL EVENT.
-  ITEM? __currItemInternalEVT;
-
-  // Only Used for INTERNAL EVENT.
-  ITEM? get currItemInternalEVT => __currItemInternalEVT;
-
-  void setCurrItemToReload(ITEM? currItemInternalEVT) {
-    __currItemInternalEVT = currItemInternalEVT;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   ///
   /// IMPORTANT: To create new XBlock, use 'block._createXBlock' method
   /// to have the same Generics Parameters with the block.
@@ -156,49 +141,17 @@ class XBlock<
   // ***************************************************************************
   // ***************************************************************************
 
-  _BlockSetItemAsCurrentExecutionUnit createBlockSetItemAsCurrentExecutionUnit({
-    required BlockSetCurrentItemDirective setCurrentItemDirective,
-    required List<Object> newQueriedList, // Do not change <Object>
-    required Object? candidateItem, // Do not change <Object>
-    required bool forceReloadItem,
-    required ForceType? forceTypeForForm,
-  }) {
-    // return _BlockSetItemAsCurrentExecutionUnit<ID, ITEM>(
-    //   setCurrentItemDirective: setCurrentItemDirective,
-    //   xBlock: this,
-    //   newQueriedList: newQueriedList.whereType<ITEM>().toList(),
-    //   candidateItem: candidateItem as ITEM?,
-    //   forceReloadItem: forceReloadItem,
-    //   forceTypeForForm: forceTypeForForm,
-    // );
-    throw UnimplementedError("TODO 112");
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   bool hasQryHintInTreeBranchAndNotProcessed() {
-    if (__qryHint == QryHint.force || __qryHint == QryHint.markAsPending) {
+    if (__qryHint == QryHint.force) {
       return true;
     }
-    // print("BLOCK: ${block} - CHILD: ${childXBlocks}");
+    //
     for (XBlock child in childXBlocks) {
       if (child.hasQryHintInTreeBranchAndNotProcessed()) {
         return true;
       }
     }
     return false;
-  }
-
-  bool hasAncestorWork() {
-    XBlock? prXBlock = parentXBlock;
-    if (prXBlock == null) {
-      return false;
-    }
-    if (prXBlock.needToReQuery() || prXBlock.needToReloadCurrItem()) {
-      return true;
-    }
-    return prXBlock.hasAncestorWork();
   }
 
   bool isRoot() {
@@ -221,27 +174,6 @@ class XBlock<
     __qryHint = QryHint.none;
     __forceReloadCurrItem = false;
     __candidateCurrItem = null;
-    __currItemInternalEVT = null;
-  }
-
-  bool needToReloadCurrItem() {
-    return !isReloadCurrItemDone();
-  }
-
-  bool isReloadCurrItemDone() {
-    if (currItemInternalEVT == null) {
-      return true;
-    }
-    final ID currItemIdToReload =
-        block._getItemIdInternal(currItemInternalEVT!);
-    // TODO: Check throw pending exception.
-    final ITEM? currItem = block.currentItem;
-    ID? currItemId =
-        currItem == null ? null : block._getItemIdInternal(currItem);
-    if (currItemId != currItemIdToReload) {
-      return true;
-    }
-    return !__forceReloadCurrItem;
   }
 
   void setForceReloadCurrItemDone() {
@@ -253,10 +185,6 @@ class XBlock<
   }
 
   void setQueryHintToGreater(QryHint queryHint) {
-    if (queryHint == QryHint.markAsPending) {
-      print("******** setQueryHintToGreater *************\n");
-      print(StackTrace.current);
-    }
     if (__qryHint.isLessThan(queryHint)) {
       __qryHint = queryHint;
     }
@@ -436,8 +364,9 @@ class XBlock<
             );
           } else if (itemDataState.isPending) {
             _createAndSetBlockExecutionIntentSetCurrentItem(
-              setCurrentItemDirective: BlockSetCurrentItemDirective
-                  .setAnItemAsCurrentIfNeed, // TODO: Hardcode?
+              setCurrentItemDirective:
+                  BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
+              // TODO: Hardcode?
               newQueriedList: [],
               inputCandidateCurrItem: null,
               forceReloadItem: true,
@@ -459,8 +388,9 @@ class XBlock<
             );
           } else if (itemDataState.isStale) {
             _createAndSetBlockExecutionIntentSetCurrentItem(
-              setCurrentItemDirective: BlockSetCurrentItemDirective
-                  .setAnItemAsCurrentIfNeed, // TODO: Hardcode?
+              setCurrentItemDirective:
+                  BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
+              // TODO: Hardcode?
               newQueriedList: [],
               inputCandidateCurrItem: null,
               forceReloadItem: true,
@@ -837,20 +767,20 @@ class XBlock<
     }
   }
 
-  // String toDebugHtmlString() {
-  //   return " - <b>XBlock (${getClassName(block)})</b>"
-  //       "\n    - <b>qryHint</b>: $queryHint"
-  //       "\n    - <b>blockSyncSessionState</b>: ${block._blockSyncSessionState}"
-  //       "\n    - <b>forceReloadItem</b>: $__forceReloadCurrItem"
-  //       "\n    - <b>blockItemRefreshCondition</b>: ${block._blockItemRefreshCondition}"
-  //       "\n    - <b>xFormModel</b>: $xFormModel";
-  // }
+// String toDebugHtmlString() {
+//   return " - <b>XBlock (${getClassName(block)})</b>"
+//       "\n    - <b>qryHint</b>: $queryHint"
+//       "\n    - <b>blockSyncSessionState</b>: ${block._blockSyncSessionState}"
+//       "\n    - <b>forceReloadItem</b>: $__forceReloadCurrItem"
+//       "\n    - <b>blockItemRefreshCondition</b>: ${block._blockItemRefreshCondition}"
+//       "\n    - <b>xFormModel</b>: $xFormModel";
+// }
 
-  // @override
-  // String toString() {
-  //   return "XBlock (${getClassName(block)}) \n"
-  //       "      - qryHint: $queryHint / blockReQryCon: ${block._blockSyncSessionState}\n"
-  //       "      - forceReloadItem: $__forceReloadCurrItem / blockItemRefreshCon: ${block._blockItemRefreshCondition} \n"
-  //       "      - xFormModel: $xFormModel";
-  // }
+// @override
+// String toString() {
+//   return "XBlock (${getClassName(block)}) \n"
+//       "      - qryHint: $queryHint / blockReQryCon: ${block._blockSyncSessionState}\n"
+//       "      - forceReloadItem: $__forceReloadCurrItem / blockItemRefreshCon: ${block._blockItemRefreshCondition} \n"
+//       "      - xFormModel: $xFormModel";
+// }
 }

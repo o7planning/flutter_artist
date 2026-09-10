@@ -4,8 +4,8 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(
-    xShelfType: XShelfType.shelfExternalReaction,
-  ) {
+          xShelfType: XShelfType.shelfExternalReaction,
+        ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk.block._blockSyncSessionState == null &&
           xBlk.block._blockItemSyncSessionState == null) {
@@ -13,7 +13,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       }
       // @@@hasActiveBlockFragment
       bool blockXBlockRep =
-      xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
+          xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
         alsoCheckChildren: true,
       );
       QryHint queryHint = QryHint.none;
@@ -27,8 +27,10 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
         }
       }
       if (xBlk.block._blockItemSyncSessionState != null &&
-          xBlk.block._blockItemSyncSessionState!.isValidFor(xBlk.block.currentItemId)) {
-        forceReloadItem = true; // Sẽ kích hoạt _unitSetItemAsCurrent với forceReloadItem = true!
+          xBlk.block._blockItemSyncSessionState!
+              .isValidFor(xBlk.block.currentItemId)) {
+        forceReloadItem =
+            true; // Sẽ kích hoạt _unitSetItemAsCurrent với forceReloadItem = true!
       }
       // if (xBlk.block._blockItemRefreshCondition != null &&
       //     xBlk.block._isMatchBlockItemRefreshCon(
@@ -48,7 +50,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
         }
         // @@@hasActiveBlockFragment
         bool blockXBlockRep =
-        xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
+            xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
           alsoCheckChildren: true,
         );
         if (blockXBlockRep) {

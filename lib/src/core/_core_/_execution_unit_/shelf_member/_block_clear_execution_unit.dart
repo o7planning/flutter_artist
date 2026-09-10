@@ -2,9 +2,9 @@ part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 class _BlockClearItemsExecutionUnit<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>>
     extends _ShelfMemberResultedExecutionUnit<BlockClearItemsResult> {
   final XBlock xBlock;
 
@@ -15,9 +15,9 @@ class _BlockClearItemsExecutionUnit<
     required this.xBlock,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.blockClear,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.blockClear,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

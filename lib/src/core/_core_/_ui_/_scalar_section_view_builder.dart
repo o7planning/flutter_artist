@@ -35,7 +35,6 @@ class _ScalarSectionViewBuilderState
     return null;
   }
 
-
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.scalar);

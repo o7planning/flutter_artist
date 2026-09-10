@@ -39,7 +39,6 @@ class _BlockItemsViewBuilderState
     return null;
   }
 
-
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);

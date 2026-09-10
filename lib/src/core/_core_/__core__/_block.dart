@@ -367,20 +367,6 @@ abstract class Block<
     return formModel!.formMode;
   }
 
-  // FormMode? get nearestAncestorFormMode {
-  //   Block? p = parent;
-  //   while (true) {
-  //     if (p == null) {
-  //       return null;
-  //     }
-  //     FormMode? pfm = p.formMode;
-  //     if (pfm != null) {
-  //       return pfm;
-  //     }
-  //     p = p.parent;
-  //   }
-  // }
-
   late final SortModel<ITEM>? _clientSideSortModel;
 
   late final SortModel<ITEM>? _serverSideSortModel;
@@ -447,6 +433,7 @@ abstract class Block<
   }) {
     _blockSyncSessionState = null;
   }
+
   // ***************************************************************************
 
   void _resetBlockItemSyncSessionState({
@@ -1424,29 +1411,6 @@ abstract class Block<
           forceReloadItem: thisXBlock.forceReloadCurrItem,
           forceTypeForForm: null,
         );
-        return;
-      case QryHint.markAsPending:
-        executionTrace._addTraceStep(
-          codeId: "#03160",
-          shortDesc: "@queryHint: $queryHint.",
-        );
-        executionTrace._addTraceStep(
-          codeId: "#03180",
-          shortDesc:
-              "Clear all items of ${debugObjHtml(this)} and set to <b>pending</b>. "
-              "Clear data of all child blocks and set them to <b>none</b>."
-              "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-        );
-        __clearWithDataStateAndChildrenToNonCascade(
-          thisXBlock: thisXBlock,
-          blkDataState: BlockDataStatePending(),
-          currentHasPendingInvalidation: false,
-          frmDataState: FormDataStateNone(),
-          errorInFilter: false,
-          resetSyncSessionState: true,
-          resetRefreshItemCondition: true,
-        );
-        thisXBlock.setReQueryDone();
         return;
       case QryHint.force:
       // Continue below:
