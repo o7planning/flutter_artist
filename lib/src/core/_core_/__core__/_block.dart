@@ -347,7 +347,8 @@ abstract class Block<
   /// Does the FilterPanel contain uncommitted draft criteria that differs
   /// from the currently applied dataset criteria?
   bool get hasUnappliedFilter =>
-      filterModel != null && filterModel!.filterCriteria != filterCriteria;
+      filterModel != null &&
+      filterModel!.committedFilterCriteria != filterCriteria;
 
   // nearestAncestorNonNoneDataState?
   BlockDataState get ancestralNonNoneDataState {
@@ -376,10 +377,10 @@ abstract class Block<
   SortModel<ITEM>? get serverSideSortModel => _serverSideSortModel;
 
   FILTER_CRITERIA? get filterCriteria =>
-      __blockData._filterCriteriaMappedValue?.filterCriteria;
+      __blockData._filterCriteriaSnapshot?.criteriaOrNull;
 
-  FilterCriteriaMappedValue<FILTER_CRITERIA>? get debugXFilterCriteria =>
-      __blockData._filterCriteriaMappedValue;
+  FilterCriteriaSnapshot<FILTER_CRITERIA>? get debugFilterCriteriaSnapshot =>
+      __blockData._filterCriteriaSnapshot;
 
   ///
   /// return a copied list of items.
@@ -503,9 +504,11 @@ abstract class Block<
           _blockSyncSessionState!.calculateNextDataState(dataState);
 
       // Test case: [63a], [63b].
+      // IN: _updateBlockSyncSessionState() method.
       if (nextState != dataState) {
         xBlock?._createAndSetBlockExecutionIntentNull(
-            lastIntentInfo: "Test Wait More");
+          lastIntentInfo: "Test Wait More",
+        );
         __blockData._blockDataState = nextState;
         executionTrace._addTraceStep(
           codeId: "#83500",
@@ -977,6 +980,9 @@ abstract class Block<
       resetSyncSessionState: resetSyncSessionState,
       resetRefreshItemCondition: resetRefreshItemCondition,
     );
+    __blockData._setBlockItemDataState(
+      newBlockItemDataState: BlockItemDataStateNone(),
+    );
     //
     if (formModel != null) {
       formModel!._clearDataWithDataState(formDataState: formDataState);
@@ -1107,9 +1113,9 @@ abstract class Block<
     }
     //
     if (filterModel != null) {
-      FilterCriteria? criteriaInFilter = filterModel!.filterCriteria;
-      FilterCriteria? criteriaInData = filterCriteria;
-      if (criteriaInFilter != criteriaInData) {
+      FilterCriteria? criteriaInFilter = filterModel!.committedFilterCriteria;
+      FilterCriteria? blockFilterCriteria = filterCriteria;
+      if (criteriaInFilter != blockFilterCriteria) {
         return true;
       }
     }
@@ -1213,11 +1219,13 @@ abstract class Block<
       objectCaller: this,
       methodName: '_unitClearCurrentItem',
     );
-    __setCurrentItemOnly(
+    //
+    __setCurrentItemOnlyAndItemState(
       id: null,
       item: null,
       itemDetail: null,
     );
+    //
     if (formModel != null) {
       executionTrace._addTraceStep(
         codeId: "#13200",
@@ -1255,7 +1263,13 @@ abstract class Block<
     required BlockQueryIntent<ID, ITEM, ITEM_DETAIL> executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
+    //
+    QryHint applyQueryHint = thisXBlock.queryHint;
+    bool applyForceReloadCurrItem = thisXBlock.forceReloadCurrItem;
+    //
+    thisXBlock._setQueriedTrue();
     thisXBlock._createAndSetBlockExecutionIntentDone(lastIntentInfo: "Query");
+    thisXBlock.resetExecutionHints();
     //
     executionTrace._addTraceStep(
       codeId: "#03000",
@@ -1270,6 +1284,13 @@ abstract class Block<
       methodName: '_unitQuery',
     );
     //
+    final XFilterModel xFilterModel = thisXBlock.xFilterModel;
+    final FilterModel filterModel = xFilterModel.filterModel;
+    final FilterCriteriaSnapshot<FILTER_CRITERIA>?
+        committedFilterCriteriaSnapshot =
+        filterModel._committedFilterCriteriaSnapshot
+            as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
+    //
     bool provideBlockContext = ui.hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
@@ -1281,17 +1302,21 @@ abstract class Block<
       tipDocument: TipDocument.blockActiveUiComponents,
     );
     //
-    QryHint queryHint = thisXBlock.queryHint;
-    if (queryHint != QryHint.force) {
+    if (applyQueryHint != QryHint.force) {
       if (provideBlockContext && (dataState.isPending || dataState.isStale)) {
-        queryHint = QryHint.force;
+        applyQueryHint = QryHint.force;
       }
     }
     //
     executionTrace._addTraceStep(
       codeId: "#03040",
-      shortDesc:
-          "Current State: ${dataState.toBriefInfo()}, @queryHint: ${debugObjHtml(queryHint)}.",
+      shortDesc: "Debug",
+      parameters: {
+        "dataState": dataState.toBriefInfo(),
+        "applyQueryHint": applyQueryHint,
+        "committedFilterCriteriaSnapshot.isError":
+            committedFilterCriteriaSnapshot?.isError,
+      },
       traceStepType: TraceStepType.debug,
     );
     //
@@ -1329,7 +1354,7 @@ abstract class Block<
       codeId: "#03050",
       shortDesc: "Debug:",
       parameters: {
-        "queryHint": queryHint,
+        "applyQueryHint": applyQueryHint,
         "viewportSyncStrategy": viewportSyncStrategy,
         "performQryMethod": performQryMethod,
       },
@@ -1342,11 +1367,11 @@ abstract class Block<
     final ITEM? candidateCurrItem;
     bool queried = false;
 
-    switch (queryHint) {
+    switch (applyQueryHint) {
       case QryHint.none:
         executionTrace._addTraceStep(
           codeId: "#03060",
-          shortDesc: "@queryHint: ${debugObjHtml(queryHint)}, "
+          shortDesc: "@applyQueryHint: ${debugObjHtml(applyQueryHint)}, "
               "@viewportSyncStrategy: ${debugObjHtml(viewportSyncStrategy)}.",
         );
         candidateCurrItem = null;
@@ -1408,66 +1433,24 @@ abstract class Block<
               BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
           newQueriedList: [],
           inputCandidateCurrItem: candidateCurrItem,
-          forceReloadItem: thisXBlock.forceReloadCurrItem,
+          forceReloadItem: applyForceReloadCurrItem,
           forceTypeForForm: null,
         );
         return;
       case QryHint.force:
       // Continue below:
     }
+    if (committedFilterCriteriaSnapshot == null) {
+      throw "TODO: Will Never Run";
+    }
     //
     // FORCE QUERY:
-    // thisXBlock.queryHint || (provideBlockContext && this.dataState != DataState.loaded)
+    // thisXBlock.applyQueryHint || (provideBlockContext && this.dataState != DataState.loaded)
     //
-    FilterCriteriaMappedValue<FILTER_CRITERIA>? filterCriteriaMvOfFilterModel;
-    try {
-      final XFilterModel xFilterModel = thisXBlock.xFilterModel;
-      final FilterModel filterModel = xFilterModel.filterModel;
-      // SAME-AS: #0004
-      if (!xFilterModel.queried) {
-        if (filterModel is! _DefaultFilterModel) {
-          executionTrace._addTraceStep(
-            codeId: "#03200",
-            shortDesc: "Need to load data for ${debugObjHtml(filterModel)}.",
-          );
-        }
-        FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
-        //
-        filterCriteriaMvOfFilterModel =
-            await filterModel._startNewFilterActivity(
-          executionTrace: executionTrace,
-          activityType: FilterActivityType.newFilt,
-          filterInput: filterInput,
-          formKeyInstantValuesInUI: null,
-        ) as FilterCriteriaMappedValue<FILTER_CRITERIA>?;
-        //
-        xFilterModel.queried = true;
-      }
-      // xFilterModel.queried
-      else {
-        if (filterModel is! _DefaultFilterModel) {
-          executionTrace._addTraceStep(
-            codeId: "#03220",
-            shortDesc:
-                "${debugObjHtml(filterModel)} data loaded --> no need to load data.",
-          );
-        }
-        filterCriteriaMvOfFilterModel = filterModel._filterCriteriaMappedValue!
-            as FilterCriteriaMappedValue<FILTER_CRITERIA>;
-      }
-    } catch (e, stackTrace) {
-      executionTrace._addTraceStep(
-        codeId: "#03240",
-        shortDesc: "Load data for ${debugObjHtml(filterModel)} error!",
-      );
-      // @@TODO@@ 12 Test.
-      print("ERROR _unitQuery: $stackTrace");
-      /* Never Error */
-    }
     //
     // Has Error in FilterModel.
     //
-    if (filterCriteriaMvOfFilterModel == null) {
+    if (committedFilterCriteriaSnapshot.isError) {
       executionTrace._addTraceStep(
         codeId: "#03260",
         shortDesc:
@@ -1479,15 +1462,17 @@ abstract class Block<
         thisXBlock: thisXBlock,
         blockErrorInfo: null,
       );
-
       return;
     }
+
     //
     // Ready FilterCriteria:
     //
+    committedFilterCriteriaSnapshot
+        as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
     final bool filterCriteriaChanged =
-        __blockData._isFilterCriteriaMappedValueChanged(
-      newFilterCriteriaMappedValue: filterCriteriaMvOfFilterModel,
+        __blockData._isFilterCriteriaSnapshotChanged(
+      newFilterCriteriaSnapshot: committedFilterCriteriaSnapshot,
     );
     //
     ActionResultState queryResultState;
@@ -1555,7 +1540,7 @@ abstract class Block<
                 "Calling ${debugObjHtml(this)}.${performQryMethod.name}()...",
             parameters: {
               "parentBlockCurrentItem": parent?.currentItem,
-              "filterCriteria": filterCriteriaMvOfFilterModel.filterCriteria,
+              "filterCriteria": committedFilterCriteriaSnapshot.criteriaOrNull,
               "sortableCriteria": sortableCriteria,
               "pageable": willBeUsedPageable,
             },
@@ -1567,7 +1552,7 @@ abstract class Block<
             debug.__performQueryCount++;
             final ApiResult<PageData<ITEM>?> result = await performQuery(
               parentBlockCurrentItem: parent?.currentItem,
-              filterCriteria: filterCriteriaMvOfFilterModel.filterCriteria,
+              filterCriteria: committedFilterCriteriaSnapshot.filterCriteria,
               sortableCriteria: sortableCriteria,
               pageable: willBeUsedPageable,
             );
@@ -1583,7 +1568,7 @@ abstract class Block<
             final ApiResult<ListData<ITEM>?> result =
                 await performQueryByItemIds(
               parentBlockCurrentItem: parent?.currentItem,
-              filterCriteria: filterCriteriaMvOfFilterModel.filterCriteria,
+              filterCriteria: committedFilterCriteriaSnapshot.filterCriteria,
               sortableCriteria: sortableCriteria,
               itemIds: queryPlan.targetItemIds.toList(),
             );
@@ -1605,7 +1590,7 @@ abstract class Block<
                 "Calling ${debugObjHtml(this)}.performQueryByItemIds()...",
             parameters: {
               "parentBlockCurrentItem": parent?.currentItem,
-              "filterCriteria": filterCriteriaMvOfFilterModel.filterCriteria,
+              "filterCriteria": committedFilterCriteriaSnapshot.criteriaOrNull,
               "sortableCriteria": sortableCriteria,
               "pageable": willBeUsedPageable,
             },
@@ -1621,7 +1606,7 @@ abstract class Block<
 
           final ApiResult<ListData<ITEM>?> result = await performQueryByItemIds(
             parentBlockCurrentItem: parent?.currentItem,
-            filterCriteria: filterCriteriaMvOfFilterModel.filterCriteria,
+            filterCriteria: committedFilterCriteriaSnapshot.filterCriteria,
             sortableCriteria: sortableCriteria,
             itemIds: itemIdsToQry,
           );
@@ -1673,11 +1658,6 @@ abstract class Block<
           errorInfo: errorInfo,
         );
       } finally {
-        //
-        // Query DONE!
-        //
-        thisXBlock.setReQueryDone();
-        //
         __refreshQueryingState(isQuerying: false);
       }
       final bool isPageShifting;
@@ -1707,9 +1687,9 @@ abstract class Block<
       final BlockQueryCalculatorResult calculationResult =
           BlockQueryStateCalculator.calculate(calculationInput);
 
-      print("@TEMP INPUT ${getClassNameWithoutGenerics(this)}: ");
-      print(calculationInput.getDebugInfo());
-      print(calculationResult.getDebugInfo());
+      // print("@TEMP INPUT ${getClassNameWithoutGenerics(this)}: ");
+      // print(calculationInput.getDebugInfo());
+      // print(calculationResult.getDebugInfo());
 
       // Extract variables directly into your pre-existing downstream fields securely
       realListUpdateStrategy = calculationResult.realListUpdateStrategy;
@@ -1725,10 +1705,10 @@ abstract class Block<
         __blockData._updateStateAfterQueryError(
           newBlockDataState: newBlockDataState,
         );
-        final List<XBlock> descendantXBlocks =
-            thisXBlock.getDescendantXBlocks(sameFilterOnly: true);
+        final List<XBlock> descendantXBlocks = thisXBlock.getDescendantXBlocks(
+          sameFilterOnly: true,
+        );
 
-        // TODO: Xoa di.
         __stopDescendantQueryWithError(
           descendantXBlocks: descendantXBlocks,
           blockErrorOrigin: BlockErrorOrigin.directFetch,
@@ -1783,7 +1763,7 @@ abstract class Block<
         shortDesc:
             "Calling ${debugObjHtml(this)}.__processQueryResult() to process queried data.",
         parameters: {
-          "usedXFilterCriteria": filterCriteriaMvOfFilterModel,
+          "committedFilterCriteriaSnapshot": committedFilterCriteriaSnapshot,
           "usedPageable": willBeUsedPageable,
           "queriedItemList": queriedItemList,
           "queriedPaginationInfo": queriedPaginationInfo,
@@ -1792,7 +1772,7 @@ abstract class Block<
         traceStepType: TraceStepType.nonControllableCalling,
       );
       final processedQueryResult = __processQueryResult(
-        usedXFilterCriteria: filterCriteriaMvOfFilterModel,
+        usedFilterCriteriaSnapshot: committedFilterCriteriaSnapshot,
         usedPageable: willBeUsedPageable,
         //
         queriedItemList: queriedItemList,
@@ -1843,10 +1823,10 @@ abstract class Block<
         codeId: "#03600",
         shortDesc: "Set currentItem to <b>null</b>.",
       );
-      __blockData._setCurrentItemOnly(
+      __setCurrentItemOnlyAndItemState(
         id: null,
-        refreshedItem: null,
-        refreshedItemDetail: null,
+        item: null,
+        itemDetail: null,
       );
       //
       if (formModel != null) {
@@ -1865,7 +1845,7 @@ abstract class Block<
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         traceStepType: TraceStepType.info,
       );
-      // (Currently, In _unitQuery && queryHint).
+      // (Currently, In _unitQuery && applyQueryHint).
       // Test Case: [42a].
       __clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
@@ -1909,7 +1889,7 @@ abstract class Block<
     }
     //
     // TODO: LOGIC-01 (If not querying block --> No need to force select an item).
-    BlockAfterQueryDirective afterQueryDirective =
+    final BlockAfterQueryDirective afterQueryDirective =
         thisXBlock.afterQueryDirective;
     if (!thisXBlock.xShelf.naturalMode) {
       if (!queried) {
@@ -1947,6 +1927,9 @@ abstract class Block<
         initDirty: false,
         formInput: null,
       );
+      return;
+    }
+    if (itemCount == 0) {
       return;
     }
     //
@@ -2008,15 +1991,19 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     thisXBlock._createAndSetBlockExecutionIntentDone(
-        lastIntentInfo: "Set Item As Current");
+      lastIntentInfo: "Set Item As Current",
+    );
+    //
+    final List<ITEM> newQueriedList = executionIntent.newQueriedList;
+    final ITEM? inputCandidateCurrItem = executionIntent.inputCandidateCurrItem;
     //
     executionTrace._addTraceStep(
       codeId: "#28000",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}.",
       parameters: {
-        "inputCandidateCurrItem": executionIntent.inputCandidateCurrItem,
-        "newQueriedList": executionIntent.newQueriedList,
+        "inputCandidateCurrItem": inputCandidateCurrItem,
+        "newQueriedList": newQueriedList,
         "setCurrentItemDirective": executionIntent.setCurrentItemDirective,
       },
       traceStepType: TraceStepType.debug,
@@ -2032,22 +2019,11 @@ abstract class Block<
       formModel?._formModelStructure._setManualDirty(manualDirty);
     }
     //
-    ITEM? inputCandidateCurrItem = executionIntent.inputCandidateCurrItem;
-    if (thisXBlock.candidateCurrItem != null) {
-      executionTrace._addTraceStep(
-        codeId: "#28030",
-        shortDesc:
-            "Candidate Item specified by XBlock: ${debugObjHtml(thisXBlock.candidateCurrItem)}",
-      );
-      //
-      inputCandidateCurrItem ??= (thisXBlock.candidateCurrItem as ITEM);
-    }
-    //
     final blockSetCurrentItemResult = executionIntent.resultWrapper._setResult(
       BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>(
         precheck: null,
         setCurrentItemDirective: executionIntent.setCurrentItemDirective,
-        candidateItem: executionIntent.inputCandidateCurrItem,
+        candidateItem: inputCandidateCurrItem,
         oldCurrentItem: currentItem,
         currentItem: currentItem,
       ),
@@ -2056,22 +2032,54 @@ abstract class Block<
     );
     thisXBlock.attachToPredecessorIfAny(blockSetCurrentItemResult);
     //
-    if (inputCandidateCurrItem != null) {
-      // TODO: Old code (DELETE)
-      // blockSetCurrentItemResult._addCandidateItem(inputCandidateCurrItem);
-    }
-    //
     // In: _unitSetItemAsCurrent
     //
     if (dataState.isPending || dataState.isStale) {
-      // TODO: Review.
-      // This case never run!
+      // This case never runs in normal lifecycle
       print("NEVER RUN: dataState.isPending || dataState.isStale");
-      // Do nothing.
       return;
     }
     //
-    if (itemCount == 0) {
+    final ITEM? currItemOrigin = currentItem;
+    final ITEM? currItem;
+    if (currItemOrigin != null) {
+      if (containsItem(currItemOrigin)) {
+        currItem = currItemOrigin;
+      } else {
+        currItem = null;
+      }
+    } else {
+      currItem = null;
+    }
+    //
+    ITEM? candidateCurrItem;
+    //
+    if (inputCandidateCurrItem != null) {
+      if (!containsItem(inputCandidateCurrItem)) {
+        executionTrace._addTraceStep(
+          codeId: "#28120",
+          shortDesc:
+              "inputCandidateCurrItem: ${debugObjHtml(inputCandidateCurrItem)} not in the list items of the block.",
+        );
+        candidateCurrItem = null;
+      } else {
+        candidateCurrItem = inputCandidateCurrItem;
+      }
+    }
+    int? suggestIdx = specifyItemIndexToSetAsCurrent();
+    final ITEM? suggestCandidateItem;
+    if (suggestIdx != null) {
+      suggestCandidateItem = findItemByIndex(suggestIdx);
+    } else {
+      suggestCandidateItem = null;
+    }
+    candidateCurrItem = candidateCurrItem ??
+        currItem ??
+        newQueriedList.firstOrNull ??
+        suggestCandidateItem ??
+        firstItem;
+    //
+    if (candidateCurrItem == null) {
       executionTrace._addTraceStep(
         codeId: "#28080",
         shortDesc:
@@ -2098,244 +2106,43 @@ abstract class Block<
       //
       __blockData._blockItemDataState = const BlockItemDataStateNone();
       _resetBlockItemSyncSessionState(executionTrace: executionTrace);
-      // TODO: Test Cases.
+
+      if (formModel != null) {
+        formModel!._clearDataWithDataState(formDataState: FormDataStateNone());
+      }
+
       __clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
       );
       return;
     }
     //
-    ITEM? candidateCurrItem = inputCandidateCurrItem;
-    //
-    if (candidateCurrItem != null) {
-      if (!containsItem(candidateCurrItem)) {
-        executionTrace._addTraceStep(
-          codeId: "#28120",
-          shortDesc:
-              "Candidate Item ${debugObjHtml(candidateCurrItem)} not in the list items of the block -> set candidate item to null.",
-        );
-        candidateCurrItem = null;
-      }
-    }
-    //
-    final ITEM? currItemOrigin = currentItem;
-    final ITEM? currItem;
-    if (currItemOrigin != null) {
-      if (containsItem(currItemOrigin)) {
-        currItem = currItemOrigin;
-      } else {
-        currItem = null;
-      }
-    } else {
-      currItem = null;
-    }
-    //
-    final bool currItemWillChanged;
-    if (currItem == null) {
-      executionTrace._addTraceStep(
-        codeId: "#28160",
-        shortDesc:
-            "Currently, this block contains <b>$itemCount items</b> and has no <b>current item</b>.",
-        traceStepType: TraceStepType.info,
-      );
-      if (candidateCurrItem == null) {
-        // If UI Component Active need an ITEM-load.
-        final String? itemContextComponent =
-            ui.findActiveUiComponentByItemContext(
-          alsoCheckChildren: true,
-        );
-        final bool hasItemRep = itemContextComponent != null;
-        executionTrace._addTraceStep(
-          codeId: "#28200",
-          shortDesc: hasItemRep
-              ? "Found a <b>UI-X-Component</b> that displays and represents the ITEM. So setting a currentItem is required."
-              : "This block does not have any visible <b>UI-Component</b> but represents the ITEM.",
-          parameters: {
-            "itemContextComponent": itemContextComponent,
-          },
-          tipDocument: TipDocument.blockActiveUiComponents,
-        );
-        //
-        ITEM? candidateCurrItem2;
-        executionTrace._addTraceStep(
-          codeId: "#28220",
-          shortDesc:
-              "Calling ${debugObjHtml(this)}.specifyItemIndexToSetAsCurrent() method "
-              "to specify an <b>itemIndex</b> as the current one.",
-          note:
-              "You can override this method, otherwise the first ITEM will be the candidate. ",
-          traceStepType: TraceStepType.controllableCalling,
-        );
-        int? suggestIdx = specifyItemIndexToSetAsCurrent();
-        //
-        executionTrace._addTraceStep(
-          codeId: "#28240",
-          shortDesc: "Got value: <b>$suggestIdx</b>.",
-        );
-        if (suggestIdx != null && suggestIdx >= 0 && suggestIdx < itemCount) {
-          candidateCurrItem2 = candidateCurrItem2 ?? items[suggestIdx];
-        }
-        candidateCurrItem2 = candidateCurrItem2 ?? firstItem;
-        executionTrace._addTraceStep(
-          codeId: "#28260",
-          shortDesc:
-              "Found an ITEM that could be a candidate - ${debugObjHtml(candidateCurrItem2)}",
-        );
-        final bool isInNewQueryList2;
-        if (candidateCurrItem2 == null) {
-          isInNewQueryList2 = false;
-        } else {
-          isInNewQueryList2 = FaItemsUtils.isListContainItem(
-            targetList: executionIntent.newQueriedList,
-            item: candidateCurrItem2,
-            getItemId: _getItemIdInternal,
-          );
-        }
-        if (isInNewQueryList2) {
-          executionTrace._addTraceStep(
-            codeId: "#28280",
-            shortDesc:
-                "The ITEM ${debugObjHtml(candidateCurrItem2)} is in the list of ITEM(s) just queried.",
-          );
-        }
-        //
-        executionTrace._addTraceStep(
-          codeId: "#28300",
-          shortDesc: "State:"
-              "\n - ITEM == ITEM_DETAIL?: <b>${ITEM == ITEM_DETAIL}</b>."
-              "\n - @setCurrentItemDirective: <b>${executionIntent.setCurrentItemDirective}</b>.",
-          traceStepType: TraceStepType.debug,
-        );
-        //
-        if (hasItemRep ||
-            executionIntent.setCurrentItemDirective ==
-                BlockSetCurrentItemDirective.setAnItemAsCurrent ||
-            executionIntent.setCurrentItemDirective ==
-                BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm) {
-          candidateCurrItem = candidateCurrItem2;
-          currItemWillChanged = candidateCurrItem != null;
-        } else if (executionIntent.setCurrentItemDirective ==
-                BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed &&
-            (ITEM == ITEM_DETAIL && isInNewQueryList2)) {
-          candidateCurrItem = isInNewQueryList2 ? candidateCurrItem2 : null;
-          currItemWillChanged = candidateCurrItem != null;
-        } else {
-          currItemWillChanged = false;
-        }
-      } else {
-        currItemWillChanged = true;
-      }
-    }
-    // currItem != null
-    else {
-      executionTrace._addTraceStep(
-        codeId: "#28460",
-        shortDesc:
-            "Currently, this block contains <b>$itemCount items</b> and has a <b>currentItem</b> - ${debugObjHtml(currItem)}.",
-      );
-      if (candidateCurrItem == null) {
-        candidateCurrItem = currItem;
-        currItemWillChanged = false;
-      } else {
-        // candidateCurrItem != null && currItem != null
-        final ID candidateCurrItemId = __getItemIdShowErr(
-          candidateCurrItem,
-          showErr: true,
-        );
-        final ID currItemId = __getItemIdShowErr(
-          currItem,
-          showErr: true,
-        );
-        //
-        if (candidateCurrItemId == currItemId) {
-          currItemWillChanged = false;
-        } else {
-          currItemWillChanged = true;
-        }
-      }
-    }
-    //
-    executionTrace._addTraceStep(
-      codeId: "#28560",
-      shortDesc:
-          "Finally, the candidate ITEM is ${debugObjHtml(candidateCurrItem)}. "
-          "@currItemWillChanged: ${debugObjHtml(currItemWillChanged)}",
-    );
-    //
-    // If no item can be current.
-    //
-    if (candidateCurrItem == null) {
-      executionTrace._addTraceStep(
-        codeId: "#28600",
-        shortDesc:
-            "No ITEM is determined to be the currentItem of ${debugObjHtml(this)} -> "
-            "clear all data of the child blocks and set them to <b>none</b> state."
-            "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-        traceStepType: TraceStepType.info,
-      );
-
-      // Record transition to null when candidate cannot be determined
-      blockSetCurrentItemResult.recordCurrentTransition(
-        previousItem: currentItem,
-        candidateItem: null,
-        finalItem: null,
-        trigger: CurrentItemTransitionTrigger.resetToNull,
-      );
-
-      for (final child in thisXBlock.childXBlocks) {
-        blockSetCurrentItemResult.recordCascadedEviction(
-          childBlockName: child.name,
-          targetState: const BlockDataStateNone(),
-        );
-      }
-      // New Code.
-      __blockData._blockItemDataState = const BlockItemDataStateNone();
-      _resetBlockItemSyncSessionState(executionTrace: executionTrace);
-      // Test Cases: [74a].
-      __clearAllChildrenBlocksToNone(
-        thisXBlock: thisXBlock,
-      );
-      return;
-    }
-    //
-    // Now candidateCurrItem != null.
-    //
-    final bool isSameCandidateItem = isSame(
-      item1: inputCandidateCurrItem,
-      item2: candidateCurrItem,
-    );
-    if (!isSameCandidateItem) {
-      // TODO: Old code (DELETE).
-      // blockSetCurrentItemResult._addCandidateItem(candidateCurrItem);
-    }
+    // OK, Now candidateCurrItem is NOT NULl.
     //
     final bool isCandidateCurrentItemInNewQueriedList =
-        FaItemsUtils.isListContainItem(
-      targetList: executionIntent.newQueriedList,
+        FaItemsUtils.isListContainItem<ITEM, ID>(
+      targetList: newQueriedList,
       item: candidateCurrItem,
       getItemId: _getItemIdInternal,
     );
     //
-    // This block has UI Active (Or child block has UI Active).
-    //
-    final bool hasBlockXRepresentative =
-        ui.hasActiveUiComponentBlockRepresentative(
+    final bool provideBlockContext = ui.hasActiveUiComponentBlockRepresentative(
       alsoCheckChildren: true,
     );
-    final bool hasItemXRepresentative =
-        ui.hasActiveUiComponentItemRepresentative(
+    final bool provideItemContext = ui.hasActiveUiComponentItemRepresentative(
       alsoCheckChildren: true,
     );
     final bool provideFormContext = ui.hasActiveUiComponentFormRepresentative();
-    //
     final bool inputForceReloadItem = thisXBlock.forceReloadCurrItem;
+    final bool currItemMaybeChanged =
+        candidateCurrItem.id != currItemOrigin?.id;
     //
     executionTrace._addTraceStep(
       codeId: "#28640",
       shortDesc: "Debug:",
       parameters: {
-        "hasBlockXRepresentative": hasBlockXRepresentative,
-        "hasItemXRepresentative": hasItemXRepresentative,
+        "provideBlockContext": provideBlockContext,
+        "provideItemContext": provideItemContext,
         "provideFormContext": provideFormContext,
         "inputForceReloadItem": inputForceReloadItem,
       },
@@ -2346,13 +2153,14 @@ abstract class Block<
     //
     executionTrace._addTraceStep(
       codeId: "#28660",
-      shortDesc: "Calling <b>_calculateBlockState()</b>:",
+      shortDesc:
+          "Calling <b>BlockCurrentItemResolver.resolveCurrentItem()</b>:",
       parameters: {
-        "inputCandidateCurrItem": inputCandidateCurrItem,
-        "inputForceReloadItem": inputForceReloadItem,
+        "ITEM == ITEM_DETAIL?": ITEM == ITEM_DETAIL,
         "candidateCurrItem": candidateCurrItem,
-        "hasBlockXRepresentative": hasBlockXRepresentative,
-        "hasItemXRepresentative": hasItemXRepresentative,
+        "inputForceReloadItem": inputForceReloadItem,
+        "provideBlockContext": provideBlockContext,
+        "provideItemContext": provideItemContext,
         "provideFormContext": provideFormContext,
         "itemAbsentRepresentativePolicy":
             effectiveConfig.itemAbsentRepresentativePolicy,
@@ -2360,19 +2168,20 @@ abstract class Block<
         "setCurrentItemDirective": executionIntent.setCurrentItemDirective,
         "isCandidateCurrentItemInNewQueriedList":
             isCandidateCurrentItemInNewQueriedList,
-        "currentItemChanged": currItemWillChanged,
+        "isCandidateItemDifferentFromCurrent": currItemMaybeChanged,
       },
       traceStepType: TraceStepType.nonControllableCalling,
     );
     //
-    final _ForceReloadItemState blkState = _calculateBlockState(
+    final BlockCurrentItemPlan blkState =
+        BlockCurrentItemResolver.resolveCurrentItem(
       executionTrace: executionTrace,
+      debug: false,
       thisXBlock: thisXBlock,
-      inputCandidateCurrItem: inputCandidateCurrItem,
-      inputForceReloadItem: inputForceReloadItem,
       candidateCurrItem: candidateCurrItem,
-      hasBlockXRepresentative: hasBlockXRepresentative,
-      hasItemXRepresentative: hasItemXRepresentative,
+      inputForceReloadItem: inputForceReloadItem,
+      provideBlockContext: provideBlockContext,
+      provideItemContext: provideItemContext,
       provideFormContext: provideFormContext,
       itemAbsentRepresentativePolicy:
           effectiveConfig.itemAbsentRepresentativePolicy,
@@ -2380,14 +2189,14 @@ abstract class Block<
       setCurrentItemDirective: executionIntent.setCurrentItemDirective,
       isCandidateCurrentItemInNewQueriedList:
           isCandidateCurrentItemInNewQueriedList,
-      currentItemIdChanged: currItemWillChanged,
+      isCandidateItemDifferentFromCurrent: currItemMaybeChanged,
     );
     //
     executionTrace._addLineFlowSeparator();
     //
     final forceReloadItem = blkState.forceReloadItem;
-    final forceReloadForm = blkState.forceReloadForm;
     final candidateItemAccepted = blkState.candidateAccepted;
+    final currentItemChanged = currItemMaybeChanged && candidateItemAccepted;
 
     if (!candidateItemAccepted) {
       executionTrace._addTraceStep(
@@ -2396,7 +2205,6 @@ abstract class Block<
             "@candidateItemAccepted: <b>false</b> --> Clean all data of child blocks and set them to none.",
         traceStepType: TraceStepType.info,
       );
-
       // Record candidate rejection step
       blockSetCurrentItemResult.recordCurrentTransition(
         previousItem: currentItem,
@@ -2404,12 +2212,22 @@ abstract class Block<
         finalItem: null,
         trigger: CurrentItemTransitionTrigger.resetToNull,
       );
-
+      //
+      __setCurrentItemOnlyAndItemState(
+        id: null,
+        item: null,
+        itemDetail: null,
+      );
+      //
       for (final child in thisXBlock.childXBlocks) {
         blockSetCurrentItemResult.recordCascadedEviction(
           childBlockName: child.name,
           targetState: const BlockDataStateNone(),
         );
+      }
+
+      if (formModel != null) {
+        formModel!._clearDataWithDataState(formDataState: FormDataStateNone());
       }
 
       __clearAllChildrenBlocksToNone(
@@ -2418,18 +2236,14 @@ abstract class Block<
       return;
     }
     //
-    if (thisXBlock.xFormModel != null) {
-      if (forceReloadForm) {
-        thisXBlock.xFormModel!.setForceType(ForceType.force);
-      }
-    }
+    // NOW candidateItemAccepted.
     //
     executionTrace._addTraceStep(
       codeId: "#28700",
       shortDesc: "Calculated:",
       parameters: {
         "forceReloadItem": forceReloadItem,
-        "forceReloadForm": forceReloadForm,
+        "candidateItemAccepted": candidateItemAccepted,
       },
       traceStepType: TraceStepType.debug,
     );
@@ -2451,7 +2265,7 @@ abstract class Block<
       traceStepType: TraceStepType.debug,
     );
     //
-    final ID itemId = __getItemIdShowErr(
+    final ID candidateCurrItemId = __getItemIdShowErr(
       candidateCurrItem,
       showErr: true,
     );
@@ -2466,17 +2280,13 @@ abstract class Block<
         shortDesc:
             "The candidate ${debugObjHtml(candidateCurrItem)} will not need to be reloaded.",
       );
-      // Test Cases: [13a], [42a]. (?????)
       final ITEM? candidateCurrItemInNewQueriedList =
           FaItemsUtils.findItemInList(
         item: candidateCurrItem,
         targetList: executionIntent.newQueriedList,
         getItemId: _getItemIdInternal,
       );
-      if (ITEM == ITEM_DETAIL && isCandidateCurrentItemInNewQueriedList) {
-        //
-        // No need to refresh Item.
-        //
+      if (ITEM == ITEM_DETAIL && candidateCurrItemInNewQueriedList != null) {
         refreshedCurrentItemDetail =
             candidateCurrItemInNewQueriedList as ITEM_DETAIL;
       }
@@ -2485,9 +2295,9 @@ abstract class Block<
     else {
       itemRefreshed = true;
       String? methodName;
-      // Recent Loaded Item:
-      _BlockItem2Wrap? loadedCoupleItem =
-          thisXBlock._getRecentLoadedItem(itemId: itemId);
+      final _BlockItem2Wrap? loadedCoupleItem = thisXBlock._getRecentLoadedItem(
+        itemId: candidateCurrItemId,
+      );
       refreshedCurrentItemDetail = loadedCoupleItem?._itemDetail;
 
       if (refreshedCurrentItemDetail == null) {
@@ -2502,16 +2312,16 @@ abstract class Block<
             shortDesc:
                 "Calling ${debugObjHtml(this)}.$methodName() with parameters:",
             parameters: {
-              "itemId": itemId,
+              "candidateCurrItemId": candidateCurrItemId,
             },
             traceStepType: TraceStepType.controllableCalling,
           );
           //
           debug.__performLoadItemDetailByIdCount++;
+          thisXBlock.currentItemReloadedInSession = true;
           ApiResult<ITEM_DETAIL> result = await performLoadItemDetailById(
-            itemId: itemId,
+            itemId: candidateCurrItemId,
           );
-          // Throw ApiError:
           result.throwIfError();
           //
           refreshedCurrentItemDetail = result.data;
@@ -2536,7 +2346,6 @@ abstract class Block<
             errorInfo: errorInfo,
           );
 
-          // Record item loading failure
           blockSetCurrentItemResult.recordItemOperationFailure(
             item: candidateCurrItem,
             operation: methodName,
@@ -2549,8 +2358,6 @@ abstract class Block<
                 "The ${debugObjHtml(this)}.$methodName() method was called with an error!",
             errorInfo: errorInfo,
           );
-          // TODO: Them test case:
-          // TODO: Always return? Load ITEM Error
           return;
         } finally {
           __refreshRefreshingCurrentItemState(
@@ -2558,10 +2365,11 @@ abstract class Block<
           );
         }
       }
-    }
-    //
-    // If candidate not found in database --> remove.
-    //
+    } // end of forceReloadItem.
+
+    // ===========================================================================
+    // (***) STAGE 1: REMOTE NOT FOUND / EVICTION & FALLBACK HANDLING
+    // ===========================================================================
     if (refreshedCurrentItemDetail == null) {
       executionTrace._addTraceStep(
         codeId: "#29040",
@@ -2570,46 +2378,45 @@ abstract class Block<
             "--> remove it from the block..",
       );
 
-      // Record eviction due to remote deletion
       blockSetCurrentItemResult.recordEviction(
         item: candidateCurrItem,
         reason: ItemEvictionReason.remoteNotFound,
       );
+      // Find sibling before removing..
+      final ITEM? siblingItem = findSiblingItem(item: candidateCurrItem);
 
-      //
-      final ITEM? siblingItem = findSiblingItem(
-        item: candidateCurrItem,
+      // 1.1 Remove the evicted item from the current dataset
+      executionTrace._addTraceStep(
+        codeId: "#29060",
+        shortDesc: "Remove ${debugObjHtml(candidateCurrItem)} from the list.",
       );
-      // #SAME-CODE-001
-      if (!isCandidateIsCurrent) {
-        executionTrace._addTraceStep(
-          codeId: "#29060",
-          shortDesc: "Remove ${debugObjHtml(candidateCurrItem)} from the list.",
+      await __removeItemFromList(
+        executionTrace: executionTrace,
+        removeItem: candidateCurrItem,
+      );
+      // Test Case: [04a].
+      if (candidateCurrItem.id == currentItem?.id) {
+        __setCurrentItemOnlyAndItemState(
+          id: null,
+          item: null,
+          itemDetail: null,
         );
-        await __removeItemFromList(
-          executionTrace: executionTrace,
-          removeItem: candidateCurrItem,
-        );
-        //
-        if (currItem != null) {
-          // TODO: Test case.
-          return;
-        }
-        //
-        if (siblingItem == null) {
-          // TODO: Test case.
-          return;
-        }
-        //
+      }
+      // 1.2 Non-current candidate evicted with a surviving current item -> Keep current item stable
+      if (!isCandidateIsCurrent && currItem != null) {
+        return;
+      }
+
+      // 1.3 Case A: Found a sibling to fall back to
+      if (siblingItem != null) {
         executionTrace._addTraceStep(
           codeId: "#29100",
           shortDesc:
               "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
         );
 
-        // Record sibling fallback transition
         blockSetCurrentItemResult.recordCurrentTransition(
-          previousItem: currentItem,
+          previousItem: isCandidateIsCurrent ? candidateCurrItem : currentItem,
           candidateItem: candidateCurrItem,
           finalItem: siblingItem,
           trigger: CurrentItemTransitionTrigger.siblingFallback,
@@ -2619,108 +2426,68 @@ abstract class Block<
           setCurrentItemDirective: executionIntent.setCurrentItemDirective,
           newQueriedList: executionIntent.newQueriedList,
           inputCandidateCurrItem: siblingItem,
-          forceReloadItem: executionIntent.forceReloadItem,
-          // false (Origin)
-          forceTypeForForm: executionIntent.forceTypeForForm, // null (Origin)
+          forceReloadItem:
+              !isCandidateIsCurrent && executionIntent.forceReloadItem,
+          forceTypeForForm: null,
         );
         return;
       }
-      //
-      // Candidate is current but not found in database.
-      // Remove Item (Current Item)
-      //
-      executionTrace._addTraceStep(
-        codeId: "#29160",
-        shortDesc:
-            "Remove current item ${debugObjHtml(candidateCurrItem)} from the ${debugObjHtml(this)}.",
-      );
-      await __removeItemFromList(
-        executionTrace: executionTrace,
-        removeItem: candidateCurrItem,
-      );
-      //
-      executionTrace._addTraceStep(
-        codeId: "#29180",
-        shortDesc: "Set current item to <b>null</b>.",
-      );
-      // Test Case: [36b] - _testEdit_withoutCoordinator_itemNotFoundON
-      __setCurrentItemOnly(
-        id: null,
-        item: null,
-        itemDetail: null,
-      );
-      if (formModel != null) {
+
+      // 1.4 Case B: No sibling available -> Clear current item and reset consumers to None
+      if (isCandidateIsCurrent) {
         executionTrace._addTraceStep(
-          codeId: "#29200",
-          shortDesc:
-              "Set ${debugObjHtml(formModel!)} dataState to <b>none</b>.",
+          codeId: "#29180",
+          shortDesc: "Set current item to <b>null</b>.",
         );
-        formModel?._clearDataWithDataState(formDataState: FormDataStateNone());
-      }
-      //
-      executionTrace._addTraceStep(
-        codeId: "#29220",
-        shortDesc: "Clear all data in child blocks and set them to <b>none</b>."
-            "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-      );
+        //
+        __setCurrentItemOnlyAndItemState(
+            id: null, item: null, itemDetail: null);
+        //
+        if (formModel != null) {
+          executionTrace._addTraceStep(
+            codeId: "#29200",
+            shortDesc:
+                "Set ${debugObjHtml(formModel!)} dataState to <b>none</b>.",
+          );
+          formModel!
+              ._clearDataWithDataState(formDataState: FormDataStateNone());
+        }
 
-      for (final child in thisXBlock.childXBlocks) {
-        blockSetCurrentItemResult.recordCascadedEviction(
-          childBlockName: child.name,
-          targetState: const BlockDataStateNone(),
-        );
-      }
-
-      // Test Case: [46a].
-      __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
-      //
-      if (siblingItem != null) {
         executionTrace._addTraceStep(
-          codeId: "#29240",
+          codeId: "#29220",
           shortDesc:
-              "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
+              "Clear all data in child blocks and set them to <b>none</b>."
+              "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         );
 
-        // Record fallback to sibling when current item was evicted
-        blockSetCurrentItemResult.recordCurrentTransition(
-          previousItem: candidateCurrItem,
-          candidateItem: siblingItem,
-          finalItem: siblingItem,
-          trigger: CurrentItemTransitionTrigger.siblingFallback,
-        );
+        for (final child in thisXBlock.childXBlocks) {
+          blockSetCurrentItemResult.recordCascadedEviction(
+            childBlockName: child.name,
+            targetState: const BlockDataStateNone(),
+          );
+        }
 
-        // IN: refreshedCurrentItemDetail == null
-        thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
-          setCurrentItemDirective: executionIntent.setCurrentItemDirective,
-          newQueriedList: executionIntent.newQueriedList,
-          inputCandidateCurrItem: siblingItem,
-          // false (origin)
-          forceReloadItem: false,
-          // executionIntent.forceReloadItem,
-          // null (origin)
-          forceTypeForForm: null, // executionIntent.forceTypeForForm,
-        );
-        return;
+        __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
       }
       return;
-    } // End if refreshedCurrentItemDetail == null.
-    //
-    if (currItemWillChanged || itemRefreshed) {
+    }
+
+    // ===========================================================================
+    // STAGE 2: ITEM MUTATION, CONVERSION & STATE COMMIT
+    // ===========================================================================
+    if (currentItemChanged || itemRefreshed) {
       executionTrace._addTraceStep(
         codeId: "#29400",
         shortDesc: "Debug",
         parameters: {
-          "currItemWillChanged": currItemWillChanged,
+          "currentItemChanged": currentItemChanged,
           "itemRefreshed": itemRefreshed,
         },
         traceStepType: TraceStepType.debug,
       );
-      //
-      // NOW: refreshedCurrentItemDetail != null
-      //
+
+      // 2.1 Convert loaded ITEM_DETAIL to domain ITEM
       final String methodName = "convertItemDetailToItem";
-      //
-      bool convertError = false;
       try {
         executionTrace._addTraceStep(
           codeId: "#29410",
@@ -2729,27 +2496,26 @@ abstract class Block<
               " ${debugObjHtml(refreshedCurrentItemDetail)} --> ${_debugItemTypeHtml()}.",
           traceStepType: TraceStepType.controllableCalling,
         );
-        //
+
         candidateCurrItem = __convertItemDetailToItem(
           itemDetail: refreshedCurrentItemDetail,
         );
+
         executionTrace._addTraceStep(
           codeId: "#29420",
           shortDesc: "Got value: ${debugObjHtml(candidateCurrItem)}.",
           traceStepType: TraceStepType.debug,
         );
       } catch (e, stackTrace) {
-        convertError = true;
         final ErrorInfo errorInfo = _handleError(
           shelf: shelf,
-          methodName: "convertItemDetailToItem",
+          methodName: methodName,
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
           tipDocument: TipDocument.blockConvertItemDetailToItem,
         );
 
-        // Record conversion error on this specific candidate
         blockSetCurrentItemResult.recordItemOperationFailure(
           item: candidateCurrItem,
           operation: methodName,
@@ -2762,17 +2528,10 @@ abstract class Block<
               "The ${debugObjHtml(this)}.$methodName() method was called with an error!",
           errorInfo: errorInfo,
         );
-      }
-      if (convertError) {
-        // blockSetCurrentItemResult._convertError = true;
-        // TODO Always return??
-        // If currentItemChanged or not currentItemChanged
-        // Always return. Nothing to do if has error!!
         return;
       }
-      //
-      //
-      __blockData._blockItemDataState = BlockItemDataStateFresh();
+
+      // 2.2 Synchronize list data and commit current item pointer
       if (candidateCurrItem != null) {
         executionTrace._addTraceStep(
           codeId: "#29480",
@@ -2791,7 +2550,6 @@ abstract class Block<
         shortDesc: "Set ${debugObjHtml(candidateCurrItem)} as current.",
       );
 
-      // Record explicit selection or refresh transition
       blockSetCurrentItemResult.recordCurrentTransition(
         previousItem: currItemOrigin,
         candidateItem: inputCandidateCurrItem,
@@ -2800,24 +2558,25 @@ abstract class Block<
             ? CurrentItemTransitionTrigger.explicitSelect
             : CurrentItemTransitionTrigger.initialQueryDefault,
       );
-
-      __setCurrentItemOnly(
-        id: itemId,
+      //
+      __setCurrentItemOnlyAndItemState(
+        id: candidateCurrItemId,
         item: candidateCurrItem,
         itemDetail: refreshedCurrentItemDetail,
       );
       //
-      __blockData._blockItemDataState = const BlockItemDataStateFresh();
       _resetBlockItemSyncSessionState(executionTrace: executionTrace);
     }
-    //
-    // FormModel:
-    //
-    if (thisXBlock.xFormModel != null) {
-      if (currItemWillChanged || isCandidateCurrentItemInNewQueriedList) {
+
+    // ===========================================================================
+    // STAGE 3: FORM MODEL LIFECYCLE COORDINATION
+    // ===========================================================================
+    if (thisXBlock.xFormModel != null && formModel != null) {
+      if (currentItemChanged || isCandidateCurrentItemInNewQueriedList) {
         executionTrace._addTraceStep(
           codeId: "#29520",
-          shortDesc: "Current Item Change --> Clear form and set to Pending.",
+          shortDesc:
+              "Current Item Changed/Queried --> Clear form and set to Pending.",
           traceStepType: TraceStepType.info,
         );
         formModel!._clearDataWithDataState(
@@ -2836,24 +2595,28 @@ abstract class Block<
           error: null,
         );
       }
-      // [IN _unitSetItemAsCurrent method].
-      if (forceReloadForm) {
+
+      // Explicit directive demanding immediate Form Load
+      if (executionIntent.setCurrentItemDirective ==
+          BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm) {
         executionTrace._addTraceStep(
           codeId: "#29540",
           shortDesc:
-              "@forceReloadForm: ${debugObjHtml(forceReloadForm)}. Create FormModelLoadIntent.",
-          note:
-              "This execution unit will load data for ${debugObjHtml(thisXBlock.xFormModel!.formModel)}.",
+              "Directive demands immediate Form Load --> Create FormModelLoadIntent.",
           traceStepType: TraceStepType.executionIntent,
         );
+        thisXBlock.xFormModel!
+            .setForceTypeIfLessThan(FormForceType.forceIfNeed);
         thisXBlock.xFormModel!._createAndSetFormModelExecutionIntentLoad();
       }
     }
-    // (On _unitSetItemAsCurrent method).
-    // candidateCurrItem != null.
-    if (currItemWillChanged) {
+
+    // ===========================================================================
+    // STAGE 4: CASCADE CHILD BLOCKS TO PENDING
+    // ===========================================================================
+    if (currentItemChanged) {
       blockSetCurrentItemResult._currentItem = candidateCurrItem;
-      //
+
       executionTrace._addTraceStep(
         codeId: "#29640",
         shortDesc:
@@ -2869,8 +2632,6 @@ abstract class Block<
         );
       }
 
-      //
-      // TODO: Test Cases!
       __clearAllChildrenBlocksToPending(
         thisXBlock: thisXBlock,
       );
@@ -3072,10 +2833,10 @@ abstract class Block<
       codeId: "#08300",
       shortDesc: "${debugObjHtml(this)} --> set current item to <b>null</b>.",
     );
-    __blockData._setCurrentItemOnly(
+    __setCurrentItemOnlyAndItemState(
       id: null,
-      refreshedItem: null,
-      refreshedItemDetail: null,
+      item: null,
+      itemDetail: null,
     );
     //
     if (formModel != null) {
@@ -3273,10 +3034,10 @@ abstract class Block<
           );
           currentItemDeleted = true;
           //
-          __blockData._setCurrentItemOnly(
+          __setCurrentItemOnlyAndItemState(
             id: null,
-            refreshedItem: null,
-            refreshedItemDetail: null,
+            item: null,
+            itemDetail: null,
           );
           //
           if (formModel != null) {
@@ -3438,11 +3199,19 @@ abstract class Block<
     const ID? nullId = null;
     const ITEM? nullItem = null;
     const ITEM_DETAIL? nullItemDetail = null;
-    __setCurrentItemOnly(
+    __setCurrentItemOnlyAndItemState(
       id: nullId,
       item: nullItem,
       itemDetail: nullItemDetail,
     );
+    // if (formModel != null && formModel!.formMode == FormMode.creation) {
+    //   //
+    //   // IMPORTANT: In FormMode.creation, itemDataState must be `fresh`.
+    //   //
+    //   __blockData._setBlockItemDataState(
+    //     newBlockItemDataState: BlockItemDataStateFresh(),
+    //   );
+    // }
     //
     executionTrace._addTraceStep(
       codeId: "#04040",
@@ -3506,6 +3275,10 @@ abstract class Block<
         );
         formModel!._formModelStructure
             ._setManualDirty(executionIntent.initDirty);
+        formModel!._formModelStructure._setFormDataState(
+          formDataState: FormDataStateLoadedFresh(),
+          error: null,
+        );
       }
     } finally {
       __refreshPreparingFormCreationState(
@@ -3927,26 +3700,28 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @Deprecated("Xoa di")
   void __stopDescendantQueryWithError({
     required List<XBlock> descendantXBlocks,
     required BlockErrorOrigin blockErrorOrigin,
   }) {
-    FallbackDilemmaStrategy fallbackDilemmaStrategy =
-        FallbackDilemmaStrategy.preserveStableCache;
+    final fallbackDilemmaStrategy = FallbackDilemmaStrategy.preserveStableCache;
 
-    for (final descendant in descendantXBlocks) {
+    for (final descendantXBlock in descendantXBlocks) {
+      final descendantBlock = descendantXBlock.block;
+
       final descendantState =
           BlockQueryStateCalculator.calculateDataStateOnError(
-        currentDataState: descendant.block.dataState,
+        currentDataState: descendantBlock.dataState,
         blockErrorOrigin: blockErrorOrigin,
         blockErrorInfo: null,
         dilemmaStrategy: fallbackDilemmaStrategy,
       );
-
-      descendant.block.__blockData._lastQueryResultState =
+      descendantXBlock._queried = true;
+      descendantBlock.__blockData._lastQueryResultState =
           ActionResultState.fail;
-      descendant.block.__blockData._blockDataState = descendantState;
+      descendantBlock.__blockData._setBlockDataState(
+        newBlockDataState: descendantState,
+      );
     }
   }
 
@@ -4095,15 +3870,17 @@ abstract class Block<
         item: refreshedItem,
         itemDetail: savedItemDetail,
       );
+      //
       executionTrace._addTraceStep(
         codeId: "#16320",
         shortDesc: "Set ${debugObjHtml(refreshedItem)} as current.",
       );
-      __setCurrentItemOnly(
+      __setCurrentItemOnlyAndItemState(
         id: itemId,
         itemDetail: savedItemDetail,
         item: refreshedItem,
       );
+      //
       // Test Case [01c]. New Code:
       // Test Case [02b] - __test_form_cat_product02b_newCat.
       if (isNew) {
@@ -4118,7 +3895,7 @@ abstract class Block<
         );
       }
       //
-      final newForceType = ForceType.force;
+      final newForceType = FormForceType.force;
       //
       if (thisXBlock.xFormModel != null) {
         executionTrace._addTraceStep(
@@ -4204,10 +3981,10 @@ abstract class Block<
           codeId: "#16620",
           shortDesc: "${debugObjHtml(this)} --> set current item to null.",
         );
-        __blockData._setCurrentItemOnly(
+        __setCurrentItemOnlyAndItemState(
           id: null,
-          refreshedItem: null,
-          refreshedItemDetail: null,
+          item: null,
+          itemDetail: null,
         );
         //
         if (formModel != null) {
@@ -4579,8 +4356,8 @@ abstract class Block<
       inputCandidateCurrItem: item,
       forceReloadItem: forceLoadItem,
       forceTypeForForm: forceLoadForm //
-          ? ForceType.force
-          : ForceType.decidedAtRuntime,
+          ? FormForceType.force
+          : FormForceType.auto,
     );
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -4797,6 +4574,7 @@ abstract class Block<
   @_ReturnExecutionUnitResultMethodAnnotation()
   Future<bool> queryEmptyAndPrepareToCreate({
     FILTER_INPUT? filterInput,
+    FilterSyncDirective filterSyncDirective = FilterSyncDirective.useCommitted,
   }) async {
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
       return false;
@@ -4807,9 +4585,17 @@ abstract class Block<
       methodName: "queryEmptyAndPrepareToCreate",
       parameters: {
         "filterInput": filterInput,
+        "filterSyncDirective": filterSyncDirective,
       },
       isLibMethod: true,
     );
+    //
+    if (filterModel != null) {
+      filterModel!._applyFilterSyncDirective(
+        filterSyncDirective: filterSyncDirective,
+        filterInput: filterInput,
+      );
+    }
     //
     return await __queryEmpty(
       executionTrace: executionTrace,
@@ -4821,11 +4607,20 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Clears all items in the block while setting the block state to Fresh.
+  ///
+  /// This simulates a successful query that yields zero items without hitting
+  /// the remote server or backend data source.
+  ///
+  /// If [syncFilterDraft] is set to `true`, the associated [FilterModel] will
+  /// commit its draft workspace snapshot to the committed realm prior to
+  /// clearing the items.
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   Future<bool> queryEmpty({
     FILTER_INPUT? filterInput,
     bool prepareFormToCreateItem = false,
+    FilterSyncDirective filterSyncDirective = FilterSyncDirective.useCommitted,
   }) async {
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
       return false;
@@ -4840,6 +4635,13 @@ abstract class Block<
       },
       isLibMethod: true,
     );
+    // Synchronize draft snapshot into committed realm if explicitly requested
+    if (filterModel != null) {
+      filterModel!._applyFilterSyncDirective(
+        filterSyncDirective: filterSyncDirective,
+        filterInput: filterInput,
+      );
+    }
     //
     return await __queryEmpty(
       executionTrace: executionTrace,
@@ -4860,20 +4662,19 @@ abstract class Block<
   @_BlockQueryAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockQueryResult> query({
-    // ListUpdateStrategy suggestedListUpdateStrategy = ListUpdateStrategy.replace,
     BlockAfterQueryDirective afterQueryDirective =
         BlockAfterQueryDirective.setAnItemAsCurrentIfNeed,
     FILTER_INPUT? filterInput,
     SuggestedSelection? suggestedSelection,
     Pageable? pageable,
+    FilterSyncDirective filterSyncDirective = FilterSyncDirective.useCommitted,
   }) async {
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
       return BlockQueryResult._queryBlockedTemporarily();
     }
+    //
     final suggestedListUpdateStrategy = ListUpdateStrategy.replace;
-    //
-    final qryMethod = BlockQryMethodName.query;
-    //
+
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "query",
@@ -4886,6 +4687,14 @@ abstract class Block<
       },
       isLibMethod: true,
     );
+    if (filterModel != null) {
+      filterModel!._applyFilterSyncDirective(
+        filterSyncDirective: filterSyncDirective,
+        filterInput: filterInput,
+      );
+    }
+    //
+    final qryMethod = BlockQryMethodName.query;
     //
     return await __queryBlock(
       executionTrace: executionTrace,
@@ -4914,7 +4723,11 @@ abstract class Block<
     ListUpdateStrategy suggestedListUpdateStrategy = ListUpdateStrategy.replace,
     SuggestedSelection<ID>? suggestedSelection,
     Pageable? pageable,
+    FilterSyncDirective filterSyncDirective = FilterSyncDirective.useCommitted,
   }) async {
+    if (filterModel != null && filterModel!.lockAddMoreQuery) {
+      return BlockQueryResult._();
+    }
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryAndPrepareToEdit",
@@ -4923,9 +4736,17 @@ abstract class Block<
         "suggestedListUpdateStrategy": suggestedListUpdateStrategy,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
+        "filterSyncDirective": filterSyncDirective,
       },
       isLibMethod: true,
     );
+    //
+    if (filterModel != null) {
+      filterModel!._applyFilterSyncDirective(
+        filterSyncDirective: filterSyncDirective,
+        filterInput: filterInput,
+      );
+    }
     //
     final XShelf xShelf = _XShelfBlockQueryThenPrepareToEdit(
       block: this,
@@ -4937,7 +4758,6 @@ abstract class Block<
       suggestedSelection: suggestedSelection,
     );
     //
-    // xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
@@ -4959,15 +4779,28 @@ abstract class Block<
   @_BlockQueryAndPrepareToCreateAnnotation()
   Future<BlockQueryResult> queryAndPrepareToCreate({
     FILTER_INPUT? filterInput,
+    FilterSyncDirective filterSyncDirective = FilterSyncDirective.useCommitted,
   }) async {
+    if (filterModel != null && filterModel!.lockAddMoreQuery) {
+      return BlockQueryResult._();
+    }
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryAndPrepareToCreate",
       parameters: {
         "filterInput": filterInput,
+        "filterSyncDirective": filterSyncDirective,
       },
       isLibMethod: true,
     );
+    //
+    if (filterModel != null) {
+      filterModel!._applyFilterSyncDirective(
+        filterSyncDirective: filterSyncDirective,
+        filterInput: filterInput,
+      );
+    }
+    //
     executionTrace._addTraceStep(
       codeId: "#56000",
       shortDesc: "Creating <b>$_XShelfBlockQueryThenPrepareToCreate</b>..",
@@ -5300,7 +5133,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __setCurrentItemOnly({
+  void __setCurrentItemOnlyAndItemState({
     required ID? id,
     required ITEM? item,
     required ITEM_DETAIL? itemDetail,
@@ -5310,6 +5143,15 @@ abstract class Block<
       refreshedItem: item,
       refreshedItemDetail: itemDetail,
     );
+    if (id == null) {
+      __blockData._setBlockItemDataState(
+        newBlockItemDataState: BlockItemDataStateNone(),
+      );
+    } else {
+      __blockData._setBlockItemDataState(
+        newBlockItemDataState: BlockItemDataStateFresh(),
+      );
+    }
   }
 
   // ***************************************************************************
@@ -6251,24 +6093,6 @@ abstract class Block<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     return executionIntent.result;
-
-    // final XShelf xShelf = _XShelfBlockQuery(
-    //   block: this,
-    //   filterInput: filterInput,
-    //   pageable: usedPageable,
-    //   listUpdateStrategy: suggestedListUpdateStrategy,
-    //   afterQueryDirective: afterQueryDirective,
-    //   suggestedSelection: suggestedSelection,
-    // );
-    // XBlock xBlock = xShelf.findXBlockByName(name)!;
-    // xBlock._isQueryMoreFlow = isQueryMoreFlow;
-    // //
-    // xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
-    // FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    // await FlutterArtist.executor._executeExecutionUnitQueue();
-    //
-    // final BlockQueryResult queryResult = xBlock.queryResult;
-    // return queryResult;
   }
 
   // ***************************************************************************
@@ -6279,10 +6103,6 @@ abstract class Block<
     required FILTER_INPUT? filterInput,
     bool prepareFormToCreateItem = false,
   }) async {
-    if (filterModel != null && filterModel!.lockAddMoreQuery) {
-      return false;
-    }
-    //
     executionTrace._addTraceStep(
       codeId: "#53000",
       shortDesc: "Creating <b>$_XShelfBlockQueryEmpty</b>..",
@@ -6299,12 +6119,12 @@ abstract class Block<
       suggestedSelection: null,
     );
     //
-    // executionTrace._addTraceStep(
-    //   codeId: "#53100",
-    //   shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()..",
-    //   traceStepType: TraceStepType.nonControllableCalling,
-    // );
-    // xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
+    executionTrace._addTraceStep(
+      codeId: "#53100",
+      shortDesc: "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()..",
+      traceStepType: TraceStepType.nonControllableCalling,
+    );
+    //
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
@@ -8214,7 +8034,8 @@ abstract class Block<
   // ***************************************************************************
 
   _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA> __processQueryResult({
-    required FilterCriteriaMappedValue<FILTER_CRITERIA>? usedXFilterCriteria,
+    required FilterCriteriaSnapshot<FILTER_CRITERIA>?
+        usedFilterCriteriaSnapshot,
     required Pageable? usedPageable,
     //
     required List<ITEM>? queriedItemList,
@@ -8277,7 +8098,7 @@ abstract class Block<
     //
     return _ProcessedQueryResult(
       parentBlockCurrentItemId: parentBlockCurrentItemId,
-      usedXFilterCriteria: usedXFilterCriteria,
+      usedXFilterCriteria: usedFilterCriteriaSnapshot,
       usedPageable: usedPageable,
       //
       queriedItemList: queriedItemList,

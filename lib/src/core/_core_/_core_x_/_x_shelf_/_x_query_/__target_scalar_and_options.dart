@@ -1,10 +1,10 @@
 part of '../../../core.dart';
 
-class SrcScalarAndOptions {
+class TargetScalarAndOptions {
   final Scalar scalar;
   final QueryType queryType;
 
-  SrcScalarAndOptions({
+  TargetScalarAndOptions({
     required this.scalar,
     required this.queryType,
   });

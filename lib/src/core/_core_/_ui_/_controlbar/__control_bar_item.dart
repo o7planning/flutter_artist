@@ -19,7 +19,8 @@ class ControlBarItem<OWNER extends Object, ITEM_TYPE extends Enum> {
     required String this.tooltip,
     required IconData this.iconData,
     required this.onPressed,
-  })  : type = null,
+  })
+      : type = null,
         customWidget = null;
 }
 

@@ -212,6 +212,29 @@ final class ScalarLoadedStateStaleReasonEvent
   String toString() => 'ScalarLoadedStateStaleReason.event';
 }
 
+/// Baseline metric or value remains loaded in memory but is marked stale because
+/// the active committed filter criteria mutated.
+final class ScalarLoadedStateStaleReasonFilterChanged
+    extends ScalarLoadedStateStaleReason {
+  const ScalarLoadedStateStaleReasonFilterChanged();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ScalarLoadedStateStaleReasonFilterChanged;
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toBriefInfo() {
+    return "filterChanged()";
+  }
+
+  @override
+  String toString() => 'ScalarLoadedStateStaleReason.filterChanged';
+}
+
 /// Baseline scalar value is marked stale because a subsequent remote refetch, filter change, or query failed.
 final class ScalarLoadedStateStaleReasonFailed
     extends ScalarLoadedStateStaleReason {
@@ -258,6 +281,9 @@ sealed class ScalarPendingReason {
   /// Quick check whether this pending state is uninitialized / initial loading.
   bool get isInitial => this is ScalarPendingReasonInitial;
 
+  /// Quick check whether this pending state was triggered by a filter criteria shift.
+  bool get isFilterChanged => this is ScalarPendingReasonFilterChanged;
+
   /// Convenience factory for initial pending state.
   static const ScalarPendingReason initial = ScalarPendingReasonInitial();
 
@@ -296,6 +322,26 @@ final class ScalarPendingReasonInitial extends ScalarPendingReason {
   String toBriefInfo() {
     return "initial()";
   }
+}
+
+/// Baseline metric or value was invalidated and entered pending state because the active filter criteria mutated.
+final class ScalarPendingReasonFilterChanged extends ScalarPendingReason {
+  const ScalarPendingReasonFilterChanged();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is ScalarPendingReasonFilterChanged;
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toBriefInfo() {
+    return "filterChanged()";
+  }
+
+  @override
+  String toString() => 'ScalarPendingReason.filterChanged';
 }
 
 /// Baseline loading failure where no prior scalar exists (caused by direct query, filter model, or upstream parent cascade).
@@ -341,6 +387,9 @@ sealed class ScalarLoadedStateStaleReason {
 
   /// Quick check whether scalar data is stale because a background re-query attempt failed.
   bool get isFailed => this is ScalarLoadedStateStaleReasonFailed;
+
+  /// Quick check whether metric became stale due to a filter criteria shift.
+  bool get isFilterChanged => this is ScalarLoadedStateStaleReasonFilterChanged;
 
   /// Quick accessor to diagnostic error payload if available.
   ScalarErrorInfo? get errorInfo => switch (this) {

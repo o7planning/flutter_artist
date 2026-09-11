@@ -40,7 +40,7 @@ class FormDebugBox extends BaseDebugBox {
       if (options.showFormDataState)
         IconLabelText(
           label: "Form State: ",
-          text: formModel.dataState.name.toString(),
+          text: formModel.dataState.toBriefInfo(),
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle(context),
         ),

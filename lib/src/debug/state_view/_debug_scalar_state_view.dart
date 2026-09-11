@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/widgets/_table_container.dart';
+import 'options/_debug_filter_options.dart';
 import 'options/_debug_scalar_options.dart';
+import 'widgets/filter_debug_box.dart';
 import 'widgets/scalar_debug_box.dart';
 
 class DebugScalarStateView extends StatelessWidget {
   final Scalar scalar;
+  final DebugFilterOptions? debugFilterOptions;
   final DebugScalarOptions? debugScalarOptions;
 
   final bool showTitle;
@@ -17,6 +20,7 @@ class DebugScalarStateView extends StatelessWidget {
     required this.scalar,
     required this.vertical,
     this.showTitle = true,
+    this.debugFilterOptions,
     required this.debugScalarOptions,
   });
 
@@ -31,6 +35,14 @@ class DebugScalarStateView extends StatelessWidget {
         final colorScheme = theme.colorScheme;
 
         List<Widget> children = [];
+        if (debugFilterOptions != null && scalar.filterModel != null) {
+          children.add(
+            FilterDebugBox(
+              filterModel: scalar.filterModel!,
+              options: debugFilterOptions!,
+            ),
+          );
+        }
         if (debugScalarOptions != null) {
           children.add(
             ScalarDebugBox(

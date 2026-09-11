@@ -25,7 +25,8 @@ class SortCriterion extends Equatable {
     required this.directionalSelectionOnly,
     required this.translationKey,
     required String text,
-  })  : _text = text,
+  })
+      : _text = text,
         _direction = direction,
         _initialDirection = direction,
         _lastUsedDirection = direction;

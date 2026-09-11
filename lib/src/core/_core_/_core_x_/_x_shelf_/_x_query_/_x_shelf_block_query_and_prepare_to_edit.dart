@@ -15,7 +15,7 @@ class _XShelfBlockQueryThenPrepareToEdit extends _XShelfBaseQuery {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: block.registeredOrDefaultFilterModel,
       filterInput: filterInput,
-      srcBlockAndOptions: SrcBlockAndOptions(
+      targetBlockAndOptions: TargetBlockAndOptions(
         block: block,
         queryType: QueryType.realQuery,
         listUpdateStrategy: suggestedListUpdateStrategy,
@@ -23,7 +23,7 @@ class _XShelfBlockQueryThenPrepareToEdit extends _XShelfBaseQuery {
         afterQueryDirective: afterQueryDirective,
         pageable: pageable,
       ),
-      srcScalarAndOptions: null,
+      targetScalarAndOptions: null,
       forceQueryAll: false,
       forceReloadFilter: false,
     );

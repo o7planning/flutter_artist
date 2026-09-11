@@ -1,6 +1,6 @@
 part of '../../../core.dart';
 
-class SrcBlockAndOptions {
+class TargetBlockAndOptions {
   final Block block;
   final QueryType queryType;
   final ListUpdateStrategy? listUpdateStrategy;
@@ -8,7 +8,7 @@ class SrcBlockAndOptions {
   final BlockAfterQueryDirective? afterQueryDirective;
   final Pageable? pageable;
 
-  SrcBlockAndOptions({
+  TargetBlockAndOptions({
     required this.block,
     required this.queryType,
     required this.listUpdateStrategy,

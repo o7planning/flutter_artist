@@ -21,7 +21,7 @@ class BlockDataStateInfoWidget extends BaseInfoWidget {
 
   @override
   String getLabel() {
-    return "Data State: ";
+    return "Block State: ";
   }
 
   @override
@@ -40,6 +40,10 @@ class BlockDataStateInfoWidget extends BaseInfoWidget {
       case BlockDataStateNone():
         return null;
       case BlockDataStatePending(reason: BlockPendingReasonInitial()):
+        return null;
+      case BlockDataStatePending(reason: BlockPendingReasonFilterChanged()):
+        return null;
+      case BlockDataStateLoadedStale(reason: BlockLoadedStateStaleReasonFilterChanged()):
         return null;
       case BlockDataStatePending(reason: BlockPendingReasonFailed()):
         return ButtonFunction(

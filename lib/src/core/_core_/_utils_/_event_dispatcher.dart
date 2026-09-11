@@ -249,7 +249,7 @@ class _EventDispatcher {
     // Dispatch to blocks.
     for (Block block in shelf.blocks) {
       if (block == eventBlock) {
-        continue;
+        // continue;
       }
       executionTrace._addTraceStep(
         codeId: "#88600",

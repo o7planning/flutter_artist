@@ -167,7 +167,7 @@ final class BlockSetCurrentItemIntent<
   final List<ITEM> newQueriedList;
   final ITEM? inputCandidateCurrItem;
   final bool forceReloadItem;
-  final ForceType? forceTypeForForm;
+  final FormForceType? forceTypeForForm;
 
   BlockSetCurrentItemIntent({
     required this.setCurrentItemDirective,

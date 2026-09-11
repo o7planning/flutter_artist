@@ -1,9 +1,9 @@
 part of '../../core.dart';
 
 abstract class BaseControlBar<
-OWNER extends Object, //
-ITEM_TYPE extends Enum, //
-CONTROL_BAR_ITEM extends ControlBarItem<OWNER, ITEM_TYPE>>
+        OWNER extends Object, //
+        ITEM_TYPE extends Enum, //
+        CONTROL_BAR_ITEM extends ControlBarItem<OWNER, ITEM_TYPE>>
     extends _ContextProviderView {
   final ControlBarStyle style;
   final List<CONTROL_BAR_ITEM> leftItems;

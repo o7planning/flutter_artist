@@ -37,7 +37,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
   @override
   void initState() {
     super.initState();
-    filterCriteria = widget.filterModel.filterCriteria;
+    filterCriteria = widget.filterModel.committedFilterCriteria;
     _selectedFilterCriterion = filterCriteria?.filterCriterionList.firstOrNull;
   }
 

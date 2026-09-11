@@ -40,7 +40,7 @@ class FilterModelStructure {
       [];
 
   late final FilterModel filterModel;
-  FilterDataState _filterDataState = FilterDataStatePending();
+  FilterDataState _draftFilterDataState = FilterDataStatePending();
 
   // ***************************************************************************
 
@@ -409,8 +409,8 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setFilterDataState(FilterDataState filterDataState) {
-    _filterDataState = filterDataState;
+  void _setDraftFilterDataState(FilterDataState filterDataState) {
+    _draftFilterDataState = filterDataState;
   }
 
   // ***************************************************************************

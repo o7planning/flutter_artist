@@ -10,7 +10,7 @@ class _ScalarData<
   ///
   final Scalar<ID, VALUE, FILTER_INPUT, FILTER_CRITERIA> scalar;
 
-  FilterCriteriaMappedValue<FILTER_CRITERIA>? _filterCriteriaMappedValue;
+  FilterCriteriaSnapshot<FILTER_CRITERIA>? _filterCriteriaSnapshot;
 
   _ScalarValueWrap<ID, VALUE> __current =
       _ScalarValueWrap<ID, VALUE>(id: null, value: null);
@@ -55,17 +55,16 @@ class _ScalarData<
   void _clearWithDataState({required ScalarDataState scalarDataState}) {
     _scalarDataState = scalarDataState;
     __current = _ScalarValueWrap<ID, VALUE>(id: null, value: null);
-    _filterCriteriaMappedValue = null; // ???
+    _filterCriteriaSnapshot = null; // ???
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isFilterCriteriaMappedValueChanged({
-    required FilterCriteriaMappedValue<FILTER_CRITERIA>
-        newFilterCriteriaMappedValue,
+  bool _isFilterCriteriaSnapshotChanged({
+    required FilterCriteriaSnapshot<FILTER_CRITERIA> newFilterCriteriaSnapshot,
   }) {
-    if (newFilterCriteriaMappedValue != _filterCriteriaMappedValue) {
+    if (newFilterCriteriaSnapshot != _filterCriteriaSnapshot) {
       return true;
     }
     return false;
@@ -74,8 +73,10 @@ class _ScalarData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setToPending() {
-    _scalarDataState = ScalarDataStatePending();
+  void _setScalarDataState({
+    required ScalarDataState newScalarDataState,
+  }) {
+    _scalarDataState = newScalarDataState;
   }
 
   // ***************************************************************************
@@ -97,7 +98,7 @@ class _ScalarData<
       // Update FilterCriteria:
       //
       if (errorInFilter) {
-        __setNewFilterCriteriaMappedValue(newXFilterCriteria: null);
+        __setNewFilterCriteriaSnapshot(newXFilterCriteria: null);
       }
     }
 
@@ -108,15 +109,13 @@ class _ScalarData<
   // ***************************************************************************
 
   void _updateData({
-    required FilterCriteriaMappedValue<FILTER_CRITERIA>?
-        filterCriteriaMappedValue,
+    required FilterCriteriaSnapshot<FILTER_CRITERIA>? filterCriteriaSnapshot,
     required ID? valueId,
     required VALUE? value,
     required ScalarDataState dataState,
     required ActionResultState queryResultState,
   }) {
-    __setNewFilterCriteriaMappedValue(
-        newXFilterCriteria: filterCriteriaMappedValue);
+    __setNewFilterCriteriaSnapshot(newXFilterCriteria: filterCriteriaSnapshot);
     __current = _ScalarValueWrap<ID, VALUE>(id: valueId, value: value);
     _scalarDataState = dataState;
     _lastQueryResultState = queryResultState;
@@ -125,11 +124,11 @@ class _ScalarData<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __setNewFilterCriteriaMappedValue({
-    required FilterCriteriaMappedValue<FILTER_CRITERIA>? newXFilterCriteria,
+  void __setNewFilterCriteriaSnapshot({
+    required FilterCriteriaSnapshot<FILTER_CRITERIA>? newXFilterCriteria,
   }) {
-    final bool changed = _filterCriteriaMappedValue != newXFilterCriteria;
-    _filterCriteriaMappedValue = newXFilterCriteria;
+    final bool changed = _filterCriteriaSnapshot != newXFilterCriteria;
+    _filterCriteriaSnapshot = newXFilterCriteria;
     if (changed) {
       _filterCriteriaChangeCount++;
     }

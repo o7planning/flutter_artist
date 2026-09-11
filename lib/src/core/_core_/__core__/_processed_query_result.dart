@@ -5,7 +5,7 @@ class _ProcessedQueryResult<
     ITEM extends Identifiable<ID>,
     FILTER_CRITERIA extends FilterCriteria> {
   final Comparable? parentBlockCurrentItemId;
-  final FilterCriteriaMappedValue<FILTER_CRITERIA>? usedXFilterCriteria;
+  final FilterCriteriaSnapshot<FILTER_CRITERIA>? usedXFilterCriteria;
   final Pageable? usedPageable;
 
   //

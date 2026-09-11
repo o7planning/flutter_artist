@@ -47,7 +47,7 @@ class FilterDebugBox extends BaseDebugBox {
       if (options.showFilterDataState)
         IconLabelText(
           label: "Filter State: ",
-          text: filterModel.dataState.name.toString(),
+          text: filterModel.committedDataState.toBriefInfo(),
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle(context),
         ),

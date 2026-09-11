@@ -17,11 +17,12 @@ sealed class FilterDataState {
   bool get isLoaded => this is FilterDataStateLoaded;
 
   /// Quick accessor to diagnostic error payload if in [FilterDataStateError], otherwise null.
-  ErrorInfo? get errorInfo =>
-      switch (this) {
+  ErrorInfo? get errorInfo => switch (this) {
         FilterDataStateError(:final errorInfo) => errorInfo,
         _ => null,
       };
+
+  String toBriefInfo();
 
   @override
   bool operator ==(Object other);
@@ -34,7 +35,13 @@ sealed class FilterDataState {
 final class FilterDataStatePending extends FilterDataState {
   const FilterDataStatePending();
 
+  @override
   String get name => "pending";
+
+  @override
+  String toBriefInfo() {
+    return "pending()";
+  }
 
   @override
   bool operator ==(Object other) =>
@@ -50,18 +57,25 @@ final class FilterDataStatePending extends FilterDataState {
 /// Filter model encountered an operational error with guaranteed non-null [ErrorInfo].
 final class FilterDataStateError extends FilterDataState {
   /// Diagnostic error details regarding the filter initialization or validation failure.
+  @override
   final ErrorInfo errorInfo;
 
   const FilterDataStateError({required this.errorInfo});
 
+  @override
   String get name => "error";
+
+  @override
+  String toBriefInfo() {
+    return "fatalError(err)";
+  }
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is FilterDataStateError &&
-              runtimeType == other.runtimeType &&
-              errorInfo == other.errorInfo;
+      other is FilterDataStateError &&
+          runtimeType == other.runtimeType &&
+          errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);
@@ -74,7 +88,13 @@ final class FilterDataStateError extends FilterDataState {
 final class FilterDataStateLoaded extends FilterDataState {
   const FilterDataStateLoaded();
 
+  @override
   String get name => "loaded";
+
+  @override
+  String toBriefInfo() {
+    return "loaded()";
+  }
 
   @override
   bool operator ==(Object other) =>

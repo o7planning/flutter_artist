@@ -135,6 +135,7 @@ abstract class XShelf extends XRootQueueItem {
         xBlock.parentXBlock = null;
       }
     }
+    //
     _updateFromShelfForFirstTime();
   }
 
@@ -145,39 +146,17 @@ abstract class XShelf extends XRootQueueItem {
   void _updateFromShelfForFirstTime() {
     for (XScalar leafXScalar in allLeafXScalars) {
       XScalar? xScalar = leafXScalar;
-      QryHint maxQryHint = leafXScalar.queryHint;
       while (xScalar != null) {
-        maxQryHint = QryHint.max(maxQryHint, xScalar.queryHint);
         final ScalarDataState dataState = xScalar.scalar.dataState;
         bool hasActiveUiX = xScalar.scalar.ui.hasActiveScalarBaseView(
           alsoCheckChildren: true,
         );
         if (hasActiveUiX) {
-          switch (dataState) {
-            case ScalarDataStateNone():
-              break;
-            case ScalarDataStateLoadedFresh():
-              break;
-            case ScalarDataStatePending():
-              maxQryHint = QryHint.force;
-            case ScalarDataStateLoadedStale():
-              maxQryHint = QryHint.force;
+          if (xScalar.scalar.dataState.isPending ||
+              xScalar.scalar.dataState.isStale) {
+            xScalar.setQueryHintToGreater(QryHint.force);
           }
         }
-        // !hasActiveUiX
-        else {
-          switch (dataState) {
-            case ScalarDataStateNone():
-              break;
-            case ScalarDataStateLoadedFresh():
-              break;
-            case ScalarDataStatePending():
-              break;
-            case ScalarDataStateLoadedStale():
-              break;
-          }
-        }
-        xScalar.setQueryHintToGreater(maxQryHint);
         xScalar = xScalar.parentXScalar;
       }
     }
@@ -202,11 +181,10 @@ abstract class XShelf extends XRootQueueItem {
               xFormModel.formModel.dataState.isFatalError ||
               xFormModel.formModel.dataState.isNone) {
             // Test case: [39b]
-            xFormModel.lazy = true;
             if (naturalMode) {
-              xFormModel.setForceType(ForceType.decidedAtRuntime);
+              xFormModel.setForceType(FormForceType.auto);
             } else {
-              xFormModel.setForceType(ForceType.force);
+              xFormModel.setForceType(FormForceType.force);
             }
           }
         }
@@ -223,6 +201,10 @@ abstract class XShelf extends XRootQueueItem {
     PrintUtils.debug(debug,
         "\nBEGIN >>> ${getClassNameWithoutGenerics(this)}._getNextExecutionUnit()...");
     NxtExecutionUnit? next = _findBlockNextExecutionUnit(debug: debug);
+    if (next != null) {
+      return next;
+    }
+    next = _findScalarNextExecutionUnit(debug: debug);
     if (next != null) {
       return next;
     }
@@ -262,80 +244,34 @@ abstract class XShelf extends XRootQueueItem {
 
   // ***************************************************************************
 
-  XScalar? _findScalarNextExecutionUnit() {
+  NxtExecutionUnit? _findScalarNextExecutionUnit({required bool debug}) {
     for (final root in allRootXScalars) {
-      final XScalar? result = _findScalarNextExecutionUnitCascade(root);
-      if (result != null) {
-        return result;
+      final NxtExecutionUnit? next =
+          _findScalarNextExecutionUnitCascade(xScalar: root, debug: debug);
+      if (next != null && next.yes) {
+        return next;
       }
     }
     return null;
   }
 
-  XScalar? _findScalarNextExecutionUnitCascade(XScalar xScalar) {
-    if (xScalar.isLazy) {
-      return xScalar;
+  NxtExecutionUnit? _findScalarNextExecutionUnitCascade({
+    required XScalar xScalar,
+    required bool debug,
+  }) {
+    NxtExecutionUnit next1 = xScalar._getNextExecutionUnit(debug: debug);
+    if (next1.yes) {
+      return next1;
     }
     for (final XScalar childXScalar in xScalar.childXScalars) {
-      final XScalar? result = _findScalarNextExecutionUnitCascade(childXScalar);
-      if (result != null) {
-        return result;
+      NxtExecutionUnit? next2 = _findScalarNextExecutionUnitCascade(
+          xScalar: childXScalar, debug: debug);
+      if (next2 != null && next2.yes) {
+        return next2;
       }
     }
     return null;
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // debug [#01000] _EmptyExecutionUnit
-  @Deprecated("Xoa di")
-  void _initQueryExecutionUnits({required ExecutionTrace executionTrace}) {
-    // if (rootVipXScalar != null && rootVipXBlock != null) {
-    //   // throw "Development Logic Error";
-    // }
-    // shelf.debug._initQueryExecutionUnitsCount++;
-    // //
-    // executionTrace._addTraceStep(
-    //   codeId: "#01000",
-    //   shortDesc: toDebugXShelfStateAsHtml(),
-    //   traceStepType: TraceStepType.debug,
-    // );
-    // //
-    // final executionUnit = _ShelfStarterExecutionUnit(
-    //   xShelf: this,
-    // );
-    // executionTrace._addTraceStep(
-    //   codeId: "#01060",
-    //   shortDesc:
-    //       "Create ${executionUnit.asDebugExecutionUnit()} and add to ${debugObjHtml(this)}.",
-    //   traceStepType: TraceStepType.addExecutionUnit,
-    // );
-    // //
-    // _addExecutionUnit(
-    //   executionUnit: executionUnit,
-    //   toMainQueue: true,
-    // );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // String toDebugXShelfStateAsHtml() {
-  //   String s = "${debugObjHtml(this)}\n"
-  //       " --- STATE BEFORE CREATING EXECUTION UNITS ---";
-  //   for (String key in xBlockMap.keys) {
-  //     final XBlock xBlock = xBlockMap[key]!;
-  //     s += "\n${xBlock.toDebugHtmlString()}";
-  //   }
-  //   for (String key in xScalarMap.keys) {
-  //     final XScalar xScalar = xScalarMap[key]!;
-  //     s += "\n${xScalar.toDebugHtmlString()}";
-  //   }
-  //   return s;
-  // }
 
   // ***************************************************************************
   // ***************************************************************************

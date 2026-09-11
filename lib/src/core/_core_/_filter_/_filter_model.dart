@@ -12,6 +12,8 @@ abstract class FilterModel<
 
   final FilterModelConfig config;
 
+  final FilterModelEffectiveConfig effectiveConfig;
+
   String get pathInfo {
     return "filter-model > ${shelf.name} > $name";
   }
@@ -24,13 +26,65 @@ abstract class FilterModel<
 
   List<Scalar> get scalars => List.unmodifiable(_scalars);
 
-  FilterCriteriaMappedValue<FILTER_CRITERIA>? _filterCriteriaMappedValue;
+  // ===========================================================================
+  // DRAFT REALM (Workspace / Input / Pending changes)
+  // ===========================================================================
 
-  FILTER_CRITERIA? get filterCriteria =>
-      _filterCriteriaMappedValue?.filterCriteria;
+  /// Holds the current active draft criteria and raw map values from the UI workspace.
+  FilterCriteriaSnapshot<FILTER_CRITERIA>? _draftFilterCriteriaSnapshot;
 
-  FilterCriteriaMappedValue<FILTER_CRITERIA>?
-      get debugFilterCriteriaMappedValue => _filterCriteriaMappedValue;
+  /// The active draft criteria reflecting instant inputs in the FilterPanel workspace.
+  FILTER_CRITERIA? get draftFilterCriteria =>
+      _draftFilterCriteriaSnapshot?.criteriaOrNull;
+
+  /// Diagnostic access to the draft criteria and map value wrapper.
+  FilterCriteriaSnapshot<FILTER_CRITERIA>?
+      get debugDraftFilterCriteriaSnapshot => _draftFilterCriteriaSnapshot;
+
+  /// The active data state of the draft workspace (Pending, Loaded, or Error during cascade loading).
+  FilterDataState get draftDataState =>
+      _filterModelStructure._draftFilterDataState;
+
+  // ===========================================================================
+  // APPLIED REALM (Committed snapshot consumed by bound Blocks and Scalars)
+  // ===========================================================================
+
+  /// Holds the committed criteria snapshot that bound Blocks and Scalars actively query against.
+  FilterCriteriaSnapshot<FILTER_CRITERIA>? _committedFilterCriteriaSnapshot;
+
+  /// The committed criteria snapshot consumed by bound Blocks and Scalars.
+  FILTER_CRITERIA? get committedFilterCriteria =>
+      _committedFilterCriteriaSnapshot?.criteriaOrNull;
+
+  /// Diagnostic access to the committed criteria wrapper object.
+  FilterCriteriaSnapshot<FILTER_CRITERIA>?
+      get debugAppliedFilterCriteriaSnapshot =>
+          _committedFilterCriteriaSnapshot;
+
+  /// The committed data state snapshot reflecting the readiness of the committed criteria.
+  FilterDataState _committedDataState = FilterDataStatePending();
+
+  /// The committed data state snapshot consumed by bound Blocks and Scalars.
+  FilterDataState get committedDataState => _committedDataState;
+
+  // ===========================================================================
+  // BACKWARD COMPATIBILITY ALIASES & CRITERIA COMPARISONS
+  // ===========================================================================
+
+  /// Alias for [debugAppliedFilterCriteriaSnapshot].
+  FilterCriteriaSnapshot<FILTER_CRITERIA>? get debugFilterCriteriaSnapshot =>
+      _committedFilterCriteriaSnapshot;
+
+  /// Indicates whether the draft workspace holds criteria different from the committed snapshot.
+  bool get hasUncommittedCriteriaChanges {
+    return draftFilterCriteria != committedFilterCriteria;
+  }
+
+  /// Indicates whether either the criteria or the data state in draft differs from committed.
+  bool get hasUncommittedChanges {
+    return draftFilterCriteria != committedFilterCriteria ||
+        draftDataState != committedDataState;
+  }
 
   late final _FilterModelDebugInfo debug = _FilterModelDebugInfo();
 
@@ -50,17 +104,30 @@ abstract class FilterModel<
 
   FilterModelStructure get filterModelStructure => _filterModelStructure;
 
-  FilterDataState get dataState => _filterModelStructure._filterDataState;
-
+  /// Error information resolved from the committed committed state.
   ErrorInfo? get errorInfo {
-    return switch (dataState) {
+    return switch (committedDataState) {
       FilterDataStateError(:final errorInfo) => errorInfo,
       _ => null
     };
   }
 
+  /// True if the committed committed state holds an error.
   bool get hasError {
-    return dataState.isError;
+    return committedDataState.isError;
+  }
+
+  /// Error information resolved from the draft workspace state.
+  ErrorInfo? get draftErrorInfo {
+    return switch (draftDataState) {
+      FilterDataStateError(:final errorInfo) => errorInfo,
+      _ => null
+    };
+  }
+
+  /// True if the draft workspace state holds an error.
+  bool get hasDraftError {
+    return draftDataState.isError;
   }
 
   late final ui = _FilterUiComponents(filterModel: this);
@@ -70,7 +137,8 @@ abstract class FilterModel<
 
   FilterModel({
     FilterModelConfig config = const FilterModelConfig(),
-  }) : config = config.copy() {
+  })  : config = config.copy(),
+        effectiveConfig = FilterModelEffectiveConfig._fromConfig(config) {
     __defineFilterModelStructure();
   }
 
@@ -187,7 +255,6 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
-  // OLD: getMultiOptCriterionValueFromFilterInput
   @_AbstractMethodAnnotation()
   OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
@@ -233,7 +300,179 @@ abstract class FilterModel<
     required Map<String, dynamic> tildeCriteriaMap,
   });
 
-  FilterCriteriaMappedValue<FILTER_CRITERIA> __createFilterCriteriaMappedValue({
+  // ***************************************************************************
+  // SNAPSHOT SYNCHRONIZATION
+  // ***************************************************************************
+
+  /// Applies the specified [FilterSyncDirective] to reconcile the draft workspace
+  /// with the committed snapshot realm.
+  ///
+  /// **CRITICAL ARCHITECTURAL CONTRACT**:
+  /// Calling this method mutates the committed snapshot state of this [FilterModel]
+  /// and **MUST ALWAYS** be coupled with an immediate, actual query execution pipeline
+  /// (e.g. within [Block.query], [Scalar.query], or [Block.queryEmpty]).
+  ///
+  /// **Why standalone calls are strictly prohibited**:
+  /// 1. **Visual State Desynchronization**: If this method commits a new criteria snapshot
+  ///    (e.g. switching keyword from "Samsung" to "Apple") without immediately executing
+  ///    a query on active consumers, visible blocks will continue displaying stale records
+  ///    while the filter panel reflects the new criteria, severely confusing the user.
+  /// 2. **Broken Reactive Contracts**: Mutating [committedFilterCriteria] and [committedDataState]
+  ///    without dispatching an execution unit causes bound consumer blocks to calculate invalid
+  ///    freshness flags (such as [hasUnappliedFilter]) while remaining unqueried.
+  /// 3. **Cascade Multi-Block Inconsistency**: In multi-block setups sharing this [FilterModel],
+  ///    committing snapshot state without executing a query pipeline leaves sibling blocks
+  ///    in an uncoordinated and desynchronized lifecycle.
+  /// Applies the specified [FilterSyncDirective] to reconcile the draft workspace
+  /// with the committed snapshot realm.
+  ///
+  /// If a programmatic [filterInput] is supplied, it takes strict precedence over
+  /// the directive and automatically commits the resulting snapshot to the committed realm.
+  void _applyFilterSyncDirective({
+    required FilterSyncDirective filterSyncDirective,
+    required FILTER_INPUT? filterInput,
+  }) {
+    // 1. Programmatic Input Override:
+    // When code explicitly injects a filterInput, it is an authoritative command
+    // that must be committed into the committed realm immediately.
+    if (filterInput != null) {
+      _commitDraftSnapshotToCommitted();
+      return;
+    }
+
+    // 2. Error Recovery Van: If committed is broken but draft has been fixed,
+    // auto-commit the valid draft to escape the error trap.
+    if (committedDataState.isError && draftDataState.isLoaded) {
+      _commitDraftSnapshotToCommitted();
+      return;
+    }
+
+    // 3. Interactive Workspace Reconciliation:
+    switch (filterSyncDirective) {
+      case FilterSyncDirective.useCommitted:
+        // Preserve committed realm; do not modify draft workspace.
+        break;
+
+      case FilterSyncDirective.forceCommitDraft:
+        // Unconditionally mirror draft workspace snapshot to committed realm.
+        _commitDraftSnapshotToCommitted();
+        break;
+
+      case FilterSyncDirective.commitDraftIfValid:
+        // Commit draft workspace snapshot only if free of validation or cascade errors.
+        if (draftDataState.isLoaded) {
+          _commitDraftSnapshotToCommitted();
+        }
+        break;
+
+      case FilterSyncDirective.discardDraftToCommitted:
+        // Roll back draft workspace and UI controls back to committed snapshot.
+        discardDraftToCommitted();
+        break;
+    }
+  }
+
+  /// Copies the current draft workspace state and criteria to the committed snapshot.
+  ///
+  /// This method faithfully mirrors whatever state the draft realm currently holds
+  /// (Loaded, Pending, or Error) to the committed realm.
+  void _commitDraftSnapshotToCommitted() {
+    final bool dataStateChanged = _committedDataState != draftDataState;
+    final bool criteriaChanged =
+        _committedFilterCriteriaSnapshot != _draftFilterCriteriaSnapshot;
+    final bool anyChanged = dataStateChanged || criteriaChanged;
+    //
+    _committedFilterCriteriaSnapshot = _draftFilterCriteriaSnapshot;
+    _committedDataState = draftDataState;
+    // Notify..
+    if (anyChanged) {
+      for (Block block in _blocks) {
+        final BlockDataState blockDataState = block.dataState;
+        if (blockDataState is BlockDataStatePending) {
+          final BlockPendingReason reason = blockDataState.reason;
+          if (reason.isFailed) {
+            block.__blockData._setBlockDataState(
+              newBlockDataState: BlockDataStatePending(
+                reason: BlockPendingReasonFilterChanged(),
+              ),
+            );
+          }
+        } else if (blockDataState is BlockDataStateLoadedStale) {
+          final BlockLoadedStateStaleReason reason = blockDataState.reason;
+          if (reason.isFailed) {
+            block.__blockData._setBlockDataState(
+              newBlockDataState: BlockDataStateLoadedStale(
+                reason: BlockLoadedStateStaleReasonFilterChanged(),
+              ),
+            );
+          }
+        } else if (blockDataState is BlockDataStateLoadedFresh) {
+          block.__blockData._setBlockDataState(
+            newBlockDataState: BlockDataStateLoadedStale(
+              reason: BlockLoadedStateStaleReasonFilterChanged(),
+            ),
+          );
+        }
+      }
+      for (Scalar scalar in _scalars) {
+        final ScalarDataState scalarDataState = scalar.dataState;
+        if (scalarDataState is ScalarDataStatePending) {
+          final ScalarPendingReason reason = scalarDataState.reason;
+          if (reason.isFailed) {
+            scalar.__scalarData._setScalarDataState(
+              newScalarDataState: ScalarDataStatePending(
+                reason: ScalarPendingReasonFilterChanged(),
+              ),
+            );
+          }
+        } else if (scalarDataState is ScalarDataStateLoadedStale) {
+          final ScalarLoadedStateStaleReason reason = scalarDataState.reason;
+          if (reason.isFailed) {
+            scalar.__scalarData._setScalarDataState(
+              newScalarDataState: ScalarDataStateLoadedStale(
+                reason: ScalarLoadedStateStaleReasonFilterChanged(),
+              ),
+            );
+          }
+        } else if (scalarDataState is ScalarDataStateLoadedFresh) {
+          scalar.__scalarData._setScalarDataState(
+            newScalarDataState: ScalarDataStateLoadedStale(
+              reason: ScalarLoadedStateStaleReasonFilterChanged(),
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  /// Discards uncommitted draft workspace changes and restores the committed snapshot.
+  void discardDraftToCommitted() {
+    _draftFilterCriteriaSnapshot = _committedFilterCriteriaSnapshot;
+    _filterModelStructure._setDraftFilterDataState(_committedDataState);
+
+    switch (_committedFilterCriteriaSnapshot) {
+      case FilterCriteriaSnapshotSuccess(:final filterCriteriaMap):
+        // 1. Update values into temporary workspace with cascade awareness
+        _filterModelStructure._updateCriteriaTempValues(filterCriteriaMap);
+
+        // 2. Commit temporary values to real current values
+        _filterModelStructure._updateTempToReal();
+
+        // 3. Patch UI Form controls back to committed criteria values
+        _formKeyPatchValue(
+          newCurrentValue: _filterModelStructure._currentCriteriaValues,
+        );
+        break;
+
+      case FilterCriteriaSnapshotError():
+      case null:
+        // Committed realm is either uninitialized or in an error state.
+        // No valid form map exists to patch into UI controls.
+        break;
+    }
+  }
+
+  FilterCriteriaSnapshot<FILTER_CRITERIA> __createFilterCriteriaSnapshot({
     required Map<String, dynamic> tildeCriteriaMap,
     required FilterConditionGroupVal baseCriteria,
     required bool isPrecheck,
@@ -245,7 +484,7 @@ abstract class FilterModel<
       baseCriteria: baseCriteria,
       isPrecheck: isPrecheck,
     );
-    return FilterCriteriaMappedValue<FILTER_CRITERIA>(
+    return FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>(
       filterCriteria: filterCriteria,
       filterCriteriaMap: tildeCriteriaMap,
     );
@@ -259,12 +498,11 @@ abstract class FilterModel<
       return;
     }
     try {
-      final xFilterCriteria = __createFilterCriteriaMappedValue(
+      final filterCriteriaSnapshot = __createFilterCriteriaSnapshot(
         tildeCriteriaMap: {},
         baseCriteria: FilterConditionGroupVal.empty(),
         isPrecheck: true,
       );
-      FILTER_CRITERIA filterCriteria = xFilterCriteria.filterCriteria;
     } on FilterModelRegisterError catch (_) {
       rethrow;
     }
@@ -300,28 +538,78 @@ abstract class FilterModel<
       objectCaller: this,
       methodName: '_unitLoadFilterData',
     );
+    executionTrace._addTraceStep(
+      codeId: "#24100",
+      shortDesc: "Debug",
+      parameters: {
+        "thisXFilterModel.loadedInSession": thisXFilterModel.loadedInSession,
+      },
+      traceStepType: TraceStepType.debug,
+    );
+    print("@@@@ BEFORE 1: draftDataState: $draftDataState");
+    print("@@@@ BEFORE 1: committedDataState: $committedDataState");
     //
     try {
       // SAME-AS: #0004
-      if (!thisXFilterModel.queried) {
+      if (!thisXFilterModel.loadedInSession) {
         final filterInput = thisXFilterModel.filterInput as FILTER_INPUT?;
         //
-        _filterCriteriaMappedValue = await _startNewFilterActivity(
+        final bool isFirstTime = !__initiatedAtLeastOnce;
+        executionTrace._addTraceStep(
+          codeId: "#24200",
+          shortDesc: "Debug",
+          parameters: {
+            "isFirstTime": isFirstTime,
+            "effectiveConfig.applyPolicy": effectiveConfig.applyPolicy,
+          },
+          traceStepType: TraceStepType.debug,
+        );
+        // Auto-commit on first run, instant policy, OR when recovering from an error state
+        final bool recoveringFromCommittedError = committedDataState.isError;
+        //
+        _draftFilterCriteriaSnapshot = await _startNewFilterActivity(
           executionTrace: executionTrace,
           activityType: FilterActivityType.newFilt,
           filterInput: filterInput,
           formKeyInstantValuesInUI: null,
         );
+        executionTrace._addTraceStep(
+          codeId: "#24400",
+          shortDesc: "Debug:",
+          parameters: {
+            "committedFilterCriteriaSnapshot.isError":
+                _committedFilterCriteriaSnapshot?.isError,
+            "draftFilterCriteriaSnapshot.isError":
+                _draftFilterCriteriaSnapshot?.isError,
+          },
+          traceStepType: TraceStepType.debug,
+        );
         //
-        thisXFilterModel.queried = true;
+        if (isFirstTime ||
+            recoveringFromCommittedError ||
+            effectiveConfig.applyPolicy == FilterApplyPolicy.instant ||
+            thisXFilterModel.filterApplyPolicy == FilterApplyPolicy.instant) {
+          executionTrace._addTraceStep(
+            codeId: "#24300",
+            shortDesc:
+                "Calling ${debugObjHtml(this)}._commitDraftSnapshotToCommitted().",
+            traceStepType: TraceStepType.nonControllableCalling,
+          );
+          print("@@@@ AFTER 0: Calling _commitDraftSnapshotToCommitted()");
+          //
+          _commitDraftSnapshotToCommitted();
+        }
+        print("@@@@ AFTER 1: draftDataState: $draftDataState");
+        print("@@@@ AFTER 1: committedDataState: $committedDataState");
       }
       return true;
     } catch (e, stackTrace) {
-      // @@TODO@@ 12 Test.
+      // TODO: Test case.
+      // Never Run.
       print("ERROR _unitQuery: $stackTrace");
-      /* Never Error */
     } finally {
       thisXFilterModel.resetExecutionHints();
+      thisXFilterModel.loadedInSession = true;
     }
     return false;
   }
@@ -352,19 +640,21 @@ abstract class FilterModel<
       methodName: '_unitFilterPanelChanged',
     );
     //
-    _filterModelStructure._setFilterDataState(FilterDataStatePending());
-    //
     try {
-      FilterCriteriaMappedValue<FILTER_CRITERIA>? xFilterCriteria =
+      FilterCriteriaSnapshot<FILTER_CRITERIA>? xFilterCriteria =
           await _startNewFilterActivity(
         executionTrace: executionTrace,
         activityType: FilterActivityType.updateFromFilterPanel,
         filterInput: null,
         formKeyInstantValuesInUI: executionIntent.formKeyInstantValuesInUI,
       );
+      // Under instant policy, auto-commit draft snapshot to committed realm.
+      if (effectiveConfig.applyPolicy == FilterApplyPolicy.instant) {
+        _commitDraftSnapshotToCommitted();
+      }
       return xFilterCriteria != null;
     } finally {
-      thisXFilterModel._createAndSetFilterModelExecutionIntentLoad();
+      // Do nothing.
     }
   }
 
@@ -576,7 +866,7 @@ abstract class FilterModel<
   ///
   @_ImportantMethodAnnotation(
       "Called after changing in FilterPanel or Querying in Block or Scalar.")
-  Future<FilterCriteriaMappedValue<FILTER_CRITERIA>?> _startNewFilterActivity({
+  Future<FilterCriteriaSnapshot<FILTER_CRITERIA>?> _startNewFilterActivity({
     required ExecutionTrace executionTrace,
     required FILTER_INPUT? filterInput,
     required FilterActivityType activityType,
@@ -635,9 +925,12 @@ abstract class FilterModel<
       );
       //
       final dataStateError = FilterDataStateError(errorInfo: errorInfo);
-      _filterModelStructure._setFilterDataState(dataStateError);
-      _filterCriteriaMappedValue = null;
-      return _filterCriteriaMappedValue;
+      _filterModelStructure._setDraftFilterDataState(dataStateError);
+      _draftFilterCriteriaSnapshot =
+          FilterCriteriaSnapshotError<FILTER_CRITERIA>(
+        errorInfo: errorInfo,
+      );
+      return _draftFilterCriteriaSnapshot;
     }
     //
     // Load OptProp Data:
@@ -721,9 +1014,12 @@ abstract class FilterModel<
       );
       //
       final dataStateError = FilterDataStateError(errorInfo: errorInfo);
-      _filterModelStructure._setFilterDataState(dataStateError);
-      _filterCriteriaMappedValue = null;
-      return _filterCriteriaMappedValue;
+      _filterModelStructure._setDraftFilterDataState(dataStateError);
+      _draftFilterCriteriaSnapshot =
+          FilterCriteriaSnapshotError<FILTER_CRITERIA>(
+        errorInfo: errorInfo,
+      );
+      return _draftFilterCriteriaSnapshot;
     }
     //
     if (filterInput != null) {
@@ -778,9 +1074,12 @@ abstract class FilterModel<
         );
         //
         final dataStateError = FilterDataStateError(errorInfo: errorInfo);
-        _filterModelStructure._setFilterDataState(dataStateError);
-        _filterCriteriaMappedValue = null;
-        return _filterCriteriaMappedValue;
+        _filterModelStructure._setDraftFilterDataState(dataStateError);
+        _draftFilterCriteriaSnapshot =
+            FilterCriteriaSnapshotError<FILTER_CRITERIA>(
+          errorInfo: errorInfo,
+        );
+        return _draftFilterCriteriaSnapshot;
       }
     }
     // filterInput is null
@@ -831,9 +1130,12 @@ abstract class FilterModel<
         );
         //
         final dataStateError = FilterDataStateError(errorInfo: errorInfo);
-        _filterModelStructure._setFilterDataState(dataStateError);
-        _filterCriteriaMappedValue = null;
-        return _filterCriteriaMappedValue;
+        _filterModelStructure._setDraftFilterDataState(dataStateError);
+        _draftFilterCriteriaSnapshot =
+            FilterCriteriaSnapshotError<FILTER_CRITERIA>(
+          errorInfo: errorInfo,
+        );
+        return _draftFilterCriteriaSnapshot;
       }
     }
     //
@@ -862,7 +1164,7 @@ abstract class FilterModel<
         newCurrentValue: _filterModelStructure._currentCriteriaValues,
       );
       //
-      final Map<String, dynamic> newCriteriaMap = {
+      final Map<String, dynamic> newTildeCriteriaMap = {
         ..._filterModelStructure._tempCriteriaValues
       };
 
@@ -871,9 +1173,9 @@ abstract class FilterModel<
           .toFilterCriteriaGroupVal();
 
       // Convert Map Data to FilterCriteria Object.
-      final FilterCriteriaMappedValue<FILTER_CRITERIA> newXFilterCriteria =
-          __createFilterCriteriaMappedValue(
-        tildeCriteriaMap: newCriteriaMap,
+      final FilterCriteriaSnapshot<FILTER_CRITERIA> newFilterCriteriaSnapshot =
+          __createFilterCriteriaSnapshot(
+        tildeCriteriaMap: newTildeCriteriaMap,
         baseCriteria: baseCriteria,
         isPrecheck: false,
       );
@@ -882,19 +1184,19 @@ abstract class FilterModel<
         executionTrace._addTraceStep(
           codeId: "#31460",
           shortDesc:
-              "Got an instance of ${debugObjHtml(newXFilterCriteria)} (Dart object).\n"
+              "Got an instance of ${debugObjHtml(newFilterCriteriaSnapshot)} (Dart object).\n"
               "This object will be passed to the <b>@filterCriteria</b> parameter "
               "of the <b>Block.query()</b> or <b>Scalar.query()</b> method.",
           tipDocument: TipDocument.filterCriteria,
         );
       }
       //
-      _filterCriteriaMappedValue = newXFilterCriteria;
+      _draftFilterCriteriaSnapshot = newFilterCriteriaSnapshot;
       //
       __initiatedAtLeastOnce = true;
-      _filterModelStructure._setFilterDataState(FilterDataStateLoaded());
+      _filterModelStructure._setDraftFilterDataState(FilterDataStateLoaded());
       //
-      return _filterCriteriaMappedValue;
+      return _draftFilterCriteriaSnapshot;
     } catch (e, stackTrace) {
       print(stackTrace);
       final ErrorInfo errorInfo = _handleError(
@@ -907,7 +1209,7 @@ abstract class FilterModel<
       );
       //
       final newDataState = FilterDataStateError(errorInfo: errorInfo);
-      _filterModelStructure._setFilterDataState(newDataState);
+      _filterModelStructure._setDraftFilterDataState(newDataState);
       //
       // IMPORTANT:
       //
@@ -915,14 +1217,17 @@ abstract class FilterModel<
         newCurrentValue: _filterModelStructure._currentCriteriaValues,
       );
       //
-      _filterCriteriaMappedValue = null;
+      _draftFilterCriteriaSnapshot =
+          FilterCriteriaSnapshotError<FILTER_CRITERIA>(
+        errorInfo: errorInfo,
+      );
       executionTrace._addTraceStep(
         codeId: "#31500",
         shortDesc:
             "The ${debugObjHtml(this)}.createNewFilterCriteria() method was called with an error!",
         errorInfo: errorInfo,
       );
-      return _filterCriteriaMappedValue;
+      return _draftFilterCriteriaSnapshot;
     }
   }
 
@@ -1460,6 +1765,19 @@ abstract class FilterModel<
       },
       isLibMethod: true,
     );
+
+    executionTrace._addTraceStep(
+      codeId: "#89100",
+      shortDesc: "Debug",
+      parameters: {
+        "committedFilterCriteriaSnapshot.isError":
+            _committedFilterCriteriaSnapshot?.isError,
+        "draftFilterCriteriaSnapshot.isError":
+            _draftFilterCriteriaSnapshot?.isError,
+      },
+      traceStepType: TraceStepType.debug,
+    );
+
     // Test Cases: [48b] - query() & queryAll() - Block.
     // Test Cases: [80b] - query() & queryAll() - Scalar.
     return await __query(
@@ -1490,6 +1808,10 @@ abstract class FilterModel<
       },
       isLibMethod: true,
     );
+
+    // Commit current draft snapshot to committed realm before query dispatch.
+    _commitDraftSnapshotToCommitted();
+
     // Test Cases: [48b] - query() & queryAll().
     return await __query(
       executionTrace: executionTrace,

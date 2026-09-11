@@ -2,3 +2,6 @@ https://excalidraw.com
 
 
 class Blok, BlokForm.
+
+
+Thêm test gọi patchFormFields khi form đang pending, hoặc lỗi.

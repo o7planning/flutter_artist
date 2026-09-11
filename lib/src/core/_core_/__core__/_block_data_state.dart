@@ -215,6 +215,29 @@ final class BlockLoadedStateStaleReasonEvent
   }
 }
 
+/// Baseline dataset remains loaded in memory but is marked stale because
+/// the active committed filter criteria mutated.
+final class BlockLoadedStateStaleReasonFilterChanged
+    extends BlockLoadedStateStaleReason {
+  const BlockLoadedStateStaleReasonFilterChanged();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BlockLoadedStateStaleReasonFilterChanged;
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toBriefInfo() {
+    return "filterChanged()";
+  }
+
+  @override
+  String toString() => 'BlockLoadedStateStaleReason.filterChanged';
+}
+
 /// Baseline dataset is marked stale because a subsequent remote refetch, filter change, or query failed.
 final class BlockLoadedStateStaleReasonFailed
     extends BlockLoadedStateStaleReason {
@@ -258,6 +281,8 @@ sealed class BlockPendingReason {
   /// Quick check whether this pending state is uninitialized / initial loading.
   bool get isInitial => this is BlockPendingReasonInitial;
 
+  bool get isFilterChanged => this is BlockPendingReasonFilterChanged;
+
   /// Convenience factory for initial pending state.
   static const BlockPendingReason initial = BlockPendingReasonInitial();
 
@@ -295,6 +320,26 @@ final class BlockPendingReasonInitial extends BlockPendingReason {
 
   @override
   String toString() => 'PendingReason.initial';
+}
+
+/// Baseline dataset was evicted and entered pending state because the active filter criteria mutated.
+final class BlockPendingReasonFilterChanged extends BlockPendingReason {
+  const BlockPendingReasonFilterChanged();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) || other is BlockPendingReasonFilterChanged;
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toBriefInfo() {
+    return "filterChanged()";
+  }
+
+  @override
+  String toString() => 'PendingReason.filterChanged';
 }
 
 /// Baseline loading failure where no prior dataset exists (caused by direct query, filter model, or upstream parent cascade).
@@ -340,6 +385,9 @@ sealed class BlockLoadedStateStaleReason {
 
   /// Quick check whether data is stale because a background re-query attempt failed.
   bool get isFailed => this is BlockLoadedStateStaleReasonFailed;
+
+  /// Quick check whether data became stale due to a filter criteria shift.
+  bool get isFilterChanged => this is BlockLoadedStateStaleReasonFilterChanged;
 
   /// Quick accessor to diagnostic error payload if available.
   BlockErrorInfo? get errorInfo => switch (this) {

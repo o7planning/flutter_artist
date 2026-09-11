@@ -26,10 +26,11 @@ sealed class FormDataState {
   bool get isStale => this is FormDataStateLoadedStale;
 
   /// Quick accessor to diagnostic error payload across all error-carrying states.
-  ErrorInfo? get errorInfo => switch (this) {
+  ErrorInfo? get errorInfo =>
+      switch (this) {
         FormDataStateFatalError(:final errorInfo) => errorInfo,
         FormDataStateLoadedFresh(:final transientErrorInfo) =>
-          transientErrorInfo,
+        transientErrorInfo,
         FormDataStateLoadedStale(:final errorInfo) => errorInfo,
         _ => null,
       };
@@ -98,9 +99,9 @@ final class FormDataStateFatalError extends FormDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FormDataStateFatalError &&
-          runtimeType == other.runtimeType &&
-          errorInfo == other.errorInfo;
+          other is FormDataStateFatalError &&
+              runtimeType == other.runtimeType &&
+              errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);
@@ -135,9 +136,9 @@ final class FormDataStateLoadedFresh extends FormDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FormDataStateLoadedFresh &&
-          runtimeType == other.runtimeType &&
-          transientErrorInfo == other.transientErrorInfo;
+          other is FormDataStateLoadedFresh &&
+              runtimeType == other.runtimeType &&
+              transientErrorInfo == other.transientErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, transientErrorInfo);
@@ -175,9 +176,9 @@ final class FormDataStateLoadedStale extends FormDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FormDataStateLoadedStale &&
-          runtimeType == other.runtimeType &&
-          reason == other.reason;
+          other is FormDataStateLoadedStale &&
+              runtimeType == other.runtimeType &&
+              reason == other.reason;
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
@@ -203,18 +204,19 @@ sealed class FormLoadedStateStaleReason {
   bool get isItemRefreshed => this is FormLoadedStateStaleReasonItemRefreshed;
 
   /// Quick accessor to diagnostic error payload if available.
-  ErrorInfo? get errorInfo => switch (this) {
+  ErrorInfo? get errorInfo =>
+      switch (this) {
         FormLoadedStateStaleReasonFailed(:final errorInfo) => errorInfo,
         _ => null,
       };
 
   /// Convenience constant for event-induced stale reason.
   static const FormLoadedStateStaleReason event =
-      FormLoadedStateStaleReasonEvent();
+  FormLoadedStateStaleReasonEvent();
 
   /// Convenience constant for item-refresh-induced stale reason.
   static const FormLoadedStateStaleReason itemRefreshed =
-      FormLoadedStateStaleReasonItemRefreshed();
+  FormLoadedStateStaleReasonItemRefreshed();
 
   /// Convenience factory for reload-failure stale reason.
   static FormLoadedStateStaleReason failed({required ErrorInfo errorInfo}) =>
@@ -255,7 +257,7 @@ final class FormLoadedStateStaleReasonItemRefreshed
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FormLoadedStateStaleReasonItemRefreshed;
+          other is FormLoadedStateStaleReasonItemRefreshed;
 
   @override
   int get hashCode => runtimeType.hashCode;
@@ -277,9 +279,9 @@ final class FormLoadedStateStaleReasonFailed
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is FormLoadedStateStaleReasonFailed &&
-          runtimeType == other.runtimeType &&
-          errorInfo == other.errorInfo;
+          other is FormLoadedStateStaleReasonFailed &&
+              runtimeType == other.runtimeType &&
+              errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);

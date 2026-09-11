@@ -4,6 +4,7 @@ class DebugBlockOptions {
   final bool showBlockDataState;
   final bool showLastQueryResultState;
   final bool showPerformQueryCount;
+  final bool showItemDataState;
   final bool showPerformLoadItemCount;
   final bool showItemCount;
   final bool showCurrentItemChangeCount;
@@ -17,6 +18,7 @@ class DebugBlockOptions {
     this.showUiActive = true,
     this.showBlockDataState = true,
     this.showPerformQueryCount = true,
+    this.showItemDataState = true,
     this.showPerformLoadItemCount = true,
     this.showItemCount = true,
     this.showCurrentItemChangeCount = true,
@@ -32,6 +34,7 @@ class DebugBlockOptions {
     this.showUiActive = false,
     this.showBlockDataState = false,
     this.showPerformQueryCount = false,
+    this.showItemDataState = false,
     this.showPerformLoadItemCount = false,
     this.showItemCount = false,
     this.showCurrentItemChangeCount = false,

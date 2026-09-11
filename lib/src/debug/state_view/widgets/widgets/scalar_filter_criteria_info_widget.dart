@@ -20,7 +20,7 @@ class ScalarFilterCriteriaInfoWidget extends BaseInfoWidget {
   Widget build(BuildContext context) {
     final FilterModel filterModel = scalar.registeredOrDefaultFilterModel;
     final FilterCriteria? filterModelFilterCriteria =
-        filterModel.filterCriteria;
+        filterModel.committedFilterCriteria;
     final FilterCriteria? scalarFilterCriteria = scalar.filterCriteria;
 
     return Row(
@@ -64,7 +64,7 @@ class ScalarFilterCriteriaInfoWidget extends BaseInfoWidget {
   String? getButtonTooltip() {
     final FilterModel filterModel = scalar.registeredOrDefaultFilterModel;
     final FilterCriteria? filterModelFilterCriteria =
-        filterModel.filterCriteria;
+        filterModel.committedFilterCriteria;
     final FilterCriteria? scalarFilterCriteria = scalar.filterCriteria;
     //
     return scalarFilterCriteria == null

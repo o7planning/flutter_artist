@@ -7,8 +7,6 @@ sealed class BlockItemDataState {
 
   bool get isNone => this is BlockItemDataStateNone;
 
-  bool get isPending => this is BlockItemDataStatePending;
-
   bool get isFresh => this is BlockItemDataStateFresh;
 
   bool get isStale => this is BlockItemDataStateStale;
@@ -25,17 +23,6 @@ final class BlockItemDataStateNone extends BlockItemDataState {
 
   @override
   String toString() => 'BlockItemDataState.none()';
-}
-
-/// Item is currently being loaded or refreshed via performLoadItemDetailById.
-final class BlockItemDataStatePending extends BlockItemDataState {
-  const BlockItemDataStatePending();
-
-  @override
-  String toBriefInfo() => 'pending()';
-
-  @override
-  String toString() => 'BlockItemDataState.pending()';
 }
 
 /// Item detail is fully loaded and fresh in RAM.

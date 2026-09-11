@@ -1,9 +1,9 @@
 part of '../core.dart';
 
 abstract class Task<
-    TASK_DATA extends TaskData, //
-    TASK_INPUT extends FormInput,
-    ADDITIONAL_FORM_DATA extends AdditionalFormRelatedData> extends _Core {
+TASK_DATA extends TaskData, //
+TASK_INPUT extends FormInput,
+ADDITIONAL_FORM_DATA extends AdditionalFormRelatedData> extends _Core {
   final String name;
   final TaskConfig config;
   final TaskEffectiveConfig effectiveConfig;

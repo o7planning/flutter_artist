@@ -29,8 +29,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       if (xBlk.block._blockItemSyncSessionState != null &&
           xBlk.block._blockItemSyncSessionState!
               .isValidFor(xBlk.block.currentItemId)) {
-        forceReloadItem =
-            true; // Sẽ kích hoạt _unitSetItemAsCurrent với forceReloadItem = true!
+        forceReloadItem = true;
       }
       // if (xBlk.block._blockItemRefreshCondition != null &&
       //     xBlk.block._isMatchBlockItemRefreshCon(
@@ -85,11 +84,10 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
           if (xFormModel.formModel.dataState.isPending ||
               xFormModel.formModel.dataState.isFatalError ||
               xFormModel.formModel.dataState.isNone) {
-            xFormModel.lazy = true;
             if (naturalMode) {
-              xFormModel.setForceType(ForceType.decidedAtRuntime);
+              xFormModel.setForceType(FormForceType.auto);
             } else {
-              xFormModel.setForceType(ForceType.force);
+              xFormModel.setForceType(FormForceType.force);
             }
           }
         }

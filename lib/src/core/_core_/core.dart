@@ -62,7 +62,9 @@ import '../enums/block_viewport_sync_strategy.dart';
 import '../enums/error_origin.dart';
 import '../enums/event_data_kind.dart';
 import '../enums/fallback_dilemma_strategy.dart';
+import '../enums/filter_apply_policy.dart';
 import '../enums/filter_connector.dart';
+import '../enums/filter_sync_directive.dart';
 import '../enums/sort_strategy.dart';
 import '../enums/default_setting_policy.dart';
 import '../enums/filter_operator.dart';
@@ -334,7 +336,7 @@ part '_filter_/_filter_data_state.dart';
 
 part '_filter_/_filter_model.dart';
 
-part '_filter_/_filter_criteria_mapped_value.dart';
+part '_filter_/_filter_criteria_and_map_value.dart';
 
 part '_form_/_form_leave_safely.dart';
 
@@ -440,6 +442,8 @@ part '_event_/_block_event_reaction.dart';
 
 part '_config_/_filter_model_config.dart';
 
+part '_config_/_filter_model_effective_config.dart';
+
 part '_config_/_form_model_config.dart';
 
 part '_event_/_scalar_event_reaction.dart';
@@ -474,9 +478,9 @@ part '_sync_/_debug_block_item_sync_session_state.dart';
 
 part '_sync_/_block_item_refresh_condition.dart';
 
-part '_core_x_/_x_shelf_/_x_query_/__src_block_and_options.dart';
+part '_core_x_/_x_shelf_/_x_query_/__target_block_and_options.dart';
 
-part '_core_x_/_x_shelf_/_x_query_/__src_scalar_and_options.dart';
+part '_core_x_/_x_shelf_/_x_query_/__target_scalar_and_options.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_shelf_natural_query.dart';
 
@@ -532,11 +536,9 @@ part '_core_x_/_x_shelf_/_x_shelf_sort_panel_change.dart';
 
 part '_core_x_/_x_storage.dart';
 
-part '_core_state_/__force_reload_throw.dart';
+part '_utils_/_block_current_item_resolver.dart';
 
-part '_core_state_/_force_reload_item_calculator.dart';
-
-part '_core_state_/_force_reload_state.dart';
+part '_core_state_/_block_current_item_plan.dart';
 
 part '_fa_.dart';
 

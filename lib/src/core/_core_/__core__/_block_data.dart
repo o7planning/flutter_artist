@@ -30,7 +30,7 @@ class _BlockData<
 
   Object? _parentBlockCurrentItemId;
 
-  FilterCriteriaMappedValue<FILTER_CRITERIA>? _filterCriteriaMappedValue;
+  FilterCriteriaSnapshot<FILTER_CRITERIA>? _filterCriteriaSnapshot;
 
   PageData<ITEM>? _lastQueryResult;
 
@@ -72,6 +72,18 @@ class _BlockData<
   }) {
     _lastQueryResultState = ActionResultState.fail;
     _blockDataState = newBlockDataState;
+  }
+
+  void _setBlockDataState({
+    required BlockDataState newBlockDataState,
+  }) {
+    _blockDataState = newBlockDataState;
+  }
+
+  void _setBlockItemDataState({
+    required BlockItemDataState newBlockItemDataState,
+  }) {
+    _blockItemDataState = newBlockItemDataState;
   }
 
   // ***************************************************************************
@@ -236,7 +248,7 @@ class _BlockData<
       // Update FilterCriteria:
       //
       if (errorInFilter) {
-        __setNewFilterCriteria(filterCriteriaMappedValue: null);
+        __setNewFilterCriteria(filterCriteriaSnapshot: null);
       }
     }
     //
@@ -257,11 +269,10 @@ class _BlockData<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isFilterCriteriaMappedValueChanged({
-    required FilterCriteriaMappedValue<FILTER_CRITERIA>
-        newFilterCriteriaMappedValue,
+  bool _isFilterCriteriaSnapshotChanged({
+    required FilterCriteriaSnapshot<FILTER_CRITERIA> newFilterCriteriaSnapshot,
   }) {
-    if (newFilterCriteriaMappedValue != _filterCriteriaMappedValue) {
+    if (newFilterCriteriaSnapshot != _filterCriteriaSnapshot) {
       return true;
     }
     return false;
@@ -391,8 +402,7 @@ class _BlockData<
     if (forceListUpdateStrategy == ListUpdateStrategy.replace ||
         _parentBlockCurrentItemId !=
             processedQueryResult.parentBlockCurrentItemId ||
-        _filterCriteriaMappedValue !=
-            processedQueryResult.usedXFilterCriteria) {
+        _filterCriteriaSnapshot != processedQueryResult.usedXFilterCriteria) {
       _items.clear();
       cleared = true;
     }
@@ -408,8 +418,7 @@ class _BlockData<
     _pageable = processedQueryResult.usedPageable?.copy();
     if (_parentBlockCurrentItemId !=
             processedQueryResult.parentBlockCurrentItemId ||
-        _filterCriteriaMappedValue !=
-            processedQueryResult.usedXFilterCriteria) {
+        _filterCriteriaSnapshot != processedQueryResult.usedXFilterCriteria) {
       _paginationInfo = PaginationInfo.copy(ap.paginationInfo);
     } else {
       // Query Error:
@@ -427,7 +436,7 @@ class _BlockData<
     // Update FilterCriteria:
     //
     __setNewFilterCriteria(
-      filterCriteriaMappedValue: processedQueryResult.usedXFilterCriteria,
+      filterCriteriaSnapshot: processedQueryResult.usedXFilterCriteria,
     );
     //
     // Append to _items:
@@ -530,12 +539,10 @@ class _BlockData<
   // ***************************************************************************
 
   void __setNewFilterCriteria({
-    required FilterCriteriaMappedValue<FILTER_CRITERIA>?
-        filterCriteriaMappedValue,
+    required FilterCriteriaSnapshot<FILTER_CRITERIA>? filterCriteriaSnapshot,
   }) {
-    final bool changed =
-        _filterCriteriaMappedValue != filterCriteriaMappedValue;
-    _filterCriteriaMappedValue = filterCriteriaMappedValue;
+    final bool changed = _filterCriteriaSnapshot != filterCriteriaSnapshot;
+    _filterCriteriaSnapshot = filterCriteriaSnapshot;
     if (changed) {
       block.debug._filterCriteriaChangeCount++;
       if (block.formModel != null) {

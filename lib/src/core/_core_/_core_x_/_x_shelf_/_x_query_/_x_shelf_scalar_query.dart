@@ -11,8 +11,8 @@ class _XShelfScalarQuery extends _XShelfBaseQuery {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: scalar.registeredOrDefaultFilterModel,
       filterInput: filterInput,
-      srcBlockAndOptions: null,
-      srcScalarAndOptions: SrcScalarAndOptions(
+      targetBlockAndOptions: null,
+      targetScalarAndOptions: TargetScalarAndOptions(
         scalar: scalar,
         queryType: QueryType.realQuery,
       ),

@@ -232,10 +232,10 @@ abstract class Scalar<
   ScalarDataState get dataState => __scalarData._scalarDataState;
 
   FILTER_CRITERIA? get filterCriteria =>
-      __scalarData._filterCriteriaMappedValue?.filterCriteria;
+      __scalarData._filterCriteriaSnapshot?.criteriaOrNull;
 
-  FilterCriteriaMappedValue<FILTER_CRITERIA>? get debugXFilterCriteria =>
-      __scalarData._filterCriteriaMappedValue;
+  FilterCriteriaSnapshot<FILTER_CRITERIA>? get debugXFilterCriteria =>
+      __scalarData._filterCriteriaSnapshot;
 
   VALUE? get value => __scalarData.current._value;
 
@@ -451,11 +451,23 @@ abstract class Scalar<
   }) async {
     __assertThisXScalar(thisXScalar);
     //
+    QryHint applyQueryHint = thisXScalar.queryHint;
+    //
+    thisXScalar._setQueriedTrue();
+    thisXScalar._createAndSetScalarExecutionIntentDone(lastIntentInfo: "Query");
+    thisXScalar.resetExecutionHints();
+    //
     executionTrace._addTraceStep(
       codeId: "#12000",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
+    );
+    // Important:
+    final executionResult = executionIntent.resultWrapper._setResult(
+      ScalarQueryResult(precheck: null),
+      objectCaller: this,
+      methodName: '_unitQuery',
     );
     //
     bool provideScalarContext =
@@ -466,16 +478,14 @@ abstract class Scalar<
       shortDesc: "${debugObjHtml(this)} has UIX Visible? $provideScalarContext",
     );
     //
-    QryHint queryHint = thisXScalar.queryHint;
-
-    if (queryHint != QryHint.force) {
+    if (applyQueryHint != QryHint.force) {
       if (provideScalarContext && (dataState.isPending || dataState.isStale)) {
-        queryHint = QryHint.force;
+        applyQueryHint = QryHint.force;
       }
     }
     executionTrace._addTraceStep(
       codeId: "#12040",
-      shortDesc: "Calculated: @queryHint: $queryHint.",
+      shortDesc: "Calculated: @applyQueryHint: $applyQueryHint.",
     );
 
     final DebugScalarSyncSessionState<ID>? currentSyncSessionState =
@@ -487,83 +497,29 @@ abstract class Scalar<
       syncSessionState: currentSyncSessionState,
     );
 
-    if (queryHint == QryHint.none) {
+    if (applyQueryHint == QryHint.none) {
       executionTrace._addTraceStep(
         codeId: "#12080",
         shortDesc:
-            "@queryHint: $queryHint, @dataState: $dataState, @value: ${debugObjHtml(this.value)}.",
+            "@applyQueryHint: $applyQueryHint, @dataState: $dataState, @value: ${debugObjHtml(this.value)}.",
       );
-      //
-      if (dataState.isLoaded && this.value != null) {
-        executionTrace._addTraceStep(
-          codeId: "#12100",
-          shortDesc:
-              "Create ${ExecutionUnitType.scalarQuery.asDebugExecutionUnit()}(s) "
-              "for all child scalars and add to Queue."
-              "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-          traceStepType: TraceStepType.info,
-        );
-        // for (XScalar childXScalar in thisXScalar.childXScalars) {
-        //   // TODO: Review again .........................................
-        //   // final executionUnit = _ScalarQueryExecutionUnit(
-        //   //   xScalar: childXScalar,
-        //   // );
-        //   // executionTrace._addTraceStep(
-        //   //   codeId: "#12120",
-        //   //   shortDesc:
-        //   //       "Create ${executionUnit.asDebugExecutionUnit()} and add to Queue.",
-        //   //   traceStepType: TraceStepType.addExecutionUnit,
-        //   // );
-        //   // thisXScalar.xShelf._addExecutionUnit(
-        //   //   executionUnit: executionUnit,
-        //   // );
-        // }
-      }
       return;
     }
     //
     // this.dataState != DataState.loaded || thisXScalar.queryHint
     //
-    ScalarDataState newScalarDataState = this.dataState;
+    ScalarDataState newScalarDataState = dataState;
     //
-    FilterCriteriaMappedValue<FILTER_CRITERIA>? filterCriteriaMvOfFilterModel;
-    try {
-      final XFilterModel xFilterModel = thisXScalar.xFilterModel;
-      final FilterModel filterModel = xFilterModel.filterModel;
-      // SAME-AS: #0004
-      if (!xFilterModel.queried) {
-        executionTrace._addTraceStep(
-          codeId: "#12220",
-          shortDesc:
-              "${debugObjHtml(this)} @queried: ${xFilterModel.queried} --> need to load data",
-        );
-        FILTER_INPUT? filterInput = xFilterModel.filterInput as FILTER_INPUT?;
-        //
-        filterCriteriaMvOfFilterModel =
-            await filterModel._startNewFilterActivity(
-          executionTrace: executionTrace,
-          activityType: FilterActivityType.newFilt,
-          filterInput: filterInput,
-          formKeyInstantValuesInUI: null,
-        ) as FilterCriteriaMappedValue<FILTER_CRITERIA>?;
-        //
-        xFilterModel.queried = true;
-      } else {
-        executionTrace._addTraceStep(
-          codeId: "#12300",
-          shortDesc:
-              "${debugObjHtml(this)} @queried: ${xFilterModel.queried} --> no need to load data.",
-        );
-        filterCriteriaMvOfFilterModel = filterModel._filterCriteriaMappedValue!
-            as FilterCriteriaMappedValue<FILTER_CRITERIA>;
-      }
-    } catch (e, _) {
-      /* Never Error */
-    }
+    final XFilterModel xFilterModel = thisXScalar.xFilterModel;
+    final FilterModel filterModel = xFilterModel.filterModel;
+    FilterCriteriaSnapshot<FILTER_CRITERIA>? committedFilterCriteriaSnapshot =
+        filterModel._committedFilterCriteriaSnapshot
+            as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
     //
     // Has Error in FilterModel.
     //
-    if (filterCriteriaMvOfFilterModel == null) {
+    if (committedFilterCriteriaSnapshot == null ||
+        committedFilterCriteriaSnapshot.isError) {
       executionTrace._addTraceStep(
         codeId: "#12340",
         shortDesc:
@@ -581,9 +537,11 @@ abstract class Scalar<
     //
     // Ready FilterCriteria:
     //
+    committedFilterCriteriaSnapshot
+        as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
     final bool filterCriteriaChanged =
-        __scalarData._isFilterCriteriaMappedValueChanged(
-      newFilterCriteriaMappedValue: filterCriteriaMvOfFilterModel,
+        __scalarData._isFilterCriteriaSnapshotChanged(
+      newFilterCriteriaSnapshot: committedFilterCriteriaSnapshot,
     );
     //
     ActionResultState queryResultState;
@@ -603,7 +561,7 @@ abstract class Scalar<
         shortDesc: "Calling ${debugObjHtml(this)}.performQuery()...",
         parameters: {
           "parentScalarValue": parent?.value,
-          "filterCriteria": filterCriteriaMvOfFilterModel.filterCriteria,
+          "filterCriteria": committedFilterCriteriaSnapshot.filterCriteria,
         },
         traceStepType: TraceStepType.controllableCalling,
       );
@@ -611,7 +569,7 @@ abstract class Scalar<
       debug.__performQueryCount++;
       ApiResult<VALUE> result = await performQuery(
         parentScalarValue: parent?.value,
-        filterCriteria: filterCriteriaMvOfFilterModel.filterCriteria,
+        filterCriteria: committedFilterCriteriaSnapshot.filterCriteria,
       );
       //
       // Throw ApiError:
@@ -640,6 +598,9 @@ abstract class Scalar<
         showSnackBar: true,
         tipDocument: TipDocument.scalarPerformQuery,
       );
+      executionResult._setErrorInfo(
+        errorInfo: errorInfo,
+      );
       //
       thisXScalar.queryResult._setErrorInfo(
         errorInfo: errorInfo,
@@ -652,11 +613,6 @@ abstract class Scalar<
         errorInfo: errorInfo,
       );
     } finally {
-      //
-      // Query DONE!
-      //
-      thisXScalar.setReQueryDone();
-      //
       __refreshQueryingState(isQuerying: false);
     }
     //
@@ -670,9 +626,9 @@ abstract class Scalar<
     final ScalarQueryCalculatorResult calculationResult =
         ScalarQueryStateCalculator.calculate(calculationInput);
 
-    print("@TEMP INPUT: ");
-    print(calculationInput.getDebugInfo());
-    print(calculationResult.getDebugInfo());
+    // print("@TEMP INPUT: ");
+    // print(calculationInput.getDebugInfo());
+    // print(calculationResult.getDebugInfo());
 
     // Extract variables directly into your pre-existing downstream fields securely
     newScalarDataState = calculationResult.newScalarDataState;
@@ -707,7 +663,7 @@ abstract class Scalar<
     newScalarDataState = ScalarDataStateLoadedFresh();
     __setQueryDataWithState(
       thisXScalar: thisXScalar,
-      xFilterCriteria: filterCriteriaMvOfFilterModel,
+      xFilterCriteria: committedFilterCriteriaSnapshot,
       dataState: newScalarDataState,
       valueId: valueId,
       value: value,
@@ -738,29 +694,6 @@ abstract class Scalar<
         thisXScalar: thisXScalar,
       );
     }
-    //
-    // executionTrace._addTraceStep(
-    //   codeId: "#12800",
-    //   shortDesc:
-    //       "Create ${ExecutionUnitType.scalarQuery.asDebugExecutionUnit()}(s) "
-    //       "for all child scalars and add to queue."
-    //       "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-    //   traceStepType: TraceStepType.info,
-    // );
-    // for (XScalar childXScalar in thisXScalar.childXScalars) {
-    //   final executionUnit = _ScalarQueryExecutionUnit(
-    //     xScalar: childXScalar,
-    //   );
-    //   executionTrace._addTraceStep(
-    //     codeId: "#12840",
-    //     shortDesc:
-    //         "Create ${executionUnit.asDebugExecutionUnit()} and add to queue.",
-    //     traceStepType: TraceStepType.addExecutionUnit,
-    //   );
-    //   thisXScalar.xShelf._addExecutionUnit(
-    //     executionUnit: executionUnit,
-    //   );
-    // }
   }
 
   // ***************************************************************************
@@ -984,20 +917,22 @@ abstract class Scalar<
     FallbackDilemmaStrategy fallbackDilemmaStrategy =
         FallbackDilemmaStrategy.preserveStableCache;
 
-    for (final descendant in descendantXScalars) {
+    for (final descendantXScalar in descendantXScalars) {
+      final descendantScalar = descendantXScalar.scalar;
       final descendantState =
           ScalarQueryStateCalculator.calculateDataStateOnError(
-        currentDataState: descendant.scalar.dataState,
+        currentDataState: descendantScalar.dataState,
         scalarErrorOrigin: scalarErrorOrigin,
         scalarErrorInfo: null,
         dilemmaStrategy: fallbackDilemmaStrategy,
       );
-      print("*** scalarErrorOrigin $scalarErrorOrigin");
-      print("descendant: $descendant, descendantState: $descendantState");
-
-      descendant.scalar.__scalarData._lastQueryResultState =
+      //
+      descendantXScalar._queried = true;
+      descendantScalar.__scalarData._lastQueryResultState =
           ActionResultState.fail;
-      descendant.scalar.__scalarData._scalarDataState = descendantState;
+      descendantScalar.__scalarData._setScalarDataState(
+        newScalarDataState: descendantState,
+      );
     }
   }
 
@@ -1059,7 +994,7 @@ abstract class Scalar<
 
   void __setQueryDataWithState({
     required XScalar thisXScalar,
-    required FilterCriteriaMappedValue<FILTER_CRITERIA>? xFilterCriteria,
+    required FilterCriteriaSnapshot<FILTER_CRITERIA>? xFilterCriteria,
     required ScalarDataState dataState,
     required ID? valueId,
     required VALUE? value,
@@ -1068,7 +1003,7 @@ abstract class Scalar<
     __assertThisXScalar(thisXScalar);
     //
     __scalarData._updateData(
-      filterCriteriaMappedValue: xFilterCriteria,
+      filterCriteriaSnapshot: xFilterCriteria,
       dataState: dataState,
       valueId: valueId,
       value: value,

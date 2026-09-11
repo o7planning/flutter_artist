@@ -12,6 +12,7 @@ import 'widgets/block_data_state_info_widget.dart';
 import 'widgets/block_filter_criteria_info_widget.dart';
 import 'widgets/block_item_refresh_preview_info_widget.dart';
 import 'widgets/block_query_preview_info_widget.dart';
+import 'widgets/item_data_state_info_widget.dart';
 
 class BlockDebugBox extends BaseDebugBox {
   final Block block;
@@ -94,6 +95,12 @@ class BlockDebugBox extends BaseDebugBox {
         ),
       if (options.showPerformQueryCount)
         BlockQueryPreviewInfoWidget(
+          block: block,
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
+        ),
+      if (options.showItemDataState)
+        BlockItemDataStateInfoWidget(
           block: block,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle(context),

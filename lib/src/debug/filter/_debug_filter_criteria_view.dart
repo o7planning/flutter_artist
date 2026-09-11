@@ -19,7 +19,7 @@ class DebugFilterCriteriaView extends StatefulWidget {
     super.key,
     required Block this.block,
     required this.onDebugFilterModelPressed,
-  })  : filterCriteria = block.registeredOrDefaultFilterModel.filterCriteria,
+  })  : filterCriteria = block.registeredOrDefaultFilterModel.committedFilterCriteria,
         scalar = null,
         filterModel = block.registeredOrDefaultFilterModel;
 
@@ -27,7 +27,7 @@ class DebugFilterCriteriaView extends StatefulWidget {
     super.key,
     required Scalar this.scalar,
     required this.onDebugFilterModelPressed,
-  })  : filterCriteria = scalar.registeredOrDefaultFilterModel.filterCriteria,
+  })  : filterCriteria = scalar.registeredOrDefaultFilterModel.committedFilterCriteria,
         block = null,
         filterModel = scalar.registeredOrDefaultFilterModel;
 
@@ -35,7 +35,7 @@ class DebugFilterCriteriaView extends StatefulWidget {
     super.key,
     required FilterModel this.filterModel,
     required this.onDebugFilterModelPressed,
-  })  : filterCriteria = filterModel.filterCriteria,
+  })  : filterCriteria = filterModel.committedFilterCriteria,
         block = null,
         scalar = null;
 

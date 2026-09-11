@@ -43,6 +43,8 @@ export 'src/core/built_in_ui/popup_sort_panel_style.dart';
 export 'src/core/built_in_ui/segmented_sort_panel.dart';
 export 'src/core/built_in_ui/segmented_sort_panel_style.dart';
 export 'src/core/enums/action_confirmation_type.dart';
+export 'src/core/enums/filter_sync_directive.dart';
+export 'src/core/enums/filter_apply_policy.dart';
 export 'src/core/enums/action_result_state.dart';
 export 'src/core/enums/after_backend_action.dart';
 export 'src/core/enums/after_query_action.dart';

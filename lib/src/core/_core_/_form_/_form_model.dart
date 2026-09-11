@@ -442,14 +442,29 @@ abstract class FormModel<
       methodName: '_unitLoadFormData',
     );
     //
+    final visibleX = ui.hasActiveUiComponent();
+    final thisFormDataState = dataState;
     final bool forceReloadForm;
     switch (thisXFormModel.forceTypeForForm) {
-      case ForceType.force:
+      case FormForceType.force:
         forceReloadForm = true;
-      case ForceType.decidedAtRuntime:
-        // forceReloadForm =
-        //     formDataState != DataState.loaded && hasActiveUiComponent();
-        forceReloadForm = false;
+      case FormForceType.forceIfNeed:
+        if (thisFormDataState.isPending ||
+            thisFormDataState.isFatalError ||
+            thisFormDataState.isStale) {
+          forceReloadForm = true;
+        } else {
+          forceReloadForm = false;
+        }
+      case FormForceType.auto:
+        if (visibleX &&
+            (thisFormDataState.isPending ||
+                thisFormDataState.isFatalError ||
+                thisFormDataState.isStale)) {
+          forceReloadForm = true;
+        } else {
+          forceReloadForm = false;
+        }
     }
     //
     executionTrace._addTraceStep(

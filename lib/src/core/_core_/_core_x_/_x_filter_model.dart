@@ -10,7 +10,14 @@ class XFilterModel {
   final List<XBlock> xBlocks = [];
   final List<XScalar> xScalars = [];
 
-  bool queried = false;
+  FilterApplyPolicy _filterApplyPolicy = FilterApplyPolicy.explicit;
+  FilterApplyPolicy get filterApplyPolicy => _filterApplyPolicy;
+
+  void _setFilterApplyPolicy(FilterApplyPolicy filterApplyPolicy) {
+    _filterApplyPolicy = filterApplyPolicy;
+  }
+
+  bool loadedInSession = false;
   FilterInput? filterInput;
 
   bool get isDefaultFilterModel => filterModel.isDefaultFilterModel;
@@ -37,7 +44,6 @@ class XFilterModel {
   /// Resets query status and load hints for this filter session.
   void resetExecutionHints() {
     _filterLoadHint = FilterLoadHint.auto;
-    queried = false;
   }
 
   // ***************************************************************************
@@ -73,138 +79,205 @@ class XFilterModel {
   // ***************************************************************************
 
   NxtExecutionUnit _getNextExecutionUnit({required bool debug}) {
-    final filterDataState = filterModel.dataState;
-    if (filterModel.isDefaultFilterModel) {
+    if (loadedInSession) {
       return NxtExecutionUnit.no(
         debug: debug,
-        info: "FilterModel (1), ${getClassNameWithoutGenerics(filterModel)}, "
-            "default?: ${filterModel.isDefaultFilterModel}",
+        info:
+            "FilterModel (1.1), ${getClassNameWithoutGenerics(filterModel)}, loadedInSession: $loadedInSession.",
       );
     }
-    //
-    if (_executionIntent == null) {
-      if (_filterLoadHint == FilterLoadHint.force) {
+    final draftDataState = filterModel.draftDataState;
+    final committedDataState = filterModel.committedDataState;
+    final executionIntent = _executionIntent;
+
+    // =========================================================================
+    // 2. DATA STATE = PENDING.
+    // =========================================================================
+    if (committedDataState.isPending) {
+      // Must load filter data first before allowing panel mutations or consumption
+      if (executionIntent is! FilterModelLoadIntent) {
         _createAndSetFilterModelExecutionIntentLoad();
-        //
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _FilterModelLoadDataExecutionUnit(
-            xFilterModel: this,
-            executionIntent: _executionIntent as FilterModelLoadIntent,
-          ),
-          info:
-              "FilterModel (Force Reload), ${getClassNameWithoutGenerics(filterModel)}, "
-              "default?: ${filterModel.isDefaultFilterModel}, "
-              "dataState: $filterDataState, executionIntent: $_executionIntent",
-        );
       }
-      // IN: `_executionIntent == null`
-      if (filterDataState.isLoaded) {
-        return NxtExecutionUnit.no(
-          debug: debug,
-          info:
-              "FilterModel (2.1), ${getClassNameWithoutGenerics(filterModel)}, "
-              "default?: ${filterModel.isDefaultFilterModel}, "
-              "dataState: $filterDataState, executionIntent: $_executionIntent",
-        );
-      }
-      // IN: `_executionIntent == null`
-      else if (filterDataState.isPending) {
-        PrintUtils.debug(debug,
-            " (**) FilterModel _executionIntent: null, create FilterModelLoadIntent.");
-        _createAndSetFilterModelExecutionIntentLoad();
-        //
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _FilterModelLoadDataExecutionUnit(
-            xFilterModel: this,
-            executionIntent: _executionIntent as FilterModelLoadIntent,
-          ),
-          info:
-              "FilterModel (2.2), ${getClassNameWithoutGenerics(filterModel)}, "
-              "default?: ${filterModel.isDefaultFilterModel}, "
-              "dataState: $filterDataState, executionIntent: $_executionIntent",
-        );
-      }
-      // IN: `_executionIntent == null`
-      else if (filterDataState.isError) {
-        PrintUtils.debug(debug,
-            " (**) FilterModel _executionIntent: null, create ${debugObjHtml(FilterModelLoadIntent)}");
-        _createAndSetFilterModelExecutionIntentLoad();
-        //
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _FilterModelLoadDataExecutionUnit(
-            xFilterModel: this,
-            executionIntent: _executionIntent as FilterModelLoadIntent,
-          ),
-          info:
-              "FilterModel (2.3), ${getClassNameWithoutGenerics(filterModel)}, "
-              "default?: ${filterModel.isDefaultFilterModel}, "
-              "dataState: $filterDataState, executionIntent: $_executionIntent",
-        );
-      }
-      // IN: `_executionIntent == null`
-      else {
-        _createAndSetFilterModelExecutionIntentLoad();
-        //
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _FilterModelLoadDataExecutionUnit(
-            xFilterModel: this,
-            executionIntent: _executionIntent as FilterModelLoadIntent,
-          ),
-          info:
-              "FilterModel (2.4), ${getClassNameWithoutGenerics(filterModel)}, "
-              "default?: ${filterModel.isDefaultFilterModel}, "
-              "dataState: $filterDataState, executionIntent: $_executionIntent",
-        );
-      }
-    }
-    //
-    // _executionIntent != null.
-    //
-    final executionIntent = _executionIntent!;
-    // FilterModelDoneIntent
-    if (executionIntent is FilterModelDoneIntent) {
-      return NxtExecutionUnit.no(
-        debug: debug,
-        info: "FilterModel (3), ${getClassNameWithoutGenerics(filterModel)}, "
-            "default?: ${filterModel.isDefaultFilterModel}, "
-            "dataState: $filterDataState, executionIntent: $executionIntent",
-      );
-    }
-    // FilterModelFilterPanelChangeIntent
-    else if (executionIntent is FilterModelFilterPanelChangeIntent) {
-      return NxtExecutionUnit.yes(
-        debug: debug,
-        executionUnit: _FilterPanelChangeExecutionUnit(
-          xFilterModel: this,
-          executionIntent: executionIntent,
-        ),
-        info: "FilterModel (4), ${getClassNameWithoutGenerics(filterModel)}, "
-            "default?: ${filterModel.isDefaultFilterModel}, "
-            "dataState: $filterDataState, executionIntent: $_executionIntent",
-      );
-    }
-    // FilterModelLoadIntent
-    else if (executionIntent is FilterModelLoadIntent) {
+
       return NxtExecutionUnit.yes(
         debug: debug,
         executionUnit: _FilterModelLoadDataExecutionUnit(
           xFilterModel: this,
-          executionIntent: executionIntent,
+          executionIntent: _executionIntent as FilterModelLoadIntent,
         ),
-        info: "FilterModel (5), ${getClassNameWithoutGenerics(filterModel)}, "
-            "default?: ${filterModel.isDefaultFilterModel}, "
-            "dataState: $filterDataState, executionIntent: $_executionIntent",
+        info:
+            "FilterModel 2.1, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+            "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+            "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
       );
     }
+
+    // =========================================================================
+    // 3. DATA STATE = ERROR (Data is missing or broken)
+    // =========================================================================
+    if (committedDataState.isError) {
+      // IN: filterDataState.isLoaded
+      // 3.0. Intercept terminal Done intent to prevent duplicate scheduler cycles
+      if (executionIntent is FilterModelDoneIntent) {
+        return NxtExecutionUnit.no(
+          debug: debug,
+          info:
+              "FilterModel (3.0), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+              "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
+        );
+      }
+      // IN: committedDataState.isError.
+      if (executionIntent == null) {
+        _createAndSetFilterModelExecutionIntentLoad();
+
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _FilterModelLoadDataExecutionUnit(
+            xFilterModel: this,
+            executionIntent: _executionIntent as FilterModelLoadIntent,
+          ),
+          info:
+              "FilterModel 3.1, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+              "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
+        );
+      }
+      if (executionIntent is FilterModelLoadIntent) {
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _FilterModelLoadDataExecutionUnit(
+            xFilterModel: this,
+            executionIntent: _executionIntent as FilterModelLoadIntent,
+          ),
+          info:
+              "FilterModel 3.2, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+              "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
+        );
+      } else if (executionIntent is FilterModelFilterPanelChangeIntent) {
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _FilterPanelChangeExecutionUnit(
+            xFilterModel: this,
+            executionIntent:
+                _executionIntent as FilterModelFilterPanelChangeIntent,
+          ),
+          info:
+              "FilterModel 3.3, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+              "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
+        );
+      } else {
+        return NxtExecutionUnit.no(
+          debug: debug,
+          info:
+              "FilterModel 3.4, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+              "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
+        );
+      }
+    }
+
+    // =========================================================================
+    // 4. DATA STATE = LOADED (Data is ready)
+    // =========================================================================
+    else if (committedDataState.isLoaded) {
+      // IN: filterDataState.isLoaded
+      // 4.0. Intercept terminal Done intent to prevent duplicate scheduler cycles
+      if (executionIntent is FilterModelDoneIntent) {
+        return NxtExecutionUnit.no(
+          debug: debug,
+          info:
+              "FilterModel (4.0), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+              "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
+        );
+      }
+
+      // 4.1. Force reload explicitly requested
+      if (_filterLoadHint == FilterLoadHint.force) {
+        // Reuse caller-provided LoadIntent if already attached to preserve completer hooks
+        if (executionIntent is! FilterModelLoadIntent) {
+          _createAndSetFilterModelExecutionIntentLoad();
+        }
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _FilterModelLoadDataExecutionUnit(
+            xFilterModel: this,
+            executionIntent: _executionIntent as FilterModelLoadIntent,
+          ),
+          info:
+              "FilterModel (4.1), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+              "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
+        );
+      }
+
+      // 4.2. Handle active execution intents
+      if (executionIntent != null) {
+        if (executionIntent is FilterModelDoneIntent) {
+          return NxtExecutionUnit.no(
+            debug: debug,
+            info:
+                "FilterModel (4.2.1), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+                "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+                "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
+          );
+        } else if (executionIntent is FilterModelFilterPanelChangeIntent) {
+          return NxtExecutionUnit.yes(
+            debug: debug,
+            executionUnit: _FilterPanelChangeExecutionUnit(
+              xFilterModel: this,
+              executionIntent: executionIntent,
+            ),
+            info:
+                "FilterModel (4.2.2), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+                "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+                "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
+          );
+        } else if (executionIntent is FilterModelLoadIntent) {
+          return NxtExecutionUnit.yes(
+            debug: debug,
+            executionUnit: _FilterModelLoadDataExecutionUnit(
+              xFilterModel: this,
+              executionIntent: executionIntent,
+            ),
+            info:
+                "FilterModel (4.2.3), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+                "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+                "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
+          );
+        } else {
+          return NxtExecutionUnit.no(
+            debug: debug,
+            info:
+                "FilterModel (4.2.4), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+                "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+                "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
+          );
+        }
+      }
+
+      // 4.3. Idle state when filter is fully loaded and no intent is pending
+      return NxtExecutionUnit.no(
+        debug: debug,
+        info:
+            "FilterModel (4.3), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: null, "
+            "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+            "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
+      );
+    }
+
+    // =========================================================================
+    // 4. UNHANDLED / FALLTHROUGH STATE
+    // =========================================================================
     return NxtExecutionUnit.no(
       debug: debug,
-      info: "FilterModel (6), ${getClassNameWithoutGenerics(filterModel)}, "
-          "default?: ${filterModel.isDefaultFilterModel}, "
-          "dataState: $filterDataState, executionIntent: $_executionIntent  *** OTHER ***",
+      info:
+          "FilterModel (5.1), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+          "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+          "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
     );
   }
 
@@ -217,7 +290,7 @@ class XFilterModel {
     if (!filterModel.ui.hasActiveUiComponent()) {
       return false;
     }
-    if (filterModel.dataState.isLoaded) {
+    if (filterModel.committedDataState.isLoaded) {
       return false;
     }
     return true;
@@ -225,6 +298,6 @@ class XFilterModel {
 
   @override
   String toString() {
-    return "${getClassName(filterModel)} - Queried: $queried >>> FILTER_INPUT: $filterInput";
+    return "${getClassName(filterModel)} - Queried: $loadedInSession >>> FILTER_INPUT: $filterInput";
   }
 }

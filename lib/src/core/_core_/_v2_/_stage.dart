@@ -1,17 +1,18 @@
 part of '../core.dart';
 
 abstract class Stage<
-STAGE_ENUM extends Enum,
-STAGE_DATA extends StageData,
-FLOW_CONTEXT_DATA extends FlowContextData,
-FORM_INPUT extends FormInput,
-ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core {
+        STAGE_ENUM extends Enum,
+        STAGE_DATA extends StageData,
+        FLOW_CONTEXT_DATA extends FlowContextData,
+        FORM_INPUT extends FormInput,
+        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
+    extends _Core {
   final STAGE_ENUM stageId;
   final String name;
   final StageConfig config;
   final StageEffectiveConfig effectiveConfig;
   final StageFormModel<STAGE_DATA, FORM_INPUT, ADDITIONAL_FORM_RELATED_DATA>?
-  formModel;
+      formModel;
 
   late final Flow<STAGE_ENUM, FLOW_CONTEXT_DATA> flow;
   StageDataState _dataState = StageDataState.idle;
@@ -42,7 +43,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core {
 
   /// Thực thi hành động Submit của riêng bước này.
   Future<ApiResult<StageExecutionResult<STAGE_ENUM, STAGE_DATA>>>
-  performStageSubmit({
+      performStageSubmit({
     required Map<String, dynamic> formStageData,
     required FLOW_CONTEXT_DATA sharedContext,
   });

@@ -41,6 +41,12 @@ class ScalarDataStateInfoWidget extends BaseInfoWidget {
         return null;
       case ScalarDataStatePending(reason: ScalarPendingReasonInitial()):
         return null;
+      case ScalarDataStatePending(reason: ScalarPendingReasonFilterChanged()):
+        return null;
+      case ScalarDataStateLoadedStale(
+          reason: ScalarLoadedStateStaleReasonFilterChanged()
+        ):
+        return null;
       case ScalarDataStatePending(reason: ScalarPendingReasonFailed()):
         return ButtonFunction(
           btnType: DebugBtnType.error,

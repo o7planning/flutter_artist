@@ -12,8 +12,8 @@ class _XShelfFilterModelQuery extends _XShelfBaseQuery {
     _updateQueryStateFromFilterModelAndFilterInput(
       filterModel: filterModel,
       filterInput: filterInput,
-      srcBlockAndOptions: null,
-      srcScalarAndOptions: null,
+      targetBlockAndOptions: null,
+      targetScalarAndOptions: null,
       forceQueryAll: forceQueryAll,
       forceReloadFilter: true,
     );

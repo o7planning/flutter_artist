@@ -83,7 +83,7 @@ class BlockConfig {
     this.preventUnsavedChangesLoss = true,
     this.viewportSyncConfig = const BlockViewportSyncConfig(),
     this.eventBroadcastEnabled = false,
-    this.eventReactionEnabled = true,
+    this.eventReactionEnabled = false,
     List<Type>? extraBroadcastEvents,
     this.isNativeQueryModeLocked = true,
     this.nativeQueryMode = BlockNativeQueryMode.pageableQuery,

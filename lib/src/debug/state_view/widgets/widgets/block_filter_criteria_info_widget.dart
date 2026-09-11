@@ -20,7 +20,7 @@ class BlockFilterCriteriaInfoWidget extends BaseInfoWidget {
   Widget build(BuildContext context) {
     final FilterModel filterModel = block.registeredOrDefaultFilterModel;
     final FilterCriteria? filterModelFilterCriteria =
-        filterModel.filterCriteria;
+        filterModel.committedFilterCriteria;
     final FilterCriteria? blockFilterCriteria = block.filterCriteria;
 
     return Row(
@@ -64,7 +64,7 @@ class BlockFilterCriteriaInfoWidget extends BaseInfoWidget {
   String? getButtonTooltip() {
     final FilterModel filterModel = block.registeredOrDefaultFilterModel;
     final FilterCriteria? filterModelFilterCriteria =
-        filterModel.filterCriteria;
+        filterModel.committedFilterCriteria;
     final FilterCriteria? blockFilterCriteria = block.filterCriteria;
     //
     return blockFilterCriteria == null
