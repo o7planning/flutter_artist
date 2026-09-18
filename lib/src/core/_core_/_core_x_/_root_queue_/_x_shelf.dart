@@ -326,6 +326,7 @@ abstract class XShelf extends XRootQueueItem {
   // ***************************************************************************
 
   void printInfo() {
+    print("\n\n--------------------------------------------------------------");
     for (XScalar xScalar in allXScalars) {
       if (xScalar.queryHint != QryHint.none) {
         xScalar.printInfo();
@@ -337,6 +338,7 @@ abstract class XShelf extends XRootQueueItem {
     for (XFormModel xFormModel in allXFormModels) {
       xFormModel.printInfo();
     }
+    print("--------------------------------------------------------------\n\n");
   }
 
   // ***************************************************************************

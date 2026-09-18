@@ -107,7 +107,8 @@ void main() {
         syncSessionState: mockSession,
       );
 
-      expect(plan.action, equals(BlockResolvedQueryAction.performQueryByItemIds));
+      expect(
+          plan.action, equals(BlockResolvedQueryAction.performQueryByItemIds));
       expect(plan.viewportSyncStrategy,
           equals(BlockViewportSyncStrategy.effectedItemIdsQuery));
       expect(plan.targetItemIds, containsAll(['user-10', 'user-20']));
@@ -214,7 +215,8 @@ void main() {
         syncSessionState: mockSession,
       );
 
-      expect(plan.action, equals(BlockResolvedQueryAction.performQueryByItemIds));
+      expect(
+          plan.action, equals(BlockResolvedQueryAction.performQueryByItemIds));
       expect(plan.viewportSyncStrategy,
           equals(BlockViewportSyncStrategy.effectedItemIdsQuery));
       expect(plan.targetItemIds, equals({'item-99'}));
@@ -255,7 +257,8 @@ void main() {
         syncSessionState: mockSession,
       );
 
-      expect(plan.action, equals(BlockResolvedQueryAction.performQueryByItemIds));
+      expect(
+          plan.action, equals(BlockResolvedQueryAction.performQueryByItemIds));
       expect(plan.viewportSyncStrategy,
           equals(BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery));
       expect(plan.targetItemIds,

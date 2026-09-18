@@ -6,10 +6,6 @@ class _XShelfBaseQuery extends XShelf {
     required super.shelf,
   });
 
-  // ***************************************************************************
-  // ***************************************************************************
-  // ***************************************************************************
-
   void _updateQueryStateFromFilterModelAndFilterInput({
     required TargetBlockAndOptions? targetBlockAndOptions,
     required TargetScalarAndOptions? targetScalarAndOptions,
@@ -26,26 +22,23 @@ class _XShelfBaseQuery extends XShelf {
     }
 
     final XFilterModel thisXFilterModel = xFilterModelMap[filterModel.name]!;
-    // TODO: Hardcode?
     thisXFilterModel._setFilterApplyPolicy(FilterApplyPolicy.instant);
     final oldFilterInput = thisXFilterModel.filterInput;
     thisXFilterModel.filterInput = filterInput;
 
-    if (oldFilterInput != filterInput) {
-      // Test Case: [20c].
-      thisXFilterModel._filterLoadHint = FilterLoadHint.force;
-      thisXFilterModel.loadedInSession = false;
-    }
-    if (forceReloadFilter) {
+    if (oldFilterInput != filterInput || forceReloadFilter) {
       thisXFilterModel._filterLoadHint = FilterLoadHint.force;
       thisXFilterModel.loadedInSession = false;
     }
 
     // Flag indicating whether the current operation is emptyQuery mode
     final bool isTargetEmptyQuery =
-        targetBlockAndOptions?.queryType == QueryType.emptyQuery;
+        targetBlockAndOptions?.queryType == QueryType.emptyQuery ||
+            targetScalarAndOptions?.queryType == QueryType.emptyQuery;
 
-    // 1. Explicitly configure target block if provided
+    // -------------------------------------------------------------------------
+    // 1. Explicitly configure target block and walk up its ancestry chain
+    // -------------------------------------------------------------------------
     if (targetBlockAndOptions != null) {
       final Block targetBlock = targetBlockAndOptions.block;
       final XBlock targetXBlock = xBlockMap[targetBlock.name]!;
@@ -57,9 +50,25 @@ class _XShelfBaseQuery extends XShelf {
         afterQueryDirective: targetBlockAndOptions.afterQueryDirective,
         pageable: targetBlockAndOptions.pageable,
       );
+
+      // Immediately propagate force query to ancestors requiring baseline data
+      XBlock? parentXBlock = targetXBlock.parentXBlock;
+      while (parentXBlock != null) {
+        final Block parentBlock = parentXBlock.block;
+        final bool isParentNeedQuery = parentBlock.dataState.isNone ||
+            parentBlock.dataState.isPending ||
+            parentBlock.dataState.isStale;
+
+        if (isParentNeedQuery) {
+          parentXBlock.setQueryHintToGreater(QryHint.force);
+        }
+        parentXBlock = parentXBlock.parentXBlock;
+      }
     }
 
-    // 2. Explicitly configure target scalar if provided
+    // -------------------------------------------------------------------------
+    // 2. Explicitly configure target scalar and walk up its ancestry chain
+    // -------------------------------------------------------------------------
     if (targetScalarAndOptions != null) {
       final Scalar targetScalar = targetScalarAndOptions.scalar;
       final XScalar targetXScalar = xScalarMap[targetScalar.name]!;
@@ -67,6 +76,20 @@ class _XShelfBaseQuery extends XShelf {
       targetXScalar.setOptions(
         queryType: targetScalarAndOptions.queryType,
       );
+
+      // Immediately propagate force query to parent scalars requiring baseline data
+      XScalar? parentXScalar = targetXScalar.parentXScalar;
+      while (parentXScalar != null) {
+        final Scalar parentScalar = parentXScalar.scalar;
+        final bool isParentNeedQuery = parentScalar.dataState.isNone ||
+            parentScalar.dataState.isPending ||
+            parentScalar.dataState.isStale;
+
+        if (isParentNeedQuery) {
+          parentXScalar.setQueryHintToGreater(QryHint.force);
+        }
+        parentXScalar = parentXScalar.parentXScalar;
+      }
     }
 
     // -------------------------------------------------------------------------
@@ -75,12 +98,10 @@ class _XShelfBaseQuery extends XShelf {
     for (XBlock xBlock in thisXFilterModel.xBlocks) {
       final Block block = xBlock.block;
 
-      // Safe identity check using unique name to avoid proxy / type mismatch
-      final bool isSrcBlock = targetBlockAndOptions != null &&
+      final bool isTargetBlock = targetBlockAndOptions != null &&
           targetBlockAndOptions.block.name == block.name;
 
-      if (isSrcBlock) {
-        // Target block already fully configured above; do NOT override its options or queryType!
+      if (isTargetBlock) {
         continue;
       }
 
@@ -88,13 +109,11 @@ class _XShelfBaseQuery extends XShelf {
 
       if (targetBlockAndOptions != null) {
         final Block targetBlock = targetBlockAndOptions.block;
-        // Search: LOGIC-02: Ancestors of the target block must be evaluated
         if (block.isAncestorOf(targetBlock)) {
           queryHint = QryHint.force;
         }
       }
 
-      // If emptyQuery is requested, do not automatically force-query sibling or child UI blocks!
       final bool hasBlockContextX =
           block.ui.hasActiveUiComponentBlockRepresentative(
         alsoCheckChildren: true,
@@ -105,7 +124,6 @@ class _XShelfBaseQuery extends XShelf {
 
       xBlock.setQueryHintToGreater(queryHint);
 
-      // Reset default options for non-target blocks
       xBlock.setOptions(
         queryType: QueryType.realQuery,
         listUpdateStrategy: ListUpdateStrategy.replace,
@@ -118,16 +136,13 @@ class _XShelfBaseQuery extends XShelf {
         XBlock? parentXBlock = xBlock.parentXBlock;
         while (parentXBlock != null) {
           final Block parentBlock = parentXBlock.block;
+          final bool isParentNeedQuery = parentBlock.dataState.isNone ||
+              parentBlock.dataState.isPending ||
+              parentBlock.dataState.isStale;
 
-          // Check if parent block has stale data or needs baseline initialization
-          final bool isParentStaleOrPending =
-              parentBlock.dataState.isPending || parentBlock.dataState.isStale;
-
-          // Force query parent first if it is on the ancestry path and not yet fresh
-          if (isParentStaleOrPending) {
+          if (isParentNeedQuery) {
             parentXBlock.setQueryHintToGreater(QryHint.force);
           }
-
           parentXBlock = parentXBlock.parentXBlock;
         }
       }
@@ -139,11 +154,10 @@ class _XShelfBaseQuery extends XShelf {
     for (XScalar xScalar in thisXFilterModel.xScalars) {
       final Scalar scalar = xScalar.scalar;
 
-      final bool isSrcScalar = targetScalarAndOptions != null &&
+      final bool isTargetScalar = targetScalarAndOptions != null &&
           targetScalarAndOptions.scalar.name == scalar.name;
 
-      if (isSrcScalar) {
-        // Target scalar already configured above; do NOT override its options!
+      if (isTargetScalar) {
         continue;
       }
 
@@ -151,7 +165,6 @@ class _XShelfBaseQuery extends XShelf {
 
       if (targetScalarAndOptions != null) {
         final Scalar targetScalar = targetScalarAndOptions.scalar;
-        // Search: LOGIC-02: Ancestors of the target scalar must be evaluated
         if (scalar.isAncestorOf(targetScalar)) {
           queryHint = QryHint.force;
         }
@@ -166,7 +179,6 @@ class _XShelfBaseQuery extends XShelf {
 
       xScalar.setQueryHintToGreater(queryHint);
 
-      // Reset default options for non-target scalars
       xScalar.setOptions(
         queryType: QueryType.realQuery,
       );
@@ -175,16 +187,13 @@ class _XShelfBaseQuery extends XShelf {
         XScalar? parentXScalar = xScalar.parentXScalar;
         while (parentXScalar != null) {
           final Scalar parentScalar = parentXScalar.scalar;
-
-          // Check if parent scalar has stale data or needs baseline initialization
-          final bool isParentStaleOrPending =
+          final bool isParentNeedQuery = parentScalar.dataState.isNone ||
               parentScalar.dataState.isPending ||
-                  parentScalar.dataState.isStale;
+              parentScalar.dataState.isStale;
 
-          if (isParentStaleOrPending) {
+          if (isParentNeedQuery) {
             parentXScalar.setQueryHintToGreater(QryHint.force);
           }
-
           parentXScalar = parentXScalar.parentXScalar;
         }
       }

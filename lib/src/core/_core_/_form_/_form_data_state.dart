@@ -26,11 +26,10 @@ sealed class FormDataState {
   bool get isStale => this is FormDataStateLoadedStale;
 
   /// Quick accessor to diagnostic error payload across all error-carrying states.
-  ErrorInfo? get errorInfo =>
-      switch (this) {
+  ErrorInfo? get errorInfo => switch (this) {
         FormDataStateFatalError(:final errorInfo) => errorInfo,
         FormDataStateLoadedFresh(:final transientErrorInfo) =>
-        transientErrorInfo,
+          transientErrorInfo,
         FormDataStateLoadedStale(:final errorInfo) => errorInfo,
         _ => null,
       };
@@ -99,9 +98,9 @@ final class FormDataStateFatalError extends FormDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is FormDataStateFatalError &&
-              runtimeType == other.runtimeType &&
-              errorInfo == other.errorInfo;
+      other is FormDataStateFatalError &&
+          runtimeType == other.runtimeType &&
+          errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);
@@ -136,9 +135,9 @@ final class FormDataStateLoadedFresh extends FormDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is FormDataStateLoadedFresh &&
-              runtimeType == other.runtimeType &&
-              transientErrorInfo == other.transientErrorInfo;
+      other is FormDataStateLoadedFresh &&
+          runtimeType == other.runtimeType &&
+          transientErrorInfo == other.transientErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, transientErrorInfo);
@@ -167,6 +166,20 @@ final class FormDataStateLoadedStale extends FormDataStateLoaded {
   FormDataStateLoadedStale.failed({required ErrorInfo errorInfo})
       : reason = FormLoadedStateStaleReasonFailed(errorInfo: errorInfo);
 
+  /// Resolves the underlying failure reason if the form is currently in a failed state
+  /// or preserves a retained failure from earlier sync cycles.
+  FormLoadedStateStaleReasonFailed? get underlyingFailureReason =>
+      switch (reason) {
+        FormLoadedStateStaleReasonFailed failure => failure,
+        FormLoadedStateStaleReasonItemRefreshed(:final retainedFailureReason) =>
+          retainedFailureReason,
+        FormLoadedStateStaleReasonEvent(:final retainedFailureReason) =>
+          retainedFailureReason,
+      };
+
+  /// Quick check whether this stale state carries any historical or active failure.
+  bool get hasFailure => underlyingFailureReason != null;
+
   @override
   String get name => "loaded + stale";
 
@@ -176,9 +189,9 @@ final class FormDataStateLoadedStale extends FormDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is FormDataStateLoadedStale &&
-              runtimeType == other.runtimeType &&
-              reason == other.reason;
+      other is FormDataStateLoadedStale &&
+          runtimeType == other.runtimeType &&
+          reason == other.reason;
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
@@ -203,20 +216,26 @@ sealed class FormLoadedStateStaleReason {
   /// Quick check whether data is stale because its target/bound item in the parent Block was refreshed.
   bool get isItemRefreshed => this is FormLoadedStateStaleReasonItemRefreshed;
 
-  /// Quick accessor to diagnostic error payload if available.
-  ErrorInfo? get errorInfo =>
-      switch (this) {
-        FormLoadedStateStaleReasonFailed(:final errorInfo) => errorInfo,
-        _ => null,
+  /// Returns the active error payload if this is a failed state,
+  /// or the preserved error payload from the retained failure if applicable.
+  ErrorInfo? get errorInfo => switch (this) {
+        FormLoadedStateStaleReasonFailed(:final errorInfo) => errorInfo, //
+        FormLoadedStateStaleReasonItemRefreshed(:final retainedFailureReason) =>
+          retainedFailureReason?.errorInfo,
+        FormLoadedStateStaleReasonEvent(:final retainedFailureReason) =>
+          retainedFailureReason?.errorInfo,
       };
 
-  /// Convenience constant for event-induced stale reason.
-  static const FormLoadedStateStaleReason event =
-  FormLoadedStateStaleReasonEvent();
+  /// Returns true if this reason either represents a failure or carries a preserved retained failure.
+  bool get hasFailureHistory => errorInfo != null;
 
-  /// Convenience constant for item-refresh-induced stale reason.
+  /// Convenience constant for event-induced stale reason without retained failure.
+  static const FormLoadedStateStaleReason event =
+      FormLoadedStateStaleReasonEvent();
+
+  /// Convenience constant for item-refresh-induced stale reason without retained failure.
   static const FormLoadedStateStaleReason itemRefreshed =
-  FormLoadedStateStaleReasonItemRefreshed();
+      FormLoadedStateStaleReasonItemRefreshed();
 
   /// Convenience factory for reload-failure stale reason.
   static FormLoadedStateStaleReason failed({required ErrorInfo errorInfo}) =>
@@ -233,40 +252,55 @@ sealed class FormLoadedStateStaleReason {
 
 /// Form data marked stale due to an external mutation or domain sync notification.
 final class FormLoadedStateStaleReasonEvent extends FormLoadedStateStaleReason {
-  const FormLoadedStateStaleReasonEvent();
+  /// Retained failure state from the most recent failed reload attempt (if any).
+  final FormLoadedStateStaleReasonFailed? retainedFailureReason;
+
+  const FormLoadedStateStaleReasonEvent({this.retainedFailureReason});
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is FormLoadedStateStaleReasonEvent;
+      identical(this, other) ||
+      other is FormLoadedStateStaleReasonEvent &&
+          runtimeType == other.runtimeType &&
+          retainedFailureReason == other.retainedFailureReason;
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, retainedFailureReason);
 
   @override
-  String toBriefInfo() => "event()";
+  String toBriefInfo() =>
+      "event(${retainedFailureReason == null ? '' : 'prevErr'})";
 
   @override
-  String toString() => 'FormLoadedStateStaleReason.event';
+  String toString() =>
+      'FormLoadedStateStaleReason.event(retainedFailureReason: $retainedFailureReason)';
 }
 
 /// Form data marked stale because the corresponding target item in the parent Block was refreshed.
 final class FormLoadedStateStaleReasonItemRefreshed
     extends FormLoadedStateStaleReason {
-  const FormLoadedStateStaleReasonItemRefreshed();
+  /// Retained failure state from the most recent failed reload attempt (if any).
+  final FormLoadedStateStaleReasonFailed? retainedFailureReason;
+
+  const FormLoadedStateStaleReasonItemRefreshed({this.retainedFailureReason});
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is FormLoadedStateStaleReasonItemRefreshed;
+      other is FormLoadedStateStaleReasonItemRefreshed &&
+          runtimeType == other.runtimeType &&
+          retainedFailureReason == other.retainedFailureReason;
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, retainedFailureReason);
 
   @override
-  String toBriefInfo() => "itemRefreshed()";
+  String toBriefInfo() =>
+      "itemRefreshed(${retainedFailureReason == null ? '' : 'prevErr'})";
 
   @override
-  String toString() => 'FormLoadedStateStaleReason.itemRefreshed';
+  String toString() =>
+      'FormLoadedStateStaleReason.itemRefreshed(retainedFailureReason: $retainedFailureReason)';
 }
 
 /// Form data marked stale because a subsequent background reload or detail sync attempt failed.
@@ -279,9 +313,9 @@ final class FormLoadedStateStaleReasonFailed
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is FormLoadedStateStaleReasonFailed &&
-              runtimeType == other.runtimeType &&
-              errorInfo == other.errorInfo;
+      other is FormLoadedStateStaleReasonFailed &&
+          runtimeType == other.runtimeType &&
+          errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);

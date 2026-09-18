@@ -55,6 +55,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   }
 
   void resetExecutionHints() {
+    print("???????? ${getClassName(scalar)} --> resetExecutionHints???????");
     __qryHint = QryHint.none;
   }
 

@@ -972,7 +972,7 @@ abstract class Block<
     //
     // 🛑 RESET
     //
-    thisXBlock.resetExecutionHints();
+    // thisXBlock.resetExecutionHints();
     //
     __blockData._clearItemsWithDataState(
       blockDataState: blockDataState,
@@ -1264,12 +1264,12 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
     //
-    QryHint applyQueryHint = thisXBlock.queryHint;
-    bool applyForceReloadCurrItem = thisXBlock.forceReloadCurrItem;
+    QryHint applyQueryHint = thisXBlock.queryHint; // (**)
+    bool applyForceReloadCurrItem = thisXBlock.forceReloadCurrItem; // (**)
     //
     thisXBlock._setQueriedTrue();
     thisXBlock._createAndSetBlockExecutionIntentDone(lastIntentInfo: "Query");
-    thisXBlock.resetExecutionHints();
+    thisXBlock.resetExecutionHints(); // (**)
     //
     executionTrace._addTraceStep(
       codeId: "#03000",
@@ -2571,7 +2571,7 @@ abstract class Block<
     // ===========================================================================
     // STAGE 3: FORM MODEL LIFECYCLE COORDINATION
     // ===========================================================================
-    if (thisXBlock.xFormModel != null && formModel != null) {
+    if (formModel != null) {
       if (currentItemChanged || isCandidateCurrentItemInNewQueriedList) {
         executionTrace._addTraceStep(
           codeId: "#29520",
@@ -2588,10 +2588,13 @@ abstract class Block<
           shortDesc: "Current Item Refreshed --> Set Form to Stale.",
           traceStepType: TraceStepType.info,
         );
+        final newFormDataState = FormDataStateUtils.calculateNewLazyDataState(
+          currentFormDataState: formModel!.dataState,
+          hasCurrentItem: true,
+          currentItemChanged: false,
+        );
         formModel!._formModelStructure._setFormDataState(
-          formDataState: FormDataStateLoadedStale(
-            reason: FormLoadedStateStaleReasonItemRefreshed(),
-          ),
+          formDataState: newFormDataState,
           error: null,
         );
       }

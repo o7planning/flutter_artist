@@ -546,8 +546,6 @@ abstract class FilterModel<
       },
       traceStepType: TraceStepType.debug,
     );
-    print("@@@@ BEFORE 1: draftDataState: $draftDataState");
-    print("@@@@ BEFORE 1: committedDataState: $committedDataState");
     //
     try {
       // SAME-AS: #0004
@@ -595,12 +593,9 @@ abstract class FilterModel<
                 "Calling ${debugObjHtml(this)}._commitDraftSnapshotToCommitted().",
             traceStepType: TraceStepType.nonControllableCalling,
           );
-          print("@@@@ AFTER 0: Calling _commitDraftSnapshotToCommitted()");
           //
           _commitDraftSnapshotToCommitted();
         }
-        print("@@@@ AFTER 1: draftDataState: $draftDataState");
-        print("@@@@ AFTER 1: committedDataState: $committedDataState");
       }
       return true;
     } catch (e, stackTrace) {

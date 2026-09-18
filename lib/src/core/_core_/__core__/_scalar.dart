@@ -451,11 +451,12 @@ abstract class Scalar<
   }) async {
     __assertThisXScalar(thisXScalar);
     //
-    QryHint applyQueryHint = thisXScalar.queryHint;
+    QryHint applyQueryHint = thisXScalar.queryHint; // (**)
     //
     thisXScalar._setQueriedTrue();
     thisXScalar._createAndSetScalarExecutionIntentDone(lastIntentInfo: "Query");
-    thisXScalar.resetExecutionHints();
+
+    thisXScalar.resetExecutionHints(); // (**)
     //
     executionTrace._addTraceStep(
       codeId: "#12000",
@@ -1321,7 +1322,7 @@ abstract class Scalar<
     //
     // 🛑 RESET
     //
-    thisXScalar.resetExecutionHints();
+    // thisXScalar.resetExecutionHints();
     //
     __scalarData._clearValueWithDataState(
       scalarDataState: scalarDataState,

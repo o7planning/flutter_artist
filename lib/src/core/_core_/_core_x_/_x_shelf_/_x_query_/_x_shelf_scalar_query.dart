@@ -19,5 +19,6 @@ class _XShelfScalarQuery extends _XShelfBaseQuery {
       forceQueryAll: false,
       forceReloadFilter: false,
     );
+    printInfo();
   }
 }

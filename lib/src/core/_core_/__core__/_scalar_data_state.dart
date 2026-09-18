@@ -1,6 +1,7 @@
 part of '../core.dart';
 
 /// Root sealed state container for Scalar data lifecycle.
+@immutable
 sealed class ScalarDataState {
   const ScalarDataState();
 
@@ -19,6 +20,9 @@ sealed class ScalarDataState {
 
   bool get isStale => this is ScalarDataStateLoadedStale;
 
+  /// Quick accessor to diagnostic error payload across all error-carrying states.
+  ScalarErrorInfo? get errorInfo;
+
   @override
   bool operator ==(Object other);
 
@@ -26,12 +30,15 @@ sealed class ScalarDataState {
   int get hashCode;
 }
 
-/// Uninitialized context (Child scalar whose parent has no selected item).
+/// Uninitialized context (e.g., Child scalar whose parent has no selected item or value).
 final class ScalarDataStateNone extends ScalarDataState {
   const ScalarDataStateNone();
 
   @override
   String get name => "none";
+
+  @override
+  ScalarErrorInfo? get errorInfo => null;
 
   @override
   bool operator ==(Object other) =>
@@ -41,9 +48,7 @@ final class ScalarDataStateNone extends ScalarDataState {
   int get hashCode => runtimeType.hashCode;
 
   @override
-  String toBriefInfo() {
-    return "none()";
-  }
+  String toBriefInfo() => "none()";
 
   @override
   String toString() => 'ScalarDataState.none()';
@@ -61,6 +66,13 @@ final class ScalarDataStatePending extends ScalarDataState {
   const ScalarDataStatePending.initial()
       : reason = const ScalarPendingReasonInitial();
 
+  /// Factory constructor for filter mutation eviction.
+  ScalarDataStatePending.filterChanged({
+    ScalarPendingReasonFailed? retainedFailureReason,
+  }) : reason = ScalarPendingReasonFilterChanged(
+          retainedFailureReason: retainedFailureReason,
+        );
+
   /// Factory constructor for blocked baseline state caused by direct query, filter, or upstream cascade failures.
   ScalarDataStatePending.failed({
     required ScalarErrorOrigin errorOrigin,
@@ -73,11 +85,16 @@ final class ScalarDataStatePending extends ScalarDataState {
   @override
   String get name => "pending";
 
-  /// Quick accessor to diagnostic error info if available.
-  ScalarErrorInfo? get errorInfo => switch (reason) {
-        ScalarPendingReasonFailed(:final errorInfo) => errorInfo,
-        _ => null,
-      };
+  /// Resolves the active or preserved error payload across the pending reason chain.
+  @override
+  ScalarErrorInfo? get errorInfo => reason.errorInfo;
+
+  /// Resolves the underlying failure reason if this pending state directly failed or carries a retained failure.
+  ScalarPendingReasonFailed? get underlyingFailureReason =>
+      reason.underlyingFailureReason;
+
+  /// Quick check whether this pending state carries any historical or active failure.
+  bool get hasFailure => underlyingFailureReason != null;
 
   @override
   bool operator ==(Object other) =>
@@ -90,9 +107,7 @@ final class ScalarDataStatePending extends ScalarDataState {
   int get hashCode => Object.hash(runtimeType, reason);
 
   @override
-  String toBriefInfo() {
-    return "pending(${reason.toBriefInfo()})";
-  }
+  String toBriefInfo() => "pending(${reason.toBriefInfo()})";
 
   @override
   String toString() => 'ScalarDataState.pending(reason: $reason)';
@@ -101,6 +116,9 @@ final class ScalarDataStatePending extends ScalarDataState {
 /// Base sealed class for states where scalar data is loaded and retained in RAM.
 sealed class ScalarDataStateLoaded extends ScalarDataState {
   const ScalarDataStateLoaded();
+
+  /// Indicates whether the active scalar holds a pending or retained operational error.
+  bool get hasError => errorInfo != null;
 }
 
 /// Active scalar metric in RAM is fully fresh, synchronized, and matching active criteria.
@@ -108,21 +126,15 @@ final class ScalarDataStateLoadedFresh extends ScalarDataStateLoaded {
   /// Structured diagnostic details for errors occurring during non-destructive,
   /// secondary fetch or polling operations while the active scalar value remains
   /// completely valid, intact, and fresh.
-  ///
-  /// This captures failures where the current in-memory content should neither be
-  /// evicted nor marked stale, allowing the UI to retain the existing scalar metric
-  /// while displaying localized feedback or retry prompts.
-  ///
-  /// Common scenarios include:
-  /// - **Background Polling Failure:** Periodic refresh of a dashboard counter fails due to a network glitch,
-  ///   while the displayed metric remains fresh according to the last successful poll.
-  /// - **Secondary Metric Calculation Failure:** A dependent sub-calculation failed without corrupting the main metric.
   final ScalarErrorInfo? transientErrorInfo;
 
   const ScalarDataStateLoadedFresh({this.transientErrorInfo});
 
   @override
   String get name => "loaded + fresh";
+
+  @override
+  ScalarErrorInfo? get errorInfo => transientErrorInfo;
 
   /// Quick check if the fresh state carries a transient operation error.
   bool get hasTransientError => transientErrorInfo != null;
@@ -138,9 +150,7 @@ final class ScalarDataStateLoadedFresh extends ScalarDataStateLoaded {
   int get hashCode => Object.hash(runtimeType, transientErrorInfo);
 
   @override
-  String toBriefInfo() {
-    return "fresh(${transientErrorInfo == null ? '' : 'err'})";
-  }
+  String toBriefInfo() => "fresh(${transientErrorInfo == null ? '' : 'err'})";
 
   @override
   String toString() =>
@@ -154,8 +164,18 @@ final class ScalarDataStateLoadedStale extends ScalarDataStateLoaded {
   const ScalarDataStateLoadedStale({required this.reason});
 
   /// Factory constructor for event-driven stale state.
-  const ScalarDataStateLoadedStale.event()
-      : reason = const ScalarLoadedStateStaleReasonEvent();
+  ScalarDataStateLoadedStale.event({
+    ScalarLoadedStateStaleReasonFailed? retainedFailureReason,
+  }) : reason = ScalarLoadedStateStaleReasonEvent(
+          retainedFailureReason: retainedFailureReason,
+        );
+
+  /// Factory constructor for filter-changed stale state.
+  ScalarDataStateLoadedStale.filterChanged({
+    ScalarLoadedStateStaleReasonFailed? retainedFailureReason,
+  }) : reason = ScalarLoadedStateStaleReasonFilterChanged(
+          retainedFailureReason: retainedFailureReason,
+        );
 
   /// Factory constructor for query-failure stale state.
   ScalarDataStateLoadedStale.failed({
@@ -169,8 +189,16 @@ final class ScalarDataStateLoadedStale extends ScalarDataStateLoaded {
   @override
   String get name => "loaded + stale";
 
-  /// Quick accessor extracting [ScalarErrorInfo] directly from the stale reason payload.
+  /// Quick accessor extracting [ScalarErrorInfo] from the active reason or retained failure payload.
+  @override
   ScalarErrorInfo? get errorInfo => reason.errorInfo;
+
+  /// Resolves the underlying failure reason if this stale state directly failed or carries a retained failure.
+  ScalarLoadedStateStaleReasonFailed? get underlyingFailureReason =>
+      reason.underlyingFailureReason;
+
+  /// Quick check whether this stale state carries any historical or active failure.
+  bool get hasFailure => underlyingFailureReason != null;
 
   @override
   bool operator ==(Object other) =>
@@ -183,91 +211,15 @@ final class ScalarDataStateLoadedStale extends ScalarDataStateLoaded {
   int get hashCode => Object.hash(runtimeType, reason);
 
   @override
-  String toBriefInfo() {
-    return "stale(${reason.toBriefInfo()})";
-  }
+  String toBriefInfo() => "stale(${reason.toBriefInfo()})";
 
   @override
   String toString() => 'ScalarDataState.loadedStale(reason: $reason)';
 }
 
-/// Baseline scalar value is marked stale due to an external mutation event or sync trigger.
-final class ScalarLoadedStateStaleReasonEvent
-    extends ScalarLoadedStateStaleReason {
-  const ScalarLoadedStateStaleReasonEvent();
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) || other is ScalarLoadedStateStaleReasonEvent;
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  String toBriefInfo() {
-    return "event()";
-  }
-
-  @override
-  String toString() => 'ScalarLoadedStateStaleReason.event';
-}
-
-/// Baseline metric or value remains loaded in memory but is marked stale because
-/// the active committed filter criteria mutated.
-final class ScalarLoadedStateStaleReasonFilterChanged
-    extends ScalarLoadedStateStaleReason {
-  const ScalarLoadedStateStaleReasonFilterChanged();
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ScalarLoadedStateStaleReasonFilterChanged;
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  String toBriefInfo() {
-    return "filterChanged()";
-  }
-
-  @override
-  String toString() => 'ScalarLoadedStateStaleReason.filterChanged';
-}
-
-/// Baseline scalar value is marked stale because a subsequent remote refetch, filter change, or query failed.
-final class ScalarLoadedStateStaleReasonFailed
-    extends ScalarLoadedStateStaleReason {
-  final ScalarErrorOrigin errorOrigin;
-
-  /// Structured diagnostic details regarding the failed fetch attempt.
-  @override
-  final ScalarErrorInfo? errorInfo;
-
-  ScalarLoadedStateStaleReasonFailed({
-    required this.errorOrigin,
-    this.errorInfo,
-  });
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ScalarLoadedStateStaleReasonFailed &&
-          runtimeType == other.runtimeType &&
-          errorInfo == other.errorInfo;
-
-  @override
-  int get hashCode => Object.hash(runtimeType, errorInfo);
-
-  @override
-  String toBriefInfo() {
-    return "failed(${errorOrigin.name}${errorInfo == null ? '' : ',err'})";
-  }
-
-  @override
-  String toString() =>
-      'ScalarLoadedStateStaleReason.failed(origin: $errorOrigin, errorInfo: $errorInfo)';
-}
+// =============================================================================
+// PENDING REASONS HIERARCHY
+// =============================================================================
 
 /// Sealed hierarchy representing the specific rationale behind a [ScalarDataStatePending].
 sealed class ScalarPendingReason {
@@ -283,6 +235,21 @@ sealed class ScalarPendingReason {
 
   /// Quick check whether this pending state was triggered by a filter criteria shift.
   bool get isFilterChanged => this is ScalarPendingReasonFilterChanged;
+
+  /// Returns the active error payload if this is a failed state,
+  /// or the preserved error payload from the retained failure if applicable.
+  ScalarErrorInfo? get errorInfo => underlyingFailureReason?.errorInfo;
+
+  /// Resolves the underlying failure reason across the pending reason hierarchy.
+  ScalarPendingReasonFailed? get underlyingFailureReason => switch (this) {
+        ScalarPendingReasonFailed failure => failure,
+        ScalarPendingReasonFilterChanged(:final retainedFailureReason) =>
+          retainedFailureReason,
+        _ => null,
+      };
+
+  /// Returns true if this reason either represents a failure or carries a preserved previous failure.
+  bool get hasFailureHistory => underlyingFailureReason != null;
 
   /// Convenience factory for initial pending state.
   static const ScalarPendingReason initial = ScalarPendingReasonInitial();
@@ -316,32 +283,36 @@ final class ScalarPendingReasonInitial extends ScalarPendingReason {
   int get hashCode => runtimeType.hashCode;
 
   @override
-  String toString() => 'ScalarPendingReason.initial';
+  String toBriefInfo() => "initial()";
 
   @override
-  String toBriefInfo() {
-    return "initial()";
-  }
+  String toString() => 'ScalarPendingReason.initial';
 }
 
 /// Baseline metric or value was invalidated and entered pending state because the active filter criteria mutated.
 final class ScalarPendingReasonFilterChanged extends ScalarPendingReason {
-  const ScalarPendingReasonFilterChanged();
+  /// Retained failure state from earlier query attempts (if any).
+  final ScalarPendingReasonFailed? retainedFailureReason;
+
+  const ScalarPendingReasonFilterChanged({this.retainedFailureReason});
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is ScalarPendingReasonFilterChanged;
+      identical(this, other) ||
+      other is ScalarPendingReasonFilterChanged &&
+          runtimeType == other.runtimeType &&
+          retainedFailureReason == other.retainedFailureReason;
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, retainedFailureReason);
 
   @override
-  String toBriefInfo() {
-    return "filterChanged()";
-  }
+  String toBriefInfo() =>
+      "filterChanged(${retainedFailureReason == null ? '' : 'retainedErr'})";
 
   @override
-  String toString() => 'ScalarPendingReason.filterChanged';
+  String toString() =>
+      'ScalarPendingReason.filterChanged(retainedFailureReason: $retainedFailureReason)';
 }
 
 /// Baseline loading failure where no prior scalar exists (caused by direct query, filter model, or upstream parent cascade).
@@ -369,14 +340,17 @@ final class ScalarPendingReasonFailed extends ScalarPendingReason {
   int get hashCode => Object.hash(runtimeType, errorOrigin, errorInfo);
 
   @override
-  String toBriefInfo() {
-    return "failed(${errorOrigin.name}${errorInfo == null ? '' : ',err'})";
-  }
+  String toBriefInfo() =>
+      "failed(${errorOrigin.name}${errorInfo == null ? '' : ',err'})";
 
   @override
   String toString() =>
       'ScalarPendingReason.failed(origin: $errorOrigin, errorInfo: $errorInfo)';
 }
+
+// =============================================================================
+// LOADED STALE REASONS HIERARCHY
+// =============================================================================
 
 /// Sealed hierarchy representing the specific rationale behind marking a loaded scalar as stale.
 sealed class ScalarLoadedStateStaleReason {
@@ -391,13 +365,26 @@ sealed class ScalarLoadedStateStaleReason {
   /// Quick check whether metric became stale due to a filter criteria shift.
   bool get isFilterChanged => this is ScalarLoadedStateStaleReasonFilterChanged;
 
-  /// Quick accessor to diagnostic error payload if available.
-  ScalarErrorInfo? get errorInfo => switch (this) {
-        ScalarLoadedStateStaleReasonFailed(:final errorInfo) => errorInfo,
-        _ => null,
+  /// Returns the active error payload if this is a failed state,
+  /// or the preserved error payload from the retained failure if applicable.
+  ScalarErrorInfo? get errorInfo => underlyingFailureReason?.errorInfo;
+
+  /// Resolves the underlying failure reason across the stale reason hierarchy.
+  ScalarLoadedStateStaleReasonFailed? get underlyingFailureReason =>
+      switch (this) {
+        ScalarLoadedStateStaleReasonFailed failure => failure,
+        ScalarLoadedStateStaleReasonEvent(:final retainedFailureReason) =>
+          retainedFailureReason,
+        ScalarLoadedStateStaleReasonFilterChanged(
+          :final retainedFailureReason
+        ) =>
+          retainedFailureReason,
       };
 
-  /// Convenience constant for event-induced stale reason.
+  /// Returns true if this reason either represents a failure or carries a preserved previous failure.
+  bool get hasFailureHistory => underlyingFailureReason != null;
+
+  /// Convenience constant for event-induced stale reason without previous failure.
   static const ScalarLoadedStateStaleReason event =
       ScalarLoadedStateStaleReasonEvent();
 
@@ -418,4 +405,93 @@ sealed class ScalarLoadedStateStaleReason {
   int get hashCode;
 
   String toBriefInfo();
+}
+
+/// Baseline scalar value is marked stale due to an external mutation event or sync trigger.
+final class ScalarLoadedStateStaleReasonEvent
+    extends ScalarLoadedStateStaleReason {
+  /// Retained failure state from earlier query attempts (if any).
+  final ScalarLoadedStateStaleReasonFailed? retainedFailureReason;
+
+  const ScalarLoadedStateStaleReasonEvent({this.retainedFailureReason});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ScalarLoadedStateStaleReasonEvent &&
+          runtimeType == other.runtimeType &&
+          retainedFailureReason == other.retainedFailureReason;
+
+  @override
+  int get hashCode => Object.hash(runtimeType, retainedFailureReason);
+
+  @override
+  String toBriefInfo() =>
+      "event(${retainedFailureReason == null ? '' : 'retainedErr'})";
+
+  @override
+  String toString() =>
+      'ScalarLoadedStateStaleReason.event(retainedFailureReason: $retainedFailureReason)';
+}
+
+/// Baseline metric or value remains loaded in memory but is marked stale because
+/// the active committed filter criteria mutated.
+final class ScalarLoadedStateStaleReasonFilterChanged
+    extends ScalarLoadedStateStaleReason {
+  /// Retained failure state from earlier query attempts (if any).
+  final ScalarLoadedStateStaleReasonFailed? retainedFailureReason;
+
+  const ScalarLoadedStateStaleReasonFilterChanged({this.retainedFailureReason});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ScalarLoadedStateStaleReasonFilterChanged &&
+          runtimeType == other.runtimeType &&
+          retainedFailureReason == other.retainedFailureReason;
+
+  @override
+  int get hashCode => Object.hash(runtimeType, retainedFailureReason);
+
+  @override
+  String toBriefInfo() =>
+      "filterChanged(${retainedFailureReason == null ? '' : 'retainedErr'})";
+
+  @override
+  String toString() =>
+      'ScalarLoadedStateStaleReason.filterChanged(retainedFailureReason: $retainedFailureReason)';
+}
+
+/// Baseline scalar value is marked stale because a subsequent remote refetch, filter change, or query failed.
+final class ScalarLoadedStateStaleReasonFailed
+    extends ScalarLoadedStateStaleReason {
+  final ScalarErrorOrigin errorOrigin;
+
+  /// Structured diagnostic details regarding the failed fetch attempt.
+  @override
+  final ScalarErrorInfo? errorInfo;
+
+  const ScalarLoadedStateStaleReasonFailed({
+    required this.errorOrigin,
+    this.errorInfo,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ScalarLoadedStateStaleReasonFailed &&
+          runtimeType == other.runtimeType &&
+          errorOrigin == other.errorOrigin &&
+          errorInfo == other.errorInfo;
+
+  @override
+  int get hashCode => Object.hash(runtimeType, errorOrigin, errorInfo);
+
+  @override
+  String toBriefInfo() =>
+      "failed(${errorOrigin.name}${errorInfo == null ? '' : ',err'})";
+
+  @override
+  String toString() =>
+      'ScalarLoadedStateStaleReason.failed(origin: $errorOrigin, errorInfo: $errorInfo)';
 }
