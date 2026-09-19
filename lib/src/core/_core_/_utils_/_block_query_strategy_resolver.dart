@@ -48,7 +48,7 @@ class BlockQueryStrategyResolver {
     // -------------------------------------------------------------------------
     if (dataState.isPending) {
       // Unbounded Flat Mode: Full Native Query is mandatory to establish baseline
-      if (config.nativeQueryMode == BlockNativeQueryMode.fullQuery) {
+      if (nativeQueryMode == BlockNativeQueryMode.fullQuery) {
         return const BlockQueryPlan(
           action: BlockResolvedQueryAction.performQuery,
           viewportSyncStrategy: BlockViewportSyncStrategy.nativeQuery,
@@ -81,13 +81,21 @@ class BlockQueryStrategyResolver {
     if (dataState.isLoaded) {
       final bool isStale = dataState.isStale;
 
-      // If block is clean and has no pending invalidation or events, do nothing
+      // Clean baseline dataset without session events: Do nothing
       if (!isStale && syncSessionState == null) {
         return const BlockQueryPlan.none();
       }
 
+      // Explicit refresh or stale state without accumulated events session: Native query
+      if (syncSessionState == null) {
+        return const BlockQueryPlan(
+          action: BlockResolvedQueryAction.performQuery,
+          viewportSyncStrategy: BlockViewportSyncStrategy.nativeQuery,
+        );
+      }
+
       final List<BlockReceivedEventInfo<ID>> receivedEvents =
-          syncSessionState?.receivedEventInfos ?? const [];
+          syncSessionState.receivedEventInfos;
 
       // Resolve final strategy using block's viewportSyncConfig
       final BlockViewportSyncStrategy? resolvedStrategy =
@@ -106,15 +114,12 @@ class BlockQueryStrategyResolver {
           );
 
         case BlockViewportSyncStrategy.effectedItemIdsQuery:
-          final Set<ID> effectedIds =
-              syncSessionState?.getEffectedItemIds() ?? const {};
+          final Set<ID> effectedIds = syncSessionState.getEffectedItemIds();
 
-          // Fallback to full native query if no specific item IDs exist
+          // Safeguard: If no specific IDs were affected, do NOT destroy the viewport
+          // by falling back to performQuery. Maintain current viewport intact.
           if (effectedIds.isEmpty) {
-            return const BlockQueryPlan(
-              action: BlockResolvedQueryAction.performQuery,
-              viewportSyncStrategy: BlockViewportSyncStrategy.nativeQuery,
-            );
+            return const BlockQueryPlan.none();
           }
 
           return BlockQueryPlan(
@@ -128,8 +133,7 @@ class BlockQueryStrategyResolver {
           final List<ID> currentBlockItemIds = itemIds;
 
           final Set<ID> performQueryIds =
-              syncSessionState?.getPerformQueryItemIds(currentBlockItemIds) ??
-                  currentBlockItemIds.toSet();
+              syncSessionState.getPerformQueryItemIds(currentBlockItemIds);
 
           // Fallback to full query if target ID pool resolves empty
           if (performQueryIds.isEmpty) {

@@ -8,7 +8,7 @@ class _EventDispatcher {
     required List<Type> eventDataTypes,
   }) {
     ExecutionTrace executionTrace =
-    FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
+        FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
       ownerClassInstance: _EventDispatcher(),
       eventSourceType: EventSourceType.external,
     );
@@ -64,7 +64,7 @@ class _EventDispatcher {
     required List<Type> extraEvents,
   }) {
     ExecutionTrace executionTrace =
-    FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
+        FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
       ownerClassInstance: _EventDispatcher(),
       eventSourceType: EventSourceType.external,
     );
@@ -101,7 +101,7 @@ class _EventDispatcher {
     final List<Type> mainDataTypes = mainEvents;
     final List<Type> extraDataTypes = extraEvents;
     final List<Type> allDataType =
-    {...mainDataTypes, ...extraDataTypes}.toList();
+        {...mainDataTypes, ...extraDataTypes}.toList();
 
     final _Storage storage = FlutterArtist.storage;
 
@@ -132,7 +132,7 @@ class _EventDispatcher {
         executionTrace._addTraceStep(
           codeId: "#25600",
           shortDesc:
-          "Calling ${getClassNameWithoutGenerics(block)}._receiveEvent()",
+              "Calling ${getClassNameWithoutGenerics(block)}._receiveEvent()",
           parameters: {
             "eventSourceType": externalEventSourceType,
             "eventDataKind": EventDataKind.main,
@@ -156,7 +156,7 @@ class _EventDispatcher {
           executionTrace._addTraceStep(
             codeId: "#25640",
             shortDesc:
-            "Calling ${getClassNameWithoutGenerics(block)}._receiveEvent()",
+                "Calling ${getClassNameWithoutGenerics(block)}._receiveEvent()",
             parameters: {
               "eventSourceType": externalEventSourceType,
               "eventDataKind": EventDataKind.extra,
@@ -183,7 +183,7 @@ class _EventDispatcher {
         executionTrace._addTraceStep(
           codeId: "#25700",
           shortDesc:
-          "Calling ${getClassNameWithoutGenerics(scalar)}._receiveEvent()",
+              "Calling ${getClassNameWithoutGenerics(scalar)}._receiveEvent()",
           parameters: {
             "eventSourceType": externalEventSourceType,
             "dataTypes": allDataType,
@@ -205,7 +205,7 @@ class _EventDispatcher {
     required List<ID> effectedItemIds,
   }) {
     ExecutionTrace executionTrace =
-    FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
+        FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
       ownerClassInstance: _EventDispatcher(),
       eventSourceType: EventSourceType.internal,
     );
@@ -229,18 +229,18 @@ class _EventDispatcher {
       return;
     }
     final List<Type> mainDataTypes =
-    eventBlock.getDeclaredMainBroadcastDataTypes().toList();
+        eventBlock.getDeclaredMainBroadcastDataTypes().toList();
     final List<Type> extraDataTypes =
-    eventBlock.getDeclaredExtraBroadcastDataTypes().toList();
+        eventBlock.getDeclaredExtraBroadcastDataTypes().toList();
     final List<Type> allDataType =
-    {...mainDataTypes, ...extraDataTypes}.toList();
+        {...mainDataTypes, ...extraDataTypes}.toList();
 
     Shelf shelf = eventBlock.shelf;
 
     executionTrace._addTraceStep(
       codeId: "#88300",
       shortDesc:
-      "Broadcast Internal Event in ${getClassNameWithoutGenerics(shelf)}.",
+          "Broadcast Internal Event in ${getClassNameWithoutGenerics(shelf)}.",
       traceStepType: TraceStepType.separator,
     );
     final EventSourceType internalEventSourceType = EventSourceType.internal;
@@ -254,7 +254,7 @@ class _EventDispatcher {
       executionTrace._addTraceStep(
         codeId: "#88600",
         shortDesc:
-        "Calling ${getClassNameWithoutGenerics(block)}._receiveEvent()",
+            "Calling ${getClassNameWithoutGenerics(block)}._receiveEvent()",
         parameters: {
           "eventSourceType": internalEventSourceType,
           "eventDataKind": EventDataKind.main,
@@ -278,7 +278,7 @@ class _EventDispatcher {
         executionTrace._addTraceStep(
           codeId: "#88640",
           shortDesc:
-          "Calling ${getClassNameWithoutGenerics(block)}._receiveEvent()",
+              "Calling ${getClassNameWithoutGenerics(block)}._receiveEvent()",
           parameters: {
             "eventSourceType": internalEventSourceType,
             "eventDataKind": EventDataKind.extra,
@@ -305,7 +305,7 @@ class _EventDispatcher {
       executionTrace._addTraceStep(
         codeId: "#88700",
         shortDesc:
-        "Calling ${getClassNameWithoutGenerics(scalar)}._receiveEvent()",
+            "Calling ${getClassNameWithoutGenerics(scalar)}._receiveEvent()",
         parameters: {
           "eventSourceType": internalEventSourceType,
           "dataTypes": allDataType,

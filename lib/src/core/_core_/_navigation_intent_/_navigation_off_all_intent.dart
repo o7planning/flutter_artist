@@ -5,8 +5,7 @@ class _NavigationOffAllIntent extends NavigationIntent {
   final FaRouteBuilder? builder;
   final Object? extra;
 
-  const _NavigationOffAllIntent(
-    this.path, {
+  const _NavigationOffAllIntent(this.path, {
     this.builder,
     this.extra,
     required super.executeOnFailure,

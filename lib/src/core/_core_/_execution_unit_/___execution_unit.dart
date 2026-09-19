@@ -51,8 +51,7 @@ class NxtExecutionUnit {
   NxtExecutionUnit.no({
     required this.info,
     required bool debug,
-  })
-      : yes = false,
+  })  : yes = false,
         executionUnit = null {
     PrintUtils.debug(debug, " --> [$yes] - $info");
   }

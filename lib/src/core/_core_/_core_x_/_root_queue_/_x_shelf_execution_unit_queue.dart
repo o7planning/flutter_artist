@@ -42,12 +42,12 @@ class _XShelfExecutionUnitQueue {
       mainExecutionUnits: _mainExecutionUnits
           .map(
             (exeUnit) => exeUnit.toDebugExecutionUnit(),
-          )
+      )
           .toList(),
       secondaryExecutionUnits: _secondaryExecutionUnits
           .map(
             (tu) => tu.toDebugExecutionUnit(),
-          )
+      )
           .toList(),
     );
   }

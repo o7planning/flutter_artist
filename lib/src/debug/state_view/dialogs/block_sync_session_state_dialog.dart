@@ -1,57 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
-import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
+import '../../../core/_core_/_sync_/_block_sync_session_snapshot.dart';
 import '../../../core/_core_/core.dart';
 import '../../../core/enums/block_native_query_mode.dart';
 import '../../../core/enums/resolved_query_action.dart';
 import 'debug_id_list_dialog.dart';
 
+// =============================================================================
+// DEBUG DIALOG
+// =============================================================================
+
 class DebugBlockSyncSessionStateDialog<ID extends Comparable>
     extends StatelessWidget {
   final String title;
-  final Block<
-      ID, //
-      Identifiable<ID>,
-      Identifiable<ID>,
-      FilterInput,
-      FilterCriteria,
-      FormInput,
-      AdditionalFormRelatedData> block;
-  final DebugBlockSyncSessionState<ID>? syncSessionState;
+  final BlockSyncDiagnosticSnapshot<ID> snapshot;
 
   const DebugBlockSyncSessionStateDialog({
-    required this.title,
-    required this.block,
-    required this.syncSessionState,
+    this.title = "Block Sync Session State Inspector",
+    required this.snapshot,
     super.key,
   });
+
+  /// Opens the diagnostic dialog as an inspection modal.
+  static Future<void> show<ID extends Comparable>({
+    required BuildContext context,
+    String? title,
+    required BlockSyncDiagnosticSnapshot<ID> snapshot,
+  }) async {
+    await showDialog(
+      context: context,
+      builder: (context) => DebugBlockSyncSessionStateDialog<ID>(
+        snapshot: snapshot,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     // Extract accumulated unique IDs across all events (if session exists)
     final Set<ID> allEffectedIds = {};
-    final receivedEvents = syncSessionState?.receivedEventInfos ?? const [];
+    final receivedEvents =
+        snapshot.syncSessionState?.receivedEventInfos ?? const [];
 
     for (var info in receivedEvents) {
       allEffectedIds.addAll(info.effectedItemIds);
     }
 
-    // Resolve projected query execution plan based on current block state and session info
-    final queryPlan = BlockQueryStrategyResolver.resolveQueryPlan<ID>(
-      block: block,
-      syncSessionState: syncSessionState,
+    // Resolve projected query execution plan based on decoupled snapshot inputs
+    final queryPlan = BlockQueryStrategyResolver.resolveQueryPlanInternal<ID>(
+      dataState: snapshot.blockDataState,
+      nativeQueryMode: snapshot.effectiveConfig.nativeQueryMode,
+      itemIds: snapshot.itemIds,
+      config: snapshot.effectiveConfig,
+      syncSessionState: snapshot.syncSessionState,
     );
 
-    // Extract parent item ID and filter criteria from Session Snapshot or directly from Live Block
-    final Comparable? parentItemId = syncSessionState != null
-        ? syncSessionState!.parentBlockItemId
-        : block.parentBlockCurrentItemId;
+    // Extract parent item ID and filter criteria from Session Snapshot or fallback
+    final Comparable? parentItemId = snapshot.syncSessionState != null
+        ? snapshot.syncSessionState!.parentBlockItemId
+        : snapshot.parentBlockCurrentItemId;
 
-    final FilterCriteria? activeFilterCriteria = syncSessionState != null
-        ? syncSessionState!.filterCriteria
-        : block.filterCriteria;
+    final FilterCriteria? activeFilterCriteria =
+        snapshot.syncSessionState != null
+            ? snapshot.syncSessionState!.filterCriteria
+            : snapshot.filterCriteria;
 
     final FaDialog alert = FaDialog(
       titleText: title,
@@ -61,7 +75,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 1. Session / Live Baseline Summary Section
+          // 1. Session / Baseline Summary Section
           _buildSummarySection(
             context,
             parentItemId: parentItemId,
@@ -71,7 +85,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
           const SizedBox(height: 10),
 
           // 2. Projected Query Execution Plan Card (Predicted Outcome)
-          _buildPredictedPlanCard(context, block, queryPlan),
+          _buildPredictedPlanCard(context, queryPlan),
           const SizedBox(height: 12),
           const Divider(height: 1),
           const SizedBox(height: 8),
@@ -87,7 +101,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                   const SizedBox(width: 6),
-                  if (syncSessionState == null)
+                  if (snapshot.syncSessionState == null)
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 6, vertical: 2),
@@ -137,7 +151,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
 
   /// Builds the banner displayed when no sync session exists or no events are accumulated.
   Widget _buildEmptyEventsBanner() {
-    final bool isPristine = syncSessionState == null;
+    final bool isPristine = snapshot.syncSessionState == null;
     return Center(
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -289,7 +303,6 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
   /// Builds the projected query execution plan card predicting the exact action the Block will take.
   Widget _buildPredictedPlanCard(
     BuildContext context,
-    Block block,
     BlockQueryPlan<ID> queryPlan,
   ) {
     Color actionColor;
@@ -301,7 +314,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
         actionLabel = "NONE (No Query Required)";
       case BlockResolvedQueryAction.performQuery:
         actionColor = Colors.teal.shade800;
-        actionLabel = block.effectiveConfig.nativeQueryMode ==
+        actionLabel = snapshot.effectiveConfig.nativeQueryMode ==
                 BlockNativeQueryMode.fullQuery
             ? "PERFORM QUERY (Full Query)"
             : "PERFORM QUERY (Pageable Query)";
@@ -359,7 +372,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
               Expanded(
                 child: _buildPlanDetailItem(
                   "Block Data State",
-                  "${block.dataState.toString()} ${block.dataState.isStale ? '(Stale)' : ''}",
+                  "${snapshot.blockDataState.toString()} ${snapshot.blockDataState.isStale ? '(Stale)' : ''}",
                 ),
               ),
               Expanded(
@@ -371,7 +384,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
               Expanded(
                 child: _buildPlanDetailItem(
                   "Native Query Mode",
-                  block.effectiveConfig.nativeQueryMode.name,
+                  snapshot.effectiveConfig.nativeQueryMode.name,
                 ),
               ),
             ],
@@ -465,7 +478,10 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
 
   /// Builds an item card displaying details of a single [BlockReceivedEventInfo].
   Widget _buildEventInfoCard(
-      BuildContext context, int index, BlockReceivedEventInfo<ID> eventInfo) {
+    BuildContext context,
+    int index,
+    BlockReceivedEventInfo<ID> eventInfo,
+  ) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(

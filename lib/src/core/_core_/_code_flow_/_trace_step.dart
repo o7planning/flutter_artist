@@ -15,6 +15,7 @@ class TraceStep {
   Actionable? actionable;
 
   List<String>? get extraInfos => _extraInfos;
+  BlockSyncDiagnosticSnapshot<Comparable>? blockSyncDiagnosticSnapshot;
 
   TraceStep({
     required this.showIconAndLabel,
@@ -31,7 +32,10 @@ class TraceStep {
   }) : _extraInfos = extraInfos;
 
   bool needControlBar() {
-    return errorInfo != null || tipDocument != null || hasExtraInfos();
+    return errorInfo != null ||
+        tipDocument != null ||
+        blockSyncDiagnosticSnapshot != null ||
+        hasExtraInfos();
   }
 
   bool hasExtraInfos() {

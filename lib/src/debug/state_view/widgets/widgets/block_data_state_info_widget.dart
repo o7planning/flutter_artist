@@ -43,7 +43,9 @@ class BlockDataStateInfoWidget extends BaseInfoWidget {
         return null;
       case BlockDataStatePending(reason: BlockPendingReasonFilterChanged()):
         return null;
-      case BlockDataStateLoadedStale(reason: BlockLoadedStateStaleReasonFilterChanged()):
+      case BlockDataStateLoadedStale(
+          reason: BlockLoadedStateStaleReasonFilterChanged()
+        ):
         return null;
       case BlockDataStatePending(reason: BlockPendingReasonFailed()):
         return ButtonFunction(

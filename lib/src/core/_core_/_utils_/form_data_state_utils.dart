@@ -26,23 +26,23 @@ class FormDataStateUtils {
     }
 
     switch (currentFormDataState) {
-      // 2. Uninitialized or cold-bootstrapping states transition directly to Pending.
+    // 2. Uninitialized or cold-bootstrapping states transition directly to Pending.
       case FormDataStateNone():
       case FormDataStatePending():
         return const FormDataStatePending();
 
-      // 3. Fatal bootstrapping failure:
-      // If the target item changed, discard previous fatal errors and restart bootstrapping.
-      // Otherwise, retain the fatal lock until the user or system triggers an explicit reload.
+    // 3. Fatal bootstrapping failure:
+    // If the target item changed, discard previous fatal errors and restart bootstrapping.
+    // Otherwise, retain the fatal lock until the user or system triggers an explicit reload.
       case FormDataStateFatalError():
         if (currentItemChanged) {
           return const FormDataStatePending();
         }
         return currentFormDataState;
 
-      // 4. Clean data in RAM:
-      // If identity changed, flush cache and enter Pending.
-      // If refreshed in-place, transition to Stale without any historical failure payload.
+    // 4. Clean data in RAM:
+    // If identity changed, flush cache and enter Pending.
+    // If refreshed in-place, transition to Stale without any historical failure payload.
       case FormDataStateLoadedFresh():
         if (currentItemChanged) {
           return const FormDataStatePending();
@@ -51,9 +51,9 @@ class FormDataStateUtils {
           reason: FormLoadedStateStaleReasonItemRefreshed(),
         );
 
-      // 5. Outdated data in RAM:
-      // If identity changed, cache is evicted to Pending.
-      // If refreshed in-place, mark reason as itemRefreshed while preserving any prior failure history.
+    // 5. Outdated data in RAM:
+    // If identity changed, cache is evicted to Pending.
+    // If refreshed in-place, mark reason as itemRefreshed while preserving any prior failure history.
       case FormDataStateLoadedStale(:final reason):
         if (currentItemChanged) {
           return const FormDataStatePending();
@@ -63,11 +63,11 @@ class FormDataStateUtils {
         final FormLoadedStateStaleReasonFailed? priorFailure = switch (reason) {
           FormLoadedStateStaleReasonFailed failure => failure,
           FormLoadedStateStaleReasonItemRefreshed(
-            :final retainedFailureReason
+              :final retainedFailureReason
           ) =>
-            retainedFailureReason,
+          retainedFailureReason,
           FormLoadedStateStaleReasonEvent(:final retainedFailureReason) =>
-            retainedFailureReason,
+          retainedFailureReason,
         };
 
         return FormDataStateLoadedStale(

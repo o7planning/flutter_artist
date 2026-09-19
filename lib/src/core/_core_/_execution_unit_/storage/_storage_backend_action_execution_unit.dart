@@ -9,9 +9,9 @@ class _StorageBackendActionExecutionUnit extends _ExecutionUnit {
   _StorageBackendActionExecutionUnit({
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.storageBackendAction,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.storageBackendAction,
+    executionIntent: executionIntent,
+  );
 
   @override
   Object get owner => FlutterArtist.storage;

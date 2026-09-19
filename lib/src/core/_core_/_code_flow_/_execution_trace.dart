@@ -189,6 +189,8 @@ class EventDispatcherExecutionTrace extends ExecutionTrace {
     executionTraceType: switch (eventSourceType) {
       EventSourceType.internal =>
       ExecutionTraceType.dispatchInternalEvents,
+      EventSourceType.special =>
+      ExecutionTraceType.dispatchInternalEvents,
       EventSourceType.external =>
       ExecutionTraceType.dispatchExternalEvents,
     },
@@ -197,6 +199,8 @@ class EventDispatcherExecutionTrace extends ExecutionTrace {
   @override
   String getSubtitle() {
     switch (eventSourceType) {
+      case EventSourceType.special:
+        return "Dispatch Special Events...";
       case EventSourceType.internal:
         return "Dispatch Internal Events...";
       case EventSourceType.external:
@@ -207,6 +211,8 @@ class EventDispatcherExecutionTrace extends ExecutionTrace {
   @override
   String getTitle() {
     switch (eventSourceType) {
+      case EventSourceType.special:
+        return "EventDispatcher";
       case EventSourceType.internal:
         return "EventDispatcher";
       case EventSourceType.external:

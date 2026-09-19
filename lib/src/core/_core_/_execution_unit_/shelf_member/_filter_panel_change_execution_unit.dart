@@ -12,9 +12,9 @@ class _FilterPanelChangeExecutionUnit extends _ShelfMemberExecutionUnit {
     required this.xFilterModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.filterModelFilterPanelChanged,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.filterModelFilterPanelChanged,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xFilterModel.xShelf;

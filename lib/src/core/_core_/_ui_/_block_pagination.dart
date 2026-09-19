@@ -32,7 +32,6 @@ class _BlockPaginationState extends _ContextProviderViewState<BlockPagination> {
     return null;
   }
 
-
   @override
   bool get provideScalarContext {
     return false;

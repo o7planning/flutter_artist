@@ -7,11 +7,10 @@ part of '../../core.dart';
 @_BlockSelectFirstItemAsCurrentAnnotation()
 @_BlockSelectPreviousItemAsCurrentAnnotation()
 class _BlockSetItemAsCurrentExecutionUnit<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
-    extends _ShelfMemberResultedExecutionUnit<
-        BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberResultedExecutionUnit<
+    BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> {
   final XBlock<ID, ITEM, ITEM_DETAIL> xBlock;
 
   @override
@@ -21,17 +20,17 @@ class _BlockSetItemAsCurrentExecutionUnit<
     required this.xBlock,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.blockSetItemAsCurrent,
-          executionIntent: executionIntent,
-          // executionUnitResult: BlockSetCurrentItemResult<ID,ITEM,ITEM_DETAIL>(
-          //   precheck: null,
-          //   setCurrentItemDirective: executionIntent.setCurrentItemDirective,
-          //   getItemId: xBlock.block._getItemIdInternal,
-          //   candidateItem: executionIntent.inputCandidateCurrItem,
-          //   oldCurrentItem: xBlock.block.currentItem,
-          //   currentItem: xBlock.block.currentItem,
-          // ),
-        ) {
+    executionUnitType: ExecutionUnitType.blockSetItemAsCurrent,
+    executionIntent: executionIntent,
+    // executionUnitResult: BlockSetCurrentItemResult<ID,ITEM,ITEM_DETAIL>(
+    //   precheck: null,
+    //   setCurrentItemDirective: executionIntent.setCurrentItemDirective,
+    //   getItemId: xBlock.block._getItemIdInternal,
+    //   candidateItem: executionIntent.inputCandidateCurrItem,
+    //   oldCurrentItem: xBlock.block.currentItem,
+    //   currentItem: xBlock.block.currentItem,
+    // ),
+  ) {
     xBlock.setForceReloadCurrItem(executionIntent.forceReloadItem);
     //
     if (executionIntent.forceTypeForForm != null) {

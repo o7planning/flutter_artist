@@ -94,7 +94,7 @@ class BlockViewportSyncConfig {
   /// ```
   const BlockViewportSyncConfig.lenient()
       : minStrategyOnFullQueryMode =
-      BlockViewportSyncStrategy.effectedItemIdsQuery,
+            BlockViewportSyncStrategy.effectedItemIdsQuery,
         minStrategyOnPageableQueryMode = BlockViewportSyncStrategy.nativeQuery;
 
   /// **Strict (Defensive) Boundary Configuration**

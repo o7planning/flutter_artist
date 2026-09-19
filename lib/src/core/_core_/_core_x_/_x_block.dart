@@ -1,9 +1,9 @@
 part of '../core.dart';
 
 class XBlock<
-    ID extends Comparable, //
-    ITEM extends Identifiable<ID>,
-    ITEM_DETAIL extends Identifiable<ID>> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> {
   XShelf get xShelf => xFilterModel.xShelf;
 
   int get xShelfId => xShelf.xShelfId;
@@ -66,11 +66,8 @@ class XBlock<
 
   BlockSetCurrentItemDirective? __setCurrentItemDirective;
 
-  BlockViewportSyncStrategy? get viewportSyncStrategy => __viewportSyncStrategy;
-
   // Options:
 
-  BlockViewportSyncStrategy? __viewportSyncStrategy;
   QryHint __qryHint = QryHint.none;
   bool __forceReloadCurrItem = false;
   QueryType __queryType = QueryType.realQuery;
@@ -100,13 +97,13 @@ class XBlock<
     switch (queryType) {
       case QueryType.realQuery:
         Pageable? usedPageable = block.effectiveConfig.nativeQueryMode ==
-                BlockNativeQueryMode.fullQuery
+            BlockNativeQueryMode.fullQuery
             ? null
             : (pageable ?? block.config.pageable);
         return usedPageable;
       case QueryType.emptyQuery:
         Pageable? usedPageable = block.effectiveConfig.nativeQueryMode ==
-                BlockNativeQueryMode.fullQuery
+            BlockNativeQueryMode.fullQuery
             ? null
             : block.__blockData._emptyPageable;
         return usedPageable;
@@ -130,7 +127,7 @@ class XBlock<
   // ***************************************************************************
 
   BlockExecutionUnitResult<ID, ITEM, ITEM_DETAIL, dynamic>?
-      _pendingPredecessorResult;
+  _pendingPredecessorResult;
 
   void stagePredecessorResult(
       BlockExecutionUnitResult<ID, ITEM, ITEM_DETAIL, dynamic> result) {
@@ -207,9 +204,6 @@ class XBlock<
     }
   }
 
-  void setViewportSyncStrategy(BlockViewportSyncStrategy viewportSyncStrategy) {
-    __viewportSyncStrategy = viewportSyncStrategy;
-  }
 
   void setForceReloadCurrItem(bool forceReloadCurrItem) {
     __forceReloadCurrItem = forceReloadCurrItem;
@@ -272,7 +266,7 @@ class XBlock<
   // Block only (Not find in FilterModel, FormModel).
   NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
     final bool isVisibleX =
-        block.ui.hasActiveUiComponent(alsoCheckChildren: true);
+    block.ui.hasActiveUiComponent(alsoCheckChildren: true);
     final blockDataState = block.dataState;
     final itemDataState = block.blockItemDataState;
     final executionIntent = _executionIntent;
@@ -284,8 +278,10 @@ class XBlock<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "Block (1.1), ${getClassNameWithoutGenerics(block)}, intent: $executionIntent, "
-            "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}",
+        "Block (1.1), ${getClassNameWithoutGenerics(
+            block)}, intent: $executionIntent, "
+            "dataState: ${blockDataState
+            .toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}",
       );
     }
 
@@ -312,16 +308,20 @@ class XBlock<
             executionIntent: intentToUse,
           ),
           info:
-              "Block (2.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: $intentToUse, "
-              "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
+          "Block (2.1), ${getClassNameWithoutGenerics(
+              block)}, _executionIntent: $intentToUse, "
+              "dataState: ${blockDataState
+              .toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
               "qryHint: $__qryHint, isVisibleX: $isVisibleX",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Block (2.2), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
-              "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
+          "Block (2.2), ${getClassNameWithoutGenerics(
+              block)}, _executionIntent: $executionIntent, "
+              "dataState: ${blockDataState
+              .toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
               "qryHint: $__qryHint, isVisibleX: $isVisibleX",
         );
       }
@@ -350,16 +350,20 @@ class XBlock<
             executionIntent: intentToUse,
           ),
           info:
-              "Block 3.1, ${getClassNameWithoutGenerics(block)}, _executionIntent: $intentToUse, "
-              "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
+          "Block 3.1, ${getClassNameWithoutGenerics(
+              block)}, _executionIntent: $intentToUse, "
+              "dataState: ${blockDataState
+              .toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
               "qryHint: $__qryHint, isVisibleX: $isVisibleX",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Block 3.2, ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
-              "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
+          "Block 3.2, ${getClassNameWithoutGenerics(
+              block)}, _executionIntent: $executionIntent, "
+              "dataState: ${blockDataState
+              .toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
               "qryHint: $__qryHint, isVisibleX: $isVisibleX",
         );
       }
@@ -375,7 +379,8 @@ class XBlock<
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Block (4.2.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
+          "Block (4.2.1), ${getClassNameWithoutGenerics(
+              block)}, _executionIntent: $executionIntent, "
               "dataState: ${blockDataState.toBriefInfo()}",
         );
       }
@@ -398,8 +403,10 @@ class XBlock<
             executionIntent: intentToUse,
           ),
           info:
-              "Block (4.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: $intentToUse, "
-              "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
+          "Block (4.1), ${getClassNameWithoutGenerics(
+              block)}, _executionIntent: $executionIntent --> $intentToUse, "
+              "dataState: ${blockDataState
+              .toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
               "qryHint: $__qryHint, isVisibleX: $isVisibleX",
         );
       }
@@ -410,14 +417,16 @@ class XBlock<
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Block (4.2.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
+            "Block (4.2.1), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: $executionIntent, "
                 "dataState: ${blockDataState.toBriefInfo()}",
           );
         } else if (executionIntent is BlockNullIntent) {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Block (4.2.2), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
+            "Block (4.2.2), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: $executionIntent, "
                 "dataState: ${blockDataState.toBriefInfo()}",
           );
         } else if (executionIntent is BlockQueryIntent<ID, ITEM, ITEM_DETAIL>) {
@@ -428,11 +437,12 @@ class XBlock<
               executionIntent: executionIntent,
             ),
             info:
-                "Block (4.2.3), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
+            "Block (4.2.3), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: $executionIntent, "
                 "dataState: ${blockDataState.toBriefInfo()}",
           );
         } else if (executionIntent
-            is BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>) {
+        is BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>) {
           var intentToRun = executionIntent;
           //
           if (_pendingSetCurrentItemIntent != null) {
@@ -443,97 +453,106 @@ class XBlock<
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit:
-                _BlockSetItemAsCurrentExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+            _BlockSetItemAsCurrentExecutionUnit<ID, ITEM, ITEM_DETAIL>(
               xBlock: this,
               executionIntent: intentToRun,
             ),
             info:
-                "Block (4.2.4), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
+            "Block (4.2.4), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: $executionIntent, "
                 "dataState: ${blockDataState.toBriefInfo()}",
           );
         } else if (executionIntent
-            is BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>) {
+        is BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit:
-                _BlockClearCurrentExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+            _BlockClearCurrentExecutionUnit<ID, ITEM, ITEM_DETAIL>(
               xBlock: this,
               executionIntent: executionIntent,
             ),
             info:
-                "Block (4.2.5), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
+            "Block (4.2.5), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: $executionIntent, "
                 "dataState: ${blockDataState.toBriefInfo()}",
           );
         } else if (executionIntent
-            is BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>) {
+        is BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit:
-                _BlockItemDeletionExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+            _BlockItemDeletionExecutionUnit<ID, ITEM, ITEM_DETAIL>(
               xBlock: this,
               executionIntent: executionIntent,
             ),
             info:
-                "Block (4.2.6), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
+            "Block (4.2.6), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: $executionIntent, "
                 "dataState: ${blockDataState.toBriefInfo()}",
           );
         } else if (executionIntent
-            is BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>) {
+        is BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
             debug: debug,
-            executionUnit: _BlockPrepareFormToCreateItemExecutionUnit<ID, ITEM,
+            executionUnit: _BlockPrepareFormToCreateItemExecutionUnit<ID,
+                ITEM,
                 ITEM_DETAIL>(
               xBlock: this,
               executionIntent: executionIntent,
             ),
             info:
-                "Block (4.2.7), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
+            "Block (4.2.7), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: $executionIntent, "
                 "dataState: ${blockDataState.toBriefInfo()}",
           );
         } else if (executionIntent
-            is BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>) {
+        is BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit:
-                _BlockQuickItemUpdateExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+            _BlockQuickItemUpdateExecutionUnit<ID, ITEM, ITEM_DETAIL>(
               xBlock: this,
               executionIntent: executionIntent,
             ),
             info:
-                "Block (4.2.8), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
+            "Block (4.2.8), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: $executionIntent, "
                 "dataState: ${blockDataState.toBriefInfo()}",
           );
         } else if (executionIntent
-            is BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>) {
+        is BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit:
-                _BlockQuickItemCreationExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+            _BlockQuickItemCreationExecutionUnit<ID, ITEM, ITEM_DETAIL>(
               xBlock: this,
               executionIntent: executionIntent,
             ),
             info:
-                "Block (4.2.9), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
+            "Block (4.2.9), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: $executionIntent, "
                 "dataState: ${blockDataState.toBriefInfo()}",
           );
         } else if (executionIntent
-            is BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL>) {
+        is BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit:
-                _BlockBackendActionExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+            _BlockBackendActionExecutionUnit<ID, ITEM, ITEM_DETAIL>(
               xBlock: this,
               executionIntent: executionIntent,
             ),
             info:
-                "Block (4.2.10), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
+            "Block (4.2.10), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: $executionIntent, "
                 "dataState: ${blockDataState.toBriefInfo()}",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Block (4.2.11), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
+            "Block (4.2.11), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: $executionIntent, "
                 "dataState: ${blockDataState.toBriefInfo()}",
           );
         }
@@ -550,17 +569,20 @@ class XBlock<
             return NxtExecutionUnit.no(
               debug: debug,
               info:
-                  "Block (4.3.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: null, "
-                  "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}",
+              "Block (4.3.1), ${getClassNameWithoutGenerics(
+                  block)}, _executionIntent: null, "
+                  "dataState: ${blockDataState
+                  .toBriefInfo()}, itemDataState: ${itemDataState
+                  .toBriefInfo()}",
             );
           }
           bool itemVisibleX = block.ui
               .hasActiveUiComponentItemRepresentative(alsoCheckChildren: true);
           if (block.itemCount > 0 && itemVisibleX) {
             final setItemIntent =
-                _createAndSetBlockExecutionIntentSetCurrentItem(
+            _createAndSetBlockExecutionIntentSetCurrentItem(
               setCurrentItemDirective:
-                  BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
+              BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
               newQueriedList: [],
               inputCandidateCurrItem: null,
               forceReloadItem: true,
@@ -569,20 +591,26 @@ class XBlock<
             return NxtExecutionUnit.yes(
               debug: debug,
               executionUnit:
-                  _BlockSetItemAsCurrentExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+              _BlockSetItemAsCurrentExecutionUnit<ID, ITEM, ITEM_DETAIL>(
                 xBlock: this,
                 executionIntent: setItemIntent,
               ),
               info:
-                  "Block (4.3.2.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: null -> $setItemIntent, "
-                  "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}",
+              "Block (4.3.2.1), ${getClassNameWithoutGenerics(
+                  block)}, _executionIntent: null -> $setItemIntent, "
+                  "dataState: ${blockDataState
+                  .toBriefInfo()}, itemDataState: ${itemDataState
+                  .toBriefInfo()}",
             );
           } else {
             return NxtExecutionUnit.no(
               debug: debug,
               info:
-                  "Block (4.3.2.2), ${getClassNameWithoutGenerics(block)}, _executionIntent: null, "
-                  "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}",
+              "Block (4.3.2.2), ${getClassNameWithoutGenerics(
+                  block)}, _executionIntent: null, "
+                  "dataState: ${blockDataState
+                  .toBriefInfo()}, itemDataState: ${itemDataState
+                  .toBriefInfo()}",
             );
           }
         }
@@ -592,8 +620,10 @@ class XBlock<
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Block (4.3.2.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: null, "
-                "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}",
+            "Block (4.3.2.1), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: null, "
+                "dataState: ${blockDataState
+                .toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}",
           );
         }
         // IN: blockDataState.isFresh
@@ -601,7 +631,7 @@ class XBlock<
         else if (itemDataState.isStale) {
           final setItemIntent = _createAndSetBlockExecutionIntentSetCurrentItem(
             setCurrentItemDirective:
-                BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
+            BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
             newQueriedList: [],
             inputCandidateCurrItem: null,
             forceReloadItem: true,
@@ -610,20 +640,23 @@ class XBlock<
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit:
-                _BlockSetItemAsCurrentExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+            _BlockSetItemAsCurrentExecutionUnit<ID, ITEM, ITEM_DETAIL>(
               xBlock: this,
               executionIntent: setItemIntent,
             ),
             info:
-                "Block (4.3.3), ${getClassNameWithoutGenerics(block)}, _executionIntent: null -> $setItemIntent, "
-                "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}",
+            "Block (4.3.3), ${getClassNameWithoutGenerics(
+                block)}, _executionIntent: null -> $setItemIntent, "
+                "dataState: ${blockDataState
+                .toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}",
           );
         }
         // IN: blockDataState.isFresh
         // IN: executionIntent == null
         else {
           throw UnimplementedError(
-            "Unhandled itemDataState in Fresh block: ${itemDataState.toBriefInfo()}",
+            "Unhandled itemDataState in Fresh block: ${itemDataState
+                .toBriefInfo()}",
           );
         }
       }
@@ -635,7 +668,8 @@ class XBlock<
     return NxtExecutionUnit.no(
       debug: debug,
       info:
-          "Block (5.1), ${getClassNameWithoutGenerics(block)}, intent: $executionIntent, "
+      "Block (5.1), ${getClassNameWithoutGenerics(
+          block)}, intent: $executionIntent, "
           "dataState: ${blockDataState.toBriefInfo()}",
     );
   }
@@ -665,13 +699,13 @@ class XBlock<
   // ***************************************************************************
 
   BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockExecutionIntentPrepareFormToCreateItem({
+  _createAndSetBlockExecutionIntentPrepareFormToCreateItem({
     required XBlock<ID, ITEM, ITEM_DETAIL> xBlock,
     required bool initDirty,
     required FormInput? formInput,
   }) {
     final executionIntent =
-        BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>(
+    BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>(
       initDirty: initDirty,
       formInput: formInput,
     );
@@ -680,7 +714,7 @@ class XBlock<
   }
 
   BlockQueryIntent<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockExecutionIntentQuery({
+  _createAndSetBlockExecutionIntentQuery({
     bool isQueryMoreFlow = false,
   }) {
     final executionIntent = BlockQueryIntent<ID, ITEM, ITEM_DETAIL>(
@@ -691,7 +725,7 @@ class XBlock<
   }
 
   BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockExecutionIntentDeleteItem({
+  _createAndSetBlockExecutionIntentDeleteItem({
     required ITEM item,
   }) {
     final executionIntent = BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>(
@@ -702,7 +736,7 @@ class XBlock<
   }
 
   BlockDeleteItemsIntent<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockExecutionIntentDeleteItems({
+  _createAndSetBlockExecutionIntentDeleteItems({
     required List<ITEM> items,
     required bool stopIfError,
   }) {
@@ -718,41 +752,41 @@ class XBlock<
     required BlockBackendAction<ID> action,
   }) {
     final executionIntent =
-        BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL>(action: action);
+    BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL>(action: action);
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
   BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockQuickItemUpdate({
+  _createAndSetBlockQuickItemUpdate({
     required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
   }) {
     final executionIntent =
-        BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>(action: action);
+    BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>(action: action);
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
   BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockQuickItemCreation({
+  _createAndSetBlockQuickItemCreation({
     required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
   }) {
     final executionIntent =
-        BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>(action: action);
+    BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>(action: action);
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
   BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockExecutionIntentClearCurrentItem() {
+  _createAndSetBlockExecutionIntentClearCurrentItem() {
     final executionIntent =
-        BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>();
+    BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>();
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
   BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockExecutionIntentClearItems() {
+  _createAndSetBlockExecutionIntentClearItems() {
     final executionIntent = BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL>();
     _executionIntent = executionIntent;
     return executionIntent;
@@ -775,7 +809,7 @@ class XBlock<
   }
 
   BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockExecutionIntentSetCurrentItem({
+  _createAndSetBlockExecutionIntentSetCurrentItem({
     required BlockSetCurrentItemDirective setCurrentItemDirective,
     required List<ITEM> newQueriedList,
     required ITEM? inputCandidateCurrItem,

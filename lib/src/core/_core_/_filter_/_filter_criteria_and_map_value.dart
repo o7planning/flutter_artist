@@ -6,6 +6,7 @@ sealed class FilterCriteriaSnapshot<FILTER_CRITERIA extends FilterCriteria>
   const FilterCriteriaSnapshot();
 
   bool get isSuccess => this is FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
+
   bool get isError => this is FilterCriteriaSnapshotError<FILTER_CRITERIA>;
 
   FILTER_CRITERIA? get criteriaOrNull => switch (this) {

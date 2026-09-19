@@ -82,7 +82,8 @@ abstract class MultiOptTildeFilterCriterionModel<V>
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $tildeCriterionName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
+        "${("- - - " *
+            indentFactor)} $tildeCriterionName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
     for (var child in children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }

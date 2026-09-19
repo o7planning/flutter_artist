@@ -50,7 +50,8 @@ abstract class ActivityV1 extends _Core {
     executionTrace._addTraceStep(
       codeId: "#23000",
       shortDesc:
-          "Creating <b>XActivity</b> for ${debugObjHtml(this)} and add it to <b>RootQueue</b>.",
+      "Creating <b>XActivity</b> for ${debugObjHtml(
+          this)} and add it to <b>RootQueue</b>.",
       traceStepType: TraceStepType.info,
     );
     XActivityV1 xActivity = _createXActivity();
@@ -72,8 +73,10 @@ abstract class ActivityV1 extends _Core {
     executionTrace._addTraceStep(
       codeId: "#19000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} > ${executionUnitType.asDebugExecutionUnit()}.\n"
-          "Note: This is called because you called the ${debugObjHtml(this)}.executeActivity() method.",
+      "Begin ${debugObjHtml(this)} > ${executionUnitType
+          .asDebugExecutionUnit()}.\n"
+          "Note: This is called because you called the ${debugObjHtml(
+          this)}.executeActivity() method.",
       traceStepType: TraceStepType.debug,
     );
     final activityResult = executionIntent.resultWrapper._setResult(
@@ -86,7 +89,7 @@ abstract class ActivityV1 extends _Core {
       executionTrace._addTraceStep(
         codeId: "#19100",
         shortDesc:
-            "Calling ${debugObjHtml(this)}.performActivityOperation()...",
+        "Calling ${debugObjHtml(this)}.performActivityOperation()...",
         traceStepType: TraceStepType.nonControllableCalling,
       );
       await performActivityOperation();
@@ -104,7 +107,8 @@ abstract class ActivityV1 extends _Core {
       executionTrace._addTraceStep(
         codeId: "#19200",
         shortDesc:
-            "The ${debugObjHtml(this)}.performActivityOperation() method was called with an error!",
+        "The ${debugObjHtml(
+            this)}.performActivityOperation() method was called with an error!",
         errorInfo: errorInfo,
       );
     }

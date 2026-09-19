@@ -64,8 +64,7 @@ abstract class Activity extends _Core {
       if (__taskMap.containsKey(task.name)) {
         throw ___registerError(
           "Duplicate Task '${task.name}' in '${getClassName(this)}'\n"
-              "Double-check ${getClassName(
-              this)}.defineActivityStructure() method",
+          "Double-check ${getClassName(this)}.defineActivityStructure() method",
         );
       }
       __taskMap[task.name] = task;
@@ -84,8 +83,7 @@ abstract class Activity extends _Core {
       if (__flowMap.containsKey(flow.name)) {
         throw ___registerError(
           "Duplicate Flow '${flow.name}' in '${getClassName(this)}'\n"
-              "Double-check ${getClassName(
-              this)}.defineActivityStructure() method",
+          "Double-check ${getClassName(this)}.defineActivityStructure() method",
         );
       }
       __flowMap[flow.name] = flow;

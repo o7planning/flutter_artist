@@ -20,7 +20,8 @@ class BlockReceivedEventInfo<ID extends Comparable> {
   BlockReceivedEventInfo.maxSyncStrategy({
     required this.eventSourceType,
     required this.dataTypes,
-  })  : requiresMaxSyncStrategy = true,
+  })
+      : requiresMaxSyncStrategy = true,
         effectedItemIds = [],
         syncStrategyOnFullQueryMode = BlockViewportSyncStrategy.nativeQuery,
         syncStrategyOnPageableQueryMode =

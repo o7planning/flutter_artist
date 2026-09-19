@@ -7,8 +7,14 @@ import '../../../core/_core_/core.dart';
 class DebugBlockItemSyncSessionStateDialog<ID extends Comparable>
     extends StatelessWidget {
   final String title;
-  final Block<ID, Identifiable<ID>, Identifiable<ID>, FilterInput,
-      FilterCriteria, FormInput, AdditionalFormRelatedData> block;
+  final Block<
+      ID, //
+      Identifiable<ID>,
+      Identifiable<ID>,
+      FilterInput,
+      FilterCriteria,
+      FormInput,
+      AdditionalFormRelatedData> block;
   final DebugBlockItemSyncSessionState<ID>? itemSyncSessionState;
 
   const DebugBlockItemSyncSessionStateDialog({

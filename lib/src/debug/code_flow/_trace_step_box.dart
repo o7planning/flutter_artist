@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
+import '../../core/_core_/_sync_/_block_sync_session_snapshot.dart';
 import '../../core/_core_/core.dart';
 import '../../core/enums/trace_step_type.dart';
 import '../../core/icon/icon_constants.dart';
@@ -8,6 +9,7 @@ import '../../core/widgets/_html_selectable_rich_text.dart';
 import '../dialog/_error_viewer_dialog.dart';
 import '../dialog/_extra_info_viewer_dialog.dart';
 import '../dialog/_tip_document_viewer_dialog.dart';
+import '../state_view/dialogs/block_sync_session_state_dialog.dart';
 
 class TraceStepBox extends StatelessWidget {
   final TraceStep traceStep;
@@ -119,6 +121,18 @@ class TraceStepBox extends StatelessWidget {
         ),
         _buildActionIcon(
           context,
+          message: "Block Sync Session",
+          icon: Icons.sync_alt,
+          color: traceStep.blockSyncDiagnosticSnapshot != null
+              ? colorScheme.primary
+              : null,
+          onPressed: traceStep.blockSyncDiagnosticSnapshot != null
+              ? () => _showBlockSyncSessionStateDialog(
+                  context, traceStep.blockSyncDiagnosticSnapshot!)
+              : null,
+        ),
+        _buildActionIcon(
+          context,
           message: "Tip & Document",
           icon: FaIconConstants.tipDocument,
           color: traceStep.tipDocument == null ? null : colorScheme.tertiary,
@@ -146,6 +160,15 @@ class TraceStepBox extends StatelessWidget {
         iconSize: 16,
         onPressed: onPressed,
       ),
+    );
+  }
+
+  void _showBlockSyncSessionStateDialog(
+      BuildContext context, BlockSyncDiagnosticSnapshot snapshot) {
+    DebugBlockSyncSessionStateDialog.show(
+      context: context,
+      title: '',
+      snapshot: snapshot,
     );
   }
 

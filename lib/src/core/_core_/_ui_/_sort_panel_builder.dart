@@ -38,7 +38,6 @@ class _SortPanelBuilderState
     return null;
   }
 
-
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.sortModel);

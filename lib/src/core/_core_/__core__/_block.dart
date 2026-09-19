@@ -1322,7 +1322,6 @@ abstract class Block<
     //
     thisXBlock._printParameters(provideBlockContext: provideBlockContext);
 
-    // TODO Validate ???????????????????????????????????????????????????????????
     final DebugBlockSyncSessionState<ID>? currentSyncSessionState =
         _blockSyncSessionState;
 
@@ -1331,10 +1330,28 @@ abstract class Block<
       block: this,
       syncSessionState: currentSyncSessionState,
     );
-    final viewportSyncStrategy = thisXBlock.viewportSyncStrategy ??
-        queryPlan.viewportSyncStrategy ??
-        BlockViewportSyncStrategy.nativeQuery;
-
+    TraceStep step = executionTrace._addTraceStep(
+      codeId: "#03044",
+      shortDesc: "Calculated Query Plan (${debugObjHtml(this)}):",
+      parameters: {
+        "action": queryPlan.action,
+        "viewportSyncStrategy": queryPlan.viewportSyncStrategy,
+        "targetItemIds (count)": queryPlan.targetItemIds.length,
+      },
+      traceStepType: TraceStepType.debug,
+    );
+    if (_blockSyncSessionState != null) {
+      step.blockSyncDiagnosticSnapshot = BlockSyncDiagnosticSnapshot<ID>(
+        syncSessionState: _blockSyncSessionState,
+        blockDataState: dataState,
+        effectiveConfig: effectiveConfig,
+        itemIds: itemIds,
+        parentBlockCurrentItemId: parentBlockCurrentItemId,
+        filterCriteria: filterCriteria,
+      );
+    }
+    final viewportSyncStrategy =
+        queryPlan.viewportSyncStrategy ?? BlockViewportSyncStrategy.nativeQuery;
     //
     final BlockResolvedQueryAction resolvedQueryAction;
     final BlockErrorMethod performQryMethod;
@@ -1361,7 +1378,6 @@ abstract class Block<
       traceStepType: TraceStepType.debug,
     );
     BlockDataState newBlockDataState = dataState;
-    // PageData<ITEM>? queriedPageData;
     List<ITEM>? queriedItemList;
     PaginationInfo? queriedPaginationInfo;
     final ITEM? candidateCurrItem;
@@ -1445,7 +1461,7 @@ abstract class Block<
     }
     //
     // FORCE QUERY:
-    // thisXBlock.applyQueryHint || (provideBlockContext && this.dataState != DataState.loaded)
+    //  applyQueryHint || (provideBlockContext && this.dataState != DataState.loaded)
     //
     //
     // Has Error in FilterModel.
@@ -3589,6 +3605,7 @@ abstract class Block<
       );
       return;
     }
+    // Error.
     if (actionResult.error != null) {
       _handleRestError(
         shelf: shelf,
@@ -3600,7 +3617,7 @@ abstract class Block<
       );
       return;
     }
-    //
+    // No Error.
     executionTrace._addTraceStep(
       codeId: "#45400",
       shortDesc: "Calling _updateBlockSyncSessionState()",
@@ -3613,16 +3630,19 @@ abstract class Block<
       traceStepType: TraceStepType.nonControllableCalling,
     );
     //
+    final List<ID> effectedItemIds = actionResult.data?.items ?? [];
+    // Add Event.
     _updateBlockSyncSessionState(
       executionTrace: executionTrace,
       xBlock: thisXBlock,
-      eventSourceType: EventSourceType.internal,
+      // BackendAction.
+      eventSourceType: EventSourceType.special,
       requiresMaxSyncStrategy: false,
       //
       syncStrategyOnFullQueryMode: action.config.syncStrategyOnFullQueryMode,
       syncStrategyOnPageableQueryMode:
           action.config.syncStrategyOnPageableQueryMode,
-      addedEffectiveIds: actionResult.data?.items ?? [],
+      addedEffectiveIds: effectedItemIds,
     );
     //
     // *new*
@@ -3634,24 +3654,17 @@ abstract class Block<
       traceStepType: TraceStepType.broadcastEvent,
     );
     //
-    final List<ID> effectedItemIds = actionResult.data?.items ?? [];
-
     __broadcastEventFromBlockToOtherShelves(
       executionTrace: executionTrace,
       eventType: EventType.mix,
       effectedItemIds: effectedItemIds,
     );
     //
-    final ITEM? candidateCurrItem = null;
     executionTrace._addTraceStep(
       codeId: "#45600",
       shortDesc: "Calling ${debugObjHtml(this)}._processInternalReaction()..",
       parameters: {
-        "syncStrategyOnFullQueryMode":
-            action.config.syncStrategyOnFullQueryMode,
-        "syncStrategyOnPageableQueryMode":
-            action.config.syncStrategyOnPageableQueryMode,
-        "candidateCurrItem": candidateCurrItem,
+        "effectiveItemIds": effectedItemIds,
       },
       traceStepType: TraceStepType.nonControllableCalling,
     );
@@ -3907,6 +3920,8 @@ abstract class Block<
               "${debugObjHtml(formModel)} -> After Saving Form, create ${debugObjHtml(FormModelDataLoadIntent)}.",
           traceStepType: TraceStepType.executionIntent,
         );
+        // Test Case [02a].
+        formModel!._formModelStructure._setFormMode(FormMode.edit);
         // IMPORTANT:
         thisXBlock.xFormModel!.setForceType(newForceType);
         thisXBlock.xFormModel!._createAndSetFormModelExecutionIntentLoad();
@@ -5266,7 +5281,7 @@ abstract class Block<
     );
     executionTrace._addTraceStep(
       codeId: "#71346",
-      shortDesc: "Resolved viewportSyncStrategy: ${viewportSyncStrategy}",
+      shortDesc: "Resolved viewportSyncStrategy: $viewportSyncStrategy",
       traceStepType: TraceStepType.debug,
     );
     //
@@ -8241,15 +8256,19 @@ abstract class Block<
 
   Future<void> showDebugSyncSessionState({
     required BuildContext context,
-    String title = "Block Sync Session State Inspector",
   }) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
         return DebugBlockSyncSessionStateDialog<ID>(
-          title: title,
-          syncSessionState: _blockSyncSessionState,
-          block: this,
+          snapshot: BlockSyncDiagnosticSnapshot<ID>(
+            syncSessionState: _blockSyncSessionState,
+            blockDataState: dataState,
+            effectiveConfig: effectiveConfig,
+            itemIds: itemIds,
+            parentBlockCurrentItemId: parentBlockCurrentItemId,
+            filterCriteria: filterCriteria,
+          ),
         );
       },
     );

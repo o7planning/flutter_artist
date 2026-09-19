@@ -166,8 +166,7 @@ void main() {
         config: BlockEffectiveConfig.fromConfig(
           BlockConfig(
             nativeQueryMode: BlockNativeQueryMode.fullQuery,
-            viewportSyncConfig: BlockViewportSyncConfig
-                .strict(), // Strict floor on fullQuery = nativeQuery
+            viewportSyncConfig: BlockViewportSyncConfig.strict(),
           ),
         ),
         syncSessionState: mockSession,
@@ -208,8 +207,7 @@ void main() {
         config: BlockEffectiveConfig.fromConfig(
           BlockConfig(
             nativeQueryMode: BlockNativeQueryMode.fullQuery,
-            viewportSyncConfig: BlockViewportSyncConfig
-                .lenient(), // Lenient floor on fullQuery = effectedItemIdsQuery
+            viewportSyncConfig: BlockViewportSyncConfig.lenient(),
           ),
         ),
         syncSessionState: mockSession,
@@ -250,8 +248,7 @@ void main() {
         config: BlockEffectiveConfig.fromConfig(
           BlockConfig(
             nativeQueryMode: BlockNativeQueryMode.pageableQuery,
-            viewportSyncConfig: BlockViewportSyncConfig
-                .strict(), // Strict floor on pageable = effectedAndViewport
+            viewportSyncConfig: BlockViewportSyncConfig.strict(),
           ),
         ),
         syncSessionState: mockSession,
@@ -286,6 +283,151 @@ void main() {
 
       expect(plan.action, isNull);
       expect(plan.viewportSyncStrategy, isNull);
+    });
+
+    // -------------------------------------------------------------------------
+    // TEST 9: Empty Effected IDs with effectedItemIdsQuery (Config 2 - Viewport Safeguard)
+    // -------------------------------------------------------------------------
+    test(
+        '9. [CONFIG 2] Warm LOADED STALE under effectedItemIdsQuery with EMPTY effected IDs MUST resolve to NULL (Preserve Viewport)',
+        () {
+      final mockSession = TestSyncSession<String>(
+        receivedEventInfos: [
+          BlockReceivedEventInfo<String>(
+            eventSourceType: EventSourceType.special,
+            requiresMaxSyncStrategy: false,
+            syncStrategyOnFullQueryMode: null,
+            syncStrategyOnPageableQueryMode:
+                BlockViewportSyncStrategy.effectedItemIdsQuery,
+            dataTypes: const [],
+            effectedItemIds: const [],
+          ),
+        ],
+      );
+
+      final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
+        dataState: const BlockDataStateLoadedStale(
+            reason: BlockLoadedStateStaleReason.event),
+        nativeQueryMode: BlockNativeQueryMode.pageableQuery,
+        itemIds: const ['prod-1', 'prod-2', 'prod-3'],
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.pageableQuery,
+            viewportSyncConfig: BlockViewportSyncConfig(),
+          ),
+        ),
+        syncSessionState: mockSession,
+      );
+
+      // Must resolve to NONE to avoid wiping out or shifting user pagination
+      expect(plan.action, isNull);
+      expect(plan.viewportSyncStrategy, isNull);
+      expect(plan.targetItemIds, isEmpty);
+    });
+
+    // -------------------------------------------------------------------------
+    // TEST 10: Empty Effected IDs with effectedAndViewportItemIdsQuery (Config 3)
+    // -------------------------------------------------------------------------
+    test(
+        '10. [CONFIG 3] Warm LOADED STALE under effectedAndViewportItemIdsQuery with EMPTY effected IDs MUST still query active viewport rows',
+        () {
+      final mockSession = TestSyncSession<String>(
+        receivedEventInfos: [
+          BlockReceivedEventInfo<String>(
+            eventSourceType: EventSourceType.special,
+            requiresMaxSyncStrategy: false,
+            syncStrategyOnFullQueryMode: null,
+            syncStrategyOnPageableQueryMode:
+                BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
+            dataTypes: const [],
+            effectedItemIds: const [],
+          ),
+        ],
+      );
+
+      final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
+        dataState: const BlockDataStateLoadedStale(
+            reason: BlockLoadedStateStaleReason.event),
+        nativeQueryMode: BlockNativeQueryMode.pageableQuery,
+        itemIds: const ['prod-1', 'prod-2', 'prod-3'],
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.pageableQuery,
+            viewportSyncConfig: BlockViewportSyncConfig(),
+          ),
+        ),
+        syncSessionState: mockSession,
+      );
+
+      expect(
+          plan.action, equals(BlockResolvedQueryAction.performQueryByItemIds));
+      expect(plan.viewportSyncStrategy,
+          equals(BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery));
+      expect(plan.targetItemIds, equals({'prod-1', 'prod-2', 'prod-3'}));
+    });
+
+    // -------------------------------------------------------------------------
+    // TEST 11: Manual Stale State without Active Session
+    // -------------------------------------------------------------------------
+    test(
+        '11. Warm LOADED STALE without syncSessionState (explicit manual stale) MUST fallback to performQuery (nativeQuery)',
+        () {
+      final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
+        dataState: const BlockDataStateLoadedStale(
+            reason: BlockLoadedStateStaleReason.event),
+        nativeQueryMode: BlockNativeQueryMode.pageableQuery,
+        itemIds: const ['item-1'],
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.pageableQuery,
+            viewportSyncConfig: BlockViewportSyncConfig(),
+          ),
+        ),
+        syncSessionState: null,
+      );
+
+      expect(plan.action, equals(BlockResolvedQueryAction.performQuery));
+      expect(plan.viewportSyncStrategy,
+          equals(BlockViewportSyncStrategy.nativeQuery));
+    });
+
+    // -------------------------------------------------------------------------
+    // TEST 12: Empty Viewport and Empty Effected IDs in effectedAndViewport
+    // -------------------------------------------------------------------------
+    test(
+        '12. Warm LOADED STALE under effectedAndViewportItemIdsQuery when BOTH viewport and effected IDs are empty MUST fallback to performQuery',
+        () {
+      final mockSession = TestSyncSession<String>(
+        receivedEventInfos: [
+          BlockReceivedEventInfo<String>(
+            eventSourceType: EventSourceType.special,
+            requiresMaxSyncStrategy: false,
+            syncStrategyOnFullQueryMode: null,
+            syncStrategyOnPageableQueryMode:
+                BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
+            dataTypes: const [],
+            effectedItemIds: const [],
+          ),
+        ],
+      );
+
+      final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
+        dataState: const BlockDataStateLoadedStale(
+            reason: BlockLoadedStateStaleReason.event),
+        nativeQueryMode: BlockNativeQueryMode.pageableQuery,
+        itemIds: const [], // Empty viewport
+        config: BlockEffectiveConfig.fromConfig(
+          BlockConfig(
+            nativeQueryMode: BlockNativeQueryMode.pageableQuery,
+            viewportSyncConfig: BlockViewportSyncConfig(),
+          ),
+        ),
+        syncSessionState: mockSession,
+      );
+
+      expect(plan.action, equals(BlockResolvedQueryAction.performQuery));
+      expect(plan.viewportSyncStrategy,
+          equals(BlockViewportSyncStrategy.nativeQuery));
     });
   });
 }

@@ -27,12 +27,10 @@ class _BlockItemDetailViewBuilderState
     return widget.block.shelf;
   }
 
-
   @override
   Activity? _getRelatedActivity() {
     return null;
   }
-
 
   @override
   String getWidgetOwnerClassName() {
