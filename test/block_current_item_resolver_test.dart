@@ -34,8 +34,8 @@ void main() {
       bool provideBlockContext = true,
       bool provideItemContext = true,
       bool provideFormContext = false,
-      ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy =
-          ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
+      AbsentItemContextPolicy absentItemContextPolicy =
+          AbsentItemContextPolicy.tryNotSetAnItemAsCurrent,
       UnifiedItemRefreshPolicy unifiedItemRefreshPolicy =
           UnifiedItemRefreshPolicy.auto,
       BlockSetCurrentItemDirective setCurrentItemDirective =
@@ -53,7 +53,7 @@ void main() {
         provideBlockContext: provideBlockContext,
         provideItemContext: provideItemContext,
         provideFormContext: provideFormContext,
-        itemAbsentRepresentativePolicy: itemAbsentRepresentativePolicy,
+        absentItemContextPolicy: absentItemContextPolicy,
         unifiedItemRefreshPolicy: unifiedItemRefreshPolicy,
         setCurrentItemDirective: setCurrentItemDirective,
         isCandidateCurrentItemInNewQueriedList:
@@ -109,8 +109,8 @@ void main() {
           isCandidateItemDifferentFromCurrent: true,
           isCandidateCurrentItemInNewQueriedList: true,
           provideItemContext: false,
-          itemAbsentRepresentativePolicy:
-              ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
+          absentItemContextPolicy:
+              AbsentItemContextPolicy.tryNotSetAnItemAsCurrent,
         );
         expect(plan.candidateAccepted, isFalse);
       });
@@ -140,8 +140,8 @@ void main() {
           isCandidateItemDifferentFromCurrent: true,
           isCandidateCurrentItemInNewQueriedList: false,
           provideItemContext: false,
-          itemAbsentRepresentativePolicy:
-              ItemAbsentRepresentativePolicy.trySetAnItemAsCurrent,
+          absentItemContextPolicy:
+              AbsentItemContextPolicy.trySetAnItemAsCurrent,
         );
         expect(plan.candidateAccepted, isTrue);
       });
@@ -173,8 +173,8 @@ void main() {
           () {
         final plan = executeInternal(
           provideItemContext: false,
-          itemAbsentRepresentativePolicy:
-              ItemAbsentRepresentativePolicy.trySetAnItemAsCurrent,
+          absentItemContextPolicy:
+              AbsentItemContextPolicy.trySetAnItemAsCurrent,
           isCandidateItemDifferentFromCurrent: true,
           isCandidateCurrentItemInNewQueriedList: true,
         );
@@ -186,8 +186,8 @@ void main() {
           () {
         final plan = executeInternal(
           provideItemContext: false,
-          itemAbsentRepresentativePolicy:
-              ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
+          absentItemContextPolicy:
+              AbsentItemContextPolicy.tryNotSetAnItemAsCurrent,
           isCandidateItemDifferentFromCurrent: true,
           isCandidateCurrentItemInNewQueriedList: true,
         );
@@ -294,8 +294,8 @@ void main() {
           provideItemContext: false,
           isCandidateItemDifferentFromCurrent: true,
           isCandidateCurrentItemInNewQueriedList: true,
-          itemAbsentRepresentativePolicy:
-              ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
+          absentItemContextPolicy:
+              AbsentItemContextPolicy.tryNotSetAnItemAsCurrent,
         );
         expect(plan.forceReloadItem, isFalse);
       });

@@ -3,8 +3,8 @@ part of '../core.dart';
 class _ActivityV1UiComponents extends _UiComponents {
   final ActivityV1 activity;
 
-  final Map<_ContextProviderViewState, XState> __activityBaseViewWidgetStates =
-      {};
+  final Map<_ContextProviderViewState, XState>
+      __activityContentViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -16,7 +16,7 @@ class _ActivityV1UiComponents extends _UiComponents {
 
   @override
   Set<FaRouteData> get faRouteDatas {
-    return __activityBaseViewWidgetStates.keys
+    return __activityContentViewWidgetStates.keys
         .map((v) => v.faRoute)
         .nonNulls
         .toList()
@@ -26,9 +26,9 @@ class _ActivityV1UiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateActivityBaseViews({bool force = false}) {
+  void refreshActivityContentViews({bool force = false}) {
     for (_ContextProviderViewState widgetState
-        in __activityBaseViewWidgetStates.keys) {
+        in __activityContentViewWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -39,57 +39,61 @@ class _ActivityV1UiComponents extends _UiComponents {
   // ***************************************************************************
 
   @override
-  bool hasMountedUiComponent() {
-    return __activityBaseViewWidgetStates.isNotEmpty;
+  bool hasMountedViews() {
+    return __activityContentViewWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUiComponentActivityRepresentative({
-    bool alsoCheckChildren = false,
+  // OLD: hasActiveUiComponentActivityRepresentative
+  bool hasActivityContext({
+    bool includeDescendants = false,
   }) {
-    String? componentName = _findActiveUiComponentWithContextKind(
+    String? componentName = _findVisibleViewWithContextKind(
       contextKind: ContextKind.activity,
-      alsoCheckChildren: alsoCheckChildren,
+      includeDescendants: includeDescendants,
     );
     return componentName != null;
   }
 
-  bool hasActiveUiComponent({bool alsoCheckChildren = false}) {
-    String? componentName = findActiveUiComponent(
-      alsoCheckChildren: alsoCheckChildren,
+  // OLD: hasActiveUiComponent
+  bool hasVisibleViews({bool includeDescendants = false}) {
+    String? componentName = findVisibleView(
+      includeDescendants: includeDescendants,
     );
     return componentName != null;
   }
 
-  String? findActiveUiComponent({bool alsoCheckChildren = false}) {
-    return _findActiveUiComponentWithContextKind(
+  // OLD: findActiveUiComponent
+  String? findVisibleView({bool includeDescendants = false}) {
+    return _findVisibleViewWithContextKind(
       contextKind: null,
-      alsoCheckChildren: alsoCheckChildren,
+      includeDescendants: includeDescendants,
     );
   }
 
-  String? findActiveUiComponentActivityRepresentative({
-    bool alsoCheckChildren = false,
+  // findActiveUiComponentActivityRepresentative
+  String? findVisibleActivityContextView({
+    bool includeDescendants = false,
   }) {
-    return _findActiveUiComponentWithContextKind(
+    return _findVisibleViewWithContextKind(
       contextKind: ContextKind.activity,
-      alsoCheckChildren: alsoCheckChildren,
+      includeDescendants: includeDescendants,
     );
   }
 
-  String? _findActiveUiComponentWithContextKind({
+  String? _findVisibleViewWithContextKind({
     required ContextKind? contextKind,
-    bool alsoCheckChildren = false,
+    bool includeDescendants = false,
   }) {
     bool has = false;
     //
     // Activity Base View:
     //
-    String? componentName = findActiveActivityBaseViewWithContextKind(
+    String? componentName = findVisibleActivityContentViewWithContextKind(
       contextKind: contextKind,
-      alsoCheckChildren: false,
+      includeDescendants: false,
     );
     if (componentName != null) {
       return componentName;
@@ -100,25 +104,25 @@ class _ActivityV1UiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveActivityBaseView({required bool alsoCheckChildren}) {
+  bool hasActiveActivityBaseView({required bool includeDescendants}) {
     String? componentName = findActiveActivityBaseView(
-      alsoCheckChildren: alsoCheckChildren,
+      includeDescendants: includeDescendants,
     );
     return componentName != null;
   }
 
-  String? findActiveActivityBaseView({required bool alsoCheckChildren}) {
-    return findActiveActivityBaseViewWithContextKind(
+  String? findActiveActivityBaseView({required bool includeDescendants}) {
+    return findVisibleActivityContentViewWithContextKind(
       contextKind: null,
-      alsoCheckChildren: alsoCheckChildren,
+      includeDescendants: includeDescendants,
     );
   }
 
-  String? findActiveActivityBaseViewWithContextKind({
+  String? findVisibleActivityContentViewWithContextKind({
     required ContextKind? contextKind,
-    required bool alsoCheckChildren,
+    required bool includeDescendants,
   }) {
-    var map = {...__activityBaseViewWidgetStates};
+    var map = {...__activityContentViewWidgetStates};
     for (_ContextProviderViewState widgetState in map.keys) {
       if (!widgetState.mounted) {
         continue;
@@ -138,20 +142,21 @@ class _ActivityV1UiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUiComponents({
+  // OLD: updateAllUiComponents
+  void refreshAllViews({
     bool force = true,
   }) {
-    updateActivityBaseViews(force: force);
+    refreshActivityContentViews(force: force);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedContentViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
-      widgetStates: __activityBaseViewWidgetStates,
+      widgetStates: __activityContentViewWidgetStates,
       activeOnly: activeOnly,
     );
   }
@@ -159,20 +164,20 @@ class _ActivityV1UiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addActivityBaseViewWidgetState({
+  void _addActivityContentViewWidgetState({
     required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
-    bool hasXActivityRepOLD = hasActiveUiComponentActivityRepresentative(
-      alsoCheckChildren: true,
+    bool hasXActivityRepOLD = hasActivityContext(
+      includeDescendants: true,
     );
-    __activityBaseViewWidgetStates.update(
+    __activityContentViewWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isVisible),
       ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool hasXActivityRepCURRENT = hasActiveUiComponentActivityRepresentative(
-      alsoCheckChildren: true,
+    bool hasXActivityRepCURRENT = hasActivityContext(
+      includeDescendants: true,
     );
     //
     if (isVisible) {
@@ -192,10 +197,10 @@ class _ActivityV1UiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _removeActivityBaseViewWidgetState({required State widgetState}) {
-    bool activeOLD = hasActiveUiComponent();
-    __activityBaseViewWidgetStates.remove(widgetState);
-    bool activeCURRENT = hasActiveUiComponent();
+  void _removeActivityContentViewWidgetState({required State widgetState}) {
+    bool activeOLD = hasVisibleViews();
+    __activityContentViewWidgetStates.remove(widgetState);
+    bool activeCURRENT = hasVisibleViews();
     //
     if (activeOLD && !activeCURRENT) {
       activity._broadcastActivityHidden();
@@ -213,7 +218,7 @@ class _ActivityV1UiComponents extends _UiComponents {
     //
     if (withActivityBaseView) {
       ret.addAll(
-        _findMountedBaseViewWidgetStates(activeOnly: activeOnly),
+        _findMountedContentViewWidgetStates(activeOnly: activeOnly),
       );
     }
     //

@@ -100,7 +100,7 @@ class _ScalarSectionViewBuilderState
 
   @override
   void addWidgetState({required bool isVisible}) {
-    widget.scalar.ui._addScalarBaseViewWidgetState(
+    widget.scalar.ui._addScalarContentViewWidgetState(
       widgetState: this,
       isVisible: isVisible,
     );
@@ -108,7 +108,7 @@ class _ScalarSectionViewBuilderState
 
   @override
   void removeWidgetState() {
-    widget.scalar.ui._removeScalarBaseViewWidgetState(
+    widget.scalar.ui._removeScalarContentViewWidgetState(
       widgetState: this,
     );
   }

@@ -73,7 +73,7 @@ class _FilterPanelBuilderState
 
   @override
   void addWidgetState({required bool isVisible}) {
-    widget.filterModel.ui._addFilterFragmentWidgetState(
+    widget.filterModel.ui._addFilterPanelWidgetState(
       widgetState: this,
       isVisible: true,
     );
@@ -81,7 +81,7 @@ class _FilterPanelBuilderState
 
   @override
   void removeWidgetState() {
-    widget.filterModel.ui._removeFilterFragmentWidgetState(
+    widget.filterModel.ui._removeFilterPanelWidgetState(
       widgetState: this,
     );
   }

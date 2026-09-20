@@ -10,7 +10,7 @@ class _StageUiComponents extends _UiComponents {
   Set<FaRouteData> get faRouteDatas => throw UnimplementedError();
 
   @override
-  bool hasMountedUiComponent() {
+  bool hasMountedViews() {
     // TODO: implement hasMountedUiComponent
     throw UnimplementedError();
   }

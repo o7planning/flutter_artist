@@ -1,8 +1,8 @@
 part of '../core.dart';
 
 /// Centralized strategy resolver calculating execution plans and target ID sets
-/// for a [Block] based on its current [BlockDataState], query mode,
-/// and boundary rules defined in [BlockViewportSyncConfig].
+/// for a [Block] based on its current [BlockDataState], query mode, UI context,
+/// and pipeline execution hints.
 class BlockQueryStrategyResolver {
   /// Resolves the exact query execution plan for a given [block].
   static BlockQueryPlan<ID> resolveQueryPlan<ID extends Comparable>({
@@ -16,6 +16,8 @@ class BlockQueryStrategyResolver {
             AdditionalFormRelatedData>
         block,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
+    required QryHint queryHint,
+    required bool provideBlockContext,
   }) {
     return resolveQueryPlanInternal<ID>(
       dataState: block.dataState,
@@ -23,6 +25,8 @@ class BlockQueryStrategyResolver {
       itemIds: block.items.map((i) => i.id).toList(),
       config: block.effectiveConfig,
       syncSessionState: syncSessionState,
+      queryHint: queryHint,
+      provideBlockContext: provideBlockContext,
     );
   }
 
@@ -33,6 +37,8 @@ class BlockQueryStrategyResolver {
     required List<ID> itemIds,
     required BlockEffectiveConfig config,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
+    required QryHint queryHint,
+    required bool provideBlockContext,
   }) {
     // -------------------------------------------------------------------------
     // 1. UNINITIALIZED STATE (BlockDataStateNone): Skip execution
@@ -41,10 +47,36 @@ class BlockQueryStrategyResolver {
       return const BlockQueryPlan.none();
     }
 
+    // -------------------------------------------------------------------------
+    // 2. EVALUATE EFFECTIVE FORCE RE-QUERY DEMAND
+    // -------------------------------------------------------------------------
+    // Re-query is required IF:
+    // a. Pipeline explicitly mandated force (queryHint == QryHint.force)
+    // b. Active UI representation is visible AND dataset is unready (pending/stale)
+    final bool effectiveForce = queryHint == QryHint.force ||
+        (provideBlockContext && (dataState.isPending || dataState.isStale));
+
+    // If there is no demand to execute or refresh, reject execution immediately
+    if (!effectiveForce) {
+      return const BlockQueryPlan.none();
+    }
+
+    // -------------------------------------------------------------------------
+    // 3. EXPLICIT FETCH / COLD QUERY (syncSessionState == null)
+    // -------------------------------------------------------------------------
+    // If no sync session state is attached, this operation is not driven by
+    // accumulated background events. Default directly to standard nativeQuery.
+    if (syncSessionState == null) {
+      return const BlockQueryPlan(
+        action: BlockResolvedQueryAction.performQuery,
+        viewportSyncStrategy: BlockViewportSyncStrategy.nativeQuery,
+      );
+    }
+
     final BlockViewportSyncConfig syncConfig = config.viewportSyncConfig;
 
     // -------------------------------------------------------------------------
-    // 2. PENDING STATE (Cold Query / Baseline Initialization)
+    // 4. PENDING STATE (Cold Query with Prior Accumulated Events)
     // -------------------------------------------------------------------------
     if (dataState.isPending) {
       // Unbounded Flat Mode: Full Native Query is mandatory to establish baseline
@@ -57,7 +89,7 @@ class BlockQueryStrategyResolver {
 
       // Bounded Paginated Mode (pageableQuery):
       final Set<ID> accumulatedEffectedIds =
-          syncSessionState?.getEffectedItemIds() ?? const {};
+          syncSessionState.getEffectedItemIds();
 
       if (accumulatedEffectedIds.isEmpty) {
         // No pending mutated IDs: Sweep initial page (Page 1)
@@ -76,24 +108,9 @@ class BlockQueryStrategyResolver {
     }
 
     // -------------------------------------------------------------------------
-    // 3. LOADED STATE (Warm Re-query / Invalidation Reconcile)
+    // 5. LOADED STATE (Event-Driven Re-query / Viewport Reconcile)
     // -------------------------------------------------------------------------
     if (dataState.isLoaded) {
-      final bool isStale = dataState.isStale;
-
-      // Clean baseline dataset without session events: Do nothing
-      if (!isStale && syncSessionState == null) {
-        return const BlockQueryPlan.none();
-      }
-
-      // Explicit refresh or stale state without accumulated events session: Native query
-      if (syncSessionState == null) {
-        return const BlockQueryPlan(
-          action: BlockResolvedQueryAction.performQuery,
-          viewportSyncStrategy: BlockViewportSyncStrategy.nativeQuery,
-        );
-      }
-
       final List<BlockReceivedEventInfo<ID>> receivedEvents =
           syncSessionState.receivedEventInfos;
 

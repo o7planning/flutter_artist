@@ -328,7 +328,7 @@ class XFilterModel {
     if (isDefaultFilterModel) {
       return false;
     }
-    if (!filterModel.ui.hasActiveUiComponent()) {
+    if (!filterModel.ui.hasVisibleViews()) {
       return false;
     }
     if (filterModel.committedDataState.isLoaded) {

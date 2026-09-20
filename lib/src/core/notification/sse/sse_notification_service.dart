@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../../../flutter_artist.dart';
+import '../../utils/_class_utils.dart';
 
 /// Service manages the lifecycle of the SSE connection.
 class SSENotificationService

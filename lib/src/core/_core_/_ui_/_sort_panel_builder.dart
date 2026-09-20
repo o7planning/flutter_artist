@@ -73,7 +73,7 @@ class _SortPanelBuilderState
 
   @override
   void addWidgetState({required bool isVisible}) {
-    widget.sortModel.ui._addSortFragmentWidgetState(
+    widget.sortModel.ui._addSortPanelWidgetState(
       widgetState: this,
       isVisible: true,
     );
@@ -81,7 +81,7 @@ class _SortPanelBuilderState
 
   @override
   void removeWidgetState() {
-    widget.sortModel.ui._removeSortFragmentWidgetState(
+    widget.sortModel.ui._removeSortPanelWidgetState(
       widgetState: this,
     );
   }

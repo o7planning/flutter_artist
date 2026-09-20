@@ -176,7 +176,7 @@ abstract class _StorageCore extends _Core {
   // ***************************************************************************
 
   void _checkToRemoveShelf(Shelf shelf) {
-    bool hasMountedUiComponent = shelf.ui.hasMountedUiComponent();
+    bool hasMountedUiComponent = shelf.ui.hasMountedViews();
     if (!hasMountedUiComponent) {
       switch (shelf.config.releasePolicy) {
         case ShelfReleasePolicy.retain:
@@ -213,7 +213,7 @@ abstract class _StorageCore extends _Core {
         continue;
       }
       if (visibleOnly) {
-        if (!shelf.ui.hasMountedUiComponent()) {
+        if (!shelf.ui.hasMountedViews()) {
           continue;
         }
       }

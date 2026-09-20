@@ -1,6 +1,12 @@
 part of '../core.dart';
 
+/// Coordinates UI representation registrations, visibility tracking, and hierarchical
+/// view rebuild cascades across all data models contained within a [Shelf].
+///
+/// Functions as the top-level shelf coordinator orchestrating reactive updates downward
+/// to root blocks, root scalars, and independent filter models.
 class _ShelfUiComponents extends _UiComponents {
+  /// The owner shelf bound to this UI coordinator.
   final Shelf shelf;
 
   // ***************************************************************************
@@ -11,16 +17,17 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Aggregates all navigation route keys declared across all blocks, scalars, and filters in this shelf.
   @override
   Set<FaRouteData> get faRouteDatas {
     final Set<FaRouteData> set = {};
-    for (Block block in shelf.blocks) {
+    for (final Block block in shelf.blocks) {
       set.addAll(block.ui.faRouteDatas);
     }
-    for (Scalar scalar in shelf.scalars) {
+    for (final Scalar scalar in shelf.scalars) {
       set.addAll(scalar.ui.faRouteDatas);
     }
-    for (FilterModel filterModel in shelf._allFilterModels) {
+    for (final FilterModel filterModel in shelf._allFilterModels) {
       set.addAll(filterModel.ui.faRouteDatas);
     }
     return set;
@@ -29,48 +36,49 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUiComponent() {
-    bool hasActive = _hasActiveBlockUiComponentCascade(shelf._rootBlocks);
-    if (hasActive) {
+  /// Checks whether any UI component inside this shelf is actively visible on screen.
+  // OLD: hasActiveUiComponent
+  bool hasVisibleViews() {
+    final bool hasVisible = _hasVisibleBlockViewsCascade(shelf._rootBlocks);
+    if (hasVisible) {
       return true;
     }
-    hasActive = _hasActiveScalarUiComponentCascade(shelf._rootScalars);
-    return hasActive;
+    return _hasVisibleScalarViewsCascade(shelf._rootScalars);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Checks whether any UI component inside this shelf is currently mounted in the widget tree.
+  // OLD: hasMountedUiComponent
   @override
-  bool hasMountedUiComponent() {
-    bool hasMounted = _hasMountedBlockUiComponentCascade(shelf._rootBlocks);
+  bool hasMountedViews() {
+    final bool hasMounted = _hasMountedBlockViewsCascade(shelf._rootBlocks);
     if (hasMounted) {
       return true;
     }
-    hasMounted = _hasMountedScalarUiComponentCascade(shelf._rootScalars);
-    if (hasMounted) {
-      return true;
-    }
-    return false;
+    return _hasMountedScalarViewsCascade(shelf._rootScalars);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUiComponents() {
+  /// Cascades a rebuild request to all mounted views within this shelf (filters, scalars, and blocks).
+  // OLD: updateAllUiComponents
+  void refreshAllViews() {
     try {
-      print("|----> ${getClassName(shelf)}.ui.updateAllUiComponents()");
+      print("|----> ${getClassName(shelf)}.ui.refreshAllViews()");
       //
-      for (FilterModel filterModel in shelf._allFilterModels) {
-        filterModel.ui.updateAllUiComponents();
+      for (final FilterModel filterModel in shelf._allFilterModels) {
+        filterModel.ui.refreshAllViews();
       }
       //
-      for (Scalar scalar in shelf._rootScalars) {
-        __updateAllScalarUiComponentsCascade(scalar, withoutFilters: true);
+      for (final Scalar scalar in shelf._rootScalars) {
+        _refreshAllScalarViewsCascade(scalar, withoutFilters: true);
       }
       //
-      for (Block block in shelf._rootBlocks) {
-        __updateAllBlockUiComponentsCascade(block, withoutFilters: true);
+      for (final Block block in shelf._rootBlocks) {
+        _refreshAllBlockViewsCascade(block, withoutFilters: true);
       }
     } catch (e, stackTrace) {
       print("ERROR: $e");
@@ -81,13 +89,14 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _hasMountedScalarUiComponentCascade(List<Scalar> scalars) {
-    for (Scalar scalar in scalars) {
-      if (scalar.ui.hasMountedUiComponent()) {
+  // OLD: _hasMountedScalarUiComponentCascade
+  bool _hasMountedScalarViewsCascade(List<Scalar> scalars) {
+    for (final Scalar scalar in scalars) {
+      if (scalar.ui.hasMountedViews()) {
         return true;
       }
-      bool hasMounted =
-          _hasMountedScalarUiComponentCascade(scalar._childScalars);
+      final bool hasMounted =
+      _hasMountedScalarViewsCascade(scalar._childScalars);
       if (hasMounted) {
         return true;
       }
@@ -98,12 +107,13 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _hasMountedBlockUiComponentCascade(List<Block> blocks) {
-    for (Block block in blocks) {
-      if (block.ui.hasMountedUiComponent()) {
+  // OLD: _hasMountedBlockUiComponentCascade
+  bool _hasMountedBlockViewsCascade(List<Block> blocks) {
+    for (final Block block in blocks) {
+      if (block.ui.hasMountedViews()) {
         return true;
       }
-      bool hasMounted = _hasMountedBlockUiComponentCascade(block._childBlocks);
+      final bool hasMounted = _hasMountedBlockViewsCascade(block._childBlocks);
       if (hasMounted) {
         return true;
       }
@@ -114,9 +124,10 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _hasActiveBlockUiComponentCascade(List<Block> blocks) {
-    for (Block block in blocks) {
-      if (block.ui.hasActiveUiComponent(alsoCheckChildren: true)) {
+  // OLD: _hasActiveBlockUiComponentCascade
+  bool _hasVisibleBlockViewsCascade(List<Block> blocks) {
+    for (final Block block in blocks) {
+      if (block.ui.hasVisibleViews(includeDescendants: true)) {
         return true;
       }
     }
@@ -126,9 +137,10 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _hasActiveScalarUiComponentCascade(List<Scalar> scalars) {
-    for (Scalar scalar in scalars) {
-      if (scalar.ui.hasActiveUiComponent(alsoCheckChildren: true)) {
+  // OLD: _hasActiveScalarUiComponentCascade
+  bool _hasVisibleScalarViewsCascade(List<Scalar> scalars) {
+    for (final Scalar scalar in scalars) {
+      if (scalar.ui.hasVisibleViews(includeDescendants: true)) {
         return true;
       }
     }
@@ -137,16 +149,15 @@ class _ShelfUiComponents extends _UiComponents {
 
   // ***************************************************************************
   // ***************************************************************************
-  // ***************************************************************************
 
-  void __updateAllScalarUiComponentsCascade(
-    Scalar scalar, {
+  // OLD: __updateAllScalarUiComponentsCascade
+  void _refreshAllScalarViewsCascade(Scalar scalar, {
     required bool withoutFilters,
   }) {
-    scalar.ui.updateAllUiComponents(withoutFilters: withoutFilters);
+    scalar.ui.refreshAllViews(withoutFilters: withoutFilters);
     //
-    for (Scalar childScalar in scalar._childScalars) {
-      __updateAllScalarUiComponentsCascade(
+    for (final Scalar childScalar in scalar._childScalars) {
+      _refreshAllScalarViewsCascade(
         childScalar,
         withoutFilters: withoutFilters,
       );
@@ -156,14 +167,14 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __updateAllBlockUiComponentsCascade(
-    Block block, {
+  // OLD: __updateAllBlockUiComponentsCascade
+  void _refreshAllBlockViewsCascade(Block block, {
     required bool withoutFilters,
   }) {
-    block.ui.updateAllUiComponents(withoutFilters: withoutFilters);
+    block.ui.refreshAllViews(withoutFilters: withoutFilters);
     //
-    for (Block childBlock in block._childBlocks) {
-      __updateAllBlockUiComponentsCascade(
+    for (final Block childBlock in block._childBlocks) {
+      _refreshAllBlockViewsCascade(
         childBlock,
         withoutFilters: withoutFilters,
       );
@@ -176,8 +187,8 @@ class _ShelfUiComponents extends _UiComponents {
   void __findMountedWidgetStates({
     required List<Block> blocks,
     required List<Scalar> scalars,
-    required bool withBlockFragment,
-    required bool withScalarFragment,
+    required bool withBlockContentView,
+    required bool withScalarContentView,
     required bool withFilter,
     required bool withSort,
     required bool withForm,
@@ -188,12 +199,12 @@ class _ShelfUiComponents extends _UiComponents {
     required bool withPagination,
     required Map<_ContextProviderViewState, XState> founds,
   }) {
-    for (Block block in blocks) {
-      Map<_ContextProviderViewState, XState> m =
-          block.ui._findMountedWidgetStates(
+    for (final Block block in blocks) {
+      final Map<_ContextProviderViewState, XState> m =
+      block.ui._findMountedWidgetStates(
         activeOnly: activeOnly,
         withPagination: withPagination,
-        withBlockBaseView: withBlockFragment,
+        withBlockContentView: withBlockContentView,
         withFilter: withFilter,
         withSort: withSort,
         withForm: withForm,
@@ -204,10 +215,10 @@ class _ShelfUiComponents extends _UiComponents {
       //
       __findMountedWidgetStates(
         blocks: block.childBlocks,
-        scalars: [],
+        scalars: const [],
         withPagination: withPagination,
-        withBlockFragment: withBlockFragment,
-        withScalarFragment: withScalarFragment,
+        withBlockContentView: withBlockContentView,
+        withScalarContentView: withScalarContentView,
         withFilter: withFilter,
         withSort: withSort,
         withForm: withForm,
@@ -218,22 +229,22 @@ class _ShelfUiComponents extends _UiComponents {
         founds: founds,
       );
     }
-    for (Scalar scalar in scalars) {
-      Map<_ContextProviderViewState, XState> m =
-          scalar.ui._findMountedWidgetStates(
+    for (final Scalar scalar in scalars) {
+      final Map<_ContextProviderViewState, XState> m =
+      scalar.ui._findMountedWidgetStates(
         activeOnly: activeOnly,
         withFilter: withFilter,
         withScalarControlBar: withScalarControlBar,
-        withScalarBaseView: withScalarFragment,
+        withScalarContentView: withScalarContentView,
       );
       founds.addAll(m);
       //
       __findMountedWidgetStates(
         scalars: scalar.childScalars,
-        blocks: [],
+        blocks: const [],
         withPagination: withPagination,
-        withBlockFragment: withBlockFragment,
-        withScalarFragment: withScalarFragment,
+        withBlockContentView: withBlockContentView,
+        withScalarContentView: withScalarContentView,
         withFilter: withFilter,
         withSort: withSort,
         withForm: withForm,
@@ -250,8 +261,8 @@ class _ShelfUiComponents extends _UiComponents {
   // ***************************************************************************
 
   Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
-    required bool withBlockFragment,
-    required bool withScalarFragment,
+    required bool withBlockContentView,
+    required bool withScalarContentView,
     required bool withPagination,
     required bool withFilter,
     required bool withSort,
@@ -261,13 +272,13 @@ class _ShelfUiComponents extends _UiComponents {
     required bool withControl,
     required bool activeOnly,
   }) {
-    Map<_ContextProviderViewState, XState> founds = {};
+    final Map<_ContextProviderViewState, XState> founds = {};
     __findMountedWidgetStates(
       blocks: shelf._rootBlocks,
       scalars: shelf._rootScalars,
       withPagination: withPagination,
-      withBlockFragment: withBlockFragment,
-      withScalarFragment: withScalarFragment,
+      withBlockContentView: withBlockContentView,
+      withScalarContentView: withScalarContentView,
       withFilter: withFilter,
       withSort: withSort,
       withForm: withForm,
@@ -285,8 +296,8 @@ class _ShelfUiComponents extends _UiComponents {
 
   @DebugMethodAnnotation()
   Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
-    required bool withBlockFragment,
-    required bool withScalarFragment,
+    required bool withBlockContentView,
+    required bool withScalarContentView,
     required bool withPagination,
     required bool withFilter,
     required bool withSort,
@@ -297,8 +308,8 @@ class _ShelfUiComponents extends _UiComponents {
     required bool activeOnly,
   }) {
     return _findMountedWidgetStates(
-      withBlockFragment: withBlockFragment,
-      withScalarFragment: withScalarFragment,
+      withBlockContentView: withBlockContentView,
+      withScalarContentView: withScalarContentView,
       withPagination: withPagination,
       withFilter: withFilter,
       withSort: withSort,

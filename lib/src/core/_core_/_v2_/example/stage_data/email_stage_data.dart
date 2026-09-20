@@ -1,4 +1,4 @@
-import '../../../../../../flutter_artist.dart';
+import '../../../core.dart';
 
 class EmailStageData extends StageData {
   final String email;

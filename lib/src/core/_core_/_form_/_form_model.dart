@@ -91,7 +91,7 @@ abstract class FormModel<
   void __disableAutovalidation() {
     AutovalidateMode temp = _autovalidateMode;
     _autovalidateMode = AutovalidateMode.disabled;
-    ui.updateAllUiComponents(force: true);
+    ui.refreshAllViews(force: true);
     _autovalidateMode = temp;
   }
 
@@ -442,7 +442,7 @@ abstract class FormModel<
       methodName: '_unitLoadFormData',
     );
     //
-    final visibleX = ui.hasActiveUiComponent();
+    final visibleX = ui.hasVisibleViews();
     final thisFormDataState = dataState;
     final bool forceReloadForm;
     switch (thisXFormModel.forceTypeForForm) {
@@ -1359,7 +1359,7 @@ abstract class FormModel<
           if (formMode == FormMode.edit &&
               _formModelStructure._formInitialDataReady) {
             final List<FormBuilderState> activeForms =
-                ui._activeFormBuilderStates;
+                ui._visibleFormBuilderStates;
             for (FormBuilderState formState in activeForms) {
               formState.validate(focusOnInvalid: false);
             }
@@ -1409,7 +1409,7 @@ abstract class FormModel<
   void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
     try {
       // _formKey.currentState?.patchValue(newCurrentValue);
-      final List<FormBuilderState> activeForms = ui._activeFormBuilderStates;
+      final List<FormBuilderState> activeForms = ui._visibleFormBuilderStates;
       for (FormBuilderState formState in activeForms) {
         formState.patchValue(newCurrentValue);
       }
@@ -1818,12 +1818,12 @@ abstract class FormModel<
       propName: propertyName,
       value: value,
     );
-    final activeForms = ui._activeFormBuilderStates;
+    final activeForms = ui._visibleFormBuilderStates;
     for (var formState in activeForms) {
       formState.patchValue({propertyName: value});
     }
 
-    ui.updateAllUiComponents(force: true);
+    ui.refreshAllViews(force: true);
   }
 
   dynamic getPropValue(String propName) {
@@ -2073,7 +2073,7 @@ abstract class FormModel<
       //
       this.__clearFormKey();
       //
-      block.ui.updateControlBars();
+      block.ui.refreshControlBars();
     } catch (e, stackTrace) {
       _handleError(
         shelf: shelf,
@@ -2090,13 +2090,7 @@ abstract class FormModel<
   // ***************************************************************************
 
   void __clearFormKey() {
-    // final Map<String, dynamic> instantValues =
-    //     this._formKey.currentState?.instantValue ?? {};
-    // //
-    // final Map<String, dynamic> newFormData = {...instantValues}
-    //   ..updateAll((k, v) => null);
-    // this._formKey.currentState?.patchValue(newFormData);
-    final List<FormBuilderState> activeForms = ui._activeFormBuilderStates;
+    final List<FormBuilderState> activeForms = ui._visibleFormBuilderStates;
     for (FormBuilderState formState in activeForms) {
       final Map<String, dynamic> instantValues = formState.instantValue;
       final Map<String, dynamic> newFormData = {...instantValues}
@@ -2139,7 +2133,7 @@ abstract class FormModel<
       // Patch _formKey:
       //
       Map<String, dynamic> initData = {..._formModelStructure._initialFormData};
-      final activeForms = ui._activeFormBuilderStates;
+      final activeForms = ui._visibleFormBuilderStates;
 
       for (FormBuilderState formState in activeForms) {
         Map<String, dynamic> localInitData = {...initData};
@@ -2151,7 +2145,7 @@ abstract class FormModel<
         formState.patchValue(localInitData);
       }
       //
-      shelf.ui.updateAllUiComponents();
+      shelf.ui.refreshAllViews();
     } finally {
       _changeEventLocked = false;
     }

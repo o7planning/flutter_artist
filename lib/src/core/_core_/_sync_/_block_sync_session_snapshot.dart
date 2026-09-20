@@ -1,11 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
-import 'package:flutter_artist_styles/flutter_artist_styles.dart';
-
 import '../../../core/_core_/core.dart';
-import '../../../core/enums/block_native_query_mode.dart';
-import '../../../core/enums/resolved_query_action.dart';
-import '../../../debug/state_view/dialogs/debug_id_list_dialog.dart';
+import '../../enums/qry_hint.dart';
 
 // =============================================================================
 // DIAGNOSTIC SNAPSHOT
@@ -18,6 +12,10 @@ import '../../../debug/state_view/dialogs/debug_id_list_dialog.dart';
 /// enabling precise time-travel debugging and strategy replay without being
 /// affected by subsequent mutations to the live Block instance.
 class BlockSyncDiagnosticSnapshot<ID extends Comparable> {
+  final QryHint queryHint;
+
+  final bool provideBlockContext;
+
   /// The structural data state of the block (e.g., Pending, LoadedFresh, LoadedStale)
   /// at the exact moment the snapshot was taken.
   final BlockDataState blockDataState;
@@ -45,5 +43,7 @@ class BlockSyncDiagnosticSnapshot<ID extends Comparable> {
     required this.parentBlockCurrentItemId,
     required this.filterCriteria,
     required this.syncSessionState,
+    required this.queryHint,
+    required this.provideBlockContext,
   });
 }

@@ -13,14 +13,14 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       }
       // @@@hasActiveBlockFragment
       bool blockXBlockRep =
-          xBlk.block.ui.hasActiveUiComponentBlockRepresentative(
-        alsoCheckChildren: true,
+          xBlk.block.ui.hasBlockContext(
+        includeDescendants: true,
       );
       QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //
       if (xBlk.block._blockSyncSessionState != null &&
-          xBlk.block._isMatchBlockReQryCon(xBlk.block._blockSyncSessionState)) {
+          xBlk.block._isMatchBlockSyncSessionState(xBlk.block._blockSyncSessionState)) {
         // queryHint = blockXBlockRep ? QryHint.force : QryHint.markAsPending;
         if (blockXBlockRep) {
           queryHint = QryHint.force;
@@ -49,8 +49,8 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
         }
         // @@@hasActiveBlockFragment
         bool blockXBlockRep =
-            xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
-          alsoCheckChildren: true,
+            xBlock.block.ui.hasBlockContext(
+          includeDescendants: true,
         );
         if (blockXBlockRep) {
           if (xBlock.block.dataState.isPending ||
@@ -80,7 +80,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
         XFormModel? xFormModel = xBlock.xFormModel;
         // Current: forShelfExternalReaction
         if (xFormModel != null &&
-            xFormModel.formModel.ui.hasActiveUiComponent()) {
+            xFormModel.formModel.ui.hasVisibleViews()) {
           if (xFormModel.formModel.dataState.isPending ||
               xFormModel.formModel.dataState.isFatalError ||
               xFormModel.formModel.dataState.isNone) {
@@ -99,14 +99,14 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       if (xScalar.scalar._scalarSyncSessionState == null) {
         continue;
       }
-      bool scalarXVisible = xScalar.scalar.ui.hasActiveUiComponent(
-        alsoCheckChildren: true,
+      bool scalarXVisible = xScalar.scalar.ui.hasVisibleViews(
+        includeDescendants: true,
       );
       QryHint queryHint = QryHint.none;
       //
       if (xScalar.scalar._scalarSyncSessionState != null &&
           xScalar.scalar
-              ._isMatchScalarReQryCon(xScalar.scalar._scalarSyncSessionState)) {
+              ._isMatchScalarSyncSessionState(xScalar.scalar._scalarSyncSessionState)) {
         if (scalarXVisible) {
           // Test Cases: [84a].
           xScalar.setQueryHintToGreater(QryHint.force);
@@ -121,8 +121,8 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
         if (xScalar == null) {
           break;
         }
-        bool hasXActiveUI = xScalar.scalar.ui.hasActiveScalarBaseView(
-          alsoCheckChildren: true,
+        bool hasXActiveUI = xScalar.scalar.ui.hasVisibleContentView(
+          includeDescendants: true,
         );
         if (hasXActiveUI) {
           if (xScalar.scalar.dataState.isPending ||

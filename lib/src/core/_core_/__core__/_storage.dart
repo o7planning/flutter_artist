@@ -17,7 +17,7 @@ class _Storage extends _StorageCore {
 
   void _init({
     required ExecutionTrace executionTrace,
-    required RuntimeAppConfig appConfig,
+    required EffectiveAppConfig appConfig,
   }) {
     TraceStep item = executionTrace._addTraceStep(
       codeId: "#SS000",

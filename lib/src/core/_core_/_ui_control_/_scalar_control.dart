@@ -74,14 +74,13 @@ class _ControlButtonState extends _ContextProviderViewState<ScalarControl> {
       onPressedAsync == null
           ? null
           : () {
-        () async {
-          bool success = await onPressedAsync();
-          if (success && widget.navigate != null) {
-            widget.navigate!();
-          }
-        }
-        ();
-      },
+              () async {
+                bool success = await onPressedAsync();
+                if (success && widget.navigate != null) {
+                  widget.navigate!();
+                }
+              }();
+            },
     );
   }
 
@@ -108,17 +107,17 @@ class _ControlButtonState extends _ContextProviderViewState<ScalarControl> {
 
   @override
   void addWidgetState({required bool isVisible}) {
-    widget.scalar.ui._addControlWidgetState(
-      widgetState: this,
-      isVisible: isVisible,
-    );
+    // widget.scalar.ui._addControlWidgetState(
+    //   widgetState: this,
+    //   isVisible: isVisible,
+    // );
   }
 
   @override
   void removeWidgetState() {
-    widget.scalar.ui._removeControlWidgetState(
-      widgetState: this,
-    );
+    // widget.scalar.ui._removeControlWidgetState(
+    //   widgetState: this,
+    // );
   }
 
   @override

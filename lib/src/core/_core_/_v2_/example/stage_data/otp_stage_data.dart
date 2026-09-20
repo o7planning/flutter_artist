@@ -1,4 +1,4 @@
-import '../../../../../../flutter_artist.dart';
+import '../../../core.dart';
 
 class OtpStageData extends StageData {
   final String otp;

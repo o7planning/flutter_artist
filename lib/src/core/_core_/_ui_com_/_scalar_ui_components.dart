@@ -1,12 +1,17 @@
 part of '../core.dart';
 
+/// Manages UI representation registrations, visibility tracking, and view rebuild cycles
+/// for an individual [Scalar].
+///
+/// This component coordinates reactive updates between UI widgets (e.g., Value Views,
+/// Section Views, and Control Bars) and the Scalar runtime data state.
 class _ScalarUiComponents extends _UiComponents {
+  /// The owner scalar bound to this UI coordinator.
   final Scalar scalar;
 
-  final Map<_ContextProviderViewState, XState> __scalarBaseViewWidgetStates =
-      {};
-  final Map<_ContextProviderViewState, XState> __scalarControlBarWidgetStates =
-      {};
+  // Registered views: ScalarValueView, ScalarSectionView.
+  final Map<_ContextProviderViewState, XState> __contentViewWidgetStates = {};
+  final Map<_ContextProviderViewState, XState> __controlBarWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -16,11 +21,12 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Aggregates all navigation route keys declared across registered views and models.
   @override
   Set<FaRouteData> get faRouteDatas {
-    List<_ContextProviderViewState> list = [
-      ...__scalarBaseViewWidgetStates.keys,
-      ...__scalarControlBarWidgetStates.keys,
+    final List<_ContextProviderViewState> list = [
+      ...__contentViewWidgetStates.keys,
+      ...__controlBarWidgetStates.keys,
     ];
     return list.map((v) => v.faRoute).nonNulls.toList().toSet();
   }
@@ -28,46 +34,148 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Checks whether any UI component connected to this scalar is currently mounted.
+  // OLD: hasMountedUiComponent
   @override
-  bool hasMountedUiComponent() {
-    return __scalarBaseViewWidgetStates.isNotEmpty ||
-        __scalarControlBarWidgetStates.isNotEmpty;
+  bool hasMountedViews() {
+    return __contentViewWidgetStates.isNotEmpty ||
+        __controlBarWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUiComponent({bool alsoCheckChildren = false}) {
-    String? componentName = findActiveUiComponent(
-      alsoCheckChildren: alsoCheckChildren,
+  /// Checks if any UI view connected to this scalar is actively visible on screen.
+  // OLD: hasActiveUiComponent
+  bool hasVisibleViews({bool includeDescendants = false}) {
+    final String? componentName = findVisibleView(
+      includeDescendants: includeDescendants,
     );
     return componentName != null;
   }
 
-  String? findActiveUiComponent({bool alsoCheckChildren = false}) {
-    bool active = false;
-    // Filter
-    // if (scalar.filterModel != null) {
-    //   active = scalar.filterModel!.ui.hasActiveUiComponent();
-    //   if (active) {
-    //     return true;
-    //   }
-    // }
-    // Scalar Base View:
-    String? componentName = findActiveScalarBaseView(alsoCheckChildren: false);
+  /// Resolves the class name of any actively visible view for diagnostic inspection.
+  // OLD: findActiveUiComponent
+  String? findVisibleView({bool includeDescendants = false}) {
+    // 1. Content View (ScalarValueView, ScalarSectionView)
+    final String? componentName = findVisibleContentView(
+      includeDescendants: false,
+    );
     if (componentName != null) {
       return componentName;
     }
-    // ControlBar:
-    active = hasActiveControlBar();
-    if (active) {
+
+    // 2. ControlBar
+    if (hasVisibleControlBar()) {
       return "ScalarControlBar";
     }
-    //
-    if (alsoCheckChildren) {
-      for (Scalar childScalar in scalar._childScalars) {
-        componentName = childScalar.ui.findActiveUiComponent(
-          alsoCheckChildren: alsoCheckChildren,
+
+    // 3. Child Scalars
+    if (includeDescendants) {
+      for (final Scalar childScalar in scalar._childScalars) {
+        final String? childComponentName = childScalar.ui.findVisibleView(
+          includeDescendants: includeDescendants,
+        );
+        if (childComponentName != null) {
+          return childComponentName;
+        }
+      }
+    }
+    return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Rebuilds active scalar control bars.
+  // OLD: updateControlBars
+  void refreshControlBars({bool force = false}) {
+    for (final _ContextProviderViewState widgetState
+        in __controlBarWidgetStates.keys) {
+      if (widgetState.mounted) {
+        widgetState.refreshState(force: force);
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Rebuilds all mounted primary content views (ScalarValueView, ScalarSectionView).
+  // OLD: updateScalarBaseViews
+  void refreshContentViews({bool force = true}) {
+    for (final _ContextProviderViewState state
+        in __contentViewWidgetStates.keys) {
+      if (state.mounted) {
+        state.refreshState(force: force);
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Rebuilds all mounted views connected to this scalar and its filter model.
+  // OLD: updateAllUiComponents
+  void refreshAllViews({
+    required bool withoutFilters,
+    bool force = true,
+  }) {
+    if (!withoutFilters) {
+      scalar.filterModel?.ui.refreshAllViews();
+    }
+    refreshControlBars(force: force);
+    refreshContentViews(force: force);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Checks if any content view (value view, section view) is actively visible on screen.
+  // OLD: hasActiveScalarBaseView
+  bool hasVisibleContentView({bool includeDescendants = false}) {
+    final String? componentName = findVisibleContentView(
+      includeDescendants: includeDescendants,
+    );
+    return componentName != null;
+  }
+
+  /// Locates the class name of the actively visible content view for diagnostics.
+  // OLD: findActiveScalarBaseView
+  String? findVisibleContentView({bool includeDescendants = false}) {
+    return findVisibleContentViewWithContextKind(
+      contextKind: null,
+      includeDescendants: includeDescendants,
+    );
+  }
+
+  /// Locates the class name of the actively visible content view filtered by context kind.
+  // OLD: findActiveScalarBaseViewWithContextKind
+  String? findVisibleContentViewWithContextKind({
+    required ContextKind? contextKind,
+    bool includeDescendants = false,
+  }) {
+    for (final _ContextProviderViewState widgetState
+        in __contentViewWidgetStates.keys) {
+      if (!widgetState.mounted) {
+        continue;
+      }
+      final bool visible =
+          __contentViewWidgetStates[widgetState]?.isVisible ?? false;
+      if (!visible) {
+        continue;
+      }
+      final bool ok = widgetState.isContextKind(contextKind);
+      if (ok) {
+        return getClassNameWithoutGenerics(widgetState.widget);
+      }
+    }
+    if (includeDescendants) {
+      for (final Scalar childScalar in scalar._childScalars) {
+        final String? componentName =
+            childScalar.ui.findVisibleContentViewWithContextKind(
+          contextKind: contextKind,
+          includeDescendants: true,
         );
         if (componentName != null) {
           return componentName;
@@ -80,24 +188,239 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Checks whether an active [ScalarControlBar] is currently visible on screen.
+  // OLD: hasActiveControlBar
+  bool hasVisibleControlBar() {
+    return hasVisibleControlBarWithContextKind(
+      contextKind: null,
+    );
+  }
+
+  /// Checks whether a [ScalarControlBar] matching [contextKind] is currently visible.
+  bool hasVisibleControlBarWithContextKind({
+    required ContextKind? contextKind,
+  }) {
+    for (final _ContextProviderViewState widgetState
+        in __controlBarWidgetStates.keys) {
+      if (!widgetState.mounted) {
+        continue;
+      }
+      final bool visible =
+          __controlBarWidgetStates[widgetState]?.isVisible ?? false;
+      if (!visible) {
+        continue;
+      }
+      final bool ok = widgetState.isContextKind(contextKind);
+      if (ok) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Resolves the class name of the view currently demanding the Scalar data context.
+  // OLD: findActiveUiComponentByScalarContext
+  String? findVisibleScalarContextView({
+    bool includeDescendants = false,
+  }) {
+    String? componentName = __findVisibleViewWithContextKind(
+      contextKind: ContextKind.scalar,
+      includeDescendants: includeDescendants,
+    );
+    if (componentName != null) {
+      return componentName;
+    }
+    if (!includeDescendants) {
+      return null;
+    }
+    for (final Scalar childScalar in scalar._childScalars) {
+      componentName = childScalar.ui.__findVisibleViewWithContextKind(
+        contextKind: ContextKind.scalar,
+        includeDescendants: includeDescendants,
+      );
+      if (componentName != null) {
+        return componentName;
+      }
+    }
+    return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Evaluates whether any active UI representation demands this Scalar's data context.
+  // OLD: hasActiveUiComponentScalarRepresentative
+  bool hasScalarContext({
+    bool includeDescendants = false,
+  }) {
+    final String? componentName = findVisibleScalarContextView(
+      includeDescendants: includeDescendants,
+    );
+    return componentName != null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  String? __findVisibleViewWithContextKind({
+    required ContextKind? contextKind,
+    bool includeDescendants = false,
+  }) {
+    //
+    // Scalar Content Views:
+    //
+    final String? componentName = findVisibleContentViewWithContextKind(
+      contextKind: contextKind,
+      includeDescendants: false,
+    );
+    if (componentName != null) {
+      return componentName;
+    }
+    //
+    // ControlBar:
+    //
+    if (hasVisibleControlBarWithContextKind(contextKind: contextKind)) {
+      return "ScalarControlBar";
+    }
+    //
+    if (includeDescendants) {
+      for (final Scalar childScalar in scalar._childScalars) {
+        final childComponentName =
+            childScalar.ui.__findVisibleViewWithContextKind(
+          contextKind: contextKind,
+          includeDescendants: includeDescendants,
+        );
+        if (childComponentName != null) {
+          return childComponentName;
+        }
+      }
+    }
+    return null;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _addControlBarWidgetState({
+    required _ContextProviderViewState widgetState,
+    required bool isVisible,
+  }) {
+    final bool scalarContextOld = hasScalarContext(
+      includeDescendants: true,
+    );
+    __controlBarWidgetStates.update(
+      widgetState,
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
+    );
+    final bool scalarContextCurrent = hasScalarContext(
+      includeDescendants: true,
+    );
+    //
+    if (isVisible) {
+      FlutterArtist.storage._addRecentShelf(scalar.shelf);
+    }
+    //
+    if (!scalarContextOld && scalarContextCurrent) {
+      FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
+    } else if (scalarContextOld && !scalarContextCurrent) {
+      scalar._broadcastScalarHidden();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _removeControlBarWidgetState({
+    required _ContextProviderViewState widgetState,
+  }) {
+    __controlBarWidgetStates.remove(widgetState);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _addScalarContentViewWidgetState({
+    required _ContextProviderViewState widgetState,
+    required bool isVisible,
+  }) {
+    final bool visibleOld = hasVisibleViews();
+    __contentViewWidgetStates.update(
+      widgetState,
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
+    );
+    final bool visibleCurrent = hasVisibleViews();
+    //
+    if (isVisible) {
+      FlutterArtist.storage._addRecentShelf(scalar.shelf);
+    }
+    //
+    if (!visibleOld && visibleCurrent) {
+      FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
+    } else if (visibleOld && !visibleCurrent) {
+      scalar._broadcastScalarHidden();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _removeScalarContentViewWidgetState({
+    required _ContextProviderViewState widgetState,
+  }) {
+    final bool visibleOld = hasVisibleViews();
+    __contentViewWidgetStates.remove(widgetState);
+    final bool visibleCurrent = hasVisibleViews();
+    //
+    if (visibleOld && !visibleCurrent) {
+      scalar._broadcastScalarHidden();
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Map<_ContextProviderViewState, XState> _findMountedContentViewWidgetStates({
+    required bool activeOnly,
+  }) {
+    return ___findMountedWidgetStates(
+      widgetStates: __contentViewWidgetStates,
+      activeOnly: activeOnly,
+    );
+  }
+
+  Map<_ContextProviderViewState, XState> _findMountedControlBarWidgetStates({
+    required bool activeOnly,
+  }) {
+    return ___findMountedWidgetStates(
+      widgetStates: __controlBarWidgetStates,
+      activeOnly: activeOnly,
+    );
+  }
+
   Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
-    required bool withScalarBaseView,
+    required bool withScalarContentView,
     required bool withFilter,
     required bool withScalarControlBar,
     required bool activeOnly,
   }) {
-    Map<_ContextProviderViewState, XState> ret = {};
+    final Map<_ContextProviderViewState, XState> ret = {};
     //
     if (withFilter) {
       final FilterModel filterModel = scalar._registeredOrDefaultFilterModel;
       ret.addAll(
-        filterModel.ui._findMountedBaseViewWidgetStates(activeOnly: activeOnly),
+        filterModel.ui
+            ._findMountedFilterPanelWidgetStates(activeOnly: activeOnly),
       );
     }
     //
-    if (withScalarBaseView) {
+    if (withScalarContentView) {
       ret.addAll(
-        _findMountedBaseViewWidgetStates(activeOnly: activeOnly),
+        _findMountedContentViewWidgetStates(activeOnly: activeOnly),
       );
     }
     //
@@ -113,374 +436,15 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateControlBars({bool force = false}) {
-    for (_ContextProviderViewState widgetState
-        in __scalarControlBarWidgetStates.keys) {
-      if (widgetState.mounted) {
-        widgetState.refreshState(force: force);
-      }
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void updateScalarBaseViews({bool force = true}) {
-    for (_ContextProviderViewState state in __scalarBaseViewWidgetStates.keys) {
-      if (state.mounted) {
-        state.refreshState(force: force);
-      }
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void updateAllUiComponents({
-    required bool withoutFilters,
-    bool force = true,
-  }) {
-    if (!withoutFilters) {
-      scalar.filterModel?.ui.updateAllUiComponents();
-    }
-    updateControlBars(force: force);
-    updateScalarBaseViews(force: force);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool hasActiveScalarBaseView({required bool alsoCheckChildren}) {
-    String? componentName = findActiveScalarBaseView(
-      alsoCheckChildren: alsoCheckChildren,
-    );
-    return componentName != null;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  String? findActiveScalarBaseView({required bool alsoCheckChildren}) {
-    return findActiveScalarBaseViewWithContextKind(
-      contextKind: null,
-      alsoCheckChildren: alsoCheckChildren,
-    );
-  }
-
-  String? findActiveScalarBaseViewWithContextKind({
-    required ContextKind? contextKind,
-    required bool alsoCheckChildren,
-  }) {
-    for (State widgetState in __scalarBaseViewWidgetStates.keys) {
-      if (!widgetState.mounted) {
-        continue;
-      }
-      bool visible =
-          __scalarBaseViewWidgetStates[widgetState]?.isVisible ?? false;
-      if (!visible) {
-        continue;
-      }
-      return getClassNameWithoutGenerics(widgetState.widget);
-    }
-    if (alsoCheckChildren) {
-      for (Scalar childScalar in scalar._childScalars) {
-        String? componentName =
-            childScalar.ui.findActiveScalarBaseViewWithContextKind(
-          contextKind: contextKind,
-          alsoCheckChildren: true,
-        );
-        if (componentName != null) {
-          return componentName;
-        }
-      }
-    }
-    return null;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool hasActiveControlBar() {
-    return hasActiveControlBarWithContextKind(
-      contextKind: null,
-    );
-  }
-
-  bool hasActiveControlBarWithContextKind({
-    required ContextKind? contextKind,
-  }) {
-    for (_ContextProviderViewState widgetState
-        in __scalarControlBarWidgetStates.keys) {
-      if (!widgetState.mounted) {
-        continue;
-      }
-      bool visible =
-          __scalarControlBarWidgetStates[widgetState]?.isVisible ?? false;
-      if (!visible) {
-        continue;
-      }
-      bool ok = widgetState.isContextKind(contextKind);
-      if (ok) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
-    required bool activeOnly,
-  }) {
-    return ___findMountedWidgetStates(
-      widgetStates: __scalarBaseViewWidgetStates,
-      activeOnly: activeOnly,
-    );
-  }
-
-  Map<_ContextProviderViewState, XState> _findMountedControlBarWidgetStates({
-    required bool activeOnly,
-  }) {
-    return ___findMountedWidgetStates(
-      widgetStates: __scalarControlBarWidgetStates,
-      activeOnly: activeOnly,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  String? __activeUiComponentsWithContextKind({
-    required ContextKind? contextKind,
-    bool alsoCheckChildren = false,
-  }) {
-    bool has = false;
-    //
-    // Filter
-    //
-    // if (scalar.filterModel != null) {
-    //   has = scalar.filterModel!.ui.hasActiveUiComponentWithContextKind(
-    //     contextKind: contextKind,
-    //   );
-    //   if (has) {
-    //     return getClassNameWithoutGenerics(scalar.filterModel);
-    //   }
-    // }
-    //
-    //
-    // Scalar Base Views:
-    //
-    String? componentName = findActiveScalarBaseViewWithContextKind(
-      contextKind: contextKind,
-      alsoCheckChildren: false,
-    );
-    if (componentName != null) {
-      return componentName;
-    }
-    //
-    // ControlBar:
-    //
-    has = hasActiveControlBarWithContextKind(
-      contextKind: contextKind,
-    );
-    if (has) {
-      return "ScalarControlBar";
-    }
-    //
-    if (alsoCheckChildren) {
-      for (Scalar childScalar in scalar._childScalars) {
-        componentName = childScalar.ui.__activeUiComponentsWithContextKind(
-          contextKind: contextKind,
-          alsoCheckChildren: alsoCheckChildren,
-        );
-        if (componentName != null) {
-          return componentName;
-        }
-      }
-    }
-    return null;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  String? findActiveUiComponentByScalarContext({
-    bool alsoCheckChildren = false,
-  }) {
-    String? componentName = __activeUiComponentsWithContextKind(
-      contextKind: ContextKind.scalar,
-      alsoCheckChildren: alsoCheckChildren,
-    );
-    if (componentName != null) {
-      return componentName;
-    }
-    if (!alsoCheckChildren) {
-      return null;
-    }
-    for (Scalar childScalar in scalar._childScalars) {
-      componentName = childScalar.ui.__activeUiComponentsWithContextKind(
-        contextKind: ContextKind.item,
-        alsoCheckChildren: alsoCheckChildren,
-      );
-      if (componentName != null) {
-        return componentName;
-      }
-    }
-    return null;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool hasActiveUiComponentScalarRepresentative({
-    bool alsoCheckChildren = false,
-  }) {
-    String? componentName = findActiveUiComponentByScalarContext(
-      alsoCheckChildren: alsoCheckChildren,
-    );
-    return componentName != null;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _addControlBarWidgetState({
-    required _ContextProviderViewState widgetState,
-    required bool isVisible,
-  }) {
-    bool scalarXScalarRepOLD = hasActiveUiComponentScalarRepresentative(
-      alsoCheckChildren: true,
-    );
-    __scalarControlBarWidgetStates.update(
-      widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
-    );
-    bool scalarXScalarRepCURRENT = hasActiveUiComponentScalarRepresentative(
-      alsoCheckChildren: true,
-    );
-    //
-    if (isVisible) {
-      FlutterArtist.storage._addRecentShelf(scalar.shelf);
-    }
-    //
-    if (!scalarXScalarRepOLD && scalarXScalarRepCURRENT) {
-      // Fire event:
-      // scalar.shelf._startLoadDataForLazyUiComponentsIfNeed();
-      // LOGIC: #0000
-      FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
-    } else if (scalarXScalarRepOLD && !scalarXScalarRepCURRENT) {
-      scalar._broadcastScalarHidden();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeControlBarWidgetState({
-    required _ContextProviderViewState widgetState,
-  }) {
-    __scalarControlBarWidgetStates.remove(widgetState);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _addControlWidgetState({
-    required _ContextProviderViewState widgetState,
-    required bool isVisible,
-  }) {
-    bool activeOLD = hasActiveUiComponent();
-    __scalarControlBarWidgetStates.update(
-      widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
-    );
-    bool activeCURRENT = hasActiveUiComponent();
-    //
-    if (isVisible) {
-      FlutterArtist.storage._addRecentShelf(scalar.shelf);
-    }
-    //
-    if (!activeOLD && activeCURRENT) {
-      // Fire event:
-      // scalar.shelf._startLoadDataForLazyUiComponentsIfNeed();
-      // LOGIC: #0000
-      FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
-    } else if (activeOLD && !activeCURRENT) {
-      scalar._broadcastScalarHidden();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeControlWidgetState({required State widgetState}) {
-    bool activeOLD = hasActiveUiComponent();
-    __scalarControlBarWidgetStates.remove(widgetState);
-    bool activeCURRENT = hasActiveUiComponent();
-    //
-    if (activeOLD && !activeCURRENT) {
-      scalar._broadcastScalarHidden();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _addScalarBaseViewWidgetState({
-    required _ContextProviderViewState widgetState,
-    required bool isVisible,
-  }) {
-    bool activeOLD = hasActiveUiComponent();
-    __scalarBaseViewWidgetStates.update(
-      widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
-    );
-    bool activeCURRENT = hasActiveUiComponent();
-    //
-    if (isVisible) {
-      FlutterArtist.storage._addRecentShelf(scalar.shelf);
-    }
-    //
-    if (!activeOLD && activeCURRENT) {
-      // Fire event:
-      // scalar.shelf._startLoadDataForLazyUiComponentsIfNeed();
-      // LOGIC: #0000
-      FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
-    } else if (activeOLD && !activeCURRENT) {
-      scalar._broadcastScalarHidden();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeScalarBaseViewWidgetState({required State widgetState}) {
-    bool activeOLD = hasActiveUiComponent();
-    __scalarBaseViewWidgetStates.remove(widgetState);
-    bool activeCURRENT = hasActiveUiComponent();
-    //
-    if (activeOLD && !activeCURRENT) {
-      scalar._broadcastScalarHidden();
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   @DebugMethodAnnotation()
   Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
-    required bool withPagination,
-    required bool withScalarBaseView,
+    required bool withScalarContentView,
     required bool withFilter,
     required bool withScalarControlBar,
     required bool activeOnly,
   }) {
     return _findMountedWidgetStates(
-      withScalarBaseView: withScalarBaseView,
+      withScalarContentView: withScalarContentView,
       withFilter: withFilter,
       withScalarControlBar: withScalarControlBar,
       activeOnly: activeOnly,

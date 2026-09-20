@@ -6,14 +6,14 @@ class BlockDataStateUtils {
   ///
   /// ### Transition Scenarios:
   /// 1. **Parent Context Shift (`parentItemChanged` / `!hasParentItem`)**:
-  ///    - If this block is a child block and the parent item is null, transitions directly to `None`[cite: 8].
-  ///    - If the parent item identity mutated, previous data cache is evicted, resetting the state to `Pending.initial`[cite: 8].
+  ///    - If this block is a child block and the parent item is null, transitions directly to `None`.
+  ///    - If the parent item identity mutated, previous data cache is evicted, resetting the state to `Pending.initial`.
   /// 2. **Filter Criteria Shift (`filterCriteriaChanged`)**:
   ///    - If data is already in RAM (`LoadedFresh` or `LoadedStale`), marks it as `LoadedStale(filterChanged)`
-  ///      while safely carrying over any prior failure history via [retainedFailureReason][cite: 8].
-  ///    - If data is cold (`Pending`), transitions to `Pending.filterChanged`[cite: 8].
+  ///      while safely carrying over any prior failure history via [retainedFailureReason].
+  ///    - If data is cold (`Pending`), transitions to `Pending.filterChanged`.
   /// 3. **Incoming Domain Mutation Events (`hasIncomingEvent`)**:
-  ///    - When loaded in RAM, transitions to `LoadedStale(event)` preserving previous failures[cite: 8].
+  ///    - When loaded in RAM, transitions to `LoadedStale(event)` preserving previous failures.
   static BlockDataState calculateNewLazyDataState({
     required BlockDataState currentBlockDataState,
     required bool hasParentItem,
@@ -33,17 +33,17 @@ class BlockDataStateUtils {
     }
 
     switch (currentBlockDataState) {
-    // Uninitialized blocks stay in Pending once parent identity is established
+      // Uninitialized blocks stay in Pending once parent identity is established
       case BlockDataStateNone():
         return const BlockDataStatePending.initial();
 
-    // Cold baseline states
+      // Cold baseline states
       case BlockDataStatePending(:final reason):
         if (filterCriteriaChanged) {
           final BlockPendingReasonFailed? priorFailure = switch (reason) {
             BlockPendingReasonFailed failure => failure,
             BlockPendingReasonFilterChanged(:final retainedFailureReason) =>
-            retainedFailureReason,
+              retainedFailureReason,
             _ => null,
           };
           return BlockDataStatePending.filterChanged(
@@ -52,7 +52,7 @@ class BlockDataStateUtils {
         }
         return currentBlockDataState;
 
-    // Active and clean dataset in RAM
+      // Active and clean dataset in RAM
       case BlockDataStateLoadedFresh(:final transientErrorInfo):
         if (filterCriteriaChanged) {
           return BlockDataStateLoadedStale.filterChanged();
@@ -62,18 +62,18 @@ class BlockDataStateUtils {
         }
         return currentBlockDataState;
 
-    // Dataset in RAM that is already marked stale
+      // Dataset in RAM that is already marked stale
       case BlockDataStateLoadedStale(:final reason):
-      // Extract existing failure reason across multiple hops
+        // Extract existing failure reason across multiple hops
         final BlockLoadedStateStaleReasonFailed? priorFailure =
-        switch (reason) {
+            switch (reason) {
           BlockLoadedStateStaleReasonFailed failure => failure,
           BlockLoadedStateStaleReasonEvent(:final retainedFailureReason) =>
-          retainedFailureReason,
+            retainedFailureReason,
           BlockLoadedStateStaleReasonFilterChanged(
-              :final retainedFailureReason
+            :final retainedFailureReason
           ) =>
-          retainedFailureReason,
+            retainedFailureReason,
         };
 
         if (filterCriteriaChanged) {

@@ -101,9 +101,9 @@ class _Executor {
           rethrow;
         } finally {
           for (Shelf shelf in executedShelfMap.values) {
-            shelf.ui.updateAllUiComponents();
+            shelf.ui.refreshAllViews();
           }
-          FlutterArtist.storage.ui.updateAllUiComponents();
+          FlutterArtist.storage.ui.refreshAllViews();
           //
           __executingXShelfId = null;
           FlutterArtist.backstage._consumeSingleDeferral();
@@ -206,7 +206,7 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
-          executionIntent: executionUnit.executionIntent!,
+          executionIntent: executionUnit.executionIntent,
         );
       }
       // Block PrepareCreate:

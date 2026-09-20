@@ -23,8 +23,8 @@ class BlockCurrentItemResolver {
     required final bool provideBlockContext,
     required final bool provideItemContext,
     required final bool provideFormContext,
-    required final ItemAbsentRepresentativePolicy
-    itemAbsentRepresentativePolicy,
+    required final AbsentItemContextPolicy
+    absentItemContextPolicy,
     required final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy,
     required final BlockSetCurrentItemDirective setCurrentItemDirective,
     required final bool isCandidateCurrentItemInNewQueriedList,
@@ -42,7 +42,7 @@ class BlockCurrentItemResolver {
       provideBlockContext: provideBlockContext,
       provideItemContext: provideItemContext,
       provideFormContext: provideFormContext,
-      itemAbsentRepresentativePolicy: itemAbsentRepresentativePolicy,
+      absentItemContextPolicy: absentItemContextPolicy,
       unifiedItemRefreshPolicy: unifiedItemRefreshPolicy,
       setCurrentItemDirective: setCurrentItemDirective,
       isCandidateCurrentItemInNewQueriedList:
@@ -62,8 +62,8 @@ class BlockCurrentItemResolver {
     required final bool provideBlockContext,
     required final bool provideItemContext,
     required final bool provideFormContext,
-    required final ItemAbsentRepresentativePolicy
-    itemAbsentRepresentativePolicy,
+    required final AbsentItemContextPolicy
+    absentItemContextPolicy,
     required final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy,
     required final BlockSetCurrentItemDirective setCurrentItemDirective,
     required final bool isCandidateCurrentItemInNewQueriedList,
@@ -79,8 +79,8 @@ class BlockCurrentItemResolver {
     // or escalated by configuration policies/directives.
     bool provideItemContextExt = provideItemContext;
     if (!provideItemContext &&
-        itemAbsentRepresentativePolicy ==
-            ItemAbsentRepresentativePolicy.trySetAnItemAsCurrent) {
+        absentItemContextPolicy ==
+            AbsentItemContextPolicy.trySetAnItemAsCurrent) {
       provideItemContextExt = true;
       PrintUtils.debug(debug,
           " --> [Calc 1.1] Extended ItemRep to true via ItemAbsentRepresentativePolicy.trySetAnItemAsCurrent");

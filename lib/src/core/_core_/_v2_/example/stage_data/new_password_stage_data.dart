@@ -1,4 +1,4 @@
-import '../../../../../../flutter_artist.dart';
+import '../../../core.dart';
 
 class NewPasswordStageData extends StageData {
   final String newPassword;

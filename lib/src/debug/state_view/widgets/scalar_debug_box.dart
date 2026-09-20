@@ -22,9 +22,9 @@ class ScalarDebugBox extends BaseDebugBox {
 
   @override
   List<Widget> getChildIconLabelTexts(BuildContext context) {
-    String? activeUI = scalar.ui.findActiveUiComponent();
+    String? activeUI = scalar.ui.findVisibleView();
     String? xActiveUI =
-        scalar.ui.findActiveUiComponent(alsoCheckChildren: true);
+        scalar.ui.findVisibleView(includeDescendants: true);
     return [
       if (options.showUiActive)
         ActiveInfoWidget(
@@ -34,7 +34,7 @@ class ScalarDebugBox extends BaseDebugBox {
           labelStyle: DebugStyleUtils.getLabelStyle0(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
           checkAgain: () {
-            String? activeUI = scalar.ui.findActiveUiComponent();
+            String? activeUI = scalar.ui.findVisibleView();
             print("Check again: $activeUI");
           },
         ),

@@ -513,27 +513,6 @@ abstract class Shelf extends _Core {
     // Natural Query:
     //
     final XShelf xShelf = _XShelfShelfNaturalQuery(shelf: shelf);
-    // _LazyObjects lazyObjects = xShelf.getLazyObjectInfos();
-    // //
-    // if (lazyObjects.isEmpty) {
-    //   executionTrace._addTraceStep(
-    //     codeId: "#02020",
-    //     shortDesc:
-    //         "No lazy model-components found. Just update All UI components and nothing else. "
-    //         "Calling ${debugObjHtml(this)}.ui.updateAllUiComponents().",
-    //     traceStepType: TraceStepType.nonControllableCalling,
-    //   );
-    //   // IMPORTANT: No Lazy entities, but need to refresh UiComponents:
-    //   ui.updateAllUiComponents();
-    //   FlutterArtist.storage.ui.updateAllUiComponents();
-    //   return;
-    // }
-    // executionTrace._addTraceStep(
-    //   codeId: "#02060",
-    //   shortDesc: "Found some lazy model-components.\n"
-    //       "${lazyObjects.toDebugString()}",
-    //   traceStepType: TraceStepType.debug,
-    // );
     try {
       executionTrace._addTraceStep(
         codeId: "#02100",
@@ -548,10 +527,6 @@ abstract class Shelf extends _Core {
             xShelf)}._initQueryExecutionUnits() to create <b>Natural-Load</b> execution units...",
         traceStepType: TraceStepType.nonControllableCalling,
       );
-      // //
-      // // TODO: Handle Error:
-      // //
-      // xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
       //
       executionTrace._addTraceStep(
         codeId: "#02160",

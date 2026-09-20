@@ -70,7 +70,7 @@ class _ActivitySectionViewBuilderState
 
   @override
   void addWidgetState({required bool isVisible}) {
-    widget.activity.ui._addActivityBaseViewWidgetState(
+    widget.activity.ui._addActivityContentViewWidgetState(
       widgetState: this,
       isVisible: isVisible,
     );
@@ -78,7 +78,7 @@ class _ActivitySectionViewBuilderState
 
   @override
   void removeWidgetState() {
-    widget.activity.ui._removeActivityBaseViewWidgetState(
+    widget.activity.ui._removeActivityContentViewWidgetState(
       widgetState: this,
     );
   }

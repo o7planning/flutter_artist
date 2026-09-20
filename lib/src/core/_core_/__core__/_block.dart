@@ -397,9 +397,6 @@ abstract class Block<
 
   BlockNativeQueryMode get nativeQueryMode => __blockData._nativeQueryMode;
 
-  // BlockNativeQueryMode get pendingNativeQueryMode =>
-  //     __blockData._pendingNativeQueryMode;
-
   Pageable? get pageable => __blockData._pageable;
 
   Pageable? get nextPageable {
@@ -500,8 +497,14 @@ abstract class Block<
 
     // 🚀 Recalculate BlockDataState upon incoming event
     if (_blockSyncSessionState != null) {
-      final nextState =
-          _blockSyncSessionState!.calculateNextDataState(dataState);
+      final nextState = BlockDataStateUtils.calculateNewLazyDataState(
+        currentBlockDataState: dataState,
+        hasParentItem: parent != null,
+        isRootBlock: isRoot,
+        parentItemChanged: false,
+        filterCriteriaChanged: false,
+        hasIncomingEvent: true,
+      );
 
       // Test case: [63a], [63b].
       // IN: _updateBlockSyncSessionState() method.
@@ -582,12 +585,14 @@ abstract class Block<
     return _blockSyncSessionState != null || _blockItemSyncSessionState != null;
   }
 
-  bool _isMatchBlockReQryCon(_BlockSyncSessionState? blockReQryCon) {
-    if (blockReQryCon == null) {
+  bool _isMatchBlockSyncSessionState(
+      _BlockSyncSessionState? blockSyncSessionState) {
+    if (blockSyncSessionState == null) {
       return false;
     }
-    return blockReQryCon.parentBlockItemId == parentBlockCurrentItemId &&
-        blockReQryCon.filterCriteria == filterCriteria;
+    return blockSyncSessionState.parentBlockItemId ==
+            parentBlockCurrentItemId &&
+        blockSyncSessionState.filterCriteria == filterCriteria;
   }
 
   bool _isMatchBlockItemRefreshCon(_BlockItemRefreshCon? blockItemRefreshCon) {
@@ -753,7 +758,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool isPendingOrStale({required bool requiresVisible}) {
-    final bool visible = ui.hasActiveUiComponent(alsoCheckChildren: true);
+    final bool visible = ui.hasVisibleViews(includeDescendants: true);
     if (requiresVisible) {
       if (!visible) {
         return false;
@@ -770,7 +775,7 @@ abstract class Block<
     if (_blockSyncSessionState == null && _blockItemSyncSessionState == null) {
       return false;
     }
-    return ui.hasActiveUiComponent(alsoCheckChildren: true);
+    return ui.hasVisibleViews(includeDescendants: true);
   }
 
   // ***************************************************************************
@@ -1263,65 +1268,47 @@ abstract class Block<
     required BlockQueryIntent<ID, ITEM, ITEM_DETAIL> executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
-    //
-    QryHint applyQueryHint = thisXBlock.queryHint; // (**)
-    bool applyForceReloadCurrItem = thisXBlock.forceReloadCurrItem; // (**)
-    //
+
+    final QryHint initialQueryHint = thisXBlock.queryHint;
+    final bool applyForceReloadCurrItem = thisXBlock.forceReloadCurrItem;
+
     thisXBlock._setQueriedTrue();
     thisXBlock._createAndSetBlockExecutionIntentDone(lastIntentInfo: "Query");
-    thisXBlock.resetExecutionHints(); // (**)
-    //
+    thisXBlock.resetExecutionHints();
+
     executionTrace._addTraceStep(
       codeId: "#03000",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}.",
       traceStepType: TraceStepType.debug,
     );
-    // Important:
+
     final executionResult = executionIntent.resultWrapper._setResult(
       BlockQueryResult._(),
       objectCaller: this,
       methodName: '_unitQuery',
     );
-    //
+
     final XFilterModel xFilterModel = thisXBlock.xFilterModel;
     final FilterModel filterModel = xFilterModel.filterModel;
     final FilterCriteriaSnapshot<FILTER_CRITERIA>?
         committedFilterCriteriaSnapshot =
         filterModel._committedFilterCriteriaSnapshot
             as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
-    //
-    bool provideBlockContext = ui.hasActiveUiComponentBlockRepresentative(
-      alsoCheckChildren: true,
-    );
-    //
+
+    final bool provideBlockContext =
+        ui.hasBlockContext(includeDescendants: true);
+
     executionTrace._addTraceStep(
       codeId: "#03020",
       shortDesc: "@provideBlockContext: ${debugObjHtml(provideBlockContext)}.",
       traceStepType: TraceStepType.debug,
       tipDocument: TipDocument.blockActiveUiComponents,
     );
-    //
-    if (applyQueryHint != QryHint.force) {
-      if (provideBlockContext && (dataState.isPending || dataState.isStale)) {
-        applyQueryHint = QryHint.force;
-      }
-    }
-    //
-    executionTrace._addTraceStep(
-      codeId: "#03040",
-      shortDesc: "Debug",
-      parameters: {
-        "dataState": dataState.toBriefInfo(),
-        "applyQueryHint": applyQueryHint,
-        "committedFilterCriteriaSnapshot.isError":
-            committedFilterCriteriaSnapshot?.isError,
-      },
-      traceStepType: TraceStepType.debug,
-    );
-    //
-    thisXBlock._printParameters(provideBlockContext: provideBlockContext);
 
+    // =========================================================================
+    // 1. UNIFIED STRATEGY RESOLUTION (SINGLE SOURCE OF TRUTH)
+    // =========================================================================
     final DebugBlockSyncSessionState<ID>? currentSyncSessionState =
         _blockSyncSessionState;
 
@@ -1329,8 +1316,11 @@ abstract class Block<
         BlockQueryStrategyResolver.resolveQueryPlan<ID>(
       block: this,
       syncSessionState: currentSyncSessionState,
+      queryHint: initialQueryHint,
+      provideBlockContext: provideBlockContext,
     );
-    TraceStep step = executionTrace._addTraceStep(
+
+    final TraceStep step = executionTrace._addTraceStep(
       codeId: "#03044",
       shortDesc: "Calculated Query Plan (${debugObjHtml(this)}):",
       parameters: {
@@ -1340,6 +1330,7 @@ abstract class Block<
       },
       traceStepType: TraceStepType.debug,
     );
+
     if (_blockSyncSessionState != null) {
       step.blockSyncDiagnosticSnapshot = BlockSyncDiagnosticSnapshot<ID>(
         syncSessionState: _blockSyncSessionState,
@@ -1348,132 +1339,51 @@ abstract class Block<
         itemIds: itemIds,
         parentBlockCurrentItemId: parentBlockCurrentItemId,
         filterCriteria: filterCriteria,
+        queryHint: initialQueryHint,
+        provideBlockContext: provideBlockContext,
       );
     }
-    final viewportSyncStrategy =
-        queryPlan.viewportSyncStrategy ?? BlockViewportSyncStrategy.nativeQuery;
-    //
-    final BlockResolvedQueryAction resolvedQueryAction;
-    final BlockErrorMethod performQryMethod;
-    switch (queryPlan.action) {
-      case null:
-        performQryMethod = BlockErrorMethod.performQuery;
-        resolvedQueryAction = BlockResolvedQueryAction.performQuery;
-      case BlockResolvedQueryAction.performQuery:
-        performQryMethod = BlockErrorMethod.performQuery;
-        resolvedQueryAction = queryPlan.action!;
-      case BlockResolvedQueryAction.performQueryByItemIds:
-        performQryMethod = BlockErrorMethod.performQueryByItemIds;
-        resolvedQueryAction = queryPlan.action!;
+
+    // =========================================================================
+    // 2. NO-OP SHORT CIRCUIT (PRESERVE VIEWPORT)
+    // =========================================================================
+    if (queryPlan.action == null) {
+      executionTrace._addTraceStep(
+        codeId: "#03060",
+        shortDesc:
+            "QueryPlan action is NULL -> Skip query execution and preserve active viewport.",
+        traceStepType: TraceStepType.debug,
+      );
+
+      // Reconciled successfully with zero mutations: Clear event session
+      if (_blockSyncSessionState != null) {
+        _resetBlockSyncSessionState(executionTrace: executionTrace);
+        if (dataState.isStale) {
+          __blockData._setBlockDataState(
+            newBlockDataState: const BlockDataStateLoadedFresh(),
+          );
+        }
+      }
+
+      // Delegate selection fallback without triggering network mutations
+      _handleSelectionWhenQuerySkipped(
+        executionTrace: executionTrace,
+        thisXBlock: thisXBlock,
+        applyForceReloadCurrItem: applyForceReloadCurrItem,
+      );
+      return;
     }
 
-    executionTrace._addTraceStep(
-      codeId: "#03050",
-      shortDesc: "Debug:",
-      parameters: {
-        "applyQueryHint": applyQueryHint,
-        "viewportSyncStrategy": viewportSyncStrategy,
-        "performQryMethod": performQryMethod,
-      },
-      traceStepType: TraceStepType.debug,
-    );
-    BlockDataState newBlockDataState = dataState;
-    List<ITEM>? queriedItemList;
-    PaginationInfo? queriedPaginationInfo;
-    final ITEM? candidateCurrItem;
-    bool queried = false;
-
-    switch (applyQueryHint) {
-      case QryHint.none:
-        executionTrace._addTraceStep(
-          codeId: "#03060",
-          shortDesc: "@applyQueryHint: ${debugObjHtml(applyQueryHint)}, "
-              "@viewportSyncStrategy: ${debugObjHtml(viewportSyncStrategy)}.",
-        );
-        candidateCurrItem = null;
-        //
-        BlockSetCurrentItemDirective? setCurrentItemDirective;
-        final defaultAfterQueryDirective =
-            FlutterArtist.defaultAfterQueryDirective;
-        final BlockSetCurrentItemDirective?
-            defaultBlockSetCurrentItemDirective =
-            defaultAfterQueryDirective.toSetCurrentItemDirective();
-        //
-        // If Natural Mode: Try to select an item as current if the Block has no current.
-        //
-        if (thisXBlock.xShelf.naturalMode) {
-          executionTrace._addTraceStep(
-            codeId: "#03080",
-            shortDesc: "Currently, ${debugObjHtml(this)} query in naturalMode.",
-          );
-          // Test Cases: [38b] - test_companyCreationScreen_to_employeeScreen.
-          // No need to select an Item as Current.
-          if (formModel?.formMode == FormMode.creation) {
-            executionTrace._addTraceStep(
-              codeId: "#03100",
-              shortDesc:
-                  "The ${debugObjHtml(this)} is in creation mode --> cancel query.",
-            );
-            return;
-          }
-          //
-          setCurrentItemDirective = defaultBlockSetCurrentItemDirective;
-        }
-        // Not Natural Mode.
-        else {
-          if (thisXBlock.setCurrentItemDirective != null) {
-            setCurrentItemDirective = thisXBlock.setCurrentItemDirective!;
-          }
-        }
-        //
-        // Test Cases: [63a] - __test_event_63a__external_product_event_in_productScreen_1
-        //
-        if (currentItem == null && setCurrentItemDirective == null) {
-          executionTrace._addTraceStep(
-            codeId: "#03120",
-            shortDesc:
-                "The block has no currentItem and @setCurrentItemDirective is null --> Cancel query.",
-          );
-          return;
-        }
-        //
-        executionTrace._addTraceStep(
-          codeId: "#03140",
-          shortDesc:
-              "${debugObjHtml(this)}: XBlock._createAndSetBlockExecutionIntentSetCurrentItem().",
-          traceStepType: TraceStepType.executionIntent,
-        );
-        // IN: Case QryHint.none
-        thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
-          setCurrentItemDirective: setCurrentItemDirective ??
-              BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
-          newQueriedList: [],
-          inputCandidateCurrItem: candidateCurrItem,
-          forceReloadItem: applyForceReloadCurrItem,
-          forceTypeForForm: null,
-        );
-        return;
-      case QryHint.force:
-      // Continue below:
-    }
-    if (committedFilterCriteriaSnapshot == null) {
-      throw "TODO: Will Never Run";
-    }
-    //
-    // FORCE QUERY:
-    //  applyQueryHint || (provideBlockContext && this.dataState != DataState.loaded)
-    //
-    //
-    // Has Error in FilterModel.
-    //
-    if (committedFilterCriteriaSnapshot.isError) {
+    // =========================================================================
+    // 3. FILTER MODEL VALIDATION & CASCADE ERROR GUARD
+    // =========================================================================
+    if (committedFilterCriteriaSnapshot == null ||
+        committedFilterCriteriaSnapshot.isError) {
       executionTrace._addTraceStep(
         codeId: "#03260",
         shortDesc:
             "Error in FilterModel of ${debugObjHtml(this)}, keep block data state",
       );
-      // Test Cases: [23a].
-      // Set Block to error cascade.
       __stopQueryWithFilterErrorCascade(
         thisXBlock: thisXBlock,
         blockErrorInfo: null,
@@ -1481,79 +1391,76 @@ abstract class Block<
       return;
     }
 
-    //
-    // Ready FilterCriteria:
-    //
     committedFilterCriteriaSnapshot
         as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
     final bool filterCriteriaChanged =
         __blockData._isFilterCriteriaSnapshotChanged(
       newFilterCriteriaSnapshot: committedFilterCriteriaSnapshot,
     );
-    //
+
+    final BlockResolvedQueryAction resolvedQueryAction = queryPlan.action!;
+    final BlockViewportSyncStrategy viewportSyncStrategy =
+        queryPlan.viewportSyncStrategy ?? BlockViewportSyncStrategy.nativeQuery;
+
+    final BlockErrorMethod performQryMethod = switch (resolvedQueryAction) {
+      BlockResolvedQueryAction.performQuery => BlockErrorMethod.performQuery,
+      BlockResolvedQueryAction.performQueryByItemIds =>
+        BlockErrorMethod.performQueryByItemIds,
+    };
+
+    executionTrace._addTraceStep(
+      codeId: "#03050",
+      shortDesc: "Resolved Execution Action:",
+      parameters: {
+        "resolvedQueryAction": resolvedQueryAction.name,
+        "viewportSyncStrategy": viewportSyncStrategy.name,
+        "performQryMethod": performQryMethod.name,
+      },
+      traceStepType: TraceStepType.debug,
+    );
+
+    BlockDataState newBlockDataState = dataState;
+    List<ITEM>? queriedItemList;
+    PaginationInfo? queriedPaginationInfo;
+    final ITEM? candidateCurrItem;
+    bool queried = false;
+
     ActionResultState queryResultState;
     BlockErrorInfo? blkErrorInfo;
-    //
     ListUpdateStrategy realListUpdateStrategy;
-    // Will be used for Query:
+
     final Pageable? willBeUsedPageable =
         thisXBlock.getWillBeUsedPageable(thisXBlock.queryType);
     List<ID>? itemIdsToQry;
-    //
+
+    // =========================================================================
+    // 4. REMOTE DATA FETCH EXECUTION
+    // =========================================================================
     if (thisXBlock.queryType == QueryType.realQuery) {
-      //
       executionTrace._addTraceStep(
         codeId: "#03280",
         shortDesc: "@queryType: ${debugObjHtml(thisXBlock.queryType)}.",
         traceStepType: TraceStepType.debug,
         tipDocument: TipDocument.blockQueryType,
       );
-      //
-      __blockData._nativeQueryMode = effectiveConfig.nativeQueryMode;
 
+      __blockData._nativeQueryMode = effectiveConfig.nativeQueryMode;
       final QueryType newQueryType = thisXBlock.queryType;
-      final queryTypeChanged = __lastQueryType != newQueryType;
+      final bool queryTypeChanged = __lastQueryType != newQueryType;
       __lastQueryType = newQueryType;
 
-      //
-      // Call Query API:
-      //
       try {
         __blockData._backupManualArrangementBeforeQueryIfNeed();
         __refreshQueryingState(isQuerying: true);
-        //
-        final SortableCriteria sortableCriteria;
-        if (serverSideSortModel != null) {
-          executionTrace._addTraceStep(
-            codeId: "#03320",
-            shortDesc:
-                "Calling ${debugObjHtml(serverSideSortModel)}.getSortableCriteria():",
-            traceStepType: TraceStepType.nonControllableCalling,
-            tipDocument: TipDocument.sorting,
-          );
-          sortableCriteria = serverSideSortModel!.sortableCriteria;
-          executionTrace._addTraceStep(
-            codeId: "#03324",
-            shortDesc:
-                "Got @sortableCriteria: ${debugObjHtml(sortableCriteria)}.",
-            traceStepType: TraceStepType.debug,
-          );
-        } else {
-          sortableCriteria = SortableCriteria._empty();
-          executionTrace._addTraceStep(
-            codeId: "#03330",
-            shortDesc:
-                "No <b>serverSideSortModel</b> --> @sortableCriteria: ${debugObjHtml(sortableCriteria)}.",
-            traceStepType: TraceStepType.debug,
-            tipDocument: TipDocument.sorting,
-          );
-        }
-        //
-        if (viewportSyncStrategy == BlockViewportSyncStrategy.nativeQuery) {
+
+        final SortableCriteria sortableCriteria = serverSideSortModel != null
+            ? serverSideSortModel!.sortableCriteria
+            : SortableCriteria._empty();
+
+        if (resolvedQueryAction == BlockResolvedQueryAction.performQuery) {
           executionTrace._addTraceStep(
             codeId: "#03340",
-            shortDesc:
-                "Calling ${debugObjHtml(this)}.${performQryMethod.name}()...",
+            shortDesc: "Calling ${debugObjHtml(this)}.performQuery()...",
             parameters: {
               "parentBlockCurrentItem": parent?.currentItem,
               "filterCriteria": committedFilterCriteriaSnapshot.criteriaOrNull,
@@ -1562,44 +1469,23 @@ abstract class Block<
             },
             traceStepType: TraceStepType.controllableCalling,
           );
-          itemIdsToQry = null;
-          // performQuery
-          if (resolvedQueryAction == BlockResolvedQueryAction.performQuery) {
-            debug.__performQueryCount++;
-            final ApiResult<PageData<ITEM>?> result = await performQuery(
-              parentBlockCurrentItem: parent?.currentItem,
-              filterCriteria: committedFilterCriteriaSnapshot.filterCriteria,
-              sortableCriteria: sortableCriteria,
-              pageable: willBeUsedPageable,
-            );
-            // Throw ApiError:
-            result.throwIfError();
-            queriedItemList = result.data?.items;
-            queriedPaginationInfo = result.data?.paginationInfo;
-          }
-          // performQueryByItemIds
-          else if (resolvedQueryAction ==
-              BlockResolvedQueryAction.performQueryByItemIds) {
-            debug.__performQueryByItemIdsCount++;
-            final ApiResult<ListData<ITEM>?> result =
-                await performQueryByItemIds(
-              parentBlockCurrentItem: parent?.currentItem,
-              filterCriteria: committedFilterCriteriaSnapshot.filterCriteria,
-              sortableCriteria: sortableCriteria,
-              itemIds: queryPlan.targetItemIds.toList(),
-            );
-            // Throw ApiError:
-            result.throwIfError();
-            queriedItemList = result.data?.items;
-            queriedPaginationInfo = null;
-          } else {
-            throw UnimplementedError("Never Run");
-          }
-          //
-          _resetBlockSyncSessionState(executionTrace: executionTrace);
-        }
-        // viewportSyncStrategy != BlockViewportSyncStrategy.nativeQuery
-        else {
+
+          debug.__performQueryCount++;
+          final ApiResult<PageData<ITEM>?> result = await performQuery(
+            parentBlockCurrentItem: parent?.currentItem,
+            filterCriteria: committedFilterCriteriaSnapshot.filterCriteria,
+            sortableCriteria: sortableCriteria,
+            pageable: willBeUsedPageable,
+          );
+
+          result.throwIfError();
+          queriedItemList = result.data?.items;
+          queriedPaginationInfo = result.data?.paginationInfo;
+        } else {
+          itemIdsToQry = queryPlan.targetItemIds.toList();
+          debug.__performQueryByItemIdsCount++;
+          debug._lastPerformQueryItemIds = queryPlan.targetItemIds;
+
           executionTrace._addTraceStep(
             codeId: "#03350",
             shortDesc:
@@ -1608,17 +1494,10 @@ abstract class Block<
               "parentBlockCurrentItem": parent?.currentItem,
               "filterCriteria": committedFilterCriteriaSnapshot.criteriaOrNull,
               "sortableCriteria": sortableCriteria,
-              "pageable": willBeUsedPageable,
+              "targetItemIds": itemIdsToQry,
             },
             traceStepType: TraceStepType.controllableCalling,
           );
-          itemIdsToQry = _blockSyncSessionState
-                  ?.getPerformQueryItemIds(itemIds)
-                  .toList() ??
-              [];
-
-          debug.__performQueryByItemIdsCount++;
-          debug._lastPerformQueryItemIds = itemIdsToQry.toSet();
 
           final ApiResult<ListData<ITEM>?> result = await performQueryByItemIds(
             parentBlockCurrentItem: parent?.currentItem,
@@ -1626,17 +1505,16 @@ abstract class Block<
             sortableCriteria: sortableCriteria,
             itemIds: itemIdsToQry,
           );
-          // Throw ApiError:
+
           result.throwIfError();
           queriedItemList = result.data?.items;
           queriedPaginationInfo = null;
-          //
-          _resetBlockSyncSessionState(executionTrace: executionTrace);
         }
-        //
+
+        _resetBlockSyncSessionState(executionTrace: executionTrace);
         queried = true;
         queryResultState = ActionResultState.success;
-        //
+
         executionTrace._addTraceStep(
           codeId: "#03360",
           shortDesc: "Got @queriedItemList: ${debugObjHtml(queriedItemList)}.",
@@ -1647,26 +1525,23 @@ abstract class Block<
         queryResultState = ActionResultState.fail;
         queriedItemList = null;
         queriedPaginationInfo = null;
-        //
+
         blkErrorInfo = BlockErrorInfo(
           blockErrorMethod: performQryMethod,
-          error: e, // AppError, ApiError or others.
+          error: e,
           errorStackTrace: stackTrace,
         );
-        //
+
         final errorInfo = _handleError(
           shelf: shelf,
           methodName: performQryMethod.name,
-          // AppError, ApiError or others.
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
           tipDocument: TipDocument.blockPerformQuery,
         );
-        executionResult._setErrorInfo(
-          errorInfo: errorInfo,
-        );
-        //
+        executionResult._setErrorInfo(errorInfo: errorInfo);
+
         executionTrace._addTraceStep(
           codeId: "#03400",
           shortDesc:
@@ -1676,13 +1551,13 @@ abstract class Block<
       } finally {
         __refreshQueryingState(isQuerying: false);
       }
+
       final bool isPageShifting;
-      // Full Query
       if (willBeUsedPageable == null) {
         isPageShifting = !filterCriteriaChanged;
       } else {
-        int currentPage = __blockData._paginationInfo?.currentPage ?? 0;
-        int targetPage = willBeUsedPageable.page;
+        final int currentPage = __blockData._paginationInfo?.currentPage ?? 0;
+        final int targetPage = willBeUsedPageable.page;
         isPageShifting = !filterCriteriaChanged && currentPage != targetPage;
       }
 
@@ -1703,11 +1578,6 @@ abstract class Block<
       final BlockQueryCalculatorResult calculationResult =
           BlockQueryStateCalculator.calculate(calculationInput);
 
-      // print("@TEMP INPUT ${getClassNameWithoutGenerics(this)}: ");
-      // print(calculationInput.getDebugInfo());
-      // print(calculationResult.getDebugInfo());
-
-      // Extract variables directly into your pre-existing downstream fields securely
       realListUpdateStrategy = calculationResult.realListUpdateStrategy;
       newBlockDataState = calculationResult.newBlockDataState;
 
@@ -1717,7 +1587,6 @@ abstract class Block<
           shortDesc:
               "${debugObjHtml(this)} --> Query error -> newBlockDataState: $newBlockDataState",
         );
-        // Test case [42a], [22a].
         __blockData._updateStateAfterQueryError(
           newBlockDataState: newBlockDataState,
         );
@@ -1731,23 +1600,21 @@ abstract class Block<
         );
         return;
       }
-    }
-    // Query Empty:
-    else {
+    } else {
+      // Empty Query Mode
       executionTrace._addTraceStep(
         codeId: "#03500",
         shortDesc: "@queryType: ${thisXBlock.queryType}.",
       );
-      //
       __blockData._nativeQueryMode = effectiveConfig.nativeQueryMode;
       __lastQueryType = thisXBlock.queryType;
       realListUpdateStrategy = ListUpdateStrategy.replace;
-      newBlockDataState = BlockDataStateLoadedFresh();
+      newBlockDataState = const BlockDataStateLoadedFresh();
       queriedItemList = [];
       queriedPaginationInfo = null;
       queryResultState = ActionResultState.success;
     }
-    //
+
     executionTrace._addTraceStep(
       codeId: "#03520",
       shortDesc: "Calculated:",
@@ -1761,8 +1628,8 @@ abstract class Block<
     if (queriedItemList != null &&
         realListUpdateStrategy == ListUpdateStrategy.merge) {
       if (itemIdsToQry != null && itemIdsToQry.isNotEmpty) {
-        for (ID itmId in itemIdsToQry) {
-          ITEM? found =
+        for (final ID itmId in itemIdsToQry) {
+          final ITEM? found =
               queriedItemList.firstWhereOrNull((it) => it.id == itmId);
           if (found == null) {
             removeItemIds.add(itmId);
@@ -1770,8 +1637,10 @@ abstract class Block<
         }
       }
     }
-    //
-    //
+
+    // =========================================================================
+    // 5. UPDATE STORAGE & DATASET
+    // =========================================================================
     final ITEM? currItem = currentItem;
     try {
       executionTrace._addTraceStep(
@@ -1790,15 +1659,12 @@ abstract class Block<
       final processedQueryResult = __processQueryResult(
         usedFilterCriteriaSnapshot: committedFilterCriteriaSnapshot,
         usedPageable: willBeUsedPageable,
-        //
         queriedItemList: queriedItemList,
         queriedPaginationInfo: queriedPaginationInfo,
         newBlockDataState: newBlockDataState,
         queryResultState: queryResultState,
       );
-      //
-      // Update queried items to the List:
-      //
+
       __blockData._updateData(
         executionTrace: executionTrace,
         forceListUpdateStrategy: realListUpdateStrategy,
@@ -1814,9 +1680,7 @@ abstract class Block<
         showSnackBar: true,
         tipDocument: null,
       );
-      executionResult._setErrorInfo(
-        errorInfo: errorInfo,
-      );
+      executionResult._setErrorInfo(errorInfo: errorInfo);
       executionTrace._addTraceStep(
         codeId: "#03560",
         shortDesc: "Update queried data to block --> error.",
@@ -1824,16 +1688,19 @@ abstract class Block<
       );
       return;
     }
-    //
+
+    // =========================================================================
+    // 6. CURRENT ITEM EVALUATION & DOWNSTREAM SYNCHRONIZATION
+    // =========================================================================
     final bool currentItemInList = currItem != null && containsItem(currItem);
     candidateCurrItem = currentItemInList ? currItem : null;
-    //
+
     executionTrace._addTraceStep(
       codeId: "#03580",
       shortDesc: "@currentItemInList: ${debugObjHtml(currentItemInList)}.",
       traceStepType: TraceStepType.debug,
     );
-    //
+
     if (!currentItemInList) {
       executionTrace._addTraceStep(
         codeId: "#03600",
@@ -1844,7 +1711,7 @@ abstract class Block<
         item: null,
         itemDetail: null,
       );
-      //
+
       if (formModel != null) {
         executionTrace._addTraceStep(
           codeId: "#03610",
@@ -1852,7 +1719,8 @@ abstract class Block<
               "Clear ${debugObjHtml(formModel)} data and set to <b>none</b>.",
           traceStepType: TraceStepType.info,
         );
-        formModel!._clearDataWithDataState(formDataState: FormDataStateNone());
+        formModel!
+            ._clearDataWithDataState(formDataState: const FormDataStateNone());
       }
       executionTrace._addTraceStep(
         codeId: "#03620",
@@ -1861,65 +1729,39 @@ abstract class Block<
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         traceStepType: TraceStepType.info,
       );
-      // (Currently, In _unitQuery && applyQueryHint).
-      // Test Case: [42a].
-      __clearAllChildrenBlocksToNone(
-        thisXBlock: thisXBlock,
-      );
-    }
-    // currentItemInList.
-    else {
+      __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
+    } else {
       switch (newBlockDataState) {
         case BlockDataStateNone():
-          // @@TODO@@ 04.
-          // Never run:
-          __clearAllChildrenBlocksToNone(
-            thisXBlock: thisXBlock,
-          );
         case BlockDataStatePending():
-          // @@TODO@@ 05.
-          // Never run:
-          __clearAllChildrenBlocksToNone(
-            thisXBlock: thisXBlock,
-          );
         case BlockDataStateLoadedStale():
-          // TODO: Xem lai
-          __clearAllChildrenBlocksToNone(
-            thisXBlock: thisXBlock,
-          );
+          __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
         case BlockDataStateLoadedFresh():
           break;
       }
     }
-    if (thisXBlock.xShelf.naturalMode) {
-      if (formMode == FormMode.creation) {
-        executionTrace._addTraceStep(
-          codeId: "#03660",
-          shortDesc:
-              "This query in naturalMode and formMode is creation --> do nothing.",
-        );
-        // Do nothing.
-        // Test Case: [38b].
-        return;
-      }
+
+    if (thisXBlock.xShelf.naturalMode && formMode == FormMode.creation) {
+      executionTrace._addTraceStep(
+        codeId: "#03660",
+        shortDesc:
+            "This query in naturalMode and formMode is creation --> do nothing.",
+      );
+      return;
     }
-    //
-    // TODO: LOGIC-01 (If not querying block --> No need to force select an item).
+
     final BlockAfterQueryDirective afterQueryDirective =
         thisXBlock.afterQueryDirective;
-    if (!thisXBlock.xShelf.naturalMode) {
-      if (!queried) {
-        return;
-      }
+    if (!thisXBlock.xShelf.naturalMode && !queried) {
+      return;
     }
+
     executionTrace._addTraceStep(
       codeId: "#03700",
       shortDesc: "@afterQueryDirective: ${debugObjHtml(afterQueryDirective)}.",
       traceStepType: TraceStepType.debug,
     );
-    //
-    // Begin AfterQueryDirective
-    //
+
     if (afterQueryDirective == BlockAfterQueryDirective.clearCurrentItem) {
       executionTrace._addTraceStep(
         codeId: "#03720",
@@ -1929,9 +1771,7 @@ abstract class Block<
       );
       thisXBlock._createAndSetBlockExecutionIntentClearCurrentItem();
       return;
-    }
-    // createNewItem (IN _unitQuery)
-    else if (afterQueryDirective == BlockAfterQueryDirective.createNewItem) {
+    } else if (afterQueryDirective == BlockAfterQueryDirective.createNewItem) {
       executionTrace._addTraceStep(
         codeId: "#03740",
         shortDesc: "@afterQueryDirective: $afterQueryDirective --> "
@@ -1945,27 +1785,24 @@ abstract class Block<
       );
       return;
     }
+
     if (itemCount == 0) {
       return;
     }
-    //
-    final BlockSetCurrentItemDirective setCurrentItemDirective;
-    switch (afterQueryDirective) {
-      case BlockAfterQueryDirective.clearCurrentItem:
-        throw UnimplementedError("Never ran. Handled above.");
-      case BlockAfterQueryDirective.createNewItem:
-        throw UnimplementedError("Never ran. Handled above.");
-      case BlockAfterQueryDirective.setAnItemAsCurrentIfNeed:
-        setCurrentItemDirective =
-            BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
-      case BlockAfterQueryDirective.setAnItemAsCurrent:
-        setCurrentItemDirective =
-            BlockSetCurrentItemDirective.setAnItemAsCurrent;
-      case BlockAfterQueryDirective.setAnItemAsCurrentThenLoadForm:
-        setCurrentItemDirective =
-            BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm;
-    }
-    //
+
+    final BlockSetCurrentItemDirective setCurrentItemDirective =
+        switch (afterQueryDirective) {
+      BlockAfterQueryDirective.clearCurrentItem ||
+      BlockAfterQueryDirective.createNewItem =>
+        throw UnimplementedError("Handled in early returns above."),
+      BlockAfterQueryDirective.setAnItemAsCurrentIfNeed =>
+        BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
+      BlockAfterQueryDirective.setAnItemAsCurrent =>
+        BlockSetCurrentItemDirective.setAnItemAsCurrent,
+      BlockAfterQueryDirective.setAnItemAsCurrentThenLoadForm =>
+        BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm,
+    };
+
     executionTrace._addTraceStep(
       codeId: "#03780",
       shortDesc:
@@ -1978,12 +1815,69 @@ abstract class Block<
           "Create ${debugObjHtml(BlockSetCurrentItemIntent)} for ${debugObjHtml(thisXBlock.block)}.",
       traceStepType: TraceStepType.executionIntent,
     );
-    //
+
     thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
       setCurrentItemDirective: setCurrentItemDirective,
       newQueriedList: queriedItemList ?? [],
       inputCandidateCurrItem: candidateCurrItem,
       forceReloadItem: false,
+      forceTypeForForm: null,
+    );
+  }
+
+  /// Handles selection fallback when remote query is short-circuited (Action is NULL).
+  void _handleSelectionWhenQuerySkipped({
+    required ExecutionTrace executionTrace,
+    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
+    required bool applyForceReloadCurrItem,
+  }) {
+    BlockSetCurrentItemDirective? setCurrentItemDirective;
+    final defaultAfterQueryDirective = FlutterArtist.defaultAfterQueryDirective;
+    final defaultDirective =
+        defaultAfterQueryDirective.toSetCurrentItemDirective();
+
+    if (thisXBlock.xShelf.naturalMode) {
+      executionTrace._addTraceStep(
+        codeId: "#03080",
+        shortDesc: "Currently, ${debugObjHtml(this)} query in naturalMode.",
+      );
+      if (formModel?.formMode == FormMode.creation) {
+        executionTrace._addTraceStep(
+          codeId: "#03100",
+          shortDesc:
+              "The ${debugObjHtml(this)} is in creation mode --> cancel query.",
+        );
+        return;
+      }
+      setCurrentItemDirective = defaultDirective;
+    } else {
+      if (thisXBlock.setCurrentItemDirective != null) {
+        setCurrentItemDirective = thisXBlock.setCurrentItemDirective!;
+      }
+    }
+
+    if (currentItem == null && setCurrentItemDirective == null) {
+      executionTrace._addTraceStep(
+        codeId: "#03120",
+        shortDesc:
+            "The block has no currentItem and @setCurrentItemDirective is null --> Cancel query.",
+      );
+      return;
+    }
+
+    executionTrace._addTraceStep(
+      codeId: "#03140",
+      shortDesc:
+          "${debugObjHtml(this)}: XBlock._createAndSetBlockExecutionIntentSetCurrentItem().",
+      traceStepType: TraceStepType.executionIntent,
+    );
+
+    thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
+      setCurrentItemDirective: setCurrentItemDirective ??
+          BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
+      newQueriedList: const [],
+      inputCandidateCurrItem: null,
+      forceReloadItem: applyForceReloadCurrItem,
       forceTypeForForm: null,
     );
   }
@@ -2142,13 +2036,13 @@ abstract class Block<
       getItemId: _getItemIdInternal,
     );
     //
-    final bool provideBlockContext = ui.hasActiveUiComponentBlockRepresentative(
-      alsoCheckChildren: true,
+    final bool provideBlockContext = ui.hasBlockContext(
+      includeDescendants: true,
     );
-    final bool provideItemContext = ui.hasActiveUiComponentItemRepresentative(
-      alsoCheckChildren: true,
+    final bool provideItemContext = ui.hasItemContext(
+      includeDescendants: true,
     );
-    final bool provideFormContext = ui.hasActiveUiComponentFormRepresentative();
+    final bool provideFormContext = ui.hasFormContext();
     final bool inputForceReloadItem = thisXBlock.forceReloadCurrItem;
     final bool currItemMaybeChanged =
         candidateCurrItem.id != currItemOrigin?.id;
@@ -2178,8 +2072,7 @@ abstract class Block<
         "provideBlockContext": provideBlockContext,
         "provideItemContext": provideItemContext,
         "provideFormContext": provideFormContext,
-        "itemAbsentRepresentativePolicy":
-            effectiveConfig.itemAbsentRepresentativePolicy,
+        "absentItemContextPolicy": effectiveConfig.absentItemContextPolicy,
         "unifiedItemRefreshPolicy": effectiveConfig.unifiedItemRefreshPolicy,
         "setCurrentItemDirective": executionIntent.setCurrentItemDirective,
         "isCandidateCurrentItemInNewQueriedList":
@@ -2199,8 +2092,7 @@ abstract class Block<
       provideBlockContext: provideBlockContext,
       provideItemContext: provideItemContext,
       provideFormContext: provideFormContext,
-      itemAbsentRepresentativePolicy:
-          effectiveConfig.itemAbsentRepresentativePolicy,
+      absentItemContextPolicy: effectiveConfig.absentItemContextPolicy,
       unifiedItemRefreshPolicy: effectiveConfig.unifiedItemRefreshPolicy,
       setCurrentItemDirective: executionIntent.setCurrentItemDirective,
       isCandidateCurrentItemInNewQueriedList:
@@ -2275,8 +2167,7 @@ abstract class Block<
         "isCandidateIsCurrent": isCandidateIsCurrent,
         "isCandidateCurrentItemInNewQueriedList":
             isCandidateCurrentItemInNewQueriedList,
-        "itemAbsentRepresentativePolicy":
-            effectiveConfig.itemAbsentRepresentativePolicy,
+        "absentItemContextPolicy": effectiveConfig.absentItemContextPolicy,
       },
       traceStepType: TraceStepType.debug,
     );
@@ -2804,8 +2695,8 @@ abstract class Block<
       return;
     }
     //
-    final String? itemContextComponent = ui.findActiveUiComponentByItemContext(
-      alsoCheckChildren: true,
+    final String? itemContextComponent = ui.findVisibleItemContextView(
+      includeDescendants: true,
     );
     executionTrace._addTraceStep(
       codeId: "#08250",
@@ -2980,8 +2871,8 @@ abstract class Block<
     //
     final String methodName = "performDeleteItemById";
     //
-    final String? itemContextComponent = ui.findActiveUiComponentByItemContext(
-      alsoCheckChildren: true,
+    final String? itemContextComponent = ui.findVisibleItemContextView(
+      includeDescendants: true,
     );
     executionTrace._addTraceStep(
       codeId: "#42560",
@@ -4833,14 +4724,6 @@ abstract class Block<
       suggestedSelection: null,
     );
     //
-    // executionTrace._addTraceStep(
-    //   codeId: "#57000",
-    //   shortDesc:
-    //       "Calling ${debugObjHtml(xShelf)}._initQueryExecutionUnits()...",
-    //   traceStepType: TraceStepType.nonControllableCalling,
-    // );
-    // xShelf._initQueryExecutionUnits(executionTrace: executionTrace);
-    //
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
@@ -5189,7 +5072,7 @@ abstract class Block<
       shortDesc: "Update <b>BlockItemsView</b>...",
       traceStepType: TraceStepType.info,
     );
-    ui.updateItemsView();
+    ui.refreshItemsViewsOnly();
   }
 
   // ***************************************************************************
@@ -6501,27 +6384,6 @@ abstract class Block<
         errCode: BlockBackendActionPrecheck.busy,
       );
     }
-    // switch (dataState) {
-    //   case DataState.pending:
-    //     return Actionable<BlockBackendActionPrecheck>.no(
-    //       errCode: BlockBackendActionPrecheck.blockInPendingState,
-    //     );
-    //   // case DataState.error:
-    //   //   return Actionable<BlockBackendActionPrecheck>.no(
-    //   //     errCode: BlockBackendActionPrecheck.blockInErrorState,
-    //   //   );
-    //   case DataState.none:
-    //     return Actionable<BlockBackendActionPrecheck>.no(
-    //       errCode: BlockBackendActionPrecheck.blockInNoneState,
-    //     );
-    //   case DataState.loaded:
-    //     if (isLoadedAndStale) {
-    //       return Actionable<BlockBackendActionPrecheck>.no(
-    //         errCode: BlockBackendActionPrecheck.blockInStaleState,
-    //       );
-    //     }
-    //     break;
-    // }
     switch (dataState) {
       case BlockDataStateNone():
         return Actionable<BlockBackendActionPrecheck>.no(
@@ -6627,8 +6489,8 @@ abstract class Block<
         errCode: BlockClearItemsPrecheck.busy,
       );
     }
-    bool hasBlockRep = ui.hasActiveUiComponentBlockRepresentative(
-      alsoCheckChildren: true,
+    bool hasBlockRep = ui.hasBlockContext(
+      includeDescendants: true,
     );
     if (hasBlockRep) {
       return Actionable<BlockClearItemsPrecheck>.no(
@@ -6948,7 +6810,7 @@ abstract class Block<
     //   }
     // }
     if (checkValidate) {
-      final activeForms = formModel!.ui._activeFormBuilderStates;
+      final activeForms = formModel!.ui._visibleFormBuilderStates;
       bool allFormsAreValid = true;
 
       if (activeForms.isEmpty) {
@@ -7461,8 +7323,8 @@ abstract class Block<
   // ************* ITEM SELECTION/CHECK METHOD *********************************
   // ***************************************************************************
 
-  void __updateUiComponentAfterCheckedOrSelected() {
-    ui.updateAllUiComponents(
+  void __refreshAllViewsAfterCheckedOrSelected() {
+    ui.refreshAllViews(
       withoutFilters: false,
       force: true,
     );
@@ -7471,7 +7333,7 @@ abstract class Block<
   void clientSideSort({required bool refresh}) {
     __blockData._clientSideSortItems();
     if (refresh) {
-      shelf.ui.updateAllUiComponents();
+      shelf.ui.refreshAllViews();
     }
   }
 
@@ -7659,7 +7521,7 @@ abstract class Block<
 
   void setSelectedItem(ITEM item, {required bool selected}) {
     __setSelectedItem(item, selected: selected);
-    __updateUiComponentAfterCheckedOrSelected();
+    __refreshAllViewsAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7667,7 +7529,7 @@ abstract class Block<
 
   void toggleSelectItem(ITEM item) {
     __toggleSelectItem(item);
-    __updateUiComponentAfterCheckedOrSelected();
+    __refreshAllViewsAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7897,12 +7759,12 @@ abstract class Block<
 
   void toggleCheckItem(ITEM item) {
     __toggleCheckItem(item);
-    __updateUiComponentAfterCheckedOrSelected();
+    __refreshAllViewsAfterCheckedOrSelected();
   }
 
   void setCheckedItem(ITEM item, {required bool checked}) {
     __setCheckedItem(item, checked: checked);
-    __updateUiComponentAfterCheckedOrSelected();
+    __refreshAllViewsAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7918,12 +7780,12 @@ abstract class Block<
 
   void setCheckedItems(List<ITEM> items) {
     __setCheckedItems(items);
-    __updateUiComponentAfterCheckedOrSelected();
+    __refreshAllViewsAfterCheckedOrSelected();
   }
 
   void checkAllItems() {
     __setCheckedItems(__blockData._items);
-    __updateUiComponentAfterCheckedOrSelected();
+    __refreshAllViewsAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7931,7 +7793,7 @@ abstract class Block<
 
   void setSelectedItems(List<ITEM> items) {
     __setSelectedItems(items: items);
-    __updateUiComponentAfterCheckedOrSelected();
+    __refreshAllViewsAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7939,7 +7801,7 @@ abstract class Block<
 
   void uncheckAllItems() {
     __blockData._checkedItems.clear();
-    __updateUiComponentAfterCheckedOrSelected();
+    __refreshAllViewsAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7951,7 +7813,7 @@ abstract class Block<
 
   void selectAllItems() {
     __selectAllItems();
-    __updateUiComponentAfterCheckedOrSelected();
+    __refreshAllViewsAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -7959,7 +7821,7 @@ abstract class Block<
 
   void deselectAllItems() {
     __blockData._selectedItems.clear();
-    __updateUiComponentAfterCheckedOrSelected();
+    __refreshAllViewsAfterCheckedOrSelected();
   }
 
   // ***************************************************************************
@@ -8021,7 +7883,7 @@ abstract class Block<
       getItemId: _getItemIdInternal,
     );
     if (success) {
-      ui.updateAllUiComponents(withoutFilters: true);
+      ui.refreshAllViews(withoutFilters: true);
     }
     return success;
   }
@@ -8043,7 +7905,7 @@ abstract class Block<
       getItemId: _getItemIdInternal,
     );
     if (success) {
-      ui.updateAllUiComponents(withoutFilters: true);
+      ui.refreshAllViews(withoutFilters: true);
     }
     return success;
   }
@@ -8137,7 +7999,7 @@ abstract class Block<
   void __refreshQueryingState({required bool isQuerying}) {
     try {
       __isQuerying = isQuerying;
-      ui.updateControlBars(force: true);
+      ui.refreshControlBars(force: true);
     } catch (e) {}
   }
 
@@ -8147,7 +8009,7 @@ abstract class Block<
   void __refreshDeletingState({required bool isDeleting}) {
     try {
       __isDeleting = isDeleting;
-      ui.updateControlBars(force: true);
+      ui.refreshControlBars(force: true);
     } catch (e) {}
   }
 
@@ -8157,7 +8019,7 @@ abstract class Block<
   void _refreshSavingState({required bool isSaving}) {
     try {
       __isSaving = isSaving;
-      ui.updateControlBars(force: true);
+      ui.refreshControlBars(force: true);
     } catch (e) {}
   }
 
@@ -8169,7 +8031,7 @@ abstract class Block<
   }) {
     try {
       __isRefreshingCurrentItem = isRefreshingCurrentItem;
-      ui.updateControlBars(force: true);
+      ui.refreshControlBars(force: true);
     } catch (e) {}
   }
 
@@ -8181,7 +8043,7 @@ abstract class Block<
   }) {
     try {
       __isPreparingFormCreation = isPreparingFormCreation;
-      ui.updateControlBars(force: true);
+      ui.refreshControlBars(force: true);
     } catch (e) {}
   }
 
@@ -8202,7 +8064,7 @@ abstract class Block<
       getItemId: _getItemIdInternal,
     );
     if (success) {
-      ui.updateAllUiComponents(withoutFilters: true);
+      ui.refreshAllViews(withoutFilters: true);
     }
     return success;
   }
@@ -8260,6 +8122,9 @@ abstract class Block<
     await showDialog(
       context: context,
       builder: (BuildContext context) {
+        final bool provideBlockContext = ui.hasBlockContext(
+          includeDescendants: true,
+        );
         return DebugBlockSyncSessionStateDialog<ID>(
           snapshot: BlockSyncDiagnosticSnapshot<ID>(
             syncSessionState: _blockSyncSessionState,
@@ -8268,6 +8133,8 @@ abstract class Block<
             itemIds: itemIds,
             parentBlockCurrentItemId: parentBlockCurrentItemId,
             filterCriteria: filterCriteria,
+            queryHint: QryHint.none,
+            provideBlockContext: provideBlockContext,
           ),
         );
       },

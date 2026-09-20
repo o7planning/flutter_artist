@@ -12,8 +12,8 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
         if (xScalar == null) {
           break;
         }
-        bool hasXActiveUI = xScalar.scalar.ui.hasActiveScalarBaseView(
-          alsoCheckChildren: true,
+        bool hasXActiveUI = xScalar.scalar.ui.hasVisibleContentView(
+          includeDescendants: true,
         );
         if (hasXActiveUI) {
           if (xScalar.scalar.dataState.isPending ||
@@ -33,8 +33,8 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
         }
         //
         bool blockVisibleX =
-        xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
-          alsoCheckChildren: true,
+        xBlock.block.ui.hasBlockContext(
+          includeDescendants: true,
         );
         if (blockVisibleX) {
           if (xBlock.block.dataState.isPending ||
@@ -44,7 +44,7 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
         }
         XFormModel? xFormModel = xBlock.xFormModel;
         if (xFormModel != null &&
-            xFormModel.formModel.ui.hasActiveUiComponent()) {
+            xFormModel.formModel.ui.hasVisibleViews()) {
           if (xFormModel.formModel.dataState.isPending ||
               xFormModel.formModel.dataState.isFatalError ||
               xFormModel.formModel.dataState.isNone) {

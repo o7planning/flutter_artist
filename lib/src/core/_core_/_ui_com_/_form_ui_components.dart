@@ -1,9 +1,16 @@
 part of '../core.dart';
 
+/// Coordinates UI representation registrations, visibility tracking, and view rebuild cycles
+/// for an individual [FormModel].
+///
+/// Serves as the runtime bridge between reactive form view widgets (e.g., [FormView],
+/// [FormViewBuilder]) and the underlying form data state.
 class _FormUiComponents extends _UiComponents {
+  /// The owner form model bound to this UI coordinator.
   final FormModel formModel;
 
-  final Map<_ContextProviderViewState, XState> __formWidgetStates = {};
+  // Registered views: FormView / FormViewBuilder widget states.
+  final Map<_ContextProviderViewState, XState> _formViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -13,9 +20,11 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  List<FormBuilderState> get _activeFormBuilderStates {
-    List<FormBuilderState> forms = [];
-    for (_ContextProviderViewState state in __formWidgetStates.keys) {
+  /// Returns all active Flutter FormBuilderState instances currently mounted in visible form views.
+  // OLD: _activeFormBuilderStates
+  List<FormBuilderState> get _visibleFormBuilderStates {
+    final List<FormBuilderState> forms = [];
+    for (final _ContextProviderViewState state in _formViewWidgetStates.keys) {
       if (state.mounted && state is _FormViewBuilderState) {
         final formState = state.formKey.currentState;
         if (formState != null) {
@@ -29,10 +38,11 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Aggregates all navigation route keys declared across registered form views.
   @override
   Set<FaRouteData> get faRouteDatas {
-    List<_ContextProviderViewState> list = [
-      ...__formWidgetStates.keys,
+    final List<_ContextProviderViewState> list = [
+      ..._formViewWidgetStates.keys,
     ];
     return list.map((v) => v.faRoute).nonNulls.toList().toSet();
   }
@@ -40,39 +50,49 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUiComponents({bool force = false}) {
-    __updateFormWidgets(force: force);
+  /// Rebuilds all mounted view representations associated with this form model.
+  // OLD: updateAllUiComponents
+  void refreshAllViews({bool force = false}) {
+    refreshFormViews(force: force);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Checks whether any FormView connected to this form model is currently mounted in the widget tree.
+  // OLD: hasMountedUiComponent
   @override
-  bool hasMountedUiComponent() {
-    return __formWidgetStates.isNotEmpty;
+  bool hasMountedViews() {
+    return _formViewWidgetStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUiComponent() {
-    return hasActiveUiComponentWithContextKind(
+  /// Checks if any FormView connected to this form model is actively visible on screen.
+  // OLD: hasActiveUiComponent
+  bool hasVisibleViews() {
+    return hasVisibleViewsWithContextKind(
       contextKind: null,
     );
   }
 
-  bool hasActiveUiComponentWithContextKind({
+  /// Checks if any FormView matching the specified [contextKind] is currently visible.
+  // OLD: hasActiveUiComponentWithContextKind
+  bool hasVisibleViewsWithContextKind({
     required ContextKind? contextKind,
   }) {
-    for (_ContextProviderViewState widgetState in __formWidgetStates.keys) {
+    for (final _ContextProviderViewState widgetState
+        in _formViewWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = __formWidgetStates[widgetState]?.isVisible ?? false;
+      final bool visible =
+          _formViewWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isContextKind(contextKind);
+      final bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return true;
       }
@@ -83,11 +103,29 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Locates the class name of the actively visible FormView for diagnostic inspection.
+  String? findVisibleFormView() {
+    for (final widgetState in _formViewWidgetStates.keys) {
+      if (!widgetState.mounted) continue;
+      final visible = _formViewWidgetStates[widgetState]?.isVisible ?? false;
+      if (visible) {
+        return getClassNameWithoutGenerics(widgetState.widget);
+      }
+    }
+    return null;
+  }
+
+  /// Diagnostic inspection alias resolving the visible form view.
+  String? findVisibleView() => findVisibleFormView();
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Map<_ContextProviderViewState, XState> _findMountedFormWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
-      widgetStates: __formWidgetStates,
+      widgetStates: _formViewWidgetStates,
       activeOnly: activeOnly,
     );
   }
@@ -99,7 +137,7 @@ class _FormUiComponents extends _UiComponents {
     required _ContextProviderViewState widgetState,
     required bool isBuilding,
   }) {
-    __formWidgetStates.update(
+    _formViewWidgetStates.update(
       widgetState,
       (xState) => xState.._setBuilding(isBuilding),
       ifAbsent: () => XState().._setBuilding(isBuilding),
@@ -113,14 +151,14 @@ class _FormUiComponents extends _UiComponents {
     required _ContextProviderViewState widgetState,
     required final bool isVisible,
   }) {
-    bool isVisibleOLD = __formWidgetStates[widgetState]?.isVisible ?? false;
-    __formWidgetStates.update(
+    final bool isVisibleOld =
+        _formViewWidgetStates[widgetState]?.isVisible ?? false;
+    _formViewWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isVisible),
       ifAbsent: () => XState().._setShowing(isVisible),
     );
-    if (!isVisibleOLD && isVisible) {
-      // formModel.shelf._startLoadDataForLazyUiComponentsIfNeed();
+    if (!isVisibleOld && isVisible) {
       // LOGIC: #0000
       FlutterArtist.storage._naturalQueryQueue.addShelf(formModel.shelf);
     }
@@ -135,16 +173,16 @@ class _FormUiComponents extends _UiComponents {
   void _removeFormWidgetState({
     required _ContextProviderViewState widgetState,
   }) {
-    __formWidgetStates.remove(widgetState);
+    _formViewWidgetStates.remove(widgetState);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   List<_ContextProviderViewState> _getMountedFormWidgetStates() {
-    List<_ContextProviderViewState> ret = [];
-    for (_ContextProviderViewState widgetState in [
-      ...__formWidgetStates.keys
+    final List<_ContextProviderViewState> ret = [];
+    for (final _ContextProviderViewState widgetState in [
+      ..._formViewWidgetStates.keys
     ]) {
       if (widgetState.mounted) {
         ret.add(widgetState);
@@ -156,20 +194,20 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isWidgetStateBuilding(
-      {required _ContextProviderViewState widgetState}) {
-    return __formWidgetStates[widgetState]?.isBuilding ?? false;
+  bool _isWidgetStateBuilding({
+    required _ContextProviderViewState widgetState,
+  }) {
+    return _formViewWidgetStates[widgetState]?.isBuilding ?? false;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  ///
-  /// Call this method to refresh Widgets..
-  ///
-  void __updateFormWidgets({bool force = false}) {
-    List<_ContextProviderViewState> list = _getMountedFormWidgetStates();
-    for (_ContextProviderViewState formWidgetState in list) {
+  /// Rebuilds all mounted form view widgets.
+  // OLD: __updateFormWidgets
+  void refreshFormViews({bool force = false}) {
+    final List<_ContextProviderViewState> list = _getMountedFormWidgetStates();
+    for (final _ContextProviderViewState formWidgetState in list) {
       if (formWidgetState.mounted) {
         formWidgetState.refreshState(force: force);
       }

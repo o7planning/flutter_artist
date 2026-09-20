@@ -63,7 +63,7 @@ class _StorageSectionViewState
 
   @override
   void addWidgetState({required bool isVisible}) {
-    FlutterArtist.storage.ui._addShelfWidgetState(
+    FlutterArtist.storage.ui._addStorageSectionViewState(
       widgetState: this,
       isVisible: isVisible,
     );
@@ -71,7 +71,7 @@ class _StorageSectionViewState
 
   @override
   void removeWidgetState() {
-    FlutterArtist.storage.ui._removeShelfWidgetState(
+    FlutterArtist.storage.ui._removeStorageSectionViewState(
       widgetState: this,
     );
   }

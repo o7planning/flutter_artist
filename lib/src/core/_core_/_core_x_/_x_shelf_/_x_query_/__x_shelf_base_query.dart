@@ -115,8 +115,8 @@ class _XShelfBaseQuery extends XShelf {
       }
 
       final bool hasBlockContextX =
-          block.ui.hasActiveUiComponentBlockRepresentative(
-        alsoCheckChildren: true,
+          block.ui.hasBlockContext(
+        includeDescendants: true,
       );
       if (hasBlockContextX && !isTargetEmptyQuery) {
         queryHint = QryHint.force;
@@ -170,8 +170,8 @@ class _XShelfBaseQuery extends XShelf {
         }
       }
 
-      final bool hasXActiveUI = scalar.ui.hasActiveUiComponent(
-        alsoCheckChildren: true,
+      final bool hasXActiveUI = scalar.ui.hasVisibleViews(
+        includeDescendants: true,
       );
       if (hasXActiveUI && !isTargetEmptyQuery) {
         queryHint = QryHint.force;

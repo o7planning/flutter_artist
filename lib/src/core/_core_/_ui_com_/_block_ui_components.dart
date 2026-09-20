@@ -1,12 +1,17 @@
 part of '../core.dart';
 
+/// Manages UI representation registrations, visibility tracking, and view rebuild cycles
+/// for an individual [Block].
+///
+/// This component serves as the runtime bridge between reactive UI widgets (e.g., Table,
+/// Detail View, Control Bar, Pagination) and the Block's execution engine.
 class _BlockUiComponents extends _UiComponents {
+  /// The owner block bound to this UI coordinator.
   final Block block;
 
-  // Sections: BlockItemsView - BlockItemDetailView - BlockSectionView.
-  final Map<_ContextProviderViewState, XState> __blockBaseViewWidgetStates = {};
-  final Map<_ContextProviderViewState, XState> __blockControlBarWidgetStates =
-      {};
+  // Registered views: BlockItemsView, BlockItemDetailView, BlockSectionView.
+  final Map<_ContextProviderViewState, XState> __contentViewWidgetStates = {};
+  final Map<_ContextProviderViewState, XState> __controlBarWidgetStates = {};
   final Map<_ContextProviderViewState, XState> __controlWidgetStates = {};
   final Map<_ContextProviderViewState, XState> __paginationWidgetStates = {};
 
@@ -18,13 +23,14 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Aggregates all navigation route keys declared across registered views and models.
   @override
   Set<FaRouteData> get faRouteDatas {
-    List<_ContextProviderViewState> list = [
-      ...__blockBaseViewWidgetStates.keys,
-      ...__blockControlBarWidgetStates.keys,
+    final List<_ContextProviderViewState> list = [
+      ...__contentViewWidgetStates.keys,
+      ...__controlBarWidgetStates.keys,
       ...__controlWidgetStates.keys,
-      ...__paginationWidgetStates.keys
+      ...__paginationWidgetStates.keys,
     ];
     final Set<FaRouteData> faRoutes =
         list.map((v) => v.faRoute).nonNulls.toList().toSet();
@@ -43,8 +49,10 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updatePaginationViews({bool force = false}) {
-    for (_ContextProviderViewState widgetState
+  /// Rebuilds active pagination controls bound to this block.
+  // OLD: updatePaginationViews
+  void refreshPaginationViews({bool force = false}) {
+    for (final _ContextProviderViewState widgetState
         in __paginationWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
@@ -55,9 +63,11 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateBlockBaseViews({bool force = false}) {
-    for (_ContextProviderViewState widgetState
-        in __blockBaseViewWidgetStates.keys) {
+  /// Rebuilds all mounted primary content views (ItemsView, DetailView, SectionView).
+  // OLD: updateBlockBaseViews
+  void refreshContentViews({bool force = false}) {
+    for (final _ContextProviderViewState widgetState
+        in __contentViewWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -67,9 +77,11 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateControlBars({bool force = false}) {
-    for (_ContextProviderViewState widgetState
-        in __blockControlBarWidgetStates.keys) {
+  /// Rebuilds active block control bars.
+  // OLD: updateControlBars
+  void refreshControlBars({bool force = false}) {
+    for (final _ContextProviderViewState widgetState
+        in __controlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -79,8 +91,11 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateControlButtons({bool force = false}) {
-    for (_ContextProviderViewState widgetState in __controlWidgetStates.keys) {
+  /// Rebuilds standalone control buttons and auxiliary action controls.
+  // OLD: updateControlButtons
+  void refreshControlWidgets({bool force = false}) {
+    for (final _ContextProviderViewState widgetState
+        in __controlWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -90,77 +105,93 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Checks whether any UI component connected to this block (or its models) is currently mounted.
+  // OLD: hasMountedUiComponent
   @override
-  bool hasMountedUiComponent() {
-    return (block.filterModel?.ui.hasMountedUiComponent() ?? false) ||
-        (block.serverSideSortModel?.ui.hasMountedUiComponent() ?? false) ||
-        (block.clientSideSortModel?.ui.hasMountedUiComponent() ?? false) ||
-        __blockBaseViewWidgetStates.isNotEmpty ||
-        __blockControlBarWidgetStates.isNotEmpty ||
+  bool hasMountedViews() {
+    return (block.filterModel?.ui.hasMountedViews() ?? false) ||
+        (block.serverSideSortModel?.ui.hasMountedViews() ?? false) ||
+        (block.clientSideSortModel?.ui.hasMountedViews() ?? false) ||
+        __contentViewWidgetStates.isNotEmpty ||
+        __controlBarWidgetStates.isNotEmpty ||
         __controlWidgetStates.isNotEmpty ||
         __paginationWidgetStates.isNotEmpty ||
-        (block.formModel?.ui.hasMountedUiComponent() ?? false);
+        (block.formModel?.ui.hasMountedViews() ?? false);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUiComponentBlockRepresentative({
-    bool alsoCheckChildren = false,
+  /// Evaluates whether any active UI representation demands the primary Block dataset context.
+  // OLD: hasActiveUiComponentBlockRepresentative
+  bool hasBlockContext({
+    bool includeDescendants = false,
   }) {
-    String? componentName = findActiveUiComponentByBlockContext(
-      alsoCheckChildren: alsoCheckChildren,
+    final String? componentName = findVisibleBlockContextView(
+      includeDescendants: includeDescendants,
     );
     return componentName != null;
   }
 
-  bool hasActiveUiComponentFormRepresentative() {
-    String? componentName = findActiveUiComponentByFormContext(
-      alsoCheckChildren: false,
-    );
-    return componentName != null;
-  }
-
-  bool hasActiveUiComponentItemRepresentative({
-    bool alsoCheckChildren = false,
+  /// Evaluates whether an active Form representation demands form-level dataset context.
+  // OLD: hasActiveUiComponentFormRepresentative
+  bool hasFormContext({
+    bool includeDescendants = false,
   }) {
-    String? componentName = findActiveUiComponentByItemContext(
-      alsoCheckChildren: alsoCheckChildren,
+    final String? componentName = findVisibleFormContextView(
+      includeDescendants: includeDescendants,
     );
     return componentName != null;
   }
 
-  bool hasActiveUiComponent({bool alsoCheckChildren = false}) {
-    String? componentName = findActiveUiComponent(
-      alsoCheckChildren: alsoCheckChildren,
+  /// Evaluates whether any active UI representation demands an active selected item context.
+  // OLD: hasActiveUiComponentItemRepresentative
+  bool hasItemContext({
+    bool includeDescendants = false,
+  }) {
+    final String? componentName = findVisibleItemContextView(
+      includeDescendants: includeDescendants,
     );
     return componentName != null;
   }
 
-  String? findActiveUiComponent({bool alsoCheckChildren = false}) {
-    return __activeUiComponentsWithContextKind(
+  /// Checks if any UI view connected to this block is actively visible on the screen.
+  // OLD: hasActiveUiComponent
+  bool hasVisibleViews({bool includeDescendants = false}) {
+    final String? componentName = findVisibleView(
+      includeDescendants: includeDescendants,
+    );
+    return componentName != null;
+  }
+
+  /// Resolves the class name of any actively visible view for diagnostic inspection.
+  // OLD: findActiveUiComponent
+  String? findVisibleView({bool includeDescendants = false}) {
+    return __findVisibleViewWithContextKind(
       contextKind: null,
-      alsoCheckChildren: alsoCheckChildren,
+      includeDescendants: includeDescendants,
     );
   }
 
-  String? findActiveUiComponentByBlockContext({
-    bool alsoCheckChildren = false,
+  /// Resolves the class name of the view currently demanding the Block dataset context.
+  // OLD: findActiveUiComponentByBlockContext
+  String? findVisibleBlockContextView({
+    bool includeDescendants = false,
   }) {
-    String? componentName = __activeUiComponentsWithContextKind(
+    String? componentName = __findVisibleViewWithContextKind(
       contextKind: ContextKind.block,
-      alsoCheckChildren: alsoCheckChildren,
+      includeDescendants: includeDescendants,
     );
     if (componentName != null) {
       return componentName;
     }
-    if (!alsoCheckChildren) {
+    if (!includeDescendants) {
       return null;
     }
-    for (Block childBlock in block._childBlocks) {
-      componentName = childBlock.ui.__activeUiComponentsWithContextKind(
+    for (final Block childBlock in block._childBlocks) {
+      componentName = childBlock.ui.__findVisibleViewWithContextKind(
         contextKind: ContextKind.item,
-        alsoCheckChildren: alsoCheckChildren,
+        includeDescendants: includeDescendants,
       );
       if (componentName != null) {
         return componentName;
@@ -169,23 +200,25 @@ class _BlockUiComponents extends _UiComponents {
     return null;
   }
 
-  String? findActiveUiComponentByItemContext({
-    bool alsoCheckChildren = false,
+  /// Resolves the class name of the view currently demanding an active item context.
+  // OLD: findActiveUiComponentByItemContext
+  String? findVisibleItemContextView({
+    bool includeDescendants = false,
   }) {
-    String? componentName = __activeUiComponentsWithContextKind(
+    String? componentName = __findVisibleViewWithContextKind(
       contextKind: ContextKind.item,
-      alsoCheckChildren: alsoCheckChildren,
+      includeDescendants: includeDescendants,
     );
     if (componentName != null) {
       return componentName;
     }
-    if (!alsoCheckChildren) {
+    if (!includeDescendants) {
       return null;
     }
-    for (Block childBlock in block._childBlocks) {
-      componentName = childBlock.ui.__activeUiComponentsWithContextKind(
+    for (final Block childBlock in block._childBlocks) {
+      componentName = childBlock.ui.__findVisibleViewWithContextKind(
         contextKind: ContextKind.block,
-        alsoCheckChildren: alsoCheckChildren,
+        includeDescendants: includeDescendants,
       );
       if (componentName != null) {
         return componentName;
@@ -194,36 +227,27 @@ class _BlockUiComponents extends _UiComponents {
     return null;
   }
 
-  String? findActiveUiComponentByFormContext({
-    bool alsoCheckChildren = false,
+  /// Resolves the class name of the view currently demanding the Form data context.
+  // OLD: findActiveUiComponentByFormContext
+  String? findVisibleFormContextView({
+    bool includeDescendants = false,
   }) {
-    return __activeUiComponentsWithContextKind(
+    return __findVisibleViewWithContextKind(
       contextKind: ContextKind.form,
-      alsoCheckChildren: alsoCheckChildren,
+      includeDescendants: includeDescendants,
     );
   }
 
-  String? __activeUiComponentsWithContextKind({
+  String? __findVisibleViewWithContextKind({
     required ContextKind? contextKind,
-    bool alsoCheckChildren = false,
+    bool includeDescendants = false,
   }) {
-    bool has = false;
-    //
-    // Filter
-    //
-    // if (block.filterModel != null) {
-    //   has = block.filterModel!.ui.hasActiveUiComponentWithContextKind(
-    //     contextKind: contextKind,
-    //   );
-    //   if (has) {
-    //     return getClassNameWithoutGenerics(block.filterModel);
-    //   }
-    // }
     //
     // Sort
     //
     if (block.serverSideSortModel != null) {
-      has = block.serverSideSortModel!.ui.hasActiveUiComponentWithContextKind(
+      final bool has =
+          block.serverSideSortModel!.ui.hasVisibleViewsWithContextKind(
         contextKind: contextKind,
       );
       if (has) {
@@ -232,7 +256,8 @@ class _BlockUiComponents extends _UiComponents {
     }
     //
     if (block.clientSideSortModel != null) {
-      has = block.clientSideSortModel!.ui.hasActiveUiComponentWithContextKind(
+      final bool has =
+          block.clientSideSortModel!.ui.hasVisibleViewsWithContextKind(
         contextKind: contextKind,
       );
       if (has) {
@@ -243,7 +268,7 @@ class _BlockUiComponents extends _UiComponents {
     // Form
     //
     if (block.formModel != null) {
-      has = block.formModel!.ui.hasActiveUiComponentWithContextKind(
+      final bool has = block.formModel!.ui.hasVisibleViewsWithContextKind(
         contextKind: contextKind,
       );
       if (has) {
@@ -251,11 +276,11 @@ class _BlockUiComponents extends _UiComponents {
       }
     }
     //
-    // Block Base Views:
+    // Block Content Views:
     //
-    String? componentName = findActiveBlockBaseViewWithContextKind(
+    final String? componentName = findVisibleContentViewWithContextKind(
       contextKind: contextKind,
-      alsoCheckChildren: false,
+      includeDescendants: false,
     );
     if (componentName != null) {
       return componentName;
@@ -263,39 +288,31 @@ class _BlockUiComponents extends _UiComponents {
     //
     // ControlBar:
     //
-    has = hasActiveControlBarWithContextKind(
-      contextKind: contextKind,
-    );
-    if (has) {
+    if (hasVisibleControlBarWithContextKind(contextKind: contextKind)) {
       return "BlockControlBar";
     }
     //
-    // Control
+    // Control Widgets:
     //
-    has = hasActiveControlWidgetWithContextKind(
-      contextKind: contextKind,
-    );
-    if (has) {
+    if (hasVisibleControlWidgetWithContextKind(contextKind: contextKind)) {
       return "ControlWidget";
     }
     //
-    // Pagination
+    // Pagination:
     //
-    has = hasActivePaginationWithContextKind(
-      contextKind: contextKind,
-    );
-    if (has) {
+    if (hasVisiblePaginationWithContextKind(contextKind: contextKind)) {
       return "PaginationWidget";
     }
     //
-    if (alsoCheckChildren) {
-      for (Block childBlock in block._childBlocks) {
-        componentName = childBlock.ui.__activeUiComponentsWithContextKind(
+    if (includeDescendants) {
+      for (final Block childBlock in block._childBlocks) {
+        final childComponentName =
+            childBlock.ui.__findVisibleViewWithContextKind(
           contextKind: contextKind,
-          alsoCheckChildren: alsoCheckChildren,
+          includeDescendants: includeDescendants,
         );
-        if (componentName != null) {
-          return componentName;
+        if (childComponentName != null) {
+          return childComponentName;
         }
       }
     }
@@ -305,44 +322,50 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveBlockBaseView({required bool alsoCheckChildren}) {
-    String? componentName = findActiveBlockBaseView(
-      alsoCheckChildren: alsoCheckChildren,
+  /// Checks if any content view (table, list, detail, section) is actively visible on screen.
+  // OLD: hasActiveBlockBaseView
+  bool hasVisibleContentView({bool includeDescendants = false}) {
+    final String? componentName = findVisibleContentView(
+      includeDescendants: includeDescendants,
     );
     return componentName != null;
   }
 
-  String? findActiveBlockBaseView({required bool alsoCheckChildren}) {
-    return findActiveBlockBaseViewWithContextKind(
+  /// Locates the class name of the actively visible content view for diagnostics.
+  // OLD: findActiveBlockBaseView
+  String? findVisibleContentView({bool includeDescendants = false}) {
+    return findVisibleContentViewWithContextKind(
       contextKind: null,
-      alsoCheckChildren: alsoCheckChildren,
+      includeDescendants: includeDescendants,
     );
   }
 
-  String? findActiveBlockBaseViewWithContextKind({
+  /// Locates the class name of the actively visible content view filtered by context kind.
+  // OLD: findActiveBlockBaseViewWithContextKind
+  String? findVisibleContentViewWithContextKind({
     required ContextKind? contextKind,
-    required bool alsoCheckChildren,
+    bool includeDescendants = false,
   }) {
-    var map = {...__blockBaseViewWidgetStates};
-    for (_ContextProviderViewState widgetState in map.keys) {
+    final map = {...__contentViewWidgetStates};
+    for (final _ContextProviderViewState widgetState in map.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = map[widgetState]?.isVisible ?? false;
+      final bool visible = map[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isContextKind(contextKind);
+      final bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return getClassNameWithoutGenerics(widgetState.widget);
       }
     }
-    if (alsoCheckChildren) {
-      for (Block childBlock in block._childBlocks) {
-        String? componentName =
-            childBlock.ui.findActiveBlockBaseViewWithContextKind(
+    if (includeDescendants) {
+      for (final Block childBlock in block._childBlocks) {
+        final String? componentName =
+            childBlock.ui.findVisibleContentViewWithContextKind(
           contextKind: contextKind,
-          alsoCheckChildren: true,
+          includeDescendants: true,
         );
         if (componentName != null) {
           return componentName;
@@ -355,24 +378,27 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveControlBar() {
-    return hasActiveControlBarWithContextKind(contextKind: null);
+  /// Checks whether an active [BlockControlBar] is currently visible on screen.
+  // OLD: hasActiveControlBar
+  bool hasVisibleControlBar() {
+    return hasVisibleControlBarWithContextKind(contextKind: null);
   }
 
-  bool hasActiveControlBarWithContextKind({
+  /// Checks whether a [BlockControlBar] matching [contextKind] is currently visible.
+  bool hasVisibleControlBarWithContextKind({
     required ContextKind? contextKind,
   }) {
-    for (_ContextProviderViewState widgetState
-        in __blockControlBarWidgetStates.keys) {
+    for (final _ContextProviderViewState widgetState
+        in __controlBarWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible =
-          __blockControlBarWidgetStates[widgetState]?.isVisible ?? false;
+      final bool visible =
+          __controlBarWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isContextKind(contextKind);
+      final bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return true;
       }
@@ -383,24 +409,29 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveControlWidget() {
-    return hasActiveControlWidgetWithContextKind(
+  /// Checks whether any standalone action control widget is currently visible.
+  // OLD: hasActiveControlWidget
+  bool hasVisibleControlWidget() {
+    return hasVisibleControlWidgetWithContextKind(
       contextKind: null,
     );
   }
 
-  bool hasActiveControlWidgetWithContextKind({
+  /// Checks whether any standalone action control widget matching [contextKind] is visible.
+  bool hasVisibleControlWidgetWithContextKind({
     required ContextKind? contextKind,
   }) {
-    for (_ContextProviderViewState widgetState in __controlWidgetStates.keys) {
+    for (final _ContextProviderViewState widgetState
+        in __controlWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = __controlWidgetStates[widgetState]?.isVisible ?? false;
+      final bool visible =
+          __controlWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isContextKind(contextKind);
+      final bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return true;
       }
@@ -411,23 +442,27 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActivePagination() {
-    return hasActivePaginationWithContextKind(contextKind: null);
+  /// Checks whether a pagination bar is currently visible on screen.
+  // OLD: hasActivePagination
+  bool hasVisiblePagination() {
+    return hasVisiblePaginationWithContextKind(contextKind: null);
   }
 
-  bool hasActivePaginationWithContextKind({
+  /// Checks whether a pagination bar matching [contextKind] is currently visible.
+  bool hasVisiblePaginationWithContextKind({
     required ContextKind? contextKind,
   }) {
-    for (_ContextProviderViewState widgetState
+    for (final _ContextProviderViewState widgetState
         in __paginationWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible = __paginationWidgetStates[widgetState]?.isVisible ?? false;
+      final bool visible =
+          __paginationWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isContextKind(contextKind);
+      final bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return true;
       }
@@ -438,31 +473,35 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUiComponents({
+  /// Rebuilds all mounted views connected to this block and its child models.
+  // OLD: updateAllUiComponents
+  void refreshAllViews({
     required bool withoutFilters,
     bool force = true,
   }) {
     if (!withoutFilters) {
-      block.filterModel?.ui.updateAllUiComponents();
+      block.filterModel?.ui.refreshAllViews();
     }
     //
-    block.serverSideSortModel?.ui.updateAllUiComponents(force: force);
-    block.clientSideSortModel?.ui.updateAllUiComponents(force: force);
+    block.serverSideSortModel?.ui.refreshAllViews(force: force);
+    block.clientSideSortModel?.ui.refreshAllViews(force: force);
     //
-    updateBlockBaseViews(force: force);
-    updatePaginationViews(force: force);
-    updateControlBars(force: force);
-    updateControlButtons(force: force);
+    refreshContentViews(force: force);
+    refreshPaginationViews(force: force);
+    refreshControlBars(force: force);
+    refreshControlWidgets(force: force);
     //
-    block.formModel?.ui.updateAllUiComponents(force: force);
+    block.formModel?.ui.refreshAllViews(force: force);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateItemsView() {
-    for (_ContextProviderViewState widgetState
-        in __blockBaseViewWidgetStates.keys) {
+  /// Rebuilds specifically the table or list item views.
+  // OLD: updateItemsView
+  void refreshItemsViewsOnly() {
+    for (final _ContextProviderViewState widgetState
+        in __contentViewWidgetStates.keys) {
       if (widgetState.mounted &&
           widgetState.type == ContextProviderViewType.blockItemsView) {
         widgetState.refreshState();
@@ -473,11 +512,11 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
+  Map<_ContextProviderViewState, XState> _findMountedContentViewWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
-      widgetStates: __blockBaseViewWidgetStates,
+      widgetStates: __contentViewWidgetStates,
       activeOnly: activeOnly,
     );
   }
@@ -486,7 +525,7 @@ class _BlockUiComponents extends _UiComponents {
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
-      widgetStates: __blockControlBarWidgetStates,
+      widgetStates: __controlBarWidgetStates,
       activeOnly: activeOnly,
     );
   }
@@ -534,28 +573,25 @@ class _BlockUiComponents extends _UiComponents {
     required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
-    bool blockXBlockRepOLD = hasActiveUiComponentBlockRepresentative(
-      alsoCheckChildren: true,
+    final bool blockContextOld = hasBlockContext(
+      includeDescendants: true,
     );
-    __blockControlBarWidgetStates.update(
+    __controlBarWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isVisible),
       ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool blockXBlockRepCURRENT = hasActiveUiComponentBlockRepresentative(
-      alsoCheckChildren: true,
+    final bool blockContextCurrent = hasBlockContext(
+      includeDescendants: true,
     );
     //
     if (isVisible) {
       FlutterArtist.storage._addRecentShelf(block.shelf);
     }
     //
-    if (!blockXBlockRepOLD && blockXBlockRepCURRENT) {
-      // Fire event:
-      // block.shelf._startLoadDataForLazyUiComponentsIfNeed();
-      // LOGIC: #0000
+    if (!blockContextOld && blockContextCurrent) {
       FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
-    } else if (blockXBlockRepOLD && !blockXBlockRepCURRENT) {
+    } else if (blockContextOld && !blockContextCurrent) {
       block._broadcastBlockHidden();
     }
   }
@@ -566,7 +602,7 @@ class _BlockUiComponents extends _UiComponents {
   void _removeControlBarWidgetState({
     required _ContextProviderViewState widgetState,
   }) {
-    __blockControlBarWidgetStates.remove(widgetState);
+    __controlBarWidgetStates.remove(widgetState);
   }
 
   // ***************************************************************************
@@ -576,28 +612,25 @@ class _BlockUiComponents extends _UiComponents {
     required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
-    bool blockXBlockRepOLD = hasActiveUiComponentBlockRepresentative(
-      alsoCheckChildren: true,
+    final bool blockContextOld = hasBlockContext(
+      includeDescendants: true,
     );
     __controlWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isVisible),
       ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool blockXBlockRepCURRENT = hasActiveUiComponentBlockRepresentative(
-      alsoCheckChildren: true,
+    final bool blockContextCurrent = hasBlockContext(
+      includeDescendants: true,
     );
     //
     if (isVisible) {
       FlutterArtist.storage._addRecentShelf(block.shelf);
     }
     //
-    if (!blockXBlockRepOLD && blockXBlockRepCURRENT) {
-      // Fire event:
-      // block.shelf._startLoadDataForLazyUiComponentsIfNeed();
-      // LOGIC: #0000
+    if (!blockContextOld && blockContextCurrent) {
       FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
-    } else if (blockXBlockRepOLD && !blockXBlockRepCURRENT) {
+    } else if (blockContextOld && !blockContextCurrent) {
       block._broadcastBlockHidden();
     }
   }
@@ -614,32 +647,29 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addBlockBaseViewWidgetState({
+  void _addBlockContentViewWidgetState({
     required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
-    bool hasXBlockRepOLD = hasActiveUiComponentBlockRepresentative(
-      alsoCheckChildren: true,
+    final bool blockContextOld = hasBlockContext(
+      includeDescendants: true,
     );
-    __blockBaseViewWidgetStates.update(
+    __contentViewWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isVisible),
       ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool hasXBlockRepCURRENT = hasActiveUiComponentBlockRepresentative(
-      alsoCheckChildren: true,
+    final bool blockContextCurrent = hasBlockContext(
+      includeDescendants: true,
     );
     //
     if (isVisible) {
       FlutterArtist.storage._addRecentShelf(block.shelf);
     }
     //
-    if (!hasXBlockRepOLD && hasXBlockRepCURRENT) {
-      // Fire event:
-      // block.shelf._startLoadDataForLazyUiComponentsIfNeed();
-      // LOGIC: #0000
+    if (!blockContextOld && blockContextCurrent) {
       FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
-    } else if (hasXBlockRepOLD && !hasXBlockRepCURRENT) {
+    } else if (blockContextOld && !blockContextCurrent) {
       block._broadcastBlockHidden();
     }
   }
@@ -647,12 +677,14 @@ class _BlockUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _removeBlockBaseViewWidgetState({required State widgetState}) {
-    bool activeOLD = hasActiveUiComponent();
-    __blockBaseViewWidgetStates.remove(widgetState);
-    bool activeCURRENT = hasActiveUiComponent();
+  void _removeBlockContentViewWidgetState({
+    required _ContextProviderViewState widgetState,
+  }) {
+    final bool visibleOld = hasVisibleViews();
+    __contentViewWidgetStates.remove(widgetState);
+    final bool visibleCurrent = hasVisibleViews();
     //
-    if (activeOLD && !activeCURRENT) {
+    if (visibleOld && !visibleCurrent) {
       block._broadcastBlockHidden();
     }
   }
@@ -662,7 +694,7 @@ class _BlockUiComponents extends _UiComponents {
 
   Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
     required bool withPagination,
-    required bool withBlockBaseView,
+    required bool withBlockContentView,
     required bool withFilter,
     required bool withSort,
     required bool withForm,
@@ -670,13 +702,13 @@ class _BlockUiComponents extends _UiComponents {
     required bool withBlockControlBar,
     required bool activeOnly,
   }) {
-    Map<_ContextProviderViewState, XState> ret = {};
+    final Map<_ContextProviderViewState, XState> ret = {};
     //
     if (withFilter) {
       final FilterModel filterModel = block._registeredOrDefaultFilterModel;
       ret.addAll(
-        filterModel.ui._findMountedBaseViewWidgetStates(
-          activeOnly: true,
+        filterModel.ui._findMountedFilterPanelWidgetStates(
+          activeOnly: activeOnly,
         ),
       );
     }
@@ -685,8 +717,8 @@ class _BlockUiComponents extends _UiComponents {
       final SortModel? serverSortModel = block.serverSideSortModel;
       if (serverSortModel != null) {
         ret.addAll(
-          serverSortModel.ui._findMountedBaseViewWidgetStates(
-            activeOnly: true,
+          serverSortModel.ui._findMountedSortPanelWidgetStates(
+            activeOnly: activeOnly,
           ),
         );
       }
@@ -694,16 +726,16 @@ class _BlockUiComponents extends _UiComponents {
       final SortModel? clientSortModel = block.clientSideSortModel;
       if (clientSortModel != null) {
         ret.addAll(
-          clientSortModel.ui._findMountedBaseViewWidgetStates(
-            activeOnly: true,
+          clientSortModel.ui._findMountedSortPanelWidgetStates(
+            activeOnly: activeOnly,
           ),
         );
       }
     }
     //
-    if (withBlockBaseView) {
+    if (withBlockContentView) {
       ret.addAll(
-        _findMountedBaseViewWidgetStates(activeOnly: activeOnly),
+        _findMountedContentViewWidgetStates(activeOnly: activeOnly),
       );
     }
     //
@@ -718,9 +750,6 @@ class _BlockUiComponents extends _UiComponents {
         _findMountedControlBarWidgetStates(activeOnly: activeOnly),
       );
     }
-    // if (withControl) {
-    //   ret.addAll(__controlWidgetStates);
-    // }
     //
     if (withForm && block.formModel != null) {
       ret.addAll(
@@ -738,7 +767,7 @@ class _BlockUiComponents extends _UiComponents {
   @DebugMethodAnnotation()
   Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
     required bool withPagination,
-    required bool withBlockBaseView,
+    required bool withBlockContentView,
     required bool withFilter,
     required bool withSort,
     required bool withForm,
@@ -748,7 +777,7 @@ class _BlockUiComponents extends _UiComponents {
   }) {
     return _findMountedWidgetStates(
       withPagination: withPagination,
-      withBlockBaseView: withBlockBaseView,
+      withBlockContentView: withBlockContentView,
       withFilter: withFilter,
       withSort: withSort,
       withForm: withForm,

@@ -55,7 +55,7 @@ class _FlutterArtist extends _Core {
 
   late final ThemeManager themeManager;
 
-  late final RuntimeAppConfig appConfig;
+  late final EffectiveAppConfig appConfig;
 
   BlockAfterQueryDirective _defaultAfterQueryDirective =
       BlockAfterQueryDirective.setAnItemAsCurrentIfNeed;
@@ -196,7 +196,7 @@ class _FlutterArtist extends _Core {
     }
     __appStarted = true;
     //
-    appConfig = RuntimeAppConfig.fromConfiguration(appConfiguration);
+    appConfig = EffectiveAppConfig.fromConfiguration(appConfiguration);
     this.router = router;
     // IMPORTANT: Call this before using ExecutionTrace.
     codeFlowLogger = CodeFlowLogger(

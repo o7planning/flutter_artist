@@ -55,6 +55,8 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
       itemIds: snapshot.itemIds,
       config: snapshot.effectiveConfig,
       syncSessionState: snapshot.syncSessionState,
+      queryHint: snapshot.queryHint,
+      provideBlockContext: snapshot.provideBlockContext,
     );
 
     // Extract parent item ID and filter criteria from Session Snapshot or fallback

@@ -267,7 +267,7 @@ abstract class SortModel<ITEM extends Object> {
   Future<void> __applyChanges() async {
     if (sortingSide == SortingSide.client) {
       block.clientSideSort(refresh: false);
-      block.ui.updateAllUiComponents(
+      block.ui.refreshAllViews(
         withoutFilters: true,
         force: true,
       );

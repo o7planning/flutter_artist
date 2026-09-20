@@ -840,7 +840,7 @@ abstract class FilterModel<
     try {
       FlutterArtist._lockAddMoreQuery = true;
       __lockAddMoreQuery = true;
-      final List<FormBuilderState> activeForms = ui._activeFormBuilderStates;
+      final List<FormBuilderState> activeForms = ui._visibleFormBuilderStates;
 
       for (FormBuilderState formState in activeForms) {
         // Only patch fields that this Form actually owns or allows

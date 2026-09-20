@@ -26,15 +26,15 @@ class BlockDebugBox extends BaseDebugBox {
 
   @override
   List<Widget> getChildIconLabelTexts(BuildContext context) {
-    String? activeUIBlockRep = block.ui.findActiveUiComponentByBlockContext();
-    String? xActiveUIIBlockRep = block.ui.findActiveUiComponentByBlockContext(
-      alsoCheckChildren: true,
+    String? activeUIBlockRep = block.ui.findVisibleBlockContextView();
+    String? xActiveUIIBlockRep = block.ui.findVisibleBlockContextView(
+      includeDescendants: true,
     );
     //
 
-    String? activeUIItemRep = block.ui.findActiveUiComponentByItemContext();
-    String? xActiveUIItemRep = block.ui.findActiveUiComponentByItemContext(
-      alsoCheckChildren: true,
+    String? activeUIItemRep = block.ui.findVisibleItemContextView();
+    String? xActiveUIItemRep = block.ui.findVisibleItemContextView(
+      includeDescendants: true,
     );
     return [
       if (options.showUiActive)
@@ -62,7 +62,7 @@ class BlockDebugBox extends BaseDebugBox {
       if (block.getItemType() == block.getItemDetailType())
         IconLabelText(
           label: "Behavior (*): ",
-          text: block.effectiveConfig.itemAbsentRepresentativePolicy.name,
+          text: block.effectiveConfig.absentItemContextPolicy.name,
           labelStyle: DebugStyleUtils.getLabelStyle1(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),

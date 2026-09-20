@@ -93,7 +93,7 @@ class XFormModel<
 
   NxtExecutionUnit _getNextExecutionUnit({required bool debug}) {
     final formModelDataState = formModel.dataState;
-    final bool visibleX = formModel.ui.hasActiveUiComponent();
+    final bool visibleX = formModel.ui.hasVisibleViews();
     final executionIntent = _executionIntent;
 
     // =========================================================================

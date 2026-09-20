@@ -148,8 +148,8 @@ abstract class XShelf extends XRootQueueItem {
       XScalar? xScalar = leafXScalar;
       while (xScalar != null) {
         final ScalarDataState dataState = xScalar.scalar.dataState;
-        bool hasActiveUiX = xScalar.scalar.ui.hasActiveScalarBaseView(
-          alsoCheckChildren: true,
+        bool hasActiveUiX = xScalar.scalar.ui.hasVisibleContentView(
+          includeDescendants: true,
         );
         if (hasActiveUiX) {
           if (xScalar.scalar.dataState.isPending ||
@@ -165,8 +165,8 @@ abstract class XShelf extends XRootQueueItem {
       XBlock? xBlock = leafXBlock;
       while (xBlock != null) {
         bool blockXBlockRep =
-        xBlock.block.ui.hasActiveUiComponentBlockRepresentative(
-          alsoCheckChildren: true,
+        xBlock.block.ui.hasBlockContext(
+          includeDescendants: true,
         );
         if (blockXBlockRep) {
           if (xBlock.block.dataState.isPending ||
@@ -176,7 +176,7 @@ abstract class XShelf extends XRootQueueItem {
         }
         XFormModel? xFormModel = xBlock.xFormModel;
         if (xFormModel != null &&
-            xFormModel.formModel.ui.hasActiveUiComponent()) {
+            xFormModel.formModel.ui.hasVisibleViews()) {
           if (xFormModel.formModel.dataState.isPending ||
               xFormModel.formModel.dataState.isFatalError ||
               xFormModel.formModel.dataState.isNone) {

@@ -64,7 +64,7 @@ class _BlockSectionViewBuilderState
 
   @override
   void addWidgetState({required bool isVisible}) {
-    widget.block.ui._addBlockBaseViewWidgetState(
+    widget.block.ui._addBlockContentViewWidgetState(
       widgetState: this,
       isVisible: isVisible,
     );
@@ -72,7 +72,7 @@ class _BlockSectionViewBuilderState
 
   @override
   void removeWidgetState() {
-    widget.block.ui._removeBlockBaseViewWidgetState(
+    widget.block.ui._removeBlockContentViewWidgetState(
       widgetState: this,
     );
   }

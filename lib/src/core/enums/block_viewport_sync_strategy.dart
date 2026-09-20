@@ -1,5 +1,4 @@
-import 'package:flutter_artist/flutter_artist.dart';
-
+import '../_core_/core.dart';
 import 'block_native_query_mode.dart';
 
 /// Defines the synchronization strategies used to re-evaluate and merge

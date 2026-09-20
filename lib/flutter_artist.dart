@@ -14,8 +14,6 @@ export 'src/core/action/storage_backend_action.dart';
 export 'src/core/built_in/empty_additional_form_related_data.dart';
 export 'src/core/built_in/empty_filter_criteria.dart';
 
-export 'src/core/built_in/empty_filter_criteria.dart';
-
 export 'src/core/_core_/_utils_/form_data_state_utils.dart';
 
 export 'src/core/_core_/_utils_/block_data_state_utils.dart';
@@ -87,7 +85,7 @@ export 'src/core/enums/form_debug_item_type.dart';
 export 'src/core/enums/form_error_method.dart';
 export 'src/core/enums/form_input_source.dart';
 export 'src/core/enums/form_mode.dart';
-export 'src/core/enums/item_absent_representative_policy.dart';
+export 'src/core/enums/absent_item_context_policy.dart';
 export 'src/core/enums/item_creation_type.dart';
 export 'src/core/enums/list_update_strategy.dart';
 export 'src/core/enums/loaded_status.dart';

@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class RuntimeAppConfig {
+class EffectiveAppConfig {
   final String appName;
   final List<ProjectionFamily> projectionFamilies;
   final List<FaTheme> additionalThemes;
@@ -21,7 +21,7 @@ class RuntimeAppConfig {
   final FlutterArtistGlobalDataAdapter _globalDataAdapter;
 
   // Private constructor so only the framework can instantiate it
-  RuntimeAppConfig._({
+  EffectiveAppConfig._({
     required this.appName,
     required this.projectionFamilies,
     required this.additionalThemes,
@@ -40,8 +40,7 @@ class RuntimeAppConfig {
     required FlutterArtistLoginLogoutAdapter loginLogoutAdapter,
     required FlutterArtistNotificationAdapter? notificationAdapter,
     required FlutterArtistGlobalDataAdapter globalDataAdapter,
-  })
-      : _updateLocale = updateLocale,
+  })  : _updateLocale = updateLocale,
         _registerActivities = registerActivities,
         _registerShelves = registerShelves,
         _showDebugNetworkInspector = showDebugNetworkInspector,
@@ -51,8 +50,8 @@ class RuntimeAppConfig {
         _globalDataAdapter = globalDataAdapter;
 
   /// Factory to capture and freeze the configuration state at startup.
-  factory RuntimeAppConfig.fromConfiguration(AppConfiguration config) {
-    return RuntimeAppConfig._(
+  factory EffectiveAppConfig.fromConfiguration(AppConfiguration config) {
+    return EffectiveAppConfig._(
       appName: config.appName,
       // Deep copy or freeze the list to prevent external mutations
       projectionFamilies: List.unmodifiable(config.projectionFamilies()),

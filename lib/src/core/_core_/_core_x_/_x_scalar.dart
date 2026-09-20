@@ -125,7 +125,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
     final bool isVisibleX =
-        scalar.ui.hasActiveUiComponent(alsoCheckChildren: true);
+        scalar.ui.hasVisibleViews(includeDescendants: true);
     final scalarDataState = scalar.dataState;
     final executionIntent = _executionIntent;
 
@@ -395,7 +395,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   // ***************************************************************************
 
   void printInfo() {
-    bool hasActiveUI = scalar.ui.hasActiveUiComponent();
+    bool hasActiveUI = scalar.ui.hasVisibleViews();
     String msg =
         "${getClassName(this)}(${getClassName(scalar)} - UiActive: $hasActiveUI - queryHint: $queryHint)";
     print(msg);

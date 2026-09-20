@@ -22,6 +22,7 @@ import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:hive/hive.dart';
 import 'package:stack_trace/stack_trace.dart';
 
+
 import '../../debug/code_flow/__code_flow_const.dart';
 import '../../debug/code_flow/_execution_trace_box_detail.dart';
 import '../../debug/dialog/_block_error_viewer_dialog.dart';
@@ -72,7 +73,7 @@ import '../enums/filter_error_method.dart';
 import '../enums/block_control_action_type.dart';
 import '../enums/block_error_method.dart';
 import '../enums/block_hidden_action.dart';
-import '../enums/item_absent_representative_policy.dart';
+import '../enums/absent_item_context_policy.dart';
 import '../enums/trace_step_type.dart';
 import '../enums/execution_trace_type.dart';
 import '../enums/block_set_current_item_directive.dart';
@@ -149,6 +150,7 @@ import '../precheck/activity_precheck.dart';
 import '../precheck/form_model_view_changed_precheck.dart';
 import '../precheck/scalar_load_extra_data_precheck.dart';
 import '_sync_/_block_sync_session_snapshot.dart';
+import '_utils_/block_data_state_utils.dart';
 import '_utils_/data_type_event_utils.dart';
 import '../icon/icon_constants.dart';
 import '../isar/fa_isar_storage.dart';
@@ -194,6 +196,7 @@ import '../notification/firebase/firebase_notification_service.dart';
 import '../utils/print_utils.dart';
 import '_utils_/block_query_state_calculator.dart';
 import '_utils_/form_data_state_utils.dart';
+import '_utils_/scalar_data_state_utils.dart';
 import '_utils_/scalar_query_state_calculator.dart';
 
 part '../../startup_error_viewer.dart';
@@ -388,7 +391,9 @@ part '_sync_/_debug_block_sync_session_state.dart';
 
 part '_sync_/_debug_scalar_sync_session_state.dart';
 
-part '__core__/_block_query_plan.dart';
+part '_plan_/_block_query_plan.dart';
+
+part '_plan_/_scalar_query_plan.dart';
 
 part '__core__/_shelf_block_scalar_type.dart';
 
@@ -540,7 +545,7 @@ part '_core_x_/_x_storage.dart';
 
 part '_utils_/_block_current_item_resolver.dart';
 
-part '_core_state_/_block_current_item_plan.dart';
+part '_plan_/_block_current_item_plan.dart';
 
 part '_fa_.dart';
 

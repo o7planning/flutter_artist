@@ -33,11 +33,9 @@ class BlockEffectiveConfig {
     return BlockEffectiveConfig._fromConfig(config);
   }
 
-  @Deprecated("No longer supported")
-  ItemAbsentRepresentativePolicy get itemAbsentRepresentativePolicy =>
-      _baselineConfig.itemAbsentRepresentativePolicy;
+  AbsentItemContextPolicy get absentItemContextPolicy =>
+      _baselineConfig.absentItemContextPolicy;
 
-  @Deprecated("No longer supported")
   UnifiedItemRefreshPolicy get unifiedItemRefreshPolicy =>
       _baselineConfig.unifiedItemRefreshPolicy;
 

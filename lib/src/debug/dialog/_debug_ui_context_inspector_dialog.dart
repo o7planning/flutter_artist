@@ -76,8 +76,8 @@ class _DebugUiContextInspectorDialogState
       return widget.shelf!.ui.debugFindMountedWidgetStates(
         activeOnly: true,
         withPagination: true,
-        withBlockFragment: true,
-        withScalarFragment: true,
+        withBlockContentView: true,
+        withScalarContentView: true,
         withFilter: true,
         withSort: true,
         withForm: true,
@@ -89,7 +89,7 @@ class _DebugUiContextInspectorDialogState
       return widget.block!.ui.debugFindMountedWidgetStates(
         activeOnly: false,
         withPagination: true,
-        withBlockBaseView: true,
+        withBlockContentView: true,
         withFilter: true,
         withSort: true,
         withForm: true,
@@ -99,8 +99,7 @@ class _DebugUiContextInspectorDialogState
     } else if (widget.scalar != null) {
       return widget.scalar!.ui.debugFindMountedWidgetStates(
         activeOnly: false,
-        withPagination: true,
-        withScalarBaseView: true,
+        withScalarContentView: true,
         withFilter: true,
         withScalarControlBar: true,
       );

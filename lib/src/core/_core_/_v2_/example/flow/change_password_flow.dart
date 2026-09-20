@@ -1,6 +1,7 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../../../../../flutter_artist.dart';
+
+import '../../../core.dart';
 import '../flow_data/change_password_data.dart';
 import '../stage/enter_email_stage.dart';
 import '../stage/enter_new_password_stage.dart';

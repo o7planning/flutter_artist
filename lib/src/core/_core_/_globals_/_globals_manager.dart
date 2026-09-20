@@ -400,7 +400,7 @@ class GlobalsManager extends _Core {
     }
     //
     try {
-      ui.updateAllUiComponents();
+      ui.refreshAllViews();
     } catch (e, stackTrace) {
       print(stackTrace);
     }
@@ -413,6 +413,6 @@ class GlobalsManager extends _Core {
     }
     _loggedInUser = null;
     _globalData = null;
-    ui.updateAllUiComponents();
+    ui.refreshAllViews();
   }
 }

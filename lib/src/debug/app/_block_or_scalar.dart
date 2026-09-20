@@ -175,9 +175,9 @@ class BlockOrScalar extends Equatable {
 
   bool hasActiveUiComponent() {
     if (block != null) {
-      return block!.ui.hasActiveUiComponent();
+      return block!.ui.hasVisibleViews();
     } else {
-      return scalar!.ui.hasActiveUiComponent();
+      return scalar!.ui.hasVisibleViews();
     }
   }
 

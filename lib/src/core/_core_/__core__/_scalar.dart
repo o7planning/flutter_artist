@@ -251,12 +251,13 @@ abstract class Scalar<
     return _scalarSyncSessionState != null;
   }
 
-  bool _isMatchScalarReQryCon(_ScalarSyncSessionState? scalarReQryCon) {
-    if (scalarReQryCon == null) {
+  bool _isMatchScalarSyncSessionState(
+      _ScalarSyncSessionState? scalarSyncSessionState) {
+    if (scalarSyncSessionState == null) {
       return false;
     }
-    return scalarReQryCon.parentScalarValueId == parentScalarValueId &&
-        scalarReQryCon.filterCriteria == filterCriteria;
+    return scalarSyncSessionState.parentScalarValueId == parentScalarValueId &&
+        scalarSyncSessionState.filterCriteria == filterCriteria;
   }
 
   // ***************************************************************************
@@ -327,7 +328,7 @@ abstract class Scalar<
   // ***************************************************************************
 
   bool isPendingOrStale({required bool requiresVisible}) {
-    final bool visible = ui.hasActiveUiComponent(alsoCheckChildren: true);
+    final bool visible = ui.hasVisibleViews(includeDescendants: true);
     if (requiresVisible) {
       if (!visible) {
         return false;
@@ -341,7 +342,7 @@ abstract class Scalar<
     if (_scalarSyncSessionState == null) {
       return false;
     }
-    return ui.hasActiveUiComponent(alsoCheckChildren: true);
+    return ui.hasVisibleViews(includeDescendants: true);
   }
 
   // ***************************************************************************
@@ -404,9 +405,6 @@ abstract class Scalar<
       );
     }
 
-    print(
-        "########## - 3: _scalarSyncSessionState: $_scalarSyncSessionState, dataState: $dataState");
-
     // Append received event metadata
     _scalarSyncSessionState?.addReceivedEventInfo(
       eventSourceType: eventSourceType,
@@ -420,15 +418,18 @@ abstract class Scalar<
 
     // Recalculate ScalarDataState upon incoming event invalidation
     if (_scalarSyncSessionState != null) {
-      final nextState =
-          _scalarSyncSessionState!.calculateNextDataState(dataState);
-      print("########## - 4: nextState: $nextState");
+      final nextState = ScalarDataStateUtils.calculateNewLazyDataState(
+        currentScalarDataState: dataState,
+        hasParentValue: parent != null,
+        isRootScalar: isRoot,
+        parentValueChanged: false,
+        filterCriteriaChanged: false,
+        hasIncomingEvent: true,
+      );
 
       // Test Case: [84b].
       if (nextState != dataState) {
         __scalarData._scalarDataState = nextState;
-        print(
-            "########## - 5: __scalarData._scalarDataState: ${__scalarData._scalarDataState}");
         executionTrace._addTraceStep(
           codeId: "#86400",
           shortDesc:
@@ -450,45 +451,38 @@ abstract class Scalar<
     required ScalarQueryIntent<ID, VALUE> executionIntent,
   }) async {
     __assertThisXScalar(thisXScalar);
-    //
-    QryHint applyQueryHint = thisXScalar.queryHint; // (**)
-    //
+
+    final QryHint initialQueryHint = thisXScalar.queryHint;
+
     thisXScalar._setQueriedTrue();
     thisXScalar._createAndSetScalarExecutionIntentDone(lastIntentInfo: "Query");
+    thisXScalar.resetExecutionHints();
 
-    thisXScalar.resetExecutionHints(); // (**)
-    //
     executionTrace._addTraceStep(
       codeId: "#12000",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
       traceStepType: TraceStepType.debug,
     );
-    // Important:
+
     final executionResult = executionIntent.resultWrapper._setResult(
       ScalarQueryResult(precheck: null),
       objectCaller: this,
       methodName: '_unitQuery',
     );
-    //
-    bool provideScalarContext =
-        ui.hasActiveUiComponent(alsoCheckChildren: true);
-    //
+
+    final bool provideScalarContext =
+        ui.hasVisibleViews(includeDescendants: true);
+
     executionTrace._addTraceStep(
       codeId: "#12020",
       shortDesc: "${debugObjHtml(this)} has UIX Visible? $provideScalarContext",
-    );
-    //
-    if (applyQueryHint != QryHint.force) {
-      if (provideScalarContext && (dataState.isPending || dataState.isStale)) {
-        applyQueryHint = QryHint.force;
-      }
-    }
-    executionTrace._addTraceStep(
-      codeId: "#12040",
-      shortDesc: "Calculated: @applyQueryHint: $applyQueryHint.",
+      traceStepType: TraceStepType.debug,
     );
 
+    // =========================================================================
+    // 1. UNIFIED STRATEGY RESOLUTION (SINGLE SOURCE OF TRUTH)
+    // =========================================================================
     final DebugScalarSyncSessionState<ID>? currentSyncSessionState =
         _scalarSyncSessionState;
 
@@ -496,29 +490,44 @@ abstract class Scalar<
         ScalarQueryStrategyResolver.resolveQueryPlan<ID>(
       scalar: this,
       syncSessionState: currentSyncSessionState,
+      queryHint: initialQueryHint,
+      provideScalarContext: provideScalarContext,
     );
 
-    if (applyQueryHint == QryHint.none) {
+    executionTrace._addTraceStep(
+      codeId: "#12040",
+      shortDesc: "Calculated Query Plan (${debugObjHtml(this)}):",
+      parameters: {
+        "action": queryPlan.action?.name,
+      },
+      traceStepType: TraceStepType.debug,
+    );
+
+    // =========================================================================
+    // 2. NO-OP SHORT CIRCUIT
+    // =========================================================================
+    if (queryPlan.action == null) {
       executionTrace._addTraceStep(
         codeId: "#12080",
         shortDesc:
-            "@applyQueryHint: $applyQueryHint, @dataState: $dataState, @value: ${debugObjHtml(this.value)}.",
+            "QueryPlan action is NULL -> Skip query execution, @dataState: $dataState, @value: ${debugObjHtml(this.value)}.",
+        traceStepType: TraceStepType.debug,
       );
       return;
     }
-    //
-    // this.dataState != DataState.loaded || thisXScalar.queryHint
-    //
+
+    // =========================================================================
+    // 3. FILTER MODEL VALIDATION & CASCADE ERROR GUARD
+    // =========================================================================
     ScalarDataState newScalarDataState = dataState;
-    //
+
     final XFilterModel xFilterModel = thisXScalar.xFilterModel;
     final FilterModel filterModel = xFilterModel.filterModel;
-    FilterCriteriaSnapshot<FILTER_CRITERIA>? committedFilterCriteriaSnapshot =
+    final FilterCriteriaSnapshot<FILTER_CRITERIA>?
+        committedFilterCriteriaSnapshot =
         filterModel._committedFilterCriteriaSnapshot
             as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
-    //
-    // Has Error in FilterModel.
-    //
+
     if (committedFilterCriteriaSnapshot == null ||
         committedFilterCriteriaSnapshot.isError) {
       executionTrace._addTraceStep(
@@ -528,35 +537,34 @@ abstract class Scalar<
             "Clear data of child scalar and set them to <b>none</b>.",
         traceStepType: TraceStepType.info,
       );
-      // Set Scalar to error cascade.
       __stopQueryWithFilterErrorCascade(
         thisXScalar: thisXScalar,
         scalarErrorInfo: null,
       );
       return;
     }
-    //
-    // Ready FilterCriteria:
-    //
+
     committedFilterCriteriaSnapshot
         as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
     final bool filterCriteriaChanged =
         __scalarData._isFilterCriteriaSnapshotChanged(
       newFilterCriteriaSnapshot: committedFilterCriteriaSnapshot,
     );
-    //
+
     ActionResultState queryResultState;
     ScalarErrorInfo? sclrErrorInfo;
-    //
+
     final performQueryMethod = ScalarErrorMethod.performQuery;
-    bool isQueryError = false;
     final ID? oldValueId = __scalarData.current._id;
     ID? valueId;
     VALUE? value;
-    //
+
+    // =========================================================================
+    // 4. REMOTE DATA FETCH EXECUTION
+    // =========================================================================
     try {
       __refreshQueryingState(isQuerying: true);
-      //
+
       executionTrace._addTraceStep(
         codeId: "#12400",
         shortDesc: "Calling ${debugObjHtml(this)}.performQuery()...",
@@ -566,34 +574,31 @@ abstract class Scalar<
         },
         traceStepType: TraceStepType.controllableCalling,
       );
-      //
+
       debug.__performQueryCount++;
-      ApiResult<VALUE> result = await performQuery(
+      final ApiResult<VALUE> result = await performQuery(
         parentScalarValue: parent?.value,
         filterCriteria: committedFilterCriteriaSnapshot.filterCriteria,
       );
-      //
-      // Throw ApiError:
+
       result.throwIfError();
-      //
+
       queryResultState = ActionResultState.success;
       value = result.data;
       valueId = value?.id;
       _resetBlockSyncSessionState(executionTrace: executionTrace);
     } catch (e, stackTrace) {
       queryResultState = ActionResultState.fail;
-      isQueryError = true;
-      //
+
       sclrErrorInfo = ScalarErrorInfo(
         scalarErrorMethod: performQueryMethod,
-        error: e, // AppError, ApiError or others.
+        error: e,
         errorStackTrace: stackTrace,
       );
-      //
+
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: performQueryMethod.name,
-        // AppError, ApiError or others.
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -602,11 +607,11 @@ abstract class Scalar<
       executionResult._setErrorInfo(
         errorInfo: errorInfo,
       );
-      //
+
       thisXScalar.queryResult._setErrorInfo(
         errorInfo: errorInfo,
       );
-      //
+
       executionTrace._addTraceStep(
         codeId: "#12440",
         shortDesc:
@@ -616,7 +621,10 @@ abstract class Scalar<
     } finally {
       __refreshQueryingState(isQuerying: false);
     }
-    //
+
+    // =========================================================================
+    // 5. LIFECYCLE STATE EVALUATION
+    // =========================================================================
     final calculationInput = ScalarQueryCalculatorInput(
       queryResultState: queryResultState,
       scalarErrorOrigin: ScalarErrorOrigin.directFetch,
@@ -627,15 +635,8 @@ abstract class Scalar<
     final ScalarQueryCalculatorResult calculationResult =
         ScalarQueryStateCalculator.calculate(calculationInput);
 
-    // print("@TEMP INPUT: ");
-    // print(calculationInput.getDebugInfo());
-    // print(calculationResult.getDebugInfo());
-
-    // Extract variables directly into your pre-existing downstream fields securely
     newScalarDataState = calculationResult.newScalarDataState;
 
-    // Test Cases: [12a], [12b].
-    // Test Cases: [80b].
     if (sclrErrorInfo != null) {
       executionTrace._addTraceStep(
         codeId: "#12500",
@@ -655,13 +656,15 @@ abstract class Scalar<
       return;
     }
 
-    // No ERROR!
+    // =========================================================================
+    // 6. UPDATE SCALAR DATA & DOWNSTREAM SYNCHRONIZATION
+    // =========================================================================
     executionTrace._addTraceStep(
       codeId: "#12600",
       shortDesc:
-          "${debugObjHtml(this)} --> set state to loađed and set value to ${debugObjHtml(value)}.",
+          "${debugObjHtml(this)} --> set state to loaded and set value to ${debugObjHtml(value)}.",
     );
-    newScalarDataState = ScalarDataStateLoadedFresh();
+    newScalarDataState = const ScalarDataStateLoadedFresh();
     __setQueryDataWithState(
       thisXScalar: thisXScalar,
       xFilterCriteria: committedFilterCriteriaSnapshot,
@@ -670,7 +673,7 @@ abstract class Scalar<
       value: value,
       queryResultState: ActionResultState.success,
     );
-    //
+
     if (value == null) {
       executionTrace._addTraceStep(
         codeId: "#12680",
@@ -682,7 +685,7 @@ abstract class Scalar<
       __clearAllChildrenScalarsToNone(thisXScalar: thisXScalar);
       return;
     }
-    //
+
     if (filterCriteriaChanged || valueId != oldValueId) {
       executionTrace._addTraceStep(
         codeId: "#12700",
@@ -691,7 +694,7 @@ abstract class Scalar<
             "${_childScalars.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         traceStepType: TraceStepType.info,
       );
-      this.__clearAllChildrenScalarsToPending(
+      __clearAllChildrenScalarsToPending(
         thisXScalar: thisXScalar,
       );
     }
@@ -869,7 +872,7 @@ abstract class Scalar<
       case AfterScalarLoadExtraDataQuickAction.none:
         break;
       case AfterScalarLoadExtraDataQuickAction.update:
-        ui.updateAllUiComponents(withoutFilters: true);
+        ui.refreshAllViews(withoutFilters: true);
     }
     return success2;
   }
@@ -1337,7 +1340,7 @@ abstract class Scalar<
   void __refreshQueryingState({required bool isQuerying}) {
     try {
       __isQuerying = isQuerying;
-      ui.updateControlBars();
+      ui.refreshControlBars();
     } catch (e) {}
   }
 
@@ -1447,7 +1450,7 @@ abstract class Scalar<
         errCode: ScalarClearPrecheck.busy,
       );
     }
-    // bool hasActiveUI = ui.hasActiveUiComponent(alsoCheckChildren: true);
+    // bool hasActiveUI = ui.hasActiveUiComponent(includeDescendants: true);
     // if (hasActiveUI) {
     //   return Actionable<ScalarClearPrecheck>.no(
     //     errCode: ScalarClearPrecheck.hasActiveUI,

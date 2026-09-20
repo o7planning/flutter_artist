@@ -1,10 +1,16 @@
 part of '../core.dart';
 
+/// Coordinates UI representation registrations, visibility tracking, and view rebuild cycles
+/// managed directly at the global [_Storage] level.
+///
+/// Serves as the runtime bridge between reactive storage section widgets (e.g., [StorageSectionView],
+/// [StorageSectionViewBuilder]) and the underlying storage state.
 class _StorageUiComponents extends _UiComponents {
+  /// The global storage instance bound to this UI coordinator.
   final _Storage storage;
 
-  final Map<_ContextProviderViewState, bool>
-      __refreshableStorageSectionViewStates = {};
+  // Registered views: StorageSectionView widget states.
+  final Map<_ContextProviderViewState, bool> _storageSectionViewStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -14,22 +20,24 @@ class _StorageUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Aggregates all navigation route keys declared across registered storage section views.
   @override
   Set<FaRouteData> get faRouteDatas {
-    return {};
+    return const {};
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUiComponent() {
-    for (_ContextProviderViewState widgetState
-        in __refreshableStorageSectionViewStates.keys) {
+  /// Checks whether any StorageSectionView is actively visible on screen.
+  // OLD: hasActiveUiComponent
+  bool hasVisibleViews() {
+    for (final _ContextProviderViewState widgetState
+        in _storageSectionViewStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible =
-          __refreshableStorageSectionViewStates[widgetState] ?? false;
+      final bool visible = _storageSectionViewStates[widgetState] ?? false;
       if (visible) {
         return true;
       }
@@ -40,28 +48,30 @@ class _StorageUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Checks whether any StorageSectionView is currently mounted in the widget tree.
+  // OLD: hasMountedUiComponent
   @override
-  bool hasMountedUiComponent() {
-    bool hasMounted = __refreshableStorageSectionViewStates.isNotEmpty;
-    if (hasMounted) {
-      return true;
-    }
-    return false;
+  bool hasMountedViews() {
+    return _storageSectionViewStates.isNotEmpty;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUiComponents() {
-    updateAllStorageSectionViews();
+  /// Rebuilds all mounted view representations managed directly at the storage level.
+  // OLD: updateAllUiComponents
+  void refreshAllViews() {
+    refreshStorageSectionViews();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllStorageSectionViews() {
-    for (_ContextProviderViewState widgetState
-        in __refreshableStorageSectionViewStates.keys) {
+  /// Rebuilds all mounted storage section views.
+  // OLD: updateAllStorageSectionViews
+  void refreshStorageSectionViews() {
+    for (final _ContextProviderViewState widgetState
+        in _storageSectionViewStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -71,19 +81,22 @@ class _StorageUiComponents extends _UiComponents {
 
   // ***************************************************************************
   // ***************************************************************************
-  // ***************************************************************************
 
-  void _addShelfWidgetState({
+  // OLD: _addShelfWidgetState
+  void _addStorageSectionViewState({
     required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
-    __refreshableStorageSectionViewStates[widgetState] = isVisible;
+    _storageSectionViewStates[widgetState] = isVisible;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _removeShelfWidgetState({required State widgetState}) {
-    __refreshableStorageSectionViewStates.remove(widgetState);
+  // OLD: _removeShelfWidgetState
+  void _removeStorageSectionViewState({
+    required _ContextProviderViewState widgetState,
+  }) {
+    _storageSectionViewStates.remove(widgetState);
   }
 }

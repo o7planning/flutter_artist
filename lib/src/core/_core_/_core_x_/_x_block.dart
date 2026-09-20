@@ -266,7 +266,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
   // Block only (Not find in FilterModel, FormModel).
   NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
     final bool isVisibleX =
-    block.ui.hasActiveUiComponent(alsoCheckChildren: true);
+    block.ui.hasVisibleViews(includeDescendants: true);
     final blockDataState = block.dataState;
     final itemDataState = block.blockItemDataState;
     final executionIntent = _executionIntent;
@@ -577,7 +577,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
             );
           }
           bool itemVisibleX = block.ui
-              .hasActiveUiComponentItemRepresentative(alsoCheckChildren: true);
+              .hasItemContext(includeDescendants: true);
           if (block.itemCount > 0 && itemVisibleX) {
             final setItemIntent =
             _createAndSetBlockExecutionIntentSetCurrentItem(
@@ -836,8 +836,8 @@ ITEM_DETAIL extends Identifiable<ID>> {
   }
 
   void printInfoCascade() {
-    bool provideBlockContext = block.ui.hasActiveUiComponentBlockRepresentative(
-      alsoCheckChildren: false,
+    bool provideBlockContext = block.ui.hasBlockContext(
+      includeDescendants: false,
     );
     String msg = "${getClassName(this)}(${getClassName(block)}"
         " - provideBlockContext: $provideBlockContext"

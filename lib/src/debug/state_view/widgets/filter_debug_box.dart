@@ -26,7 +26,7 @@ class FilterDebugBox extends BaseDebugBox {
       if (options.showFilterUiActive)
         IconLabelText(
           label: "Filter UI Active?: ",
-          text: "${filterModel.ui.hasActiveUiComponent()}",
+          text: "${filterModel.ui.hasVisibleViews()}",
           labelStyle: DebugStyleUtils.getLabelStyle0(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),

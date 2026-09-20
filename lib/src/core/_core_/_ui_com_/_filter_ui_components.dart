@@ -1,12 +1,19 @@
 part of '../core.dart';
 
+/// Coordinates UI representations, panel visibility tracking, and view rebuild cycles
+/// for an individual [FilterModel].
+///
+/// Serves as the runtime bridge between reactive filter panel widgets (e.g., [FilterPanel],
+/// [FilterControlBar]) and the underlying filter state.
 class _FilterUiComponents extends _UiComponents {
+  /// The owner filter model bound to this UI coordinator.
   final FilterModel filterModel;
 
-  final Map<_ContextProviderViewState, XState> _filterBaseViewWidgetStates = {};
+  // Registered views: FilterPanel widgets.
+  final Map<_ContextProviderViewState, XState> _filterPanelWidgetStates = {};
 
-  final Map<_ContextProviderViewState, XState> __filterControlBarWidgetStates =
-  {};
+  // Registered views: FilterControlBar widgets.
+  final Map<_ContextProviderViewState, XState> _controlBarWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -16,24 +23,25 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Aggregates all navigation route keys declared across registered filter views.
   @override
   Set<FaRouteData> get faRouteDatas {
-    List<_ContextProviderViewState> list = [
-      ..._filterBaseViewWidgetStates.keys,
+    final List<_ContextProviderViewState> list = [
+      ..._filterPanelWidgetStates.keys,
+      ..._controlBarWidgetStates.keys,
     ];
-    return list
-        .map((v) => v.faRoute)
-        .nonNulls
-        .toList()
-        .toSet();
+    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  List<FormBuilderState> get _activeFormBuilderStates {
-    List<FormBuilderState> forms = [];
-    for (_ContextProviderViewState state in _filterBaseViewWidgetStates.keys) {
+  /// Returns all active Flutter FormBuilderState instances currently mounted in visible filter panels.
+  // OLD: _activeFormBuilderStates
+  List<FormBuilderState> get _visibleFormBuilderStates {
+    final List<FormBuilderState> forms = [];
+    for (final _ContextProviderViewState state
+        in _filterPanelWidgetStates.keys) {
       if (state.mounted && state is _FilterPanelBuilderState) {
         final formState = state.formKey.currentState;
         if (formState != null) {
@@ -47,61 +55,98 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  Map<_ContextProviderViewState, XState> _findMountedBaseViewWidgetStates({
+  // OLD: _findMountedBaseViewWidgetStates / _findMountedContentViewWidgetStates
+  Map<_ContextProviderViewState, XState> _findMountedFilterPanelWidgetStates({
     required bool activeOnly,
   }) {
     return ___findMountedWidgetStates(
-      widgetStates: _filterBaseViewWidgetStates,
+      widgetStates: _filterPanelWidgetStates,
       activeOnly: activeOnly,
     );
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @override
-  bool hasMountedUiComponent() {
-    return _filterBaseViewWidgetStates.isNotEmpty;
+  /// Locates the class name of the actively visible FilterPanel for diagnostic inspection.
+  String? findVisibleFilterPanel() {
+    for (final widgetState in _filterPanelWidgetStates.keys) {
+      if (!widgetState.mounted) continue;
+      final bool visible =
+          _filterPanelWidgetStates[widgetState]?.isVisible ?? false;
+      if (visible) {
+        return getClassNameWithoutGenerics(widgetState.widget);
+      }
+    }
+    return null;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasActiveUiComponent() {
-    return hasActiveUiComponentWithContextKind(
+  /// Checks whether any filter view (panel or control bar) is currently mounted in the widget tree.
+  // OLD: hasMountedUiComponent
+  @override
+  bool hasMountedViews() {
+    return _filterPanelWidgetStates.isNotEmpty ||
+        _controlBarWidgetStates.isNotEmpty;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Checks if any FilterPanel view is actively visible on screen.
+  bool hasVisibleFilterPanel() {
+    return findVisibleFilterPanel() != null;
+  }
+
+  /// Checks if any FilterControlBar is actively visible on screen.
+  bool hasVisibleControlBar() {
+    for (final widgetState in _controlBarWidgetStates.keys) {
+      if (!widgetState.mounted) continue;
+      final bool visible =
+          _controlBarWidgetStates[widgetState]?.isVisible ?? false;
+      if (visible) return true;
+    }
+    return false;
+  }
+
+  /// Checks if any view connected to this filter model is actively visible on screen.
+  // OLD: hasActiveUiComponent
+  bool hasVisibleViews() {
+    return hasVisibleViewsWithContextKind(
       contextKind: null,
     );
   }
 
-  bool hasActiveUiComponentWithContextKind({
+  /// Checks if any filter view matching the specified [contextKind] is currently visible.
+  // OLD: hasActiveUiComponentWithContextKind
+  bool hasVisibleViewsWithContextKind({
     required ContextKind? contextKind,
   }) {
-    for (_ContextProviderViewState widgetState
-    in _filterBaseViewWidgetStates.keys) {
+    for (final _ContextProviderViewState widgetState
+        in _filterPanelWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible =
-          _filterBaseViewWidgetStates[widgetState]?.isVisible ?? false;
+      final bool visible =
+          _filterPanelWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isContextKind(contextKind);
+      final bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return true;
       }
     }
-    for (_ContextProviderViewState widgetState
-    in __filterControlBarWidgetStates.keys) {
+    for (final _ContextProviderViewState widgetState
+        in _controlBarWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
-      bool visible =
-          __filterControlBarWidgetStates[widgetState]?.isVisible ?? false;
+      final bool visible =
+          _controlBarWidgetStates[widgetState]?.isVisible ?? false;
       if (!visible) {
         continue;
       }
-      bool ok = widgetState.isContextKind(contextKind);
+      final bool ok = widgetState.isContextKind(contextKind);
       if (ok) {
         return true;
       }
@@ -112,8 +157,21 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateFilterBaseViews({bool force = true}) {
-    for (_ContextProviderViewState state in _filterBaseViewWidgetStates.keys) {
+  /// Rebuilds specifically the filter panel form views.
+  // OLD: updateFilterBaseViews
+  void refreshFilterPanels({bool force = true}) {
+    for (final _ContextProviderViewState state
+        in _filterPanelWidgetStates.keys) {
+      if (state.mounted) {
+        state.refreshState(force: force);
+      }
+    }
+  }
+
+  /// Rebuilds active filter control bars.
+  void refreshControlBars({bool force = false}) {
+    for (final _ContextProviderViewState state
+        in _controlBarWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -123,30 +181,27 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  void updateAllUiComponents({bool force = true}) {
-    for (_ContextProviderViewState widgetState in [
-      ..._filterBaseViewWidgetStates.keys,
-      ...__filterControlBarWidgetStates.keys
-    ]) {
-      if (widgetState.mounted) {
-        widgetState.refreshState(force: force);
-      }
-    }
+  /// Rebuilds all mounted view representations associated with this filter model.
+  // OLD: updateAllUiComponents
+  void refreshAllViews({bool force = true}) {
+    refreshFilterPanels(force: force);
+    refreshControlBars(force: force);
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isWidgetStateBuilding(
-      {required _ContextProviderViewState widgetState}) {
-    return _filterBaseViewWidgetStates[widgetState]?.isBuilding ?? false;
+  bool _isWidgetStateBuilding({
+    required _ContextProviderViewState widgetState,
+  }) {
+    return _filterPanelWidgetStates[widgetState]?.isBuilding ?? false;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   bool _isBuilding() {
-    for (XState xState in _filterBaseViewWidgetStates.values) {
+    for (final XState xState in _filterPanelWidgetStates.values) {
       if (xState.isBuilding) {
         return true;
       }
@@ -161,54 +216,46 @@ class _FilterUiComponents extends _UiComponents {
     required _ContextProviderViewState widgetState,
     required bool isBuilding,
   }) {
-    _filterBaseViewWidgetStates.update(
+    _filterPanelWidgetStates.update(
       widgetState,
-          (xState) => xState.._setBuilding(isBuilding),
-      ifAbsent: () =>
-      XState()
-        .._setBuilding(isBuilding),
+      (xState) => xState.._setBuilding(isBuilding),
+      ifAbsent: () => XState().._setBuilding(isBuilding),
     );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _addFilterFragmentWidgetState({
+  // OLD: _addFilterFragmentWidgetState
+  void _addFilterPanelWidgetState({
     required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
-    bool activeOLD = hasActiveUiComponent();
-    _filterBaseViewWidgetStates.update(
+    final bool visibleOld = hasVisibleViews();
+    _filterPanelWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool activeCURRENT = hasActiveUiComponent();
+    final bool visibleCurrent = hasVisibleViews();
 
     if (isVisible) {
       FlutterArtist.storage._addRecentShelf(filterModel.shelf);
     }
-    //
-    if (!activeOLD && activeCURRENT) {
-      // Fire event:
-      // filterModel.shelf._startLoadDataForLazyUiComponentsIfNeed();
-      // LOGIC: #0000
+
+    if (!visibleOld && visibleCurrent) {
       FlutterArtist.storage._naturalQueryQueue.addShelf(filterModel.shelf);
-    } else if (activeOLD && !activeCURRENT) {
-      // TODO: (Kiem tra phuong thuc cung ten trong Block).
-      // block._broadcastBlockHidden();
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _removeFilterFragmentWidgetState({
-    required State widgetState,
+  // OLD: _removeFilterFragmentWidgetState
+  void _removeFilterPanelWidgetState({
+    required _ContextProviderViewState widgetState,
   }) {
-    _filterBaseViewWidgetStates.remove(widgetState);
+    _filterPanelWidgetStates.remove(widgetState);
   }
 
   // ***************************************************************************
@@ -218,27 +265,20 @@ class _FilterUiComponents extends _UiComponents {
     required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
-    bool activeOLD = hasActiveUiComponent();
-    __filterControlBarWidgetStates.update(
+    final bool visibleOld = hasVisibleViews();
+    _controlBarWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    bool activeCURRENT = hasActiveUiComponent();
+    final bool visibleCurrent = hasVisibleViews();
 
     if (isVisible) {
       FlutterArtist.storage._addRecentShelf(filterModel.shelf);
     }
-    //
-    if (!activeOLD && activeCURRENT) {
-      // Fire event:
-      // filterModel.shelf._startLoadDataForLazyUiComponentsIfNeed();
+
+    if (!visibleOld && visibleCurrent) {
       FlutterArtist.storage._naturalQueryQueue.addShelf(filterModel.shelf);
-    } else if (activeOLD && !activeCURRENT) {
-      // TODO: (Kiem tra phuong thuc cung ten trong Block).
-      // block._broadcastBlockHidden();
     }
   }
 
@@ -248,6 +288,6 @@ class _FilterUiComponents extends _UiComponents {
   void _removeControlBarWidgetState({
     required _ContextProviderViewState widgetState,
   }) {
-    __filterControlBarWidgetStates.remove(widgetState);
+    _controlBarWidgetStates.remove(widgetState);
   }
 }

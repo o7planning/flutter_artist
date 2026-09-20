@@ -25,11 +25,8 @@ class BlockConfig {
   /// Defaults to `true`.
   final bool preventUnsavedChangesLoss;
 
-  @Deprecated("No longer supported")
-  final ItemAbsentRepresentativePolicy itemAbsentRepresentativePolicy;
+  final AbsentItemContextPolicy absentItemContextPolicy;
 
-  // IdentityBlockConfig
-  @Deprecated("No longer supported")
   final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy;
 
   final BlockHiddenAction onHideAction;
@@ -77,8 +74,8 @@ class BlockConfig {
   BlockConfig({
     this.bindToAncestorPayloadState = false,
     this.enforceParentLinkConstraint = false,
-    this.itemAbsentRepresentativePolicy =
-        ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent,
+    this.absentItemContextPolicy =
+        AbsentItemContextPolicy.tryNotSetAnItemAsCurrent,
     this.unifiedItemRefreshPolicy = UnifiedItemRefreshPolicy.auto,
     this.preventUnsavedChangesLoss = true,
     this.viewportSyncConfig = const BlockViewportSyncConfig(),
@@ -102,7 +99,7 @@ class BlockConfig {
     return BlockConfig(
       bindToAncestorPayloadState: bindToAncestorPayloadState,
       unifiedItemRefreshPolicy: unifiedItemRefreshPolicy,
-      itemAbsentRepresentativePolicy: itemAbsentRepresentativePolicy,
+      absentItemContextPolicy: absentItemContextPolicy,
       preventUnsavedChangesLoss: preventUnsavedChangesLoss,
       enforceParentLinkConstraint: enforceParentLinkConstraint,
       nativeQueryMode: nativeQueryMode,

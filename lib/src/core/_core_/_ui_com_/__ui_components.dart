@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 abstract class _UiComponents {
-  bool hasMountedUiComponent();
+  bool hasMountedViews();
 
   Set<FaRouteData> get faRouteDatas;
 
