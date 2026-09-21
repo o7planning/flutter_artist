@@ -23,8 +23,7 @@ class ScalarDebugBox extends BaseDebugBox {
   @override
   List<Widget> getChildIconLabelTexts(BuildContext context) {
     String? activeUI = scalar.ui.findVisibleView();
-    String? xActiveUI =
-        scalar.ui.findVisibleView(includeDescendants: true);
+    String? xActiveUI = scalar.ui.findVisibleView(includeDescendants: true);
     return [
       if (options.showUiActive)
         ActiveInfoWidget(

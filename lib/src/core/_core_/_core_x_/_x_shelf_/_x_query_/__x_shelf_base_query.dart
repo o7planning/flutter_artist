@@ -114,8 +114,7 @@ class _XShelfBaseQuery extends XShelf {
         }
       }
 
-      final bool hasBlockContextX =
-          block.ui.hasBlockContext(
+      final bool hasBlockContextX = block.ui.hasBlockContext(
         includeDescendants: true,
       );
       if (hasBlockContextX && !isTargetEmptyQuery) {

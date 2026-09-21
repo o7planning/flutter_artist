@@ -58,6 +58,11 @@ String __debugObjHtml(Object? obj, bool asHtml) {
       return "${b1}${obj.toString()}${b2}";
     }
     return "${b1}${getClassName(obj)}(${obj.length} items)${b2}";
+  } else if (obj is Set) {
+    if (obj is Set<Type>) {
+      return "${b1}${obj.toString()}${b2}";
+    }
+    return "${b1}${getClassName(obj)}(${obj.length} items)${b2}";
   } else if (obj is Map) {
     return "${b1}${getClassName(obj)}(${obj.length} entries)${b2}";
   } else if (obj is Function) {
@@ -65,7 +70,7 @@ String __debugObjHtml(Object? obj, bool asHtml) {
   } else if (obj is Locale) {
     return "${b1}${getClassName(obj)}(${obj.languageCode}, ${obj.countryCode})${b2}";
   } else if (obj is Type) {
-    return "${b1}$obj${b2}";
+    return "${b1}${getTypeNameWithoutGenerics(obj)}${b2}";
   } else if (obj is Block) {
     return "${b1}${getClassNameWithoutGenerics(obj)}${b2}";
   } else if (obj is Scalar) {

@@ -1,4 +1,3 @@
-
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../../../built_in/empty_additional_form_related_data.dart';

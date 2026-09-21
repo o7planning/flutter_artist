@@ -38,13 +38,11 @@ class _ScalarSyncSessionState<ID extends Comparable> extends Equatable
     _receivedEventInfos.add(eventInfo);
   }
 
-
   @override
   List<Object?> get props => [parentScalarValueId, filterCriteria];
 
   @override
   String toString() {
-    return "parentScalarValueId: $parentScalarValueId, filterCriteria: ${filterCriteria ==
-        null ? 'null' : 'OK'}";
+    return "parentScalarValueId: $parentScalarValueId, filterCriteria: ${filterCriteria == null ? 'null' : 'OK'}";
   }
 }

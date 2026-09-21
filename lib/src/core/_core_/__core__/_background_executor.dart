@@ -33,11 +33,10 @@ class _BackgroundExecutor extends _Core {
   }) async {
     final needToConfirm = action.needToConfirm;
 
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#61000",
       shortDesc:
           "${debugObjHtml(action)}.needToConfirm = <b>$needToConfirm<b>.",
-      traceStepType: TraceStepType.debug,
     );
     //
     // Confirmation:
@@ -51,7 +50,7 @@ class _BackgroundExecutor extends _Core {
       );
     }
     if (!confirm) {
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#61100",
         shortDesc: "@confirm = <b>$confirm</b> --> cancelled.",
       );
@@ -61,10 +60,11 @@ class _BackgroundExecutor extends _Core {
     }
     BackgroundActionResult backgroundResult = BackgroundActionResult();
     try {
-      executionTrace._addTraceStep(
+      executionTrace.addControllableCall(
         codeId: "#61200",
-        shortDesc: "Calling ${debugObjHtml(action)}.run()...",
-        traceStepType: TraceStepType.controllableCalling,
+        caller: action,
+        methodName: "run",
+        suffixShortDesc: "",
       );
       ApiResult<void> result = await action.run();
       // Throw ApiError:
@@ -81,7 +81,7 @@ class _BackgroundExecutor extends _Core {
       backgroundResult._setErrorInfo(
         errorInfo: errorInfo,
       );
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#61300",
         shortDesc:
             "The ${debugObjHtml(action)}.run() method was called with an error!",

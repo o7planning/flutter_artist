@@ -19,10 +19,11 @@ class _Storage extends _StorageCore {
     required ExecutionTrace executionTrace,
     required EffectiveAppConfig appConfig,
   }) {
-    TraceStep item = executionTrace._addTraceStep(
+    TraceStep item = executionTrace.addControllableCall(
       codeId: "#SS000",
-      shortDesc: "${debugObjHtml(appConfig)}.projectionFamilies().",
-      traceStepType: TraceStepType.controllableCalling,
+      caller: appConfig,
+      methodName: "projectionFamilies",
+      suffixShortDesc: "",
       tipDocument: TipDocument.projection,
     );
     final List<ProjectionFamily> projectionFamilies =
@@ -35,29 +36,31 @@ class _Storage extends _StorageCore {
     //
     item._extraInfos = FlutterArtist.debugRegister.debugRegisterProjections
       ..sort();
-    item = executionTrace._addTraceStep(
+    item = executionTrace.addControllableCall(
       codeId: "#SS040",
-      shortDesc: "${debugObjHtml(appConfig)}.registerActivities().",
-      traceStepType: TraceStepType.controllableCalling,
-      tipDocument: TipDocument.activity,
+      caller: appConfig,
+      methodName: "registerActivities",
+      suffixShortDesc: "",
     );
     appConfig._registerActivities();
     item._extraInfos = FlutterArtist.debugRegister.debugRegisterActivities
       ..sort();
     //
-    item = executionTrace._addTraceStep(
+    item = executionTrace.addControllableCall(
       codeId: "#SS060",
-      shortDesc: "${debugObjHtml(appConfig)}.registerShelves().",
-      traceStepType: TraceStepType.controllableCalling,
+      caller: appConfig,
+      methodName: "registerShelves",
+      suffixShortDesc: "",
       tipDocument: TipDocument.shelf,
     );
     appConfig._registerShelves();
     item._extraInfos = FlutterArtist.debugRegister.debugRegisterShelves..sort();
     //
-    item = executionTrace._addTraceStep(
+    item = executionTrace.addControllableCall(
       codeId: "#SS160",
-      shortDesc: "${debugObjHtml(appConfig)}.additionalThemes().",
-      traceStepType: TraceStepType.controllableCalling,
+      caller: appConfig,
+      methodName: "additionalThemes",
+      suffixShortDesc: "",
       tipDocument: TipDocument.theme,
     );
     List<FaTheme> faThemes = appConfig.additionalThemes;

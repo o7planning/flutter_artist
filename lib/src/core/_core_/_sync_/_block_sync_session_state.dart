@@ -36,7 +36,6 @@ class _BlockSyncSessionState<ID extends Comparable> extends Equatable
         _filterCriteria = filterCriteria {
     block.debug._querySessionCount++;
     block.debug._lastViewportSyncStrategy = null;
-    block.debug._lastEffectiveItemIds = {};
     block.debug._lastPerformQueryItemIds = {};
   }
 
@@ -91,7 +90,6 @@ class _BlockSyncSessionState<ID extends Comparable> extends Equatable
         return effectedItemIds;
     }
   }
-
 
   @override
   List<Object?> get props {

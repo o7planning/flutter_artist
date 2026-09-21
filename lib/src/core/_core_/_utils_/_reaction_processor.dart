@@ -8,21 +8,19 @@ class _ReactionProcessor {
         FlutterArtist.codeFlowLogger._createPendingEventProcessorExecutionTrace(
       ownerClassInstance: this,
     );
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#27000",
       shortDesc: "addReactionExecutionUnits",
-      traceStepType: TraceStepType.debug,
     );
     //
     // #0004.
     //
     final bool deferred = FlutterArtist.backstage.isReactionDeferred;
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#27040",
       shortDesc: deferred
           ? "The mode to defer <b>Reactions</b> execution is <b>enabled</b>."
           : "The mode to defer <b>Reactions</b> execution is <b>not enabled</b>.",
-      traceStepType: TraceStepType.debug,
       tipDocument: TipDocument.deferringReactions,
     );
     //
@@ -31,36 +29,20 @@ class _ReactionProcessor {
         continue;
       }
       Shelf listenerShelf = FlutterArtist.storage._shelfMap[listenerShelfName]!;
-      executionTrace._addTraceStep(
-        codeId: "#27100",
-        shortDesc: "Separator",
-        traceStepType: TraceStepType.separator,
-      );
+
+      executionTrace.addSeparator();
+
       if (listenerShelf.deferReactions) {
-        executionTrace._addTraceStep(
-          codeId: "#27200",
-          shortDesc: "${debugObjHtml(listenerShelf)}: Reaction Deferred.",
-          traceStepType: TraceStepType.separator,
-        );
+        executionTrace.addSeparator();
         continue;
       }
       bool hasPendingOrStaleMember =
           listenerShelf.hasPendingOrStaleMember(requiresVisible: true);
       if (!hasPendingOrStaleMember) {
-        executionTrace._addTraceStep(
-          codeId: "#27300",
-          shortDesc:
-              "${debugObjHtml(listenerShelf)}: Has no pending or stale members.",
-          traceStepType: TraceStepType.separator,
-        );
+        executionTrace.addSeparator();
         continue;
       }
-      executionTrace._addTraceStep(
-        codeId: "#27400",
-        shortDesc:
-            "${debugObjHtml(listenerShelf)}: Add Shelf External Reaction Execution Unit.",
-        traceStepType: TraceStepType.separator,
-      );
+      executionTrace.addSeparator();
       listenerShelf._addShelfExternalReactionExecutionUnit(
         executionTrace: executionTrace,
       );

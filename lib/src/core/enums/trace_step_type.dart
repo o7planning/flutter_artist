@@ -1,44 +1,40 @@
 import 'package:flutter/material.dart';
 
+/// Categorizes the operational intent and lifecycle scope of individual trace steps.
 enum TraceStepType {
-  line, // Default.
-  info,
-  debug,
-  addExecutionUnit,
-  executionIntent,
+  /// Controllable method invocation that can be overridden or defined by developers (e.g., performQuery, performDeleteItemById).
   controllableCalling,
+
+  /// Internal library/engine method call governing framework coordination (e.g., _updateBlockSyncSessionState).
   nonControllableCalling,
+
+  /// Execution intent creation or scheduler queue transition.
+  executionIntent,
+
+  /// Domain-level event emitted or received across shelves and components.
   broadcastEvent,
-  eventInfo,
+
+  /// Informational payload, calculation metrics, diagnostic state snapshots, or precheck evaluations.
+  info,
+
+  /// Visual division separating logical operational phases.
   separator;
 
-  String get desc {
-    return name;
-  }
+  String get desc => name;
 
   IconData getIconData() {
     switch (this) {
-      case TraceStepType.line:
-        return Icons.backpack_outlined;
-      case TraceStepType.info:
-        return Icons.info_outline;
       case TraceStepType.controllableCalling:
-        return Icons.call;
       case TraceStepType.nonControllableCalling:
         return Icons.call;
-      case TraceStepType.addExecutionUnit:
-        return Icons.miscellaneous_services_outlined;
-      case TraceStepType.debug:
-        return Icons.bug_report_outlined;
-
-      case TraceStepType.broadcastEvent:
-        return Icons.electric_bolt_outlined;
-      case TraceStepType.eventInfo:
-        return Icons.electric_bolt_outlined;
-      case TraceStepType.separator:
-        return Icons.linear_scale;
       case TraceStepType.executionIntent:
         return Icons.add_to_drive_outlined;
+      case TraceStepType.broadcastEvent:
+        return Icons.electric_bolt_outlined;
+      case TraceStepType.info:
+        return Icons.info_outline;
+      case TraceStepType.separator:
+        return Icons.linear_scale;
     }
   }
 
@@ -49,27 +45,15 @@ enum TraceStepType {
     switch (this) {
       case TraceStepType.controllableCalling:
         return colorScheme.primary;
-
-      case TraceStepType.addExecutionUnit:
-        return colorScheme.tertiary;
+      case TraceStepType.nonControllableCalling:
+        return theme.colorScheme.onSurface.withValues(alpha: 0.5);
+      case TraceStepType.executionIntent:
       case TraceStepType.broadcastEvent:
         return colorScheme.tertiary;
       case TraceStepType.info:
-      case TraceStepType.eventInfo:
         return colorScheme.secondary;
-
-      case TraceStepType.debug:
-        return Colors.deepPurpleAccent.withValues(alpha: 0.8);
-
       case TraceStepType.separator:
         return theme.dividerColor;
-
-      case TraceStepType.nonControllableCalling:
-        return theme.colorScheme.onSurface.withValues(alpha: 0.5);
-      case TraceStepType.line:
-        return theme.colorScheme.onSurface.withValues(alpha: 0.5);
-      default:
-        return theme.colorScheme.onSurface.withValues(alpha: 0.5);
     }
   }
 }

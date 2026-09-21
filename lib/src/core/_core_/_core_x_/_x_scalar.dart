@@ -124,8 +124,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   // ***************************************************************************
 
   NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
-    final bool isVisibleX =
-        scalar.ui.hasVisibleViews(includeDescendants: true);
+    final bool isVisibleX = scalar.ui.hasVisibleViews(includeDescendants: true);
     final scalarDataState = scalar.dataState;
     final executionIntent = _executionIntent;
 
@@ -315,6 +314,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
         }
       }
 
+      // IN: scalarDataState.isFresh
       // 4.3. Idle state when data is fresh and no intent is active
       return NxtExecutionUnit.no(
         debug: debug,

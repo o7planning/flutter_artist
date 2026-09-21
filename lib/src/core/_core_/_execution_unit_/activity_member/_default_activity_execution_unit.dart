@@ -8,6 +8,6 @@ class _DefaultActivityExecutionUnit extends _ActivityMemberExecutionUnit {
     required super.xActivity,
     required this.executionIntent,
   }) : super(
-    executionIntent: executionIntent,
-  );
+          executionIntent: executionIntent,
+        );
 }

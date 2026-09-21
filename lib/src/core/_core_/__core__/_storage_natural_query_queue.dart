@@ -42,7 +42,7 @@ class _StorageNaturalQueryQueue {
     var executionTrace = FlutterArtist.codeFlowLogger._addNaturalUIEvent(
       ownerClassInstance: this,
     );
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#00000",
       shortDesc:
           "Just detected some <b>UI Components</b> that have just been displayed. "
@@ -54,7 +54,7 @@ class _StorageNaturalQueryQueue {
       if (lazyShelf.markedAsOrphan) {
         // continue;
       }
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#00100",
         shortDesc:
             "Start checking lazy model-components of ${debugObjHtml(lazyShelf)}...",

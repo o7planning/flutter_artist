@@ -8,7 +8,7 @@ abstract class XShelf extends XRootQueueItem {
   late final int xShelfId;
 
   late final __xShelfExecutionUnitQueue =
-  _XShelfExecutionUnitQueue(xShelf: this);
+      _XShelfExecutionUnitQueue(xShelf: this);
 
   @override
   String get _fullName => "@XShelf-${shelf.name}";
@@ -164,8 +164,7 @@ abstract class XShelf extends XRootQueueItem {
     for (XBlock leafXBlock in allLeafXBlocks) {
       XBlock? xBlock = leafXBlock;
       while (xBlock != null) {
-        bool blockXBlockRep =
-        xBlock.block.ui.hasBlockContext(
+        bool blockXBlockRep = xBlock.block.ui.hasBlockContext(
           includeDescendants: true,
         );
         if (blockXBlockRep) {
@@ -175,8 +174,7 @@ abstract class XShelf extends XRootQueueItem {
           }
         }
         XFormModel? xFormModel = xBlock.xFormModel;
-        if (xFormModel != null &&
-            xFormModel.formModel.ui.hasVisibleViews()) {
+        if (xFormModel != null && xFormModel.formModel.ui.hasVisibleViews()) {
           if (xFormModel.formModel.dataState.isPending ||
               xFormModel.formModel.dataState.isFatalError ||
               xFormModel.formModel.dataState.isNone) {
@@ -199,8 +197,7 @@ abstract class XShelf extends XRootQueueItem {
 
   NxtExecutionUnit? _getNextExecutionUnit({required bool debug}) {
     PrintUtils.debug(debug,
-        "\nBEGIN >>> ${getClassNameWithoutGenerics(
-            this)}._getNextExecutionUnit()...");
+        "\nBEGIN >>> ${getClassNameWithoutGenerics(this)}._getNextExecutionUnit()...");
     NxtExecutionUnit? next = _findBlockNextExecutionUnit(debug: debug);
     if (next != null) {
       return next;
@@ -217,7 +214,7 @@ abstract class XShelf extends XRootQueueItem {
   NxtExecutionUnit? _findBlockNextExecutionUnit({required bool debug}) {
     for (final root in allRootXBlocks) {
       final NxtExecutionUnit? next =
-      _findBlockNextExecutionUnitCascade(xBlock: root, debug: debug);
+          _findBlockNextExecutionUnitCascade(xBlock: root, debug: debug);
       if (next != null && next.yes) {
         return next;
       }
@@ -235,7 +232,7 @@ abstract class XShelf extends XRootQueueItem {
     }
     for (final XBlock childXBlock in xBlock.childXBlocks) {
       NxtExecutionUnit? next2 =
-      _findBlockNextExecutionUnitCascade(xBlock: childXBlock, debug: debug);
+          _findBlockNextExecutionUnitCascade(xBlock: childXBlock, debug: debug);
       if (next2 != null && next2.yes) {
         return next2;
       }
@@ -248,7 +245,7 @@ abstract class XShelf extends XRootQueueItem {
   NxtExecutionUnit? _findScalarNextExecutionUnit({required bool debug}) {
     for (final root in allRootXScalars) {
       final NxtExecutionUnit? next =
-      _findScalarNextExecutionUnitCascade(xScalar: root, debug: debug);
+          _findScalarNextExecutionUnitCascade(xScalar: root, debug: debug);
       if (next != null && next.yes) {
         return next;
       }

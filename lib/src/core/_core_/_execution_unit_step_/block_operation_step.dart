@@ -3,7 +3,7 @@ part of '../core.dart';
 /// Rationale behind why an item was evicted from in-memory collection.
 enum ItemEvictionReason {
   /// Explicitly deleted via user or caller action.
-  userDeleted,
+  explicitDeletion,
 
   /// Entity was removed or not found on the remote backend during verification/fetch.
   remoteNotFound,

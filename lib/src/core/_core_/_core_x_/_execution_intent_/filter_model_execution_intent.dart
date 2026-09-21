@@ -1,8 +1,8 @@
 part of '../../core.dart';
 
 sealed class FilterModelExecutionIntent<
-PRECHECK, //
-EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
+        PRECHECK, //
+        EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
     extends ExecutionIntent<PRECHECK, EXECUTION_RESULT> {
   //
 }

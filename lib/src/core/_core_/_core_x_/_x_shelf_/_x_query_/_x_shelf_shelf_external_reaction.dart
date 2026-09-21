@@ -4,8 +4,8 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(
-          xShelfType: XShelfType.shelfExternalReaction,
-        ) {
+    xShelfType: XShelfType.shelfExternalReaction,
+  ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk.block._blockSyncSessionState == null &&
           xBlk.block._blockItemSyncSessionState == null) {
@@ -13,14 +13,15 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       }
       // @@@hasActiveBlockFragment
       bool blockXBlockRep =
-          xBlk.block.ui.hasBlockContext(
+      xBlk.block.ui.hasBlockContext(
         includeDescendants: true,
       );
       QryHint queryHint = QryHint.none;
       bool forceReloadItem = false;
       //
       if (xBlk.block._blockSyncSessionState != null &&
-          xBlk.block._isMatchBlockSyncSessionState(xBlk.block._blockSyncSessionState)) {
+          xBlk.block._isMatchBlockSyncSessionState(
+              xBlk.block._blockSyncSessionState)) {
         // queryHint = blockXBlockRep ? QryHint.force : QryHint.markAsPending;
         if (blockXBlockRep) {
           queryHint = QryHint.force;
@@ -49,7 +50,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
         }
         // @@@hasActiveBlockFragment
         bool blockXBlockRep =
-            xBlock.block.ui.hasBlockContext(
+        xBlock.block.ui.hasBlockContext(
           includeDescendants: true,
         );
         if (blockXBlockRep) {
@@ -106,7 +107,8 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       //
       if (xScalar.scalar._scalarSyncSessionState != null &&
           xScalar.scalar
-              ._isMatchScalarSyncSessionState(xScalar.scalar._scalarSyncSessionState)) {
+              ._isMatchScalarSyncSessionState(
+              xScalar.scalar._scalarSyncSessionState)) {
         if (scalarXVisible) {
           // Test Cases: [84a].
           xScalar.setQueryHintToGreater(QryHint.force);

@@ -88,7 +88,7 @@ class _SortUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-    in _sortPanelWidgetStates.keys) {
+        in _sortPanelWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -153,10 +153,8 @@ class _SortUiComponents extends _UiComponents {
   }) {
     _sortPanelWidgetStates.update(
       widgetState,
-          (xState) => xState.._setBuilding(isBuilding),
-      ifAbsent: () =>
-      XState()
-        .._setBuilding(isBuilding),
+      (xState) => xState.._setBuilding(isBuilding),
+      ifAbsent: () => XState().._setBuilding(isBuilding),
     );
   }
 
@@ -171,10 +169,8 @@ class _SortUiComponents extends _UiComponents {
     final bool visibleOld = hasVisibleViews();
     _sortPanelWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
     final bool visibleCurrent = hasVisibleViews();
 

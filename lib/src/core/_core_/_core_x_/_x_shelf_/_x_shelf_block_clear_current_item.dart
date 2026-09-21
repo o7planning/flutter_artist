@@ -4,9 +4,9 @@ class _XShelfBlockClearCurrentItem extends XShelf {
   _XShelfBlockClearCurrentItem({
     required Block block,
   }) : super(
-    xShelfType: XShelfType.blockCurrItemClear,
-    shelf: block.shelf,
-  ) {
+          xShelfType: XShelfType.blockCurrItemClear,
+          shelf: block.shelf,
+        ) {
     //
   }
 }

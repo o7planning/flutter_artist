@@ -527,10 +527,9 @@ abstract class FilterModel<
     __assertThisXFilterModel(thisXFilterModel);
     thisXFilterModel._createAndSetFilterModelExecutionIntentDone();
     //
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#24000",
       shortDesc: "Begin ${executionUnitType.asDebugExecutionUnit()}.",
-      traceStepType: TraceStepType.debug,
     );
     //
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -538,13 +537,12 @@ abstract class FilterModel<
       objectCaller: this,
       methodName: '_unitLoadFilterData',
     );
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#24100",
       shortDesc: "Debug",
       parameters: {
         "thisXFilterModel.loadedInSession": thisXFilterModel.loadedInSession,
       },
-      traceStepType: TraceStepType.debug,
     );
     //
     try {
@@ -553,14 +551,13 @@ abstract class FilterModel<
         final filterInput = thisXFilterModel.filterInput as FILTER_INPUT?;
         //
         final bool isFirstTime = !__initiatedAtLeastOnce;
-        executionTrace._addTraceStep(
+        executionTrace.addInfo(
           codeId: "#24200",
           shortDesc: "Debug",
           parameters: {
             "isFirstTime": isFirstTime,
             "effectiveConfig.applyPolicy": effectiveConfig.applyPolicy,
           },
-          traceStepType: TraceStepType.debug,
         );
         // Auto-commit on first run, instant policy, OR when recovering from an error state
         final bool recoveringFromCommittedError = committedDataState.isError;
@@ -571,7 +568,7 @@ abstract class FilterModel<
           filterInput: filterInput,
           formKeyInstantValuesInUI: null,
         );
-        executionTrace._addTraceStep(
+        executionTrace.addInfo(
           codeId: "#24400",
           shortDesc: "Debug:",
           parameters: {
@@ -580,18 +577,17 @@ abstract class FilterModel<
             "draftFilterCriteriaSnapshot.isError":
                 _draftFilterCriteriaSnapshot?.isError,
           },
-          traceStepType: TraceStepType.debug,
         );
         //
         if (isFirstTime ||
             recoveringFromCommittedError ||
             effectiveConfig.applyPolicy == FilterApplyPolicy.instant ||
             thisXFilterModel.filterApplyPolicy == FilterApplyPolicy.instant) {
-          executionTrace._addTraceStep(
+          executionTrace.addNonControllableCall(
             codeId: "#24300",
-            shortDesc:
-                "Calling ${debugObjHtml(this)}._commitDraftSnapshotToCommitted().",
-            traceStepType: TraceStepType.nonControllableCalling,
+            caller: this,
+            methodName: "_commitDraftSnapshotToCommitted",
+            suffixShortDesc: "",
           );
           //
           _commitDraftSnapshotToCommitted();
@@ -623,11 +619,10 @@ abstract class FilterModel<
     __assertThisXFilterModel(thisXFilterModel);
     thisXFilterModel._createAndSetFilterModelExecutionIntentDone();
     //
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#30000",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}.",
-      traceStepType: TraceStepType.debug,
     );
     final executionResult = executionIntent.resultWrapper._setResult(
       EmptyExecutionUnitResult(),
@@ -878,11 +873,11 @@ abstract class FilterModel<
             _filterModelStructure._currentCriteriaValues;
     //
     if (this is! _DefaultFilterModel) {
-      executionTrace._addTraceStep(
+      executionTrace.addNonControllableCall(
         codeId: "#31020",
-        shortDesc:
-            "Calling <b>_filterModelStructure._setupTemporaryStateForNewActivity()</b>..",
-        traceStepType: TraceStepType.nonControllableCalling,
+        caller: _filterModelStructure,
+        methodName: "_setupTemporaryStateForNewActivity",
+        suffixShortDesc: "",
       );
     }
     try {
@@ -912,7 +907,7 @@ abstract class FilterModel<
         showSnackBar: true,
         tipDocument: null,
       );
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#31030",
         shortDesc:
             "The ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() was called with an error.",
@@ -933,11 +928,12 @@ abstract class FilterModel<
     try {
       for (MultiOptTildeFilterCriterionModel multiOptCriterion
           in _filterModelStructure._rootOptCriterionModels) {
-        executionTrace._addTraceStep(
+        executionTrace.addNonControllableCall(
           codeId: "#31040",
-          shortDesc:
-              "Calling ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method "
-              "to load data for ${debugObjHtml(multiOptCriterion)} and its descendants.",
+          caller: this,
+          methodName: "_loadMultiOptCriterionDataCascade",
+          suffixShortDesc:
+              "To load data for ${debugObjHtml(multiOptCriterion)} and its descendants.",
           parameters: {
             "activityType": activityType,
             "filterInput": filterInput,
@@ -945,7 +941,6 @@ abstract class FilterModel<
             "multiOptCriterion": multiOptCriterion,
             "formKeyInstantValues": formKeyInstantValues,
           },
-          traceStepType: TraceStepType.nonControllableCalling,
         );
         //
         // Load OptCriterion Data and set default and selected.
@@ -1001,7 +996,7 @@ abstract class FilterModel<
         showSnackBar: true,
         tipDocument: TipDocument.filterModelPerformLoadMultiOptCriterionXData,
       );
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#31080",
         shortDesc:
             "The ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() was called with an error.",
@@ -1019,15 +1014,14 @@ abstract class FilterModel<
     //
     if (filterInput != null) {
       try {
-        executionTrace._addTraceStep(
+        executionTrace.addControllableCall(
           codeId: "#31140",
-          shortDesc:
-              "Calling ${debugObjHtml(this)}.updatedSimpleCriterionValues() method "
-              "to get values from filterInput to update for simpleCriteria",
+          caller: this,
+          methodName: "updatedSimpleCriterionValues",
+          suffixShortDesc: "To get values from filterInput to update for simpleCriteria",
           parameters: {
             "filterInput": filterInput,
           },
-          traceStepType: TraceStepType.controllableCalling,
         );
         final Map<String, SimpleValueWrap?> updatedSimpleCriterionValues =
             extractUpdateValuesForSimpleTildeCriteria(
@@ -1061,7 +1055,7 @@ abstract class FilterModel<
           tipDocument: null,
         );
         //
-        executionTrace._addTraceStep(
+        executionTrace.addInfo(
           codeId: "#31200",
           shortDesc:
               "The ${debugObjHtml(this)}.updatedSimpleCriterionValues() method was called with an error.",
@@ -1082,12 +1076,11 @@ abstract class FilterModel<
       try {
         if (!__initiatedAtLeastOnce) {
           if (this is! _DefaultFilterModel) {
-            executionTrace._addTraceStep(
+            executionTrace.addControllableCall(
               codeId: "#31300",
-              shortDesc:
-                  "Calling ${debugObjHtml(this)}.specifyDefaultValuesForSimpleTildeCriteria() method "
-                  "to get default values for <b>simple criteria</b>.",
-              traceStepType: TraceStepType.controllableCalling,
+              caller: this,
+              methodName: "specifyDefaultValuesForSimpleTildeCriteria",
+              suffixShortDesc: "To get default values for <b>simple criteria</b>.",
             );
           }
           final Map<String, dynamic> defaultSimpleCriterionValues =
@@ -1117,7 +1110,7 @@ abstract class FilterModel<
           showSnackBar: true,
           tipDocument: null,
         );
-        executionTrace._addTraceStep(
+        executionTrace.addInfo(
           codeId: "#31380",
           shortDesc:
               "The ${debugObjHtml(this)}.specifyDefaultValuesForSimpleTildeCriteria() method was called with an error.",
@@ -1136,15 +1129,14 @@ abstract class FilterModel<
     //
     try {
       if (this is! _DefaultFilterModel) {
-        executionTrace._addTraceStep(
+        executionTrace.addControllableCall(
           codeId: "#31420",
-          shortDesc:
-              "Calling ${debugObjHtml(this)}.createNewFilterCriteria() method "
-              "to convert criteria in type of Map to a Dart object.",
+          caller: this,
+          methodName: "createNewFilterCriteria",
+          suffixShortDesc: "To convert criteria in type of Map to a Dart object.",
           parameters: {
             "dataMap": _filterModelStructure._tempCriteriaValues,
           },
-          traceStepType: TraceStepType.controllableCalling,
           tipDocument: TipDocument.filterCriteria,
         );
       }
@@ -1176,7 +1168,7 @@ abstract class FilterModel<
       );
       //
       if (this is! _DefaultFilterModel) {
-        executionTrace._addTraceStep(
+        executionTrace.addInfo(
           codeId: "#31460",
           shortDesc:
               "Got an instance of ${debugObjHtml(newFilterCriteriaSnapshot)} (Dart object).\n"
@@ -1216,7 +1208,7 @@ abstract class FilterModel<
           FilterCriteriaSnapshotError<FILTER_CRITERIA>(
         errorInfo: errorInfo,
       );
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#31500",
         shortDesc:
             "The ${debugObjHtml(this)}.createNewFilterCriteria() method was called with an error!",
@@ -1242,7 +1234,7 @@ abstract class FilterModel<
     final String multiOptCriterionBaseName = multiOptCriterion.criterionName;
     final SelectionType selectionType = multiOptCriterion.selectionType;
 
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#82000",
       shortDesc:
           "Begin of ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method.",
@@ -1252,7 +1244,6 @@ abstract class FilterModel<
         "multiOptCriterion": multiOptCriterion,
         "activityType": activityType,
       },
-      traceStepType: TraceStepType.debug,
     );
 
     final MultiOptTildeFilterCriterionModel? multiOptCriterionParent =
@@ -1285,7 +1276,7 @@ abstract class FilterModel<
         itemOrItemList2: newSelectedValue,
       );
     }
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#82100",
       shortDesc: "Debug:",
       parameters: {
@@ -1293,7 +1284,6 @@ abstract class FilterModel<
         "newSelectedValue": newSelectedValue,
         "valueChanged": valueChanged,
       },
-      traceStepType: TraceStepType.debug,
     );
     // May throw Type error here!
     multiOptCriterion._tempCurrentValue = newSelectedValue;
@@ -1348,7 +1338,7 @@ abstract class FilterModel<
       newLoaded = true;
       //
       try {
-        executionTrace._addTraceStep(
+        executionTrace.addInfo(
           codeId: "#82300",
           shortDesc:
               "Calling ${debugObjHtml(this)}.performLoadMultiOptTildeCriterionXData():",
@@ -1360,7 +1350,6 @@ abstract class FilterModel<
             "multiOptTildeCriterionName": multiOptTildeCriterionName,
             "selectionType": selectionType,
           },
-          traceStepType: TraceStepType.debug,
         );
         // May throw AppError, ApiError or others.
         //
@@ -1375,13 +1364,12 @@ abstract class FilterModel<
           multiOptTildeCriterionName: multiOptTildeCriterionName,
           selectionType: selectionType,
         );
-        executionTrace._addTraceStep(
+        executionTrace.addInfo(
           codeId: "#82400",
           shortDesc: "Debug. Return value: ",
           parameters: {
             "tempMultiOptCriterionXData": tempMultiOptCriterionXData,
           },
-          traceStepType: TraceStepType.debug,
         );
       } catch (e, stackTrace) {
         // TODO: Test Case??
@@ -1421,10 +1409,11 @@ abstract class FilterModel<
             (newLoaded &&
                 multiOptCriterion._tempCurrentValue == null &&
                 defaultSettingPolicy == DefaultSettingPolicy.onEveryLoad)) {
-          executionTrace._addTraceStep(
+          executionTrace.addNonControllableCall(
             codeId: "#82460",
-            shortDesc:
-                "Calling ${debugObjHtml(this)}.__specifyDefaultValueForMultiOptTildeCriterion():",
+            caller: this,
+            methodName: "__specifyDefaultValueForMultiOptTildeCriterion",
+            suffixShortDesc: "",
             parameters: {
               "parentMultiOptTildeCriterionValue":
                   parentMultiOptTildeCriterionValue,
@@ -1432,7 +1421,6 @@ abstract class FilterModel<
               "multiOptTildeCriterionName": multiOptTildeCriterionName,
               "selectionType": selectionType,
             },
-            traceStepType: TraceStepType.nonControllableCalling,
           );
           inputValueWrap = __specifyDefaultValueForMultiOptTildeCriterion(
             multiOptCriterionBaseName: multiOptCriterionBaseName,
@@ -1442,13 +1430,12 @@ abstract class FilterModel<
             multiOptTildeCriterionXData: tempMultiOptCriterionXData,
             selectionType: selectionType,
           );
-          executionTrace._addTraceStep(
+          executionTrace.addInfo(
             codeId: "#82470",
             shortDesc: "Debug",
             parameters: {
               "inputValueWrap": inputValueWrap,
             },
-            traceStepType: TraceStepType.debug,
           );
         }
       }
@@ -1488,15 +1475,15 @@ abstract class FilterModel<
       candidateSelectedItems = null;
     }
     //
-    executionTrace._addTraceStep(
+    executionTrace.addNonControllableCall(
       codeId: "#82600",
-      shortDesc:
-          "Calling ${debugObjHtml(this)}._setTempMultiOptCriterionXData():",
+      caller: this,
+      methodName: "_setTempMultiOptCriterionXData",
+      suffixShortDesc: "",
       parameters: {
         "multiOptTildeCriterionName": multiOptTildeCriterionName,
         "multiOptXData": tempMultiOptCriterionXData,
       },
-      traceStepType: TraceStepType.nonControllableCalling,
     );
     _filterModelStructure._setTempMultiOptCriterionXData(
       multiOptTildeCriterionName: multiOptTildeCriterionName,
@@ -1536,14 +1523,13 @@ abstract class FilterModel<
         _filterModelStructure._getTempCurrentCriterionValue(
       tildeCriterionName: multiOptTildeCriterionName,
     );
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#82800",
       shortDesc: "Debug:",
       parameters: {
         "tildeCriterionName": multiOptTildeCriterionName,
         "tempSelectedCriterionValue": tempSelectedCriterionValue,
       },
-      traceStepType: TraceStepType.debug,
     );
 
     if (tempSelectedCriterionValue != null) {
@@ -1761,7 +1747,7 @@ abstract class FilterModel<
       isLibMethod: true,
     );
 
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#89100",
       shortDesc: "Debug",
       parameters: {
@@ -1770,7 +1756,6 @@ abstract class FilterModel<
         "draftFilterCriteriaSnapshot.isError":
             _draftFilterCriteriaSnapshot?.isError,
       },
-      traceStepType: TraceStepType.debug,
     );
 
     // Test Cases: [48b] - query() & queryAll() - Block.
@@ -1828,7 +1813,7 @@ abstract class FilterModel<
     if (__lockAddMoreQuery) {
       return false;
     }
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#55000",
       shortDesc: "Creating <b>$_XShelfFilterModelQuery</b>..",
     );

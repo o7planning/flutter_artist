@@ -125,29 +125,30 @@ class LocaleManager extends _Core {
     //
     final ILoggedInUser? loggedInUser = _globalsManager.loggedInUser;
     if (loggedInUser == null) {
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#46000",
         shortDesc: "No LoggedInUser --> Nothing to do!",
       );
       return;
     }
     //
-    executionTrace._addTraceStep(
+    executionTrace.addNonControllableCall(
       codeId: "#46040",
-      shortDesc: "On the ${debugObjHtml(this)}.updateAndStoreLocale() method.",
+      caller: this,
+      methodName: "updateAndStoreLocale",
+      suffixShortDesc: "",
       parameters: {
         "locale": locale,
       },
-      traceStepType: TraceStepType.nonControllableCalling,
     );
-    executionTrace._addTraceStep(
+    executionTrace.addNonControllableCall(
       codeId: "#46100",
-      shortDesc:
-          "Calling ${debugObjHtml(this)}._updateLocale() with parameters:",
+      caller: this,
+      methodName: "_updateLocale",
+      suffixShortDesc: "",
       parameters: {
         "locale": locale,
       },
-      traceStepType: TraceStepType.nonControllableCalling,
     );
     // Refresh UI with new Locale.
     await _updateLocale(executionTrace: executionTrace, locale: locale);
@@ -155,16 +156,16 @@ class LocaleManager extends _Core {
     final String localeValue =
         "${locale.languageCode}-${locale.countryCode ?? ''}";
     //
-    executionTrace._addTraceStep(
+    executionTrace.addNonControllableCall(
       codeId: "#46200",
-      shortDesc: "Calling ${debugObjHtml(FaIsarStorage)}.saveSettings():",
+      caller: FaIsarStorage,
+      methodName: "saveSettings",
+      suffixShortDesc: "",
       parameters: {
         "userId": loggedInUser.userName,
         "locale": localeValue,
       },
-      traceStepType: TraceStepType.nonControllableCalling,
     );
-    print("@SAVE localeValue --> Call FaIsarStorage.saveSettings()");
     FaIsarStorage.saveSettings(
         userId: loggedInUser.userName, locale: localeValue);
   }
@@ -173,14 +174,14 @@ class LocaleManager extends _Core {
     required ExecutionTrace executionTrace,
     required Locale locale,
   }) async {
-    executionTrace._addTraceStep(
+    executionTrace.addControllableCall(
       codeId: "#47100",
-      shortDesc:
-          "Calling ${debugObjHtml(_localeAdapter)}.updateLocale() with parameters:",
+      caller: _localeAdapter,
+      methodName: "updateLocale",
+      suffixShortDesc: "",
       parameters: {
         "locale": locale,
       },
-      traceStepType: TraceStepType.controllableCalling,
       tipDocument: TipDocument.locale,
     );
     await _localeAdapter._updateLocale(locale);

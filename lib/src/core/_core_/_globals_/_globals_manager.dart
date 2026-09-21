@@ -33,66 +33,65 @@ class GlobalsManager extends _Core {
   Future<void> _init(ExecutionTrace executionTrace) async {
     if (__inited) return;
     __inited = true;
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#GM000",
       shortDesc:
-      "Call <b>FaIsarStorage.getLatestMetadata()</b> to read user information that was previously saved locally.",
+          "Call <b>FaIsarStorage.getLatestMetadata()</b> to read user information that was previously saved locally.",
     );
     _faMetadata = await FaIsarStorage.getLatestMetadata();
 
     if (_faMetadata == null) {
       print("Stored @faMetadata is NULL");
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#GM040",
         shortDesc: "Read @faMetadata: <b>NULL</b>.",
       );
       return;
     }
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#GM050",
       shortDesc:
-      "Prefer theme: <b>${_faMetadata!
-          .themeName}</b>. Prefer locale: <b>${_faMetadata!.localeCode}</b>",
+          "Prefer theme: <b>${_faMetadata!.themeName}</b>. Prefer locale: <b>${_faMetadata!.localeCode}</b>",
     );
 
     print("Read stored themeName: ${_faMetadata!.themeName}");
     FaThemeHub.instance.setThemeByName(_faMetadata!.themeName);
 
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#GM060",
       shortDesc: "Read @userName: <b>${_faMetadata!.userId}</b>.",
     );
 
     ILoggedInUser? loggedInUser;
     try {
-      executionTrace._addTraceStep(
+      executionTrace.addNonControllableCall(
         codeId: "#GM070",
-        shortDesc:
-        "Calling: <b>${getTypeNameWithoutGenerics(
-            FaIsarStorage)}.getDecryptedUserJson()</b>.",
+        caller: FaIsarStorage,
+        methodName: "getDecryptedUserJson",
+        suffixShortDesc: "",
         parameters: {
           "userId": _faMetadata!.userId,
         },
-        traceStepType: TraceStepType.nonControllableCalling,
       );
       final String? loggedInUserJson =
-      await FaIsarStorage.getDecryptedUserJson(_faMetadata!.userId);
+          await FaIsarStorage.getDecryptedUserJson(_faMetadata!.userId);
 
       if (loggedInUserJson != null) {
-        executionTrace._addTraceStep(
+        final traceStep = executionTrace.addControllableCall(
           codeId: "#GM080",
-          shortDesc: "Calling ${debugObjHtml(loginLogoutAdapter)}.fromJson() "
-              "to convert above <b>JSON String</b> to <b>${getTypeNameWithoutGenerics(
-              ILoggedInUser)}</b> object.",
+          caller: loginLogoutAdapter,
+          methodName: "fromJson",
+          suffixShortDesc:
+              "To convert above <b>JSON String</b> to <b>${getTypeNameWithoutGenerics(ILoggedInUser)}</b> object.",
           parameters: {
             "jsonString": loggedInUserJson,
           },
-          extraInfos: [loggedInUserJson],
-          traceStepType: TraceStepType.controllableCalling,
           tipDocument: TipDocument.loginLogoutAdapter,
         );
+        traceStep.setExtraInfo([loggedInUserJson]);
+        //
         loggedInUser = loginLogoutAdapter.fromJson(loggedInUserJson);
-        executionTrace._addTraceStep(
+        executionTrace.addInfo(
           codeId: "#GM100",
           shortDesc: "Got value: ${debugObjHtml(loggedInUser)}.",
         );
@@ -102,11 +101,10 @@ class GlobalsManager extends _Core {
         error: e,
         stackTrace: stackTrace,
       );
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#GM120",
         shortDesc:
-        "The ${debugObjHtml(
-            loginLogoutAdapter)}.fromJson() method was called with an error.",
+            "The ${debugObjHtml(loginLogoutAdapter)}.fromJson() method was called with an error.",
         note: "You need to log in again via the login page.",
         errorInfo: errorInfo,
       );
@@ -114,24 +112,21 @@ class GlobalsManager extends _Core {
     }
     //
     if (loggedInUser == null) {
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#GM140",
         shortDesc:
-        "The ${debugObjHtml(
-            loginLogoutAdapter)}.fromJson() method returned null.",
+            "The ${debugObjHtml(loginLogoutAdapter)}.fromJson() method returned null.",
         note: "You need to log in again via the login page.",
       );
       return;
     }
     ILoggedInUser refreshedUser;
     try {
-      executionTrace._addTraceStep(
+      executionTrace.addControllableCall(
         codeId: "#GM160",
-        shortDesc:
-        "Calling ${debugObjHtml(
-            loginLogoutAdapter)}.performReloadLoggedInUser().",
-        traceStepType: TraceStepType.controllableCalling,
-        isLibCall: false,
+        caller: loginLogoutAdapter,
+        methodName: "performReloadLoggedInUser",
+        suffixShortDesc: "",
         parameters: {
           "loggedInUser": loggedInUser,
         },
@@ -141,22 +136,20 @@ class GlobalsManager extends _Core {
     } catch (e, stackTrace) {
       final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
       //
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#GM180",
         shortDesc:
-        "The ${debugObjHtml(
-            loginLogoutAdapter)}.performReloadLoggedInUser() method was called with an error.",
+            "The ${debugObjHtml(loginLogoutAdapter)}.performReloadLoggedInUser() method was called with an error.",
         errorInfo: errorInfo,
       );
       executionTrace.printToConsole();
       return;
     }
     if (refreshedUser.userName != loggedInUser.userName) {
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#GM190",
         shortDesc:
-        "The ${debugObjHtml(
-            loginLogoutAdapter)}.performReloadLoggedInUser() an invalid user, the username has been changed.",
+            "The ${debugObjHtml(loginLogoutAdapter)}.performReloadLoggedInUser() an invalid user, the username has been changed.",
       );
       executionTrace.printToConsole();
       return;
@@ -176,26 +169,24 @@ class GlobalsManager extends _Core {
     // After reload User successfully.
     //
     try {
-      executionTrace._addTraceStep(
+      executionTrace.addControllableCall(
         codeId: "#GM200",
-        shortDesc:
-        "Calling ${debugObjHtml(
-            loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:",
+        caller: loginLogoutAdapter,
+        methodName: "addThirdPartyLogicOnLogin",
+        suffixShortDesc: "",
         parameters: {
           "loggedInUser": loggedInUser,
         },
-        traceStepType: TraceStepType.controllableCalling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       loginLogoutAdapter.addThirdPartyLogicOnLogin(loggedInUser);
     } catch (e, stackTrace) {
       final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
       //
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#GM240",
         shortDesc:
-        "The ${debugObjHtml(
-            loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
+            "The ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
         errorInfo: errorInfo,
       );
       executionTrace.printToConsole();
@@ -207,18 +198,16 @@ class GlobalsManager extends _Core {
     IGlobalData? globalData;
     try {
       _performLoadGlobalDataCount++;
-      executionTrace._addTraceStep(
+      executionTrace.addControllableCall(
         codeId: "#GM360",
-        shortDesc:
-        "Calling ${debugObjHtml(
-            loginLogoutAdapter)}.performLoadGlobalData() method with parameters:",
+        caller: loginLogoutAdapter,
+        methodName: "performLoadGlobalData",
+        suffixShortDesc: "",
         parameters: {
           "loggedInUser": loggedInUser,
         },
         note:
-        "This method requires calling an <b>API</b> to retrieve global data for user ${debugObjHtml(
-            loggedInUser)}.",
-        traceStepType: TraceStepType.controllableCalling,
+            "This method requires calling an <b>API</b> to retrieve global data for user ${debugObjHtml(loggedInUser)}.",
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       // Load Global Data:
@@ -230,11 +219,10 @@ class GlobalsManager extends _Core {
         error: e,
         stackTrace: stackTrace,
       );
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#GM420",
         shortDesc:
-        "The ${debugObjHtml(
-            globalDataAdapter)}.performLoadGlobalData() method was called with an error.",
+            "The ${debugObjHtml(globalDataAdapter)}.performLoadGlobalData() method was called with an error.",
         errorInfo: errorInfo,
       );
       executionTrace.printToConsole();
@@ -242,12 +230,12 @@ class GlobalsManager extends _Core {
     }
     _globalData = globalData;
     //
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#GM640",
       shortDesc:
-      "Reading <b>Extra Global Prop Names</b> from <b>Local</b>. For example: favorite 'locale' and 'theme'.",
+          "Reading <b>Extra Global Prop Names</b> from <b>Local</b>. For example: favorite 'locale' and 'theme'.",
       note:
-      "This information is stored locally when the user selects a preferred 'locale' or 'theme'.",
+          "This information is stored locally when the user selects a preferred 'locale' or 'theme'.",
       tipDocument: TipDocument.locale,
     );
   }
@@ -286,7 +274,7 @@ class GlobalsManager extends _Core {
         errorDetails: errorDetails,
       );
       //
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#22020",
         shortDesc: errorMessage,
         errorInfo: ErrorInfo(
@@ -300,22 +288,21 @@ class GlobalsManager extends _Core {
     _loggedInUser = loggedInUser;
     // Store on local device:
     try {
-      executionTrace._addTraceStep(
+      executionTrace.addControllableCall(
         codeId: "#22420",
-        shortDesc: "Calling ${debugObjHtml(loginLogoutAdapter)}.toJson()... "
-            "to convert ${debugObjHtml(loggedInUser)} to <b>JSON String</b>.",
+        caller: loginLogoutAdapter,
+        methodName: "toJson",
+        suffixShortDesc: "To convert ${debugObjHtml(loggedInUser)} to <b>JSON String</b>.",
         parameters: {
           "loggedInUser": loggedInUser,
         },
-        traceStepType: TraceStepType.controllableCalling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       String json = loginLogoutAdapter.toJson(loggedInUser);
       //
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#22440",
         shortDesc: "Storing the above <b>JSON String</b> to <b>Local</b>.",
-        traceStepType: TraceStepType.info,
         extraInfos: [json],
       );
       print("@SAVE userJson --> Call FaIsarStorage.saveSettings()");
@@ -328,7 +315,7 @@ class GlobalsManager extends _Core {
           "Warning: Unable to store <b>JSON String</b> to <b>Local</b>..\n"
           "This means that the login information cannot be remembered.";
       final appWarning =
-      _createAppWarning(HtmlUtils.removeTags(warningHtmlMessage));
+          _createAppWarning(HtmlUtils.removeTags(warningHtmlMessage));
       //
       print(appWarning);
       //
@@ -337,7 +324,7 @@ class GlobalsManager extends _Core {
         stackTrace: stackTrace,
       );
       // This is warning.
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#22480",
         shortDesc: warningHtmlMessage,
         errorInfo: errorInfo,
@@ -356,17 +343,16 @@ class GlobalsManager extends _Core {
   }) async {
     try {
       // Load GlobalData:
-      executionTrace._addTraceStep(
+      executionTrace.addControllableCall(
         codeId: "#34240",
-        shortDesc:
-        "Calling ${debugObjHtml(
-            globalDataAdapter)}.performLoadGlobalData() to load global data for @loggedInUser:",
+        caller: globalDataAdapter,
+        methodName: "performLoadGlobalData",
+        suffixShortDesc: "",
         parameters: {
           "loggedInUser": loggedInUser,
         },
         note:
-        "You can access global data via <b>FlutterArtist.globalsManager.globalData</b>.",
-        traceStepType: TraceStepType.controllableCalling,
+            "You can access global data via <b>FlutterArtist.globalsManager.globalData</b>.",
         tipDocument: TipDocument.globalData,
       );
       _performLoadGlobalDataCount++;
@@ -374,10 +360,9 @@ class GlobalsManager extends _Core {
         loggedInUser: loggedInUser,
       );
       _globalData = globalData;
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#34280",
         shortDesc: "Got @globalData: ${debugObjHtml(globalData)}",
-        traceStepType: TraceStepType.debug,
         tipDocument: TipDocument.globalData,
       );
     } catch (e, stackTrace) {
@@ -389,11 +374,10 @@ class GlobalsManager extends _Core {
         message: errorInfo.errorMessage,
         errorDetails: errorInfo.errorDetails,
       );
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#34300",
         shortDesc:
-        "The ${debugObjHtml(
-            globalDataAdapter)}.performLoadGlobalData() method called with an error!",
+            "The ${debugObjHtml(globalDataAdapter)}.performLoadGlobalData() method called with an error!",
         errorInfo: errorInfo,
       );
       return false;

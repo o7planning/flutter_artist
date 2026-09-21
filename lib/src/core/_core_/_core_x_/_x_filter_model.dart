@@ -51,7 +51,7 @@ class XFilterModel {
   // ***************************************************************************
 
   FilterModelFilterPanelChangeIntent
-  _createAndSetFilterModelExecutionIntentPanelChange({
+      _createAndSetFilterModelExecutionIntentPanelChange({
     required Map<String, dynamic> formKeyInstantValuesInUI,
   }) {
     final executionIntent = FilterModelFilterPanelChangeIntent(
@@ -84,8 +84,7 @@ class XFilterModel {
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-        "FilterModel (1.1), ${getClassNameWithoutGenerics(
-            filterModel)}, loadedInSession: $loadedInSession.",
+            "FilterModel (1.1), ${getClassNameWithoutGenerics(filterModel)}, loadedInSession: $loadedInSession.",
       );
     }
     final draftDataState = filterModel.draftDataState;
@@ -108,10 +107,8 @@ class XFilterModel {
           executionIntent: _executionIntent as FilterModelLoadIntent,
         ),
         info:
-        "FilterModel 2.1, ${getClassNameWithoutGenerics(
-            filterModel)}, _executionIntent: $_executionIntent, "
-            "committedDataState**: ${committedDataState
-            .toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+            "FilterModel 2.1, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+            "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
             "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
       );
     }
@@ -126,11 +123,8 @@ class XFilterModel {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-          "FilterModel (3.0), ${getClassNameWithoutGenerics(
-              filterModel)}, _executionIntent: $executionIntent, "
-              "committedDataState**: ${committedDataState
-              .toBriefInfo()}, draftDataState: ${draftDataState
-              .toBriefInfo()}, "
+              "FilterModel (3.0), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
               "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
         );
       }
@@ -145,11 +139,8 @@ class XFilterModel {
             executionIntent: _executionIntent as FilterModelLoadIntent,
           ),
           info:
-          "FilterModel 3.1, ${getClassNameWithoutGenerics(
-              filterModel)}, _executionIntent: $_executionIntent, "
-              "committedDataState**: ${committedDataState
-              .toBriefInfo()}, draftDataState: ${draftDataState
-              .toBriefInfo()}, "
+              "FilterModel 3.1, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
               "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
         );
       }
@@ -161,11 +152,8 @@ class XFilterModel {
             executionIntent: _executionIntent as FilterModelLoadIntent,
           ),
           info:
-          "FilterModel 3.2, ${getClassNameWithoutGenerics(
-              filterModel)}, _executionIntent: $_executionIntent, "
-              "committedDataState**: ${committedDataState
-              .toBriefInfo()}, draftDataState: ${draftDataState
-              .toBriefInfo()}, "
+              "FilterModel 3.2, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
               "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
         );
       } else if (executionIntent is FilterModelFilterPanelChangeIntent) {
@@ -174,25 +162,19 @@ class XFilterModel {
           executionUnit: _FilterPanelChangeExecutionUnit(
             xFilterModel: this,
             executionIntent:
-            _executionIntent as FilterModelFilterPanelChangeIntent,
+                _executionIntent as FilterModelFilterPanelChangeIntent,
           ),
           info:
-          "FilterModel 3.3, ${getClassNameWithoutGenerics(
-              filterModel)}, _executionIntent: $_executionIntent, "
-              "committedDataState**: ${committedDataState
-              .toBriefInfo()}, draftDataState: ${draftDataState
-              .toBriefInfo()}, "
+              "FilterModel 3.3, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
               "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-          "FilterModel 3.4, ${getClassNameWithoutGenerics(
-              filterModel)}, _executionIntent: $_executionIntent, "
-              "committedDataState**: ${committedDataState
-              .toBriefInfo()}, draftDataState: ${draftDataState
-              .toBriefInfo()}, "
+              "FilterModel 3.4, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
               "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
         );
       }
@@ -208,11 +190,8 @@ class XFilterModel {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-          "FilterModel (4.0), ${getClassNameWithoutGenerics(
-              filterModel)}, _executionIntent: $executionIntent, "
-              "committedDataState**: ${committedDataState
-              .toBriefInfo()}, draftDataState: ${draftDataState
-              .toBriefInfo()}, "
+              "FilterModel (4.0), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
               "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
         );
       }
@@ -230,11 +209,8 @@ class XFilterModel {
             executionIntent: _executionIntent as FilterModelLoadIntent,
           ),
           info:
-          "FilterModel (4.1), ${getClassNameWithoutGenerics(
-              filterModel)}, _executionIntent: $_executionIntent, "
-              "committedDataState**: ${committedDataState
-              .toBriefInfo()}, draftDataState: ${draftDataState
-              .toBriefInfo()}, "
+              "FilterModel (4.1), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
               "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
         );
       }
@@ -245,11 +221,8 @@ class XFilterModel {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-            "FilterModel (4.2.1), ${getClassNameWithoutGenerics(
-                filterModel)}, _executionIntent: $executionIntent, "
-                "committedDataState**: ${committedDataState
-                .toBriefInfo()}, draftDataState: ${draftDataState
-                .toBriefInfo()}, "
+                "FilterModel (4.2.1), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+                "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
                 "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
           );
         } else if (executionIntent is FilterModelFilterPanelChangeIntent) {
@@ -260,11 +233,8 @@ class XFilterModel {
               executionIntent: executionIntent,
             ),
             info:
-            "FilterModel (4.2.2), ${getClassNameWithoutGenerics(
-                filterModel)}, _executionIntent: $executionIntent, "
-                "committedDataState**: ${committedDataState
-                .toBriefInfo()}, draftDataState: ${draftDataState
-                .toBriefInfo()}, "
+                "FilterModel (4.2.2), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+                "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
                 "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
           );
         } else if (executionIntent is FilterModelLoadIntent) {
@@ -275,22 +245,16 @@ class XFilterModel {
               executionIntent: executionIntent,
             ),
             info:
-            "FilterModel (4.2.3), ${getClassNameWithoutGenerics(
-                filterModel)}, _executionIntent: $executionIntent, "
-                "committedDataState**: ${committedDataState
-                .toBriefInfo()}, draftDataState: ${draftDataState
-                .toBriefInfo()}, "
+                "FilterModel (4.2.3), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+                "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
                 "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-            "FilterModel (4.2.4), ${getClassNameWithoutGenerics(
-                filterModel)}, _executionIntent: $executionIntent, "
-                "committedDataState**: ${committedDataState
-                .toBriefInfo()}, draftDataState: ${draftDataState
-                .toBriefInfo()}, "
+                "FilterModel (4.2.4), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+                "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
                 "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
           );
         }
@@ -300,10 +264,8 @@ class XFilterModel {
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-        "FilterModel (4.3), ${getClassNameWithoutGenerics(
-            filterModel)}, _executionIntent: null, "
-            "committedDataState**: ${committedDataState
-            .toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+            "FilterModel (4.3), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: null, "
+            "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
             "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
       );
     }
@@ -314,10 +276,8 @@ class XFilterModel {
     return NxtExecutionUnit.no(
       debug: debug,
       info:
-      "FilterModel (5.1), ${getClassNameWithoutGenerics(
-          filterModel)}, _executionIntent: $executionIntent, "
-          "committedDataState**: ${committedDataState
-          .toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
+          "FilterModel (5.1), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $executionIntent, "
+          "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
           "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
     );
   }
@@ -339,7 +299,6 @@ class XFilterModel {
 
   @override
   String toString() {
-    return "${getClassName(
-        filterModel)} - Queried: $loadedInSession >>> FILTER_INPUT: $filterInput";
+    return "${getClassName(filterModel)} - Queried: $loadedInSession >>> FILTER_INPUT: $filterInput";
   }
 }

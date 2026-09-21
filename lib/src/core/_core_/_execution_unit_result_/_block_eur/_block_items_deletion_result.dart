@@ -1,74 +1,42 @@
 part of '../../core.dart';
 
-class BlockItemsDeletionResult<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockExecutionUnitResult<ID, ITEM, ITEM_DETAIL,
+/// Execution result for batch item deletion intents, powered by [BlockOperationStep] journaling.
+class BlockItemsDeletionResult<ID extends Comparable,
+        ITEM extends Identifiable<ID>, ITEM_DETAIL extends Identifiable<ID>>
+    extends BlockExecutionUnitResult<
+        ID, //
+        ITEM,
+        ITEM_DETAIL,
         BlockItemsDeletionPrecheck> {
-  List<ITEM> _candidateItems;
-  final List<ITEM> _deletedItems = [];
-  final List<FailedItemDeletion<ITEM>> _failedItemDeletions = [];
-
-  List<ITEM> get candidateItems => List.unmodifiable(_candidateItems);
-
-  List<ITEM> get deletedItems => List.unmodifiable(_deletedItems);
-
-  List<FailedItemDeletion<ITEM>> get failedItemDeletions =>
-      List.unmodifiable(_failedItemDeletions);
+  final List<ITEM> candidateItems;
 
   BlockItemsDeletionResult({
-    required List<ITEM> candidateItems,
+    required this.candidateItems,
     super.precheck,
     super.errorInfo,
-  }) : _candidateItems = candidateItems;
+  });
 
+  /// Evaluates primary success: true if precheck passed and no individual item failures occurred.
   @override
   bool get successForFirst {
     if (precheck != null) {
       return false;
     }
-    if (_failedItemDeletions.isNotEmpty) {
-      return false;
-    }
-    return true;
+    return failedOperations.isEmpty;
   }
 
-  void _setCandidateItems({required List<ITEM> candidateItems}) {
-    _candidateItems = candidateItems;
-  }
+  // ===========================================================================
+  // JOURNAL-DERIVED CONVENIENCE ACCESSORS
+  // ===========================================================================
 
-  void _addDeletedItem({
-    required ITEM deletedItem,
-  }) {
-    _deletedItems.add(deletedItem);
-  }
+  /// Entities that were successfully evicted during this batch deletion sequence.
+  List<ITEM> get deletedItems => evictedItems;
 
-  void _addFailedItem({
-    required ITEM failedItem,
-    required Object error,
-    required StackTrace? stackTrace,
-  }) {
-    AppError appError = FaErrorUtils.toAppError(error);
-    //
-    _failedItemDeletions.add(
-      FailedItemDeletion(
-        failedItem: failedItem,
-        appError: appError,
-        stackTrace: appError is ApiError ? null : stackTrace,
-      ),
-    );
-  }
-}
+  /// Failed operations encountered during item deletions.
+  List<ItemOperationFailedStep<ID, ITEM>> get failedOperations =>
+      journalSteps.whereType<ItemOperationFailedStep<ID, ITEM>>().toList();
 
-class FailedItemDeletion<ITEM> {
-  final ITEM failedItem;
-  final AppError appError;
-  final StackTrace? stackTrace;
-
-  FailedItemDeletion({
-    required this.failedItem,
-    required this.appError,
-    required this.stackTrace,
-  });
+  /// Indicates whether all targeted items were successfully deleted.
+  bool get isAllDeleted =>
+      deletedItems.length == candidateItems.length && failedOperations.isEmpty;
 }

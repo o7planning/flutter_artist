@@ -76,7 +76,7 @@ class BlockDebugBox extends BaseDebugBox {
       if (options.showLastQueryType)
         IconLabelText(
           label: "Last Query Type: ",
-          text: block.lastQueryType.name.toString(),
+          text: block.debug.lastQueryType.name.toString(),
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),

@@ -47,12 +47,11 @@ abstract class ActivityV1 extends _Core {
       isLibMethod: true,
     );
     //
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#23000",
       shortDesc:
       "Creating <b>XActivity</b> for ${debugObjHtml(
           this)} and add it to <b>RootQueue</b>.",
-      traceStepType: TraceStepType.info,
     );
     XActivityV1 xActivity = _createXActivity();
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
@@ -70,14 +69,13 @@ abstract class ActivityV1 extends _Core {
   }) async {
     __assertThisXActivity(thisXActivity);
     //
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#19000",
       shortDesc:
       "Begin ${debugObjHtml(this)} > ${executionUnitType
           .asDebugExecutionUnit()}.\n"
           "Note: This is called because you called the ${debugObjHtml(
           this)}.executeActivity() method.",
-      traceStepType: TraceStepType.debug,
     );
     final activityResult = executionIntent.resultWrapper._setResult(
       ActivityResult(),
@@ -86,11 +84,11 @@ abstract class ActivityV1 extends _Core {
     );
     //
     try {
-      executionTrace._addTraceStep(
+      executionTrace.addNonControllableCall(
         codeId: "#19100",
-        shortDesc:
-        "Calling ${debugObjHtml(this)}.performActivityOperation()...",
-        traceStepType: TraceStepType.nonControllableCalling,
+        caller: this,
+        methodName: "performActivityOperation",
+        suffixShortDesc: "",
       );
       await performActivityOperation();
     } catch (e, stackTrace) {
@@ -104,7 +102,7 @@ abstract class ActivityV1 extends _Core {
         tipDocument: TipDocument.activity,
       );
       activityResult._setErrorInfo(errorInfo: errorInfo);
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#19200",
         shortDesc:
         "The ${debugObjHtml(

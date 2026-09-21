@@ -7,11 +7,11 @@ class ScalarQueryStrategyResolver {
   /// Resolves the exact query execution plan for a given [scalar].
   static ScalarQueryPlan<ID> resolveQueryPlan<ID extends Comparable>({
     required Scalar<
-        ID, //
-        Identifiable<ID>,
-        FilterInput,
-        FilterCriteria>
-    scalar,
+            ID, //
+            Identifiable<ID>,
+            FilterInput,
+            FilterCriteria>
+        scalar,
     required DebugScalarSyncSessionState<ID>? syncSessionState,
     required QryHint queryHint,
     required bool provideScalarContext,

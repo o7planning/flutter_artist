@@ -23,8 +23,7 @@ class BlockCurrentItemResolver {
     required final bool provideBlockContext,
     required final bool provideItemContext,
     required final bool provideFormContext,
-    required final AbsentItemContextPolicy
-    absentItemContextPolicy,
+    required final AbsentItemContextPolicy absentItemContextPolicy,
     required final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy,
     required final BlockSetCurrentItemDirective setCurrentItemDirective,
     required final bool isCandidateCurrentItemInNewQueriedList,
@@ -46,7 +45,7 @@ class BlockCurrentItemResolver {
       unifiedItemRefreshPolicy: unifiedItemRefreshPolicy,
       setCurrentItemDirective: setCurrentItemDirective,
       isCandidateCurrentItemInNewQueriedList:
-      isCandidateCurrentItemInNewQueriedList,
+          isCandidateCurrentItemInNewQueriedList,
       isCandidateItemDifferentFromCurrent: isCandidateItemDifferentFromCurrent,
       debug: debug,
     );
@@ -62,8 +61,7 @@ class BlockCurrentItemResolver {
     required final bool provideBlockContext,
     required final bool provideItemContext,
     required final bool provideFormContext,
-    required final AbsentItemContextPolicy
-    absentItemContextPolicy,
+    required final AbsentItemContextPolicy absentItemContextPolicy,
     required final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy,
     required final BlockSetCurrentItemDirective setCurrentItemDirective,
     required final bool isCandidateCurrentItemInNewQueriedList,
@@ -103,9 +101,9 @@ class BlockCurrentItemResolver {
     bool candidateAccepted;
     switch (setCurrentItemDirective) {
       case BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed:
-      // Accept candidate IF:
-      // 1. It is already the stable current item (!isCandidateItemDifferentFromCurrent), OR
-      // 2. The UI explicitly requires an item context (provideItemContextExt).
+        // Accept candidate IF:
+        // 1. It is already the stable current item (!isCandidateItemDifferentFromCurrent), OR
+        // 2. The UI explicitly requires an item context (provideItemContextExt).
         candidateAccepted =
             !isCandidateItemDifferentFromCurrent || provideItemContextExt;
         PrintUtils.debug(debug,
@@ -177,7 +175,7 @@ class BlockCurrentItemResolver {
     // =========================================================================
     // 5. TRACE STEP & CONSOLIDATED RESULT
     // =========================================================================
-    executionTrace?._addTraceStep(
+    executionTrace?.addInfo(
       codeId: "A12800",
       shortDesc: "Calculated Item Reload State:",
       parameters: {
@@ -185,7 +183,7 @@ class BlockCurrentItemResolver {
         "canSkipDetailFetch": canSkipDetailFetch,
         "provideItemContextExt": provideItemContextExt,
         "isCandidateItemDifferentFromCurrent":
-        isCandidateItemDifferentFromCurrent,
+            isCandidateItemDifferentFromCurrent,
         "retForceReloadItem": retForceReloadItem,
       },
     );

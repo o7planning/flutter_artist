@@ -1,34 +1,33 @@
 part of '../core.dart';
 
+/// Represents an atomic logged operation within an [ExecutionTrace].
 class TraceStep {
   final bool showIconAndLabel;
   final TraceStepType traceStepType;
-  final bool isLibCall;
   final String lineId;
   final String shortDesc;
   final String? note;
   final TipDocument? tipDocument;
   final ErrorInfo? errorInfo;
   List<String>? _extraInfos;
-
-  Map<String, dynamic>? parameters;
-  Actionable? actionable;
+  final Map<String, dynamic>? parameters;
+  final Actionable? actionable;
+  final BlockSyncDiagnosticSnapshot<Comparable>? blockSyncDiagnosticSnapshot;
 
   List<String>? get extraInfos => _extraInfos;
-  BlockSyncDiagnosticSnapshot<Comparable>? blockSyncDiagnosticSnapshot;
 
   TraceStep({
     required this.showIconAndLabel,
-    this.traceStepType = TraceStepType.line,
-    required this.isLibCall,
+    required this.traceStepType,
     required this.lineId,
     required this.shortDesc,
-    required this.note,
-    required this.tipDocument,
-    required this.errorInfo,
-    required List<String>? extraInfos,
-    required this.parameters,
-    required this.actionable,
+    this.note,
+    this.tipDocument,
+    this.errorInfo,
+    List<String>? extraInfos,
+    this.parameters,
+    this.actionable,
+    this.blockSyncDiagnosticSnapshot,
   }) : _extraInfos = extraInfos;
 
   bool needControlBar() {
@@ -38,23 +37,20 @@ class TraceStep {
         hasExtraInfos();
   }
 
-  bool hasExtraInfos() {
-    return _extraInfos != null && _extraInfos!.isNotEmpty;
+  void setExtraInfo(List<String> extraInfos) {
+    _extraInfos = extraInfos;
   }
 
+  bool hasExtraInfos() => _extraInfos != null && _extraInfos!.isNotEmpty;
+
   String getNoteAsHtmlString() {
-    if (note == null || note!.isEmpty) {
-      return "";
-    }
+    if (note == null || note!.isEmpty) return "";
     return "\n $note";
   }
 
   String getActionableAsHtmlString() {
-    if (actionable == null) {
-      return "";
-    }
-    String s = "";
-    s += "\n  - <b>@actionable.message</b>: ${actionable!.message}";
+    if (actionable == null) return "";
+    String s = "\n  - <b>@actionable.message</b>: ${actionable!.message}";
     if (actionable!.details != null) {
       s += "\n  - <b>@actionable.details</b>:";
       for (String detail in actionable!.details!) {
@@ -66,9 +62,7 @@ class TraceStep {
   }
 
   String getParametersAsHtmlString() {
-    if (parameters == null) {
-      return "";
-    }
+    if (parameters == null) return "";
     String s = "";
     for (String key in parameters!.keys) {
       dynamic value = parameters![key];

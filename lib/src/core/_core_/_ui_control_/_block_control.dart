@@ -74,14 +74,13 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
       onPressedAsync == null
           ? null
           : () {
-        () async {
-          bool success = await onPressedAsync();
-          if (success && widget.navigate != null) {
-            widget.navigate!();
-          }
-        }
-        ();
-      },
+              () async {
+                bool success = await onPressedAsync();
+                if (success && widget.navigate != null) {
+                  widget.navigate!();
+                }
+              }();
+            },
     );
   }
 
@@ -95,7 +94,7 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
         return queryActionable.yes ? __queryBlock : null;
       case BlockControlActionType.saveForm:
         Actionable<BlockFormSavePrecheck> saveActionable =
-        widget.block.canSaveForm();
+            widget.block.canSaveForm();
         return saveActionable.yes ? __saveForm : null;
       case BlockControlActionType.refreshCurrentItem:
         Actionable refreshActionable = widget.block.canRefreshCurrentItem();
@@ -145,7 +144,7 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
     }
     //
     PrepareItemCreationResult result =
-    await widget.block.prepareFormToCreateItem();
+        await widget.block.prepareFormToCreateItem();
     return result.successForAll;
   }
 

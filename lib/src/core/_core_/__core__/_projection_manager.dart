@@ -28,7 +28,7 @@ class _ProjectionManager {
             "Duplicate <b>ProjectionFamily</b>(<b>'${family.familyName}</b>).";
         String errorMessage = HtmlUtils.removeTags(htmlMessage);
         //
-        executionTrace._addTraceStep(
+        executionTrace.addInfo(
           codeId: "#SP010",
           shortDesc: htmlMessage,
           errorInfo: ErrorInfo(
@@ -49,7 +49,7 @@ class _ProjectionManager {
               "It cannot be registered as a member of <b>$family</b>.";
           String errorMessage = HtmlUtils.removeTags(htmlMessage);
           //
-          executionTrace._addTraceStep(
+          executionTrace.addInfo(
             codeId: "#SP030",
             shortDesc: htmlMessage,
             errorInfo: ErrorInfo(

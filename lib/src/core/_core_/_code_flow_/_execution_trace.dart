@@ -2,6 +2,9 @@ part of '../core.dart';
 
 int __flowLogItemSEQ = 1;
 
+// *****************************************************************************
+// *****************************************************************************
+
 class NavigationIntentExecutionTrace extends ExecutionTrace {
   final NavigationIntent navigationIntent;
 
@@ -9,8 +12,8 @@ class NavigationIntentExecutionTrace extends ExecutionTrace {
     required super.ownerClassInstance,
     required this.navigationIntent,
   }) : super(
-    executionTraceType: ExecutionTraceType.navigationIntent,
-  );
+          executionTraceType: ExecutionTraceType.navigationIntent,
+        );
 
   @override
   String getSubtitle() {
@@ -23,6 +26,9 @@ class NavigationIntentExecutionTrace extends ExecutionTrace {
   }
 }
 
+// *****************************************************************************
+// *****************************************************************************
+
 class MethodCallExecutionTrace extends ExecutionTrace {
   final FuncCallInfo funcCallInfo;
   final bool isLibMethod;
@@ -34,39 +40,37 @@ class MethodCallExecutionTrace extends ExecutionTrace {
     required this.funcCallInfo,
     required this.isLibMethod,
   }) : super(
-    executionTraceType: isLibMethod
-        ? ExecutionTraceType.libMethodCall
-        : ExecutionTraceType.userMethodCall,
-  );
+          executionTraceType: isLibMethod
+              ? ExecutionTraceType.libMethodCall
+              : ExecutionTraceType.userMethodCall,
+        );
 
   MethodCallExecutionTrace._methodCallFromStackTrace({
     required super.ownerClassInstance,
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? arguments,
     required this.isLibMethod,
-  })
-      : funcCallInfo = FuncCallInfo.fromCurrentStackTrace(
-    currentStackTrace: currentStackTrace,
-    arguments: arguments,
-  ),
+  })  : funcCallInfo = FuncCallInfo.fromCurrentStackTrace(
+          currentStackTrace: currentStackTrace,
+          arguments: arguments,
+        ),
         super(
-        executionTraceType: isLibMethod
-            ? ExecutionTraceType.libMethodCall
-            : ExecutionTraceType.userMethodCall,
-      );
+          executionTraceType: isLibMethod
+              ? ExecutionTraceType.libMethodCall
+              : ExecutionTraceType.userMethodCall,
+        );
 
   MethodCallExecutionTrace._methodCall({
     required super.ownerClassInstance,
     required String methodName,
     required Map<String, dynamic>? arguments,
     required this.isLibMethod,
-  })
-      : funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
+  })  : funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
         super(
-        executionTraceType: isLibMethod
-            ? ExecutionTraceType.libMethodCall
-            : ExecutionTraceType.userMethodCall,
-      );
+          executionTraceType: isLibMethod
+              ? ExecutionTraceType.libMethodCall
+              : ExecutionTraceType.userMethodCall,
+        );
 
   @override
   String getSubtitle() {
@@ -127,6 +131,9 @@ class MethodCallExecutionTrace extends ExecutionTrace {
   }
 }
 
+// *****************************************************************************
+// *****************************************************************************
+
 class NaturalLoadExecutionTrace extends ExecutionTrace {
   NaturalLoadExecutionTrace({
     required super.ownerClassInstance,
@@ -143,6 +150,9 @@ class NaturalLoadExecutionTrace extends ExecutionTrace {
   }
 }
 
+// *****************************************************************************
+// *****************************************************************************
+
 class ExecutionUnitExecutionTrace extends ExecutionTrace {
   final ExecutionUnitType executionUnitType;
 
@@ -153,8 +163,7 @@ class ExecutionUnitExecutionTrace extends ExecutionTrace {
 
   @override
   String getSubtitle() {
-    return "${getClassNameWithoutGenerics(ownerClassInstance)} - (${traceSteps
-        .length})";
+    return "${getClassNameWithoutGenerics(ownerClassInstance)} - (${traceSteps.length})";
   }
 
   @override
@@ -162,6 +171,9 @@ class ExecutionUnitExecutionTrace extends ExecutionTrace {
     return executionUnitType.name;
   }
 }
+
+// *****************************************************************************
+// *****************************************************************************
 
 class StartupExecutionTrace extends ExecutionTrace {
   StartupExecutionTrace({
@@ -179,6 +191,9 @@ class StartupExecutionTrace extends ExecutionTrace {
   }
 }
 
+// *****************************************************************************
+// *****************************************************************************
+
 class EventDispatcherExecutionTrace extends ExecutionTrace {
   final EventSourceType eventSourceType;
 
@@ -186,15 +201,15 @@ class EventDispatcherExecutionTrace extends ExecutionTrace {
     required super.ownerClassInstance,
     required this.eventSourceType,
   }) : super(
-    executionTraceType: switch (eventSourceType) {
-      EventSourceType.internal =>
-      ExecutionTraceType.dispatchInternalEvents,
-      EventSourceType.special =>
-      ExecutionTraceType.dispatchInternalEvents,
-      EventSourceType.external =>
-      ExecutionTraceType.dispatchExternalEvents,
-    },
-  );
+          executionTraceType: switch (eventSourceType) {
+            EventSourceType.internal =>
+              ExecutionTraceType.dispatchInternalEvents,
+            EventSourceType.special =>
+              ExecutionTraceType.dispatchInternalEvents,
+            EventSourceType.external =>
+              ExecutionTraceType.dispatchExternalEvents,
+          },
+        );
 
   @override
   String getSubtitle() {
@@ -221,6 +236,9 @@ class EventDispatcherExecutionTrace extends ExecutionTrace {
   }
 }
 
+// *****************************************************************************
+// *****************************************************************************
+
 class ReactionProcessorExecutionTrace extends ExecutionTrace {
   ReactionProcessorExecutionTrace({
     required super.ownerClassInstance,
@@ -237,12 +255,13 @@ class ReactionProcessorExecutionTrace extends ExecutionTrace {
   }
 }
 
+// *****************************************************************************
+// *****************************************************************************
+
 abstract class ExecutionTrace {
   final int id;
   final ExecutionTraceType executionTraceType;
-
   final DateTime createdDateTime = DateTime.now();
-
   final Object ownerClassInstance;
   final List<TraceStep> __traceSteps = [];
 
@@ -257,44 +276,169 @@ abstract class ExecutionTrace {
 
   String getSubtitle();
 
-  void _addLineFlowSeparator() {
-    var item = TraceStep(
-      lineId: "-----",
-      traceStepType: TraceStepType.separator,
-      isLibCall: false,
-      showIconAndLabel: false,
-      shortDesc: "",
-      parameters: null,
-      actionable: null,
-      note: null,
-      tipDocument: null,
-      errorInfo: null,
-      extraInfos: null,
+  // ===========================================================================
+  // SPECIALIZED LOGGING FACADE METHODS
+  // ===========================================================================
+
+  /// Logs a controllable method call that can be implemented or overridden by developers.
+  TraceStep addControllableCall({
+    required String codeId,
+    required Object caller,
+    required String methodName,
+    required String suffixShortDesc,
+    Map<String, dynamic>? parameters,
+    TipDocument? tipDocument,
+    ErrorInfo? errorInfo,
+    String? note,
+  }) {
+    final shortDesc =
+        "Calling ${debugObjHtml(caller)}.$methodName()... $suffixShortDesc";
+    return _addRawStep(
+      traceStepType: TraceStepType.controllableCalling,
+      codeId: codeId,
+      shortDesc: shortDesc,
+      parameters: parameters,
+      tipDocument: tipDocument,
+      errorInfo: errorInfo,
+      note: note,
     );
-    __traceSteps.add(item);
   }
 
-  TraceStep _addTraceStep({
-    TraceStepType? traceStepType,
-    bool isLibCall = false,
+  // ===========================================================================
+
+  /// Logs an internal framework pipeline execution call.
+  TraceStep addNonControllableCall({
+    required String codeId,
+    required Object caller,
+    required String methodName,
+    required String suffixShortDesc,
+    Map<String, dynamic>? parameters,
+    TipDocument? tipDocument,
+    ErrorInfo? errorInfo,
+    String? note,
+  }) {
+    final shortDesc =
+        "Calling ${debugObjHtml(caller)}.$methodName()... $suffixShortDesc";
+
+    return _addRawStep(
+      traceStepType: TraceStepType.nonControllableCalling,
+      codeId: codeId,
+      shortDesc: shortDesc,
+      parameters: parameters,
+      tipDocument: tipDocument,
+      errorInfo: errorInfo,
+      note: note,
+    );
+  }
+
+  // ===========================================================================
+
+  /// Logs the creation and attachment of an execution intent.
+  TraceStep addExecutionIntent({
+    required String codeId,
+    required Object owner,
+    required Type executionIntentType,
+    required String suffixShortDesc,
+    Map<String, dynamic>? parameters,
+    String? note,
+  }) {
+    final shortDesc =
+        "Creating ExecutionIntent: ${debugObjHtml(executionIntentType)} for ${debugObjHtml(owner)}. $suffixShortDesc";
+
+    return _addRawStep(
+      traceStepType: TraceStepType.executionIntent,
+      codeId: codeId,
+      shortDesc: shortDesc,
+      parameters: parameters,
+      note: note,
+    );
+  }
+
+  // ===========================================================================
+
+  /// Logs an internal or external domain event broadcast/reception.
+  TraceStep addBroadcastEvent({
+    required String codeId,
+    required String shortDesc,
+    Map<String, dynamic>? parameters,
+    List<String>? extraInfos,
+    String? note,
+  }) {
+    return _addRawStep(
+      traceStepType: TraceStepType.broadcastEvent,
+      codeId: codeId,
+      shortDesc: shortDesc,
+      parameters: parameters,
+      extraInfos: extraInfos,
+      note: note,
+    );
+  }
+
+  // ===========================================================================
+
+  /// Logs diagnostic metrics, calculations, state transitions, or precheck outputs.
+  TraceStep addInfo({
+    required String codeId,
+    required String shortDesc,
+    Map<String, dynamic>? parameters,
+    Actionable? actionable,
+    BlockSyncDiagnosticSnapshot<Comparable>? snapshot,
+    List<String>? extraInfos,
+    TipDocument? tipDocument,
+    ErrorInfo? errorInfo,
+    String? note,
+  }) {
+    return _addRawStep(
+      traceStepType: TraceStepType.info,
+      codeId: codeId,
+      shortDesc: shortDesc,
+      parameters: parameters,
+      actionable: actionable,
+      snapshot: snapshot,
+      extraInfos: extraInfos,
+      tipDocument: tipDocument,
+      errorInfo: errorInfo,
+      note: note,
+    );
+  }
+
+  // ===========================================================================
+
+  /// Inserts a visual line separator in the execution timeline.
+  void addSeparator() {
+    _addRawStep(
+      traceStepType: TraceStepType.separator,
+      codeId: "-----",
+      shortDesc: "",
+      showIconAndLabel: false,
+    );
+  }
+
+  // ===========================================================================
+  // BASE INTERNAL REGISTRATION
+  // ===========================================================================
+
+  TraceStep _addRawStep({
+    required TraceStepType traceStepType,
     required String codeId,
     required String shortDesc,
     String? note,
     Map<String, dynamic>? parameters,
     Actionable? actionable,
+    BlockSyncDiagnosticSnapshot<Comparable>? snapshot,
     List<String>? extraInfos,
     TipDocument? tipDocument,
     ErrorInfo? errorInfo,
     bool showIconAndLabel = true,
   }) {
-    var item = TraceStep(
+    final item = TraceStep(
       lineId: codeId,
-      traceStepType: traceStepType ?? TraceStepType.line,
-      isLibCall: isLibCall,
+      traceStepType: traceStepType,
       showIconAndLabel: showIconAndLabel,
       shortDesc: shortDesc,
       parameters: parameters,
       actionable: actionable,
+      blockSyncDiagnosticSnapshot: snapshot,
       note: note,
       tipDocument: tipDocument,
       errorInfo: errorInfo,
@@ -304,13 +448,13 @@ abstract class ExecutionTrace {
     return item;
   }
 
-  bool hasError() {
-    return getErrorInfo() != null;
-  }
+  // ===========================================================================
+  // DEPRECATED COMPATIBILITY ALIASES (FOR SAFE TRANSITION)
+  // ===========================================================================
 
-  bool hasEvent() {
-    return getLineFlowEvent() != null;
-  }
+  bool hasError() => getErrorInfo() != null;
+
+  bool hasEvent() => getLineFlowEvent() != null;
 
   TraceStep? getLineFlowEvent() {
     for (TraceStep item in __traceSteps) {

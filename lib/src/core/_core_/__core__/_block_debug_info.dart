@@ -1,7 +1,8 @@
 part of '../core.dart';
 
 class _BlockDebugInfo<ID extends Comparable> {
-  final Block<ID,
+  final Block<
+      ID, //
       Identifiable<ID>,
       Identifiable<ID>,
       FilterInput,
@@ -13,21 +14,21 @@ class _BlockDebugInfo<ID extends Comparable> {
 
   int get lazyLoadCount => _lazyLoadCount;
 
-  int __performLoadItemDetailByIdCount = 0;
+  int _performLoadItemDetailByIdCount = 0;
 
-  int get performLoadItemDetailByIdCount => __performLoadItemDetailByIdCount;
+  int get performLoadItemDetailByIdCount => _performLoadItemDetailByIdCount;
 
   int _deletionErrorCount = 0;
 
   int get deletionErrorCount => _deletionErrorCount;
 
-  int __performQueryCount = 0;
+  int _performQueryCount = 0;
 
-  int get performQueryCount => __performQueryCount;
+  int get performQueryCount => _performQueryCount;
 
-  int __performQueryByItemIdsCount = 0;
+  int _performQueryByItemIdsCount = 0;
 
-  int get performQueryByItemIdsCount => __performQueryByItemIdsCount;
+  int get performQueryByItemIdsCount => _performQueryByItemIdsCount;
 
   DebugBlockSyncSessionState? get syncSessionState =>
       _block._blockSyncSessionState;
@@ -40,6 +41,8 @@ class _BlockDebugInfo<ID extends Comparable> {
 
   int get currentItemChangeCount => _currentItemChangeCount;
 
+  QueryType get lastQueryType => _block._lastQueryType;
+
   ListUpdateStrategy? get lastForceListUpdateStrategy =>
       _block.__blockData._lastForceListUpdateStrategy;
 
@@ -48,19 +51,14 @@ class _BlockDebugInfo<ID extends Comparable> {
   }
 
   String get classParametersDefinition {
-    return "<${_block.getItemIdType()}, ${_block.getItemType()}, ${_block
-        .getItemDetailType()}, "
+    return "<${_block.getItemIdType()}, ${_block.getItemType()}, ${_block.getItemDetailType()}, "
         "${_block.getFilterInputType()}, ${_block.getFilterCriteriaType()}, "
         "${_block.getFormInputType()}, ${_block.getFormRelatedDataType()}>";
   }
 
-  Set<ID> _lastEffectiveItemIds = {};
+  Set<ID>? _lastPerformQueryItemIds;
 
-  Set<ID> get lastEffectiveItemIds => _lastEffectiveItemIds;
-
-  Set<ID> _lastPerformQueryItemIds = {};
-
-  Set<ID> get lastPerformQueryItemIds => _lastPerformQueryItemIds;
+  Set<ID>? get lastPerformQueryItemIds => _lastPerformQueryItemIds;
 
   BlockViewportSyncStrategy? _lastViewportSyncStrategy;
 
@@ -77,13 +75,13 @@ class _BlockDebugInfo<ID extends Comparable> {
 
   _BlockDebugInfo({
     required Block<
-        ID, //
-        Identifiable<ID>,
-        Identifiable<ID>,
-        FilterInput,
-        FilterCriteria,
-        FormInput,
-        AdditionalFormRelatedData>
-    block,
+            ID, //
+            Identifiable<ID>,
+            Identifiable<ID>,
+            FilterInput,
+            FilterCriteria,
+            FormInput,
+            AdditionalFormRelatedData>
+        block,
   }) : _block = block;
 }

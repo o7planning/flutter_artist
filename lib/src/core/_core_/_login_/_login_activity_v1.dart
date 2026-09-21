@@ -17,10 +17,11 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
       isLibMethod: true,
     );
     try {
-      executionTrace._addTraceStep(
+      executionTrace.addControllableCall(
         codeId: "#20000",
-        shortDesc: "Calling ${debugObjHtml(this)}.performLogin()...",
-        traceStepType: TraceStepType.controllableCalling,
+        caller: this,
+        methodName: "performLogin",
+        suffixShortDesc: "",
       );
       result = await performLogin();
       // Throw if Error.
@@ -34,7 +35,7 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
         showSnackBar: true,
         tipDocument: TipDocument.loginActivityPerformLogin,
       );
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#20040",
         shortDesc:
             "The ${debugObjHtml(this)}.performLogin() method was called with an error!",
@@ -47,7 +48,7 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
       final message =
           "No data from ${getClassNameWithoutGenerics(this)}.performLogin().";
       //
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#20060",
         shortDesc: "Got value >> @loggedInUser: ${debugObjHtml(loggedInUser)}."
             "\n$message",
@@ -57,7 +58,7 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
         message: message,
         errorDetails: null,
       );
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#20080",
         shortDesc: message,
       );
@@ -74,22 +75,21 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
       tokenPrefix = "$tokenPrefix...";
     }
     //
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#20100",
       shortDesc: "Got LoggedInUser: ${debugObjHtml(loggedInUser)}."
           "\n - @accessToken: <b>$tokenPrefix</b>.",
-      traceStepType: TraceStepType.debug,
     );
     //
-    executionTrace._addTraceStep(
+    executionTrace.addNonControllableCall(
       codeId: "#20200",
-      shortDesc:
-          "Calling <b>globalsManager._setOrUpdateLoggedInUserSafely()</b> with parameters:",
+      caller: FlutterArtist.globalsManager,
+      methodName: "_setOrUpdateLoggedInUserSafely",
+      suffixShortDesc: "",
       parameters: {
         "loggedInUser": loggedInUser,
         "requiresTheSameUser": false,
       },
-      traceStepType: TraceStepType.nonControllableCalling,
     );
     //
     // IMPORTANT:
@@ -111,21 +111,21 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
     //
     final loginLogoutAdapter = FlutterArtist.globalsManager.loginLogoutAdapter;
     try {
-      executionTrace._addTraceStep(
+      executionTrace.addControllableCall(
         codeId: "#22060",
-        shortDesc:
-            "Calling ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() with parameters:",
+        caller: loginLogoutAdapter,
+        methodName: "addThirdPartyLogicOnLogin",
+        suffixShortDesc: "",
         parameters: {
           "loggedInUser": loggedInUser,
         },
-        traceStepType: TraceStepType.controllableCalling,
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       loginLogoutAdapter.addThirdPartyLogicOnLogin(loggedInUser);
     } catch (e, stackTrace) {
       final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
       //
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#22080",
         shortDesc:
             "The ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
@@ -147,10 +147,11 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
       return;
     }
     //
-    executionTrace._addTraceStep(
+    executionTrace.addControllableCall(
       codeId: "#20400",
-      shortDesc: "Calling ${debugObjHtml(this)}.navigateToSuccessScreen()...",
-      traceStepType: TraceStepType.controllableCalling,
+      caller: this,
+      methodName: "navigateToSuccessScreen",
+      suffixShortDesc: "",
     );
     // IMPORTANT: No await:
     navigateToSuccessScreen();

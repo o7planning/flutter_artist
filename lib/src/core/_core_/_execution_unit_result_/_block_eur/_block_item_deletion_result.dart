@@ -1,53 +1,46 @@
 part of '../../core.dart';
 
+/// Execution result representing the outcome of deleting a single item within a [Block],
+/// backed by [BlockOperationStep] journaling.
 class BlockItemDeletionResult<
 ID extends Comparable, //
 ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionUnitResult<ID,
+ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionUnitResult<
+    ID, //
     ITEM,
     ITEM_DETAIL,
     BlockItemDeletionPrecheck> {
-  ITEM? _candidateItem;
-  ITEM? _deletedItem;
-  ITEM? _failedItem;
-
-  ITEM? get candidateItem => _candidateItem;
-
-  ITEM? get deletedItem => _deletedItem;
-
-  ITEM? get failedItem => _failedItem;
+  final ITEM? candidateItem;
 
   BlockItemDeletionResult({
-    required ITEM? candidateItem,
+    required this.candidateItem,
     super.precheck,
     super.errorInfo,
-  }) : _candidateItem = candidateItem;
+  });
 
+  /// Evaluates primary success: true if precheck passed, errorInfo is null,
+  /// and the target item was successfully evicted from storage.
   @override
   bool get successForFirst {
-    if (precheck != null) {
+    if (precheck != null || errorInfo != null) {
       return false;
     }
-    if (errorInfo != null) {
-      return false;
-    }
-    // TODO: Xem lai.
-    return _deletedItem != null;
+    return deletedItem != null && failedOperation == null;
   }
 
-  void _setCandidateItem({required ITEM candidateItem}) {
-    _candidateItem = _candidateItem;
-  }
+  // ===========================================================================
+  // JOURNAL-DERIVED CONVENIENCE ACCESSORS
+  // ===========================================================================
 
-  void _setDeletedItem({required ITEM deletedItem}) {
-    _deletedItem = deletedItem;
-  }
+  /// The item that was successfully evicted during this deletion sequence.
+  ITEM? get deletedItem => evictedItems.firstOrNull;
 
-  void _setFailedItem({
-    required ITEM failedItem,
-    required ErrorInfo errorInfo,
-  }) {
-    _failedItem = failedItem;
-    _setErrorInfo(errorInfo: errorInfo);
-  }
+  /// Failed operation encountered during item deletion, if any.
+  ItemOperationFailedStep<ID, ITEM>? get failedOperation =>
+      journalSteps
+          .whereType<ItemOperationFailedStep<ID, ITEM>>()
+          .firstOrNull;
+
+  /// The item that failed to be deleted, if any.
+  ITEM? get failedItem => failedOperation?.item;
 }

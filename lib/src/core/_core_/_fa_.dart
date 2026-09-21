@@ -148,14 +148,15 @@ class _FlutterArtist extends _Core {
     required ILoggedInUser loggedInUser,
     required bool requiresTheSameUser,
   }) async {
-    executionTrace._addTraceStep(
+    executionTrace.addNonControllableCall(
       codeId: "#21000",
-      shortDesc: "Calling <b>globalsManager._setOrUpdateLoggedInUser()</b>.",
+      caller: globalsManager,
+      methodName: "_setOrUpdateLoggedInUserSafely",
+      suffixShortDesc: "",
       parameters: {
         "loggedInUser": loggedInUser,
         "requiresTheSameUser": requiresTheSameUser,
       },
-      traceStepType: TraceStepType.nonControllableCalling,
     );
     // This method never throw error.
     return await globalsManager._setOrUpdateLoggedInUserSafely(
@@ -223,22 +224,22 @@ class _FlutterArtist extends _Core {
     await FaIsarStorage.init();
     logger = Logger(maxStoredLogEntryCount: appConfig.maxStoredLogEntryCount);
     //
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#S0000",
       shortDesc: "Begin FlutterArtist Config...\n"
           "Note: You see this debug information because the <b>FlutterArtist.start()</b> method is called in <b>main.dart</b>.",
       parameters: {},
-      traceStepType: TraceStepType.debug,
       tipDocument: TipDocument.start,
     );
     //
-    executionTrace._addTraceStep(
+    executionTrace.addNonControllableCall(
       codeId: "#S0200",
-      shortDesc: "Calling <b>storage._init()</b> with parameters:",
+      caller: storage,
+      methodName: "_init",
+      suffixShortDesc: "",
       parameters: {
         "appConfig": appConfig,
       },
-      traceStepType: TraceStepType.nonControllableCalling,
       tipDocument: TipDocument.appConfiguration,
     );
     // This method may throw error and stop app.
@@ -249,7 +250,7 @@ class _FlutterArtist extends _Core {
     //
     // Global Manager:
     //
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#S0400",
       shortDesc: "Creating <b>globalsManager</b>..",
       tipDocument: TipDocument.globalData,
@@ -258,12 +259,12 @@ class _FlutterArtist extends _Core {
       loginLogoutAdapter: appConfig._loginLogoutAdapter,
       globalDataAdapter: appConfig._globalDataAdapter,
     );
-    executionTrace._addTraceStep(
+    executionTrace.addNonControllableCall(
       codeId: "#S0500",
-      shortDesc: "Calling <b>globalsManager._init()</b>...",
-      note:
+      caller: globalsManager,
+      methodName: "_init",
+      suffixShortDesc:
           "This method will read all the user data that was previously stored in <b>Local</b>.",
-      traceStepType: TraceStepType.nonControllableCalling,
       tipDocument: TipDocument.globalData,
     );
     await globalsManager._init(executionTrace);
@@ -288,22 +289,22 @@ class _FlutterArtist extends _Core {
     final ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     //
     if (loggedInUser != null) {
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#S0540",
         shortDesc: "Automatic authentication successful!",
         parameters: {
           "loggedInUser": loggedInUser,
         },
       );
-      executionTrace._addTraceStep(
+      executionTrace.addNonControllableCall(
         codeId: "#S0560",
-        shortDesc:
-            "Calling <b>localeManager._getStoredLocalLocale()</b> to read saved locale from <b>Local</b>...",
-        traceStepType: TraceStepType.nonControllableCalling,
+        caller: localeManager,
+        methodName: "_getStoredLocalLocale",
+        suffixShortDesc: "To read saved locale from <b>Local</b>...",
       );
       final Locale? locale = localeManager.storedLocale;
 
-      executionTrace._addTraceStep(
+      executionTrace.addInfo(
         codeId: "#S0580",
         shortDesc: "Got stored @locale: ${debugObjHtml(locale)}.",
       );
@@ -324,7 +325,7 @@ class _FlutterArtist extends _Core {
       throw UnimplementedError("TODO: Notification: $notiAdapter");
     }
     //
-    executionTrace._addTraceStep(
+    executionTrace.addInfo(
       codeId: "#S0680",
       shortDesc: "Start notificationEngine.",
     );

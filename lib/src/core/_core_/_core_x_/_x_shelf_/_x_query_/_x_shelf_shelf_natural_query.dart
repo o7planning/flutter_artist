@@ -4,8 +4,8 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
   _XShelfShelfNaturalQuery({
     required super.shelf,
   }) : super(
-    xShelfType: XShelfType.naturalQuery,
-  ) {
+          xShelfType: XShelfType.naturalQuery,
+        ) {
     for (XScalar leafXScalar in allLeafXScalars) {
       XScalar? xScalar = leafXScalar;
       while (true) {
@@ -32,8 +32,7 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
           break;
         }
         //
-        bool blockVisibleX =
-        xBlock.block.ui.hasBlockContext(
+        bool blockVisibleX = xBlock.block.ui.hasBlockContext(
           includeDescendants: true,
         );
         if (blockVisibleX) {
@@ -43,8 +42,7 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
           }
         }
         XFormModel? xFormModel = xBlock.xFormModel;
-        if (xFormModel != null &&
-            xFormModel.formModel.ui.hasVisibleViews()) {
+        if (xFormModel != null && xFormModel.formModel.ui.hasVisibleViews()) {
           if (xFormModel.formModel.dataState.isPending ||
               xFormModel.formModel.dataState.isFatalError ||
               xFormModel.formModel.dataState.isNone) {

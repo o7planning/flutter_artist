@@ -22,7 +22,6 @@ import 'package:flutter_localized_locales/flutter_localized_locales.dart';
 import 'package:hive/hive.dart';
 import 'package:stack_trace/stack_trace.dart';
 
-
 import '../../debug/code_flow/__code_flow_const.dart';
 import '../../debug/code_flow/_execution_trace_box_detail.dart';
 import '../../debug/dialog/_block_error_viewer_dialog.dart';
@@ -391,7 +390,11 @@ part '_sync_/_debug_block_sync_session_state.dart';
 
 part '_sync_/_debug_scalar_sync_session_state.dart';
 
+part '_utils_/_block_event_dispatch_plan_resolver.dart';
+
 part '_plan_/_block_query_plan.dart';
+
+part '_plan_/_block_event_dispatch_plan.dart';
 
 part '_plan_/_scalar_query_plan.dart';
 
