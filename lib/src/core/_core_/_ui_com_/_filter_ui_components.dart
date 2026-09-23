@@ -244,7 +244,7 @@ class _FilterUiComponents extends _UiComponents {
     }
 
     if (!visibleOld && visibleCurrent) {
-      FlutterArtist.storage._naturalQueryQueue.addShelf(filterModel.shelf);
+      FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(filterModel.shelf);
     }
   }
 
@@ -278,7 +278,7 @@ class _FilterUiComponents extends _UiComponents {
     }
 
     if (!visibleOld && visibleCurrent) {
-      FlutterArtist.storage._naturalQueryQueue.addShelf(filterModel.shelf);
+      FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(filterModel.shelf);
     }
   }
 

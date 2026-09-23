@@ -57,6 +57,16 @@ class _LoggedInUserBuilderState
   }
 
   @override
+  bool get provideStageContext {
+    return false;
+  }
+
+  @override
+  bool get provideTaskContext {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     ILoggedInUser? user = FlutterArtist.loggedInUser;
     //

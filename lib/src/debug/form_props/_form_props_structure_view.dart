@@ -14,7 +14,7 @@ import '_form_model_debug_view.dart';
 import 'widgets/_prop_view.dart';
 
 class FormPropsStructureView extends StatefulWidget {
-  final FormModel formModel;
+  final BlockFormModel formModel;
 
   const FormPropsStructureView({
     required super.key,
@@ -78,7 +78,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
   }
 
   Widget _buildRight() {
-    if (_currentNode.data is FormModel) {
+    if (_currentNode.data is BlockFormModel) {
       return FormModelDebugView(
         formModel: _currentNode.data,
       );
@@ -151,7 +151,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           bool isDirty = false;
           bool isError = false;
 
-          if (data is FormModel) {
+          if (data is BlockFormModel) {
             title = getClassName(data);
             prefixIconData = FaIconConstants.formModelIconData;
             isError = data.dataState.isFatalError;

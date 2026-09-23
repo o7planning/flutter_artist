@@ -42,7 +42,7 @@ class _XShelfBaseQuery extends XShelf {
     if (targetBlockAndOptions != null) {
       final Block targetBlock = targetBlockAndOptions.block;
       final XBlock targetXBlock = xBlockMap[targetBlock.name]!;
-      targetXBlock.setQueryHintToGreater(QryHint.force);
+      targetXBlock.setQueryHintToGreater(QueryHint.force);
       targetXBlock.setOptions(
         queryType: targetBlockAndOptions.queryType,
         listUpdateStrategy: targetBlockAndOptions.listUpdateStrategy,
@@ -60,7 +60,7 @@ class _XShelfBaseQuery extends XShelf {
             parentBlock.dataState.isStale;
 
         if (isParentNeedQuery) {
-          parentXBlock.setQueryHintToGreater(QryHint.force);
+          parentXBlock.setQueryHintToGreater(QueryHint.force);
         }
         parentXBlock = parentXBlock.parentXBlock;
       }
@@ -72,7 +72,7 @@ class _XShelfBaseQuery extends XShelf {
     if (targetScalarAndOptions != null) {
       final Scalar targetScalar = targetScalarAndOptions.scalar;
       final XScalar targetXScalar = xScalarMap[targetScalar.name]!;
-      targetXScalar.setQueryHintToGreater(QryHint.force);
+      targetXScalar.setQueryHintToGreater(QueryHint.force);
       targetXScalar.setOptions(
         queryType: targetScalarAndOptions.queryType,
       );
@@ -86,7 +86,7 @@ class _XShelfBaseQuery extends XShelf {
             parentScalar.dataState.isStale;
 
         if (isParentNeedQuery) {
-          parentXScalar.setQueryHintToGreater(QryHint.force);
+          parentXScalar.setQueryHintToGreater(QueryHint.force);
         }
         parentXScalar = parentXScalar.parentXScalar;
       }
@@ -105,12 +105,12 @@ class _XShelfBaseQuery extends XShelf {
         continue;
       }
 
-      QryHint queryHint = forceQueryAll ? QryHint.force : QryHint.none;
+      QueryHint queryHint = forceQueryAll ? QueryHint.force : QueryHint.none;
 
       if (targetBlockAndOptions != null) {
         final Block targetBlock = targetBlockAndOptions.block;
         if (block.isAncestorOf(targetBlock)) {
-          queryHint = QryHint.force;
+          queryHint = QueryHint.force;
         }
       }
 
@@ -118,7 +118,7 @@ class _XShelfBaseQuery extends XShelf {
         includeDescendants: true,
       );
       if (hasBlockContextX && !isTargetEmptyQuery) {
-        queryHint = QryHint.force;
+        queryHint = QueryHint.force;
       }
 
       xBlock.setQueryHintToGreater(queryHint);
@@ -131,7 +131,7 @@ class _XShelfBaseQuery extends XShelf {
         pageable: null,
       );
 
-      if (queryHint == QryHint.force) {
+      if (queryHint == QueryHint.force) {
         XBlock? parentXBlock = xBlock.parentXBlock;
         while (parentXBlock != null) {
           final Block parentBlock = parentXBlock.block;
@@ -140,7 +140,7 @@ class _XShelfBaseQuery extends XShelf {
               parentBlock.dataState.isStale;
 
           if (isParentNeedQuery) {
-            parentXBlock.setQueryHintToGreater(QryHint.force);
+            parentXBlock.setQueryHintToGreater(QueryHint.force);
           }
           parentXBlock = parentXBlock.parentXBlock;
         }
@@ -160,12 +160,12 @@ class _XShelfBaseQuery extends XShelf {
         continue;
       }
 
-      QryHint queryHint = forceQueryAll ? QryHint.force : QryHint.none;
+      QueryHint queryHint = forceQueryAll ? QueryHint.force : QueryHint.none;
 
       if (targetScalarAndOptions != null) {
         final Scalar targetScalar = targetScalarAndOptions.scalar;
         if (scalar.isAncestorOf(targetScalar)) {
-          queryHint = QryHint.force;
+          queryHint = QueryHint.force;
         }
       }
 
@@ -173,7 +173,7 @@ class _XShelfBaseQuery extends XShelf {
         includeDescendants: true,
       );
       if (hasXActiveUI && !isTargetEmptyQuery) {
-        queryHint = QryHint.force;
+        queryHint = QueryHint.force;
       }
 
       xScalar.setQueryHintToGreater(queryHint);
@@ -182,7 +182,7 @@ class _XShelfBaseQuery extends XShelf {
         queryType: QueryType.realQuery,
       );
 
-      if (queryHint == QryHint.force) {
+      if (queryHint == QueryHint.force) {
         XScalar? parentXScalar = xScalar.parentXScalar;
         while (parentXScalar != null) {
           final Scalar parentScalar = parentXScalar.scalar;
@@ -191,7 +191,7 @@ class _XShelfBaseQuery extends XShelf {
               parentScalar.dataState.isStale;
 
           if (isParentNeedQuery) {
-            parentXScalar.setQueryHintToGreater(QryHint.force);
+            parentXScalar.setQueryHintToGreater(QueryHint.force);
           }
           parentXScalar = parentXScalar.parentXScalar;
         }

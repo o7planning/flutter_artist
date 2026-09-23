@@ -62,6 +62,16 @@ class _BlockItemDetailViewBuilderState
   }
 
   @override
+  bool get provideStageContext {
+    return false;
+  }
+
+  @override
+  bool get provideTaskContext {
+    return false;
+  }
+
+  @override
   void addWidgetState({required bool isVisible}) {
     widget.block.ui._addBlockContentViewWidgetState(
       widgetState: this,

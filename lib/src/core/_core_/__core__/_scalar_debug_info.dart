@@ -7,12 +7,12 @@ class _ScalarDebugInfo {
 
   int get lazyLoadCount => _lazyLoadCount;
 
-  int __performQueryCount = 0;
+  int _performQueryCount = 0;
 
-  int get performQueryCount => __performQueryCount;
+  int get performQueryCount => _performQueryCount;
 
   int get filterCriteriaChangeCount =>
-      _scalar.__scalarData._filterCriteriaChangeCount;
+      _scalar._scalarData._filterCriteriaChangeCount;
 
   String get classDefinition {
     return "${getClassName(this)}$classParametersDefinition";

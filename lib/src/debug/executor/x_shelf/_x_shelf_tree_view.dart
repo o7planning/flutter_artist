@@ -178,7 +178,7 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
             //   textColor = Colors.red;
             //   showRefreshCurrItemIcon = true;
             // }
-          } else if (data is XFormModel) {
+          } else if (data is XBlockFormModel) {
             title = data.name;
             tooltip = "FormModel: $title";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;

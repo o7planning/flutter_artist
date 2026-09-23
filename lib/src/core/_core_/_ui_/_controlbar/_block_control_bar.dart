@@ -68,12 +68,24 @@ class _BlockControlBarState extends _BaseControlBarState<
   bool get provideScalarContext => false;
 
   @override
-  bool get provideItemContext =>
-      widget.block.formModel != null && widget.config.allowSaveButton;
+  bool get provideItemContext {
+    return widget.block.formModel != null && widget.config.allowSaveButton;
+  }
 
   @override
-  bool get provideFormContext =>
-      widget.block.formModel != null && widget.config.allowSaveButton;
+  bool get provideFormContext {
+    return widget.block.formModel != null && widget.config.allowSaveButton;
+  }
+
+  @override
+  bool get provideStageContext {
+    return false;
+  }
+
+  @override
+  bool get provideTaskContext {
+    return false;
+  }
 
   @override
   Widget? buildStandardButton(BlockControlBarItem item) {

@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 abstract class FormView<
-    FORM_MODEL extends FormModel<
+    FORM_MODEL extends BlockFormModel<
         Comparable, //
         Identifiable<Comparable>,
         FormInput,

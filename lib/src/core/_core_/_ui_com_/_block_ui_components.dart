@@ -590,7 +590,7 @@ class _BlockUiComponents extends _UiComponents {
     }
     //
     if (!blockContextOld && blockContextCurrent) {
-      FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
+      FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(block.shelf);
     } else if (blockContextOld && !blockContextCurrent) {
       block._broadcastBlockHidden();
     }
@@ -629,7 +629,7 @@ class _BlockUiComponents extends _UiComponents {
     }
     //
     if (!blockContextOld && blockContextCurrent) {
-      FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
+      FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(block.shelf);
     } else if (blockContextOld && !blockContextCurrent) {
       block._broadcastBlockHidden();
     }
@@ -668,7 +668,7 @@ class _BlockUiComponents extends _UiComponents {
     }
     //
     if (!blockContextOld && blockContextCurrent) {
-      FlutterArtist.storage._naturalQueryQueue.addShelf(block.shelf);
+      FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(block.shelf);
     } else if (blockContextOld && !blockContextCurrent) {
       block._broadcastBlockHidden();
     }

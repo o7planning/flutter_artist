@@ -1,27 +1,20 @@
 part of '../core.dart';
 
 @_ExecutionUnitClassAnnotation()
-@_ActivityAnnotation()
-class _ActivityMemberExecutionUnit extends _ExecutionUnit {
-  final XActivityV1 xActivity;
-
+abstract class _ActivityMemberExecutionUnit extends _ExecutionUnit {
   _ActivityMemberExecutionUnit({
-    required this.xActivity,
+    required super.executionUnitType,
     required super.executionIntent,
-  }) : super(
-          executionUnitType: ExecutionUnitType.activity,
-        );
+  });
 
-  @override
-  ActivityV1 get owner => xActivity.activity;
+  XActivity get xActivity;
 
-  @override
-  String getObjectName() {
-    return getClassName(xActivity.activity);
-  }
+  int get xActivityId;
+
+  Activity get activity;
 
   @override
   String toString() {
-    return "${getClassName(this)}(${getClassName(xActivity.activity)})";
+    return "${getClassName(this)}(${getObjectName()})";
   }
 }

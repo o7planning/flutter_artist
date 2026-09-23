@@ -16,15 +16,15 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       xBlk.block.ui.hasBlockContext(
         includeDescendants: true,
       );
-      QryHint queryHint = QryHint.none;
+      QueryHint queryHint = QueryHint.none;
       bool forceReloadItem = false;
       //
       if (xBlk.block._blockSyncSessionState != null &&
           xBlk.block._isMatchBlockSyncSessionState(
               xBlk.block._blockSyncSessionState)) {
-        // queryHint = blockXBlockRep ? QryHint.force : QryHint.markAsPending;
+        // queryHint = blockXBlockRep ? QueryHint.force : QueryHint.markAsPending;
         if (blockXBlockRep) {
-          queryHint = QryHint.force;
+          queryHint = QueryHint.force;
         }
       }
       if (xBlk.block._blockItemSyncSessionState != null &&
@@ -56,7 +56,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
         if (blockXBlockRep) {
           if (xBlock.block.dataState.isPending ||
               xBlock.block.dataState.isStale) {
-            xBlock.setQueryHintToGreater(QryHint.force);
+            xBlock.setQueryHintToGreater(QueryHint.force);
           }
         }
         // Descendant Blocks with the same FilterModel:
@@ -65,30 +65,30 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
             xBlock.block.descendantBlocksWithSameFilterModel;
         for (Block descendantBlock in descendantSFMBlocks) {
           XBlock descendantXBlock = xBlockMap[descendantBlock.name]!;
-          if (descendantXBlock.queryHint == QryHint.force) {
+          if (descendantXBlock.queryHint == QueryHint.force) {
             // Search: LOGIC-02.??
-            // xBlock.setQueryHintToGreater(QryHint.force);
+            // xBlock.setQueryHintToGreater(QueryHint.force);
             // break;
             // Test Cases: [65a].
             if (xBlock.block.dataState.isPending ||
                 xBlock.block.dataState.isStale) {
-              xBlock.setQueryHintToGreater(QryHint.force);
+              xBlock.setQueryHintToGreater(QueryHint.force);
               break;
             }
           }
         }
         //
-        XFormModel? xFormModel = xBlock.xFormModel;
+        XBlockFormModel? xBlockFormModel = xBlock.xBlockFormModel;
         // Current: forShelfExternalReaction
-        if (xFormModel != null &&
-            xFormModel.formModel.ui.hasVisibleViews()) {
-          if (xFormModel.formModel.dataState.isPending ||
-              xFormModel.formModel.dataState.isFatalError ||
-              xFormModel.formModel.dataState.isNone) {
+        if (xBlockFormModel != null &&
+            xBlockFormModel.formModel.ui.hasVisibleViews()) {
+          if (xBlockFormModel.formModel.dataState.isPending ||
+              xBlockFormModel.formModel.dataState.isFatalError ||
+              xBlockFormModel.formModel.dataState.isNone) {
             if (naturalMode) {
-              xFormModel.setForceType(FormForceType.auto);
+              xBlockFormModel.setForceType(FormLoadHint.auto);
             } else {
-              xFormModel.setForceType(FormForceType.force);
+              xBlockFormModel.setForceType(FormLoadHint.force);
             }
           }
         }
@@ -103,7 +103,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       bool scalarXVisible = xScalar.scalar.ui.hasVisibleViews(
         includeDescendants: true,
       );
-      QryHint queryHint = QryHint.none;
+      QueryHint queryHint = QueryHint.none;
       //
       if (xScalar.scalar._scalarSyncSessionState != null &&
           xScalar.scalar
@@ -111,7 +111,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
               xScalar.scalar._scalarSyncSessionState)) {
         if (scalarXVisible) {
           // Test Cases: [84a].
-          xScalar.setQueryHintToGreater(QryHint.force);
+          xScalar.setQueryHintToGreater(QueryHint.force);
         }
       }
       xScalar.setQueryHintToGreater(queryHint);
@@ -129,7 +129,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
         if (hasXActiveUI) {
           if (xScalar.scalar.dataState.isPending ||
               xScalar.scalar.dataState.isStale) {
-            xScalar.setQueryHintToGreater(QryHint.force);
+            xScalar.setQueryHintToGreater(QueryHint.force);
           }
         }
         // Descendant Scalars with the same FilterModel:
@@ -138,14 +138,14 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
             xScalar.scalar.descendantScalarsWithSameFilterModel;
         for (Scalar descendantScalar in descendantSFMScalars) {
           XScalar descendantXScalar = xScalarMap[descendantScalar.name]!;
-          if (descendantXScalar.queryHint == QryHint.force) {
+          if (descendantXScalar.queryHint == QueryHint.force) {
             // Search: LOGIC-02.
-            // xScalar.setQueryHintToGreater(QryHint.force);
+            // xScalar.setQueryHintToGreater(QueryHint.force);
             // break;
             // Test Cases:
             if (xScalar.scalar.dataState.isPending ||
                 xScalar.scalar.dataState.isStale) {
-              xScalar.setQueryHintToGreater(QryHint.force);
+              xScalar.setQueryHintToGreater(QueryHint.force);
               break;
             }
           }

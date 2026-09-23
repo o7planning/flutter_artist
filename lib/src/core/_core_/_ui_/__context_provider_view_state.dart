@@ -59,6 +59,10 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
 
   bool get provideFormContext;
 
+  bool get provideStageContext;
+
+  bool get provideTaskContext;
+
   bool get isActivityRepresentative => false;
 
   bool isContextKind(ContextKind? contextKind) {

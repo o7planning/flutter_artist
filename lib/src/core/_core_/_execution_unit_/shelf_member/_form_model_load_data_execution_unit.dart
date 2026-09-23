@@ -4,13 +4,13 @@ part of '../../core.dart';
 @_FormModelLoadDataAnnotation()
 class _FormModelLoadDataExecutionUnit
     extends _ShelfMemberResultedExecutionUnit<FormModelDataLoadResult> {
-  final XFormModel xFormModel;
+  final XBlockFormModel xBlockFormModel;
 
   @override
   final FormModelDataLoadIntent executionIntent;
 
   _FormModelLoadDataExecutionUnit({
-    required this.xFormModel,
+    required this.xBlockFormModel,
     required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.formModelLoadData,
@@ -18,19 +18,19 @@ class _FormModelLoadDataExecutionUnit
         );
 
   @override
-  XShelf get xShelf => xFormModel.xShelf;
+  XShelf get xShelf => xBlockFormModel.xShelf;
 
   @override
-  int get xShelfId => xFormModel.xShelfId;
+  int get xShelfId => xBlockFormModel.xShelfId;
 
   @override
-  Shelf get shelf => xFormModel.formModel.block.shelf;
+  Shelf get shelf => xBlockFormModel.formModel.block.shelf;
 
   @override
-  FormModel get owner => xFormModel.formModel;
+  BlockFormModel get owner => xBlockFormModel.formModel;
 
   @override
   String getObjectName() {
-    return xFormModel.formModel.block.name;
+    return xBlockFormModel.formModel.block.name;
   }
 }

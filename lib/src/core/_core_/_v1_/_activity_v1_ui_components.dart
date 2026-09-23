@@ -181,7 +181,7 @@ class _ActivityV1UiComponents extends _UiComponents {
     );
     //
     if (isVisible) {
-      FlutterArtist.desk._addRecentActivity(activity);
+      // FlutterArtist.desk._addRecentActivity(activity);
     }
     //
     if (!hasXActivityRepOLD && hasXActivityRepCURRENT) {

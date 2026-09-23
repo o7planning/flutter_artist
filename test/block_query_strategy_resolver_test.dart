@@ -1,5 +1,5 @@
 import 'package:flutter_artist/flutter_artist.dart';
-import 'package:flutter_artist/src/core/enums/qry_hint.dart';
+import 'package:flutter_artist/src/core/enums/query_hint.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -22,7 +22,7 @@ void main() {
               ),
             ),
             syncSessionState: null,
-            queryHint: QryHint.force,
+            queryHint: QueryHint.force,
             provideBlockContext: true,
           );
 
@@ -48,7 +48,7 @@ void main() {
               ),
             ),
             syncSessionState: null,
-            queryHint: QryHint.none,
+            queryHint: QueryHint.none,
             provideBlockContext: true, // Visible UI escalates pending state to query
           );
 
@@ -75,7 +75,7 @@ void main() {
               ),
             ),
             syncSessionState: null,
-            queryHint: QryHint.force,
+            queryHint: QueryHint.force,
             provideBlockContext: true,
           );
 
@@ -112,7 +112,7 @@ void main() {
               ),
             ),
             syncSessionState: mockSession,
-            queryHint: QryHint.force,
+            queryHint: QueryHint.force,
             provideBlockContext: true,
           );
 
@@ -145,7 +145,7 @@ void main() {
               ),
             ),
             syncSessionState: null,
-            queryHint: QryHint.force,
+            queryHint: QueryHint.force,
             provideBlockContext: true,
           );
 
@@ -181,7 +181,7 @@ void main() {
               ),
             ),
             syncSessionState: mockSession,
-            queryHint: QryHint.force,
+            queryHint: QueryHint.force,
             provideBlockContext: true,
           );
 
@@ -224,7 +224,7 @@ void main() {
               ),
             ),
             syncSessionState: mockSession,
-            queryHint: QryHint.force,
+            queryHint: QueryHint.force,
             provideBlockContext: true,
           );
 
@@ -267,7 +267,7 @@ void main() {
               ),
             ),
             syncSessionState: mockSession,
-            queryHint: QryHint.force,
+            queryHint: QueryHint.force,
             provideBlockContext: true,
           );
 
@@ -296,7 +296,7 @@ void main() {
               ),
             ),
             syncSessionState: null,
-            queryHint: QryHint.none,
+            queryHint: QueryHint.none,
             provideBlockContext: true,
           );
 
@@ -336,7 +336,7 @@ void main() {
               ),
             ),
             syncSessionState: mockSession,
-            queryHint: QryHint.force,
+            queryHint: QueryHint.force,
             provideBlockContext: true,
           );
 
@@ -377,7 +377,7 @@ void main() {
               ),
             ),
             syncSessionState: mockSession,
-            queryHint: QryHint.force,
+            queryHint: QueryHint.force,
             provideBlockContext: true,
           );
 
@@ -406,7 +406,7 @@ void main() {
               ),
             ),
             syncSessionState: null,
-            queryHint: QryHint.force,
+            queryHint: QueryHint.force,
             provideBlockContext: true,
           );
 
@@ -432,7 +432,7 @@ void main() {
               ),
             ),
             syncSessionState: null,
-            queryHint: QryHint.none,
+            queryHint: QueryHint.none,
             provideBlockContext: false, // Off-screen / hidden UI -> No query needed!
           );
 

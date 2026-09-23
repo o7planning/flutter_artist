@@ -9,7 +9,7 @@ class _XShelfBlockBackendActionExecution extends XShelf {
           xShelfType: XShelfType.blockBackendActionExecution,
           shelf: block.shelf,
         ) {
-    // QryHint queryHint = QryHint.none;
+    // QueryHint queryHint = QueryHint.none;
     // bool forceReloadItem = false;
     // //
     // final thisXBlock = xBlockMap[block.name]!;
@@ -22,7 +22,7 @@ class _XShelfBlockBackendActionExecution extends XShelf {
     //   case BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery:
     //   case BlockViewportSyncStrategy.effectedItemIdsQuery:
     //   case BlockViewportSyncStrategy.nativeQuery:
-    //     queryHint = QryHint.force;
+    //     queryHint = QueryHint.force;
     //     forceReloadItem = false;
     // }
     // //

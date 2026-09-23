@@ -45,7 +45,7 @@ class XBlock<
   final List<XBlock> childXBlocks = [];
 
   final XFilterModel xFilterModel;
-  final XFormModel? xFormModel;
+  final XBlockFormModel? xBlockFormModel;
 
   List<XBlock> getDescendantXBlocks({required bool sameFilterOnly}) {
     final List<XBlock> ret = [];
@@ -68,7 +68,7 @@ class XBlock<
 
   // Options:
 
-  QryHint __qryHint = QryHint.none;
+  QueryHint __queryHint = QueryHint.none;
   bool __forceReloadCurrItem = false;
   QueryType __queryType = QueryType.realQuery;
 
@@ -80,12 +80,11 @@ class XBlock<
   Pageable? __pageable;
 
   // TODO: Delete ít! ??????????????????????????????????????????????????????????
-
   final queryResult = BlockQueryResult._();
 
   // ***************************************************************************
 
-  QryHint get queryHint => __qryHint;
+  QueryHint get queryHint => __queryHint;
 
   bool get forceReloadCurrItem => __forceReloadCurrItem;
 
@@ -105,7 +104,7 @@ class XBlock<
         Pageable? usedPageable = block.effectiveConfig.nativeQueryMode ==
                 BlockNativeQueryMode.fullQuery
             ? null
-            : block.__blockData._emptyPageable;
+            : block._blockData._emptyPageable;
         return usedPageable;
     }
   }
@@ -120,7 +119,7 @@ class XBlock<
   XBlock._({
     required this.block,
     required this.xFilterModel,
-    required this.xFormModel,
+    required this.xBlockFormModel,
   });
 
   // ***************************************************************************
@@ -156,13 +155,13 @@ class XBlock<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool hasQryHintInTreeBranchAndNotProcessed() {
-    if (__qryHint == QryHint.force) {
+  bool hasQueryHintInTreeBranchAndNotProcessed() {
+    if (__queryHint == QueryHint.force) {
       return true;
     }
     //
     for (XBlock child in childXBlocks) {
-      if (child.hasQryHintInTreeBranchAndNotProcessed()) {
+      if (child.hasQueryHintInTreeBranchAndNotProcessed()) {
         return true;
       }
     }
@@ -174,19 +173,19 @@ class XBlock<
   }
 
   bool isReQueryDone() {
-    return __qryHint == QryHint.none;
+    return __queryHint == QueryHint.none;
   }
 
   bool needToReQuery() {
-    return __qryHint == QryHint.force;
+    return __queryHint == QueryHint.force;
   }
 
   void setReQueryDone() {
-    __qryHint = QryHint.none;
+    __queryHint = QueryHint.none;
   }
 
   void resetExecutionHints() {
-    __qryHint = QryHint.none;
+    __queryHint = QueryHint.none;
     __forceReloadCurrItem = false;
   }
 
@@ -194,13 +193,13 @@ class XBlock<
     __forceReloadCurrItem = false;
   }
 
-  void setQueryHint(QryHint queryHint) {
-    __qryHint = queryHint;
+  void setQueryHint(QueryHint queryHint) {
+    __queryHint = queryHint;
   }
 
-  void setQueryHintToGreater(QryHint queryHint) {
-    if (__qryHint.isLessThan(queryHint)) {
-      __qryHint = queryHint;
+  void setQueryHintToGreater(QueryHint queryHint) {
+    if (__queryHint.isLessThan(queryHint)) {
+      __queryHint = queryHint;
     }
   }
 
@@ -286,7 +285,7 @@ class XBlock<
     // =========================================================================
     else if (blockDataState.isPending) {
       final bool shouldQuery =
-          (__qryHint == QryHint.force || isVisibleX) && !_queried;
+          (__queryHint == QueryHint.force || isVisibleX) && !_queried;
 
       if (shouldQuery) {
         // Ensure executionIntent is QueryIntent to refresh stale dataset before any item manipulation
@@ -306,7 +305,7 @@ class XBlock<
           info:
               "Block (2.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: $intentToUse, "
               "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
-              "qryHint: $__qryHint, isVisibleX: $isVisibleX",
+              "queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       } else {
         return NxtExecutionUnit.no(
@@ -314,7 +313,7 @@ class XBlock<
           info:
               "Block (2.2), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
               "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
-              "qryHint: $__qryHint, isVisibleX: $isVisibleX",
+              "queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
     }
@@ -324,7 +323,7 @@ class XBlock<
     // =========================================================================
     else if (blockDataState.isStale) {
       final bool shouldQuery =
-          (__qryHint == QryHint.force || isVisibleX) && !_queried;
+          (__queryHint == QueryHint.force || isVisibleX) && !_queried;
 
       if (shouldQuery) {
         // Ensure executionIntent is QueryIntent to refresh stale dataset before any item manipulation
@@ -344,7 +343,7 @@ class XBlock<
           info:
               "Block 3.1, ${getClassNameWithoutGenerics(block)}, _executionIntent: $intentToUse, "
               "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
-              "qryHint: $__qryHint, isVisibleX: $isVisibleX",
+              "queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       } else {
         return NxtExecutionUnit.no(
@@ -352,7 +351,7 @@ class XBlock<
           info:
               "Block 3.2, ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent, "
               "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
-              "qryHint: $__qryHint, isVisibleX: $isVisibleX",
+              "queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
     }
@@ -374,7 +373,7 @@ class XBlock<
 
       // IN: blockDataState.isFresh
       // 4.1. Force re-query explicitly requested
-      if (__qryHint == QryHint.force) {
+      if (__queryHint == QueryHint.force) {
         // Reuse caller-provided QueryIntent if already attached to preserve completer hooks
         final BlockQueryIntent<ID, ITEM, ITEM_DETAIL> intentToUse;
         if (executionIntent is BlockQueryIntent<ID, ITEM, ITEM_DETAIL>) {
@@ -392,14 +391,14 @@ class XBlock<
           info:
               "Block (4.1), ${getClassNameWithoutGenerics(block)}, _executionIntent: $executionIntent --> $intentToUse, "
               "dataState: ${blockDataState.toBriefInfo()}, itemDataState: ${itemDataState.toBriefInfo()}, "
-              "qryHint: $__qryHint, isVisibleX: $isVisibleX",
+              "queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
       // IN: blockDataState.isFresh
       // 4.2. Handle existing Execution Intents
       if (executionIntent != null) {
         // IN: blockDataState.isFresh
-        // IN: __qryHint = `none`.
+        // IN: __queryHint = `none`.
         if (executionIntent is BlockDoneIntent) {
           return NxtExecutionUnit.no(
             debug: debug,
@@ -409,7 +408,7 @@ class XBlock<
           );
         }
         // IN: blockDataState.isFresh
-        // IN: __qryHint = `none`.
+        // IN: __queryHint = `none`.
         else if (executionIntent is BlockNullIntent) {
           return NxtExecutionUnit.no(
             debug: debug,
@@ -419,7 +418,7 @@ class XBlock<
           );
         }
         // IN: blockDataState.isFresh
-        // IN: __qryHint = `none`.
+        // IN: __queryHint = `none`.
         else if (executionIntent is BlockQueryIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
             debug: debug,
@@ -433,7 +432,7 @@ class XBlock<
           );
         }
         // IN: blockDataState.isFresh
-        // IN: __qryHint = `none`.
+        // IN: __queryHint = `none`.
         else if (executionIntent
             is BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>) {
           var intentToRun = executionIntent;
@@ -456,7 +455,7 @@ class XBlock<
           );
         }
         // IN: blockDataState.isFresh
-        // IN: __qryHint = `none`.
+        // IN: __queryHint = `none`.
         else if (executionIntent
             is BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
@@ -472,7 +471,7 @@ class XBlock<
           );
         }
         // IN: blockDataState.isFresh
-        // IN: __qryHint = `none`.
+        // IN: __queryHint = `none`.
         else if (executionIntent
             is BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
@@ -488,7 +487,7 @@ class XBlock<
           );
         }
         // IN: blockDataState.isFresh
-        // IN: __qryHint = `none`.
+        // IN: __queryHint = `none`.
         else if (executionIntent
             is BlockDeleteItemsIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
@@ -504,7 +503,7 @@ class XBlock<
           );
         }
         // IN: blockDataState.isFresh
-        // IN: __qryHint = `none`.
+        // IN: __queryHint = `none`.
         else if (executionIntent
             is BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
@@ -520,7 +519,7 @@ class XBlock<
           );
         }
         // IN: blockDataState.isFresh
-        // IN: __qryHint = `none`.
+        // IN: __queryHint = `none`.
         else if (executionIntent
             is BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
@@ -536,7 +535,7 @@ class XBlock<
           );
         }
         // IN: blockDataState.isFresh
-        // IN: __qryHint = `none`.
+        // IN: __queryHint = `none`.
         else if (executionIntent
             is BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
@@ -552,7 +551,7 @@ class XBlock<
           );
         }
         // IN: blockDataState.isFresh
-        // IN: __qryHint = `none`.
+        // IN: __queryHint = `none`.
         else if (executionIntent
             is BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
@@ -568,7 +567,7 @@ class XBlock<
           );
         }
         // IN: blockDataState.isFresh
-        // IN: __qryHint = `none`.
+        // IN: __queryHint = `none`.
         else {
           return NxtExecutionUnit.no(
             debug: debug,
@@ -603,7 +602,7 @@ class XBlock<
               newQueriedList: [],
               inputCandidateCurrItem: null,
               forceReloadItem: true,
-              forceTypeForForm: null,
+              formLoadHint: null,
             );
             return NxtExecutionUnit.yes(
               debug: debug,
@@ -644,7 +643,7 @@ class XBlock<
             newQueriedList: [],
             inputCandidateCurrItem: null,
             forceReloadItem: true,
-            forceTypeForForm: null,
+            formLoadHint: null,
           );
           return NxtExecutionUnit.yes(
             debug: debug,
@@ -691,8 +690,8 @@ class XBlock<
     if (next.yes) {
       return next;
     }
-    if (xFormModel != null) {
-      next = xFormModel!._getNextExecutionUnit(debug: debug);
+    if (xBlockFormModel != null) {
+      next = xBlockFormModel!._getNextExecutionUnit(debug: debug);
       if (next.yes) {
         return next;
       }
@@ -819,14 +818,14 @@ class XBlock<
     required List<ITEM> newQueriedList,
     required ITEM? inputCandidateCurrItem,
     required bool forceReloadItem,
-    required FormForceType? forceTypeForForm,
+    required FormLoadHint? formLoadHint,
   }) {
     final executionIntent = BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>(
       setCurrentItemDirective: setCurrentItemDirective,
       newQueriedList: newQueriedList,
       inputCandidateCurrItem: inputCandidateCurrItem,
       forceReloadItem: forceReloadItem,
-      forceTypeForForm: forceTypeForForm,
+      formLoadHint: formLoadHint,
     );
     _executionIntent = executionIntent;
     _pendingSetCurrentItemIntent ??= executionIntent;
@@ -846,7 +845,7 @@ class XBlock<
     );
     String msg = "${getClassName(this)}(${getClassName(block)}"
         " - provideBlockContext: $provideBlockContext"
-        " - QryHint: $__qryHint - RefreshItem: $__forceReloadCurrItem";
+        " - QueryHint: $__queryHint - RefreshItem: $__forceReloadCurrItem";
     print(msg);
     for (XBlock xBlock in childXBlocks) {
       xBlock.printInfoCascade();
@@ -855,18 +854,18 @@ class XBlock<
 
 // String toDebugHtmlString() {
 //   return " - <b>XBlock (${getClassName(block)})</b>"
-//       "\n    - <b>qryHint</b>: $queryHint"
+//       "\n    - <b>queryHint</b>: $queryHint"
 //       "\n    - <b>blockSyncSessionState</b>: ${block._blockSyncSessionState}"
 //       "\n    - <b>forceReloadItem</b>: $__forceReloadCurrItem"
 //       "\n    - <b>blockItemRefreshCondition</b>: ${block._blockItemRefreshCondition}"
-//       "\n    - <b>xFormModel</b>: $xFormModel";
+//       "\n    - <b>xBlockFormModel</b>: $xBlockFormModel";
 // }
 
 // @override
 // String toString() {
 //   return "XBlock (${getClassName(block)}) \n"
-//       "      - qryHint: $queryHint / blockReQryCon: ${block._blockSyncSessionState}\n"
+//       "      - queryHint: $queryHint / blockReQryCon: ${block._blockSyncSessionState}\n"
 //       "      - forceReloadItem: $__forceReloadCurrItem / blockItemRefreshCon: ${block._blockItemRefreshCondition} \n"
-//       "      - xFormModel: $xFormModel";
+//       "      - xBlockFormModel: $xBlockFormModel";
 // }
 }

@@ -11,7 +11,7 @@ abstract class Shelf extends _Core {
     if (excludeDeferShelfTypes == null) {
       return false;
     }
-    if (excludeDeferShelfTypes.contains(this.runtimeType)) {
+    if (excludeDeferShelfTypes.contains(runtimeType)) {
       return false;
     }
     return true;
@@ -47,7 +47,7 @@ abstract class Shelf extends _Core {
       List.unmodifiable(_shelfStruct.filterModels.keys);
 
   // All formModels.
-  final List<FormModel> _allFormModels = [];
+  final List<BlockFormModel> _allFormModels = [];
 
   final Map<String, Scalar> __scalarMap = {};
 
@@ -96,8 +96,6 @@ abstract class Shelf extends _Core {
   bool get isStructError => _isStructError;
 
   String? get structError => _structError;
-
-  int __lazyLoadId = 0;
 
   late final int _shelfLocalId = __shelfSequence++;
 
@@ -474,7 +472,6 @@ abstract class Shelf extends _Core {
     required XShelf thisXShelf,
   }) async {
     __assertThisXShelf(thisXShelf);
-
     print("####### - _unitExecutionStarter (_ShelfStarterExecutionUnit)");
   }
 
@@ -482,11 +479,11 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  // LOGIC: #0000
-  Future<void> _startLoadDataForLazyUiComponentsIfNeed({
+  // LOGIC: #0000 (Same as Activity.dispatchNaturalExecution())
+  Future<void> _dispatchNaturalQuery({
     required ExecutionTrace executionTrace,
   }) async {
-    __lazyLoadId++;
+    debug._lazyLoadId++;
     //
     executionTrace.addInfo(
       codeId: "#02000",

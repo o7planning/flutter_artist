@@ -1,15 +1,14 @@
 part of '../core.dart';
 
-class _DeskCore extends _Core {
+class _DeskCore extends _DeskCoreV1 {
   final Map<String, ActivityCreator> __activityCreatorMap = {};
-  final Map<String, ActivityV1> _activityMap = {};
+  final Map<String, Activity> _activityMap = {};
 
-  final List<ActivityV1> _recentActivities = [];
+  final List<Activity> _recentActivities = [];
 
   List<String> get activeActivityNames => List.unmodifiable(_activityMap.keys);
 
-  List<ActivityV1> get activeActivities =>
-      List.unmodifiable(_activityMap.values);
+  List<Activity> get activeActivities => List.unmodifiable(_activityMap.values);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -26,7 +25,7 @@ class _DeskCore extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  void registerActivity<F extends ActivityV1>(ActivityCreator<F> builder) {
+  void registerActivity<F extends Activity>(ActivityCreator<F> builder) {
     if (FlutterArtist._navigatorStated) {
       // LOGIC: #0001
       throw DebugUtils.getFatalError(
@@ -45,7 +44,7 @@ class _DeskCore extends _Core {
     _createActivity(activityName);
   }
 
-  F _createActivity<F extends ActivityV1>(String activityName) {
+  F _createActivity<F extends Activity>(String activityName) {
     F? activity = _activityMap[activityName] as F?;
     if (activity != null) {
       return activity;
@@ -68,21 +67,21 @@ class _DeskCore extends _Core {
     return activity;
   }
 
-  ActivityV1? _findActivity(Type activityType) {
+  Activity? _findActivity(Type activityType) {
     final String activityName = _getActivityName(activityType);
-    ActivityV1? activity = _activityMap[activityName];
+    Activity? activity = _activityMap[activityName];
     activity ??= _createActivity(activityName);
     return activity;
   }
 
-  F findActivity<F extends ActivityV1>() {
+  F findActivity<F extends Activity>() {
     final String activityName = _getActivityName(F);
-    ActivityV1? activity = _activityMap[activityName];
+    Activity? activity = _activityMap[activityName];
     activity ??= _createActivity(activityName);
     return activity as F;
   }
 
-  F? findActivityOrNull<F extends ActivityV1>() {
+  F? findActivityOrNull<F extends Activity>() {
     final String activityName = _getActivityName(F);
     F? activity = _activityMap[activityName] as F?;
     return activity;
@@ -94,11 +93,29 @@ class _DeskCore extends _Core {
     _activityMap.clear();
   }
 
-  void _checkToRemoveActivity(ActivityV1 activity) {
-    //
+
+  void _checkToRemoveActivity(Activity activity) {
+    bool hasMountedUiComponent = activity.ui.hasMountedViews();
+    if (!hasMountedUiComponent) {
+      switch (activity.config.releasePolicy) {
+        case ActivityReleasePolicy.retain:
+          print(
+              "[FLUTTER_ARTIST] ---------> RETAIN_IN_MEMORY: ${getClassName(activity)}");
+          return;
+        case ActivityReleasePolicy.unmount:
+          print(
+              "[FLUTTER_ARTIST] ---------> MARK_TO_RELEASE_AND_PRUNE: ${getClassName(activity)} - ${DateTime.now()}");
+          activity._markAsOrphaned(true);
+          return;
+      }
+    } else {
+      print(
+          "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(activity)} - ${DateTime.now()}");
+      activity._markAsOrphaned(false);
+    }
   }
 
-  void _addRecentActivity(ActivityV1 activity) {
+  void _addRecentActivity(Activity activity) {
     //
   }
 }

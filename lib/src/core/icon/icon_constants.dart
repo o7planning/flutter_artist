@@ -167,6 +167,9 @@ class FaIconConstants {
   static const IconData stageViewIconData =
       cupertino.CupertinoIcons.asterisk_circle;
 
+  static const IconData taskViewIconData =
+      cupertino.CupertinoIcons.doc_checkmark;
+
   static const IconData loggedUserIconData =
       cupertino.CupertinoIcons.person_crop_circle;
 

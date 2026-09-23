@@ -48,23 +48,22 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
     return ret;
   }
 
-  QryHint __qryHint = QryHint.none;
+  QueryHint __queryHint = QueryHint.none;
 
   bool isRoot() {
     return parentXScalar == null;
   }
 
   void resetExecutionHints() {
-    print("???????? ${getClassName(scalar)} --> resetExecutionHints???????");
-    __qryHint = QryHint.none;
+    __queryHint = QueryHint.none;
   }
 
   void setReQueryDone() {
-    __qryHint = QryHint.none;
+    __queryHint = QueryHint.none;
   }
 
   bool isReQueryDone() {
-    return __qryHint == QryHint.none;
+    return __queryHint == QueryHint.none;
   }
 
   bool affectByFilterInput = false;
@@ -100,17 +99,17 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   // ***************************************************************************
 
-  QryHint get queryHint {
-    return __qryHint;
+  QueryHint get queryHint {
+    return __queryHint;
   }
 
-  void setQueryHint(QryHint qryHint) {
-    __qryHint = qryHint;
+  void setQueryHint(QueryHint queryHint) {
+    __queryHint = queryHint;
   }
 
-  void setQueryHintToGreater(QryHint qryHint) {
-    if (__qryHint.isLessThan(qryHint)) {
-      __qryHint = qryHint;
+  void setQueryHintToGreater(QueryHint queryHint) {
+    if (__queryHint.isLessThan(queryHint)) {
+      __queryHint = queryHint;
     }
   }
 
@@ -145,7 +144,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
     // =========================================================================
     else if (scalarDataState.isPending) {
       final bool shouldQuery =
-          (__qryHint == QryHint.force || isVisibleX) && !_queried;
+          (__queryHint == QueryHint.force || isVisibleX) && !_queried;
 
       if (shouldQuery) {
         // Enforce QueryIntent to resolve pending or stale state before executing other actions
@@ -164,7 +163,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
           ),
           info:
               "Scalar (2.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent --> $intentToUse, "
-              "dataState: ${scalarDataState.toBriefInfo()}, qryHint: $__qryHint, isVisibleX: $isVisibleX",
+              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
       // IN: DATA STATE = PENDING
@@ -174,7 +173,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
           debug: debug,
           info:
               "Scalar (2.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
-              "dataState: ${scalarDataState.toBriefInfo()}, qryHint: $__qryHint, isVisibleX: $isVisibleX",
+              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
     }
@@ -184,7 +183,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
     // =========================================================================
     else if (scalarDataState.isStale) {
       final bool shouldQuery =
-          (__qryHint == QryHint.force || isVisibleX) && !_queried;
+          (__queryHint == QueryHint.force || isVisibleX) && !_queried;
 
       if (shouldQuery) {
         // Enforce QueryIntent to resolve pending or stale state before executing other actions
@@ -203,14 +202,14 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
           ),
           info:
               "Scalar (3.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $intentToUse, "
-              "dataState: ${scalarDataState.toBriefInfo()}, qryHint: $__qryHint, isVisibleX: $isVisibleX",
+              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
               "Scalar (3.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
-              "dataState: ${scalarDataState.toBriefInfo()}, qryHint: $__qryHint, isVisibleX: $isVisibleX",
+              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
     }
@@ -231,7 +230,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
       }
 
       // 4.1. Force re-query explicitly requested
-      if (__qryHint == QryHint.force) {
+      if (__queryHint == QueryHint.force) {
         // Reuse caller-provided QueryIntent if already attached to preserve completer hooks
         final ScalarQueryIntent<ID, VALUE> intentToUse;
         if (executionIntent is ScalarQueryIntent<ID, VALUE>) {
@@ -248,7 +247,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
           ),
           info:
               "Scalar (4.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $intentToUse, "
-              "dataState: ${scalarDataState.toBriefInfo()}, qryHint: $__qryHint, isVisibleX: $isVisibleX",
+              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
 
@@ -320,7 +319,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
         debug: debug,
         info:
             "Scalar (4.3), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: null, "
-            "dataState: ${scalarDataState.toBriefInfo()}, qryHint: $__qryHint, isVisibleX: $isVisibleX",
+            "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
       );
     }
 

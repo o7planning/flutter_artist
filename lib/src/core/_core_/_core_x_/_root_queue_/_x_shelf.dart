@@ -7,14 +7,13 @@ abstract class XShelf extends XRootQueueItem {
   final Shelf shelf;
   late final int xShelfId;
 
-  late final __xShelfExecutionUnitQueue =
-      _XShelfExecutionUnitQueue(xShelf: this);
+  int _executionUnitStep = 0;
 
   @override
   String get _fullName => "@XShelf-${shelf.name}";
 
   final Map<String, XFilterModel> xFilterModelMap = {};
-  final Map<String, XFormModel> xFormModelMap = {};
+  final Map<String, XBlockFormModel> xBlockFormModelMap = {};
   final Map<String, XScalar> xScalarMap = {};
   final Map<String, XBlock> xBlockMap = {};
 
@@ -32,7 +31,7 @@ abstract class XShelf extends XRootQueueItem {
 
   //
   final List<XFilterModel> allXFilterModels = [];
-  final List<XFormModel> allXFormModels = [];
+  final List<XBlockFormModel> allXBlockFormModels = [];
 
   bool get naturalMode => xShelfType == XShelfType.naturalQuery;
 
@@ -88,16 +87,16 @@ abstract class XShelf extends XRootQueueItem {
     }
     //
     for (Block block in shelf.blocks) {
-      final FormModel? formModel = block.formModel;
-      XFormModel? xFormModel;
+      final BlockFormModel? formModel = block.formModel;
+      XBlockFormModel? xBlockFormModel;
       if (formModel != null) {
         //
-        // Create new XFormModel via 'formModel._createXFormModel' method
+        // Create new XBlockFormModel via 'formModel._createXBlockFormModel' method
         // to have the same Generics Parameters with block.
         //
-        xFormModel = formModel._createXFormModel(formInput: null);
-        allXFormModels.add(xFormModel);
-        xFormModelMap[formModel.block.name] = xFormModel;
+        xBlockFormModel = formModel._createXBlockFormModel(formInput: null);
+        allXBlockFormModels.add(xBlockFormModel);
+        xBlockFormModelMap[formModel.block.name] = xBlockFormModel;
       }
       //
       final FilterModel filterModel = block._registeredOrDefaultFilterModel;
@@ -108,9 +107,9 @@ abstract class XShelf extends XRootQueueItem {
       //
       final xBlock = block._createXBlock(
         xFilterModel: xFilterModel,
-        xFormModel: xFormModel,
+        xBlockFormModel: xBlockFormModel,
       );
-      xFormModel?.xBlock = xBlock;
+      xBlockFormModel?.xBlock = xBlock;
       //
       xFilterModel.xBlocks.add(xBlock);
       allXBlocks.add(xBlock);
@@ -154,7 +153,7 @@ abstract class XShelf extends XRootQueueItem {
         if (hasActiveUiX) {
           if (xScalar.scalar.dataState.isPending ||
               xScalar.scalar.dataState.isStale) {
-            xScalar.setQueryHintToGreater(QryHint.force);
+            xScalar.setQueryHintToGreater(QueryHint.force);
           }
         }
         xScalar = xScalar.parentXScalar;
@@ -170,19 +169,20 @@ abstract class XShelf extends XRootQueueItem {
         if (blockXBlockRep) {
           if (xBlock.block.dataState.isPending ||
               xBlock.block.dataState.isStale) {
-            xBlock.setQueryHintToGreater(QryHint.force);
+            xBlock.setQueryHintToGreater(QueryHint.force);
           }
         }
-        XFormModel? xFormModel = xBlock.xFormModel;
-        if (xFormModel != null && xFormModel.formModel.ui.hasVisibleViews()) {
-          if (xFormModel.formModel.dataState.isPending ||
-              xFormModel.formModel.dataState.isFatalError ||
-              xFormModel.formModel.dataState.isNone) {
+        XBlockFormModel? xBlockFormModel = xBlock.xBlockFormModel;
+        if (xBlockFormModel != null &&
+            xBlockFormModel.formModel.ui.hasVisibleViews()) {
+          if (xBlockFormModel.formModel.dataState.isPending ||
+              xBlockFormModel.formModel.dataState.isFatalError ||
+              xBlockFormModel.formModel.dataState.isNone) {
             // Test case: [39b]
             if (naturalMode) {
-              xFormModel.setForceType(FormForceType.auto);
+              xBlockFormModel.setForceType(FormLoadHint.auto);
             } else {
-              xFormModel.setForceType(FormForceType.force);
+              xBlockFormModel.setForceType(FormLoadHint.force);
             }
           }
         }
@@ -196,8 +196,14 @@ abstract class XShelf extends XRootQueueItem {
   // ***************************************************************************
 
   NxtExecutionUnit? _getNextExecutionUnit({required bool debug}) {
+    if (debug) {
+      if (++_executionUnitStep == 1) {
+        print(
+            "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ BEGIN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      }
+    }
     PrintUtils.debug(debug,
-        "\nBEGIN >>> ${getClassNameWithoutGenerics(this)}._getNextExecutionUnit()...");
+        "\nSHELF EXECUTION UNIT ($_executionUnitStep) >>> ${getClassNameWithoutGenerics(this)}._getNextExecutionUnit()...");
     NxtExecutionUnit? next = _findBlockNextExecutionUnit(debug: debug);
     if (next != null) {
       return next;
@@ -289,52 +295,19 @@ abstract class XShelf extends XRootQueueItem {
 
   // ***************************************************************************
   // ***************************************************************************
-  // ***************************************************************************
-
-  @override
-  DebugXRootQueueItem toDebugXRootQueueItem() {
-    return __xShelfExecutionUnitQueue.toDebugXRootQueueItem();
-  }
-
-  @override
-  bool isEmptyExecutionUnit() {
-    return __xShelfExecutionUnitQueue.isEmpty;
-  }
-
-  _ShelfMemberExecutionUnit? _getNextExecutionUnitOLD() {
-    return __xShelfExecutionUnitQueue.getNextExecutionUnit();
-  }
-
-  void _addExecutionUnit({
-    required _ShelfMemberExecutionUnit executionUnit,
-    bool toMainQueue = true,
-  }) {
-    if (executionUnit.xShelf != this) {
-      throw FatalAppError(
-        errorMessage: "Development Logic Error.",
-      );
-    }
-    __xShelfExecutionUnitQueue.addExecutionUnit(
-      executionUnit: executionUnit,
-      toMainQueue: toMainQueue,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
 
   void printInfo() {
     print("\n\n--------------------------------------------------------------");
     for (XScalar xScalar in allXScalars) {
-      if (xScalar.queryHint != QryHint.none) {
+      if (xScalar.queryHint != QueryHint.none) {
         xScalar.printInfo();
       }
     }
     for (XBlock xBlock in allRootXBlocks) {
       xBlock.printInfoCascade();
     }
-    for (XFormModel xFormModel in allXFormModels) {
-      xFormModel.printInfo();
+    for (XBlockFormModel xBlockFormModel in allXBlockFormModels) {
+      xBlockFormModel.printInfo();
     }
     print("--------------------------------------------------------------\n\n");
   }

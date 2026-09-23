@@ -53,6 +53,16 @@ class _BlockPaginationState extends _ContextProviderViewState<BlockPagination> {
   }
 
   @override
+  bool get provideStageContext {
+    return false;
+  }
+
+  @override
+  bool get provideTaskContext {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     return widget.build(context);
   }

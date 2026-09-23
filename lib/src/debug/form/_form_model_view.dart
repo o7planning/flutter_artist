@@ -18,7 +18,7 @@ import '../widgets/_html_info_view.dart';
 import '../widgets/_json_view.dart';
 
 class FormModelView extends StatefulWidget {
-  final FormModel formModel;
+  final BlockFormModel formModel;
   final String locationInfo;
   final Function() onPressedShelf;
 

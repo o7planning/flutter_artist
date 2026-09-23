@@ -12,7 +12,7 @@ import '../utils/_dialog_size.dart';
 import '_tip_document_viewer_dialog.dart';
 
 class DebugFormModelInspectorDialog extends StatefulWidget {
-  final FormModel formModel;
+  final BlockFormModel formModel;
   final String locationInfo;
 
   const DebugFormModelInspectorDialog({
@@ -29,7 +29,7 @@ class DebugFormModelInspectorDialog extends StatefulWidget {
   static Future<void> show({
     required BuildContext context,
     required String locationInfo,
-    required FormModel formModel,
+    required BlockFormModel formModel,
   }) async {
     await showDialog(
       context: context,

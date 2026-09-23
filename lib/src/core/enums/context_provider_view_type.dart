@@ -76,6 +76,10 @@ enum ContextProviderViewType {
   stageView(
     name: "Stage View",
     iconData: FaIconConstants.stageViewIconData,
+  ),
+  taskView(
+    name: "Task View",
+    iconData: FaIconConstants.taskViewIconData,
   );
 
   final String name;

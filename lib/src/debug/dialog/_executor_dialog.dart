@@ -39,8 +39,9 @@ class DebugExecutorDialog extends StatelessWidget {
   }
 
   Widget _buildMainWidget() {
-    return DebugExecutorView(
-      debugXShelfQueue: FlutterArtist.debugExecutionUnitQueue,
-    );
+    // return DebugExecutorView(
+    //   debugXShelfQueue: FlutterArtist.debugExecutionUnitQueue,
+    // );
+    return Text("Not Supported!");
   }
 }

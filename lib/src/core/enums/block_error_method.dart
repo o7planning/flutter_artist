@@ -7,3 +7,11 @@ enum BlockErrorMethod {
   performDeleteItemById,
   performLoadItemDetailById,
 }
+
+enum TaskErrorMethod {
+  performExec,
+}
+
+enum StageErrorMethod {
+  performExec,
+}

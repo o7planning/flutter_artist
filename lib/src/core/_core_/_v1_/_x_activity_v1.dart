@@ -1,12 +1,10 @@
 part of '../core.dart';
 
 class XActivityV1 extends XRootQueueItem {
-  final ActivityV1 activity;
-
-  // String get name => activity.name;
+  final ActivityV1 activityV1;
 
   @override
-  String get _fullName => "@XActivity-${getClassName(activity)}";
+  String get _fullName => "@XActivity-${getClassName(activityV1)}";
 
   bool _tasked = false;
 
@@ -18,7 +16,7 @@ class XActivityV1 extends XRootQueueItem {
   /// to have the same Generics Parameters with the activity.
   ///
   XActivityV1._({
-    required this.activity,
+    required this.activityV1,
   });
 
   NxtExecutionUnit? _getNextExecutionUnit({required bool debug}) {
@@ -28,9 +26,9 @@ class XActivityV1 extends XRootQueueItem {
     _tasked = true;
     return NxtExecutionUnit.yes(
       debug: debug,
-      executionUnit: _DefaultActivityExecutionUnit(
-        xActivity: this,
-        executionIntent: DefaultActivityExecutionIntent(),
+      executionUnit: _DefaultActivityV1ExecutionUnit(
+        xActivityV1: this,
+        executionIntent: DefaultActivityV1ExecutionIntent(),
       ),
       info: '_getNextExecutionUnit',
     );

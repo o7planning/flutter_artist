@@ -64,6 +64,16 @@ class _SortPanelBuilderState
   }
 
   @override
+  bool get provideStageContext {
+    return false;
+  }
+
+  @override
+  bool get provideTaskContext {
+    return false;
+  }
+
+  @override
   void setBuildingState({required bool isBuilding}) {
     widget.sortModel.ui._setSortPanelBuildingState(
       widgetState: this,

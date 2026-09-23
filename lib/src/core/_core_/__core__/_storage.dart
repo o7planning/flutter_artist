@@ -5,7 +5,7 @@ class _Storage extends _StorageCore {
 
   late final _projectionManager = _ProjectionManager(this);
   late final eventHelper = _EventHelper(this);
-  final _naturalQueryQueue = _StorageNaturalQueryQueue();
+  final _lazyUiComponentTriggerQueue = _LazyUiComponentTriggerQueue();
 
   // ***************************************************************************
   // ***************************************************************************

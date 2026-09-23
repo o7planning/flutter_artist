@@ -211,7 +211,7 @@ abstract class Block<
     return other.isAncestorOf(this);
   }
 
-  final FormModel<
+  final BlockFormModel<
       ID, //
       ITEM_DETAIL,
       FORM_INPUT,
@@ -283,7 +283,7 @@ abstract class Block<
 
   QueryType _lastQueryType = QueryType.realQuery;
 
-  late final __blockData = _BlockData<
+  late final _blockData = _BlockData<
       ID, //
       ITEM,
       ITEM_DETAIL,
@@ -333,14 +333,14 @@ abstract class Block<
   /// }
   /// ```
   ///
-  PageData<ITEM>? get lastQueryResult => __blockData._lastQueryResult;
+  PageData<ITEM>? get lastQueryResult => _blockData._lastQueryResult;
 
   ActionResultState? get lastQueryResultState =>
-      __blockData._lastQueryResultState;
+      _blockData._lastQueryResultState;
 
-  BlockDataState get dataState => __blockData._blockDataState;
+  BlockDataState get dataState => _blockData._blockDataState;
 
-  BlockItemDataState get blockItemDataState => __blockData._blockItemDataState;
+  BlockItemDataState get blockItemDataState => _blockData._blockItemDataState;
 
   /// Does the FilterPanel contain uncommitted draft criteria that differs
   /// from the currently applied dataset criteria?
@@ -375,38 +375,38 @@ abstract class Block<
   SortModel<ITEM>? get serverSideSortModel => _serverSideSortModel;
 
   FILTER_CRITERIA? get filterCriteria =>
-      __blockData._filterCriteriaSnapshot?.criteriaOrNull;
+      _blockData._filterCriteriaSnapshot?.criteriaOrNull;
 
   FilterCriteriaSnapshot<FILTER_CRITERIA>? get debugFilterCriteriaSnapshot =>
-      __blockData._filterCriteriaSnapshot;
+      _blockData._filterCriteriaSnapshot;
 
   ///
   /// return a copied list of items.
   ///
   List<ITEM> get items {
-    return [...__blockData._items];
+    return [..._blockData._items];
   }
 
   List<ID> get itemIds {
     return items.map((item) => item.id).toList();
   }
 
-  int get itemCount => __blockData._items.length;
+  int get itemCount => _blockData._items.length;
 
-  BlockNativeQueryMode get nativeQueryMode => __blockData._nativeQueryMode;
+  BlockNativeQueryMode get nativeQueryMode => _blockData._nativeQueryMode;
 
-  Pageable? get pageable => __blockData._pageable;
+  Pageable? get pageable => _blockData._pageable;
 
   Pageable? get nextPageable {
     if (_lastQueryType == QueryType.emptyQuery) {
-      return __blockData._initialPageable;
+      return _blockData._initialPageable;
     }
-    Pageable? p = __blockData._pageable;
+    Pageable? p = _blockData._pageable;
     return p?.next();
   }
 
   PaginationInfo? get paginationInfo {
-    return PaginationInfo.copy(__blockData._paginationInfo);
+    return PaginationInfo.copy(_blockData._paginationInfo);
   }
 
   // ***************************************************************************
@@ -506,7 +506,7 @@ abstract class Block<
     );
 
     if (nextState != dataState) {
-      __blockData._setBlockDataState(newBlockDataState: nextState);
+      _blockData._setBlockDataState(newBlockDataState: nextState);
       executionTrace.addInfo(
         codeId: "#86300",
         shortDesc:
@@ -567,7 +567,7 @@ abstract class Block<
 
     // 3. Mark the BlockItemDataState as stale to prompt an in-place currentItem reload
     if (!blockItemDataState.isStale) {
-      __blockData._setBlockItemDataState(
+      _blockData._setBlockItemDataState(
         newBlockItemDataState: const BlockItemDataStateStale(),
       );
       executionTrace.addInfo(
@@ -624,7 +624,7 @@ abstract class Block<
     );
 
     // Transition the selection data state to stale
-    __blockData._blockItemDataState = const BlockItemDataStateStale();
+    _blockData._blockItemDataState = const BlockItemDataStateStale();
 
     // Mark XBlock to force reload the current item on next scheduler sweep
     xBlock?.setForceReloadCurrItem(true);
@@ -686,12 +686,12 @@ abstract class Block<
 
   XBlock<ID, ITEM, ITEM_DETAIL> _createXBlock({
     required XFilterModel xFilterModel,
-    required XFormModel? xFormModel,
+    required XBlockFormModel? xBlockFormModel,
   }) {
     return XBlock<ID, ITEM, ITEM_DETAIL>._(
       block: this,
       xFilterModel: xFilterModel,
-      xFormModel: xFormModel,
+      xBlockFormModel: xBlockFormModel,
     );
   }
 
@@ -992,13 +992,13 @@ abstract class Block<
     //
     // thisXBlock.resetExecutionHints();
     //
-    __blockData._clearItemsWithDataState(
+    _blockData._clearItemsWithDataState(
       blockDataState: blockDataState,
       errorInFilter: errorInFilter,
       resetSyncSessionState: resetSyncSessionState,
       resetRefreshItemCondition: resetRefreshItemCondition,
     );
-    __blockData._setBlockItemDataState(
+    _blockData._setBlockItemDataState(
       newBlockItemDataState: BlockItemDataStateNone(),
     );
     //
@@ -1254,7 +1254,7 @@ abstract class Block<
   }) async {
     __assertThisXBlock(thisXBlock);
 
-    final QryHint initialQueryHint = thisXBlock.queryHint;
+    final QueryHint initialQueryHint = thisXBlock.queryHint;
     final bool applyForceReloadCurrItem = thisXBlock.forceReloadCurrItem;
 
     thisXBlock._setQueriedTrue();
@@ -1339,7 +1339,7 @@ abstract class Block<
       if (_blockSyncSessionState != null) {
         _resetBlockSyncSessionState(executionTrace: executionTrace);
         if (dataState.isStale) {
-          __blockData._setBlockDataState(
+          _blockData._setBlockDataState(
             newBlockDataState: const BlockDataStateLoadedFresh(),
           );
         }
@@ -1374,7 +1374,7 @@ abstract class Block<
     committedFilterCriteriaSnapshot
         as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
     final bool filterCriteriaChanged =
-        __blockData._isFilterCriteriaSnapshotChanged(
+        _blockData._isFilterCriteriaSnapshotChanged(
       newFilterCriteriaSnapshot: committedFilterCriteriaSnapshot,
     );
 
@@ -1422,13 +1422,13 @@ abstract class Block<
         tipDocument: TipDocument.blockQueryType,
       );
 
-      __blockData._nativeQueryMode = effectiveConfig.nativeQueryMode;
+      _blockData._nativeQueryMode = effectiveConfig.nativeQueryMode;
       final QueryType newQueryType = thisXBlock.queryType;
       final bool queryTypeChanged = _lastQueryType != newQueryType;
       _lastQueryType = newQueryType;
 
       try {
-        __blockData._backupManualArrangementBeforeQueryIfNeed();
+        _blockData._backupManualArrangementBeforeQueryIfNeed();
         __refreshQueryingState(isQuerying: true);
 
         final SortableCriteria sortableCriteria = serverSideSortModel != null
@@ -1544,7 +1544,7 @@ abstract class Block<
       if (willBeUsedPageable == null) {
         isPageShifting = !filterCriteriaChanged;
       } else {
-        final int currentPage = __blockData._paginationInfo?.currentPage ?? 0;
+        final int currentPage = _blockData._paginationInfo?.currentPage ?? 0;
         final int targetPage = willBeUsedPageable.page;
         isPageShifting = !filterCriteriaChanged && currentPage != targetPage;
       }
@@ -1575,7 +1575,7 @@ abstract class Block<
           shortDesc:
               "${debugObjHtml(this)} --> Query error -> newBlockDataState: $newBlockDataState",
         );
-        __blockData._updateStateAfterQueryError(
+        _blockData._updateStateAfterQueryError(
           newBlockDataState: newBlockDataState,
         );
         final List<XBlock> descendantXBlocks = thisXBlock.getDescendantXBlocks(
@@ -1594,7 +1594,7 @@ abstract class Block<
       // Empty Query Mode
       debug._lastPerformQueryItemIds = null;
       debug._lastViewportSyncStrategy = null;
-      __blockData._nativeQueryMode = effectiveConfig.nativeQueryMode;
+      _blockData._nativeQueryMode = effectiveConfig.nativeQueryMode;
       _lastQueryType = thisXBlock.queryType;
       realListUpdateStrategy = ListUpdateStrategy.replace;
       newBlockDataState = const BlockDataStateLoadedFresh();
@@ -1665,7 +1665,7 @@ abstract class Block<
         queryResultState: queryResultState,
       );
 
-      __blockData._updateData(
+      _blockData._updateData(
         executionTrace: executionTrace,
         forceListUpdateStrategy: realListUpdateStrategy,
         processedQueryResult: processedQueryResult,
@@ -1816,7 +1816,7 @@ abstract class Block<
       newQueriedList: queriedItemList ?? [],
       inputCandidateCurrItem: candidateCurrItem,
       forceReloadItem: false,
-      forceTypeForForm: null,
+      formLoadHint: null,
     );
   }
 
@@ -1873,7 +1873,7 @@ abstract class Block<
       newQueriedList: const [],
       inputCandidateCurrItem: null,
       forceReloadItem: applyForceReloadCurrItem,
-      forceTypeForForm: null,
+      formLoadHint: null,
     );
   }
 
@@ -2007,7 +2007,7 @@ abstract class Block<
         );
       }
       //
-      __blockData._blockItemDataState = const BlockItemDataStateNone();
+      _blockData._blockItemDataState = const BlockItemDataStateNone();
       _resetBlockItemSyncSessionState(executionTrace: executionTrace);
 
       if (formModel != null) {
@@ -2324,7 +2324,7 @@ abstract class Block<
           inputCandidateCurrItem: siblingItem,
           forceReloadItem:
               !isCandidateIsCurrent && executionIntent.forceReloadItem,
-          forceTypeForForm: null,
+          formLoadHint: null,
         );
         return;
       }
@@ -2429,14 +2429,14 @@ abstract class Block<
       if (candidateCurrItem != null) {
         executionTrace.addNonControllableCall(
           codeId: "#29480",
-          caller: __blockData,
+          caller: _blockData,
           methodName: "_insertOrReplaceItem",
           suffixShortDesc: "",
           parameters: {
             "item": candidateCurrItem,
           },
         );
-        __blockData._insertOrReplaceItem(item: candidateCurrItem);
+        _blockData._insertOrReplaceItem(item: candidateCurrItem);
       }
 
       executionTrace.addInfo(
@@ -2494,16 +2494,16 @@ abstract class Block<
       // Explicit directive demanding immediate Form Load
       if (executionIntent.setCurrentItemDirective ==
           BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm) {
-        thisXBlock.xFormModel!
-            .setForceTypeIfLessThan(FormForceType.forceIfNeed);
+        thisXBlock.xBlockFormModel!
+            .setForceTypeIfLessThan(FormLoadHint.forceIfNeed);
 
         executionTrace.addExecutionIntent(
           codeId: "#29540",
-          owner: thisXBlock.xFormModel!.formModel,
+          owner: thisXBlock.xBlockFormModel!.formModel,
           executionIntentType: FormModelDataLoadIntent,
           suffixShortDesc: "",
         );
-        thisXBlock.xFormModel!._createAndSetFormModelExecutionIntentLoad();
+        thisXBlock.xBlockFormModel!._createAndSetFormModelExecutionIntentLoad();
       }
     }
 
@@ -2775,7 +2775,7 @@ abstract class Block<
           newQueriedList: const [],
           inputCandidateCurrItem: siblingItem,
           forceReloadItem: false,
-          forceTypeForForm: null,
+          formLoadHint: null,
         );
         thisXBlock.stagePredecessorResult(deletionResult);
       } else {
@@ -3080,7 +3080,7 @@ abstract class Block<
           newQueriedList: const [],
           inputCandidateCurrItem: nextCandidateItem,
           forceReloadItem: false,
-          forceTypeForForm: null,
+          formLoadHint: null,
         );
         thisXBlock.stagePredecessorResult(deletionResult);
       }
@@ -3627,8 +3627,8 @@ abstract class Block<
       dilemmaStrategy: fallbackDilemmaStrategy,
     );
 
-    __blockData._lastQueryResultState = ActionResultState.fail;
-    __blockData._blockDataState = newBlockDataState;
+    _blockData._lastQueryResultState = ActionResultState.fail;
+    _blockData._blockDataState = newBlockDataState;
 
     final List<XBlock> descendantXBlocks =
         thisXBlock.getDescendantXBlocks(sameFilterOnly: true);
@@ -3659,9 +3659,8 @@ abstract class Block<
         dilemmaStrategy: fallbackDilemmaStrategy,
       );
       descendantXBlock._queried = true;
-      descendantBlock.__blockData._lastQueryResultState =
-          ActionResultState.fail;
-      descendantBlock.__blockData._setBlockDataState(
+      descendantBlock._blockData._lastQueryResultState = ActionResultState.fail;
+      descendantBlock._blockData._setBlockDataState(
         newBlockDataState: descendantState,
       );
     }
@@ -3797,7 +3796,7 @@ abstract class Block<
         shortDesc:
             "Insert or replace ${debugObjHtml(refreshedItem)} into the list.",
       );
-      __blockData._insertOrReplaceItem(
+      _blockData._insertOrReplaceItem(
         item: refreshedItem,
       );
       //
@@ -3835,21 +3834,21 @@ abstract class Block<
         );
       }
       //
-      final newForceType = FormForceType.force;
+      final newForceType = FormLoadHint.force;
       //
-      if (thisXBlock.xFormModel != null) {
+      if (thisXBlock.xBlockFormModel != null) {
         // Test Case [02a].
         formModel!._formModelStructure._setFormMode(FormMode.edit);
         // IMPORTANT:
-        thisXBlock.xFormModel!.setForceType(newForceType);
+        thisXBlock.xBlockFormModel!.setForceType(newForceType);
 
         executionTrace.addExecutionIntent(
           codeId: "#16400",
-          owner: thisXBlock.xFormModel!.formModel,
+          owner: thisXBlock.xBlockFormModel!.formModel,
           executionIntentType: FormModelDataLoadIntent,
           suffixShortDesc: "After Saving Form.",
         );
-        thisXBlock.xFormModel!._createAndSetFormModelExecutionIntentLoad();
+        thisXBlock.xBlockFormModel!._createAndSetFormModelExecutionIntentLoad();
       }
     }
     // savedItemDetail = null or !keepInList
@@ -4122,7 +4121,7 @@ abstract class Block<
     bool errorIfItemNotInTheBlock = true,
   }) async {
     final List<ITEM> candidateDeleteItems =
-        __blockData.moveCurrentItemToEndOfList(
+        _blockData.moveCurrentItemToEndOfList(
       itemList: items,
     );
     executionTrace.addInfo(
@@ -4191,23 +4190,6 @@ abstract class Block<
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     return executionIntent.result;
-
-    // final executionUnitResult = _createEmptyItemsDeletionResult(
-    //   candidateItems: candidateDeleteItems,
-    // );
-    // final _ShelfMemberResultedExecutionUnit executionUnit =
-    //     _BlockMultiItemDeletionExecutionUnit<ID, ITEM>(
-    //   xBlock: thisXBlock,
-    //   items: candidateDeleteItems,
-    //   stopIfError: stopIfError,
-    //   executionUnitResult: executionUnitResult,
-    // );
-    // //
-    // xShelf._addExecutionUnit(executionUnit: executionUnit);
-    // FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    // await FlutterArtist.executor._executeExecutionUnitQueue();
-    // //
-    // return executionUnitResult;
   }
 
   // ***************************************************************************
@@ -4291,9 +4273,9 @@ abstract class Block<
       newQueriedList: [],
       inputCandidateCurrItem: item,
       forceReloadItem: forceLoadItem,
-      forceTypeForForm: forceLoadForm //
-          ? FormForceType.force
-          : FormForceType.auto,
+      formLoadHint: forceLoadForm //
+          ? FormLoadHint.force
+          : FormLoadHint.auto,
     );
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -5067,17 +5049,17 @@ abstract class Block<
     required ITEM? item,
     required ITEM_DETAIL? itemDetail,
   }) {
-    __blockData._setCurrentItemOnly(
+    _blockData._setCurrentItemOnly(
       id: id,
       refreshedItem: item,
       refreshedItemDetail: itemDetail,
     );
     if (id == null) {
-      __blockData._setBlockItemDataState(
+      _blockData._setBlockItemDataState(
         newBlockItemDataState: BlockItemDataStateNone(),
       );
     } else {
-      __blockData._setBlockItemDataState(
+      _blockData._setBlockItemDataState(
         newBlockItemDataState: BlockItemDataStateFresh(),
       );
     }
@@ -5093,7 +5075,7 @@ abstract class Block<
     required ExecutionTrace executionTrace,
     required ITEM removeItem,
   }) async {
-    __blockData._removeItem(removeItem: removeItem);
+    _blockData._removeItem(removeItem: removeItem);
     //
     executionTrace.addInfo(
       codeId: "#43000",
@@ -5616,7 +5598,7 @@ abstract class Block<
       },
       isLibMethod: true,
     );
-    List<ITEM> selItems = __blockData.getSelectedItems(
+    List<ITEM> selItems = _blockData.getSelectedItems(
       currentItemInclusion: currentItemInclusion,
     );
     executionTrace.addInfo(
@@ -5651,7 +5633,7 @@ abstract class Block<
       },
       isLibMethod: true,
     );
-    List<ITEM> chkItems = __blockData.getCheckedItems(
+    List<ITEM> chkItems = _blockData.getCheckedItems(
       currentItemInclusion: currentItemInclusion,
     );
     executionTrace.addInfo(
@@ -5979,14 +5961,14 @@ abstract class Block<
         usedPageable = specifiedPageable;
         isQueryMoreFlow = false;
       case BlockQryMethodName.queryNextPage:
-        Pageable? currentPageable = __blockData.pageable;
+        Pageable? currentPageable = _blockData.pageable;
         isQueryMoreFlow = false;
         if (currentPageable == null) {
           return BlockQueryResult._noCurrentPagination();
         }
         usedPageable = currentPageable.next();
       case BlockQryMethodName.queryPreviousPage:
-        Pageable? currentPageable = __blockData.pageable;
+        Pageable? currentPageable = _blockData.pageable;
         isQueryMoreFlow = false;
         if (currentPageable == null) {
           return BlockQueryResult._noCurrentPagination();
@@ -6688,23 +6670,7 @@ abstract class Block<
         errCode: BlockQuickItemCreationPrecheck.busy,
       );
     }
-    // switch (dataState) {
-    //   case DataState.pending:
-    //     return Actionable<BlockQuickItemCreationPrecheck>.no(
-    //       errCode: BlockQuickItemCreationPrecheck.blockInPendingState,
-    //     );
-    //   case DataState.none:
-    //     return Actionable<BlockQuickItemCreationPrecheck>.no(
-    //       errCode: BlockQuickItemCreationPrecheck.blockInNoneState,
-    //     );
-    //   case DataState.loaded:
-    //     if (isLoadedAndStale) {
-    //       return Actionable<BlockQuickItemCreationPrecheck>.no(
-    //         errCode: BlockQuickItemCreationPrecheck.blockInStaleState,
-    //       );
-    //     }
-    //     break;
-    // }
+    //
     switch (dataState) {
       case BlockDataStateNone():
         return Actionable<BlockQuickItemCreationPrecheck>.no(
@@ -6830,14 +6796,7 @@ abstract class Block<
         errCode: BlockFormSavePrecheck.formIsNotDirty,
       );
     }
-    // TODO: DELETE.
-    // if (checkValidate) {
-    //   if (!(formModel!._formKey.currentState?.validate() ?? false)) {
-    //     return Actionable<BlockFormSavePrecheck>.no(
-    //       errCode: BlockFormSavePrecheck.formInvalidated,
-    //     );
-    //   }
-    // }
+    //
     if (checkValidate) {
       final activeForms = formModel!.ui._visibleFormBuilderStates;
       bool allFormsAreValid = true;
@@ -7360,7 +7319,7 @@ abstract class Block<
   }
 
   void clientSideSort({required bool refresh}) {
-    __blockData._clientSideSortItems();
+    _blockData._clientSideSortItems();
     if (refresh) {
       shelf.ui.refreshAllViews();
     }
@@ -7375,12 +7334,12 @@ abstract class Block<
   }
 
   ID? get currentItemId {
-    return __blockData.current._id;
+    return _blockData.current._id;
   }
 
-  ITEM? get currentItem => __blockData.current._item;
+  ITEM? get currentItem => _blockData.current._item;
 
-  ITEM_DETAIL? get currentItemDetail => __blockData.current._itemDetail;
+  ITEM_DETAIL? get currentItemDetail => _blockData.current._itemDetail;
 
   int get currentItemIndex {
     ITEM? ci = currentItem;
@@ -7393,9 +7352,9 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool get isEmpty => __blockData._items.isEmpty;
+  bool get isEmpty => _blockData._items.isEmpty;
 
-  bool get isNotEmpty => __blockData._items.isNotEmpty;
+  bool get isNotEmpty => _blockData._items.isNotEmpty;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -7404,14 +7363,14 @@ abstract class Block<
   /// return a copied list of checked items.
   ///
   List<ITEM> get checkedItems {
-    return List.unmodifiable(__blockData._checkedItems);
+    return List.unmodifiable(_blockData._checkedItems);
   }
 
   ///
   /// return a copied list of selected items.
   ///
   List<ITEM> get selectedItems {
-    return List.unmodifiable(__blockData._selectedItems);
+    return List.unmodifiable(_blockData._selectedItems);
   }
 
   List<ID> get selectedItemIds {
@@ -7468,7 +7427,7 @@ abstract class Block<
 
   bool isSelectedItem(ITEM item) {
     return FaItemsUtils.isListContainItem(
-      targetList: __blockData._selectedItems,
+      targetList: _blockData._selectedItems,
       item: item,
       getItemId: _getItemIdInternal,
     );
@@ -7525,13 +7484,13 @@ abstract class Block<
     if (selected) {
       FaItemsUtils.insertOrReplaceItemInList(
         item: item,
-        targetList: __blockData._selectedItems,
+        targetList: _blockData._selectedItems,
         getItemId: _getItemIdInternal,
       );
     } else {
       FaItemsUtils.removeItemFromList(
         removeItem: item,
-        targetList: __blockData._selectedItems,
+        targetList: _blockData._selectedItems,
         getItemId: _getItemIdInternal,
       );
     }
@@ -7567,7 +7526,7 @@ abstract class Block<
   void __setSelectedItems({required List<ITEM> items}) {
     FaItemsUtils.insertOrReplaceItemsInList(
       items: items,
-      targetList: __blockData._selectedItems,
+      targetList: _blockData._selectedItems,
       getItemId: _getItemIdInternal,
     );
   }
@@ -7576,10 +7535,10 @@ abstract class Block<
   // ***************************************************************************
 
   ITEM? findItemByIndex(int index) {
-    if (index < 0 || index >= __blockData._items.length) {
+    if (index < 0 || index >= _blockData._items.length) {
       return null;
     }
-    return __blockData._items[index];
+    return _blockData._items[index];
   }
 
   // ***************************************************************************
@@ -7604,14 +7563,14 @@ abstract class Block<
   // ***************************************************************************
 
   ITEM? get firstItem {
-    return __blockData._items.firstOrNull;
+    return _blockData._items.firstOrNull;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   ITEM? get lastItem {
-    return __blockData._items.lastOrNull;
+    return _blockData._items.lastOrNull;
   }
 
   // ***************************************************************************
@@ -7652,7 +7611,7 @@ abstract class Block<
   }) {
     return FaItemsUtils.findNextSiblingItemInList(
       item: item,
-      targetList: __blockData._items,
+      targetList: _blockData._items,
       getItemId: _getItemIdInternal,
     );
   }
@@ -7665,7 +7624,7 @@ abstract class Block<
   }) {
     return FaItemsUtils.findPreviousSiblingItemInList(
       item: item,
-      targetList: __blockData._items,
+      targetList: _blockData._items,
       getItemId: _getItemIdInternal,
     );
   }
@@ -7678,7 +7637,7 @@ abstract class Block<
   }) {
     return FaItemsUtils.findSiblingItemInList(
       item: item,
-      targetList: __blockData._items,
+      targetList: _blockData._items,
       getItemId: _getItemIdInternal,
     );
   }
@@ -7699,7 +7658,7 @@ abstract class Block<
   ITEM? findItemById(ID itemId) {
     return FaItemsUtils.findItemInListById(
       id: itemId,
-      targetList: __blockData._items,
+      targetList: _blockData._items,
       getItemId: _getItemIdInternal,
     );
   }
@@ -7737,7 +7696,7 @@ abstract class Block<
 
   bool containsItem(ITEM item) {
     return FaItemsUtils.isListContainItem(
-      targetList: __blockData._items,
+      targetList: _blockData._items,
       item: item,
       getItemId: _getItemIdInternal,
     );
@@ -7745,7 +7704,7 @@ abstract class Block<
 
   bool isCheckedItem(ITEM item) {
     return FaItemsUtils.isListContainItem(
-      targetList: __blockData._checkedItems,
+      targetList: _blockData._checkedItems,
       item: item,
       getItemId: _getItemIdInternal,
     );
@@ -7769,13 +7728,13 @@ abstract class Block<
     if (checked) {
       FaItemsUtils.insertOrReplaceItemInList(
         item: item,
-        targetList: __blockData._checkedItems,
+        targetList: _blockData._checkedItems,
         getItemId: _getItemIdInternal,
       );
     } else {
       FaItemsUtils.removeItemFromList(
         removeItem: item,
-        targetList: __blockData._checkedItems,
+        targetList: _blockData._checkedItems,
         getItemId: _getItemIdInternal,
       );
     }
@@ -7802,7 +7761,7 @@ abstract class Block<
   void __setCheckedItems(List<ITEM> items) {
     FaItemsUtils.insertOrReplaceItemsInList(
       items: items,
-      targetList: __blockData._checkedItems,
+      targetList: _blockData._checkedItems,
       getItemId: _getItemIdInternal,
     );
   }
@@ -7813,7 +7772,7 @@ abstract class Block<
   }
 
   void checkAllItems() {
-    __setCheckedItems(__blockData._items);
+    __setCheckedItems(_blockData._items);
     __refreshAllViewsAfterCheckedOrSelected();
   }
 
@@ -7829,7 +7788,7 @@ abstract class Block<
   // ***************************************************************************
 
   void uncheckAllItems() {
-    __blockData._checkedItems.clear();
+    _blockData._checkedItems.clear();
     __refreshAllViewsAfterCheckedOrSelected();
   }
 
@@ -7837,7 +7796,7 @@ abstract class Block<
   // ***************************************************************************
 
   void __selectAllItems() {
-    __setSelectedItems(items: __blockData._items);
+    __setSelectedItems(items: _blockData._items);
   }
 
   void selectAllItems() {
@@ -7849,7 +7808,7 @@ abstract class Block<
   // ***************************************************************************
 
   void deselectAllItems() {
-    __blockData._selectedItems.clear();
+    _blockData._selectedItems.clear();
     __refreshAllViewsAfterCheckedOrSelected();
   }
 
@@ -7908,7 +7867,7 @@ abstract class Block<
     bool success = FaItemsUtils.swapPositionsByIds(
       itemId1: _getItemIdInternal(item1),
       itemId2: _getItemIdInternal(item2),
-      targetList: __blockData._items,
+      targetList: _blockData._items,
       getItemId: _getItemIdInternal,
     );
     if (success) {
@@ -7930,7 +7889,7 @@ abstract class Block<
     bool success = FaItemsUtils.moveItemToNewIndexPosition(
       item: item,
       newIndexPosition: newIndexPosition,
-      targetList: __blockData._items,
+      targetList: _blockData._items,
       getItemId: _getItemIdInternal,
     );
     if (success) {
@@ -8089,7 +8048,7 @@ abstract class Block<
     bool success = FaItemsUtils.moveItemByIndexPosition(
       oldIndexPosition: oldIndexPosition,
       newIndexPosition: newIndexPosition,
-      targetList: __blockData._items,
+      targetList: _blockData._items,
       getItemId: _getItemIdInternal,
     );
     if (success) {
@@ -8162,7 +8121,7 @@ abstract class Block<
             itemIds: itemIds,
             parentBlockCurrentItemId: parentBlockCurrentItemId,
             filterCriteria: filterCriteria,
-            queryHint: QryHint.none,
+            queryHint: QueryHint.none,
             provideBlockContext: provideBlockContext,
           ),
         );

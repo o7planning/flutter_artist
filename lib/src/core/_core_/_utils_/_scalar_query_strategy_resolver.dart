@@ -13,7 +13,7 @@ class ScalarQueryStrategyResolver {
             FilterCriteria>
         scalar,
     required DebugScalarSyncSessionState<ID>? syncSessionState,
-    required QryHint queryHint,
+    required QueryHint queryHint,
     required bool provideScalarContext,
   }) {
     return resolveQueryPlanInternal<ID>(
@@ -30,7 +30,7 @@ class ScalarQueryStrategyResolver {
     required ScalarDataState dataState,
     required ScalarEffectiveConfig config,
     required DebugScalarSyncSessionState<ID>? syncSessionState,
-    required QryHint queryHint,
+    required QueryHint queryHint,
     required bool provideScalarContext,
   }) {
     // -------------------------------------------------------------------------
@@ -44,9 +44,9 @@ class ScalarQueryStrategyResolver {
     // 2. EVALUATE EFFECTIVE FORCE RE-QUERY DEMAND
     // -------------------------------------------------------------------------
     // Re-query is required IF:
-    // a. Pipeline explicitly mandated force (queryHint == QryHint.force)
+    // a. Pipeline explicitly mandated force (queryHint == QueryHint.force)
     // b. Active UI component is visible AND data is unready (pending/stale)
-    final bool effectiveForce = queryHint == QryHint.force ||
+    final bool effectiveForce = queryHint == QueryHint.force ||
         (provideScalarContext && (dataState.isPending || dataState.isStale));
 
     // If there is no demand to execute or refresh, reject execution immediately

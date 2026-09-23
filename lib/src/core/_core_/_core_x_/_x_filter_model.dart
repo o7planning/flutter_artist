@@ -107,7 +107,7 @@ class XFilterModel {
           executionIntent: _executionIntent as FilterModelLoadIntent,
         ),
         info:
-            "FilterModel 2.1, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+            "FilterModel (2.1), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
             "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
             "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
       );
@@ -139,7 +139,7 @@ class XFilterModel {
             executionIntent: _executionIntent as FilterModelLoadIntent,
           ),
           info:
-              "FilterModel 3.1, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "FilterModel (3.1), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
               "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
               "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
         );
@@ -152,7 +152,7 @@ class XFilterModel {
             executionIntent: _executionIntent as FilterModelLoadIntent,
           ),
           info:
-              "FilterModel 3.2, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "FilterModel (3.2), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
               "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
               "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
         );
@@ -165,7 +165,7 @@ class XFilterModel {
                 _executionIntent as FilterModelFilterPanelChangeIntent,
           ),
           info:
-              "FilterModel 3.3, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "FilterModel (3.3), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
               "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
               "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
         );
@@ -173,7 +173,7 @@ class XFilterModel {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "FilterModel 3.4, ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
+              "FilterModel (3.4), ${getClassNameWithoutGenerics(filterModel)}, _executionIntent: $_executionIntent, "
               "committedDataState**: ${committedDataState.toBriefInfo()}, draftDataState: ${draftDataState.toBriefInfo()}, "
               "filterLoadHint: $_filterLoadHint, xFilterModel.loadedInSession: $loadedInSession.",
         );

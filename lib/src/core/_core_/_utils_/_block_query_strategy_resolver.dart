@@ -16,7 +16,7 @@ class BlockQueryStrategyResolver {
             AdditionalFormRelatedData>
         block,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
-    required QryHint queryHint,
+    required QueryHint queryHint,
     required bool provideBlockContext,
   }) {
     return resolveQueryPlanInternal<ID>(
@@ -37,7 +37,7 @@ class BlockQueryStrategyResolver {
     required List<ID> itemIds,
     required BlockEffectiveConfig config,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
-    required QryHint queryHint,
+    required QueryHint queryHint,
     required bool provideBlockContext,
   }) {
     // -------------------------------------------------------------------------
@@ -51,9 +51,9 @@ class BlockQueryStrategyResolver {
     // 2. EVALUATE EFFECTIVE FORCE RE-QUERY DEMAND
     // -------------------------------------------------------------------------
     // Re-query is required IF:
-    // a. Pipeline explicitly mandated force (queryHint == QryHint.force)
+    // a. Pipeline explicitly mandated force (queryHint == QueryHint.force)
     // b. Active UI representation is visible AND dataset is unready (pending/stale)
-    final bool effectiveForce = queryHint == QryHint.force ||
+    final bool effectiveForce = queryHint == QueryHint.force ||
         (provideBlockContext && (dataState.isPending || dataState.isStale));
 
     // If there is no demand to execute or refresh, reject execution immediately

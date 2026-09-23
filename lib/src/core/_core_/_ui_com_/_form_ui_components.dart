@@ -1,13 +1,13 @@
 part of '../core.dart';
 
 /// Coordinates UI representation registrations, visibility tracking, and view rebuild cycles
-/// for an individual [FormModel].
+/// for an individual [BlockFormModel].
 ///
 /// Serves as the runtime bridge between reactive form view widgets (e.g., [FormView],
 /// [FormViewBuilder]) and the underlying form data state.
 class _FormUiComponents extends _UiComponents {
   /// The owner form model bound to this UI coordinator.
-  final FormModel formModel;
+  final BlockFormModel formModel;
 
   // Registered views: FormView / FormViewBuilder widget states.
   final Map<_ContextProviderViewState, XState> _formViewWidgetStates = {};
@@ -160,7 +160,7 @@ class _FormUiComponents extends _UiComponents {
     );
     if (!isVisibleOld && isVisible) {
       // LOGIC: #0000
-      FlutterArtist.storage._naturalQueryQueue.addShelf(formModel.shelf);
+      FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(formModel.shelf);
     }
     if (isVisible) {
       FlutterArtist.storage._addRecentShelf(formModel.shelf);

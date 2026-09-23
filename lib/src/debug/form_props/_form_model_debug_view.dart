@@ -11,7 +11,7 @@ import '../dialog/_error_viewer_dialog.dart';
 import '../widgets/_html_info_view.dart';
 
 class FormModelDebugView extends StatelessWidget {
-  final FormModel formModel;
+  final BlockFormModel formModel;
 
   const FormModelDebugView({
     super.key,

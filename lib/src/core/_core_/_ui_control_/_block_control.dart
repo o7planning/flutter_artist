@@ -67,6 +67,16 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
   }
 
   @override
+  bool get provideStageContext {
+    return false;
+  }
+
+  @override
+  bool get provideTaskContext {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     ControlPressedAsyncFunction? onPressedAsync = _getOnPressedFunction();
     //

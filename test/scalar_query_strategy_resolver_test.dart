@@ -1,5 +1,5 @@
 import 'package:flutter_artist/flutter_artist.dart';
-import 'package:flutter_artist/src/core/enums/qry_hint.dart';
+import 'package:flutter_artist/src/core/enums/query_hint.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -18,7 +18,7 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: null,
-        queryHint: QryHint.force,
+        queryHint: QueryHint.force,
         provideScalarContext: true,
       );
 
@@ -37,7 +37,7 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: null,
-        queryHint: QryHint.none,
+        queryHint: QueryHint.none,
         provideScalarContext:
             true, // Visible UI escalates pending state to query
       );
@@ -69,7 +69,7 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: mockSession,
-        queryHint: QryHint.none,
+        queryHint: QueryHint.none,
         provideScalarContext: true, // Visible UI escalates stale state to query
       );
 
@@ -77,10 +77,10 @@ void main() {
     });
 
     // -------------------------------------------------------------------------
-    // TEST 4: Explicit Force Hint (QryHint.force) on Fresh Data
+    // TEST 4: Explicit Force Hint (QueryHint.force) on Fresh Data
     // -------------------------------------------------------------------------
     test(
-        '4. Explicit QryHint.force on LOADED FRESH data MUST force performQuery',
+        '4. Explicit QueryHint.force on LOADED FRESH data MUST force performQuery',
         () {
       final plan =
           BlockQueryStrategyResolverTestHelper.resolveScalarPlan<String>(
@@ -89,7 +89,7 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: null,
-        queryHint: QryHint.force, // Explicit user/pipeline force
+        queryHint: QueryHint.force, // Explicit user/pipeline force
         provideScalarContext: true,
       );
 
@@ -109,7 +109,7 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: null,
-        queryHint: QryHint.none,
+        queryHint: QueryHint.none,
         provideScalarContext: true,
       );
 
@@ -120,7 +120,7 @@ void main() {
     // TEST 6: Hidden UI Context (provideScalarContext == false) without Force
     // -------------------------------------------------------------------------
     test(
-        '6. Hidden UI context and QryHint.none MUST resolve to NULL even when dataState is PENDING',
+        '6. Hidden UI context and QueryHint.none MUST resolve to NULL even when dataState is PENDING',
         () {
       final plan =
           BlockQueryStrategyResolverTestHelper.resolveScalarPlan<String>(
@@ -129,7 +129,7 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: null,
-        queryHint: QryHint.none,
+        queryHint: QueryHint.none,
         provideScalarContext:
             false, // Off-screen / hidden UI -> No network call
       );
@@ -141,7 +141,7 @@ void main() {
     // TEST 7: Hidden UI Context (provideScalarContext == false) with STALE data
     // -------------------------------------------------------------------------
     test(
-        '7. Hidden UI context and QryHint.none MUST resolve to NULL even when dataState is STALE with active session',
+        '7. Hidden UI context and QueryHint.none MUST resolve to NULL even when dataState is STALE with active session',
         () {
       final mockSession = TestScalarSyncSession<String>(
         receivedEventInfos: [
@@ -161,7 +161,7 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: mockSession,
-        queryHint: QryHint.none,
+        queryHint: QueryHint.none,
         provideScalarContext: false, // Deferred query until screen mounts
       );
 
@@ -169,10 +169,10 @@ void main() {
     });
 
     // -------------------------------------------------------------------------
-    // TEST 8: Hidden UI Context OVERRIDDEN by Explicit QryHint.force
+    // TEST 8: Hidden UI Context OVERRIDDEN by Explicit QueryHint.force
     // -------------------------------------------------------------------------
     test(
-        '8. Explicit QryHint.force MUST override hidden UI context and trigger performQuery',
+        '8. Explicit QueryHint.force MUST override hidden UI context and trigger performQuery',
         () {
       final plan =
           BlockQueryStrategyResolverTestHelper.resolveScalarPlan<String>(
@@ -181,7 +181,7 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: null,
-        queryHint: QryHint.force, // Pipeline mandates force fetch
+        queryHint: QueryHint.force, // Pipeline mandates force fetch
         provideScalarContext: false,
       );
 
@@ -206,7 +206,7 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: null,
-        queryHint: QryHint.none,
+        queryHint: QueryHint.none,
         provideScalarContext: true,
       );
 
@@ -225,7 +225,7 @@ class BlockQueryStrategyResolverTestHelper {
     required ScalarDataState dataState,
     required ScalarEffectiveConfig config,
     required DebugScalarSyncSessionState<ID>? syncSessionState,
-    required QryHint queryHint,
+    required QueryHint queryHint,
     required bool provideScalarContext,
   }) {
     return ScalarQueryStrategyResolver.resolveQueryPlanInternal<ID>(

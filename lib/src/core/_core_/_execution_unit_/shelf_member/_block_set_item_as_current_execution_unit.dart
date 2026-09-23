@@ -34,8 +34,8 @@ class _BlockSetItemAsCurrentExecutionUnit<
         ) {
     xBlock.setForceReloadCurrItem(executionIntent.forceReloadItem);
     //
-    if (executionIntent.forceTypeForForm != null) {
-      xBlock.xFormModel?.setForceType(executionIntent.forceTypeForForm!);
+    if (executionIntent.formLoadHint != null) {
+      xBlock.xBlockFormModel?.setForceType(executionIntent.formLoadHint!);
     }
   }
 

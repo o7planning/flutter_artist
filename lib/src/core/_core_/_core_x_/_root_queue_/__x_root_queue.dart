@@ -18,9 +18,8 @@ final class _XRootQueue {
     for (XRootQueueItem item in __xRootQueueItemMap.values) {
       if (item is XShelf) {
         return item._getNextExecutionUnit(debug: false) != null;
-      } else if (item is XActivityV1) {
-        // return item._getNextExecutionUnit()!= null;
-        return true;
+      } else if (item is XActivity) {
+        return item._getNextExecutionUnit(debug: false) != null;
       }
     }
     return false;
@@ -52,10 +51,12 @@ final class _XRootQueue {
       final NxtExecutionUnit? next;
       if (rootQueueItem is XShelf) {
         next = rootQueueItem._getNextExecutionUnit(debug: debug);
+      } else if (rootQueueItem is XActivity) {
+        next = rootQueueItem._getNextExecutionUnit(debug: debug);
       } else if (rootQueueItem is XActivityV1) {
         next = rootQueueItem._getNextExecutionUnit(debug: debug);
       } else {
-        throw "TODO getNextExecutionUnit";
+        throw "TODO _getNextExecutionUnit";
       }
 
       if (next == null) {
@@ -81,14 +82,6 @@ final class _XRootQueue {
 
   void _addXRootQueueItem({required XRootQueueItem xRootQueueItem}) {
     __xRootQueueItemMap[xRootQueueItem._fullName] = xRootQueueItem;
-  }
-
-  DebugXRootQueue toDebugXRootQueue() {
-    return DebugXRootQueue(
-      debugXRootQueueItems: __xRootQueueItemMap.entries
-          .map((entry) => entry.value.toDebugXRootQueueItem())
-          .toList(),
-    );
   }
 
   @override

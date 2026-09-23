@@ -61,6 +61,16 @@ class _ScalarValueViewBuilderState
   }
 
   @override
+  bool get provideStageContext {
+    return false;
+  }
+
+  @override
+  bool get provideTaskContext {
+    return false;
+  }
+
+  @override
   Widget buildContent(BuildContext context) {
     if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
       return Stack(

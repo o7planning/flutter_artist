@@ -26,7 +26,7 @@ abstract class ActivityV1 extends _Core {
 
   XActivityV1 _createXActivity() {
     return XActivityV1._(
-      activity: this,
+      activityV1: this,
     );
   }
 
@@ -65,7 +65,7 @@ abstract class ActivityV1 extends _Core {
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XActivityV1 thisXActivity,
-    required DefaultActivityExecutionIntent executionIntent,
+    required DefaultActivityV1ExecutionIntent executionIntent,
   }) async {
     __assertThisXActivity(thisXActivity);
     //
@@ -130,9 +130,9 @@ abstract class ActivityV1 extends _Core {
   // ***************************************************************************
 
   void __assertThisXActivity(XActivityV1 thisXActivity) {
-    if (thisXActivity.activity != this) {
+    if (thisXActivity.activityV1 != this) {
       String message =
-          "Error Assert activity: ${thisXActivity.activity} - $this";
+          "Error Assert activity: ${thisXActivity.activityV1} - $this";
       print("FATAL ERROR: $message");
       throw message;
     }

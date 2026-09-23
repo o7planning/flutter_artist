@@ -391,7 +391,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
   }
 
   String _formTooltipMessage(
-    FormModel formModel,
+    BlockFormModel formModel,
   ) {
     String className = getClassName(formModel);
     final FormDataState formDataState = formModel.dataState;
@@ -500,7 +500,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     );
   }
 
-  Widget _buildFormDataState(FormModel formModel) {
+  Widget _buildFormDataState(BlockFormModel formModel) {
     return Container(
       padding: const EdgeInsets.all(3),
       color: _formDataStateBgColor(formModel.dataState),

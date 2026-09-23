@@ -4,13 +4,13 @@ part of '../../core.dart';
 @_FormModelPatchFormFieldsAnnotation()
 class _FormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
     extends _ShelfMemberResultedExecutionUnit {
-  final XFormModel xFormModel;
+  final XBlockFormModel xBlockFormModel;
 
   @override
   final FormModelPatchFormFieldsIntent executionIntent;
 
   _FormModelPatchFormFieldsExecutionUnit({
-    required this.xFormModel,
+    required this.xBlockFormModel,
     required this.executionIntent,
   }) : super(
           executionUnitType: ExecutionUnitType.formModelPatchFormFields,
@@ -18,19 +18,19 @@ class _FormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
         );
 
   @override
-  XShelf get xShelf => xFormModel.xShelf;
+  XShelf get xShelf => xBlockFormModel.xShelf;
 
   @override
-  int get xShelfId => xFormModel.xShelfId;
+  int get xShelfId => xBlockFormModel.xShelfId;
 
   @override
-  Shelf get shelf => xFormModel.formModel.block.shelf;
+  Shelf get shelf => xBlockFormModel.formModel.block.shelf;
 
   @override
-  FormModel get owner => xFormModel.formModel;
+  BlockFormModel get owner => xBlockFormModel.formModel;
 
   @override
   String getObjectName() {
-    return xFormModel.formModel.block.name;
+    return xBlockFormModel.formModel.block.name;
   }
 }

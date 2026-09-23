@@ -47,16 +47,34 @@ class _FilterControlBarState extends _BaseControlBarState<
   }
 
   @override
-  bool get provideScalarContext => false;
+  bool get provideScalarContext {
+    return false;
+  }
 
   @override
-  bool get provideBlockContext => false;
+  bool get provideBlockContext {
+    return false;
+  }
 
   @override
-  bool get provideItemContext => false;
+  bool get provideItemContext {
+    return false;
+  }
 
   @override
-  bool get provideFormContext => false;
+  bool get provideFormContext {
+    return false;
+  }
+
+  @override
+  bool get provideStageContext {
+    return false;
+  }
+
+  @override
+  bool get provideTaskContext {
+    return false;
+  }
 
   @override
   Widget? buildStandardButton(FilterControlBarItem item) {

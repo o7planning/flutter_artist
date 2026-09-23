@@ -47,8 +47,6 @@ class _FlutterArtist extends _Core {
 
   final _rootQueue = _XRootQueue();
 
-  DebugXRootQueue get debugExecutionUnitQueue => _rootQueue.toDebugXRootQueue();
-
   late final GlobalsManager globalsManager;
 
   late final LocaleManager localeManager;

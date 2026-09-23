@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class FormViewBuilder extends _ContextProviderView {
-  final FormModel formModel;
+  final BlockFormModel formModel;
   final QuickSuggestionMode quickSuggestionMode;
 
   final Widget Function() build;
@@ -60,6 +60,16 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
   @override
   bool get provideFormContext {
     return true;
+  }
+
+  @override
+  bool get provideStageContext {
+    return false;
+  }
+
+  @override
+  bool get provideTaskContext {
+    return false;
   }
 
   @override

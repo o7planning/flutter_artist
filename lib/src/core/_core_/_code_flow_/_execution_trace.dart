@@ -111,7 +111,7 @@ class MethodCallExecutionTrace extends ExecutionTrace {
   }
 
   bool isFormModel() {
-    return ownerClassInstance is FormModel;
+    return ownerClassInstance is BlockFormModel;
   }
 
   bool isOtherClass() {
@@ -242,7 +242,7 @@ class EventDispatcherExecutionTrace extends ExecutionTrace {
 class ReactionProcessorExecutionTrace extends ExecutionTrace {
   ReactionProcessorExecutionTrace({
     required super.ownerClassInstance,
-  }) : super(executionTraceType: ExecutionTraceType.deferredEvent);
+  }) : super(executionTraceType: ExecutionTraceType.reactionProcessor);
 
   @override
   String getSubtitle() {
@@ -479,8 +479,8 @@ abstract class ExecutionTrace {
       return (ownerClassInstance as Block).shelf;
     } else if (ownerClassInstance is FilterModel) {
       return (ownerClassInstance as FilterModel).shelf;
-    } else if (ownerClassInstance is FormModel) {
-      return (ownerClassInstance as FormModel).block.shelf;
+    } else if (ownerClassInstance is BlockFormModel) {
+      return (ownerClassInstance as BlockFormModel).block.shelf;
     }
     return null;
   }

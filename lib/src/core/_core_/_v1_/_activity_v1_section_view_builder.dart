@@ -59,6 +59,16 @@ class _ActivitySectionViewBuilderState
   }
 
   @override
+  bool get provideStageContext {
+    return false;
+  }
+
+  @override
+  bool get provideTaskContext {
+    return false;
+  }
+
+  @override
   bool get isActivityRepresentative {
     return false;
   }
@@ -85,7 +95,7 @@ class _ActivitySectionViewBuilderState
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.desk._checkToRemoveActivity(widget.activity);
+    FlutterArtist.desk._checkToRemoveActivityV1(widget.activity);
   }
 
   @override

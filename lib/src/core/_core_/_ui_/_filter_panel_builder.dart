@@ -64,6 +64,16 @@ class _FilterPanelBuilderState
   }
 
   @override
+  bool get provideStageContext {
+    return false;
+  }
+
+  @override
+  bool get provideTaskContext {
+    return false;
+  }
+
+  @override
   void setBuildingState({required bool isBuilding}) {
     widget.filterModel.ui._setFilterPanelBuildingState(
       widgetState: this,

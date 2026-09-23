@@ -1,13 +1,13 @@
 part of '../core.dart';
 
 class _FilterModelDebugInfo {
-  int __loadCount = 0;
+  int _loadCount = 0;
 
-  int get loadCount => __loadCount;
+  int get loadCount => _loadCount;
 
-  int __filterActivityCount = 0;
+  int _filterActivityCount = 0;
 
-  int get filterActivityCount => __filterActivityCount;
+  int get filterActivityCount => _filterActivityCount;
 
   bool _loadTimeUiActive = false;
 

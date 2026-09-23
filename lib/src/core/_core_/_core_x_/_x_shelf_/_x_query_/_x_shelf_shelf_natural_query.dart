@@ -18,7 +18,7 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
         if (hasXActiveUI) {
           if (xScalar.scalar.dataState.isPending ||
               xScalar.scalar.dataState.isStale) {
-            xScalar.setQueryHintToGreater(QryHint.force);
+            xScalar.setQueryHintToGreater(QueryHint.force);
           }
         }
         xScalar = xScalar.parentXScalar;
@@ -38,19 +38,19 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
         if (blockVisibleX) {
           if (xBlock.block.dataState.isPending ||
               xBlock.block.dataState.isStale) {
-            xBlock.setQueryHintToGreater(QryHint.force);
+            xBlock.setQueryHintToGreater(QueryHint.force);
           }
         }
-        XFormModel? xFormModel = xBlock.xFormModel;
-        if (xFormModel != null && xFormModel.formModel.ui.hasVisibleViews()) {
-          if (xFormModel.formModel.dataState.isPending ||
-              xFormModel.formModel.dataState.isFatalError ||
-              xFormModel.formModel.dataState.isNone) {
+        XBlockFormModel? xBlockFormModel = xBlock.xBlockFormModel;
+        if (xBlockFormModel != null && xBlockFormModel.formModel.ui.hasVisibleViews()) {
+          if (xBlockFormModel.formModel.dataState.isPending ||
+              xBlockFormModel.formModel.dataState.isFatalError ||
+              xBlockFormModel.formModel.dataState.isNone) {
             // Test case: [39b]
             if (naturalMode) {
-              xFormModel.setForceType(FormForceType.auto);
+              xBlockFormModel.setForceType(FormLoadHint.auto);
             } else {
-              xFormModel.setForceType(FormForceType.force);
+              xBlockFormModel.setForceType(FormLoadHint.force);
             }
           }
         }

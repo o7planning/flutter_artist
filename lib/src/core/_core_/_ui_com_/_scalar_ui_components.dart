@@ -325,7 +325,7 @@ class _ScalarUiComponents extends _UiComponents {
     }
     //
     if (!scalarContextOld && scalarContextCurrent) {
-      FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
+      FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(scalar.shelf);
     } else if (scalarContextOld && !scalarContextCurrent) {
       scalar._broadcastScalarHidden();
     }
@@ -347,7 +347,9 @@ class _ScalarUiComponents extends _UiComponents {
     required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
-    final bool visibleOld = hasVisibleViews();
+    final bool visibleOld =
+        __contentViewWidgetStates[widgetState]?.isVisible ?? false;
+
     __contentViewWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isVisible),
@@ -360,7 +362,7 @@ class _ScalarUiComponents extends _UiComponents {
     }
     //
     if (!visibleOld && visibleCurrent) {
-      FlutterArtist.storage._naturalQueryQueue.addShelf(scalar.shelf);
+      FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(scalar.shelf);
     } else if (visibleOld && !visibleCurrent) {
       scalar._broadcastScalarHidden();
     }

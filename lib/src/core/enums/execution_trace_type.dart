@@ -8,7 +8,7 @@ enum ExecutionTraceType {
   userMethodCall,
   libMethodCall,
   navigationIntent,
-  deferredEvent,
+  reactionProcessor,
   dispatchInternalEvents,
   dispatchExternalEvents;
 
@@ -28,7 +28,7 @@ enum ExecutionTraceType {
         return Icons.call;
       case ExecutionTraceType.libMethodCall:
         return Icons.call;
-      case ExecutionTraceType.deferredEvent:
+      case ExecutionTraceType.reactionProcessor:
         return Icons.star; // settings_suggest
       case ExecutionTraceType.navigationIntent:
         return Icons.navigation;
@@ -56,7 +56,7 @@ enum ExecutionTraceType {
         return colorScheme.secondary;
       case ExecutionTraceType.navigationIntent:
         return context.faColors.action.ink.success;
-      case ExecutionTraceType.deferredEvent:
+      case ExecutionTraceType.reactionProcessor:
         return Colors.orangeAccent;
       case ExecutionTraceType.dispatchInternalEvents:
         return Colors.orangeAccent[800] ?? Colors.orangeAccent;
@@ -83,7 +83,7 @@ enum ExecutionTraceType {
         return "User's Method";
       case ExecutionTraceType.libMethodCall:
         return "Lib's Method";
-      case ExecutionTraceType.deferredEvent:
+      case ExecutionTraceType.reactionProcessor:
         return "Init Execution Unit for Deferred Events";
       case ExecutionTraceType.navigationIntent:
         return "Navigation Intent";

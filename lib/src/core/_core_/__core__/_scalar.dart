@@ -28,10 +28,10 @@ abstract class Scalar<
     > extends _Core {
   late final Shelf shelf;
 
-  PageData<VALUE>? get lastQueryResult => __scalarData._lastQueryResult;
+  PageData<VALUE>? get lastQueryResult => _scalarData._lastQueryResult;
 
   ActionResultState? get lastQueryResultState =>
-      __scalarData._lastQueryResultState;
+      _scalarData._lastQueryResultState;
 
   QueryType __lastQueryType = QueryType.realQuery;
 
@@ -66,13 +66,13 @@ abstract class Scalar<
   }
 
   List<Scalar> get descendantScalarsWithSameFilterModel {
-    if (this.filterModel == null) {
+    if (filterModel == null) {
       return [];
     }
     List<Scalar> ret = [];
     for (Scalar childScalar in _childScalars) {
       if (childScalar.filterModel != null) {
-        if (this.filterModel!.name == childScalar.filterModel!.name) {
+        if (filterModel!.name == childScalar.filterModel!.name) {
           ret.add(childScalar);
         }
       }
@@ -117,20 +117,20 @@ abstract class Scalar<
   }
 
   bool isSameWith(Scalar other) {
-    if (this.shelf.name != other.shelf.name) {
+    if (shelf.name != other.shelf.name) {
       return false;
     }
-    if (this.name == other.name) {
+    if (name == other.name) {
       return true;
     }
     return false;
   }
 
   bool isAncestorOf(Scalar other) {
-    if (this.shelf.name != other.shelf.name) {
+    if (shelf.name != other.shelf.name) {
       return false;
     }
-    if (this.name == other.name) {
+    if (name == other.name) {
       return false;
     }
     Scalar s = other;
@@ -139,7 +139,7 @@ abstract class Scalar<
       if (p == null) {
         return false;
       }
-      if (p.name == this.name) {
+      if (p.name == name) {
         return true;
       }
       s = p;
@@ -204,7 +204,7 @@ abstract class Scalar<
     }
   }
 
-  late final __scalarData =
+  late final _scalarData =
       _ScalarData<ID, VALUE, FILTER_INPUT, FILTER_CRITERIA>(this);
 
   late final ui = _ScalarUiComponents(scalar: this);
@@ -229,15 +229,15 @@ abstract class Scalar<
     return filterModel?.errorInfo;
   }
 
-  ScalarDataState get dataState => __scalarData._scalarDataState;
+  ScalarDataState get dataState => _scalarData._scalarDataState;
 
   FILTER_CRITERIA? get filterCriteria =>
-      __scalarData._filterCriteriaSnapshot?.criteriaOrNull;
+      _scalarData._filterCriteriaSnapshot?.criteriaOrNull;
 
   FilterCriteriaSnapshot<FILTER_CRITERIA>? get debugXFilterCriteria =>
-      __scalarData._filterCriteriaSnapshot;
+      _scalarData._filterCriteriaSnapshot;
 
-  VALUE? get value => __scalarData.current._value;
+  VALUE? get value => _scalarData.current._value;
 
   void _resetBlockSyncSessionState({
     required ExecutionTrace? executionTrace,
@@ -428,7 +428,7 @@ abstract class Scalar<
 
       // Test Case: [84b].
       if (nextState != dataState) {
-        __scalarData._scalarDataState = nextState;
+        _scalarData._scalarDataState = nextState;
         executionTrace.addInfo(
           codeId: "#86400",
           shortDesc:
@@ -451,7 +451,7 @@ abstract class Scalar<
   }) async {
     __assertThisXScalar(thisXScalar);
 
-    final QryHint initialQueryHint = thisXScalar.queryHint;
+    final QueryHint initialQueryHint = thisXScalar.queryHint;
 
     thisXScalar._setQueriedTrue();
     thisXScalar._createAndSetScalarExecutionIntentDone(lastIntentInfo: "Query");
@@ -541,7 +541,7 @@ abstract class Scalar<
     committedFilterCriteriaSnapshot
         as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
     final bool filterCriteriaChanged =
-        __scalarData._isFilterCriteriaSnapshotChanged(
+        _scalarData._isFilterCriteriaSnapshotChanged(
       newFilterCriteriaSnapshot: committedFilterCriteriaSnapshot,
     );
 
@@ -549,7 +549,7 @@ abstract class Scalar<
     ScalarErrorInfo? sclrErrorInfo;
 
     final performQueryMethod = ScalarErrorMethod.performQuery;
-    final ID? oldValueId = __scalarData.current._id;
+    final ID? oldValueId = _scalarData.current._id;
     ID? valueId;
     VALUE? value;
 
@@ -570,7 +570,7 @@ abstract class Scalar<
         },
       );
 
-      debug.__performQueryCount++;
+      debug._performQueryCount++;
       final ApiResult<VALUE> result = await performQuery(
         parentScalarValue: parent?.value,
         filterCriteria: committedFilterCriteriaSnapshot.filterCriteria,
@@ -638,7 +638,7 @@ abstract class Scalar<
         shortDesc:
             "${debugObjHtml(this)} --> Query error -> newScalarDataState: $newScalarDataState",
       );
-      __scalarData._updateStateAfterQueryError(
+      _scalarData._updateStateAfterQueryError(
         newScalarDataState: newScalarDataState,
       );
       final List<XScalar> descendantXScalars =
@@ -890,8 +890,8 @@ abstract class Scalar<
       dilemmaStrategy: fallbackDilemmaStrategy,
     );
 
-    __scalarData._lastQueryResultState = ActionResultState.fail;
-    __scalarData._scalarDataState = newScalarDataState;
+    _scalarData._lastQueryResultState = ActionResultState.fail;
+    _scalarData._scalarDataState = newScalarDataState;
 
     final List<XScalar> descendantXScalars =
         thisXScalar.getDescendantXScalars(sameFilterOnly: true);
@@ -923,9 +923,9 @@ abstract class Scalar<
       );
       //
       descendantXScalar._queried = true;
-      descendantScalar.__scalarData._lastQueryResultState =
+      descendantScalar._scalarData._lastQueryResultState =
           ActionResultState.fail;
-      descendantScalar.__scalarData._setScalarDataState(
+      descendantScalar._scalarData._setScalarDataState(
         newScalarDataState: descendantState,
       );
     }
@@ -997,7 +997,7 @@ abstract class Scalar<
   }) {
     __assertThisXScalar(thisXScalar);
     //
-    __scalarData._updateData(
+    _scalarData._updateData(
       filterCriteriaSnapshot: xFilterCriteria,
       dataState: dataState,
       valueId: valueId,
@@ -1048,7 +1048,7 @@ abstract class Scalar<
   }) {
     __assertThisXScalar(thisXScalar);
     //
-    __scalarData._clearWithDataState(
+    _scalarData._clearWithDataState(
       scalarDataState: scalarDataState,
     );
   }
@@ -1144,7 +1144,7 @@ abstract class Scalar<
       filterInput: filterInput,
     );
     //
-    final XScalar thisXScalar = xShelf.findXScalarByName(this.name)!;
+    final XScalar thisXScalar = xShelf.findXScalarByName(name)!;
     //
     executionTrace.addExecutionIntent(
       codeId: "#80340",
@@ -1195,7 +1195,7 @@ abstract class Scalar<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
-    XScalar xScalar = xShelf.findXScalarByName(this.name)!;
+    XScalar xScalar = xShelf.findXScalarByName(name)!;
     ScalarQueryResult result = xScalar.queryResult;
     return result;
   }
@@ -1283,7 +1283,7 @@ abstract class Scalar<
     //
     // thisXScalar.resetExecutionHints();
     //
-    __scalarData._clearValueWithDataState(
+    _scalarData._clearValueWithDataState(
       scalarDataState: scalarDataState,
       errorInFilter: errorInFilter,
       resetSyncSessionState: resetSyncSessionState,

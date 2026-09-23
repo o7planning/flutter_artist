@@ -21,6 +21,7 @@ enum TipDocument {
   locale(enabled: true),
   theme(enabled: true),
   naturalQuery(enabled: true),
+  naturalExec(enabled: true),
   filterCriteria(enabled: true),
   blockActiveUiComponents(enabled: true),
   blockQueryType(enabled: true),
@@ -113,6 +114,8 @@ enum TipDocument {
         return "FlutterArtist Theme";
       case TipDocument.naturalQuery:
         return "Natural Query";
+      case TipDocument.naturalExec:
+        return "Natural Execution";
       case TipDocument.filterCriteria:
         return "Filter Criteria";
       case TipDocument.scalarActiveUiComponents:
@@ -218,6 +221,8 @@ enum TipDocument {
         return "FlutterArtist Theme";
       case TipDocument.naturalQuery:
         return "Natural Query";
+      case TipDocument.naturalExec:
+        return "Natural Exec";
       case TipDocument.filterCriteria:
         return "Filter Criteria";
       case TipDocument.scalarActiveUiComponents:
@@ -359,6 +364,10 @@ enum TipDocument {
       case TipDocument.naturalQuery:
         return [
           "14777", // FlutterArtist Natural Load example 1 (***)
+        ];
+      case TipDocument.naturalExec:
+        return [
+          //
         ];
       case TipDocument.filterCriteria:
         return [

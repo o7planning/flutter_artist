@@ -44,7 +44,7 @@ class _BlockDebugInfo<ID extends Comparable> {
   QueryType get lastQueryType => _block._lastQueryType;
 
   ListUpdateStrategy? get lastForceListUpdateStrategy =>
-      _block.__blockData._lastForceListUpdateStrategy;
+      _block._blockData._lastForceListUpdateStrategy;
 
   String get classDefinition {
     return "${getClassName(this)}$classParametersDefinition";

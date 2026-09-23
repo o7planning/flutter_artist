@@ -12,7 +12,6 @@ class _ProcessedQueryResult<
   final List<ITEM>? queriedItemList;
   final PaginationInfo? queriedPaginationInfo;
 
-  // final PageData<ITEM>? queriedPageData;
   final ActionResultState queryResultState;
   final BlockDataState newBlockDataState;
 
@@ -28,7 +27,6 @@ class _ProcessedQueryResult<
     required this.usedXFilterCriteria,
     required this.usedPageable,
     //
-    // required this.queriedPageData,
     required this.queriedItemList,
     required this.queriedPaginationInfo,
     required this.queryResultState,

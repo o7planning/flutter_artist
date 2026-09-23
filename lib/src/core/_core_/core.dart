@@ -58,6 +58,7 @@ import '../enums/action_confirmation_type.dart';
 import '../enums/action_result_state.dart';
 import '../enums/activity_hidden_action.dart';
 
+import '../enums/activity_release_policy.dart';
 import '../enums/block_viewport_sync_strategy.dart';
 import '../enums/error_origin.dart';
 import '../enums/event_data_kind.dart';
@@ -76,11 +77,11 @@ import '../enums/absent_item_context_policy.dart';
 import '../enums/trace_step_type.dart';
 import '../enums/execution_trace_type.dart';
 import '../enums/block_set_current_item_directive.dart';
-import '../enums/data_mode.dart';
+import '../enums/query_type.dart';
 import '../enums/debug_cat.dart';
 import '../enums/err_code_if_item_is_null.dart';
 import '../enums/filter_activity_type.dart';
-import '../enums/force_type.dart';
+import '../enums/form_load_hint.dart';
 import '../enums/form_action.dart';
 import '../enums/form_activity_type.dart';
 import '../enums/form_error_method.dart';
@@ -90,7 +91,7 @@ import '../enums/item_creation_type.dart';
 import '../enums/list_update_strategy.dart';
 import '../enums/multi_opt_prop_reload.dart';
 import '../enums/after_query_action.dart';
-import '../enums/qry_hint.dart';
+import '../enums/query_hint.dart';
 import '../enums/qry_pagination_type.dart';
 import '../enums/quick_suggestion_mode.dart';
 import '../enums/quick_suggestion_type.dart';
@@ -108,6 +109,7 @@ import '../enums/sorting_side.dart';
 import '../enums/execution_unit_type.dart';
 import '../enums/tip_document.dart';
 import '../enums/unified_item_refresh_policy.dart';
+import '../enums/x_activity_type.dart';
 import '../enums/x_shelf_type.dart';
 import '../enums/after_backend_action.dart';
 import '../enums/block_native_query_mode.dart';
@@ -119,6 +121,8 @@ import '../enums/scalar_reaction_target.dart';
 import '../error/_block_error_info.dart';
 import '../error/_dev_error.dart';
 import '../error/_filter_error_info.dart';
+import '../error/_stage_error_info.dart';
+import '../error/_task_error_info.dart';
 import '../error/filter/filter_method_error.dart';
 import '../error/filter_register/filter_criterion_invalid_base_name_error.dart';
 import '../error/form/form_method_error.dart';
@@ -148,6 +152,8 @@ import '../error/form_register/form_prop_invalid_name_error.dart';
 import '../precheck/activity_precheck.dart';
 import '../precheck/form_model_view_changed_precheck.dart';
 import '../precheck/scalar_load_extra_data_precheck.dart';
+import '../precheck/stage_submit_precheck.dart';
+import '../precheck/task_execution_precheck.dart';
 import '_sync_/_block_sync_session_snapshot.dart';
 import '_utils_/block_data_state_utils.dart';
 import '_utils_/data_type_event_utils.dart';
@@ -212,67 +218,77 @@ part '__core__/_block_debug_info.dart';
 
 part '__core__/_block.dart';
 
-part '_v2_/view/_stage_view.dart';
+part '_ui_/_stage_view.dart';
 
-part '_v2_/view/_stage_view_builder.dart';
+part '_ui_/_stage_view_builder.dart';
 
-part '_v2_/ui/_activity_ui_components.dart';
+part '_ui_/_task_view.dart';
 
-part '_v2_/ui/_stage_ui_components.dart';
+part '_ui_/_task_view_builder.dart';
 
-part '_v2_/ui/_flow_ui_components.dart';
+part '_ui_com_/_activity_ui_components.dart';
 
-part '_v2_/_workflow_transition_result.dart';
+part '_ui_com_/_stage_ui_components.dart';
 
-part '_v2_/data/_fllow_context_data.dart';
+part '_ui_com_/_flow_ui_components.dart';
 
-part '_v2_/data/_stage_data.dart';
+part '_ui_com_/_task_ui_components.dart';
 
-part '_v2_/data/_task_data.dart';
+part '__core__/_flow_transition_result.dart';
 
-part '_v2_/_stage_form_model.dart';
+part '__core__/_fllow_context_data.dart';
 
-part '_v2_/_task_form_model.dart';
+part '__core__/_stage_data.dart';
 
-part '_v2_/_flow.dart';
+part '__core__/_task_data.dart';
 
-part '_v2_/_task.dart';
+part '__core__/_stage_form_model.dart';
 
-part '_v2_/_activity.dart';
+part '__core__/_task_form_model.dart';
 
-part '_core_x_/_execution_intent_/filter_model_execution_intent.dart';
+part '__core__/_flow.dart';
 
-part '_core_x_/_execution_intent_/form_model_execution_intent.dart';
+part '__core__/_task.dart';
 
-part '_core_x_/_execution_intent_/block_execution_intent.dart';
+part '__core__/_activity.dart';
 
-part '_core_x_/_execution_intent_/scalar_execution_intent.dart';
+part '_execution_intent_/filter_model_execution_intent.dart';
 
-part '_core_x_/_execution_intent_/_execution_intent.dart';
+part '_execution_intent_/form_model_execution_intent.dart';
 
-part '_core_x_/_execution_intent_/storage_execution_intent.dart';
+part '_execution_intent_/block_execution_intent.dart';
 
-part '_core_x_/_execution_intent_/activity_execution_intent.dart';
+part '_execution_intent_/scalar_execution_intent.dart';
 
-part '_v2_/_activity_structure.dart';
+part '_execution_intent_/_execution_intent.dart';
 
-part '_v2_/_flow_structure.dart';
+part '_execution_intent_/storage_execution_intent.dart';
 
-part '_v2_/_stage.dart';
+part '_execution_intent_/activity_v1_execution_intent.dart';
 
-part '_v2_/config/_flow_config.dart';
+part '_execution_intent_/stage_execution_intent.dart';
 
-part '_v2_/config/_stage_config.dart';
+part '_execution_intent_/task_execution_intent.dart';
 
-part '_v2_/config/_task_config.dart';
+part '__core__/_activity_structure.dart';
 
-part '_v2_/enums/_stage_data_state.dart';
+part '__core__/_flow_structure.dart';
 
-part '_v2_/enums/_task_data_state.dart';
+part '__core__/_stage.dart';
 
-part '_v2_/config/_activity_config.dart';
+part '_config_/_flow_config.dart';
 
-part '_v2_/enums/_flow_data_state.dart';
+part '_config_/_stage_config.dart';
+
+part '_config_/_task_config.dart';
+
+part '__core__/_stage_data_state.dart';
+
+part '__core__/_task_data_state.dart';
+
+part '_config_/_activity_config.dart';
+
+part '__core__/_flow_data_state.dart';
 
 part '__core__/_scalar_debug_info.dart';
 
@@ -304,9 +320,9 @@ part '__core__/_log_listener.dart';
 
 part '__core__/_executor.dart';
 
-part '_form_/_form_input.dart';
+part '_form_/__core__/_form_input.dart';
 
-part '_form_/_additional_form_related_data.dart';
+part '_form_/__core__/_additional_form_related_data.dart';
 
 part '_filter_/_filter_criteria.dart';
 
@@ -342,11 +358,13 @@ part '_filter_/_filter_model.dart';
 
 part '_filter_/_filter_criteria_and_map_value.dart';
 
-part '_form_/_form_leave_safely.dart';
+part '_form_/__core__/_form_leave_safely.dart';
 
-part '_form_/_form_data_state.dart';
+part '_form_/__core__/_form_data_state.dart';
 
-part '_form_/_form_model.dart';
+part '_form_/__core__/_base_form_model.dart';
+
+part '_form_/_block_form_/_block_form_model.dart';
 
 part '_sort_/_model_/_client_side_sort_model.dart';
 
@@ -362,7 +380,7 @@ part '__core__/_processed_query_result.dart';
 
 part '__core__/_projection_manager.dart';
 
-part '__core__/_storage_natural_query_queue.dart';
+part '__core__/_lazy_ui_component_trigger_queue.dart';
 
 part '_config_/_app_configuration.dart';
 
@@ -383,6 +401,8 @@ part '__core__/_scalar_value_wrap.dart';
 part '__core__/_shelf.dart';
 
 part '__core__/_shelf_debug_info.dart';
+
+part '__core__/_activity_debug_info.dart';
 
 part '__core__/_dialog_deferral_result.dart';
 
@@ -417,6 +437,8 @@ part '__core__/_storage.dart';
 part '__core__/_desk.dart';
 
 part '__core__/_desk_core.dart';
+
+part '__core__/_desk_core_v1.dart';
 
 part '_utils_/_event_helper.dart';
 
@@ -468,15 +490,23 @@ part '_v1_/_x_activity_v1.dart';
 
 part '_core_x_/_x_block.dart';
 
+part '_core_x_/_x_task.dart';
+
+part '_core_x_/_x_stage.dart';
+
+part '_core_x_/_x_flow.dart';
+
 part '_core_x_/_x_filter_model.dart';
 
-part '_core_x_/_x_form_model.dart';
+part '_core_x_/_x_block_form_model.dart';
 
 part '_core_x_/_x_scalar.dart';
 
 part '_core_x_/_root_queue_/_x_root_queue_item.dart';
 
 part '_core_x_/_root_queue_/_x_shelf.dart';
+
+part '_core_x_/_root_queue_/_x_activity.dart';
 
 part '_sync_/_scalar_sync_session_state.dart';
 
@@ -493,6 +523,10 @@ part '_core_x_/_x_shelf_/_x_query_/__target_block_and_options.dart';
 part '_core_x_/_x_shelf_/_x_query_/__target_scalar_and_options.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_shelf_natural_query.dart';
+
+part '_core_x_/_x_activity_/_x_exec_/__x_shelf_base_exec.dart';
+
+part '_core_x_/_x_activity_/_x_exec_/_x_activity_activity_natural_exec.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_shelf_external_reaction.dart';
 
@@ -580,25 +614,25 @@ part '_filter_/_model_/_multi_opt_ms_tilde_filter_criterion_model.dart';
 
 part '_filter_/_model_/_simple_tilde_filter_criterion_model.dart';
 
-part '_form_/_model_/__form_prop_model.dart';
+part '_form_/__core__/_prop_model_/__form_prop_model.dart';
 
-part '_form_/_def_/_form_prop_def.dart';
+part '_form_/__core__/_def_/_form_prop_def.dart';
 
-part '_form_/_name_/_form_prop_name_obj.dart';
+part '_form_/__core__/_name_/_form_prop_name_obj.dart';
 
-part '_form_/_model_/_calculated_form_prop_model.dart';
+part '_form_/__core__/_prop_model_/_calculated_form_prop_model.dart';
 
-part '_form_/_form_model_debug_info.dart';
+part '_form_/__core__/_form_model_debug_info.dart';
 
-part '_form_/_form_model_structure.dart';
+part '_form_/__core__/_form_model_structure.dart';
 
-part '_form_/_model_/_multi_opt_form_prop_model.dart';
+part '_form_/__core__/_prop_model_/_multi_opt_form_prop_model.dart';
 
-part '_form_/_model_/_multi_opt_ss_form_prop_model.dart';
+part '_form_/__core__/_prop_model_/_multi_opt_ss_form_prop_model.dart';
 
-part '_form_/_model_/_multi_opt_ms_form_prop_model.dart';
+part '_form_/__core__/_prop_model_/_multi_opt_ms_form_prop_model.dart';
 
-part '_form_/_model_/_simple_form_prop_model.dart';
+part '_form_/__core__/_prop_model_/_simple_form_prop_model.dart';
 
 part '__core__/_value_wrap.dart';
 
@@ -672,11 +706,13 @@ part '_execution_unit_result_/_activity_result.dart';
 
 part '_execution_unit_result_/_scalar_eur/_scalar_query_result.dart';
 
+part '_execution_unit_result_/_scalar_eur/_task_result.dart';
+
+part '_execution_unit_result_/_scalar_eur/_stage_result.dart';
+
 part '_execution_unit_result_/_storage_backend_action_result.dart';
 
 part '_execution_unit_/__shelf_member_resulted_execution_unit.dart';
-
-part '_core_x_/_root_queue_/_x_shelf_execution_unit_queue.dart';
 
 part '_execution_unit_/___execution_unit.dart';
 
@@ -692,6 +728,8 @@ part '_execution_unit_/shelf_member/_block_clear_current_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_item_deletion_execution_unit.dart';
 
+part '_execution_unit_/__activity_v1_member_execution_unit.dart';
+
 part '_execution_unit_/__activity_member_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_multi_item_deletion_execution_unit.dart';
@@ -700,7 +738,11 @@ part '_execution_unit_/shelf_member/_block_prepare_form_to_create_item_execution
 
 part '_execution_unit_/shelf_member/_block_query_execution_unit.dart';
 
-part '_execution_unit_/activity_member/_default_activity_execution_unit.dart';
+part '_execution_unit_/activity_member/_default_activity_v1_execution_unit.dart';
+
+part '_execution_unit_/activity_member/_task_execution_unit.dart';
+
+part '_execution_unit_/activity_member/_stage_submit_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_backend_action_execution_unit.dart';
 

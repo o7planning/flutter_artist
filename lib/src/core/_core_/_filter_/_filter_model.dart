@@ -391,7 +391,7 @@ abstract class FilterModel<
         if (blockDataState is BlockDataStatePending) {
           final BlockPendingReason reason = blockDataState.reason;
           if (reason.isFailed) {
-            block.__blockData._setBlockDataState(
+            block._blockData._setBlockDataState(
               newBlockDataState: BlockDataStatePending(
                 reason: BlockPendingReasonFilterChanged(),
               ),
@@ -400,14 +400,14 @@ abstract class FilterModel<
         } else if (blockDataState is BlockDataStateLoadedStale) {
           final BlockLoadedStateStaleReason reason = blockDataState.reason;
           if (reason.isFailed) {
-            block.__blockData._setBlockDataState(
+            block._blockData._setBlockDataState(
               newBlockDataState: BlockDataStateLoadedStale(
                 reason: BlockLoadedStateStaleReasonFilterChanged(),
               ),
             );
           }
         } else if (blockDataState is BlockDataStateLoadedFresh) {
-          block.__blockData._setBlockDataState(
+          block._blockData._setBlockDataState(
             newBlockDataState: BlockDataStateLoadedStale(
               reason: BlockLoadedStateStaleReasonFilterChanged(),
             ),
@@ -419,7 +419,7 @@ abstract class FilterModel<
         if (scalarDataState is ScalarDataStatePending) {
           final ScalarPendingReason reason = scalarDataState.reason;
           if (reason.isFailed) {
-            scalar.__scalarData._setScalarDataState(
+            scalar._scalarData._setScalarDataState(
               newScalarDataState: ScalarDataStatePending(
                 reason: ScalarPendingReasonFilterChanged(),
               ),
@@ -428,14 +428,14 @@ abstract class FilterModel<
         } else if (scalarDataState is ScalarDataStateLoadedStale) {
           final ScalarLoadedStateStaleReason reason = scalarDataState.reason;
           if (reason.isFailed) {
-            scalar.__scalarData._setScalarDataState(
+            scalar._scalarData._setScalarDataState(
               newScalarDataState: ScalarDataStateLoadedStale(
                 reason: ScalarLoadedStateStaleReasonFilterChanged(),
               ),
             );
           }
         } else if (scalarDataState is ScalarDataStateLoadedFresh) {
-          scalar.__scalarData._setScalarDataState(
+          scalar._scalarData._setScalarDataState(
             newScalarDataState: ScalarDataStateLoadedStale(
               reason: ScalarLoadedStateStaleReasonFilterChanged(),
             ),
@@ -862,10 +862,10 @@ abstract class FilterModel<
     required FilterActivityType activityType,
     required Map<String, dynamic>? formKeyInstantValuesInUI,
   }) async {
-    debug.__filterActivityCount++;
+    debug._filterActivityCount++;
     //
     if (activityType == FilterActivityType.newFilt) {
-      debug.__loadCount++;
+      debug._loadCount++;
     }
 
     final Map<String, dynamic> formKeyInstantValues =

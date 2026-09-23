@@ -70,6 +70,16 @@ class _ExecutionProgressBuilderState
     return false;
   }
 
+  @override
+  bool get provideStageContext {
+    return false;
+  }
+
+  @override
+  bool get provideTaskContext {
+    return false;
+  }
+
   bool isMatches(
       {required Object owner, required ExecutionUnitType executionUnitType}) {
     if (!widget.executionUnitTypes.contains(executionUnitType)) {

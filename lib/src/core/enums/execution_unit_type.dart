@@ -32,6 +32,8 @@ enum ExecutionUnitType {
   scalarBackendAction,
   scalarLoadExtraData,
   //
+  task,
+  stage,
   activity;
 
   String asDebugExecutionUnit([String? forName]) {

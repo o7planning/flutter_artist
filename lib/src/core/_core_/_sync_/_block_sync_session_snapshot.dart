@@ -1,5 +1,5 @@
 import '../../../core/_core_/core.dart';
-import '../../enums/qry_hint.dart';
+import '../../enums/query_hint.dart';
 
 // =============================================================================
 // DIAGNOSTIC SNAPSHOT
@@ -12,7 +12,7 @@ import '../../enums/qry_hint.dart';
 /// enabling precise time-travel debugging and strategy replay without being
 /// affected by subsequent mutations to the live Block instance.
 class BlockSyncDiagnosticSnapshot<ID extends Comparable> {
-  final QryHint queryHint;
+  final QueryHint queryHint;
 
   final bool provideBlockContext;
 
