@@ -50,8 +50,7 @@ abstract class ActivityV1 extends _Core {
     executionTrace.addInfo(
       codeId: "#23000",
       shortDesc:
-      "Creating <b>XActivity</b> for ${debugObjHtml(
-          this)} and add it to <b>RootQueue</b>.",
+          "Creating <b>XActivity</b> for ${debugObjHtml(this)} and add it to <b>RootQueue</b>.",
     );
     XActivityV1 xActivity = _createXActivity();
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
@@ -72,10 +71,8 @@ abstract class ActivityV1 extends _Core {
     executionTrace.addInfo(
       codeId: "#19000",
       shortDesc:
-      "Begin ${debugObjHtml(this)} > ${executionUnitType
-          .asDebugExecutionUnit()}.\n"
-          "Note: This is called because you called the ${debugObjHtml(
-          this)}.executeActivity() method.",
+          "Begin ${debugObjHtml(this)} > ${executionUnitType.asDebugExecutionUnit()}.\n"
+          "Note: This is called because you called the ${debugObjHtml(this)}.executeActivity() method.",
     );
     final activityResult = executionIntent.resultWrapper._setResult(
       ActivityResult(),
@@ -105,8 +102,7 @@ abstract class ActivityV1 extends _Core {
       executionTrace.addInfo(
         codeId: "#19200",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}.performActivityOperation() method was called with an error!",
+            "The ${debugObjHtml(this)}.performActivityOperation() method was called with an error!",
         errorInfo: errorInfo,
       );
     }

@@ -2,11 +2,9 @@ import '../core.dart';
 
 class DataTypeEventUtils {
   /// Evaluates whether at least one common [Type] exists across all three provided sets (3-way intersection).
-  static bool hasIntersection3(
-    Set<Type> events1,
-    Set<Type> events2,
-    Set<Type> events3,
-  ) {
+  static bool hasIntersection3(Set<Type> events1,
+      Set<Type> events2,
+      Set<Type> events3,) {
     if (events1.isEmpty || events2.isEmpty || events3.isEmpty) {
       return false;
     }

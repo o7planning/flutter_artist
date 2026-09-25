@@ -8,6 +8,10 @@ abstract class BaseFormModel<
 
   late final FormModelStructure _formModelStructure;
 
+  bool _changeEventLocked = false;
+
+  String get pathInfo;
+
   FormModelStructure get formModelStructure => _formModelStructure;
 
   FormDataState get dataState => _formModelStructure._formDataState;
@@ -29,7 +33,14 @@ abstract class BaseFormModel<
     return _autovalidateMode;
   }
 
+  bool get effectivePreventUnsavedChangesLoss {
+    // TODO: Hardcode!!
+    return true;
+  }
+
   late final debug = _FormModelDebugInfo();
+
+  late final ui = _FormUiComponents(formModel: this);
 
   BaseFormModel({
     FormModelConfig config = const FormModelConfig(),
@@ -67,6 +78,80 @@ abstract class BaseFormModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  bool isDirty() {
+    return _formModelStructure._isDirty();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void resetForm() {
+    bool canReset = _canResetForm();
+    if (!canReset) {
+      return;
+    }
+    try {
+      _changeEventLocked = true;
+      //
+      // Reset FormData:
+      //
+      _formModelStructure._resetFormData();
+      //
+      // Patch _formKey:
+      //
+      Map<String, dynamic> initData = {..._formModelStructure._initialFormData};
+      final activeForms = ui._visibleFormBuilderStates;
+
+      for (FormBuilderState formState in activeForms) {
+        Map<String, dynamic> localInitData = {...initData};
+        for (String key in formState.instantValue.keys) {
+          if (!localInitData.containsKey(key)) {
+            localInitData[key] = null;
+          }
+        }
+        formState.patchValue(localInitData);
+      }
+      //
+      _refreshAllViews();
+    } finally {
+      _changeEventLocked = false;
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  ///
+  /// Used for FormView.
+  ///
+  Map<String, dynamic> _getInitialValuesForFormView() {
+    return _formModelStructure._currentFormData;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  dynamic getInitialPropValue(String propName) {
+    return _formModelStructure._getInitialPropValue(propName: propName);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> showFormErrorViewerDialog(BuildContext context) async {
+    if (!dataState.isFatalError) {
+      return;
+    }
+    await FormErrorViewerDialog.show(
+      context: context,
+      formErrorInfo: formErrorInfo!,
+      formInitialDataReady: formInitialDataReady,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   ///
   /// ```dart
   /// @override
@@ -95,4 +180,22 @@ abstract class BaseFormModel<
   ///
   @_AbstractMethodAnnotation()
   FormModelStructure defineFormModelStructure();
+
+  bool isEnabled();
+
+  Future<void> _onChangeFromFormView({
+    required Map<String, dynamic> formKeyInstantValuesInUI,
+  });
+
+  bool _canResetForm();
+
+  void _refreshAllViews();
+
+  void _triggerWhenFormViewVisible();
+
+  void _addToRecent();
+
+  void _afterBuildFormView() {
+    _formModelStructure._justInitialized = false;
+  }
 }

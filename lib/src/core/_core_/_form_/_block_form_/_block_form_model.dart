@@ -6,14 +6,13 @@ abstract class BlockFormModel<
         FORM_INPUT extends FormInput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends BaseFormModel<FORM_INPUT, ADDITIONAL_FORM_RELATED_DATA> {
+  @override
   String get pathInfo {
-    return "block-form > ${shelf.name} > ${block.name}";
+    return "${shelf.name} > ${block.name} > block-form";
   }
 
   ADDITIONAL_FORM_RELATED_DATA? _additionalFormRelatedData;
   FORM_INPUT? _creationFormInput;
-
-  bool _changeEventLocked = false;
 
   Shelf get shelf => block.shelf;
 
@@ -32,8 +31,6 @@ abstract class BlockFormModel<
   bool get defaultSimpleValuesInitiated => _defaultSimpleValuesInitiated;
 
   bool get defaultMultiOptValuesInitiated => _defaultMultiOptValuesInitiated;
-
-  late final ui = _FormUiComponents(formModel: this);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -287,20 +284,6 @@ abstract class BlockFormModel<
   @DebugMethodAnnotation()
   String get debugClassParametersDefinition {
     return "<${getIdType()}, ${getItemDetailType()}, ${getFormInputType()}>";
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<void> showFormErrorViewerDialog(BuildContext context) async {
-    if (!dataState.isFatalError) {
-      return;
-    }
-    await FormErrorViewerDialog.show(
-      context: context,
-      formErrorInfo: formErrorInfo!,
-      formInitialDataReady: formInitialDataReady,
-    );
   }
 
   // ***************************************************************************
@@ -1695,23 +1678,6 @@ abstract class BlockFormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  ///
-  /// Used for FormView.
-  ///
-  Map<String, dynamic> _initialValuesForFormView() {
-    return _formModelStructure._currentFormData;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  dynamic getInitialPropValue(String propName) {
-    return _formModelStructure._getInitialPropValue(propName: propName);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   // TODO: Add test case:
   // @Deprecated("Xem lai, co can xoa di khong?")
   void patchPropValue(String propertyName, dynamic value) {
@@ -2003,13 +1969,7 @@ abstract class BlockFormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isDirty() {
-    return _formModelStructure._isDirty();
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
+  @override
   bool isEnabled() {
     Actionable<BlockFormEnablementPrecheck> actionable =
         block._isEnableFormToModify();
@@ -2019,37 +1979,25 @@ abstract class BlockFormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  void resetForm() {
-    Actionable canReset = block.canResetForm();
-    if (canReset.no) {
-      return;
-    }
-    try {
-      _changeEventLocked = true;
-      //
-      // Reset FormData:
-      //
-      _formModelStructure._resetFormData();
-      //
-      // Patch _formKey:
-      //
-      Map<String, dynamic> initData = {..._formModelStructure._initialFormData};
-      final activeForms = ui._visibleFormBuilderStates;
+  @override
+  void _addToRecent() {
+    FlutterArtist.storage._addRecentShelf(shelf);
+  }
 
-      for (FormBuilderState formState in activeForms) {
-        Map<String, dynamic> localInitData = {...initData};
-        for (String key in formState.instantValue.keys) {
-          if (!localInitData.containsKey(key)) {
-            localInitData[key] = null;
-          }
-        }
-        formState.patchValue(localInitData);
-      }
-      //
-      shelf.ui.refreshAllViews();
-    } finally {
-      _changeEventLocked = false;
-    }
+  @override
+  void _triggerWhenFormViewVisible() {
+    FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(shelf);
+  }
+
+  @override
+  bool _canResetForm() {
+    Actionable canReset = block.canResetForm();
+    return canReset.yes;
+  }
+
+  @override
+  void _refreshAllViews() {
+    shelf.ui.refreshAllViews();
   }
 
   // ***************************************************************************
@@ -2058,6 +2006,7 @@ abstract class BlockFormModel<
   // Change Event from GUI.
   @_ImportantMethodAnnotation("Called when user makes a change in FormView.")
   @_FormViewChangeAnnotation()
+  @override
   Future<void> _onChangeFromFormView({
     required Map<String, dynamic> formKeyInstantValuesInUI,
   }) async {
@@ -2071,13 +2020,6 @@ abstract class BlockFormModel<
     );
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue(showOverlay: false);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _afterBuildFormView() {
-    _formModelStructure._justInitialized = false;
   }
 
   // ***************************************************************************

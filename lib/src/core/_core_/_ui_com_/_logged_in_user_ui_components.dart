@@ -22,11 +22,7 @@ class _LoggedInUserUiComponents extends _UiComponents {
     final List<_ContextProviderViewState> list = [
       ..._loggedInUserWidgetStates.keys,
     ];
-    return list
-        .map((v) => v.faRoute)
-        .nonNulls
-        .toList()
-        .toSet();
+    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
   }
 
   // ***************************************************************************
@@ -46,7 +42,7 @@ class _LoggedInUserUiComponents extends _UiComponents {
   // OLD: hasActiveUiComponent
   bool hasVisibleViews() {
     for (final _ContextProviderViewState widgetState
-    in _loggedInUserWidgetStates.keys) {
+        in _loggedInUserWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -65,7 +61,7 @@ class _LoggedInUserUiComponents extends _UiComponents {
   // OLD: updateAllUiComponents
   void refreshAllViews() {
     for (final _ContextProviderViewState widgetState
-    in _loggedInUserWidgetStates.keys) {
+        in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

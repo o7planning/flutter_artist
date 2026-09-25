@@ -4,9 +4,9 @@ class _XShelfFormModelPatchFormFields extends XShelf {
   _XShelfFormModelPatchFormFields({
     required BlockFormModel formModel,
   }) : super(
-          xShelfType: XShelfType.formModelEnterFields,
-          shelf: formModel.block.shelf,
-        ) {
+    xShelfType: XShelfType.formModelEnterFields,
+    shelf: formModel.block.shelf,
+  ) {
     //
     // IMPORTANT:
     //

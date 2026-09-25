@@ -1,9 +1,9 @@
 part of '../../core.dart';
 
 class _StageSubmitExecutionUnit<
-        STAGE_ENUM extends Enum, //
-        STAGE_DATA extends StageData,
-        FLOW_CONTEXT_DATA extends FlowContextData>
+STAGE_ENUM extends Enum, //
+STAGE_DATA extends StageData,
+FLOW_CONTEXT_DATA extends FlowContextData>
     extends _ActivityMemberExecutionUnit {
   final XStage xStage;
 
@@ -17,9 +17,9 @@ class _StageSubmitExecutionUnit<
     required this.xStage,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.stage,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.stage,
+    executionIntent: executionIntent,
+  );
 
   @override
   Activity get activity => xStage.stage.activity;

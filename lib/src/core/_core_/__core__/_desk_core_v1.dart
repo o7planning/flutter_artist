@@ -57,7 +57,7 @@ class _DeskCoreV1 extends _Core {
     if (creator == null) {
       throw DebugUtils.getFatalError(
           " ERROR: '$activityV1Name' not found. You need to call:\n "
-          " FlutterArtist.storage.registerActivity(()=> $activityV1Name())");
+              " FlutterArtist.storage.registerActivity(()=> $activityV1Name())");
     }
     activity = creator() as F;
     if (FlutterArtist._navigatorStated) {

@@ -13,9 +13,9 @@ class _FormModelSaveFormExecutionUnit
     required this.xBlockFormModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.formModelSaveForm,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.formModelSaveForm,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xBlockFormModel.xShelf;

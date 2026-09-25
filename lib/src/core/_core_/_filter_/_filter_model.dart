@@ -1018,7 +1018,8 @@ abstract class FilterModel<
           codeId: "#31140",
           caller: this,
           methodName: "updatedSimpleCriterionValues",
-          suffixShortDesc: "To get values from filterInput to update for simpleCriteria",
+          suffixShortDesc:
+              "To get values from filterInput to update for simpleCriteria",
           parameters: {
             "filterInput": filterInput,
           },
@@ -1080,7 +1081,8 @@ abstract class FilterModel<
               codeId: "#31300",
               caller: this,
               methodName: "specifyDefaultValuesForSimpleTildeCriteria",
-              suffixShortDesc: "To get default values for <b>simple criteria</b>.",
+              suffixShortDesc:
+                  "To get default values for <b>simple criteria</b>.",
             );
           }
           final Map<String, dynamic> defaultSimpleCriterionValues =
@@ -1133,7 +1135,8 @@ abstract class FilterModel<
           codeId: "#31420",
           caller: this,
           methodName: "createNewFilterCriteria",
-          suffixShortDesc: "To convert criteria in type of Map to a Dart object.",
+          suffixShortDesc:
+              "To convert criteria in type of Map to a Dart object.",
           parameters: {
             "dataMap": _filterModelStructure._tempCriteriaValues,
           },

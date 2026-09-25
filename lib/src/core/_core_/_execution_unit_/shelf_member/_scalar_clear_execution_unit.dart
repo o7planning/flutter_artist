@@ -2,8 +2,8 @@ part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 class _ScalarClearExecutionUnit<
-        ID extends Comparable, //
-        VALUE extends Identifiable<ID>>
+ID extends Comparable, //
+VALUE extends Identifiable<ID>>
     extends _ShelfMemberResultedExecutionUnit<ScalarClearResult> {
   final XScalar xScalar;
 
@@ -14,9 +14,9 @@ class _ScalarClearExecutionUnit<
     required this.xScalar,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.scalarClear,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.scalarClear,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xScalar.xShelf;

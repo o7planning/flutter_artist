@@ -1,36 +1,26 @@
 part of '../core.dart';
 
-abstract class BlockItemsView<
-BLOCK extends Block<
-    Comparable, //
-    Identifiable<Comparable>,
-    Identifiable<Comparable>,
-    FilterInput,
-    FilterCriteria,
+abstract class TaskFormView<
+TASK_FORM_MODEL extends TaskFormModel<
+    TaskData, //
     FormInput,
     AdditionalFormRelatedData>> extends StatelessWidget {
-  final BLOCK block;
+  final TASK_FORM_MODEL formModel;
   final QuickSuggestionMode quickSuggestionMode;
-  final bool provideItemContext;
-  final bool provideFormContext;
 
-  const BlockItemsView({
-    required this.block,
+  const TaskFormView({
+    required this.formModel,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
-    this.provideItemContext = false,
-    this.provideFormContext = false,
     super.key,
   });
 
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return BlockItemsViewBuilder(
+    return TaskFormViewBuilder(
       ownerClassInstance: this,
       description: '',
-      block: block,
-      provideItemContext: provideItemContext,
-      provideFormContext: provideFormContext,
+      formModel: formModel,
       quickSuggestionMode: quickSuggestionMode,
       build: () {
         return buildContent(context);

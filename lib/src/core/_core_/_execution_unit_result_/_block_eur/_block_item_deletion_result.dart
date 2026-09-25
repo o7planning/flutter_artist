@@ -3,9 +3,9 @@ part of '../../core.dart';
 /// Execution result representing the outcome of deleting a single item within a [Block],
 /// backed by [BlockOperationStep] journaling.
 class BlockItemDeletionResult<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionUnitResult<
+    ID extends Comparable, //
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionUnitResult<
     ID, //
     ITEM,
     ITEM_DETAIL,
@@ -37,9 +37,7 @@ ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionUnitResult<
 
   /// Failed operation encountered during item deletion, if any.
   ItemOperationFailedStep<ID, ITEM>? get failedOperation =>
-      journalSteps
-          .whereType<ItemOperationFailedStep<ID, ITEM>>()
-          .firstOrNull;
+      journalSteps.whereType<ItemOperationFailedStep<ID, ITEM>>().firstOrNull;
 
   /// The item that failed to be deleted, if any.
   ITEM? get failedItem => failedOperation?.item;

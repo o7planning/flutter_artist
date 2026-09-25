@@ -86,7 +86,7 @@ abstract class Task<
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
-      TaskExecutionResult(precheck: null),
+      TaskExecutionResult<TASK_DATA>(precheck: null),
       objectCaller: this,
       methodName: '_unitTaskExecution',
     );

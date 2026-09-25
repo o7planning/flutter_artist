@@ -8,8 +8,11 @@ sealed class FlowDataState<STAGE_ENUM extends Enum> {
   String get name;
 
   bool get isNone => this is FlowDataStateNone;
+
   bool get isPending => this is FlowDataStatePending;
+
   bool get isCompleted => this is FlowDataStateCompleted;
+
   bool get isAborted => this is FlowDataStateAborted;
 
   @override

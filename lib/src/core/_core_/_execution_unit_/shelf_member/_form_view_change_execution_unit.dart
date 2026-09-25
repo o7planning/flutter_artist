@@ -12,9 +12,9 @@ class _FormViewChangeExecutionUnit extends _ShelfMemberExecutionUnit {
     required this.xBlockFormModel,
     required this.executionIntent,
   }) : super(
-    executionUnitType: ExecutionUnitType.formModelFormViewChanged,
-    executionIntent: executionIntent,
-  );
+          executionUnitType: ExecutionUnitType.formModelFormViewChanged,
+          executionIntent: executionIntent,
+        );
 
   @override
   XShelf get xShelf => xBlockFormModel.xShelf;

@@ -16,6 +16,7 @@ class XStage<
       ADDITIONAL_FORM_RELATED_DATA> stage;
 
   String get name => stage.name;
+
   STAGE_ENUM get stageId => stage.stageId;
 
   StageSubmitExecutionIntent<

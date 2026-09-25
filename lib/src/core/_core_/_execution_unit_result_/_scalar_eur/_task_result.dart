@@ -1,6 +1,7 @@
 part of '../../core.dart';
 
-class TaskExecutionResult extends ExecutionUnitResult<TaskExecutionPrecheck> {
+class TaskExecutionResult<TASK_DATA extends TaskData>
+    extends ExecutionUnitResult<TaskExecutionPrecheck> {
   TaskExecutionResult({required super.precheck});
 
   @override

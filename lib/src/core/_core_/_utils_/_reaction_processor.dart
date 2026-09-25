@@ -5,7 +5,7 @@ class _ReactionProcessor {
 
   void addReactionExecutionUnits({required Set<String> excludeShelfNames}) {
     ExecutionTrace executionTrace =
-        FlutterArtist.codeFlowLogger._createPendingEventProcessorExecutionTrace(
+    FlutterArtist.codeFlowLogger._createPendingEventProcessorExecutionTrace(
       ownerClassInstance: this,
     );
     executionTrace.addInfo(
@@ -37,7 +37,7 @@ class _ReactionProcessor {
         continue;
       }
       bool hasPendingOrStaleMember =
-          listenerShelf.hasPendingOrStaleMember(requiresVisible: true);
+      listenerShelf.hasPendingOrStaleMember(requiresVisible: true);
       if (!hasPendingOrStaleMember) {
         executionTrace.addSeparator();
         continue;

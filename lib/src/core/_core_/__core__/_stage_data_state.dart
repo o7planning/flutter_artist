@@ -8,12 +8,17 @@ sealed class StageDataState {
   String get name;
 
   bool get isNone => this is StageDataStateNone;
+
   bool get isPending => this is StageDataStatePending;
+
   bool get isLoaded => this is StageDataStateLoaded;
+
   bool get isFresh => this is StageDataStateLoadedFresh;
+
   bool get isStale => this is StageDataStateLoadedStale;
 
-  StageErrorInfo? get errorInfo => switch (this) {
+  StageErrorInfo? get errorInfo =>
+      switch (this) {
         StageDataStatePending(:final errorInfo) => errorInfo,
         StageDataStateLoadedStale(:final errorInfo) => errorInfo,
         _ => null,
@@ -64,9 +69,9 @@ final class StageDataStatePending extends StageDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is StageDataStatePending &&
-          runtimeType == other.runtimeType &&
-          errorInfo == other.errorInfo;
+          other is StageDataStatePending &&
+              runtimeType == other.runtimeType &&
+              errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);
@@ -117,9 +122,9 @@ final class StageDataStateLoadedStale extends StageDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is StageDataStateLoadedStale &&
-          runtimeType == other.runtimeType &&
-          errorInfo == other.errorInfo;
+          other is StageDataStateLoadedStale &&
+              runtimeType == other.runtimeType &&
+              errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);

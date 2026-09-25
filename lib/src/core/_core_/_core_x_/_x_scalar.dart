@@ -134,7 +134,8 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "Scalar (1.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+        "Scalar (1.1), ${getClassNameWithoutGenerics(
+            scalar)}, _executionIntent: $executionIntent, "
             "dataState: ${scalarDataState.toBriefInfo()}",
       );
     }
@@ -162,8 +163,10 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
             executionIntent: intentToUse,
           ),
           info:
-              "Scalar (2.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent --> $intentToUse, "
-              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
+          "Scalar (2.1), ${getClassNameWithoutGenerics(
+              scalar)}, _executionIntent: $executionIntent --> $intentToUse, "
+              "dataState: ${scalarDataState
+              .toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
       // IN: DATA STATE = PENDING
@@ -172,8 +175,10 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Scalar (2.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
-              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
+          "Scalar (2.2), ${getClassNameWithoutGenerics(
+              scalar)}, _executionIntent: $executionIntent, "
+              "dataState: ${scalarDataState
+              .toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
     }
@@ -201,15 +206,19 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
             executionIntent: intentToUse,
           ),
           info:
-              "Scalar (3.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $intentToUse, "
-              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
+          "Scalar (3.1), ${getClassNameWithoutGenerics(
+              scalar)}, _executionIntent: $intentToUse, "
+              "dataState: ${scalarDataState
+              .toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Scalar (3.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
-              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
+          "Scalar (3.2), ${getClassNameWithoutGenerics(
+              scalar)}, _executionIntent: $executionIntent, "
+              "dataState: ${scalarDataState
+              .toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
     }
@@ -224,7 +233,8 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Scalar (4.0), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+          "Scalar (4.0), ${getClassNameWithoutGenerics(
+              scalar)}, _executionIntent: $executionIntent, "
               "dataState: ${scalarDataState.toBriefInfo()}",
         );
       }
@@ -246,8 +256,10 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
             executionIntent: intentToUse,
           ),
           info:
-              "Scalar (4.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $intentToUse, "
-              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
+          "Scalar (4.1), ${getClassNameWithoutGenerics(
+              scalar)}, _executionIntent: $intentToUse, "
+              "dataState: ${scalarDataState
+              .toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
 
@@ -257,14 +269,16 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Scalar (4.2.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+            "Scalar (4.2.1), ${getClassNameWithoutGenerics(
+                scalar)}, _executionIntent: $executionIntent, "
                 "dataState: ${scalarDataState.toBriefInfo()}",
           );
         } else if (executionIntent is ScalarNullIntent) {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Scalar (4.2.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+            "Scalar (4.2.2), ${getClassNameWithoutGenerics(
+                scalar)}, _executionIntent: $executionIntent, "
                 "dataState: ${scalarDataState.toBriefInfo()}",
           );
         } else if (executionIntent is ScalarQueryIntent<ID, VALUE>) {
@@ -275,21 +289,23 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
               executionIntent: executionIntent,
             ),
             info:
-                "Scalar (4.2.3), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+            "Scalar (4.2.3), ${getClassNameWithoutGenerics(
+                scalar)}, _executionIntent: $executionIntent, "
                 "dataState: ${scalarDataState.toBriefInfo()}",
           );
         } else if (executionIntent
-            is ScalarLoadExtraDataQuickActionIntent<ID, VALUE, dynamic>) {
+        is ScalarLoadExtraDataQuickActionIntent<ID, VALUE, dynamic>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit:
-                _ScalarLoadExtraDataQuickActionExecutionUnit<ID, VALUE, Object>(
+            _ScalarLoadExtraDataQuickActionExecutionUnit<ID, VALUE, Object>(
               xScalar: this,
               executionIntent: executionIntent
-                  as ScalarLoadExtraDataQuickActionIntent<ID, VALUE, Object>,
+              as ScalarLoadExtraDataQuickActionIntent<ID, VALUE, Object>,
             ),
             info:
-                "Scalar (4.2.4), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+            "Scalar (4.2.4), ${getClassNameWithoutGenerics(
+                scalar)}, _executionIntent: $executionIntent, "
                 "dataState: ${scalarDataState.toBriefInfo()}",
           );
         } else if (executionIntent is ScalarClearIntent<ID, VALUE>) {
@@ -300,14 +316,16 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
               executionIntent: executionIntent,
             ),
             info:
-                "Scalar (4.2.5), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+            "Scalar (4.2.5), ${getClassNameWithoutGenerics(
+                scalar)}, _executionIntent: $executionIntent, "
                 "dataState: ${scalarDataState.toBriefInfo()}",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Scalar (4.2.6), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+            "Scalar (4.2.6), ${getClassNameWithoutGenerics(
+                scalar)}, _executionIntent: $executionIntent, "
                 "dataState: ${scalarDataState.toBriefInfo()}",
           );
         }
@@ -318,8 +336,10 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "Scalar (4.3), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: null, "
-            "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
+        "Scalar (4.3), ${getClassNameWithoutGenerics(
+            scalar)}, _executionIntent: null, "
+            "dataState: ${scalarDataState
+            .toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
       );
     }
 
@@ -329,7 +349,8 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
     return NxtExecutionUnit.no(
       debug: debug,
       info:
-          "Scalar (5.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+      "Scalar (5.1), ${getClassNameWithoutGenerics(
+          scalar)}, _executionIntent: $executionIntent, "
           "dataState: ${scalarDataState.toBriefInfo()}",
     );
   }
@@ -368,13 +389,13 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   // ***************************************************************************
 
   ScalarLoadExtraDataQuickActionIntent
-      _createAndSetScalarExecutionIntentLoadExtraDataQuickAction<
-          DATA extends Object>({
+  _createAndSetScalarExecutionIntentLoadExtraDataQuickAction<
+  DATA extends Object>({
     required ScalarQuickExtraDataLoadAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
   }) {
     final executionIntent =
-        ScalarLoadExtraDataQuickActionIntent<ID, VALUE, DATA>(
+    ScalarLoadExtraDataQuickActionIntent<ID, VALUE, DATA>(
       action: action,
       afterQuickAction: afterQuickAction,
     );
@@ -396,12 +417,14 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   void printInfo() {
     bool hasActiveUI = scalar.ui.hasVisibleViews();
     String msg =
-        "${getClassName(this)}(${getClassName(scalar)} - UiActive: $hasActiveUI - queryHint: $queryHint)";
+        "${getClassName(this)}(${getClassName(
+        scalar)} - UiActive: $hasActiveUI - queryHint: $queryHint)";
     print(msg);
   }
 
   String toDebugHtmlString() {
-    return " - <b>XScalar (${getClassName(scalar)})</b> - <b>queryHint</b>: $queryHint";
+    return " - <b>XScalar (${getClassName(
+        scalar)})</b> - <b>queryHint</b>: $queryHint";
   }
 
   @override

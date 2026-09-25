@@ -93,7 +93,6 @@ class _DeskCore extends _DeskCoreV1 {
     _activityMap.clear();
   }
 
-
   void _checkToRemoveActivity(Activity activity) {
     bool hasMountedUiComponent = activity.ui.hasMountedViews();
     if (!hasMountedUiComponent) {

@@ -11,10 +11,16 @@ abstract class Stage<
   final String name;
   final StageConfig config;
   final StageEffectiveConfig effectiveConfig;
-  final StageFormModel<STAGE_DATA, FORM_INPUT, ADDITIONAL_FORM_RELATED_DATA>?
-      formModel;
+
+  final StageFormModel<
+      STAGE_ENUM, //
+      STAGE_DATA,
+      FLOW_CONTEXT_DATA, //
+      FORM_INPUT,
+      ADDITIONAL_FORM_RELATED_DATA>? formModel;
 
   late final Flow<STAGE_ENUM, FLOW_CONTEXT_DATA> flow;
+
   StageDataState _dataState = StageDataStateNone();
 
   StageDataState get dataState => _dataState;

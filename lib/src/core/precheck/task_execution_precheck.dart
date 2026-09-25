@@ -1,7 +1,6 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
-
 enum TaskExecutionPrecheck implements Precheck {
   busy(
     precheckCode: PrecheckCode.busy,

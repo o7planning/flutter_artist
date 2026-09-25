@@ -27,7 +27,7 @@ class FilterCriterion<RAW_VALUE extends Object> {
       print(stackTrace);
       throw AppError(
           errorMessage:
-          "The ${getTypeNameWithoutGenerics(FilterCriterion)}.convert() "
+              "The ${getTypeNameWithoutGenerics(FilterCriterion)}.convert() "
               "method of criterionBaseName('$filterCriterionName') was called with error. $e");
     }
   }

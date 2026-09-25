@@ -13,9 +13,9 @@ class _FilterModelLoadDataExecutionUnit
     required this.xFilterModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.filterModelLoadData,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.filterModelLoadData,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xFilterModel.xShelf;

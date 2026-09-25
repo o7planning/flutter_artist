@@ -18,20 +18,20 @@ class BlockControlElevatedButton extends BlockControl {
     WidgetStatesController? statesController,
     Widget? child,
   }) : super(
-          build: (VoidCallback? onPressed) {
-            return ElevatedButton(
-              onPressed: onPressed,
-              onHover: onHover,
-              onFocusChange: onFocusChange,
-              style: style,
-              focusNode: focusNode,
-              autofocus: autofocus,
-              clipBehavior: clipBehavior,
-              statesController: statesController,
-              child: child,
-            );
-          },
-        );
+    build: (VoidCallback? onPressed) {
+      return ElevatedButton(
+        onPressed: onPressed,
+        onHover: onHover,
+        onFocusChange: onFocusChange,
+        style: style,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        clipBehavior: clipBehavior,
+        statesController: statesController,
+        child: child,
+      );
+    },
+  );
 
   BlockControlElevatedButton.icon({
     super.key,
@@ -52,20 +52,20 @@ class BlockControlElevatedButton extends BlockControl {
     Widget? icon,
     IconAlignment iconAlignment = IconAlignment.start,
   }) : super(
-          build: (VoidCallback? onPressed) {
-            return ElevatedButton.icon(
-              onPressed: onPressed,
-              onHover: onHover,
-              onFocusChange: onFocusChange,
-              style: style,
-              focusNode: focusNode,
-              autofocus: autofocus,
-              clipBehavior: clipBehavior,
-              statesController: statesController,
-              iconAlignment: iconAlignment,
-              icon: icon,
-              label: label,
-            );
-          },
-        );
+    build: (VoidCallback? onPressed) {
+      return ElevatedButton.icon(
+        onPressed: onPressed,
+        onHover: onHover,
+        onFocusChange: onFocusChange,
+        style: style,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        clipBehavior: clipBehavior,
+        statesController: statesController,
+        iconAlignment: iconAlignment,
+        icon: icon,
+        label: label,
+      );
+    },
+  );
 }

@@ -42,7 +42,8 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
           }
         }
         XBlockFormModel? xBlockFormModel = xBlock.xBlockFormModel;
-        if (xBlockFormModel != null && xBlockFormModel.formModel.ui.hasVisibleViews()) {
+        if (xBlockFormModel != null &&
+            xBlockFormModel.formModel.ui.hasVisibleViews()) {
           if (xBlockFormModel.formModel.dataState.isPending ||
               xBlockFormModel.formModel.dataState.isFatalError ||
               xBlockFormModel.formModel.dataState.isNone) {

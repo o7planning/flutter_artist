@@ -1,15 +1,15 @@
 part of '../core.dart';
 
-abstract class FormView<
-    FORM_MODEL extends BlockFormModel<
+abstract class BlockFormView<
+    BLOCK_FORM_MODEL extends BlockFormModel<
         Comparable, //
         Identifiable<Comparable>,
         FormInput,
         AdditionalFormRelatedData>> extends StatelessWidget {
-  final FORM_MODEL formModel;
+  final BLOCK_FORM_MODEL formModel;
   final QuickSuggestionMode quickSuggestionMode;
 
-  const FormView({
+  const BlockFormView({
     required this.formModel,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     super.key,
@@ -18,7 +18,7 @@ abstract class FormView<
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return FormViewBuilder(
+    return BlockFormViewBuilder(
       ownerClassInstance: this,
       description: '',
       formModel: formModel,

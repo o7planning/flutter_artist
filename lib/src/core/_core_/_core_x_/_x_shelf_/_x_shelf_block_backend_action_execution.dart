@@ -6,9 +6,9 @@ class _XShelfBlockBackendActionExecution extends XShelf {
     required FilterInput? filterInput,
     required BlockViewportSyncStrategy? viewportSyncStrategy,
   }) : super(
-          xShelfType: XShelfType.blockBackendActionExecution,
-          shelf: block.shelf,
-        ) {
+    xShelfType: XShelfType.blockBackendActionExecution,
+    shelf: block.shelf,
+  ) {
     // QueryHint queryHint = QueryHint.none;
     // bool forceReloadItem = false;
     // //

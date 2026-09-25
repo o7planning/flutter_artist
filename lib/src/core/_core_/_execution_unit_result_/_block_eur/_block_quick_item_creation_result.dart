@@ -2,11 +2,12 @@ part of '../../core.dart';
 
 @RenameAnnotation()
 class BlockQuickItemCreationResult<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockExecutionUnitResult<ID, ITEM, ITEM_DETAIL,
-        BlockQuickItemCreationPrecheck> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionUnitResult<ID,
+    ITEM,
+    ITEM_DETAIL,
+    BlockQuickItemCreationPrecheck> {
   BlockQuickItemCreationResult({
     super.precheck,
     super.errorInfo,

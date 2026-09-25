@@ -11,7 +11,8 @@ class LocaleManager extends _Core {
   LocaleManager._({
     required GlobalsManager globalsManager,
     required FlutterArtistLocaleAdapter localeAdapter,
-  })  : _globalsManager = globalsManager,
+  })
+      : _globalsManager = globalsManager,
         _localeAdapter = localeAdapter;
 
   /// Exposes the core localized asset dictionary loader delegate infrastructure.
@@ -54,7 +55,9 @@ class LocaleManager extends _Core {
     if (targets.isEmpty) return const [];
 
     final List<LocaleProfile> compiled = [];
-    final Map<String, String>? englishLocaleMap = LocaleNames.of(context)?.data;
+    final Map<String, String>? englishLocaleMap = LocaleNames
+        .of(context)
+        ?.data;
 
     for (Locale locale in targets) {
       final String lookupKey = locale.toString();

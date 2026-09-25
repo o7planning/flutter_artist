@@ -8,15 +8,18 @@ sealed class TaskDataState {
   String get name;
 
   bool get isPending => this is TaskDataStatePending;
+
   bool get isLoaded => this is TaskDataStateLoaded;
+
   bool get isFresh => this is TaskDataStateLoadedFresh;
+
   bool get isStale => this is TaskDataStateLoadedStale;
 
   TaskErrorInfo? get errorInfo => switch (this) {
-    TaskDataStatePending(:final errorInfo) => errorInfo,
-    TaskDataStateLoadedStale(:final errorInfo) => errorInfo,
-    _ => null,
-  };
+        TaskDataStatePending(:final errorInfo) => errorInfo,
+        TaskDataStateLoadedStale(:final errorInfo) => errorInfo,
+        _ => null,
+      };
 
   bool get hasError => errorInfo != null;
 
@@ -42,9 +45,9 @@ final class TaskDataStatePending extends TaskDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is TaskDataStatePending &&
-              runtimeType == other.runtimeType &&
-              errorInfo == other.errorInfo;
+      other is TaskDataStatePending &&
+          runtimeType == other.runtimeType &&
+          errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);
@@ -95,9 +98,9 @@ final class TaskDataStateLoadedStale extends TaskDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is TaskDataStateLoadedStale &&
-              runtimeType == other.runtimeType &&
-              errorInfo == other.errorInfo;
+      other is TaskDataStateLoadedStale &&
+          runtimeType == other.runtimeType &&
+          errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);

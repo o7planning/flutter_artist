@@ -1,12 +1,12 @@
 part of '../core.dart';
 
-class FormViewBuilder extends _ContextProviderView {
-  final BlockFormModel formModel;
+abstract class BaseFormViewBuilder<M extends BaseFormModel>
+    extends _ContextProviderView {
+  final M formModel;
   final QuickSuggestionMode quickSuggestionMode;
-
   final Widget Function() build;
 
-  const FormViewBuilder({
+  const BaseFormViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
@@ -14,28 +14,11 @@ class FormViewBuilder extends _ContextProviderView {
     required this.build,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
   });
-
-  @override
-  State<StatefulWidget> createState() {
-    return _FormViewBuilderState();
-  }
 }
 
-class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
+abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
+    M extends BaseFormModel> extends _ContextProviderViewState<W> {
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-
-  @override
-  ContextProviderViewType get type => ContextProviderViewType.form;
-
-  @override
-  Shelf? _getRelatedShelf() {
-    return widget.formModel.shelf;
-  }
-
-  @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
 
   @override
   String getWidgetOwnerClassName() {
@@ -43,34 +26,13 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
   }
 
   @override
-  bool get provideScalarContext {
-    return false;
-  }
+  bool get provideScalarContext => false;
 
   @override
-  bool get provideBlockContext {
-    return true;
-  }
+  bool get provideItemContext => true;
 
   @override
-  bool get provideItemContext {
-    return true;
-  }
-
-  @override
-  bool get provideFormContext {
-    return true;
-  }
-
-  @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  bool get provideFormContext => true;
 
   @override
   void setBuildingState({required bool isBuilding}) {
@@ -100,34 +62,30 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
     widget.formModel._afterBuildFormView();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // widget.formModel._formKey = formKey;
-  }
-
+  /// Handles form discard confirmation when closing the route with dirty changes.
   Future<void> _onPopInvokedWithResult(bool didPop, dynamic result) async {
     if (didPop || !widget.formModel.isDirty()) {
       return;
     }
     _leavingDirtyForms[widget.formModel.pathInfo] = widget.formModel;
-    //
+
     dialogs.YesNoCancel selection = dialogs.YesNoCancel.cancel;
     try {
       selection = await dialogs.showYesNoCancelDialog(
         context: context,
         message:
-            "Do you want to save changes the [${getClassName(widget.formModel)}] before closing?",
+            "Do you want to save changes to [${getClassName(widget.formModel)}] before closing?",
         details: "",
         defaultOption: dialogs.YesNoCancel.yes,
       );
     } finally {
       _leavingDirtyForms.remove(widget.formModel.pathInfo);
     }
+
     switch (selection) {
       case dialogs.YesNoCancel.yes:
-        BlockFormSaveResult result = await widget.formModel.saveForm();
-        if (!result.successForAll) {
+        final bool savedSuccessfully = await handleSaveOnPop();
+        if (!savedSuccessfully) {
           return;
         }
         if (mounted && _leavingDirtyForms.isEmpty) {
@@ -141,16 +99,39 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
         }
         break;
       case dialogs.YesNoCancel.cancel:
-        // Do Nothing
+        // Do nothing.
         break;
+    }
+  }
+
+  /// Hook implemented by specific form subclasses to persist data upon exit confirmation.
+  Future<bool> handleSaveOnPop();
+
+  /// Guards against simultaneous executor sweeps and race conditions during UI changes.
+  Future<void> _onChanged() async {
+    if (FlutterArtist.executor.executingXShelfId != null) {
+      return;
+    }
+    if (widget.formModel._changeEventLocked) {
+      return;
+    }
+
+    final bool isBuilding = widget.formModel.ui._isWidgetStateBuilding(
+      widgetState: this,
+    );
+    if (!isBuilding) {
+      final Map<String, dynamic> currentInstantValues =
+          formKey.currentState?.instantValue ?? {};
+      await widget.formModel._onChangeFromFormView(
+        formKeyInstantValuesInUI: currentInstantValues,
+      );
     }
   }
 
   @override
   Widget buildContent(BuildContext context) {
-    if (widget.formModel.block.effectiveConfig.preventUnsavedChangesLoss) {
+    if (widget.formModel.effectivePreventUnsavedChangesLoss) {
       return PopScope(
-        // TODO: In Error, check again late.
         canPop: !widget.formModel.isDirty(),
         onPopInvokedWithResult: _onPopInvokedWithResult,
         child: _buildFormBuilder(context),
@@ -160,36 +141,17 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
     }
   }
 
-  Future<void> _onChanged() async {
-    if (FlutterArtist.executor.executingXShelfId != null) {
-      return;
-    }
-    if (widget.formModel._changeEventLocked) {
-      return;
-    }
-    //
-    bool isBuilding = widget.formModel.ui._isWidgetStateBuilding(
-      widgetState: this,
-    );
-    if (!isBuilding) {
-      final Map<String, dynamic> currentInstantValues =
-          formKey.currentState?.instantValue ?? {};
-      await widget.formModel._onChangeFromFormView(
-          formKeyInstantValuesInUI: currentInstantValues);
-    }
-  }
-
   FormBuilder _buildFormBuilder(BuildContext context) {
     return FormBuilder(
       key: formKey,
-      initialValue: widget.formModel._initialValuesForFormView(),
+      initialValue: widget.formModel._getInitialValuesForFormView(),
       autovalidateMode: widget.formModel._autovalidateModeForFormView,
       onChanged: _onChanged,
-      child: _build(context),
+      child: _buildBody(context),
     );
   }
 
-  Widget _build(BuildContext context) {
+  Widget _buildBody(BuildContext context) {
     if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
       return Stack(
         children: [
@@ -241,10 +203,5 @@ class _FormViewBuilderState extends _ContextProviderViewState<FormViewBuilder> {
         ),
       ],
     );
-  }
-
-  @override
-  void checkAndFreeMemory() {
-    FlutterArtist.storage._checkToRemoveShelf(widget.formModel.shelf);
   }
 }

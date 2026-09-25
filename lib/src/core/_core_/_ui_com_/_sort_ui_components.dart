@@ -180,7 +180,8 @@ class _SortUiComponents extends _UiComponents {
 
     if (!visibleOld && visibleCurrent) {
       // LOGIC: #0000
-      FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(sortModel.shelf);
+      FlutterArtist.storage._lazyUiComponentTriggerQueue
+          .addShelf(sortModel.shelf);
     } else if (visibleOld && !visibleCurrent) {
       // TODO: Broadcast hidden if needed
     }

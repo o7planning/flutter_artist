@@ -4,16 +4,15 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(
-    xShelfType: XShelfType.shelfExternalReaction,
-  ) {
+          xShelfType: XShelfType.shelfExternalReaction,
+        ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk.block._blockSyncSessionState == null &&
           xBlk.block._blockItemSyncSessionState == null) {
         continue;
       }
       // @@@hasActiveBlockFragment
-      bool blockXBlockRep =
-      xBlk.block.ui.hasBlockContext(
+      bool blockXBlockRep = xBlk.block.ui.hasBlockContext(
         includeDescendants: true,
       );
       QueryHint queryHint = QueryHint.none;
@@ -49,8 +48,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
           break;
         }
         // @@@hasActiveBlockFragment
-        bool blockXBlockRep =
-        xBlock.block.ui.hasBlockContext(
+        bool blockXBlockRep = xBlock.block.ui.hasBlockContext(
           includeDescendants: true,
         );
         if (blockXBlockRep) {
@@ -106,8 +104,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       QueryHint queryHint = QueryHint.none;
       //
       if (xScalar.scalar._scalarSyncSessionState != null &&
-          xScalar.scalar
-              ._isMatchScalarSyncSessionState(
+          xScalar.scalar._isMatchScalarSyncSessionState(
               xScalar.scalar._scalarSyncSessionState)) {
         if (scalarXVisible) {
           // Test Cases: [84a].

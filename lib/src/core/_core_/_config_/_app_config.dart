@@ -40,7 +40,8 @@ class EffectiveAppConfig {
     required FlutterArtistLoginLogoutAdapter loginLogoutAdapter,
     required FlutterArtistNotificationAdapter? notificationAdapter,
     required FlutterArtistGlobalDataAdapter globalDataAdapter,
-  })  : _updateLocale = updateLocale,
+  })
+      : _updateLocale = updateLocale,
         _registerActivities = registerActivities,
         _registerShelves = registerShelves,
         _showDebugNetworkInspector = showDebugNetworkInspector,
