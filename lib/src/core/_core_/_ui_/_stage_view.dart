@@ -3,7 +3,7 @@ part of '../core.dart';
 abstract class StageView<
     STAGE extends Stage<
         Enum, //
-        StageData,
+        StageResultData,
         FlowContextData,
         CreationPreset,
         FormInput >> extends StatelessWidget {

@@ -3,17 +3,19 @@ part of '../core.dart';
 /// Runtime operational context wrapper for individual [Stage] instances inside a [Flow].
 class XStage<
     STAGE_ENUM extends Enum,
-    STAGE_DATA extends StageData,
+    STAGE_INIT_DATA extends StageInitData,
+    STAGE_RESULT_DATA extends StageResultData,
     FLOW_CONTEXT_DATA extends FlowContextData,
     CREATION_PRESET extends CreationPreset,
-    FORM_INPUT extends FormInput > {
+    FORM_INPUT extends FormInput> {
   final XFlow xFlow;
   final Stage<
       STAGE_ENUM, //
-      STAGE_DATA,
+      STAGE_INIT_DATA,
+      STAGE_RESULT_DATA,
       FLOW_CONTEXT_DATA,
       CREATION_PRESET,
-      FORM_INPUT > stage;
+      FORM_INPUT> stage;
 
   String get name => stage.name;
 
@@ -21,12 +23,12 @@ class XStage<
 
   StageSubmitExecutionIntent<
       STAGE_ENUM, //
-      STAGE_DATA,
+      STAGE_RESULT_DATA,
       FLOW_CONTEXT_DATA>? _executionIntent;
 
   StageSubmitExecutionIntent<
       STAGE_ENUM, //
-      STAGE_DATA,
+      STAGE_RESULT_DATA,
       FLOW_CONTEXT_DATA>? get executionIntent => _executionIntent;
 
   XStage._({
@@ -48,7 +50,7 @@ class XStage<
     if (_executionIntent != null) {
       return NxtExecutionUnit.yes(
         debug: debug,
-        executionUnit: _StageSubmitExecutionUnit<STAGE_ENUM, STAGE_DATA,
+        executionUnit: _StageSubmitExecutionUnit<STAGE_ENUM, STAGE_RESULT_DATA,
             FLOW_CONTEXT_DATA>(
           xStage: this,
           executionIntent: _executionIntent!,

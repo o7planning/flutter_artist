@@ -1,6 +1,6 @@
 import '../../../core.dart';
 
-class NewPasswordStageData extends StageData {
+class NewPasswordStageData extends StageResultData {
   final String newPassword;
   final String confirmPassword;
 

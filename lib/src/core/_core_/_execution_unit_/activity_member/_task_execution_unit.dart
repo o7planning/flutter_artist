@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
 class _TaskExecutionUnit<
-        TASK_DATA extends TaskData, //
+        TASK_DATA extends TaskInitData, //
         CREATION_PRESET extends CreationPreset,
         TASK_INPUT extends FormInput >
     extends _ActivityMemberExecutionUnit {
@@ -11,7 +11,7 @@ class _TaskExecutionUnit<
       TASK_INPUT > xTask;
 
   @override
-  final TaskExecutionIntent<TASK_DATA> executionIntent;
+  final TaskSubmitIntent<TASK_DATA> executionIntent;
 
   _TaskExecutionUnit({
     required this.xTask,

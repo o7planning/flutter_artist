@@ -2,7 +2,7 @@ part of '../core.dart';
 
 sealed class StageExecutionIntent<
         STAGE_ENUM extends Enum,
-        STAGE_DATA extends StageData,
+        STAGE_DATA extends StageResultData,
         FLOW_CONTEXT_DATA extends FlowContextData,
         PRECHECK, //
         EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
@@ -12,7 +12,7 @@ sealed class StageExecutionIntent<
 
 class StageSubmitExecutionIntent<
     STAGE_ENUM extends Enum, //
-    STAGE_DATA extends StageData,
+    STAGE_DATA extends StageResultData,
     FLOW_CONTEXT_DATA extends FlowContextData> extends StageExecutionIntent<
     STAGE_ENUM, //
     STAGE_DATA,

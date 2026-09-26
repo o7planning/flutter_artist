@@ -3,12 +3,14 @@ part of '../core.dart';
 /// Runtime execution wrapper for [Task], managing intent delegation,
 /// single-stage progress lifecycle, and state mutation.
 class XTask<
-    TASK_DATA extends TaskData, //
+    TASK_INIT_DATA extends TaskInitData,
+    TASK_RESULT_DATA extends TaskResultData, //
     CREATION_PRESET extends CreationPreset,
-    FORM_INPUT extends FormInput > {
+    FORM_INPUT extends FormInput> {
   final XActivity xActivity;
 
-  final Task<TASK_DATA, CREATION_PRESET, FORM_INPUT > task;
+  final Task<TASK_INIT_DATA, TASK_RESULT_DATA, CREATION_PRESET, FORM_INPUT>
+      task;
 
   bool _executed = false;
 
@@ -22,10 +24,10 @@ class XTask<
 
   ExecHint get execHint => _execHint;
 
-  TaskBaseExecutionIntent<TASK_DATA, dynamic, dynamic>? _executionIntent;
+  TaskBaseExecutionIntent<TASK_INIT_DATA, TASK_RESULT_DATA, dynamic, dynamic>? _executionIntent;
 
-  TaskBaseExecutionIntent<TASK_DATA, dynamic, dynamic>? get executionIntent =>
-      _executionIntent;
+  TaskBaseExecutionIntent<TASK_INIT_DATA, TASK_RESULT_DATA, dynamic, dynamic>?
+      get executionIntent => _executionIntent;
 
   XTask._({
     required this.xActivity,
@@ -71,8 +73,8 @@ class XTask<
           (_execHint == ExecHint.force || isVisible) && !_executed;
 
       if (shouldExecute) {
-        final TaskExecutionIntent<TASK_DATA> intentToUse;
-        if (executionIntent is TaskExecutionIntent<TASK_DATA>) {
+        final TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA> intentToUse;
+        if (executionIntent is TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
           intentToUse = executionIntent;
         } else {
           intentToUse = _createAndSetTaskIntentExecution(
@@ -108,8 +110,8 @@ class XTask<
           (_execHint == ExecHint.force || isVisible) && !_executed;
 
       if (shouldExecute) {
-        final TaskExecutionIntent<TASK_DATA> intentToUse;
-        if (executionIntent is TaskExecutionIntent<TASK_DATA>) {
+        final TaskSubmitIntent<TASK_RESULT_DATA> intentToUse;
+        if (executionIntent is TaskSubmitIntent<TASK_RESULT_DATA>) {
           intentToUse = executionIntent;
         } else {
           intentToUse = _createAndSetTaskIntentExecution(
@@ -153,8 +155,8 @@ class XTask<
 
       // 3.1. Force execution explicitly requested via ExecHint
       if (_execHint == ExecHint.force) {
-        final TaskExecutionIntent<TASK_DATA> intentToUse;
-        if (executionIntent is TaskExecutionIntent<TASK_DATA>) {
+        final TaskSubmitIntent<TASK_RESULT_DATA> intentToUse;
+        if (executionIntent is TaskSubmitIntent<TASK_RESULT_DATA>) {
           intentToUse = executionIntent;
         } else {
           intentToUse = _createAndSetTaskIntentExecution(
@@ -183,7 +185,7 @@ class XTask<
                 "Task (3.2.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $executionIntent, "
                 "dataState: ${taskDataState.toBriefInfo()}",
           );
-        } else if (executionIntent is TaskExecutionIntent<TASK_DATA>) {
+        } else if (executionIntent is TaskSubmitIntent<TASK_RESULT_DATA>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _TaskExecutionUnit(
@@ -228,15 +230,15 @@ class XTask<
   // ***************************************************************************
 
   void _createAndSetTaskIntentDone({required String lastIntentInfo}) {
-    _executionIntent = TaskDoneIntent<TASK_DATA>(
+    _executionIntent = TaskDoneIntent<TASK_RESULT_DATA>(
       lastIntentInfo: lastIntentInfo,
     );
   }
 
-  TaskExecutionIntent<TASK_DATA> _createAndSetTaskIntentExecution({
+  TaskSubmitIntent<TASK_RESULT_DATA> _createAndSetTaskIntentExecution({
     required String lastIntentInfo,
   }) {
-    final executionIntent = TaskExecutionIntent<TASK_DATA>(
+    final executionIntent = TaskSubmitIntent<TASK_RESULT_DATA>(
       lastIntentInfo: lastIntentInfo,
     );
     _executionIntent = executionIntent;

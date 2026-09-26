@@ -2,7 +2,7 @@ part of '../../core.dart';
 
 class _StageSubmitExecutionUnit<
 STAGE_ENUM extends Enum, //
-STAGE_DATA extends StageData,
+STAGE_DATA extends StageResultData,
 FLOW_CONTEXT_DATA extends FlowContextData>
     extends _ActivityMemberExecutionUnit {
   final XStage xStage;

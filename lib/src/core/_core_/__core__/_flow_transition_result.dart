@@ -6,7 +6,7 @@ class FlowTransitionResult<STAGE_ENUM extends Enum> {
 
 class StageExecutionResult<
     STAGE_ENUM extends Enum, //
-    STAGE_DATA extends StageData> {
+    STAGE_DATA extends StageResultData> {
   final STAGE_DATA? stageData;
   final STAGE_ENUM? nextStage;
   final bool isFinished;

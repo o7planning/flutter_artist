@@ -1,38 +1,57 @@
 part of '../core.dart';
 
 sealed class TaskBaseExecutionIntent<
-        TASK_DATA extends TaskData, //
+        TASK_INIT_DATA extends TaskInitData, //
+        TASK_RESULT_DATA extends TaskResultData,
         PRECHECK, //
         EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
     extends ExecutionIntent {
   //
 }
 
-class TaskExecutionIntent<TASK_DATA extends TaskData>
-    extends TaskBaseExecutionIntent<
-        TASK_DATA, //
-        TaskExecutionPrecheck,
-        TaskExecutionResult> {
+class TaskLoadInitIntent<
+    TASK_INIT_DATA extends TaskInitData, //
+    TASK_RESULT_DATA extends TaskResultData> extends TaskBaseExecutionIntent<
+    TASK_INIT_DATA,
+    TASK_RESULT_DATA, //
+    TaskSubmitExcutionPrecheck,
+    TaskSubmitExecutionResult> {
   final String lastIntentInfo;
 
-  TaskExecutionIntent({required this.lastIntentInfo});
+  TaskLoadInitIntent({required this.lastIntentInfo});
 }
 
-class TaskDoneIntent<TASK_DATA extends TaskData>
+class TaskSubmitIntent<
+    TASK_INIT_DATA extends TaskInitData, //
+    TASK_RESULT_DATA extends TaskResultData> extends TaskBaseExecutionIntent<
+    TASK_INIT_DATA,
+    TASK_RESULT_DATA, //
+    TaskSubmitExcutionPrecheck,
+    TaskSubmitExecutionResult> {
+  final String lastIntentInfo;
+
+  TaskSubmitIntent({required this.lastIntentInfo});
+}
+
+class TaskDoneIntent<
+        TASK_INIT_DATA extends TaskInitData, TASK_RESULT_DATA extends TaskResultData>
     extends TaskBaseExecutionIntent<
-        TASK_DATA, //
-        TaskExecutionPrecheck,
-        TaskExecutionResult> {
+        TASK_INIT_DATA,
+        TASK_RESULT_DATA, //
+        TaskSubmitExcutionPrecheck,
+        TaskSubmitExecutionResult> {
   final String lastIntentInfo;
 
   TaskDoneIntent({required this.lastIntentInfo});
 }
 
-class TaskNullIntent<TASK_DATA extends TaskData>
+class TaskNullIntent<
+        TASK_INIT_DATA extends TaskInitData, TASK_RESULT_DATA extends TaskResultData>
     extends TaskBaseExecutionIntent<
-        TASK_DATA, //
-        TaskExecutionPrecheck,
-        TaskExecutionResult> {
+        TASK_INIT_DATA,
+        TASK_RESULT_DATA, //
+        TaskSubmitExcutionPrecheck,
+        TaskSubmitExecutionResult> {
   final String lastIntentInfo;
 
   TaskNullIntent({required this.lastIntentInfo});

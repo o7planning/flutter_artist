@@ -1,16 +1,18 @@
 part of '../core.dart';
 
-class FlowStructure<STAGE_ENUM extends Enum,
+class FlowStructure<
+    STAGE_ENUM extends Enum, //
     FLOW_CONTEXT_DATA extends FlowContextData> {
   final FlowConfig config;
   final String? description;
   final List<
       Stage<
           STAGE_ENUM, //
-          StageData,
+          StageInitData,
+          StageResultData,
           FLOW_CONTEXT_DATA,
           CreationPreset,
-          FormInput >> stages;
+          FormInput>> stages;
 
   final STAGE_ENUM? initialStageId;
 

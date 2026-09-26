@@ -89,7 +89,7 @@ abstract class Flow<
   }
 
   void _processStageSubmitResult(
-      StageExecutionResult<STAGE_ENUM, StageData> result) {
+      StageExecutionResult<STAGE_ENUM, StageResultData> result) {
     if (result.isFinished) {
       _dataState = FlowDataStateCompleted();
       return;

@@ -2,8 +2,8 @@ part of '../core.dart';
 
 /// Runtime workflow coordinator maintaining multi-stage progression and transitions.
 class XFlow<
-STAGE_ENUM extends Enum, //
-FLOW_CONTEXT_DATA extends FlowContextData> {
+    STAGE_ENUM extends Enum, //
+    FLOW_CONTEXT_DATA extends FlowContextData> {
   final XActivity xActivity;
   final Flow<STAGE_ENUM, FLOW_CONTEXT_DATA> flow;
 

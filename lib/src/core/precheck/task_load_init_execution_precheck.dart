@@ -1,7 +1,7 @@
 import '__chk_code.dart';
 import '__precheck.dart';
 
-enum TaskExecutionPrecheck implements Precheck {
+enum TaskLoadInitExcutionPrecheck implements Precheck {
   busy(
     precheckCode: PrecheckCode.busy,
     message: "The Task execution is disabled.",
@@ -18,9 +18,11 @@ enum TaskExecutionPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const TaskExecutionPrecheck({
+  const TaskLoadInitExcutionPrecheck({
     required this.precheckCode,
     required this.message,
     required this.details,
   });
 }
+
+

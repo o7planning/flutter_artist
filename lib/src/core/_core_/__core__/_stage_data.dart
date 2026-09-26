@@ -1,11 +1,21 @@
 part of '../core.dart';
 
-abstract class StageData {
+abstract class StageResultData {
   //
 }
 
-class EmptyStageData extends StageData {
-  EmptyStageData._();
+class EmptyStageResultData extends StageResultData {
+  EmptyStageResultData._();
 
-  factory EmptyStageData() => EmptyStageData._();
+  factory EmptyStageResultData() => EmptyStageResultData._();
+}
+
+abstract class StageInitData {
+  //
+}
+
+class EmptyStageInitData extends StageInitData {
+  EmptyStageInitData._();
+
+  factory EmptyStageInitData() => EmptyStageInitData._();
 }

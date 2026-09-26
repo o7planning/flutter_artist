@@ -3,7 +3,7 @@ part of '../core.dart';
 abstract class StageFormView<
     STAGE_FORM_MODEL extends StageFormModel<
         Enum, //
-        StageData,
+        StageResultData,
         FlowContextData,
         CreationPreset,
         FormInput,
