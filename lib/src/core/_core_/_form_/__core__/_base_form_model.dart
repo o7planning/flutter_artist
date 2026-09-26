@@ -1,6 +1,7 @@
 part of '../../core.dart';
 
 abstract class BaseFormModel<
+        CREATION_PRESET extends CreationPreset,
         FORM_INPUT extends FormInput, //
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends _Core {

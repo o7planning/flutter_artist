@@ -4,9 +4,13 @@ abstract class StageFormModel<
         STAGE_ENUM extends Enum,
         STAGE_DATA extends StageData,
         FLOW_CONTEXT_DATA extends FlowContextData,
+        CREATION_PRESET extends CreationPreset,
         FORM_INPUT extends FormInput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel {
+    extends BaseFormModel<
+        CREATION_PRESET, //
+        FORM_INPUT,
+        ADDITIONAL_FORM_RELATED_DATA> {
   Activity get activity => stage.flow.activity;
 
   Flow<STAGE_ENUM, FLOW_CONTEXT_DATA> get flow => stage.flow;
@@ -20,16 +24,16 @@ abstract class StageFormModel<
       STAGE_ENUM, //
       STAGE_DATA,
       FLOW_CONTEXT_DATA,
-      FORM_INPUT,
-      ADDITIONAL_FORM_RELATED_DATA> stage;
+      CREATION_PRESET,
+      FORM_INPUT > stage;
 
   void _bindToStage(
     Stage<
             STAGE_ENUM, //
             STAGE_DATA,
             FLOW_CONTEXT_DATA,
-            FORM_INPUT,
-            ADDITIONAL_FORM_RELATED_DATA>
+            CREATION_PRESET,
+            FORM_INPUT >
         stage,
   ) {
     this.stage = stage;

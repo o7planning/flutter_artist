@@ -7,8 +7,8 @@ abstract class BlockSectionView<
         Identifiable<Comparable>,
         FilterInput,
         FilterCriteria,
-        FormInput,
-        AdditionalFormRelatedData>> extends StatelessWidget {
+         CreationPreset,
+        FormInput >> extends StatelessWidget {
   final bool provideItemContext;
   final bool provideFormContext;
   final BLOCK block;

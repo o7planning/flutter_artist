@@ -40,10 +40,10 @@ RENAME:
  severSideAcceptNonDirection --> serverSideSkipNonDirectionWhileSelecting
  clientSideAcceptNonDirection --> clientSideSkipNonDirectionWhileSelecting
 
-TODO: buildInputForCreationForm trong truong hop SingleItemBlock can xu ly the nao?
+TODO: buildFormInput trong truong hop SingleItemBlock can xu ly the nao?
 
   @override
-  SingleProduct36aFormInput buildInputForCreationForm({
+  SingleProduct36aFormInput buildFormInput({
     required Object? parentBlockCurrentItem,
     required SingleProduct36aFilterCriteria filterCriteria,
   }) {

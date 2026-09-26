@@ -6,7 +6,7 @@ class _BlockData<
     ITEM_DETAIL extends Identifiable<ID>,
     FILTER_INPUT extends FilterInput,
     FILTER_CRITERIA extends FilterCriteria,
-    ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData,
+    CREATION_PRESET extends CreationPreset,
     FORM_INPUT extends FormInput> {
   ///
   /// Owner block
@@ -17,8 +17,8 @@ class _BlockData<
       ITEM_DETAIL,
       FILTER_INPUT,
       FILTER_CRITERIA,
-      FORM_INPUT,
-      ADDITIONAL_FORM_RELATED_DATA> block;
+      CREATION_PRESET,
+      FORM_INPUT> block;
 
   final List<ITEM> _items = [];
   final List<ITEM> _selectedItems = [];

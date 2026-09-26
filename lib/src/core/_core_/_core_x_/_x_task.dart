@@ -4,11 +4,11 @@ part of '../core.dart';
 /// single-stage progress lifecycle, and state mutation.
 class XTask<
     TASK_DATA extends TaskData, //
-    TASK_INPUT extends FormInput,
-    ADDITIONAL_FORM_DATA extends AdditionalFormRelatedData> {
+    CREATION_PRESET extends CreationPreset,
+    FORM_INPUT extends FormInput > {
   final XActivity xActivity;
 
-  final Task<TASK_DATA, TASK_INPUT, ADDITIONAL_FORM_DATA> task;
+  final Task<TASK_DATA, CREATION_PRESET, FORM_INPUT > task;
 
   bool _executed = false;
 

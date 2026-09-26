@@ -2,15 +2,19 @@ part of '../core.dart';
 
 abstract class Task<
     TASK_DATA extends TaskData, //
-    TASK_INPUT extends FormInput,
-    ADDITIONAL_FORM_DATA extends AdditionalFormRelatedData> extends _Core {
+    CREATION_PRESET extends CreationPreset,
+    FORM_INPUT extends FormInput > extends _Core {
   final String name;
   final TaskConfig config;
   final TaskEffectiveConfig effectiveConfig;
 
   late final Activity activity;
 
-  final TaskFormModel<TASK_DATA, TASK_INPUT, ADDITIONAL_FORM_DATA>? formModel;
+  final TaskFormModel<
+      TASK_DATA, //
+      CREATION_PRESET,
+      FORM_INPUT,
+      AdditionalFormRelatedData>? formModel;
 
   late final ui = _TaskUiComponents(task: this);
 
@@ -32,10 +36,11 @@ abstract class Task<
 
   // ***************************************************************************
 
-  XTask<TASK_DATA, TASK_INPUT, ADDITIONAL_FORM_DATA> _createXTask({
+  XTask<TASK_DATA, CREATION_PRESET, FORM_INPUT >
+      _createXTask({
     required XActivity xActivity,
   }) {
-    return XTask<TASK_DATA, TASK_INPUT, ADDITIONAL_FORM_DATA>._(
+    return XTask<TASK_DATA, CREATION_PRESET, FORM_INPUT >._(
       task: this,
       xActivity: xActivity,
     );
@@ -66,8 +71,8 @@ abstract class Task<
     required ExecutionUnitType executionUnitType,
     required XTask<
             TASK_DATA, //
-            TASK_INPUT,
-            ADDITIONAL_FORM_DATA>
+            CREATION_PRESET,
+            FORM_INPUT >
         thisXTask,
     required TaskExecutionIntent<TaskData> executionIntent,
   }) async {

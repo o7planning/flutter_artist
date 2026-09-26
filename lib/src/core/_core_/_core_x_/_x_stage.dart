@@ -5,15 +5,15 @@ class XStage<
     STAGE_ENUM extends Enum,
     STAGE_DATA extends StageData,
     FLOW_CONTEXT_DATA extends FlowContextData,
-    FORM_INPUT extends FormInput,
-    ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> {
+    CREATION_PRESET extends CreationPreset,
+    FORM_INPUT extends FormInput > {
   final XFlow xFlow;
   final Stage<
       STAGE_ENUM, //
       STAGE_DATA,
       FLOW_CONTEXT_DATA,
-      FORM_INPUT,
-      ADDITIONAL_FORM_RELATED_DATA> stage;
+      CREATION_PRESET,
+      FORM_INPUT > stage;
 
   String get name => stage.name;
 

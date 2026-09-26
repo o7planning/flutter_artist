@@ -1,3 +1,4 @@
+import 'package:flutter_artist/src/core/built_in/empty_creation_preset.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../../../built_in/empty_additional_form_related_data.dart';
@@ -11,8 +12,8 @@ class EnterEmailStage extends Stage<
     ChangePassEnum, // STAGE_ENUM
     EmailStageData, // STAGE_DATA
     ChangePasswordData, // FLOW_CONTEXT_DATA
-    EmptyFormInput, // FORM_INPUT
-    EmptyAdditionalFormRelatedData // AdditionalFormRelatedData
+    EmptyCreationPreset, // CREATION_PRESET
+    EmptyFormInput // FORM_INPUT
     > {
   static const stageName = "enter-email-stage";
 

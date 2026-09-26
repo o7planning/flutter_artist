@@ -1,12 +1,11 @@
 part of '../core.dart';
 
 abstract class Stage<
-        STAGE_ENUM extends Enum,
-        STAGE_DATA extends StageData,
-        FLOW_CONTEXT_DATA extends FlowContextData,
-        FORM_INPUT extends FormInput,
-        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends _Core {
+    STAGE_ENUM extends Enum,
+    STAGE_DATA extends StageData,
+    FLOW_CONTEXT_DATA extends FlowContextData,
+    CREATION_PRESET extends CreationPreset,
+    FORM_INPUT extends FormInput> extends _Core {
   final STAGE_ENUM stageId;
   final String name;
   final StageConfig config;
@@ -16,8 +15,9 @@ abstract class Stage<
       STAGE_ENUM, //
       STAGE_DATA,
       FLOW_CONTEXT_DATA, //
+      CREATION_PRESET,
       FORM_INPUT,
-      ADDITIONAL_FORM_RELATED_DATA>? formModel;
+      AdditionalFormRelatedData>? formModel;
 
   late final Flow<STAGE_ENUM, FLOW_CONTEXT_DATA> flow;
 
@@ -44,12 +44,16 @@ abstract class Stage<
       STAGE_ENUM, //
       STAGE_DATA,
       FLOW_CONTEXT_DATA,
-      FORM_INPUT,
-      ADDITIONAL_FORM_RELATED_DATA> _createXStage({
+      CREATION_PRESET,
+      FORM_INPUT> _createXStage({
     required XFlow xFlow,
   }) {
-    return XStage<STAGE_ENUM, STAGE_DATA, FLOW_CONTEXT_DATA, FORM_INPUT,
-        ADDITIONAL_FORM_RELATED_DATA>._(
+    return XStage<
+        STAGE_ENUM, //
+        STAGE_DATA,
+        FLOW_CONTEXT_DATA,
+        CREATION_PRESET,
+        FORM_INPUT>._(
       stage: this,
       xFlow: xFlow,
     );
@@ -83,8 +87,8 @@ abstract class Stage<
             STAGE_ENUM, //
             STAGE_DATA,
             FLOW_CONTEXT_DATA,
-            FORM_INPUT,
-            ADDITIONAL_FORM_RELATED_DATA>
+            CREATION_PRESET,
+            FORM_INPUT>
         thisXStage,
     required StageSubmitExecutionIntent<Enum, StageData, FlowContextData>
         executionIntent,

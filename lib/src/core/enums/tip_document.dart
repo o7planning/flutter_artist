@@ -37,6 +37,7 @@ enum TipDocument {
   blockConvertItemDetailToItem(enabled: false),
   blockPerformLoadItemDetailById(enabled: false),
   blockResolveParentBlockItemId(enabled: true),
+  blockCreationPreset(enabled: false),
   blockInitFormRelatedData(enabled: false),
   //
   blockBackendActionPerformAction(enabled: false),
@@ -148,6 +149,8 @@ enum TipDocument {
         return "Block.performLoadItemDetailById()";
       case TipDocument.blockInitFormRelatedData:
         return "Block.performLoadAdditionalFormRelatedData()";
+      case TipDocument.blockCreationPreset:
+        return "Block.buildCreationPreset()";
       case TipDocument.blockBackendActionPerformAction:
         return "BlockBackendAction.performBackendOperation()";
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
@@ -255,6 +258,8 @@ enum TipDocument {
         return "Block.performLoadItemDetailById()";
       case TipDocument.blockInitFormRelatedData:
         return "Block.performLoadAdditionalFormRelatedData()";
+      case TipDocument.blockCreationPreset:
+        return "Block.buildCreationPreset()";
       case TipDocument.blockBackendActionPerformAction:
         return "BlockBackendAction.performBackendOperation()";
       case TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem:
@@ -459,6 +464,8 @@ enum TipDocument {
       case TipDocument.blockPerformLoadItemDetailById:
         return [];
       case TipDocument.blockInitFormRelatedData:
+        return [];
+      case TipDocument.blockCreationPreset:
         return [];
       case TipDocument.blockBackendActionPerformAction:
         return [];

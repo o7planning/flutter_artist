@@ -5,8 +5,8 @@ abstract class StageView<
         Enum, //
         StageData,
         FlowContextData,
-        FormInput,
-        AdditionalFormRelatedData>> extends StatelessWidget {
+        CreationPreset,
+        FormInput >> extends StatelessWidget {
   final STAGE stage;
   final QuickSuggestionMode quickSuggestionMode;
 

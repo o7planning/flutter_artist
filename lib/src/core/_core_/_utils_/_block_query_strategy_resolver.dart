@@ -12,8 +12,8 @@ class BlockQueryStrategyResolver {
             Identifiable<ID>,
             FilterInput,
             FilterCriteria,
-            FormInput,
-            AdditionalFormRelatedData>
+            CreationPreset,
+            FormInput>
         block,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
     required QueryHint queryHint,

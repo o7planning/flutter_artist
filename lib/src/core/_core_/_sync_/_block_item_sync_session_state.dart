@@ -5,8 +5,14 @@ part of '../core.dart';
 class _BlockItemSyncSessionState<ID extends Comparable> extends Equatable
     implements DebugBlockItemSyncSessionState<ID> {
   /// Reference to the owner block.
-  final Block<ID, Identifiable<ID>, Identifiable<ID>, FilterInput,
-      FilterCriteria, FormInput, AdditionalFormRelatedData> block;
+  final Block<
+      ID, //
+      Identifiable<ID>,
+      Identifiable<ID>,
+      FilterInput,
+      FilterCriteria,
+      CreationPreset,
+      FormInput> block;
 
   /// The specific item identity bound to this sync session.
   final ID _targetItemId;

@@ -9,8 +9,8 @@ class _BlockSyncSessionState<ID extends Comparable> extends Equatable
       Identifiable<ID>,
       FilterInput,
       FilterCriteria,
-      FormInput,
-      AdditionalFormRelatedData> block;
+      CreationPreset,
+      FormInput> block;
 
   final Comparable? _parentBlockItemId;
 

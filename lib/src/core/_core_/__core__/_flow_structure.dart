@@ -9,8 +9,8 @@ class FlowStructure<STAGE_ENUM extends Enum,
           STAGE_ENUM, //
           StageData,
           FLOW_CONTEXT_DATA,
-          FormInput,
-          AdditionalFormRelatedData>> stages;
+          CreationPreset,
+          FormInput >> stages;
 
   final STAGE_ENUM? initialStageId;
 

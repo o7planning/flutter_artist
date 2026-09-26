@@ -2,9 +2,13 @@ part of '../../core.dart';
 
 abstract class TaskFormModel<
         TASK_DATA extends TaskData,
-        TASK_INPUT extends FormInput,
+        CREATION_PRESET extends CreationPreset,
+FORM_INPUT extends FormInput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel {
+    extends BaseFormModel<
+        CREATION_PRESET, //
+        FORM_INPUT,
+        ADDITIONAL_FORM_RELATED_DATA> {
   Activity get activity => task.activity;
 
   @override
@@ -14,11 +18,11 @@ abstract class TaskFormModel<
 
   late final Task<
       TASK_DATA, //
-      TASK_INPUT,
-      ADDITIONAL_FORM_RELATED_DATA> task;
+  CREATION_PRESET,
+      FORM_INPUT > task;
 
   void _bindToTask(
-      Task<TASK_DATA, TASK_INPUT, ADDITIONAL_FORM_RELATED_DATA> task) {
+      Task<TASK_DATA, CREATION_PRESET, FORM_INPUT > task) {
     this.task = task;
   }
 
@@ -27,7 +31,7 @@ abstract class TaskFormModel<
 
   /// Khởi tạo giá trị ban đầu cho form (Initial Values).
   Map<String, dynamic> specifyInitialValues({
-    required TASK_INPUT? taskInput,
+    required FORM_INPUT? taskInput,
     required ADDITIONAL_FORM_RELATED_DATA? relatedData,
   });
 

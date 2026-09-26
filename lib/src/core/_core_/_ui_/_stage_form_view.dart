@@ -5,6 +5,7 @@ abstract class StageFormView<
         Enum, //
         StageData,
         FlowContextData,
+        CreationPreset,
         FormInput,
         AdditionalFormRelatedData>> extends StatelessWidget {
   final STAGE_FORM_MODEL formModel;

@@ -4,6 +4,7 @@ abstract class BlockFormView<
     BLOCK_FORM_MODEL extends BlockFormModel<
         Comparable, //
         Identifiable<Comparable>,
+        CreationPreset,
         FormInput,
         AdditionalFormRelatedData>> extends StatelessWidget {
   final BLOCK_FORM_MODEL formModel;

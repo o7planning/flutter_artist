@@ -60,14 +60,6 @@ part of '../core.dart';
 /// }
 /// ```
 ///
-/// [ADDITIONAL_FORM_RELATED_DATA]: Ancestral Data used for Form.
-/// ```
-/// class EmployeeFormRelatedData  {
-///    final int departmentId;
-///    final String departmentName;
-/// }
-/// ```
-///
 /// [FORM_INPUT]: Form data are used to create a record in the Form.
 /// For example: Create an employee with the specified name,...
 /// ```
@@ -82,8 +74,8 @@ abstract class Block<
     ITEM_DETAIL extends Identifiable<ID>,
     FILTER_INPUT extends FilterInput, // EmptyFilterInput
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-    FORM_INPUT extends FormInput, // EmptyFormInput
-    ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData // EmptyAdditionalFormRelatedData
+    CREATION_PRESET extends CreationPreset, // EmptyCreationPreset
+    FORM_INPUT extends FormInput // EmptyFormInput
     > extends _Core {
   late final Shelf shelf;
 
@@ -214,8 +206,9 @@ abstract class Block<
   final BlockFormModel<
       ID, //
       ITEM_DETAIL,
+      CREATION_PRESET,
       FORM_INPUT,
-      ADDITIONAL_FORM_RELATED_DATA>? formModel;
+      AdditionalFormRelatedData>? formModel;
 
   final List<Block> _childBlocks;
 
@@ -289,7 +282,7 @@ abstract class Block<
       ITEM_DETAIL,
       FILTER_INPUT,
       FILTER_CRITERIA,
-      ADDITIONAL_FORM_RELATED_DATA,
+      CREATION_PRESET,
       FORM_INPUT>._(
     block: this,
     pageable: config.pageable,
@@ -1107,12 +1100,12 @@ abstract class Block<
     return FILTER_CRITERIA;
   }
 
-  Type getFormInputType() {
-    return FORM_INPUT;
+  Type getCreationPresetType() {
+    return CREATION_PRESET;
   }
 
-  Type getFormRelatedDataType() {
-    return ADDITIONAL_FORM_RELATED_DATA;
+  Type getFormInputType() {
+    return FORM_INPUT;
   }
 
   // ***************************************************************************
@@ -3126,7 +3119,7 @@ abstract class Block<
     thisXBlock._createAndSetBlockExecutionIntentDone(
       lastIntentInfo: "Prepare Form To Create Item",
     );
-    //
+
     executionTrace.addInfo(
       codeId: "#04000",
       shortDesc: "Begin ${executionUnitType.asDebugExecutionUnit()}.",
@@ -3135,18 +3128,18 @@ abstract class Block<
         "initDirty": executionIntent.initDirty,
       },
     );
-    //
+
     executionTrace.addInfo(
       codeId: "#04020",
       shortDesc: "${debugObjHtml(this)} set currentItem to null.",
     );
-    //
+
     final executionResult = executionIntent.resultWrapper._setResult(
       PrepareItemCreationResult(),
       objectCaller: this,
       methodName: '_unitPrepareFormToCreateItem',
     );
-    //
+
     const ID? nullId = null;
     const ITEM? nullItem = null;
     const ITEM_DETAIL? nullItemDetail = null;
@@ -3155,7 +3148,7 @@ abstract class Block<
       item: nullItem,
       itemDetail: nullItemDetail,
     );
-    //
+
     executionTrace.addInfo(
       codeId: "#04040",
       shortDesc: "Clear all data of child blocks and set them to <b>none</b>."
@@ -3164,7 +3157,7 @@ abstract class Block<
     __clearAllChildrenBlocksToNone(
       thisXBlock: thisXBlock,
     );
-    //
+
     executionTrace.addInfo(
       codeId: "#04060",
       shortDesc: "${debugObjHtml(formModel)} set formMode to creation.",
@@ -3173,25 +3166,27 @@ abstract class Block<
       formMode: FormMode.creation,
       formDataState: FormDataStateLoadedFresh(),
     );
-    //
+
     bool success = false;
     try {
       __refreshPreparingFormCreationState(
         isPreparingFormCreation: true,
       );
-      // TODO: Test Cases??
+
       executionTrace.addInfo(
         codeId: "#04080",
         shortDesc: "${debugObjHtml(formModel)} set formMode to creation.",
       );
-      ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData =
-          await _performLoadAdditionalFormRelatedData(executionTrace);
-      if (additionalFormRelatedData == null) {
+
+      // Build creation preset synchronously from committed filter criteria and ancestor context
+      final CREATION_PRESET? creationPreset =
+          _buildCreationPreset(executionTrace);
+      if (creationPreset == null) {
         return false;
       }
-      //
+
       final activityType = FormActivityType.startCreatingOrEditing;
-      //
+
       executionTrace.addNonControllableCall(
         codeId: "#04100",
         caller: formModel!,
@@ -3200,16 +3195,19 @@ abstract class Block<
         parameters: {
           "activityType": activityType,
           "formInput": executionIntent.formInput,
-          "additionalFormRelatedData": additionalFormRelatedData,
+          "creationPreset": creationPreset,
         },
       );
+
+      // Delegate full form initialization directly to the form model
       success = await formModel!._startNewFormActivity(
         executionTrace: executionTrace,
-        additionalFormRelatedData: additionalFormRelatedData,
+        creationPreset: creationPreset,
         formInput: executionIntent.formInput as FORM_INPUT?,
         activityType: activityType,
         formKeyInstantValuesInUI: null,
       );
+
       if (success) {
         executionTrace.addInfo(
           codeId: "#04120",
@@ -4802,7 +4800,7 @@ abstract class Block<
   /// This method is called before calling a Form to create.
   ///
   @_AbstractMethodAnnotation()
-  FORM_INPUT buildInputForCreationForm({
+  FORM_INPUT buildFormInput({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
   });
@@ -4810,17 +4808,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_AbstractMethodAnnotation()
-  Future<ADDITIONAL_FORM_RELATED_DATA> performLoadAdditionalFormRelatedData({
-    required Object? parentBlockCurrentItem,
-    required ITEM_DETAIL? currentItemDetail,
-    required FILTER_CRITERIA filterCriteria,
-  });
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  FORM_INPUT __buildInputForCreationForm(ExecutionTrace executionTrace) {
+  FORM_INPUT __buildFormInput(ExecutionTrace executionTrace) {
     final Object? parentBlockCurrentItem = parent?.currentItem;
     final FILTER_CRITERIA? currentFilterCriteria = filterCriteria;
 
@@ -4832,24 +4820,26 @@ abstract class Block<
     executionTrace.addControllableCall(
       codeId: "#05100",
       caller: this,
-      methodName: "buildInputForCreationForm",
+      methodName: "buildFormInput",
       suffixShortDesc: "",
       parameters: {
         "parentBlockCurrentItem": parentBlockCurrentItem,
         "filterCriteria": currentFilterCriteria,
       },
     );
-    return buildInputForCreationForm(
+    return buildFormInput(
       parentBlockCurrentItem: parentBlockCurrentItem,
       filterCriteria: currentFilterCriteria,
     );
   }
 
-  Future<ADDITIONAL_FORM_RELATED_DATA?> _performLoadAdditionalFormRelatedData(
+  // ***************************************************************************
+  // ***************************************************************************
+
+  CREATION_PRESET? _buildCreationPreset(
     ExecutionTrace executionTrace,
-  ) async {
+  ) {
     try {
-      final Object? parentBlockCurrentItem = parent?.currentItem;
       final FILTER_CRITERIA? currentFilterCriteria = filterCriteria;
 
       if (currentFilterCriteria == null) {
@@ -4860,32 +4850,31 @@ abstract class Block<
       executionTrace.addControllableCall(
         codeId: "#05000",
         caller: this,
-        methodName: "performLoadAdditionalFormRelatedData",
+        methodName: "buildCreationPreset",
         suffixShortDesc: "",
         parameters: {
-          "parentBlockCurrentItem": parentBlockCurrentItem,
-          "currentItemDetail": currentItemDetail,
           "filterCriteria": filterCriteria,
         },
       );
-      return await performLoadAdditionalFormRelatedData(
-        parentBlockCurrentItem: parentBlockCurrentItem,
-        currentItemDetail: currentItemDetail,
+      final ancestorContext = BlockAncestorContext(currentBlock: this);
+
+      return buildCreationPreset(
+        ancestorContext: ancestorContext,
         filterCriteria: currentFilterCriteria,
       );
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
-        methodName: "performLoadAdditionalFormRelatedData",
+        methodName: "buildCreationPreset",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument: TipDocument.blockInitFormRelatedData,
+        tipDocument: TipDocument.blockCreationPreset,
       );
       executionTrace.addInfo(
         codeId: "#05020",
         shortDesc:
-            "The ${debugObjHtml(this)}.performLoadAdditionalFormRelatedData() method was called with an error!",
+            "The ${debugObjHtml(this)}.buildCreationPreset() method was called with an error!",
         errorInfo: errorInfo,
       );
       return null;
@@ -4995,6 +4984,17 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Builds creation preset values derived from the active filter criteria and ancestor blocks.
+  /// Synchronous and in-memory execution.
+  @_AbstractMethodAnnotation()
+  CREATION_PRESET buildCreationPreset({
+    required BlockAncestorContext ancestorContext,
+    required FILTER_CRITERIA filterCriteria,
+  });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @_OverridableMethodAnnotation()
   void setChildrenForParent({
     required Object currentItemOfParentBlock,
@@ -5002,17 +5002,6 @@ abstract class Block<
   }) {
     // Override if need.
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // void __clearBlockError() {
-  //   _blockErrorInfo = null;
-  // }
-  //
-  // void __setBlockErrorInfo(BlockErrorInfo errorInfo) {
-  //   _blockErrorInfo = errorInfo;
-  // }
 
   // ***************************************************************************
   // ***************************************************************************
