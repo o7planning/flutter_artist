@@ -309,7 +309,7 @@ abstract class FilterModel<
   ///
   /// **CRITICAL ARCHITECTURAL CONTRACT**:
   /// Calling this method mutates the committed snapshot state of this [FilterModel]
-  /// and **MUST ALWAYS** be coupled with an immediate, actual query execution pipeline
+  /// and **MUST ALWAYS** be coupled with an immediate, actual query execution prozess
   /// (e.g. within [Block.query], [Scalar.query], or [Block.queryEmpty]).
   ///
   /// **Why standalone calls are strictly prohibited**:
@@ -321,7 +321,7 @@ abstract class FilterModel<
   ///    without dispatching an execution unit causes bound consumer blocks to calculate invalid
   ///    freshness flags (such as [hasUnappliedFilter]) while remaining unqueried.
   /// 3. **Cascade Multi-Block Inconsistency**: In multi-block setups sharing this [FilterModel],
-  ///    committing snapshot state without executing a query pipeline leaves sibling blocks
+  ///    committing snapshot state without executing a query prozess leaves sibling blocks
   ///    in an uncoordinated and desynchronized lifecycle.
   /// Applies the specified [FilterSyncDirective] to reconcile the draft workspace
   /// with the committed snapshot realm.
@@ -419,7 +419,7 @@ abstract class FilterModel<
         if (scalarDataState is ScalarDataStatePending) {
           final ScalarPendingReason reason = scalarDataState.reason;
           if (reason.isFailed) {
-            scalar._scalarData._setScalarDataState(
+            scalar._setScalarDataState(
               newScalarDataState: ScalarDataStatePending(
                 reason: ScalarPendingReasonFilterChanged(),
               ),
@@ -428,14 +428,14 @@ abstract class FilterModel<
         } else if (scalarDataState is ScalarDataStateLoadedStale) {
           final ScalarLoadedStateStaleReason reason = scalarDataState.reason;
           if (reason.isFailed) {
-            scalar._scalarData._setScalarDataState(
+            scalar._setScalarDataState(
               newScalarDataState: ScalarDataStateLoadedStale(
                 reason: ScalarLoadedStateStaleReasonFilterChanged(),
               ),
             );
           }
         } else if (scalarDataState is ScalarDataStateLoadedFresh) {
-          scalar._scalarData._setScalarDataState(
+          scalar._setScalarDataState(
             newScalarDataState: ScalarDataStateLoadedStale(
               reason: ScalarLoadedStateStaleReasonFilterChanged(),
             ),

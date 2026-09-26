@@ -7,8 +7,8 @@ abstract interface class DebugBlockSyncSessionState<ID extends Comparable> {
       Identifiable<ID>,
       FilterInput,
       FilterCriteria,
-      FormInput,
-      AdditionalFormRelatedData> get block;
+      CreationPreset,
+      FormInput> get block;
 
   Comparable? get parentBlockItemId;
 

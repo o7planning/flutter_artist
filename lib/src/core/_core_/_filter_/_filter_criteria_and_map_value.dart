@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-/// Represents an immutable criteria snapshot produced by the FilterModel evaluation pipeline.
+/// Represents an immutable criteria snapshot produced by the FilterModel evaluation prozess.
 sealed class FilterCriteriaSnapshot<FILTER_CRITERIA extends FilterCriteria>
     extends Equatable {
   const FilterCriteriaSnapshot();

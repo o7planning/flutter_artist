@@ -114,9 +114,9 @@ class _StageViewBuilderState
           },
         ),
         _QuickSuggestionButton.requery(
-          tooltip: "Requery",
+          tooltip: "Load Init Data",
           onPressed: () async {
-            await widget.stage.execute();
+            await widget.stage.loadInitData();
           },
         ),
       ],

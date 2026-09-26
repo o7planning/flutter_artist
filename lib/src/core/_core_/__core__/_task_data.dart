@@ -1,11 +1,22 @@
 part of '../core.dart';
 
-abstract class TaskData {
+abstract class TaskInitData {
   //
 }
 
-class EmptyTaskData extends TaskData {
-  EmptyTaskData._();
+class EmptyTaskInitData extends TaskInitData {
+  EmptyTaskInitData._();
 
-  factory EmptyTaskData() => EmptyTaskData._();
+  factory EmptyTaskInitData() => EmptyTaskInitData._();
+}
+
+
+class TaskResultData {
+
+}
+
+class EmptyTaskResultData extends TaskResultData {
+  EmptyTaskResultData._();
+
+  factory EmptyTaskResultData() => EmptyTaskResultData._();
 }

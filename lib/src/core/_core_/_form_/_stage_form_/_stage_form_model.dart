@@ -2,96 +2,158 @@ part of '../../core.dart';
 
 abstract class StageFormModel<
         STAGE_ENUM extends Enum,
-        STAGE_DATA extends StageData,
-        FLOW_CONTEXT_DATA extends FlowContextData,
+        INIT_DATA extends StageInitData,
+        RESULT_DATA extends StageResultData,
+        PROZESS_CONTEXT_DATA extends ProzessContextData,
+        CREATION_PRESET extends CreationPreset,
         FORM_INPUT extends FormInput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel {
-  Activity get activity => stage.flow.activity;
-
-  Flow<STAGE_ENUM, FLOW_CONTEXT_DATA> get flow => stage.flow;
-
+    extends BaseFormModel<CREATION_PRESET, FORM_INPUT,
+        ADDITIONAL_FORM_RELATED_DATA> {
   @override
-  String get pathInfo {
-    return "${activity.name} > ${flow.name} > ${stage.stageId} > stage-form";
+  String get pathInfo =>
+      "${stage.prozess.activity.name} > ${stage.prozess.name} > ${stage.name} > stage-form";
+
+  late final Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA,
+      CREATION_PRESET, FORM_INPUT> stage;
+
+  void _bindToStage(Stage parentStage) {
+    stage = parentStage as Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA,
+        PROZESS_CONTEXT_DATA, CREATION_PRESET, FORM_INPUT>;
   }
 
-  late final Stage<
-      STAGE_ENUM, //
-      STAGE_DATA,
-      FLOW_CONTEXT_DATA,
-      FORM_INPUT,
-      ADDITIONAL_FORM_RELATED_DATA> stage;
+  StageFormModel({super.config});
 
-  void _bindToStage(
-    Stage<
-            STAGE_ENUM, //
-            STAGE_DATA,
-            FLOW_CONTEXT_DATA,
-            FORM_INPUT,
-            ADDITIONAL_FORM_RELATED_DATA>
-        stage,
-  ) {
-    this.stage = stage;
-  }
+  PROZESS_CONTEXT_DATA get sharedContext => stage.sharedContext;
 
-  /// Nạp dữ liệu phụ trợ cho bước này dựa trên sharedContext của cả Flow.
-  Future<ADDITIONAL_FORM_RELATED_DATA?> performLoadStageFormData({
-    required FLOW_CONTEXT_DATA sharedContext,
+  // ===========================================================================
+  // FORM EXTRACTION HOOKS
+  // ===========================================================================
+
+  /// Supplies baseline initial values derived from the Stage's [initData]
+  /// and the Prozess's [sharedContext].
+  @_AbstractMethodAnnotation()
+  Map<String, dynamic>? specifyInitialValuesForSimpleProps({
+    required INIT_DATA initData,
+    required PROZESS_CONTEXT_DATA sharedContext,
+    required CREATION_PRESET creationPreset,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
   });
 
-  /// Điền giá trị khởi tạo cho form của bước này.
-  Map<String, dynamic> specifyInitialValues({
-    required FLOW_CONTEXT_DATA sharedContext,
-    required ADDITIONAL_FORM_RELATED_DATA? relatedData,
+  @_AbstractMethodAnnotation()
+  OptValueWrap? specifyInitialValueForMultiOptProp({
+    required String multiOptPropName,
+    required SelectionType selectionType,
+    required XData multiOptPropXData,
+    required Object? parentMultiOptPropValue,
+    required INIT_DATA initData,
+    required PROZESS_CONTEXT_DATA sharedContext,
+    required CREATION_PRESET creationPreset,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
   });
 
-  // ***************************************************************************
-  // ***************************************************************************
+  @_AbstractMethodAnnotation()
+  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
+    required FORM_INPUT formInput,
+  });
 
-  @override
-  void _addToRecent() {
-    FlutterArtist.desk._addRecentActivity(activity);
+  @_AbstractMethodAnnotation()
+  OptValueWrap? extractUpdateValueForMultiOptProp({
+    required String multiOptPropName,
+    required SelectionType selectionType,
+    required XData multiOptPropXData,
+    required Object? parentMultiOptPropValue,
+    required FORM_INPUT formInput,
+  });
+
+  @_AbstractMethodAnnotation()
+  Future<ADDITIONAL_FORM_RELATED_DATA> performLoadAdditionalFormRelatedData({
+    required INIT_DATA initData,
+    required PROZESS_CONTEXT_DATA sharedContext,
+  });
+
+  // ===========================================================================
+  // INITIALIZATION & SUBMIT
+  // ===========================================================================
+
+  /// Internal initializer invoked by [Stage.prepareStage].
+  Future<void> _initStageForm({
+    required INIT_DATA initData,
+    required CREATION_PRESET creationPreset,
+  }) async {
+    _formModelStructure._clearFormError();
+    _formModelStructure._setFormDataState(
+      formDataState: FormDataStatePending(),
+      error: null,
+    );
+
+    final additionalData = await performLoadAdditionalFormRelatedData(
+      initData: initData,
+      sharedContext: sharedContext,
+    );
+
+    final simpleDefaults = specifyInitialValuesForSimpleProps(
+          initData: initData,
+          sharedContext: sharedContext,
+          creationPreset: creationPreset,
+          additionalFormRelatedData: additionalData,
+        ) ??
+        {};
+
+    for (final entry in simpleDefaults.entries) {
+      _formModelStructure._setTempSimplePropValue(
+        propName: entry.key,
+        value: entry.value,
+        setForInitial: true,
+      );
+    }
+
+    _formModelStructure._updateTempToReal();
+    _formModelStructure._setFormDataState(
+      formDataState: const FormDataStateLoadedFresh(),
+      error: null,
+    );
+    _formModelStructure._formInitialDataReady = true;
   }
 
-  @override
-  void _triggerWhenFormViewVisible() {
-    FlutterArtist.storage._lazyUiComponentTriggerQueue.addActivity(activity);
-  }
-
-  @override
-  bool _canResetForm() {
-    // Actionable canReset = block.canResetForm();
-    // return canReset;
-    // TODO: Hardcode
-    print("TODO: stageFormModel._canResetForm");
+  /// Submits current form fields and advances the stage within the workflow.
+  Future<bool> submit() async {
+    // final Map<String, dynamic> formMapData =
+    //     _formModelStructure._currentFormData;
+    // final ApiResult<StageExecutionResult<STAGE_ENUM, RESULT_DATA>> apiResult =
+    //     await stage.performStageSubmit(
+    //   formStageData: formMapData,
+    //   initData: stage.initData!,
+    //   sharedContext: sharedContext,
+    // );
+    //
+    // if (!apiResult.isError()) {
+    //   await stage._processStageSubmitResult(apiResult);
+    //   _formModelStructure._setManualDirty(false);
+    //   return true;
+    // }
     return false;
   }
 
   @override
-  void _refreshAllViews() {
-    // activity.ui.refreshAllViews();
-    // TODO: Hardcode
-    print("TODO: stageFormModel._refreshAllViews");
+  bool isEnabled() => stage.dataState.isLoaded;
+
+  @override
+  bool _canResetForm() => isDirty();
+
+  @override
+  void _refreshAllViews()  {
+    // FlutterArtist.desk.ui.refreshAllViews();
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
+  @override
+  void _triggerWhenFormViewVisible() {}
 
-  /// Validate form tại bước này và đẩy kết quả sang stage.performStageSubmit
-  Future<bool> submit() async {
-    // final FormBuilderState? currentState = formKey.currentState;
-    // if (currentState == null || !currentState.saveAndValidate()) {
-    //   return;
-    // }
-    //
-    // final Map<String, dynamic> formStageData = currentState.value;
-    //
-    // final apiResult = await stage.performStageSubmit(
-    //   formStageData: formStageData,
-    //   sharedContext: stage.flow.contextData,
-    // );
-    // await stage._processStageSubmitResult(apiResult);
-    return true;
-  }
+  @override
+  void _addToRecent() {}
+
+  @override
+  Future<void> _onChangeFromFormView({
+    required Map<String, dynamic> formKeyInstantValuesInUI,
+  }) async {}
 }

@@ -3,9 +3,13 @@ part of '../../core.dart';
 abstract class BlockFormModel<
         ID extends Comparable,
         ITEM_DETAIL extends Identifiable<ID>,
+        CREATION_PRESET extends CreationPreset,
         FORM_INPUT extends FormInput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel<FORM_INPUT, ADDITIONAL_FORM_RELATED_DATA> {
+    extends BaseFormModel<
+        CREATION_PRESET, //
+        FORM_INPUT,
+        ADDITIONAL_FORM_RELATED_DATA> {
   @override
   String get pathInfo {
     return "${shelf.name} > ${block.name} > block-form";
@@ -22,8 +26,8 @@ abstract class BlockFormModel<
       ITEM_DETAIL,
       FilterInput,
       FilterCriteria,
-      FORM_INPUT,
-      ADDITIONAL_FORM_RELATED_DATA> block;
+      CREATION_PRESET,
+      FORM_INPUT> block;
 
   bool _defaultSimpleValuesInitiated = false;
   bool _defaultMultiOptValuesInitiated = false;
@@ -52,6 +56,16 @@ abstract class BlockFormModel<
 
   // ***************************************************************************
 
+  Type getFormRelatedDataType() {
+    return ADDITIONAL_FORM_RELATED_DATA;
+  }
+
+  Type getCreationPresetType() {
+    return CREATION_PRESET;
+  }
+
+  // ***************************************************************************
+
   void __disableAutovalidation() {
     AutovalidateMode temp = _autovalidateMode;
     _autovalidateMode = AutovalidateMode.disabled;
@@ -60,39 +74,10 @@ abstract class BlockFormModel<
   }
 
   // ***************************************************************************
+  // *** ABSTRACT METHODS: DATA EXTRACTION & FORM MUTATION ********************
   // ***************************************************************************
 
-  /// In all the cases: @itemDetail not null or @formInput not null or both.
-  ///
-  /// In case of you are editing an ITEM with and FormInput
-  /// then @itemDetail & @formInput will be not null.
-  ///
-  /// ```
-  /// Case FormActivityType.startCreatingOrEditing:
-  ///     - @formMode = FormMode.creation:
-  ///         - @itemDetail     --> Null.
-  ///         - @formInput --> Not null.
-  ///     - @formMode = FormMode.edit:
-  ///         - @itemDetail     --> Not Null.
-  ///         - @formInput --> Null or Not null.
-  ///
-  /// Case FormActivityType.patchFormFields:
-  ///     - @formMode = FormMode.creation:
-  ///         - @itemDetail     --> Null.
-  ///         - @formInput --> Not null.
-  ///     - @formMode = FormMode.edit:
-  ///         - @itemDetail     --> Not Null.
-  ///         - @formInput --> Not null. -
-  ///
-  /// Case FormActivityType.updateFromFormView:
-  ///     - @formMode = FormMode.creation:
-  ///         - @itemDetail     --> Null.
-  ///         - @formInput --> Not Null.
-  ///     - @formMode = FormMode.edit:
-  ///         - @itemDetail     --> Not Null.
-  ///         - @formInput --> Null or Not null.
-  /// ```
-  ///
+  /// Loads dynamic option dataset ([XData]) for a multi-option form property.
   @_AbstractMethodAnnotation()
   Future<XData?> performLoadMultiOptPropXData({
     required String multiOptPropName,
@@ -103,158 +88,92 @@ abstract class BlockFormModel<
     required ITEM_DETAIL? itemDetail,
   });
 
-  // ***************************************************************************
-  // ***************************************************************************
+  // ===========================================================================
+  // PAIR 1: CREATION PHASE (Evaluated only during FormMode.creation)
+  // ===========================================================================
 
+  /// Supplies baseline initial values for simple form properties during Creation mode.
+  ///
+  /// Combines [ancestorContext], [creationPreset] (derived from filter criteria),
+  /// and [additionalFormRelatedData].
   @_AbstractMethodAnnotation()
-  OptValueWrap? specifyDefaultValueForMultiOptProp({
+  Map<String, dynamic>? specifyCreationValuesForSimpleProps({
+    required BlockAncestorContext ancestorContext,
+    required CREATION_PRESET creationPreset,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
+  });
+
+  /// Resolves the initial selection wrapper for a multi-option property during Creation mode.
+  @_AbstractMethodAnnotation()
+  OptValueWrap? specifyCreationValueForMultiOptProp({
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
+    required BlockAncestorContext ancestorContext,
+    required CREATION_PRESET creationPreset,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
   });
 
-  // ***************************************************************************
-  // ***************************************************************************
+  // ===========================================================================
+  // PAIR 2: EDIT PHASE (Evaluated only during FormMode.edit)
+  // ===========================================================================
 
-  ///
-  /// If this Block HAS a parent Block:
-  /// ```dart
-  ///  Map<String, dynamic>? specifyDefaultValuesForSimpleProps({
-  ///     required Object? parentBlockCurrentItemId,
-  ///  }) {
-  ///     return {
-  ///        // ID of current item of parent Block.
-  ///        "companyId": parentBlockCurrentItemId,
-  ///        "departmentName": "Some Name",
-  ///     };
-  ///  }
-  /// ```
-  ///
-  /// If this Block HAS NO a parent Block:
-  /// ```dart
-  ///  Map<String, dynamic>? specifyDefaultValuesForSimpleProps({
-  ///     required Object? parentBlockCurrentItemId,
-  ///  }) {
-  ///     return {
-  ///        "departmentName": "Some Name",
-  ///     };
-  ///  }
-  /// ```
-  ///
-  // SAME-AS: #0011 (filter - specifyDefaultValuesForSimpleTildeCriteria)
+  /// Extracts values from the persisted [itemDetail] to populate simple form fields.
   @_AbstractMethodAnnotation()
-  Map<String, dynamic>? specifyDefaultValuesForSimpleProps({
-    required Object? parentBlockCurrentItemId,
+  Map<String, dynamic>? extractSimplePropValuesFromItemDetail({
+    required BlockAncestorContext ancestorContext,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
+    required ITEM_DETAIL itemDetail,
   });
 
-  // ***************************************************************************
-  // ***************************************************************************
-
+  /// Extracts selection wrappers from the persisted [itemDetail] for a multi-option property.
   @_AbstractMethodAnnotation()
   OptValueWrap? extractMultiOptPropValueFromItemDetail({
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
+    required BlockAncestorContext ancestorContext,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required ITEM_DETAIL itemDetail,
   });
 
-  // ***************************************************************************
-  // ***************************************************************************
+  // ===========================================================================
+  // PAIR 3: EXTERNAL DIRECTIVES (FORM INPUT)
+  // ===========================================================================
 
-  ///
-  /// [itemDetail] should include the ID of the parent Block's currentItem.
-  /// Let's look at an example with class [DepartmentFormModel]:
-  /// ```dart
-  ///  Map<String, dynamic>? extractSimplePropValuesFromItemDetail({
-  ///      required Object? parentBlockCurrentItemId,
-  ///      required AdditionalFormRelatedData additionalFormRelatedData,
-  ///      required DepartmentData itemDetail,
-  ///  }) {
-  ///     return {
-  ///        "companyId": itemDetail.companyId,
-  ///        "departmentName": itemDetail.name,
-  ///     };
-  ///  }
-  /// ```
-  ///
-  /// [additionalFormRelatedData] can include other information from the parent Block's [currentItem].
-  /// ```dart
-  ///  Map<String, dynamic>? extractSimplePropValuesFromItemDetail({
-  ///      required Object? parentBlockCurrentItemId,
-  ///      required DepartmentFormRelatedData additionalFormRelatedData,
-  ///      required DepartmentData itemDetail,
-  ///  }) {
-  ///     return {
-  ///        "companyId": itemDetail.companyId,
-  ///        "companyName": additionalFormRelatedData.companyName,
-  ///        "departmentName": itemDetail.name,
-  ///     };
-  ///  }
-  /// ```
-  ///
+  /// Extracts override values from an external [formInput] for simple form fields.
   @_AbstractMethodAnnotation()
-  Map<String, dynamic>? extractSimplePropValuesFromItemDetail({
-    required Object? parentBlockCurrentItemId,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required ITEM_DETAIL itemDetail,
+  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
+    required FORM_INPUT formInput,
   });
 
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // OLD: getMultiOptPropValueFromFormInput.
+  /// Extracts override values from an external [formInput] for a multi-option property.
   @_AbstractMethodAnnotation()
   OptValueWrap? extractUpdateValueForMultiOptProp({
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
-    required Object? parentBlockCurrentItemId,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required FORM_INPUT formInput,
   });
 
-  // ***************************************************************************
-  // ***************************************************************************
+  // ===========================================================================
+  // AUXILIARY & REMOTE PERSISTENCE OPERATIONS
+  // ===========================================================================
 
-  ///
-  ///
-  /// ```dart
-  ///  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
-  ///     required Object? parentBlockCurrentItemId,
-  ///     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-  ///     required DepartmentFormInput formInput,
-  ///  }) {
-  ///     return {
-  ///        "departmentName": SimpleValueWrap.useIfNotNull(formInput.name),
-  ///        "departmentPhone": SimpleValueWrap.useIfNotNull(formInput.phone),
-  ///     };
-  ///  }
-  /// ```
-  /// Note: In your design, [FormInput] should not include the ID of the parent Block's [currentItem].
-  ///
-  // OLD: extractUpdateValuesForSimpleProps.
-  // SAME-AS: #0010 (filter - extractUpdateValuesForSimpleTildeCriteria)
+  /// Asynchronously fetches auxiliary metadata specifically required for form display.
   @_AbstractMethodAnnotation()
-  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
-    required Object? parentBlockCurrentItemId,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required FORM_INPUT formInput,
+  Future<ADDITIONAL_FORM_RELATED_DATA> performLoadAdditionalFormRelatedData({
+    required BlockAncestorContext ancestorContext,
+    required ITEM_DETAIL? currentItemDetail,
   });
-
-  // ***************************************************************************
-  // ***************************************************************************
 
   @_AbstractMethodAnnotation()
   Future<ApiResult<ITEM_DETAIL>> performCreateItem({
     required Map<String, dynamic> formMapData,
   });
-
-  // ***************************************************************************
-  // ***************************************************************************
 
   @_AbstractMethodAnnotation()
   Future<ApiResult<ITEM_DETAIL>> performUpdateItem({
@@ -264,27 +183,19 @@ abstract class BlockFormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Type getIdType() {
-    return ID;
-  }
+  Type getIdType() => ID;
 
-  Type getItemDetailType() {
-    return ITEM_DETAIL;
-  }
+  Type getItemDetailType() => ITEM_DETAIL;
 
-  Type getFormInputType() {
-    return FORM_INPUT;
-  }
+  Type getFormInputType() => FORM_INPUT;
 
   @DebugMethodAnnotation()
-  String get debugClassDefinition {
-    return "${getClassName(this)}$debugClassParametersDefinition";
-  }
+  String get debugClassDefinition =>
+      "${getClassName(this)}$debugClassParametersDefinition";
 
   @DebugMethodAnnotation()
-  String get debugClassParametersDefinition {
-    return "<${getIdType()}, ${getItemDetailType()}, ${getFormInputType()}>";
-  }
+  String get debugClassParametersDefinition =>
+      "<${getIdType()}, ${getItemDetailType()}, ${getFormInputType()}>";
 
   // ***************************************************************************
   // ***************************************************************************
@@ -310,21 +221,21 @@ abstract class BlockFormModel<
   }) async {
     __assertThisXBlockFormModel(thisXBlockFormModel);
     thisXBlockFormModel._createAndSetFormModelExecutionIntentDone();
-    //
+
     executionTrace.addInfo(
       codeId: "#36000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
+          "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
     );
     final executionResult = executionIntent.resultWrapper._setResult(
       FormModelViewChangedResult(),
       objectCaller: this,
       methodName: '_unitFormViewChanged',
     );
-    //
+
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      additionalFormRelatedData: null,
+      creationPreset: null,
       formInput: null,
       activityType: FormActivityType.updateFromFormView,
       formKeyInstantValuesInUI: executionIntent.formKeyInstantValuesInUI,
@@ -345,19 +256,19 @@ abstract class BlockFormModel<
   }) async {
     __assertThisXBlockFormModel(thisXBlockFormModel);
     thisXBlockFormModel._createAndSetFormModelExecutionIntentDone();
-    //
+
     executionTrace.addInfo(
       codeId: "#37000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
+          "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
     );
-    //
+
     final executionResult = executionIntent.resultWrapper._setResult(
       FormModelDataLoadResult(),
       objectCaller: this,
       methodName: '_unitLoadFormData',
     );
-    //
+
     final visibleX = ui.hasVisibleViews();
     final thisFormDataState = dataState;
     final bool forceReloadForm;
@@ -365,30 +276,22 @@ abstract class BlockFormModel<
       case FormLoadHint.force:
         forceReloadForm = true;
       case FormLoadHint.forceIfNeed:
-        if (thisFormDataState.isPending ||
+        forceReloadForm = (thisFormDataState.isPending ||
             thisFormDataState.isFatalError ||
-            thisFormDataState.isStale) {
-          forceReloadForm = true;
-        } else {
-          forceReloadForm = false;
-        }
+            thisFormDataState.isStale);
       case FormLoadHint.auto:
-        if (visibleX &&
+        forceReloadForm = visibleX &&
             (thisFormDataState.isPending ||
                 thisFormDataState.isFatalError ||
-                thisFormDataState.isStale)) {
-          forceReloadForm = true;
-        } else {
-          forceReloadForm = false;
-        }
+                thisFormDataState.isStale);
     }
-    //
+
     executionTrace.addInfo(
       codeId: "#37060",
       shortDesc:
-          "Calculate >>  @forceReloadForm: ${debugObjHtml(forceReloadForm)}",
+          "Calculate >> @forceReloadForm: ${debugObjHtml(forceReloadForm)}",
     );
-    //
+
     if (!forceReloadForm) {
       if (!dataState.isLoaded) {
         executionTrace.addInfo(
@@ -405,37 +308,32 @@ abstract class BlockFormModel<
       );
       return true;
     }
-    //
-    executionTrace.addNonControllableCall(
-      codeId: "#37160",
-      caller: block,
-      methodName: "_performLoadAdditionalFormRelatedData",
-      suffixShortDesc: "",
-    );
-    ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData =
-        await block._performLoadAdditionalFormRelatedData(executionTrace);
-    if (additionalFormRelatedData == null) {
+
+    // Synchronously construct creation preset
+    final CREATION_PRESET? creationPreset =
+        block._buildCreationPreset(executionTrace);
+    if (creationPreset == null) {
       return false;
     }
-    //
+
     final formInput = thisXBlockFormModel.formInput as FORM_INPUT?;
     final activityType = FormActivityType.startCreatingOrEditing;
-    //
+
     executionTrace.addNonControllableCall(
       codeId: "#37260",
-      caller: block,
+      caller: this,
       methodName: "_startNewFormActivity",
       suffixShortDesc: "",
       parameters: {
         "activityType": activityType,
         "formInput": formInput,
-        "additionalFormRelatedData": additionalFormRelatedData,
+        "creationPreset": creationPreset,
       },
     );
-    //
+
     return await _startNewFormActivity(
       executionTrace: executionTrace,
-      additionalFormRelatedData: additionalFormRelatedData,
+      creationPreset: creationPreset,
       formInput: formInput,
       activityType: activityType,
       formKeyInstantValuesInUI: null,
@@ -455,37 +353,35 @@ abstract class BlockFormModel<
   }) async {
     __assertThisXBlockFormModel(thisXBlockFormModel);
     thisXBlockFormModel._createAndSetFormModelExecutionIntentDone();
-    //
+
     executionTrace.addInfo(
       codeId: "#38000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
+          "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
     );
     final executionResult = executionIntent.resultWrapper._setResult(
       FormModelPatchFormFieldsResult(),
       objectCaller: this,
       methodName: '_unitPatchFormFields',
     );
-    //
-    final ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData = null;
+
     final activityType = FormActivityType.patchFormFields;
 
     executionTrace.addNonControllableCall(
       codeId: "#38100",
-      caller: block,
+      caller: this,
       methodName: "_startNewFormActivity",
       suffixShortDesc: "",
       parameters: {
         "activityType": activityType,
         "formInput": executionIntent.formInput,
-        "additionalFormRelatedData": additionalFormRelatedData,
+        "creationPreset": null,
       },
     );
-    //
+
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      additionalFormRelatedData: additionalFormRelatedData,
-      // null
+      creationPreset: null,
       formInput: executionIntent.formInput,
       activityType: activityType,
       formKeyInstantValuesInUI: null,
@@ -506,32 +402,31 @@ abstract class BlockFormModel<
   }) async {
     __assertThisXBlockFormModel(thisXBlockFormModel);
     thisXBlockFormModel._createAndSetFormModelExecutionIntentDone();
-    //
+
     executionTrace.addInfo(
       codeId: "#11000",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
     );
-    //
+
     final executionResult = executionIntent.resultWrapper._setResult(
       BlockFormSaveResult(precheck: null),
       objectCaller: this,
       methodName: '_unitSaveForm',
     );
-    //
+
     final Map<String, dynamic> formMapData =
         _formModelStructure._currentFormData;
-    //
-    String calledMethodName = _formModelStructure.isNew //
-        ? 'performCreateItem'
-        : 'performUpdateItem';
-    //
+
+    String calledMethodName =
+        _formModelStructure.isNew ? 'performCreateItem' : 'performUpdateItem';
+
     ApiResult<ITEM_DETAIL> result;
     bool saveError = false;
     final bool isNew = _formModelStructure.isNew;
     try {
       block._refreshSavingState(isSaving: true);
-      //
+
       executionTrace.addControllableCall(
         codeId: "#11400",
         caller: this,
@@ -541,13 +436,13 @@ abstract class BlockFormModel<
           "formMapData": formMapData,
         },
       );
-      //
+
       result = isNew
           ? await performCreateItem(formMapData: formMapData)
           : await performUpdateItem(formMapData: formMapData);
     } catch (e, stackTrace) {
       saveError = true;
-      //
+
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: calledMethodName,
@@ -558,23 +453,22 @@ abstract class BlockFormModel<
             ? TipDocument.formModelPerformCreateItem
             : TipDocument.formModelPerformUpdateItem,
       );
-      //
+
       executionResult._setErrorInfo(
         errorInfo: errorInfo,
       );
-      //
+
       executionTrace.addInfo(
         codeId: "#11500",
         shortDesc:
             "The ${debugObjHtml(this)}.$calledMethodName() method was called with an error!",
         errorInfo: errorInfo,
       );
-      //
       return;
     } finally {
       block._refreshSavingState(isSaving: false);
     }
-    //
+
     try {
       executionTrace.addNonControllableCall(
         codeId: "#11800",
@@ -582,7 +476,7 @@ abstract class BlockFormModel<
         methodName: "_processSaveActionRestResult",
         suffixShortDesc: "",
       );
-      // In: _unitSaveForm
+
       await block._processSaveActionRestResult(
         executionTrace: executionTrace,
         thisXBlock: thisXBlockFormModel.xBlock,
@@ -602,18 +496,17 @@ abstract class BlockFormModel<
         showSnackBar: true,
         tipDocument: null,
       );
-      //
+
       executionResult._setErrorInfo(
         errorInfo: errorInfo,
       );
-      //
+
       executionTrace.addInfo(
         codeId: "#11900",
         shortDesc:
             "The ${debugObjHtml(this)}.$calledMethodName() method was called with an error!",
         errorInfo: errorInfo,
       );
-      //
       return;
     }
   }
@@ -621,66 +514,62 @@ abstract class BlockFormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  ///
-  /// Return null is error.
-  ///
+  /// Central lifecycle coordinator for Form data mutation, initialization, and validation.
   @_ImportantMethodAnnotation(
       "Called when Form Data is being loaded or user makes changes in FormView")
   Future<bool> _startNewFormActivity({
     required ExecutionTrace executionTrace,
-    required ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData,
+    required CREATION_PRESET? creationPreset,
     required FORM_INPUT? formInput,
     required final FormActivityType activityType,
     required Map<String, dynamic>? formKeyInstantValuesInUI,
   }) async {
     debug._formActivityCount++;
-    //
+
     executionTrace.addInfo(
       codeId: "#06000",
       shortDesc: "${debugObjHtml(this)} on _startNewFormActivity().",
     );
-    //
+
     if (activityType == FormActivityType.startCreatingOrEditing) {
       debug._loadCount++;
-      _autovalidateMode = config.autovalidateMode; // AutovalidateMode.disabled;
+      _autovalidateMode = config.autovalidateMode;
     } else {
       _autovalidateMode = config.autovalidateMode;
     }
-    //
+
     final ITEM_DETAIL? itemDetail = block.currentItemDetail;
     final FormMode currentFormMode;
+    ADDITIONAL_FORM_RELATED_DATA? additionalFormRelatedData;
+
     switch (activityType) {
       case FormActivityType.startCreatingOrEditing:
-        currentFormMode = itemDetail == null //
-            ? FormMode.creation
-            : FormMode.edit;
-        //
+        currentFormMode =
+            itemDetail == null ? FormMode.creation : FormMode.edit;
+
         _formModelStructure._clearFormError();
         _formModelStructure._setFormDataState(
           formDataState: FormDataStatePending(),
           error: null,
         );
+
         if (currentFormMode == FormMode.creation) {
           _creationFormInput = formInput;
         } else {
           _creationFormInput = null;
         }
+
+        // Asynchronously load auxiliary data required by this form model
+        additionalFormRelatedData =
+            await _performLoadAdditionalFormRelatedData(executionTrace);
         if (additionalFormRelatedData == null) {
-          throw DevError(
-            errorMessage:
-                "Dev Error. additionalFormRelatedData must be not null if FormModel.activityType = startCreatingOrEditing.",
-          );
+          return false;
         }
         _additionalFormRelatedData = additionalFormRelatedData;
+        break;
+
       case FormActivityType.updateFromFormView:
         currentFormMode = formMode;
-        if (additionalFormRelatedData != null) {
-          throw DevError(
-            errorMessage:
-                "Dev Error. additionalFormRelatedData must be null if FormModel.activityType = updateFromFormView.",
-          );
-        }
-        additionalFormRelatedData = _additionalFormRelatedData!;
         if (formInput != null) {
           throw DevError(
             errorMessage:
@@ -690,47 +579,63 @@ abstract class BlockFormModel<
         if (currentFormMode == FormMode.creation) {
           formInput = _creationFormInput;
         }
-      case FormActivityType.patchFormFields:
-        currentFormMode = formMode;
-        if (additionalFormRelatedData != null) {
+        additionalFormRelatedData = _additionalFormRelatedData;
+        if (additionalFormRelatedData == null) {
           throw DevError(
             errorMessage:
-                "Dev Error. additionalFormRelatedData must be null if FormModel.activityType = patchFormFields.",
+                "Dev Error. _additionalFormRelatedData is null in updateFromFormView.",
           );
         }
-        additionalFormRelatedData = _additionalFormRelatedData!;
+        break;
+
+      case FormActivityType.patchFormFields:
+        currentFormMode = formMode;
         if (formInput == null) {
           throw DevError(
             errorMessage:
                 "Dev Error. formInput must be not null if FormModel.activityType = patchFormFields.",
           );
         }
+        additionalFormRelatedData = _additionalFormRelatedData;
+        if (additionalFormRelatedData == null) {
+          throw DevError(
+            errorMessage:
+                "Dev Error. _additionalFormRelatedData is null in patchFormFields.",
+          );
+        }
+        break;
     }
-    //
+
     _formModelStructure._setFormMode(currentFormMode);
     final bool isNoneMode = currentFormMode == FormMode.none;
     final bool isCreationMode = currentFormMode == FormMode.creation;
-    //
+
     if (activityType == FormActivityType.startCreatingOrEditing) {
       if (isNoneMode || isCreationMode) {
         _defaultSimpleValuesInitiated = false;
         _defaultMultiOptValuesInitiated = false;
       }
     }
-    //
+
     final Map<String, dynamic> formKeyInstantValues =
         formKeyInstantValuesInUI ?? _formModelStructure._currentFormData;
-    //
+
     _formModelStructure._setupTemporaryStateForNewActivity(
       activityType: activityType,
-      // Data from FormView:
       formKeyInstantValues: formKeyInstantValues,
     );
-    //
-    // Get SimpleProp Value:
-    //
-    // FormActivityType.startCreatingOrEditing (Begin Create or Update).
+
+    // Initialize AncestorContext for hierarchical lookups
+    final BlockAncestorContext ancestorContext =
+        BlockAncestorContext(currentBlock: block);
+
+    // =========================================================================
+    // POPULATE SIMPLE PROPERTIES
+    // =========================================================================
     if (activityType == FormActivityType.startCreatingOrEditing) {
+      // -----------------------------------------------------------------------
+      // CASE 1: EDIT MODE (itemDetail != null) -> Read persisted values
+      // -----------------------------------------------------------------------
       if (itemDetail != null) {
         executionTrace.addInfo(
           codeId: "#06180",
@@ -745,27 +650,24 @@ abstract class BlockFormModel<
             methodName: "extractSimplePropValuesFromItemDetail",
             suffixShortDesc: "",
             parameters: {
-              "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
-              "itemDetail": itemDetail,
+              "ancestorContext": ancestorContext,
               "additionalFormRelatedData": additionalFormRelatedData,
+              "itemDetail": itemDetail,
             },
           );
-          var simplePropValueMap = extractSimplePropValuesFromItemDetail(
-                parentBlockCurrentItemId: block.parentBlockCurrentItemId,
+          final simplePropValueMap = extractSimplePropValuesFromItemDetail(
+                ancestorContext: ancestorContext,
                 additionalFormRelatedData: additionalFormRelatedData,
                 itemDetail: itemDetail,
               ) ??
               {};
+
           for (String propName in simplePropValueMap.keys) {
-            // Check and throw error if 'propName' is not a SimpleFormProp:
             __throwErrorIfNotASimplePropName(
               propName: propName,
               formErrorMethod:
                   FormErrorMethod.extractSimplePropValuesFromItemDetail,
             );
-            //
-            // In (First load + itemDetail != null).
-            //
             dynamic value = simplePropValueMap[propName];
             _formModelStructure._setTempSimplePropValue(
               propName: propName,
@@ -776,7 +678,6 @@ abstract class BlockFormModel<
         } catch (e, stackTrace) {
           dynamic error = e;
           if (e is FormPropTypeMismatchError) {
-            // Bug: #Bug#004
             error = e.toAppError(
               formModelName: getClassNameWithoutGenerics(this),
             );
@@ -790,7 +691,7 @@ abstract class BlockFormModel<
             errorStackTrace: stackTrace,
           );
           _formModelStructure._setFormError(formErrorInfo);
-          //
+
           final ErrorInfo errorInfo = _handleError(
             shelf: shelf,
             methodName: formErrorInfo.methodName,
@@ -799,9 +700,8 @@ abstract class BlockFormModel<
             showSnackBar: true,
             tipDocument: null,
           );
-          // IN CASE OF activityType = startCreatingOrEditing.
+
           final fatalErrorInfo = FormDataStateFatalError(errorInfo: errorInfo);
-          //
           __endFormActivityWithDataState(
             formDataState: fatalErrorInfo,
             activityType: activityType,
@@ -816,8 +716,9 @@ abstract class BlockFormModel<
           return false;
         }
       }
-      // itemDetail == null.
-      // [[Currently Condition: startCreatingOrEditing && itemDetail == null]].
+      // -----------------------------------------------------------------------
+      // CASE 2: CREATION MODE (itemDetail == null) -> Pull defaults, preset & ancestors
+      // -----------------------------------------------------------------------
       else {
         executionTrace.addInfo(
           codeId: "#06500",
@@ -825,39 +726,40 @@ abstract class BlockFormModel<
               "\n - @activityType: <b>$activityType</b>."
               "\n - @itemDetail: ${debugObjHtml(itemDetail)}.",
         );
-        Map<String, dynamic> simplePropValueDefault = {};
+
         if (!_defaultSimpleValuesInitiated) {
           executionTrace.addInfo(
             codeId: "#06520",
             shortDesc:
-                "@_defaultSimpleValuesInitiated = false --> Need to init default simple values.",
+                "@_defaultSimpleValuesInitiated = false --> Need to init creation default simple values.",
           );
           try {
             executionTrace.addControllableCall(
               codeId: "#06540",
               caller: this,
-              methodName: "specifyDefaultValuesForSimpleProps",
+              methodName: "specifyCreationValuesForSimpleProps",
               suffixShortDesc: "",
               parameters: {
-                "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
+                "ancestorContext": ancestorContext,
+                "creationPreset": creationPreset,
+                "additionalFormRelatedData": additionalFormRelatedData,
               },
             );
-            // IN CASE OF activityType = startCreatingOrEditing.
-            simplePropValueDefault = specifyDefaultValuesForSimpleProps(
-                  parentBlockCurrentItemId: block.parentBlockCurrentItemId,
-                ) ??
-                {};
-            //
+
+            final Map<String, dynamic> simplePropValueDefault =
+                specifyCreationValuesForSimpleProps(
+                      ancestorContext: ancestorContext,
+                      creationPreset: creationPreset!,
+                      additionalFormRelatedData: additionalFormRelatedData,
+                    ) ??
+                    {};
+
             for (String propName in simplePropValueDefault.keys) {
-              // Check and throw error if 'propName' is not a SimpleFormProp:
               __throwErrorIfNotASimplePropName(
                 propName: propName,
                 formErrorMethod:
                     FormErrorMethod.specifyDefaultValuesForSimpleProps,
               );
-              //
-              // In (Item First Load + itemDetail == null + !_defaultValueInitiated).
-              //
               dynamic value = simplePropValueDefault[propName];
               _formModelStructure._setTempSimplePropValue(
                 propName: propName,
@@ -875,7 +777,7 @@ abstract class BlockFormModel<
               errorStackTrace: stackTrace,
             );
             _formModelStructure._setFormError(formErrorInfo);
-            //
+
             final ErrorInfo errorInfo = _handleError(
               shelf: shelf,
               methodName: formErrorInfo.methodName,
@@ -885,10 +787,9 @@ abstract class BlockFormModel<
               tipDocument:
                   TipDocument.formModelSpecifyDefaultValuesForSimpleProps,
             );
-            // IN CASE OF activityType = startCreatingOrEditing.
+
             final fatalErrorState =
                 FormDataStateFatalError(errorInfo: errorInfo);
-            //
             __endFormActivityWithDataState(
               formDataState: fatalErrorState,
               activityType: activityType,
@@ -897,17 +798,15 @@ abstract class BlockFormModel<
             executionTrace.addInfo(
               codeId: "#06580",
               shortDesc:
-                  "The ${debugObjHtml(this)}.specifyDefaultValuesForSimpleProps() method was called with an error!",
+                  "The ${debugObjHtml(this)}.specifyCreationValuesForSimpleProps() method was called with an error!",
               errorInfo: errorInfo,
             );
             return false;
           }
         }
-        //
-        // In Condition: startCreatingOrEditing && itemDetail == null.
-        // TODO: Handle Error:
-        //
-        formInput ??= block.__buildInputForCreationForm(executionTrace);
+
+        // Apply external FormInput overrides if present
+        formInput ??= block.__buildFormInput(executionTrace);
         if (formInput != null) {
           try {
             executionTrace.addControllableCall(
@@ -916,31 +815,22 @@ abstract class BlockFormModel<
               methodName: "extractUpdateValuesForSimpleProps",
               suffixShortDesc: "",
               parameters: {
-                "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
                 "formInput": formInput,
-                "additionalFormRelatedData": additionalFormRelatedData,
               },
             );
             final Map<String, SimpleValueWrap?> updatedSimplePropValues =
                 extractUpdateValuesForSimpleProps(
-                      parentBlockCurrentItemId: block.parentBlockCurrentItemId,
-                      additionalFormRelatedData: additionalFormRelatedData,
                       formInput: formInput,
                     ) ??
                     {};
-            //
+
             for (String propName in updatedSimplePropValues.keys) {
-              // Check and throw error if 'propName' is not a SimpleFormProp:
               __throwErrorIfNotASimplePropName(
                 propName: propName,
                 formErrorMethod:
                     FormErrorMethod.extractUpdateValuesForSimpleProps,
               );
-              //
-              // In (ItemFirstLoad + formInput != null).
-              //
               SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
-              // SAME-AS: #0012 (filterModel)
               if (valueWrap != null && valueWrap.use) {
                 _formModelStructure._setTempSimplePropValue(
                   propName: propName,
@@ -959,7 +849,7 @@ abstract class BlockFormModel<
               errorStackTrace: stackTrace,
             );
             _formModelStructure._setFormError(formErrorInfo);
-            //
+
             final ErrorInfo errorInfo = _handleError(
               shelf: shelf,
               methodName: formErrorInfo.methodName,
@@ -968,16 +858,14 @@ abstract class BlockFormModel<
               showSnackBar: true,
               tipDocument: TipDocument.formModelGetUpdatedValuesForSimpleProps,
             );
-            // IN CASE OF activityType = startCreatingOrEditing.
+
             final fatalErrorState =
                 FormDataStateFatalError(errorInfo: errorInfo);
-            //
             __endFormActivityWithDataState(
               formDataState: fatalErrorState,
               error: e,
               activityType: activityType,
             );
-            //
             executionTrace.addInfo(
               codeId: "#06660",
               shortDesc:
@@ -988,8 +876,10 @@ abstract class BlockFormModel<
           }
         }
       }
-    } // end of "startCreatingOrEditing".
-    // Begin of 'patchFormFields'.
+    }
+    // -------------------------------------------------------------------------
+    // CASE 3: PATCH FORM FIELDS
+    // -------------------------------------------------------------------------
     else if (activityType == FormActivityType.patchFormFields) {
       executionTrace.addInfo(
         codeId: "#06700",
@@ -1005,29 +895,21 @@ abstract class BlockFormModel<
             methodName: "extractUpdateValuesForSimpleProps",
             suffixShortDesc: "",
             parameters: {
-              "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
               "formInput": formInput,
-              "additionalFormRelatedData": additionalFormRelatedData,
             },
           );
           final Map<String, SimpleValueWrap?> updatedSimplePropValues =
               extractUpdateValuesForSimpleProps(
-                    parentBlockCurrentItemId: block.parentBlockCurrentItemId,
-                    additionalFormRelatedData: additionalFormRelatedData,
                     formInput: formInput,
                   ) ??
                   {};
-          //
+
           for (String propName in updatedSimplePropValues.keys) {
-            // Check and throw error if 'propName' is not a SimpleFormProp:
             __throwErrorIfNotASimplePropName(
               propName: propName,
               formErrorMethod:
                   FormErrorMethod.extractUpdateValuesForSimpleProps,
             );
-            //
-            // In (patchFormFields + formInput != null)
-            //
             SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
             if (valueWrap != null && valueWrap.use) {
               _formModelStructure._setTempSimplePropValue(
@@ -1046,7 +928,7 @@ abstract class BlockFormModel<
             errorStackTrace: stackTrace,
           );
           _formModelStructure._setFormError(formErrorInfo);
-          //
+
           final ErrorInfo transientErrorInfo = _handleError(
             shelf: shelf,
             methodName: formErrorInfo.methodName,
@@ -1055,11 +937,10 @@ abstract class BlockFormModel<
             showSnackBar: true,
             tipDocument: TipDocument.formModelGetUpdatedValuesForSimpleProps,
           );
-          // IN CASE OF activityType = patchFormFields.
+
           final formDataState = FormDataStateLoadedStale.failed(
             errorInfo: transientErrorInfo,
           );
-          //
           __endFormActivityWithDataState(
             formDataState: formDataState,
             activityType: activityType,
@@ -1074,10 +955,11 @@ abstract class BlockFormModel<
           return false;
         }
       }
-    } // End of 'patchFormFields'.
-    //
-    // Load MultiOptProp Data (All cases of activityType).
-    //
+    }
+
+    // =========================================================================
+    // POPULATE MULTI-OPTION PROPERTIES (CASCADE HIERARCHY)
+    // =========================================================================
     try {
       for (MultiOptFormPropModel multiOptProp
           in _formModelStructure._rootOptPropModels) {
@@ -1089,6 +971,7 @@ abstract class BlockFormModel<
               "To load data for ${debugObjHtml(multiOptProp)} and its descendants.",
           parameters: {
             "additionalFormRelatedData": additionalFormRelatedData,
+            "creationPreset": creationPreset,
             "formInput": formInput,
             "parentMultiOptPropValue": null,
             "parentValueIsInitialValue": true,
@@ -1097,13 +980,11 @@ abstract class BlockFormModel<
             "activityType": activityType,
           },
         );
-        //
-        // Load OptProp Data and set default and selected.
-        //
-        // May throw ApiError or FormTempError.
-        //
+
         await _loadMultiOptPropDataCascade(
           executionTrace: executionTrace,
+          ancestorContext: ancestorContext,
+          creationPreset: creationPreset,
           additionalFormRelatedData: additionalFormRelatedData,
           formInput: formInput,
           parentMultiOptPropValue: null,
@@ -1124,7 +1005,6 @@ abstract class BlockFormModel<
           errorStackTrace: e.stackTrace,
         );
       } else if (e is FormPropTypeMismatchError) {
-        // Bug: #Bug#005
         formErrorInfo = FormErrorInfo(
           activityType: activityType,
           propName: null,
@@ -1144,7 +1024,7 @@ abstract class BlockFormModel<
         );
       }
       _formModelStructure._setFormError(formErrorInfo);
-      //
+
       final ErrorInfo errorInfo = _handleError(
         shelf: shelf,
         methodName: formErrorInfo.methodName,
@@ -1153,7 +1033,7 @@ abstract class BlockFormModel<
         showSnackBar: true,
         tipDocument: null,
       );
-      // IN any case of activityType:
+
       final FormDataState formDataState = switch (activityType) {
         FormActivityType.startCreatingOrEditing =>
           FormDataStateFatalError(errorInfo: errorInfo),
@@ -1162,7 +1042,7 @@ abstract class BlockFormModel<
         FormActivityType.patchFormFields =>
           FormDataStateLoadedFresh(transientErrorInfo: errorInfo)
       };
-      //
+
       __endFormActivityWithDataState(
         formDataState: formDataState,
         activityType: activityType,
@@ -1176,7 +1056,7 @@ abstract class BlockFormModel<
       );
       return false;
     }
-    //
+
     return __endFormActivityWithDataState(
       formDataState: FormDataStateLoadedFresh(),
       activityType: activityType,
@@ -1211,39 +1091,28 @@ abstract class BlockFormModel<
     required dynamic error,
   }) {
     try {
-      //
-      // Update Real FromData from Temporary FormData:
-      //
       _formModelStructure._updateTempToReal();
-      //
+
       if (activityType == FormActivityType.startCreatingOrEditing) {
         _formModelStructure._setInitialFormDataForItemFirstLoad();
       }
-      //
-      // IMPORTANT: (Called on Field.onChanged).
-      //
+
       _formKeyPatchValue(
         newCurrentValue: _formModelStructure._currentFormData,
       );
-      //
-      // _defaultValueInitiated = true;
+
       _formModelStructure._setFormDataState(
         formDataState: formDataState,
         error: error,
       );
-      //
+
       if (activityType == FormActivityType.startCreatingOrEditing) {
         if (formDataState.isLoaded) {
           _formModelStructure._formInitialDataReady = true;
         }
       }
-      // Form Disabled:
-      if (!_formModelStructure._formInitialDataReady) {
-        // Clear form validation error
-      }
-      // Form Initial Data Ready
-      else {
-        // Validate Form
+
+      if (_formModelStructure._formInitialDataReady) {
         if (activityType == FormActivityType.startCreatingOrEditing) {
           if (formMode == FormMode.edit &&
               _formModelStructure._formInitialDataReady) {
@@ -1255,7 +1124,7 @@ abstract class BlockFormModel<
           }
         }
       }
-      //
+
       return true;
     } catch (e, stackTrace) {
       ErrorInfo errorInfo = _handleError(
@@ -1266,9 +1135,7 @@ abstract class BlockFormModel<
         showSnackBar: true,
         tipDocument: null,
       );
-      //
-      // IMPORTANT:
-      //
+
       _formKeyPatchValue(
         newCurrentValue: _formModelStructure._currentFormData,
       );
@@ -1280,7 +1147,7 @@ abstract class BlockFormModel<
         FormActivityType.patchFormFields =>
           FormDataStateLoadedFresh(transientErrorInfo: errorInfo),
       };
-      //
+
       _formModelStructure._setFormDataState(
         formDataState: formDataState,
         error: e,
@@ -1294,16 +1161,60 @@ abstract class BlockFormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  // TestCase [16a]-changeSupplierType.
   void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
     try {
-      // _formKey.currentState?.patchValue(newCurrentValue);
       final List<FormBuilderState> activeForms = ui._visibleFormBuilderStates;
       for (FormBuilderState formState in activeForms) {
         formState.patchValue(newCurrentValue);
       }
-    } finally {
-      //
+    } finally {}
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<ADDITIONAL_FORM_RELATED_DATA?> _performLoadAdditionalFormRelatedData(
+    ExecutionTrace executionTrace,
+  ) async {
+    try {
+      final ITEM_DETAIL? currentItemDetail = block.currentItemDetail;
+      final ancestorContext = BlockAncestorContext(currentBlock: block);
+
+      executionTrace.addControllableCall(
+        codeId: "#91000",
+        caller: this,
+        methodName: "performLoadAdditionalFormRelatedData",
+        suffixShortDesc: "",
+        parameters: {
+          "currentItemDetail": currentItemDetail,
+          "ancestorContext": ancestorContext,
+        },
+      );
+      return await performLoadAdditionalFormRelatedData(
+        ancestorContext: ancestorContext,
+        currentItemDetail: currentItemDetail,
+      );
+    } catch (e, stackTrace) {
+      final ErrorInfo errorInfo = _handleError(
+        shelf: shelf,
+        methodName: "performLoadAdditionalFormRelatedData",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: TipDocument.blockInitFormRelatedData,
+      );
+      final fatalErrorInfo = FormDataStateFatalError(errorInfo: errorInfo);
+      _formModelStructure._setFormDataState(
+        formDataState: fatalErrorInfo,
+        error: e,
+      );
+      executionTrace.addInfo(
+        codeId: "#91020",
+        shortDesc:
+            "The ${debugObjHtml(this)}.performLoadAdditionalFormRelatedData() method was called with an error!",
+        errorInfo: errorInfo,
+      );
+      return null;
     }
   }
 
@@ -1312,6 +1223,8 @@ abstract class BlockFormModel<
 
   Future<void> _loadMultiOptPropDataCascade({
     required final ExecutionTrace executionTrace,
+    required final BlockAncestorContext ancestorContext,
+    required final CREATION_PRESET? creationPreset,
     required final FormActivityType activityType,
     required final ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required final FORM_INPUT? formInput,
@@ -1329,7 +1242,6 @@ abstract class BlockFormModel<
           "Loading Data for ${debugObjHtml(multiOptProp)} and its children..",
     );
 
-    // Get current OptProp data:
     XData? tempMultiOptPropXData =
         _formModelStructure._getTempMultiOptPropXData(
       propName: multiOptPropName,
@@ -1340,7 +1252,6 @@ abstract class BlockFormModel<
     final dynamic tempCurrentMultiOptValue = _formModelStructure
         ._getTempCurrentPropValue(propName: multiOptPropName);
 
-    //
     dynamic newSelectedValue = _formModelStructure._getTempCurrentPropValue(
       propName: multiOptPropName,
     );
@@ -1349,7 +1260,7 @@ abstract class BlockFormModel<
         newSelectedValue = formKeyInstantValues[multiOptPropName];
       }
     }
-    //
+
     final bool valueChanged;
     if (tempMultiOptPropXData == null) {
       valueChanged = false;
@@ -1359,7 +1270,7 @@ abstract class BlockFormModel<
         itemOrItemList2: newSelectedValue,
       );
     }
-    //
+
     final bool multiOptValueIsInitialValue;
     if (tempMultiOptPropXData == null) {
       multiOptValueIsInitialValue = false;
@@ -1369,9 +1280,9 @@ abstract class BlockFormModel<
         itemOrItemList2: newSelectedValue,
       );
     }
-    //
+
     multiOptProp._tempCurrentValue = newSelectedValue;
-    //
+
     if (valueChanged) {
       executionTrace.addInfo(
         codeId: "#17200",
@@ -1382,31 +1293,23 @@ abstract class BlockFormModel<
         multiOptProp: multiOptProp,
       );
     }
-    //
+
     if (tempMultiOptPropXData == null) {
       _formModelStructure._setTempMultiOptPropXData(
         multiOptPropName: multiOptPropName,
         multiOptPropXData: null,
       );
-      // IMPORTANT:
-      //  - Update from ROOTs to LEAVES
-      //  - And make sure children-OptProp to null if parent-Value is null or not selected.
       _formModelStructure._updatePropsTempValues({
         multiOptPropName: null,
       });
     }
-    //
+
     bool forceReload = activityType != FormActivityType.updateFromFormView &&
         multiOptProp.parent == null &&
         multiOptProp._markToReload;
-    //
-    // Load OptProp data from Rest API.
-    // May throw ApiError.
-    //
+
     if (tempMultiOptPropXData == null || forceReload) {
-      // Always increase "_loadCount" value regardless of error.
       multiOptProp._loadCount++;
-      //
       try {
         executionTrace.addControllableCall(
           codeId: "#17400",
@@ -1422,7 +1325,6 @@ abstract class BlockFormModel<
             "additionalFormRelatedData": additionalFormRelatedData,
           },
         );
-        // May throw AppError, ApiError or others.
         tempMultiOptPropXData = await performLoadMultiOptPropXData(
           formInput: formInput,
           itemDetail: block.currentItemDetail,
@@ -1435,27 +1337,26 @@ abstract class BlockFormModel<
         throw FormMethodError(
           propName: multiOptPropName,
           formErrorMethod: FormErrorMethod.performLoadMultiOptPropXData,
-          error: e, // May be AppError, ApiError or others.
+          error: e,
           stackTrace: stackTrace,
         );
       }
-      //
+
       multiOptProp._markToReload = false;
       multiOptProp._tempCurrentXData = tempMultiOptPropXData;
     }
-    //
-    // IMPORTANT: Do not use empty list here
-    // to avoid cast Error (List<dynamic> to List<ITEM>)
-    //
-    List? currentSelectedItems; // will be null or not empty.
-    // Candidate Selected Items:
+
+    List? currentSelectedItems;
     List? candidateSelectedItems;
     OptValueWrap? initialValueWrap;
     final ITEM_DETAIL? currentItemDetail = block.currentItemDetail;
-    //
+
     if (tempMultiOptPropXData != null) {
-      // Item First Load:
+      // -----------------------------------------------------------------------
+      // ITEM FIRST LOAD: RESOLVE INITIAL SELECTION WRAPPER
+      // -----------------------------------------------------------------------
       if (activityType == FormActivityType.startCreatingOrEditing) {
+        // CASE A: CREATION MODE (currentItemDetail == null)
         if (currentItemDetail == null) {
           executionTrace.addInfo(
             codeId: "#17500",
@@ -1468,11 +1369,13 @@ abstract class BlockFormModel<
               "formInput": formInput,
             },
           );
-          // In startCreatingOrEditing & currentItemDetail == null.
+
           if (!_defaultMultiOptValuesInitiated) {
-            // May throw FormTempError.
-            initialValueWrap = __specifyDefaultValueForMultiOptProp(
+            initialValueWrap = __specifyCreationValueForMultiOptProp(
               executionTrace: executionTrace,
+              ancestorContext: ancestorContext,
+              creationPreset: creationPreset!,
+              additionalFormRelatedData: additionalFormRelatedData,
               multiOptPropName: multiOptPropName,
               selectionType: selectionType,
               multiOptPropXData: tempMultiOptPropXData,
@@ -1483,11 +1386,10 @@ abstract class BlockFormModel<
               shortDesc: "Got Value: ${debugObjHtml(initialValueWrap)}.",
             );
           }
+
           if (formInput != null && formInput is! EmptyFormInput) {
-            // May throw FormTempError.
             initialValueWrap = __extractUpdateValueForMultiOptProp(
               executionTrace: executionTrace,
-              additionalFormRelatedData: additionalFormRelatedData,
               formInput: formInput,
               multiOptPropXData: tempMultiOptPropXData,
               multiOptPropName: multiOptPropName,
@@ -1500,7 +1402,7 @@ abstract class BlockFormModel<
             );
           }
         }
-        // currentItemDetail != null
+        // CASE B: EDIT MODE (currentItemDetail != null)
         else {
           executionTrace.addInfo(
             codeId: "#17580",
@@ -1512,9 +1414,10 @@ abstract class BlockFormModel<
               "formInput": formInput,
             },
           );
-          // May throw FormTempError.
+
           initialValueWrap = __extractMultiOptPropValueFromItemDetail(
             executionTrace: executionTrace,
+            ancestorContext: ancestorContext,
             additionalFormRelatedData: additionalFormRelatedData,
             itemDetail: currentItemDetail,
             multiOptPropXData: tempMultiOptPropXData,
@@ -1527,8 +1430,10 @@ abstract class BlockFormModel<
             shortDesc: "Got value: ${debugObjHtml(initialValueWrap)}",
           );
         }
-      } // end of 'startCreatingOrEditing'.
-      // Auto Enter Form Fields:
+      }
+      // -----------------------------------------------------------------------
+      // PATCH FORM FIELDS: APPLY FORM INPUT OVERRIDES
+      // -----------------------------------------------------------------------
       else if (activityType == FormActivityType.patchFormFields) {
         if (formInput != null && formInput is! EmptyFormInput) {
           executionTrace.addInfo(
@@ -1541,10 +1446,9 @@ abstract class BlockFormModel<
               "formInput": formInput,
             },
           );
-          // May throw FormTempError.
+
           initialValueWrap = __extractUpdateValueForMultiOptProp(
             executionTrace: executionTrace,
-            additionalFormRelatedData: additionalFormRelatedData,
             formInput: formInput,
             multiOptPropXData: tempMultiOptPropXData,
             multiOptPropName: multiOptPropName,
@@ -1553,20 +1457,16 @@ abstract class BlockFormModel<
           );
         }
       }
-      //
-      // Current selected value:
-      // It can be a single value or a List.
-      //
+
       final dynamic tempCurrentValue =
           _formModelStructure._getTempCurrentPropValue(
         propName: multiOptPropName,
       );
-      //
+
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
-          currentSelectedItems = tempCurrentValue.isEmpty //
-              ? null
-              : tempCurrentValue;
+          currentSelectedItems =
+              tempCurrentValue.isEmpty ? null : tempCurrentValue;
         } else {
           currentSelectedItems = [tempCurrentValue];
         }
@@ -1578,24 +1478,21 @@ abstract class BlockFormModel<
           clearOrphanItems: true,
         );
       }
-      // Candidate Selected Items:
-      candidateSelectedItems = initialValueWrap?.values;
 
+      candidateSelectedItems = initialValueWrap?.values;
       if (candidateSelectedItems == null || candidateSelectedItems.isEmpty) {
         candidateSelectedItems = currentSelectedItems;
       }
-    }
-    // tempMultiOptPropXData == null
-    else {
+    } else {
       currentSelectedItems = null;
       candidateSelectedItems = null;
     }
-    //
+
     _formModelStructure._setTempMultiOptPropXData(
       multiOptPropName: multiOptPropName,
       multiOptPropXData: tempMultiOptPropXData,
     );
-    //
+
     final dynamic initialValue;
     if (activityType == FormActivityType.startCreatingOrEditing) {
       initialValue = initialValueWrap?.values;
@@ -1604,7 +1501,7 @@ abstract class BlockFormModel<
         propName: multiOptPropName,
       );
     }
-    //
+
     if (activityType == FormActivityType.startCreatingOrEditing ||
         parentValueIsInitialValue) {
       tempMultiOptPropXData?._addInitialValueIfOrphan(
@@ -1612,46 +1509,31 @@ abstract class BlockFormModel<
         removeCurrentOrphanItems: true,
       );
     }
-    // TODO: Dangerous, check not null:
+
     candidateSelectedItems = tempMultiOptPropXData?._resolveItemsFromRawData(
           dynamicValues: candidateSelectedItems,
-          //
-          // IMPORTANT: Add not found item to internal list.
-          //
           addOrphan: true,
           clearOrphanItems: false,
         ) ??
         [];
-    //
-    // TODO: Double check this code:
-    //
+
     if (candidateSelectedItems.isNotEmpty) {
       if (multiOptProp.selectionType == SelectionType.single) {
-        // IMPORTANT:
-        //  - Update from ROOTs to LEAVES
-        //  - And make sure children-OptProp to null if parent-Value is null or not selected.
         Object? candidateSelectedItem = candidateSelectedItems.first;
         _formModelStructure._updatePropsTempValues({
           multiOptPropName: candidateSelectedItem,
         });
       } else {
-        // IMPORTANT:
-        //  - Update from ROOTs to LEAVES
-        //  - And make sure children-OptProp to null if parent-Value is null or not selected.
-        // Try MULTI SELECTED ITEMS:
         _formModelStructure._updatePropsTempValues({
           multiOptPropName: candidateSelectedItems,
         });
       }
     } else {
-      // IMPORTANT:
-      //  - Update from ROOTs to LEAVES
-      //  - And make sure children-OptProp to null if parent-Value is null or not selected.
       _formModelStructure._updatePropsTempValues({
         multiOptPropName: null,
       });
     }
-    //
+
     Object? tempSelectedPropValue =
         _formModelStructure._getTempCurrentPropValue(
       propName: multiOptPropName,
@@ -1661,6 +1543,8 @@ abstract class BlockFormModel<
       for (MultiOptFormPropModel child in multiOptProp._children) {
         await _loadMultiOptPropDataCascade(
           executionTrace: executionTrace,
+          ancestorContext: ancestorContext,
+          creationPreset: creationPreset,
           additionalFormRelatedData: additionalFormRelatedData,
           formInput: formInput,
           parentMultiOptPropValue: tempSelectedPropValue,
@@ -1670,16 +1554,12 @@ abstract class BlockFormModel<
           activityType: activityType,
         );
       }
-    } else {
-      // Do nothing.
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  // TODO: Add test case:
-  // @Deprecated("Xem lai, co can xoa di khong?")
   void patchPropValue(String propertyName, dynamic value) {
     _formModelStructure._setCurrentPropValue(
       propName: propertyName,
@@ -1718,8 +1598,11 @@ abstract class BlockFormModel<
   // ***************************************************************************
 
   @_MayThrowFormTempErrorAnnotation()
-  OptValueWrap? __specifyDefaultValueForMultiOptProp({
+  OptValueWrap? __specifyCreationValueForMultiOptProp({
     required ExecutionTrace executionTrace,
+    required BlockAncestorContext ancestorContext,
+    required CREATION_PRESET creationPreset,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
@@ -1729,24 +1612,30 @@ abstract class BlockFormModel<
       executionTrace.addControllableCall(
         codeId: "#33000",
         caller: this,
-        methodName: "specifyDefaultValueForMultiOptProp",
+        methodName: "specifyCreationValueForMultiOptProp",
         suffixShortDesc: "",
         parameters: {
           "multiOptPropXData": multiOptPropXData,
           "multiOptPropName": multiOptPropName,
           "selectionType": selectionType,
           "parentMultiOptPropValue": parentMultiOptPropValue,
+          "ancestorContext": ancestorContext,
+          "creationPreset": creationPreset,
+          "additionalFormRelatedData": additionalFormRelatedData,
         },
       );
-      OptValueWrap? valueWrap = specifyDefaultValueForMultiOptProp(
+      OptValueWrap? valueWrap = specifyCreationValueForMultiOptProp(
         multiOptPropXData: multiOptPropXData,
         multiOptPropName: multiOptPropName,
         selectionType: selectionType,
         parentMultiOptPropValue: parentMultiOptPropValue,
+        ancestorContext: ancestorContext,
+        creationPreset: creationPreset,
+        additionalFormRelatedData: additionalFormRelatedData,
       );
       if (valueWrap == null) {
         __createNullValueWrapAppError(
-          methodName: "specifyDefaultValueForMultiOptProp",
+          methodName: "specifyCreationValueForMultiOptProp",
           multiOptPropName: multiOptPropName,
         );
         return null;
@@ -1791,7 +1680,6 @@ abstract class BlockFormModel<
     }
     message +=
         "And return null for not $MultiOptFormPropModel. See the specification of this method for more information.";
-    // throw AppError(errorMessage: message);
   }
 
   // ***************************************************************************
@@ -1800,10 +1688,11 @@ abstract class BlockFormModel<
   @_MayThrowFormTempErrorAnnotation()
   OptValueWrap? __extractMultiOptPropValueFromItemDetail({
     required ExecutionTrace executionTrace,
+    required BlockAncestorContext ancestorContext,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required ITEM_DETAIL itemDetail,
     required Object? parentMultiOptPropValue,
   }) {
@@ -1819,6 +1708,7 @@ abstract class BlockFormModel<
           "selectionType": selectionType,
           "multiOptPropXData": multiOptPropXData,
           "itemDetail": itemDetail,
+          "ancestorContext": ancestorContext,
           "additionalFormRelatedData": additionalFormRelatedData,
         },
       );
@@ -1826,9 +1716,10 @@ abstract class BlockFormModel<
         multiOptPropName: multiOptPropName,
         selectionType: selectionType,
         multiOptPropXData: multiOptPropXData,
-        additionalFormRelatedData: additionalFormRelatedData,
         itemDetail: itemDetail,
         parentMultiOptPropValue: parentMultiOptPropValue,
+        ancestorContext: ancestorContext,
+        additionalFormRelatedData: additionalFormRelatedData,
       );
       if (valueWrap == null) {
         __createNullValueWrapAppError(
@@ -1856,7 +1747,6 @@ abstract class BlockFormModel<
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required FORM_INPUT formInput,
     required Object? parentMultiOptPropValue,
   }) {
@@ -1874,8 +1764,6 @@ abstract class BlockFormModel<
           "multiOptPropXData": multiOptPropXData,
           "selectionType": selectionType,
           "parentMultiOptPropValue": parentMultiOptPropValue,
-          "parentBlockCurrentItemId": block.parentBlockCurrentItemId,
-          "additionalFormRelatedData": additionalFormRelatedData,
           "formInput": formInput,
         },
       );
@@ -1884,8 +1772,6 @@ abstract class BlockFormModel<
         multiOptPropXData: multiOptPropXData,
         selectionType: selectionType,
         parentMultiOptPropValue: parentMultiOptPropValue,
-        parentBlockCurrentItemId: block.parentBlockCurrentItemId,
-        additionalFormRelatedData: additionalFormRelatedData,
         formInput: formInput,
       );
       if (valueWrap == null) {
@@ -1915,31 +1801,24 @@ abstract class BlockFormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool get isNew {
-    return _formModelStructure.isNew;
-  }
+  bool get isNew => _formModelStructure.isNew;
 
-  Map<String, dynamic> get initialFormData {
-    return _formModelStructure._initialFormData;
-  }
+  Map<String, dynamic> get initialFormData =>
+      _formModelStructure._initialFormData;
 
-  Map<String, dynamic> get currentFormData {
-    return _formModelStructure._currentFormData;
-  }
+  Map<String, dynamic> get currentFormData =>
+      _formModelStructure._currentFormData;
 
   // ***************************************************************************
   // ***************************************************************************
 
   void _clearDataWithDataState({required FormDataState formDataState}) {
     try {
-      // Disable Auto validation.
       __disableAutovalidation();
       _formModelStructure._clearFormDataWithState(
         formDataState: formDataState,
       );
-      //
-      this.__clearFormKey();
-      //
+      __clearFormKey();
       block.ui.refreshControlBars();
     } catch (e, stackTrace) {
       _handleError(
@@ -2003,7 +1882,6 @@ abstract class BlockFormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  // Change Event from GUI.
   @_ImportantMethodAnnotation("Called when user makes a change in FormView.")
   @_FormViewChangeAnnotation()
   @override
@@ -2011,7 +1889,7 @@ abstract class BlockFormModel<
     required Map<String, dynamic> formKeyInstantValuesInUI,
   }) async {
     final XShelf xShelf = _XShelfFormViewChange(formModel: this);
-    //
+
     XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     XBlockFormModel xBlockFormModel = xBlock.xBlockFormModel!;
 
@@ -2076,7 +1954,6 @@ abstract class BlockFormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  // Test Case: [26a]
   @_RootMethodAnnotation()
   @_FormModelPatchFormFieldsAnnotation()
   Future<FormModelPatchFormFieldsResult> patchFormFields({
@@ -2090,9 +1967,9 @@ abstract class BlockFormModel<
       },
       isLibMethod: true,
     );
-    //
+
     final bool checkBusyTrue = true;
-    //
+
     executionTrace.addInfo(
       codeId: "#78000",
       shortDesc:
@@ -2101,7 +1978,7 @@ abstract class BlockFormModel<
         "checkBusy": checkBusyTrue,
       },
     );
-    //
+
     final Actionable<FormModelPatchFormFieldsPrecheck> actionable =
         __canPatchFormFields(
       checkBusy: checkBusyTrue,
@@ -2112,7 +1989,6 @@ abstract class BlockFormModel<
         shortDesc: "Got @actionable:",
         actionable: actionable,
       );
-      // _createItemErrorCount++;
       _addErrorLogActionable(
         shelf: shelf,
         actionableFalse: actionable,
@@ -2123,12 +1999,12 @@ abstract class BlockFormModel<
         precheck: actionable.errCode,
       );
     }
-    //
+
     final XShelf xShelf = _XShelfFormModelPatchFormFields(formModel: this);
-    //
+
     XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     XBlockFormModel xBlockFormModel = xBlock.xBlockFormModel!;
-    //
+
     executionTrace.addExecutionIntent(
       codeId: "#78340",
       owner: this,
@@ -2138,10 +2014,10 @@ abstract class BlockFormModel<
     final executionIntent = xBlockFormModel
         ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_INPUT>(
             formInput: formInput);
-    //
+
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    //
+
     return executionIntent.result;
   }
 
@@ -2156,11 +2032,11 @@ abstract class BlockFormModel<
       parameters: null,
       isLibMethod: true,
     );
-    //
+
     final bool checkBusyTrue = true;
     final bool checkAllowTrue = true;
     final bool checkValidateTrue = true;
-    //
+
     executionTrace.addInfo(
       codeId: "#79000",
       shortDesc:
@@ -2171,7 +2047,7 @@ abstract class BlockFormModel<
         "checkValidate": checkValidateTrue,
       },
     );
-    //
+
     Actionable<BlockFormSavePrecheck> actionable = block.__canSaveForm(
       checkBusy: checkBusyTrue,
       checkAllow: checkAllowTrue,
@@ -2183,7 +2059,7 @@ abstract class BlockFormModel<
         shortDesc: "Got @actionable:",
         actionable: actionable,
       );
-      //
+
       debug._saveErrorCount++;
       _addErrorLogActionable(
         shelf: shelf,
@@ -2193,12 +2069,12 @@ abstract class BlockFormModel<
       );
       return BlockFormSaveResult(precheck: actionable.errCode);
     }
-    //
+
     final XShelf xShelf = _XShelfFormModelSave(formModel: this);
-    //
+
     XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     XBlockFormModel xBlockFormModel = xBlock.xBlockFormModel!;
-    //
+
     executionTrace.addExecutionIntent(
       codeId: "#79340",
       owner: this,
@@ -2218,7 +2094,7 @@ abstract class BlockFormModel<
 
   Future<void> showDebugFormModelnspector() async {
     BuildContext context = FlutterArtistCore.context;
-    //
+
     await DebugFormModelInspectorDialog.show(
       context: context,
       locationInfo: getClassName(this),
@@ -2229,7 +2105,6 @@ abstract class BlockFormModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  // SAME-AS: #0009 (filter)
   MultiOptFormPropModel? findMultiOptFormProp({
     required String multiOptPropName,
   }) {
@@ -2238,7 +2113,6 @@ abstract class BlockFormModel<
     );
   }
 
-  // SAME-AS: #0008 (filterModel.debugGetMultiOptCriterionLoadCount())
   int debugGetMultiOptPropLoadCount(String multiOptPropName) {
     return _formModelStructure._debugGetMultiOptPropLoadCount(
       multiOptPropName: multiOptPropName,

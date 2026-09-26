@@ -1,0 +1,42 @@
+part of '../../core.dart';
+
+class _StageLoadInitDataExecutionUnit<
+        STAGE_ENUM extends Enum, //
+        STAGE_INIT_DATA extends StageInitData,
+        STAGE_RESULT_DATA extends StageResultData,
+        PROZESS_CONTEXT_DATA extends ProzessContextData>
+    extends _ActivityMemberExecutionUnit {
+  final XStage xStage;
+
+  @override
+  final StageLoadInitDataIntent<
+      STAGE_ENUM, //
+      STAGE_INIT_DATA,
+      STAGE_RESULT_DATA,
+      PROZESS_CONTEXT_DATA> executionIntent;
+
+  _StageLoadInitDataExecutionUnit({
+    required this.xStage,
+    required this.executionIntent,
+  }) : super(
+          executionUnitType: ExecutionUnitType.stage,
+          executionIntent: executionIntent,
+        );
+
+  @override
+  Activity get activity => xStage.stage.activity;
+
+  @override
+  String getObjectName() {
+    return xStage.stage.name;
+  }
+
+  @override
+  Object get owner => xStage.stage;
+
+  @override
+  XActivity get xActivity => xStage.xProzess.xActivity;
+
+  @override
+  int get xActivityId => xStage.xProzess.xActivity.xActivityId;
+}

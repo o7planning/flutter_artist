@@ -3,7 +3,7 @@ part of '../../core.dart';
 int __xActivitySequence = 0;
 
 /// Root queue item representing a stateful process container (Activity),
-/// managing child [XFlow] workflows and atomic [XTask] units.
+/// managing child [XProzess] workprozesss and atomic [XTask] units.
 abstract class XActivity extends XRootQueueItem {
   final XActivityType xActivityType;
 
@@ -16,10 +16,12 @@ abstract class XActivity extends XRootQueueItem {
   String get _fullName => "@XActivity-${activity.name}";
 
   final Map<String, XTask> xTaskMap = {};
+
   final List<XTask> allXTasks = [];
 
-  final Map<String, XFlow> xFlowMap = {};
-  final List<XFlow> allXFlows = [];
+  final Map<String, XStage> xStageMap = {};
+  final Map<String, XProzess> xProzessMap = {};
+  final List<XProzess> allXProzesss = [];
 
   XActivity({
     required this.activity,
@@ -34,14 +36,21 @@ abstract class XActivity extends XRootQueueItem {
       allXTasks.add(xTask);
     }
 
-    // 2. Build and bind active runtime Flows & Stages
-    for (final Flow flow in activity.flows) {
-      final xFlow = flow._createXFlow(
+    // 2. Build and bind active runtime Prozesses & Stages
+    for (final Prozess prozess in activity.prozesss) {
+      final xProzess = prozess._createXProzess(
         xActivity: this,
       );
-      xFlowMap[flow.name] = xFlow;
-      allXFlows.add(xFlow);
+      xProzessMap[prozess.name] = xProzess;
+      allXProzesss.add(xProzess);
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  XStage? findXStageByName(String name) {
+    return xStageMap[name];
   }
 
   // ***************************************************************************
@@ -49,12 +58,12 @@ abstract class XActivity extends XRootQueueItem {
 
   XTask? findXTaskByName(String name) => xTaskMap[name];
 
-  XFlow? findXFlowByName(String name) => xFlowMap[name];
+  XProzess? findXProzessByName(String name) => xProzessMap[name];
 
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Resolves the next unit to execute across Tasks and active Flow stages.
+  /// Resolves the next unit to execute across Tasks and active Prozess stages.
   NxtExecutionUnit? _getNextExecutionUnit({required bool debug}) {
     if (debug) {
       if (++_executionUnitStep == 1) {
@@ -73,9 +82,9 @@ abstract class XActivity extends XRootQueueItem {
       }
     }
 
-    // Priority 2: Check multi-stage Flows
-    for (final xFlow in allXFlows) {
-      final next = xFlow._getNextExecutionUnit(debug: debug);
+    // Priority 2: Check multi-stage Prozesses
+    for (final xProzess in allXProzesss) {
+      final next = xProzess._getNextExecutionUnit(debug: debug);
       if (next != null && next.yes) {
         return next;
       }

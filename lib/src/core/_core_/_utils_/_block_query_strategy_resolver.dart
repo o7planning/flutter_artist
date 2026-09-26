@@ -2,7 +2,7 @@ part of '../core.dart';
 
 /// Centralized strategy resolver calculating execution plans and target ID sets
 /// for a [Block] based on its current [BlockDataState], query mode, UI context,
-/// and pipeline execution hints.
+/// and prozess execution hints.
 class BlockQueryStrategyResolver {
   /// Resolves the exact query execution plan for a given [block].
   static BlockQueryPlan<ID> resolveQueryPlan<ID extends Comparable>({
@@ -12,8 +12,8 @@ class BlockQueryStrategyResolver {
             Identifiable<ID>,
             FilterInput,
             FilterCriteria,
-            FormInput,
-            AdditionalFormRelatedData>
+            CreationPreset,
+            FormInput>
         block,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
     required QueryHint queryHint,
@@ -51,7 +51,7 @@ class BlockQueryStrategyResolver {
     // 2. EVALUATE EFFECTIVE FORCE RE-QUERY DEMAND
     // -------------------------------------------------------------------------
     // Re-query is required IF:
-    // a. Pipeline explicitly mandated force (queryHint == QueryHint.force)
+    // a. Prozess explicitly mandated force (queryHint == QueryHint.force)
     // b. Active UI representation is visible AND dataset is unready (pending/stale)
     final bool effectiveForce = queryHint == QueryHint.force ||
         (provideBlockContext && (dataState.isPending || dataState.isStale));

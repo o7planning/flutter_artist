@@ -241,7 +241,7 @@ class BlockQueryStateCalculator {
         }
       }
 
-      // Hard override: If the pipeline query layout model structurally mutated, enforce replace
+      // Hard override: If the prozess query layout model structurally mutated, enforce replace
       if (input.queryTypeChanged) {
         resolvedStrategy = ListUpdateStrategy.replace;
       }

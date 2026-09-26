@@ -89,7 +89,7 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: null,
-        queryHint: QueryHint.force, // Explicit user/pipeline force
+        queryHint: QueryHint.force, // Explicit user/prozess force
         provideScalarContext: true,
       );
 
@@ -181,7 +181,7 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: null,
-        queryHint: QueryHint.force, // Pipeline mandates force fetch
+        queryHint: QueryHint.force, // Prozess mandates force fetch
         provideScalarContext: false,
       );
 

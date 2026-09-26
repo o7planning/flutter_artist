@@ -306,7 +306,7 @@ abstract class ExecutionTrace {
 
   // ===========================================================================
 
-  /// Logs an internal framework pipeline execution call.
+  /// Logs an internal framework prozess execution call.
   TraceStep addNonControllableCall({
     required String codeId,
     required Object caller,

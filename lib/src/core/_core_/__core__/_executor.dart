@@ -9,7 +9,7 @@ class _Executor {
   int? get executingXShelfId => __executingXShelfId;
 
   final Map<_ExecutionProgressBuilderState, bool>
-  _executionProgressViewWidgetStates = {};
+      _executionProgressViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -51,7 +51,7 @@ class _Executor {
         try {
           while (true) {
             _ExecutionUnit? executionUnit =
-            FlutterArtist._rootQueue.getNextExecutionUnit(
+                FlutterArtist._rootQueue.getNextExecutionUnit(
               removeEmptyRootQuery: true,
             );
             //
@@ -61,7 +61,7 @@ class _Executor {
               }
               pendingEventProcessed = true;
               final Set<String> excludeShelfNames =
-              executedShelfMap.keys.toSet();
+                  executedShelfMap.keys.toSet();
               //
               FlutterArtist.desk._reactionProcessor.addReactionExecutionUnits(
                 excludeShelfNames: excludeShelfNames,
@@ -156,9 +156,27 @@ class _Executor {
           executionIntent: executionUnit.executionIntent,
         );
       }
+      // _StageLoadInitDataExecutionUnit
+      else if (executionUnit is _StageLoadInitDataExecutionUnit) {
+        await executionUnit.xStage.stage._unitLoadInitData(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXStage: executionUnit.xStage,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
       // _TaskExecutionUnit
-      else if (executionUnit is _TaskExecutionUnit) {
-        await executionUnit.xTask.task._unitTaskExecution(
+      else if (executionUnit is _TaskSubmitExecutionUnit) {
+        await executionUnit.xTask.task._unitSubmit(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXTask: executionUnit.xTask,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
+      // _TaskLoadInitDataExecutionUnit
+      else if (executionUnit is _TaskLoadInitDataExecutionUnit) {
+        await executionUnit.xTask.task._unitLoadInitData(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXTask: executionUnit.xTask,
@@ -367,9 +385,9 @@ class _Executor {
       bool onProgress = owner == null || executionUnitType == null
           ? false
           : state.isMatches(
-        owner: owner,
-        executionUnitType: executionUnitType,
-      );
+              owner: owner,
+              executionUnitType: executionUnitType,
+            );
       //
       state.onProgress = onProgress;
       state.refreshState(force: true);

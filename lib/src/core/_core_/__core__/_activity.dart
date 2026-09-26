@@ -19,10 +19,10 @@ abstract class Activity extends _Core {
 
   List<Task> get tasks => List.unmodifiable(_tasks);
 
-  final Map<String, Flow> __flowMap = {};
-  final List<Flow> _flows = [];
+  final Map<String, Prozess> __prozessMap = {};
+  final List<Prozess> _prozesss = [];
 
-  List<Flow> get flows => List.unmodifiable(_flows);
+  List<Prozess> get prozesss => List.unmodifiable(_prozesss);
 
   final List<TaskFormModel> _allTaskFormModels = [];
   final List<StageFormModel> _allStageFormModels = [];
@@ -93,21 +93,21 @@ abstract class Activity extends _Core {
     }
 
     //
-    // 2. Flows & Stages Registration:
+    // 2. Prozesses & Stages Registration:
     //
-    for (Flow flow in _activityStruct.flows) {
-      if (__flowMap.containsKey(flow.name)) {
+    for (Prozess prozess in _activityStruct.prozesss) {
+      if (__prozessMap.containsKey(prozess.name)) {
         throw ___registerError(
-          "Duplicate Flow '${flow.name}' in '${getClassName(this)}'\n"
+          "Duplicate Prozess '${prozess.name}' in '${getClassName(this)}'\n"
           "Double-check ${getClassName(this)}.defineActivityStructure() method",
         );
       }
-      __flowMap[flow.name] = flow;
-      _flows.add(flow);
-      flow._bindToActivity(this);
+      __prozessMap[prozess.name] = prozess;
+      _prozesss.add(prozess);
+      prozess._bindToActivity(this);
 
       // Register Stage Form Models
-      for (Stage stage in flow.stages) {
+      for (Stage stage in prozess.stages) {
         if (stage.formModel != null) {
           _allStageFormModels.add(stage.formModel!);
         }
@@ -122,8 +122,8 @@ abstract class Activity extends _Core {
     return __taskMap[taskName];
   }
 
-  Flow? findFlow(String flowName) {
-    return __flowMap[flowName];
+  Prozess? findProzess(String flowName) {
+    return __prozessMap[flowName];
   }
 
   // ***************************************************************************

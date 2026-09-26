@@ -1,9 +1,8 @@
 part of '../../../core.dart';
 
-class _XActivityBaseQuery extends XActivity {
-  _XActivityBaseQuery({
+class _XActivityBaseExec extends XActivity {
+  _XActivityBaseExec({
     required super.xActivityType,
     required super.activity,
   });
-
 }

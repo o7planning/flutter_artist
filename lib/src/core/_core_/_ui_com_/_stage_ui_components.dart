@@ -9,10 +9,18 @@ class _StageUiComponents extends _UiComponents {
   // TODO: implement faRouteDatas
   Set<FaRouteData> get faRouteDatas => throw UnimplementedError();
 
+  String? findVisibleView() {
+    return null;
+  }
+
   @override
   bool hasMountedViews() {
     // TODO: implement hasMountedUiComponent
     throw UnimplementedError();
+  }
+
+  void refreshControlBars() {
+    // TODO:....
   }
 
   void _removeStageBaseViewWidgetState({

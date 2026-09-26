@@ -1,9 +1,9 @@
 part of '../core.dart';
 
-class _FlowUiComponents extends _UiComponents {
-  final Flow flow;
+class _ProzessUiComponents extends _UiComponents {
+  final Prozess prozess;
 
-  _FlowUiComponents({required this.flow});
+  _ProzessUiComponents({required this.prozess});
 
   @override
   // TODO: implement faRouteDatas
@@ -13,5 +13,9 @@ class _FlowUiComponents extends _UiComponents {
   bool hasMountedViews() {
     // TODO: implement hasMountedUiComponent
     throw UnimplementedError();
+  }
+
+  String? findVisibleView() {
+    return null;
   }
 }

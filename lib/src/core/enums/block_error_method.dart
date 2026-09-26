@@ -10,8 +10,10 @@ enum BlockErrorMethod {
 
 enum TaskErrorMethod {
   performExec,
+  performLoadInitData;
 }
 
 enum StageErrorMethod {
+  performLoadInitData,
   performExec,
 }

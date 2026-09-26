@@ -1,7 +1,9 @@
 enum ActiveElementType {
   block,
   item,
-  scalar;
+  scalar,
+  task,
+  prozess, stage;
 
   String shortInf() {
     switch (this) {
@@ -10,6 +12,12 @@ enum ActiveElementType {
       case ActiveElementType.item:
         return "I";
       case ActiveElementType.scalar:
+        return "S";
+      case ActiveElementType.task:
+        return "T";
+      case ActiveElementType.prozess:
+        return "P";
+      case ActiveElementType.stage:
         return "S";
     }
   }

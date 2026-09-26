@@ -7,8 +7,8 @@ abstract class BlockItemDetailView<
         Identifiable<Comparable>,
         FilterInput,
         FilterCriteria,
-        FormInput,
-        AdditionalFormRelatedData>> extends StatelessWidget {
+        CreationPreset,
+        FormInput>> extends StatelessWidget {
   final BLOCK block;
   final bool provideFormContext;
 

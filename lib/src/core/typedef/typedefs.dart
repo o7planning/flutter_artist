@@ -24,5 +24,5 @@ typedef AnyBlock = Block<
     Identifiable<Comparable>,
     FilterInput,
     FilterCriteria,
-    FormInput,
-    AdditionalFormRelatedData>;
+    CreationPreset,
+    FormInput>;

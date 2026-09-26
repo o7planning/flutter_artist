@@ -15,6 +15,10 @@ class _TaskUiComponents extends _UiComponents {
     return list.map((v) => v.faRoute).nonNulls.toList().toSet();
   }
 
+  void refreshControlBars() {
+    // TODO...
+  }
+
   @override
   bool hasMountedViews() {
     return _taskViewWidgetStates.isNotEmpty;

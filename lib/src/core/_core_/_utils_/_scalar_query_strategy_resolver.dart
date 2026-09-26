@@ -2,7 +2,7 @@ part of '../core.dart';
 
 /// Centralized strategy resolver calculating execution plans for a [Scalar]
 /// based on its current [ScalarDataState], invalidation flags, UI context,
-/// and pipeline execution hints.
+/// and prozess execution hints.
 class ScalarQueryStrategyResolver {
   /// Resolves the exact query execution plan for a given [scalar].
   static ScalarQueryPlan<ID> resolveQueryPlan<ID extends Comparable>({
@@ -44,7 +44,7 @@ class ScalarQueryStrategyResolver {
     // 2. EVALUATE EFFECTIVE FORCE RE-QUERY DEMAND
     // -------------------------------------------------------------------------
     // Re-query is required IF:
-    // a. Pipeline explicitly mandated force (queryHint == QueryHint.force)
+    // a. Prozess explicitly mandated force (queryHint == QueryHint.force)
     // b. Active UI component is visible AND data is unready (pending/stale)
     final bool effectiveForce = queryHint == QueryHint.force ||
         (provideScalarContext && (dataState.isPending || dataState.isStale));

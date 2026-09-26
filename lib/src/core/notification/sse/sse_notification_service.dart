@@ -14,7 +14,7 @@ class SSENotificationService
   @override
   Future<void> initialize() async {
     print(
-        "${getClassName(this)}.initialize() - SSE pipeline is being set up....");
+        "${getClassName(this)}.initialize() - SSE prozess is being set up....");
 
     adapter.connect();
 

@@ -1,110 +1,267 @@
 part of '../core.dart';
 
+/// Represents a standalone transactional unit of work within an Activity.
+///
+/// Lifecycle:
+/// [TaskDataStatePending] -> (loads INIT_DATA) -> [TaskDataStateLoadedFresh]
+/// -> (submission) -> [TaskDataStateSubmissionAttempted]
 abstract class Task<
-    TASK_DATA extends TaskData, //
-    TASK_INPUT extends FormInput,
-    ADDITIONAL_FORM_DATA extends AdditionalFormRelatedData> extends _Core {
+    INIT_DATA extends TaskInitData, //
+    RESULT_DATA extends TaskResultData, //
+    CREATION_PRESET extends CreationPreset,
+    FORM_INPUT extends FormInput> extends _Core {
   final String name;
+  final String? description;
   final TaskConfig config;
   final TaskEffectiveConfig effectiveConfig;
 
+  late final debug = _TaskDebugInfo(task: this);
+
   late final Activity activity;
-
-  final TaskFormModel<TASK_DATA, TASK_INPUT, ADDITIONAL_FORM_DATA>? formModel;
-
   late final ui = _TaskUiComponents(task: this);
 
-  TaskDataState _dataState = TaskDataStatePending();
+  TaskFormModel<
+      INIT_DATA, //
+      RESULT_DATA,
+      CREATION_PRESET,
+      FORM_INPUT,
+      AdditionalFormRelatedData>? formModel;
 
+  // ===========================================================================
+  // EMBEDDED TASK STATE STORAGE
+  // ===========================================================================
+
+  TaskDataState _dataState = const TaskDataStatePending.initial();
   TaskDataState get dataState => _dataState;
 
-  void _setTaskDataState(TaskDataState dataState) {
-    _dataState = dataState;
-  }
+  INIT_DATA? _initData;
+  INIT_DATA? get initData => _initData;
+
+  RESULT_DATA? _lastResultData;
+  RESULT_DATA? get lastResultData => _lastResultData;
+
+  bool __isLoadingInitData = false;
+  bool get isLoadingInitData => __isLoadingInitData;
+
+  bool __isExecuting = false;
+  bool get isExecuting => __isExecuting;
+
+  bool get hasForm => formModel != null;
+  bool get hasError => _dataState.hasError;
+  TaskErrorInfo? get errorInfo => _dataState.errorInfo;
+
+  // ===========================================================================
+  // Constructor
+  // ===========================================================================
 
   Task({
     required this.name,
+    this.description,
     this.config = const TaskConfig(),
-    this.formModel,
+    required this.formModel,
   }) : effectiveConfig = TaskEffectiveConfig.fromConfig(config) {
     formModel?._bindToTask(this);
   }
 
-  // ***************************************************************************
+  // ===========================================================================
 
-  XTask<TASK_DATA, TASK_INPUT, ADDITIONAL_FORM_DATA> _createXTask({
+  XTask _createXTask({
     required XActivity xActivity,
   }) {
-    return XTask<TASK_DATA, TASK_INPUT, ADDITIONAL_FORM_DATA>._(
-      task: this,
-      xActivity: xActivity,
-    );
+    return XTask<
+        INIT_DATA, //
+        RESULT_DATA,
+        CREATION_PRESET,
+        FORM_INPUT>._(xActivity: xActivity, task: this);
   }
 
-  // ***************************************************************************
+  // ===========================================================================
 
   void _bindToActivity(Activity parentActivity) {
     activity = parentActivity;
   }
 
-  bool get hasForm => formModel != null;
+  // ===========================================================================
+  // GENERICS TYPES:
+  // ===========================================================================
 
-  bool get hasError => false;
+  Type getInitDataType() => INIT_DATA;
+  Type getResultDataType() => RESULT_DATA;
+  Type getCreationPresetType() => CREATION_PRESET;
+  Type getFormInputType() => FORM_INPUT;
 
-  // ***************************************************************************
-  // ***************************************************************************
+  // ===========================================================================
+  // ABSTRACT CONTRACTS
+  // ===========================================================================
 
-  Future<void> execute() async {
-    //
-  }
+  /// Asynchronously fetches baseline metadata/context required for this Task.
+  ///
+  /// Symmetric to [performQuery] in Scalar and [performLoadItemDetailById] in Block.
+  @_AbstractMethodAnnotation()
+  Future<ApiResult<INIT_DATA>> performLoadInitData();
 
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<void> _unitTaskExecution({
-    required ExecutionTrace executionTrace,
-    required ExecutionUnitType executionUnitType,
-    required XTask<
-            TASK_DATA, //
-            TASK_INPUT,
-            ADDITIONAL_FORM_DATA>
-        thisXTask,
-    required TaskExecutionIntent<TaskData> executionIntent,
-  }) async {
-    __assertThisXTask(thisXTask);
-
-    final ExecHint initialExecHint = thisXTask.execHint;
-
-    thisXTask._setExecutedTrue();
-    thisXTask._createAndSetTaskIntentDone(lastIntentInfo: "Execute");
-    thisXTask.resetExecutionHints();
-    //
-    executionTrace.addInfo(
-      codeId: "#90000",
-      shortDesc:
-          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
-    );
-
-    final executionResult = executionIntent.resultWrapper._setResult(
-      TaskExecutionResult<TASK_DATA>(precheck: null),
-      objectCaller: this,
-      methodName: '_unitTaskExecution',
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<ApiResult<TASK_DATA>> performExecute({
+  /// Executes the core submission logic of the Task with user input.
+  @_AbstractMethodAnnotation()
+  Future<ApiResult<RESULT_DATA>> performSubmit({
+    required INIT_DATA? initData,
     required Map<String, dynamic>? formData,
   });
 
-  Future<void> _processTaskSubmitResult(ApiResult<TASK_DATA> apiResult) async {
-    // ...
+  // ===========================================================================
+  // EXECUTION UNIT: _unitLoadInitData
+  // ===========================================================================
+
+  /// Internal ExecutionUnit method handling asynchronous INIT_DATA retrieval.
+  ///
+  /// Invoked by [_TaskLoadInitDataExcutionUnit].
+  @_ExecutionUnitMethodAnnotation()
+  Future<void> _unitLoadInitData({
+    required ExecutionTrace executionTrace,
+    required ExecutionUnitType executionUnitType,
+    required XTask thisXTask,
+    required TaskLoadInitDataIntent<INIT_DATA, RESULT_DATA> executionIntent,
+  }) async {
+    __assertThisXTask(thisXTask);
+
+    executionTrace.addInfo(
+      codeId: "#90100",
+      shortDesc:
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Load InitData)",
+    );
+
+    final executionResult = executionIntent.resultWrapper._setResult(
+      TaskLoadInitDataResult<INIT_DATA>(precheck: null),
+      objectCaller: this,
+      methodName: '_unitLoadInitData',
+    );
+
+    TaskErrorInfo? taskErrorInfo;
+    try {
+      __refreshLoadingInitDataState(isLoading: true);
+
+      executionTrace.addControllableCall(
+        codeId: "#90120",
+        caller: this,
+        methodName: "performLoadInitData",
+        suffixShortDesc: "",
+      );
+      debug._performLoadInitDataCount++;
+
+      final ApiResult<INIT_DATA> result = await performLoadInitData();
+      result.throwIfError();
+
+      _initData = result.data;
+      _dataState = const TaskDataStateLoadedFresh();
+
+      executionTrace.addInfo(
+        codeId: "#90140",
+        shortDesc:
+            "${debugObjHtml(this)} -> Successfully loaded INIT_DATA: ${debugObjHtml(_initData)}.",
+      );
+    } catch (e, stackTrace) {
+      taskErrorInfo = TaskErrorInfo(
+        taskErrorMethod: TaskErrorMethod.performLoadInitData,
+        error: e,
+        errorStackTrace: stackTrace,
+      );
+
+      final ErrorInfo errorInfo = _handleError(
+        shelf: null,
+        methodName: "performLoadInitData",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+
+      executionResult._setErrorInfo(errorInfo: errorInfo);
+
+      // Transition to failed state preserving error info
+      if (_initData != null) {
+        _dataState = TaskDataStateLoadedStale(staleErrorInfo: taskErrorInfo);
+      } else {
+        _dataState = TaskDataStatePending.failed(errorInfo: taskErrorInfo);
+      }
+
+      executionTrace.addInfo(
+        codeId: "#90160",
+        shortDesc:
+            "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
+        errorInfo: errorInfo,
+      );
+    } finally {
+      __refreshLoadingInitDataState(isLoading: false);
+    }
+  }
+
+  // ===========================================================================
+  // EXECUTION UNIT: _unitSubmit
+  // ===========================================================================
+
+  Future<void> _unitSubmit({
+    required ExecutionTrace executionTrace,
+    required ExecutionUnitType executionUnitType,
+    required XTask<TaskInitData, TaskResultData, CreationPreset, FormInput>
+        thisXTask,
+    required TaskSubmitIntent<TaskInitData, TaskResultData> executionIntent,
+  }) async {
+    // Handled in subsequent phase
+  }
+
+  // ===========================================================================
+  // PUBLIC CONTROLS
+  // ===========================================================================
+
+  /// Triggers asynchronous loading of [INIT_DATA] through the framework queue.
+  Future<TaskLoadInitDataResult<INIT_DATA>> loadInitData() async {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "loadInitData",
+      parameters: null,
+      isLibMethod: true,
+    );
+
+    final XActivity xActivity = _XActivityTaskLoadInitData(task: this);
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
+    await FlutterArtist.executor._executeExecutionUnitQueue();
+
+    final thisXTask = xActivity.findXTaskByName(name) as XTask<
+        INIT_DATA, //
+        RESULT_DATA,
+        CREATION_PRESET,
+        FORM_INPUT>;
+    return thisXTask.loadInitDataResult;
+  }
+
+  bool isPendingOrStale({required bool requiresVisible}) {
+    final bool visible = ui.hasVisibleViews();
+    if (requiresVisible && !visible) {
+      return false;
+    }
+    return dataState.isPending || dataState.isStale;
+  }
+
+  /// Resets the Task back to cold initial pending state.
+  void clear() {
+    _initData = null;
+    _lastResultData = null;
+    _dataState = const TaskDataStatePending.initial();
+  }
+
+  void __refreshLoadingInitDataState({required bool isLoading}) {
+    try {
+      __isLoadingInitData = isLoading;
+      ui.refreshControlBars();
+    } catch (_) {}
   }
 
   void showTaskErrorViewerDialog(BuildContext context) {
-    // ...
+    if (errorInfo != null) {
+      ErrorViewerDialog.show(
+        context: context,
+        errorInfo: errorInfo!.toErrorInfo(),
+      );
+    }
   }
 
   // ***************************************************************************
@@ -113,9 +270,7 @@ abstract class Task<
 
   void __assertThisXTask(XTask thisXTask) {
     if (thisXTask.task != this || thisXTask.name != name) {
-      String message = "Error Assert task: ${thisXTask.task} - $this";
-      print("FATAL ERROR: $message");
-      throw message;
+      throw "Error Assert task: ${thisXTask.task} - $this";
     }
   }
 }

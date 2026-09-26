@@ -7,7 +7,7 @@ import '_debug_box.dart';
 import 'debug_style_utils.dart';
 
 class FormDebugBox extends BaseDebugBox {
-  final BlockFormModel formModel;
+  final BaseFormModel formModel;
   final DebugFormOptions options;
 
   const FormDebugBox({

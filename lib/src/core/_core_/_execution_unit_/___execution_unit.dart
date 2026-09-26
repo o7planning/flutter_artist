@@ -11,7 +11,7 @@ part of '../core.dart';
 ///   │
 ///   │
 ///   ├── _ActivityMemberExecutionUnit
-///   │   ├── _FlowExecutionUnit
+///   │   ├── _ProzessExecutionUnit
 ///   │   └── _TaskExecutionUnit
 ///   │
 ///   └── _StorageBackendActionExecutionUnit

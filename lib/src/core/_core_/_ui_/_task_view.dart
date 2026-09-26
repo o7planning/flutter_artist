@@ -1,10 +1,11 @@
 part of '../core.dart';
 
 abstract class TaskView<
-    TASK extends Task<
-        TaskData,
-        FormInput, // TASK_INPUT
-        AdditionalFormRelatedData>> extends StatelessWidget {
+TASK extends Task<
+    TaskInitData, //
+    TaskResultData,
+    CreationPreset,
+    FormInput>> extends StatelessWidget {
   final TASK task;
   final QuickSuggestionMode quickSuggestionMode;
 

@@ -1,76 +1,114 @@
 part of '../../core.dart';
 
 abstract class TaskFormModel<
-        TASK_DATA extends TaskData,
-        TASK_INPUT extends FormInput,
+        INIT_DATA extends TaskInitData,
+        RESULT_DATA extends TaskResultData,
+        CREATION_PRESET extends CreationPreset,
+        FORM_INPUT extends FormInput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel {
-  Activity get activity => task.activity;
-
+    extends BaseFormModel<CREATION_PRESET, FORM_INPUT,
+        ADDITIONAL_FORM_RELATED_DATA> {
   @override
-  String get pathInfo {
-    return "${activity.name} > ${task.name} > task-form";
+  String get pathInfo => "${task.activity.name} > ${task.name} > task-form";
+
+  late final Task<INIT_DATA, RESULT_DATA, CREATION_PRESET, FORM_INPUT> task;
+
+  void _bindToTask(Task parentTask) {
+    task =
+        parentTask as Task<INIT_DATA, RESULT_DATA, CREATION_PRESET, FORM_INPUT>;
   }
 
-  late final Task<
-      TASK_DATA, //
-      TASK_INPUT,
-      ADDITIONAL_FORM_RELATED_DATA> task;
+  TaskFormModel({super.config});
 
-  void _bindToTask(
-      Task<TASK_DATA, TASK_INPUT, ADDITIONAL_FORM_RELATED_DATA> task) {
-    this.task = task;
-  }
+  // ===========================================================================
+  // FORM EXTRACTION HOOKS (Symmetric with BlockFormModel)
+  // ===========================================================================
 
-  /// Nạp các dữ liệu danh mục phụ trợ (vd: FeedbackCategoryList, UserProfile).
-  Future<ADDITIONAL_FORM_RELATED_DATA?> performLoadFormRelatedData();
-
-  /// Khởi tạo giá trị ban đầu cho form (Initial Values).
-  Map<String, dynamic> specifyInitialValues({
-    required TASK_INPUT? taskInput,
-    required ADDITIONAL_FORM_RELATED_DATA? relatedData,
+  /// Supplies baseline initial values using [initData], [creationPreset], and [additionalData].
+  @_AbstractMethodAnnotation()
+  Map<String, dynamic>? specifyInitialValuesForSimpleProps({
+    required INIT_DATA? initData,
+    required CREATION_PRESET creationPreset,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
   });
 
-  /// Thu thập dữ liệu biểu mẫu đã nhập và kích hoạt execute trên Task.
-  Future<TaskExecutionResult<TASK_DATA>> submit() async {
-    // final FormBuilderState? currentState = formKey.currentState;
-    // if (currentState == null || !currentState.saveAndValidate()) {
-    //   return TaskExecutionResult.validationFailed();
-    // }
-    //
-    // final Map<String, dynamic> formData = currentState.value;
-    //
-    // // Giao quyền thực thi cho Task thông qua TaskExecutionIntent
-    // return await task.executeWithFormData(formData: formData);
-    throw UnimplementedError("TODO submit");
-  }
+  @_AbstractMethodAnnotation()
+  OptValueWrap? specifyInitialValueForMultiOptProp({
+    required String multiOptPropName,
+    required SelectionType selectionType,
+    required XData multiOptPropXData,
+    required Object? parentMultiOptPropValue,
+    required INIT_DATA? initData,
+    required CREATION_PRESET creationPreset,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
+  });
 
-  // ***************************************************************************
-  // ***************************************************************************
+  @_AbstractMethodAnnotation()
+  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
+    required FORM_INPUT formInput,
+  });
+
+  @_AbstractMethodAnnotation()
+  OptValueWrap? extractUpdateValueForMultiOptProp({
+    required String multiOptPropName,
+    required SelectionType selectionType,
+    required XData multiOptPropXData,
+    required Object? parentMultiOptPropValue,
+    required FORM_INPUT formInput,
+  });
+
+  @_AbstractMethodAnnotation()
+  Future<ADDITIONAL_FORM_RELATED_DATA> performLoadAdditionalFormRelatedData({
+    required INIT_DATA? initData,
+  });
+
+  // ===========================================================================
+  // SUBMISSION
+  // ===========================================================================
+
+  /// Submits the active form and triggers the underlying Task execution.
+  Future<TaskSubmitExecutionResult<INIT_DATA, RESULT_DATA>> submit() async {
+    final Map<String, dynamic> formMapData =
+        _formModelStructure._currentFormData;
+    final ApiResult<RESULT_DATA> apiResult = await task.performSubmit(
+      formData: formMapData,
+      initData: task.initData,
+    );
+
+    if (apiResult.isError()) {
+      return TaskSubmitExecutionResult<INIT_DATA, RESULT_DATA>(
+        precheck: null,
+      );
+    } else {
+      _formModelStructure._setManualDirty(false);
+      return TaskSubmitExecutionResult<INIT_DATA, RESULT_DATA>(
+        precheck: null,
+      );
+    }
+  }
 
   @override
-  void _addToRecent() {
-    FlutterArtist.desk._addRecentActivity(activity);
-  }
+  bool isEnabled() => dataState.isFresh;
 
   @override
-  void _triggerWhenFormViewVisible() {
-    FlutterArtist.storage._lazyUiComponentTriggerQueue.addActivity(activity);
-  }
-
-  @override
-  bool _canResetForm() {
-    // Actionable canReset = block.canResetForm();
-    // return canReset;
-    // TODO: Hardcode
-    print("TODO: taskFormModel._canResetForm");
-    return false;
-  }
+  bool _canResetForm() => isDirty();
 
   @override
   void _refreshAllViews() {
-    // activity.ui.refreshAllViews();
-    // TODO: Hardcode
-    print("TODO: taskFormModel._refreshAllViews");
+    // task.ui.refreshAllViews();
+    // FlutterArtist.desk.ui.refreshAllViews();
+  }
+
+  @override
+  void _triggerWhenFormViewVisible() {}
+
+  @override
+  void _addToRecent() {}
+
+  @override
+  Future<void> _onChangeFromFormView({
+    required Map<String, dynamic> formKeyInstantValuesInUI,
+  }) async {
+    // Reactive multi-opt cascade triggers
   }
 }

@@ -1,12 +1,13 @@
 part of '../core.dart';
 
 abstract class StageView<
-    STAGE extends Stage<
-        Enum, //
-        StageData,
-        FlowContextData,
-        FormInput,
-        AdditionalFormRelatedData>> extends StatelessWidget {
+STAGE extends Stage<
+    Enum, //
+    StageInitData,
+    StageResultData,
+    ProzessContextData,
+    CreationPreset,
+    FormInput>> extends StatelessWidget {
   final STAGE stage;
   final QuickSuggestionMode quickSuggestionMode;
 
