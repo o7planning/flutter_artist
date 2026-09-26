@@ -3,7 +3,7 @@ part of '../core.dart';
 abstract class Task<
     TASK_DATA extends TaskData, //
     CREATION_PRESET extends CreationPreset,
-    FORM_INPUT extends FormInput > extends _Core {
+    FORM_INPUT extends FormInput> extends _Core {
   final String name;
   final TaskConfig config;
   final TaskEffectiveConfig effectiveConfig;
@@ -36,11 +36,10 @@ abstract class Task<
 
   // ***************************************************************************
 
-  XTask<TASK_DATA, CREATION_PRESET, FORM_INPUT >
-      _createXTask({
+  XTask<TASK_DATA, CREATION_PRESET, FORM_INPUT> _createXTask({
     required XActivity xActivity,
   }) {
-    return XTask<TASK_DATA, CREATION_PRESET, FORM_INPUT >._(
+    return XTask<TASK_DATA, CREATION_PRESET, FORM_INPUT>._(
       task: this,
       xActivity: xActivity,
     );
@@ -72,7 +71,7 @@ abstract class Task<
     required XTask<
             TASK_DATA, //
             CREATION_PRESET,
-            FORM_INPUT >
+            FORM_INPUT>
         thisXTask,
     required TaskExecutionIntent<TaskData> executionIntent,
   }) async {
