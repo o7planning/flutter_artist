@@ -14,4 +14,8 @@ class _ActivityUiComponents extends _UiComponents {
     // TODO: implement hasMountedUiComponent
     throw UnimplementedError();
   }
+
+  void refreshAllViews() {
+    // TODO: implement hasMountedUiComponent
+  }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../../../core/enums/debug_btn_type.dart';
+import '../../../../core/enums/_enums.dart';
 
 abstract class BaseInfoWidget extends StatelessWidget {
   final TextStyle labelStyle;

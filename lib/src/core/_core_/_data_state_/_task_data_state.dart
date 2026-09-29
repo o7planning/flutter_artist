@@ -1,5 +1,3 @@
-
-
 part of '../core.dart';
 
 /// Root sealed state container for Task lifecycle readiness and submission outcome.
@@ -93,10 +91,11 @@ sealed class TaskPendingReason {
 
   bool get isFailed => this is TaskPendingReasonFailed;
 
-  TaskErrorInfo? get errorInfo => switch (this) {
-    TaskPendingReasonFailed(:final errorInfo) => errorInfo,
-    _ => null,
-  };
+  TaskErrorInfo? get errorInfo =>
+      switch (this) {
+        TaskPendingReasonFailed(:final errorInfo) => errorInfo,
+        _ => null,
+      };
 
   @override
   bool operator ==(Object other);

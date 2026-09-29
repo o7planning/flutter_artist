@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart'
     hide FlutterArtistLocaleAdapter;
@@ -54,70 +54,9 @@ import '../annotation/annotation.dart';
 import '../built_in/empty_form_input.dart';
 import '../built_in/empty_filter_criteria.dart';
 import '../built_in/empty_filter_input.dart';
-import '../enums/action_confirmation_type.dart';
-import '../enums/action_result_state.dart';
-import '../enums/activity_hidden_action.dart';
+import '../enums/_enums.dart';
+import '../enums/_enums.dart';
 
-import '../enums/activity_release_policy.dart';
-import '../enums/block_viewport_sync_strategy.dart';
-import '../enums/error_origin.dart';
-import '../enums/event_data_kind.dart';
-import '../enums/fallback_dilemma_strategy.dart';
-import '../enums/filter_apply_policy.dart';
-import '../enums/filter_connector.dart';
-import '../enums/filter_sync_directive.dart';
-import '../enums/sort_strategy.dart';
-import '../enums/default_setting_policy.dart';
-import '../enums/filter_operator.dart';
-import '../enums/filter_error_method.dart';
-import '../enums/block_control_action_type.dart';
-import '../enums/block_error_method.dart';
-import '../enums/block_hidden_action.dart';
-import '../enums/absent_item_context_policy.dart';
-import '../enums/trace_step_type.dart';
-import '../enums/execution_trace_type.dart';
-import '../enums/block_set_current_item_directive.dart';
-import '../enums/query_type.dart';
-import '../enums/debug_cat.dart';
-import '../enums/err_code_if_item_is_null.dart';
-import '../enums/filter_activity_type.dart';
-import '../enums/form_load_hint.dart';
-import '../enums/form_action.dart';
-import '../enums/form_activity_type.dart';
-import '../enums/form_error_method.dart';
-import '../enums/form_mode.dart';
-import '../enums/deferment_source.dart';
-import '../enums/item_creation_type.dart';
-import '../enums/list_update_strategy.dart';
-import '../enums/multi_opt_prop_reload.dart';
-import '../enums/after_query_action.dart';
-import '../enums/query_hint.dart';
-import '../enums/qry_pagination_type.dart';
-import '../enums/quick_suggestion_mode.dart';
-import '../enums/quick_suggestion_type.dart';
-import '../enums/context_provider_view_type.dart';
-import '../enums/context_kind.dart';
-import '../enums/scalar_control_action_type.dart';
-import '../enums/scalar_error_method.dart';
-import '../enums/scalar_hidden_action.dart';
-import '../enums/selection_type.dart';
-import '../enums/shelf_release_policy.dart';
-import '../enums/show_mode.dart';
-import '../enums/sort_direction.dart';
-import '../enums/sort_mode.dart';
-import '../enums/sorting_side.dart';
-import '../enums/execution_unit_type.dart';
-import '../enums/tip_document.dart';
-import '../enums/unified_item_refresh_policy.dart';
-import '../enums/x_activity_type.dart';
-import '../enums/x_shelf_type.dart';
-import '../enums/after_backend_action.dart';
-import '../enums/block_native_query_mode.dart';
-import '../enums/block_reaction_target.dart';
-import '../enums/event_scope.dart';
-import '../enums/event_source_type.dart';
-import '../enums/resolved_query_action.dart';
-import '../enums/scalar_reaction_target.dart';
 import '../error/_block_error_info.dart';
 import '../error/_dev_error.dart';
 import '../error/_filter_error_info.dart';
@@ -198,7 +137,8 @@ import '../utils/_html_utils.dart';
 import '../utils/_locale_utils.dart';
 import '../utils/_name_utils.dart';
 import '../event/broadcast_backend_events_action.dart';
-import '../enums/control_bar_item_type.dart';
+
+ 
 import '../notification/firebase/firebase_notification_service.dart';
 import '../utils/print_utils.dart';
 import '_utils_/block_query_state_calculator.dart';
@@ -508,6 +448,8 @@ part '_core_x_/_x_filter_model.dart';
 
 part '_core_x_/_x_block_form_model.dart';
 
+part '_core_x_/_x_task_form_model.dart';
+
 part '_core_x_/_x_scalar.dart';
 
 part '_core_x_/_root_queue_/_x_root_queue_item.dart';
@@ -556,7 +498,7 @@ part '_core_x_/_x_shelf_/_x_query_/_x_shelf_filter_model_query.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_form_model_save.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_form_model_patch_form_fields.dart';
+part '_core_x_/_x_shelf_/_x_shelf_block_form_model_patch_form_fields.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_multi_item_deletion.dart';
 
@@ -585,6 +527,10 @@ part '_core_x_/_x_shelf_/_x_shelf_scalar_quick_extra_data_load_action.dart';
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_scalar_query.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_form_view_change.dart';
+
+part '_core_x_/_x_activity_/_x_activity_form_view_change.dart';
+
+part '_core_x_/_x_activity_/_x_activity_task_form_model_patch_form_fields.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_filter_panel_change.dart';
 
@@ -730,6 +676,8 @@ part '_execution_unit_result_/_storage_backend_action_result.dart';
 
 part '_execution_unit_/__shelf_member_resulted_execution_unit.dart';
 
+part '_execution_unit_/__activity_member_resulted_execution_unit.dart';
+
 part '_execution_unit_/___execution_unit.dart';
 
 part '_execution_unit_/__shelf_member_execution_unit.dart';
@@ -760,6 +708,12 @@ part '_execution_unit_/activity_member/_task_submit_execution_unit.dart';
 
 part '_execution_unit_/activity_member/_stage_submit_execution_unit.dart';
 
+part '_execution_unit_/activity_member/_task_form_model_load_data_execution_unit.dart';
+
+part '_execution_unit_/activity_member/_task_form_view_change_execution_unit.dart';
+
+part '_execution_unit_/activity_member/_task_form_model_patch_form_fields_execution_unit.dart';
+
 part '_execution_unit_/activity_member/_stage_load_init_data_execution_unit.dart';
 
 part '_execution_unit_/activity_member/_task_load_init_data_execution_unit.dart';
@@ -774,15 +728,15 @@ part '_execution_unit_/shelf_member/_block_set_item_as_current_execution_unit.da
 
 part '_execution_unit_/shelf_member/_filter_panel_change_execution_unit.dart';
 
-part '_execution_unit_/shelf_member/_form_model_patch_form_fields_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_form_model_patch_form_fields_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_filter_model_load_data_execution_unit.dart';
 
-part '_execution_unit_/shelf_member/_form_model_load_data_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_form_model_load_data_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_form_model_save_form_execution_unit.dart';
 
-part '_execution_unit_/shelf_member/_form_view_change_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_form_view_change_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_scalar_load_extra_data_quick_action_execution_unit.dart';
 
@@ -1131,8 +1085,12 @@ class _FormModelSaveFormAnnotation {
   const _FormModelSaveFormAnnotation();
 }
 
-class _FormModelLoadDataAnnotation {
-  const _FormModelLoadDataAnnotation();
+class _BlockFormModelLoadDataAnnotation {
+  const _BlockFormModelLoadDataAnnotation();
+}
+
+class _TaskFormModelLoadDataAnnotation {
+  const _TaskFormModelLoadDataAnnotation();
 }
 
 class _FormViewChangeAnnotation {

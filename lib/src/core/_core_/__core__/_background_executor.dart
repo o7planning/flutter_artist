@@ -36,7 +36,7 @@ class _BackgroundExecutor extends _Core {
     executionTrace.addInfo(
       codeId: "#61000",
       shortDesc:
-          "${debugObjHtml(action)}.needToConfirm = <b>$needToConfirm<b>.",
+      "${debugObjHtml(action)}.needToConfirm = <b>$needToConfirm<b>.",
     );
     //
     // Confirmation:
@@ -84,7 +84,7 @@ class _BackgroundExecutor extends _Core {
       executionTrace.addInfo(
         codeId: "#61300",
         shortDesc:
-            "The ${debugObjHtml(action)}.run() method was called with an error!",
+        "The ${debugObjHtml(action)}.run() method was called with an error!",
         errorInfo: errorInfo,
       );
     }

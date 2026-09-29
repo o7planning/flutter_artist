@@ -1,7 +1,5 @@
 import '../_core_/core.dart';
-import '../enums/filter_connector.dart';
-import '../enums/filter_operator.dart';
-import '../enums/selection_type.dart';
+import '../enums/_enums.dart';
 import 'search_text_filter_criteria.dart';
 import 'search_text_filter_input.dart';
 

@@ -1,11 +1,12 @@
 part of '../../core.dart';
 
 class BlockQueryResult<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockExecutionUnitResult<ID, ITEM, ITEM_DETAIL,
-        BlockQueryPrecheck> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionUnitResult<ID,
+    ITEM,
+    ITEM_DETAIL,
+    BlockQueryPrecheck> {
   BlockQueryResult._();
 
   BlockQueryResult._queryBlockedTemporarily()

@@ -33,7 +33,11 @@ class _BlockUiComponents extends _UiComponents {
       ...__paginationWidgetStates.keys,
     ];
     final Set<FaRouteData> faRoutes =
-        list.map((v) => v.faRoute).nonNulls.toList().toSet();
+    list
+        .map((v) => v.faRoute)
+        .nonNulls
+        .toList()
+        .toSet();
     if (block.formModel != null) {
       faRoutes.addAll(block.formModel!.ui.faRouteDatas);
     }
@@ -53,7 +57,7 @@ class _BlockUiComponents extends _UiComponents {
   // OLD: updatePaginationViews
   void refreshPaginationViews({bool force = false}) {
     for (final _ContextProviderViewState widgetState
-        in __paginationWidgetStates.keys) {
+    in __paginationWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -67,7 +71,7 @@ class _BlockUiComponents extends _UiComponents {
   // OLD: updateBlockBaseViews
   void refreshContentViews({bool force = false}) {
     for (final _ContextProviderViewState widgetState
-        in __contentViewWidgetStates.keys) {
+    in __contentViewWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -81,7 +85,7 @@ class _BlockUiComponents extends _UiComponents {
   // OLD: updateControlBars
   void refreshControlBars({bool force = false}) {
     for (final _ContextProviderViewState widgetState
-        in __controlBarWidgetStates.keys) {
+    in __controlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -95,7 +99,7 @@ class _BlockUiComponents extends _UiComponents {
   // OLD: updateControlButtons
   void refreshControlWidgets({bool force = false}) {
     for (final _ContextProviderViewState widgetState
-        in __controlWidgetStates.keys) {
+    in __controlWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -247,7 +251,7 @@ class _BlockUiComponents extends _UiComponents {
     //
     if (block.serverSideSortModel != null) {
       final bool has =
-          block.serverSideSortModel!.ui.hasVisibleViewsWithContextKind(
+      block.serverSideSortModel!.ui.hasVisibleViewsWithContextKind(
         contextKind: contextKind,
       );
       if (has) {
@@ -257,7 +261,7 @@ class _BlockUiComponents extends _UiComponents {
     //
     if (block.clientSideSortModel != null) {
       final bool has =
-          block.clientSideSortModel!.ui.hasVisibleViewsWithContextKind(
+      block.clientSideSortModel!.ui.hasVisibleViewsWithContextKind(
         contextKind: contextKind,
       );
       if (has) {
@@ -307,7 +311,7 @@ class _BlockUiComponents extends _UiComponents {
     if (includeDescendants) {
       for (final Block childBlock in block._childBlocks) {
         final childComponentName =
-            childBlock.ui.__findVisibleViewWithContextKind(
+        childBlock.ui.__findVisibleViewWithContextKind(
           contextKind: contextKind,
           includeDescendants: includeDescendants,
         );
@@ -363,7 +367,7 @@ class _BlockUiComponents extends _UiComponents {
     if (includeDescendants) {
       for (final Block childBlock in block._childBlocks) {
         final String? componentName =
-            childBlock.ui.findVisibleContentViewWithContextKind(
+        childBlock.ui.findVisibleContentViewWithContextKind(
           contextKind: contextKind,
           includeDescendants: true,
         );
@@ -389,7 +393,7 @@ class _BlockUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-        in __controlBarWidgetStates.keys) {
+    in __controlBarWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -422,7 +426,7 @@ class _BlockUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-        in __controlWidgetStates.keys) {
+    in __controlWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -453,7 +457,7 @@ class _BlockUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-        in __paginationWidgetStates.keys) {
+    in __paginationWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -501,7 +505,7 @@ class _BlockUiComponents extends _UiComponents {
   // OLD: updateItemsView
   void refreshItemsViewsOnly() {
     for (final _ContextProviderViewState widgetState
-        in __contentViewWidgetStates.keys) {
+    in __contentViewWidgetStates.keys) {
       if (widgetState.mounted &&
           widgetState.type == ContextProviderViewType.blockItemsView) {
         widgetState.refreshState();
@@ -548,8 +552,10 @@ class _BlockUiComponents extends _UiComponents {
   }) {
     __paginationWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     //
     if (isVisible) {
@@ -578,8 +584,10 @@ class _BlockUiComponents extends _UiComponents {
     );
     __controlBarWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     final bool blockContextCurrent = hasBlockContext(
       includeDescendants: true,
@@ -617,8 +625,10 @@ class _BlockUiComponents extends _UiComponents {
     );
     __controlWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     final bool blockContextCurrent = hasBlockContext(
       includeDescendants: true,
@@ -656,8 +666,10 @@ class _BlockUiComponents extends _UiComponents {
     );
     __contentViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     final bool blockContextCurrent = hasBlockContext(
       includeDescendants: true,

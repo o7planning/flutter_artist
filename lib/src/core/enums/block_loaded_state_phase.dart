@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 /// Represents the fine-grained operational phase or execution footprint
 /// of a [Block] while maintaining a valid baseline dataset in [BlockDataStateLoaded].
 enum BlockLoadedStatePhase {

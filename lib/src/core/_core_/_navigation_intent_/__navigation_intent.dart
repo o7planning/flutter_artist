@@ -14,7 +14,8 @@ abstract class NavigationIntent {
   });
 
   /// Standard intent to push a new path onto the router stack.
-  factory NavigationIntent.to(String path, {
+  factory NavigationIntent.to(
+    String path, {
     FaRouteBuilder? builder,
     Object? extra,
     bool executeOnFailure = false,
@@ -28,7 +29,8 @@ abstract class NavigationIntent {
   }
 
   /// Standard intent to replace the current route with a new path.
-  factory NavigationIntent.off(String path, {
+  factory NavigationIntent.off(
+    String path, {
     FaRouteBuilder? builder,
     Object? extra,
     bool executeOnFailure = false,
@@ -42,7 +44,8 @@ abstract class NavigationIntent {
   }
 
   /// Standard intent to clear the entire stack and navigate to a new root path.
-  factory NavigationIntent.offAll(String path, {
+  factory NavigationIntent.offAll(
+    String path, {
     FaRouteBuilder? builder,
     Object? extra,
     bool executeOnFailure = false,
@@ -67,7 +70,8 @@ abstract class NavigationIntent {
   }
 
   /// Standard intent to overlay a declarative dialog onto the router stack.
-  factory NavigationIntent.showDialog(String path, {
+  factory NavigationIntent.showDialog(
+    String path, {
     required FaRouteBuilder builder,
     List<FaRouteGuard> guards = const [],
     Object? extra,

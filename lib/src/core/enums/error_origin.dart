@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 /// Categorizes the root architectural source or trigger layer that caused a query failure.
 enum BlockErrorOrigin {
   /// The failure originated directly from this block's own remote data fetch or execution method.

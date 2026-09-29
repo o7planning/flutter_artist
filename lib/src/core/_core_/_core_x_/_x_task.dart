@@ -9,8 +9,13 @@ class XTask<
     FORM_INPUT extends FormInput> {
   final XActivity xActivity;
 
-  final Task<TASK_INIT_DATA, TASK_RESULT_DATA, CREATION_PRESET, FORM_INPUT>
-      task;
+  final XTaskFormModel? xTaskFormModel;
+
+  final Task<
+      TASK_INIT_DATA, //
+      TASK_RESULT_DATA,
+      CREATION_PRESET,
+      FORM_INPUT> task;
 
   bool _executed = false;
 
@@ -33,6 +38,7 @@ class XTask<
   XTask._({
     required this.xActivity,
     required this.task,
+    required this.xTaskFormModel,
   });
 
   TaskLoadInitDataResult<TASK_INIT_DATA> loadInitDataResult =
@@ -63,8 +69,25 @@ class XTask<
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Evaluates and yields the next operational execution unit for this Task.
   NxtExecutionUnit _getNextExecutionUnit({required bool debug}) {
+    NxtExecutionUnit next = __getNextExecutionUnit(debug: debug);
+    if (next.yes) {
+      return next;
+    }
+    if (xTaskFormModel != null) {
+      next = xTaskFormModel!._getNextExecutionUnit(debug: debug);
+      if (next.yes) {
+        return next;
+      }
+    }
+    return next;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Evaluates and yields the next operational execution unit for this Task.
+  NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
     final TaskDataState taskDataState = task.dataState;
     final executionIntent = _executionIntent;
     final bool isVisible = task.ui.hasVisibleViews();

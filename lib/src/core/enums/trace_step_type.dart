@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of '_enums.dart';
 
 /// Categorizes the operational intent and lifecycle scope of individual trace steps.
 enum TraceStepType {

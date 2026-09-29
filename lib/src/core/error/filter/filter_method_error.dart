@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../enums/filter_error_method.dart';
+import '../../../core/enums/_enums.dart';
 
 class FilterMethodError {
   final FilterErrorMethod filterErrorMethod;

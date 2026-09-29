@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 /// Defines the policy determining how a [Block] refreshes its current item data
 /// (and its corresponding item details) during query or synchronization flows.
 enum UnifiedItemRefreshPolicy {

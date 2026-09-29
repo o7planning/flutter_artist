@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 /// Defines the synchronization policy between the draft criteria in the UI workspace
 /// and the applied criteria consumed by bound blocks.
 enum FilterApplyPolicy {

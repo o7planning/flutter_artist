@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_artist/src/core/enums/debug_btn_type.dart';
 
-import '../../../../core/enums/active_element_type.dart';
+import '../../../../core/enums/_enums.dart';
 import '_base_info_widget.dart';
 
 class ActiveInfoWidget extends BaseInfoWidget {

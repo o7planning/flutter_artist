@@ -3,7 +3,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/_sync_/_block_sync_session_snapshot.dart';
 import '../../core/_core_/core.dart';
-import '../../core/enums/trace_step_type.dart';
+import '../../core/enums/_enums.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/widgets/_html_selectable_rich_text.dart';
 import '../dialog/_error_viewer_dialog.dart';

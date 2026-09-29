@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 enum FormLoadHint {
   force(2),
   forceIfNeed(1),

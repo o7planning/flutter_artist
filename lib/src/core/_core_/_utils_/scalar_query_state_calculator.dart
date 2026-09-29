@@ -1,6 +1,4 @@
-import '../../enums/action_result_state.dart';
-import '../../enums/error_origin.dart';
-import '../../enums/fallback_dilemma_strategy.dart';
+import '../../enums/_enums.dart';
 import '../../error/_scalar_error_info.dart';
 import '../core.dart';
 
@@ -106,8 +104,8 @@ class ScalarQueryStateCalculator {
             resolvedState = input.currentDataState.isStale
                 ? input.currentDataState
                 : ScalarDataStateLoadedFresh(
-                    transientErrorInfo: input.scalarErrorInfo,
-                  );
+              transientErrorInfo: input.scalarErrorInfo,
+            );
           } else {
             // Explicit root refresh failure evaluates fallback dilemma policy
             if (input.dilemmaStrategy ==

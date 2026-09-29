@@ -19,21 +19,21 @@ class ScalarControlTextButton extends ScalarControl {
     WidgetStatesController? statesController,
     required Widget child,
   }) : super(
-          build: (VoidCallback? onPressed) {
-            return TextButton(
-              onPressed: onPressed,
-              onHover: onHover,
-              onFocusChange: onFocusChange,
-              style: style,
-              focusNode: focusNode,
-              autofocus: autofocus,
-              clipBehavior: clipBehavior,
-              isSemanticButton: isSemanticButton,
-              statesController: statesController,
-              child: child,
-            );
-          },
-        );
+    build: (VoidCallback? onPressed) {
+      return TextButton(
+        onPressed: onPressed,
+        onHover: onHover,
+        onFocusChange: onFocusChange,
+        style: style,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        clipBehavior: clipBehavior,
+        isSemanticButton: isSemanticButton,
+        statesController: statesController,
+        child: child,
+      );
+    },
+  );
 
   ScalarControlTextButton.icon({
     super.key,
@@ -54,20 +54,20 @@ class ScalarControlTextButton extends ScalarControl {
     Widget? icon,
     IconAlignment iconAlignment = IconAlignment.start,
   }) : super(
-          build: (VoidCallback? onPressed) {
-            return TextButton.icon(
-              onPressed: onPressed,
-              onHover: onHover,
-              onFocusChange: onFocusChange,
-              style: style,
-              focusNode: focusNode,
-              autofocus: autofocus,
-              clipBehavior: clipBehavior,
-              statesController: statesController,
-              iconAlignment: iconAlignment,
-              label: label,
-              icon: icon,
-            );
-          },
-        );
+    build: (VoidCallback? onPressed) {
+      return TextButton.icon(
+        onPressed: onPressed,
+        onHover: onHover,
+        onFocusChange: onFocusChange,
+        style: style,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        clipBehavior: clipBehavior,
+        statesController: statesController,
+        iconAlignment: iconAlignment,
+        label: label,
+        icon: icon,
+      );
+    },
+  );
 }

@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 enum TipDocument {
   start(enabled: true),
   logViewer(enabled: true),

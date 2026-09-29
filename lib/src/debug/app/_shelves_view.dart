@@ -1,5 +1,5 @@
+import '../../../flutter_artist.dart';
 import '../../core/_core_/core.dart';
-import '../../core/enums/tip_document.dart';
 import '_html_text_list_view.dart';
 
 class ShelvesView extends HtmlTextListView {

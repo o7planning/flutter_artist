@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 enum QueryHint {
   force(1),
   none(0);

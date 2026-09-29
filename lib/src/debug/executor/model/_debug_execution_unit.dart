@@ -1,4 +1,4 @@
-import '../../../core/enums/execution_unit_type.dart';
+import '../../../core/enums/_enums.dart';
 
 class DebugExecutionUnit {
   final ExecutionUnitType executionUnitType;

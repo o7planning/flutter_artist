@@ -24,5 +24,3 @@ enum TaskSubmitExcutionPrecheck implements Precheck {
     required this.details,
   });
 }
-
-

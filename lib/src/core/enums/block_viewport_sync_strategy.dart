@@ -1,5 +1,4 @@
-import '../_core_/core.dart';
-import 'block_native_query_mode.dart';
+part of '_enums.dart';
 
 /// Defines the synchronization strategies used to re-evaluate and merge
 /// remote server mutation footprints into the active runtime block viewport.

@@ -3,8 +3,8 @@ part of '../../core.dart';
 @_ExecutionUnitClassAnnotation()
 @_ScalarQueryAnnotation()
 class _ScalarQueryExecutionUnit<
-ID extends Comparable, //
-VALUE extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
+    ID extends Comparable, //
+    VALUE extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
   final XScalar xScalar;
 
   @override
@@ -14,9 +14,9 @@ VALUE extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
     required this.xScalar,
     required this.executionIntent,
   }) : super(
-    executionUnitType: ExecutionUnitType.scalarQuery,
-    executionIntent: executionIntent,
-  );
+          executionUnitType: ExecutionUnitType.scalarQuery,
+          executionIntent: executionIntent,
+        );
 
   @override
   XShelf get xShelf => xScalar.xShelf;

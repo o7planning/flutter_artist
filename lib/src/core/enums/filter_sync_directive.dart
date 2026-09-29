@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 /// Defines the exact synchronization directive governing how a query execution
 /// across a [Block] or [Scalar] reconciles its associated [FilterModel] state.
 ///

@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 enum BlockReactionTarget {
   /// Re-query the entire Block data.
   block,

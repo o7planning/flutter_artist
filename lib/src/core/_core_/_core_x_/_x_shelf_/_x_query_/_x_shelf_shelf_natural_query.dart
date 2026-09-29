@@ -4,8 +4,8 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
   _XShelfShelfNaturalQuery({
     required super.shelf,
   }) : super(
-          xShelfType: XShelfType.naturalQuery,
-        ) {
+    xShelfType: XShelfType.naturalQuery,
+  ) {
     for (XScalar leafXScalar in allLeafXScalars) {
       XScalar? xScalar = leafXScalar;
       while (true) {

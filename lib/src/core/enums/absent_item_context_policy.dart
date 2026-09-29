@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 /// Defines the policy governing how a [Block] handles its `currentItem` selection
 /// when no actively visible UI view demands the item-level data context
 /// (i.e., when `ui.hasItemContext()` evaluates to `false`).

@@ -4,6 +4,5 @@ import '../_core_/core.dart';
 class EmptyCreationPreset extends CreationPreset {
   EmptyCreationPreset._();
 
-  factory EmptyCreationPreset() =>
-      EmptyCreationPreset._();
+  factory EmptyCreationPreset() => EmptyCreationPreset._();
 }

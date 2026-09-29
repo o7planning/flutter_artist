@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../icon/icon_constants.dart';
+part of '_enums.dart';
 
 enum ContextProviderViewType {
   pagination(

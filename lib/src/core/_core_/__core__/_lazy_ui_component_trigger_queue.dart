@@ -71,7 +71,7 @@ class _LazyUiComponentTriggerQueue {
       executionTrace.addInfo(
         codeId: "#00000",
         shortDesc:
-            "Just detected some <b>UI Components</b> that have just been displayed. "
+        "Just detected some <b>UI Components</b> that have just been displayed. "
             "This will trigger a query execution on the associated <b>Shelves</b>:\n"
             " - ${lazyShelves.map((s) => debugObjHtml(s)).join(", ")}",
         tipDocument: TipDocument.naturalQuery,
@@ -81,7 +81,7 @@ class _LazyUiComponentTriggerQueue {
       executionTrace.addInfo(
         codeId: "#00001",
         shortDesc:
-            "Just detected some <b>UI Components</b> that have just been displayed. "
+        "Just detected some <b>UI Components</b> that have just been displayed. "
             "This will trigger an execution on the associated <b>Activities</b>:\n"
             " - ${lazyActivities.map((s) => debugObjHtml(s)).join(", ")}",
         tipDocument: TipDocument.naturalQuery,
@@ -95,7 +95,7 @@ class _LazyUiComponentTriggerQueue {
       executionTrace.addInfo(
         codeId: "#00100",
         shortDesc:
-            "Start checking lazy model-components of ${debugObjHtml(lazyShelf)}...",
+        "Start checking lazy model-components of ${debugObjHtml(lazyShelf)}...",
       );
       await lazyShelf._dispatchNaturalQuery(
         executionTrace: executionTrace,
@@ -108,7 +108,8 @@ class _LazyUiComponentTriggerQueue {
       executionTrace.addInfo(
         codeId: "#00200",
         shortDesc:
-            "Start checking lazy model-components of ${debugObjHtml(lazyActivity)}...",
+        "Start checking lazy model-components of ${debugObjHtml(
+            lazyActivity)}...",
       );
       await lazyActivity._dispatchNaturalExecution(
         executionTrace: executionTrace,

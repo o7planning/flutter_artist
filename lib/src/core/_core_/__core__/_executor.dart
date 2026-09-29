@@ -9,7 +9,7 @@ class _Executor {
   int? get executingXShelfId => __executingXShelfId;
 
   final Map<_ExecutionProgressBuilderState, bool>
-      _executionProgressViewWidgetStates = {};
+  _executionProgressViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -51,7 +51,7 @@ class _Executor {
         try {
           while (true) {
             _ExecutionUnit? executionUnit =
-                FlutterArtist._rootQueue.getNextExecutionUnit(
+            FlutterArtist._rootQueue.getNextExecutionUnit(
               removeEmptyRootQuery: true,
             );
             //
@@ -61,7 +61,7 @@ class _Executor {
               }
               pendingEventProcessed = true;
               final Set<String> excludeShelfNames =
-                  executedShelfMap.keys.toSet();
+              executedShelfMap.keys.toSet();
               //
               FlutterArtist.desk._reactionProcessor.addReactionExecutionUnits(
                 excludeShelfNames: excludeShelfNames,
@@ -210,7 +210,7 @@ class _Executor {
         );
       }
       //
-      else if (executionUnit is _FormViewChangeExecutionUnit) {
+      else if (executionUnit is _BlockFormViewChangeExecutionUnit) {
         await executionUnit.xBlockFormModel.formModel._unitFormViewChanged(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
@@ -309,7 +309,7 @@ class _Executor {
         );
       }
       // FormModel LoadForm:
-      else if (executionUnit is _FormModelLoadDataExecutionUnit) {
+      else if (executionUnit is _BlockFormModelLoadDataExecutionUnit) {
         await executionUnit.xBlockFormModel.formModel._unitLoadFormData(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
@@ -327,7 +327,7 @@ class _Executor {
         );
       }
       // FormModel QuickFormInputAction:
-      else if (executionUnit is _FormModelPatchFormFieldsExecutionUnit) {
+      else if (executionUnit is _BlockFormModelPatchFormFieldsExecutionUnit) {
         await executionUnit.xBlockFormModel.formModel._unitPatchFormFields(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
@@ -385,9 +385,9 @@ class _Executor {
       bool onProgress = owner == null || executionUnitType == null
           ? false
           : state.isMatches(
-              owner: owner,
-              executionUnitType: executionUnitType,
-            );
+        owner: owner,
+        executionUnitType: executionUnitType,
+      );
       //
       state.onProgress = onProgress;
       state.refreshState(force: true);

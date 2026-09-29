@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 /// All comments are in English for global users to read.
 enum EventScope {
   /// Only handled within the local Shelf that broadcasted it.

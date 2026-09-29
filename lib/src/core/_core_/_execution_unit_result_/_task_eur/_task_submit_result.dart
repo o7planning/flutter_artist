@@ -1,8 +1,8 @@
 part of '../../core.dart';
 
 class TaskSubmitExecutionResult<
-        TASK_INIT_DATA extends TaskInitData, //
-        TASK_RESULT_DATA extends TaskResultData>
+TASK_INIT_DATA extends TaskInitData, //
+TASK_RESULT_DATA extends TaskResultData>
     extends ExecutionUnitResult<TaskSubmitExcutionPrecheck> {
   TaskSubmitExecutionResult({required super.precheck});
 

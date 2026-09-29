@@ -1,5 +1,5 @@
 import '../../../core/_core_/core.dart';
-import '../../enums/query_hint.dart';
+import '../../enums/_enums.dart';
 
 // =============================================================================
 // DIAGNOSTIC SNAPSHOT

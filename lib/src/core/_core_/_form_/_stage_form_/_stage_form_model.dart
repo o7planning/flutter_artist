@@ -142,7 +142,7 @@ abstract class StageFormModel<
   bool _canResetForm() => isDirty();
 
   @override
-  void _refreshAllViews()  {
+  void _refreshAllViews() {
     // FlutterArtist.desk.ui.refreshAllViews();
   }
 

@@ -29,8 +29,19 @@ abstract class XActivity extends XRootQueueItem {
   }) : xActivityId = __xActivitySequence++ {
     // 1. Build and bind active runtime Tasks
     for (final Task task in activity.tasks) {
+      final TaskFormModel? formModel = task.formModel;
+      XTaskFormModel? xTaskFormModel;
+      if (formModel != null) {
+        //
+        // Create new XTaskFormModel via 'formModel._createXTaskFormModel' method
+        // to have the same Generics Parameters with task.
+        //
+        xTaskFormModel = formModel._createXTaskFormModel(formInput: null);
+        allXTaskFormModels.add(xTaskFormModel);
+      }
       final xTask = task._createXTask(
         xActivity: this,
+        xTaskFormModel: xTaskFormModel,
       );
       xTaskMap[task.name] = xTask;
       allXTasks.add(xTask);
@@ -45,6 +56,8 @@ abstract class XActivity extends XRootQueueItem {
       allXProzesss.add(xProzess);
     }
   }
+
+  final List<XTaskFormModel> allXTaskFormModels = [];
 
   // ***************************************************************************
   // ***************************************************************************

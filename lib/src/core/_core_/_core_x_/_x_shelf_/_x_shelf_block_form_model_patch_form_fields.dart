@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
-class _XShelfFormModelPatchFormFields extends XShelf {
-  _XShelfFormModelPatchFormFields({
+class _XShelfBlockFormModelPatchFormFields extends XShelf {
+  _XShelfBlockFormModelPatchFormFields({
     required BlockFormModel formModel,
   }) : super(
     xShelfType: XShelfType.formModelEnterFields,

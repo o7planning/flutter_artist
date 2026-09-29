@@ -1,7 +1,5 @@
 import '../_core_/core.dart';
-import '../enums/filter_connector.dart';
-import '../enums/filter_operator.dart';
-import '../enums/selection_type.dart';
+import '../enums/_enums.dart';
 import 'int_id_filter_criteria.dart';
 import 'int_id_filter_input.dart';
 

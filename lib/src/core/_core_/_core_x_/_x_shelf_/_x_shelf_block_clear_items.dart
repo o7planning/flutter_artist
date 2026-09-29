@@ -4,9 +4,9 @@ class _XShelfBlockClearItems extends XShelf {
   _XShelfBlockClearItems({
     required Block block,
   }) : super(
-          xShelfType: XShelfType.blockClearItems,
-          shelf: block.shelf,
-        ) {
+    xShelfType: XShelfType.blockClearItems,
+    shelf: block.shelf,
+  ) {
     //
   }
 }

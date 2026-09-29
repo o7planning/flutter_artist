@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 enum ShelfReleasePolicy {
   /// Keep the shelf instance in memory even when no UI components are active.
   retain,

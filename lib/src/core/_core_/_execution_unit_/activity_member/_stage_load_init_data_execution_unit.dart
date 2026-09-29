@@ -1,10 +1,10 @@
 part of '../../core.dart';
 
 class _StageLoadInitDataExecutionUnit<
-        STAGE_ENUM extends Enum, //
-        STAGE_INIT_DATA extends StageInitData,
-        STAGE_RESULT_DATA extends StageResultData,
-        PROZESS_CONTEXT_DATA extends ProzessContextData>
+STAGE_ENUM extends Enum, //
+STAGE_INIT_DATA extends StageInitData,
+STAGE_RESULT_DATA extends StageResultData,
+PROZESS_CONTEXT_DATA extends ProzessContextData>
     extends _ActivityMemberExecutionUnit {
   final XStage xStage;
 
@@ -19,9 +19,9 @@ class _StageLoadInitDataExecutionUnit<
     required this.xStage,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.stage,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.stage,
+    executionIntent: executionIntent,
+  );
 
   @override
   Activity get activity => xStage.stage.activity;

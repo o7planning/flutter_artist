@@ -24,5 +24,3 @@ enum TaskLoadInitDataPrecheck implements Precheck {
     required this.details,
   });
 }
-
-

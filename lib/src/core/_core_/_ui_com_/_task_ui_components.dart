@@ -11,6 +11,7 @@ class _TaskUiComponents extends _UiComponents {
 
   // Registered views: TaskView, TaskSectionView.
   final Map<_ContextProviderViewState, XState> __contentViewWidgetStates = {};
+
   // Registered views: TaskControlBar.
   final Map<_ContextProviderViewState, XState> __controlBarWidgetStates = {};
 
@@ -27,7 +28,11 @@ class _TaskUiComponents extends _UiComponents {
       ...__controlBarWidgetStates.keys,
     ];
     final Set<FaRouteData> faRoutes =
-        list.map((v) => v.faRoute).nonNulls.toList().toSet();
+    list
+        .map((v) => v.faRoute)
+        .nonNulls
+        .toList()
+        .toSet();
     if (task.formModel != null) {
       faRoutes.addAll(task.formModel!.ui.faRouteDatas);
     }
@@ -144,7 +149,7 @@ class _TaskUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-        in __contentViewWidgetStates.keys) {
+    in __contentViewWidgetStates.keys) {
       if (!widgetState.mounted) continue;
       final bool visible =
           __contentViewWidgetStates[widgetState]?.isVisible ?? false;
@@ -170,7 +175,7 @@ class _TaskUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-        in __controlBarWidgetStates.keys) {
+    in __controlBarWidgetStates.keys) {
       if (!widgetState.mounted) continue;
       final bool visible =
           __controlBarWidgetStates[widgetState]?.isVisible ?? false;
@@ -187,7 +192,7 @@ class _TaskUiComponents extends _UiComponents {
   /// Rebuilds active task control bars.
   void refreshControlBars({bool force = false}) {
     for (final _ContextProviderViewState widgetState
-        in __controlBarWidgetStates.keys) {
+    in __controlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -197,7 +202,7 @@ class _TaskUiComponents extends _UiComponents {
   /// Rebuilds mounted primary content views (TaskView).
   void refreshContentViews({bool force = true}) {
     for (final _ContextProviderViewState state
-        in __contentViewWidgetStates.keys) {
+    in __contentViewWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -222,8 +227,10 @@ class _TaskUiComponents extends _UiComponents {
 
     __controlBarWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
 
     final bool taskContextCurrent = hasTaskContext();
@@ -260,8 +267,10 @@ class _TaskUiComponents extends _UiComponents {
 
     __contentViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
 
     final bool taskContextCurrent = hasTaskContext();

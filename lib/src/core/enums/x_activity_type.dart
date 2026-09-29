@@ -1,5 +1,9 @@
+part of '_enums.dart';
+
 enum XActivityType {
   stageLoadInitData,
   taskLoadInitData,
-  naturalExec;
+  naturalExec,
+  formViewChange,
+  formModelEnterFields;
 }

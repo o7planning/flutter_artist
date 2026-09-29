@@ -7,12 +7,12 @@ part of '../core.dart';
 /// -> (resolves INIT_DATA) -> [StageDataStateLoadedFresh]
 /// -> (submission) -> [StageDataStateSubmissionAttempted]
 abstract class Stage<
-    STAGE_ENUM extends Enum,
-    INIT_DATA extends StageInitData,
-    RESULT_DATA extends StageResultData,
-    PROZESS_CONTEXT_DATA extends ProzessContextData,
-    CREATION_PRESET extends CreationPreset,
-    FORM_INPUT extends FormInput> extends _Core {
+STAGE_ENUM extends Enum,
+INIT_DATA extends StageInitData,
+RESULT_DATA extends StageResultData,
+PROZESS_CONTEXT_DATA extends ProzessContextData,
+CREATION_PRESET extends CreationPreset,
+FORM_INPUT extends FormInput> extends _Core {
   final STAGE_ENUM stageId;
   final String name;
   final String? description;
@@ -25,6 +25,7 @@ abstract class Stage<
   late final ui = _StageUiComponents(stage: this);
 
   Activity get activity => prozess.activity;
+
   PROZESS_CONTEXT_DATA get sharedContext => prozess.contextData;
 
   StageFormModel<
@@ -41,22 +42,29 @@ abstract class Stage<
   // ===========================================================================
 
   StageDataState _dataState = const StageDataStateNone();
+
   StageDataState get dataState => _dataState;
 
   INIT_DATA? _initData;
+
   INIT_DATA? get initData => _initData;
 
   RESULT_DATA? _lastResultData;
+
   RESULT_DATA? get lastResultData => _lastResultData;
 
   bool __isLoadingInitData = false;
+
   bool get isLoadingInitData => __isLoadingInitData;
 
   bool __isSubmitting = false;
+
   bool get isSubmitting => __isSubmitting;
 
   bool get hasForm => formModel != null;
+
   bool get hasError => _dataState.hasError;
+
   StageErrorInfo? get errorInfo => _dataState.errorInfo;
 
   // ===========================================================================
@@ -77,8 +85,12 @@ abstract class Stage<
 
   XStage _createXStage(
       {required XProzess<STAGE_ENUM, PROZESS_CONTEXT_DATA> xProzess}) {
-    return XStage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA,
-        CREATION_PRESET, FORM_INPUT>._(
+    return XStage<STAGE_ENUM,
+        INIT_DATA,
+        RESULT_DATA,
+        PROZESS_CONTEXT_DATA,
+        CREATION_PRESET,
+        FORM_INPUT>._(
       stage: this,
       xProzess: xProzess,
     );
@@ -95,10 +107,15 @@ abstract class Stage<
   // ===========================================================================
 
   Type getStageEnumType() => STAGE_ENUM;
+
   Type getInitDataType() => INIT_DATA;
+
   Type getResultDataType() => RESULT_DATA;
+
   Type getProzessContextDataType() => PROZESS_CONTEXT_DATA;
+
   Type getCreationPresetType() => CREATION_PRESET;
+
   Type getFormInputType() => FORM_INPUT;
 
   // ===========================================================================
@@ -133,18 +150,19 @@ abstract class Stage<
     required ExecutionUnitType executionUnitType,
     required XStage thisXStage,
     required StageLoadInitDataIntent<
-            STAGE_ENUM, //
-            INIT_DATA,
-            RESULT_DATA,
-            PROZESS_CONTEXT_DATA>
-        executionIntent,
+        STAGE_ENUM, //
+        INIT_DATA,
+        RESULT_DATA,
+        PROZESS_CONTEXT_DATA>
+    executionIntent,
   }) async {
     __assertThisXStage(thisXStage);
 
     executionTrace.addInfo(
       codeId: "#92100",
       shortDesc:
-          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Stage Load InitData)",
+      "${debugObjHtml(this)} -> Begin ${executionUnitType
+          .asDebugExecutionUnit()} (Stage Load InitData)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -173,7 +191,7 @@ abstract class Stage<
       debug._performLoadInitDataCount++;
 
       final ApiResult<INIT_DATA> result =
-          await performLoadInitData(sharedContext: sharedContext);
+      await performLoadInitData(sharedContext: sharedContext);
       result.throwIfError();
 
       _initData = result.data;
@@ -182,7 +200,9 @@ abstract class Stage<
       executionTrace.addInfo(
         codeId: "#92140",
         shortDesc:
-            "${debugObjHtml(this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(_initData)}.",
+        "${debugObjHtml(
+            this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(
+            _initData)}.",
       );
     } catch (e, stackTrace) {
       stageErrorInfo = StageErrorInfo(
@@ -211,7 +231,8 @@ abstract class Stage<
       executionTrace.addInfo(
         codeId: "#92160",
         shortDesc:
-            "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
+        "The ${debugObjHtml(
+            this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
       );
     } finally {
@@ -226,12 +247,18 @@ abstract class Stage<
   Future<void> _unitSubmit({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XStage<Enum, StageInitData, StageResultData, ProzessContextData,
-            CreationPreset, FormInput>
-        thisXStage,
-    required StageSubmitExecutionIntent<Enum, StageInitData, StageResultData,
-            ProzessContextData>
-        executionIntent,
+    required XStage<Enum,
+        StageInitData,
+        StageResultData,
+        ProzessContextData,
+        CreationPreset,
+        FormInput>
+    thisXStage,
+    required StageSubmitExecutionIntent<Enum,
+        StageInitData,
+        StageResultData,
+        ProzessContextData>
+    executionIntent,
   }) async {
     // Handled in subsequent phase
   }
@@ -298,7 +325,6 @@ abstract class Stage<
       );
     }
   }
-
 
 
   void _broadcastStageHidden() {

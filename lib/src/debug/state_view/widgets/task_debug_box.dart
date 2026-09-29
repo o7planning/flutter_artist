@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../../core/_core_/core.dart';
-import '../../../core/enums/active_element_type.dart';
+import '../../../core/enums/_enums.dart';
 import '../options/_debug_task_options.dart';
 import 'widgets/active_info_widget.dart';
 import '_debug_box.dart';

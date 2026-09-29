@@ -2,14 +2,14 @@ part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_FormModelPatchFormFieldsAnnotation()
-class _FormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
+class _BlockFormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
     extends _ShelfMemberResultedExecutionUnit {
   final XBlockFormModel xBlockFormModel;
 
   @override
   final FormModelPatchFormFieldsIntent executionIntent;
 
-  _FormModelPatchFormFieldsExecutionUnit({
+  _BlockFormModelPatchFormFieldsExecutionUnit({
     required this.xBlockFormModel,
     required this.executionIntent,
   }) : super(

@@ -1,21 +1,20 @@
 part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
-@_FormModelLoadDataAnnotation()
-class _FormModelLoadDataExecutionUnit
-    extends _ShelfMemberResultedExecutionUnit<FormModelDataLoadResult> {
-  final XBlockFormModel xBlockFormModel;
+@_FormViewChangeAnnotation()
+class _BlockFormViewChangeExecutionUnit extends _ShelfMemberExecutionUnit {
+  XBlockFormModel xBlockFormModel;
 
   @override
-  final FormModelDataLoadIntent executionIntent;
+  final FormModelViewChangeIntent executionIntent;
 
-  _FormModelLoadDataExecutionUnit({
+  _BlockFormViewChangeExecutionUnit({
     required this.xBlockFormModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.formModelLoadData,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.formModelFormViewChanged,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xBlockFormModel.xShelf;
@@ -24,7 +23,7 @@ class _FormModelLoadDataExecutionUnit
   int get xShelfId => xBlockFormModel.xShelfId;
 
   @override
-  Shelf get shelf => xBlockFormModel.formModel.block.shelf;
+  Shelf get shelf => xBlockFormModel.formModel.shelf;
 
   @override
   BlockFormModel get owner => xBlockFormModel.formModel;

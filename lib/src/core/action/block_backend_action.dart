@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/block_viewport_sync_strategy.dart';
+import '../../core/enums/_enums.dart';
 import '_action.dart';
 
 abstract class BlockBackendAction<ID extends Comparable> extends Action {

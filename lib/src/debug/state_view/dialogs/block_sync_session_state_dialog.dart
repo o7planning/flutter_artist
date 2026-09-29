@@ -4,8 +4,7 @@ import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../../core/_core_/_sync_/_block_sync_session_snapshot.dart';
 import '../../../core/_core_/core.dart';
-import '../../../core/enums/block_native_query_mode.dart';
-import '../../../core/enums/resolved_query_action.dart';
+import '../../../core/enums/_enums.dart';
 import 'debug_id_list_dialog.dart';
 
 // =============================================================================
@@ -31,10 +30,9 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
   }) async {
     await showDialog(
       context: context,
-      builder: (context) =>
-          DebugBlockSyncSessionStateDialog<ID>(
-            snapshot: snapshot,
-          ),
+      builder: (context) => DebugBlockSyncSessionStateDialog<ID>(
+        snapshot: snapshot,
+      ),
     );
   }
 
@@ -66,9 +64,9 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
         : snapshot.parentBlockCurrentItemId;
 
     final FilterCriteria? activeFilterCriteria =
-    snapshot.syncSessionState != null
-        ? snapshot.syncSessionState!.filterCriteria
-        : snapshot.filterCriteria;
+        snapshot.syncSessionState != null
+            ? snapshot.syncSessionState!.filterCriteria
+            : snapshot.filterCriteria;
 
     final FaDialog alert = FaDialog(
       titleText: title,
@@ -138,13 +136,13 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
             child: receivedEvents.isEmpty
                 ? _buildEmptyEventsBanner()
                 : ListView.separated(
-              itemCount: receivedEvents.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
-              itemBuilder: (context, index) {
-                final eventInfo = receivedEvents[index];
-                return _buildEventInfoCard(context, index, eventInfo);
-              },
-            ),
+                    itemCount: receivedEvents.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    itemBuilder: (context, index) {
+                      final eventInfo = receivedEvents[index];
+                      return _buildEventInfoCard(context, index, eventInfo);
+                    },
+                  ),
           ),
         ],
       ),
@@ -182,7 +180,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
                 color:
-                isPristine ? Colors.green.shade900 : Colors.grey.shade800,
+                    isPristine ? Colors.green.shade900 : Colors.grey.shade800,
               ),
             ),
             const SizedBox(height: 4),
@@ -200,7 +198,8 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
   }
 
   /// Builds the baseline context header cards.
-  Widget _buildSummarySection(BuildContext context, {
+  Widget _buildSummarySection(
+    BuildContext context, {
     required Comparable? parentItemId,
     required FilterCriteria? filterCriteria,
     required Set<ID> allEffectedIds,
@@ -234,12 +233,11 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
             borderRadius: BorderRadius.circular(6),
             onTap: allEffectedIds.isEmpty
                 ? null
-                : () =>
-                DebugIdListDialog.show<ID>(
-                  context: context,
-                  title: "Unique Effected IDs",
-                  ids: allEffectedIds,
-                ),
+                : () => DebugIdListDialog.show<ID>(
+                      context: context,
+                      title: "Unique Effected IDs",
+                      ids: allEffectedIds,
+                    ),
             child: _buildSummaryCard(
               label: "Unique Effected IDs",
               value: "${allEffectedIds.length} IDs",
@@ -247,7 +245,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
               textColor: Colors.orange.shade900,
               trailingWidget: allEffectedIds.isNotEmpty
                   ? Icon(Icons.open_in_new,
-                  size: 14, color: Colors.orange.shade900)
+                      size: 14, color: Colors.orange.shade900)
                   : null,
             ),
           ),
@@ -304,8 +302,10 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
   }
 
   /// Builds the projected query execution plan card predicting the exact action the Block will take.
-  Widget _buildPredictedPlanCard(BuildContext context,
-      BlockQueryPlan<ID> queryPlan,) {
+  Widget _buildPredictedPlanCard(
+    BuildContext context,
+    BlockQueryPlan<ID> queryPlan,
+  ) {
     Color actionColor;
     String actionLabel;
 
@@ -316,13 +316,13 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
       case BlockResolvedQueryAction.performQuery:
         actionColor = Colors.teal.shade800;
         actionLabel = snapshot.effectiveConfig.nativeQueryMode ==
-            BlockNativeQueryMode.fullQuery
+                BlockNativeQueryMode.fullQuery
             ? "PERFORM QUERY (Full Query)"
             : "PERFORM QUERY (Pageable Query)";
       case BlockResolvedQueryAction.performQueryByItemIds:
         actionColor = Colors.purple.shade800;
         actionLabel =
-        "PERFORM QUERY BY ITEM IDS (${queryPlan.targetItemIds.length} IDs)";
+            "PERFORM QUERY BY ITEM IDS (${queryPlan.targetItemIds.length} IDs)";
     }
 
     return Container(
@@ -373,8 +373,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
               Expanded(
                 child: _buildPlanDetailItem(
                   "Block Data State",
-                  "${snapshot.blockDataState.toString()} ${snapshot
-                      .blockDataState.isStale ? '(Stale)' : ''}",
+                  "${snapshot.blockDataState.toString()} ${snapshot.blockDataState.isStale ? '(Stale)' : ''}",
                 ),
               ),
               Expanded(
@@ -415,16 +414,15 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
                   ),
                 ),
                 InkWell(
-                  onTap: () =>
-                      DebugIdListDialog.show<ID>(
-                        context: context,
-                        title: "Target Item IDs to Query",
-                        ids: queryPlan.targetItemIds,
-                      ),
+                  onTap: () => DebugIdListDialog.show<ID>(
+                    context: context,
+                    title: "Target Item IDs to Query",
+                    ids: queryPlan.targetItemIds,
+                  ),
                   borderRadius: BorderRadius.circular(4),
                   child: Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -480,9 +478,11 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
   }
 
   /// Builds an item card displaying details of a single [BlockReceivedEventInfo].
-  Widget _buildEventInfoCard(BuildContext context,
-      int index,
-      BlockReceivedEventInfo<ID> eventInfo,) {
+  Widget _buildEventInfoCard(
+    BuildContext context,
+    int index,
+    BlockReceivedEventInfo<ID> eventInfo,
+  ) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -523,7 +523,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
               if (eventInfo.requiresMaxSyncStrategy)
                 Container(
                   padding:
-                  const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
                     color: context.faColors.surface.dangerTonal,
                     borderRadius: BorderRadius.circular(4),
@@ -590,17 +590,16 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
               ),
               if (eventInfo.effectedItemIds.isNotEmpty)
                 InkWell(
-                  onTap: () =>
-                      DebugIdListDialog.show<ID>(
-                        context: context,
-                        title: "Effected Item IDs (#${index + 1})",
-                        ids: eventInfo.effectedItemIds,
-                      ),
+                  onTap: () => DebugIdListDialog.show<ID>(
+                    context: context,
+                    title: "Effected Item IDs (#${index + 1})",
+                    ids: eventInfo.effectedItemIds,
+                  ),
                   borderRadius: BorderRadius.circular(4),
                   child: const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                     child:
-                    Icon(Icons.open_in_new, size: 12, color: Colors.indigo),
+                        Icon(Icons.open_in_new, size: 12, color: Colors.indigo),
                   ),
                 ),
             ],

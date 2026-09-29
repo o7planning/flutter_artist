@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 enum ExecutionUnitType {
   shelfQuery,
   shelfInternalReact,

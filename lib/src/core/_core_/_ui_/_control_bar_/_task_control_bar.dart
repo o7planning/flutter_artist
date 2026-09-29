@@ -96,15 +96,8 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: widget.task.isExecuting,
           onPressed: canSubmit
               ? () async {
-                  if (widget.task.formModel != null) {
-                    await widget.task.formModel!.submit();
-                  } else {
-                    await widget.task.performSubmit(
-                      initData: widget.task.initData,
-                      formData: null,
-                    );
-                  }
-                }
+            await widget.task.submit();
+          }
               : null,
         );
 

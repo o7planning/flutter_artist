@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/_core_/core.dart';
-import '../../../core/enums/debug_btn_type.dart';
+import '../../../core/enums/_enums.dart';
 import 'widgets/_base_info_widget.dart';
 
 class StageDataStateInfoWidget extends BaseInfoWidget {

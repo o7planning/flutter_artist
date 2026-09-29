@@ -77,7 +77,8 @@ abstract class MultiOptFormPropModel<V> extends FormPropModel<V> {
 
   void _printTempInfoCascade({required int indentFactor}) {
     print(
-        "${("- - - " * indentFactor)} $propName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
+        "${("- - - " *
+            indentFactor)} $propName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
     for (var child in _children) {
       child._printTempInfoCascade(indentFactor: indentFactor + 1);
     }

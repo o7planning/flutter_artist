@@ -6,10 +6,10 @@ part of '../core.dart';
 /// [TaskDataStatePending] -> (loads INIT_DATA) -> [TaskDataStateLoadedFresh]
 /// -> (submission) -> [TaskDataStateSubmissionAttempted]
 abstract class Task<
-    INIT_DATA extends TaskInitData, //
-    RESULT_DATA extends TaskResultData, //
-    CREATION_PRESET extends CreationPreset,
-    FORM_INPUT extends FormInput> extends _Core {
+INIT_DATA extends TaskInitData, //
+RESULT_DATA extends TaskResultData, //
+CREATION_PRESET extends CreationPreset,
+FORM_INPUT extends FormInput> extends _Core {
   final String name;
   final String? description;
   final TaskConfig config;
@@ -32,22 +32,29 @@ abstract class Task<
   // ===========================================================================
 
   TaskDataState _dataState = const TaskDataStatePending.initial();
+
   TaskDataState get dataState => _dataState;
 
   INIT_DATA? _initData;
+
   INIT_DATA? get initData => _initData;
 
   RESULT_DATA? _lastResultData;
+
   RESULT_DATA? get lastResultData => _lastResultData;
 
   bool __isLoadingInitData = false;
+
   bool get isLoadingInitData => __isLoadingInitData;
 
   bool __isExecuting = false;
+
   bool get isExecuting => __isExecuting;
 
   bool get hasForm => formModel != null;
+
   bool get hasError => _dataState.hasError;
+
   TaskErrorInfo? get errorInfo => _dataState.errorInfo;
 
   // ===========================================================================
@@ -67,12 +74,17 @@ abstract class Task<
 
   XTask _createXTask({
     required XActivity xActivity,
+    required XTaskFormModel? xTaskFormModel,
   }) {
     return XTask<
         INIT_DATA, //
         RESULT_DATA,
         CREATION_PRESET,
-        FORM_INPUT>._(xActivity: xActivity, task: this);
+        FORM_INPUT>._(
+      xActivity: xActivity,
+      task: this,
+      xTaskFormModel: xTaskFormModel,
+    );
   }
 
   // ===========================================================================
@@ -86,8 +98,11 @@ abstract class Task<
   // ===========================================================================
 
   Type getInitDataType() => INIT_DATA;
+
   Type getResultDataType() => RESULT_DATA;
+
   Type getCreationPresetType() => CREATION_PRESET;
+
   Type getFormInputType() => FORM_INPUT;
 
   // ===========================================================================
@@ -126,7 +141,8 @@ abstract class Task<
     executionTrace.addInfo(
       codeId: "#90100",
       shortDesc:
-          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Load InitData)",
+      "${debugObjHtml(this)} -> Begin ${executionUnitType
+          .asDebugExecutionUnit()} (Load InitData)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -156,7 +172,8 @@ abstract class Task<
       executionTrace.addInfo(
         codeId: "#90140",
         shortDesc:
-            "${debugObjHtml(this)} -> Successfully loaded INIT_DATA: ${debugObjHtml(_initData)}.",
+        "${debugObjHtml(this)} -> Successfully loaded INIT_DATA: ${debugObjHtml(
+            _initData)}.",
       );
     } catch (e, stackTrace) {
       taskErrorInfo = TaskErrorInfo(
@@ -186,7 +203,8 @@ abstract class Task<
       executionTrace.addInfo(
         codeId: "#90160",
         shortDesc:
-            "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
+        "The ${debugObjHtml(
+            this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
       );
     } finally {
@@ -202,7 +220,7 @@ abstract class Task<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XTask<TaskInitData, TaskResultData, CreationPreset, FormInput>
-        thisXTask,
+    thisXTask,
     required TaskSubmitIntent<TaskInitData, TaskResultData> executionIntent,
   }) async {
     // Handled in subsequent phase
@@ -262,6 +280,10 @@ abstract class Task<
         errorInfo: errorInfo!.toErrorInfo(),
       );
     }
+  }
+
+  Future<void> submit() async {
+    // TODO:
   }
 
   // ***************************************************************************

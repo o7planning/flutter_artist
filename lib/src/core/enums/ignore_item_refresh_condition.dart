@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 enum IgnoreItemRefreshCondition {
   ///
   /// Conditions to skip ITEM refresh:

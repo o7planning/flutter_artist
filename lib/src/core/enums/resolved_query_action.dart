@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 /// Resolved query execution action determined by [BlockQueryStrategyResolver].
 enum BlockResolvedQueryAction {
   /// Perform a full query across the entire Block dataset ([Block.performQuery]).

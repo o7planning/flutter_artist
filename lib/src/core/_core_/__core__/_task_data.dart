@@ -12,7 +12,6 @@ class EmptyTaskInitData extends TaskInitData {
 
 
 class TaskResultData {
-
 }
 
 class EmptyTaskResultData extends TaskResultData {

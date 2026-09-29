@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 enum BlockControlActionType {
   createItem,
   query,

@@ -10,7 +10,7 @@ class BlockEventReaction {
   /// Custom filter strategy to evaluate if this block should react.
   /// [isShelfInternalEvent] tells the block if the event originated from its own Shelf.
   final bool Function(ArtistEvent event, bool isShelfInternalEvent)?
-      shouldTrigger;
+  shouldTrigger;
 
   const BlockEventReaction({
     required this.dataType,

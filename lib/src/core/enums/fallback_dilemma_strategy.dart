@@ -1,3 +1,5 @@
+part of '_enums.dart';
+
 /// Defines the behavior rules for managing existing viewport elements
 /// when a page-shifting or re-query invocation encounters a network failure.
 enum FallbackDilemmaStrategy {

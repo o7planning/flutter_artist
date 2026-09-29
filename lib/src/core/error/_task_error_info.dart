@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/block_error_method.dart';
+import '../../core/enums/_enums.dart';
 
 class TaskErrorInfo {
   final TaskErrorMethod taskErrorMethod;

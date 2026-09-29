@@ -1,7 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/filter_activity_type.dart';
-import '../enums/filter_error_method.dart';
+import '../enums/_enums.dart';
 
 class FilterErrorInfo {
   final FilterActivityType activityType;

@@ -1,5 +1,5 @@
 part of '../../core.dart';
-  
+
 class ProzessControlBarConfig {
   final bool allowBackButton;
   final bool allowCancelButton;

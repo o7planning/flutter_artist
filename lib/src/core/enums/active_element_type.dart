@@ -1,9 +1,12 @@
+part of '_enums.dart';
+
 enum ActiveElementType {
   block,
   item,
   scalar,
   task,
-  prozess, stage;
+  prozess,
+  stage;
 
   String shortInf() {
     switch (this) {

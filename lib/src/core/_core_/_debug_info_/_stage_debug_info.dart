@@ -13,11 +13,13 @@ class _StageDebugInfo {
 
   String get classDefinition {
     return "${getClassName(_stage)}$classParametersDefinition";
-  } 
+  }
 
   String get classParametersDefinition {
-    return "<${_stage.getStageEnumType()}, ${_stage.getInitDataType()}, ${_stage.getResultDataType()}, "
-        "${_stage.getProzessContextDataType()}, ${_stage.getCreationPresetType()}, ${_stage.getFormInputType()}>";
+    return "<${_stage.getStageEnumType()}, ${_stage.getInitDataType()}, ${_stage
+        .getResultDataType()}, "
+        "${_stage.getProzessContextDataType()}, ${_stage
+        .getCreationPresetType()}, ${_stage.getFormInputType()}>";
   }
 
   _StageDebugInfo({required Stage stage}) : _stage = stage;

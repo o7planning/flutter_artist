@@ -1,10 +1,10 @@
 part of '../../core.dart';
 
 class _TaskLoadInitDataExecutionUnit<
-    TASK_INIT_DATA extends TaskInitData, //
-    TASK_RESULT_DATA extends TaskResultData,
-    CREATION_PRESET extends CreationPreset,
-    FORM_INPUT extends FormInput> extends _ActivityMemberExecutionUnit {
+TASK_INIT_DATA extends TaskInitData, //
+TASK_RESULT_DATA extends TaskResultData,
+CREATION_PRESET extends CreationPreset,
+FORM_INPUT extends FormInput> extends _ActivityMemberExecutionUnit {
   final XTask xTask;
 
   @override
@@ -16,9 +16,9 @@ class _TaskLoadInitDataExecutionUnit<
     required this.xTask,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.task,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.task,
+    executionIntent: executionIntent,
+  );
 
   @override
   Activity get activity => xTask.task.activity;
@@ -32,8 +32,8 @@ class _TaskLoadInitDataExecutionUnit<
   Object get owner => xTask.task;
 
   @override
-  XActivity get xActivity => xTask. xActivity;
+  XActivity get xActivity => xTask.xActivity;
 
   @override
-  int get xActivityId => xTask. xActivity.xActivityId;
+  int get xActivityId => xTask.xActivity.xActivityId;
 }

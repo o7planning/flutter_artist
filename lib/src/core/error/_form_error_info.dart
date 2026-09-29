@@ -1,7 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/form_activity_type.dart';
-import '../enums/form_error_method.dart';
+import '../enums/_enums.dart';
 
 class FormErrorInfo {
   final FormActivityType activityType;

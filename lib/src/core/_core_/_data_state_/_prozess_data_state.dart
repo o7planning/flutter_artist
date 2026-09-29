@@ -59,9 +59,9 @@ final class ProzessDataStatePending<STAGE_ENUM extends Enum>
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ProzessDataStatePending<STAGE_ENUM> &&
-          runtimeType == other.runtimeType &&
-          currentStageId == other.currentStageId;
+          other is ProzessDataStatePending<STAGE_ENUM> &&
+              runtimeType == other.runtimeType &&
+              currentStageId == other.currentStageId;
 
   @override
   int get hashCode => Object.hash(runtimeType, currentStageId);
@@ -70,7 +70,8 @@ final class ProzessDataStatePending<STAGE_ENUM extends Enum>
   String toBriefInfo() => "pending(${currentStageId.name})";
 
   @override
-  String toString() => 'ProzessDataState.pending(currentStageId: $currentStageId)';
+  String toString() =>
+      'ProzessDataState.pending(currentStageId: $currentStageId)';
 }
 
 /// Prozess has completed all its stages successfully.
@@ -108,9 +109,9 @@ final class ProzessDataStateAborted<STAGE_ENUM extends Enum>
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ProzessDataStateAborted<STAGE_ENUM> &&
-          runtimeType == other.runtimeType &&
-          reason == other.reason;
+          other is ProzessDataStateAborted<STAGE_ENUM> &&
+              runtimeType == other.runtimeType &&
+              reason == other.reason;
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
