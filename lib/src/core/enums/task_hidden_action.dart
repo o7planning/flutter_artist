@@ -1,0 +1,4 @@
+enum TaskHiddenAction {
+  none,
+  clear;
+}

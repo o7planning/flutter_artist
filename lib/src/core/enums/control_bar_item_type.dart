@@ -27,3 +27,20 @@ enum FilterControlBarItemType {
   custom,
   debugFilter,
 }
+
+enum TaskControlBarItemType {
+  back,
+  loadInitData,
+  submit,
+  divider,
+  custom,
+}
+
+enum ProzessControlBarItemType {
+  back,
+  cancel,
+  reset,
+  debugInspector,
+  divider,
+  custom,
+}

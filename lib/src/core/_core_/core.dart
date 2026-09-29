@@ -234,9 +234,9 @@ part '_ui_com_/_activity_ui_components.dart';
 
 part '_ui_com_/_stage_ui_components.dart';
 
-part '_ui_com_/_flow_ui_components.dart';
-
 part '_ui_com_/_task_ui_components.dart';
+
+part '_ui_com_/_prozess_ui_components.dart';
 
 part '__core__/_prozess_transition_result.dart';
 
@@ -830,7 +830,11 @@ part '_ui_/_control_bar_item_/_block_control_bar_item.dart';
 
 part '_ui_/_control_bar_item_/_scalar_control_bar_item.dart';
 
+part '_ui_/_control_bar_item_/_task_control_bar_item.dart';
+
 part '_ui_/_control_bar_item_/_filter_control_bar_item.dart';
+
+part '_ui_/_control_bar_item_/_prozess_control_bar_item.dart';
 
 part '_ui_/_control_bar_/__base_control_bar_state.dart';
 
@@ -838,11 +842,17 @@ part '_ui_/_control_bar_config_/_filter_control_bar_config.dart';
 
 part '_ui_/_control_bar_/_filter_control_bar.dart';
 
+part '_ui_/_control_bar_/_prozess_control_bar.dart';
+
 part '_ui_/_control_bar_/_block_control_bar.dart';
 
 part '_ui_/_control_bar_/_scalar_control_bar.dart';
 
 part '_ui_/_control_bar_config_/_scalar_control_bar_config.dart';
+
+part '_ui_/_control_bar_config_/_prozess_control_bar_config.dart';
+
+part '_ui_/_control_bar_config_/_task_control_bar_config.dart';
 
 part '_ui_/_control_bar_config_/_block_control_bar_config.dart';
 

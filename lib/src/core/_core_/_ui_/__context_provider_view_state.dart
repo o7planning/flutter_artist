@@ -80,6 +80,10 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
         return provideFormContext;
       case ContextKind.activity:
         return isActivityRepresentative;
+      case ContextKind.task:
+        return provideTaskContext;
+      case ContextKind.stage:
+        return provideStageContext;
     }
   }
 

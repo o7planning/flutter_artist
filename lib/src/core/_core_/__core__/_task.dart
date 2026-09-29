@@ -268,6 +268,23 @@ abstract class Task<
   // ***************************************************************************
   // ***************************************************************************
 
+  void _broadcastScalarHidden() {
+    switch (effectiveConfig.onHideAction) {
+      case ScalarHiddenAction.none:
+        break;
+      case ScalarHiddenAction.clear:
+        break;
+    }
+  }
+
+  void _broadcastTaskHidden() {
+    // TODO
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __assertThisXTask(XTask thisXTask) {
     if (thisXTask.task != this || thisXTask.name != name) {
       throw "Error Assert task: ${thisXTask.task} - $this";

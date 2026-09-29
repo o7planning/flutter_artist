@@ -26,15 +26,6 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
   }
 
   @override
-  bool get provideScalarContext => false;
-
-  @override
-  bool get provideItemContext => true;
-
-  @override
-  bool get provideFormContext => true;
-
-  @override
   void setBuildingState({required bool isBuilding}) {
     widget.formModel.ui._setFormViewBuildingState(
       widgetState: this,

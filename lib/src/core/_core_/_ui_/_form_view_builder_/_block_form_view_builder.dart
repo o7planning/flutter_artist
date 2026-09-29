@@ -35,6 +35,15 @@ class _BlockFormViewBuilderState
   bool get provideBlockContext => true;
 
   @override
+  bool get provideItemContext => true;
+
+  @override
+  bool get provideFormContext => true;
+
+  @override
+  bool get provideScalarContext => false;
+
+  @override
   bool get provideStageContext => false;
 
   @override

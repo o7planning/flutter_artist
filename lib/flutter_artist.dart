@@ -94,6 +94,7 @@ export 'src/core/enums/resolved_query_action.dart';
 export 'src/core/enums/scalar_control_action_type.dart';
 export 'src/core/enums/scalar_error_method.dart';
 export 'src/core/enums/scalar_hidden_action.dart';
+export 'src/core/enums/task_hidden_action.dart';
 export 'src/core/enums/scalar_reaction_target.dart';
 export 'src/core/enums/selection_type.dart';
 export 'src/core/enums/shelf_release_policy.dart';

@@ -1,7 +1,9 @@
 part of '../core.dart';
 
 class TaskConfig {
-  const TaskConfig();
+  final ScalarHiddenAction onHideAction;
+
+  const TaskConfig() : onHideAction = ScalarHiddenAction.none;
 
   TaskConfig copy() => const TaskConfig();
 }
@@ -13,4 +15,6 @@ class TaskEffectiveConfig {
 
   factory TaskEffectiveConfig.fromConfig(TaskConfig config) =>
       TaskEffectiveConfig._fromConfig(config);
+
+  ScalarHiddenAction get onHideAction => _baselineConfig.onHideAction;
 }

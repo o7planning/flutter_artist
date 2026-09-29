@@ -98,4 +98,16 @@ abstract class Prozess<
       moveToStage(result.nextStage!);
     }
   }
+
+  void reset() {
+    // TODO...
+  }
+
+  void showDebugContextDataViewerDialog(BuildContext context) {
+    // TODO...
+  }
+
+  void _broadcastProzessHidden() {
+    // TODO...
+  }
 }

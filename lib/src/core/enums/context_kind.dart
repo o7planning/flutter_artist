@@ -3,5 +3,7 @@ enum ContextKind {
   block,
   item,
   form,
-  activity;
+  activity,
+  task,
+  stage;
 }

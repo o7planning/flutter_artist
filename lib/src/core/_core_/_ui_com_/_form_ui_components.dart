@@ -59,6 +59,16 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Checks whether any view managed directly by this form model provides a form context.
+  bool hasFormContext() {
+    return hasVisibleViewsWithContextKind(
+      contextKind: ContextKind.form,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   /// Checks whether any FormView connected to this form model is currently mounted in the widget tree.
   // OLD: hasMountedUiComponent
   @override
@@ -151,17 +161,20 @@ class _FormUiComponents extends _UiComponents {
     required _ContextProviderViewState widgetState,
     required final bool isVisible,
   }) {
-    final bool isVisibleOld =
-        _formViewWidgetStates[widgetState]?.isVisible ?? false;
+    final bool formContextOld = hasFormContext();
+
     _formViewWidgetStates.update(
       widgetState,
       (xState) => xState.._setShowing(isVisible),
       ifAbsent: () => XState().._setShowing(isVisible),
     );
-    if (!isVisibleOld && isVisible) {
-      // LOGIC: #0000
+
+    final bool formContextCurrent = hasFormContext();
+
+    if (!formContextOld && formContextCurrent) {
       formModel._triggerWhenFormViewVisible();
     }
+
     if (isVisible) {
       formModel._addToRecent();
     }

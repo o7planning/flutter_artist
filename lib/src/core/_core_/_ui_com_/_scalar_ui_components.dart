@@ -28,11 +28,7 @@ class _ScalarUiComponents extends _UiComponents {
       ...__contentViewWidgetStates.keys,
       ...__controlBarWidgetStates.keys,
     ];
-    return list
-        .map((v) => v.faRoute)
-        .nonNulls
-        .toList()
-        .toSet();
+    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
   }
 
   // ***************************************************************************
@@ -95,7 +91,7 @@ class _ScalarUiComponents extends _UiComponents {
   // OLD: updateControlBars
   void refreshControlBars({bool force = false}) {
     for (final _ContextProviderViewState widgetState
-    in __controlBarWidgetStates.keys) {
+        in __controlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -109,7 +105,7 @@ class _ScalarUiComponents extends _UiComponents {
   // OLD: updateScalarBaseViews
   void refreshContentViews({bool force = true}) {
     for (final _ContextProviderViewState state
-    in __contentViewWidgetStates.keys) {
+        in __contentViewWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -160,7 +156,7 @@ class _ScalarUiComponents extends _UiComponents {
     bool includeDescendants = false,
   }) {
     for (final _ContextProviderViewState widgetState
-    in __contentViewWidgetStates.keys) {
+        in __contentViewWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -177,7 +173,7 @@ class _ScalarUiComponents extends _UiComponents {
     if (includeDescendants) {
       for (final Scalar childScalar in scalar._childScalars) {
         final String? componentName =
-        childScalar.ui.findVisibleContentViewWithContextKind(
+            childScalar.ui.findVisibleContentViewWithContextKind(
           contextKind: contextKind,
           includeDescendants: true,
         );
@@ -205,7 +201,7 @@ class _ScalarUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-    in __controlBarWidgetStates.keys) {
+        in __controlBarWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -226,30 +222,14 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
 
   /// Resolves the class name of the view currently demanding the Scalar data context.
-  // OLD: findActiveUiComponentByScalarContext
+  // OLD: findActiveUiComponentByScalarConte
   String? findVisibleScalarContextView({
     bool includeDescendants = false,
   }) {
-    String? componentName = __findVisibleViewWithContextKind(
+    return __findVisibleViewWithContextKind(
       contextKind: ContextKind.scalar,
       includeDescendants: includeDescendants,
     );
-    if (componentName != null) {
-      return componentName;
-    }
-    if (!includeDescendants) {
-      return null;
-    }
-    for (final Scalar childScalar in scalar._childScalars) {
-      componentName = childScalar.ui.__findVisibleViewWithContextKind(
-        contextKind: ContextKind.scalar,
-        includeDescendants: includeDescendants,
-      );
-      if (componentName != null) {
-        return componentName;
-      }
-    }
-    return null;
   }
 
   // ***************************************************************************
@@ -293,7 +273,7 @@ class _ScalarUiComponents extends _UiComponents {
     if (includeDescendants) {
       for (final Scalar childScalar in scalar._childScalars) {
         final childComponentName =
-        childScalar.ui.__findVisibleViewWithContextKind(
+            childScalar.ui.__findVisibleViewWithContextKind(
           contextKind: contextKind,
           includeDescendants: includeDescendants,
         );
@@ -317,10 +297,8 @@ class _ScalarUiComponents extends _UiComponents {
     );
     __controlBarWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
     final bool scalarContextCurrent = hasScalarContext(
       includeDescendants: true,
@@ -353,25 +331,24 @@ class _ScalarUiComponents extends _UiComponents {
     required _ContextProviderViewState widgetState,
     required bool isVisible,
   }) {
-    final bool visibleOld =
-        __contentViewWidgetStates[widgetState]?.isVisible ?? false;
+    final bool scalarContextOld = hasScalarContext(includeDescendants: true);
 
     __contentViewWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
-    final bool visibleCurrent = hasVisibleViews();
-    //
+
+    final bool scalarContextCurrent =
+        hasScalarContext(includeDescendants: true);
+
     if (isVisible) {
       FlutterArtist.storage._addRecentShelf(scalar.shelf);
     }
-    //
-    if (!visibleOld && visibleCurrent) {
+
+    if (!scalarContextOld && scalarContextCurrent) {
       FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(scalar.shelf);
-    } else if (visibleOld && !visibleCurrent) {
+    } else if (scalarContextOld && !scalarContextCurrent) {
       scalar._broadcastScalarHidden();
     }
   }
