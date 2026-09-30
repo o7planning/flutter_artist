@@ -33,9 +33,7 @@ class FormModelStructure {
 
   bool _formInitialDataReady = false;
 
-  FormMode _formMode = FormMode.none;
-
-  FormMode get formMode => _formMode;
+  InternalFormMode _internalFormMode = InternalFormMode.none;
 
   FormDataState _formDataState = FormDataStateNone();
 
@@ -44,13 +42,12 @@ class FormModelStructure {
   // TODO: Delete???
   FormErrorInfo? __formErrorInfo;
 
-  bool get isNew => _formMode == FormMode.creation;
+  bool get isNew => _internalFormMode == InternalFormMode.creation;
 
   FormModelStructure({
     required List<SimpleFormPropDef> simplePropDefs,
     required List<MultiOptFormPropDef> multiOptPropDefs,
-  })
-      : __simplePropDefs = [...simplePropDefs],
+  })  : __simplePropDefs = [...simplePropDefs],
         __rootMultiOptPropDefs = [...multiOptPropDefs] {
     for (SimpleFormPropDef simplePropDef in simplePropDefs) {
       __initSimplePropDef(simplePropDef: simplePropDef);
@@ -221,8 +218,8 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setFormMode(FormMode formMode) {
-    _formMode = formMode;
+  void _setInternalFormMode(InternalFormMode internalFormMode) {
+    _internalFormMode = internalFormMode;
   }
 
   void _setFormDataState({
@@ -232,12 +229,11 @@ class FormModelStructure {
     _formDataState = formDataState;
   }
 
-  // TODO: Xem lai, xoa di?
-  void _setFormMode_TODO_DELETE({
-    required FormMode formMode,
+  void _setInternalFormModeAndState({
+    required InternalFormMode internalFormMode,
     required FormDataState formDataState,
   }) {
-    _formMode = formMode;
+    _internalFormMode = internalFormMode;
     _formDataState = formDataState;
   }
 
@@ -310,7 +306,7 @@ class FormModelStructure {
   void _clearFormDataWithState({required FormDataState formDataState}) {
     _justInitialized = true;
     _formDataState = formDataState;
-    _formMode = FormMode.none;
+    _internalFormMode = InternalFormMode.none;
     __manualDirty = false;
     //
     for (FormPropModel prop in _allPropModelMapX.values) {
@@ -423,7 +419,7 @@ class FormModelStructure {
             } else {
               prop._tempInitialXData = prop._initialXData;
               prop._tempCurrentXData = prop._currentXData;
-              if (_formMode == FormMode.edit) {
+              if (_internalFormMode == InternalFormMode.edit) {
                 prop._tempInitialValue = prop._initialValue;
                 prop._tempCurrentValue = prop._currentValue;
               } else {
@@ -590,8 +586,7 @@ class FormModelStructure {
       if (prop == null) {
         print("""\n
             ****************************************************************************************************
-            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(
-            formModel)}.
+            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(formModel)}.
             ****************************************************************************************************
             """);
         //
@@ -661,7 +656,7 @@ class FormModelStructure {
     } else {
       throw AppError(
         errorMessage:
-        'Invalid Prop "$multiOptPropName", it must be $MultiOptFormPropModel',
+            'Invalid Prop "$multiOptPropName", it must be $MultiOptFormPropModel',
       );
     }
   }

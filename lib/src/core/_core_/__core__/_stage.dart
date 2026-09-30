@@ -7,12 +7,12 @@ part of '../core.dart';
 /// -> (resolves INIT_DATA) -> [StageDataStateLoadedFresh]
 /// -> (submission) -> [StageDataStateSubmissionAttempted]
 abstract class Stage<
-STAGE_ENUM extends Enum,
-INIT_DATA extends StageInitData,
-RESULT_DATA extends StageResultData,
-PROZESS_CONTEXT_DATA extends ProzessContextData,
-CREATION_PRESET extends CreationPreset,
-FORM_INPUT extends FormInput> extends _Core {
+    STAGE_ENUM extends Enum,
+    INIT_DATA extends StageInitData,
+    RESULT_DATA extends StageResultData,
+    PROZESS_CONTEXT_DATA extends ProzessContextData,
+    CREATION_PRESET extends CreationPreset,
+    FORM_INPUT extends FormInput> extends _Core {
   final STAGE_ENUM stageId;
   final String name;
   final String? description;
@@ -83,9 +83,14 @@ FORM_INPUT extends FormInput> extends _Core {
 
   // ===========================================================================
 
-  XStage _createXStage(
-      {required XProzess<STAGE_ENUM, PROZESS_CONTEXT_DATA> xProzess}) {
-    return XStage<STAGE_ENUM,
+  XStage _createXStage({
+    required XProzess<STAGE_ENUM, PROZESS_CONTEXT_DATA> xProzess,
+    required XStageFormModel<STAGE_ENUM, INIT_DATA, RESULT_DATA,
+            PROZESS_CONTEXT_DATA, CREATION_PRESET, FORM_INPUT>?
+        xStageFormModel,
+  }) {
+    return XStage<
+        STAGE_ENUM, //
         INIT_DATA,
         RESULT_DATA,
         PROZESS_CONTEXT_DATA,
@@ -93,6 +98,7 @@ FORM_INPUT extends FormInput> extends _Core {
         FORM_INPUT>._(
       stage: this,
       xProzess: xProzess,
+      xStageFormModel: xStageFormModel,
     );
   }
 
@@ -150,19 +156,18 @@ FORM_INPUT extends FormInput> extends _Core {
     required ExecutionUnitType executionUnitType,
     required XStage thisXStage,
     required StageLoadInitDataIntent<
-        STAGE_ENUM, //
-        INIT_DATA,
-        RESULT_DATA,
-        PROZESS_CONTEXT_DATA>
-    executionIntent,
+            STAGE_ENUM, //
+            INIT_DATA,
+            RESULT_DATA,
+            PROZESS_CONTEXT_DATA>
+        executionIntent,
   }) async {
     __assertThisXStage(thisXStage);
 
     executionTrace.addInfo(
       codeId: "#92100",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()} (Stage Load InitData)",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Stage Load InitData)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -191,7 +196,7 @@ FORM_INPUT extends FormInput> extends _Core {
       debug._performLoadInitDataCount++;
 
       final ApiResult<INIT_DATA> result =
-      await performLoadInitData(sharedContext: sharedContext);
+          await performLoadInitData(sharedContext: sharedContext);
       result.throwIfError();
 
       _initData = result.data;
@@ -200,9 +205,7 @@ FORM_INPUT extends FormInput> extends _Core {
       executionTrace.addInfo(
         codeId: "#92140",
         shortDesc:
-        "${debugObjHtml(
-            this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(
-            _initData)}.",
+            "${debugObjHtml(this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(_initData)}.",
       );
     } catch (e, stackTrace) {
       stageErrorInfo = StageErrorInfo(
@@ -231,8 +234,7 @@ FORM_INPUT extends FormInput> extends _Core {
       executionTrace.addInfo(
         codeId: "#92160",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}.performLoadInitData() method encountered an error!",
+            "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
       );
     } finally {
@@ -247,18 +249,12 @@ FORM_INPUT extends FormInput> extends _Core {
   Future<void> _unitSubmit({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XStage<Enum,
-        StageInitData,
-        StageResultData,
-        ProzessContextData,
-        CreationPreset,
-        FormInput>
-    thisXStage,
-    required StageSubmitExecutionIntent<Enum,
-        StageInitData,
-        StageResultData,
-        ProzessContextData>
-    executionIntent,
+    required XStage<Enum, StageInitData, StageResultData, ProzessContextData,
+            CreationPreset, FormInput>
+        thisXStage,
+    required StageSubmitExecutionIntent<Enum, StageInitData, StageResultData,
+            ProzessContextData>
+        executionIntent,
   }) async {
     // Handled in subsequent phase
   }
@@ -325,7 +321,6 @@ FORM_INPUT extends FormInput> extends _Core {
       );
     }
   }
-
 
   void _broadcastStageHidden() {
     // TODO:...

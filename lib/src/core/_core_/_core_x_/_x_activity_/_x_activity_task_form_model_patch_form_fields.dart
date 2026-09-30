@@ -1,15 +1,12 @@
 part of '../../core.dart';
 
-class _XActivityTaskFormModelPatchFormFields extends XActivity {
-  _XActivityTaskFormModelPatchFormFields({
-    required TaskFormModel formModel,
+class _XActivityFormModelPatchFormFields extends XActivity {
+  _XActivityFormModelPatchFormFields({
+    required ActivityFormModel formModel,
   }) : super(
     xActivityType: XActivityType.formModelEnterFields,
-    activity: formModel.task.activity,
+    activity: formModel.activity,
   ) {
     //
-    // IMPORTANT:
-    //
-    XTask xTask = xTaskMap[formModel.task.name]!;
   }
 }

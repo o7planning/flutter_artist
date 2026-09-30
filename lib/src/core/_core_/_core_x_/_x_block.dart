@@ -611,7 +611,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
         // 4.3. Automatic synchronization based on Item Data State when no intent is active
         if (itemDataState.isNone) {
           if (block.formModel != null &&
-              block.formModel!.formMode == FormMode.creation) {
+              block.formModel!.formMode == BlockFormMode.creation) {
             return NxtExecutionUnit.no(
               debug: debug,
               info:

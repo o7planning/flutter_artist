@@ -10,6 +10,8 @@ class XProzess<
   final Map<STAGE_ENUM, XStage> xStageMap = {};
   final List<XStage> allXStages = [];
 
+  final List<XStageFormModel> allXStageFormModels = [];
+
   String get name => flow.name;
 
   int get xActivityId => xActivity.xActivityId;
@@ -19,9 +21,22 @@ class XProzess<
     required this.flow,
   }) {
     for (final Stage stage in flow.stages) {
+      final StageFormModel? formModel = stage.formModel;
+      XStageFormModel? xStageFormModel;
+      if (formModel != null) {
+        //
+        // Create new XStageFormModel via 'formModel._createXStageFormModel' method
+        // to have the same Generics Parameters with stage.
+        //
+        xStageFormModel = formModel._createXStageFormModel(formInput: null);
+        allXStageFormModels.add(xStageFormModel);
+      }
+      //
       final xStage = stage._createXStage(
         xProzess: this,
+        xStageFormModel: xStageFormModel,
       );
+      xStageFormModel?.xStage = xStage;
       xStageMap[stage.stageId as STAGE_ENUM] = xStage;
       allXStages.add(xStage);
     }

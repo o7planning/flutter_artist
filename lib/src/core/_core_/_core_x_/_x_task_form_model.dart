@@ -1,8 +1,8 @@
 part of '../core.dart';
 
 class XTaskFormModel<
-INIT_DATA extends TaskInitData, //
-RESULT_DATA extends TaskResultData> {
+    INIT_DATA extends TaskInitData, //
+    RESULT_DATA extends TaskResultData> {
   XActivity get xActivity => xTask.xActivity;
 
   final TaskFormModel formModel;
@@ -39,7 +39,6 @@ RESULT_DATA extends TaskResultData> {
     }
   }
 
-
   // ***************************************************************************
 
   FormModelViewChangeIntent _createAndSetFormModelExecutionIntentViewChange({
@@ -63,12 +62,12 @@ RESULT_DATA extends TaskResultData> {
   // ***************************************************************************
 
   FormModelPatchFormFieldsIntent
-  _createAndSetFormModelExecutionIntentPatchFormFields<
-  FORM_INPUT extends FormInput>({
+      _createAndSetFormModelExecutionIntentPatchFormFields<
+          FORM_INPUT extends FormInput>({
     required FORM_INPUT formInput,
   }) {
     final executionIntent =
-    FormModelPatchFormFieldsIntent(formInput: formInput);
+        FormModelPatchFormFieldsIntent(formInput: formInput);
     _executionIntent = executionIntent;
     return executionIntent;
   }
@@ -95,8 +94,7 @@ RESULT_DATA extends TaskResultData> {
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-        "TaskFormModel (0.0), (${formModel.task
-            .name}), _executionIntent: $executionIntent, "
+            "TaskFormModel (0.0), (${formModel.task.name}), _executionIntent: $executionIntent, "
             "formDataState: ${formModelDataState.toBriefInfo()}",
       );
     }
@@ -108,8 +106,7 @@ RESULT_DATA extends TaskResultData> {
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-        "TaskFormModel (1.1), (${formModel.task
-            .name}), _executionIntent: $executionIntent, "
+            "TaskFormModel (1.1), (${formModel.task.name}), _executionIntent: $executionIntent, "
             "formDataState: ${formModelDataState.toBriefInfo()}",
       );
     }
@@ -126,8 +123,7 @@ RESULT_DATA extends TaskResultData> {
             executionIntent: executionIntent,
           ),
           info:
-          "TaskFormModel (2.1), (${formModel.task
-              .name}), _executionIntent: $executionIntent, "
+              "TaskFormModel (2.1), (${formModel.task.name}), _executionIntent: $executionIntent, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -150,8 +146,7 @@ RESULT_DATA extends TaskResultData> {
             executionIntent: intentToUse,
           ),
           info:
-          "TaskFormModel (2.2.1), (${formModel.task
-              .name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "TaskFormModel (2.2.1), (${formModel.task.name}), _executionIntent: $executionIntent --> $intentToUse, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -159,8 +154,7 @@ RESULT_DATA extends TaskResultData> {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-          "TaskFormModel (2.2.2), (${formModel.task
-              .name}), _executionIntent: $executionIntent, "
+              "TaskFormModel (2.2.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -189,8 +183,7 @@ RESULT_DATA extends TaskResultData> {
             executionIntent: intentToUse,
           ),
           info:
-          "TaskFormModel (3.1.1), (${formModel.task
-              .name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "TaskFormModel (3.1.1), (${formModel.task.name}), _executionIntent: $executionIntent --> $intentToUse, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -198,8 +191,7 @@ RESULT_DATA extends TaskResultData> {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-          "TaskFormModel (3.1.2), (${formModel.task
-              .name}), _executionIntent: $executionIntent, "
+              "TaskFormModel (3.1.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -227,8 +219,7 @@ RESULT_DATA extends TaskResultData> {
             executionIntent: intentToUse,
           ),
           info:
-          "TaskFormModel (4.1.1), (${formModel.task
-              .name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "TaskFormModel (4.1.1), (${formModel.task.name}), _executionIntent: $executionIntent --> $intentToUse, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -236,8 +227,7 @@ RESULT_DATA extends TaskResultData> {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-          "TaskFormModel (4.1.2), (${formModel.task
-              .name}), _executionIntent: $executionIntent, "
+              "TaskFormModel (4.1.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -264,8 +254,7 @@ RESULT_DATA extends TaskResultData> {
             executionIntent: intentToUse,
           ),
           info:
-          "TaskFormModel (5.1.2), (${formModel.task
-              .name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "TaskFormModel (5.1.2), (${formModel.task.name}), _executionIntent: $executionIntent --> $intentToUse, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -282,8 +271,7 @@ RESULT_DATA extends TaskResultData> {
               executionIntent: executionIntent,
             ),
             info:
-            "TaskFormModel (5.2.2), (${formModel.task
-                .name}), _executionIntent: $executionIntent, "
+                "TaskFormModel (5.2.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
                 "formDataState: ${formModelDataState.toBriefInfo()}",
           );
         } else if (executionIntent is FormModelDataLoadIntent) {
@@ -294,8 +282,7 @@ RESULT_DATA extends TaskResultData> {
               executionIntent: executionIntent,
             ),
             info:
-            "TaskFormModel (5.2.3), (${formModel.task
-                .name}), _executionIntent: $executionIntent, "
+                "TaskFormModel (5.2.3), (${formModel.task.name}), _executionIntent: $executionIntent, "
                 "formDataState: ${formModelDataState.toBriefInfo()}",
           );
         } else if (executionIntent is FormModelPatchFormFieldsIntent) {
@@ -306,16 +293,14 @@ RESULT_DATA extends TaskResultData> {
               executionIntent: executionIntent,
             ),
             info:
-            "TaskFormModel (5.2.4), (${formModel.task
-                .name}), _executionIntent: $executionIntent, "
+                "TaskFormModel (5.2.4), (${formModel.task.name}), _executionIntent: $executionIntent, "
                 "formDataState: ${formModelDataState.toBriefInfo()}",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-            "TaskFormModel (5.2.4), (${formModel.task
-                .name}), _executionIntent: $executionIntent, "
+                "TaskFormModel (5.2.4), (${formModel.task.name}), _executionIntent: $executionIntent, "
                 "formDataState: ${formModelDataState.toBriefInfo()}",
           );
         }
@@ -326,8 +311,7 @@ RESULT_DATA extends TaskResultData> {
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-        "TaskFormModel (5.3), (${formModel.task
-            .name}), _executionIntent: null, "
+            "TaskFormModel (5.3), (${formModel.task.name}), _executionIntent: null, "
             "formDataState: ${formModelDataState.toBriefInfo()}, "
             "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
       );
@@ -339,8 +323,7 @@ RESULT_DATA extends TaskResultData> {
     return NxtExecutionUnit.no(
       debug: debug,
       info:
-      "TaskFormModel (6.1) (${formModel.task
-          .name}), _executionIntent: $executionIntent, "
+          "TaskFormModel (6.1) (${formModel.task.name}), _executionIntent: $executionIntent, "
           "formDataState: ${formModelDataState.toBriefInfo()}",
     );
   }

@@ -43,6 +43,7 @@ abstract class XActivity extends XRootQueueItem {
         xActivity: this,
         xTaskFormModel: xTaskFormModel,
       );
+      xTaskFormModel?.xTask = xTask;
       xTaskMap[task.name] = xTask;
       allXTasks.add(xTask);
     }
@@ -54,6 +55,10 @@ abstract class XActivity extends XRootQueueItem {
       );
       xProzessMap[prozess.name] = xProzess;
       allXProzesss.add(xProzess);
+
+      for (final xStage in xProzess.allXStages) {
+        xStageMap[xStage.name] = xStage;
+      }
     }
   }
 

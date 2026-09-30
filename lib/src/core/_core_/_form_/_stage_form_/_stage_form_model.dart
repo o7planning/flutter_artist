@@ -1,5 +1,6 @@
 part of '../../core.dart';
 
+/// Form model bound to an individual [Stage] within a multi-step [Prozess].
 abstract class StageFormModel<
         STAGE_ENUM extends Enum,
         INIT_DATA extends StageInitData,
@@ -8,152 +9,227 @@ abstract class StageFormModel<
         CREATION_PRESET extends CreationPreset,
         FORM_INPUT extends FormInput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel<CREATION_PRESET, FORM_INPUT,
-        ADDITIONAL_FORM_RELATED_DATA> {
-  @override
-  String get pathInfo =>
-      "${stage.prozess.activity.name} > ${stage.prozess.name} > ${stage.name} > stage-form";
-
+    extends ActivityFormModel<INIT_DATA, RESULT_DATA, CREATION_PRESET,
+        FORM_INPUT, ADDITIONAL_FORM_RELATED_DATA> {
   late final Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA,
       CREATION_PRESET, FORM_INPUT> stage;
 
-  void _bindToStage(Stage parentStage) {
-    stage = parentStage as Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA,
-        PROZESS_CONTEXT_DATA, CREATION_PRESET, FORM_INPUT>;
-  }
+  @override
+  Activity get activity => stage.activity;
 
-  StageFormModel({super.config});
+  @override
+  INIT_DATA? get initData => stage.initData;
 
   PROZESS_CONTEXT_DATA get sharedContext => stage.sharedContext;
 
-  // ===========================================================================
-  // FORM EXTRACTION HOOKS
-  // ===========================================================================
-
-  /// Supplies baseline initial values derived from the Stage's [initData]
-  /// and the Prozess's [sharedContext].
-  @_AbstractMethodAnnotation()
-  Map<String, dynamic>? specifyInitialValuesForSimpleProps({
-    required INIT_DATA initData,
-    required PROZESS_CONTEXT_DATA sharedContext,
-    required CREATION_PRESET creationPreset,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-  });
-
-  @_AbstractMethodAnnotation()
-  OptValueWrap? specifyInitialValueForMultiOptProp({
-    required String multiOptPropName,
-    required SelectionType selectionType,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
-    required INIT_DATA initData,
-    required PROZESS_CONTEXT_DATA sharedContext,
-    required CREATION_PRESET creationPreset,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-  });
-
-  @_AbstractMethodAnnotation()
-  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
-    required FORM_INPUT formInput,
-  });
-
-  @_AbstractMethodAnnotation()
-  OptValueWrap? extractUpdateValueForMultiOptProp({
-    required String multiOptPropName,
-    required SelectionType selectionType,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
-    required FORM_INPUT formInput,
-  });
-
-  @_AbstractMethodAnnotation()
-  Future<ADDITIONAL_FORM_RELATED_DATA> performLoadAdditionalFormRelatedData({
-    required INIT_DATA initData,
-    required PROZESS_CONTEXT_DATA sharedContext,
-  });
+  @override
+  String get pathInfo =>
+      "${activity.name} > ${stage.prozess.name} > ${stage.name} > stage-form";
 
   // ===========================================================================
-  // INITIALIZATION & SUBMIT
+
+  StageFormModel({super.config});
+
   // ===========================================================================
 
-  /// Internal initializer invoked by [Stage.prepareStage].
-  Future<void> _initStageForm({
-    required INIT_DATA initData,
-    required CREATION_PRESET creationPreset,
-  }) async {
-    _formModelStructure._clearFormError();
-    _formModelStructure._setFormDataState(
-      formDataState: FormDataStatePending(),
-      error: null,
-    );
-
-    final additionalData = await performLoadAdditionalFormRelatedData(
-      initData: initData,
-      sharedContext: sharedContext,
-    );
-
-    final simpleDefaults = specifyInitialValuesForSimpleProps(
-          initData: initData,
-          sharedContext: sharedContext,
-          creationPreset: creationPreset,
-          additionalFormRelatedData: additionalData,
-        ) ??
-        {};
-
-    for (final entry in simpleDefaults.entries) {
-      _formModelStructure._setTempSimplePropValue(
-        propName: entry.key,
-        value: entry.value,
-        setForInitial: true,
-      );
-    }
-
-    _formModelStructure._updateTempToReal();
-    _formModelStructure._setFormDataState(
-      formDataState: const FormDataStateLoadedFresh(),
-      error: null,
-    );
-    _formModelStructure._formInitialDataReady = true;
+  @override
+  String debugClassParametersDefinition() {
+    return "<${getStageEnumType()}, ${getInitDataType()}, ${getResultDataType()}, ${getProzessContextDataType()}, "
+        "${getCreationPresetType()}, ${getFormInputType()}, ${getAdditionalFormRelatedDataType()}>";
   }
 
-  /// Submits current form fields and advances the stage within the workflow.
-  Future<bool> submit() async {
-    // final Map<String, dynamic> formMapData =
-    //     _formModelStructure._currentFormData;
-    // final ApiResult<StageExecutionResult<STAGE_ENUM, RESULT_DATA>> apiResult =
-    //     await stage.performStageSubmit(
-    //   formStageData: formMapData,
-    //   initData: stage.initData!,
-    //   sharedContext: sharedContext,
-    // );
-    //
-    // if (!apiResult.isError()) {
-    //   await stage._processStageSubmitResult(apiResult);
-    //   _formModelStructure._setManualDirty(false);
-    //   return true;
-    // }
-    return false;
+  // ===========================================================================
+
+  Type getStageEnumType() => STAGE_ENUM;
+  Type getProzessContextDataType() => PROZESS_CONTEXT_DATA;
+
+  // ===========================================================================
+
+  void _bindToStage(
+    Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA,
+            CREATION_PRESET, FORM_INPUT>
+        parentStage,
+  ) {
+    stage = parentStage;
+  }
+
+  XStageFormModel<
+      STAGE_ENUM, //
+      INIT_DATA,
+      RESULT_DATA,
+      PROZESS_CONTEXT_DATA,
+      CREATION_PRESET,
+      FORM_INPUT> _createXStageFormModel({
+    required FORM_INPUT? formInput,
+  }) {
+    return XStageFormModel<
+        STAGE_ENUM, //
+        INIT_DATA,
+        RESULT_DATA,
+        PROZESS_CONTEXT_DATA,
+        CREATION_PRESET,
+        FORM_INPUT>._(
+      formModel: this,
+      formInput: formInput,
+    );
   }
 
   @override
-  bool isEnabled() => stage.dataState.isLoaded;
+  bool isEnabled() => !stage.isLoadingInitData && !stage.isSubmitting;
 
   @override
-  bool _canResetForm() => isDirty();
+  void _refreshControlBars() => stage.ui.refreshControlBars();
 
-  @override
-  void _refreshAllViews() {
-    // FlutterArtist.desk.ui.refreshAllViews();
-  }
-
-  @override
-  void _triggerWhenFormViewVisible() {}
-
-  @override
-  void _addToRecent() {}
+  // ===========================================================================
+  // EXECUTION INTENT DISPATCHERS & HANDLERS
+  // ===========================================================================
 
   @override
   Future<void> _onChangeFromFormView({
     required Map<String, dynamic> formKeyInstantValuesInUI,
-  }) async {}
+  }) async {
+    final XActivity xActivity = _XActivityFormViewChange(formModel: this);
+    XStage xStage = xActivity.findXStageByName(stage.name)!;
+    xStage.xStageFormModel!._createAndSetFormModelExecutionIntentViewChange(
+      formKeyInstantValuesInUI: formKeyInstantValuesInUI,
+    );
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
+    await FlutterArtist.executor._executeExecutionUnitQueue(showOverlay: false);
+  }
+
+  @_ExecutionUnitMethodAnnotation()
+  @_FormViewChangeAnnotation()
+  Future<bool> _unitFormViewChanged({
+    required ExecutionTrace executionTrace,
+    required ExecutionUnitType executionUnitType,
+    required XStageFormModel thisXStageFormModel,
+    required FormModelViewChangeIntent executionIntent,
+  }) async {
+    __assertThisXStageFormModel(thisXStageFormModel);
+    thisXStageFormModel._createAndSetFormModelExecutionIntentDone();
+
+    executionIntent.resultWrapper._setResult(
+      FormModelViewChangedResult(),
+      objectCaller: this,
+      methodName: '_unitFormViewChanged',
+    );
+
+    await _startNewFormActivity(
+      executionTrace: executionTrace,
+      creationPreset: null,
+      formInput: null,
+      activityType: FormActivityType.updateFromFormView,
+      formKeyInstantValuesInUI: executionIntent.formKeyInstantValuesInUI,
+    );
+    return true;
+  }
+
+  @_ExecutionUnitMethodAnnotation()
+  @_StageFormModelLoadDataAnnotation()
+  Future<bool> _unitLoadFormData({
+    required ExecutionTrace executionTrace,
+    required ExecutionUnitType executionUnitType,
+    required XStageFormModel thisXStageFormModel,
+    required FormModelDataLoadIntent executionIntent,
+  }) async {
+    __assertThisXStageFormModel(thisXStageFormModel);
+    thisXStageFormModel._createAndSetFormModelExecutionIntentDone();
+
+    executionIntent.resultWrapper._setResult(
+      FormModelDataLoadResult(),
+      objectCaller: this,
+      methodName: '_unitLoadFormData',
+    );
+
+    final visibleX = ui.hasVisibleViews();
+    final thisFormDataState = dataState;
+    final bool forceReloadForm = switch (thisXStageFormModel.formLoadHint) {
+      FormLoadHint.force => true,
+      FormLoadHint.forceIfNeed => (thisFormDataState.isPending ||
+          thisFormDataState.isFatalError ||
+          thisFormDataState.isStale),
+      FormLoadHint.auto => visibleX &&
+          (thisFormDataState.isPending ||
+              thisFormDataState.isFatalError ||
+              thisFormDataState.isStale),
+    };
+
+    if (!forceReloadForm) {
+      if (!dataState.isLoaded) {
+        _clearDataWithDataState(formDataState: const FormDataStatePending());
+      }
+      return true;
+    }
+
+    final formInput = thisXStageFormModel.formInput as FORM_INPUT?;
+    return await _startNewFormActivity(
+      executionTrace: executionTrace,
+      creationPreset: null,
+      formInput: formInput,
+      activityType: FormActivityType.startCreatingOrEditing,
+      formKeyInstantValuesInUI: null,
+    );
+  }
+
+  @_ExecutionUnitMethodAnnotation()
+  @_FormModelPatchFormFieldsAnnotation()
+  Future<bool> _unitPatchFormFields({
+    required ExecutionTrace executionTrace,
+    required ExecutionUnitType executionUnitType,
+    required XStageFormModel thisXStageFormModel,
+    required FormModelPatchFormFieldsIntent<FORM_INPUT> executionIntent,
+  }) async {
+    __assertThisXStageFormModel(thisXStageFormModel);
+    thisXStageFormModel._createAndSetFormModelExecutionIntentDone();
+
+    executionIntent.resultWrapper._setResult(
+      FormModelPatchFormFieldsResult(),
+      objectCaller: this,
+      methodName: '_unitPatchFormFields',
+    );
+
+    await _startNewFormActivity(
+      executionTrace: executionTrace,
+      creationPreset: null,
+      formInput: executionIntent.formInput,
+      activityType: FormActivityType.patchFormFields,
+      formKeyInstantValuesInUI: null,
+    );
+    return true;
+  }
+
+  @_RootMethodAnnotation()
+  @_FormModelPatchFormFieldsAnnotation()
+  Future<FormModelPatchFormFieldsResult> patchFormFields({
+    required FORM_INPUT formInput,
+  }) async {
+    final Actionable<FormModelPatchFormFieldsPrecheck> actionable =
+        __canPatchFormFields(checkBusy: true);
+    if (!actionable.yes) {
+      _addErrorLogActionable(
+        shelf: null,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
+      return FormModelPatchFormFieldsResult(precheck: actionable.errCode);
+    }
+
+    final XActivity xActivity =
+        _XActivityFormModelPatchFormFields(formModel: this);
+    XStage xStage = xActivity.findXStageByName(stage.name)!;
+    final executionIntent = xStage.xStageFormModel!
+        ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_INPUT>(
+            formInput: formInput);
+
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
+    await FlutterArtist.executor._executeExecutionUnitQueue();
+    return executionIntent.result;
+  }
+
+  void __assertThisXStageFormModel(XStageFormModel thisXStageFormModel) {
+    if (!identical(thisXStageFormModel.formModel, this)) {
+      throw "Error Assert form model: ${thisXStageFormModel.formModel} - $this";
+    }
+  }
 }

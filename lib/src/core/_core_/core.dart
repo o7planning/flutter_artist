@@ -310,6 +310,8 @@ part '_form_/__core__/_form_data_state.dart';
 
 part '_form_/__core__/_base_form_model.dart';
 
+part '_form_/__core__/_activity_form_model.dart';
+
 part '_form_/_block_form_/_block_form_model.dart';
 
 part '_form_/_stage_form_/_stage_form_model.dart';
@@ -449,6 +451,8 @@ part '_core_x_/_x_filter_model.dart';
 part '_core_x_/_x_block_form_model.dart';
 
 part '_core_x_/_x_task_form_model.dart';
+
+part '_core_x_/_x_stage_form_model.dart';
 
 part '_core_x_/_x_scalar.dart';
 
@@ -710,9 +714,15 @@ part '_execution_unit_/activity_member/_stage_submit_execution_unit.dart';
 
 part '_execution_unit_/activity_member/_task_form_model_load_data_execution_unit.dart';
 
+part '_execution_unit_/activity_member/_stage_form_model_load_data_execution_unit.dart';
+
 part '_execution_unit_/activity_member/_task_form_view_change_execution_unit.dart';
 
+part '_execution_unit_/activity_member/_stage_form_view_change_execution_unit.dart';
+
 part '_execution_unit_/activity_member/_task_form_model_patch_form_fields_execution_unit.dart';
+
+part '_execution_unit_/activity_member/_stage_form_model_patch_form_fields_execution_unit.dart';
 
 part '_execution_unit_/activity_member/_stage_load_init_data_execution_unit.dart';
 
@@ -1091,6 +1101,10 @@ class _BlockFormModelLoadDataAnnotation {
 
 class _TaskFormModelLoadDataAnnotation {
   const _TaskFormModelLoadDataAnnotation();
+}
+
+class _StageFormModelLoadDataAnnotation {
+  const _StageFormModelLoadDataAnnotation();
 }
 
 class _FormViewChangeAnnotation {

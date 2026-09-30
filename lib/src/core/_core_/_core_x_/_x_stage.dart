@@ -9,6 +9,9 @@ class XStage<
     CREATION_PRESET extends CreationPreset,
     FORM_INPUT extends FormInput> {
   final XProzess xProzess;
+
+  final XStageFormModel? xStageFormModel;
+
   final Stage<
       STAGE_ENUM, //
       STAGE_INIT_DATA,
@@ -46,10 +49,28 @@ class XStage<
   XStage._({
     required this.xProzess,
     required this.stage,
+    required this.xStageFormModel,
   });
 
-  /// Evaluates if this specific stage is active and has pending execution units.
+  // ***************************************************************************
+  // ***************************************************************************
+
   NxtExecutionUnit _getNextExecutionUnit({required bool debug}) {
+    NxtExecutionUnit next = __getNextExecutionUnit(debug: debug);
+    if (next.yes) {
+      return next;
+    }
+    if (xStageFormModel != null) {
+      next = xStageFormModel!._getNextExecutionUnit(debug: debug);
+      if (next.yes) {
+        return next;
+      }
+    }
+    return next;
+  }
+
+  /// Evaluates if this specific stage is active and has pending execution units.
+  NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
     final bool isCurrentStage = xProzess.flow.currentStageId == stageId;
     if (!isCurrentStage) {
       return NxtExecutionUnit.no(
