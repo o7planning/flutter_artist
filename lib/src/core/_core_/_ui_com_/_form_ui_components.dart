@@ -20,6 +20,15 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+    // TODO: implement findMountedWidgetStates
+    throw UnimplementedError();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   /// Returns all active Flutter FormBuilderState instances currently mounted in visible form views.
   // OLD: _activeFormBuilderStates
   List<FormBuilderState> get _visibleFormBuilderStates {
@@ -176,7 +185,7 @@ class _FormUiComponents extends _UiComponents {
     }
 
     if (isVisible) {
-      formModel._addToRecent();
+      FlutterArtist._addRecentModule( formModel.module );
     }
   }
 

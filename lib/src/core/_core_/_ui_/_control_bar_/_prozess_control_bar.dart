@@ -70,7 +70,9 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         if (!widget.config.allowBackButton) return null;
         // If history exists, step back internally in the pipeline; otherwise pop the screen.
         final bool canStepBack = widget.prozess.stageHistory.isNotEmpty;
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: canStepBack ? "Previous Stage" : "Back",
           iconData: FaIconConstants.formBackIconData,
           onPressed: () async {
@@ -84,7 +86,9 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
 
       case ProzessControlBarItemType.cancel:
         if (!widget.config.allowCancelButton) return null;
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: "Cancel Prozess",
           iconData: Icons.cancel_outlined,
           customColor: widget.style.deleteIconColor,
@@ -98,7 +102,9 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
 
       case ProzessControlBarItemType.reset:
         if (!widget.config.allowResetButton) return null;
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: "Reset All Stages",
           iconData: FaIconConstants.formCleanIconData,
           onPressed: () {
@@ -108,7 +114,9 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
 
       case ProzessControlBarItemType.debugInspector:
         if (!widget.config.allowDebugInspectorButton) return null;
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: "Inspect Prozess Context",
           iconData: Icons.account_tree_outlined,
           onPressed: () {
@@ -117,7 +125,9 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         );
 
       case ProzessControlBarItemType.custom:
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: item.tooltip ?? "Custom",
           iconData: item.iconData ?? CupertinoIcons.question_diamond,
           onPressed: item.onPressed == null
@@ -130,33 +140,6 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
     }
   }
 
-  Widget _buildButton({
-    required String tooltip,
-    required IconData iconData,
-    bool onAction = false,
-    required VoidCallback? onPressed,
-    Color? customColor,
-  }) {
-    if (widget.style.buttonBuilder != null) {
-      return widget.style.buttonBuilder!(
-        context,
-        iconData,
-        onPressed,
-        onAction,
-        tooltip,
-      );
-    }
-
-    return _ControlBarButton(
-      tooltip: tooltip,
-      iconData: iconData,
-      onAction: onAction,
-      onPressed: onPressed,
-      iconColor: onPressed == null
-          ? widget.style.disabledIconColor
-          : (customColor ?? widget.style.activeIconColor),
-    );
-  }
 
   @override
   String getWidgetOwnerClassName() =>

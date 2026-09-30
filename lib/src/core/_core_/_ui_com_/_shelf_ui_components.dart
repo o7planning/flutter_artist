@@ -5,7 +5,7 @@ part of '../core.dart';
 ///
 /// Functions as the top-level shelf coordinator orchestrating reactive updates downward
 /// to root blocks, root scalars, and independent filter models.
-class _ShelfUiComponents extends _UiComponents {
+class _ShelfUiComponents extends _ModuleUiComponents {
   /// The owner shelf bound to this UI coordinator.
   final Shelf shelf;
 
@@ -65,6 +65,7 @@ class _ShelfUiComponents extends _UiComponents {
 
   /// Cascades a rebuild request to all mounted views within this shelf (filters, scalars, and blocks).
   // OLD: updateAllUiComponents
+  @override
   void refreshAllViews() {
     try {
       print("|----> ${getClassName(shelf)}.ui.refreshAllViews()");
@@ -295,6 +296,22 @@ class _ShelfUiComponents extends _UiComponents {
 
   // ***************************************************************************
   // ***************************************************************************
+
+  @override
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+    return debugFindMountedWidgetStates(
+      withBlockContentView: true,
+      withScalarContentView: true,
+      withPagination: true,
+      withFilter: true,
+      withSort: true,
+      withForm: true,
+      withBlockControlBar: true,
+      withScalarControlBar: true,
+      withControl: true,
+      activeOnly: true,
+    );
+  }
 
   @DebugMethodAnnotation()
   Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({

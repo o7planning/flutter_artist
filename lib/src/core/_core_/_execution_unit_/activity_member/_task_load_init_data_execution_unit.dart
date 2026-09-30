@@ -3,7 +3,6 @@ part of '../../core.dart';
 class _TaskLoadInitDataExecutionUnit<
 TASK_INIT_DATA extends TaskInitData, //
 TASK_RESULT_DATA extends TaskResultData,
-CREATION_PRESET extends CreationPreset,
 FORM_INPUT extends FormInput> extends _ActivityMemberExecutionUnit {
   final XTask xTask;
 

@@ -1,13 +1,13 @@
 part of '../core.dart';
 
-interface class IContextProviderViewState {
+abstract interface class IContextProviderViewState {
   ShowMode showMode = ShowMode.production;
 
-  ContextProviderViewType get type => throw UnimplementedError("type");
+  ContextProviderViewType get type;
 
-  String get locationInfo => throw UnimplementedError("locationInfo");
+  String get locationInfo;
 
-  String get description => throw UnimplementedError("description");
+  String get description;
 
   void setState(Function() func) {}
 }
@@ -15,7 +15,7 @@ interface class IContextProviderViewState {
 // Google Search: Flutter NavigatorObserver Aware.
 abstract class _ContextProviderViewState<W extends _ContextProviderView>
     extends State<W> //
-// Google Search: Flutter NavigatorObserver Aware.
+    // Google Search: Flutter NavigatorObserver Aware.
     with
         RouteAware
     implements

@@ -29,11 +29,20 @@ class _StorageUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+    // TODO: implement findMountedWidgetStates
+    throw UnimplementedError();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   /// Checks whether any StorageSectionView is actively visible on screen.
   // OLD: hasActiveUiComponent
   bool hasVisibleViews() {
     for (final _ContextProviderViewState widgetState
-    in _storageSectionViewStates.keys) {
+        in _storageSectionViewStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -71,7 +80,7 @@ class _StorageUiComponents extends _UiComponents {
   // OLD: updateAllStorageSectionViews
   void refreshStorageSectionViews() {
     for (final _ContextProviderViewState widgetState
-    in _storageSectionViewStates.keys) {
+        in _storageSectionViewStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }

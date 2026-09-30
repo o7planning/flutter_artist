@@ -4,7 +4,7 @@ class _ActivityV1UiComponents extends _UiComponents {
   final ActivityV1 activity;
 
   final Map<_ContextProviderViewState, XState>
-  __activityContentViewWidgetStates = {};
+      __activityContentViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -26,9 +26,17 @@ class _ActivityV1UiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+    return {};
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void refreshActivityContentViews({bool force = false}) {
     for (_ContextProviderViewState widgetState
-    in __activityContentViewWidgetStates.keys) {
+        in __activityContentViewWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -173,10 +181,8 @@ class _ActivityV1UiComponents extends _UiComponents {
     );
     __activityContentViewWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
     bool hasXActivityRepCURRENT = hasActivityContext(
       includeDescendants: true,

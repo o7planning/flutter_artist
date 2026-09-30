@@ -2,7 +2,7 @@ part of '../core.dart';
 
 int __activitySequence = 0;
 
-abstract class Activity extends _Core {
+abstract class Activity extends FeatureModule {
   Activity get activity => this;
 
   late final ActivityStructure _activityStruct;
@@ -20,33 +20,21 @@ abstract class Activity extends _Core {
   List<Task> get tasks => List.unmodifiable(_tasks);
 
   final Map<String, Prozess> __prozessMap = {};
-  final List<Prozess> _prozesss = [];
+  final List<Prozess> _prozesses = [];
 
-  List<Prozess> get prozesss => List.unmodifiable(_prozesss);
+  List<Prozess> get prozesses => List.unmodifiable(_prozesses);
 
   final List<TaskFormModel> _allTaskFormModels = [];
   final List<StageFormModel> _allStageFormModels = [];
 
   late final int _activityLocalId = __activitySequence++;
 
-  String get name => FlutterArtist.desk._getActivityV1Name(runtimeType);
+  @override
+  String get name => FlutterArtist.desk._getActivityName(runtimeType);
 
   String get activityId => "${name}_$_activityLocalId";
 
-  void _markAsOrphaned(bool orphaned) {
-    if (orphaned) {
-      __orphanedAt = DateTime.now();
-    } else {
-      __orphanedAt = null;
-    }
-  }
-
-  DateTime? __orphanedAt;
-
-  DateTime? get orphanedAt => __orphanedAt;
-
-  bool get markedAsOrphan => __orphanedAt != null;
-
+  @override
   late final ui = _ActivityUiComponents(activity: this);
 
   Activity() {
@@ -103,7 +91,7 @@ abstract class Activity extends _Core {
         );
       }
       __prozessMap[prozess.name] = prozess;
-      _prozesss.add(prozess);
+      _prozesses.add(prozess);
       prozess._bindToActivity(this);
 
       // Register Stage Form Models

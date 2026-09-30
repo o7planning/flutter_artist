@@ -4,15 +4,22 @@ part of '../../core.dart';
 abstract class TaskFormModel<
         INIT_DATA extends TaskInitData,
         RESULT_DATA extends TaskResultData,
-        CREATION_PRESET extends CreationPreset,
         FORM_INPUT extends FormInput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends ActivityFormModel<INIT_DATA, RESULT_DATA, CREATION_PRESET,
-        FORM_INPUT, ADDITIONAL_FORM_RELATED_DATA> {
-  late final Task<INIT_DATA, RESULT_DATA, CREATION_PRESET, FORM_INPUT> task;
+    extends ActivityFormModel<
+        INIT_DATA, //
+        RESULT_DATA,
+        FORM_INPUT,
+        ADDITIONAL_FORM_RELATED_DATA> {
+  late final Task<INIT_DATA, RESULT_DATA, FORM_INPUT> task;
+
+  @override
+  Task get host => task;
 
   @override
   Activity get activity => task.activity;
+
+  Activity get module => task.module;
 
   @override
   INIT_DATA? get initData => task.initData;
@@ -29,13 +36,13 @@ abstract class TaskFormModel<
   @override
   String debugClassParametersDefinition() {
     return "<${getInitDataType()}, ${getResultDataType()}, "
-        "${getCreationPresetType()}, ${getFormInputType()}, ${getAdditionalFormRelatedDataType()}>";
+        "${getFormInputType()}, ${getAdditionalFormRelatedDataType()}>";
   }
 
   // ===========================================================================
 
   void _bindToTask(
-    Task<INIT_DATA, RESULT_DATA, CREATION_PRESET, FORM_INPUT> parentTask,
+    Task<INIT_DATA, RESULT_DATA, FORM_INPUT> parentTask,
   ) {
     task = parentTask;
   }
@@ -91,7 +98,6 @@ abstract class TaskFormModel<
 
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      creationPreset: null,
       formInput: null,
       activityType: FormActivityType.updateFromFormView,
       formKeyInstantValuesInUI: executionIntent.formKeyInstantValuesInUI,
@@ -139,7 +145,6 @@ abstract class TaskFormModel<
     final formInput = thisXTaskFormModel.formInput as FORM_INPUT?;
     return await _startNewFormActivity(
       executionTrace: executionTrace,
-      creationPreset: null,
       formInput: formInput,
       activityType: FormActivityType.startCreatingOrEditing,
       formKeyInstantValuesInUI: null,
@@ -165,7 +170,6 @@ abstract class TaskFormModel<
 
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      creationPreset: null,
       formInput: executionIntent.formInput,
       activityType: FormActivityType.patchFormFields,
       formKeyInstantValuesInUI: null,

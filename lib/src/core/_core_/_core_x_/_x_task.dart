@@ -4,8 +4,7 @@ part of '../core.dart';
 /// single-stage progress lifecycle, and state mutation.
 class XTask<
     TASK_INIT_DATA extends TaskInitData,
-    TASK_RESULT_DATA extends TaskResultData, //
-    CREATION_PRESET extends CreationPreset,
+    TASK_RESULT_DATA extends TaskResultData, //\
     FORM_INPUT extends FormInput> {
   final XActivity xActivity;
 
@@ -14,7 +13,6 @@ class XTask<
   final Task<
       TASK_INIT_DATA, //
       TASK_RESULT_DATA,
-      CREATION_PRESET,
       FORM_INPUT> task;
 
   bool _executed = false;
@@ -114,7 +112,6 @@ class XTask<
           executionUnit: _TaskLoadInitDataExecutionUnit<
               TASK_INIT_DATA, //
               TASK_RESULT_DATA,
-              CREATION_PRESET,
               FORM_INPUT>(
             xTask: this,
             executionIntent: intentToUse,

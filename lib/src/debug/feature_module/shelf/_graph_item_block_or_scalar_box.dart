@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../core/_core_/core.dart';
-import '../../core/icon/icon_constants.dart';
-import '../../core/utils/_class_utils.dart';
-import '../../core/utils/_text_size_utils.dart';
-import '../../core/utils/_tooltip_utils.dart';
-import '../constants/_debug_constants.dart';
-import '../app/_block_or_scalar.dart';
+import '../../../core/_core_/core.dart';
+import '../../../core/icon/icon_constants.dart';
+import '../../../core/utils/_class_utils.dart';
+import '../../../core/utils/_text_size_utils.dart';
+import '../../../core/utils/_tooltip_utils.dart';
+import '../../constants/_debug_constants.dart';
+import '../../app/_block_or_scalar.dart';
 
 class GraphItemBlockOrScalarBox extends StatefulWidget {
   final BlockOrScalar blockOrScalar;

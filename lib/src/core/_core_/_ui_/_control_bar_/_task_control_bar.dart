@@ -67,7 +67,9 @@ class _TaskControlBarState extends _BaseControlBarState<
     switch (type) {
       case TaskControlBarItemType.back:
         if (!widget.config.allowBackButton) return null;
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: "Back",
           iconData: FaIconConstants.formBackIconData,
           onPressed: Navigator.of(context).canPop()
@@ -77,7 +79,9 @@ class _TaskControlBarState extends _BaseControlBarState<
 
       case TaskControlBarItemType.loadInitData:
         if (!widget.config.allowLoadInitDataButton) return null;
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: "Load Init Data",
           iconData: FaIconConstants.formRefreshIconData,
           onAction: widget.task.isLoadingInitData,
@@ -90,19 +94,44 @@ class _TaskControlBarState extends _BaseControlBarState<
         if (!widget.config.allowSubmitButton) return null;
         // Submit is active only when INIT_DATA is loaded or task is ready
         final bool canSubmit = widget.task.dataState.isLoaded;
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: "Submit",
-          iconData: FaIconConstants.formSaveIconData,
+          iconData: FaIconConstants.submitIconData,
           onAction: widget.task.isExecuting,
           onPressed: canSubmit
               ? () async {
-            await widget.task.submit();
-          }
+                  await widget.task.submit();
+                }
+              : null,
+        );
+
+      case TaskControlBarItemType.debugForm:
+        if (!widget.config.allowDebugFormModelInspectorButton) return null;
+        Actionable actionable = widget.task.canShowFormInfo();
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
+          tooltip: "Debug Form Model Inspector",
+          iconData: FaIconConstants.formIconData,
+          onAction: false,
+          onPressed: actionable.yes
+              ? () {
+                  DebugFormModelInspectorDialog.show(
+                    context: context,
+                    locationInfo:
+                        getClassNameWithoutGenerics(widget.ownerClassInstance),
+                    formModel: widget.task.formModel!,
+                  );
+                }
               : null,
         );
 
       case TaskControlBarItemType.custom:
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: item.tooltip ?? "Custom",
           iconData: item.iconData ?? CupertinoIcons.question_diamond,
           onPressed: item.onPressed == null
@@ -113,34 +142,6 @@ class _TaskControlBarState extends _BaseControlBarState<
       default:
         return null;
     }
-  }
-
-  Widget _buildButton({
-    required String tooltip,
-    required IconData iconData,
-    bool onAction = false,
-    required VoidCallback? onPressed,
-    Color? customColor,
-  }) {
-    if (widget.style.buttonBuilder != null) {
-      return widget.style.buttonBuilder!(
-        context,
-        iconData,
-        onPressed,
-        onAction,
-        tooltip,
-      );
-    }
-
-    return _ControlBarButton(
-      tooltip: tooltip,
-      iconData: iconData,
-      onAction: onAction,
-      onPressed: onPressed,
-      iconColor: onPressed == null
-          ? widget.style.disabledIconColor
-          : (customColor ?? widget.style.activeIconColor),
-    );
   }
 
   @override

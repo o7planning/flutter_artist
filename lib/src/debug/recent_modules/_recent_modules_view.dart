@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../../core/_core_/core.dart';
 import '../__root_debug_view.dart';
 
-class RecentShelvesView extends StatelessWidget {
+class RecentModulesView extends StatelessWidget {
   final RootDebugController controller;
   final bool showTitle;
 
-  const RecentShelvesView({
+  const RecentModulesView({
     super.key,
     this.showTitle = true,
     required this.controller,
@@ -15,19 +15,18 @@ class RecentShelvesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Shelf> recentShelves =
-        FlutterArtist.storage.getRecentShelves(visibleOnly: true);
+    List<FeatureModule> recentModules =
+        FlutterArtist. getRecentModules(visibleOnly: true);
 
     return Center(
       child: Wrap(
-        children: recentShelves
+        children: recentModules
             .map(
-              (shelf) => ElevatedButton(
+              (module) => ElevatedButton(
                 onPressed: () {
-                  /// controller.showDebugShelfState(shelf: shelf);
-                  controller.showDebugInternalEventGraph(shelf: shelf);
+                  controller.showDebugInternalEventGraph(module: module);
                 },
-                child: Text(shelf.name),
+                child: Text(module.name),
               ),
             )
             .toList(),

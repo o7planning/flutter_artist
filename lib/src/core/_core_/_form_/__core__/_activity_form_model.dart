@@ -7,11 +7,9 @@ part of '../../core.dart';
 abstract class ActivityFormModel<
         INIT_DATA extends Object,
         RESULT_DATA extends Object,
-        CREATION_PRESET extends CreationPreset,
         FORM_INPUT extends FormInput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel<CREATION_PRESET, FORM_INPUT,
-        ADDITIONAL_FORM_RELATED_DATA> {
+    extends BaseFormModel<FORM_INPUT, ADDITIONAL_FORM_RELATED_DATA> {
   Activity get activity;
 
   @override
@@ -33,6 +31,77 @@ abstract class ActivityFormModel<
   // ===========================================================================
 
   @override
+  Map<String, dynamic>? _internalResolveInitialSimplePropValues({
+    required ExecutionTrace executionTrace,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
+  }) {
+    final INIT_DATA? currentInitData = initData;
+    if (currentInitData == null) {
+      return null;
+    }
+
+    executionTrace.addControllableCall(
+      codeId: "#96200",
+      caller: this,
+      methodName: "extractSimplePropValuesFromInitData",
+      suffixShortDesc: "",
+      parameters: {
+        "additionalFormRelatedData": additionalFormRelatedData,
+        "initData": currentInitData,
+      },
+    );
+    return extractSimplePropValuesFromInitData(
+      additionalFormRelatedData: additionalFormRelatedData,
+      initData: currentInitData,
+    );
+  }
+
+  @override
+  OptValueWrap? _internalResolveInitialMultiOptPropValue({
+    required ExecutionTrace executionTrace,
+    required String multiOptPropName,
+    required SelectionType selectionType,
+    required XData multiOptPropXData,
+    required Object? parentMultiOptPropValue,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
+  }) {
+    final INIT_DATA? currentInitData = initData;
+    if (currentInitData == null) {
+      return null;
+    }
+
+    executionTrace.addControllableCall(
+      codeId: "#98200",
+      caller: this,
+      methodName: "extractMultiOptPropValueFromInitData",
+      suffixShortDesc: "",
+      parameters: {
+        "multiOptPropName": multiOptPropName,
+        "parentMultiOptPropValue": parentMultiOptPropValue,
+        "selectionType": selectionType,
+        "multiOptPropXData": multiOptPropXData,
+        "initData": currentInitData,
+        "additionalFormRelatedData": additionalFormRelatedData,
+      },
+    );
+    OptValueWrap? valueWrap = extractMultiOptPropValueFromInitData(
+      multiOptPropName: multiOptPropName,
+      selectionType: selectionType,
+      multiOptPropXData: multiOptPropXData,
+      parentMultiOptPropValue: parentMultiOptPropValue,
+      additionalFormRelatedData: additionalFormRelatedData,
+      initData: currentInitData,
+    );
+    if (valueWrap == null) {
+      __createNullValueWrapAppError(
+        methodName: "extractMultiOptPropValueFromInitData",
+        multiOptPropName: multiOptPropName,
+      );
+    }
+    return valueWrap;
+  }
+
+  @override
   Future<XData?> _internalPerformLoadMultiOptPropXData({
     required String multiOptPropName,
     required SelectionType selectionType,
@@ -52,36 +121,6 @@ abstract class ActivityFormModel<
   }
 
   @override
-  Map<String, dynamic>? _internalExtractSimplePropValuesFromDomainData({
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required Object rawDomainData,
-  }) {
-    return extractSimplePropValuesFromInitData(
-      additionalFormRelatedData: additionalFormRelatedData,
-      initData: rawDomainData as INIT_DATA,
-    );
-  }
-
-  @override
-  OptValueWrap? _internalExtractMultiOptPropValueFromDomainData({
-    required String multiOptPropName,
-    required SelectionType selectionType,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required Object rawDomainData,
-  }) {
-    return extractMultiOptPropValueFromInitData(
-      multiOptPropName: multiOptPropName,
-      selectionType: selectionType,
-      multiOptPropXData: multiOptPropXData,
-      parentMultiOptPropValue: parentMultiOptPropValue,
-      additionalFormRelatedData: additionalFormRelatedData,
-      initData: rawDomainData as INIT_DATA,
-    );
-  }
-
-  @override
   Future<ADDITIONAL_FORM_RELATED_DATA>
       _internalPerformLoadAdditionalFormRelatedData({
     required Object? rawDomainData,
@@ -91,55 +130,9 @@ abstract class ActivityFormModel<
     );
   }
 
-  @override
-  Map<String, dynamic>? _internalSpecifyCreationValuesForSimpleProps({
-    required CREATION_PRESET creationPreset,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-  }) {
-    return specifyCreationValuesForSimpleProps(
-      creationPreset: creationPreset,
-      additionalFormRelatedData: additionalFormRelatedData,
-    );
-  }
-
-  @override
-  OptValueWrap? _internalSpecifyCreationValueForMultiOptProp({
-    required String multiOptPropName,
-    required SelectionType selectionType,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
-    required CREATION_PRESET? creationPreset,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-  }) {
-    return specifyCreationValueForMultiOptProp(
-      multiOptPropName: multiOptPropName,
-      selectionType: selectionType,
-      multiOptPropXData: multiOptPropXData,
-      parentMultiOptPropValue: parentMultiOptPropValue,
-      creationPreset: creationPreset,
-      additionalFormRelatedData: additionalFormRelatedData,
-    );
-  }
-
   // ===========================================================================
   // ABSTRACT CONTRACTS (User override in concrete FormModels)
   // ===========================================================================
-
-  @_AbstractMethodAnnotation()
-  OptValueWrap? specifyCreationValueForMultiOptProp({
-    required String multiOptPropName,
-    required SelectionType selectionType,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
-    required CREATION_PRESET? creationPreset,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-  });
-
-  @_AbstractMethodAnnotation()
-  Map<String, dynamic>? specifyCreationValuesForSimpleProps({
-    required CREATION_PRESET creationPreset,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-  });
 
   @_AbstractMethodAnnotation()
   Future<XData?> performLoadMultiOptPropXDataForInitData({
@@ -179,10 +172,6 @@ abstract class ActivityFormModel<
 
   Type getInitDataType() => INIT_DATA;
   Type getResultDataType() => RESULT_DATA;
-  Type getFormInputType() => FORM_INPUT;
-
-  @override
-  void _addToRecent() => FlutterArtist.desk._addRecentActivity(activity);
 
   @override
   void _triggerWhenFormViewVisible() =>

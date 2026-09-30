@@ -2,7 +2,7 @@ part of '../core.dart';
 
 int __shelfSequence = 0;
 
-abstract class Shelf extends _Core {
+abstract class Shelf extends FeatureModule {
   Shelf get shelf => this;
 
   bool get deferReactions {
@@ -21,20 +21,6 @@ abstract class Shelf extends _Core {
 
   late final ShelfConfig config;
   late final ShelfEffectiveConfig effectiveConfig;
-
-  void _markAsOrphaned(bool orphaned) {
-    if (orphaned) {
-      __orphanedAt = DateTime.now();
-    } else {
-      __orphanedAt = null;
-    }
-  }
-
-  DateTime? __orphanedAt;
-
-  DateTime? get orphanedAt => __orphanedAt;
-
-  bool get markedAsOrphan => __orphanedAt != null;
 
   late final ShelfStructure _shelfStruct;
 
@@ -99,10 +85,12 @@ abstract class Shelf extends _Core {
 
   late final int _shelfLocalId = __shelfSequence++;
 
+  @override
   String get name => FlutterArtist.storage._getShelfName(runtimeType);
 
   String get shelfId => "${name}_$_shelfLocalId";
 
+  @override
   late final ui = _ShelfUiComponents(shelf: this);
 
   // ***************************************************************************
@@ -410,23 +398,13 @@ abstract class Shelf extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showDebugShelfStructureInspector() async {
+  // OLD: showDebugShelfStructureInspector
+  Future<void> showFeatureModuleStructureInspector() async {
     BuildContext context = FlutterArtistCore.context;
     //
-    await DebugShelfStructureInspectorDialog.show(
+    await DebugFeatureModuleStructureInspectorDialog.show(
       context: context,
-      shelf: this,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Future<void> showDebugUiContextInspector() async {
-    BuildContext context = FlutterArtistCore.context;
-    await DebugUiContextInspectorDialog.show(
-      context: context,
-      shelf: this,
+      module: this,
     );
   }
 

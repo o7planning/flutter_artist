@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/_core_/core.dart';
 import 'internal_event/x/_internal_event_graph_view_test2b.dart';
-import 'recent_shelves/_recent_shelves_view.dart';
+import 'recent_modules/_recent_modules_view.dart';
 import 'state_view/_debug_shelf_state_view.dart';
 
 part 'root_debug_controller.dart';
@@ -30,8 +30,8 @@ class _RootDebugViewState extends State<RootDebugView> {
     super.initState();
     //
     controller = RootDebugController(
-      showDebugShelfState: _showDebugShelfState,
-      showRecentShelves: _showRecentShelves,
+      showDebugFeatureModuleState: _showDebugFeatureModuleState,
+      showRecentModules: _showRecentModules,
       showDebugInternalEventGraph: _showDebugInternalEventGraph,
     );
   }
@@ -47,7 +47,7 @@ class _RootDebugViewState extends State<RootDebugView> {
           children: [
             ElevatedButton(
               onPressed: () {
-                _showRecentShelves();
+                _showRecentModules();
               },
               child: Text("Recent Shelves"),
             ),
@@ -72,20 +72,21 @@ class _RootDebugViewState extends State<RootDebugView> {
     setState(() {});
   }
 
-  void _showDebugShelfState({required Shelf shelf}) {
-    currentView = DebugShelfStateView(
-      controller: controller,
-      shelf: shelf,
-    );
+  void _showDebugFeatureModuleState({required FeatureModule module}) {
+    // currentView = DebugShelfStateView(
+    //   controller: controller,
+    //   shelf: shelf,
+    // );
+    currentView = Text("TODO _showDebugFeatureModuleState");
     setState(() {});
   }
 
-  void _showRecentShelves() {
-    currentView = RecentShelvesView(controller: controller);
+  void _showRecentModules() {
+    currentView = RecentModulesView(controller: controller);
     setState(() {});
   }
 
-  void _showDebugInternalEventGraph({required Shelf shelf}) {
+  void _showDebugInternalEventGraph({required FeatureModule module}) {
     // currentView = InternalEventGraphView(
     //   controller: controller,
     //   shelf: shelf,

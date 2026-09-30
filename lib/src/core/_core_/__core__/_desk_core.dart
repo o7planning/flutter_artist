@@ -4,8 +4,6 @@ class _DeskCore extends _DeskCoreV1 {
   final Map<String, ActivityCreator> __activityCreatorMap = {};
   final Map<String, Activity> _activityMap = {};
 
-  final List<Activity> _recentActivities = [];
-
   List<String> get activeActivityNames => List.unmodifiable(_activityMap.keys);
 
   List<Activity> get activeActivities => List.unmodifiable(_activityMap.values);
@@ -88,7 +86,6 @@ class _DeskCore extends _DeskCoreV1 {
   }
 
   void __clearActivities() {
-    _recentActivities.clear();
     __activityCreatorMap.clear();
     _activityMap.clear();
   }
@@ -112,9 +109,5 @@ class _DeskCore extends _DeskCoreV1 {
           "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(activity)} - ${DateTime.now()}");
       activity._markAsOrphaned(false);
     }
-  }
-
-  void _addRecentActivity(Activity activity) {
-    //
   }
 }

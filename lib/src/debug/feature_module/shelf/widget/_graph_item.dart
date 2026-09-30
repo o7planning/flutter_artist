@@ -1,5 +1,7 @@
-import '../../../core/_core_/core.dart';
-import '../../app/_block_or_scalar.dart';
+
+
+import '../../../../core/_core_/core.dart';
+import '../../../app/_block_or_scalar.dart';
 
 class GraphItem {
   BlockOrScalar? blockOrScalar;
@@ -13,9 +15,12 @@ class GraphItem {
 
   String get name {
     if (shelf != null) {
-      return "-";
+      return "Shelf-${shelf!.name}";
     } else {
-      return blockOrScalar!.name;
+      // Distinguish between Block and Scalar to avoid key collisions in GraphView
+      return blockOrScalar!.isBlock
+          ? "Blk-${blockOrScalar!.name}"
+          : "Scalar-${blockOrScalar!.name}";
     }
   }
 }

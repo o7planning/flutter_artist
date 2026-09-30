@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../../core/_core_/core.dart';
-import '../../../core/icon/icon_constants.dart';
-import '../../../core/utils/_class_utils.dart';
+import '../../../../core/_core_/core.dart';
+import '../../../../core/icon/icon_constants.dart';
+import '../../../../core/utils/_class_utils.dart';
 
 class ShelfInfoView extends StatelessWidget {
   final Shelf? shelf;
@@ -31,12 +31,12 @@ class ShelfInfoView extends StatelessWidget {
       trailing: Tooltip(
         message: "Show Shelf Structure",
         child: SimpleSmallIconButton(
-          iconData: FaIconConstants.shelfStructureIconData,
+          iconData: FaIconConstants.moduleStructureIconData,
           iconSize: 18,
           onPressed: shelf == null
               ? null
               : () {
-                  shelf!.showDebugShelfStructureInspector();
+                  shelf!.showFeatureModuleStructureInspector();
                 },
         ),
       ),

@@ -48,16 +48,17 @@ class DebugMenuBuilder {
               _showDebugAppInspectorDialog(context);
             },
           ),
-        if (isSystemUser && FlutterArtist.canShowDebugShelfStructureInspector())
+        if (isSystemUser &&
+            FlutterArtist.canShowDebugModuleStructureInspector())
           _buildPopupMenuItem(
-            iconData: FaIconConstants.shelfStructureIconData,
-            title: 'Shelf Structure Inspector',
+            iconData: FaIconConstants.moduleStructureIconData,
+            title: 'Module Structure Inspector',
             trainingTooltip: null,
             onTap: () {
-              _showDebugShelfStructureInspector(context);
+              _showDebugModuleStructureInspector(context);
             },
           ),
-        if (isSystemUser && FlutterArtist.debugCanShowUiComponentDialog())
+        if (isSystemUser && FlutterArtist.canShowDebugUiComponentDialog())
           _buildPopupMenuItem(
             iconData: FaIconConstants.uiComponentsIconData,
             title: 'UI Context Inspector',
@@ -206,9 +207,9 @@ class DebugMenuBuilder {
     await FlutterArtist.showCodeFlowInspector();
   }
 
-  Future<void> _showDebugShelfStructureInspector(BuildContext context) async {
+  Future<void> _showDebugModuleStructureInspector(BuildContext context) async {
     Navigator.pop(context, null);
-    await FlutterArtist.showDebugShelfStructureInspector();
+    await FlutterArtist.showDebugModuleStructureInspector();
   }
 
   Future<void> _showLogViewerDialog(BuildContext context) async {

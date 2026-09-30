@@ -43,6 +43,15 @@ class _ProzessUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+    // TODO: implement findMountedWidgetStates
+    throw UnimplementedError();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   /// Checks whether any UI component inside this prozess (or its stages) is currently mounted.
   @override
   bool hasMountedViews() {
@@ -137,7 +146,7 @@ class _ProzessUiComponents extends _UiComponents {
     final bool visibleCurrent = hasVisibleViews();
 
     if (isVisible) {
-      FlutterArtist.desk._addRecentActivity(prozess.activity);
+      FlutterArtist._addRecentModule(prozess.activity);
     }
 
     if (!visibleOld && visibleCurrent) {

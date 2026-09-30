@@ -14,7 +14,7 @@ import '_form_model_debug_view.dart';
 import 'widgets/_prop_view.dart';
 
 class FormPropsStructureView extends StatefulWidget {
-  final BlockFormModel formModel;
+  final BaseFormModel formModel;
 
   const FormPropsStructureView({
     required super.key,

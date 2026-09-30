@@ -25,7 +25,11 @@ abstract class Prozess<
 
   late final Activity activity;
 
+  Activity get module => activity;
+
   late final ui = _ProzessUiComponents(prozess: this);
+
+  String get title => "Prozess";
 
   Prozess({required this.name}) {
     __initializeProzess();

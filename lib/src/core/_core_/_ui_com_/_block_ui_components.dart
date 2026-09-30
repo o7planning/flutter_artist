@@ -559,7 +559,7 @@ class _BlockUiComponents extends _UiComponents {
     );
     //
     if (isVisible) {
-      FlutterArtist.storage._addRecentShelf(block.shelf);
+      FlutterArtist._addRecentModule(block.shelf);
     }
   }
 
@@ -594,7 +594,7 @@ class _BlockUiComponents extends _UiComponents {
     );
     //
     if (isVisible) {
-      FlutterArtist.storage._addRecentShelf(block.shelf);
+      FlutterArtist._addRecentModule(block.shelf);
     }
     //
     if (!blockContextOld && blockContextCurrent) {
@@ -635,7 +635,7 @@ class _BlockUiComponents extends _UiComponents {
     );
     //
     if (isVisible) {
-      FlutterArtist.storage._addRecentShelf(block.shelf);
+      FlutterArtist._addRecentModule(block.shelf);
     }
     //
     if (!blockContextOld && blockContextCurrent) {
@@ -676,7 +676,7 @@ class _BlockUiComponents extends _UiComponents {
     );
     //
     if (isVisible) {
-      FlutterArtist.storage._addRecentShelf(block.shelf);
+      FlutterArtist._addRecentModule(block.shelf);
     }
     //
     if (!blockContextOld && blockContextCurrent) {
@@ -775,6 +775,20 @@ class _BlockUiComponents extends _UiComponents {
 
   // ***************************************************************************
   // ***************************************************************************
+
+  @override
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+    return debugFindMountedWidgetStates(
+      withPagination: true,
+      withBlockContentView: true,
+      withFilter: true,
+      withSort: true,
+      withForm: true,
+      withControl: true,
+      withBlockControlBar: true,
+      activeOnly: true,
+    );
+  }
 
   @DebugMethodAnnotation()
   Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({

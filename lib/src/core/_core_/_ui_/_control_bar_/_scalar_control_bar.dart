@@ -83,7 +83,9 @@ class _ScalarControlBarState extends _BaseControlBarState<
     switch (type) {
       case ScalarControlBarItemType.back:
         if (!widget.config.allowBackButton) return null;
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: "Back",
           iconData: FaIconConstants.formBackIconData,
           onPressed: Navigator.of(context).canPop()
@@ -93,7 +95,9 @@ class _ScalarControlBarState extends _BaseControlBarState<
       case ScalarControlBarItemType.query:
         if (!widget.config.allowQueryButton) return null;
         final actionable = widget.scalar.canQuery();
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: "Re Query",
           iconData: FaIconConstants.formQueryIconData,
           onAction: widget.scalar.isQuerying,
@@ -103,59 +107,39 @@ class _ScalarControlBarState extends _BaseControlBarState<
       case ScalarControlBarItemType.debugFilter:
         if (!widget.config.allowDebugFilterCriteriaInspectorButton) return null;
         bool show = widget.scalar.canShowFilterCriteria();
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: "Debug Filter Criteria Inspector",
           iconData: FaIconConstants.filterCriteriaIconData,
           onAction: false,
           onPressed: show
               ? () {
-            DebugViewerDialog.openDebugFilterCriteriaInspector(
-              context: context,
-              locationInfo: '',
-              filterModel: widget.scalar.registeredOrDefaultFilterModel,
-            );
-          }
+                  DebugViewerDialog.openDebugFilterCriteriaInspector(
+                    context: context,
+                    locationInfo: '',
+                    filterModel: widget.scalar.registeredOrDefaultFilterModel,
+                  );
+                }
               : null,
         );
 
       case ScalarControlBarItemType.custom:
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: item.tooltip ?? "Custom",
           iconData: item.iconData ?? CupertinoIcons.question_diamond,
           onAction: widget.scalar.isQuerying,
           onPressed: item.onPressed == null
               ? null
               : () {
-            item.onPressed!.call(widget.scalar, type);
-          },
+                  item.onPressed!.call(widget.scalar, type);
+                },
         );
       default:
         return null;
     }
-  }
-
-  Widget _buildButton({
-    required String tooltip,
-    required IconData iconData,
-    bool onAction = false,
-    required VoidCallback? onPressed,
-    Color? customColor,
-  }) {
-    if (widget.style.buttonBuilder != null) {
-      return widget.style.buttonBuilder!(
-          context, iconData, onPressed, onAction, tooltip);
-    }
-
-    return _ControlBarButton(
-      tooltip: tooltip,
-      iconData: iconData,
-      onAction: onAction,
-      onPressed: onPressed,
-      //
-      iconColor: onPressed == null
-          ? widget.style.disabledIconColor
-          : (customColor ?? widget.style.activeIconColor),
-    );
   }
 
   @override
@@ -163,9 +147,8 @@ class _ScalarControlBarState extends _BaseControlBarState<
       getClassNameWithoutGenerics(widget.scalar);
 
   @override
-  void addWidgetState({required bool isVisible}) =>
-      widget.scalar.ui
-          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) => widget.scalar.ui
+      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

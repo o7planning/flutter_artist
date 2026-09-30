@@ -49,7 +49,7 @@ abstract class XActivity extends XRootQueueItem {
     }
 
     // 2. Build and bind active runtime Prozesses & Stages
-    for (final Prozess prozess in activity.prozesss) {
+    for (final Prozess prozess in activity.prozesses) {
       final xProzess = prozess._createXProzess(
         xActivity: this,
       );

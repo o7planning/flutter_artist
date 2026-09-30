@@ -6,13 +6,25 @@ abstract class StageFormModel<
         INIT_DATA extends StageInitData,
         RESULT_DATA extends StageResultData,
         PROZESS_CONTEXT_DATA extends ProzessContextData,
-        CREATION_PRESET extends CreationPreset,
         FORM_INPUT extends FormInput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends ActivityFormModel<INIT_DATA, RESULT_DATA, CREATION_PRESET,
-        FORM_INPUT, ADDITIONAL_FORM_RELATED_DATA> {
-  late final Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA,
-      CREATION_PRESET, FORM_INPUT> stage;
+    extends ActivityFormModel<
+        INIT_DATA, //
+        RESULT_DATA,
+        FORM_INPUT,
+        ADDITIONAL_FORM_RELATED_DATA> {
+  late final Stage<
+      STAGE_ENUM, //
+      INIT_DATA,
+      RESULT_DATA,
+      PROZESS_CONTEXT_DATA,
+      FORM_INPUT> stage;
+
+  @override
+  Activity get module => stage.module;
+
+  @override
+  Stage get host => stage;
 
   @override
   Activity get activity => stage.activity;
@@ -35,7 +47,7 @@ abstract class StageFormModel<
   @override
   String debugClassParametersDefinition() {
     return "<${getStageEnumType()}, ${getInitDataType()}, ${getResultDataType()}, ${getProzessContextDataType()}, "
-        "${getCreationPresetType()}, ${getFormInputType()}, ${getAdditionalFormRelatedDataType()}>";
+        "${getFormInputType()}, ${getAdditionalFormRelatedDataType()}>";
   }
 
   // ===========================================================================
@@ -46,29 +58,18 @@ abstract class StageFormModel<
   // ===========================================================================
 
   void _bindToStage(
-    Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA,
-            CREATION_PRESET, FORM_INPUT>
+    Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA, FORM_INPUT>
         parentStage,
   ) {
     stage = parentStage;
   }
 
-  XStageFormModel<
-      STAGE_ENUM, //
-      INIT_DATA,
-      RESULT_DATA,
-      PROZESS_CONTEXT_DATA,
-      CREATION_PRESET,
+  XStageFormModel<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA,
       FORM_INPUT> _createXStageFormModel({
     required FORM_INPUT? formInput,
   }) {
-    return XStageFormModel<
-        STAGE_ENUM, //
-        INIT_DATA,
-        RESULT_DATA,
-        PROZESS_CONTEXT_DATA,
-        CREATION_PRESET,
-        FORM_INPUT>._(
+    return XStageFormModel<STAGE_ENUM, INIT_DATA, RESULT_DATA,
+        PROZESS_CONTEXT_DATA, FORM_INPUT>._(
       formModel: this,
       formInput: formInput,
     );
@@ -116,7 +117,6 @@ abstract class StageFormModel<
 
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      creationPreset: null,
       formInput: null,
       activityType: FormActivityType.updateFromFormView,
       formKeyInstantValuesInUI: executionIntent.formKeyInstantValuesInUI,
@@ -164,7 +164,6 @@ abstract class StageFormModel<
     final formInput = thisXStageFormModel.formInput as FORM_INPUT?;
     return await _startNewFormActivity(
       executionTrace: executionTrace,
-      creationPreset: null,
       formInput: formInput,
       activityType: FormActivityType.startCreatingOrEditing,
       formKeyInstantValuesInUI: null,
@@ -190,7 +189,6 @@ abstract class StageFormModel<
 
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      creationPreset: null,
       formInput: executionIntent.formInput,
       activityType: FormActivityType.patchFormFields,
       formKeyInstantValuesInUI: null,

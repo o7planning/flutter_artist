@@ -1,58 +1,124 @@
 part of '../../core.dart';
 
+/// Defines the structural schema, field definitions, and hierarchical relationships
+/// of a form model.
+///
+/// [FormModelStructure] acts as the declarative blueprint for all form fields,
+/// categorizing them into:
+/// - **Simple Properties** ([SimpleFormPropDef]): Discrete values such as text,
+///   integers, booleans, dates, or files that do not require option dataset lookups.
+/// - **Multi-Option Properties** ([MultiOptFormPropDef]): Selection-based properties
+///   backed by dynamic datasets ([XData]), supporting single-selection, multi-selection,
+///   and hierarchical cascading dependencies between parent and child options.
+///
+/// Form models override `defineFormModelStructure()` to supply this configuration.
+///
+/// ### Example:
+/// ```dart
+/// @override
+/// FormModelStructure defineFormModelStructure() {
+///   return FormModelStructure(
+///     simplePropDefs: [
+///       SimpleFormPropDef<int>(propName: "id"),
+///       SimpleFormPropDef<String>(propName: "name"),
+///       SimpleFormPropDef<bool>(propName: "active"),
+///       SimpleFormPropDef<String>(propName: "description"),
+///     ],
+///     multiOptPropDefs: [
+///       // Single-selection dropdown/picker:
+///       MultiOptFormPropDef<ProgramTypeInfo>.singleSelection(
+///         propName: "programType",
+///       ),
+///       // Multi-selection list or tag picker:
+///       MultiOptFormPropDef<ContributorInfo>.multiSelection(
+///         propName: "contributors",
+///       ),
+///     ],
+///   );
+/// }
+/// ```
 class FormModelStructure {
   //
   // Prop Defs:
   //
+  /// List of simple property definitions registered for this form structure.
   final List<SimpleFormPropDef> __simplePropDefs;
+
+  /// List of root multi-option property definitions registered for this form structure.
   final List<MultiOptFormPropDef> __rootMultiOptPropDefs;
 
+  /// Combined map of all property definitions mapped by their unique names.
   final Map<String, FormPropDef> __allPropDefMap = {};
+
+  /// Map of simple property definitions mapped by their unique names.
   final Map<String, SimpleFormPropDef> __simplePropDefMap = {};
+
+  /// Map of multi-option property definitions mapped by their unique names.
   final Map<String, MultiOptFormPropDef> __multiOptPropDefMap = {};
 
   //
   // FormPropModels:
   //
+  /// Map of all instantiated property models mapped by their unique names.
   final Map<String, FormPropModel> _allPropModelMapX = {};
+
+  /// List of root multi-option property models.
   final List<MultiOptFormPropModel> _rootOptPropModels = [];
+
+  /// List of simple property models.
   final List<SimpleFormPropModel> _simplePropModels = [];
+
+  /// List of calculated property models.
   final List<CalculatedFormPropModel> _calculatedPropModels = [];
 
   //
 
+  /// Flag indicating whether the form has been marked as dirty manually.
   bool __manualDirty = false;
 
+  /// Flag indicating whether the form is currently running in temporary mode.
   bool __isTempMode = false;
 
+  /// Public getter to check if the form is in temporary mode.
   bool get isTempMode => __isTempMode;
 
+  /// The reference to the parent base form model.
   late final BaseFormModel formModel;
 
+  /// Flag indicating whether the form has just been initialized.
   bool _justInitialized = false;
 
+  /// Flag indicating whether the initial form data is fully ready.
   bool _formInitialDataReady = false;
 
+  /// The internal mode of the form (e.g., creation, edit, none).
   InternalFormMode _internalFormMode = InternalFormMode.none;
 
+  /// The current state of the form data loading/processing.
   FormDataState _formDataState = FormDataStateNone();
 
+  /// Public getter for the current form data state.
   FormDataState get formDataState => _formDataState;
 
   // TODO: Delete???
+  /// Stores global error information for the form if any.
   FormErrorInfo? __formErrorInfo;
 
+  /// Checks whether the current form is in creation mode (is a new item).
   bool get isNew => _internalFormMode == InternalFormMode.creation;
 
+  /// Initializes the form model structure with given simple and multi-option property definitions.
   FormModelStructure({
     required List<SimpleFormPropDef> simplePropDefs,
     required List<MultiOptFormPropDef> multiOptPropDefs,
   })  : __simplePropDefs = [...simplePropDefs],
         __rootMultiOptPropDefs = [...multiOptPropDefs] {
+    // Initialize simple property definitions
     for (SimpleFormPropDef simplePropDef in simplePropDefs) {
       __initSimplePropDef(simplePropDef: simplePropDef);
     }
     //
+    // Initialize multi-option property definitions recursively (cascade)
     for (MultiOptFormPropDef multiOptPropDef in multiOptPropDefs) {
       __initMultiOptPropDefCascade(
         multiOptPropDef: multiOptPropDef,
@@ -62,11 +128,13 @@ class FormModelStructure {
     //
     // Create Prop Models:
     //
+    // Instantiate models for all simple property definitions
     for (SimpleFormPropDef propDef in __simplePropDefs) {
       __createSimpleFormPropModel(
         simplePropDef: propDef,
       );
     }
+    // Instantiate models for all multi-option property definitions recursively
     for (MultiOptFormPropDef rootOptDef in __rootMultiOptPropDefs) {
       __createMultiOptFormPropModelCascade(
         optPropDef: rootOptDef,
@@ -77,6 +145,7 @@ class FormModelStructure {
 
   // ***************************************************************************
 
+  /// Initializes a single simple property definition and checks for name duplicates.
   void __initSimplePropDef({
     required SimpleFormPropDef simplePropDef,
   }) {
@@ -91,6 +160,7 @@ class FormModelStructure {
 
   // ***************************************************************************
 
+  /// Recursively initializes multi-option property definitions and links parent-child relationships.
   void __initMultiOptPropDefCascade({
     required MultiOptFormPropDef multiOptPropDef,
     required MultiOptFormPropDef? parent,
@@ -116,6 +186,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Creates and registers a simple form property model from its definition.
   void __createSimpleFormPropModel({
     required SimpleFormPropDef simplePropDef,
   }) {
@@ -128,6 +199,7 @@ class FormModelStructure {
 
   // ***************************************************************************
 
+  /// Recursively creates and registers multi-option form property models.
   void __createMultiOptFormPropModelCascade({
     required MultiOptFormPropDef optPropDef,
     required MultiOptFormPropModel? parentOptModel,
@@ -153,6 +225,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Retrieves the active form error information from any property or global scope.
   FormErrorInfo? get formErrorInfo {
     for (String propName in _allPropModelMapX.keys) {
       FormPropModel prop = _allPropModelMapX[propName]!;
@@ -166,6 +239,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Clears error information across all properties and the global form scope.
   void _clearFormError() {
     for (String propName in _allPropModelMapX.keys) {
       FormPropModel prop = _allPropModelMapX[propName]!;
@@ -174,6 +248,7 @@ class FormModelStructure {
     __formErrorInfo = null;
   }
 
+  /// Sets error information for a specific property or globally if no property name is specified.
   void _setFormError(FormErrorInfo formErrorInfo) {
     if (formErrorInfo.propName == null) {
       __formErrorInfo = formErrorInfo;
@@ -187,6 +262,7 @@ class FormModelStructure {
   // ***************************************************************************
 
   // SAME-AS: #0007 (filterModelStructure.allMultiOptCriteria)
+  /// Retrieves a list of all multi-option property models in the form.
   List<MultiOptFormPropModel> get allMultiOptProps {
     return _allPropModelMapX.values
         .whereType<MultiOptFormPropModel>()
@@ -197,6 +273,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Marks root multi-option properties for reload if their criteria has changed.
   void _triggerFilterCriteriaChanged() {
     for (var rootMultiOptProp in _rootOptPropModels) {
       if (rootMultiOptProp.reloadCondition ==
@@ -206,6 +283,7 @@ class FormModelStructure {
     }
   }
 
+  /// Marks root multi-option properties for reload if the item ID has changed.
   void _triggerItemIdChanged() {
     for (var rootMultiOptProp in _rootOptPropModels) {
       if (rootMultiOptProp.reloadCondition ==
@@ -218,10 +296,12 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Sets the internal mode of the form.
   void _setInternalFormMode(InternalFormMode internalFormMode) {
     _internalFormMode = internalFormMode;
   }
 
+  /// Sets the current state of form data.
   void _setFormDataState({
     required FormDataState formDataState,
     required dynamic error,
@@ -229,6 +309,7 @@ class FormModelStructure {
     _formDataState = formDataState;
   }
 
+  /// Sets both the internal form mode and data state simultaneously.
   void _setInternalFormModeAndState({
     required InternalFormMode internalFormMode,
     required FormDataState formDataState,
@@ -240,6 +321,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Sets the manual dirty flag for the form.
   void _setManualDirty(bool manualDirty) {
     __manualDirty = manualDirty;
   }
@@ -247,6 +329,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Checks whether the form data has been modified (is dirty).
   bool _isDirty() {
     if (__manualDirty) {
       return true;
@@ -285,6 +368,7 @@ class FormModelStructure {
     }
   }
 
+  /// Updates current values and extra data from temporary values.
   void _updateTempToReal() {
     for (FormPropModel prop in _allPropModelMapX.values) {
       prop._currentValue = prop._tempCurrentValue;
@@ -294,7 +378,7 @@ class FormModelStructure {
 
   ///
   /// Reset Form Data:
-  ///
+  /// Resets all property current values back to their initial values and clears manual dirty flag.
   void _resetFormData() {
     __manualDirty = false;
     for (FormPropModel prop in _allPropModelMapX.values) {
@@ -303,6 +387,7 @@ class FormModelStructure {
     }
   }
 
+  /// Clears all form data and resets the state to initial/none conditions.
   void _clearFormDataWithState({required FormDataState formDataState}) {
     _justInitialized = true;
     _formDataState = formDataState;
@@ -324,6 +409,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Sets the current value for a specific property by its name.
   void _setCurrentPropValue({
     required String propName,
     required dynamic value,
@@ -334,6 +420,7 @@ class FormModelStructure {
     }
   }
 
+  /// Retrieves the current value of a specific property by its name.
   dynamic _getCurrentPropValue({required String propName}) {
     FormPropModel? prop = _allPropModelMapX[propName];
     if (prop != null) {
@@ -346,16 +433,17 @@ class FormModelStructure {
   // ***************************************************************************
 
   // TODO: DELETE?
+  /// Returns initial form data map (placeholder/legacy).
   Map<String, dynamic> get initial0FormData {
     return {};
   }
 
-  // initialFormData
+  /// Returns a map of all property names mapped to their initial values.
   Map<String, dynamic> get _initialFormData {
     return _allPropModelMapX.map((k, v) => MapEntry(k, v._initialValue));
   }
 
-  // currentFormData
+  /// Returns a map of all property names mapped to their current values.
   Map<String, dynamic> get _currentFormData {
     return _allPropModelMapX.map((k, v) => MapEntry(k, v._currentValue));
   }
@@ -363,6 +451,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Finds and returns a multi-option form property model by its name.
   MultiOptFormPropModel? _getMultiOptFormProp(String multiOptPropName) {
     FormPropModel? prop = _allPropModelMapX[multiOptPropName];
     if (prop is MultiOptFormPropModel) {
@@ -374,6 +463,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Finds and returns a simple form property model by its name.
   SimpleFormPropModel? _getSimpleFormProp(String propName) {
     FormPropModel? prop = _allPropModelMapX[propName];
     if (prop is SimpleFormPropModel) {
@@ -385,6 +475,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Checks if a property with the given name is a multi-option form property.
   bool _isMultiOptFormProp(String propName) {
     return _getMultiOptFormProp(propName) != null;
   }
@@ -392,6 +483,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Sets up temporary states for starting or updating a form activity.
   void _setupTemporaryStateForNewActivity({
     required FormActivityType activityType,
     required Map<String, dynamic> formKeyInstantValues,
@@ -454,6 +546,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Retrieves the temporary current value of a property by its name.
   dynamic _getTempCurrentPropValue({required String propName}) {
     FormPropModel? prop = _allPropModelMapX[propName];
     return prop?._tempCurrentValue;
@@ -462,6 +555,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Retrieves the temporary initial value of a property by its name.
   dynamic _getTempInitialPropValue({required String propName}) {
     FormPropModel? prop = _allPropModelMapX[propName];
     return prop?._tempInitialValue;
@@ -470,6 +564,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Retrieves the initial value of a property by its name.
   dynamic _getInitialPropValue({required String propName}) {
     FormPropModel? prop = _allPropModelMapX[propName];
     return prop?._initialValue;
@@ -478,6 +573,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Retrieves the temporary extra data (`XData`) of a multi-option property.
   XData? _getTempMultiOptPropXData({required String propName}) {
     FormPropModel? prop = _allPropModelMapX[propName];
     if (prop is MultiOptFormPropModel) {
@@ -486,6 +582,7 @@ class FormModelStructure {
     return null;
   }
 
+  /// Retrieves the current extra data (`XData`) of a multi-option property.
   XData? _getCurrentMultiOptPropXData({required String propName}) {
     FormPropModel? prop = _allPropModelMapX[propName];
     if (prop is MultiOptFormPropModel) {
@@ -494,6 +591,7 @@ class FormModelStructure {
     return null;
   }
 
+  /// Retrieves the raw data inside the extra data (`XData`) of a multi-option property.
   dynamic _getCurrentMultiOptPropData({required String propName}) {
     XData? multiOptPropXData = _getCurrentMultiOptPropXData(propName: propName);
     return multiOptPropXData?.data;
@@ -502,6 +600,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Finds and returns a multi-option form property model by its name.
   MultiOptFormPropModel? _findMultiOptFormProp(String multiOptPropName) {
     FormPropModel? prop = _allPropModelMapX[multiOptPropName];
     if (prop is MultiOptFormPropModel) {
@@ -510,6 +609,7 @@ class FormModelStructure {
     return null;
   }
 
+  /// Debug helper to get the load count of a multi-option property.
   int _debugGetMultiOptPropLoadCount({
     required String multiOptPropName,
   }) {
@@ -520,6 +620,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Recursively updates children multi-option values to null.
   void _updateChildrenMultiOptValueToNullCascade({
     required MultiOptFormPropModel multiOptProp,
   }) {
@@ -534,6 +635,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Updates temporary values for properties based on provided value maps.
   void _updatePropsTempValues(Map<String, dynamic> propValues) {
     __addPropsIfNeed(
       propNames: propValues.keys.toList(),
@@ -580,6 +682,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Checks if any properties are missing and adds them dynamically if needed.
   void __addPropsIfNeed({required List<String> propNames}) {
     for (String propName in propNames) {
       FormPropModel? prop = _allPropModelMapX[propName];
@@ -601,6 +704,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Creates and adds a new simple property model dynamically.
   void __createAndAddNewSimpleProp({
     required String propName,
     required bool markTempDirty,
@@ -617,6 +721,7 @@ class FormModelStructure {
     );
   }
 
+  /// Initializes and registers a new simple property model.
   void __initSimpleProp({
     required SimpleFormPropModel newSimpleProp,
     required bool markTempDirty,
@@ -630,6 +735,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Initializes and registers a new calculated property model.
   void __initCalculatedProp({
     required CalculatedFormPropModel newCalculatedProp,
     required bool markTempDirty,
@@ -643,6 +749,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Sets temporary extra data (`XData`) for a multi-option property.
   void _setTempMultiOptPropXData({
     required String multiOptPropName,
     required XData? multiOptPropXData,
@@ -664,6 +771,7 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Sets temporary value and optionally initial value for a simple property.
   void _setTempSimplePropValue({
     required String propName,
     required Object? value,
@@ -690,15 +798,18 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Debug getter for root multi-option property models.
   @DebugMethodAnnotation()
   List<MultiOptFormPropModel> get debugRootOptProps => _rootOptPropModels;
 
+  /// Debug getter for simple property models.
   @DebugMethodAnnotation()
   List<SimpleFormPropModel> get simpleProps => _simplePropModels;
 
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Prints temporary debugging information for the form structure.
   void _printTemporaryInfo(String prefix) {
     if (true) {
       print(

@@ -3,12 +3,10 @@ part of '../../core.dart';
 class _TaskSubmitExecutionUnit<
 TASK_INIT_DATA extends TaskInitData, //
 TASK_RESULT_DATA extends TaskResultData,
-CREATION_PRESET extends CreationPreset,
 TASK_INPUT extends FormInput> extends _ActivityMemberExecutionUnit {
   final XTask<
       TASK_INIT_DATA,
       TASK_RESULT_DATA, //
-      CREATION_PRESET,
       TASK_INPUT> xTask;
 
   @override

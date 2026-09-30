@@ -269,4 +269,26 @@ abstract class _Core {
       customMessage: customMessage,
     );
   }
+
+  Actionable<ShowFormInfoPrecheck> _internalCanShowFormInfo({
+    required BaseFormModel? formModel,
+  }) {
+    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
+    if (formModel == null) {
+      return Actionable<ShowFormInfoPrecheck>.no(
+        errCode: ShowFormInfoPrecheck.noForm,
+      );
+    }
+    if (loggedInUser == null) {
+      return Actionable<ShowFormInfoPrecheck>.no(
+        errCode: ShowFormInfoPrecheck.noLoggedInUser,
+      );
+    }
+    if (!loggedInUser.isSystemUser) {
+      return Actionable<ShowFormInfoPrecheck>.no(
+        errCode: ShowFormInfoPrecheck.userIsNotSystemUser,
+      );
+    }
+    return Actionable<ShowFormInfoPrecheck>.yes();
+  }
 }

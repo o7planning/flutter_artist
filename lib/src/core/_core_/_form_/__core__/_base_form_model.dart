@@ -1,45 +1,69 @@
 part of '../../core.dart';
 
+/// Base abstract class representing a form model in the FlutterArtist framework,
+/// managing form state, structure, validation, and data lifecycle.
 abstract class BaseFormModel<
-        CREATION_PRESET extends CreationPreset,
-        FORM_INPUT extends FormInput,
+        FORM_INPUT extends FormInput, //
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends _Core {
+  /// Configuration options for the form model.
   final FormModelConfig config;
 
+  /// Internal structure defining the form's properties and state.
   late final FormModelStructure _formModelStructure;
 
+  /// Flag to lock change events during batch operations or resets.
   bool _changeEventLocked = false;
 
+  FeatureModule get module;
+
+  FormHost get host;
+
+  /// Returns the current mode of the form (e.g., creation, edit).
   FormMode get formMode;
 
+  /// Returns path information for routing or debugging purposes.
   String get pathInfo;
 
+  /// Exposes the form model structure.
   FormModelStructure get formModelStructure => _formModelStructure;
 
+  /// Returns the current data state of the form (e.g., pending, loaded, error).
   FormDataState get dataState => _formModelStructure._formDataState;
 
+  /// Returns form error information if any error occurred.
   FormErrorInfo? get formErrorInfo => _formModelStructure.formErrorInfo;
 
+  /// Indicates whether the initial form data is fully loaded and ready.
   bool get formInitialDataReady => _formModelStructure._formInitialDataReady;
 
+  /// Internal mode representation for form handling.
   InternalFormMode get _internalFormMode =>
       _formModelStructure._internalFormMode;
 
+  /// Flags tracking whether default simple and multi-option values have been initiated.
   bool _defaultSimpleValuesInitiated = false;
   bool _defaultMultiOptValuesInitiated = false;
 
+  /// Returns whether default simple values have been initiated.
   bool get defaultSimpleValuesInitiated => _defaultSimpleValuesInitiated;
 
+  /// Returns whether default multi-option values have been initiated.
   bool get defaultMultiOptValuesInitiated => _defaultMultiOptValuesInitiated;
 
+  /// Additional data required related to form operations.
   ADDITIONAL_FORM_RELATED_DATA? _additionalFormRelatedData;
+
+  /// Form input used when creating a new record.
   FORM_INPUT? _creationFormInput;
 
+  /// Autovalidate mode for form fields, defaulting to user interaction.
   AutovalidateMode _autovalidateMode = AutovalidateMode.onUserInteraction;
 
+  /// Returns the current autovalidate mode.
   AutovalidateMode get autovalidateMode => _autovalidateMode;
 
+  /// Internal getter resolving the autovalidate mode specifically for form views.
   AutovalidateMode get _autovalidateModeForFormView {
     if (_formModelStructure._internalFormMode == InternalFormMode.none) {
       return AutovalidateMode.disabled;
@@ -47,20 +71,27 @@ abstract class BaseFormModel<
     return _autovalidateMode;
   }
 
+  /// Returns true if the form is in creation or new mode.
   bool get isNew => _formModelStructure.isNew;
 
+  /// Returns the initial form data map.
   Map<String, dynamic> get initialFormData =>
       _formModelStructure._initialFormData;
 
+  /// Returns the current form data map.
   Map<String, dynamic> get currentFormData =>
       _formModelStructure._currentFormData;
 
+  /// Returns whether unsaved changes loss prevention is effectively enabled.
   bool get effectivePreventUnsavedChangesLoss => true;
 
+  /// Debug information helper for the form model.
   late final debug = _FormModelDebugInfo();
 
+  /// UI components helper linked to this form model.
   late final ui = _FormUiComponents(formModel: this);
 
+  /// Constructor initializes configuration and builds the form model structure.
   BaseFormModel({
     FormModelConfig config = const FormModelConfig(),
   })  : config = config.copy(),
@@ -70,38 +101,44 @@ abstract class BaseFormModel<
 
   // ===========================================================================
 
+  /// Returns the runtime type of the form input.
   Type getFormInputType() => FORM_INPUT;
+
+  /// Returns the runtime type of additional form related data.
   Type getAdditionalFormRelatedDataType() => ADDITIONAL_FORM_RELATED_DATA;
 
   // ===========================================================================
 
+  /// Returns a string definition of class parameters for debugging purposes.
   String debugClassParametersDefinition();
 
   // ===========================================================================
-  // DOMAIN CONTRACTS (To be implemented by BlockFormModel & TaskFormModel)
+  // DOMAIN CONTRACTS (To be implemented by subclasses)
   // ===========================================================================
 
-  /// Returns the underlying domain data instance: [ITEM_DETAIL] for Block, [INIT_DATA] for Task.
+  /// Returns the underlying domain data instance: [ITEM_DETAIL] for Block, [INIT_DATA] for Task/Stage.
   Object? get rawDomainData;
 
-  /// Returns the Shelf context if available (Block), otherwise null (Task).
+  /// Returns the Shelf context if available (Block), otherwise null (Activity).
   Shelf? get relatedShelf;
 
-  /// Resolves the initial selection wrapper for a multi-option property during Creation mode.
+  /// Internal hook resolving baseline initial values for simple form properties.
+  /// BlockFormModel delegates to edit/creation methods, while ActivityFormModel delegates to initData.
   @_AbstractMethodAnnotation()
-  OptValueWrap? _internalSpecifyCreationValueForMultiOptProp({
+  Map<String, dynamic>? _internalResolveInitialSimplePropValues({
+    required ExecutionTrace executionTrace,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
+  });
+
+  /// Internal hook resolving baseline initial selection wrapper for a multi-option property.
+  /// BlockFormModel delegates to edit/creation methods, while ActivityFormModel delegates to initData.
+  @_AbstractMethodAnnotation()
+  OptValueWrap? _internalResolveInitialMultiOptPropValue({
+    required ExecutionTrace executionTrace,
     required String multiOptPropName,
     required SelectionType selectionType,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
-    required CREATION_PRESET creationPreset,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-  });
-
-  /// Supplies baseline initial values for simple form properties during Creation mode.
-  @_AbstractMethodAnnotation()
-  Map<String, dynamic>? _internalSpecifyCreationValuesForSimpleProps({
-    required CREATION_PRESET creationPreset,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
   });
 
@@ -115,24 +152,6 @@ abstract class BaseFormModel<
     required Object? rawDomainData,
   });
 
-  /// Polymorphic bridge to extract simple properties from persisted/loaded domain data.
-  @_AbstractMethodAnnotation()
-  Map<String, dynamic>? _internalExtractSimplePropValuesFromDomainData({
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required Object rawDomainData,
-  });
-
-  /// Polymorphic bridge to extract multi-opt selection from persisted/loaded domain data.
-  @_AbstractMethodAnnotation()
-  OptValueWrap? _internalExtractMultiOptPropValueFromDomainData({
-    required String multiOptPropName,
-    required SelectionType selectionType,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required Object rawDomainData,
-  });
-
   /// Asynchronously fetches auxiliary metadata specifically required for form display.
   @_AbstractMethodAnnotation()
   Future<ADDITIONAL_FORM_RELATED_DATA>
@@ -144,6 +163,7 @@ abstract class BaseFormModel<
   // INITIALIZATION & STRUCTURE DEFINITION
   // ===========================================================================
 
+  /// Internal method to define and initialize the form model structure safely, handling name conflicts or errors.
   void __defineFormModelStructure() {
     try {
       _formModelStructure = defineFormModelStructure();
@@ -163,12 +183,13 @@ abstract class BaseFormModel<
     }
   }
 
+  /// Returns the type of related form data.
   Type getFormRelatedDataType() => ADDITIONAL_FORM_RELATED_DATA;
 
-  Type getCreationPresetType() => CREATION_PRESET;
-
+  /// Returns whether the form has unsaved modifications (is dirty).
   bool isDirty() => _formModelStructure._isDirty();
 
+  /// Resets the form data back to its initial state if permitted.
   void resetForm() {
     bool canReset = _canResetForm();
     if (!canReset) return;
@@ -193,6 +214,7 @@ abstract class BaseFormModel<
     }
   }
 
+  /// Patches a specific property value in the form and updates active UI views.
   void patchPropValue(String propertyName, dynamic value) {
     _formModelStructure._setCurrentPropValue(
       propName: propertyName,
@@ -205,33 +227,39 @@ abstract class BaseFormModel<
     ui.refreshAllViews(force: true);
   }
 
+  /// Retrieves the current value of a specific form property.
   dynamic getPropValue(String propName) {
     return _formModelStructure._getCurrentPropValue(propName: propName);
   }
 
+  /// Retrieves the current XData dataset for a multi-option property.
   XData? getMultiOptPropXData(String multiOptPropName) {
     return _formModelStructure._getCurrentMultiOptPropXData(
       propName: multiOptPropName,
     );
   }
 
+  /// Retrieves the current data value for a multi-option property.
   dynamic getMultiOptPropData(String multiOptPropName) {
     return _formModelStructure._getCurrentMultiOptPropData(
       propName: multiOptPropName,
     );
   }
 
+  /// Finds and returns a multi-option form property model by its name.
   MultiOptFormPropModel? findMultiOptFormProp(
       {required String multiOptPropName}) {
     return _formModelStructure._findMultiOptFormProp(multiOptPropName);
   }
 
+  /// Returns the debug load count for a specific multi-option property.
   int debugGetMultiOptPropLoadCount(String multiOptPropName) {
     return _formModelStructure._debugGetMultiOptPropLoadCount(
       multiOptPropName: multiOptPropName,
     );
   }
 
+  /// Checks whether form fields can be patched based on current system and form state.
   Actionable<FormModelPatchFormFieldsPrecheck> __canPatchFormFields({
     required bool checkBusy,
   }) {
@@ -258,6 +286,7 @@ abstract class BaseFormModel<
     return Actionable<FormModelPatchFormFieldsPrecheck>.yes();
   }
 
+  /// Internal pre-check helper before applying patches to form fields, handling error logs and snackbars.
   bool __checkBeforePatchFormFields({
     required bool checkBusy,
     required bool addErrorLog,
@@ -287,7 +316,6 @@ abstract class BaseFormModel<
       "Called when Form Data is being loaded or user makes changes in FormView")
   Future<bool> _startNewFormActivity({
     required ExecutionTrace executionTrace,
-    required CREATION_PRESET? creationPreset,
     required FORM_INPUT? formInput,
     required final FormActivityType activityType,
     required Map<String, dynamic>? formKeyInstantValuesInUI,
@@ -312,9 +340,15 @@ abstract class BaseFormModel<
 
     switch (activityType) {
       case FormActivityType.startCreatingOrEditing:
-        currentFormMode = domainData == null
-            ? InternalFormMode.creation
-            : InternalFormMode.edit;
+        if (relatedShelf != null) {
+          // BlockFormModel branch: distinguish creation vs edit
+          currentFormMode = domainData == null
+              ? InternalFormMode.creation
+              : InternalFormMode.edit;
+        } else {
+          // ActivityFormModel (Task/Stage) branch: always compose
+          currentFormMode = InternalFormMode.compose;
+        }
 
         _formModelStructure._clearFormError();
         _formModelStructure._setFormDataState(
@@ -397,60 +431,113 @@ abstract class BaseFormModel<
     // POPULATE SIMPLE PROPERTIES
     // =========================================================================
     if (activityType == FormActivityType.startCreatingOrEditing) {
-      // -----------------------------------------------------------------------
-      // CASE 1: EDIT / DATA PRESENT MODE (domainData != null)
-      // -----------------------------------------------------------------------
-      if (domainData != null) {
-        executionTrace.addInfo(
-          codeId: "#06180",
-          shortDesc: "Populating form from domain data."
-              "\n - @activityType: <b>$activityType</b>."
-              "\n - @domainData: ${debugObjHtml(domainData)}.",
+      executionTrace.addInfo(
+        codeId: "#06180",
+        shortDesc: "Populating simple form properties."
+            "\n - @activityType: <b>$activityType</b>."
+            "\n - @domainData: ${debugObjHtml(domainData)}.",
+      );
+      try {
+        final Map<String, dynamic> simplePropValueMap =
+            _internalResolveInitialSimplePropValues(
+                  executionTrace: executionTrace,
+                  additionalFormRelatedData: additionalFormRelatedData,
+                ) ??
+                {};
+
+        for (String propName in simplePropValueMap.keys) {
+          __throwErrorIfNotASimplePropName(
+            propName: propName,
+            formErrorMethod:
+                FormErrorMethod.extractSimplePropValuesFromItemDetail,
+          );
+          dynamic value = simplePropValueMap[propName];
+          _formModelStructure._setTempSimplePropValue(
+            propName: propName,
+            value: value,
+            setForInitial: true,
+          );
+        }
+      } catch (e, stackTrace) {
+        dynamic error = e;
+        if (e is FormPropTypeMismatchError) {
+          error = e.toAppError(
+            formModelName: getClassNameWithoutGenerics(this),
+          );
+        }
+        final formErrorInfo = FormErrorInfo(
+          activityType: activityType,
+          propName: null,
+          formErrorMethod:
+              FormErrorMethod.extractSimplePropValuesFromItemDetail,
+          error: error,
+          errorStackTrace: stackTrace,
         );
+        _formModelStructure._setFormError(formErrorInfo);
+
+        final ErrorInfo errorInfo = _handleError(
+          shelf: relatedShelf,
+          methodName: formErrorInfo.methodName,
+          error: formErrorInfo.error,
+          stackTrace: formErrorInfo.errorStackTrace,
+          showSnackBar: true,
+          tipDocument: null,
+        );
+
+        final fatalErrorInfo = FormDataStateFatalError(errorInfo: errorInfo);
+        __endFormActivityWithDataState(
+          formDataState: fatalErrorInfo,
+          activityType: activityType,
+          error: e,
+        );
+        executionTrace.addInfo(
+          codeId: "#06400",
+          shortDesc:
+              "The ${debugObjHtml(this)}._internalResolveInitialSimplePropValues() method encountered an error!",
+          errorInfo: errorInfo,
+        );
+        return false;
+      }
+
+      // Apply external FormInput overrides if present
+      if (formInput != null) {
         try {
           executionTrace.addControllableCall(
-            codeId: "#06200",
+            codeId: "#06620",
             caller: this,
-            methodName: "extractSimplePropValuesFromDomainData",
+            methodName: "extractUpdateValuesForSimpleProps",
             suffixShortDesc: "",
             parameters: {
-              "additionalFormRelatedData": additionalFormRelatedData,
-              "domainData": domainData,
+              "formInput": formInput,
             },
           );
-          final simplePropValueMap =
-              _internalExtractSimplePropValuesFromDomainData(
-                    additionalFormRelatedData: additionalFormRelatedData,
-                    rawDomainData: domainData,
+          final Map<String, SimpleValueWrap?> updatedSimplePropValues =
+              extractUpdateValuesForSimpleProps(
+                    formInput: formInput,
                   ) ??
                   {};
 
-          for (String propName in simplePropValueMap.keys) {
+          for (String propName in updatedSimplePropValues.keys) {
             __throwErrorIfNotASimplePropName(
               propName: propName,
               formErrorMethod:
-                  FormErrorMethod.extractSimplePropValuesFromItemDetail,
+                  FormErrorMethod.extractUpdateValuesForSimpleProps,
             );
-            dynamic value = simplePropValueMap[propName];
-            _formModelStructure._setTempSimplePropValue(
-              propName: propName,
-              value: value,
-              setForInitial: true,
-            );
+            SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
+            if (valueWrap != null && valueWrap.use) {
+              _formModelStructure._setTempSimplePropValue(
+                propName: propName,
+                value: valueWrap.value,
+                setForInitial: true,
+              );
+            }
           }
         } catch (e, stackTrace) {
-          dynamic error = e;
-          if (e is FormPropTypeMismatchError) {
-            error = e.toAppError(
-              formModelName: getClassNameWithoutGenerics(this),
-            );
-          }
           final formErrorInfo = FormErrorInfo(
             activityType: activityType,
             propName: null,
-            formErrorMethod:
-                FormErrorMethod.extractSimplePropValuesFromItemDetail,
-            error: error,
+            formErrorMethod: FormErrorMethod.extractUpdateValuesForSimpleProps,
+            error: e,
             errorStackTrace: stackTrace,
           );
           _formModelStructure._setFormError(formErrorInfo);
@@ -464,157 +551,13 @@ abstract class BaseFormModel<
             tipDocument: null,
           );
 
-          final fatalErrorInfo = FormDataStateFatalError(errorInfo: errorInfo);
+          final fatalErrorState = FormDataStateFatalError(errorInfo: errorInfo);
           __endFormActivityWithDataState(
-            formDataState: fatalErrorInfo,
-            activityType: activityType,
+            formDataState: fatalErrorState,
             error: e,
-          );
-          executionTrace.addInfo(
-            codeId: "#06400",
-            shortDesc:
-                "The ${debugObjHtml(this)}.extractSimplePropValuesFromDomainData() method encountered an error!",
-            errorInfo: errorInfo,
+            activityType: activityType,
           );
           return false;
-        }
-      }
-      // -----------------------------------------------------------------------
-      // CASE 2: CREATION / DEFAULT MODE (domainData == null)
-      // -----------------------------------------------------------------------
-      else {
-        executionTrace.addInfo(
-          codeId: "#06500",
-          shortDesc: "Initial creation defaults in form."
-              "\n - @activityType: <b>$activityType</b>.",
-        );
-
-        if (!_defaultSimpleValuesInitiated) {
-          try {
-            executionTrace.addControllableCall(
-              codeId: "#06540",
-              caller: this,
-              methodName: "specifyCreationValuesForSimpleProps",
-              suffixShortDesc: "",
-              parameters: {
-                "creationPreset": creationPreset,
-                "additionalFormRelatedData": additionalFormRelatedData,
-              },
-            );
-
-            final Map<String, dynamic> simplePropValueDefault =
-                _internalSpecifyCreationValuesForSimpleProps(
-                      creationPreset: creationPreset!,
-                      additionalFormRelatedData: additionalFormRelatedData,
-                    ) ??
-                    {};
-
-            for (String propName in simplePropValueDefault.keys) {
-              __throwErrorIfNotASimplePropName(
-                propName: propName,
-                formErrorMethod:
-                    FormErrorMethod.specifyDefaultValuesForSimpleProps,
-              );
-              dynamic value = simplePropValueDefault[propName];
-              _formModelStructure._setTempSimplePropValue(
-                propName: propName,
-                value: value,
-                setForInitial: true,
-              );
-            }
-          } catch (e, stackTrace) {
-            final formErrorInfo = FormErrorInfo(
-              activityType: activityType,
-              propName: null,
-              formErrorMethod:
-                  FormErrorMethod.specifyDefaultValuesForSimpleProps,
-              error: e,
-              errorStackTrace: stackTrace,
-            );
-            _formModelStructure._setFormError(formErrorInfo);
-
-            final ErrorInfo errorInfo = _handleError(
-              shelf: relatedShelf,
-              methodName: formErrorInfo.methodName,
-              error: formErrorInfo.error,
-              stackTrace: formErrorInfo.errorStackTrace,
-              showSnackBar: true,
-              tipDocument: null,
-            );
-
-            final fatalErrorState =
-                FormDataStateFatalError(errorInfo: errorInfo);
-            __endFormActivityWithDataState(
-              formDataState: fatalErrorState,
-              activityType: activityType,
-              error: e,
-            );
-            return false;
-          }
-        }
-
-        // Apply external FormInput overrides if present
-        if (formInput != null) {
-          try {
-            executionTrace.addControllableCall(
-              codeId: "#06620",
-              caller: this,
-              methodName: "extractUpdateValuesForSimpleProps",
-              suffixShortDesc: "",
-              parameters: {
-                "formInput": formInput,
-              },
-            );
-            final Map<String, SimpleValueWrap?> updatedSimplePropValues =
-                extractUpdateValuesForSimpleProps(
-                      formInput: formInput,
-                    ) ??
-                    {};
-
-            for (String propName in updatedSimplePropValues.keys) {
-              __throwErrorIfNotASimplePropName(
-                propName: propName,
-                formErrorMethod:
-                    FormErrorMethod.extractUpdateValuesForSimpleProps,
-              );
-              SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
-              if (valueWrap != null && valueWrap.use) {
-                _formModelStructure._setTempSimplePropValue(
-                  propName: propName,
-                  value: valueWrap.value,
-                  setForInitial: true,
-                );
-              }
-            }
-          } catch (e, stackTrace) {
-            final formErrorInfo = FormErrorInfo(
-              activityType: activityType,
-              propName: null,
-              formErrorMethod:
-                  FormErrorMethod.extractUpdateValuesForSimpleProps,
-              error: e,
-              errorStackTrace: stackTrace,
-            );
-            _formModelStructure._setFormError(formErrorInfo);
-
-            final ErrorInfo errorInfo = _handleError(
-              shelf: relatedShelf,
-              methodName: formErrorInfo.methodName,
-              error: formErrorInfo.error,
-              stackTrace: formErrorInfo.errorStackTrace,
-              showSnackBar: true,
-              tipDocument: null,
-            );
-
-            final fatalErrorState =
-                FormDataStateFatalError(errorInfo: errorInfo);
-            __endFormActivityWithDataState(
-              formDataState: fatalErrorState,
-              error: e,
-              activityType: activityType,
-            );
-            return false;
-          }
         }
       }
     }
@@ -694,7 +637,6 @@ abstract class BaseFormModel<
           in _formModelStructure._rootOptPropModels) {
         await _loadMultiOptPropDataCascade(
           executionTrace: executionTrace,
-          creationPreset: creationPreset,
           additionalFormRelatedData: additionalFormRelatedData,
           formInput: formInput,
           parentMultiOptPropValue: null,
@@ -772,9 +714,9 @@ abstract class BaseFormModel<
   // UNIFIED MULTI-OPT PROP DATA LOADING (CASCADE)
   // ===========================================================================
 
+  /// Recursively loads multi-option property data down the hierarchical cascade.
   Future<void> _loadMultiOptPropDataCascade({
     required final ExecutionTrace executionTrace,
-    required final CREATION_PRESET? creationPreset,
     required final FormActivityType activityType,
     required final ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required final FORM_INPUT? formInput,
@@ -894,38 +836,22 @@ abstract class BaseFormModel<
     List? currentSelectedItems;
     List? candidateSelectedItems;
     OptValueWrap? initialValueWrap;
-    final Object? domainData = rawDomainData;
 
     if (tempMultiOptPropXData != null) {
       if (activityType == FormActivityType.startCreatingOrEditing) {
-        if (domainData == null) {
-          if (!_defaultMultiOptValuesInitiated) {
-            initialValueWrap = __specifyCreationValueForMultiOptProp(
-              executionTrace: executionTrace,
-              creationPreset: creationPreset,
-              additionalFormRelatedData: additionalFormRelatedData,
-              multiOptPropName: multiOptPropName,
-              selectionType: selectionType,
-              multiOptPropXData: tempMultiOptPropXData,
-              parentMultiOptPropValue: parentMultiOptPropValue,
-            );
-          }
+        initialValueWrap = _internalResolveInitialMultiOptPropValue(
+          executionTrace: executionTrace,
+          multiOptPropName: multiOptPropName,
+          selectionType: selectionType,
+          multiOptPropXData: tempMultiOptPropXData,
+          parentMultiOptPropValue: parentMultiOptPropValue,
+          additionalFormRelatedData: additionalFormRelatedData,
+        );
 
-          if (formInput != null && formInput is! EmptyFormInput) {
-            initialValueWrap = __extractUpdateValueForMultiOptProp(
-              executionTrace: executionTrace,
-              formInput: formInput,
-              multiOptPropXData: tempMultiOptPropXData,
-              multiOptPropName: multiOptPropName,
-              selectionType: selectionType,
-              parentMultiOptPropValue: parentMultiOptPropValue,
-            );
-          }
-        } else {
-          initialValueWrap = __extractMultiOptPropValueFromDomainData(
+        if (formInput != null && formInput is! EmptyFormInput) {
+          initialValueWrap = __extractUpdateValueForMultiOptProp(
             executionTrace: executionTrace,
-            additionalFormRelatedData: additionalFormRelatedData,
-            rawDomainData: domainData,
+            formInput: formInput,
             multiOptPropXData: tempMultiOptPropXData,
             multiOptPropName: multiOptPropName,
             selectionType: selectionType,
@@ -1030,7 +956,6 @@ abstract class BaseFormModel<
       for (MultiOptFormPropModel child in multiOptProp._children) {
         await _loadMultiOptPropDataCascade(
           executionTrace: executionTrace,
-          creationPreset: creationPreset,
           additionalFormRelatedData: additionalFormRelatedData,
           formInput: formInput,
           parentMultiOptPropValue: tempSelectedPropValue,
@@ -1047,6 +972,7 @@ abstract class BaseFormModel<
   // AUXILIARY LOAD & STATE CLEAR
   // ===========================================================================
 
+  /// Loads auxiliary form related data asynchronously.
   Future<ADDITIONAL_FORM_RELATED_DATA?> _performLoadAdditionalFormRelatedData(
     ExecutionTrace executionTrace,
   ) async {
@@ -1081,6 +1007,7 @@ abstract class BaseFormModel<
     }
   }
 
+  /// Clears form data associated with a specific data state.
   void _clearDataWithDataState({required FormDataState formDataState}) {
     try {
       __disableAutovalidation();
@@ -1105,114 +1032,7 @@ abstract class BaseFormModel<
   // HELPERS & VALIDATION
   // ===========================================================================
 
-  @_MayThrowFormTempErrorAnnotation()
-  OptValueWrap? __specifyCreationValueForMultiOptProp({
-    required ExecutionTrace executionTrace,
-    required CREATION_PRESET? creationPreset,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required String multiOptPropName,
-    required SelectionType selectionType,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
-  }) {
-    try {
-      executionTrace.addControllableCall(
-        codeId: "#33000",
-        caller: this,
-        methodName: "specifyCreationValueForMultiOptProp",
-        suffixShortDesc: "",
-        parameters: {
-          "multiOptPropXData": multiOptPropXData,
-          "multiOptPropName": multiOptPropName,
-          "selectionType": selectionType,
-          "parentMultiOptPropValue": parentMultiOptPropValue,
-          "creationPreset": creationPreset,
-          "additionalFormRelatedData": additionalFormRelatedData,
-        },
-      );
-      OptValueWrap? valueWrap = _internalSpecifyCreationValueForMultiOptProp(
-        multiOptPropXData: multiOptPropXData,
-        multiOptPropName: multiOptPropName,
-        selectionType: selectionType,
-        parentMultiOptPropValue: parentMultiOptPropValue,
-        creationPreset: creationPreset!,
-        additionalFormRelatedData: additionalFormRelatedData,
-      );
-      if (valueWrap == null) {
-        __createNullValueWrapAppError(
-          methodName: "specifyCreationValueForMultiOptProp",
-          multiOptPropName: multiOptPropName,
-        );
-        return null;
-      }
-      List? value = valueWrap.values;
-      return OptValueWrap.multi(
-        multiOptPropXData._resolveItemsFromRawData(
-          dynamicValues: value,
-          addOrphan: true,
-          clearOrphanItems: true,
-        ),
-      );
-    } catch (e, stackTrace) {
-      throw FormMethodError(
-        propName: multiOptPropName,
-        formErrorMethod: FormErrorMethod.specifyDefaultValueForMultiOptProp,
-        error: e,
-        stackTrace: stackTrace,
-      );
-    }
-  }
-
-  @_MayThrowFormTempErrorAnnotation()
-  OptValueWrap? __extractMultiOptPropValueFromDomainData({
-    required ExecutionTrace executionTrace,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required String multiOptPropName,
-    required SelectionType selectionType,
-    required XData multiOptPropXData,
-    required Object rawDomainData,
-    required Object? parentMultiOptPropValue,
-  }) {
-    try {
-      executionTrace.addControllableCall(
-        codeId: "#32000",
-        caller: this,
-        methodName: "extractMultiOptPropValueFromDomainData",
-        suffixShortDesc: "",
-        parameters: {
-          "multiOptPropName": multiOptPropName,
-          "parentMultiOptPropValue": parentMultiOptPropValue,
-          "selectionType": selectionType,
-          "multiOptPropXData": multiOptPropXData,
-          "rawDomainData": rawDomainData,
-          "additionalFormRelatedData": additionalFormRelatedData,
-        },
-      );
-      OptValueWrap? valueWrap = _internalExtractMultiOptPropValueFromDomainData(
-        multiOptPropName: multiOptPropName,
-        selectionType: selectionType,
-        multiOptPropXData: multiOptPropXData,
-        rawDomainData: rawDomainData,
-        parentMultiOptPropValue: parentMultiOptPropValue,
-        additionalFormRelatedData: additionalFormRelatedData,
-      );
-      if (valueWrap == null) {
-        __createNullValueWrapAppError(
-          methodName: "extractMultiOptPropValueFromDomainData",
-          multiOptPropName: multiOptPropName,
-        );
-      }
-      return valueWrap;
-    } catch (e, stackTrace) {
-      throw FormMethodError(
-        propName: multiOptPropName,
-        formErrorMethod: FormErrorMethod.extractMultiOptPropValueFromItemDetail,
-        error: e,
-        stackTrace: stackTrace,
-      );
-    }
-  }
-
+  /// Extracts update values for a multi-option property from form input.
   @_MayThrowFormTempErrorAnnotation()
   OptValueWrap? __extractUpdateValueForMultiOptProp({
     required ExecutionTrace executionTrace,
@@ -1268,6 +1088,7 @@ abstract class BaseFormModel<
     }
   }
 
+  /// Concludes form activity with a given data state, updating actual values and UI state.
   bool __endFormActivityWithDataState({
     required FormDataState formDataState,
     required FormActivityType activityType,
@@ -1324,6 +1145,7 @@ abstract class BaseFormModel<
     }
   }
 
+  /// Throws an error when a method returns a null value wrap for a multi-option property.
   void __createNullValueWrapAppError({
     required String methodName,
     required String multiOptPropName,
@@ -1345,6 +1167,7 @@ abstract class BaseFormModel<
         "And return null for not $MultiOptFormPropModel. See the specification of this method for more information.";
   }
 
+  /// Throws an error if the provided property name does not correspond to a simple property.
   void __throwErrorIfNotASimplePropName({
     required String propName,
     required FormErrorMethod formErrorMethod,
@@ -1360,6 +1183,7 @@ abstract class BaseFormModel<
     }
   }
 
+  /// Clears active form key instant values in UI views.
   void __clearFormKey() {
     final List<FormBuilderState> activeForms = ui._visibleFormBuilderStates;
     for (FormBuilderState formState in activeForms) {
@@ -1370,6 +1194,7 @@ abstract class BaseFormModel<
     }
   }
 
+  /// Patches form key values across all visible form builder states.
   void _formKeyPatchValue({required Map<String, dynamic> newCurrentValue}) {
     final List<FormBuilderState> activeForms = ui._visibleFormBuilderStates;
     for (FormBuilderState formState in activeForms) {
@@ -1377,6 +1202,7 @@ abstract class BaseFormModel<
     }
   }
 
+  /// Temporarily disables autovalidation during structural changes or resets.
   void __disableAutovalidation() {
     AutovalidateMode temp = _autovalidateMode;
     _autovalidateMode = AutovalidateMode.disabled;
@@ -1384,12 +1210,15 @@ abstract class BaseFormModel<
     _autovalidateMode = temp;
   }
 
+  /// Returns initial values for the form view.
   Map<String, dynamic> _getInitialValuesForFormView() =>
       _formModelStructure._currentFormData;
 
+  /// Retrieves the initial value of a specific property.
   dynamic getInitialPropValue(String propName) =>
       _formModelStructure._getInitialPropValue(propName: propName);
 
+  /// Shows the form error viewer dialog if the data state is in fatal error.
   Future<void> showFormErrorViewerDialog(BuildContext context) async {
     if (!dataState.isFatalError) return;
     await FormErrorViewerDialog.show(
@@ -1399,11 +1228,13 @@ abstract class BaseFormModel<
     );
   }
 
+  /// Extracts update values for simple properties from form input.
   @_AbstractMethodAnnotation()
   Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
     required FORM_INPUT formInput,
   });
 
+  /// Extracts update value for a multi-option property from form input.
   @_AbstractMethodAnnotation()
   OptValueWrap? extractUpdateValueForMultiOptProp({
     required String multiOptPropName,
@@ -1413,25 +1244,55 @@ abstract class BaseFormModel<
     required FORM_INPUT formInput,
   });
 
+  /// Defines the form model structure containing properties, fields, and options.
+  ///
+  /// Example:
+  /// ```dart
+  /// @override
+  /// FormModelStructure defineFormModelStructure() {
+  ///   return FormModelStructure(
+  ///     simplePropDefs: [
+  ///       SimpleFormPropDef<int>(propName: "id"),
+  ///       SimpleFormPropDef<String>(propName: "name"),
+  ///       SimpleFormPropDef<bool>(propName: "active"),
+  ///       SimpleFormPropDef<String>(propName: "description"),
+  ///     ],
+  ///     multiOptPropDefs: [
+  ///       MultiOptFormPropDef<ProgramTypeInfo>.singleSelection(
+  ///         propName: "programType",
+  ///       ),
+  ///       // Multi Option Multi Selection Criterion.
+  ///       MultiOptFormPropDef<ContributorInfo>.multiSelection(
+  ///         propName: "contributors",
+  ///       ),
+  ///     ],
+  ///   );
+  /// }
+  /// ```
   @_AbstractMethodAnnotation()
   FormModelStructure defineFormModelStructure();
 
+  /// Returns whether the form model is enabled.
   bool isEnabled();
 
+  /// Handles changes triggered from the form view interface.
   Future<void> _onChangeFromFormView({
     required Map<String, dynamic> formKeyInstantValuesInUI,
   });
 
+  /// Determines whether the form can be reset.
   bool _canResetForm();
 
+  /// Refreshes all associated views.
   void _refreshAllViews();
 
+  /// Refreshes form control bars.
   void _refreshControlBars();
 
+  /// Triggered when the form view becomes visible.
   void _triggerWhenFormViewVisible();
 
-  void _addToRecent();
-
+  /// Lifecycle hook executed after the form view is built.
   void _afterBuildFormView() {
     _formModelStructure._justInitialized = false;
   }

@@ -6,13 +6,14 @@ import '../../core/_core_/core.dart';
 import '../../core/enums/_enums.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
+import '../feature_module/activity/_activity_structure_graph_view.dart';
+import '../feature_module/shelf/_shelf_structure_graph_view.dart';
 import '../form/_form_model_view.dart';
-import '../shelf/_shelf_structure_graph_view.dart';
 import '../utils/_dialog_size.dart';
 import '_tip_document_viewer_dialog.dart';
 
 class DebugFormModelInspectorDialog extends StatefulWidget {
-  final BlockFormModel formModel;
+  final BaseFormModel formModel;
   final String locationInfo;
 
   const DebugFormModelInspectorDialog({
@@ -29,7 +30,7 @@ class DebugFormModelInspectorDialog extends StatefulWidget {
   static Future<void> show({
     required BuildContext context,
     required String locationInfo,
-    required BlockFormModel formModel,
+    required BaseFormModel formModel,
   }) async {
     await showDialog(
       context: context,
@@ -56,10 +57,10 @@ class _DebugFormModelInspectorDialogState
     dialogs.FaDialog alert = dialogs.FaDialog(
       iconData: showFormData
           ? FaIconConstants.formModelIconData
-          : FaIconConstants.shelfStructureIconData,
+          : FaIconConstants.moduleStructureIconData,
       titleText: showFormData
           ? "Debug Form Model Inspector - ${getClassName(widget.formModel)}"
-          : "Debug Shelf Structure Inspector - ${getClassName(widget.formModel.block.shelf)}",
+          : "Debug Shelf Structure Inspector - ${getClassName(widget.formModel.module)}",
       contentPadding: const EdgeInsets.all(5),
       preferredContentWidth: preferContentSize.width,
       preferredContentHeight: preferContentSize.height,
@@ -75,6 +76,31 @@ class _DebugFormModelInspectorDialogState
   }
 
   Widget _buildMainContent(BuildContext context) {
+    final FeatureModule module = widget.formModel.module;
+
+    Widget moduleView;
+    if (module is Shelf) {
+      moduleView = ShelfStructureGraphView(
+        shelf: module,
+        onPressedBack: () {
+          setState(() {
+            showFormData = true;
+          });
+        },
+      );
+    } else if (module is Activity) {
+      moduleView = ActivityStructureGraphView(
+        activity: module,
+        onPressedBack: () {
+          setState(() {
+            showFormData = true;
+          });
+        },
+      );
+    } else {
+      moduleView = SizedBox();
+    }
+
     return showFormData
         ? FormModelView(
             formModel: widget.formModel,
@@ -85,13 +111,6 @@ class _DebugFormModelInspectorDialogState
               });
             },
           )
-        : ShelfStructureGraphView(
-            shelf: widget.formModel.block.shelf,
-            onPressedBack: () {
-              setState(() {
-                showFormData = true;
-              });
-            },
-          );
+        : moduleView;
   }
 }

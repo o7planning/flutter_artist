@@ -6,10 +6,9 @@ part of '../core.dart';
 /// [TaskDataStatePending] -> (loads INIT_DATA) -> [TaskDataStateLoadedFresh]
 /// -> (submission) -> [TaskDataStateSubmissionAttempted]
 abstract class Task<
-INIT_DATA extends TaskInitData, //
-RESULT_DATA extends TaskResultData, //
-CREATION_PRESET extends CreationPreset,
-FORM_INPUT extends FormInput> extends _Core {
+    INIT_DATA extends TaskInitData, //
+    RESULT_DATA extends TaskResultData, //
+    FORM_INPUT extends FormInput> extends _Core  implements FormHost  {
   final String name;
   final String? description;
   final TaskConfig config;
@@ -18,12 +17,15 @@ FORM_INPUT extends FormInput> extends _Core {
   late final debug = _TaskDebugInfo(task: this);
 
   late final Activity activity;
+
+  Activity get module => activity;
+
   late final ui = _TaskUiComponents(task: this);
 
+  @override
   TaskFormModel<
       INIT_DATA, //
       RESULT_DATA,
-      CREATION_PRESET,
       FORM_INPUT,
       AdditionalFormRelatedData>? formModel;
 
@@ -79,7 +81,6 @@ FORM_INPUT extends FormInput> extends _Core {
     return XTask<
         INIT_DATA, //
         RESULT_DATA,
-        CREATION_PRESET,
         FORM_INPUT>._(
       xActivity: xActivity,
       task: this,
@@ -100,8 +101,6 @@ FORM_INPUT extends FormInput> extends _Core {
   Type getInitDataType() => INIT_DATA;
 
   Type getResultDataType() => RESULT_DATA;
-
-  Type getCreationPresetType() => CREATION_PRESET;
 
   Type getFormInputType() => FORM_INPUT;
 
@@ -141,8 +140,7 @@ FORM_INPUT extends FormInput> extends _Core {
     executionTrace.addInfo(
       codeId: "#90100",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()} (Load InitData)",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Load InitData)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -172,8 +170,7 @@ FORM_INPUT extends FormInput> extends _Core {
       executionTrace.addInfo(
         codeId: "#90140",
         shortDesc:
-        "${debugObjHtml(this)} -> Successfully loaded INIT_DATA: ${debugObjHtml(
-            _initData)}.",
+            "${debugObjHtml(this)} -> Successfully loaded INIT_DATA: ${debugObjHtml(_initData)}.",
       );
     } catch (e, stackTrace) {
       taskErrorInfo = TaskErrorInfo(
@@ -203,8 +200,7 @@ FORM_INPUT extends FormInput> extends _Core {
       executionTrace.addInfo(
         codeId: "#90160",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}.performLoadInitData() method encountered an error!",
+            "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
       );
     } finally {
@@ -219,8 +215,7 @@ FORM_INPUT extends FormInput> extends _Core {
   Future<void> _unitSubmit({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XTask<TaskInitData, TaskResultData, CreationPreset, FormInput>
-    thisXTask,
+    required XTask<TaskInitData, TaskResultData, FormInput> thisXTask,
     required TaskSubmitIntent<TaskInitData, TaskResultData> executionIntent,
   }) async {
     // Handled in subsequent phase
@@ -246,7 +241,6 @@ FORM_INPUT extends FormInput> extends _Core {
     final thisXTask = xActivity.findXTaskByName(name) as XTask<
         INIT_DATA, //
         RESULT_DATA,
-        CREATION_PRESET,
         FORM_INPUT>;
     return thisXTask.loadInitDataResult;
   }
@@ -284,6 +278,14 @@ FORM_INPUT extends FormInput> extends _Core {
 
   Future<void> submit() async {
     // TODO:
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckMethod()
+  Actionable<ShowFormInfoPrecheck> canShowFormInfo() {
+    return _internalCanShowFormInfo(formModel: formModel);
   }
 
   // ***************************************************************************

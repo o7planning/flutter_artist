@@ -11,7 +11,6 @@ PROZESS_CONTEXT_DATA extends ProzessContextData> {
           StageInitData,
           StageResultData,
           PROZESS_CONTEXT_DATA,
-          CreationPreset,
           FormInput>> stages;
 
   final STAGE_ENUM? initialStageId;

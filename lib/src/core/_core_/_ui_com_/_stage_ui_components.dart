@@ -30,15 +30,76 @@ class _StageUiComponents extends _UiComponents {
       ...__controlBarWidgetStates.keys,
     ];
     final Set<FaRouteData> faRoutes =
-    list
-        .map((v) => v.faRoute)
-        .nonNulls
-        .toList()
-        .toSet();
+        list.map((v) => v.faRoute).nonNulls.toList().toSet();
     if (stage.formModel != null) {
       faRoutes.addAll(stage.formModel!.ui.faRouteDatas);
     }
     return faRoutes;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
+    required bool withStageContentView,
+    required bool withForm,
+    required bool withStageControlBar,
+    required bool activeOnly,
+  }) {
+    final Map<_ContextProviderViewState, XState> ret = {};
+
+    if (withStageContentView) {
+      ret.addAll(
+        ___findMountedWidgetStates(
+          widgetStates: __contentViewWidgetStates,
+          activeOnly: activeOnly,
+        ),
+      );
+    }
+
+    if (withStageControlBar) {
+      ret.addAll(
+        ___findMountedWidgetStates(
+          widgetStates: __controlBarWidgetStates,
+          activeOnly: activeOnly,
+        ),
+      );
+    }
+
+    if (withForm && stage.formModel != null) {
+      ret.addAll(
+        stage.formModel!.ui._findMountedFormWidgetStates(
+          activeOnly: activeOnly,
+        ),
+      );
+    }
+
+    return ret;
+  }
+
+  @override
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+    return debugFindMountedWidgetStates(
+      withStageContentView: true,
+      withForm: true,
+      withStageControlBar: true,
+      activeOnly: true,
+    );
+  }
+
+  @DebugMethodAnnotation()
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+    required bool withStageContentView,
+    required bool withForm,
+    required bool withStageControlBar,
+    required bool activeOnly,
+  }) {
+    return _findMountedWidgetStates(
+      withStageContentView: withStageContentView,
+      withForm: withForm,
+      withStageControlBar: withStageControlBar,
+      activeOnly: activeOnly,
+    );
   }
 
   // ***************************************************************************
@@ -151,7 +212,7 @@ class _StageUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-    in __contentViewWidgetStates.keys) {
+        in __contentViewWidgetStates.keys) {
       if (!widgetState.mounted) continue;
       final bool visible =
           __contentViewWidgetStates[widgetState]?.isVisible ?? false;
@@ -177,7 +238,7 @@ class _StageUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-    in __controlBarWidgetStates.keys) {
+        in __controlBarWidgetStates.keys) {
       if (!widgetState.mounted) continue;
       final bool visible =
           __controlBarWidgetStates[widgetState]?.isVisible ?? false;
@@ -194,7 +255,7 @@ class _StageUiComponents extends _UiComponents {
   /// Rebuilds active stage control bars.
   void refreshControlBars({bool force = false}) {
     for (final _ContextProviderViewState widgetState
-    in __controlBarWidgetStates.keys) {
+        in __controlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -204,7 +265,7 @@ class _StageUiComponents extends _UiComponents {
   /// Rebuilds mounted primary content views (StageView).
   void refreshContentViews({bool force = true}) {
     for (final _ContextProviderViewState state
-    in __contentViewWidgetStates.keys) {
+        in __contentViewWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -229,16 +290,14 @@ class _StageUiComponents extends _UiComponents {
 
     __controlBarWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
 
     final bool stageContextCurrent = hasStageContext();
 
     if (isVisible) {
-      FlutterArtist.desk._addRecentActivity(stage.activity);
+      FlutterArtist._addRecentModule(stage.activity);
     }
 
     if (!stageContextOld && stageContextCurrent) {
@@ -269,16 +328,14 @@ class _StageUiComponents extends _UiComponents {
 
     __contentViewWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
 
     final bool stageContextCurrent = hasStageContext();
 
     if (isVisible) {
-      FlutterArtist.desk._addRecentActivity(stage.activity);
+      FlutterArtist._addRecentModule(stage.activity);
     }
 
     if (!stageContextOld && stageContextCurrent) {

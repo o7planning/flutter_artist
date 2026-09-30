@@ -82,7 +82,9 @@ class _FilterControlBarState extends _BaseControlBarState<
     switch (type) {
       case FilterControlBarItemType.back:
         if (!widget.config.allowBackButton) return null;
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: "Back",
           iconData: FaIconConstants.formBackIconData,
           onPressed: Navigator.of(context).canPop()
@@ -95,7 +97,9 @@ class _FilterControlBarState extends _BaseControlBarState<
         }
         // widget.filterModel.canShowFilterModelCriteria()
         // bool show = true;
-        return _buildButton(
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
           tooltip: "Debug Filter Model Inspector",
           iconData: FaIconConstants.filterModelDebugIconData,
           onAction: false,
@@ -112,37 +116,15 @@ class _FilterControlBarState extends _BaseControlBarState<
     }
   }
 
-  Widget _buildButton({
-    required String tooltip,
-    required IconData iconData,
-    bool onAction = false,
-    required VoidCallback? onPressed,
-    Color? customColor,
-  }) {
-    if (widget.style.buttonBuilder != null) {
-      return widget.style.buttonBuilder!(
-          context, iconData, onPressed, onAction, tooltip);
-    }
-
-    return _ControlBarButton(
-      tooltip: tooltip,
-      iconData: iconData,
-      onAction: onAction,
-      onPressed: onPressed,
-      //
-      iconColor: onPressed == null
-          ? widget.style.disabledIconColor
-          : (customColor ?? widget.style.activeIconColor),
-    );
-  }
 
   @override
   String getWidgetOwnerClassName() =>
       getClassNameWithoutGenerics(widget.filterModel);
 
   @override
-  void addWidgetState({required bool isVisible}) => widget.filterModel.ui
-      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) =>
+      widget.filterModel.ui
+          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

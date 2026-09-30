@@ -28,15 +28,76 @@ class _TaskUiComponents extends _UiComponents {
       ...__controlBarWidgetStates.keys,
     ];
     final Set<FaRouteData> faRoutes =
-    list
-        .map((v) => v.faRoute)
-        .nonNulls
-        .toList()
-        .toSet();
+        list.map((v) => v.faRoute).nonNulls.toList().toSet();
     if (task.formModel != null) {
       faRoutes.addAll(task.formModel!.ui.faRouteDatas);
     }
     return faRoutes;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
+    required bool withTaskContentView,
+    required bool withForm,
+    required bool withTaskControlBar,
+    required bool activeOnly,
+  }) {
+    final Map<_ContextProviderViewState, XState> ret = {};
+
+    if (withTaskContentView) {
+      ret.addAll(
+        ___findMountedWidgetStates(
+          widgetStates: __contentViewWidgetStates,
+          activeOnly: activeOnly,
+        ),
+      );
+    }
+
+    if (withTaskControlBar) {
+      ret.addAll(
+        ___findMountedWidgetStates(
+          widgetStates: __controlBarWidgetStates,
+          activeOnly: activeOnly,
+        ),
+      );
+    }
+
+    if (withForm && task.formModel != null) {
+      ret.addAll(
+        task.formModel!.ui._findMountedFormWidgetStates(
+          activeOnly: activeOnly,
+        ),
+      );
+    }
+
+    return ret;
+  }
+
+  @override
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+    return debugFindMountedWidgetStates(
+      withTaskContentView: true,
+      withForm: true,
+      withTaskControlBar: true,
+      activeOnly: true,
+    );
+  }
+
+  @DebugMethodAnnotation()
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+    required bool withTaskContentView,
+    required bool withForm,
+    required bool withTaskControlBar,
+    required bool activeOnly,
+  }) {
+    return _findMountedWidgetStates(
+      withTaskContentView: withTaskContentView,
+      withForm: withForm,
+      withTaskControlBar: withTaskControlBar,
+      activeOnly: activeOnly,
+    );
   }
 
   // ***************************************************************************
@@ -149,7 +210,7 @@ class _TaskUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-    in __contentViewWidgetStates.keys) {
+        in __contentViewWidgetStates.keys) {
       if (!widgetState.mounted) continue;
       final bool visible =
           __contentViewWidgetStates[widgetState]?.isVisible ?? false;
@@ -175,7 +236,7 @@ class _TaskUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-    in __controlBarWidgetStates.keys) {
+        in __controlBarWidgetStates.keys) {
       if (!widgetState.mounted) continue;
       final bool visible =
           __controlBarWidgetStates[widgetState]?.isVisible ?? false;
@@ -192,7 +253,7 @@ class _TaskUiComponents extends _UiComponents {
   /// Rebuilds active task control bars.
   void refreshControlBars({bool force = false}) {
     for (final _ContextProviderViewState widgetState
-    in __controlBarWidgetStates.keys) {
+        in __controlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -202,7 +263,7 @@ class _TaskUiComponents extends _UiComponents {
   /// Rebuilds mounted primary content views (TaskView).
   void refreshContentViews({bool force = true}) {
     for (final _ContextProviderViewState state
-    in __contentViewWidgetStates.keys) {
+        in __contentViewWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -227,16 +288,14 @@ class _TaskUiComponents extends _UiComponents {
 
     __controlBarWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
 
     final bool taskContextCurrent = hasTaskContext();
 
     if (isVisible) {
-      FlutterArtist.desk._addRecentActivity(task.activity);
+      FlutterArtist._addRecentModule(task.activity);
     }
 
     if (!taskContextOld && taskContextCurrent) {
@@ -267,16 +326,14 @@ class _TaskUiComponents extends _UiComponents {
 
     __contentViewWidgetStates.update(
       widgetState,
-          (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () =>
-      XState()
-        .._setShowing(isVisible),
+      (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () => XState().._setShowing(isVisible),
     );
 
     final bool taskContextCurrent = hasTaskContext();
 
     if (isVisible) {
-      FlutterArtist.desk._addRecentActivity(task.activity);
+      FlutterArtist._addRecentModule(task.activity);
     }
 
     if (!taskContextOld && taskContextCurrent) {

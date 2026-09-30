@@ -157,7 +157,7 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
           if (data is XShelf) {
             title = "${data.shelf.name} (ID: ${data.xShelfId})";
             tooltip = "XShelf: $title";
-            prefixIconData = FaIconConstants.shelfStructureIconData;
+            prefixIconData = FaIconConstants.moduleStructureIconData;
           } else if (data is XScalar) {
             title = data.name;
             tooltip = "Scalar: $title";

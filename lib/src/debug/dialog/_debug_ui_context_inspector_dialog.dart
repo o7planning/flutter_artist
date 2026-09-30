@@ -11,28 +11,57 @@ class DebugUiContextInspectorDialog extends StatefulWidget {
   final Shelf? shelf;
   final Block? block;
   final Scalar? scalar;
+
+  final Activity? activity;
+  final Prozess? prozess;
+  final Stage? stage;
+  final Task? task;
   final bool showActiveOnly;
 
-  const DebugUiContextInspectorDialog.block({
-    required Block this.block,
+  const DebugUiContextInspectorDialog.module({
+    required FeatureModule module,
     this.showActiveOnly = true,
     super.key,
-  })  : shelf = null,
-        scalar = null;
-
-  const DebugUiContextInspectorDialog.scalar({
-    required Scalar this.scalar,
-    this.showActiveOnly = true,
-    super.key,
-  })  : shelf = null,
-        block = null;
+  })  : shelf = module is Shelf ? module : null,
+        block = null,
+        scalar = null,
+        activity = module is Activity ? module : null,
+        prozess = null,
+        stage = null,
+        task = null;
 
   const DebugUiContextInspectorDialog.shelf({
     required Shelf this.shelf,
     this.showActiveOnly = true,
     super.key,
   })  : block = null,
-        scalar = null;
+        scalar = null,
+        activity = null,
+        prozess = null,
+        stage = null,
+        task = null;
+
+  const DebugUiContextInspectorDialog.block({
+    required Block this.block,
+    this.showActiveOnly = true,
+    super.key,
+  })  : shelf = null,
+        scalar = null,
+        activity = null,
+        prozess = null,
+        stage = null,
+        task = null;
+
+  const DebugUiContextInspectorDialog.scalar({
+    required Scalar this.scalar,
+    this.showActiveOnly = true,
+    super.key,
+  })  : shelf = null,
+        block = null,
+        activity = null,
+        prozess = null,
+        stage = null,
+        task = null;
 
   @override
   State<StatefulWidget> createState() {
@@ -41,13 +70,13 @@ class DebugUiContextInspectorDialog extends StatefulWidget {
 
   static Future<void> show({
     required BuildContext context,
-    required Shelf shelf,
+    required FeatureModule module,
   }) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return DebugUiContextInspectorDialog.shelf(
-          shelf: shelf,
+        return DebugUiContextInspectorDialog.module(
+          module: module,
         );
       },
     );
@@ -70,39 +99,29 @@ class _DebugUiContextInspectorDialogState
     }
   }
 
-  Map<IContextProviderViewState, XState> _findWidgetStates() {
+  Map<IContextProviderViewState, XState> _debugFindWidgetStates() {
+    // SHELF
     if (widget.shelf != null) {
-      return widget.shelf!.ui.debugFindMountedWidgetStates(
-        activeOnly: true,
-        withPagination: true,
-        withBlockContentView: true,
-        withScalarContentView: true,
-        withFilter: true,
-        withSort: true,
-        withForm: true,
-        withBlockControlBar: true,
-        withScalarControlBar: true,
-        withControl: true,
-      );
+      return widget.shelf!.ui.debugFindAllMountedWidgetStates();
     } else if (widget.block != null) {
-      return widget.block!.ui.debugFindMountedWidgetStates(
-        activeOnly: false,
-        withPagination: true,
-        withBlockContentView: true,
-        withFilter: true,
-        withSort: true,
-        withForm: true,
-        withBlockControlBar: true,
-        withControl: true,
-      );
+      return widget.block!.ui.debugFindAllMountedWidgetStates();
     } else if (widget.scalar != null) {
-      return widget.scalar!.ui.debugFindMountedWidgetStates(
-        activeOnly: false,
-        withScalarContentView: true,
-        withFilter: true,
-        withScalarControlBar: true,
-      );
-    } else {
+      return widget.scalar!.ui.debugFindAllMountedWidgetStates();
+    } else if (widget.scalar != null) {
+      return widget.scalar!.ui.debugFindAllMountedWidgetStates();
+    }
+    // ACTIVITY
+    else if (widget.activity != null) {
+      return widget.activity!.ui.debugFindAllMountedWidgetStates();
+    } else if (widget.prozess != null) {
+      return widget.prozess!.ui.debugFindAllMountedWidgetStates();
+    } else if (widget.stage != null) {
+      return widget.stage!.ui.debugFindAllMountedWidgetStates();
+    } else if (widget.task != null) {
+      return widget.task!.ui.debugFindAllMountedWidgetStates();
+    }
+    // OTHERS
+    else {
       throw UnimplementedError("_findWidgetStates");
     }
   }
@@ -127,7 +146,8 @@ class _DebugUiContextInspectorDialogState
   }
 
   Widget _buildMainContent(BuildContext context) {
-    Map<IContextProviderViewState, XState> widgetStates = _findWidgetStates();
+    Map<IContextProviderViewState, XState> widgetStates =
+        _debugFindWidgetStates();
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,12 +177,14 @@ class _DebugUiContextInspectorDialogState
   }
 
   Widget _buildRowInfo({
-    required MapEntry<IContextProviderViewState, XState> widgetStateEntry,
+    required final MapEntry<IContextProviderViewState, XState> widgetStateEntry,
   }) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+
+    final IContextProviderViewState key = widgetStateEntry.key;
     final bool isVisible = widgetStateEntry.value.isVisible;
-    final bool isDevMode = widgetStateEntry.key.showMode == ShowMode.dev;
+    final bool isDevMode = key.showMode == ShowMode.dev;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),

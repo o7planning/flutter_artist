@@ -16,17 +16,22 @@ class _LoggedInUserUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+    // TODO: implement findMountedWidgetStates
+    throw UnimplementedError();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   /// Aggregates all navigation route keys declared across registered logged-in user views.
   @override
   Set<FaRouteData> get faRouteDatas {
     final List<_ContextProviderViewState> list = [
       ..._loggedInUserWidgetStates.keys,
     ];
-    return list
-        .map((v) => v.faRoute)
-        .nonNulls
-        .toList()
-        .toSet();
+    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
   }
 
   // ***************************************************************************
@@ -46,7 +51,7 @@ class _LoggedInUserUiComponents extends _UiComponents {
   // OLD: hasActiveUiComponent
   bool hasVisibleViews() {
     for (final _ContextProviderViewState widgetState
-    in _loggedInUserWidgetStates.keys) {
+        in _loggedInUserWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -65,7 +70,7 @@ class _LoggedInUserUiComponents extends _UiComponents {
   // OLD: updateAllUiComponents
   void refreshAllViews() {
     for (final _ContextProviderViewState widgetState
-    in _loggedInUserWidgetStates.keys) {
+        in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

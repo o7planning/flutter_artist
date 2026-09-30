@@ -11,14 +11,12 @@ import '../../core/utils/_class_utils.dart';
 import '../../core/widgets/_custom_app_container.dart';
 import '../../core/widgets/_simple_copy_button.dart';
 import '../form_props/_form_props_structure_view.dart';
-import '../shelf/widget/_shelf_block_scalar_type_widget.dart';
-import '../app/_block_or_scalar.dart';
 import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';
 import '../widgets/_json_view.dart';
 
 class FormModelView extends StatefulWidget {
-  final BlockFormModel formModel;
+  final BaseFormModel formModel;
   final String locationInfo;
   final Function() onPressedShelf;
 
@@ -40,18 +38,11 @@ class _FormModelViewState extends State<FormModelView> {
   static const int instantValueTab = 2;
   late int selectedTab = instantValueTab;
 
-  late List<ShelfBlockScalarType> listeners;
-
   late TabbedViewController _controller;
 
   @override
   void initState() {
     super.initState();
-    //
-    listeners =
-        FlutterArtist.storage.eventHelper.getListenerShelfBlockScalarTypes(
-      eventBlockOrScalar: BlockOrScalar.block(widget.formModel.block),
-    );
     _controller = TabbedViewController(_createTabs());
   }
 
@@ -185,37 +176,6 @@ class _FormModelViewState extends State<FormModelView> {
     );
   }
 
-  Widget _buildFormEventListenerInfo() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            HtmlInfoView(
-              infoAsHtml:
-                  "When you successfully add or modify a record on the '${getClassName(widget.formModel.block)}' block, "
-                  "the listening blocks will be switched to the 'pending' state, "
-                  "they will be lazily queried again when they are visible on the screen.\n"
-                  "Here is a list of affected blocks or scalars:",
-              style: TextStyle(fontSize: 13),
-            ),
-            const Divider(height: 10),
-            ...listeners.map(
-              (listener) => ShelfBlockScalarTypeWidget(
-                shelfBlockScalarType: listener,
-                isListener: true,
-                isEventSource: false,
-                onTap: null,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildFormModelInfo(BuildContext context) {
     return CustomAppContainer(
       width: double.maxFinite,
@@ -247,7 +207,7 @@ class _FormModelViewState extends State<FormModelView> {
                       height: 20,
                     ),
                     label: '',
-                    text: getClassName(widget.formModel.block.shelf),
+                    text: getClassName(widget.formModel.module),
                   ),
                 ),
               ),
@@ -259,7 +219,7 @@ class _FormModelViewState extends State<FormModelView> {
                     size: iconSize,
                   ),
                   label: '',
-                  text: getClassName(widget.formModel.block),
+                  text: getClassName(widget.formModel.host),
                 ),
               ),
               BreadCrumbItem(

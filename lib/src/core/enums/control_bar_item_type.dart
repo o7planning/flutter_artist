@@ -35,6 +35,7 @@ enum TaskControlBarItemType {
   loadInitData,
   submit,
   divider,
+  debugForm,
   custom,
 }
 

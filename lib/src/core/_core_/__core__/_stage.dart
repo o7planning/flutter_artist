@@ -11,8 +11,7 @@ abstract class Stage<
     INIT_DATA extends StageInitData,
     RESULT_DATA extends StageResultData,
     PROZESS_CONTEXT_DATA extends ProzessContextData,
-    CREATION_PRESET extends CreationPreset,
-    FORM_INPUT extends FormInput> extends _Core {
+    FORM_INPUT extends FormInput> extends _Core  implements FormHost  {
   final STAGE_ENUM stageId;
   final String name;
   final String? description;
@@ -24,16 +23,19 @@ abstract class Stage<
   late final Prozess<STAGE_ENUM, PROZESS_CONTEXT_DATA> prozess;
   late final ui = _StageUiComponents(stage: this);
 
+
+  Activity get module => prozess.module;
+
   Activity get activity => prozess.activity;
 
   PROZESS_CONTEXT_DATA get sharedContext => prozess.contextData;
 
+  @override
   StageFormModel<
       STAGE_ENUM, //
       INIT_DATA,
       RESULT_DATA,
       PROZESS_CONTEXT_DATA,
-      CREATION_PRESET,
       FORM_INPUT,
       AdditionalFormRelatedData>? formModel;
 
@@ -86,7 +88,7 @@ abstract class Stage<
   XStage _createXStage({
     required XProzess<STAGE_ENUM, PROZESS_CONTEXT_DATA> xProzess,
     required XStageFormModel<STAGE_ENUM, INIT_DATA, RESULT_DATA,
-            PROZESS_CONTEXT_DATA, CREATION_PRESET, FORM_INPUT>?
+            PROZESS_CONTEXT_DATA, FORM_INPUT>?
         xStageFormModel,
   }) {
     return XStage<
@@ -94,7 +96,6 @@ abstract class Stage<
         INIT_DATA,
         RESULT_DATA,
         PROZESS_CONTEXT_DATA,
-        CREATION_PRESET,
         FORM_INPUT>._(
       stage: this,
       xProzess: xProzess,
@@ -119,8 +120,6 @@ abstract class Stage<
   Type getResultDataType() => RESULT_DATA;
 
   Type getProzessContextDataType() => PROZESS_CONTEXT_DATA;
-
-  Type getCreationPresetType() => CREATION_PRESET;
 
   Type getFormInputType() => FORM_INPUT;
 
@@ -250,7 +249,7 @@ abstract class Stage<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XStage<Enum, StageInitData, StageResultData, ProzessContextData,
-            CreationPreset, FormInput>
+            FormInput>
         thisXStage,
     required StageSubmitExecutionIntent<Enum, StageInitData, StageResultData,
             ProzessContextData>
@@ -286,7 +285,6 @@ abstract class Stage<
         INIT_DATA,
         RESULT_DATA,
         PROZESS_CONTEXT_DATA,
-        CREATION_PRESET,
         FORM_INPUT>;
     return thisXStage.loadInitDataResult;
   }

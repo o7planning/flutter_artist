@@ -1,21 +1,101 @@
 part of '../core.dart';
 
-class _ActivityUiComponents extends _UiComponents {
+/// Coordinates UI representation registrations, visibility tracking, and hierarchical
+/// view rebuild cascades across all data models contained within an [Activity].
+///
+/// Functions as the top-level activity coordinator orchestrating reactive updates downward
+/// to tasks and prozesses.
+class _ActivityUiComponents extends _ModuleUiComponents {
+  /// The owner activity bound to this UI coordinator.
   final Activity activity;
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   _ActivityUiComponents({required this.activity});
 
-  @override
-  // TODO: implement faRouteDatas
-  Set<FaRouteData> get faRouteDatas => throw UnimplementedError();
+  // ***************************************************************************
+  // ***************************************************************************
 
+  /// Aggregates all navigation route keys declared across all tasks and prozesses in this activity.
   @override
-  bool hasMountedViews() {
-    // TODO: implement hasMountedUiComponent
-    throw UnimplementedError();
+  Set<FaRouteData> get faRouteDatas {
+    final Set<FaRouteData> set = {};
+    for (final Task task in activity.tasks) {
+      set.addAll(task.ui.faRouteDatas);
+    }
+    for (final Prozess prozess in activity.prozesses) {
+      set.addAll(prozess.ui.faRouteDatas);
+    }
+    return set;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Checks whether any UI component inside this activity is actively visible on screen.
+  bool hasVisibleViews() {
+    for (final Task task in activity.tasks) {
+      if (task.ui.hasVisibleViews()) {
+        return true;
+      }
+    }
+    for (final Prozess prozess in activity.prozesses) {
+      if (prozess.ui.hasVisibleViews()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Checks whether any UI component inside this activity is currently mounted in the widget tree.
+  @override
+  bool hasMountedViews() {
+    for (final Task task in activity.tasks) {
+      if (task.ui.hasMountedViews()) {
+        return true;
+      }
+    }
+    for (final Prozess prozess in activity.prozesses) {
+      if (prozess.ui.hasMountedViews()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Cascades a rebuild request to all mounted views within this activity (tasks and prozesses).
+  @override
   void refreshAllViews() {
-    // TODO: implement hasMountedUiComponent
+    try {
+      print("|----> ${getClassName(activity)}.ui.refreshAllViews()");
+      //
+      for (final Task task in activity.tasks) {
+        task.ui.refreshAllViews();
+      }
+      //
+      for (final Prozess prozess in activity.prozesses) {
+        prozess.ui.refreshAllViews();
+      }
+    } catch (e, stackTrace) {
+      print("ERROR: $e");
+      print(stackTrace);
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @override
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+    // TODO: implement findMountedWidgetStates
+    throw UnimplementedError(
+        "_ActivityUiComponents.debugFindAllMountedWidgetStates");
   }
 }

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:graphview/GraphView.dart';
 
-import '../../core/_core_/core.dart';
-import '../../core/utils/_tooltip_utils.dart';
-import '../../core/widgets/_custom_app_container.dart';
+import '../../../core/_core_/core.dart';
+import '../../../core/utils/_tooltip_utils.dart';
+import '../../../core/widgets/_custom_app_container.dart';
 import '_graph_debug_utils.dart';
 import '_graph_item_block_or_scalar_box.dart';
 import '_graph_item_shelf_box.dart';

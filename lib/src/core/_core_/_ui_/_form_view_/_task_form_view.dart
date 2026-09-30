@@ -4,7 +4,6 @@ abstract class TaskFormView<
     TASK_FORM_MODEL extends TaskFormModel<
         TaskInitData, //
         TaskResultData,
-        CreationPreset,
         FormInput,
         AdditionalFormRelatedData>> extends StatelessWidget {
   final TASK_FORM_MODEL formModel;

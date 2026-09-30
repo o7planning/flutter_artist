@@ -6,49 +6,50 @@ import '../../core/_core_/core.dart';
 import '../../core/enums/_enums.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/_class_utils.dart';
-import '../shelf/_shelf_structure_graph_view.dart';
+import '../feature_module/activity/_activity_structure_graph_view.dart';
+import '../feature_module/shelf/_shelf_structure_graph_view.dart';
 import '../utils/_dialog_size.dart';
 import '_tip_document_viewer_dialog.dart';
 
-class DebugShelfStructureInspectorDialog extends StatefulWidget {
-  final Shelf shelf;
+class DebugFeatureModuleStructureInspectorDialog extends StatefulWidget {
+  final FeatureModule module;
 
-  const DebugShelfStructureInspectorDialog({
-    required this.shelf,
+  const DebugFeatureModuleStructureInspectorDialog({
+    required this.module,
     super.key,
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _DebugShelfStructureInspectorDialogState();
+    return _DebugFeatureModuleStructureInspectorDialogState();
   }
 
   static Future<void> show({
     required BuildContext context,
-    required Shelf shelf,
+    required FeatureModule module,
   }) async {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return DebugShelfStructureInspectorDialog(
-          shelf: shelf,
+        return DebugFeatureModuleStructureInspectorDialog(
+          module: module,
         );
       },
     );
   }
 }
 
-class _DebugShelfStructureInspectorDialogState
-    extends State<DebugShelfStructureInspectorDialog> {
+class _DebugFeatureModuleStructureInspectorDialogState
+    extends State<DebugFeatureModuleStructureInspectorDialog> {
   @override
   Widget build(BuildContext context) {
     Size preferContentSize = DialogSizeUtils.calculateDebugDialogSize(context);
 
     // Set up the AlertDialog
     dialogs.FaDialog alert = dialogs.FaDialog(
-      iconData: FaIconConstants.shelfStructureIconData,
+      iconData: FaIconConstants.moduleStructureIconData,
       titleText:
-          "Debug Shelf Structure Inspector - ${getClassName(widget.shelf)}",
+          "Debug Shelf Structure Inspector - ${getClassName(widget.module)}",
       contentPadding: const EdgeInsets.all(5),
       preferredContentWidth: preferContentSize.width,
       preferredContentHeight: preferContentSize.height,
@@ -64,9 +65,19 @@ class _DebugShelfStructureInspectorDialogState
   }
 
   Widget _buildMainContent(BuildContext context) {
-    return ShelfStructureGraphView(
-      shelf: widget.shelf,
-      onPressedBack: null,
-    );
+    FeatureModule module = widget.module;
+    if (module is Shelf) {
+      return ShelfStructureGraphView(
+        shelf: module,
+        onPressedBack: null,
+      );
+    } else if (module is Activity) {
+      return ActivityStructureGraphView(
+        activity: module,
+        onPressedBack: null,
+      );
+    } else {
+      return Text("TODO: _buildMainContent");
+    }
   }
 }

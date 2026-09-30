@@ -5,8 +5,6 @@ abstract class _StorageCore extends _Core {
 
   final Map<String, Shelf> _shelfMap = {};
 
-  final List<Shelf> _recentShelves = [];
-
   List<String> get activeShelfNames => List.unmodifiable(_shelfMap.keys);
 
   List<Shelf> get activeShelves => List.unmodifiable(_shelfMap.values);
@@ -29,13 +27,11 @@ abstract class _StorageCore extends _Core {
       final orphanedAt = shelf.orphanedAt;
       if (orphanedAt == null) continue;
 
-      if (now
-          .difference(orphanedAt)
-          .inMilliseconds >=
+      if (now.difference(orphanedAt).inMilliseconds >=
           FlutterArtist.appConfig.garbageCollectionInterval.inMilliseconds) {
         Shelf? shelf = _shelfMap.remove(key);
         if (shelf != null) {
-          _recentShelves.remove(shelf);
+          FlutterArtist._removeRecentModule(shelf);
         }
         print("Unmount $key");
       }
@@ -102,7 +98,7 @@ abstract class _StorageCore extends _Core {
     if (creator == null) {
       throw DebugUtils.getFatalError(
           " ERROR: '$shelfName' not found. You need to call:\n "
-              " FlutterArtist.storage.registerShelf(()=> $shelfName())");
+          " FlutterArtist.storage.registerShelf(()=> $shelfName())");
     }
     shelf = creator() as F;
     if (FlutterArtist._navigatorStated) {
@@ -160,7 +156,6 @@ abstract class _StorageCore extends _Core {
   // ***************************************************************************
 
   void __clearShelves() {
-    _recentShelves.clear();
     __shelfCreatorMap.clear();
     _shelfMap.clear();
   }
@@ -181,66 +176,18 @@ abstract class _StorageCore extends _Core {
       switch (shelf.config.releasePolicy) {
         case ShelfReleasePolicy.retain:
           print(
-              "[FLUTTER_ARTIST] ---------> RETAIN_IN_MEMORY: ${getClassName(
-                  shelf)}");
+              "[FLUTTER_ARTIST] ---------> RETAIN_IN_MEMORY: ${getClassName(shelf)}");
           return;
         case ShelfReleasePolicy.unmount:
           print(
-              "[FLUTTER_ARTIST] ---------> MARK_TO_RELEASE_AND_PRUNE: ${getClassName(
-                  shelf)} - ${DateTime.now()}");
+              "[FLUTTER_ARTIST] ---------> MARK_TO_RELEASE_AND_PRUNE: ${getClassName(shelf)} - ${DateTime.now()}");
           shelf._markAsOrphaned(true);
           return;
       }
     } else {
       print(
-          "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(
-              shelf)} - ${DateTime.now()}");
+          "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(shelf)} - ${DateTime.now()}");
       shelf._markAsOrphaned(false);
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  Shelf? _recentShelf() {
-    return _recentShelves.isEmpty ? null : _recentShelves.first;
-  }
-
-  List<Shelf> getRecentShelves({required bool visibleOnly}) {
-    List<Shelf> ret = [];
-    for (Shelf shelf in _recentShelves) {
-      if (shelf.markedAsOrphan) {
-        continue;
-      }
-      if (visibleOnly) {
-        if (!shelf.ui.hasMountedViews()) {
-          continue;
-        }
-      }
-      ret.add(shelf);
-    }
-    return ret;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _addRecentShelf(Shelf shelf) {
-    if (_recentShelves.isEmpty) {
-      _recentShelves.add(shelf);
-    } else {
-      if (_recentShelves.first == shelf) {
-        return;
-      } else {
-        int idx = _recentShelves.indexOf(shelf);
-        if (idx == -1) {
-          _recentShelves.insert(0, shelf);
-        } else {
-          var temp = _recentShelves[0];
-          _recentShelves[0] = _recentShelves[idx];
-          _recentShelves[idx] = temp;
-        }
-      }
     }
   }
 }

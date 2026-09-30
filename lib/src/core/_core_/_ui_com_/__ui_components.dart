@@ -22,4 +22,6 @@ abstract class _UiComponents {
     }
     return ret;
   }
+
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates();
 }

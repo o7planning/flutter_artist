@@ -30,6 +30,17 @@ class _SortUiComponents extends _UiComponents {
         .toSet();
   }
 
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+
+  @override
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+    // TODO: implement findMountedWidgetStates
+    throw UnimplementedError();
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -179,7 +190,7 @@ class _SortUiComponents extends _UiComponents {
     final bool visibleCurrent = hasVisibleViews();
 
     if (isVisible) {
-      FlutterArtist.storage._addRecentShelf(sortModel.shelf);
+      FlutterArtist._addRecentModule(sortModel.shelf);
     }
 
     if (!visibleOld && visibleCurrent) {

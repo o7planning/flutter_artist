@@ -6,8 +6,22 @@ abstract class BlockFormModel<
         CREATION_PRESET extends CreationPreset,
         FORM_INPUT extends FormInput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel<CREATION_PRESET, FORM_INPUT,
-        ADDITIONAL_FORM_RELATED_DATA> {
+    extends BaseFormModel<FORM_INPUT, ADDITIONAL_FORM_RELATED_DATA> {
+  late final Block<
+      ID, //
+      Identifiable<ID>,
+      ITEM_DETAIL,
+      FilterInput,
+      FilterCriteria,
+      CREATION_PRESET,
+      FORM_INPUT> block;
+
+  @override
+  Shelf get module => block.module;
+
+  @override
+  Block get host => block;
+
   @override
   String get pathInfo => "${shelf.name} > ${block.name} > block-form";
 
@@ -21,9 +35,6 @@ abstract class BlockFormModel<
 
   @override
   BlockFormMode get formMode => _internalFormMode.toBlockFormMode();
-
-  late final Block<ID, Identifiable<ID>, ITEM_DETAIL, FilterInput,
-      FilterCriteria, CREATION_PRESET, FORM_INPUT> block;
 
   BlockFormModel({super.config});
 
@@ -43,9 +54,156 @@ abstract class BlockFormModel<
     return "<${getIdType()}, ${getItemDetailType()}, ${getCreationPresetType()}, ${getFormInputType()}, ${getAdditionalFormRelatedDataType()}>";
   }
 
+  Type getCreationPresetType() => CREATION_PRESET;
+
   // ===========================================================================
   // POLYMORPHIC BRIDGES IMPLEMENTATION
   // ===========================================================================
+
+  @override
+  Map<String, dynamic>? _internalResolveInitialSimplePropValues({
+    required ExecutionTrace executionTrace,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
+  }) {
+    final ITEM_DETAIL? itemDetail = block.currentItemDetail;
+    final ancestorContext = BlockAncestorContext(currentBlock: block);
+
+    if (itemDetail != null) {
+      executionTrace.addControllableCall(
+        codeId: "#06200",
+        caller: this,
+        methodName: "extractSimplePropValuesFromItemDetail",
+        suffixShortDesc: "",
+        parameters: {
+          "ancestorContext": ancestorContext,
+          "additionalFormRelatedData": additionalFormRelatedData,
+          "itemDetail": itemDetail,
+        },
+      );
+      return extractSimplePropValuesFromItemDetail(
+        ancestorContext: ancestorContext,
+        additionalFormRelatedData: additionalFormRelatedData,
+        itemDetail: itemDetail,
+      );
+    } else {
+      final CREATION_PRESET? creationPreset =
+          block._buildCreationPreset(executionTrace);
+      if (creationPreset == null) {
+        return null;
+      }
+      executionTrace.addControllableCall(
+        codeId: "#06540",
+        caller: this,
+        methodName: "specifyCreationValuesForSimpleProps",
+        suffixShortDesc: "",
+        parameters: {
+          "ancestorContext": ancestorContext,
+          "creationPreset": creationPreset,
+          "additionalFormRelatedData": additionalFormRelatedData,
+        },
+      );
+      return specifyCreationValuesForSimpleProps(
+        ancestorContext: ancestorContext,
+        creationPreset: creationPreset,
+        additionalFormRelatedData: additionalFormRelatedData,
+      );
+    }
+  }
+
+  @override
+  OptValueWrap? _internalResolveInitialMultiOptPropValue({
+    required ExecutionTrace executionTrace,
+    required String multiOptPropName,
+    required SelectionType selectionType,
+    required XData multiOptPropXData,
+    required Object? parentMultiOptPropValue,
+    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
+  }) {
+    final ITEM_DETAIL? itemDetail = block.currentItemDetail;
+    final ancestorContext = BlockAncestorContext(currentBlock: block);
+
+    if (itemDetail != null) {
+      executionTrace.addControllableCall(
+        codeId: "#32000",
+        caller: this,
+        methodName: "extractMultiOptPropValueFromItemDetail",
+        suffixShortDesc: "",
+        parameters: {
+          "multiOptPropName": multiOptPropName,
+          "parentMultiOptPropValue": parentMultiOptPropValue,
+          "selectionType": selectionType,
+          "multiOptPropXData": multiOptPropXData,
+          "itemDetail": itemDetail,
+          "ancestorContext": ancestorContext,
+          "additionalFormRelatedData": additionalFormRelatedData,
+        },
+      );
+      OptValueWrap? valueWrap = extractMultiOptPropValueFromItemDetail(
+        multiOptPropName: multiOptPropName,
+        selectionType: selectionType,
+        multiOptPropXData: multiOptPropXData,
+        itemDetail: itemDetail,
+        parentMultiOptPropValue: parentMultiOptPropValue,
+        ancestorContext: ancestorContext,
+        additionalFormRelatedData: additionalFormRelatedData,
+      );
+      if (valueWrap == null) {
+        __createNullValueWrapAppError(
+          methodName: "extractMultiOptPropValueFromItemDetail",
+          multiOptPropName: multiOptPropName,
+        );
+      }
+      return valueWrap;
+    } else {
+      if (_defaultMultiOptValuesInitiated) {
+        return null;
+      }
+      final CREATION_PRESET? creationPreset =
+          block._buildCreationPreset(executionTrace);
+      if (creationPreset == null) {
+        return null;
+      }
+      executionTrace.addControllableCall(
+        codeId: "#33000",
+        caller: this,
+        methodName: "specifyCreationValueForMultiOptProp",
+        suffixShortDesc: "",
+        parameters: {
+          "multiOptPropXData": multiOptPropXData,
+          "multiOptPropName": multiOptPropName,
+          "selectionType": selectionType,
+          "parentMultiOptPropValue": parentMultiOptPropValue,
+          "ancestorContext": ancestorContext,
+          "creationPreset": creationPreset,
+          "additionalFormRelatedData": additionalFormRelatedData,
+        },
+      );
+      OptValueWrap? valueWrap = specifyCreationValueForMultiOptProp(
+        multiOptPropXData: multiOptPropXData,
+        multiOptPropName: multiOptPropName,
+        selectionType: selectionType,
+        parentMultiOptPropValue: parentMultiOptPropValue,
+        ancestorContext: ancestorContext,
+        creationPreset: creationPreset,
+        additionalFormRelatedData: additionalFormRelatedData,
+      );
+      if (valueWrap == null) {
+        __createNullValueWrapAppError(
+          methodName: "specifyCreationValueForMultiOptProp",
+          multiOptPropName: multiOptPropName,
+        );
+        return null;
+      }
+      List? value = valueWrap.values;
+      return OptValueWrap.multi(
+        multiOptPropXData._resolveItemsFromRawData(
+          dynamicValues: value,
+          addOrphan: true,
+          clearOrphanItems: true,
+        ),
+      );
+    }
+  }
 
   @override
   Future<XData?> _internalPerformLoadMultiOptPropXData({
@@ -67,38 +225,6 @@ abstract class BlockFormModel<
   }
 
   @override
-  Map<String, dynamic>? _internalExtractSimplePropValuesFromDomainData({
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required Object rawDomainData,
-  }) {
-    return extractSimplePropValuesFromItemDetail(
-      ancestorContext: BlockAncestorContext(currentBlock: block),
-      additionalFormRelatedData: additionalFormRelatedData,
-      itemDetail: rawDomainData as ITEM_DETAIL,
-    );
-  }
-
-  @override
-  OptValueWrap? _internalExtractMultiOptPropValueFromDomainData({
-    required String multiOptPropName,
-    required SelectionType selectionType,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required Object rawDomainData,
-  }) {
-    return extractMultiOptPropValueFromItemDetail(
-      multiOptPropName: multiOptPropName,
-      selectionType: selectionType,
-      multiOptPropXData: multiOptPropXData,
-      parentMultiOptPropValue: parentMultiOptPropValue,
-      ancestorContext: BlockAncestorContext(currentBlock: block),
-      additionalFormRelatedData: additionalFormRelatedData,
-      itemDetail: rawDomainData as ITEM_DETAIL,
-    );
-  }
-
-  @override
   Future<ADDITIONAL_FORM_RELATED_DATA>
       _internalPerformLoadAdditionalFormRelatedData({
     required Object? rawDomainData,
@@ -106,38 +232,6 @@ abstract class BlockFormModel<
     return performLoadAdditionalFormRelatedData(
       ancestorContext: BlockAncestorContext(currentBlock: block),
       currentItemDetail: rawDomainData as ITEM_DETAIL?,
-    );
-  }
-
-  @override
-  Map<String, dynamic>? _internalSpecifyCreationValuesForSimpleProps({
-    required CREATION_PRESET creationPreset,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-  }) {
-    return specifyCreationValuesForSimpleProps(
-      ancestorContext: BlockAncestorContext(currentBlock: block),
-      creationPreset: creationPreset,
-      additionalFormRelatedData: additionalFormRelatedData,
-    );
-  }
-
-  @override
-  OptValueWrap? _internalSpecifyCreationValueForMultiOptProp({
-    required String multiOptPropName,
-    required SelectionType selectionType,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
-    required CREATION_PRESET creationPreset,
-    required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-  }) {
-    return specifyCreationValueForMultiOptProp(
-      ancestorContext: BlockAncestorContext(currentBlock: block),
-      multiOptPropName: multiOptPropName,
-      selectionType: selectionType,
-      multiOptPropXData: multiOptPropXData,
-      parentMultiOptPropValue: parentMultiOptPropValue,
-      creationPreset: creationPreset,
-      additionalFormRelatedData: additionalFormRelatedData,
     );
   }
 
@@ -238,7 +332,7 @@ abstract class BlockFormModel<
       shortDesc:
           "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
     );
-    executionIntent.resultWrapper._setResult(
+    final executionResult = executionIntent.resultWrapper._setResult(
       FormModelViewChangedResult(),
       objectCaller: this,
       methodName: '_unitFormViewChanged',
@@ -246,7 +340,6 @@ abstract class BlockFormModel<
 
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      creationPreset: null,
       formInput: null,
       activityType: FormActivityType.updateFromFormView,
       formKeyInstantValuesInUI: executionIntent.formKeyInstantValuesInUI,
@@ -271,7 +364,7 @@ abstract class BlockFormModel<
           "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
     );
 
-    executionIntent.resultWrapper._setResult(
+    final executionResult = executionIntent.resultWrapper._setResult(
       FormModelDataLoadResult(),
       objectCaller: this,
       methodName: '_unitLoadFormData',
@@ -297,14 +390,9 @@ abstract class BlockFormModel<
       return true;
     }
 
-    final CREATION_PRESET? creationPreset =
-        block._buildCreationPreset(executionTrace);
-    if (creationPreset == null) return false;
-
     final formInput = thisXBlockFormModel.formInput as FORM_INPUT?;
     return await _startNewFormActivity(
       executionTrace: executionTrace,
-      creationPreset: creationPreset,
       formInput: formInput,
       activityType: FormActivityType.startCreatingOrEditing,
       formKeyInstantValuesInUI: null,
@@ -330,7 +418,6 @@ abstract class BlockFormModel<
 
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      creationPreset: null,
       formInput: executionIntent.formInput,
       activityType: FormActivityType.patchFormFields,
       formKeyInstantValuesInUI: null,
@@ -407,9 +494,6 @@ abstract class BlockFormModel<
 
   @override
   bool isEnabled() => block._isEnableFormToModify().yes;
-
-  @override
-  void _addToRecent() => FlutterArtist.storage._addRecentShelf(shelf);
 
   @override
   void _triggerWhenFormViewVisible() =>

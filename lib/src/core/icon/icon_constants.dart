@@ -70,7 +70,7 @@ class FaIconConstants {
   static const IconData errorIconData =
       cupertino.CupertinoIcons.exclamationmark_square;
 
-  static const IconData shelfStructureIconData =
+  static const IconData moduleStructureIconData =
       cupertino.CupertinoIcons.layers_alt;
 
   static const IconData themeIconData = Icons.palette_outlined;
@@ -193,6 +193,7 @@ class FaIconConstants {
 // static const  IconData _formCleanIconData = Icons.cleaning_services_outlined;
   static const IconData formCleanIconData = cupertino.CupertinoIcons.paintbrush;
 
+  static const IconData submitIconData = cupertino.CupertinoIcons.paperplane;
   static const IconData formSaveIconData = cupertino.CupertinoIcons.floppy_disk;
   static const IconData formRefreshIconData =
       cupertino.CupertinoIcons.refresh_circled;

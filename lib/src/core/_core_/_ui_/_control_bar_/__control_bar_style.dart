@@ -20,12 +20,12 @@ class ControlBarStyle {
 
   // Advanced: Custom Builder for button.
   final Widget Function(
-      BuildContext context,
-      IconData icon,
-      VoidCallback? onPressed,
-      bool onAction,
-      String tooltip,
-      )? buttonBuilder;
+    BuildContext context, {
+    IconData iconData,
+    VoidCallback? onPressed,
+    required bool onAction,
+    required String tooltip,
+  })? buttonBuilder;
 
   // const ControlBarStyle({
   //   this.decoration,

@@ -11,6 +11,12 @@ class _FlutterArtist extends _Core {
 
   final _Backstage backstage = _Backstage();
 
+  final List<FeatureModule> _recentModules = [];
+
+  FeatureModule? _getRecentModule() {
+    return _recentModules.isEmpty ? null : _recentModules.first;
+  }
+
   _FlutterArtistNavigatorObserver? __navigatorObserver;
 
   _FlutterArtistNavigatorObserver get navigatorObserver {
@@ -79,6 +85,54 @@ class _FlutterArtist extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
+  void _removeRecentModule(FeatureModule module) {
+    _recentModules.remove(module);
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _addRecentModule(FeatureModule module) {
+    if (_recentModules.isEmpty) {
+      _recentModules.add(module);
+    } else {
+      if (_recentModules.first == module) {
+        return;
+      } else {
+        int idx = _recentModules.indexOf(module);
+        if (idx == -1) {
+          _recentModules.insert(0, module);
+        } else {
+          var temp = _recentModules[0];
+          _recentModules[0] = _recentModules[idx];
+          _recentModules[idx] = temp;
+        }
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  List<FeatureModule> getRecentModules({required bool visibleOnly}) {
+    List<FeatureModule> ret = [];
+    for (FeatureModule module in _recentModules) {
+      if (module.markedAsOrphan) {
+        continue;
+      }
+      if (visibleOnly) {
+        if (!module.ui.hasMountedViews()) {
+          continue;
+        }
+      }
+      ret.add(module);
+    }
+    return ret;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   void _addCommonRouteKey(RouteKey routeKey) {
     __commonRouteKeys.add(routeKey);
   }
@@ -115,7 +169,7 @@ class _FlutterArtist extends _Core {
   Future<void> logout({required Function() offAllAndGotoRoute}) async {
     logger.clear();
     storage._logout();
-    storage._recentShelves.clear();
+    _recentModules.clear();
     await globalsManager._logout();
     offAllAndGotoRoute();
   }
@@ -424,11 +478,11 @@ class _FlutterArtist extends _Core {
 
   // TODO: Show all active components of all shelves.
   Future<void> showDebugUiContextInspector() async {
-    Shelf? shelf = storage._recentShelf();
-    if (shelf == null) {
+    FeatureModule? module = _getRecentModule();
+    if (module == null) {
       return;
     }
-    await shelf.showDebugUiContextInspector();
+    await module.showDebugUiContextInspector();
   }
 
   // ***************************************************************************
@@ -458,17 +512,12 @@ class _FlutterArtist extends _Core {
     await CodeFlowInspectorDialog.show(context: context);
   }
 
-  Future<void> showDebugShelfStructureInspector() async {
-    Shelf? shelf = storage._recentShelf();
-    if (shelf == null) {
+  Future<void> showDebugModuleStructureInspector() async {
+    final FeatureModule? module = _getRecentModule();
+    if (module == null) {
       return;
     }
-    await shelf.showDebugShelfStructureInspector();
-  }
-
-  bool canShowDebugShelfStructureInspector() {
-    Shelf? shelf = storage._recentShelf();
-    return shelf != null;
+    await module.showDebugModuleStructureInspector();
   }
 
   Future<void> showLogViewerDialog({int? logEntryId}) async {
@@ -512,9 +561,14 @@ class _FlutterArtist extends _Core {
     }
   }
 
-  bool debugCanShowUiComponentDialog() {
-    Shelf? shelf = storage._recentShelf();
-    return shelf != null;
+  bool canShowDebugModuleStructureInspector() {
+    FeatureModule? module = _getRecentModule();
+    return module != null;
+  }
+
+  bool canShowDebugUiComponentDialog() {
+    FeatureModule? module = _getRecentModule();
+    return module != null;
   }
 
   void showDebugMenu({

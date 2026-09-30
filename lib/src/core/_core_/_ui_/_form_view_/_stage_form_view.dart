@@ -6,7 +6,6 @@ abstract class StageFormView<
         StageInitData,
         StageResultData,
         ProzessContextData,
-        CreationPreset,
         FormInput,
         AdditionalFormRelatedData>> extends StatelessWidget {
   final STAGE_FORM_MODEL formModel;

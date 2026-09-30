@@ -6,7 +6,6 @@ class XStage<
     STAGE_INIT_DATA extends StageInitData,
     STAGE_RESULT_DATA extends StageResultData,
     PROZESS_CONTEXT_DATA extends ProzessContextData,
-    CREATION_PRESET extends CreationPreset,
     FORM_INPUT extends FormInput> {
   final XProzess xProzess;
 
@@ -17,7 +16,6 @@ class XStage<
       STAGE_INIT_DATA,
       STAGE_RESULT_DATA,
       PROZESS_CONTEXT_DATA,
-      CREATION_PRESET,
       FORM_INPUT> stage;
 
   String get name => stage.name;

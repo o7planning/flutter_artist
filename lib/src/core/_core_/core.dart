@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_artist/src/core/precheck/__precheck.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
 as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
@@ -26,7 +27,7 @@ import '../../debug/code_flow/__code_flow_const.dart';
 import '../../debug/code_flow/_execution_trace_box_detail.dart';
 import '../../debug/dialog/_block_error_viewer_dialog.dart';
 import '../../debug/dialog/_debug_viewer_dialog.dart';
-import '../../debug/dialog/_debug_shelf_structure_inspector_dialog.dart';
+import '../../debug/dialog/_debug_feature_module_structure_inspector_dialog.dart';
 import '../../debug/dialog/_error_viewer_dialog.dart';
 import '../../debug/dialog/_code_flow_inspector_dialog.dart';
 import '../../debug/dialog/_log_viewer_dialog.dart';
@@ -38,7 +39,6 @@ import '../../debug/dialog/_debug_app_inspector_dialog.dart';
 import '../../debug/dialog/_debug_ui_context_inspector_dialog.dart';
 import '../../debug/executor/model/_debug_x_root_queue_item.dart';
 import '../../debug/executor/model/_debug_execution_unit.dart';
-import '../../debug/executor/model/_debug_x_root_queue.dart';
 import '../../debug/menu/_debug_menu_builder.dart';
 import '../../debug/app/_block_or_scalar.dart';
 import '../../debug/state_view/dialogs/block_item_sync_session_state_dialog.dart';
@@ -54,7 +54,6 @@ import '../annotation/annotation.dart';
 import '../built_in/empty_form_input.dart';
 import '../built_in/empty_filter_criteria.dart';
 import '../built_in/empty_filter_input.dart';
-import '../enums/_enums.dart';
 import '../enums/_enums.dart';
 
 import '../error/_block_error_info.dart';
@@ -261,6 +260,10 @@ part '__core__/_default_filter_model.dart';
 part '_utils_/_reaction_processor.dart';
 
 part '__core__/_log_listener.dart';
+
+part '__core__/_feature_module.dart';
+
+part '__core__/_form_host.dart';
 
 part '__core__/_executor.dart';
 
@@ -834,6 +837,8 @@ part '_ui_/_block_items_view_builder.dart';
 
 part '_ui_/_control_bar_item_/__control_bar_button.dart';
 
+part '_ui_/_control_bar_helper_/_control_bar_helper.dart';
+
 part '_ui_/_dev_container.dart';
 
 part '_ui_/_filter_panel.dart';
@@ -887,6 +892,8 @@ part '_ui_/_execution_progress_view_builder.dart';
 part '_ui_/_x_state.dart';
 
 part '_ui_com_/__ui_components.dart';
+
+part '_ui_com_/__module_ui_components.dart';
 
 part '_v1_/_activity_v1_ui_components.dart';
 

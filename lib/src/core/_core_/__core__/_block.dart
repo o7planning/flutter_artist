@@ -76,8 +76,10 @@ abstract class Block<
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
     CREATION_PRESET extends CreationPreset, // EmptyCreationPreset
     FORM_INPUT extends FormInput // EmptyFormInput
-    > extends _Core {
+    > extends _Core implements FormHost {
   late final Shelf shelf;
+
+  Shelf get module => shelf;
 
   bool __isQuerying = false;
 
@@ -203,6 +205,7 @@ abstract class Block<
     return other.isAncestorOf(this);
   }
 
+  @override
   final BlockFormModel<
       ID, //
       ITEM_DETAIL,
@@ -3174,18 +3177,6 @@ abstract class Block<
         isPreparingFormCreation: true,
       );
 
-      executionTrace.addInfo(
-        codeId: "#04080",
-        shortDesc: "${debugObjHtml(formModel)} set formMode to creation.",
-      );
-
-      // Build creation preset synchronously from committed filter criteria and ancestor context
-      final CREATION_PRESET? creationPreset =
-          _buildCreationPreset(executionTrace);
-      if (creationPreset == null) {
-        return false;
-      }
-
       final activityType = FormActivityType.startCreatingOrEditing;
 
       executionTrace.addNonControllableCall(
@@ -3196,14 +3187,12 @@ abstract class Block<
         parameters: {
           "activityType": activityType,
           "formInput": executionIntent.formInput,
-          "creationPreset": creationPreset,
         },
       );
 
-      // Delegate full form initialization directly to the form model
+      // Delegate form initialization directly to the form model (creationPreset is resolved polymorphically)
       success = await formModel!._startNewFormActivity(
         executionTrace: executionTrace,
-        creationPreset: creationPreset,
         formInput: executionIntent.formInput as FORM_INPUT?,
         activityType: activityType,
         formKeyInstantValuesInUI: null,
@@ -7219,28 +7208,14 @@ abstract class Block<
   }
 
   // ***************************************************************************
+  // ***************************************************************************
 
   @_PrecheckMethod()
   Actionable<ShowFormInfoPrecheck> canShowFormInfo() {
-    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
-    if (formModel == null) {
-      return Actionable<ShowFormInfoPrecheck>.no(
-        errCode: ShowFormInfoPrecheck.noForm,
-      );
-    }
-    if (loggedInUser == null) {
-      return Actionable<ShowFormInfoPrecheck>.no(
-        errCode: ShowFormInfoPrecheck.noLoggedInUser,
-      );
-    }
-    if (!loggedInUser.isSystemUser) {
-      return Actionable<ShowFormInfoPrecheck>.no(
-        errCode: ShowFormInfoPrecheck.userIsNotSystemUser,
-      );
-    }
-    return Actionable<ShowFormInfoPrecheck>.yes();
+    return _internalCanShowFormInfo(formModel: formModel);
   }
 
+  // ***************************************************************************
   // ***************************************************************************
 
   ///
