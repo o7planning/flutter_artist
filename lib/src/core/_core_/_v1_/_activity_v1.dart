@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 /// An abstract base class that encapsulates non-data-table business logic processes
-/// (such as authentication tokens, password recovery prozesss, or generic system workflows).
+/// (such as authentication tokens, password recovery prozesses, or generic system workflows).
 ///
 /// ### ⚠️ Design Limitations & Architectural Context
 /// Under the current version 1.0.0 implementation, this class offers a very restrictive and

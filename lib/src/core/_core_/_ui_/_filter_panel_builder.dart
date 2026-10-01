@@ -109,7 +109,7 @@ class _FilterPanelBuilderState
 
   @_FilterPanelChangeAnnotation()
   Future<void> _onChanged() async {
-    if (FlutterArtist.executor.executingXShelfId != null) {
+    if (FlutterArtist.executor.executingXModuleId != null) {
       return;
     }
     //

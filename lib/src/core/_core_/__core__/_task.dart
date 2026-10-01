@@ -8,7 +8,7 @@ part of '../core.dart';
 abstract class Task<
     INIT_DATA extends TaskInitData, //
     RESULT_DATA extends TaskResultData, //
-    FORM_INPUT extends FormInput> extends _Core  implements FormHost  {
+    FORM_INPUT extends FormInput> extends _Core implements FormHost {
   final String name;
   final String? description;
   final TaskConfig config;
@@ -136,6 +136,9 @@ abstract class Task<
     required TaskLoadInitDataIntent<INIT_DATA, RESULT_DATA> executionIntent,
   }) async {
     __assertThisXTask(thisXTask);
+
+    final ExecHint initialExecHint = thisXTask.execHint;
+    thisXTask.resetExecutionHints();
 
     executionTrace.addInfo(
       codeId: "#90100",

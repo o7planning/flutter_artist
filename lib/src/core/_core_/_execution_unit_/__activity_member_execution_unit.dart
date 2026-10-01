@@ -9,7 +9,7 @@ abstract class _ActivityMemberExecutionUnit extends _ExecutionUnit {
 
   XActivity get xActivity;
 
-  int get xActivityId;
+  int get xModuleId;
 
   Activity get activity;
 

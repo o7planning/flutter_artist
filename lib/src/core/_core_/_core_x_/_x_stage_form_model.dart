@@ -18,7 +18,7 @@ class XStageFormModel<
 
   final FormInput? formInput;
 
-  int get xActivityId => xActivity.xActivityId;
+  int get xModuleId => xActivity.xModuleId;
 
   String get name => xStage.name;
 

@@ -43,7 +43,7 @@ class LocaleManager extends _Core {
   /// A customizable profile comparator layout configuration.
   ///
   /// Developers can override this callback directly to enforce custom sorting
-  /// prozesss (e.g., sorting by ISO codes or English naming conventions).
+  /// prozesses (e.g., sorting by ISO codes or English naming conventions).
   int Function(LocaleProfile a, LocaleProfile b)? profileComparator;
 
   /// Exposes the dynamically compiled profile registry tracking native string naming layouts.

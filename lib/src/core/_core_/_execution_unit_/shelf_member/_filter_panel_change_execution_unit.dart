@@ -20,7 +20,7 @@ class _FilterPanelChangeExecutionUnit extends _ShelfMemberExecutionUnit {
   XShelf get xShelf => xFilterModel.xShelf;
 
   @override
-  int get xShelfId => xFilterModel.xShelfId;
+  int get xModuleId => xFilterModel.xModuleId;
 
   @override
   Shelf get shelf => xFilterModel.filterModel.shelf;

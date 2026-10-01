@@ -2,14 +2,14 @@ part of '../core.dart';
 
 class _Executor {
   int __executionUnitCount = 0;
-  int? __executingXShelfId;
+  int? __executingXModuleId;
 
   int get executionUnitCount => __executionUnitCount;
 
-  int? get executingXShelfId => __executingXShelfId;
+  int? get executingXModuleId => __executingXModuleId;
 
   final Map<_ExecutionProgressBuilderState, bool>
-  _executionProgressViewWidgetStates = {};
+      _executionProgressViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -20,7 +20,7 @@ class _Executor {
   // ***************************************************************************
 
   bool get isBusy {
-    if (__executingXShelfId == null) {
+    if (__executingXModuleId == null) {
       return false;
     }
     final _ExecutionUnit? unit = FlutterArtist._rootQueue
@@ -34,7 +34,7 @@ class _Executor {
   // ***************************************************************************
 
   Future<void> _executeExecutionUnitQueue({bool showOverlay = true}) async {
-    if (__executingXShelfId != null) {
+    if (__executingXModuleId != null) {
       return;
     }
     bool applyShowOverlay = showOverlay;
@@ -45,13 +45,13 @@ class _Executor {
     await FlutterArtist._executeExecutionUnit(
       showOverlay: applyShowOverlay,
       asyncFunction: () async {
-        // Executed Shelf Map:
-        final Map<String, Shelf> executedShelfMap = {};
+        // Executed FeatureModule Map:
+        final Map<String, FeatureModule> executedModuleMap = {};
         print("BEGIN executor: _rootQueue: ${FlutterArtist._rootQueue}");
         try {
           while (true) {
             _ExecutionUnit? executionUnit =
-            FlutterArtist._rootQueue.getNextExecutionUnit(
+                FlutterArtist._rootQueue.getNextExecutionUnit(
               removeEmptyRootQuery: true,
             );
             //
@@ -60,11 +60,11 @@ class _Executor {
                 break;
               }
               pendingEventProcessed = true;
-              final Set<String> excludeShelfNames =
-              executedShelfMap.keys.toSet();
+              final Set<String> excludeModuleNames =
+                  executedModuleMap.keys.toSet();
               //
               FlutterArtist.desk._reactionProcessor.addReactionExecutionUnits(
-                excludeShelfNames: excludeShelfNames,
+                excludeModuleNames: excludeModuleNames,
               );
               executionUnit = FlutterArtist._rootQueue.getNextExecutionUnit(
                 removeEmptyRootQuery: true,
@@ -84,7 +84,7 @@ class _Executor {
             //
             await __executeExecutionUnit(
               executionUnit: executionUnit,
-              executedShelfMap: executedShelfMap,
+              executedModuleMap: executedModuleMap,
             );
           }
           //
@@ -100,12 +100,12 @@ class _Executor {
           // FlutterArtist._rootQueue.clear();
           rethrow;
         } finally {
-          for (Shelf shelf in executedShelfMap.values) {
-            shelf.ui.refreshAllViews();
+          for (FeatureModule module in executedModuleMap.values) {
+            module.ui.refreshAllViews();
           }
           FlutterArtist.storage.ui.refreshAllViews();
           //
-          __executingXShelfId = null;
+          __executingXModuleId = null;
           FlutterArtist.backstage._consumeSingleDeferral();
         }
       },
@@ -117,7 +117,7 @@ class _Executor {
 
   Future<void> __executeExecutionUnit({
     required _ExecutionUnit executionUnit,
-    required Map<String, Shelf> executedShelfMap,
+    required Map<String, FeatureModule> executedModuleMap,
   }) async {
     if (executionUnit is _ShelfMemberExecutionUnit) {
       _updateProgressViews(
@@ -125,11 +125,20 @@ class _Executor {
         executionUnitType: executionUnit.executionUnitType,
       );
       //
-      __executingXShelfId = executionUnit.xShelfId;
+      __executingXModuleId = executionUnit.xModuleId;
       //
-      executedShelfMap[executionUnit.shelf.name] = executionUnit.shelf;
+      executedModuleMap[executionUnit.shelf.name] = executionUnit.shelf;
+    } else if (executionUnit is _ActivityMemberExecutionUnit) {
+      _updateProgressViews(
+        owner: executionUnit.owner,
+        executionUnitType: executionUnit.executionUnitType,
+      );
+      //
+      __executingXModuleId = executionUnit.xModuleId;
+      //
+      executedModuleMap[executionUnit.activity.name] = executionUnit.activity;
     } else {
-      __executingXShelfId = -1000;
+      __executingXModuleId = -1000;
     }
     //
     final executionTrace = FlutterArtist.codeFlowLogger._addExecutionUnitCall(
@@ -385,9 +394,9 @@ class _Executor {
       bool onProgress = owner == null || executionUnitType == null
           ? false
           : state.isMatches(
-        owner: owner,
-        executionUnitType: executionUnitType,
-      );
+              owner: owner,
+              executionUnitType: executionUnitType,
+            );
       //
       state.onProgress = onProgress;
       state.refreshState(force: true);

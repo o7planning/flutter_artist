@@ -22,7 +22,7 @@ class _ScalarQueryExecutionUnit<
   XShelf get xShelf => xScalar.xShelf;
 
   @override
-  int get xShelfId => xScalar.xShelfId;
+  int get xModuleId => xScalar.xModuleId;
 
   @override
   Shelf get shelf => xScalar.scalar.shelf;

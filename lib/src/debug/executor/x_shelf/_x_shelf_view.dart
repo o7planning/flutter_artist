@@ -35,7 +35,7 @@ class XShelfView extends StatelessWidget {
         SizedBox(height: 10),
         IconLabelText(
           label: "XShelf ID: ",
-          text: xShelf.xShelfId.toString(),
+          text: xShelf.xModuleId.toString(),
           textStyle: TextStyle(
             color: Colors.red,
             fontWeight: FontWeight.bold,

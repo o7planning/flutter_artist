@@ -1,7 +1,5 @@
 part of '../core.dart';
 
-int __activitySequence = 0;
-
 abstract class Activity extends FeatureModule {
   Activity get activity => this;
 
@@ -83,7 +81,7 @@ abstract class Activity extends FeatureModule {
     //
     // 2. Prozesses & Stages Registration:
     //
-    for (Prozess prozess in _activityStruct.prozesss) {
+    for (Prozess prozess in _activityStruct.prozesses) {
       if (__prozessMap.containsKey(prozess.name)) {
         throw ___registerError(
           "Duplicate Prozess '${prozess.name}' in '${getClassName(this)}'\n"

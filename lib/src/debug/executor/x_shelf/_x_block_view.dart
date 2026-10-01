@@ -23,7 +23,7 @@ class XBlockView extends StatelessWidget {
         ),
         SizedBox(height: 5),
         Text(
-          "(${xBlock.xShelf.xShelfType.name} - XShelfID: ${xBlock.xShelf.xShelfId})",
+          "(${xBlock.xShelf.xShelfType.name} - XShelfID: ${xBlock.xShelf.xModuleId})",
           style: TextStyle(
             color: Colors.indigo,
             fontWeight: FontWeight.bold,

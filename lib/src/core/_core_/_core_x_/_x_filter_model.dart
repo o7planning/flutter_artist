@@ -27,7 +27,7 @@ class XFilterModel {
 
   String get name => filterModel.name;
 
-  int get xShelfId => xShelf.xShelfId;
+  int get xModuleId => xShelf.xModuleId;
 
   FilterModelExecutionIntent? _executionIntent;
 

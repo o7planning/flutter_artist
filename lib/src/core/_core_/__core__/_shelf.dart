@@ -1,7 +1,5 @@
 part of '../core.dart';
 
-int __shelfSequence = 0;
-
 abstract class Shelf extends FeatureModule {
   Shelf get shelf => this;
 

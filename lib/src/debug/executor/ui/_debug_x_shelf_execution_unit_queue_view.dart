@@ -63,12 +63,12 @@ class _DebugXShelfExecutionUnitQueueViewState
       contentPadding: EdgeInsets.all(0),
       leading: Tooltip(
         message:
-            "XShelfID: ${widget.debugXShelfExecutionUnitQueue.xShelf.xShelfId}",
+            "XShelfID: ${widget.debugXShelfExecutionUnitQueue.xShelf.xModuleId}",
         child: CircleAvatar(
           radius: 18,
           child: Center(
             child: Text(
-              widget.debugXShelfExecutionUnitQueue.xShelf.xShelfId.toString(),
+              widget.debugXShelfExecutionUnitQueue.xShelf.xModuleId.toString(),
               style: TextStyle(fontSize: 12),
             ),
           ),

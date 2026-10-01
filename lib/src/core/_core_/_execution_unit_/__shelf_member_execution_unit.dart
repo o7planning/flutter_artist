@@ -13,7 +13,7 @@ abstract class _ShelfMemberExecutionUnit extends _ExecutionUnit {
 
   XShelf get xShelf;
 
-  int get xShelfId;
+  int get xModuleId;
 
   Shelf get shelf;
 

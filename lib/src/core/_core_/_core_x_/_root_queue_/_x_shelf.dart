@@ -1,11 +1,11 @@
 part of '../../core.dart';
 
-int __xShelfSequence = 0;
-
 abstract class XShelf extends XRootQueueItem {
   final XShelfType xShelfType;
   final Shelf shelf;
+
   late final int xShelfId;
+  late final int xModuleId;
 
   int _executionUnitStep = 0;
 
@@ -42,7 +42,8 @@ abstract class XShelf extends XRootQueueItem {
   XShelf({
     required this.xShelfType,
     required this.shelf,
-  }) : xShelfId = __xShelfSequence++ {
+  })  : xModuleId = __xModuleSequence++,
+        xShelfId = __xShelfSequence++ {
     for (FilterModel filterModel in shelf._allFilterModels) {
       //
       // Create XFilterModel from filterModel.
@@ -203,7 +204,7 @@ abstract class XShelf extends XRootQueueItem {
       }
     }
     PrintUtils.debug(debug,
-        "\nSHELF EXECUTION UNIT ($_executionUnitStep) >>> ${getClassNameWithoutGenerics(this)}._getNextExecutionUnit()...");
+        "\nSHELF EXECUTION UNIT (Step $_executionUnitStep) >>> ${getClassNameWithoutGenerics(this)}._getNextExecutionUnit()...");
     NxtExecutionUnit? next = _findBlockNextExecutionUnit(debug: debug);
     if (next != null) {
       return next;

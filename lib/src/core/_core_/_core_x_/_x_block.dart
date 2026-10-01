@@ -6,7 +6,7 @@ ITEM extends Identifiable<ID>,
 ITEM_DETAIL extends Identifiable<ID>> {
   XShelf get xShelf => xFilterModel.xShelf;
 
-  int get xShelfId => xShelf.xShelfId;
+  int get xModuleId => xShelf.xModuleId;
 
   BlockExecutionIntent<
       ID, //

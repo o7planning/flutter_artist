@@ -70,7 +70,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   String get name => scalar.name;
 
-  int get xShelfId => xShelf.xShelfId;
+  int get xModuleId => xShelf.xModuleId;
 
   final ScalarQueryResult queryResult = ScalarQueryResult(precheck: null);
 

@@ -155,7 +155,7 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
           Color textColor = Colors.black;
 
           if (data is XShelf) {
-            title = "${data.shelf.name} (ID: ${data.xShelfId})";
+            title = "${data.shelf.name} (ID: ${data.xModuleId})";
             tooltip = "XShelf: $title";
             prefixIconData = FaIconConstants.moduleStructureIconData;
           } else if (data is XScalar) {

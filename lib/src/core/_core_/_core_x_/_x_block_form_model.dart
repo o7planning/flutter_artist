@@ -9,7 +9,7 @@ class XBlockFormModel<
   late final XBlock<ID, Identifiable<ID>, ITEM_DETAIL> xBlock;
   final FormInput? formInput;
 
-  int get xShelfId => xShelf.xShelfId;
+  int get xModuleId => xShelf.xModuleId;
 
   String get name => xBlock.name;
 

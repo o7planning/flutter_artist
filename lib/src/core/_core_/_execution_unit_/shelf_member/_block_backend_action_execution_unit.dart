@@ -24,7 +24,7 @@ ITEM_DETAIL extends Identifiable<ID>>
   XShelf get xShelf => xBlock.xShelf;
 
   @override
-  int get xShelfId => xBlock.xShelfId;
+  int get xModuleId => xBlock.xModuleId;
 
   @override
   Shelf get shelf => xBlock.block.shelf;

@@ -23,7 +23,7 @@ class XScalarView extends StatelessWidget {
         ),
         SizedBox(height: 5),
         Text(
-          "(${xScalar.xShelf.xShelfType.name} - XShelfID: ${xScalar.xShelf.xShelfId})",
+          "(${xScalar.xShelf.xShelfType.name} - XShelfID: ${xScalar.xShelf.xModuleId})",
           style: TextStyle(
             color: Colors.indigo,
             fontWeight: FontWeight.bold,

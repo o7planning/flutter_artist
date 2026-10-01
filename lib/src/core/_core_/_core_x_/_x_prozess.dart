@@ -1,26 +1,26 @@
 part of '../core.dart';
 
-/// Runtime workflow coordinator maintaining multi-stage progression and transitions.
+/// Runtime prozess coordinator maintaining multi-stage progression and transitions.
 class XProzess<
     STAGE_ENUM extends Enum, //
     PROZESS_CONTEXT_DATA extends ProzessContextData> {
   final XActivity xActivity;
-  final Prozess<STAGE_ENUM, PROZESS_CONTEXT_DATA> flow;
+  final Prozess<STAGE_ENUM, PROZESS_CONTEXT_DATA> prozess;
 
   final Map<STAGE_ENUM, XStage> xStageMap = {};
   final List<XStage> allXStages = [];
 
   final List<XStageFormModel> allXStageFormModels = [];
 
-  String get name => flow.name;
+  String get name => prozess.name;
 
-  int get xActivityId => xActivity.xActivityId;
+  int get xModuleId => xActivity.xModuleId;
 
   XProzess._({
     required this.xActivity,
-    required this.flow,
+    required this.prozess,
   }) {
-    for (final Stage stage in flow.stages) {
+    for (final Stage stage in prozess.stages) {
       final StageFormModel? formModel = stage.formModel;
       XStageFormModel? xStageFormModel;
       if (formModel != null) {
@@ -50,7 +50,7 @@ class XProzess<
 
   /// Finds and yields the next executable task belonging to the active stage.
   NxtExecutionUnit? _getNextExecutionUnit({required bool debug}) {
-    final activeStageId = flow.currentStageId;
+    final activeStageId = prozess.currentStageId;
     final activeXStage = xStageMap[activeStageId];
 
     if (activeXStage != null) {

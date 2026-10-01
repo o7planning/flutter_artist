@@ -9,7 +9,7 @@ class XTaskFormModel<
   late final XTask<INIT_DATA, RESULT_DATA,  FormInput> xTask;
   final FormInput? formInput;
 
-  int get xActivityId => xActivity.xActivityId;
+  int get xModuleId => xActivity.xModuleId;
 
   String get name => xTask.name;
 

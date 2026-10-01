@@ -20,7 +20,7 @@ class _BlockFormViewChangeExecutionUnit extends _ShelfMemberExecutionUnit {
   XShelf get xShelf => xBlockFormModel.xShelf;
 
   @override
-  int get xShelfId => xBlockFormModel.xShelfId;
+  int get xModuleId => xBlockFormModel.xModuleId;
 
   @override
   Shelf get shelf => xBlockFormModel.formModel.shelf;

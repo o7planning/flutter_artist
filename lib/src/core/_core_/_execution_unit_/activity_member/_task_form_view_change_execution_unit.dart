@@ -20,7 +20,7 @@ class _TaskFormViewChangeExecutionUnit extends _ActivityMemberExecutionUnit {
   XActivity get xActivity => xTaskFormModel.xActivity;
 
   @override
-  int get xActivityId => xTaskFormModel.xActivityId;
+  int get xModuleId => xTaskFormModel.xModuleId;
 
   @override
   Activity get activity => xTaskFormModel.formModel.activity;

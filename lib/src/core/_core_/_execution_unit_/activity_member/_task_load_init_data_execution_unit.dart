@@ -34,5 +34,5 @@ FORM_INPUT extends FormInput> extends _ActivityMemberExecutionUnit {
   XActivity get xActivity => xTask.xActivity;
 
   @override
-  int get xActivityId => xTask.xActivity.xActivityId;
+  int get xModuleId => xTask.xActivity.xModuleId;
 }

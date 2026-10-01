@@ -120,7 +120,7 @@ class _TaskUiComponents extends _UiComponents {
   }
 
   /// Evaluates whether any active UI representation demands this Task's data context.
-  bool hasTaskContext({bool includeDescendants = false}) {
+  bool hasTaskContext() {
     return findVisibleTaskContextView() != null;
   }
 

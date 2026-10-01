@@ -38,5 +38,5 @@ PROZESS_CONTEXT_DATA extends ProzessContextData>
   XActivity get xActivity => xStage.xProzess.xActivity;
 
   @override
-  int get xActivityId => xStage.xProzess.xActivity.xActivityId;
+  int get xModuleId => xStage.xProzess.xActivity.xModuleId;
 }

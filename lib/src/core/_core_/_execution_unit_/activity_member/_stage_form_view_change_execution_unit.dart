@@ -20,7 +20,7 @@ class _StageFormViewChangeExecutionUnit extends _ActivityMemberExecutionUnit {
   XActivity get xActivity => xStageFormModel.xActivity;
 
   @override
-  int get xActivityId => xStageFormModel.xActivityId;
+  int get xModuleId => xStageFormModel.xModuleId;
 
   @override
   Activity get activity => xStageFormModel.formModel.activity;

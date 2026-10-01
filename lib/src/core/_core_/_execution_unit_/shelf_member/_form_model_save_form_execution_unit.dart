@@ -21,7 +21,7 @@ class _FormModelSaveFormExecutionUnit
   XShelf get xShelf => xBlockFormModel.xShelf;
 
   @override
-  int get xShelfId => xBlockFormModel.xShelfId;
+  int get xModuleId => xBlockFormModel.xModuleId;
 
   @override
   Shelf get shelf => xBlockFormModel.formModel.block.shelf;

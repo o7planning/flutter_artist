@@ -3,7 +3,7 @@ part of '../core.dart';
 class _ReactionProcessor {
   _ReactionProcessor();
 
-  void addReactionExecutionUnits({required Set<String> excludeShelfNames}) {
+  void addReactionExecutionUnits({required Set<String> excludeModuleNames}) {
     ExecutionTrace executionTrace =
         FlutterArtist.codeFlowLogger._createPendingEventProcessorExecutionTrace(
       ownerClassInstance: this,
@@ -25,7 +25,7 @@ class _ReactionProcessor {
     );
     //
     for (String listenerShelfName in FlutterArtist.storage._shelfMap.keys) {
-      if (excludeShelfNames.contains(listenerShelfName)) {
+      if (excludeModuleNames.contains(listenerShelfName)) {
         continue;
       }
       Shelf listenerShelf = FlutterArtist.storage._shelfMap[listenerShelfName]!;

@@ -41,7 +41,7 @@ abstract class Prozess<
     required XActivity xActivity,
   }) {
     return XProzess<STAGE_ENUM, PROZESS_CONTEXT_DATA>._(
-      flow: this,
+      prozess: this,
       xActivity: xActivity,
     );
   }

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_artist/src/core/precheck/__precheck.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-as dialogs;
+    as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart'
     hide FlutterArtistLocaleAdapter;
@@ -137,7 +137,6 @@ import '../utils/_locale_utils.dart';
 import '../utils/_name_utils.dart';
 import '../event/broadcast_backend_events_action.dart';
 
- 
 import '../notification/firebase/firebase_notification_service.dart';
 import '../utils/print_utils.dart';
 import '_utils_/block_query_state_calculator.dart';
@@ -442,7 +441,7 @@ part '_config_/_shelf_config.dart';
 part '_v1_/_x_activity_v1.dart';
 
 part '_core_x_/_x_block.dart';
-
+part '__core__/__sequence.dart';
 part '_core_x_/_x_task.dart';
 
 part '_core_x_/_x_stage.dart';
@@ -484,6 +483,10 @@ part '_core_x_/_x_shelf_/_x_query_/_x_shelf_shelf_natural_query.dart';
 part '_core_x_/_x_activity_/_x_exec_/__x_shelf_base_exec.dart';
 
 part '_core_x_/_x_activity_/_x_exec_/_x_activity_activity_natural_exec.dart';
+
+part '_core_x_/_x_activity_/_x_exec_/__target_task_and_options.dart';
+
+part '_core_x_/_x_activity_/_x_exec_/__target_stage_and_options.dart';
 
 part '_core_x_/_x_activity_/_x_exec_/_x_activity_stage_load_init_data.dart';
 

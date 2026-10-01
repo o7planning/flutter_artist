@@ -7,6 +7,9 @@ class _XActivityTaskLoadInitData extends _XActivityBaseExec {
           xActivityType: XActivityType.taskLoadInitData,
           activity: task.activity,
         ) {
-    //
+    _updateExecStateFromTarget(
+      targetTaskAndOptions: TargetTaskAndOptions(task: task),
+      targetStageAndOptions: null,
+    );
   }
 }

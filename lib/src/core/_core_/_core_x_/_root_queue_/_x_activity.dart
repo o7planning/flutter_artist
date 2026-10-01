@@ -1,14 +1,14 @@
 part of '../../core.dart';
 
-int __xActivitySequence = 0;
-
 /// Root queue item representing a stateful process container (Activity),
-/// managing child [XProzess] workprozesss and atomic [XTask] units.
+/// managing child [XProzess] prozesses and atomic [XTask] units.
 abstract class XActivity extends XRootQueueItem {
   final XActivityType xActivityType;
 
   final Activity activity;
+
   late final int xActivityId;
+  late final int xModuleId;
 
   int _executionUnitStep = 0;
 
@@ -19,14 +19,17 @@ abstract class XActivity extends XRootQueueItem {
 
   final List<XTask> allXTasks = [];
 
+  final List<XTaskFormModel> allXTaskFormModels = [];
+
   final Map<String, XStage> xStageMap = {};
   final Map<String, XProzess> xProzessMap = {};
-  final List<XProzess> allXProzesss = [];
+  final List<XProzess> allXProzesses = [];
 
   XActivity({
     required this.activity,
     required this.xActivityType,
-  }) : xActivityId = __xActivitySequence++ {
+  })  : xModuleId = __xModuleSequence++,
+        xActivityId = __xActivitySequence++ {
     // 1. Build and bind active runtime Tasks
     for (final Task task in activity.tasks) {
       final TaskFormModel? formModel = task.formModel;
@@ -54,15 +57,60 @@ abstract class XActivity extends XRootQueueItem {
         xActivity: this,
       );
       xProzessMap[prozess.name] = xProzess;
-      allXProzesss.add(xProzess);
+      allXProzesses.add(xProzess);
 
       for (final xStage in xProzess.allXStages) {
         xStageMap[xStage.name] = xStage;
       }
     }
+    //
+    _updateFromActivityForFirstTime();
   }
 
-  final List<XTaskFormModel> allXTaskFormModels = [];
+  // ***************************************************************************
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _updateFromActivityForFirstTime() {
+    for (XTask xTask in allXTasks) {
+      final TaskDataState dataState = xTask.task.dataState;
+      bool hasActiveUiX = xTask.task.ui.hasTaskContext();
+      if (hasActiveUiX) {
+        if (dataState.isPending || dataState.isStale) {
+          xTask.setExecHintToGreater(ExecHint.force);
+        }
+      }
+    }
+    //
+    for (XProzess xProzess in allXProzesses) {
+      List<Stage> stages = xProzess.prozess.stages;
+      final Stage? firstStage = stages.firstOrNull;
+      if (firstStage == null) {
+        continue;
+      }
+      final XStage firstXStage = xProzess.findXStageById(firstStage.stageId)!;
+
+      for (Stage stage in stages) {
+        final XStage xStage = xProzess.findXStageById(stage.stageId)!;
+        final StageDataState stageDataStage = stage.dataState;
+        if (stageDataStage.isNone) {
+          break;
+        }
+        if (stageDataStage.isPending || stageDataStage.isStale) {
+          xStage.setExecHintToGreater(ExecHint.force);
+          break;
+        }
+        //
+        // OK Now isFresh ...
+        //
+        if (stageDataStage.isSubmissionAttemptedSuccess) {
+          continue;
+        }
+        // Else (isSubmissionAttemptedFail)
+        break;
+      }
+    }
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -90,7 +138,7 @@ abstract class XActivity extends XRootQueueItem {
       }
     }
     PrintUtils.debug(debug,
-        "\nACTIVITY EXECUTION UNIT ($_executionUnitStep) >>> ${getClassNameWithoutGenerics(this)}.getNextExecutionUnit()...");
+        "\nACTIVITY EXECUTION UNIT (Step $_executionUnitStep) >>> ${getClassNameWithoutGenerics(this)}.getNextExecutionUnit()...");
 
     // Priority 1: Check atomic standalone Tasks
     for (final xTask in allXTasks) {
@@ -101,7 +149,7 @@ abstract class XActivity extends XRootQueueItem {
     }
 
     // Priority 2: Check multi-stage Prozesses
-    for (final xProzess in allXProzesss) {
+    for (final xProzess in allXProzesses) {
       final next = xProzess._getNextExecutionUnit(debug: debug);
       if (next != null && next.yes) {
         return next;

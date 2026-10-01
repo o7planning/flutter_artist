@@ -22,6 +22,12 @@ class XStage<
 
   STAGE_ENUM get stageId => stage.stageId;
 
+  bool _executed = false;
+
+  ExecHint _execHint = ExecHint.none;
+
+  ExecHint get execHint => _execHint;
+
   StageSubmitExecutionIntent<
       STAGE_ENUM, //
       STAGE_INIT_DATA,
@@ -53,6 +59,31 @@ class XStage<
   // ***************************************************************************
   // ***************************************************************************
 
+  void setExecHint(ExecHint hint) {
+    _execHint = hint;
+  }
+
+  void setExecHintToGreater(ExecHint hint) {
+    if (_execHint.isLessThan(hint)) {
+      _execHint = hint;
+    }
+  }
+
+  void resetExecutionHints() {
+    _execHint = ExecHint.none;
+  }
+
+  void _setExecutedTrue() {
+    _executed = true;
+  }
+
+  void _setExecutedFalse() {
+    _executed = false;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   NxtExecutionUnit _getNextExecutionUnit({required bool debug}) {
     NxtExecutionUnit next = __getNextExecutionUnit(debug: debug);
     if (next.yes) {
@@ -69,7 +100,7 @@ class XStage<
 
   /// Evaluates if this specific stage is active and has pending execution units.
   NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
-    final bool isCurrentStage = xProzess.flow.currentStageId == stageId;
+    final bool isCurrentStage = xProzess.prozess.currentStageId == stageId;
     if (!isCurrentStage) {
       return NxtExecutionUnit.no(
         debug: debug,

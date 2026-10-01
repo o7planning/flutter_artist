@@ -21,7 +21,7 @@ class XTask<
 
   String get name => task.name;
 
-  int get xActivityId => xActivity.xActivityId;
+  int get xModuleId => xActivity.xModuleId;
 
   ExecHint _execHint = ExecHint.none;
 
@@ -153,7 +153,7 @@ class XTask<
             executionIntent: intentToUse,
           ),
           info:
-              "Task (2.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $intentToUse, "
+              "Task (2.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $executionIntent --> $intentToUse, "
               "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       } else {
@@ -170,6 +170,7 @@ class XTask<
     // 3. DATA STATE = FRESH
     // =========================================================================
     else if (taskDataState.isFresh) {
+      // IN: DATA STATE = FRESH
       // 3.0. Intercept terminal Done intent to prevent duplicate scheduler cycles
       if (executionIntent is TaskDoneIntent) {
         return NxtExecutionUnit.no(
@@ -179,20 +180,21 @@ class XTask<
               "dataState: ${taskDataState.toBriefInfo()}",
         );
       }
-
+      // IN: DATA STATE = FRESH
       // 3.1. Force execution explicitly requested via ExecHint
       if (_execHint == ExecHint.force) {
-        final TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA> intentToUse;
+        final TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
+            intentToUse;
         if (executionIntent
-            is TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
+            is TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
           intentToUse = executionIntent;
         } else {
-          intentToUse = _createAndSetTaskIntentSubmit();
+          intentToUse = _createAndSetTaskIntentLoadInitData();
         }
 
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _TaskSubmitExecutionUnit(
+          executionUnit: _TaskLoadInitDataExecutionUnit(
             xTask: this,
             executionIntent: intentToUse,
           ),
@@ -201,7 +203,7 @@ class XTask<
               "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       }
-
+      // IN: DATA STATE = FRESH
       // 3.2. Handle active execution intents dispatched imperatively
       if (executionIntent != null) {
         if (executionIntent is TaskNullIntent) {
@@ -234,7 +236,7 @@ class XTask<
           );
         }
       }
-
+      // IN: DATA STATE = FRESH
       // 3.3. Idle state when data is fresh and no intent is active
       return NxtExecutionUnit.no(
         debug: debug,

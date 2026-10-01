@@ -100,7 +100,7 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
 
   /// Guards against simultaneous executor sweeps and race conditions during UI changes.
   Future<void> _onChanged() async {
-    if (FlutterArtist.executor.executingXShelfId != null) {
+    if (FlutterArtist.executor.executingXModuleId != null) {
       return;
     }
     if (widget.formModel._changeEventLocked) {

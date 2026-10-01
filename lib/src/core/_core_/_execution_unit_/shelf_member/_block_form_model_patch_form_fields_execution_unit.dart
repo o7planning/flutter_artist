@@ -21,7 +21,7 @@ class _BlockFormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
   XShelf get xShelf => xBlockFormModel.xShelf;
 
   @override
-  int get xShelfId => xBlockFormModel.xShelfId;
+  int get xModuleId => xBlockFormModel.xModuleId;
 
   @override
   Shelf get shelf => xBlockFormModel.formModel.block.shelf;
