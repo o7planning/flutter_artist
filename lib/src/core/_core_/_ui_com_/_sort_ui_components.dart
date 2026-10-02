@@ -34,11 +34,40 @@ class _SortUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
+    required bool withSortPanel,
+    required bool activeOnly,
+  }) {
+    final Map<_ContextProviderViewState, XState> ret = {};
+
+    if (withSortPanel) {
+      ret.addAll(
+        _findMountedSortPanelWidgetStates(
+          activeOnly: activeOnly,
+        ),
+      );
+    }
+
+    return ret;
+  }
 
   @override
   Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
-    // TODO: implement findMountedWidgetStates
-    throw UnimplementedError();
+    return debugFindMountedWidgetStates(
+      withSortPanel: true,
+      activeOnly: true,
+    );
+  }
+
+  @DebugMethodAnnotation()
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+    required bool withSortPanel,
+    required bool activeOnly,
+  }) {
+    return _findMountedWidgetStates(
+      withSortPanel: withSortPanel,
+      activeOnly: activeOnly,
+    );
   }
 
   // ***************************************************************************

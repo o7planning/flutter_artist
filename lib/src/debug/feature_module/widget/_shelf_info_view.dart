@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../../../core/_core_/core.dart';
-import '../../../../core/icon/icon_constants.dart';
-import '../../../../core/utils/_class_utils.dart';
+import '../../../core/_core_/core.dart';
+import '../../../core/icon/icon_constants.dart';
+import '../../../core/utils/_class_utils.dart';
 
 class ShelfInfoView extends StatelessWidget {
   final Shelf? shelf;

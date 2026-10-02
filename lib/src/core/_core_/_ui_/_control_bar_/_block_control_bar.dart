@@ -201,7 +201,6 @@ class _BlockControlBarState extends _BaseControlBarState<
           onPressed: actionable.yes
               ? () async {
                   final result = await widget.block.formModel!.saveForm();
-                  // widget.config.onNavigateSave?.call(result);
                   final NavigationIntent? intent =
                       widget.config.saveNavigationIntent;
                   if (intent != null) {

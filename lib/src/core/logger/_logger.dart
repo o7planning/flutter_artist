@@ -79,7 +79,7 @@ class Logger {
   }
 
   LogEntry addError({
-    required String? shelfName,
+    required String? moduleName,
     required String? methodName,
     required String errorMessage,
     required List<String>? errorDetails,
@@ -94,7 +94,7 @@ class Logger {
       stackTrace: stackTrace,
     );
     final logEntry = LogEntry.error(
-      shelfName: shelfName,
+      shelfName: moduleName,
       methodName: methodName,
       errorInfo: errorInfo,
       tipDocument: tipDocument,

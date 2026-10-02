@@ -1038,7 +1038,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     __canClearScalar(checkBusy: true);
     if (!actionable.yes) {
       _addErrorLogActionable(
-        shelf: shelf,
+        module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
         tipDocument: null,

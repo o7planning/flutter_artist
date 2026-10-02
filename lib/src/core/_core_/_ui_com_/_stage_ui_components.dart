@@ -1,21 +1,13 @@
 part of '../core.dart';
 
-//*** /_stage_ui_components.dart ***//
-
 /// Coordinates UI representation registrations, visibility tracking, and view rebuild cycles
 /// for an individual [Stage].
 ///
 /// Serves as the runtime bridge between reactive stage views ([StageView], [StageControlBar]),
 /// optional stage form models, and the execution engine.
-class _StageUiComponents extends _UiComponents {
+class _StageUiComponents extends _WorkNodeUiComponents {
   /// The owner stage bound to this UI coordinator.
   final Stage stage;
-
-  // Registered views: StageView widget states.
-  final Map<_ContextProviderViewState, XState> __contentViewWidgetStates = {};
-
-  // Registered views: StageControlBar widget states.
-  final Map<_ContextProviderViewState, XState> __controlBarWidgetStates = {};
 
   _StageUiComponents({required this.stage});
 
@@ -116,25 +108,16 @@ class _StageUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Checks if any UI view connected to this stage is actively visible on screen.
-  bool hasVisibleViews() {
-    return findVisibleView() != null;
-  }
-
   /// Evaluates whether any active UI representation demands this Stage's context.
   bool hasStageContext({bool includeDescendants = false}) {
     return findVisibleStageContextView() != null;
-  }
-
-  /// Evaluates whether an active Form representation demands stage-level form context.
-  bool hasFormContext() {
-    return findVisibleFormContextView() != null;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   /// Resolves the class name of any actively visible view for diagnostic inspection.
+  @override
   String? findVisibleView() {
     // 1. Content View (StageView)
     final String? componentName = findVisibleContentView();
@@ -160,11 +143,7 @@ class _StageUiComponents extends _UiComponents {
     return __findVisibleViewWithContextKind(contextKind: ContextKind.stage);
   }
 
-  /// Resolves the class name of the view currently demanding the Form data context.
-  String? findVisibleFormContextView() {
-    return __findVisibleViewWithContextKind(contextKind: ContextKind.form);
-  }
-
+  @override
   String? __findVisibleViewWithContextKind({
     required ContextKind? contextKind,
   }) {
@@ -197,82 +176,8 @@ class _StageUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Checks if any content view (e.g. StageView) is actively visible on screen.
-  bool hasVisibleContentView() {
-    return findVisibleContentView() != null;
-  }
-
-  /// Locates the class name of the actively visible content view.
-  String? findVisibleContentView() {
-    return findVisibleContentViewWithContextKind(contextKind: null);
-  }
-
-  /// Locates the class name of the actively visible content view filtered by context kind.
-  String? findVisibleContentViewWithContextKind({
-    required ContextKind? contextKind,
-  }) {
-    for (final _ContextProviderViewState widgetState
-        in __contentViewWidgetStates.keys) {
-      if (!widgetState.mounted) continue;
-      final bool visible =
-          __contentViewWidgetStates[widgetState]?.isVisible ?? false;
-      if (!visible) continue;
-      final bool ok = widgetState.isContextKind(contextKind);
-      if (ok) {
-        return getClassNameWithoutGenerics(widgetState.widget);
-      }
-    }
-    return null;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  /// Checks whether an active [StageControlBar] is currently visible on screen.
-  bool hasVisibleControlBar() {
-    return hasVisibleControlBarWithContextKind(contextKind: null);
-  }
-
-  /// Checks whether a [StageControlBar] matching [contextKind] is currently visible.
-  bool hasVisibleControlBarWithContextKind({
-    required ContextKind? contextKind,
-  }) {
-    for (final _ContextProviderViewState widgetState
-        in __controlBarWidgetStates.keys) {
-      if (!widgetState.mounted) continue;
-      final bool visible =
-          __controlBarWidgetStates[widgetState]?.isVisible ?? false;
-      if (!visible) continue;
-      final bool ok = widgetState.isContextKind(contextKind);
-      if (ok) return true;
-    }
-    return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  /// Rebuilds active stage control bars.
-  void refreshControlBars({bool force = false}) {
-    for (final _ContextProviderViewState widgetState
-        in __controlBarWidgetStates.keys) {
-      if (widgetState.mounted) {
-        widgetState.refreshState(force: force);
-      }
-    }
-  }
-
-  /// Rebuilds mounted primary content views (StageView).
-  void refreshContentViews({bool force = true}) {
-    for (final _ContextProviderViewState state
-        in __contentViewWidgetStates.keys) {
-      if (state.mounted) {
-        state.refreshState(force: force);
-      }
-    }
-  }
-
   /// Rebuilds all mounted views connected to this stage and its form model.
+  @override
   void refreshAllViews({bool force = true}) {
     refreshControlBars(force: force);
     refreshContentViews(force: force);
@@ -282,6 +187,7 @@ class _StageUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   void _addControlBarWidgetState({
     required _ContextProviderViewState widgetState,
     required bool isVisible,
@@ -306,15 +212,6 @@ class _StageUiComponents extends _UiComponents {
     } else if (stageContextOld && !stageContextCurrent) {
       stage._broadcastStageHidden();
     }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeControlBarWidgetState({
-    required _ContextProviderViewState widgetState,
-  }) {
-    __controlBarWidgetStates.remove(widgetState);
   }
 
   // ***************************************************************************

@@ -1,12 +1,13 @@
 part of '../../core.dart';
 
 abstract class BlockFormView<
-BLOCK_FORM_MODEL extends BlockFormModel<
-    Comparable, //
-    Identifiable<Comparable>,
-    CreationPreset,
-    FormInput,
-    AdditionalFormRelatedData>> extends StatelessWidget {
+    BLOCK_FORM_MODEL extends BlockFormModel<
+        Comparable, //
+        Identifiable<Comparable>,
+        CreationPreset,
+        FormInput,
+        FormOutput,
+        AdditionalFormRelatedData>> extends StatelessWidget {
   final BLOCK_FORM_MODEL formModel;
   final QuickSuggestionMode quickSuggestionMode;
 

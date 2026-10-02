@@ -6,7 +6,7 @@ class XTaskFormModel<
   XActivity get xActivity => xTask.xActivity;
 
   final TaskFormModel formModel;
-  late final XTask<INIT_DATA, RESULT_DATA,  FormInput> xTask;
+  late final XTask<INIT_DATA, RESULT_DATA,  FormInput, FormOutput> xTask;
   final FormInput? formInput;
 
   int get xModuleId => xActivity.xModuleId;

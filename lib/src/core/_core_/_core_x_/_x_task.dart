@@ -3,9 +3,10 @@ part of '../core.dart';
 /// Runtime execution wrapper for [Task], managing intent delegation,
 /// single-stage progress lifecycle, and state mutation.
 class XTask<
-    TASK_INIT_DATA extends TaskInitData,
-    TASK_RESULT_DATA extends TaskResultData, //\
-    FORM_INPUT extends FormInput> {
+    TASK_INIT_DATA extends TaskInitData, //
+    TASK_RESULT_DATA extends TaskResultData,
+    FORM_INPUT extends FormInput,
+    FORM_OUTPUT extends FormOutput> {
   final XActivity xActivity;
 
   final XTaskFormModel? xTaskFormModel;
@@ -13,7 +14,8 @@ class XTask<
   final Task<
       TASK_INIT_DATA, //
       TASK_RESULT_DATA,
-      FORM_INPUT> task;
+      FORM_INPUT,
+      FORM_OUTPUT> task;
 
   bool _executed = false;
 
@@ -39,8 +41,8 @@ class XTask<
     required this.xTaskFormModel,
   });
 
-  TaskLoadInitDataResult<TASK_INIT_DATA> loadInitDataResult =
-      TaskLoadInitDataResult<TASK_INIT_DATA>(precheck: null);
+  final loadInitDataResult =
+      TaskLoadInitDataResult<TASK_INIT_DATA, TASK_RESULT_DATA>(precheck: null);
 
   void setExecHint(ExecHint hint) {
     _execHint = hint;

@@ -137,7 +137,7 @@ abstract class _Core {
     }
     //
     final LogEntry logEntry = FlutterArtist.logger.addError(
-      shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
+      moduleName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
       methodName: methodName,
       errorMessage: appError.errorMessage,
       errorDetails: appError.errorDetails,
@@ -172,7 +172,7 @@ abstract class _Core {
     print(msg);
     //
     final LogEntry logEntry = FlutterArtist.logger.addError(
-      shelfName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
+      moduleName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
       methodName: methodName,
       errorMessage: message,
       errorDetails: errorDetails,
@@ -193,14 +193,14 @@ abstract class _Core {
   // ***************************************************************************
 
   ErrorInfo? _addErrorLogActionable({
-    required Shelf? shelf,
+    required FeatureModule? module,
     required Actionable actionableFalse,
     required bool showErrSnackBar,
     required TipDocument? tipDocument,
   }) {
     if (!actionableFalse.yes) {
       final LogEntry logEntry = FlutterArtist.logger.addError(
-        shelfName: shelf?.name,
+        moduleName: module?.name,
         methodName: null,
         errorMessage: actionableFalse.message!,
         errorDetails: actionableFalse.details,

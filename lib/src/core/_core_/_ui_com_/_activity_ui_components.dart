@@ -70,6 +70,72 @@ class _ActivityUiComponents extends _ModuleUiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
+    required bool withTask,
+    required bool withProzess,
+    required bool withProzessControlBar,
+    required bool activeOnly,
+  }) {
+    final Map<_ContextProviderViewState, XState> ret = {};
+
+    if (withTask) {
+      for (final Task task in activity.tasks) {
+        ret.addAll(
+          task.ui._findMountedWidgetStates(
+            withTaskContentView: true,
+            withForm: true,
+            withTaskControlBar: true,
+            activeOnly: activeOnly,
+          ),
+        );
+      }
+    }
+
+    if (withProzess) {
+      for (final Prozess prozess in activity.prozesses) {
+        ret.addAll(
+          prozess.ui._findMountedWidgetStates(
+            withStageContentView: true,
+            withForm: true,
+            withStageControlBar: true,
+            withProzessControlBar: withProzessControlBar,
+            activeOnly: activeOnly,
+          ),
+        );
+      }
+    }
+
+    return ret;
+  }
+
+  @override
+  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+    return debugFindMountedWidgetStates(
+      withTask: true,
+      withProzess: true,
+      withProzessControlBar: true,
+      activeOnly: true,
+    );
+  }
+
+  @DebugMethodAnnotation()
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+    required bool withTask,
+    required bool withProzess,
+    required bool withProzessControlBar,
+    required bool activeOnly,
+  }) {
+    return _findMountedWidgetStates(
+      withTask: withTask,
+      withProzess: withProzess,
+      withProzessControlBar: withProzessControlBar,
+      activeOnly: activeOnly,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   /// Cascades a rebuild request to all mounted views within this activity (tasks and prozesses).
   @override
   void refreshAllViews() {
@@ -87,15 +153,5 @@ class _ActivityUiComponents extends _ModuleUiComponents {
       print("ERROR: $e");
       print(stackTrace);
     }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @override
-  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
-    // TODO: implement findMountedWidgetStates
-    throw UnimplementedError(
-        "_ActivityUiComponents.debugFindAllMountedWidgetStates");
   }
 }

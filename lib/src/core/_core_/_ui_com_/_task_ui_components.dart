@@ -5,15 +5,9 @@ part of '../core.dart';
 ///
 /// Serves as the runtime bridge between reactive task views ([TaskView], [TaskControlBar]),
 /// optional form models, and the task execution engine.
-class _TaskUiComponents extends _UiComponents {
+class _TaskUiComponents extends _WorkNodeUiComponents {
   /// The owner task bound to this UI coordinator.
   final Task task;
-
-  // Registered views: TaskView, TaskSectionView.
-  final Map<_ContextProviderViewState, XState> __contentViewWidgetStates = {};
-
-  // Registered views: TaskControlBar.
-  final Map<_ContextProviderViewState, XState> __controlBarWidgetStates = {};
 
   _TaskUiComponents({required this.task});
 
@@ -114,25 +108,16 @@ class _TaskUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Checks if any UI view connected to this task is actively visible on screen.
-  bool hasVisibleViews() {
-    return findVisibleView() != null;
-  }
-
   /// Evaluates whether any active UI representation demands this Task's data context.
   bool hasTaskContext() {
     return findVisibleTaskContextView() != null;
-  }
-
-  /// Evaluates whether an active Form representation demands task-level form context.
-  bool hasFormContext() {
-    return findVisibleFormContextView() != null;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   /// Resolves the class name of any actively visible view for diagnostic inspection.
+  @override
   String? findVisibleView() {
     // 1. Content View (TaskView)
     final String? componentName = findVisibleContentView();
@@ -158,11 +143,7 @@ class _TaskUiComponents extends _UiComponents {
     return __findVisibleViewWithContextKind(contextKind: ContextKind.task);
   }
 
-  /// Resolves the class name of the view currently demanding the Form data context.
-  String? findVisibleFormContextView() {
-    return __findVisibleViewWithContextKind(contextKind: ContextKind.form);
-  }
-
+  @override
   String? __findVisibleViewWithContextKind({
     required ContextKind? contextKind,
   }) {
@@ -195,82 +176,8 @@ class _TaskUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Checks if any content view (e.g. TaskView) is actively visible on screen.
-  bool hasVisibleContentView() {
-    return findVisibleContentView() != null;
-  }
-
-  /// Locates the class name of the actively visible content view.
-  String? findVisibleContentView() {
-    return findVisibleContentViewWithContextKind(contextKind: null);
-  }
-
-  /// Locates the class name of the actively visible content view filtered by context kind.
-  String? findVisibleContentViewWithContextKind({
-    required ContextKind? contextKind,
-  }) {
-    for (final _ContextProviderViewState widgetState
-        in __contentViewWidgetStates.keys) {
-      if (!widgetState.mounted) continue;
-      final bool visible =
-          __contentViewWidgetStates[widgetState]?.isVisible ?? false;
-      if (!visible) continue;
-      final bool ok = widgetState.isContextKind(contextKind);
-      if (ok) {
-        return getClassNameWithoutGenerics(widgetState.widget);
-      }
-    }
-    return null;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  /// Checks whether an active [TaskControlBar] is currently visible on screen.
-  bool hasVisibleControlBar() {
-    return hasVisibleControlBarWithContextKind(contextKind: null);
-  }
-
-  /// Checks whether a [TaskControlBar] matching [contextKind] is currently visible.
-  bool hasVisibleControlBarWithContextKind({
-    required ContextKind? contextKind,
-  }) {
-    for (final _ContextProviderViewState widgetState
-        in __controlBarWidgetStates.keys) {
-      if (!widgetState.mounted) continue;
-      final bool visible =
-          __controlBarWidgetStates[widgetState]?.isVisible ?? false;
-      if (!visible) continue;
-      final bool ok = widgetState.isContextKind(contextKind);
-      if (ok) return true;
-    }
-    return false;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  /// Rebuilds active task control bars.
-  void refreshControlBars({bool force = false}) {
-    for (final _ContextProviderViewState widgetState
-        in __controlBarWidgetStates.keys) {
-      if (widgetState.mounted) {
-        widgetState.refreshState(force: force);
-      }
-    }
-  }
-
-  /// Rebuilds mounted primary content views (TaskView).
-  void refreshContentViews({bool force = true}) {
-    for (final _ContextProviderViewState state
-        in __contentViewWidgetStates.keys) {
-      if (state.mounted) {
-        state.refreshState(force: force);
-      }
-    }
-  }
-
   /// Rebuilds all mounted views connected to this task and its form model.
+  @override
   void refreshAllViews({bool force = true}) {
     refreshControlBars(force: force);
     refreshContentViews(force: force);
@@ -280,6 +187,7 @@ class _TaskUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   void _addControlBarWidgetState({
     required _ContextProviderViewState widgetState,
     required bool isVisible,
@@ -304,15 +212,6 @@ class _TaskUiComponents extends _UiComponents {
     } else if (taskContextOld && !taskContextCurrent) {
       task._broadcastTaskHidden();
     }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void _removeControlBarWidgetState({
-    required _ContextProviderViewState widgetState,
-  }) {
-    __controlBarWidgetStates.remove(widgetState);
   }
 
   // ***************************************************************************

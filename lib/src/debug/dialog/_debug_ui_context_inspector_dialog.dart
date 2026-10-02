@@ -89,13 +89,19 @@ class _DebugUiContextInspectorDialogState
 
   String _title() {
     if (widget.shelf != null) {
-      return "Active UI Components in current screen";
+      return "Mounted UI Components of the Block";
     } else if (widget.block != null) {
       return "Mounted UI Components of the Block";
     } else if (widget.scalar != null) {
       return "Mounted UI Components of the Scalar";
+    } else if (widget.activity != null) {
+      return "Mounted UI Components of the Activity";
+    } else if (widget.task != null) {
+      return "Mounted UI Components of the Task";
+    } else if (widget.prozess != null) {
+      return "Mounted UI Components of the Prozess";
     } else {
-      throw UnimplementedError("_title");
+      throw UnimplementedError("DebugUiContextInspectorDialog _title");
     }
   }
 
@@ -122,7 +128,8 @@ class _DebugUiContextInspectorDialogState
     }
     // OTHERS
     else {
-      throw UnimplementedError("_findWidgetStates");
+      throw UnimplementedError(
+          "DebugUiContextInspectorDialog._findWidgetStates");
     }
   }
 
@@ -198,64 +205,69 @@ class _DebugUiContextInspectorDialogState
           width: 0.8,
         ),
       ),
-      child: CheckboxListTile(
-        dense: true,
-        visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-        contentPadding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-        controlAffinity: ListTileControlAffinity.trailing,
-        value: isDevMode,
-        secondary: Container(
-          width: 42,
-          height: 42,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            color: isVisible
-                ? colorScheme.primary.withValues(alpha: 0.15)
-                : theme.colorScheme.surfaceContainerHighest
-                    .withValues(alpha: 0.4),
-            border: Border.all(
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(8),
+        clipBehavior: Clip.antiAlias,
+        child: CheckboxListTile(
+          dense: true,
+          visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
+          contentPadding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+          controlAffinity: ListTileControlAffinity.trailing,
+          value: isDevMode,
+          secondary: Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
               color: isVisible
-                  ? colorScheme.primary.withValues(alpha: 0.5)
-                  : theme.dividerColor.withValues(alpha: 0.1),
-              width: 0.5,
+                  ? colorScheme.primary.withValues(alpha: 0.15)
+                  : theme.colorScheme.surfaceContainerHighest
+                      .withValues(alpha: 0.4),
+              border: Border.all(
+                color: isVisible
+                    ? colorScheme.primary.withValues(alpha: 0.5)
+                    : theme.dividerColor.withValues(alpha: 0.1),
+                width: 0.5,
+              ),
+            ),
+            child: Icon(
+              widgetStateEntry.key.type.iconData,
+              size: 22,
+              color: isVisible ? colorScheme.primary : theme.hintColor,
             ),
           ),
-          child: Icon(
-            widgetStateEntry.key.type.iconData,
-            size: 22,
-            color: isVisible ? colorScheme.primary : theme.hintColor,
-          ),
-        ),
-        title: IconLabelText(
-          icon: Icon(
-            FaIconConstants.locationIconData,
-            size: 14,
-            color: colorScheme.onSurface.withValues(alpha: 0.7),
-          ),
-          label: "",
-          text: widgetStateEntry.key.locationInfo,
-          style: TextStyle(
-            fontSize: fontSize,
-            fontWeight: isDevMode ? FontWeight.bold : FontWeight.normal,
-            color: colorScheme.onSurface,
-          ),
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(left: 18),
-          child: Text(
-            widgetStateEntry.key.description,
+          title: IconLabelText(
+            icon: Icon(
+              FaIconConstants.locationIconData,
+              size: 14,
+              color: colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+            label: "",
+            text: widgetStateEntry.key.locationInfo,
             style: TextStyle(
-              fontSize: fontSize - 2,
-              color: colorScheme.onSurface.withValues(alpha: 0.5),
+              fontSize: fontSize,
+              fontWeight: isDevMode ? FontWeight.bold : FontWeight.normal,
+              color: colorScheme.onSurface,
             ),
           ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(left: 18),
+            child: Text(
+              widgetStateEntry.key.description,
+              style: TextStyle(
+                fontSize: fontSize - 2,
+                color: colorScheme.onSurface.withValues(alpha: 0.5),
+              ),
+            ),
+          ),
+          onChanged: (bool? value) {
+            widgetStateEntry.key.showMode =
+                (value ?? false) ? ShowMode.dev : ShowMode.production;
+            widgetStateEntry.key.setState(() {});
+            setState(() {});
+          },
         ),
-        onChanged: (bool? value) {
-          widgetStateEntry.key.showMode =
-              (value ?? false) ? ShowMode.dev : ShowMode.production;
-          widgetStateEntry.key.setState(() {});
-          setState(() {});
-        },
       ),
     );
   }

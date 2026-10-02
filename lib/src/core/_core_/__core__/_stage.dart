@@ -7,25 +7,31 @@ part of '../core.dart';
 /// -> (resolves INIT_DATA) -> [StageDataStateLoadedFresh]
 /// -> (submission) -> [StageDataStateSubmissionAttempted]
 abstract class Stage<
-    STAGE_ENUM extends Enum,
+    STAGE_ENUM extends Enum, //
     INIT_DATA extends StageInitData,
     RESULT_DATA extends StageResultData,
     PROZESS_CONTEXT_DATA extends ProzessContextData,
-    FORM_INPUT extends FormInput> extends _Core  implements FormHost  {
+    FORM_INPUT extends FormInput,
+    FORM_OUTPUT extends FormOutput> extends WorkNode<
+    INIT_DATA, //
+    RESULT_DATA,
+    FORM_INPUT,
+    FORM_OUTPUT> implements FormHost {
   final STAGE_ENUM stageId;
-  final String name;
-  final String? description;
+
   final StageConfig config;
   final StageEffectiveConfig effectiveConfig;
 
   late final debug = _StageDebugInfo(stage: this);
 
   late final Prozess<STAGE_ENUM, PROZESS_CONTEXT_DATA> prozess;
+
   late final ui = _StageUiComponents(stage: this);
 
-
+  @override
   Activity get module => prozess.module;
 
+  @override
   Activity get activity => prozess.activity;
 
   PROZESS_CONTEXT_DATA get sharedContext => prozess.contextData;
@@ -37,6 +43,7 @@ abstract class Stage<
       RESULT_DATA,
       PROZESS_CONTEXT_DATA,
       FORM_INPUT,
+      FORM_OUTPUT,
       AdditionalFormRelatedData>? formModel;
 
   // ===========================================================================
@@ -47,24 +54,10 @@ abstract class Stage<
 
   StageDataState get dataState => _dataState;
 
-  INIT_DATA? _initData;
-
-  INIT_DATA? get initData => _initData;
-
-  RESULT_DATA? _lastResultData;
-
-  RESULT_DATA? get lastResultData => _lastResultData;
-
-  bool __isLoadingInitData = false;
-
-  bool get isLoadingInitData => __isLoadingInitData;
-
-  bool __isSubmitting = false;
-
-  bool get isSubmitting => __isSubmitting;
-
+  @override
   bool get hasForm => formModel != null;
 
+  @override
   bool get hasError => _dataState.hasError;
 
   StageErrorInfo? get errorInfo => _dataState.errorInfo;
@@ -75,8 +68,8 @@ abstract class Stage<
 
   Stage({
     required this.stageId,
-    required this.name,
-    this.description,
+    required super.name,
+    super.description,
     this.config = const StageConfig(),
     required this.formModel,
   }) : effectiveConfig = StageEffectiveConfig.fromConfig(config) {
@@ -88,7 +81,7 @@ abstract class Stage<
   XStage _createXStage({
     required XProzess<STAGE_ENUM, PROZESS_CONTEXT_DATA> xProzess,
     required XStageFormModel<STAGE_ENUM, INIT_DATA, RESULT_DATA,
-            PROZESS_CONTEXT_DATA, FORM_INPUT>?
+            PROZESS_CONTEXT_DATA, FORM_INPUT, FORM_OUTPUT>?
         xStageFormModel,
   }) {
     return XStage<
@@ -96,7 +89,8 @@ abstract class Stage<
         INIT_DATA,
         RESULT_DATA,
         PROZESS_CONTEXT_DATA,
-        FORM_INPUT>._(
+        FORM_INPUT,
+        FORM_OUTPUT>._(
       stage: this,
       xProzess: xProzess,
       xStageFormModel: xStageFormModel,
@@ -109,19 +103,18 @@ abstract class Stage<
     prozess = parentProzess as Prozess<STAGE_ENUM, PROZESS_CONTEXT_DATA>;
   }
 
+  @override
+  void _refreshControlBars() {
+    ui.refreshControlBars( );
+  }
+
   // ===========================================================================
   // GENERICS TYPES:
   // ===========================================================================
 
   Type getStageEnumType() => STAGE_ENUM;
 
-  Type getInitDataType() => INIT_DATA;
-
-  Type getResultDataType() => RESULT_DATA;
-
   Type getProzessContextDataType() => PROZESS_CONTEXT_DATA;
-
-  Type getFormInputType() => FORM_INPUT;
 
   // ===========================================================================
   // ABSTRACT CONTRACTS
@@ -162,6 +155,9 @@ abstract class Stage<
         executionIntent,
   }) async {
     __assertThisXStage(thisXStage);
+    thisXStage._createAndSetStageIntentDone(
+      lastIntentInfo: "Load Init Data",
+    );
 
     executionTrace.addInfo(
       codeId: "#92100",
@@ -206,6 +202,19 @@ abstract class Stage<
         shortDesc:
             "${debugObjHtml(this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(_initData)}.",
       );
+
+      // Coordinate StageFormModel data state transition
+      if (formModel != null) {
+        final newFormDataState = FormDataStateUtils.calculateNewLazyDataState(
+          currentFormDataState: formModel!.dataState,
+          hasCurrentItem: _initData != null,
+          currentItemChanged: true,
+        );
+        formModel!._formModelStructure._setFormDataState(
+          formDataState: newFormDataState,
+          error: null,
+        );
+      }
     } catch (e, stackTrace) {
       stageErrorInfo = StageErrorInfo(
         stageErrorMethod: StageErrorMethod.performLoadInitData,
@@ -249,9 +258,9 @@ abstract class Stage<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XStage<Enum, StageInitData, StageResultData, ProzessContextData,
-            FormInput>
+            FormInput, FormOutput>
         thisXStage,
-    required StageSubmitExecutionIntent<Enum, StageInitData, StageResultData,
+    required StageSubmitIntent<Enum, StageInitData, StageResultData,
             ProzessContextData>
         executionIntent,
   }) async {
@@ -285,31 +294,12 @@ abstract class Stage<
         INIT_DATA,
         RESULT_DATA,
         PROZESS_CONTEXT_DATA,
-        FORM_INPUT>;
+        FORM_INPUT,
+        FORM_OUTPUT>;
     return thisXStage.loadInitDataResult;
   }
 
-  // bool isPendingOrStale({required bool requiresVisible}) {
-  //   final bool visible = ui.hasVisibleViews();
-  //   if (requiresVisible && !visible) {
-  //     return false;
-  //   }
-  //   return dataState.isPending || dataState.isStale;
-  // }
 
-  /// Clears stage data and resets back to inactive state.
-  void clear() {
-    _initData = null;
-    _lastResultData = null;
-    _dataState = const StageDataStateNone();
-  }
-
-  void __refreshLoadingInitDataState({required bool isLoading}) {
-    try {
-      __isLoadingInitData = isLoading;
-      ui.refreshControlBars();
-    } catch (_) {}
-  }
 
   void showStageErrorViewerDialog(BuildContext context) {
     if (errorInfo != null) {

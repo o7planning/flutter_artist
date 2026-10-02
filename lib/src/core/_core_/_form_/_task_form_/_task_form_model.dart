@@ -5,13 +5,15 @@ abstract class TaskFormModel<
         INIT_DATA extends TaskInitData,
         RESULT_DATA extends TaskResultData,
         FORM_INPUT extends FormInput,
+        FORM_OUTPUT extends FormOutput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends ActivityFormModel<
+    extends WorkNodeFormModel<
         INIT_DATA, //
         RESULT_DATA,
         FORM_INPUT,
+        FORM_OUTPUT,
         ADDITIONAL_FORM_RELATED_DATA> {
-  late final Task<INIT_DATA, RESULT_DATA, FORM_INPUT> task;
+  late final Task<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT> task;
 
   @override
   Task get host => task;
@@ -19,6 +21,7 @@ abstract class TaskFormModel<
   @override
   Activity get activity => task.activity;
 
+  @override
   Activity get module => task.module;
 
   @override
@@ -42,7 +45,7 @@ abstract class TaskFormModel<
   // ===========================================================================
 
   void _bindToTask(
-    Task<INIT_DATA, RESULT_DATA, FORM_INPUT> parentTask,
+    Task<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT> parentTask,
   ) {
     task = parentTask;
   }
@@ -57,7 +60,7 @@ abstract class TaskFormModel<
   }
 
   @override
-  bool isEnabled() => !task.isLoadingInitData && !task.isExecuting;
+  bool isEnabled() => !task.isLoadingInitData && !task.isSubmitting;
 
   @override
   void _refreshControlBars() => task.ui.refreshControlBars();
@@ -186,7 +189,7 @@ abstract class TaskFormModel<
         __canPatchFormFields(checkBusy: true);
     if (!actionable.yes) {
       _addErrorLogActionable(
-        shelf: null,
+        module: null,
         actionableFalse: actionable,
         showErrSnackBar: true,
         tipDocument: null,

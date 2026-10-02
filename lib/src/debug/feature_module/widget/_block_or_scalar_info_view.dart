@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
-import '../../../../core/icon/icon_constants.dart';
-import '../../../app/_block_or_scalar.dart';
-import '../../../constants/_debug_constants.dart';
+import '../../../core/icon/icon_constants.dart';
+import '../../app/_block_or_scalar.dart';
+import '../../constants/_debug_constants.dart';
 
 
 class BlockOrScalarInfoView extends StatelessWidget {

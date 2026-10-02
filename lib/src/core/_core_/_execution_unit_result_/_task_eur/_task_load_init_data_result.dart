@@ -1,6 +1,8 @@
 part of '../../core.dart';
 
-class TaskLoadInitDataResult<INIT_DATA extends TaskInitData>
+class TaskLoadInitDataResult<
+        INIT_DATA extends TaskInitData, //
+        RESULT_DATA extends TaskResultData>
     extends ExecutionUnitResult<TaskLoadInitDataPrecheck> {
   TaskLoadInitDataResult({required super.precheck});
 

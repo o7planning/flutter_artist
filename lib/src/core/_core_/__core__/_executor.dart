@@ -174,7 +174,34 @@ class _Executor {
           executionIntent: executionUnit.executionIntent,
         );
       }
-      // _TaskExecutionUnit
+      // _StageFormModelLoadDataExecutionUnit
+      else if (executionUnit is _StageFormModelLoadDataExecutionUnit) {
+        await executionUnit.xStageFormModel.formModel._unitLoadFormData(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXStageFormModel: executionUnit.xStageFormModel,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
+      // _StageFormViewChangeExecutionUnit
+      else if (executionUnit is _StageFormViewChangeExecutionUnit) {
+        await executionUnit.xStageFormModel.formModel._unitFormViewChanged(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXStageFormModel: executionUnit.xStageFormModel,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
+      // _TaskFormModelPatchFormFieldsExecutionUnit
+      else if (executionUnit is _TaskFormModelPatchFormFieldsExecutionUnit) {
+        await executionUnit.xTaskFormModel.formModel._unitPatchFormFields(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXTaskFormModel: executionUnit.xTaskFormModel,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
+      // _TaskSubmitExecutionUnit
       else if (executionUnit is _TaskSubmitExecutionUnit) {
         await executionUnit.xTask.task._unitSubmit(
           executionTrace: executionTrace,
@@ -189,6 +216,33 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXTask: executionUnit.xTask,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
+      // _TaskFormModelLoadDataExecutionUnit
+      else if (executionUnit is _TaskFormModelLoadDataExecutionUnit) {
+        await executionUnit.xTaskFormModel.formModel._unitLoadFormData(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXTaskFormModel: executionUnit.xTaskFormModel,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
+      // _TaskFormViewChangeExecutionUnit
+      else if (executionUnit is _TaskFormViewChangeExecutionUnit) {
+        await executionUnit.xTaskFormModel.formModel._unitFormViewChanged(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXTaskFormModel: executionUnit.xTaskFormModel,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
+      // _StageFormModelPatchFormFieldsExecutionUnit
+      else if (executionUnit is _StageFormModelPatchFormFieldsExecutionUnit) {
+        await executionUnit.xStageFormModel.formModel._unitPatchFormFields(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXStageFormModel: executionUnit.xStageFormModel,
           executionIntent: executionUnit.executionIntent,
         );
       }
@@ -326,7 +380,7 @@ class _Executor {
           executionIntent: executionUnit.executionIntent,
         );
       }
-      // FormModel Save:
+      // _FormModelSaveFormExecutionUnit
       else if (executionUnit is _FormModelSaveFormExecutionUnit) {
         await executionUnit.xBlockFormModel.formModel._unitSaveForm(
           executionTrace: executionTrace,
@@ -335,7 +389,7 @@ class _Executor {
           executionIntent: executionUnit.executionIntent,
         );
       }
-      // FormModel QuickFormInputAction:
+      // _BlockFormModelPatchFormFieldsExecutionUnit
       else if (executionUnit is _BlockFormModelPatchFormFieldsExecutionUnit) {
         await executionUnit.xBlockFormModel.formModel._unitPatchFormFields(
           executionTrace: executionTrace,
@@ -344,7 +398,7 @@ class _Executor {
           executionIntent: executionUnit.executionIntent,
         );
       }
-      // Scalar:
+      // _ScalarQueryExecutionUnit
       else if (executionUnit is _ScalarQueryExecutionUnit) {
         await executionUnit.xScalar.scalar._unitQuery(
           executionTrace: executionTrace,

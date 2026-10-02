@@ -8,7 +8,9 @@ import '../../../core/utils/_tooltip_utils.dart';
 
 import '../../../core/widgets/_custom_app_container.dart';
 import '../../constants/_debug_constants.dart';
-import '../shelf/_shelf_structure_view_config.dart';
+import '../_graph_configuration.dart';
+import '_graph_item_prozess_box.dart';
+import '_graph_item_task_box.dart';
 
 /// A widget that visualizes the Activity execution structure using GraphView,
 /// mapping Activities, Prozesses, and their corresponding child Stages.
@@ -61,6 +63,16 @@ class _ActivityStructureGraphViewState
       _graph.addEdge(
         activityNode,
         prozessNode,
+        paint: Paint()..color = Colors.black87,
+      );
+    }
+
+    // Build connections from Activity to its Tasks (fixes the crash when prozess is empty but task exists)
+    for (var task in widget.activity.tasks) {
+      final taskNode = Node.Id(task);
+      _graph.addEdge(
+        activityNode,
+        taskNode,
         paint: Paint()..color = Colors.black87,
       );
     }
@@ -125,8 +137,10 @@ class _ActivityStructureGraphViewState
       child: entity is Activity
           ? _buildActivityBox(entity)
           : entity is Prozess
-              ? _buildProzessBox(entity)
-              : const SizedBox.shrink(),
+              ? GraphItemProzessBox(prozess: entity)
+              : entity is Task
+                  ? GraphItemTaskBox(task: entity)
+                  : const SizedBox.shrink(),
     );
   }
 
@@ -181,6 +195,44 @@ class _ActivityStructureGraphViewState
                   size: 18,
                 ),
               ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// Builds the visual box representation for a Task node.
+  Widget _buildTaskBox(Task task) {
+    return TooltipUtils.buildTooltip(
+      message: task.name,
+      child: Container(
+        width: 240,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: DebugConstants.activeGraphBoxBgColor(context),
+          borderRadius: BorderRadius.circular(4),
+          boxShadow: [
+            DebugConstants.graphBoxShadow(context),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Icon(
+              FaIconConstants.taskIconData,
+              size: 24,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                task.name,
+                style: TextStyle(
+                  fontSize: DebugConstants.graphBoxFontSizeChildBox,
+                  fontWeight: FontWeight.bold,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -30,5 +30,5 @@ enum PrecheckCode {
   cancelled,
   //
   hasActiveUI,
-  hasNoActiveUI,
+  hasNoActiveUI, taskInPendingState,
 }

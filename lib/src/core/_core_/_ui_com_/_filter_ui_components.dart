@@ -36,10 +36,56 @@ class _FilterUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
+    required bool withFilterPanel,
+    required bool withControlBar,
+    required bool activeOnly,
+  }) {
+    final Map<_ContextProviderViewState, XState> ret = {};
+
+    if (withFilterPanel) {
+      ret.addAll(
+        _findMountedFilterPanelWidgetStates(
+          activeOnly: activeOnly,
+        ),
+      );
+    }
+
+    if (withControlBar) {
+      ret.addAll(
+        ___findMountedWidgetStates(
+          widgetStates: _controlBarWidgetStates,
+          activeOnly: activeOnly,
+        ),
+      );
+    }
+
+    return ret;
+  }
+
   @override
   Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
-    // TODO: implement findMountedWidgetStates
-    throw UnimplementedError();
+    return debugFindMountedWidgetStates(
+      withFilterPanel: true,
+      withControlBar: true,
+      activeOnly: true,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @DebugMethodAnnotation()
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+    required bool withFilterPanel,
+    required bool withControlBar,
+    required bool activeOnly,
+  }) {
+    return _findMountedWidgetStates(
+      withFilterPanel: withFilterPanel,
+      withControlBar: withControlBar,
+      activeOnly: activeOnly,
+    );
   }
 
   // ***************************************************************************

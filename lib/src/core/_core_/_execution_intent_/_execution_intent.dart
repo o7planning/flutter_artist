@@ -19,7 +19,7 @@ sealed class ExecutionIntent<
         _completer.complete(resultWrapper._result);
       }
     } catch (e) {
-      print("ERROR ExecutionIntent.complete(): $this");
+      print("ERROR ExecutionIntent.complete(): $this: $e");
       rethrow;
     }
   }

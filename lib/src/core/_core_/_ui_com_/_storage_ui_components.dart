@@ -29,10 +29,44 @@ class _StorageUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
+    required bool withStorageSectionView,
+    required bool activeOnly,
+  }) {
+    final Map<_ContextProviderViewState, XState> ret = {};
+
+    if (withStorageSectionView) {
+      for (final _ContextProviderViewState ws
+          in _storageSectionViewStates.keys) {
+        if (ws.mounted) {
+          final bool isVisible = _storageSectionViewStates[ws] ?? false;
+          if (!activeOnly || isVisible) {
+            ret[ws] = XState().._setShowing(isVisible);
+          }
+        }
+      }
+    }
+
+    return ret;
+  }
+
   @override
   Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
-    // TODO: implement findMountedWidgetStates
-    throw UnimplementedError();
+    return debugFindMountedWidgetStates(
+      withStorageSectionView: true,
+      activeOnly: true,
+    );
+  }
+
+  @DebugMethodAnnotation()
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+    required bool withStorageSectionView,
+    required bool activeOnly,
+  }) {
+    return _findMountedWidgetStates(
+      withStorageSectionView: withStorageSectionView,
+      activeOnly: activeOnly,
+    );
   }
 
   // ***************************************************************************

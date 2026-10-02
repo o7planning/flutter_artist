@@ -1,8 +1,8 @@
 part of '../core.dart';
 
 class ProzessStructure<
-STAGE_ENUM extends Enum, //
-PROZESS_CONTEXT_DATA extends ProzessContextData> {
+    STAGE_ENUM extends Enum, //
+    PROZESS_CONTEXT_DATA extends ProzessContextData> {
   final ProzessConfig config;
   final String? description;
   final List<
@@ -11,7 +11,8 @@ PROZESS_CONTEXT_DATA extends ProzessContextData> {
           StageInitData,
           StageResultData,
           PROZESS_CONTEXT_DATA,
-          FormInput>> stages;
+          FormInput,
+          FormOutput>> stages;
 
   final STAGE_ENUM? initialStageId;
 

@@ -280,9 +280,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   ///
-  /// This method is called immediately after
-  /// calling [performLoadMultiOptTildeCriterionXData]
-  /// methods if there are no errors.
+  /// Example:
   ///
   /// ```dart
   ///  MyFilterCriteria createNewFilterCriteria({

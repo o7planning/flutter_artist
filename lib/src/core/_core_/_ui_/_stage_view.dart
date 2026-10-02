@@ -6,7 +6,8 @@ abstract class StageView<
         StageInitData,
         StageResultData,
         ProzessContextData,
-        FormInput>> extends StatelessWidget {
+        FormInput,
+        FormOutput>> extends StatelessWidget {
   final STAGE stage;
   final QuickSuggestionMode quickSuggestionMode;
 

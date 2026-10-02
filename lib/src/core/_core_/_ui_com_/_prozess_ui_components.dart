@@ -43,10 +43,66 @@ class _ProzessUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
+    required bool withStageContentView,
+    required bool withForm,
+    required bool withStageControlBar,
+    required bool withProzessControlBar,
+    required bool activeOnly,
+  }) {
+    final Map<_ContextProviderViewState, XState> ret = {};
+
+    // 1. Collect Prozess control bar states
+    if (withProzessControlBar) {
+      ret.addAll(
+        ___findMountedWidgetStates(
+          widgetStates: __controlBarWidgetStates,
+          activeOnly: activeOnly,
+        ),
+      );
+    }
+
+    // 2. Cascade down to all stages within this Prozess
+    for (final Stage stage in prozess.stages) {
+      ret.addAll(
+        stage.ui._findMountedWidgetStates(
+          withStageContentView: withStageContentView,
+          withForm: withForm,
+          withStageControlBar: withStageControlBar,
+          activeOnly: activeOnly,
+        ),
+      );
+    }
+
+    return ret;
+  }
+
   @override
   Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
-    // TODO: implement findMountedWidgetStates
-    throw UnimplementedError();
+    return debugFindMountedWidgetStates(
+      withStageContentView: true,
+      withForm: true,
+      withStageControlBar: true,
+      withProzessControlBar: true,
+      activeOnly: true,
+    );
+  }
+
+  @DebugMethodAnnotation()
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+    required bool withStageContentView,
+    required bool withForm,
+    required bool withStageControlBar,
+    required bool withProzessControlBar,
+    required bool activeOnly,
+  }) {
+    return _findMountedWidgetStates(
+      withStageContentView: withStageContentView,
+      withForm: withForm,
+      withStageControlBar: withStageControlBar,
+      withProzessControlBar: withProzessControlBar,
+      activeOnly: activeOnly,
+    );
   }
 
   // ***************************************************************************

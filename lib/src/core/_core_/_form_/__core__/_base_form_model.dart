@@ -4,6 +4,7 @@ part of '../../core.dart';
 /// managing form state, structure, validation, and data lifecycle.
 abstract class BaseFormModel<
         FORM_INPUT extends FormInput, //
+        FORM_OUTPUT extends FormOutput, //
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends _Core {
   /// Configuration options for the form model.
@@ -296,7 +297,7 @@ abstract class BaseFormModel<
     if (!createActionable.yes) {
       if (addErrorLog) {
         _addErrorLogActionable(
-          shelf: relatedShelf,
+          module: relatedShelf,
           actionableFalse: createActionable,
           showErrSnackBar: showErrSnackBar,
           tipDocument: null,
@@ -1228,7 +1229,7 @@ abstract class BaseFormModel<
     );
   }
 
-  /// Extracts update values for simple properties from form input.
+  /// Extracts update values foAbsr simple properties from form input.
   @_AbstractMethodAnnotation()
   Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
     required FORM_INPUT formInput,
@@ -1271,6 +1272,24 @@ abstract class BaseFormModel<
   /// ```
   @_AbstractMethodAnnotation()
   FormModelStructure defineFormModelStructure();
+
+  /// Converts the raw form map values into a strongly-typed [FORM_OUTPUT] object.
+  ///
+  /// This method must be implemented by concrete form model subclasses to map
+  /// UI input fields into a domain-specific output object.
+  ///
+  /// If you want a lightweight approach without creating a custom output class,
+  /// you can set [FORM_OUTPUT] to [MapBasedFormOutput] and implement it simply as follows:
+  /// ```dart
+  /// @override
+  /// MapBasedFormOutput convertToFormOutput({required Map<String, dynamic> formMapData}) {
+  ///   return MapBasedFormOutput(formMapData: formMapData);
+  /// }
+  /// ```
+  @_AbstractMethodAnnotation()
+  FORM_OUTPUT convertToFormOutput({
+    required Map<String, dynamic> formMapData,
+  });
 
   /// Returns whether the form model is enabled.
   bool isEnabled();

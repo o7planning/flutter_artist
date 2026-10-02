@@ -5,6 +5,7 @@ abstract class TaskFormView<
         TaskInitData, //
         TaskResultData,
         FormInput,
+        FormOutput,
         AdditionalFormRelatedData>> extends StatelessWidget {
   final TASK_FORM_MODEL formModel;
   final QuickSuggestionMode quickSuggestionMode;

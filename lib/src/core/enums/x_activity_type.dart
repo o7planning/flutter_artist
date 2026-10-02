@@ -5,5 +5,5 @@ enum XActivityType {
   taskLoadInitData,
   naturalExec,
   formViewChange,
-  formModelEnterFields;
+  formModelEnterFields, submit;
 }

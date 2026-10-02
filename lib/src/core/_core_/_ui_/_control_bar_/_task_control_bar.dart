@@ -21,6 +21,8 @@ class TaskControlBar extends BaseControlBar<
       TaskControlBarItem.standard(TaskControlBarItemType.loadInitData),
       TaskControlBarItem.standard(TaskControlBarItemType.divider),
       TaskControlBarItem.standard(TaskControlBarItemType.submit),
+      TaskControlBarItem.standard(TaskControlBarItemType.divider),
+      TaskControlBarItem.standard(TaskControlBarItemType.debugForm),
     ],
   });
 
@@ -90,19 +92,48 @@ class _TaskControlBarState extends _BaseControlBarState<
           },
         );
 
+      // case TaskControlBarItemType.submit:
+      //   if (!widget.config.allowSubmitButton) return null;
+      //
+      //   final bool canSubmit =
+      //       widget.task.dataState.isLoaded && !widget.task.isExecuting;
+      //
+      //   return ControlBarHelper.buildControlBarButton(
+      //     context,
+      //     style: widget.style,
+      //     tooltip: "Submit Task",
+      //     iconData: FaIconConstants.submitIconData,
+      //     onAction: widget.task.isExecuting,
+      //     onPressed: canSubmit
+      //         ? () async {
+      //             await widget.task.submit();
+      //           }
+      //         : null,
+      //   );
+
       case TaskControlBarItemType.submit:
-        if (!widget.config.allowSubmitButton) return null;
-        // Submit is active only when INIT_DATA is loaded or task is ready
-        final bool canSubmit = widget.task.dataState.isLoaded;
+        if (!widget.config.allowSubmitButton) {
+          return null;
+        }
+        final actionable = widget.task.canSubmit();
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
           tooltip: "Submit",
           iconData: FaIconConstants.submitIconData,
-          onAction: widget.task.isExecuting,
-          onPressed: canSubmit
+          onAction: widget.task.__isSubmitting,
+          onPressed: actionable.yes
               ? () async {
-                  await widget.task.submit();
+                  final result = await widget.task.submit();
+                  final NavigationIntent? intent =
+                      widget.config.submitNavigationIntent;
+                  if (intent != null) {
+                    widget.task._processNavigationIntent(
+                      context: context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
                 }
               : null,
         );

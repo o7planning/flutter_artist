@@ -9,7 +9,7 @@ class _StageSubmitExecutionUnit<
   final XStage xStage;
 
   @override
-  final StageSubmitExecutionIntent<
+  final StageSubmitIntent<
       STAGE_ENUM, //
       STAGE_INIT_DATA,
       STAGE_RESULT_DATA,

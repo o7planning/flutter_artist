@@ -4,12 +4,14 @@ part of '../../core.dart';
 ///
 /// Encapsulates common lifecycle workflows driven by transactional [INIT_DATA]
 /// rather than entity item details managed by a [Shelf].
-abstract class ActivityFormModel<
+abstract class WorkNodeFormModel<
         INIT_DATA extends Object,
         RESULT_DATA extends Object,
         FORM_INPUT extends FormInput,
+        FORM_OUTPUT extends FormOutput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel<FORM_INPUT, ADDITIONAL_FORM_RELATED_DATA> {
+    extends BaseFormModel<FORM_INPUT, FORM_OUTPUT,
+        ADDITIONAL_FORM_RELATED_DATA> {
   Activity get activity;
 
   @override
@@ -22,9 +24,9 @@ abstract class ActivityFormModel<
   INIT_DATA? get initData;
 
   @override
-  ActivityFormMode get formMode => _internalFormMode.toActivityFormMode();
+  WorkNodeFormMode get formMode => _internalFormMode.toWorkNodeFormMode();
 
-  ActivityFormModel({super.config});
+  WorkNodeFormModel({super.config});
 
   // ===========================================================================
   // POLYMORPHIC BRIDGES IMPLEMENTATION
@@ -110,7 +112,7 @@ abstract class ActivityFormModel<
     required FORM_INPUT? formInput,
     required Object? rawDomainData,
   }) {
-    return performLoadMultiOptPropXDataForInitData(
+    return performLoadMultiOptPropXData(
       multiOptPropName: multiOptPropName,
       selectionType: selectionType,
       parentMultiOptPropValue: parentMultiOptPropValue,
@@ -125,7 +127,7 @@ abstract class ActivityFormModel<
       _internalPerformLoadAdditionalFormRelatedData({
     required Object? rawDomainData,
   }) {
-    return performLoadAdditionalFormRelatedDataForInitData(
+    return performLoadAdditionalFormRelatedData(
       initData: rawDomainData as INIT_DATA?,
     );
   }
@@ -135,7 +137,7 @@ abstract class ActivityFormModel<
   // ===========================================================================
 
   @_AbstractMethodAnnotation()
-  Future<XData?> performLoadMultiOptPropXDataForInitData({
+  Future<XData?> performLoadMultiOptPropXData({
     required String multiOptPropName,
     required SelectionType selectionType,
     required Object? parentMultiOptPropValue,
@@ -161,8 +163,7 @@ abstract class ActivityFormModel<
   });
 
   @_AbstractMethodAnnotation()
-  Future<ADDITIONAL_FORM_RELATED_DATA>
-      performLoadAdditionalFormRelatedDataForInitData({
+  Future<ADDITIONAL_FORM_RELATED_DATA> performLoadAdditionalFormRelatedData({
     required INIT_DATA? initData,
   });
 

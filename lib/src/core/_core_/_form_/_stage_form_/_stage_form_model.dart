@@ -7,18 +7,21 @@ abstract class StageFormModel<
         RESULT_DATA extends StageResultData,
         PROZESS_CONTEXT_DATA extends ProzessContextData,
         FORM_INPUT extends FormInput,
+        FORM_OUTPUT extends FormOutput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends ActivityFormModel<
+    extends WorkNodeFormModel<
         INIT_DATA, //
         RESULT_DATA,
         FORM_INPUT,
+        FORM_OUTPUT,
         ADDITIONAL_FORM_RELATED_DATA> {
   late final Stage<
       STAGE_ENUM, //
       INIT_DATA,
       RESULT_DATA,
       PROZESS_CONTEXT_DATA,
-      FORM_INPUT> stage;
+      FORM_INPUT,
+      FORM_OUTPUT> stage;
 
   @override
   Activity get module => stage.module;
@@ -46,7 +49,8 @@ abstract class StageFormModel<
 
   @override
   String debugClassParametersDefinition() {
-    return "<${getStageEnumType()}, ${getInitDataType()}, ${getResultDataType()}, ${getProzessContextDataType()}, "
+    return "<${getStageEnumType()}, ${getInitDataType()}, "
+        "${getResultDataType()}, ${getProzessContextDataType()}, "
         "${getFormInputType()}, ${getAdditionalFormRelatedDataType()}>";
   }
 
@@ -58,18 +62,29 @@ abstract class StageFormModel<
   // ===========================================================================
 
   void _bindToStage(
-    Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA, FORM_INPUT>
+    Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA, FORM_INPUT,
+            FORM_OUTPUT>
         parentStage,
   ) {
     stage = parentStage;
   }
 
-  XStageFormModel<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA,
-      FORM_INPUT> _createXStageFormModel({
+  XStageFormModel<
+      STAGE_ENUM, //
+      INIT_DATA,
+      RESULT_DATA,
+      PROZESS_CONTEXT_DATA,
+      FORM_INPUT,
+      FORM_OUTPUT> _createXStageFormModel({
     required FORM_INPUT? formInput,
   }) {
-    return XStageFormModel<STAGE_ENUM, INIT_DATA, RESULT_DATA,
-        PROZESS_CONTEXT_DATA, FORM_INPUT>._(
+    return XStageFormModel<
+        STAGE_ENUM, //
+        INIT_DATA,
+        RESULT_DATA,
+        PROZESS_CONTEXT_DATA,
+        FORM_INPUT,
+        FORM_OUTPUT>._(
       formModel: this,
       formInput: formInput,
     );
@@ -205,7 +220,7 @@ abstract class StageFormModel<
         __canPatchFormFields(checkBusy: true);
     if (!actionable.yes) {
       _addErrorLogActionable(
-        shelf: null,
+        module: null,
         actionableFalse: actionable,
         showErrSnackBar: true,
         tipDocument: null,

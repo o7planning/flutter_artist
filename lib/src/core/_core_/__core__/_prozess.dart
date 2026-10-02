@@ -103,6 +103,14 @@ abstract class Prozess<
     }
   }
 
+  void loadCurrentStageInitData() {
+    // TODO...
+  }
+
+  void submitCurrentStage() {
+    // TODO...
+  }
+
   void reset() {
     // TODO...
   }

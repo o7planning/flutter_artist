@@ -16,10 +16,44 @@ class _LoggedInUserUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
+    required bool withLoggedInUserView,
+    required bool activeOnly,
+  }) {
+    final Map<_ContextProviderViewState, XState> ret = {};
+
+    if (withLoggedInUserView) {
+      for (final _ContextProviderViewState ws
+          in _loggedInUserWidgetStates.keys) {
+        if (ws.mounted) {
+          final bool isVisible = _loggedInUserWidgetStates[ws] ?? false;
+          if (!activeOnly || isVisible) {
+            ret[ws] = XState().._setShowing(isVisible);
+          }
+        }
+      }
+    }
+
+    return ret;
+  }
+
   @override
   Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
-    // TODO: implement findMountedWidgetStates
-    throw UnimplementedError();
+    return debugFindMountedWidgetStates(
+      withLoggedInUserView: true,
+      activeOnly: true,
+    );
+  }
+
+  @DebugMethodAnnotation()
+  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+    required bool withLoggedInUserView,
+    required bool activeOnly,
+  }) {
+    return _findMountedWidgetStates(
+      withLoggedInUserView: withLoggedInUserView,
+      activeOnly: activeOnly,
+    );
   }
 
   // ***************************************************************************

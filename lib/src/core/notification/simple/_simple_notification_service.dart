@@ -60,7 +60,7 @@ class SimpleNotificationService
         }
       } catch (e, stackTrace) {
         FlutterArtist.logger.addError(
-          shelfName: null,
+          moduleName: null,
           methodName: null,
           errorMessage: "Invalid Local Notification Summary JSON",
           errorDetails: null,
@@ -88,7 +88,7 @@ class SimpleNotificationService
             await adapter.performLoadSummary();
         if (result.error != null) {
           FlutterArtist.logger.addError(
-            shelfName: null,
+            moduleName: null,
             methodName: null,
             errorMessage: result.error!.errorMessage,
             errorDetails: result.error!.errorDetails,
@@ -102,7 +102,7 @@ class SimpleNotificationService
         print("Fetch Notification Error: $e");
         print(stackTrace);
         FlutterArtist.logger.addError(
-          shelfName: null,
+          moduleName: null,
           methodName: null,
           errorMessage: "Fetch Notification Error: $e",
           errorDetails: null,
@@ -114,7 +114,7 @@ class SimpleNotificationService
       //
       if (fetchedData == null) {
         FlutterArtist.logger.addError(
-          shelfName: null,
+          moduleName: null,
           methodName: null,
           errorMessage: "No Notification Summary Data",
           errorDetails: null,
@@ -137,7 +137,7 @@ class SimpleNotificationService
         );
       } catch (e, stackTrace) {
         FlutterArtist.logger.addError(
-          shelfName: null,
+          moduleName: null,
           methodName: null,
           errorMessage: "Error ${getClassName(adapter)}.toJson()",
           errorDetails: null,

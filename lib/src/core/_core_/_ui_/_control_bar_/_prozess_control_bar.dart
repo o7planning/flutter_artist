@@ -21,6 +21,10 @@ class ProzessControlBar extends BaseControlBar<
     ],
     super.rightItems = const [
       ProzessControlBarItem.standard(ProzessControlBarItemType.reset),
+      ProzessControlBarItem.standard(
+          ProzessControlBarItemType.loadCurrentStageInitData),
+      ProzessControlBarItem.standard(
+          ProzessControlBarItemType.submitCurrentStage),
       ProzessControlBarItem.standard(ProzessControlBarItemType.divider),
       ProzessControlBarItem.standard(ProzessControlBarItemType.debugInspector),
     ],
@@ -31,9 +35,7 @@ class ProzessControlBar extends BaseControlBar<
 }
 
 class _ProzessControlBarState extends _BaseControlBarState<Prozess,
-    ProzessControlBarItemType,
-    ProzessControlBarItem,
-    ProzessControlBar> {
+    ProzessControlBarItemType, ProzessControlBarItem, ProzessControlBar> {
   @override
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
 
@@ -112,6 +114,30 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           },
         );
 
+      case ProzessControlBarItemType.loadCurrentStageInitData:
+        if (!widget.config.allowLoadCurrentStageInitDataButton) return null;
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
+          tooltip: "Load Current Stage Init Data",
+          iconData: FaIconConstants.formRefreshIconData,
+          onPressed: () {
+            widget.prozess.loadCurrentStageInitData();
+          },
+        );
+
+      case ProzessControlBarItemType.submitCurrentStage:
+        if (!widget.config.submitCurrentStageButton) return null;
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
+          tooltip: "Submit Current Stage",
+          iconData: FaIconConstants.submitIconData,
+          onPressed: () {
+            widget.prozess.submitCurrentStage();
+          },
+        );
+
       case ProzessControlBarItemType.debugInspector:
         if (!widget.config.allowDebugInspectorButton) return null;
         return ControlBarHelper.buildControlBarButton(
@@ -139,7 +165,6 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         return null;
     }
   }
-
 
   @override
   String getWidgetOwnerClassName() =>

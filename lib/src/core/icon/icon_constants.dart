@@ -178,6 +178,8 @@ class FaIconConstants {
   static const IconData filterCriteriaIconData = Icons.filter_alt_outlined;
   static const IconData formIconData = cupertino.CupertinoIcons.calendar;
 
+  static const IconData taskIconData = Icons.assignment;
+
   static const IconData blockIconData = Icons.view_module;
   static const IconData scalarIconData =
       cupertino.CupertinoIcons.smallcircle_circle;

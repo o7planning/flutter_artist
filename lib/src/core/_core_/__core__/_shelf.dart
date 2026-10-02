@@ -579,7 +579,7 @@ abstract class Shelf extends FeatureModule {
     if (!actionable.yes) {
       // _createItemErrorCount++;
       final ErrorInfo? errorInfo = _addErrorLogActionable(
-        shelf: null,
+        module: null,
         actionableFalse: actionable,
         showErrSnackBar: true,
         tipDocument: null,

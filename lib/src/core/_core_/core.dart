@@ -93,7 +93,7 @@ import '../precheck/scalar_load_extra_data_precheck.dart';
 import '../precheck/stage_load_init_data_precheck.dart';
 import '../precheck/stage_submit_precheck.dart';
 import '../precheck/task_load_init_data_precheck.dart';
-import '../precheck/task_submit_execution_precheck.dart';
+import '../precheck/task_submit_precheck.dart';
 import '_sync_/_block_sync_session_snapshot.dart';
 import '_utils_/block_data_state_utils.dart';
 import '_utils_/data_type_event_utils.dart';
@@ -174,6 +174,8 @@ part '_ui_com_/_stage_ui_components.dart';
 
 part '_ui_com_/_task_ui_components.dart';
 
+part '_ui_com_/_work_node_ui_components.dart';
+
 part '_ui_com_/_prozess_ui_components.dart';
 
 part '__core__/_prozess_transition_result.dart';
@@ -185,6 +187,8 @@ part '__core__/_stage_data.dart';
 part '__core__/_task_data.dart';
 
 part '__core__/_prozess.dart';
+
+part '__core__/_work_node.dart';
 
 part '__core__/_task.dart';
 
@@ -268,6 +272,8 @@ part '__core__/_executor.dart';
 
 part '_form_/__core__/_form_input.dart';
 
+part '_form_/__core__/_form_output.dart';
+
 part '_form_/__core__/_additional_form_related_data.dart';
 
 part '_form_/__core__/_creation_preset.dart';
@@ -312,7 +318,7 @@ part '_form_/__core__/_form_data_state.dart';
 
 part '_form_/__core__/_base_form_model.dart';
 
-part '_form_/__core__/_activity_form_model.dart';
+part '_form_/__core__/_work_node_form_model.dart';
 
 part '_form_/_block_form_/_block_form_model.dart';
 
@@ -491,6 +497,8 @@ part '_core_x_/_x_activity_/_x_exec_/__target_stage_and_options.dart';
 part '_core_x_/_x_activity_/_x_exec_/_x_activity_stage_load_init_data.dart';
 
 part '_core_x_/_x_activity_/_x_exec_/_x_activity_task_load_init_data.dart';
+
+part '_core_x_/_x_activity_/_x_exec_/_x_activity_task_submit.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_shelf_external_reaction.dart';
 
@@ -678,7 +686,7 @@ part '_execution_unit_result_/_task_eur/_task_submit_result.dart';
 
 part '_execution_unit_result_/_task_eur/_task_load_init_data_result.dart';
 
-part '_execution_unit_result_/_stage_eur/_stage_result.dart';
+part '_execution_unit_result_/_stage_eur/_stage_submit_result.dart';
 
 part '_execution_unit_result_/_stage_eur/_stage_load_init_data_result.dart';
 

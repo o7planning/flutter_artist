@@ -29,9 +29,9 @@ enum InternalFormMode {
         _ => BlockFormMode.none,
       };
 
-  ActivityFormMode toActivityFormMode() => switch (this) {
-        InternalFormMode.compose => ActivityFormMode.compose,
-        _ => ActivityFormMode.none,
+  WorkNodeFormMode toWorkNodeFormMode() => switch (this) {
+        InternalFormMode.compose => WorkNodeFormMode.compose,
+        _ => WorkNodeFormMode.none,
       };
 }
 
@@ -58,20 +58,20 @@ enum BlockFormMode implements FormMode {
   }
 }
 
-/// Public form mode exposed to [ActivityFormModel] ([Task] and [Stage]) consumers.
-enum ActivityFormMode implements FormMode {
+/// Public form mode exposed to [WorkNodeFormModel] ([Task] and [Stage]) consumers.
+enum WorkNodeFormMode implements FormMode {
   none,
   compose;
 
-  bool get isNone => this == ActivityFormMode.none;
-  bool get isCompose => this == ActivityFormMode.compose;
+  bool get isNone => this == WorkNodeFormMode.none;
+  bool get isCompose => this == WorkNodeFormMode.compose;
 
   @override
   String get name {
     switch (this) {
-      case ActivityFormMode.none:
+      case WorkNodeFormMode.none:
         return "none";
-      case ActivityFormMode.compose:
+      case WorkNodeFormMode.compose:
         return "compose";
     }
   }

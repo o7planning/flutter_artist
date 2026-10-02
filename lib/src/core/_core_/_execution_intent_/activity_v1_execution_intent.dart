@@ -3,7 +3,7 @@ part of '../core.dart';
 sealed class ActivityV1ExecutionIntent<
         PRECHECK, //
         EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
-    extends ExecutionIntent {
+    extends ExecutionIntent<PRECHECK, EXECUTION_RESULT> {
   //
 }
 

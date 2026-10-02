@@ -151,7 +151,9 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           bool isDirty = false;
           bool isError = false;
 
-          if (data is BlockFormModel) {
+          if (data is BlockFormModel ||
+              data is StageFormModel ||
+              data is TaskFormModel) {
             title = getClassName(data);
             prefixIconData = FaIconConstants.formModelIconData;
             isError = data.dataState.isFatalError;

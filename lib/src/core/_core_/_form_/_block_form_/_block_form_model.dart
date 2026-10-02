@@ -5,8 +5,9 @@ abstract class BlockFormModel<
         ITEM_DETAIL extends Identifiable<ID>,
         CREATION_PRESET extends CreationPreset,
         FORM_INPUT extends FormInput,
-        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel<FORM_INPUT, ADDITIONAL_FORM_RELATED_DATA> {
+FORM_OUTPUT extends FormOutput,
+ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
+    extends BaseFormModel<FORM_INPUT, FORM_OUTPUT, ADDITIONAL_FORM_RELATED_DATA> {
   late final Block<
       ID, //
       Identifiable<ID>,
@@ -530,7 +531,7 @@ abstract class BlockFormModel<
         __canPatchFormFields(checkBusy: true);
     if (!actionable.yes) {
       _addErrorLogActionable(
-        shelf: shelf,
+        module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
         tipDocument: null,
@@ -558,7 +559,7 @@ abstract class BlockFormModel<
     );
     if (!actionable.yes) {
       _addErrorLogActionable(
-        shelf: shelf,
+        module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
         tipDocument: null,

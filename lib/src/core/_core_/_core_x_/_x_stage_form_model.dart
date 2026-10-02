@@ -5,7 +5,8 @@ class XStageFormModel<
     INIT_DATA extends StageInitData,
     RESULT_DATA extends StageResultData,
     PROZESS_CONTEXT_DATA extends ProzessContextData,
-    FORM_INPUT extends FormInput> {
+    FORM_INPUT extends FormInput,
+    FORM_OUTPUT extends FormOutput> {
   XActivity get xActivity => xStage.xProzess.xActivity;
 
   final StageFormModel formModel;
@@ -14,7 +15,8 @@ class XStageFormModel<
       INIT_DATA,
       RESULT_DATA,
       ProzessContextData,
-      FormInput> xStage;
+      FORM_INPUT,
+      FORM_OUTPUT> xStage;
 
   final FormInput? formInput;
 
