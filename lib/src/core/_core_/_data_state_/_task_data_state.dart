@@ -2,12 +2,10 @@ part of '../core.dart';
 
 /// Root sealed state container for Task lifecycle readiness and submission outcome.
 @immutable
-sealed class TaskDataState {
+sealed class TaskDataState implements DataState {
   const TaskDataState();
 
   String get name;
-
-  String toBriefInfo();
 
   bool get isPending => this is TaskDataStatePending;
 
@@ -67,9 +65,9 @@ final class TaskDataStatePending extends TaskDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is TaskDataStatePending &&
-              runtimeType == other.runtimeType &&
-              reason == other.reason;
+      other is TaskDataStatePending &&
+          runtimeType == other.runtimeType &&
+          reason == other.reason;
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
@@ -91,8 +89,7 @@ sealed class TaskPendingReason {
 
   bool get isFailed => this is TaskPendingReasonFailed;
 
-  TaskErrorInfo? get errorInfo =>
-      switch (this) {
+  TaskErrorInfo? get errorInfo => switch (this) {
         TaskPendingReasonFailed(:final errorInfo) => errorInfo,
         _ => null,
       };
@@ -132,9 +129,9 @@ final class TaskPendingReasonFailed extends TaskPendingReason {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is TaskPendingReasonFailed &&
-              runtimeType == other.runtimeType &&
-              errorInfo == other.errorInfo;
+      other is TaskPendingReasonFailed &&
+          runtimeType == other.runtimeType &&
+          errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);
@@ -173,7 +170,7 @@ final class TaskDataStateLoadedFresh extends TaskDataStateLoaded {
   int get hashCode => runtimeType.hashCode;
 
   @override
-  String toBriefInfo() => "fresh()";
+  String toBriefInfo() => "loadedFresh()";
 
   @override
   String toString() => 'TaskDataState.loadedFresh()';
@@ -194,15 +191,15 @@ final class TaskDataStateLoadedStale extends TaskDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is TaskDataStateLoadedStale &&
-              runtimeType == other.runtimeType &&
-              staleErrorInfo == other.staleErrorInfo;
+      other is TaskDataStateLoadedStale &&
+          runtimeType == other.runtimeType &&
+          staleErrorInfo == other.staleErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, staleErrorInfo);
 
   @override
-  String toBriefInfo() => "stale(${staleErrorInfo == null ? '' : 'err'})";
+  String toBriefInfo() => "loadedStale(${staleErrorInfo == null ? '' : 'err'})";
 
   @override
   String toString() => 'TaskDataState.loadedStale(errorInfo: $staleErrorInfo)';
@@ -231,7 +228,7 @@ final class TaskDataStateSubmissionAttemptedSuccess
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is TaskDataStateSubmissionAttemptedSuccess;
+      other is TaskDataStateSubmissionAttemptedSuccess;
 
   @override
   int get hashCode => runtimeType.hashCode;
@@ -261,9 +258,9 @@ final class TaskDataStateSubmissionAttemptedFailed
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is TaskDataStateSubmissionAttemptedFailed &&
-              runtimeType == other.runtimeType &&
-              submissionErrorInfo == other.submissionErrorInfo;
+      other is TaskDataStateSubmissionAttemptedFailed &&
+          runtimeType == other.runtimeType &&
+          submissionErrorInfo == other.submissionErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, submissionErrorInfo);

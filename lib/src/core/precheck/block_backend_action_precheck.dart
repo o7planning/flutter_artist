@@ -17,7 +17,7 @@ enum BlockBackendActionPrecheck implements Precheck {
   blockInStaleState(
     precheckCode: PrecheckCode.inStaleState,
     message: "Backend Action is disabled.",
-    details: ["The block is in an 'stale' state."],
+    details: ["The block is in an 'loadedStale' state."],
   ),
   //
   blockInNoneState(

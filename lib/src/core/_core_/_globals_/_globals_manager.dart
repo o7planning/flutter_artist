@@ -284,7 +284,7 @@ class GlobalsManager extends _Core {
       );
       //
       executionTrace.addInfo(
-        codeId: "#22020",
+        codeId: "#022020",
         shortDesc: errorMessage,
         errorInfo: ErrorInfo(
           errorMessage: errorMessage,
@@ -298,7 +298,7 @@ class GlobalsManager extends _Core {
     // Store on local device:
     try {
       executionTrace.addControllableCall(
-        codeId: "#22420",
+        codeId: "#022420",
         caller: loginLogoutAdapter,
         methodName: "toJson",
         suffixShortDesc: "To convert ${debugObjHtml(
@@ -311,7 +311,7 @@ class GlobalsManager extends _Core {
       String json = loginLogoutAdapter.toJson(loggedInUser);
       //
       executionTrace.addInfo(
-        codeId: "#22440",
+        codeId: "#022440",
         shortDesc: "Storing the above <b>JSON String</b> to <b>Local</b>.",
         extraInfos: [json],
       );
@@ -335,7 +335,7 @@ class GlobalsManager extends _Core {
       );
       // This is warning.
       executionTrace.addInfo(
-        codeId: "#22480",
+        codeId: "#022480",
         shortDesc: warningHtmlMessage,
         errorInfo: errorInfo,
       );
@@ -354,7 +354,7 @@ class GlobalsManager extends _Core {
     try {
       // Load GlobalData:
       executionTrace.addControllableCall(
-        codeId: "#34240",
+        codeId: "#034240",
         caller: globalDataAdapter,
         methodName: "performLoadGlobalData",
         suffixShortDesc: "",
@@ -371,7 +371,7 @@ class GlobalsManager extends _Core {
       );
       _globalData = globalData;
       executionTrace.addInfo(
-        codeId: "#34280",
+        codeId: "#034280",
         shortDesc: "Got @globalData: ${debugObjHtml(globalData)}",
         tipDocument: TipDocument.globalData,
       );
@@ -385,7 +385,7 @@ class GlobalsManager extends _Core {
         errorDetails: errorInfo.errorDetails,
       );
       executionTrace.addInfo(
-        codeId: "#34300",
+        codeId: "#034300",
         shortDesc:
         "The ${debugObjHtml(
             globalDataAdapter)}.performLoadGlobalData() method called with an error!",

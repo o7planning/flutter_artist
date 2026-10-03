@@ -18,7 +18,7 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
     );
     try {
       executionTrace.addControllableCall(
-        codeId: "#20000",
+        codeId: "#020000",
         caller: this,
         methodName: "performLogin",
         suffixShortDesc: "",
@@ -28,7 +28,7 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
       result.throwIfError();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
-        shelf: null,
+        module: null,
         methodName: "performLogin",
         error: e,
         stackTrace: stackTrace,
@@ -36,7 +36,7 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
         tipDocument: TipDocument.loginActivityPerformLogin,
       );
       executionTrace.addInfo(
-        codeId: "#20040",
+        codeId: "#020040",
         shortDesc:
             "The ${debugObjHtml(this)}.performLogin() method was called with an error!",
         errorInfo: errorInfo,
@@ -49,7 +49,7 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
           "No data from ${getClassNameWithoutGenerics(this)}.performLogin().";
       //
       executionTrace.addInfo(
-        codeId: "#20060",
+        codeId: "#020060",
         shortDesc: "Got value >> @loggedInUser: ${debugObjHtml(loggedInUser)}."
             "\n$message",
       );
@@ -59,7 +59,7 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
         errorDetails: null,
       );
       executionTrace.addInfo(
-        codeId: "#20080",
+        codeId: "#020080",
         shortDesc: message,
       );
       return;
@@ -76,13 +76,13 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
     }
     //
     executionTrace.addInfo(
-      codeId: "#20100",
+      codeId: "#020100",
       shortDesc: "Got LoggedInUser: ${debugObjHtml(loggedInUser)}."
           "\n - @accessToken: <b>$tokenPrefix</b>.",
     );
     //
     executionTrace.addNonControllableCall(
-      codeId: "#20200",
+      codeId: "#020200",
       caller: FlutterArtist.globalsManager,
       methodName: "_setOrUpdateLoggedInUserSafely",
       suffixShortDesc: "",
@@ -112,7 +112,7 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
     final loginLogoutAdapter = FlutterArtist.globalsManager.loginLogoutAdapter;
     try {
       executionTrace.addControllableCall(
-        codeId: "#22060",
+        codeId: "#022060",
         caller: loginLogoutAdapter,
         methodName: "addThirdPartyLogicOnLogin",
         suffixShortDesc: "",
@@ -126,7 +126,7 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
       final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
       //
       executionTrace.addInfo(
-        codeId: "#22080",
+        codeId: "#022080",
         shortDesc:
             "The ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
         errorInfo: errorInfo,
@@ -148,7 +148,7 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
     }
     //
     executionTrace.addControllableCall(
-      codeId: "#20400",
+      codeId: "#020400",
       caller: this,
       methodName: "navigateToSuccessScreen",
       suffixShortDesc: "",

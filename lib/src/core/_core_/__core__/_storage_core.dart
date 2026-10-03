@@ -68,7 +68,7 @@ abstract class _StorageCore extends _Core {
     if (FlutterArtist._navigatorStated) {
       // LOGIC: #0001
       throw DebugUtils.getFatalError(
-        " ERROR: It is not possible to register a new Shelf after the application has been started.",
+        " - ERROR: It is not possible to register a new Shelf after the application has been started.",
       );
     }
     //
@@ -97,7 +97,7 @@ abstract class _StorageCore extends _Core {
     ShelfCreator? creator = __shelfCreatorMap[shelfName];
     if (creator == null) {
       throw DebugUtils.getFatalError(
-          " ERROR: '$shelfName' not found. You need to call:\n "
+          " - ERROR: '$shelfName' not found. You need to call:\n "
           " FlutterArtist.storage.registerShelf(()=> $shelfName())");
     }
     shelf = creator() as F;

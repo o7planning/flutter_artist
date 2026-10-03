@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '_style.dart';
+import '_sort_panel_style.dart';
 
 class SegmentedSortPanelStyle extends SortPanelStyle {
   final EdgeInsetsGeometry padding;

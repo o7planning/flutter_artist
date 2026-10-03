@@ -2,12 +2,10 @@ part of '../core.dart';
 
 /// Root sealed state container for individual Stage lifecycle within a Prozess.
 @immutable
-sealed class StageDataState {
+sealed class StageDataState  implements DataState{
   const StageDataState();
 
   String get name;
-
-  String toBriefInfo();
 
   bool get isNone => this is StageDataStateNone;
 
@@ -201,7 +199,7 @@ final class StageDataStateLoadedFresh extends StageDataStateLoaded {
   int get hashCode => runtimeType.hashCode;
 
   @override
-  String toBriefInfo() => "fresh()";
+  String toBriefInfo() => "loadedFresh()";
 
   @override
   String toString() => 'StageDataState.loadedFresh()';
@@ -230,7 +228,7 @@ final class StageDataStateLoadedStale extends StageDataStateLoaded {
   int get hashCode => Object.hash(runtimeType, staleErrorInfo);
 
   @override
-  String toBriefInfo() => "stale(${staleErrorInfo == null ? '' : 'err'})";
+  String toBriefInfo() => "loadedStale(${staleErrorInfo == null ? '' : 'err'})";
 
   @override
   String toString() => 'StageDataState.loadedStale(errorInfo: $staleErrorInfo)';

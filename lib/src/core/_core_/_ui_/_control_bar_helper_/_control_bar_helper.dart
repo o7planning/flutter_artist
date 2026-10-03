@@ -1,8 +1,7 @@
 part of '../../core.dart';
 
 class ControlBarHelper {
-  static Widget buildControlBarButton(
-    BuildContext context, {
+  static Widget buildControlBarButton(BuildContext context, {
     required ControlBarStyle style,
     required String tooltip,
     required IconData iconData,

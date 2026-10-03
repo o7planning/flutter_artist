@@ -18,7 +18,7 @@ enum BlockQuickItemUpdatePrecheck implements Precheck {
   blockInStaleState(
     precheckCode: PrecheckCode.inStaleState,
     message: "Item update is disabled.",
-    details: ["The block is in an 'stale' state."],
+    details: ["The block is in an 'loadedStale' state."],
   ),
   // Test Cases: [91b].
   blockInNoneState(

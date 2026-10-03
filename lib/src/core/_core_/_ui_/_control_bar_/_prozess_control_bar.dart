@@ -35,7 +35,9 @@ class ProzessControlBar extends BaseControlBar<
 }
 
 class _ProzessControlBarState extends _BaseControlBarState<Prozess,
-    ProzessControlBarItemType, ProzessControlBarItem, ProzessControlBar> {
+    ProzessControlBarItemType,
+    ProzessControlBarItem,
+    ProzessControlBar> {
   @override
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
 

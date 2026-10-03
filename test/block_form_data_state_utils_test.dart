@@ -14,7 +14,7 @@ void main() {
     );
 
     test('Transitions to None when hasCurrentItem is false', () {
-      final nextState = FormDataStateUtils.calculateNewLazyDataState(
+      final nextState = BlockFormDataStateUtils.calculateNewLazyDataState(
         currentFormDataState: const FormDataStateLoadedFresh(),
         hasCurrentItem: false,
         currentItemChanged: false,
@@ -25,12 +25,12 @@ void main() {
 
     test('Transitions to Pending when state is None or Pending and item exists',
         () {
-      final fromNone = FormDataStateUtils.calculateNewLazyDataState(
+      final fromNone = BlockFormDataStateUtils.calculateNewLazyDataState(
         currentFormDataState: const FormDataStateNone(),
         hasCurrentItem: true,
         currentItemChanged: false,
       );
-      final fromPending = FormDataStateUtils.calculateNewLazyDataState(
+      final fromPending = BlockFormDataStateUtils.calculateNewLazyDataState(
         currentFormDataState: const FormDataStatePending(),
         hasCurrentItem: true,
         currentItemChanged: false,
@@ -45,12 +45,14 @@ void main() {
         () {
       final fatalState = FormDataStateFatalError(errorInfo: mockErrorInfo);
 
-      final stateWhenItemChanged = FormDataStateUtils.calculateNewLazyDataState(
+      final stateWhenItemChanged =
+          BlockFormDataStateUtils.calculateNewLazyDataState(
         currentFormDataState: fatalState,
         hasCurrentItem: true,
         currentItemChanged: true,
       );
-      final stateWhenItemSame = FormDataStateUtils.calculateNewLazyDataState(
+      final stateWhenItemSame =
+          BlockFormDataStateUtils.calculateNewLazyDataState(
         currentFormDataState: fatalState,
         hasCurrentItem: true,
         currentItemChanged: false,
@@ -63,7 +65,7 @@ void main() {
     test('LoadedFresh: transitions to Pending when item changed', () {
       const freshState = FormDataStateLoadedFresh();
 
-      final nextState = FormDataStateUtils.calculateNewLazyDataState(
+      final nextState = BlockFormDataStateUtils.calculateNewLazyDataState(
         currentFormDataState: freshState,
         hasCurrentItem: true,
         currentItemChanged: true,
@@ -77,7 +79,7 @@ void main() {
         () {
       const freshState = FormDataStateLoadedFresh();
 
-      final nextState = FormDataStateUtils.calculateNewLazyDataState(
+      final nextState = BlockFormDataStateUtils.calculateNewLazyDataState(
         currentFormDataState: freshState,
         hasCurrentItem: true,
         currentItemChanged: false,
@@ -85,7 +87,7 @@ void main() {
 
       expect(nextState, isA<FormDataStateLoadedStale>());
       final stale = nextState as FormDataStateLoadedStale;
-      expect(stale.reason, isA<FormLoadedStateStaleReasonItemRefreshed>());
+      expect(stale.reason, isA<FormLoadedStateStaleReasonHostDataRefreshed>());
       expect(stale.errorInfo, isNull);
       expect(stale.hasFailure, isFalse);
     });
@@ -97,7 +99,7 @@ void main() {
         errorInfo: mockErrorInfo,
       );
 
-      final nextState = FormDataStateUtils.calculateNewLazyDataState(
+      final nextState = BlockFormDataStateUtils.calculateNewLazyDataState(
         currentFormDataState: staleFailedState,
         hasCurrentItem: true,
         currentItemChanged: false,
@@ -105,10 +107,10 @@ void main() {
 
       expect(nextState, isA<FormDataStateLoadedStale>());
       final stale = nextState as FormDataStateLoadedStale;
-      expect(stale.reason, isA<FormLoadedStateStaleReasonItemRefreshed>());
+      expect(stale.reason, isA<FormLoadedStateStaleReasonHostDataRefreshed>());
 
       final refreshedReason =
-          stale.reason as FormLoadedStateStaleReasonItemRefreshed;
+          stale.reason as FormLoadedStateStaleReasonHostDataRefreshed;
       expect(refreshedReason.retainedFailureReason, isNotNull);
       expect(refreshedReason.retainedFailureReason!.errorInfo,
           equals(mockErrorInfo));
@@ -126,7 +128,7 @@ void main() {
         ),
       );
 
-      final nextState = FormDataStateUtils.calculateNewLazyDataState(
+      final nextState = BlockFormDataStateUtils.calculateNewLazyDataState(
         currentFormDataState: chainedStaleState,
         hasCurrentItem: true,
         currentItemChanged: false,
@@ -134,8 +136,50 @@ void main() {
 
       expect(nextState, isA<FormDataStateLoadedStale>());
       final stale = nextState as FormDataStateLoadedStale;
-      expect(stale.reason, isA<FormLoadedStateStaleReasonItemRefreshed>());
+      expect(stale.reason, isA<FormLoadedStateStaleReasonHostDataRefreshed>());
       expect(stale.errorInfo, equals(mockErrorInfo));
+    });
+
+    test(
+        'FatalError: transitions to Pending.hostDataRefreshed when item changed',
+        () {
+      final fatalState = FormDataStateFatalError(errorInfo: mockErrorInfo);
+
+      final nextState = BlockFormDataStateUtils.calculateNewLazyDataState(
+        currentFormDataState: fatalState,
+        hasCurrentItem: true,
+        currentItemChanged: true,
+      );
+
+      expect(nextState, isA<FormDataStatePending>());
+      final pending = nextState as FormDataStatePending;
+      expect(pending.reason, isA<FormPendingReasonHostDataRefreshed>());
+    });
+
+    test(
+        'LoadedStale(Failed): transitions to Pending.hostDataRefreshed and preserves retainedFailureReason when item changed',
+        () {
+      final staleFailedState = FormDataStateLoadedStale.failed(
+        errorInfo: mockErrorInfo,
+      );
+
+      final nextState = BlockFormDataStateUtils.calculateNewLazyDataState(
+        currentFormDataState: staleFailedState,
+        hasCurrentItem: true,
+        currentItemChanged: true,
+      );
+
+      expect(nextState, isA<FormDataStatePending>());
+      final pending = nextState as FormDataStatePending;
+      expect(pending.reason, isA<FormPendingReasonHostDataRefreshed>());
+
+      final hostRefreshedReason =
+          pending.reason as FormPendingReasonHostDataRefreshed;
+      expect(hostRefreshedReason.retainedFailureReason, isNotNull);
+      expect(hostRefreshedReason.retainedFailureReason!.errorInfo,
+          equals(mockErrorInfo));
+      expect(pending.errorInfo, equals(mockErrorInfo));
+      expect(pending.hasFailure, isTrue);
     });
   });
 }

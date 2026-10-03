@@ -6,7 +6,7 @@ class XTaskFormModel<
   XActivity get xActivity => xTask.xActivity;
 
   final TaskFormModel formModel;
-  late final XTask<INIT_DATA, RESULT_DATA,  FormInput, FormOutput> xTask;
+  late final XTask<INIT_DATA, RESULT_DATA, FormInput, FormOutput> xTask;
   final FormInput? formInput;
 
   int get xModuleId => xActivity.xModuleId;
@@ -86,6 +86,7 @@ class XTaskFormModel<
     final formModelDataState = formModel.dataState;
     final bool visibleX = formModel.ui.hasVisibleViews();
     final executionIntent = _executionIntent;
+    final TaskDataState taskDataState = formModel.task.dataState;
 
     // =========================================================================
     // 0. TERMINAL INTENT INTERCEPTOR
@@ -94,8 +95,17 @@ class XTaskFormModel<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "TaskFormModel (0.0), (${formModel.task.name}), _executionIntent: $executionIntent, "
-            "formDataState: ${formModelDataState.toBriefInfo()}",
+            "TaskFormModel (0.1), (${formModel.task.name}), _executionIntent: $executionIntent, "
+            "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
+      );
+    }
+
+    if (!formModel.task.isStateReadyForForm()) {
+      return NxtExecutionUnit.no(
+        debug: debug,
+        info:
+            "TaskFormModel (0.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
+            "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
       );
     }
 
@@ -107,7 +117,7 @@ class XTaskFormModel<
         debug: debug,
         info:
             "TaskFormModel (1.1), (${formModel.task.name}), _executionIntent: $executionIntent, "
-            "formDataState: ${formModelDataState.toBriefInfo()}",
+            "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
       );
     }
 
@@ -124,7 +134,7 @@ class XTaskFormModel<
           ),
           info:
               "TaskFormModel (2.1), (${formModel.task.name}), _executionIntent: $executionIntent, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, "
+              "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       }
@@ -147,7 +157,7 @@ class XTaskFormModel<
           ),
           info:
               "TaskFormModel (2.2.1), (${formModel.task.name}), _executionIntent: $executionIntent --> $intentToUse, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, "
+              "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       } else {
@@ -155,7 +165,7 @@ class XTaskFormModel<
           debug: debug,
           info:
               "TaskFormModel (2.2.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, "
+              "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       }
@@ -184,7 +194,7 @@ class XTaskFormModel<
           ),
           info:
               "TaskFormModel (3.1.1), (${formModel.task.name}), _executionIntent: $executionIntent --> $intentToUse, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, "
+              "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       } else {
@@ -192,7 +202,7 @@ class XTaskFormModel<
           debug: debug,
           info:
               "TaskFormModel (3.1.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, "
+              "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       }
@@ -220,7 +230,7 @@ class XTaskFormModel<
           ),
           info:
               "TaskFormModel (4.1.1), (${formModel.task.name}), _executionIntent: $executionIntent --> $intentToUse, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, "
+              "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       } else {
@@ -228,7 +238,7 @@ class XTaskFormModel<
           debug: debug,
           info:
               "TaskFormModel (4.1.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, "
+              "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       }
@@ -255,7 +265,7 @@ class XTaskFormModel<
           ),
           info:
               "TaskFormModel (5.1.2), (${formModel.task.name}), _executionIntent: $executionIntent --> $intentToUse, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, "
+              "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       }
@@ -272,7 +282,7 @@ class XTaskFormModel<
             ),
             info:
                 "TaskFormModel (5.2.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}",
+                "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
           );
         } else if (executionIntent is FormModelDataLoadIntent) {
           return NxtExecutionUnit.yes(
@@ -283,7 +293,7 @@ class XTaskFormModel<
             ),
             info:
                 "TaskFormModel (5.2.3), (${formModel.task.name}), _executionIntent: $executionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}",
+                "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
           );
         } else if (executionIntent is FormModelPatchFormFieldsIntent) {
           return NxtExecutionUnit.yes(
@@ -294,14 +304,14 @@ class XTaskFormModel<
             ),
             info:
                 "TaskFormModel (5.2.4), (${formModel.task.name}), _executionIntent: $executionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}",
+                "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
                 "TaskFormModel (5.2.4), (${formModel.task.name}), _executionIntent: $executionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}",
+                "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
           );
         }
       }
@@ -312,7 +322,7 @@ class XTaskFormModel<
         debug: debug,
         info:
             "TaskFormModel (5.3), (${formModel.task.name}), _executionIntent: null, "
-            "formDataState: ${formModelDataState.toBriefInfo()}, "
+            "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
             "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
       );
     }
@@ -324,7 +334,7 @@ class XTaskFormModel<
       debug: debug,
       info:
           "TaskFormModel (6.1) (${formModel.task.name}), _executionIntent: $executionIntent, "
-          "formDataState: ${formModelDataState.toBriefInfo()}",
+          "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
     );
   }
 

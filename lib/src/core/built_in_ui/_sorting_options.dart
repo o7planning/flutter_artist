@@ -4,21 +4,7 @@ import 'package:flutter/material.dart';
 import '../_core_/core.dart';
 import '../enums/_enums.dart';
 import '_sort_panel_helper.dart';
-
-typedef SortCriterionItemBuilder = Widget Function(
-  BuildContext context,
-  SortCriterion criterion,
-  bool isSelected,
-  VoidCallback toggleDirection,
-);
-
-typedef SortIconBuilder = Widget Function(
-  BuildContext context,
-  SortDirection? direction,
-  bool isDragging,
-  double size,
-  Color? draggingColor,
-);
+import 'sort_typedefs.dart';
 
 /// A mixin to provide shared sorting logic across different panel types.
 mixin SortPanelMixin {

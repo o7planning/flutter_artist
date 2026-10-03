@@ -250,7 +250,7 @@ class XBlockFormModel<
     else if (formModelDataState.isFresh) {
       // 5.1. Force reload explicitly requested from form configuration
       if (_formLoadHint == FormLoadHint.force) {
-        if (formModel.formMode == InternalFormMode.creation) {
+        if (formModel.formMode == BlockFormMode.creation) {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
@@ -265,7 +265,7 @@ class XBlockFormModel<
         } else {
           intentToUse = _createAndSetFormModelExecutionIntentLoad();
         }
-
+        // IN: DATA STATE = FRESH
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _BlockFormModelLoadDataExecutionUnit(

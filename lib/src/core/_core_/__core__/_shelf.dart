@@ -462,7 +462,7 @@ abstract class Shelf extends FeatureModule {
     debug._lazyLoadId++;
     //
     executionTrace.addInfo(
-      codeId: "#02000",
+      codeId: "#002000",
       shortDesc:
           "Find lazy model-components (block, scalar or formModel) that are in a state where they need to query or load data.",
     );
@@ -472,27 +472,27 @@ abstract class Shelf extends FeatureModule {
     final XShelf xShelf = _XShelfShelfNaturalQuery(shelf: shelf);
     try {
       executionTrace.addInfo(
-        codeId: "#02100",
+        codeId: "#002100",
         shortDesc: "Create ${debugObjHtml(xShelf)} for <b>Natural-Load</b>.",
         note:
             "<b>XShelf</b> is a <b>RootQueueItem</b> and contains multiple <b>Execution Units</b>.",
       );
       executionTrace.addNonControllableCall(
-        codeId: "#02120",
+        codeId: "#002120",
         caller: xShelf,
         methodName: "_initQueryExecutionUnits",
         suffixShortDesc: "",
       );
       //
       executionTrace.addInfo(
-        codeId: "#02160",
+        codeId: "#002160",
         shortDesc:
             "Add ${debugObjHtml(xShelf)} (RootQueueItem) to <b>Root-Queue</b>.",
       );
       FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
       //
       executionTrace.addNonControllableCall(
-        codeId: "#02200",
+        codeId: "#002200",
         caller: FlutterArtist.executor,
         methodName: "_executeExecutionUnitQueue",
         suffixShortDesc:
@@ -543,7 +543,7 @@ abstract class Shelf extends FeatureModule {
     required ExecutionTrace executionTrace,
   }) async {
     executionTrace.addInfo(
-      codeId: "#52000",
+      codeId: "#052000",
       shortDesc:
           "Creating <b>$_XShelfShelfExternalReaction</b> for ${debugObjHtml(this)}..",
     );
@@ -553,7 +553,7 @@ abstract class Shelf extends FeatureModule {
     );
     //
     executionTrace.addInfo(
-      codeId: "#52200",
+      codeId: "#052200",
       shortDesc: "Add ${debugObjHtml(xShelf)} to <b>RootQueue</b>.",
     );
     // IMPORTANT: No need to call "execute".
@@ -568,26 +568,32 @@ abstract class Shelf extends FeatureModule {
       parameters: null,
       isLibMethod: true,
     );
-    executionTrace.addInfo(
-      codeId: "#68000",
-      shortDesc:
-          "Checking before <b>executeDelayedExternalReactionExecutionUnit</b>..",
+    //
+    final bool checkBusyTrue = true;
+    executionTrace.addNonControllableCall(
+      codeId: "#068000",
+      caller: this,
+      methodName: "__checkBeforeExecuteDelayedExternalReaction",
+      suffixShortDesc: "",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+      },
     );
     Actionable<ShelfDeferredEventExecutionPrecheck> actionable =
-        __canExecuteDelayedExternalReaction(checkBusy: true);
+        __checkBeforeExecuteDelayedExternalReaction(
+      checkBusy: checkBusyTrue,
+    );
     //
     if (!actionable.yes) {
       // _createItemErrorCount++;
       final ErrorInfo? errorInfo = _addErrorLogActionable(
-        module: null,
+        executionTrace: executionTrace,
+        traceStepCodeId: "#068100",
+        prefixShortDesc: '__checkBeforeExecuteDelayedExternalReaction()',
+        module: this,
         actionableFalse: actionable,
         showErrSnackBar: true,
         tipDocument: null,
-      );
-      executionTrace.addInfo(
-        codeId: "#68100",
-        shortDesc: "@actionable = ${debugObjHtml(actionable)}.",
-        errorInfo: errorInfo,
       );
       return ShelfDeferredEventExecutionResult(
         precheck: actionable.errCode,
@@ -601,7 +607,7 @@ abstract class Shelf extends FeatureModule {
 
   @_PrecheckPrivateMethod()
   Actionable<ShelfDeferredEventExecutionPrecheck>
-      __canExecuteDelayedExternalReaction({
+      __checkBeforeExecuteDelayedExternalReaction({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
@@ -616,7 +622,7 @@ abstract class Shelf extends FeatureModule {
   @_PrecheckPrivateMethod()
   Actionable<ShelfDeferredEventExecutionPrecheck>
       canExecuteDelayedExternalReaction() {
-    return __canExecuteDelayedExternalReaction(checkBusy: true);
+    return __checkBeforeExecuteDelayedExternalReaction(checkBusy: true);
   }
 
   // ***************************************************************************

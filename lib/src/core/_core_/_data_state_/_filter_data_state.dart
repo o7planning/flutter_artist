@@ -2,7 +2,7 @@ part of '../core.dart';
 
 /// Sealed hierarchy representing the data lifecycle states of a [FilterModel].
 @immutable
-sealed class FilterDataState {
+sealed class FilterDataState  implements DataState{
   const FilterDataState();
 
   String get name;
@@ -22,8 +22,6 @@ sealed class FilterDataState {
         FilterDataStateError(:final errorInfo) => errorInfo,
         _ => null,
       };
-
-  String toBriefInfo();
 
   @override
   bool operator ==(Object other);

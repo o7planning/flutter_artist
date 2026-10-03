@@ -161,6 +161,13 @@ abstract class BaseFormModel<
   });
 
   // ===========================================================================
+  // ===========================================================================
+
+  bool isFormValidated() {
+    throw UnimplementedError("TODO: isFormValidated");
+  }
+
+  // ===========================================================================
   // INITIALIZATION & STRUCTURE DEFINITION
   // ===========================================================================
 
@@ -192,7 +199,7 @@ abstract class BaseFormModel<
 
   /// Resets the form data back to its initial state if permitted.
   void resetForm() {
-    bool canReset = _canResetForm();
+    bool canReset = _checkBeforeResetForm();
     if (!canReset) return;
     try {
       _changeEventLocked = true;
@@ -261,7 +268,7 @@ abstract class BaseFormModel<
   }
 
   /// Checks whether form fields can be patched based on current system and form state.
-  Actionable<FormModelPatchFormFieldsPrecheck> __canPatchFormFields({
+  Actionable<FormModelPatchFormFieldsPrecheck> __checkBeforePatchFormFields({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
@@ -287,27 +294,6 @@ abstract class BaseFormModel<
     return Actionable<FormModelPatchFormFieldsPrecheck>.yes();
   }
 
-  /// Internal pre-check helper before applying patches to form fields, handling error logs and snackbars.
-  bool __checkBeforePatchFormFields({
-    required bool checkBusy,
-    required bool addErrorLog,
-    required bool showErrSnackBar,
-  }) {
-    Actionable createActionable = __canPatchFormFields(checkBusy: checkBusy);
-    if (!createActionable.yes) {
-      if (addErrorLog) {
-        _addErrorLogActionable(
-          module: relatedShelf,
-          actionableFalse: createActionable,
-          showErrSnackBar: showErrSnackBar,
-          tipDocument: null,
-        );
-      }
-      return false;
-    }
-    return true;
-  }
-
   // ===========================================================================
   // UNIFIED LIFECYCLE: START NEW FORM ACTIVITY
   // ===========================================================================
@@ -324,7 +310,7 @@ abstract class BaseFormModel<
     debug._formActivityCount++;
 
     executionTrace.addInfo(
-      codeId: "#06000",
+      codeId: "#006000",
       shortDesc: "${debugObjHtml(this)} on _startNewFormActivity().",
     );
 
@@ -433,7 +419,7 @@ abstract class BaseFormModel<
     // =========================================================================
     if (activityType == FormActivityType.startCreatingOrEditing) {
       executionTrace.addInfo(
-        codeId: "#06180",
+        codeId: "#006180",
         shortDesc: "Populating simple form properties."
             "\n - @activityType: <b>$activityType</b>."
             "\n - @domainData: ${debugObjHtml(domainData)}.",
@@ -477,7 +463,7 @@ abstract class BaseFormModel<
         _formModelStructure._setFormError(formErrorInfo);
 
         final ErrorInfo errorInfo = _handleError(
-          shelf: relatedShelf,
+          module: relatedShelf,
           methodName: formErrorInfo.methodName,
           error: formErrorInfo.error,
           stackTrace: formErrorInfo.errorStackTrace,
@@ -492,7 +478,7 @@ abstract class BaseFormModel<
           error: e,
         );
         executionTrace.addInfo(
-          codeId: "#06400",
+          codeId: "#006400",
           shortDesc:
               "The ${debugObjHtml(this)}._internalResolveInitialSimplePropValues() method encountered an error!",
           errorInfo: errorInfo,
@@ -504,7 +490,7 @@ abstract class BaseFormModel<
       if (formInput != null) {
         try {
           executionTrace.addControllableCall(
-            codeId: "#06620",
+            codeId: "#006620",
             caller: this,
             methodName: "extractUpdateValuesForSimpleProps",
             suffixShortDesc: "",
@@ -544,7 +530,7 @@ abstract class BaseFormModel<
           _formModelStructure._setFormError(formErrorInfo);
 
           final ErrorInfo errorInfo = _handleError(
-            shelf: relatedShelf,
+            module: relatedShelf,
             methodName: formErrorInfo.methodName,
             error: formErrorInfo.error,
             stackTrace: formErrorInfo.errorStackTrace,
@@ -569,7 +555,7 @@ abstract class BaseFormModel<
       if (formInput != null) {
         try {
           executionTrace.addControllableCall(
-            codeId: "#06720",
+            codeId: "#006720",
             caller: this,
             methodName: "extractUpdateValuesForSimpleProps",
             suffixShortDesc: "",
@@ -609,7 +595,7 @@ abstract class BaseFormModel<
           _formModelStructure._setFormError(formErrorInfo);
 
           final ErrorInfo transientErrorInfo = _handleError(
-            shelf: relatedShelf,
+            module: relatedShelf,
             methodName: formErrorInfo.methodName,
             error: formErrorInfo.error,
             stackTrace: formErrorInfo.errorStackTrace,
@@ -679,7 +665,7 @@ abstract class BaseFormModel<
       _formModelStructure._setFormError(formErrorInfo);
 
       final ErrorInfo errorInfo = _handleError(
-        shelf: relatedShelf,
+        module: relatedShelf,
         methodName: formErrorInfo.methodName,
         error: formErrorInfo.error,
         stackTrace: formErrorInfo.errorStackTrace,
@@ -730,7 +716,7 @@ abstract class BaseFormModel<
     final SelectionType selectionType = multiOptProp.selectionType;
 
     executionTrace.addInfo(
-      codeId: "#17000",
+      codeId: "#017000",
       shortDesc:
           "Loading Data for ${debugObjHtml(multiOptProp)} and its children..",
     );
@@ -800,7 +786,7 @@ abstract class BaseFormModel<
       multiOptProp._loadCount++;
       try {
         executionTrace.addControllableCall(
-          codeId: "#17400",
+          codeId: "#017400",
           caller: this,
           methodName: "performLoadMultiOptPropXData",
           suffixShortDesc: "",
@@ -979,7 +965,7 @@ abstract class BaseFormModel<
   ) async {
     try {
       executionTrace.addControllableCall(
-        codeId: "#91000",
+        codeId: "#091000",
         caller: this,
         methodName: "performLoadAdditionalFormRelatedData",
         suffixShortDesc: "",
@@ -992,7 +978,7 @@ abstract class BaseFormModel<
       );
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
-        shelf: relatedShelf,
+        module: relatedShelf,
         methodName: "performLoadAdditionalFormRelatedData",
         error: e,
         stackTrace: stackTrace,
@@ -1019,7 +1005,7 @@ abstract class BaseFormModel<
       _refreshControlBars();
     } catch (e, stackTrace) {
       _handleError(
-        shelf: relatedShelf,
+        module: relatedShelf,
         methodName: "_clearDataWithDataState",
         error: e,
         stackTrace: stackTrace,
@@ -1046,7 +1032,7 @@ abstract class BaseFormModel<
     if (formInput is EmptyFormInput) return null;
     try {
       executionTrace.addControllableCall(
-        codeId: "#18000",
+        codeId: "#018000",
         caller: this,
         methodName: "extractUpdateValueForMultiOptProp",
         suffixShortDesc: "",
@@ -1120,7 +1106,7 @@ abstract class BaseFormModel<
       return true;
     } catch (e, stackTrace) {
       ErrorInfo errorInfo = _handleError(
-        shelf: relatedShelf,
+        module: relatedShelf,
         methodName: "__endFormActivityWithDataState",
         error: e,
         stackTrace: stackTrace,
@@ -1273,6 +1259,11 @@ abstract class BaseFormModel<
   @_AbstractMethodAnnotation()
   FormModelStructure defineFormModelStructure();
 
+  FORM_OUTPUT _getFormOutput() {
+    Map<String, dynamic> formMapData = _formModelStructure._currentFormData;
+    return convertToFormOutput(formMapData: formMapData);
+  }
+
   /// Converts the raw form map values into a strongly-typed [FORM_OUTPUT] object.
   ///
   /// This method must be implemented by concrete form model subclasses to map
@@ -1300,7 +1291,7 @@ abstract class BaseFormModel<
   });
 
   /// Determines whether the form can be reset.
-  bool _canResetForm();
+  bool _checkBeforeResetForm();
 
   /// Refreshes all associated views.
   void _refreshAllViews();

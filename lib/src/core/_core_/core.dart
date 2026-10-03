@@ -140,9 +140,10 @@ import '../event/broadcast_backend_events_action.dart';
 import '../notification/firebase/firebase_notification_service.dart';
 import '../utils/print_utils.dart';
 import '_utils_/block_query_state_calculator.dart';
-import '_utils_/form_data_state_utils.dart';
+import '_utils_/block_form_data_state_utils.dart';
 import '_utils_/scalar_data_state_utils.dart';
 import '_utils_/scalar_query_state_calculator.dart';
+import '_utils_/task_form_data_state_utils.dart';
 
 part '../../startup_error_viewer.dart';
 
@@ -238,7 +239,7 @@ part '_debug_info_/_task_debug_info.dart';
 
 part '_debug_info_/_stage_debug_info.dart';
 
-part '_data_state_/_data_state.dart';
+part '_data_state_/__data_state.dart';
 
 part '__core__/_block_data.dart';
 
@@ -306,7 +307,7 @@ part '_filter_/_name_/_filter_field_name_obj.dart';
 
 part '_filter_/_filter_input.dart';
 
-part '_filter_/_filter_data_state.dart';
+part '_data_state_/_filter_data_state.dart';
 
 part '_filter_/_filter_model.dart';
 
@@ -314,7 +315,7 @@ part '_filter_/_filter_criteria_and_map_value.dart';
 
 part '_form_/__core__/_form_leave_safely.dart';
 
-part '_form_/__core__/_form_data_state.dart';
+part '_data_state_/_form_data_state.dart';
 
 part '_form_/__core__/_base_form_model.dart';
 

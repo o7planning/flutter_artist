@@ -14,6 +14,20 @@ enum TaskSubmitPrecheck implements Precheck {
       "The task is still in pending state and has not loaded initialization data."
     ],
   ),
+  taskInStaleState(
+    precheckCode: PrecheckCode
+        .taskInPendingState,
+    message: "Task submission is disabled.",
+    details: [
+      "The task is in stale state and requires initialization data to be reloaded."
+    ],
+  ),
+  taskAlreadySubmitted(
+    precheckCode:
+        PrecheckCode.taskAlreadySubmitted,
+    message: "Task submission is disabled.",
+    details: ["The task has already been successfully submitted."],
+  ),
   formInitialDataNotReady(
     precheckCode: PrecheckCode.formInitialDataNotReady,
     message: "Task submission is disabled.",

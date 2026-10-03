@@ -5,9 +5,10 @@ abstract class BlockFormModel<
         ITEM_DETAIL extends Identifiable<ID>,
         CREATION_PRESET extends CreationPreset,
         FORM_INPUT extends FormInput,
-FORM_OUTPUT extends FormOutput,
-ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel<FORM_INPUT, FORM_OUTPUT, ADDITIONAL_FORM_RELATED_DATA> {
+        FORM_OUTPUT extends FormOutput,
+        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
+    extends BaseFormModel<FORM_INPUT, FORM_OUTPUT,
+        ADDITIONAL_FORM_RELATED_DATA> {
   late final Block<
       ID, //
       Identifiable<ID>,
@@ -71,7 +72,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
 
     if (itemDetail != null) {
       executionTrace.addControllableCall(
-        codeId: "#06200",
+        codeId: "#006200",
         caller: this,
         methodName: "extractSimplePropValuesFromItemDetail",
         suffixShortDesc: "",
@@ -93,7 +94,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
         return null;
       }
       executionTrace.addControllableCall(
-        codeId: "#06540",
+        codeId: "#006540",
         caller: this,
         methodName: "specifyCreationValuesForSimpleProps",
         suffixShortDesc: "",
@@ -125,7 +126,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
 
     if (itemDetail != null) {
       executionTrace.addControllableCall(
-        codeId: "#32000",
+        codeId: "#032000",
         caller: this,
         methodName: "extractMultiOptPropValueFromItemDetail",
         suffixShortDesc: "",
@@ -165,7 +166,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
         return null;
       }
       executionTrace.addControllableCall(
-        codeId: "#33000",
+        codeId: "#033000",
         caller: this,
         methodName: "specifyCreationValueForMultiOptProp",
         suffixShortDesc: "",
@@ -329,7 +330,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     thisXBlockFormModel._createAndSetFormModelExecutionIntentDone();
 
     executionTrace.addInfo(
-      codeId: "#36000",
+      codeId: "#036000",
       shortDesc:
           "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
     );
@@ -360,7 +361,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     thisXBlockFormModel._createAndSetFormModelExecutionIntentDone();
 
     executionTrace.addInfo(
-      codeId: "#37000",
+      codeId: "#037000",
       shortDesc:
           "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
     );
@@ -457,7 +458,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
           : await performUpdateItem(formMapData: formMapData);
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
-        shelf: shelf,
+        module: shelf,
         methodName: calledMethodName,
         error: e,
         stackTrace: stackTrace,
@@ -482,7 +483,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
       );
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
-        shelf: shelf,
+        module: shelf,
         methodName: calledMethodName,
         error: e,
         stackTrace: stackTrace,
@@ -494,14 +495,19 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
   }
 
   @override
-  bool isEnabled() => block._isEnableFormToModify().yes;
+  bool isEnabled() {
+    if (!host.isStateReadyForForm()) {
+      return false;
+    }
+    return block._isEnableFormToModify().yes;
+  }
 
   @override
   void _triggerWhenFormViewVisible() =>
       FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(shelf);
 
   @override
-  bool _canResetForm() => block.canResetForm().yes;
+  bool _checkBeforeResetForm() => block.checkBeforeResetForm().yes;
 
   @override
   void _refreshAllViews() => shelf.ui.refreshAllViews();
@@ -527,10 +533,33 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
   Future<FormModelPatchFormFieldsResult> patchFormFields({
     required FORM_INPUT formInput,
   }) async {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "patchFormFields",
+      parameters: {},
+      isLibMethod: true,
+    );
+    //
+    final bool checkBusyTrue = true;
+    executionTrace.addNonControllableCall(
+      codeId: "#097100",
+      caller: this,
+      methodName: "__checkBeforePatchFormFields",
+      suffixShortDesc: "",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+      },
+    );
+
     final Actionable<FormModelPatchFormFieldsPrecheck> actionable =
-        __canPatchFormFields(checkBusy: true);
+        __checkBeforePatchFormFields(
+      checkBusy: checkBusyTrue,
+    );
     if (!actionable.yes) {
       _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#097200",
+        prefixShortDesc: '__checkBeforePatchFormFields()',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -552,13 +581,36 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
 
   @_FormModelSaveFormAnnotation()
   Future<BlockFormSaveResult> saveForm() async {
-    Actionable<BlockFormSavePrecheck> actionable = block.__canSaveForm(
-      checkBusy: true,
-      checkAllow: true,
-      checkValidate: true,
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "saveForm",
+      parameters: null,
+      isLibMethod: true,
+    );
+    //
+    final bool checkBusyTrue= true;
+    final bool checkAllowTrue= true;
+    final bool checkValidateTrue = true;
+
+    executionTrace.addNonControllableCall(
+      codeId: "#099000",
+      caller: block,
+      methodName: "__checkBeforeSaveForm",
+      suffixShortDesc: "",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+      },
+    );
+    Actionable<BlockFormSavePrecheck> actionable = block.__checkBeforeSaveForm(
+      checkBusy: checkBusyTrue,
+      checkAllow: checkAllowTrue,
+      checkValidate: checkValidateTrue,
     );
     if (!actionable.yes) {
       _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#099100",
+        prefixShortDesc: '__checkBeforeSaveForm()',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,

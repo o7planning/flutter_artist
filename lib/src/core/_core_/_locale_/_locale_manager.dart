@@ -129,14 +129,14 @@ class LocaleManager extends _Core {
     final ILoggedInUser? loggedInUser = _globalsManager.loggedInUser;
     if (loggedInUser == null) {
       executionTrace.addInfo(
-        codeId: "#46000",
+        codeId: "#046000",
         shortDesc: "No LoggedInUser --> Nothing to do!",
       );
       return;
     }
     //
     executionTrace.addNonControllableCall(
-      codeId: "#46040",
+      codeId: "#046040",
       caller: this,
       methodName: "updateAndStoreLocale",
       suffixShortDesc: "",
@@ -145,7 +145,7 @@ class LocaleManager extends _Core {
       },
     );
     executionTrace.addNonControllableCall(
-      codeId: "#46100",
+      codeId: "#046100",
       caller: this,
       methodName: "_updateLocale",
       suffixShortDesc: "",
@@ -160,7 +160,7 @@ class LocaleManager extends _Core {
         "${locale.languageCode}-${locale.countryCode ?? ''}";
     //
     executionTrace.addNonControllableCall(
-      codeId: "#46200",
+      codeId: "#046200",
       caller: FaIsarStorage,
       methodName: "saveSettings",
       suffixShortDesc: "",
@@ -178,7 +178,7 @@ class LocaleManager extends _Core {
     required Locale locale,
   }) async {
     executionTrace.addControllableCall(
-      codeId: "#47100",
+      codeId: "#047100",
       caller: _localeAdapter,
       methodName: "updateLocale",
       suffixShortDesc: "",

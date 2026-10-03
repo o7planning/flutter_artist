@@ -19,7 +19,7 @@ final class BlockItemDataStateNone extends BlockItemDataState {
   const BlockItemDataStateNone();
 
   @override
-  String toBriefInfo() => 'none()';
+  String toBriefInfo() => "none()";
 
   @override
   String toString() => 'BlockItemDataState.none()';
@@ -30,7 +30,7 @@ final class BlockItemDataStateFresh extends BlockItemDataState {
   const BlockItemDataStateFresh();
 
   @override
-  String toBriefInfo() => 'fresh()';
+  String toBriefInfo() => "loadedFresh()";
 
   @override
   String toString() => 'BlockItemDataState.fresh()';
@@ -43,7 +43,7 @@ final class BlockItemDataStateStale extends BlockItemDataState {
   const BlockItemDataStateStale({this.errorInfo});
 
   @override
-  String toBriefInfo() => 'stale(${errorInfo == null ? '' : 'err'})';
+  String toBriefInfo() => "loadedStale(${errorInfo == null ? '' : 'err'})";
 
   @override
   String toString() => 'BlockItemDataState.stale(errorInfo: $errorInfo)';

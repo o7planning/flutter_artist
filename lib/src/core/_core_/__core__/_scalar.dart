@@ -1,10 +1,10 @@
 part of '../core.dart';
 
 abstract class Scalar<
-ID extends Comparable,
-VALUE extends Identifiable<ID>,
-FILTER_INPUT extends FilterInput,
-FILTER_CRITERIA extends FilterCriteria> extends _Core {
+    ID extends Comparable,
+    VALUE extends Identifiable<ID>,
+    FILTER_INPUT extends FilterInput,
+    FILTER_CRITERIA extends FilterCriteria> extends _Core {
   late final Shelf shelf;
 
   QueryType __lastQueryType = QueryType.realQuery;
@@ -105,10 +105,10 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
   bool get isQuerying => __isQuerying;
 
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-  _registeredOrDefaultFilterModel;
+      _registeredOrDefaultFilterModel;
 
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-  get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
+      get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>? get filterModel {
     if (_registeredOrDefaultFilterModel is _DefaultFilterModel) {
@@ -126,7 +126,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
 
   FilterCriteriaSnapshot<FILTER_CRITERIA>? _filterCriteriaSnapshot;
   _ScalarValueWrap<ID, VALUE> __current =
-  _ScalarValueWrap<ID, VALUE>(id: null, value: null);
+      _ScalarValueWrap<ID, VALUE>(id: null, value: null);
 
   ScalarDataState _scalarDataState = const ScalarDataStatePending.initial();
   PageData<VALUE>? _lastQueryResult;
@@ -153,8 +153,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
 
   bool get hasError => scalarErrorInfo != null || filterErrorInfo != null;
 
-  ScalarErrorInfo? get scalarErrorInfo =>
-      switch (dataState) {
+  ScalarErrorInfo? get scalarErrorInfo => switch (dataState) {
         ScalarDataStatePending(:final errorInfo?) => errorInfo,
         ScalarDataStateLoadedStale(:final errorInfo?) => errorInfo,
         _ => null,
@@ -189,8 +188,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     required ScalarConfig config,
     required String? filterModelName,
     required List<Scalar>? childScalars,
-  })
-      : config = config.copy(),
+  })  : config = config.copy(),
         effectiveConfig = ScalarEffectiveConfig._fromConfig(config),
         registeredFilterModelName = filterModelName,
         _childScalars = childScalars ?? [] {
@@ -267,23 +265,39 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
   }) {
     if (_scalarSyncSessionState == null ||
         _scalarSyncSessionState!.filterCriteria != filterCriteria ||
-        _scalarSyncSessionState!.parentScalarValueId !=
-            _parent?.valueId?.toString()) {
+        _scalarSyncSessionState!.parentScalarValueId != _parent?.valueId) {
+      executionTrace.addInfo(
+        codeId: "#113200",
+        shortDesc:
+            "Create new ${debugObjHtml(_ScalarSyncSessionState)} for ${debugObjHtml(this)}",
+        parameters: {
+          "parentScalarValueId": parentScalarValueId,
+          "filterCriteria": filterCriteria,
+        },
+      );
       _scalarSyncSessionState = _ScalarSyncSessionState(
         scalar: this,
         parentScalarValueId: _parent?.valueId?.toString(),
         filterCriteria: filterCriteria,
       );
+    } else {
+      executionTrace.addInfo(
+        codeId: "#113300",
+        shortDesc: "${debugObjHtml(this)} use the current ${debugObjHtml(_ScalarSyncSessionState)}, no need to create.",
+      );
     }
-
+    //
+    executionTrace.addInfo(
+      codeId: "#113400",
+      shortDesc: "Added ScalarReceivedEventInfo to session",
+      parameters: {
+        "eventSourceType": eventSourceType,
+        "dataTypes": dataTypes,
+      },
+    );
     _scalarSyncSessionState?.addReceivedEventInfo(
       eventSourceType: eventSourceType,
       dataTypes: dataTypes,
-    );
-
-    executionTrace.addInfo(
-      codeId: "#86300",
-      shortDesc: "Added ScalarReceivedEventInfo to session",
     );
 
     if (_scalarSyncSessionState != null) {
@@ -297,12 +311,12 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       );
 
       if (nextState != dataState) {
-        _scalarDataState = nextState;
         executionTrace.addInfo(
-          codeId: "#86400",
+          codeId: "#113800",
           shortDesc:
-          "Transitioned Scalar dataState to $nextState due to SyncSession update",
+              "Transitioned ${debugObjHtml(this)} dataState to ${debugObjHtml(nextState)} due to SyncSession update",
         );
+        _scalarDataState = nextState;
       }
     }
   }
@@ -318,15 +332,14 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     required ExecutionUnitType executionUnitType,
     required XScalar<ID, VALUE> thisXScalar,
     required ScalarLoadExtraDataQuickActionIntent<ID, VALUE, DATA>
-    executionIntent,
+        executionIntent,
   }) async {
     __assertThisXScalar(thisXScalar);
 
     executionTrace.addInfo(
-      codeId: "#40000",
+      codeId: "#040000",
       shortDesc:
-      "Begin ${debugObjHtml(this)} -> ${executionUnitType
-          .asDebugExecutionUnit()}.",
+          "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
     );
 
     final loadResult = executionIntent.resultWrapper._setResult(
@@ -338,7 +351,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     ApiResult<DATA>? result;
     try {
       executionTrace.addControllableCall(
-        codeId: "#40100",
+        codeId: "#040100",
         caller: executionIntent.action,
         methodName: "performLoadExtraData",
         suffixShortDesc: "",
@@ -347,9 +360,9 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       result = await executionIntent.action.performLoadExtraData();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
-        shelf: shelf,
+        module: shelf,
         methodName:
-        '${getClassName(executionIntent.action)}.performLoadExtraData',
+            '${getClassName(executionIntent.action)}.performLoadExtraData',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -357,10 +370,9 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       );
       loadResult._setErrorInfo(errorInfo: errorInfo);
       executionTrace.addInfo(
-        codeId: "#40200",
+        codeId: "#040200",
         shortDesc:
-        "The ${debugObjHtml(executionIntent
-            .action)}.performLoadExtraData() method was called with an error!",
+            "The ${debugObjHtml(executionIntent.action)}.performLoadExtraData() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -373,17 +385,16 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       final ErrorInfo errorInfo = _handleRestError(
         shelf: shelf,
         methodName:
-        "${getClassName(executionIntent.action)}.performLoadExtraData",
+            "${getClassName(executionIntent.action)}.performLoadExtraData",
         message: result.error!.errorMessage,
         errorDetails: result.error!.errorDetails,
         showSnackBar: true,
         tipDocument: null,
       );
       executionTrace.addInfo(
-        codeId: "#40300",
+        codeId: "#040300",
         shortDesc:
-        "The ${debugObjHtml(executionIntent
-            .action)}.performLoadExtraData() method was called with an error!",
+            "The ${debugObjHtml(executionIntent.action)}.performLoadExtraData() method was called with an error!",
         errorInfo: errorInfo,
       );
     }
@@ -410,7 +421,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     bool success2;
     try {
       executionTrace.addControllableCall(
-        codeId: "#41000",
+        codeId: "#041000",
         caller: action,
         methodName: "onExtraDataLoaded",
         suffixShortDesc: "",
@@ -428,10 +439,9 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     } catch (e, stackTrace) {
       final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
       executionTrace.addInfo(
-        codeId: "#41300",
+        codeId: "#041300",
         shortDesc:
-        "The ${debugObjHtml(
-            action)}.onExtraDataLoaded() method was called with an error!",
+            "The ${debugObjHtml(action)}.onExtraDataLoaded() method was called with an error!",
         errorInfo: errorInfo,
       );
       success2 = false;
@@ -460,19 +470,16 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     __assertThisXScalar(thisXScalar);
 
     executionTrace.addInfo(
-      codeId: "#39000",
+      codeId: "#039000",
       shortDesc:
-      "Begin ${debugObjHtml(this)} -> ${executionUnitType
-          .asDebugExecutionUnit()}.",
+          "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
     );
 
     executionTrace.addInfo(
-      codeId: "#39100",
+      codeId: "#039100",
       shortDesc: "${debugObjHtml(this)} -> Clear data and set to pending. "
           "Clear data of child scalars and set its to none."
-          "${_childScalars.isEmpty
-          ? '\n ** No children -> Nothing to do!'
-          : ''}",
+          "${_childScalars.isEmpty ? '\n ** No children -> Nothing to do!' : ''}",
     );
 
     executionIntent.resultWrapper._setResult(
@@ -509,10 +516,9 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     thisXScalar.resetExecutionHints();
 
     executionTrace.addInfo(
-      codeId: "#12000",
+      codeId: "#012000",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()}",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -522,13 +528,13 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     );
 
     final bool provideScalarContext =
-    ui.hasVisibleViews(includeDescendants: true);
+        ui.hasVisibleViews(includeDescendants: true);
 
     final DebugScalarSyncSessionState<ID>? currentSyncSessionState =
         _scalarSyncSessionState;
 
     final ScalarQueryPlan<ID> queryPlan =
-    ScalarQueryStrategyResolver.resolveQueryPlan<ID>(
+        ScalarQueryStrategyResolver.resolveQueryPlan<ID>(
       scalar: this,
       syncSessionState: currentSyncSessionState,
       queryHint: initialQueryHint,
@@ -537,10 +543,9 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
 
     if (queryPlan.action == null) {
       executionTrace.addInfo(
-        codeId: "#12080",
+        codeId: "#012080",
         shortDesc:
-        "QueryPlan action is NULL -> Skip query execution, @dataState: $dataState, @value: ${debugObjHtml(
-            value)}.",
+            "QueryPlan action is NULL -> Skip query execution, @dataState: $dataState, @value: ${debugObjHtml(value)}.",
       );
       return;
     }
@@ -550,17 +555,16 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     final XFilterModel xFilterModel = thisXScalar.xFilterModel;
     final FilterModel filterModel = xFilterModel.filterModel;
     final FilterCriteriaSnapshot<FILTER_CRITERIA>?
-    committedFilterCriteriaSnapshot =
-    filterModel._committedFilterCriteriaSnapshot
-    as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
+        committedFilterCriteriaSnapshot =
+        filterModel._committedFilterCriteriaSnapshot
+            as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
 
     if (committedFilterCriteriaSnapshot == null ||
         committedFilterCriteriaSnapshot.isError) {
       executionTrace.addInfo(
-        codeId: "#12340",
+        codeId: "#012340",
         shortDesc:
-        "${debugObjHtml(filterModel)} error --> clear data of ${debugObjHtml(
-            this)} and set to error.",
+            "${debugObjHtml(filterModel)} error --> clear data of ${debugObjHtml(this)} and set to error.",
       );
       __stopQueryWithFilterErrorCascade(
         thisXScalar: thisXScalar,
@@ -570,7 +574,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     }
 
     committedFilterCriteriaSnapshot
-    as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
+        as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
     final bool filterCriteriaChanged = _isFilterCriteriaSnapshotChanged(
       newFilterCriteriaSnapshot: committedFilterCriteriaSnapshot,
     );
@@ -587,7 +591,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       __refreshQueryingState(isQuerying: true);
 
       executionTrace.addControllableCall(
-        codeId: "#12400",
+        codeId: "#012400",
         caller: this,
         methodName: "performQuery",
         suffixShortDesc: "",
@@ -619,7 +623,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       );
 
       final ErrorInfo errorInfo = _handleError(
-        shelf: shelf,
+        module: shelf,
         methodName: performQueryMethod.name,
         error: e,
         stackTrace: stackTrace,
@@ -640,14 +644,14 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       filterCriteriaChanged: filterCriteriaChanged,
     );
     final ScalarQueryCalculatorResult calculationResult =
-    ScalarQueryStateCalculator.calculate(calculationInput);
+        ScalarQueryStateCalculator.calculate(calculationInput);
 
     newScalarDataState = calculationResult.newScalarDataState;
 
     if (sclrErrorInfo != null) {
       _updateStateAfterQueryError(newScalarDataState: newScalarDataState);
       final List<XScalar> descendantXScalars =
-      thisXScalar.getDescendantXScalars(sameFilterOnly: true);
+          thisXScalar.getDescendantXScalars(sameFilterOnly: true);
 
       __stopDescendantQueryWithError(
         descendantXScalars: descendantXScalars,
@@ -757,7 +761,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     const fallbackDilemmaStrategy = FallbackDilemmaStrategy.preserveStableCache;
 
     final ScalarDataState newScalarDataState =
-    ScalarQueryStateCalculator.calculateDataStateOnError(
+        ScalarQueryStateCalculator.calculateDataStateOnError(
       currentDataState: dataState,
       scalarErrorOrigin: scalarErrorOrigin,
       scalarErrorInfo: scalarErrorInfo,
@@ -768,7 +772,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     _scalarDataState = newScalarDataState;
 
     final List<XScalar> descendantXScalars =
-    thisXScalar.getDescendantXScalars(sameFilterOnly: true);
+        thisXScalar.getDescendantXScalars(sameFilterOnly: true);
 
     __stopDescendantQueryWithError(
       descendantXScalars: descendantXScalars,
@@ -785,7 +789,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     for (final descendantXScalar in descendantXScalars) {
       final descendantScalar = descendantXScalar.scalar;
       final descendantState =
-      ScalarQueryStateCalculator.calculateDataStateOnError(
+          ScalarQueryStateCalculator.calculateDataStateOnError(
         currentDataState: descendantScalar.dataState,
         scalarErrorOrigin: scalarErrorOrigin,
         scalarErrorInfo: null,
@@ -905,8 +909,8 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
   }
 
   @_PrecheckMethod()
-  Actionable<ScalarQueryPrecheck> canQuery({bool checkAllow = true}) {
-    return __canQuery(checkBusy: true, checkAllow: checkAllow);
+  Actionable<ScalarQueryPrecheck> checkBeforeQuery({bool checkAllow = true}) {
+    return __checkBeforeQuery(checkBusy: true, checkAllow: checkAllow);
   }
 
   @_IsAllowPrivateMethodAnnotation()
@@ -922,7 +926,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
   }
 
   @_PrecheckPrivateMethod()
-  Actionable<ScalarQueryPrecheck> __canQuery({
+  Actionable<ScalarQueryPrecheck> __checkBeforeQuery({
     required bool checkBusy,
     required bool checkAllow,
   }) {
@@ -950,7 +954,8 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
   }
 
   @_PrecheckPrivateMethod()
-  Actionable<ScalarClearPrecheck> __canClearScalar({required bool checkBusy}) {
+  Actionable<ScalarClearPrecheck> __checkBeforeClearScalar(
+      {required bool checkBusy}) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
       return Actionable<ScalarClearPrecheck>.no(
         errCode: ScalarClearPrecheck.busy,
@@ -1034,10 +1039,25 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       parameters: {},
       isLibMethod: true,
     );
-    Actionable<ScalarClearPrecheck> actionable =
-    __canClearScalar(checkBusy: true);
+    //
+    final bool checkBusyTrue = true;
+    executionTrace.addNonControllableCall(
+      codeId: "#095000",
+      caller: this,
+      methodName: "__checkBeforeClearScalar",
+      suffixShortDesc: "",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+      },
+    );
+    final Actionable<ScalarClearPrecheck> actionable = __checkBeforeClearScalar(
+      checkBusy: checkBusyTrue,
+    );
     if (!actionable.yes) {
       _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#095100",
+        prefixShortDesc: '__checkBeforeClearScalar()',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -1048,7 +1068,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     final XShelf xShelf = _XShelfScalarClear(scalar: this);
     final XScalar thisXScalar = xShelf.findXScalarByName(name)!;
     final executionIntent =
-    thisXScalar._createAndSetScalarExecutionIntentClear();
+        thisXScalar._createAndSetScalarExecutionIntentClear();
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     return executionIntent.result;

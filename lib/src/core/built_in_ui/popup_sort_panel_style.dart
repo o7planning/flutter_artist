@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '_sorting_options.dart';
-import '_style.dart';
+import '_sort_panel_style.dart';
+import 'sort_typedefs.dart';
 
 /// Style configuration for the [PopupSortPanel].
 class PopupSortPanelStyle extends SortPanelStyle {

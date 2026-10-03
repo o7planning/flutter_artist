@@ -27,7 +27,7 @@ enum BlockItemEditPrecheck implements Precheck {
   blockInStaleState(
     precheckCode: PrecheckCode.inStaleState,
     message: "Item edit is disabled.",
-    details: ["The block is in an 'stale' state."],
+    details: ["The block is in an 'loadedStale' state."],
   ),
   blockInNoneState(
     precheckCode: PrecheckCode.inNoneState,

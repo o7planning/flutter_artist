@@ -2,7 +2,7 @@ part of '../core.dart';
 
 /// Root sealed state container for overall Prozess lifecycle readiness.
 @immutable
-sealed class ProzessDataState<STAGE_ENUM extends Enum> {
+sealed class ProzessDataState<STAGE_ENUM extends Enum>  implements DataState {
   const ProzessDataState();
 
   String get name;
@@ -20,8 +20,6 @@ sealed class ProzessDataState<STAGE_ENUM extends Enum> {
 
   @override
   int get hashCode;
-
-  String toBriefInfo();
 }
 
 /// Prozess has not initialized its prerequisite ProzessContextData.

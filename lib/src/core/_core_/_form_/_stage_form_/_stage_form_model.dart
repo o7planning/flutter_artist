@@ -91,7 +91,25 @@ abstract class StageFormModel<
   }
 
   @override
-  bool isEnabled() => !stage.isLoadingInitData && !stage.isSubmitting;
+  bool isEnabled() {
+    if (!host.isStateReadyForForm()) {
+      return false;
+    }
+    // Check if the underlying Form Model data state forbids modifications
+    if (dataState.isNone || dataState.isFatalError) {
+      return false;
+    }
+    // Check if the Task (FormHost) is currently busy executing network calls
+    if (stage.isLoadingInitData || stage.isSubmitting) {
+      return false;
+    }
+    // Check if the Task has already been successfully submitted.
+    // Once successfully completed, the form inputs should be locked from further edits.
+    if (stage.dataState.isSubmissionAttemptedSuccess) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   void _refreshControlBars() => stage.ui.refreshControlBars();
@@ -216,11 +234,35 @@ abstract class StageFormModel<
   Future<FormModelPatchFormFieldsResult> patchFormFields({
     required FORM_INPUT formInput,
   }) async {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "patchFormFields",
+      parameters: null,
+      isLibMethod: true,
+    );
+    //
+    final bool checkBusyTrue = true;
+
+    executionTrace.addNonControllableCall(
+      codeId: "#110000",
+      caller: this,
+      methodName: "__checkBeforeSaveForm",
+      suffixShortDesc: "",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+      },
+    );
+
     final Actionable<FormModelPatchFormFieldsPrecheck> actionable =
-        __canPatchFormFields(checkBusy: true);
+        __checkBeforePatchFormFields(
+      checkBusy: checkBusyTrue,
+    );
     if (!actionable.yes) {
       _addErrorLogActionable(
-        module: null,
+        executionTrace: executionTrace,
+        traceStepCodeId: "#110100",
+        prefixShortDesc: '__checkBeforePatchFormFields()',
+        module: module,
         actionableFalse: actionable,
         showErrSnackBar: true,
         tipDocument: null,

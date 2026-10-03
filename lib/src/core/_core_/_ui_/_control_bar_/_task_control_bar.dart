@@ -92,30 +92,35 @@ class _TaskControlBarState extends _BaseControlBarState<
           },
         );
 
-      // case TaskControlBarItemType.submit:
-      //   if (!widget.config.allowSubmitButton) return null;
-      //
-      //   final bool canSubmit =
-      //       widget.task.dataState.isLoaded && !widget.task.isExecuting;
-      //
-      //   return ControlBarHelper.buildControlBarButton(
-      //     context,
-      //     style: widget.style,
-      //     tooltip: "Submit Task",
-      //     iconData: FaIconConstants.submitIconData,
-      //     onAction: widget.task.isExecuting,
-      //     onPressed: canSubmit
-      //         ? () async {
-      //             await widget.task.submit();
-      //           }
-      //         : null,
-      //   );
+    // case TaskControlBarItemType.submit:
+    //   if (!widget.config.allowSubmitButton) return null;
+    //
+    //   final bool checkBeforeSubmit =
+    //       widget.task.dataState.isLoaded && !widget.task.isExecuting;
+    //
+    //   return ControlBarHelper.buildControlBarButton(
+    //     context,
+    //     style: widget.style,
+    //     tooltip: "Submit Task",
+    //     iconData: FaIconConstants.submitIconData,
+    //     onAction: widget.task.isExecuting,
+    //     onPressed: checkBeforeSubmit
+    //         ? () async {
+    //             await widget.task.submit();
+    //           }
+    //         : null,
+    //   );
 
       case TaskControlBarItemType.submit:
         if (!widget.config.allowSubmitButton) {
           return null;
         }
-        final actionable = widget.task.canSubmit();
+        final actionable = widget.task.checkBeforeSubmit(
+          checkAllow: true,
+          // IMPORTANT: Avoid error:
+          //  --> "setState() or markNeedsBuild() called during build.".
+          checkValidate: false,
+        );
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
@@ -124,23 +129,23 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: widget.task.__isSubmitting,
           onPressed: actionable.yes
               ? () async {
-                  final result = await widget.task.submit();
-                  final NavigationIntent? intent =
-                      widget.config.submitNavigationIntent;
-                  if (intent != null) {
-                    widget.task._processNavigationIntent(
-                      context: context,
-                      result: result,
-                      intent: intent,
-                    );
-                  }
-                }
+            final result = await widget.task.submit();
+            final NavigationIntent? intent =
+                widget.config.submitNavigationIntent;
+            if (intent != null) {
+              widget.task._processNavigationIntent(
+                context: context,
+                result: result,
+                intent: intent,
+              );
+            }
+          }
               : null,
         );
 
       case TaskControlBarItemType.debugForm:
         if (!widget.config.allowDebugFormModelInspectorButton) return null;
-        Actionable actionable = widget.task.canShowFormInfo();
+        Actionable actionable = widget.task.checkBeforeShowFormInfo();
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
@@ -149,13 +154,13 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: actionable.yes
               ? () {
-                  DebugFormModelInspectorDialog.show(
-                    context: context,
-                    locationInfo:
-                        getClassNameWithoutGenerics(widget.ownerClassInstance),
-                    formModel: widget.task.formModel!,
-                  );
-                }
+            DebugFormModelInspectorDialog.show(
+              context: context,
+              locationInfo:
+              getClassNameWithoutGenerics(widget.ownerClassInstance),
+              formModel: widget.task.formModel!,
+            );
+          }
               : null,
         );
 

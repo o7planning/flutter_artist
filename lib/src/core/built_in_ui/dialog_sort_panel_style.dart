@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '_style.dart';
+import '_sort_panel_style.dart';
 
 /// Style configuration for the [DialogSortPanel].
 class DialogSortPanelStyle extends SortPanelStyle {

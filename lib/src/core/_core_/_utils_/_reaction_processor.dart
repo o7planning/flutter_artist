@@ -9,7 +9,7 @@ class _ReactionProcessor {
       ownerClassInstance: this,
     );
     executionTrace.addInfo(
-      codeId: "#27000",
+      codeId: "#027000",
       shortDesc: "addReactionExecutionUnits",
     );
     //
@@ -17,7 +17,7 @@ class _ReactionProcessor {
     //
     final bool deferred = FlutterArtist.backstage.isReactionDeferred;
     executionTrace.addInfo(
-      codeId: "#27040",
+      codeId: "#027040",
       shortDesc: deferred
           ? "The mode to defer <b>Reactions</b> execution is <b>enabled</b>."
           : "The mode to defer <b>Reactions</b> execution is <b>not enabled</b>.",

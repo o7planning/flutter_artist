@@ -11,8 +11,9 @@ enum BlockErrorMethod {
 }
 
 enum TaskErrorMethod {
-  performExec,
-  performLoadInitData;
+  performSubmit,
+  performLoadInitData,
+  convertToFormOutput;
 }
 
 enum StageErrorMethod {

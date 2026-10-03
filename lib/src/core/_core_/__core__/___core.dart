@@ -49,7 +49,7 @@ abstract class _Core {
         return await customConfirmation(context);
       } catch (e, stackTrace) {
         _handleError(
-          shelf: shelf,
+          module: shelf,
           methodName: "customConfirmation",
           error: e,
           stackTrace: stackTrace,
@@ -108,7 +108,7 @@ abstract class _Core {
   // ***************************************************************************
 
   ErrorInfo _handleError({
-    required Shelf? shelf,
+    required FeatureModule? module,
     required String? methodName,
     required Object error,
     required StackTrace stackTrace,
@@ -137,7 +137,7 @@ abstract class _Core {
     }
     //
     final LogEntry logEntry = FlutterArtist.logger.addError(
-      moduleName: FlutterArtist.storage._getShelfName(shelf.runtimeType),
+      moduleName: FlutterArtist.storage._getShelfName(module.runtimeType),
       methodName: methodName,
       errorMessage: appError.errorMessage,
       errorDetails: appError.errorDetails,
@@ -189,10 +189,14 @@ abstract class _Core {
     return logEntry.errorInfo!;
   }
 
+
   // ***************************************************************************
   // ***************************************************************************
 
   ErrorInfo? _addErrorLogActionable({
+    required ExecutionTrace executionTrace,
+    required String traceStepCodeId,
+    required String prefixShortDesc,
     required FeatureModule? module,
     required Actionable actionableFalse,
     required bool showErrSnackBar,
@@ -207,6 +211,24 @@ abstract class _Core {
         stackTrace: actionableFalse.errorInfo?.stackTrace,
         tipDocument: tipDocument,
       );
+      //
+      Precheck? precheck = actionableFalse.errCode;
+
+      if (precheck != null) {
+        executionTrace.addInfo(
+          codeId: traceStepCodeId,
+          shortDesc: "$prefixShortDesc. actionable.precheck: $precheck",
+          errorInfo: logEntry.errorInfo,
+        );
+      } else {
+        executionTrace.addInfo(
+          codeId: traceStepCodeId,
+          shortDesc:
+              "$prefixShortDesc. actionable.errorInfo: ${logEntry.errorInfo?.errorMessage}",
+          errorInfo: logEntry.errorInfo,
+        );
+      }
+      //
       if (showErrSnackBar) {
         showErrorSnackBar(
           message: actionableFalse.message!,

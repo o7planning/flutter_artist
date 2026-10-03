@@ -42,7 +42,9 @@ enum BlockFormMode implements FormMode {
   edit;
 
   bool get isNone => this == BlockFormMode.none;
+
   bool get isCreation => this == BlockFormMode.creation;
+
   bool get isEdit => this == BlockFormMode.edit;
 
   @override
@@ -64,6 +66,7 @@ enum WorkNodeFormMode implements FormMode {
   compose;
 
   bool get isNone => this == WorkNodeFormMode.none;
+
   bool get isCompose => this == WorkNodeFormMode.compose;
 
   @override

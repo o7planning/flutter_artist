@@ -105,7 +105,7 @@ abstract class Stage<
 
   @override
   void _refreshControlBars() {
-    ui.refreshControlBars( );
+    ui.refreshControlBars();
   }
 
   // ===========================================================================
@@ -160,7 +160,7 @@ abstract class Stage<
     );
 
     executionTrace.addInfo(
-      codeId: "#92100",
+      codeId: "#092100",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Stage Load InitData)",
     );
@@ -180,7 +180,7 @@ abstract class Stage<
       __refreshLoadingInitDataState(isLoading: true);
 
       executionTrace.addControllableCall(
-        codeId: "#92120",
+        codeId: "#092120",
         caller: this,
         methodName: "performLoadInitData",
         suffixShortDesc: "",
@@ -198,14 +198,15 @@ abstract class Stage<
       _dataState = const StageDataStateLoadedFresh();
 
       executionTrace.addInfo(
-        codeId: "#92140",
+        codeId: "#092140",
         shortDesc:
             "${debugObjHtml(this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(_initData)}.",
       );
 
       // Coordinate StageFormModel data state transition
       if (formModel != null) {
-        final newFormDataState = FormDataStateUtils.calculateNewLazyDataState(
+        final newFormDataState =
+            BlockFormDataStateUtils.calculateNewLazyDataState(
           currentFormDataState: formModel!.dataState,
           hasCurrentItem: _initData != null,
           currentItemChanged: true,
@@ -223,7 +224,7 @@ abstract class Stage<
       );
 
       final ErrorInfo errorInfo = _handleError(
-        shelf: null,
+        module: null,
         methodName: "performLoadInitData",
         error: e,
         stackTrace: stackTrace,
@@ -240,7 +241,7 @@ abstract class Stage<
       }
 
       executionTrace.addInfo(
-        codeId: "#92160",
+        codeId: "#092160",
         shortDesc:
             "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
@@ -299,7 +300,25 @@ abstract class Stage<
     return thisXStage.loadInitDataResult;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
 
+  @override
+  bool isStateReadyForForm() {
+    if (dataState.isPending || dataState.isStale) {
+      return false;
+    } else if (dataState.isFresh ||
+        dataState.isSubmissionAttemptedSuccess ||
+        dataState.isSubmissionAttemptedFailed) {
+      return true;
+    } else {
+      // Never run.
+      throw UnimplementedError("XTaskFormModel: Never run");
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void showStageErrorViewerDialog(BuildContext context) {
     if (errorInfo != null) {

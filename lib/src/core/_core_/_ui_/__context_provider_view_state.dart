@@ -15,7 +15,7 @@ abstract interface class IContextProviderViewState {
 // Google Search: Flutter NavigatorObserver Aware.
 abstract class _ContextProviderViewState<W extends _ContextProviderView>
     extends State<W> //
-    // Google Search: Flutter NavigatorObserver Aware.
+// Google Search: Flutter NavigatorObserver Aware.
     with
         RouteAware
     implements

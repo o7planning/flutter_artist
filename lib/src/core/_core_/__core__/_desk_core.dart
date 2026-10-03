@@ -27,7 +27,7 @@ class _DeskCore extends _DeskCoreV1 {
     if (FlutterArtist._navigatorStated) {
       // LOGIC: #0001
       throw DebugUtils.getFatalError(
-        " ERROR: It is not possible to register a new Activity after the application has been started.",
+        " - ERROR: It is not possible to register a new Activity after the application has been started.",
       );
     }
     //
@@ -54,7 +54,7 @@ class _DeskCore extends _DeskCoreV1 {
     ActivityCreator? creator = __activityCreatorMap[activityName];
     if (creator == null) {
       throw DebugUtils.getFatalError(
-          " ERROR: '$activityName' not found. You need to call:\n "
+          " - ERROR: '$activityName' not found. You need to call:\n "
           " FlutterArtist.storage.registerActivity(()=> $activityName())");
     }
     activity = creator() as F;

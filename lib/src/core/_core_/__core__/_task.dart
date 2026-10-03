@@ -105,8 +105,8 @@ abstract class Task<
   /// Executes the core submission logic of the Task with user input.
   @_AbstractMethodAnnotation()
   Future<ApiResult<RESULT_DATA>> performSubmit({
-    required INIT_DATA? initData,
-    required Map<String, dynamic>? formData,
+    required INIT_DATA initData,
+    required FORM_OUTPUT? formData,
   });
 
   // ===========================================================================
@@ -132,7 +132,7 @@ abstract class Task<
     thisXTask.resetExecutionHints();
 
     executionTrace.addInfo(
-      codeId: "#90100",
+      codeId: "#090100",
       shortDesc:
           "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Load InitData)",
     );
@@ -148,7 +148,7 @@ abstract class Task<
       __refreshLoadingInitDataState(isLoading: true);
 
       executionTrace.addControllableCall(
-        codeId: "#90120",
+        codeId: "#090200",
         caller: this,
         methodName: "performLoadInitData",
         suffixShortDesc: "",
@@ -161,33 +161,35 @@ abstract class Task<
       _initData = result.data;
       _dataState = const TaskDataStateLoadedFresh();
 
+      executionTrace.addInfo(
+        codeId: "#090240",
+        shortDesc: "INIT_DATA loaded successfully.",
+        parameters: {
+          "initData": _initData,
+          "dataState": _dataState,
+        },
+      );
+
       // =======================================================================
       // FORM MODEL LIFECYCLE COORDINATION (Transition from none to pending)
       // =======================================================================
       if (formModel != null) {
-        executionTrace.addInfo(
-          codeId: "#90135",
-          shortDesc:
-              "INIT_DATA loaded successfully -> Transitioning FormModel state to pending.",
-        );
-
-        final newFormDataState = FormDataStateUtils.calculateNewLazyDataState(
+        final newFormDataState =
+            TaskFormDataStateUtils.calculateNewLazyDataState(
           currentFormDataState: formModel!.dataState,
-          hasCurrentItem: _initData != null,
-          currentItemChanged: true,
+          taskDataState: _dataState,
+          hasInitData: _initData != null,
         );
-
+        executionTrace.addInfo(
+          codeId: "#090300",
+          shortDesc:
+              "Transitioning FormModel state to ${newFormDataState.toBriefInfo()}.",
+        );
         formModel!._formModelStructure._setFormDataState(
           formDataState: newFormDataState,
           error: null,
         );
       }
-
-      executionTrace.addInfo(
-        codeId: "#90140",
-        shortDesc:
-            "${debugObjHtml(this)} -> Successfully loaded INIT_DATA: ${debugObjHtml(_initData)}.",
-      );
     } catch (e, stackTrace) {
       taskErrorInfo = TaskErrorInfo(
         taskErrorMethod: TaskErrorMethod.performLoadInitData,
@@ -196,7 +198,7 @@ abstract class Task<
       );
 
       final ErrorInfo errorInfo = _handleError(
-        shelf: null,
+        module: null,
         methodName: "performLoadInitData",
         error: e,
         stackTrace: stackTrace,
@@ -212,9 +214,21 @@ abstract class Task<
       } else {
         _dataState = TaskDataStatePending.failed(errorInfo: taskErrorInfo);
       }
-
+      // 🛑 Form Data State
+      if (formModel != null) {
+        final newFormDataState =
+            TaskFormDataStateUtils.calculateNewLazyDataState(
+          currentFormDataState: formModel!.dataState,
+          taskDataState: _dataState,
+          hasInitData: _initData != null,
+        );
+        formModel!._formModelStructure._setFormDataState(
+          formDataState: newFormDataState,
+          error: null,
+        );
+      }
       executionTrace.addInfo(
-        codeId: "#90160",
+        codeId: "#090500",
         shortDesc:
             "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
@@ -232,9 +246,78 @@ abstract class Task<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT> thisXTask,
-    required TaskSubmitIntent<INIT_DATA, RESULT_DATA> executionIntent,
+    required TaskSubmitIntent<INIT_DATA, RESULT_DATA, FORM_OUTPUT>
+        executionIntent,
   }) async {
-    // Handled in subsequent phase
+    __assertThisXTask(thisXTask);
+    thisXTask._createAndSetTaskIntentDone(
+      lastIntentInfo: "Submit",
+    );
+
+    executionTrace.addInfo(
+      codeId: "#093100",
+      shortDesc:
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Submit)",
+    );
+
+    final executionResult = executionIntent.resultWrapper._setResult(
+      TaskSubmitExecutionResult<INIT_DATA, RESULT_DATA>(precheck: null),
+      objectCaller: this,
+      methodName: '_unitSubmit',
+    );
+
+    FORM_OUTPUT? formOutput;
+    try {
+      formOutput = formModel?._getFormOutput();
+    } catch (e, stackTrace) {
+      formOutput = null;
+      final ErrorInfo errorInfo = _handleError(
+        module: module,
+        methodName: "convertToFormOutput",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+      executionResult._setErrorInfo(errorInfo: errorInfo);
+      //
+      TaskErrorInfo taskErrorInfo = TaskErrorInfo(
+        taskErrorMethod: TaskErrorMethod.convertToFormOutput,
+        error: e,
+        errorStackTrace: stackTrace,
+      );
+      _dataState = TaskDataStateSubmissionAttemptedFailed(
+        submissionErrorInfo: taskErrorInfo,
+      );
+      return;
+    }
+    try {
+      ApiResult<RESULT_DATA> result = await performSubmit(
+        initData: initData!,
+        formData: formOutput,
+      );
+    } catch (e, stackTrace) {
+      final ErrorInfo errorInfo = _handleError(
+        module: module,
+        methodName: "performSubmit",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+      executionResult._setErrorInfo(errorInfo: errorInfo);
+      //
+      TaskErrorInfo taskErrorInfo = TaskErrorInfo(
+        taskErrorMethod: TaskErrorMethod.performSubmit,
+        error: e,
+        errorStackTrace: stackTrace,
+      );
+      _dataState = TaskDataStateSubmissionAttemptedFailed(
+        submissionErrorInfo: taskErrorInfo,
+      );
+      return;
+    }
+    _dataState = TaskDataStateSubmissionAttemptedSuccess();
   }
 
   // ===========================================================================
@@ -262,44 +345,89 @@ abstract class Task<
     return thisXTask.loadInitDataResult;
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
-
-  /// Evaluates whether this Task permits submitting its current state.
-  @_PrecheckMethod()
-  Actionable<TaskSubmitPrecheck> canSubmit() {
+  /// Evaluates whether this Task permits submitting its current state based on
+  /// execution business rules, task data states, and form validation constraints.
+  @_PrecheckPrivateMethod()
+  Actionable<TaskSubmitPrecheck> __checkBeforeSubmit({
+    required bool checkBusy,
+    required bool checkAllow,
+    required bool checkValidate,
+  }) {
     // 1. Check if the global executor is busy processing another operation
-    if (FlutterArtist.executor.isBusy) {
+    if (checkBusy && FlutterArtist.executor.isBusy) {
       return Actionable<TaskSubmitPrecheck>.no(
-          errCode: TaskSubmitPrecheck.busy);
+        errCode: TaskSubmitPrecheck.busy,
+      );
     }
 
-    // 2. Check if the task is still in a pending state (initialization data not yet loaded)
+    // 2. Check Task DataState constraints:
+    // A Task must be fully loaded and fresh to allow submission.
     if (dataState.isPending) {
       return Actionable<TaskSubmitPrecheck>.no(
-          errCode: TaskSubmitPrecheck.taskInPendingState);
+        errCode: TaskSubmitPrecheck.taskInPendingState,
+      );
+    }
+
+    if (dataState.isStale) {
+      return Actionable<TaskSubmitPrecheck>.no(
+        errCode: TaskSubmitPrecheck.taskInStaleState,
+      );
+    }
+
+    // Prevent submitting again if the task has already been successfully completed/submitted.
+    if (dataState.isSubmissionAttemptedSuccess) {
+      return Actionable<TaskSubmitPrecheck>.no(
+        errCode: TaskSubmitPrecheck.taskAlreadySubmitted,
+      );
     }
 
     // 3. Check Form constraints (Only evaluated if the Task declares a formModel)
     if (formModel != null) {
-      // if (!formModel!.formInitialDataReady) {
-      //   return Actionable<TaskSubmitPrecheck>.no(errCode: TaskSubmitPrecheck.formInitialDataNotReady);
-      // }
-      //
-      // // Validate all active form builder states currently mounted in the UI
-      // final activeForms = formModel!.ui._visibleFormBuilderStates;
-      // bool allFormsAreValid = true;
-      // for (FormBuilderState formState in activeForms) {
-      //   bool isValid = formState.validate(focusOnInvalid: false);
-      //   allFormsAreValid = allFormsAreValid && isValid;
-      // }
-      //
-      // if (!allFormsAreValid) {
-      //   return Actionable<TaskSubmitPrecheck>.no(errCode: TaskSubmitPrecheck.formInvalidated);
-      // }
+      final FormDataState formDataState = formModel!.dataState;
+
+      if (formDataState.isNone) {
+        return Actionable<TaskSubmitPrecheck>.no(
+          errCode: TaskSubmitPrecheck.formInitialDataNotReady,
+        );
+      }
+
+      if (!formModel!.formInitialDataReady) {
+        return Actionable<TaskSubmitPrecheck>.no(
+          errCode: TaskSubmitPrecheck.formInitialDataNotReady,
+        );
+      }
+
+      // 4. Validate active UI form fields if validation check is requested
+      if (checkValidate) {
+        // Validate all active form builder states currently mounted in the UI
+        final activeForms = formModel!.ui._visibleFormBuilderStates;
+        bool allFormsAreValid = true;
+        for (FormBuilderState formState in activeForms) {
+          bool isValid = formState.validate(focusOnInvalid: false);
+          allFormsAreValid = allFormsAreValid && isValid;
+        }
+        if (!allFormsAreValid) {
+          return Actionable<TaskSubmitPrecheck>.no(
+            errCode: TaskSubmitPrecheck.formInvalidated,
+          );
+        }
+      }
     }
 
     return Actionable<TaskSubmitPrecheck>.yes();
+  }
+
+  /// Public entry point evaluating whether this Task permits submitting its current state.
+  @_PrecheckMethod()
+  Actionable<TaskSubmitPrecheck> checkBeforeSubmit({
+    bool checkAllow = true,
+    bool checkValidate = true,
+  }) {
+    return __checkBeforeSubmit(
+      checkBusy: true,
+      checkAllow: checkAllow,
+      checkValidate: checkValidate,
+    );
   }
 
   // ***************************************************************************
@@ -323,10 +451,26 @@ abstract class Task<
   }
 
   Future<TaskSubmitExecutionResult<INIT_DATA, RESULT_DATA>> submit() async {
-    Actionable<TaskSubmitPrecheck> actionable = canSubmit();
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "submit",
+      parameters: {},
+      isLibMethod: true,
+    );
+
+    executionTrace.addNonControllableCall(
+      codeId: "#094000",
+      caller: this,
+      methodName: "checkBeforeSubmit",
+      suffixShortDesc: "",
+    );
+    Actionable<TaskSubmitPrecheck> actionable = checkBeforeSubmit();
 
     if (!actionable.yes) {
       _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#094100",
+        prefixShortDesc: 'checkBeforeSubmit()',
         module: module,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -339,8 +483,8 @@ abstract class Task<
     final xTask = xActivity.findXTaskByName(name)
         as XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT>;
 
-    final TaskSubmitIntent<INIT_DATA, RESULT_DATA> executionIntent =
-        xTask._createAndSetTaskIntentSubmit();
+    final TaskSubmitIntent<INIT_DATA, RESULT_DATA, FORM_OUTPUT>
+        executionIntent = xTask._createAndSetTaskIntentSubmit();
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -358,8 +502,25 @@ abstract class Task<
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
+  bool isStateReadyForForm() {
+    if (dataState.isPending || dataState.isStale) {
+      return false;
+    } else if (dataState.isFresh ||
+        dataState.isSubmissionAttemptedSuccess ||
+        dataState.isSubmissionAttemptedFailed) {
+      return true;
+    } else {
+      // Never run.
+      throw UnimplementedError("XTaskFormModel: Never run");
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @_PrecheckMethod()
-  Actionable<ShowFormInfoPrecheck> canShowFormInfo() {
+  Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo() {
     return _internalCanShowFormInfo(formModel: formModel);
   }
 

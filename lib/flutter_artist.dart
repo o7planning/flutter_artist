@@ -1,6 +1,7 @@
 export 'src/_wcfg.dart';
 export 'src/core/_core_/_utils_/block_data_state_utils.dart';
-export 'src/core/_core_/_utils_/form_data_state_utils.dart';
+export 'src/core/_core_/_utils_/block_form_data_state_utils.dart';
+export 'src/core/_core_/_utils_/task_form_data_state_utils.dart';
 export 'src/core/_core_/_utils_/scalar_data_state_utils.dart';
 export 'src/core/_core_/core.dart';
 

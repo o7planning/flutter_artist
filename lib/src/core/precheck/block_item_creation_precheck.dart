@@ -25,7 +25,7 @@ enum BlockItemCreationPrecheck implements Precheck {
   blockInStaleState(
     precheckCode: PrecheckCode.inStaleState,
     message: "New item creation is disabled.",
-    details: ["The block is in a 'stale' state."],
+    details: ["The block is in a 'loadedStale' state."],
   ),
   // Test Cases: [01a]
   blockInNoneState(

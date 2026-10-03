@@ -19,11 +19,12 @@ class _Desk extends _DeskCore {
     );
     //
     final bool checkBusyTrue = true;
-    //
-    executionTrace.addInfo(
-      codeId: "#75000",
-      shortDesc:
-          "Calling ${debugObjHtml(this)}.__canBackendAction() to check before execute the action.",
+
+    executionTrace.addNonControllableCall(
+      codeId: "#075000",
+      caller: this,
+      methodName: "__checkBeforeExecuteBackendAction",
+      suffixShortDesc: "",
       parameters: {
         "checkBusy": checkBusyTrue,
       },
@@ -32,18 +33,16 @@ class _Desk extends _DeskCore {
     // @Same-Code-Precheck-01
     //
     final Actionable<StorageBackendActionPrecheck> actionable =
-        __canBackendAction(
+        __checkBeforeExecuteBackendAction(
       checkBusy: checkBusyTrue,
     );
     //
     if (!actionable.yes) {
-      executionTrace.addInfo(
-        codeId: "#75040",
-        shortDesc: "Got @actionable:",
-        actionable: actionable,
-      );
       // _createItemErrorCount++;
       _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId:  "#075040",
+        prefixShortDesc: '__checkBeforeExecuteBackendAction()',
         module: null,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -73,7 +72,7 @@ class _Desk extends _DeskCore {
     }
     //
     executionTrace.addExecutionIntent(
-      codeId: "#75340",
+      codeId: "#075340",
       owner: FlutterArtist.executor,
       executionIntentType: StorageBackendActionIntent,
       suffixShortDesc: "",
@@ -90,7 +89,7 @@ class _Desk extends _DeskCore {
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<StorageBackendActionPrecheck> __canBackendAction({
+  Actionable<StorageBackendActionPrecheck> __checkBeforeExecuteBackendAction({
     required bool checkBusy,
   }) {
     if (checkBusy && FlutterArtist.executor.isBusy) {
@@ -115,7 +114,7 @@ class _Desk extends _DeskCore {
     ApiResult<void>? result;
     //
     executionTrace.addInfo(
-      codeId: "#35000",
+      codeId: "#035000",
       shortDesc:
           "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
     );
@@ -127,7 +126,7 @@ class _Desk extends _DeskCore {
     //
     try {
       executionTrace.addControllableCall(
-        codeId: "#35100",
+        codeId: "#035100",
         caller: executionIntent.action,
         methodName: "performBackendOperation",
         suffixShortDesc: "",
@@ -138,7 +137,7 @@ class _Desk extends _DeskCore {
       result.throwIfError();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
-        shelf: null,
+        module: null,
         methodName:
             '${getClassName(executionIntent.action)}.performBackendOperation',
         error: e,
@@ -151,7 +150,7 @@ class _Desk extends _DeskCore {
         errorInfo: errorInfo,
       );
       executionTrace.addInfo(
-        codeId: "#35200",
+        codeId: "#035200",
         shortDesc:
             "The ${debugObjHtml(executionIntent.action)}.performBackendOperation() method was called with an error!",
         errorInfo: errorInfo,
@@ -160,7 +159,7 @@ class _Desk extends _DeskCore {
     }
     //
     executionTrace.addBroadcastEvent(
-      codeId: "#35300",
+      codeId: "#035300",
       shortDesc: "${debugObjHtml(this)} > Fire event after backend action.",
     );
     _EventDispatcher.broadcastSystemWide(

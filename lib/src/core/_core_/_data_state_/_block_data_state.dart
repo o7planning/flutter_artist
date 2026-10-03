@@ -2,7 +2,7 @@ part of '../core.dart';
 
 /// Root sealed state container for Block data lifecycle.
 @immutable
-sealed class BlockDataState {
+sealed class BlockDataState implements DataState{
   const BlockDataState();
 
   String get name;
@@ -26,8 +26,6 @@ sealed class BlockDataState {
 
   @override
   int get hashCode;
-
-  String toBriefInfo();
 }
 
 /// Uninitialized context (e.g., Child block whose parent has no selected item).
@@ -151,7 +149,7 @@ final class BlockDataStateLoadedFresh extends BlockDataStateLoaded {
 
   @override
   String toBriefInfo() =>
-      "fresh(${transientErrorInfo == null ? '' : 'transientErr'})";
+      "loadedFresh(${transientErrorInfo == null ? '' : 'transientErr'})";
 
   @override
   String toString() =>
@@ -212,7 +210,7 @@ final class BlockDataStateLoadedStale extends BlockDataStateLoaded {
   int get hashCode => Object.hash(runtimeType, reason);
 
   @override
-  String toBriefInfo() => "stale(${reason.toBriefInfo()})";
+  String toBriefInfo() => "loadedStale(${reason.toBriefInfo()})";
 
   @override
   String toString() => 'BlockDataState.loadedStale(reason: $reason)';

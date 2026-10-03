@@ -60,7 +60,25 @@ abstract class TaskFormModel<
   }
 
   @override
-  bool isEnabled() => !task.isLoadingInitData && !task.isSubmitting;
+  bool isEnabled() {
+    if (!host.isStateReadyForForm()) {
+      return false;
+    }
+    // Check if the underlying Form Model data state forbids modifications
+    if (dataState.isNone || dataState.isFatalError) {
+      return false;
+    }
+    // Check if the Task (FormHost) is currently busy executing network calls
+    if (task.isLoadingInitData || task.isSubmitting) {
+      return false;
+    }
+    // Check if the Task has already been successfully submitted.
+    // Once successfully completed, the form inputs should be locked from further edits.
+    if (task.dataState.isSubmissionAttemptedSuccess) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   void _refreshControlBars() => task.ui.refreshControlBars();
@@ -185,11 +203,34 @@ abstract class TaskFormModel<
   Future<FormModelPatchFormFieldsResult> patchFormFields({
     required FORM_INPUT formInput,
   }) async {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "patchFormFields",
+      parameters: null,
+      isLibMethod: true,
+    );
+    //
+    final bool checkBusyTrue = true;
+    executionTrace.addNonControllableCall(
+      codeId: "#112000",
+      caller: this,
+      methodName: "__checkBeforePatchFormFields",
+      suffixShortDesc: "",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+      },
+    );
+
     final Actionable<FormModelPatchFormFieldsPrecheck> actionable =
-        __canPatchFormFields(checkBusy: true);
+        __checkBeforePatchFormFields(
+      checkBusy: checkBusyTrue,
+    );
     if (!actionable.yes) {
       _addErrorLogActionable(
-        module: null,
+        executionTrace: executionTrace,
+        traceStepCodeId: "#112100",
+        prefixShortDesc: '__checkBeforePatchFormFields()',
+        module: module,
         actionableFalse: actionable,
         showErrSnackBar: true,
         tipDocument: null,

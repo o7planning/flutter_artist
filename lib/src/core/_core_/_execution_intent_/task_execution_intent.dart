@@ -21,12 +21,13 @@ class TaskLoadInitDataIntent<
 
 class TaskSubmitIntent<
     TASK_INIT_DATA extends TaskInitData, //
-    TASK_RESULT_DATA extends TaskResultData> extends TaskBaseExecutionIntent<
+    TASK_RESULT_DATA extends TaskResultData,
+    FORM_OUTPUT extends FormOutput> extends TaskBaseExecutionIntent<
     TASK_INIT_DATA,
     TASK_RESULT_DATA, //
     TaskSubmitPrecheck,
     TaskSubmitExecutionResult<TASK_INIT_DATA, TASK_RESULT_DATA>> {
-  TaskSubmitIntent();
+  TaskSubmitIntent( );
 }
 
 class TaskDoneIntent<

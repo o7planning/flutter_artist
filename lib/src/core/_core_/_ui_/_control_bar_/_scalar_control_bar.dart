@@ -94,7 +94,7 @@ class _ScalarControlBarState extends _BaseControlBarState<
         );
       case ScalarControlBarItemType.query:
         if (!widget.config.allowQueryButton) return null;
-        final actionable = widget.scalar.canQuery();
+        final actionable = widget.scalar.checkBeforeQuery();
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,

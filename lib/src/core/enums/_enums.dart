@@ -5,151 +5,77 @@ import '../_core_/core.dart';
 import '../icon/icon_constants.dart';
 
 part 'absent_item_context_policy.dart';
-
 part 'action_confirmation_type.dart';
-
 part 'action_result_state.dart';
-
 part 'active_element_type.dart';
-
 part 'activity_hidden_action.dart';
-
 part 'activity_release_policy.dart';
-
 part 'after_backend_action.dart';
-
 part 'after_query_action.dart';
-
 part 'block_control_action_type.dart';
-
 part 'block_error_method.dart';
-
 part 'block_hidden_action.dart';
-
 part 'block_loaded_state_phase.dart';
-
 part 'block_native_query_mode.dart';
-
 part 'block_reaction_target.dart';
-
 part 'block_set_current_item_directive.dart';
-
 part 'block_viewport_sync_strategy.dart';
-
 part 'code_flow_type.dart';
-
 part 'context_kind.dart';
-
 part 'context_provider_view_type.dart';
-
 part 'control_bar_item_type.dart';
-
 part 'debug_btn_type.dart';
-
 part 'debug_cat.dart';
-
 part 'default_setting_policy.dart';
-
 part 'deferment_source.dart';
-
 part 'err_code_if_item_is_null.dart';
-
 part 'error_origin.dart';
-
 part 'event_data_kind.dart';
-
 part 'event_scope.dart';
-
 part 'event_source_type.dart';
-
 part 'execution_trace_type.dart';
-
 part 'execution_unit_type.dart';
-
 part 'fallback_dilemma_strategy.dart';
-
 part 'filter_activity_type.dart';
-
 part 'filter_apply_policy.dart';
-
 part 'filter_connector.dart';
-
 part 'filter_error_method.dart';
-
 part 'filter_operator.dart';
-
 part 'filter_sync_directive.dart';
-
 part 'form_action.dart';
-
 part 'form_activity_type.dart';
-
 part 'form_debug_item_type.dart';
-
 part 'form_error_method.dart';
-
 part 'form_input_source.dart';
-
 part 'form_load_hint.dart';
-
 part 'form_mode.dart';
-
 part 'ignore_item_refresh_condition.dart';
-
 part 'item_creation_type.dart';
-
 part 'list_update_strategy.dart';
-
 part 'loaded_status.dart';
-
 part 'multi_opt_prop_reload.dart';
-
 part 'optioned_master_prop_type.dart';
-
 part 'qry_pagination_type.dart';
-
 part 'query_hint.dart';
-
 part 'query_mode.dart';
-
 part 'query_type.dart';
-
 part 'quick_suggestion_mode.dart';
-
 part 'quick_suggestion_type.dart';
-
 part 'resolved_query_action.dart';
-
 part 'scalar_control_action_type.dart';
-
 part 'scalar_error_method.dart';
-
 part 'scalar_hidden_action.dart';
-
 part 'scalar_reaction_target.dart';
-
 part 'selection_type.dart';
-
 part 'shelf_release_policy.dart';
-
 part 'show_mode.dart';
-
 part 'sort_direction.dart';
-
 part 'sort_mode.dart';
-
 part 'sort_strategy.dart';
-
 part 'sorting_side.dart';
-
 part 'task_hidden_action.dart';
-
 part 'tip_document.dart';
-
 part 'trace_step_type.dart';
-
 part 'unified_item_refresh_policy.dart';
-
 part 'x_activity_type.dart';
-
 part 'x_shelf_type.dart';

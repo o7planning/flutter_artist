@@ -132,7 +132,7 @@ abstract class Activity extends FeatureModule {
     debug._lazyLoadId++;
     //
     executionTrace.addInfo(
-      codeId: "#01000",
+      codeId: "#001000",
       shortDesc:
           "Find lazy model-components (stage, task) that are in a state where they need to execute or load data.",
     );
@@ -143,27 +143,27 @@ abstract class Activity extends FeatureModule {
         _XActivityActivityNaturalExec(activity: activity);
     try {
       executionTrace.addInfo(
-        codeId: "#01100",
+        codeId: "#001100",
         shortDesc: "Create ${debugObjHtml(xActivity)} for <b>Natural-Load</b>.",
         note:
             "<b>XActivity</b> is a <b>RootQueueItem</b> and contains multiple <b>Execution Units</b>.",
       );
       executionTrace.addNonControllableCall(
-        codeId: "#01120",
+        codeId: "#001120",
         caller: xActivity,
         methodName: "_initExecExecutionUnits",
         suffixShortDesc: "",
       );
       //
       executionTrace.addInfo(
-        codeId: "#01160",
+        codeId: "#001160",
         shortDesc:
             "Add ${debugObjHtml(xActivity)} (RootQueueItem) to <b>Root-Queue</b>.",
       );
       FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
       //
       executionTrace.addNonControllableCall(
-        codeId: "#01200",
+        codeId: "#001200",
         caller: FlutterArtist.executor,
         methodName: "_executeExecutionUnitQueue",
         suffixShortDesc:

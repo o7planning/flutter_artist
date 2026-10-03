@@ -92,6 +92,15 @@ class XTask<
     final executionIntent = _executionIntent;
     final bool isVisible = task.ui.hasVisibleViews();
 
+    if (executionIntent is TaskDoneIntent) {
+      return NxtExecutionUnit.no(
+        debug: debug,
+        info:
+            "Task (0.0), ${getClassNameWithoutGenerics(task)}, _executionIntent: $executionIntent, "
+            "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+      );
+    }
+
     // =========================================================================
     // 1. DATA STATE = PENDING
     // =========================================================================
@@ -140,17 +149,18 @@ class XTask<
           (_execHint == ExecHint.force || isVisible) && !_executed;
 
       if (shouldExecute) {
-        final TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA> intentToUse;
+        final TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
+            intentToUse;
         if (executionIntent
-            is TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
+            is TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
           intentToUse = executionIntent;
         } else {
-          intentToUse = _createAndSetTaskIntentSubmit();
+          intentToUse = _createAndSetTaskIntentLoadInitData();
         }
 
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _TaskSubmitExecutionUnit(
+          executionUnit: _TaskLoadInitDataExecutionUnit(
             xTask: this,
             executionIntent: intentToUse,
           ),
@@ -217,8 +227,8 @@ class XTask<
           );
         }
         // TaskSubmitIntent
-        else if (executionIntent
-            is TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
+        else if (executionIntent is TaskSubmitIntent<TASK_INIT_DATA,
+            TASK_RESULT_DATA, FORM_OUTPUT>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _TaskSubmitExecutionUnit(
@@ -268,10 +278,10 @@ class XTask<
     );
   }
 
-  TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
+  TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA, FORM_OUTPUT>
       _createAndSetTaskIntentSubmit() {
     final executionIntent =
-        TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA>();
+        TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA, FORM_OUTPUT>();
     _executionIntent = executionIntent;
     return executionIntent;
   }

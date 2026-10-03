@@ -43,7 +43,7 @@ abstract class WorkNodeFormModel<
     }
 
     executionTrace.addControllableCall(
-      codeId: "#96200",
+      codeId: "#096200",
       caller: this,
       methodName: "extractSimplePropValuesFromInitData",
       suffixShortDesc: "",
@@ -73,7 +73,7 @@ abstract class WorkNodeFormModel<
     }
 
     executionTrace.addControllableCall(
-      codeId: "#98200",
+      codeId: "#098200",
       caller: this,
       methodName: "extractMultiOptPropValueFromInitData",
       suffixShortDesc: "",
@@ -179,7 +179,7 @@ abstract class WorkNodeFormModel<
       FlutterArtist.storage._lazyUiComponentTriggerQueue.addActivity(activity);
 
   @override
-  bool _canResetForm() => isEnabled() && isDirty();
+  bool _checkBeforeResetForm() => isEnabled() && isDirty();
 
   @override
   void _refreshAllViews() => activity.ui.refreshAllViews();

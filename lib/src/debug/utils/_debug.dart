@@ -32,6 +32,8 @@ String __debugObjHtml(Object? obj, bool asHtml) {
     return "${b1}$obj${b2}";
   } else if (obj is Identifiable) {
     return "${b1}${getClassNameWithoutGenerics(obj)}(${obj.id})${b2}";
+  } else if (obj is DataState) {
+    return "${b1}${obj.toBriefInfo()})${b2}";
   } else if (obj is ILoggedInUser) {
     return "${b1}${getClassNameWithoutGenerics(obj)}(${obj.userName})${b2}";
   } else if (obj is XShelf) {
