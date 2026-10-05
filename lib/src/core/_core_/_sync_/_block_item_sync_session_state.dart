@@ -69,5 +69,6 @@ class _BlockItemSyncSessionState<ID extends Comparable> extends Equatable
 
   @override
   String toString() =>
-      'ItemSyncSession(targetItemId: $_targetItemId, isStale: $_isStale, events: ${_receivedEventInfos.length})';
+      'ItemSyncSession(targetItemId: $_targetItemId, isStale: $_isStale, events: ${_receivedEventInfos
+          .length})';
 }

@@ -64,7 +64,7 @@ class _FilterUiComponents extends _UiComponents {
   }
 
   @override
-  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+  Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
     return debugFindMountedWidgetStates(
       withFilterPanel: true,
       withControlBar: true,

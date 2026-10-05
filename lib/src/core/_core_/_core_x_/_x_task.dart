@@ -3,10 +3,10 @@ part of '../core.dart';
 /// Runtime execution wrapper for [Task], managing intent delegation,
 /// single-stage progress lifecycle, and state mutation.
 class XTask<
-    TASK_INIT_DATA extends TaskInitData, //
-    TASK_RESULT_DATA extends TaskResultData,
-    FORM_INPUT extends FormInput,
-    FORM_OUTPUT extends FormOutput> {
+TASK_INIT_DATA extends TaskInitData, //
+TASK_RESULT_DATA extends TaskResultData,
+FORM_INPUT extends FormInput,
+FORM_OUTPUT extends FormOutput> {
   final XActivity xActivity;
 
   final XTaskFormModel? xTaskFormModel;
@@ -30,10 +30,10 @@ class XTask<
   ExecHint get execHint => _execHint;
 
   TaskBaseExecutionIntent<TASK_INIT_DATA, TASK_RESULT_DATA, dynamic, dynamic>?
-      _executionIntent;
+  _executionIntent;
 
   TaskBaseExecutionIntent<TASK_INIT_DATA, TASK_RESULT_DATA, dynamic, dynamic>?
-      get executionIntent => _executionIntent;
+  get executionIntent => _executionIntent;
 
   XTask._({
     required this.xActivity,
@@ -42,7 +42,7 @@ class XTask<
   });
 
   final loadInitDataResult =
-      TaskLoadInitDataResult<TASK_INIT_DATA, TASK_RESULT_DATA>(precheck: null);
+  TaskLoadInitDataResult<TASK_INIT_DATA, TASK_RESULT_DATA>(precheck: null);
 
   void setExecHint(ExecHint hint) {
     _execHint = hint;
@@ -96,8 +96,10 @@ class XTask<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "Task (0.0), ${getClassNameWithoutGenerics(task)}, _executionIntent: $executionIntent, "
-            "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+        "Task (0.0), ${getClassNameWithoutGenerics(
+            task)}, _executionIntent: $executionIntent, "
+            "dataState: ${taskDataState
+            .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
       );
     }
 
@@ -110,9 +112,9 @@ class XTask<
 
       if (shouldExecute) {
         final TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
-            intentToUse;
+        intentToUse;
         if (executionIntent
-            is TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
+        is TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
           intentToUse = executionIntent;
         } else {
           intentToUse = _createAndSetTaskIntentLoadInitData();
@@ -128,15 +130,19 @@ class XTask<
             executionIntent: intentToUse,
           ),
           info:
-              "Task (1.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $executionIntent --> $intentToUse, "
-              "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+          "Task (1.1), ${getClassNameWithoutGenerics(
+              task)}, _executionIntent: $executionIntent --> $intentToUse, "
+              "dataState: ${taskDataState
+              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Task (1.2), ${getClassNameWithoutGenerics(task)}, _executionIntent: $executionIntent, "
-              "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+          "Task (1.2), ${getClassNameWithoutGenerics(
+              task)}, _executionIntent: $executionIntent, "
+              "dataState: ${taskDataState
+              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       }
     }
@@ -150,9 +156,9 @@ class XTask<
 
       if (shouldExecute) {
         final TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
-            intentToUse;
+        intentToUse;
         if (executionIntent
-            is TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
+        is TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
           intentToUse = executionIntent;
         } else {
           intentToUse = _createAndSetTaskIntentLoadInitData();
@@ -165,15 +171,19 @@ class XTask<
             executionIntent: intentToUse,
           ),
           info:
-              "Task (2.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $executionIntent --> $intentToUse, "
-              "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+          "Task (2.1), ${getClassNameWithoutGenerics(
+              task)}, _executionIntent: $executionIntent --> $intentToUse, "
+              "dataState: ${taskDataState
+              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Task (2.2), ${getClassNameWithoutGenerics(task)}, _executionIntent: $executionIntent, "
-              "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+          "Task (2.2), ${getClassNameWithoutGenerics(
+              task)}, _executionIntent: $executionIntent, "
+              "dataState: ${taskDataState
+              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       }
     }
@@ -188,7 +198,8 @@ class XTask<
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Task (3.0), ${getClassNameWithoutGenerics(task)}, _executionIntent: $executionIntent, "
+          "Task (3.0), ${getClassNameWithoutGenerics(
+              task)}, _executionIntent: $executionIntent, "
               "dataState: ${taskDataState.toBriefInfo()}",
         );
       }
@@ -196,9 +207,9 @@ class XTask<
       // 3.1. Force execution explicitly requested via ExecHint
       if (_execHint == ExecHint.force) {
         final TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
-            intentToUse;
+        intentToUse;
         if (executionIntent
-            is TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
+        is TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
           intentToUse = executionIntent;
         } else {
           intentToUse = _createAndSetTaskIntentLoadInitData();
@@ -211,8 +222,10 @@ class XTask<
             executionIntent: intentToUse,
           ),
           info:
-              "Task (3.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $intentToUse, "
-              "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+          "Task (3.1), ${getClassNameWithoutGenerics(
+              task)}, _executionIntent: $intentToUse, "
+              "dataState: ${taskDataState
+              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       }
       // IN: DATA STATE = FRESH
@@ -222,13 +235,15 @@ class XTask<
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Task (3.2.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $executionIntent, "
+            "Task (3.2.1), ${getClassNameWithoutGenerics(
+                task)}, _executionIntent: $executionIntent, "
                 "dataState: ${taskDataState.toBriefInfo()}",
           );
         }
         // TaskSubmitIntent
         else if (executionIntent is TaskSubmitIntent<TASK_INIT_DATA,
-            TASK_RESULT_DATA, FORM_OUTPUT>) {
+            TASK_RESULT_DATA,
+            FORM_OUTPUT>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _TaskSubmitExecutionUnit(
@@ -236,14 +251,16 @@ class XTask<
               executionIntent: executionIntent,
             ),
             info:
-                "Task (3.2.2), ${getClassNameWithoutGenerics(task)}, _executionIntent: $executionIntent, "
+            "Task (3.2.2), ${getClassNameWithoutGenerics(
+                task)}, _executionIntent: $executionIntent, "
                 "dataState: ${taskDataState.toBriefInfo()}",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Task (3.2.3), ${getClassNameWithoutGenerics(task)}, unhandled _executionIntent: $executionIntent, "
+            "Task (3.2.3), ${getClassNameWithoutGenerics(
+                task)}, unhandled _executionIntent: $executionIntent, "
                 "dataState: ${taskDataState.toBriefInfo()}",
           );
         }
@@ -253,8 +270,10 @@ class XTask<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "Task (3.3), ${getClassNameWithoutGenerics(task)}, _executionIntent: null, "
-            "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+        "Task (3.3), ${getClassNameWithoutGenerics(
+            task)}, _executionIntent: null, "
+            "dataState: ${taskDataState
+            .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
       );
     }
 
@@ -264,7 +283,8 @@ class XTask<
     return NxtExecutionUnit.no(
       debug: debug,
       info:
-          "Task (4.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $executionIntent, "
+      "Task (4.1), ${getClassNameWithoutGenerics(
+          task)}, _executionIntent: $executionIntent, "
           "dataState: ${taskDataState.toBriefInfo()}, isVisible: $isVisible",
     );
   }
@@ -279,17 +299,17 @@ class XTask<
   }
 
   TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA, FORM_OUTPUT>
-      _createAndSetTaskIntentSubmit() {
+  _createAndSetTaskIntentSubmit() {
     final executionIntent =
-        TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA, FORM_OUTPUT>();
+    TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA, FORM_OUTPUT>();
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
   TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
-      _createAndSetTaskIntentLoadInitData() {
+  _createAndSetTaskIntentLoadInitData() {
     final executionIntent =
-        TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>();
+    TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>();
     _executionIntent = executionIntent;
     return executionIntent;
   }

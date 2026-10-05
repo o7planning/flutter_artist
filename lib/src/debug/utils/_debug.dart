@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/utils/_class_utils.dart';
+import '../../core/utils/__utils.dart';
 
 // ***************************************************************************
 // ***************************************************************************

@@ -6,7 +6,8 @@ import 'package:tabbed_view/tabbed_view.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
-import '../../core/utils/_class_utils.dart';
+import '../../core/utils/__utils.dart';
+
 import '../../core/widgets/_custom_app_container.dart';
 import '../app/_block_or_scalar.dart';
 import '../filter_criteria/_filter_condition_groups_view.dart';

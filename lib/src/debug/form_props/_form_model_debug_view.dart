@@ -4,7 +4,8 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
-import '../../core/utils/_class_utils.dart';
+import '../../core/utils/__utils.dart';
+
 import '../../core/widgets/_custom_app_container.dart';
 import '../../core/widgets/_small_text_button.dart';
 import '../dialog/_error_viewer_dialog.dart';

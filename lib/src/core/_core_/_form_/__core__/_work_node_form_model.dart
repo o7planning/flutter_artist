@@ -172,6 +172,7 @@ abstract class WorkNodeFormModel<
   // ===========================================================================
 
   Type getInitDataType() => INIT_DATA;
+
   Type getResultDataType() => RESULT_DATA;
 
   @override

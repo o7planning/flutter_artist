@@ -27,7 +27,7 @@ class _ActivityV1UiComponents extends _UiComponents {
   // ***************************************************************************
 
   @override
-  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+  Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
     return {};
   }
 

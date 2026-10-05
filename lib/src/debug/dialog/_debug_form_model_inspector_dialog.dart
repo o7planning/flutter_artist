@@ -5,7 +5,8 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
 import '../../core/_core_/core.dart';
 import '../../core/enums/_enums.dart';
 import '../../core/icon/icon_constants.dart';
-import '../../core/utils/_class_utils.dart';
+import '../../core/utils/__utils.dart';
+
 import '../feature_module/activity/__activity_structure_graph_view.dart';
 import '../feature_module/shelf/__shelf_structure_graph_view.dart';
 import '../form/_form_model_view.dart';

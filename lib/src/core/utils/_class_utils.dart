@@ -1,3 +1,5 @@
+part of '__utils.dart';
+
 String getClassName(Object? type) {
   return type.runtimeType.toString();
 }

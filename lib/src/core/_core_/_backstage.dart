@@ -55,7 +55,7 @@ class _Backstage {
     // Dispatch queued reaction execution units once overlay is dismissed
     Future.delayed(
       Duration.zero,
-          () {
+      () {
         for (String shelfName in FlutterArtist.storage._shelfMap.keys) {
           Shelf reactionShelf = FlutterArtist.storage._shelfMap[shelfName]!;
           if (reactionShelf._hasReactionBookmark()) {
@@ -99,7 +99,8 @@ class _Backstage {
     }
   }
 
-  Future<void> openDrawerWithDeferredReactions(BuildContext context, {
+  Future<void> openDrawerWithDeferredReactions(
+    BuildContext context, {
     required Set<Type> excludeShelfTypes,
     bool showSuggestionIfNeed = true,
   }) async {
@@ -120,15 +121,15 @@ class _Backstage {
     );
     await Future.delayed(const Duration(milliseconds: 100));
     await Future.doWhile(
-          () =>
-          Future.delayed(const Duration(milliseconds: 1)).then(
-                (_) => FlutterArtist.backstage.drawer.isOpen == true,
-          ),
+      () => Future.delayed(const Duration(milliseconds: 1)).then(
+        (_) => FlutterArtist.backstage.drawer.isOpen == true,
+      ),
     );
     __resumeReactions(executionTrace: executionTrace);
   }
 
-  Future<void> openEndDrawerWithDeferredReactions(BuildContext context, {
+  Future<void> openEndDrawerWithDeferredReactions(
+    BuildContext context, {
     required Set<Type> excludeShelfTypes,
     bool showSuggestionIfNeed = true,
   }) async {
@@ -149,10 +150,9 @@ class _Backstage {
     );
     await Future.delayed(const Duration(milliseconds: 100));
     await Future.doWhile(
-          () =>
-          Future.delayed(const Duration(milliseconds: 1)).then(
-                (_) => FlutterArtist.backstage.endDrawer.isOpen == true,
-          ),
+      () => Future.delayed(const Duration(milliseconds: 1)).then(
+        (_) => FlutterArtist.backstage.endDrawer.isOpen == true,
+      ),
     );
     __resumeReactions(executionTrace: executionTrace);
   }

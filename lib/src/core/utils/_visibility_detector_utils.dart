@@ -1,4 +1,4 @@
-import 'package:uuid/uuid.dart';
+part of '__utils.dart';
 
 int __visibilityDetectorIdx = 0;
 

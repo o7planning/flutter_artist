@@ -16,7 +16,7 @@ class RecentModulesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<FeatureModule> recentModules =
-        FlutterArtist. getRecentModules(visibleOnly: true);
+        FlutterArtist.getRecentModules(visibleOnly: true);
 
     return Center(
       child: Wrap(

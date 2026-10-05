@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_artist_styles/flutter_artist_styles.dart';
+part of '__utils.dart';
 
 class CopyUtils {
   static void copyToClipboard(BuildContext context, String text) {

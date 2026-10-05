@@ -97,7 +97,8 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
   ControlPressedAsyncFunction? _getOnPressedFunction() {
     switch (widget.actionType) {
       case BlockControlActionType.createItem:
-        Actionable createActionable = widget.block.checkBeforeCreateItemWithForm();
+        Actionable createActionable =
+            widget.block.checkBeforeCreateItemWithForm();
         return createActionable.yes ? __prepareFormToCreateItem : null;
       case BlockControlActionType.query:
         Actionable queryActionable = widget.block.checkBeforeQuery();
@@ -107,13 +108,15 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
             widget.block.checkBeforeSaveForm();
         return saveActionable.yes ? __saveForm : null;
       case BlockControlActionType.refreshCurrentItem:
-        Actionable refreshActionable = widget.block.checkBeforeRefreshCurrentItem();
+        Actionable refreshActionable =
+            widget.block.checkBeforeRefreshCurrentItem();
         return refreshActionable.yes ? __refreshCurrentItem : null;
       case BlockControlActionType.resetForm:
         Actionable resetActionable = widget.block.checkBeforeResetForm();
         return resetActionable.yes ? __resetForm : null;
       case BlockControlActionType.deleteCurrentItem:
-        Actionable deleteActionable = widget.block.checkBeforeDeleteCurrentItem();
+        Actionable deleteActionable =
+            widget.block.checkBeforeDeleteCurrentItem();
         return deleteActionable.yes ? __deleteCurrentItem : null;
       case BlockControlActionType.showFormInfo:
         Actionable formInfoActionable = widget.block.checkBeforeShowFormInfo();

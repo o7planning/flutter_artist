@@ -57,6 +57,7 @@ abstract class StageFormModel<
   // ===========================================================================
 
   Type getStageEnumType() => STAGE_ENUM;
+
   Type getProzessContextDataType() => PROZESS_CONTEXT_DATA;
 
   // ===========================================================================
@@ -90,26 +91,16 @@ abstract class StageFormModel<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   @override
-  bool isEnabled() {
-    if (!host.isStateReadyForForm()) {
-      return false;
-    }
-    // Check if the underlying Form Model data state forbids modifications
-    if (dataState.isNone || dataState.isFatalError) {
-      return false;
-    }
-    // Check if the Task (FormHost) is currently busy executing network calls
-    if (stage.isLoadingInitData || stage.isSubmitting) {
-      return false;
-    }
-    // Check if the Task has already been successfully submitted.
-    // Once successfully completed, the form inputs should be locked from further edits.
-    if (stage.dataState.isSubmissionAttemptedSuccess) {
-      return false;
-    }
-    return true;
+  Actionable<StageFormEnablePrecheck> checkFormEnable() {
+    return stage.checkFormEnable(checkAllow: true);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   @override
   void _refreshControlBars() => stage.ui.refreshControlBars();

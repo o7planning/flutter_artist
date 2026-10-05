@@ -5,7 +5,8 @@ class _NavigationToIntent extends NavigationIntent {
   final FaRouteBuilder? builder;
   final Object? extra;
 
-  const _NavigationToIntent(this.path, {
+  const _NavigationToIntent(
+    this.path, {
     this.builder,
     this.extra,
     required super.executeOnFailure,

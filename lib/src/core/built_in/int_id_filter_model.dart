@@ -1,7 +1,4 @@
-import '../_core_/core.dart';
-import '../enums/_enums.dart';
-import 'int_id_filter_criteria.dart';
-import 'int_id_filter_input.dart';
+part of '_built_in_filter_criteria.dart';
 
 // Example: [14809].
 class IntIdFilterModel

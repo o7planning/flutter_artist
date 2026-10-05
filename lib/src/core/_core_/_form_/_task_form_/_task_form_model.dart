@@ -59,26 +59,16 @@ abstract class TaskFormModel<
     );
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   @override
-  bool isEnabled() {
-    if (!host.isStateReadyForForm()) {
-      return false;
-    }
-    // Check if the underlying Form Model data state forbids modifications
-    if (dataState.isNone || dataState.isFatalError) {
-      return false;
-    }
-    // Check if the Task (FormHost) is currently busy executing network calls
-    if (task.isLoadingInitData || task.isSubmitting) {
-      return false;
-    }
-    // Check if the Task has already been successfully submitted.
-    // Once successfully completed, the form inputs should be locked from further edits.
-    if (task.dataState.isSubmissionAttemptedSuccess) {
-      return false;
-    }
-    return true;
+  Actionable<TaskFormEnablePrecheck> checkFormEnable() {
+    return task.checkFormEnable(checkAllow: true);
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   @override
   void _refreshControlBars() => task.ui.refreshControlBars();

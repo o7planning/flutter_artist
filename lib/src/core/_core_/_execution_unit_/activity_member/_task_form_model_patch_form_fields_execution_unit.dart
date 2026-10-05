@@ -13,9 +13,9 @@ class _TaskFormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
     required this.xTaskFormModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.formModelPatchFormFields,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.formModelPatchFormFields,
+    executionIntent: executionIntent,
+  );
 
   @override
   XActivity get xActivity => xTaskFormModel.xActivity;

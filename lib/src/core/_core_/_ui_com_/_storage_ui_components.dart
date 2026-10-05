@@ -37,11 +37,12 @@ class _StorageUiComponents extends _UiComponents {
 
     if (withStorageSectionView) {
       for (final _ContextProviderViewState ws
-          in _storageSectionViewStates.keys) {
+      in _storageSectionViewStates.keys) {
         if (ws.mounted) {
           final bool isVisible = _storageSectionViewStates[ws] ?? false;
           if (!activeOnly || isVisible) {
-            ret[ws] = XState().._setShowing(isVisible);
+            ret[ws] = XState()
+              .._setShowing(isVisible);
           }
         }
       }
@@ -51,7 +52,7 @@ class _StorageUiComponents extends _UiComponents {
   }
 
   @override
-  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+  Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
     return debugFindMountedWidgetStates(
       withStorageSectionView: true,
       activeOnly: true,
@@ -76,7 +77,7 @@ class _StorageUiComponents extends _UiComponents {
   // OLD: hasActiveUiComponent
   bool hasVisibleViews() {
     for (final _ContextProviderViewState widgetState
-        in _storageSectionViewStates.keys) {
+    in _storageSectionViewStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -114,7 +115,7 @@ class _StorageUiComponents extends _UiComponents {
   // OLD: updateAllStorageSectionViews
   void refreshStorageSectionViews() {
     for (final _ContextProviderViewState widgetState
-        in _storageSectionViewStates.keys) {
+    in _storageSectionViewStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }

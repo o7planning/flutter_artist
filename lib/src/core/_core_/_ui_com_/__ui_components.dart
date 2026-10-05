@@ -5,6 +5,8 @@ abstract class _UiComponents {
 
   Set<FaRouteData> get faRouteDatas;
 
+  late final debug = _UiComponentsDebug(this);
+
   Map<_ContextProviderViewState, XState> ___findMountedWidgetStates({
     required Map<_ContextProviderViewState, XState> widgetStates,
     required bool activeOnly,
@@ -23,5 +25,5 @@ abstract class _UiComponents {
     return ret;
   }
 
-  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates();
+  Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates();
 }

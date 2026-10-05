@@ -276,9 +276,9 @@ abstract class BaseFormModel<
         errCode: FormModelPatchFormFieldsPrecheck.busy,
       );
     }
-    if (_internalFormMode == InternalFormMode.none) {
+    if (dataState.isNone) {
       return Actionable<FormModelPatchFormFieldsPrecheck>.no(
-        errCode: FormModelPatchFormFieldsPrecheck.formInNoneMode,
+        errCode: FormModelPatchFormFieldsPrecheck.formInNoneState,
       );
     }
     if (dataState.isPending) {
@@ -1283,7 +1283,11 @@ abstract class BaseFormModel<
   });
 
   /// Returns whether the form model is enabled.
-  bool isEnabled();
+  bool isEnabled() {
+    return checkFormEnable().yes;
+  }
+
+  Actionable<FormEnablePrecheck> checkFormEnable();
 
   /// Handles changes triggered from the form view interface.
   Future<void> _onChangeFromFormView({

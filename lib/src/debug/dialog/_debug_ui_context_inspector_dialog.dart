@@ -4,7 +4,8 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import '../../core/_core_/core.dart';
 import '../../core/enums/_enums.dart';
 import '../../core/icon/icon_constants.dart';
-import '../../core/utils/_class_utils.dart';
+import '../../core/utils/__utils.dart';
+
 import '_tip_document_viewer_dialog.dart';
 
 class DebugUiContextInspectorDialog extends StatefulWidget {
@@ -108,23 +109,23 @@ class _DebugUiContextInspectorDialogState
   Map<IContextProviderViewState, XState> _debugFindWidgetStates() {
     // SHELF
     if (widget.shelf != null) {
-      return widget.shelf!.ui.debugFindAllMountedWidgetStates();
+      return widget.shelf!.ui.debug.findAllMountedWidgetStates();
     } else if (widget.block != null) {
-      return widget.block!.ui.debugFindAllMountedWidgetStates();
+      return widget.block!.ui.debug.findAllMountedWidgetStates();
     } else if (widget.scalar != null) {
-      return widget.scalar!.ui.debugFindAllMountedWidgetStates();
+      return widget.scalar!.ui.debug.findAllMountedWidgetStates();
     } else if (widget.scalar != null) {
-      return widget.scalar!.ui.debugFindAllMountedWidgetStates();
+      return widget.scalar!.ui.debug.findAllMountedWidgetStates();
     }
     // ACTIVITY
     else if (widget.activity != null) {
-      return widget.activity!.ui.debugFindAllMountedWidgetStates();
+      return widget.activity!.ui.debug.findAllMountedWidgetStates();
     } else if (widget.prozess != null) {
-      return widget.prozess!.ui.debugFindAllMountedWidgetStates();
+      return widget.prozess!.ui.debug.findAllMountedWidgetStates();
     } else if (widget.stage != null) {
-      return widget.stage!.ui.debugFindAllMountedWidgetStates();
+      return widget.stage!.ui.debug.findAllMountedWidgetStates();
     } else if (widget.task != null) {
-      return widget.task!.ui.debugFindAllMountedWidgetStates();
+      return widget.task!.ui.debug.findAllMountedWidgetStates();
     }
     // OTHERS
     else {

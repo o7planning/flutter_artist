@@ -1,3 +1,5 @@
+part of '__utils.dart';
+
 class NameUtils {
   static final _nameRegex = RegExp(r'^[a-zA-Z_][a-zA-Z0-9_-]*$');
   static final filterCriterionName = _nameRegex;

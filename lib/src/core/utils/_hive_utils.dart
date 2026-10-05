@@ -1,4 +1,4 @@
-import 'package:hive/hive.dart';
+part of '__utils.dart';
 
 class HiveUtils {
   static Future<Box<DateTime>> openHiveBoxDateTime() async {

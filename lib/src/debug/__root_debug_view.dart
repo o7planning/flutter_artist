@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../core/_core_/core.dart';
 import 'internal_event/x/_internal_event_graph_view_test2b.dart';
 import 'recent_modules/_recent_modules_view.dart';
-import 'state_view/_debug_shelf_state_view.dart';
 
 part 'root_debug_controller.dart';
 

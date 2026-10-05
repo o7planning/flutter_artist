@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '_sort_panel_helper.dart';
+part of '_built_in_ui.dart';
 
 /// Base configuration style for all Sort Panels.
 abstract class SortPanelStyle {

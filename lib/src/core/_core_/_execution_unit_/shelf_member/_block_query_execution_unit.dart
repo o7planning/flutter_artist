@@ -8,9 +8,9 @@ part of '../../core.dart';
 @_BlockQueryAndPrepareToEditAnnotation()
 @_BlockQueryAndPrepareToCreateAnnotation()
 class _BlockQueryExecutionUnit<
-    ID extends Comparable, //
-    ITEM extends Identifiable<ID>,
-    ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
   final XBlock xBlock;
 
   @override
@@ -20,9 +20,9 @@ class _BlockQueryExecutionUnit<
     required this.xBlock,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.blockQuery,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.blockQuery,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

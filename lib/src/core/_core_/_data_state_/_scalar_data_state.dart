@@ -2,7 +2,7 @@ part of '../core.dart';
 
 /// Root sealed state container for Scalar data lifecycle.
 @immutable
-sealed class ScalarDataState  implements DataState{
+sealed class ScalarDataState implements DataState {
   const ScalarDataState();
 
   String get name;
@@ -148,7 +148,8 @@ final class ScalarDataStateLoadedFresh extends ScalarDataStateLoaded {
   int get hashCode => Object.hash(runtimeType, transientErrorInfo);
 
   @override
-  String toBriefInfo() => "loadedFresh(${transientErrorInfo == null ? '' : 'err'})";
+  String toBriefInfo() =>
+      "loadedFresh(${transientErrorInfo == null ? '' : 'err'})";
 
   @override
   String toString() =>

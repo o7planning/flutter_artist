@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_artist_styles/flutter_artist_styles.dart';
+part of '_built_in_ui.dart';
 
 class SortPanelHelper {
   static Color getTextColor(BuildContext context, bool isActive) {

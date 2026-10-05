@@ -38,7 +38,7 @@ class _FormUiComponents extends _UiComponents {
   }
 
   @override
-  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+  Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
     return debugFindMountedWidgetStates(
       withFormView: true,
       activeOnly: true,
@@ -215,7 +215,7 @@ class _FormUiComponents extends _UiComponents {
     }
 
     if (isVisible) {
-      FlutterArtist._addRecentModule( formModel.module );
+      FlutterArtist._addRecentModule(formModel.module);
     }
   }
 

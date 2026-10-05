@@ -432,7 +432,7 @@ class _ScalarUiComponents extends _UiComponents {
   // ***************************************************************************
 
   @override
-  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+  Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
     return debugFindMountedWidgetStates(
       withScalarContentView: true,
       withFilter: true,

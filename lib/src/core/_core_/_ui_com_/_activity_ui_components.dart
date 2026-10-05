@@ -109,7 +109,7 @@ class _ActivityUiComponents extends _ModuleUiComponents {
   }
 
   @override
-  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+  Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
     return debugFindMountedWidgetStates(
       withTask: true,
       withProzess: true,

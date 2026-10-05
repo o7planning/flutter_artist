@@ -2,8 +2,8 @@ part of '../core.dart';
 
 /// Runtime prozess coordinator maintaining multi-stage progression and transitions.
 class XProzess<
-    STAGE_ENUM extends Enum, //
-    PROZESS_CONTEXT_DATA extends ProzessContextData> {
+STAGE_ENUM extends Enum, //
+PROZESS_CONTEXT_DATA extends ProzessContextData> {
   final XActivity xActivity;
   final Prozess<STAGE_ENUM, PROZESS_CONTEXT_DATA> prozess;
 

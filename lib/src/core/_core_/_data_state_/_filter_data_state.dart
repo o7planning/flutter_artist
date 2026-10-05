@@ -2,7 +2,7 @@ part of '../core.dart';
 
 /// Sealed hierarchy representing the data lifecycle states of a [FilterModel].
 @immutable
-sealed class FilterDataState  implements DataState{
+sealed class FilterDataState implements DataState {
   const FilterDataState();
 
   String get name;

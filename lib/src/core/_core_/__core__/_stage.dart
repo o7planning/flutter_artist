@@ -7,16 +7,17 @@ part of '../core.dart';
 /// -> (resolves INIT_DATA) -> [StageDataStateLoadedFresh]
 /// -> (submission) -> [StageDataStateSubmissionAttempted]
 abstract class Stage<
-    STAGE_ENUM extends Enum, //
-    INIT_DATA extends StageInitData,
-    RESULT_DATA extends StageResultData,
-    PROZESS_CONTEXT_DATA extends ProzessContextData,
-    FORM_INPUT extends FormInput,
-    FORM_OUTPUT extends FormOutput> extends WorkNode<
+STAGE_ENUM extends Enum, //
+INIT_DATA extends StageInitData,
+RESULT_DATA extends StageResultData,
+PROZESS_CONTEXT_DATA extends ProzessContextData,
+FORM_INPUT extends FormInput,
+FORM_OUTPUT extends FormOutput> extends WorkNode<
     INIT_DATA, //
     RESULT_DATA,
     FORM_INPUT,
-    FORM_OUTPUT> implements FormHost {
+    FORM_OUTPUT>
+    implements FormHost {
   final STAGE_ENUM stageId;
 
   final StageConfig config;
@@ -80,9 +81,13 @@ abstract class Stage<
 
   XStage _createXStage({
     required XProzess<STAGE_ENUM, PROZESS_CONTEXT_DATA> xProzess,
-    required XStageFormModel<STAGE_ENUM, INIT_DATA, RESULT_DATA,
-            PROZESS_CONTEXT_DATA, FORM_INPUT, FORM_OUTPUT>?
-        xStageFormModel,
+    required XStageFormModel<STAGE_ENUM,
+        INIT_DATA,
+        RESULT_DATA,
+        PROZESS_CONTEXT_DATA,
+        FORM_INPUT,
+        FORM_OUTPUT>?
+    xStageFormModel,
   }) {
     return XStage<
         STAGE_ENUM, //
@@ -148,11 +153,11 @@ abstract class Stage<
     required ExecutionUnitType executionUnitType,
     required XStage thisXStage,
     required StageLoadInitDataIntent<
-            STAGE_ENUM, //
-            INIT_DATA,
-            RESULT_DATA,
-            PROZESS_CONTEXT_DATA>
-        executionIntent,
+        STAGE_ENUM, //
+        INIT_DATA,
+        RESULT_DATA,
+        PROZESS_CONTEXT_DATA>
+    executionIntent,
   }) async {
     __assertThisXStage(thisXStage);
     thisXStage._createAndSetStageIntentDone(
@@ -162,7 +167,8 @@ abstract class Stage<
     executionTrace.addInfo(
       codeId: "#092100",
       shortDesc:
-          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Stage Load InitData)",
+      "${debugObjHtml(this)} -> Begin ${executionUnitType
+          .asDebugExecutionUnit()} (Stage Load InitData)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -191,7 +197,7 @@ abstract class Stage<
       debug._performLoadInitDataCount++;
 
       final ApiResult<INIT_DATA> result =
-          await performLoadInitData(sharedContext: sharedContext);
+      await performLoadInitData(sharedContext: sharedContext);
       result.throwIfError();
 
       _initData = result.data;
@@ -200,13 +206,15 @@ abstract class Stage<
       executionTrace.addInfo(
         codeId: "#092140",
         shortDesc:
-            "${debugObjHtml(this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(_initData)}.",
+        "${debugObjHtml(
+            this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(
+            _initData)}.",
       );
 
       // Coordinate StageFormModel data state transition
       if (formModel != null) {
         final newFormDataState =
-            BlockFormDataStateUtils.calculateNewLazyDataState(
+        BlockFormDataStateUtils.calculateNewLazyDataState(
           currentFormDataState: formModel!.dataState,
           hasCurrentItem: _initData != null,
           currentItemChanged: true,
@@ -243,7 +251,8 @@ abstract class Stage<
       executionTrace.addInfo(
         codeId: "#092160",
         shortDesc:
-            "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
+        "The ${debugObjHtml(
+            this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
       );
     } finally {
@@ -258,12 +267,18 @@ abstract class Stage<
   Future<void> _unitSubmit({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XStage<Enum, StageInitData, StageResultData, ProzessContextData,
-            FormInput, FormOutput>
-        thisXStage,
-    required StageSubmitIntent<Enum, StageInitData, StageResultData,
-            ProzessContextData>
-        executionIntent,
+    required XStage<Enum,
+        StageInitData,
+        StageResultData,
+        ProzessContextData,
+        FormInput,
+        FormOutput>
+    thisXStage,
+    required StageSubmitIntent<Enum,
+        StageInitData,
+        StageResultData,
+        ProzessContextData>
+    executionIntent,
   }) async {
     // Handled in subsequent phase
   }
@@ -313,8 +328,47 @@ abstract class Stage<
       return true;
     } else {
       // Never run.
-      throw UnimplementedError("XTaskFormModel: Never run");
+      throw UnimplementedError("Stage: Never run");
     }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<StageFormEnablePrecheck> checkFormEnable({
+    bool checkAllow = true,
+  }) {
+    if (formModel == null) {
+      return Actionable<StageFormEnablePrecheck>.no(
+        errCode: StageFormEnablePrecheck.noForm,
+      );
+    }
+    if (!isStateReadyForForm()) {
+      return Actionable<StageFormEnablePrecheck>.no(
+        errCode: StageFormEnablePrecheck.noForm,
+      );
+    }
+    final FormDataState formDataState = formModel!.dataState;
+
+    if (formDataState.isNone) {
+      return Actionable<StageFormEnablePrecheck>.no(
+        errCode: StageFormEnablePrecheck.formInNoneState,
+      );
+    } else if (formDataState.isPending) {
+      return Actionable<StageFormEnablePrecheck>.no(
+        errCode: StageFormEnablePrecheck.formInPendingState,
+      );
+    } else if (formDataState.isFatalError) {
+      return Actionable<StageFormEnablePrecheck>.no(
+        errCode: StageFormEnablePrecheck.formInFatalErrorState,
+      );
+    } else if (formDataState.isStale) {
+      return Actionable<StageFormEnablePrecheck>.no(
+        errCode: StageFormEnablePrecheck.formInStaleState,
+      );
+    }
+    return Actionable<StageFormEnablePrecheck>.yes();
   }
 
   // ***************************************************************************

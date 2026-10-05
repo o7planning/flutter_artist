@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../_core_/core.dart';
-import '_sorting_options.dart';
-import '_sort_panel_style.dart';
-import 'sort_typedefs.dart';
+part of '_built_in_ui.dart';
 
 /// A stateful menu item that listens to SortModel changes to refresh
 /// even when inside a PopupMenu overlay.

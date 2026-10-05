@@ -4,8 +4,8 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(
-    xShelfType: XShelfType.shelfExternalReaction,
-  ) {
+          xShelfType: XShelfType.shelfExternalReaction,
+        ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk.block._blockSyncSessionState == null &&
           xBlk.block._blockItemSyncSessionState == null) {

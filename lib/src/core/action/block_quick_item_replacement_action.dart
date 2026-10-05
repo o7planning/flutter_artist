@@ -1,7 +1,4 @@
-import 'package:flutter_artist_core/flutter_artist_core.dart';
-
-import '../_core_/core.dart';
-import '_action.dart';
+part of '__action.dart';
 
 ///
 ///

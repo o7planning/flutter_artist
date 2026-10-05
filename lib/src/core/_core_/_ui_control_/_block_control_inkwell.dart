@@ -31,31 +31,31 @@ class BlockControlInkWell extends BlockControl {
     WidgetStatesController? statesController,
     Duration? hoverDuration,
   }) : super(
-          build: (VoidCallback? onPressed) {
-            return InkWell(
-              onTap: onPressed,
-              onHighlightChanged: onHighlightChanged,
-              onHover: onHover,
-              mouseCursor: mouseCursor,
-              focusColor: focusColor,
-              hoverColor: hoverColor,
-              highlightColor: highlightColor,
-              overlayColor: overlayColor,
-              splashColor: splashColor,
-              splashFactory: splashFactory,
-              radius: radius,
-              borderRadius: borderRadius,
-              customBorder: customBorder,
-              enableFeedback: enableFeedback,
-              excludeFromSemantics: excludeFromSemantics,
-              focusNode: focusNode,
-              canRequestFocus: canRequestFocus,
-              onFocusChange: onFocusChange,
-              autofocus: autofocus,
-              statesController: statesController,
-              hoverDuration: hoverDuration,
-              child: child,
-            );
-          },
-        );
+    build: (VoidCallback? onPressed) {
+      return InkWell(
+        onTap: onPressed,
+        onHighlightChanged: onHighlightChanged,
+        onHover: onHover,
+        mouseCursor: mouseCursor,
+        focusColor: focusColor,
+        hoverColor: hoverColor,
+        highlightColor: highlightColor,
+        overlayColor: overlayColor,
+        splashColor: splashColor,
+        splashFactory: splashFactory,
+        radius: radius,
+        borderRadius: borderRadius,
+        customBorder: customBorder,
+        enableFeedback: enableFeedback,
+        excludeFromSemantics: excludeFromSemantics,
+        focusNode: focusNode,
+        canRequestFocus: canRequestFocus,
+        onFocusChange: onFocusChange,
+        autofocus: autofocus,
+        statesController: statesController,
+        hoverDuration: hoverDuration,
+        child: child,
+      );
+    },
+  );
 }

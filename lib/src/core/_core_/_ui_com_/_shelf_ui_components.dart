@@ -298,7 +298,7 @@ class _ShelfUiComponents extends _ModuleUiComponents {
   // ***************************************************************************
 
   @override
-  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+  Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
     return debugFindMountedWidgetStates(
       withBlockContentView: true,
       withScalarContentView: true,

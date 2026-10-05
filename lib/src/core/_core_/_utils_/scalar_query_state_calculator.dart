@@ -104,8 +104,8 @@ class ScalarQueryStateCalculator {
             resolvedState = input.currentDataState.isStale
                 ? input.currentDataState
                 : ScalarDataStateLoadedFresh(
-              transientErrorInfo: input.scalarErrorInfo,
-            );
+                    transientErrorInfo: input.scalarErrorInfo,
+                  );
           } else {
             // Explicit root refresh failure evaluates fallback dilemma policy
             if (input.dilemmaStrategy ==

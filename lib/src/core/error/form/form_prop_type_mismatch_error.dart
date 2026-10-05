@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../utils/_class_utils.dart';
+import '../../utils/__utils.dart';
 
 class FormPropTypeMismatchError {
   final String propName;

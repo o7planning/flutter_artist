@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../../core/_core_/core.dart';
+import '../../../core/_core_/_precheck_/__precheck.dart';
+
 import '../options/_debug_form_options.dart';
 import '_debug_box.dart';
 import 'debug_style_utils.dart';
@@ -20,6 +22,8 @@ class FormDebugBox extends BaseDebugBox {
   List<Widget> getChildIconLabelTexts(BuildContext context) {
     FormModelStructure structure = formModel.formModelStructure;
     List<MultiOptFormPropModel> optProps = structure.allMultiOptProps;
+    Actionable<FormEnablePrecheck> actionable = formModel.checkFormEnable();
+    FormEnablePrecheck? enablePrecheck = actionable.errCode;
     //
     List<Widget> list1 = [
       if (options.showFormUiActive)
@@ -31,11 +35,14 @@ class FormDebugBox extends BaseDebugBox {
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
       if (options.showFormEnable)
-        IconLabelText(
-          label: "Form Enable?: ",
-          text: "${formModel.isEnabled()}",
-          labelStyle: DebugStyleUtils.getLabelStyle0(context),
-          textStyle: DebugStyleUtils.getTextStyle0(context),
+        Tooltip(
+          message: enablePrecheck?.getInfo() ?? "",
+          child: IconLabelText(
+            label: "Form Enable?: ",
+            text: "${formModel.isEnabled()}",
+            labelStyle: DebugStyleUtils.getLabelStyle0(context),
+            textStyle: DebugStyleUtils.getTextStyle0(context),
+          ),
         ),
       if (options.showFormDataState)
         IconLabelText(

@@ -54,7 +54,7 @@ class BlockFormDataStateUtils {
         if (currentItemChanged) {
           return FormDataStatePending.hostDataRefreshed();
         }
-        return   FormDataStateLoadedStale.hostDataRefreshed();
+        return FormDataStateLoadedStale.hostDataRefreshed();
 
       // 6. Outdated data in RAM (LoadedStale):
       // If identity changed, cache is evicted to Pending.hostDataRefreshed.

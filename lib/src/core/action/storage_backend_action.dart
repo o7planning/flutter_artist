@@ -1,7 +1,4 @@
-import 'package:flutter/foundation.dart' show protected;
-import 'package:flutter_artist_core/flutter_artist_core.dart';
-
-import '_action.dart';
+part of '__action.dart';
 
 abstract class StorageBackendAction extends Action {
   late final StorageBackendActionConfig config;

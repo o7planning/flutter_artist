@@ -5,7 +5,6 @@ import '../../../core/icon/icon_constants.dart';
 import '../../app/_block_or_scalar.dart';
 import '../../constants/_debug_constants.dart';
 
-
 class BlockOrScalarInfoView extends StatelessWidget {
   final BlockOrScalar blockOrScalar;
 

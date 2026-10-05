@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
-
-import '../typedef/typedefs.dart';
+part of '__action.dart';
 
 abstract class Action {
   final bool needToConfirm;

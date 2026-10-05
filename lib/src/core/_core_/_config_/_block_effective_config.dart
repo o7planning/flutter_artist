@@ -65,6 +65,8 @@ class BlockEffectiveConfig {
     return true;
   }
 
+  Pageable get defaultPageable => _baselineConfig.pageable;
+
   /// The active pagination instance, or `null` if operating in full query mode.
   Pageable? get currentPageable => _currentPageable;
 

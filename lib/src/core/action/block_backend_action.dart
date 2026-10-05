@@ -1,7 +1,4 @@
-import 'package:flutter_artist_core/flutter_artist_core.dart';
-
-import '../../core/enums/_enums.dart';
-import '_action.dart';
+part of '__action.dart';
 
 abstract class BlockBackendAction<ID extends Comparable> extends Action {
   late final BlockBackendActionConfig _config;

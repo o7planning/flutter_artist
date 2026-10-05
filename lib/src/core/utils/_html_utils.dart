@@ -1,3 +1,5 @@
+part of '__utils.dart';
+
 class HtmlUtils {
   static String removeTags(String html) {
     return html

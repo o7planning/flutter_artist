@@ -2,12 +2,12 @@ part of '../core.dart';
 
 /// Runtime operational context wrapper for individual [Stage] instances inside a [Prozess].
 class XStage<
-    STAGE_ENUM extends Enum,
-    STAGE_INIT_DATA extends StageInitData,
-    STAGE_RESULT_DATA extends StageResultData,
-    PROZESS_CONTEXT_DATA extends ProzessContextData,
-    FORM_INPUT extends FormInput,
-    FORM_OUTPUT extends FormOutput> {
+STAGE_ENUM extends Enum,
+STAGE_INIT_DATA extends StageInitData,
+STAGE_RESULT_DATA extends StageResultData,
+PROZESS_CONTEXT_DATA extends ProzessContextData,
+FORM_INPUT extends FormInput,
+FORM_OUTPUT extends FormOutput> {
   final XProzess xProzess;
 
   final XStageFormModel? xStageFormModel;
@@ -108,7 +108,8 @@ class XStage<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "Stage (${stage.name}) is not the active stage in Prozess (${xProzess.name}).",
+        "Stage (${stage.name}) is not the active stage in Prozess (${xProzess
+            .name}).",
       );
     }
 
@@ -124,10 +125,14 @@ class XStage<
           (_execHint == ExecHint.force || isVisible) && !_executed;
 
       if (shouldExecute) {
-        final StageLoadInitDataIntent<STAGE_ENUM, STAGE_INIT_DATA,
-            STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA> intentToUse;
+        final StageLoadInitDataIntent<STAGE_ENUM,
+            STAGE_INIT_DATA,
+            STAGE_RESULT_DATA,
+            PROZESS_CONTEXT_DATA> intentToUse;
         if (executionIntent is StageLoadInitDataIntent<STAGE_ENUM,
-            STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
+            STAGE_INIT_DATA,
+            STAGE_RESULT_DATA,
+            PROZESS_CONTEXT_DATA>) {
           intentToUse = executionIntent;
         } else {
           intentToUse = _createAndSetStageIntentLoadInitData();
@@ -136,20 +141,26 @@ class XStage<
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _StageLoadInitDataExecutionUnit<STAGE_ENUM,
-              STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
+              STAGE_INIT_DATA,
+              STAGE_RESULT_DATA,
+              PROZESS_CONTEXT_DATA>(
             xStage: this,
             executionIntent: intentToUse,
           ),
           info:
-              "Stage (1.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $executionIntent --> $intentToUse, "
-              "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+          "Stage (1.1), ${getClassNameWithoutGenerics(
+              stage)}, _executionIntent: $executionIntent --> $intentToUse, "
+              "dataState: ${stageDataState
+              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Stage (1.2), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $executionIntent, "
-              "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+          "Stage (1.2), ${getClassNameWithoutGenerics(
+              stage)}, _executionIntent: $executionIntent, "
+              "dataState: ${stageDataState
+              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       }
     }
@@ -162,10 +173,14 @@ class XStage<
           (_execHint == ExecHint.force || isVisible) && !_executed;
 
       if (shouldExecute) {
-        final StageSubmitIntent<STAGE_ENUM, STAGE_INIT_DATA, STAGE_RESULT_DATA,
+        final StageSubmitIntent<STAGE_ENUM,
+            STAGE_INIT_DATA,
+            STAGE_RESULT_DATA,
             PROZESS_CONTEXT_DATA> intentToUse;
-        if (executionIntent is StageSubmitIntent<STAGE_ENUM, STAGE_INIT_DATA,
-            STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
+        if (executionIntent is StageSubmitIntent<STAGE_ENUM,
+            STAGE_INIT_DATA,
+            STAGE_RESULT_DATA,
+            PROZESS_CONTEXT_DATA>) {
           intentToUse = executionIntent;
         } else {
           intentToUse = _createAndSetStageIntentSubmit();
@@ -173,21 +188,27 @@ class XStage<
 
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _StageSubmitExecutionUnit<STAGE_ENUM, STAGE_INIT_DATA,
-              STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
+          executionUnit: _StageSubmitExecutionUnit<STAGE_ENUM,
+              STAGE_INIT_DATA,
+              STAGE_RESULT_DATA,
+              PROZESS_CONTEXT_DATA>(
             xStage: this,
             executionIntent: intentToUse,
           ),
           info:
-              "Stage (2.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $executionIntent --> $intentToUse, "
-              "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+          "Stage (2.1), ${getClassNameWithoutGenerics(
+              stage)}, _executionIntent: $executionIntent --> $intentToUse, "
+              "dataState: ${stageDataState
+              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Stage (2.2), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $executionIntent, "
-              "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+          "Stage (2.2), ${getClassNameWithoutGenerics(
+              stage)}, _executionIntent: $executionIntent, "
+              "dataState: ${stageDataState
+              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       }
     }
@@ -201,16 +222,21 @@ class XStage<
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Stage (3.0), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $executionIntent, "
+          "Stage (3.0), ${getClassNameWithoutGenerics(
+              stage)}, _executionIntent: $executionIntent, "
               "dataState: ${stageDataState.toBriefInfo()}",
         );
       }
       // 3.1. Force execution explicitly requested via ExecHint
       if (_execHint == ExecHint.force) {
-        final StageLoadInitDataIntent<STAGE_ENUM, STAGE_INIT_DATA,
-            STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA> intentToUse;
+        final StageLoadInitDataIntent<STAGE_ENUM,
+            STAGE_INIT_DATA,
+            STAGE_RESULT_DATA,
+            PROZESS_CONTEXT_DATA> intentToUse;
         if (executionIntent is StageLoadInitDataIntent<STAGE_ENUM,
-            STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
+            STAGE_INIT_DATA,
+            STAGE_RESULT_DATA,
+            PROZESS_CONTEXT_DATA>) {
           intentToUse = executionIntent;
         } else {
           intentToUse = _createAndSetStageIntentLoadInitData();
@@ -219,13 +245,17 @@ class XStage<
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _StageLoadInitDataExecutionUnit<STAGE_ENUM,
-              STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
+              STAGE_INIT_DATA,
+              STAGE_RESULT_DATA,
+              PROZESS_CONTEXT_DATA>(
             xStage: this,
             executionIntent: intentToUse,
           ),
           info:
-              "Stage (3.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $intentToUse, "
-              "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+          "Stage (3.1), ${getClassNameWithoutGenerics(
+              stage)}, _executionIntent: $intentToUse, "
+              "dataState: ${stageDataState
+              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       }
       // 3.2. Handle active execution intents dispatched imperatively
@@ -234,29 +264,36 @@ class XStage<
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Stage (3.2.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $executionIntent, "
+            "Stage (3.2.1), ${getClassNameWithoutGenerics(
+                stage)}, _executionIntent: $executionIntent, "
                 "dataState: ${stageDataState.toBriefInfo()}",
           );
         }
         // StageSubmitIntent
         else if (executionIntent is StageSubmitIntent<STAGE_ENUM,
-            STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
+            STAGE_INIT_DATA,
+            STAGE_RESULT_DATA,
+            PROZESS_CONTEXT_DATA>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _StageSubmitExecutionUnit<STAGE_ENUM,
-                STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
+                STAGE_INIT_DATA,
+                STAGE_RESULT_DATA,
+                PROZESS_CONTEXT_DATA>(
               xStage: this,
               executionIntent: executionIntent,
             ),
             info:
-                "Stage (3.2.2), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $executionIntent, "
+            "Stage (3.2.2), ${getClassNameWithoutGenerics(
+                stage)}, _executionIntent: $executionIntent, "
                 "dataState: ${stageDataState.toBriefInfo()}",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Stage (3.2.3), ${getClassNameWithoutGenerics(stage)}, unhandled _executionIntent: $executionIntent, "
+            "Stage (3.2.3), ${getClassNameWithoutGenerics(
+                stage)}, unhandled _executionIntent: $executionIntent, "
                 "dataState: ${stageDataState.toBriefInfo()}",
           );
         }
@@ -265,8 +302,10 @@ class XStage<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "Stage (3.3), ${getClassNameWithoutGenerics(stage)}, _executionIntent: null, "
-            "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+        "Stage (3.3), ${getClassNameWithoutGenerics(
+            stage)}, _executionIntent: null, "
+            "dataState: ${stageDataState
+            .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
       );
     }
 
@@ -276,7 +315,8 @@ class XStage<
     return NxtExecutionUnit.no(
       debug: debug,
       info:
-          "Stage (4.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $executionIntent, "
+      "Stage (4.1), ${getClassNameWithoutGenerics(
+          stage)}, _executionIntent: $executionIntent, "
           "dataState: ${stageDataState.toBriefInfo()}, isVisible: $isVisible",
     );
   }

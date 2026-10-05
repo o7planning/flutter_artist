@@ -1,10 +1,10 @@
 part of '../core.dart';
 
 abstract class Scalar<
-    ID extends Comparable,
-    VALUE extends Identifiable<ID>,
-    FILTER_INPUT extends FilterInput,
-    FILTER_CRITERIA extends FilterCriteria> extends _Core {
+ID extends Comparable,
+VALUE extends Identifiable<ID>,
+FILTER_INPUT extends FilterInput,
+FILTER_CRITERIA extends FilterCriteria> extends _Core {
   late final Shelf shelf;
 
   QueryType __lastQueryType = QueryType.realQuery;
@@ -105,10 +105,10 @@ abstract class Scalar<
   bool get isQuerying => __isQuerying;
 
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-      _registeredOrDefaultFilterModel;
+  _registeredOrDefaultFilterModel;
 
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-      get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
+  get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>? get filterModel {
     if (_registeredOrDefaultFilterModel is _DefaultFilterModel) {
@@ -126,7 +126,7 @@ abstract class Scalar<
 
   FilterCriteriaSnapshot<FILTER_CRITERIA>? _filterCriteriaSnapshot;
   _ScalarValueWrap<ID, VALUE> __current =
-      _ScalarValueWrap<ID, VALUE>(id: null, value: null);
+  _ScalarValueWrap<ID, VALUE>(id: null, value: null);
 
   ScalarDataState _scalarDataState = const ScalarDataStatePending.initial();
   PageData<VALUE>? _lastQueryResult;
@@ -153,7 +153,8 @@ abstract class Scalar<
 
   bool get hasError => scalarErrorInfo != null || filterErrorInfo != null;
 
-  ScalarErrorInfo? get scalarErrorInfo => switch (dataState) {
+  ScalarErrorInfo? get scalarErrorInfo =>
+      switch (dataState) {
         ScalarDataStatePending(:final errorInfo?) => errorInfo,
         ScalarDataStateLoadedStale(:final errorInfo?) => errorInfo,
         _ => null,
@@ -188,7 +189,8 @@ abstract class Scalar<
     required ScalarConfig config,
     required String? filterModelName,
     required List<Scalar>? childScalars,
-  })  : config = config.copy(),
+  })
+      : config = config.copy(),
         effectiveConfig = ScalarEffectiveConfig._fromConfig(config),
         registeredFilterModelName = filterModelName,
         _childScalars = childScalars ?? [] {
@@ -269,7 +271,8 @@ abstract class Scalar<
       executionTrace.addInfo(
         codeId: "#113200",
         shortDesc:
-            "Create new ${debugObjHtml(_ScalarSyncSessionState)} for ${debugObjHtml(this)}",
+        "Create new ${debugObjHtml(_ScalarSyncSessionState)} for ${debugObjHtml(
+            this)}",
         parameters: {
           "parentScalarValueId": parentScalarValueId,
           "filterCriteria": filterCriteria,
@@ -283,7 +286,9 @@ abstract class Scalar<
     } else {
       executionTrace.addInfo(
         codeId: "#113300",
-        shortDesc: "${debugObjHtml(this)} use the current ${debugObjHtml(_ScalarSyncSessionState)}, no need to create.",
+        shortDesc:
+        "${debugObjHtml(this)} use the current ${debugObjHtml(
+            _ScalarSyncSessionState)}, no need to create.",
       );
     }
     //
@@ -314,7 +319,8 @@ abstract class Scalar<
         executionTrace.addInfo(
           codeId: "#113800",
           shortDesc:
-              "Transitioned ${debugObjHtml(this)} dataState to ${debugObjHtml(nextState)} due to SyncSession update",
+          "Transitioned ${debugObjHtml(this)} dataState to ${debugObjHtml(
+              nextState)} due to SyncSession update",
         );
         _scalarDataState = nextState;
       }
@@ -332,14 +338,15 @@ abstract class Scalar<
     required ExecutionUnitType executionUnitType,
     required XScalar<ID, VALUE> thisXScalar,
     required ScalarLoadExtraDataQuickActionIntent<ID, VALUE, DATA>
-        executionIntent,
+    executionIntent,
   }) async {
     __assertThisXScalar(thisXScalar);
 
     executionTrace.addInfo(
       codeId: "#040000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
+      "Begin ${debugObjHtml(this)} -> ${executionUnitType
+          .asDebugExecutionUnit()}.",
     );
 
     final loadResult = executionIntent.resultWrapper._setResult(
@@ -362,7 +369,7 @@ abstract class Scalar<
       final ErrorInfo errorInfo = _handleError(
         module: shelf,
         methodName:
-            '${getClassName(executionIntent.action)}.performLoadExtraData',
+        '${getClassName(executionIntent.action)}.performLoadExtraData',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -372,7 +379,8 @@ abstract class Scalar<
       executionTrace.addInfo(
         codeId: "#040200",
         shortDesc:
-            "The ${debugObjHtml(executionIntent.action)}.performLoadExtraData() method was called with an error!",
+        "The ${debugObjHtml(executionIntent
+            .action)}.performLoadExtraData() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -385,7 +393,7 @@ abstract class Scalar<
       final ErrorInfo errorInfo = _handleRestError(
         shelf: shelf,
         methodName:
-            "${getClassName(executionIntent.action)}.performLoadExtraData",
+        "${getClassName(executionIntent.action)}.performLoadExtraData",
         message: result.error!.errorMessage,
         errorDetails: result.error!.errorDetails,
         showSnackBar: true,
@@ -394,7 +402,8 @@ abstract class Scalar<
       executionTrace.addInfo(
         codeId: "#040300",
         shortDesc:
-            "The ${debugObjHtml(executionIntent.action)}.performLoadExtraData() method was called with an error!",
+        "The ${debugObjHtml(executionIntent
+            .action)}.performLoadExtraData() method was called with an error!",
         errorInfo: errorInfo,
       );
     }
@@ -441,7 +450,8 @@ abstract class Scalar<
       executionTrace.addInfo(
         codeId: "#041300",
         shortDesc:
-            "The ${debugObjHtml(action)}.onExtraDataLoaded() method was called with an error!",
+        "The ${debugObjHtml(
+            action)}.onExtraDataLoaded() method was called with an error!",
         errorInfo: errorInfo,
       );
       success2 = false;
@@ -472,14 +482,17 @@ abstract class Scalar<
     executionTrace.addInfo(
       codeId: "#039000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
+      "Begin ${debugObjHtml(this)} -> ${executionUnitType
+          .asDebugExecutionUnit()}.",
     );
 
     executionTrace.addInfo(
       codeId: "#039100",
       shortDesc: "${debugObjHtml(this)} -> Clear data and set to pending. "
           "Clear data of child scalars and set its to none."
-          "${_childScalars.isEmpty ? '\n ** No children -> Nothing to do!' : ''}",
+          "${_childScalars.isEmpty
+          ? '\n ** No children -> Nothing to do!'
+          : ''}",
     );
 
     executionIntent.resultWrapper._setResult(
@@ -518,7 +531,8 @@ abstract class Scalar<
     executionTrace.addInfo(
       codeId: "#012000",
       shortDesc:
-          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
+      "${debugObjHtml(this)} -> Begin ${executionUnitType
+          .asDebugExecutionUnit()}",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -528,13 +542,13 @@ abstract class Scalar<
     );
 
     final bool provideScalarContext =
-        ui.hasVisibleViews(includeDescendants: true);
+    ui.hasVisibleViews(includeDescendants: true);
 
     final DebugScalarSyncSessionState<ID>? currentSyncSessionState =
         _scalarSyncSessionState;
 
     final ScalarQueryPlan<ID> queryPlan =
-        ScalarQueryStrategyResolver.resolveQueryPlan<ID>(
+    ScalarQueryStrategyResolver.resolveQueryPlan<ID>(
       scalar: this,
       syncSessionState: currentSyncSessionState,
       queryHint: initialQueryHint,
@@ -545,7 +559,8 @@ abstract class Scalar<
       executionTrace.addInfo(
         codeId: "#012080",
         shortDesc:
-            "QueryPlan action is NULL -> Skip query execution, @dataState: $dataState, @value: ${debugObjHtml(value)}.",
+        "QueryPlan action is NULL -> Skip query execution, @dataState: $dataState, @value: ${debugObjHtml(
+            value)}.",
       );
       return;
     }
@@ -555,16 +570,17 @@ abstract class Scalar<
     final XFilterModel xFilterModel = thisXScalar.xFilterModel;
     final FilterModel filterModel = xFilterModel.filterModel;
     final FilterCriteriaSnapshot<FILTER_CRITERIA>?
-        committedFilterCriteriaSnapshot =
-        filterModel._committedFilterCriteriaSnapshot
-            as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
+    committedFilterCriteriaSnapshot =
+    filterModel._committedFilterCriteriaSnapshot
+    as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
 
     if (committedFilterCriteriaSnapshot == null ||
         committedFilterCriteriaSnapshot.isError) {
       executionTrace.addInfo(
         codeId: "#012340",
         shortDesc:
-            "${debugObjHtml(filterModel)} error --> clear data of ${debugObjHtml(this)} and set to error.",
+        "${debugObjHtml(filterModel)} error --> clear data of ${debugObjHtml(
+            this)} and set to error.",
       );
       __stopQueryWithFilterErrorCascade(
         thisXScalar: thisXScalar,
@@ -574,7 +590,7 @@ abstract class Scalar<
     }
 
     committedFilterCriteriaSnapshot
-        as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
+    as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
     final bool filterCriteriaChanged = _isFilterCriteriaSnapshotChanged(
       newFilterCriteriaSnapshot: committedFilterCriteriaSnapshot,
     );
@@ -644,14 +660,14 @@ abstract class Scalar<
       filterCriteriaChanged: filterCriteriaChanged,
     );
     final ScalarQueryCalculatorResult calculationResult =
-        ScalarQueryStateCalculator.calculate(calculationInput);
+    ScalarQueryStateCalculator.calculate(calculationInput);
 
     newScalarDataState = calculationResult.newScalarDataState;
 
     if (sclrErrorInfo != null) {
       _updateStateAfterQueryError(newScalarDataState: newScalarDataState);
       final List<XScalar> descendantXScalars =
-          thisXScalar.getDescendantXScalars(sameFilterOnly: true);
+      thisXScalar.getDescendantXScalars(sameFilterOnly: true);
 
       __stopDescendantQueryWithError(
         descendantXScalars: descendantXScalars,
@@ -761,7 +777,7 @@ abstract class Scalar<
     const fallbackDilemmaStrategy = FallbackDilemmaStrategy.preserveStableCache;
 
     final ScalarDataState newScalarDataState =
-        ScalarQueryStateCalculator.calculateDataStateOnError(
+    ScalarQueryStateCalculator.calculateDataStateOnError(
       currentDataState: dataState,
       scalarErrorOrigin: scalarErrorOrigin,
       scalarErrorInfo: scalarErrorInfo,
@@ -772,7 +788,7 @@ abstract class Scalar<
     _scalarDataState = newScalarDataState;
 
     final List<XScalar> descendantXScalars =
-        thisXScalar.getDescendantXScalars(sameFilterOnly: true);
+    thisXScalar.getDescendantXScalars(sameFilterOnly: true);
 
     __stopDescendantQueryWithError(
       descendantXScalars: descendantXScalars,
@@ -789,7 +805,7 @@ abstract class Scalar<
     for (final descendantXScalar in descendantXScalars) {
       final descendantScalar = descendantXScalar.scalar;
       final descendantState =
-          ScalarQueryStateCalculator.calculateDataStateOnError(
+      ScalarQueryStateCalculator.calculateDataStateOnError(
         currentDataState: descendantScalar.dataState,
         scalarErrorOrigin: scalarErrorOrigin,
         scalarErrorInfo: null,
@@ -908,13 +924,34 @@ abstract class Scalar<
         loggedInUser.isSystemUser;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   @_PrecheckMethod()
   Actionable<ScalarQueryPrecheck> checkBeforeQuery({bool checkAllow = true}) {
     return __checkBeforeQuery(checkBusy: true, checkAllow: checkAllow);
   }
 
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<ScalarQueryPrecheck> __checkBeforeQuery({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    return ScalarQueryPrecheckUtils.checkBeforeQuery(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      checkAllow: checkAllow,
+      checkQueryAllowed: () => __checkQueryAllowed(),
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult __isQueryAllowed() {
+  CheckAllowResult __checkQueryAllowed() {
     try {
       bool allow = isQueryAllowed();
       return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
@@ -925,44 +962,31 @@ abstract class Scalar<
     }
   }
 
-  @_PrecheckPrivateMethod()
-  Actionable<ScalarQueryPrecheck> __checkBeforeQuery({
-    required bool checkBusy,
-    required bool checkAllow,
-  }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<ScalarQueryPrecheck>.no(
-          errCode: ScalarQueryPrecheck.busy);
-    }
-    if (checkAllow) {
-      CheckAllowResult result = __isQueryAllowed();
-      switch (result.result) {
-        case CheckAllow.allow:
-          return Actionable<ScalarQueryPrecheck>.yes();
-        case CheckAllow.notAllow:
-          return Actionable<ScalarQueryPrecheck>.no(
-            errCode: ScalarQueryPrecheck.notAllow,
-          );
-        case CheckAllow.error:
-          return Actionable<ScalarQueryPrecheck>.no(
-            errCode: ScalarQueryPrecheck.checkAllowMethodError,
-            errorInfo: result.errorInfo,
-          );
-      }
-    }
-    return Actionable<ScalarQueryPrecheck>.yes();
-  }
+  // ***************************************************************************
+  // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<ScalarClearPrecheck> __checkBeforeClearScalar(
-      {required bool checkBusy}) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<ScalarClearPrecheck>.no(
-        errCode: ScalarClearPrecheck.busy,
-      );
-    }
-    return Actionable<ScalarClearPrecheck>.yes();
+  Actionable<ScalarClearPrecheck> checkBeforeClearScalar({
+    required bool checkBusy,
+  }) {
+    return __checkBeforeClearScalar(checkBusy: true);
   }
+
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<ScalarClearPrecheck> __checkBeforeClearScalar({
+    required bool checkBusy,
+  }) {
+    return ScalarClearPrecheckUtils.checkBeforeClearScalar(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      hasActiveViews: ui.hasVisibleViews(includeDescendants: true),
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<void> showDebugFilterCriteriaViewerDialog() async {
     BuildContext context = FlutterArtistCore.context;
@@ -1068,7 +1092,7 @@ abstract class Scalar<
     final XShelf xShelf = _XShelfScalarClear(scalar: this);
     final XScalar thisXScalar = xShelf.findXScalarByName(name)!;
     final executionIntent =
-        thisXScalar._createAndSetScalarExecutionIntentClear();
+    thisXScalar._createAndSetScalarExecutionIntentClear();
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     return executionIntent.result;

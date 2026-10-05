@@ -1,3 +1,5 @@
+part of '__utils.dart';
+
 class ComparisonUtils {
   ///
   /// This function is used to check for "dirty" in a form.

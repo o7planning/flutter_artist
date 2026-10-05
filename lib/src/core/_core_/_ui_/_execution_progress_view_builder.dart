@@ -10,8 +10,8 @@ class ExecutionProgressViewBuilder extends _ContextProviderView {
   final List<Scalar> scalars;
 
   final Widget Function(
-      bool onProgress,
-      ) build;
+    bool onProgress,
+  ) build;
 
   const ExecutionProgressViewBuilder({
     super.key,

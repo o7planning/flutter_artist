@@ -12,9 +12,9 @@ class _TaskFormViewChangeExecutionUnit extends _ActivityMemberExecutionUnit {
     required this.xTaskFormModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.formModelFormViewChanged,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.formModelFormViewChanged,
+    executionIntent: executionIntent,
+  );
 
   @override
   XActivity get xActivity => xTaskFormModel.xActivity;

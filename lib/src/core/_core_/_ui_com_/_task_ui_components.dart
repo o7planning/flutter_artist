@@ -70,7 +70,7 @@ class _TaskUiComponents extends _WorkNodeUiComponents {
   }
 
   @override
-  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+  Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
     return debugFindMountedWidgetStates(
       withTaskContentView: true,
       withForm: true,

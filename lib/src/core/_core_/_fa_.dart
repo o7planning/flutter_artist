@@ -257,7 +257,7 @@ class _FlutterArtist extends _Core {
     );
 
     final executionTrace =
-        FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
+    FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
     try {
       await __start(executionTrace: executionTrace);
       garbageScheduler.start();
@@ -316,7 +316,7 @@ class _FlutterArtist extends _Core {
       caller: globalsManager,
       methodName: "_init",
       suffixShortDesc:
-          "This method will read all the user data that was previously stored in <b>Local</b>.",
+      "This method will read all the user data that was previously stored in <b>Local</b>.",
       tipDocument: TipDocument.globalData,
     );
     await globalsManager._init(executionTrace);
@@ -386,7 +386,8 @@ class _FlutterArtist extends _Core {
     //
     if (__notificationService != null) {
       print(
-          "[FLUTTER_ARTIST] ${getClassNameWithoutGenerics(__notificationService)}.initialize()");
+          "[FLUTTER_ARTIST] ${getClassNameWithoutGenerics(
+              __notificationService)}.initialize()");
       __notificationService.initialize();
     }
   }
@@ -440,14 +441,15 @@ class _FlutterArtist extends _Core {
     _runWithOverlay(
       asyncFunction: () async {
         await Future.doWhile(
-          () => Future.delayed(
-            // Default?
-            const Duration(milliseconds: 0),
-          ).then(
-            (_) {
-              return __futureExecutionUnitList.isNotEmpty;
-            },
-          ),
+              () =>
+              Future.delayed(
+                // Default?
+                const Duration(milliseconds: 0),
+              ).then(
+                    (_) {
+                  return __futureExecutionUnitList.isNotEmpty;
+                },
+              ),
         );
       },
     );
@@ -533,7 +535,7 @@ class _FlutterArtist extends _Core {
   void internalNotifyLog() {
     Future.delayed(
       Duration.zero,
-      () {
+          () {
         for (ILogListener listener in [..._logListeners]) {
           if (listener is State) {
             State state = listener as State;

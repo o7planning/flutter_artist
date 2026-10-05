@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../core/_core_/core.dart';
-import '../../core/utils/_class_utils.dart';
+import '../../core/utils/__utils.dart';
+
 import '../../core/widgets/_custom_app_container.dart';
 import '../widgets/_html_info_view.dart';
 

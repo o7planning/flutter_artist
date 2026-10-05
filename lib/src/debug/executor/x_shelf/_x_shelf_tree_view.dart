@@ -7,7 +7,8 @@ import 'package:multi_split_view/multi_split_view.dart';
 
 import '../../../core/_core_/core.dart';
 import '../../../core/icon/icon_constants.dart';
-import '../../../core/utils/_class_utils.dart';
+import '../../../core/utils/__utils.dart';
+
 import '../../../core/widgets/_custom_app_container.dart';
 import '_x_block_view.dart';
 import '_x_scalar_view.dart';

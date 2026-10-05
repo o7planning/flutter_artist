@@ -5,7 +5,8 @@ import 'package:tabbed_view/tabbed_view.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
-import '../../core/utils/_class_utils.dart';
+import '../../core/utils/__utils.dart';
+
 import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';
 import '../widgets/_json_view.dart';

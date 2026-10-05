@@ -1,3 +1,5 @@
+part of '__utils.dart';
+
 class StrUtils {
   static String? trimStringToNullIfEmpty(String? s) {
     if (s == null) {

@@ -1,7 +1,4 @@
-import '../_core_/core.dart';
-import '../enums/_enums.dart';
-import 'search_text_filter_criteria.dart';
-import 'search_text_filter_input.dart';
+part of '_built_in_filter_criteria.dart';
 
 class SearchTextFilterModel
     extends FilterModel<SearchTextFilterInput, SearchTextFilterCriteria> {

@@ -1,10 +1,4 @@
-import 'package:flutter/cupertino.dart' as cupertino;
-import 'package:flutter/material.dart';
-
-import '../_core_/core.dart';
-import '../enums/_enums.dart';
-import '_sort_panel_helper.dart';
-import 'sort_typedefs.dart';
+part of '_built_in_ui.dart';
 
 /// A mixin to provide shared sorting logic across different panel types.
 mixin SortPanelMixin {

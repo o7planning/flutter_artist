@@ -4,7 +4,7 @@ import 'package:flutter_artist_doc/flutter_artist_doc.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../_wcfg.dart';
-import '../../core/utils/_url_utils.dart';
+import '../../core/utils/__utils.dart';
 import '../../core/widgets/_simple_copy_button.dart';
 import '../../core/widgets/_simple_open_url_button.dart';
 

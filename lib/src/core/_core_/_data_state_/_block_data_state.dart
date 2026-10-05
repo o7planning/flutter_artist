@@ -2,7 +2,7 @@ part of '../core.dart';
 
 /// Root sealed state container for Block data lifecycle.
 @immutable
-sealed class BlockDataState implements DataState{
+sealed class BlockDataState implements DataState {
   const BlockDataState();
 
   String get name;
@@ -68,17 +68,17 @@ final class BlockDataStatePending extends BlockDataState {
   BlockDataStatePending.filterChanged({
     BlockPendingReasonFailed? retainedFailureReason,
   }) : reason = BlockPendingReasonFilterChanged(
-          retainedFailureReason: retainedFailureReason,
-        );
+    retainedFailureReason: retainedFailureReason,
+  );
 
   /// Factory constructor for blocked baseline state caused by direct query, filter, or upstream cascade failures.
   BlockDataStatePending.failed({
     required BlockErrorOrigin errorOrigin,
     BlockErrorInfo? errorInfo,
   }) : reason = BlockPendingReasonFailed(
-          errorOrigin: errorOrigin,
-          errorInfo: errorInfo,
-        );
+    errorOrigin: errorOrigin,
+    errorInfo: errorInfo,
+  );
 
   @override
   String get name => "pending";
@@ -97,9 +97,9 @@ final class BlockDataStatePending extends BlockDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BlockDataStatePending &&
-          runtimeType == other.runtimeType &&
-          reason == other.reason;
+          other is BlockDataStatePending &&
+              runtimeType == other.runtimeType &&
+              reason == other.reason;
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
@@ -140,9 +140,9 @@ final class BlockDataStateLoadedFresh extends BlockDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BlockDataStateLoadedFresh &&
-          runtimeType == other.runtimeType &&
-          transientErrorInfo == other.transientErrorInfo;
+          other is BlockDataStateLoadedFresh &&
+              runtimeType == other.runtimeType &&
+              transientErrorInfo == other.transientErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, transientErrorInfo);
@@ -166,24 +166,24 @@ final class BlockDataStateLoadedStale extends BlockDataStateLoaded {
   BlockDataStateLoadedStale.event({
     BlockLoadedStateStaleReasonFailed? retainedFailureReason,
   }) : reason = BlockLoadedStateStaleReasonEvent(
-          retainedFailureReason: retainedFailureReason,
-        );
+    retainedFailureReason: retainedFailureReason,
+  );
 
   /// Factory constructor for filter-changed stale state.
   BlockDataStateLoadedStale.filterChanged({
     BlockLoadedStateStaleReasonFailed? retainedFailureReason,
   }) : reason = BlockLoadedStateStaleReasonFilterChanged(
-          retainedFailureReason: retainedFailureReason,
-        );
+    retainedFailureReason: retainedFailureReason,
+  );
 
   /// Factory constructor for query-failure stale state.
   BlockDataStateLoadedStale.failed({
     required BlockErrorOrigin errorOrigin,
     BlockErrorInfo? errorInfo,
   }) : reason = BlockLoadedStateStaleReasonFailed(
-          errorOrigin: errorOrigin,
-          errorInfo: errorInfo,
-        );
+    errorOrigin: errorOrigin,
+    errorInfo: errorInfo,
+  );
 
   @override
   String get name => "loaded + stale";
@@ -202,9 +202,9 @@ final class BlockDataStateLoadedStale extends BlockDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BlockDataStateLoadedStale &&
-          runtimeType == other.runtimeType &&
-          reason == other.reason;
+          other is BlockDataStateLoadedStale &&
+              runtimeType == other.runtimeType &&
+              reason == other.reason;
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
@@ -238,10 +238,11 @@ sealed class BlockPendingReason {
   BlockErrorInfo? get errorInfo => underlyingFailureReason?.errorInfo;
 
   /// Resolves the underlying failure reason across the pending reason hierarchy.
-  BlockPendingReasonFailed? get underlyingFailureReason => switch (this) {
+  BlockPendingReasonFailed? get underlyingFailureReason =>
+      switch (this) {
         BlockPendingReasonFailed failure => failure,
         BlockPendingReasonFilterChanged(:final retainedFailureReason) =>
-          retainedFailureReason,
+        retainedFailureReason,
         _ => null,
       };
 
@@ -295,9 +296,9 @@ final class BlockPendingReasonFilterChanged extends BlockPendingReason {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BlockPendingReasonFilterChanged &&
-          runtimeType == other.runtimeType &&
-          retainedFailureReason == other.retainedFailureReason;
+          other is BlockPendingReasonFilterChanged &&
+              runtimeType == other.runtimeType &&
+              retainedFailureReason == other.retainedFailureReason;
 
   @override
   int get hashCode => Object.hash(runtimeType, retainedFailureReason);
@@ -328,10 +329,10 @@ final class BlockPendingReasonFailed extends BlockPendingReason {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BlockPendingReasonFailed &&
-          runtimeType == other.runtimeType &&
-          errorOrigin == other.errorOrigin &&
-          errorInfo == other.errorInfo;
+          other is BlockPendingReasonFailed &&
+              runtimeType == other.runtimeType &&
+              errorOrigin == other.errorOrigin &&
+              errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorOrigin, errorInfo);
@@ -371,11 +372,11 @@ sealed class BlockLoadedStateStaleReason {
       switch (this) {
         BlockLoadedStateStaleReasonFailed failure => failure,
         BlockLoadedStateStaleReasonEvent(:final retainedFailureReason) =>
-          retainedFailureReason,
+        retainedFailureReason,
         BlockLoadedStateStaleReasonFilterChanged(
-          :final retainedFailureReason
+            :final retainedFailureReason
         ) =>
-          retainedFailureReason,
+        retainedFailureReason,
       };
 
   /// Returns true if this reason either represents a failure or carries a preserved previous failure.
@@ -383,7 +384,7 @@ sealed class BlockLoadedStateStaleReason {
 
   /// Convenience constant for event-induced stale reason without previous failure.
   static const BlockLoadedStateStaleReason event =
-      BlockLoadedStateStaleReasonEvent();
+  BlockLoadedStateStaleReasonEvent();
 
   /// Convenience factory for query-failure stale reason.
   static BlockLoadedStateStaleReason failed({
@@ -415,9 +416,9 @@ final class BlockLoadedStateStaleReasonEvent
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BlockLoadedStateStaleReasonEvent &&
-          runtimeType == other.runtimeType &&
-          retainedFailureReason == other.retainedFailureReason;
+          other is BlockLoadedStateStaleReasonEvent &&
+              runtimeType == other.runtimeType &&
+              retainedFailureReason == other.retainedFailureReason;
 
   @override
   int get hashCode => Object.hash(runtimeType, retainedFailureReason);
@@ -443,9 +444,9 @@ final class BlockLoadedStateStaleReasonFilterChanged
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BlockLoadedStateStaleReasonFilterChanged &&
-          runtimeType == other.runtimeType &&
-          retainedFailureReason == other.retainedFailureReason;
+          other is BlockLoadedStateStaleReasonFilterChanged &&
+              runtimeType == other.runtimeType &&
+              retainedFailureReason == other.retainedFailureReason;
 
   @override
   int get hashCode => Object.hash(runtimeType, retainedFailureReason);
@@ -476,10 +477,10 @@ final class BlockLoadedStateStaleReasonFailed
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BlockLoadedStateStaleReasonFailed &&
-          runtimeType == other.runtimeType &&
-          errorOrigin == other.errorOrigin &&
-          errorInfo == other.errorInfo;
+          other is BlockLoadedStateStaleReasonFailed &&
+              runtimeType == other.runtimeType &&
+              errorOrigin == other.errorOrigin &&
+              errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorOrigin, errorInfo);

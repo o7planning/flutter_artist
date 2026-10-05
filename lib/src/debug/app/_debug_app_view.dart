@@ -33,55 +33,60 @@ class _DebugAppViewState extends State<DebugAppView> {
         id: "Active Shelves",
         text: ' Active Shelves',
         closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.shelfIconData,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: iconSize,
-        ),
+        leading: (context, status) =>
+            Icon(
+              FaIconConstants.shelfIconData,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: iconSize,
+            ),
         view: const ActiveShelvesView(),
       ),
       TabData(
         id: "Activities",
         text: ' Activities',
         closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.activityIconData,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: iconSize,
-        ),
+        leading: (context, status) =>
+            Icon(
+              FaIconConstants.activityIconData,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: iconSize,
+            ),
         view: ActivitiesView(),
       ),
       TabData(
         id: "Shelves",
         text: ' Shelves',
         closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.shelfIconData,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: iconSize,
-        ),
+        leading: (context, status) =>
+            Icon(
+              FaIconConstants.shelfIconData,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: iconSize,
+            ),
         view: ShelvesView(),
       ),
       TabData(
         id: "Projections",
         text: ' Projections',
         closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.projectionIconData,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: iconSize,
-        ),
+        leading: (context, status) =>
+            Icon(
+              FaIconConstants.projectionIconData,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: iconSize,
+            ),
         view: ProjectionsView(),
       ),
       TabData(
         id: "Route Stack",
         text: ' Route Stack',
         closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.routeStackIconData,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: iconSize,
-        ),
+        leading: (context, status) =>
+            Icon(
+              FaIconConstants.routeStackIconData,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: iconSize,
+            ),
         view: RouteStackView(),
       ),
     ];

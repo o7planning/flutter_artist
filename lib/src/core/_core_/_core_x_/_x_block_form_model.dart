@@ -1,8 +1,8 @@
 part of '../core.dart';
 
 class XBlockFormModel<
-    ID extends Comparable, //
-    ITEM_DETAIL extends Identifiable<ID>> {
+ID extends Comparable, //
+ITEM_DETAIL extends Identifiable<ID>> {
   XShelf get xShelf => xBlock.xShelf;
 
   final BlockFormModel formModel;
@@ -71,12 +71,12 @@ class XBlockFormModel<
   // ***************************************************************************
 
   FormModelPatchFormFieldsIntent
-      _createAndSetFormModelExecutionIntentPatchFormFields<
-          FORM_INPUT extends FormInput>({
+  _createAndSetFormModelExecutionIntentPatchFormFields<
+  FORM_INPUT extends FormInput>({
     required FORM_INPUT formInput,
   }) {
     final executionIntent =
-        FormModelPatchFormFieldsIntent(formInput: formInput);
+    FormModelPatchFormFieldsIntent(formInput: formInput);
     _executionIntent = executionIntent;
     return executionIntent;
   }
@@ -103,8 +103,10 @@ class XBlockFormModel<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "BlockFormModel (0.0), (${formModel.block.name}), _executionIntent: $executionIntent, "
-            "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
+        "BlockFormModel (0.0), (${formModel.block
+            .name}), _executionIntent: $executionIntent, "
+            "formDataState: ${formModelDataState
+            .toBriefInfo()}, formMode: ${formModel.formMode.name}",
       );
     }
 
@@ -115,8 +117,10 @@ class XBlockFormModel<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "BlockFormModel (1.1), (${formModel.block.name}), _executionIntent: $executionIntent, "
-            "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
+        "BlockFormModel (1.1), (${formModel.block
+            .name}), _executionIntent: $executionIntent, "
+            "formDataState: ${formModelDataState
+            .toBriefInfo()}, formMode: ${formModel.formMode.name}",
       );
     }
 
@@ -132,8 +136,10 @@ class XBlockFormModel<
             executionIntent: executionIntent,
           ),
           info:
-              "BlockFormModel (2.1), (${formModel.block.name}), _executionIntent: $executionIntent, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
+          "BlockFormModel (2.1), (${formModel.block
+              .name}), _executionIntent: $executionIntent, "
+              "formDataState: ${formModelDataState
+              .toBriefInfo()}, formMode: ${formModel.formMode.name}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       }
@@ -155,16 +161,20 @@ class XBlockFormModel<
             executionIntent: intentToUse,
           ),
           info:
-              "BlockFormModel (2.2.1), (${formModel.block.name}), _executionIntent: $executionIntent --> $intentToUse, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
+          "BlockFormModel (2.2.1), (${formModel.block
+              .name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "formDataState: ${formModelDataState
+              .toBriefInfo()}, formMode: ${formModel.formMode.name}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "BlockFormModel (2.2.2), (${formModel.block.name}), _executionIntent: $executionIntent, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
+          "BlockFormModel (2.2.2), (${formModel.block
+              .name}), _executionIntent: $executionIntent, "
+              "formDataState: ${formModelDataState
+              .toBriefInfo()}, formMode: ${formModel.formMode.name}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       }
@@ -192,16 +202,20 @@ class XBlockFormModel<
             executionIntent: intentToUse,
           ),
           info:
-              "BlockFormModel (3.1.1), (${formModel.block.name}), _executionIntent: $executionIntent --> $intentToUse, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
+          "BlockFormModel (3.1.1), (${formModel.block
+              .name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "formDataState: ${formModelDataState
+              .toBriefInfo()}, formMode: ${formModel.formMode.name}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "BlockFormModel (3.1.2), (${formModel.block.name}), _executionIntent: $executionIntent, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
+          "BlockFormModel (3.1.2), (${formModel.block
+              .name}), _executionIntent: $executionIntent, "
+              "formDataState: ${formModelDataState
+              .toBriefInfo()}, formMode: ${formModel.formMode.name}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       }
@@ -229,16 +243,20 @@ class XBlockFormModel<
             executionIntent: intentToUse,
           ),
           info:
-              "BlockFormModel (4.1.1), (${formModel.block.name}), _executionIntent: $executionIntent --> $intentToUse, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
+          "BlockFormModel (4.1.1), (${formModel.block
+              .name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "formDataState: ${formModelDataState
+              .toBriefInfo()}, formMode: ${formModel.formMode.name}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "BlockFormModel (4.1.2), (${formModel.block.name}), _executionIntent: $executionIntent, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
+          "BlockFormModel (4.1.2), (${formModel.block
+              .name}), _executionIntent: $executionIntent, "
+              "formDataState: ${formModelDataState
+              .toBriefInfo()}, formMode: ${formModel.formMode.name}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       }
@@ -254,8 +272,10 @@ class XBlockFormModel<
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "BlockFormModel (5.1.1), (${formModel.block.name}), _executionIntent: $executionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
+            "BlockFormModel (5.1.1), (${formModel.block
+                .name}), _executionIntent: $executionIntent, "
+                "formDataState: ${formModelDataState
+                .toBriefInfo()}, formMode: ${formModel.formMode.name}, "
                 "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
           );
         }
@@ -273,8 +293,10 @@ class XBlockFormModel<
             executionIntent: intentToUse,
           ),
           info:
-              "BlockFormModel (5.1.2), (${formModel.block.name}), _executionIntent: $executionIntent --> $intentToUse, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
+          "BlockFormModel (5.1.2), (${formModel.block
+              .name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "formDataState: ${formModelDataState
+              .toBriefInfo()}, formMode: ${formModel.formMode.name}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
       }
@@ -290,8 +312,10 @@ class XBlockFormModel<
               executionIntent: executionIntent,
             ),
             info:
-                "BlockFormModel (5.2.2), (${formModel.block.name}), _executionIntent: $executionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
+            "BlockFormModel (5.2.2), (${formModel.block
+                .name}), _executionIntent: $executionIntent, "
+                "formDataState: ${formModelDataState
+                .toBriefInfo()}, formMode: ${formModel.formMode.name}",
           );
         } else if (executionIntent is FormModelDataLoadIntent) {
           return NxtExecutionUnit.yes(
@@ -301,8 +325,10 @@ class XBlockFormModel<
               executionIntent: executionIntent,
             ),
             info:
-                "BlockFormModel (5.2.3), (${formModel.block.name}), _executionIntent: $executionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
+            "BlockFormModel (5.2.3), (${formModel.block
+                .name}), _executionIntent: $executionIntent, "
+                "formDataState: ${formModelDataState
+                .toBriefInfo()}, formMode: ${formModel.formMode.name}",
           );
         } else if (executionIntent is FormModelSaveIntent) {
           return NxtExecutionUnit.yes(
@@ -312,8 +338,10 @@ class XBlockFormModel<
               executionIntent: executionIntent,
             ),
             info:
-                "BlockFormModel (5.2.4), (${formModel.block.name}), _executionIntent: $executionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
+            "BlockFormModel (5.2.4), (${formModel.block
+                .name}), _executionIntent: $executionIntent, "
+                "formDataState: ${formModelDataState
+                .toBriefInfo()}, formMode: ${formModel.formMode.name}",
           );
         } else if (executionIntent is FormModelPatchFormFieldsIntent) {
           return NxtExecutionUnit.yes(
@@ -323,15 +351,19 @@ class XBlockFormModel<
               executionIntent: executionIntent,
             ),
             info:
-                "BlockFormModel (5.2.5), (${formModel.block.name}), _executionIntent: $executionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
+            "BlockFormModel (5.2.5), (${formModel.block
+                .name}), _executionIntent: $executionIntent, "
+                "formDataState: ${formModelDataState
+                .toBriefInfo()}, formMode: ${formModel.formMode.name}",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "BlockFormModel (5.2.6), (${formModel.block.name}), _executionIntent: $executionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
+            "BlockFormModel (5.2.6), (${formModel.block
+                .name}), _executionIntent: $executionIntent, "
+                "formDataState: ${formModelDataState
+                .toBriefInfo()}, formMode: ${formModel.formMode.name}",
           );
         }
       }
@@ -341,8 +373,10 @@ class XBlockFormModel<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "BlockFormModel (5.3), (${formModel.block.name}), _executionIntent: null, "
-            "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
+        "BlockFormModel (5.3), (${formModel.block
+            .name}), _executionIntent: null, "
+            "formDataState: ${formModelDataState
+            .toBriefInfo()}, formMode: ${formModel.formMode.name}, "
             "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
       );
     }
@@ -353,8 +387,10 @@ class XBlockFormModel<
     return NxtExecutionUnit.no(
       debug: debug,
       info:
-          "BlockFormModel (6.1) (${formModel.block.name}), _executionIntent: $executionIntent, "
-          "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
+      "BlockFormModel (6.1) (${formModel.block
+          .name}), _executionIntent: $executionIntent, "
+          "formDataState: ${formModelDataState
+          .toBriefInfo()}, formMode: ${formModel.formMode.name}",
     );
   }
 

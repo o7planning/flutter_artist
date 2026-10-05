@@ -1,15 +1,14 @@
 part of '../core.dart';
 
 sealed class FormModelExecutionIntent<
-PRECHECK, //
-EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
+        PRECHECK, //
+        EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
     extends ExecutionIntent<PRECHECK, EXECUTION_RESULT> {
   //
 }
 
 final class FormModelSaveIntent extends FormModelExecutionIntent<
-    BlockFormSavePrecheck,
-    BlockFormSaveResult> {
+    BlockFormSavePrecheck, BlockFormSaveResult> {
   FormModelSaveIntent();
 }
 

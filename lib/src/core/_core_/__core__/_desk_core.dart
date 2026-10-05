@@ -55,7 +55,7 @@ class _DeskCore extends _DeskCoreV1 {
     if (creator == null) {
       throw DebugUtils.getFatalError(
           " - ERROR: '$activityName' not found. You need to call:\n "
-          " FlutterArtist.storage.registerActivity(()=> $activityName())");
+              " FlutterArtist.storage.registerActivity(()=> $activityName())");
     }
     activity = creator() as F;
     if (FlutterArtist._navigatorStated) {
@@ -96,17 +96,20 @@ class _DeskCore extends _DeskCoreV1 {
       switch (activity.config.releasePolicy) {
         case ActivityReleasePolicy.retain:
           print(
-              "[FLUTTER_ARTIST] ---------> RETAIN_IN_MEMORY: ${getClassName(activity)}");
+              "[FLUTTER_ARTIST] ---------> RETAIN_IN_MEMORY: ${getClassName(
+                  activity)}");
           return;
         case ActivityReleasePolicy.unmount:
           print(
-              "[FLUTTER_ARTIST] ---------> MARK_TO_RELEASE_AND_PRUNE: ${getClassName(activity)} - ${DateTime.now()}");
+              "[FLUTTER_ARTIST] ---------> MARK_TO_RELEASE_AND_PRUNE: ${getClassName(
+                  activity)} - ${DateTime.now()}");
           activity._markAsOrphaned(true);
           return;
       }
     } else {
       print(
-          "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(activity)} - ${DateTime.now()}");
+          "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(
+              activity)} - ${DateTime.now()}");
       activity._markAsOrphaned(false);
     }
   }

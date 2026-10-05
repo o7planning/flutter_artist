@@ -2,7 +2,7 @@ part of '../core.dart';
 
 /// Root sealed state container for individual Stage lifecycle within a Prozess.
 @immutable
-sealed class StageDataState  implements DataState{
+sealed class StageDataState implements DataState {
   const StageDataState();
 
   String get name;
@@ -95,9 +95,9 @@ final class StageDataStatePending extends StageDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is StageDataStatePending &&
-              runtimeType == other.runtimeType &&
-              reason == other.reason;
+      other is StageDataStatePending &&
+          runtimeType == other.runtimeType &&
+          reason == other.reason;
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
@@ -119,8 +119,7 @@ sealed class StagePendingReason {
 
   bool get isFailed => this is StagePendingReasonFailed;
 
-  StageErrorInfo? get errorInfo =>
-      switch (this) {
+  StageErrorInfo? get errorInfo => switch (this) {
         StagePendingReasonFailed(:final errorInfo) => errorInfo,
         _ => null,
       };
@@ -158,9 +157,9 @@ final class StagePendingReasonFailed extends StagePendingReason {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is StagePendingReasonFailed &&
-              runtimeType == other.runtimeType &&
-              errorInfo == other.errorInfo;
+      other is StagePendingReasonFailed &&
+          runtimeType == other.runtimeType &&
+          errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);
@@ -220,9 +219,9 @@ final class StageDataStateLoadedStale extends StageDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is StageDataStateLoadedStale &&
-              runtimeType == other.runtimeType &&
-              staleErrorInfo == other.staleErrorInfo;
+      other is StageDataStateLoadedStale &&
+          runtimeType == other.runtimeType &&
+          staleErrorInfo == other.staleErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, staleErrorInfo);
@@ -257,7 +256,7 @@ final class StageDataStateSubmissionAttemptedSuccess
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is StageDataStateSubmissionAttemptedSuccess;
+      other is StageDataStateSubmissionAttemptedSuccess;
 
   @override
   int get hashCode => runtimeType.hashCode;
@@ -287,9 +286,9 @@ final class StageDataStateSubmissionAttemptedFailed
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is StageDataStateSubmissionAttemptedFailed &&
-              runtimeType == other.runtimeType &&
-              submissionErrorInfo == other.submissionErrorInfo;
+      other is StageDataStateSubmissionAttemptedFailed &&
+          runtimeType == other.runtimeType &&
+          submissionErrorInfo == other.submissionErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, submissionErrorInfo);

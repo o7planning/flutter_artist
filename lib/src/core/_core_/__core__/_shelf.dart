@@ -605,24 +605,27 @@ abstract class Shelf extends FeatureModule {
     return ShelfDeferredEventExecutionResult();
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<ShelfDeferredEventExecutionPrecheck>
+      checkBeforeExecuteDelayedExternalReaction() {
+    return __checkBeforeExecuteDelayedExternalReaction(checkBusy: true);
+  }
+
+  // ***************************************************************************
+
   @_PrecheckPrivateMethod()
   Actionable<ShelfDeferredEventExecutionPrecheck>
       __checkBeforeExecuteDelayedExternalReaction({
     required bool checkBusy,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<ShelfDeferredEventExecutionPrecheck>.no(
-        errCode: ShelfDeferredEventExecutionPrecheck.busy,
-      );
-    }
-    //
-    return Actionable<ShelfDeferredEventExecutionPrecheck>.yes();
-  }
-
-  @_PrecheckPrivateMethod()
-  Actionable<ShelfDeferredEventExecutionPrecheck>
-      canExecuteDelayedExternalReaction() {
-    return __checkBeforeExecuteDelayedExternalReaction(checkBusy: true);
+    return ShelfDeferredEventPrecheckUtils
+        .checkBeforeExecuteDelayedExternalReaction(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+    );
   }
 
   // ***************************************************************************

@@ -1,4 +1,4 @@
-import '../_core_/core.dart';
+part of '_built_in_filter_criteria.dart';
 
 ///
 /// An empty or null searchText is considered the same.

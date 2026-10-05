@@ -172,8 +172,8 @@ class BlockQueryStateCalculator {
               resolvedState = input.currentDataState.isStale
                   ? input.currentDataState
                   : BlockDataStateLoadedFresh(
-                      transientErrorInfo: input.blockErrorInfo,
-                    );
+                transientErrorInfo: input.blockErrorInfo,
+              );
               resolvedPhase = BlockLoadedStatePhase.fetchMoreFailed;
             }
           } else {

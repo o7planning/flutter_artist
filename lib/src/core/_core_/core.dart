@@ -4,13 +4,13 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' hide Action;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_artist/src/core/precheck/__precheck.dart';
+import 'package:flutter_artist/src/core/_core_/_precheck_/__precheck.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart'
     hide FlutterArtistLocaleAdapter;
@@ -44,16 +44,10 @@ import '../../debug/app/_block_or_scalar.dart';
 import '../../debug/state_view/dialogs/block_item_sync_session_state_dialog.dart';
 import '../../debug/state_view/dialogs/block_sync_session_state_dialog.dart';
 import '../../debug/utils/_debug.dart';
-import '../action/_background_action.dart';
-import '../action/block_backend_action.dart';
-import '../action/block_quick_item_creation_action.dart';
-import '../action/block_quick_item_update_action.dart';
-import '../action/scalar_quick_extra_data_load_action.dart';
-import '../action/storage_backend_action.dart';
+import '../action/__action.dart';
+import '../action/__action.dart';
 import '../annotation/annotation.dart';
-import '../built_in/empty_form_input.dart';
-import '../built_in/empty_filter_criteria.dart';
-import '../built_in/empty_filter_input.dart';
+import '../built_in/_built_in_filter_criteria.dart';
 import '../enums/_enums.dart';
 
 import '../error/_block_error_info.dart';
@@ -87,13 +81,7 @@ import '../error/filter_register/tilde_filter_criterion_suffix_invalid_error.dar
 import '../error/form/form_multi_opt_ms_mismatch_error.dart';
 import '../error/form/form_prop_type_mismatch_error.dart';
 import '../error/form_register/form_prop_invalid_name_error.dart';
-import '../precheck/activity_precheck.dart';
-import '../precheck/form_model_view_changed_precheck.dart';
-import '../precheck/scalar_load_extra_data_precheck.dart';
-import '../precheck/stage_load_init_data_precheck.dart';
-import '../precheck/stage_submit_precheck.dart';
-import '../precheck/task_load_init_data_precheck.dart';
-import '../precheck/task_submit_precheck.dart';
+import '_precheck_utils_/__precheck_utils.dart';
 import '_sync_/_block_sync_session_snapshot.dart';
 import '_utils_/block_data_state_utils.dart';
 import '_utils_/data_type_event_utils.dart';
@@ -103,42 +91,13 @@ import '../isar/fa_metadata.dart';
 import '../logger/_logger.dart';
 import '../notification/sse/sse_notification_service.dart';
 import '../pagination/number/number_pagination.dart';
-import '../precheck/__actionable.dart';
-import '../precheck/_check_allow.dart';
-import '../precheck/background_action_precheck.dart';
-import '../precheck/block_clear_current_item_precheck.dart';
-import '../precheck/block_clear_items_precheck.dart';
-import '../precheck/filter_model_data_load_precheck.dart';
-import '../precheck/scalar_clear_precheck.dart';
-import '../precheck/block_form_enablement_precheck.dart';
-import '../precheck/block_form_reset_precheck.dart';
-import '../precheck/block_form_save_precheck.dart';
-import '../precheck/block_item_creation_precheck.dart';
-import '../precheck/block_set_current_item_precheck.dart';
-import '../precheck/block_item_deletion_precheck.dart';
-import '../precheck/block_item_edit_precheck.dart';
-import '../precheck/block_items_deletion_precheck.dart';
-import '../precheck/block_query_precheck.dart';
-import '../precheck/block_backend_action_precheck.dart';
-import '../precheck/block_quick_item_creation_precheck.dart';
-import '../precheck/block_quick_item_update_precheck.dart';
-import '../precheck/form_model_patch_form_fields_precheck.dart';
-import '../precheck/form_model_data_load_precheck.dart';
-import '../precheck/scalar_query_precheck.dart';
-import '../precheck/scalar_quick_action_precheck.dart';
-import '../precheck/shelf_deferred_event_execution_precheck.dart';
-import '../precheck/show_form_info_precheck.dart';
 import '../typedef/typedefs.dart';
-import '../utils/_class_utils.dart';
-import '../utils/_compare_utils.dart';
-import '../utils/_hive_utils.dart';
-import '../utils/_html_utils.dart';
-import '../utils/_locale_utils.dart';
-import '../utils/_name_utils.dart';
+import '../utils/__utils.dart';
+
+import '../utils/__utils.dart';
 import '../event/broadcast_backend_events_action.dart';
 
 import '../notification/firebase/firebase_notification_service.dart';
-import '../utils/print_utils.dart';
 import '_utils_/block_query_state_calculator.dart';
 import '_utils_/block_form_data_state_utils.dart';
 import '_utils_/scalar_data_state_utils.dart';
@@ -448,7 +407,9 @@ part '_config_/_shelf_config.dart';
 part '_v1_/_x_activity_v1.dart';
 
 part '_core_x_/_x_block.dart';
+
 part '__core__/__sequence.dart';
+
 part '_core_x_/_x_task.dart';
 
 part '_core_x_/_x_stage.dart';
@@ -904,6 +865,8 @@ part '_ui_/_execution_progress_view_builder.dart';
 part '_ui_/_x_state.dart';
 
 part '_ui_com_/__ui_components.dart';
+
+part '_ui_com_/__ui_components_debug.dart';
 
 part '_ui_com_/__module_ui_components.dart';
 

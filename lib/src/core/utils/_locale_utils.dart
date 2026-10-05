@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of '__utils.dart';
 
 class LocaleUtils {
   static Locale? fromCode(String localeCode) {

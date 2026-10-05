@@ -1,4 +1,4 @@
-import 'package:url_launcher/url_launcher.dart';
+part of '__utils.dart';
 
 class UrlUtils {
   static Future<void> open({required String url}) async {

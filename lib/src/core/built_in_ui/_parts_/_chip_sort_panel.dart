@@ -1,0 +1,63 @@
+part of '../_built_in_ui.dart';
+
+class ChipSortPanel<ITEM extends Object> extends SortPanel<ITEM>
+    with SortPanelMixin {
+  final ChipSortPanelStyle style;
+  final WrapAlignment alignment;
+
+  const ChipSortPanel({
+    super.key,
+    required super.sortModel,
+    this.style = const ChipSortPanelStyle(),
+    this.alignment = WrapAlignment.start,
+  });
+
+  @override
+  Widget buildContent(BuildContext context) {
+    return Padding(
+      padding: style.padding,
+      child: Wrap(
+        alignment: alignment,
+        spacing: style.spacing,
+        runSpacing: style.runSpacing,
+        children: sortModel.criteria.map((criterion) {
+          final isSelected = criterion.direction != null;
+
+          final effectiveUnselectedColor = style.backgroundColor ??
+              SortPanelHelper.getBackgroundColor(context);
+
+          final effectiveSelectedColor = style.selectedColor ??
+              SortPanelHelper.getTextColor(context, true)
+                  .withValues(alpha: 0.15);
+
+          return RawChip(
+            label: Text(
+              criterion.text,
+              style: style.getTextStyle(context, isSelected),
+            ),
+            labelPadding: EdgeInsets.only(right: style.iconSpacing),
+            deleteIcon: buildSortButton(
+              context: context,
+              sortModel: sortModel,
+              criterion: criterion,
+              enabled: true,
+              isDragging: false,
+              iconSize: style.sortIconSize,
+              draggingColor: style.draggingColor,
+            ),
+            onDeleted: () => toggleCriterionByName(sortModel, criterion),
+            onPressed: () => toggleCriterionByName(sortModel, criterion),
+            backgroundColor: effectiveUnselectedColor,
+            selectedColor: effectiveSelectedColor,
+            shape: style.chipShape ??
+                StadiumBorder(
+                  side: SortPanelHelper.getBorder(context),
+                ),
+            selected: isSelected,
+            showCheckmark: false,
+          );
+        }).toList(),
+      ),
+    );
+  }
+}

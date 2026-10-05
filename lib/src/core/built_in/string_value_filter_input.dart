@@ -1,4 +1,4 @@
-import '../_core_/core.dart';
+part of '_built_in_filter_criteria.dart';
 
 class StringValueFilterInput extends FilterInput {
   final String? stringValue;

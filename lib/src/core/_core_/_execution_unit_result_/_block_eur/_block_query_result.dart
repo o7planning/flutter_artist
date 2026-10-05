@@ -1,33 +1,31 @@
 part of '../../core.dart';
 
 class BlockQueryResult<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionUnitResult<ID,
-    ITEM,
-    ITEM_DETAIL,
-    BlockQueryPrecheck> {
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>>
+    extends BlockExecutionUnitResult<ID, ITEM, ITEM_DETAIL,
+        BlockQueryPrecheck> {
+  bool _isFilterError = false;
+
   BlockQueryResult._();
 
-  BlockQueryResult._queryBlockedTemporarily()
-      : super(precheck: BlockQueryPrecheck.queryBlockedTemporarily);
+  BlockQueryResult._busy() : super(precheck: BlockQueryPrecheck.busy);
 
-  BlockQueryResult._noCurrentPagination()
-      : super(precheck: BlockQueryPrecheck.noCurrentPagination);
-
-  BlockQueryResult._noPreviousPage()
-      : super(precheck: BlockQueryPrecheck.noPreviousPage);
-
-  BlockQueryResult._noNextPage() //
-      : super(precheck: BlockQueryPrecheck.noNextPage);
+  BlockQueryResult._precheckFail({required BlockQueryPrecheck precheck})
+      : super(precheck: precheck);
 
   void _setFilterError() {
-    _setPrecheck(BlockQueryPrecheck.filterError);
+    // _setPrecheck(BlockQueryPrecheck.filterError);
+    _isFilterError = true;
   }
 
   @override
   bool get successForFirst {
     if (precheck != null) {
+      return false;
+    }
+    if (_isFilterError) {
       return false;
     }
     if (_errorInfo != null) {

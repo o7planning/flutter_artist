@@ -17,7 +17,7 @@ abstract class BaseFormViewBuilder<M extends BaseFormModel>
 }
 
 abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
-    M extends BaseFormModel> extends _ContextProviderViewState<W> {
+M extends BaseFormModel> extends _ContextProviderViewState<W> {
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -65,7 +65,8 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
       selection = await dialogs.showYesNoCancelDialog(
         context: context,
         message:
-            "Do you want to save changes to [${getClassName(widget.formModel)}] before closing?",
+        "Do you want to save changes to [${getClassName(
+            widget.formModel)}] before closing?",
         details: "",
         defaultOption: dialogs.YesNoCancel.yes,
       );
@@ -90,7 +91,7 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
         }
         break;
       case dialogs.YesNoCancel.cancel:
-        // Do nothing.
+      // Do nothing.
         break;
     }
   }
@@ -188,8 +189,8 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
           tooltip: "Restore the state before the error",
           onPressed: widget.formModel.formInitialDataReady
               ? () {
-                  widget.formModel.showFormErrorViewerDialog(context);
-                }
+            widget.formModel.showFormErrorViewerDialog(context);
+          }
               : null,
         ),
       ],

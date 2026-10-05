@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart' hide Action;
-import 'package:flutter_artist_core/flutter_artist_core.dart';
-
-import '_action.dart';
+part of '__action.dart';
 
 abstract class ScalarQuickExtraDataLoadAction<DATA extends Object>
     extends Action {

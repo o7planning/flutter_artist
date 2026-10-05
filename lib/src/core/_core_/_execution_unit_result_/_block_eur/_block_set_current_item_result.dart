@@ -3,11 +3,12 @@ part of '../../core.dart';
 /// Execution unit result representing the outcome of selecting, refreshing,
 /// or transitioning the active current item within a [Block].
 class BlockSetCurrentItemResult<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockExecutionUnitResult<ID, ITEM, ITEM_DETAIL,
-        BlockSetCurrentItemPrecheck> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionUnitResult<ID,
+    ITEM,
+    ITEM_DETAIL,
+    BlockSetCurrentItemPrecheck> {
   /// The operational directive governing how selection fallback was resolved.
   final BlockSetCurrentItemDirective setCurrentItemDirective;
 
@@ -34,7 +35,8 @@ class BlockSetCurrentItemResult<
     required ITEM? candidateItem,
     required this.oldCurrentItem,
     required ITEM? currentItem,
-  })  : initialCandidateItem = candidateItem,
+  })
+      : initialCandidateItem = candidateItem,
         _currentItem = currentItem;
 
   /// Indicates whether the selection achieved its primary objective without unhandled errors.
@@ -48,14 +50,14 @@ class BlockSetCurrentItemResult<
       case BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm:
       case BlockSetCurrentItemDirective.setAnItemAsCurrent:
       case BlockSetCurrentItemDirective.refresh:
-        // Must successfully match the targeted initial candidate item
+      // Must successfully match the targeted initial candidate item
         if (initialCandidateItem == null || _currentItem == null) {
           return false;
         }
         return initialCandidateItem!.id == _currentItem!.id;
 
       case BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed:
-        // Default lenient mode: successful if no error occurred, even if current is null
+      // Default lenient mode: successful if no error occurred, even if current is null
         return true;
     }
   }
@@ -69,6 +71,6 @@ class BlockSetCurrentItemResult<
   /// Determines whether the initial targeted candidate was successfully assigned as current.
   bool get isTargetCandidateSelected =>
       initialCandidateItem != null &&
-      _currentItem != null &&
-      initialCandidateItem!.id == _currentItem!.id;
+          _currentItem != null &&
+          initialCandidateItem!.id == _currentItem!.id;
 }

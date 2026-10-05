@@ -1,7 +1,4 @@
-import '../_core_/core.dart';
-import '../enums/_enums.dart';
-import 'string_value_filter_criteria.dart';
-import 'string_value_filter_input.dart';
+part of '_built_in_filter_criteria.dart';
 
 class StringValueFilterModel
     extends FilterModel<StringValueFilterInput, StringValueFilterCriteria> {

@@ -1,11 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:flutter_artist_core/flutter_artist_core.dart';
-
-import '_background_action.dart';
-import 'stub/download_helper.dart';
-import 'stub/download_helper_stub.dart'
-    if (dart.library.html) 'stub/download_helper_web.dart';
+part of '__action.dart';
 
 abstract class BackgroundWebDownloadAction extends BackgroundAction {
   final String fileName;

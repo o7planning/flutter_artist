@@ -38,7 +38,7 @@ class _LoggedInUserUiComponents extends _UiComponents {
   }
 
   @override
-  Map<IContextProviderViewState, XState> debugFindAllMountedWidgetStates() {
+  Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
     return debugFindMountedWidgetStates(
       withLoggedInUserView: true,
       activeOnly: true,

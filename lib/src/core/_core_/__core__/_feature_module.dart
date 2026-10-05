@@ -30,7 +30,8 @@ abstract class FeatureModule extends _Core {
 
   Future<void> showDebugModuleStructureInspector() async {
     BuildContext context = FlutterArtistCore.context;
-     DebugFeatureModuleStructureInspectorDialog.show(context: context, module: this);
+    DebugFeatureModuleStructureInspectorDialog.show(
+        context: context, module: this);
   }
 
   // ***************************************************************************

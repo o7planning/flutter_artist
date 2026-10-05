@@ -2,7 +2,7 @@ part of '../../core.dart';
 
 /// Execution result for batch item deletion intents, powered by [BlockOperationStep] journaling.
 class BlockItemsDeletionResult<ID extends Comparable,
-        ITEM extends Identifiable<ID>, ITEM_DETAIL extends Identifiable<ID>>
+ITEM extends Identifiable<ID>, ITEM_DETAIL extends Identifiable<ID>>
     extends BlockExecutionUnitResult<
         ID, //
         ITEM,
