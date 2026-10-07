@@ -75,7 +75,7 @@ class _StageUiComponents extends _WorkNodeUiComponents {
 
   @override
   Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
-    return debugFindMountedWidgetStates(
+    return _debugFindMountedWidgetStates(
       withStageContentView: true,
       withForm: true,
       withStageControlBar: true,
@@ -84,7 +84,7 @@ class _StageUiComponents extends _WorkNodeUiComponents {
   }
 
   @DebugMethodAnnotation()
-  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> _debugFindMountedWidgetStates({
     required bool withStageContentView,
     required bool withForm,
     required bool withStageControlBar,

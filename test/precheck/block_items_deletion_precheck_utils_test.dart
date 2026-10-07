@@ -47,8 +47,8 @@ void main() {
         checkAllow: true,
         items: mockItems,
         errorIfItemNotInTheBlock: true,
-        findItemSameIdWith: (target) =>
-            target == 'item_1' ? target : null, // item_2 không tìm thấy
+        findItemSameIdWith: (target) => target == 'item_1' ? target : null,
+        // item_2 không tìm thấy
         checkItemsDeletionAllowed: (_) => CheckAllowResult.allow(),
       );
 

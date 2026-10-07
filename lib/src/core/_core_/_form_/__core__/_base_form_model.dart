@@ -271,27 +271,11 @@ abstract class BaseFormModel<
   Actionable<FormModelPatchFormFieldsPrecheck> __checkBeforePatchFormFields({
     required bool checkBusy,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<FormModelPatchFormFieldsPrecheck>.no(
-        errCode: FormModelPatchFormFieldsPrecheck.busy,
-      );
-    }
-    if (dataState.isNone) {
-      return Actionable<FormModelPatchFormFieldsPrecheck>.no(
-        errCode: FormModelPatchFormFieldsPrecheck.formInNoneState,
-      );
-    }
-    if (dataState.isPending) {
-      return Actionable<FormModelPatchFormFieldsPrecheck>.no(
-        errCode: FormModelPatchFormFieldsPrecheck.formInPendingState,
-      );
-    }
-    if (dataState.isFatalError) {
-      return Actionable<FormModelPatchFormFieldsPrecheck>.no(
-        errCode: FormModelPatchFormFieldsPrecheck.formInFatalErrorState,
-      );
-    }
-    return Actionable<FormModelPatchFormFieldsPrecheck>.yes();
+    return FormModelPatchFormFieldsPrecheckUtils.checkBeforePatchFormFields(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      formDataState: dataState,
+    );
   }
 
   // ===========================================================================

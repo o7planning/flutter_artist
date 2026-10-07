@@ -12,13 +12,13 @@ void main() {
       totalPages: 2,
     );
 
-    test(
-        'Should return busy error when checkBusy is true and isBusy is true[cite: 4]',
+    test('Should return busy error when checkBusy is true and isBusy is true',
         () {
       final res = BlockQueryPrecheckUtils.checkBeforeQuery(
         checkBusy: true,
         checkAllow: true,
-        isBusy: true, // System is busy[cite: 4]
+        isBusy: true,
+        // System is busy
         qryMethod: BlockQryMethodName.query,
         nativeQueryMode: BlockNativeQueryMode.pageableQuery,
         lastQueryType: QueryType.realQuery,
@@ -34,16 +34,16 @@ void main() {
     });
 
     test(
-        'Should return pageableNotSupported when fullQuery mode tries to paginate[cite: 4]',
+        'Should return pageableNotSupported when fullQuery mode tries to paginate',
         () {
       final res = BlockQueryPrecheckUtils.checkBeforeQuery(
         checkBusy: true,
         checkAllow: true,
         isBusy: false,
-        qryMethod:
-            BlockQryMethodName.queryNextPage, // Request pagination[cite: 4]
-        nativeQueryMode:
-            BlockNativeQueryMode.fullQuery, // But in full query mode[cite: 4]
+        qryMethod: BlockQryMethodName.queryNextPage,
+        // Request pagination
+        nativeQueryMode: BlockNativeQueryMode.fullQuery,
+        // But in full query mode
         lastQueryType: QueryType.realQuery,
         defaultPageable: defaultPageable,
         currentPagination: paginationInfo,
@@ -57,7 +57,7 @@ void main() {
     });
 
     test(
-        'Should return alreadyOnFirstPage when querying previous page on page 1[cite: 4]',
+        'Should return alreadyOnFirstPage when querying previous page on page 1',
         () {
       final res = BlockQueryPrecheckUtils.checkBeforeQuery(
         checkBusy: true,
@@ -67,8 +67,8 @@ void main() {
         nativeQueryMode: BlockNativeQueryMode.pageableQuery,
         lastQueryType: QueryType.realQuery,
         defaultPageable: defaultPageable,
-        currentPagination:
-            paginationInfo, // On page 1, previous will return null from calculator
+        currentPagination: paginationInfo,
+        // On page 1, previous will return null from calculator
         specifiedPageable: null,
         checkQueryAllowed: () => CheckAllowResult.allow(),
       );
@@ -79,7 +79,7 @@ void main() {
     });
 
     test(
-        'Should return notAllow when business rule checkQueryAllowed returns notAllow[cite: 4]',
+        'Should return notAllow when business rule checkQueryAllowed returns notAllow',
         () {
       final res = BlockQueryPrecheckUtils.checkBeforeQuery(
         checkBusy: true,
@@ -91,22 +91,21 @@ void main() {
         defaultPageable: defaultPageable,
         currentPagination: paginationInfo,
         specifiedPageable: null,
-        checkQueryAllowed: () =>
-            CheckAllowResult.notAllow(), // Disallowed[cite: 4]
+        checkQueryAllowed: () => CheckAllowResult.notAllow(), // Disallowed
       );
 
       expect(res.actionable.yes, isFalse);
       expect(res.actionable.errCode, equals(BlockQueryPrecheck.notAllow));
     });
 
-    test(
-        'Should return yes and correct isQueryMoreFlow when all checks pass[cite: 4]',
+    test('Should return yes and correct isQueryMoreFlow when all checks pass',
         () {
       final res = BlockQueryPrecheckUtils.checkBeforeQuery(
         checkBusy: true,
         checkAllow: true,
         isBusy: false,
-        qryMethod: BlockQryMethodName.queryMore, // Query more flow[cite: 4]
+        qryMethod: BlockQryMethodName.queryMore,
+        // Query more flow
         nativeQueryMode: BlockNativeQueryMode.pageableQuery,
         lastQueryType: QueryType.realQuery,
         defaultPageable: defaultPageable,
@@ -116,7 +115,7 @@ void main() {
       );
 
       expect(res.actionable.yes, isTrue);
-      expect(res.isQueryMoreFlow, isTrue); // Verify query more flag[cite: 4]
+      expect(res.isQueryMoreFlow, isTrue); // Verify query more flag
       expect(res.applyPageable, isNotNull);
     });
   });

@@ -291,25 +291,15 @@ abstract class _Core {
     );
   }
 
-  Actionable<ShowFormInfoPrecheck> _internalCanShowFormInfo({
+  Actionable<ShowFormInfoPrecheck> __checkBeforeShowFormInfo({
     required BaseFormModel? formModel,
   }) {
-    ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
-    if (formModel == null) {
-      return Actionable<ShowFormInfoPrecheck>.no(
-        errCode: ShowFormInfoPrecheck.noForm,
-      );
-    }
-    if (loggedInUser == null) {
-      return Actionable<ShowFormInfoPrecheck>.no(
-        errCode: ShowFormInfoPrecheck.noLoggedInUser,
-      );
-    }
-    if (!loggedInUser.isSystemUser) {
-      return Actionable<ShowFormInfoPrecheck>.no(
-        errCode: ShowFormInfoPrecheck.userIsNotSystemUser,
-      );
-    }
-    return Actionable<ShowFormInfoPrecheck>.yes();
+    final ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
+
+    return ShowFormInfoPrecheckUtils.checkBeforeShowFormInfo(
+      hasForm: formModel != null,
+      isLoggedIn: loggedInUser != null,
+      isSystemUser: loggedInUser?.isSystemUser ?? false,
+    );
   }
 }

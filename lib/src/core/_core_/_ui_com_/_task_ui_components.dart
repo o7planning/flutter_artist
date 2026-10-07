@@ -71,7 +71,7 @@ class _TaskUiComponents extends _WorkNodeUiComponents {
 
   @override
   Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
-    return debugFindMountedWidgetStates(
+    return _debugFindMountedWidgetStates(
       withTaskContentView: true,
       withForm: true,
       withTaskControlBar: true,
@@ -80,7 +80,7 @@ class _TaskUiComponents extends _WorkNodeUiComponents {
   }
 
   @DebugMethodAnnotation()
-  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> _debugFindMountedWidgetStates({
     required bool withTaskContentView,
     required bool withForm,
     required bool withTaskControlBar,

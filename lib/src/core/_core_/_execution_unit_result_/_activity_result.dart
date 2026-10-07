@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class ActivityResult extends ExecutionUnitResult<ActivityPrecheck> {
+class ActivityResult extends ExecutionUnitResult<ActivityV1Precheck> {
   ActivityResult({super.precheck});
 
   @override

@@ -4,14 +4,14 @@ class _Desk extends _DeskCore {
   final _reactionProcessor = _ReactionProcessor();
 
   @_RootMethodAnnotation()
-  @_StorageBackendActionAnnotation()
-  Future<StorageBackendActionResult> executeBackendAction({
+  @_AppBackendActionAnnotation()
+  Future<AppBackendActionResult> executeAppBackendAction({
     required ActionConfirmationType actionConfirmationType,
-    required StorageBackendAction action,
+    required AppBackendAction action,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "executeBackendAction",
+      methodName: "executeAppBackendAction",
       parameters: {
         "action": action,
       },
@@ -23,7 +23,7 @@ class _Desk extends _DeskCore {
     executionTrace.addNonControllableCall(
       codeId: "#075000",
       caller: this,
-      methodName: "__checkBeforeExecuteBackendAction",
+      methodName: "__checkBeforeExecuteAppBackendAction",
       suffixShortDesc: "",
       parameters: {
         "checkBusy": checkBusyTrue,
@@ -32,8 +32,8 @@ class _Desk extends _DeskCore {
     //
     // @Same-Code-Precheck-01
     //
-    final Actionable<StorageBackendActionPrecheck> actionable =
-        __checkBeforeExecuteBackendAction(
+    final Actionable<AppBackendActionPrecheck> actionable =
+        __checkBeforeExecuteAppBackendAction(
       checkBusy: checkBusyTrue,
     );
     //
@@ -42,13 +42,13 @@ class _Desk extends _DeskCore {
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#075040",
-        prefixShortDesc: '__checkBeforeExecuteBackendAction()',
+        prefixShortDesc: '__checkBeforeExecuteAppBackendAction()',
         module: null,
         actionableFalse: actionable,
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return StorageBackendActionResult(
+      return AppBackendActionResult(
         precheck: actionable.errCode,
         errorInfo: actionable.errorInfo,
       );
@@ -66,19 +66,19 @@ class _Desk extends _DeskCore {
     }
     //
     if (!confirm) {
-      return StorageBackendActionResult(
-        precheck: StorageBackendActionPrecheck.cancelled,
+      return AppBackendActionResult(
+        precheck: AppBackendActionPrecheck.cancelled,
       );
     }
     //
     executionTrace.addExecutionIntent(
       codeId: "#075340",
       owner: FlutterArtist.executor,
-      executionIntentType: StorageBackendActionIntent,
+      executionIntentType: AppBackendActionIntent,
       suffixShortDesc: "",
     );
     final executionIntent =
-        _createAndSetStorageExecutionIntentBackendAction(action: action);
+        _createAndSetAppExecutionIntentBackendAction(action: action);
     //
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
@@ -89,27 +89,24 @@ class _Desk extends _DeskCore {
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<StorageBackendActionPrecheck> __checkBeforeExecuteBackendAction({
+  Actionable<AppBackendActionPrecheck> __checkBeforeExecuteAppBackendAction({
     required bool checkBusy,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<StorageBackendActionPrecheck>.no(
-        errCode: StorageBackendActionPrecheck.busy,
-      );
-    }
-    //
-    return Actionable<StorageBackendActionPrecheck>.yes();
+    return AppBackendActionPrecheckUtils.checkBeforeExecuteAppBackendAction(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+    );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_ExecutionUnitMethodAnnotation()
-  @_StorageBackendActionAnnotation()
-  Future<bool> _unitBackendAction({
+  @_AppBackendActionAnnotation()
+  Future<bool> _unitAppBackendAction({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required StorageBackendActionIntent executionIntent,
+    required AppBackendActionIntent executionIntent,
   }) async {
     ApiResult<void>? result;
     //
@@ -119,9 +116,9 @@ class _Desk extends _DeskCore {
           "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
     );
     final executionUnitResult = executionIntent.resultWrapper._setResult(
-      StorageBackendActionResult(),
+      AppBackendActionResult(),
       objectCaller: this,
-      methodName: '_unitBackendAction',
+      methodName: '_unitAppBackendAction',
     );
     //
     try {
@@ -143,7 +140,7 @@ class _Desk extends _DeskCore {
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
-        tipDocument: TipDocument.storagePerformAction,
+        tipDocument: TipDocument.performAppBackendOperation,
       );
       //
       executionUnitResult._setErrorInfo(
@@ -173,17 +170,17 @@ class _Desk extends _DeskCore {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<StorageBackendActionResult> broadcastBackendActionEvents({
+  Future<AppBackendActionResult> broadcastAppBackendActionEvents({
     required List<Type> events,
     required bool needToConfirm,
     String? actionInfo,
   }) async {
-    StorageBackendAction action = BroadcastBackendEventsAction(
+    AppBackendAction action = BroadcastBackendEventsAction(
       needToConfirm: needToConfirm,
       events: events,
       actionInfo: actionInfo,
     );
-    return await executeBackendAction(
+    return await executeAppBackendAction(
       actionConfirmationType: ActionConfirmationType.custom,
       action: action,
     );
@@ -192,12 +189,12 @@ class _Desk extends _DeskCore {
   // ***************************************************************************
   // ***************************************************************************
 
-  StorageBackendActionIntent _createAndSetStorageExecutionIntentBackendAction({
-    required StorageBackendAction action,
+  AppBackendActionIntent _createAndSetAppExecutionIntentBackendAction({
+    required AppBackendAction action,
   }) {
-    final executionIntent = StorageBackendActionIntent(action: action);
+    final executionIntent = AppBackendActionIntent(action: action);
     FlutterArtist._rootQueue
-        ._addStorageBackendActionExecutionIntent(executionIntent);
+        ._addAppBackendActionExecutionIntent(executionIntent);
     return executionIntent;
   }
 }

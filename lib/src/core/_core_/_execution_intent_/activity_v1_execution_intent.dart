@@ -8,6 +8,6 @@ EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
 }
 
 final class DefaultActivityV1ExecutionIntent
-    extends ActivityV1ExecutionIntent<ActivityPrecheck, ActivityResult> {
+    extends ActivityV1ExecutionIntent<ActivityV1Precheck, ActivityResult> {
   //
 }

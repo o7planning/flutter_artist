@@ -14,7 +14,7 @@ part of '../core.dart';
 ///   │   ├── _ProzessExecutionUnit
 ///   │   └── _TaskExecutionUnit
 ///   │
-///   └── _StorageBackendActionExecutionUnit
+///   └── _AppBackendActionExecutionUnit
 ///
 @_ExecutionUnitClassAnnotation()
 abstract class _ExecutionUnit {

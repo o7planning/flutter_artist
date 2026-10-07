@@ -1,6 +1,9 @@
 Thêm Precheck cho patchFormFields, đảm bảo Form phải trong trạng thái loaded.
 
 
+Kiểm tra logic của Block, khi tạo mới một Item qua form yêu cầu phải cho phép (Allow)
+Nhưng nếu query + createNewItem thì bị vượt qua.
+
 
 
 

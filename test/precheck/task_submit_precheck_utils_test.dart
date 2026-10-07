@@ -4,6 +4,7 @@ import 'package:test/test.dart';
 // Mock đơn giản cho FormState trong test
 class MockFormBuilderState {
   final bool isValidResult;
+
   MockFormBuilderState(this.isValidResult);
 
   bool validate({bool focusOnInvalid = true}) => isValidResult;

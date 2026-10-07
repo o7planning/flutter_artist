@@ -778,7 +778,7 @@ class _BlockUiComponents extends _UiComponents {
 
   @override
   Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
-    return debugFindMountedWidgetStates(
+    return _debugFindMountedWidgetStates(
       withPagination: true,
       withBlockContentView: true,
       withFilter: true,
@@ -791,7 +791,7 @@ class _BlockUiComponents extends _UiComponents {
   }
 
   @DebugMethodAnnotation()
-  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> _debugFindMountedWidgetStates({
     required bool withPagination,
     required bool withBlockContentView,
     required bool withFilter,

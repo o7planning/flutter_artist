@@ -6,15 +6,14 @@ part of '../core.dart';
 /// [TaskDataStatePending] -> (loads INIT_DATA) -> [TaskDataStateLoadedFresh]
 /// -> (submission) -> [TaskDataStateSubmissionAttempted]
 abstract class Task<
-INIT_DATA extends TaskInitData, //
-RESULT_DATA extends TaskResultData, //
-FORM_INPUT extends FormInput,
-FORM_OUTPUT extends FormOutput> extends WorkNode<
+    INIT_DATA extends TaskInitData, //
+    RESULT_DATA extends TaskResultData, //
+    FORM_INPUT extends FormInput,
+    FORM_OUTPUT extends FormOutput> extends WorkNode<
     INIT_DATA, //
     RESULT_DATA, //
     FORM_INPUT,
-    FORM_OUTPUT>
-    implements FormHost {
+    FORM_OUTPUT> implements FormHost {
   final TaskConfig config;
   final TaskEffectiveConfig effectiveConfig;
 
@@ -135,8 +134,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     executionTrace.addInfo(
       codeId: "#090100",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()} (Load InitData)",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Load InitData)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -177,7 +175,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       // =======================================================================
       if (formModel != null) {
         final newFormDataState =
-        TaskFormDataStateUtils.calculateNewLazyDataState(
+            TaskFormDataStateUtils.calculateNewLazyDataState(
           currentFormDataState: formModel!.dataState,
           taskDataState: _dataState,
           hasInitData: _initData != null,
@@ -185,7 +183,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
         executionTrace.addInfo(
           codeId: "#090300",
           shortDesc:
-          "Transitioning FormModel state to ${newFormDataState.toBriefInfo()}.",
+              "Transitioning FormModel state to ${newFormDataState.toBriefInfo()}.",
         );
         formModel!._formModelStructure._setFormDataState(
           formDataState: newFormDataState,
@@ -219,7 +217,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       // 🛑 Form Data State
       if (formModel != null) {
         final newFormDataState =
-        TaskFormDataStateUtils.calculateNewLazyDataState(
+            TaskFormDataStateUtils.calculateNewLazyDataState(
           currentFormDataState: formModel!.dataState,
           taskDataState: _dataState,
           hasInitData: _initData != null,
@@ -232,8 +230,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       executionTrace.addInfo(
         codeId: "#090500",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}.performLoadInitData() method encountered an error!",
+            "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
       );
     } finally {
@@ -250,7 +247,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     required ExecutionUnitType executionUnitType,
     required XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT> thisXTask,
     required TaskSubmitIntent<INIT_DATA, RESULT_DATA, FORM_OUTPUT>
-    executionIntent,
+        executionIntent,
   }) async {
     __assertThisXTask(thisXTask);
     thisXTask._createAndSetTaskIntentDone(
@@ -260,8 +257,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     executionTrace.addInfo(
       codeId: "#093100",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()} (Submit)",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Submit)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -440,10 +436,10 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
     final XActivity xActivity = _XActivityTaskSubmit(task: this);
     final xTask = xActivity.findXTaskByName(name)
-    as XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT>;
+        as XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT>;
 
     final TaskSubmitIntent<INIT_DATA, RESULT_DATA, FORM_OUTPUT>
-    executionIntent = xTask._createAndSetTaskIntentSubmit();
+        executionIntent = xTask._createAndSetTaskIntentSubmit();
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -482,36 +478,20 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
   Actionable<TaskFormEnablePrecheck> checkFormEnable({
     bool checkAllow = true,
   }) {
-    if (formModel == null) {
-      return Actionable<TaskFormEnablePrecheck>.no(
-        errCode: TaskFormEnablePrecheck.noForm,
-      );
-    }
-    if (!isStateReadyForForm()) {
-      return Actionable<TaskFormEnablePrecheck>.no(
-        errCode: TaskFormEnablePrecheck.noForm,
-      );
-    }
-    final FormDataState formDataState = formModel!.dataState;
+    return __checkFormEnable(
+      checkAllow: checkAllow,
+    );
+  }
 
-    if (formDataState.isNone) {
-      return Actionable<TaskFormEnablePrecheck>.no(
-        errCode: TaskFormEnablePrecheck.formInNoneState,
-      );
-    } else if (formDataState.isPending) {
-      return Actionable<TaskFormEnablePrecheck>.no(
-        errCode: TaskFormEnablePrecheck.formInPendingState,
-      );
-    } else if (formDataState.isFatalError) {
-      return Actionable<TaskFormEnablePrecheck>.no(
-        errCode: TaskFormEnablePrecheck.formInFatalErrorState,
-      );
-    } else if (formDataState.isStale) {
-      return Actionable<TaskFormEnablePrecheck>.no(
-        errCode: TaskFormEnablePrecheck.formInStaleState,
-      );
-    }
-    return Actionable<TaskFormEnablePrecheck>.yes();
+  @_PrecheckPrivateMethod()
+  Actionable<TaskFormEnablePrecheck> __checkFormEnable({
+    bool checkAllow = true,
+  }) {
+    return TaskFormEnablePrecheckUtils.checkFormEnable(
+      hasForm: formModel != null,
+      isStateReadyForForm: isStateReadyForForm(),
+      formDataState: formModel?.dataState,
+    );
   }
 
   // ***************************************************************************
@@ -519,7 +499,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   @_PrecheckMethod()
   Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo() {
-    return _internalCanShowFormInfo(formModel: formModel);
+    return __checkBeforeShowFormInfo(formModel: formModel);
   }
 
   // ***************************************************************************

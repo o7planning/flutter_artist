@@ -1,7 +1,5 @@
 import 'package:flutter_artist/flutter_artist.dart';
 import 'package:flutter_artist/src/core/_core_/_utils_/block_query_state_calculator.dart';
-
-
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

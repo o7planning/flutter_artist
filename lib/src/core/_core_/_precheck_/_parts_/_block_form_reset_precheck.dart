@@ -1,52 +1,68 @@
 part of '../__precheck.dart';
 
-// Name (OK)
+/// Precheck enumeration for block form reset operations.
 enum BlockFormResetPrecheck implements Precheck {
+  /// Operation aborted because the system executor is currently busy.
   busy(
     precheckCode: PrecheckCode.busy,
     message: "Form reset is disabled.",
-    details: ["The executor is busy."],
+    details: ["The system executor is currently busy. Please wait."],
   ),
+
+  /// Operation aborted because no form model is configured for this block.
   noForm(
     precheckCode: PrecheckCode.noForm,
     message: "Form reset is disabled.",
-    details: ["The block has no form."],
+    details: ["The block has no form model configured."],
   ),
+
+  /// Operation aborted because the form is not in a dirty state.
   formIsNotDirty(
     precheckCode: PrecheckCode.formIsNotDirty,
     message: "Form reset is disabled.",
-    details: ["The form is not in dirty state."],
+    details: ["The form has no unsaved changes to reset."],
   ),
-  //
+
+  /// Operation aborted because the form is in a none state.
   formInNoneState(
     precheckCode: PrecheckCode.formInNoneState,
-    message: "Task reset is disabled.",
-    details: ["The form in none state."],
+    message: "Form reset is disabled.",
+    details: ["The form is currently in a 'none' state."],
   ),
+
+  /// Operation aborted because the form is in a pending state.
   formInPendingState(
     precheckCode: PrecheckCode.formInPendingState,
-    message: "Task reset is disabled.",
-    details: ["The form in pending state."],
+    message: "Form reset is disabled.",
+    details: ["The form is currently in a 'pending' state."],
   ),
+
+  /// Operation aborted because the form is in a fatal error state.
   formInFatalErrorState(
     precheckCode: PrecheckCode.formInFatalErrorState,
-    message: "Task reset is disabled.",
-    details: ["The form in fatal error state."],
+    message: "Form reset is disabled.",
+    details: ["The form is currently in a fatal error state."],
   ),
+
+  /// Operation aborted because the form is in a stale state.
   formInStaleState(
     precheckCode: PrecheckCode.formInStaleState,
-    message: "Task reset is disabled.",
-    details: ["The form in stale state."],
+    message: "Form reset is disabled.",
+    details: ["The form is currently in a stale state."],
   ),
+
+  /// Operation not allowed by application business rules.
   notAllow(
     precheckCode: PrecheckCode.notAllow,
-    message: "Form Resetting is disabled.",
-    details: ["The application logic does not allow to reset the form."],
+    message: "Form resetting is disabled.",
+    details: ["Application business rules do not allow resetting this form."],
   ),
+
+  /// An error occurred while executing the form reset allow-check method.
   checkAllowMethodError(
     precheckCode: PrecheckCode.checkAllowMethodError,
-    message: "Form Resetting is disabled.",
-    details: ["The isFormResetAllowed() method error.."],
+    message: "Form resetting is disabled.",
+    details: ["An error occurred during the form reset permission check."],
   );
 
   @override

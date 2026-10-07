@@ -3,7 +3,7 @@ part of '__precheck_utils.dart';
 /// Utility class containing pure precheck logic for block item editing operations.
 class BlockItemEditPrecheckUtils {
   /// Evaluates whether an item is permitted to be edited on a form.
-  static Actionable<BlockItemEditPrecheck> checkBeforeEditItem<ITEM>({
+  static Actionable<BlockItemEditPrecheck> checkBeforeEditItemOnForm<ITEM>({
     required bool checkBusy,
     required bool isBusy,
     required bool hasForm,

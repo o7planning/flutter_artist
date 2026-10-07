@@ -56,7 +56,8 @@ void main() {
       final result = PageableCalculator.calculate(
         lastQueryType: QueryType.realQuery,
         qryMethod: BlockQryMethodName.queryPreviousPage,
-        currentPagination: paginationInfo, // Đang ở trang 2 -> lùi về trang 1
+        currentPagination: paginationInfo,
+        // Đang ở trang 2 -> lùi về trang 1
         defaultPageable: defaultPageable,
         specifiedPageable: null,
       );
@@ -70,8 +71,8 @@ void main() {
       final result = PageableCalculator.calculate(
         lastQueryType: QueryType.realQuery,
         qryMethod: BlockQryMethodName.queryNextPage,
-        currentPagination:
-            paginationInfo, // Đang ở trang 2, tổng 3 trang -> tiến lên trang 3
+        currentPagination: paginationInfo,
+        // Đang ở trang 2, tổng 3 trang -> tiến lên trang 3
         defaultPageable: defaultPageable,
         specifiedPageable: null,
       );
@@ -107,8 +108,8 @@ void main() {
         lastQueryType: QueryType.realQuery,
         qryMethod: BlockQryMethodName.query,
         currentPagination: paginationInfo,
-        defaultPageable:
-            customDefaultPageable, // defaultPageable là trang 2, size 20
+        defaultPageable: customDefaultPageable,
+        // defaultPageable là trang 2, size 20
         specifiedPageable: null, // Không truyền specifiedPageable
       );
 

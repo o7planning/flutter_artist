@@ -9,9 +9,11 @@ void main() {
 
     test('Should return busy error when checkBusy is true and isBusy is true',
         () {
-      final result = BlockItemEditPrecheckUtils.checkBeforeEditItem<String>(
+      final result =
+          BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
         checkBusy: true,
-        isBusy: true, // System is busy
+        isBusy: true,
+        // System is busy
         hasForm: true,
         blockDataState: defaultBlockDataState,
         formDataState: defaultFormDataState,
@@ -25,10 +27,12 @@ void main() {
     });
 
     test('Should return noForm error when block has no form model', () {
-      final result = BlockItemEditPrecheckUtils.checkBeforeEditItem<String>(
+      final result =
+          BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
         checkBusy: true,
         isBusy: false,
-        hasForm: false, // No form model configured
+        hasForm: false,
+        // No form model configured
         blockDataState: defaultBlockDataState,
         formDataState: null,
         item: 'Test Item',
@@ -50,12 +54,14 @@ void main() {
             stackTrace: null),
       );
 
-      final result = BlockItemEditPrecheckUtils.checkBeforeEditItem<String>(
+      final result =
+          BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
         checkBusy: true,
         isBusy: false,
         hasForm: true,
         blockDataState: defaultBlockDataState,
-        formDataState: fatalErrorFormDataState, // Form in fatal error state
+        formDataState: fatalErrorFormDataState,
+        // Form in fatal error state
         item: 'Test Item',
         checkAllow: true,
         checkItemEditAllowed: (item) => CheckAllowResult.allow(),
@@ -67,13 +73,15 @@ void main() {
     });
 
     test('Should return noTarget error when target item is null', () {
-      final result = BlockItemEditPrecheckUtils.checkBeforeEditItem<String>(
+      final result =
+          BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
         checkBusy: true,
         isBusy: false,
         hasForm: true,
         blockDataState: defaultBlockDataState,
         formDataState: defaultFormDataState,
-        item: null, // No target item provided
+        item: null,
+        // No target item provided
         checkAllow: true,
         checkItemEditAllowed: (item) => CheckAllowResult.allow(),
       );
@@ -84,11 +92,13 @@ void main() {
 
     test('Should return blockInNoneState error when block is in none state',
         () {
-      final result = BlockItemEditPrecheckUtils.checkBeforeEditItem<String>(
+      final result =
+          BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
         checkBusy: true,
         isBusy: false,
         hasForm: true,
-        blockDataState: const BlockDataStateNone(), // Block in none state
+        blockDataState: const BlockDataStateNone(),
+        // Block in none state
         formDataState: defaultFormDataState,
         item: 'Test Item',
         checkAllow: true,
@@ -102,7 +112,8 @@ void main() {
     test(
         'Should return notAllow when business rule checkItemEditAllowed returns notAllow',
         () {
-      final result = BlockItemEditPrecheckUtils.checkBeforeEditItem<String>(
+      final result =
+          BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
         checkBusy: true,
         isBusy: false,
         hasForm: true,
@@ -120,7 +131,8 @@ void main() {
 
     test('Should return yes when all precheck conditions pass successfully',
         () {
-      final result = BlockItemEditPrecheckUtils.checkBeforeEditItem<String>(
+      final result =
+          BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
         checkBusy: true,
         isBusy: false,
         hasForm: true,

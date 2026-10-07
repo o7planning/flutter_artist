@@ -53,14 +53,14 @@ class _StorageUiComponents extends _UiComponents {
 
   @override
   Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
-    return debugFindMountedWidgetStates(
+    return _debugFindMountedWidgetStates(
       withStorageSectionView: true,
       activeOnly: true,
     );
   }
 
   @DebugMethodAnnotation()
-  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> _debugFindMountedWidgetStates({
     required bool withStorageSectionView,
     required bool activeOnly,
   }) {

@@ -5,8 +5,7 @@ enum StageSubmitPrecheck implements Precheck {
     precheckCode: PrecheckCode.busy,
     message: "The Stage execution is disabled.",
     details: ["The executor is busy."],
-  ),
-  ;
+  );
 
   @override
   final PrecheckCode precheckCode;

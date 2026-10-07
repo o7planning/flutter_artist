@@ -1,9 +1,9 @@
 part of '__action.dart';
 
-abstract class StorageBackendAction extends Action {
-  late final StorageBackendActionConfig config;
+abstract class AppBackendAction extends Action {
+  late final AppBackendActionConfig config;
 
-  StorageBackendAction({
+  AppBackendAction({
     required super.needToConfirm,
     required super.actionInfo,
   }) {
@@ -11,16 +11,16 @@ abstract class StorageBackendAction extends Action {
   }
 
   @protected
-  StorageBackendActionConfig defineActionConfig();
+  AppBackendActionConfig defineActionConfig();
 
   @protected
   Future<ApiResult<void>> performBackendOperation();
 }
 
-class StorageBackendActionConfig {
+class AppBackendActionConfig {
   final List<Type> broadcastEvents;
 
-  const StorageBackendActionConfig({
+  const AppBackendActionConfig({
     required this.broadcastEvents,
   });
 }

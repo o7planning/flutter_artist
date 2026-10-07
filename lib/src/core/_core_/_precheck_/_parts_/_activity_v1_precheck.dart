@@ -1,6 +1,6 @@
 part of '../__precheck.dart';
 
-enum ActivityPrecheck implements Precheck {
+enum ActivityV1Precheck implements Precheck {
   busy(
     precheckCode: PrecheckCode.busy,
     message: "Can not clear scalar.",
@@ -16,7 +16,7 @@ enum ActivityPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const ActivityPrecheck({
+  const ActivityV1Precheck({
     required this.precheckCode,
     required this.message,
     required this.details,

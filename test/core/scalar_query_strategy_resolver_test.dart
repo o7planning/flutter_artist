@@ -1,5 +1,4 @@
 import 'package:flutter_artist/flutter_artist.dart';
-
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -89,7 +88,8 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: null,
-        queryHint: QueryHint.force, // Explicit user/prozess force
+        queryHint: QueryHint.force,
+        // Explicit user/prozess force
         provideScalarContext: true,
       );
 
@@ -181,7 +181,8 @@ void main() {
           ScalarConfig(),
         ),
         syncSessionState: null,
-        queryHint: QueryHint.force, // Prozess mandates force fetch
+        queryHint: QueryHint.force,
+        // Prozess mandates force fetch
         provideScalarContext: false,
       );
 

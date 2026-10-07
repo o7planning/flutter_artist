@@ -17,19 +17,10 @@ enum PrecheckCode {
   @Deprecated("Xoa di, thay the bang cach khac")
   filterError,
   queryLockedTemporarily,
-  // noPreviousPage,
-  // noNextPage,
-  // noCurrentPagination,
   //
   blockInStaleState,
-
-
-  inPendingState, // State
-  inErrorState, // State
-  inNoneState, // State
-  inStaleState, // State
-  //
-  // inNoneMode, // Mode. TODO: Remove.
+  blockInPendingState, // State
+  blockInNoneState,
   //
   noTarget,
   invalidTarget,
@@ -38,11 +29,12 @@ enum PrecheckCode {
   //
   noLoggedInUser,
   permissionDenied,
+  userIsNotSystemUser,
   //
   cancelled,
   //
   hasActiveViews,
-  hasNoActiveUI,
+  //
   taskInPendingState,
   taskAlreadySubmitted,
 }

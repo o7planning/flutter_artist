@@ -25,14 +25,14 @@ enum BlockItemEditPrecheck implements Precheck {
 
   /// Operation aborted because the block is in a 'none' state.
   blockInNoneState(
-    precheckCode: PrecheckCode.inNoneState,
+    precheckCode: PrecheckCode.blockInNoneState,
     message: "Cannot edit item",
     details: ["The block has not been initialized or loaded yet."],
   ),
 
   /// Operation aborted because the block is in a pending state.
   blockInPendingState(
-    precheckCode: PrecheckCode.inPendingState,
+    precheckCode: PrecheckCode.blockInPendingState,
     message: "Cannot edit item",
     details: ["The block is currently pending data loading."],
   ),

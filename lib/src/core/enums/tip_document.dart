@@ -56,7 +56,7 @@ enum TipDocument {
   //
   filterModelPerformLoadMultiOptCriterionXData(enabled: false),
   //
-  storagePerformAction(enabled: false),
+  performAppBackendOperation(enabled: false),
   //
   backgroundActionRun(enabled: false),
   loginActivityPerformLogin(enabled: false),
@@ -171,7 +171,7 @@ enum TipDocument {
         return "FormModel.specifyDefaultValuesForSimpleProps()";
       case TipDocument.filterModelPerformLoadMultiOptCriterionXData:
         return "FilterModel.performLoadMultiOptTildeCriterionXData()";
-      case TipDocument.storagePerformAction:
+      case TipDocument.performAppBackendOperation:
         return "Storage.performBackendOperation()";
       case TipDocument.backgroundActionRun:
         return "BackgroundAction.run()";
@@ -280,7 +280,7 @@ enum TipDocument {
         return "FormModel.specifyDefaultValuesForSimpleProps()";
       case TipDocument.filterModelPerformLoadMultiOptCriterionXData:
         return "FilterModel.performLoadMultiOptTildeCriterionXData()";
-      case TipDocument.storagePerformAction:
+      case TipDocument.performAppBackendOperation:
         return "Storage.performBackendOperation()";
       case TipDocument.backgroundActionRun:
         return "BackgroundAction.run()";
@@ -487,7 +487,7 @@ enum TipDocument {
         return [];
       case TipDocument.filterModelPerformLoadMultiOptCriterionXData:
         return [];
-      case TipDocument.storagePerformAction:
+      case TipDocument.performAppBackendOperation:
         return [];
       case TipDocument.backgroundActionRun:
         return [];

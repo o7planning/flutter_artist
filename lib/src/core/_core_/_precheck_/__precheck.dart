@@ -5,7 +5,7 @@ import '../../utils/__utils.dart';
 
 part '_actionable.dart';
 part '_check_allow.dart';
-part '_parts_/_activity_precheck.dart';
+part '_parts_/_activity_v1_precheck.dart';
 part '_parts_/_background_action_precheck.dart';
 part '_parts_/_block_backend_action_precheck.dart';
 part '_parts_/_block_clear_current_item_precheck.dart';
@@ -29,7 +29,7 @@ part '_parts_/_form_model_view_changed_precheck.dart';
 part '_parts_/_scalar_clear_precheck.dart';
 part '_parts_/_scalar_load_extra_data_precheck.dart';
 part '_parts_/_scalar_query_precheck.dart';
-part '_parts_/_scalar_quick_action_precheck.dart';
+part '_parts_/_app_backend_action_precheck.dart';
 part '_parts_/_shelf_deferred_event_execution_precheck.dart';
 part '_parts_/_show_form_info_precheck.dart';
 part '_parts_/_stage_form_enable_precheck.dart';

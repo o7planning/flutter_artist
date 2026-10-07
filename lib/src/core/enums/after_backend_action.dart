@@ -5,7 +5,7 @@ enum AfterBlockBackendAction {
   none;
 }
 
-enum AfterStorageBackendAction {
+enum AfterAppBackendAction {
   none,
   query;
 }

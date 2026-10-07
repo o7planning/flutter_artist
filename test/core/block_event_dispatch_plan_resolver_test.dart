@@ -78,9 +78,8 @@ void main() {
       final plan = BlockEventDispatchPlanResolver.resolvePlan<int>(
         eventMainResolvedTypes: {ProgramContributorInfo},
         eventExtraResolvedTypes: {},
-        sourceEffectedItemIds: [
-          999
-        ], // Contributor ID (must not leak into Program)
+        sourceEffectedItemIds: [999],
+        // Contributor ID (must not leak into Program)
         // Parent block exposes ProgramInfo and observes Contributor mutations
         listenerTargetTypes: {ProgramInfo},
         listenerReactionTypes: {ProgramContributorInfo},
@@ -102,7 +101,8 @@ void main() {
       final plan = BlockEventDispatchPlanResolver.resolvePlan<int>(
         eventMainResolvedTypes: {ProgramContributorInfo},
         eventExtraResolvedTypes: {},
-        sourceEffectedItemIds: [], // Empty list from server response
+        sourceEffectedItemIds: [],
+        // Empty list from server response
         listenerTargetTypes: {ProgramInfo},
         listenerReactionTypes: {ProgramContributorInfo},
       );
@@ -120,7 +120,8 @@ void main() {
         () {
       final plan = BlockEventDispatchPlanResolver.resolvePlan<int>(
         eventMainResolvedTypes: {ProductInfo},
-        eventExtraResolvedTypes: {SupplierInfo}, // Extra event emitted
+        eventExtraResolvedTypes: {SupplierInfo},
+        // Extra event emitted
         sourceEffectedItemIds: [10],
         listenerTargetTypes: {SupplierInfo},
         listenerReactionTypes: {SupplierInfo},

@@ -433,7 +433,7 @@ class _ScalarUiComponents extends _UiComponents {
 
   @override
   Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
-    return debugFindMountedWidgetStates(
+    return _debugFindMountedWidgetStates(
       withScalarContentView: true,
       withFilter: true,
       withScalarControlBar: true,
@@ -442,7 +442,7 @@ class _ScalarUiComponents extends _UiComponents {
   }
 
   @DebugMethodAnnotation()
-  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> _debugFindMountedWidgetStates({
     required bool withScalarContentView,
     required bool withFilter,
     required bool withScalarControlBar,

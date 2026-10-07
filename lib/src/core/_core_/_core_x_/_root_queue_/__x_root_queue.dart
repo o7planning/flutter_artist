@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
 final class _XRootQueue {
-  final _xStorage = XStorage();
+  final _xStorage = XApp();
 
   ///
   /// LinkedHashMap<String fullName, XRootQueueItem>().
@@ -72,8 +72,8 @@ final class _XRootQueue {
     }
   }
 
-  void _addStorageBackendActionExecutionIntent(
-    StorageBackendActionIntent executionIntent,
+  void _addAppBackendActionExecutionIntent(
+    AppBackendActionIntent executionIntent,
   ) {
     _xStorage._addExecutionIntent(
       executionIntent,

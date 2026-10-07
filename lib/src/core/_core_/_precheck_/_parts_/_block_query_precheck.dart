@@ -29,7 +29,6 @@ enum BlockQueryPrecheck implements Precheck {
   /// Cannot go to the previous page because the block is already on the first page.
   alreadyOnFirstPage(
     precheckCode: PrecheckCode.alreadyOnFirstPage,
-    // Hoặc mã precheck phù hợp trong hệ thống
     message: "Cannot go back",
     details: ["You are already on the first page."],
   ),

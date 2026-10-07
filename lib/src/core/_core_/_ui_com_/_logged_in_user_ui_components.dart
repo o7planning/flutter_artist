@@ -39,14 +39,14 @@ class _LoggedInUserUiComponents extends _UiComponents {
 
   @override
   Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
-    return debugFindMountedWidgetStates(
+    return _debugFindMountedWidgetStates(
       withLoggedInUserView: true,
       activeOnly: true,
     );
   }
 
   @DebugMethodAnnotation()
-  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> _debugFindMountedWidgetStates({
     required bool withLoggedInUserView,
     required bool activeOnly,
   }) {

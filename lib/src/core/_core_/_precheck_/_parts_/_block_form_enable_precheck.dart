@@ -1,52 +1,62 @@
 part of '../__precheck.dart';
 
+/// Precheck enumeration for block form enable operations.
 enum BlockFormEnablePrecheck implements FormEnablePrecheck {
+  /// Operation aborted because the block state is not ready for the form.
   hostStateNotReadyForForm(
     precheckCode: PrecheckCode.noForm,
-    message: "Block state is not ready for form",
-    details: [],
+    message: "Block state is not ready for form.",
+    details: ["The underlying block state does not permit form interaction."],
   ),
+
+  /// Operation aborted because no form model is configured.
   noForm(
     precheckCode: PrecheckCode.noForm,
-    message: "Block has no Form",
-    details: [],
+    message: "Block has no form.",
+    details: ["No form model is configured for this block."],
   ),
-  // formInNoneMode(
-  //   precheckCode: PrecheckCode.inNoneMode,
-  //   message: "The Form is disabled",
-  //   details: ["The form in 'none' mode"],
-  // ),
+
+  /// Operation aborted because the form is in a none state.
   formInNoneState(
     precheckCode: PrecheckCode.formInNoneState,
-    message: "Task Form is disabled.",
-    details: ["The form in none state."],
+    message: "Block form is disabled.",
+    details: ["The form is currently in a 'none' state."],
   ),
+
+  /// Operation aborted because the form is in a pending state.
   formInPendingState(
     precheckCode: PrecheckCode.formInPendingState,
-    message: "Task Form is disabled.",
-    details: ["The form in pending state."],
+    message: "Block form is disabled.",
+    details: ["The form is currently in a 'pending' state."],
   ),
+
+  /// Operation aborted because the form is in a fatal error state.
   formInFatalErrorState(
     precheckCode: PrecheckCode.formInFatalErrorState,
-    message: "Task Form is disabled.",
-    details: ["The form in fatal error state."],
+    message: "Block form is disabled.",
+    details: ["The form is currently in a fatal error state."],
   ),
+
+  /// Operation aborted because the form is in a stale state.
   formInStaleState(
     precheckCode: PrecheckCode.formInStaleState,
-    message: "Task Form is disabled.",
-    details: ["The form in stale state."],
+    message: "Block form is disabled.",
+    details: ["The form is currently in a stale state."],
   ),
+
+  /// Operation not allowed by application business rules.
   notAllow(
     precheckCode: PrecheckCode.notAllow,
-    message: "The Form is disabled.",
-    details: ["The application logic does not allow this item to be updated."],
+    message: "The form is disabled.",
+    details: ["Application business rules do not allow updating this item."],
   ),
+
+  /// An error occurred while executing the item update allow-check method.
   checkAllowMethodError(
     precheckCode: PrecheckCode.checkAllowMethodError,
-    message: "The Form is disabled.",
-    details: ["The isItemUpdateAllowed() method error."],
-  ),
-  ;
+    message: "The form is disabled.",
+    details: ["An error occurred during the item update permission check."],
+  );
 
   @override
   final PrecheckCode precheckCode;

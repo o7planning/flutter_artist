@@ -69,15 +69,14 @@ part of '../core.dart';
 /// ```
 ///
 abstract class Block<
-ID extends Comparable,
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>,
-FILTER_INPUT extends FilterInput, // EmptyFilterInput
-FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-CREATION_PRESET extends CreationPreset, // EmptyCreationPreset
-FORM_INPUT extends FormInput // EmptyFormInput
-> extends _Core
-    implements FormHost {
+    ID extends Comparable,
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>,
+    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
+    CREATION_PRESET extends CreationPreset, // EmptyCreationPreset
+    FORM_INPUT extends FormInput // EmptyFormInput
+    > extends _Core implements FormHost {
   late final Shelf shelf;
 
   Shelf get module => shelf;
@@ -138,14 +137,14 @@ FORM_INPUT extends FormInput // EmptyFormInput
   /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
   ///
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-  _registeredOrDefaultFilterModel;
+      _registeredOrDefaultFilterModel;
 
   ///
   /// This field is not null.
   /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
   ///
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-  get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
+      get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.defineShelfStructure()] method.
@@ -344,7 +343,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
   /// from the currently applied dataset criteria?
   bool get hasUnappliedFilter =>
       filterModel != null &&
-          filterModel!.committedFilterCriteria != filterCriteria;
+      filterModel!.committedFilterCriteria != filterCriteria;
 
   // nearestAncestorNonNoneDataState?
   BlockDataState get ancestralNonNoneDataState {
@@ -473,8 +472,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#086200",
         shortDesc:
-        "Create new ${debugObjHtml(_BlockSyncSessionState)} for ${debugObjHtml(
-            this)}",
+            "Create new ${debugObjHtml(_BlockSyncSessionState)} for ${debugObjHtml(this)}",
         parameters: {
           "parentItemId": parent?.currentItemId,
           "filterCriteria": filterCriteria,
@@ -489,8 +487,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#086300",
         shortDesc:
-        "${debugObjHtml(this)} use the current ${debugObjHtml(
-            _BlockSyncSessionState)}, no need to create.",
+            "${debugObjHtml(this)} use the current ${debugObjHtml(_BlockSyncSessionState)}, no need to create.",
       );
     }
 
@@ -532,8 +529,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#086800",
         shortDesc:
-        "Transitioned ${debugObjHtml(this)} dataState to ${debugObjHtml(
-            nextState)} due to BlockSyncSession update",
+            "Transitioned ${debugObjHtml(this)} dataState to ${debugObjHtml(nextState)} due to BlockSyncSession update",
       );
 
       _blockData._setBlockDataState(newBlockDataState: nextState);
@@ -598,7 +594,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#086900",
         shortDesc:
-        "Transitioned BlockItem dataState to stale for active item ID: $activeItemId",
+            "Transitioned BlockItem dataState to stale for active item ID: $activeItemId",
       );
     }
   }
@@ -657,8 +653,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#083750",
       shortDesc:
-      "${debugObjHtml(
-          this)} - marked current item ($activeItemId) as stale due to event reaction",
+          "${debugObjHtml(this)} - marked current item ($activeItemId) as stale due to event reaction",
     );
   }
 
@@ -674,7 +669,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       return false;
     }
     return blockSyncSessionState.parentBlockItemId ==
-        parentBlockCurrentItemId &&
+            parentBlockCurrentItemId &&
         blockSyncSessionState.filterCriteria == filterCriteria;
   }
 
@@ -690,8 +685,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     required this.formModel,
     required List<Block>? childBlocks,
     SortModelBuilder<ITEM>? sortModelBuilder,
-  })
-      : registeredFilterModelName = filterModelName,
+  })  : registeredFilterModelName = filterModelName,
         config = config.copy(),
         effectiveConfig = BlockEffectiveConfig._fromConfig(config),
         _childBlocks = childBlocks ?? [] {
@@ -702,9 +696,9 @@ FORM_INPUT extends FormInput // EmptyFormInput
     //
     _serverSideSortModel = sortModelBuilder?.createServerSideSortModel();
     _clientSideSortModel =
-    config.clientSideSortStrategy != SortStrategy.modelBased
-        ? null
-        : sortModelBuilder?.createClientSideSortModel();
+        config.clientSideSortStrategy != SortStrategy.modelBased
+            ? null
+            : sortModelBuilder?.createClientSideSortModel();
     _serverSideSortModel?.block = this;
     _clientSideSortModel?.block = this;
   }
@@ -881,7 +875,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
 
     // 2. Resolve data types that this block listens to for currentItem reactions
     final Set<Type> currentItemReactionTypes =
-    getResolvedReactionDataTypes(target: BlockReactionTarget.currentItem);
+        getResolvedReactionDataTypes(target: BlockReactionTarget.currentItem);
 
     if (currentItemReactionTypes.isEmpty) {
       return;
@@ -925,9 +919,9 @@ FORM_INPUT extends FormInput // EmptyFormInput
       eventSourceType: eventSourceType,
       mainDataTypes: eventDataKind == EventDataKind.main ? eventDataTypes : [],
       extraDataTypes:
-      eventDataKind == EventDataKind.extra ? eventDataTypes : [],
+          eventDataKind == EventDataKind.extra ? eventDataTypes : [],
       effectedItemIds:
-      effectedItemIds ?? (activeItemId != null ? [activeItemId] : []),
+          effectedItemIds ?? (activeItemId != null ? [activeItemId] : []),
     );
   }
 
@@ -956,7 +950,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
 
     // 2. Resolve dataset-level reaction types
     final Set<Type> blockReactionTypes =
-    getResolvedReactionDataTypes(target: BlockReactionTarget.block);
+        getResolvedReactionDataTypes(target: BlockReactionTarget.block);
 
     if (blockReactionTypes.isEmpty) {
       return;
@@ -992,7 +986,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       eventSourceType: eventSourceType,
       mainDataTypes: eventDataKind == EventDataKind.main ? eventDataTypes : [],
       extraDataTypes:
-      eventDataKind == EventDataKind.extra ? eventDataTypes : [],
+          eventDataKind == EventDataKind.extra ? eventDataTypes : [],
       syncStrategyOnFullQueryMode: syncStrategyOnFullQueryMode,
       syncStrategyOnPageableQueryMode: syncStrategyOnPageableQueryMode,
       effectedItemIds: effectedItemIds ?? [],
@@ -1154,7 +1148,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     if (effectiveConfig.onHideAction == BlockHiddenAction.clear) {
       Future.delayed(
         const Duration(seconds: 0),
-            () {
+        () {
           clearItems();
         },
       );
@@ -1180,17 +1174,14 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#007000",
       shortDesc:
-      "Begin ${debugObjHtml(this)} > ${executionUnitType
-          .asDebugExecutionUnit()}.",
+          "Begin ${debugObjHtml(this)} > ${executionUnitType.asDebugExecutionUnit()}.",
     );
     executionTrace.addInfo(
       codeId: "#007020",
       shortDesc:
-      "Clear all item of ${debugObjHtml(this)} and set to <b>pending</b>. "
+          "Clear all item of ${debugObjHtml(this)} and set to <b>pending</b>. "
           "Clear all data of child blocks and set them to <b>none</b>."
-          "${_childBlocks.isEmpty
-          ? '\n   ** No children -> Nothing to do!'
-          : ''}",
+          "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
     );
     //
     executionIntent.resultWrapper._setResult(
@@ -1227,8 +1218,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#013000",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()}",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
     );
     //
     executionTrace.addInfo(
@@ -1251,7 +1241,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#013200",
         shortDesc:
-        "${debugObjHtml(formModel)} clear data and set state to <b>none</b>.",
+            "${debugObjHtml(formModel)} clear data and set state to <b>none</b>.",
       );
       formModel!._clearDataWithDataState(formDataState: FormDataStateNone());
     }
@@ -1259,9 +1249,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#013400",
       shortDesc: "Clear data of all child blocks and set them to <b>none</b>."
-          "${_childBlocks.isEmpty
-          ? '\n   ** No children -> Nothing to do!'
-          : ''}",
+          "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
     );
     // Test Case: [38b].
     __clearAllChildrenBlocksToNone(
@@ -1297,8 +1285,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#003000",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()}.",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}.",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -1310,12 +1297,12 @@ FORM_INPUT extends FormInput // EmptyFormInput
     final XFilterModel xFilterModel = thisXBlock.xFilterModel;
     final FilterModel filterModel = xFilterModel.filterModel;
     final FilterCriteriaSnapshot<FILTER_CRITERIA>?
-    committedFilterCriteriaSnapshot =
-    filterModel._committedFilterCriteriaSnapshot
-    as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
+        committedFilterCriteriaSnapshot =
+        filterModel._committedFilterCriteriaSnapshot
+            as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
 
     final bool provideBlockContext =
-    ui.hasBlockContext(includeDescendants: true);
+        ui.hasBlockContext(includeDescendants: true);
 
     executionTrace.addInfo(
       codeId: "#003020",
@@ -1330,7 +1317,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         _blockSyncSessionState;
 
     final BlockQueryPlan<ID> queryPlan =
-    BlockQueryStrategyResolver.resolveQueryPlan<ID>(
+        BlockQueryStrategyResolver.resolveQueryPlan<ID>(
       block: this,
       syncSessionState: currentSyncSessionState,
       queryHint: initialQueryHint,
@@ -1348,15 +1335,15 @@ FORM_INPUT extends FormInput // EmptyFormInput
       snapshot: _blockSyncSessionState == null
           ? null
           : BlockSyncDiagnosticSnapshot<ID>(
-        syncSessionState: _blockSyncSessionState,
-        blockDataState: dataState,
-        effectiveConfig: effectiveConfig,
-        itemIds: itemIds,
-        parentBlockCurrentItemId: parentBlockCurrentItemId,
-        filterCriteria: filterCriteria,
-        queryHint: initialQueryHint,
-        provideBlockContext: provideBlockContext,
-      ),
+              syncSessionState: _blockSyncSessionState,
+              blockDataState: dataState,
+              effectiveConfig: effectiveConfig,
+              itemIds: itemIds,
+              parentBlockCurrentItemId: parentBlockCurrentItemId,
+              filterCriteria: filterCriteria,
+              queryHint: initialQueryHint,
+              provideBlockContext: provideBlockContext,
+            ),
     );
 
     // =========================================================================
@@ -1366,7 +1353,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#003060",
         shortDesc:
-        "QueryPlan action is NULL -> Skip query execution and preserve active viewport.",
+            "QueryPlan action is NULL -> Skip query execution and preserve active viewport.",
       );
 
       // Reconciled successfully with zero mutations: Clear event session
@@ -1396,7 +1383,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#003260",
         shortDesc:
-        "Error in FilterModel of ${debugObjHtml(this)}, keep block data state",
+            "Error in FilterModel of ${debugObjHtml(this)}, keep block data state",
       );
       __stopQueryWithFilterErrorCascade(
         thisXBlock: thisXBlock,
@@ -1406,9 +1393,9 @@ FORM_INPUT extends FormInput // EmptyFormInput
     }
 
     committedFilterCriteriaSnapshot
-    as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
+        as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
     final bool filterCriteriaChanged =
-    _blockData._isFilterCriteriaSnapshotChanged(
+        _blockData._isFilterCriteriaSnapshotChanged(
       newFilterCriteriaSnapshot: committedFilterCriteriaSnapshot,
     );
 
@@ -1419,7 +1406,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     final BlockErrorMethod performQryMethod = switch (resolvedQueryAction) {
       BlockResolvedQueryAction.performQuery => BlockErrorMethod.performQuery,
       BlockResolvedQueryAction.performQueryByItemIds =>
-      BlockErrorMethod.performQueryByItemIds,
+        BlockErrorMethod.performQueryByItemIds,
     };
 
     executionTrace.addInfo(
@@ -1443,7 +1430,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     ListUpdateStrategy realListUpdateStrategy;
 
     final Pageable? willBeUsedPageable =
-    thisXBlock.getWillBeUsedPageable(thisXBlock.queryType);
+        thisXBlock.getWillBeUsedPageable(thisXBlock.queryType);
     List<ID>? itemIdsToQry;
 
     // =========================================================================
@@ -1567,8 +1554,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#003400",
           shortDesc:
-          "The ${debugObjHtml(this)}.${performQryMethod
-              .name}() method was called with an error!",
+              "The ${debugObjHtml(this)}.${performQryMethod.name}() method was called with an error!",
           errorInfo: errorInfo,
         );
       } finally {
@@ -1599,7 +1585,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       );
 
       final BlockQueryCalculatorResult calculationResult =
-      BlockQueryStateCalculator.calculate(calculationInput);
+          BlockQueryStateCalculator.calculate(calculationInput);
 
       realListUpdateStrategy = calculationResult.realListUpdateStrategy;
       newBlockDataState = calculationResult.newBlockDataState;
@@ -1608,8 +1594,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#003460",
           shortDesc:
-          "${debugObjHtml(
-              this)} --> Query error -> newBlockDataState: $newBlockDataState",
+              "${debugObjHtml(this)} --> Query error -> newBlockDataState: $newBlockDataState",
         );
         _blockData._updateStateAfterQueryError(
           newBlockDataState: newBlockDataState,
@@ -1666,7 +1651,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       if (itemIdsToQry != null && itemIdsToQry.isNotEmpty) {
         for (final ID itmId in itemIdsToQry) {
           final ITEM? found =
-          queriedItemList.firstWhereOrNull((it) => it.id == itmId);
+              queriedItemList.firstWhereOrNull((it) => it.id == itmId);
           if (found == null) {
             removeItemIds.add(itmId);
           }
@@ -1751,7 +1736,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#003610",
           shortDesc:
-          "Clear ${debugObjHtml(formModel)} data and set to <b>none</b>.",
+              "Clear ${debugObjHtml(formModel)} data and set to <b>none</b>.",
         );
         formModel!
             ._clearDataWithDataState(formDataState: const FormDataStateNone());
@@ -1759,10 +1744,8 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#003620",
         shortDesc:
-        "Clear data of all child blocks and set them to <b>none</b> state."
-            "${_childBlocks.isEmpty
-            ? '\n   ** No children -> Nothing to do!'
-            : ''}",
+            "Clear data of all child blocks and set them to <b>none</b> state."
+            "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       );
       __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
     } else {
@@ -1780,7 +1763,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#003660",
         shortDesc:
-        "This query in naturalMode and formMode is creation --> do nothing.",
+            "This query in naturalMode and formMode is creation --> do nothing.",
       );
       return;
     }
@@ -1825,23 +1808,22 @@ FORM_INPUT extends FormInput // EmptyFormInput
     }
 
     final BlockSetCurrentItemDirective setCurrentItemDirective =
-    switch (afterQueryDirective) {
+        switch (afterQueryDirective) {
       BlockAfterQueryDirective.clearCurrentItem ||
       BlockAfterQueryDirective.createNewItem =>
-      throw UnimplementedError("Handled in early returns above."),
+        throw UnimplementedError("Handled in early returns above."),
       BlockAfterQueryDirective.setAnItemAsCurrentIfNeed =>
-      BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
+        BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
       BlockAfterQueryDirective.setAnItemAsCurrent =>
-      BlockSetCurrentItemDirective.setAnItemAsCurrent,
+        BlockSetCurrentItemDirective.setAnItemAsCurrent,
       BlockAfterQueryDirective.setAnItemAsCurrentThenLoadForm =>
-      BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm,
+        BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm,
     };
 
     executionTrace.addInfo(
       codeId: "#003780",
       shortDesc:
-      "Calculated >> @setCurrentItemDirective: ${debugObjHtml(
-          setCurrentItemDirective)}.",
+          "Calculated >> @setCurrentItemDirective: ${debugObjHtml(setCurrentItemDirective)}.",
     );
     executionTrace.addExecutionIntent(
       codeId: "#003800",
@@ -1868,7 +1850,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     BlockSetCurrentItemDirective? setCurrentItemDirective;
     final defaultAfterQueryDirective = FlutterArtist.defaultAfterQueryDirective;
     final defaultDirective =
-    defaultAfterQueryDirective.toSetCurrentItemDirective();
+        defaultAfterQueryDirective.toSetCurrentItemDirective();
 
     if (thisXBlock.xShelf.naturalMode) {
       executionTrace.addInfo(
@@ -1879,7 +1861,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#003100",
           shortDesc:
-          "The ${debugObjHtml(this)} is in creation mode --> cancel query.",
+              "The ${debugObjHtml(this)} is in creation mode --> cancel query.",
         );
         return;
       }
@@ -1894,7 +1876,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#003120",
         shortDesc:
-        "The block has no currentItem and @setCurrentItemDirective is null --> Cancel query.",
+            "The block has no currentItem and @setCurrentItemDirective is null --> Cancel query.",
       );
       return;
     }
@@ -1931,7 +1913,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required final BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
-    executionIntent,
+        executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
     thisXBlock._createAndSetBlockExecutionIntentDone(
@@ -1944,8 +1926,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#028000",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()}.",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}.",
       parameters: {
         "inputCandidateCurrItem": inputCandidateCurrItem,
         "newQueriedList": newQueriedList,
@@ -1958,8 +1939,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#028020",
         shortDesc:
-        "${debugObjHtml(formModel)} -> set <b>manualDirty</b> to ${debugObjHtml(
-            manualDirty)}.",
+            "${debugObjHtml(formModel)} -> set <b>manualDirty</b> to ${debugObjHtml(manualDirty)}.",
       );
       formModel?._formModelStructure._setManualDirty(manualDirty);
     }
@@ -2004,8 +1984,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#028120",
           shortDesc:
-          "inputCandidateCurrItem: ${debugObjHtml(
-              inputCandidateCurrItem)} not in the list items of the block.",
+              "inputCandidateCurrItem: ${debugObjHtml(inputCandidateCurrItem)} not in the list items of the block.",
         );
         candidateCurrItem = null;
       } else {
@@ -2029,11 +2008,8 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#028080",
         shortDesc:
-        "${debugObjHtml(
-            this)} has no item -> clear all data in child blocks and set them to <b>none</b>."
-            "${_childBlocks.isEmpty
-            ? '\n   ** No children -> Nothing to do!'
-            : ''}",
+            "${debugObjHtml(this)} has no item -> clear all data in child blocks and set them to <b>none</b>."
+            "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       );
 
       // Record transition to null as there are no items available
@@ -2068,7 +2044,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     // OK, Now candidateCurrItem is NOT NULl.
     //
     final bool isCandidateCurrentItemInNewQueriedList =
-    FaItemsUtils.isListContainItem<ITEM, ID>(
+        FaItemsUtils.isListContainItem<ITEM, ID>(
       targetList: newQueriedList,
       item: candidateCurrItem,
       getItemId: _getItemIdInternal,
@@ -2114,13 +2090,13 @@ FORM_INPUT extends FormInput // EmptyFormInput
         "unifiedItemRefreshPolicy": effectiveConfig.unifiedItemRefreshPolicy,
         "setCurrentItemDirective": executionIntent.setCurrentItemDirective,
         "isCandidateCurrentItemInNewQueriedList":
-        isCandidateCurrentItemInNewQueriedList,
+            isCandidateCurrentItemInNewQueriedList,
         "isCandidateItemDifferentFromCurrent": currItemMaybeChanged,
       },
     );
     //
     final BlockCurrentItemPlan blkState =
-    BlockCurrentItemResolver.resolveCurrentItem(
+        BlockCurrentItemResolver.resolveCurrentItem(
       executionTrace: executionTrace,
       debug: false,
       thisXBlock: thisXBlock,
@@ -2133,7 +2109,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       unifiedItemRefreshPolicy: effectiveConfig.unifiedItemRefreshPolicy,
       setCurrentItemDirective: executionIntent.setCurrentItemDirective,
       isCandidateCurrentItemInNewQueriedList:
-      isCandidateCurrentItemInNewQueriedList,
+          isCandidateCurrentItemInNewQueriedList,
       isCandidateItemDifferentFromCurrent: currItemMaybeChanged,
     );
     //
@@ -2147,7 +2123,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#028670",
         shortDesc:
-        "@candidateItemAccepted: <b>false</b> --> Clean all data of child blocks and set them to none.",
+            "@candidateItemAccepted: <b>false</b> --> Clean all data of child blocks and set them to none.",
       );
       // Record candidate rejection step
       blockSetCurrentItemResult.recordCurrentTransition(
@@ -2201,7 +2177,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         "candidateCurrItem": candidateCurrItem,
         "isCandidateIsCurrent": isCandidateIsCurrent,
         "isCandidateCurrentItemInNewQueriedList":
-        isCandidateCurrentItemInNewQueriedList,
+            isCandidateCurrentItemInNewQueriedList,
         "absentItemContextPolicy": effectiveConfig.absentItemContextPolicy,
       },
     );
@@ -2219,18 +2195,17 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#028800",
         shortDesc:
-        "The candidate ${debugObjHtml(
-            candidateCurrItem)} will not need to be reloaded.",
+            "The candidate ${debugObjHtml(candidateCurrItem)} will not need to be reloaded.",
       );
       final ITEM? candidateCurrItemInNewQueriedList =
-      FaItemsUtils.findItemInList(
+          FaItemsUtils.findItemInList(
         item: candidateCurrItem,
         targetList: executionIntent.newQueriedList,
         getItemId: _getItemIdInternal,
       );
       if (ITEM == ITEM_DETAIL && candidateCurrItemInNewQueriedList != null) {
         refreshedCurrentItemDetail =
-        candidateCurrItemInNewQueriedList as ITEM_DETAIL;
+            candidateCurrItemInNewQueriedList as ITEM_DETAIL;
       }
     }
     // forceReloadItem
@@ -2272,8 +2247,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
           executionTrace.addInfo(
             codeId: "#028920",
             shortDesc:
-            "Result --> @refreshedCurrentItemDetail: ${debugObjHtml(
-                refreshedCurrentItemDetail)}.",
+                "Result --> @refreshedCurrentItemDetail: ${debugObjHtml(refreshedCurrentItemDetail)}.",
           );
         } catch (e, stackTrace) {
           final ErrorInfo errorInfo = _handleError(
@@ -2298,8 +2272,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
           executionTrace.addInfo(
             codeId: "#029000",
             shortDesc:
-            "The ${debugObjHtml(
-                this)}.$methodName() method was called with an error!",
+                "The ${debugObjHtml(this)}.$methodName() method was called with an error!",
             errorInfo: errorInfo,
           );
           return;
@@ -2318,8 +2291,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#029040",
         shortDesc:
-        "Candidate ${debugObjHtml(
-            candidateCurrItem)} seems to have been deleted from the system "
+            "Candidate ${debugObjHtml(candidateCurrItem)} seems to have been deleted from the system "
             "--> remove it from the block..",
       );
 
@@ -2357,8 +2329,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#029100",
           shortDesc:
-          "Found new candidate ${debugObjHtml(
-              siblingItem)} --> set it as current.",
+              "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
         );
 
         blockSetCurrentItemResult.recordCurrentTransition(
@@ -2373,7 +2344,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
           newQueriedList: executionIntent.newQueriedList,
           inputCandidateCurrItem: siblingItem,
           forceReloadItem:
-          !isCandidateIsCurrent && executionIntent.forceReloadItem,
+              !isCandidateIsCurrent && executionIntent.forceReloadItem,
           formLoadHint: null,
         );
         return;
@@ -2393,7 +2364,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
           executionTrace.addInfo(
             codeId: "#029200",
             shortDesc:
-            "Set ${debugObjHtml(formModel!)} dataState to <b>none</b>.",
+                "Set ${debugObjHtml(formModel!)} dataState to <b>none</b>.",
           );
           formModel!
               ._clearDataWithDataState(formDataState: FormDataStateNone());
@@ -2402,10 +2373,8 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#029220",
           shortDesc:
-          "Clear all data in child blocks and set them to <b>none</b>."
-              "${_childBlocks.isEmpty
-              ? '\n   ** No children -> Nothing to do!'
-              : ''}",
+              "Clear all data in child blocks and set them to <b>none</b>."
+              "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         );
 
         for (final child in thisXBlock.childXBlocks) {
@@ -2441,7 +2410,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
           caller: this,
           methodName: methodName,
           suffixShortDesc:
-          "To convert <b>ITEM_DETAIL</b> to <b>ITEM</b>, {debugObjHtml(refreshedCurrentItemDetail)} --> ${_debugItemTypeHtml()}.",
+              "To convert <b>ITEM_DETAIL</b> to <b>ITEM</b>, {debugObjHtml(refreshedCurrentItemDetail)} --> ${_debugItemTypeHtml()}.",
         );
 
         candidateCurrItem = __convertItemDetailToItem(
@@ -2471,8 +2440,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#029440",
           shortDesc:
-          "The ${debugObjHtml(
-              this)}.$methodName() method was called with an error!",
+              "The ${debugObjHtml(this)}.$methodName() method was called with an error!",
           errorInfo: errorInfo,
         );
         return;
@@ -2523,7 +2491,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#029520",
           shortDesc:
-          "Current Item Changed/Queried --> Clear form and set to Pending.",
+              "Current Item Changed/Queried --> Clear form and set to Pending.",
         );
         formModel!._clearDataWithDataState(
           formDataState: FormDataStatePending(),
@@ -2534,7 +2502,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
           shortDesc: "Current Item Refreshed --> Set Form to Stale.",
         );
         final newFormDataState =
-        BlockFormDataStateUtils.calculateNewLazyDataState(
+            BlockFormDataStateUtils.calculateNewLazyDataState(
           currentFormDataState: formModel!.dataState,
           hasCurrentItem: true,
           currentItemChanged: false,
@@ -2570,10 +2538,8 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#029640",
         shortDesc:
-        "The <b>currentItem</b> has changed --> clear all data in child blocks and set them to <b>pending</b>."
-            "${_childBlocks.isEmpty
-            ? '\n   ** No children -> Nothing to do!'
-            : ''}",
+            "The <b>currentItem</b> has changed --> clear all data in child blocks and set them to <b>pending</b>."
+            "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       );
 
       for (final child in thisXBlock.childXBlocks) {
@@ -2611,8 +2577,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#008000",
       shortDesc:
-      "${debugObjHtml(this)} --> Begin ${executionUnitType
-          .asDebugExecutionUnit()} for ${debugObjHtml(this)}.",
+          "${debugObjHtml(this)} --> Begin ${executionUnitType.asDebugExecutionUnit()} for ${debugObjHtml(this)}.",
     );
 
     const bool errorIfItemNotInTheBlock = true;
@@ -2627,8 +2592,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         "errorIfItemNotInTheBlock": errorIfItemNotInTheBlock,
       },
       note: "Call this method to check before deleting an item. "
-          "(**) You can override ${debugObjHtml(
-          this)}.isItemDeletionAllowed() method.",
+          "(**) You can override ${debugObjHtml(this)}.isItemDeletionAllowed() method.",
     );
 
     final deletionResult = executionIntent.resultWrapper._setResult(
@@ -2646,10 +2610,8 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#008060",
       shortDesc: isCurrent
-          ? "You are deleting the current item - ${debugObjHtml(
-          executionIntent.item)}."
-          : "You are deleting an item that is not the current item - ${debugObjHtml(
-          executionIntent.item)}.",
+          ? "You are deleting the current item - ${debugObjHtml(executionIntent.item)}."
+          : "You are deleting an item that is not the current item - ${debugObjHtml(executionIntent.item)}.",
     );
 
     final String methodName = "performDeleteItemById";
@@ -2676,8 +2638,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addBroadcastEvent(
         codeId: "#008180",
         shortDesc:
-        "${debugObjHtml(
-            this)} > Fire event after deleting ${_debugItemTypeHtml()}($itemId).",
+            "${debugObjHtml(this)} > Fire event after deleting ${_debugItemTypeHtml()}($itemId).",
       );
       effectedItemIds.add(itemId);
 
@@ -2714,8 +2675,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#008200",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}.$methodName() method was called with an error!",
+            "The ${debugObjHtml(this)}.$methodName() method was called with an error!",
         errorInfo: errorInfo,
       );
       return;
@@ -2732,8 +2692,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#008240",
         shortDesc:
-        "Remove ${debugObjHtml(executionIntent.item)} from ${debugObjHtml(
-            this)}. (*) This item was not current item.",
+            "Remove ${debugObjHtml(executionIntent.item)} from ${debugObjHtml(this)}. (*) This item was not current item.",
       );
       await __removeItemFromList(
         executionTrace: executionTrace,
@@ -2775,8 +2734,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#008280",
         shortDesc:
-        "Remove ${debugObjHtml(executionIntent.item)} from ${debugObjHtml(
-            this)}. (*) This item was current item.",
+            "Remove ${debugObjHtml(executionIntent.item)} from ${debugObjHtml(this)}. (*) This item was current item.",
       );
 
       await __removeItemFromList(
@@ -2798,8 +2756,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#008320",
           shortDesc:
-          "${debugObjHtml(
-              formModel)} --> clear formModel, set dataState to <b>none</b>.",
+              "${debugObjHtml(formModel)} --> clear formModel, set dataState to <b>none</b>.",
         );
         formModel!._clearDataWithDataState(
           formDataState: const FormDataStateNone(),
@@ -2809,9 +2766,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#008340",
         shortDesc: "Clear data of all child blocks and set them to <b>none</b>."
-            "${_childBlocks.isEmpty
-            ? '\n   ** No children -> Nothing to do!'
-            : ''}",
+            "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       );
 
       for (final child in thisXBlock.childXBlocks) {
@@ -2920,8 +2875,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#042000",
       shortDesc:
-      "Begin ${debugObjHtml(this)} -> ${executionUnitType
-          .asDebugExecutionUnit()}.",
+          "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
       parameters: {
         "items": executionIntent.items,
         "stopIfError": executionIntent.stopIfError,
@@ -2984,7 +2938,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#042660",
           shortDesc:
-          "The ${debugObjHtml(delItem)} item has been successfully deleted!",
+              "The ${debugObjHtml(delItem)} item has been successfully deleted!",
         );
 
         // 1. Audit journal tracking via BlockOperationStep
@@ -3009,7 +2963,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
           executionTrace.addInfo(
             codeId: "#042760",
             shortDesc:
-            "The current item has been deleted! Set current item to <b>null</b>.",
+                "The current item has been deleted! Set current item to <b>null</b>.",
           );
           currentItemDeleted = true;
 
@@ -3023,7 +2977,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
             executionTrace.addInfo(
               codeId: "#042780",
               shortDesc:
-              "Clear ${debugObjHtml(formModel)} and set to <b>none</b>.",
+                  "Clear ${debugObjHtml(formModel)} and set to <b>none</b>.",
             );
             formModel!._clearDataWithDataState(
               formDataState: const FormDataStateNone(),
@@ -3033,10 +2987,8 @@ FORM_INPUT extends FormInput // EmptyFormInput
           executionTrace.addInfo(
             codeId: "#042800",
             shortDesc:
-            "Clear all data of child blocks and set them to <b>none</b>."
-                "${_childBlocks.isEmpty
-                ? '\n   ** No children -> Nothing to do!'
-                : ''}",
+                "Clear all data of child blocks and set them to <b>none</b>."
+                "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
           );
 
           for (final child in thisXBlock.childXBlocks) {
@@ -3077,8 +3029,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
           executionTrace.addInfo(
             codeId: "#042860",
             shortDesc:
-            "@stopIfError: ${debugObjHtml(
-                executionIntent.stopIfError)} --> Stop batch deletion!",
+                "@stopIfError: ${debugObjHtml(executionIntent.stopIfError)} --> Stop batch deletion!",
             errorInfo: errorInfo,
           );
           break;
@@ -3097,8 +3048,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addBroadcastEvent(
         codeId: "#042900",
         shortDesc:
-        "${debugObjHtml(this)} > Fire event after deleting (${deletionResult
-            .deletedItems.length} items deleted!).",
+            "${debugObjHtml(this)} > Fire event after deleting (${deletionResult.deletedItems.length} items deleted!).",
       );
 
       __broadcastEventFromBlockToOtherShelves(
@@ -3153,8 +3103,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
           owner: this,
           executionIntentType: BlockSetCurrentItemIntent,
           suffixShortDesc:
-          "Active item was deleted in batch. Designating fallback candidate: ${debugObjHtml(
-              nextCandidateItem)}.",
+              "Active item was deleted in batch. Designating fallback candidate: ${debugObjHtml(nextCandidateItem)}.",
         );
 
         thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
@@ -3211,7 +3160,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>
-    executionIntent,
+        executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
     thisXBlock._createAndSetBlockExecutionIntentDone(
@@ -3250,9 +3199,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#004040",
       shortDesc: "Clear all data of child blocks and set them to <b>none</b>."
-          "${_childBlocks.isEmpty
-          ? '\n   ** No children -> Nothing to do!'
-          : ''}",
+          "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
     );
     __clearAllChildrenBlocksToNone(
       thisXBlock: thisXBlock,
@@ -3298,8 +3245,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#004120",
           shortDesc:
-          "${debugObjHtml(formModel)} manually set dirty to ${executionIntent
-              .initDirty}.",
+              "${debugObjHtml(formModel)} manually set dirty to ${executionIntent.initDirty}.",
         );
         formModel!._formModelStructure
             ._setManualDirty(executionIntent.initDirty);
@@ -3326,7 +3272,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     required ExecutionUnitType executionUnitType,
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
     required BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>
-    executionIntent,
+        executionIntent,
   }) async {
     __assertThisXBlock(thisXBlock);
     thisXBlock._createAndSetBlockExecutionIntentDone(
@@ -3335,12 +3281,11 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#009000",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()}",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
     );
     final action = executionIntent.action;
     final BlockQuickItemCreationResult executionUnitResult =
-    executionIntent.resultWrapper._setResult(
+        executionIntent.resultWrapper._setResult(
       BlockQuickItemCreationResult(),
       objectCaller: this,
       methodName: '_unitQuickCreateItem',
@@ -3372,7 +3317,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         stackTrace: stackTrace,
         showSnackBar: true,
         tipDocument:
-        TipDocument.blockQuickItemCreationActionPerformQuickCreateItem,
+            TipDocument.blockQuickItemCreationActionPerformQuickCreateItem,
       );
       //
       executionUnitResult._setErrorInfo(
@@ -3382,8 +3327,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#009200",
         shortDesc:
-        "The ${debugObjHtml(
-            action)}.$methodName() method was called with an error!",
+            "The ${debugObjHtml(action)}.$methodName() method was called with an error!",
         errorInfo: errorInfo,
       );
       return;
@@ -3415,7 +3359,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         stackTrace: stackTrace,
         showSnackBar: true,
         tipDocument:
-        TipDocument.blockQuickItemCreationActionPerformQuickCreateItem,
+            TipDocument.blockQuickItemCreationActionPerformQuickCreateItem,
       );
       //
       executionUnitResult._setErrorInfo(
@@ -3425,8 +3369,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#009260",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}._processSaveActionRestResult() method was called with an error!",
+            "The ${debugObjHtml(this)}._processSaveActionRestResult() method was called with an error!",
         errorInfo: errorInfo,
       );
     }
@@ -3451,12 +3394,11 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#014000",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()}",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
     );
     final action = executionIntent.action;
     final BlockQuickItemUpdateResult executionUnitResult =
-    executionIntent.resultWrapper._setResult(
+        executionIntent.resultWrapper._setResult(
       BlockQuickItemUpdateResult(),
       objectCaller: this,
       methodName: '_unitQuickUpdateItem',
@@ -3492,7 +3434,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         stackTrace: stackTrace,
         showSnackBar: true,
         tipDocument:
-        TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem,
+            TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem,
       );
       //
       executionUnitResult._setErrorInfo(
@@ -3502,8 +3444,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#014060",
         shortDesc:
-        "The ${debugObjHtml(
-            action)}.performQuickUpdateItem() method was called with an error.",
+            "The ${debugObjHtml(action)}.performQuickUpdateItem() method was called with an error.",
         errorInfo: errorInfo,
       );
       return;
@@ -3535,7 +3476,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         stackTrace: stackTrace,
         showSnackBar: true,
         tipDocument:
-        TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem,
+            TipDocument.blockQuickItemUpdateActionPerformQuickUpdateItem,
       );
       //
       executionUnitResult._setErrorInfo(
@@ -3545,8 +3486,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#014100",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}._processSaveActionRestResult() method was called with an error.",
+            "The ${debugObjHtml(this)}._processSaveActionRestResult() method was called with an error.",
         errorInfo: errorInfo,
       );
       return;
@@ -3571,8 +3511,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#045000",
       shortDesc:
-      "Begin ${debugObjHtml(this)} ->  ${executionUnitType
-          .asDebugExecutionUnit()}.",
+          "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
     );
     final action = executionIntent.action;
     final executionUnitResult = executionIntent.resultWrapper._setResult(
@@ -3615,8 +3554,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#045200",
         shortDesc:
-        "The ${debugObjHtml(
-            action)}.performBackendOperation() method was called with an error!",
+            "The ${debugObjHtml(action)}.performBackendOperation() method was called with an error!",
         errorInfo: errorInfo,
       );
       return;
@@ -3641,9 +3579,9 @@ FORM_INPUT extends FormInput // EmptyFormInput
       suffixShortDesc: "",
       parameters: {
         "syncStrategyOnFullQueryMode":
-        action.config.syncStrategyOnFullQueryMode,
+            action.config.syncStrategyOnFullQueryMode,
         "syncStrategyOnPageableQueryMode":
-        action.config.syncStrategyOnPageableQueryMode,
+            action.config.syncStrategyOnPageableQueryMode,
       },
     );
     //
@@ -3657,7 +3595,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       //
       syncStrategyOnFullQueryMode: action.config.syncStrategyOnFullQueryMode,
       syncStrategyOnPageableQueryMode:
-      action.config.syncStrategyOnPageableQueryMode,
+          action.config.syncStrategyOnPageableQueryMode,
       mainDataTypes: getDeclaredMainDataTypes().toList(),
       // TODO Review.
       extraDataTypes: [],
@@ -3669,7 +3607,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addBroadcastEvent(
       codeId: "#045500",
       shortDesc:
-      "${debugObjHtml(this)} > Fire event after execute backend action.",
+          "${debugObjHtml(this)} > Fire event after execute backend action.",
     );
     //
     __broadcastEventFromBlockToOtherShelves(
@@ -3720,7 +3658,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     final fallbackDilemmaStrategy = FallbackDilemmaStrategy.preserveStableCache;
 
     final BlockDataState newBlockDataState =
-    BlockQueryStateCalculator.calculateDataStateOnError(
+        BlockQueryStateCalculator.calculateDataStateOnError(
       currentDataState: dataState,
       blockErrorOrigin: blockErrorOrigin,
       blockErrorInfo: blockErrorInfo,
@@ -3731,7 +3669,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     _blockData._blockDataState = newBlockDataState;
 
     final List<XBlock> descendantXBlocks =
-    thisXBlock.getDescendantXBlocks(sameFilterOnly: true);
+        thisXBlock.getDescendantXBlocks(sameFilterOnly: true);
 
     __stopDescendantQueryWithError(
       descendantXBlocks: descendantXBlocks,
@@ -3752,7 +3690,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       final descendantBlock = descendantXBlock.block;
 
       final descendantState =
-      BlockQueryStateCalculator.calculateDataStateOnError(
+          BlockQueryStateCalculator.calculateDataStateOnError(
         currentDataState: descendantBlock.dataState,
         blockErrorOrigin: blockErrorOrigin,
         blockErrorInfo: null,
@@ -3790,7 +3728,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#016000",
         shortDesc:
-        "The <b>$callingClassName.$calledMethodName()</b> method was called with an error.",
+            "The <b>$callingClassName.$calledMethodName()</b> method was called with an error.",
         errorInfo: errorInfo,
       );
       return;
@@ -3831,8 +3769,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         caller: this,
         methodName: "needToKeepItemInList",
         suffixShortDesc:
-        "To decide whether to keep item ${debugObjHtml(
-            savedItemDetail)} in the list or not..",
+            "To decide whether to keep item ${debugObjHtml(savedItemDetail)} in the list or not..",
         parameters: {
           "parentBlockCurrentItem": parentBlockCurrentItemId,
           "filterCriteria": filterCriteria,
@@ -3853,7 +3790,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       effectedItemId = savedItemDetail?.id;
     }
     final List<ID> effectiveItemIds =
-    effectedItemId == null ? [] : [effectedItemId];
+        effectedItemId == null ? [] : [effectedItemId];
     //
     if (broadcastExternalShelfEvent) {
       executionTrace.addSeparator();
@@ -3861,8 +3798,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addBroadcastEvent(
         codeId: "#016200",
         shortDesc:
-        "${debugObjHtml(
-            this)} > Save successful --> An event occurred --> checking if it should be broadcasted.",
+            "${debugObjHtml(this)} > Save successful --> An event occurred --> checking if it should be broadcasted.",
       );
       __broadcastEventFromBlockToOtherShelves(
         executionTrace: executionTrace,
@@ -3888,8 +3824,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         caller: this,
         methodName: "convertItemDetailToItem",
         suffixShortDesc:
-        "To convert ${debugObjHtml(
-            savedItemDetail)} to ${_debugItemTypeHtml()}.",
+            "To convert ${debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
       );
       ITEM refreshedItem = __convertItemDetailToItem(
         itemDetail: savedItemDetail,
@@ -3897,14 +3832,14 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#016280",
         shortDesc:
-        "Insert or replace ${debugObjHtml(refreshedItem)} into the list.",
+            "Insert or replace ${debugObjHtml(refreshedItem)} into the list.",
       );
       _blockData._insertOrReplaceItem(
         item: refreshedItem,
       );
       //
       Actionable<BlockItemEditPrecheck> actionable =
-      checkBeforeEditItemOnForm(item: refreshedItem);
+          checkBeforeEditItemOnForm(item: refreshedItem);
       //
       final ID itemId = __getItemIdShowErr(refreshedItem, showErr: true);
       thisXBlock._addRecentLoadedItem(
@@ -3929,10 +3864,8 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#016360",
           shortDesc:
-          "Just created an item -> clear data of all child blocks and set them to <b>pending</b>."
-              "${_childBlocks.isEmpty
-              ? '\n   ** No children -> Nothing to do!'
-              : ''}",
+              "Just created an item -> clear data of all child blocks and set them to <b>pending</b>."
+              "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         );
         __clearAllChildrenBlocksToPending(
           thisXBlock: thisXBlock,
@@ -3974,8 +3907,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
           caller: this,
           methodName: "convertItemDetailToItem",
           suffixShortDesc:
-          "To convert ${debugObjHtml(
-              savedItemDetail)} to ${_debugItemTypeHtml()}.",
+              "To convert ${debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
         );
         savedItem = __convertItemDetailToItem(
           itemDetail: savedItemDetail,
@@ -3993,8 +3925,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
           executionTrace.addInfo(
             codeId: "#016560",
             shortDesc:
-            "${debugObjHtml(this)} --> remove the ${debugObjHtml(
-                removeItem)} from the list. "
+                "${debugObjHtml(this)} --> remove the ${debugObjHtml(removeItem)} from the list. "
                 "(*) This item is not current item.",
           );
           await __removeItemFromList(
@@ -4019,8 +3950,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#016600",
           shortDesc:
-          "${debugObjHtml(this)} --> remove the current item ${debugObjHtml(
-              removeItem)}.",
+              "${debugObjHtml(this)} --> remove the current item ${debugObjHtml(removeItem)}.",
         );
         // Remove Item (Current Item)
         await __removeItemFromList(
@@ -4042,8 +3972,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
           executionTrace.addInfo(
             codeId: "#016660",
             shortDesc:
-            "${debugObjHtml(
-                formModel)} clear form data and set to <b>none</b>.",
+                "${debugObjHtml(formModel)} clear form data and set to <b>none</b>.",
           );
           // Clear Form:
           formModel!._clearDataWithDataState(
@@ -4054,10 +3983,8 @@ FORM_INPUT extends FormInput // EmptyFormInput
         executionTrace.addInfo(
           codeId: "#016700",
           shortDesc:
-          "Clear data of all child blocks and set them to <b>none</b>."
-              "${_childBlocks.isEmpty
-              ? '\n   ** No children -> Nothing to do!'
-              : ''}",
+              "Clear data of all child blocks and set them to <b>none</b>."
+              "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         );
         // TODO: Test cases.
         __clearAllChildrenBlocksToNone(
@@ -4135,7 +4062,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     final XShelf xShelf = _XShelfBlockClearCurrentItem(block: this);
     //
     final thisXBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     thisXBlock._createAndSetBlockExecutionIntentClearCurrentItem();
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -4211,7 +4138,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     final XShelf xShelf = _XShelfBlockItemDeletion(block: this);
     //
     final thisXBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     //
     executionTrace.addExecutionIntent(
       codeId: "#076600",
@@ -4220,7 +4147,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       suffixShortDesc: "",
     );
     final BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
-    thisXBlock._createAndSetBlockExecutionIntentDeleteItem(item: item!);
+        thisXBlock._createAndSetBlockExecutionIntentDeleteItem(item: item!);
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -4239,7 +4166,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     bool errorIfItemNotInTheBlock = true,
   }) async {
     final List<ITEM> candidateDeleteItems =
-    _blockData.moveCurrentItemToEndOfList(
+        _blockData.moveCurrentItemToEndOfList(
       itemList: items,
     );
     final bool checkBusyTrue = true;
@@ -4260,7 +4187,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
 
     // @Same-Code-Precheck-01
     Actionable<BlockItemsDeletionPrecheck> actionable =
-    __checkBeforeDeleteItems(
+        __checkBeforeDeleteItems(
       checkBusy: checkBusyTrue,
       checkAllow: checkAllowTrue,
       errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
@@ -4308,10 +4235,10 @@ FORM_INPUT extends FormInput // EmptyFormInput
     final XShelf xShelf = _XShelfBlockMultiItemDeletion(block: this);
     //
     final thisXBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     //
     final BlockDeleteItemsIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
-    thisXBlock._createAndSetBlockExecutionIntentDeleteItems(
+        thisXBlock._createAndSetBlockExecutionIntentDeleteItems(
       items: candidateDeleteItems,
       stopIfError: stopIfError,
     );
@@ -4328,7 +4255,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
   @_BlockSetItemAsCurrentAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
-  __refreshItemAndSetAsCurrent({
+      __refreshItemAndSetAsCurrent({
     required ExecutionTrace executionTrace,
     required String methodName,
     required ITEM? item,
@@ -4343,8 +4270,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     executionTrace.addInfo(
       codeId: "#069000",
       shortDesc:
-      "Calculated > @setCurrentItemDirective: ${debugObjHtml(
-          setCurrentItemDirective)}",
+          "Calculated > @setCurrentItemDirective: ${debugObjHtml(setCurrentItemDirective)}",
     );
     //
     final bool checkBusyTrue = true;
@@ -4364,7 +4290,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     // @Same-Code-Precheck-01
     //
     final Actionable<BlockSetCurrentItemPrecheck> actionable =
-    __checkBeforeSetItemAsCurrent(
+        __checkBeforeSetItemAsCurrent(
       item: item,
       errCodeIfItemIsNull: errCodeIfItemIsNull,
       checkBusy: checkBusyTrue,
@@ -4398,9 +4324,9 @@ FORM_INPUT extends FormInput // EmptyFormInput
     final XShelf xShelf = _XShelfBlockSetItemAsCurrent(block: this);
     //
     final thisXBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     final executionIntent =
-    thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
+        thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
       setCurrentItemDirective: setCurrentItemDirective,
       newQueriedList: [],
       inputCandidateCurrItem: item,
@@ -4422,7 +4348,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSetItemAsCurrentAnnotation()
   Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
-  refreshItemAndSetAsCurrent({
+      refreshItemAndSetAsCurrent({
     required ITEM item,
     bool forceLoadForm = false,
   }) async {
@@ -4504,9 +4430,9 @@ FORM_INPUT extends FormInput // EmptyFormInput
     );
     final XShelf xShelf = _XShelfBlockClearItems(block: this);
     final thisXBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     final BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
-    thisXBlock._createAndSetBlockExecutionIntentClearItems();
+        thisXBlock._createAndSetBlockExecutionIntentClearItems();
     return executionIntent.result;
   }
 
@@ -4814,7 +4740,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       pageable: null,
       suggestedListUpdateStrategy: suggestedListUpdateStrategy,
       afterQueryDirective:
-      BlockAfterQueryDirective.setAnItemAsCurrentThenLoadForm,
+          BlockAfterQueryDirective.setAnItemAsCurrentThenLoadForm,
       suggestedSelection: suggestedSelection,
     );
     //
@@ -4822,7 +4748,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     final thisXBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     BlockQueryResult queryResult = thisXBlock.queryResult;
     return queryResult;
   }
@@ -4879,7 +4805,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     final thisXBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     BlockQueryResult queryResult = thisXBlock.queryResult;
     return queryResult;
   }
@@ -4980,7 +4906,9 @@ FORM_INPUT extends FormInput // EmptyFormInput
   // ***************************************************************************
   // ***************************************************************************
 
-  CREATION_PRESET? _buildCreationPreset(ExecutionTrace executionTrace,) {
+  CREATION_PRESET? _buildCreationPreset(
+    ExecutionTrace executionTrace,
+  ) {
     try {
       final FILTER_CRITERIA? currentFilterCriteria = filterCriteria;
 
@@ -5016,8 +4944,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       executionTrace.addInfo(
         codeId: "#005020",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}.buildCreationPreset() method was called with an error!",
+            "The ${debugObjHtml(this)}.buildCreationPreset() method was called with an error!",
         errorInfo: errorInfo,
       );
       return null;
@@ -5049,7 +4976,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
   Object resolveParentBlockItemId({required ITEM item}) {
     throw UnimplementedError(
         'The resolveParentBlockItemId() method must be implemented when config.enforceParentLinkConstraint is true '
-            'to determine the parent reference of each item.');
+        'to determine the parent reference of each item.');
   }
 
   // ***************************************************************************
@@ -5257,7 +5184,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     // @Same-Code-Precheck-01
     //
     final Actionable<BlockBackendActionPrecheck> actionable =
-    __checkBeforeExecuteBackendAction(
+        __checkBeforeExecuteBackendAction(
       checkBusy: checkBusyTrue,
     );
     //
@@ -5296,11 +5223,11 @@ FORM_INPUT extends FormInput // EmptyFormInput
     }
     //
     final viewportSyncStrategy =
-    BlockViewportSyncStrategy.resolveViewportSyncStrategy2(
+        BlockViewportSyncStrategy.resolveViewportSyncStrategy2(
       nativeQueryMode: nativeQueryMode,
       backendIntentInFullQueryMode: action.config.syncStrategyOnFullQueryMode,
       backendIntentInPageableQueryMode:
-      action.config.syncStrategyOnPageableQueryMode,
+          action.config.syncStrategyOnPageableQueryMode,
       syncConfig: effectiveConfig.viewportSyncConfig,
     );
     executionTrace.addInfo(
@@ -5315,7 +5242,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     );
     //
     final thisXBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     //
     executionTrace.addExecutionIntent(
       codeId: "#071400",
@@ -5324,7 +5251,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       suffixShortDesc: "",
     );
     final BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
-    thisXBlock._createAndSetBackendAction(action: action);
+        thisXBlock._createAndSetBackendAction(action: action);
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -5367,7 +5294,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     // @Same-Code-Precheck-01
     //
     final Actionable<BlockQuickItemCreationPrecheck> actionable =
-    __checkBeforeQuickCreateItem(
+        __checkBeforeQuickCreateItem(
       checkBusy: checkBusyTrue,
       checkAllow: checkAllowTrue,
     );
@@ -5407,7 +5334,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     final XShelf xShelf = _XShelfBlockQuickItemCreation(block: this);
     //
     final thisXBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     //
     executionTrace.addExecutionIntent(
       codeId: "#073340",
@@ -5417,7 +5344,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     );
 
     final BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
-    thisXBlock._createAndSetBlockQuickItemCreation(action: action);
+        thisXBlock._createAndSetBlockQuickItemCreation(action: action);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     return executionIntent.result;
@@ -5459,7 +5386,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     );
     // @Same-Code-Precheck-01
     final Actionable<BlockQuickItemUpdatePrecheck> actionable =
-    __checkBeforeQuickUpdateItem(
+        __checkBeforeQuickUpdateItem(
       item: action.item,
       checkBusy: checkBusyTrue,
       checkAllow: checkAllowTrue,
@@ -5502,7 +5429,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     final XShelf xShelf = _XShelfBlockQuickItemUpdate(block: this);
     //
     final thisXBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     //
     executionTrace.addExecutionIntent(
       codeId: "#072340",
@@ -5511,7 +5438,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       suffixShortDesc: "",
     );
     final BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
-    thisXBlock._createAndSetBlockQuickItemUpdate(action: action);
+        thisXBlock._createAndSetBlockQuickItemUpdate(action: action);
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -5525,7 +5452,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSelectFirstItemAsCurrentAnnotation()
   Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
-  refreshFirstItemAndSetAsCurrent({
+      refreshFirstItemAndSetAsCurrent({
     bool forceLoadForm = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5553,7 +5480,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSelectNextItemAsCurrentAnnotation()
   Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
-  refreshNextItemAndSetAsCurrent({
+      refreshNextItemAndSetAsCurrent({
     bool forceLoadForm = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5584,7 +5511,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSelectPreviousItemAsCurrentAnnotation()
   Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
-  refreshPreviousItemAndSetAsCurrent({
+      refreshPreviousItemAndSetAsCurrent({
     bool forceLoadForm = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -5664,7 +5591,8 @@ FORM_INPUT extends FormInput // EmptyFormInput
       },
     );
     // @Same-Code-Precheck-01
-    Actionable<BlockItemCreationPrecheck> actionable = __checkBeforeCreateItem(
+    Actionable<BlockItemCreationPrecheck> actionable =
+        __checkBeforeCreateItemOnForm(
       checkBusy: checkBusyTrue,
       checkAllow: checkAllowTrue,
       creationType: creationTypeForm,
@@ -5690,7 +5618,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     //
     final XShelf xShelf = _XShelfPrepareFormToCreateItem(block: this);
     final thisXBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     //
     executionTrace.addExecutionIntent(
       codeId: "#077340",
@@ -5699,7 +5627,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       suffixShortDesc: "",
     );
     final executionIntent =
-    thisXBlock._createAndSetBlockExecutionIntentPrepareFormToCreateItem(
+        thisXBlock._createAndSetBlockExecutionIntentPrepareFormToCreateItem(
       xBlock: thisXBlock,
       initDirty: initDirty,
       formInput: formInput,
@@ -5817,7 +5745,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockDeleteCurrentItemAnnotation()
   Future<BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>>
-  deleteCurrentItem() async {
+      deleteCurrentItem() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "deleteCurrentItem",
@@ -6108,10 +6036,10 @@ FORM_INPUT extends FormInput // EmptyFormInput
       suggestedSelection: suggestedSelection,
     );
     final xBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
 
     final BlockQueryIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
-    xBlock._createAndSetBlockExecutionIntentQuery(
+        xBlock._createAndSetBlockExecutionIntentQuery(
       isQueryMoreFlow: isQueryMoreFlow,
     );
     //
@@ -6155,7 +6083,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
     final thisXBlock =
-    xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
+        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     BlockQueryResult queryResult = thisXBlock.queryResult;
     return queryResult.successForAll;
   }
@@ -6280,7 +6208,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
   /// Allows updating an Item or not according to the application logic.
   ///
   @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult _checkItemUpdateAllowed({
+  CheckAllowResult __checkItemUpdateAllowed({
     required ITEM item,
   }) {
     try {
@@ -6298,6 +6226,24 @@ FORM_INPUT extends FormInput // EmptyFormInput
 
   // ***************************************************************************
   // ***************************************************************************
+
+  ///
+  /// Allows creating a new Item or not according to the application logic.
+  ///
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult __checkQuickItemCreationAllowed() {
+    try {
+      bool allow = isItemCreationAllowed();
+      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
+    } catch (e, stackTrace) {
+      return CheckAllowResult.error(
+        errorInfo: ErrorInfo.fromError(
+          error: e,
+          stackTrace: stackTrace,
+        ),
+      );
+    }
+  }
 
   ///
   /// Allows creating a new Item or not according to the application logic.
@@ -6363,102 +6309,30 @@ FORM_INPUT extends FormInput // EmptyFormInput
   Actionable<BlockBackendActionPrecheck> __checkBeforeExecuteBackendAction({
     required bool checkBusy,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockBackendActionPrecheck>.no(
-        errCode: BlockBackendActionPrecheck.busy,
-      );
-    }
-    switch (dataState) {
-      case BlockDataStateNone():
-        return Actionable<BlockBackendActionPrecheck>.no(
-          errCode: BlockBackendActionPrecheck.blockInNoneState,
-        );
-      case BlockDataStatePending():
-        return Actionable<BlockBackendActionPrecheck>.no(
-          errCode: BlockBackendActionPrecheck.blockInPendingState,
-        );
-      case BlockDataStateLoadedStale():
-        return Actionable<BlockBackendActionPrecheck>.no(
-          errCode: BlockBackendActionPrecheck.blockInStaleState,
-        );
-      case BlockDataStateLoadedFresh():
-        return Actionable<BlockBackendActionPrecheck>.yes();
-    }
+    return BlockBackendActionPrecheckUtils.checkBeforeExecuteBackendAction(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      blockDataState: dataState,
+    );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<BlockItemCreationPrecheck> __checkBeforeCreateItem({
+  Actionable<BlockItemCreationPrecheck> __checkBeforeCreateItemOnForm({
     required bool checkBusy,
     required ItemCreationType creationType,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockItemCreationPrecheck>.no(
-        errCode: BlockItemCreationPrecheck.busy,
-      );
-    }
-    if (creationType == ItemCreationType.form) {
-      if (formModel == null) {
-        return Actionable<BlockItemCreationPrecheck>.no(
-          errCode: BlockItemCreationPrecheck.noForm,
-        );
-      }
-    }
-    // switch (dataState) {
-    //   case DataState.pending:
-    //     return Actionable<BlockItemCreationPrecheck>.no(
-    //       errCode: BlockItemCreationPrecheck.blockInPendingState,
-    //     );
-    //   case DataState.none:
-    //     return Actionable<BlockItemCreationPrecheck>.no(
-    //       errCode: BlockItemCreationPrecheck.blockInNoneState,
-    //     );
-    //   case DataState.loaded:
-    //     if (this.isLoadedAndStale) {
-    //       return Actionable<BlockItemCreationPrecheck>.no(
-    //         errCode: BlockItemCreationPrecheck.blockInStaleState,
-    //       );
-    //     }
-    //     break;
-    // }
-    switch (dataState) {
-      case BlockDataStateNone():
-        return Actionable<BlockItemCreationPrecheck>.no(
-          errCode: BlockItemCreationPrecheck.blockInNoneState,
-        );
-      case BlockDataStatePending():
-        return Actionable<BlockItemCreationPrecheck>.no(
-          errCode: BlockItemCreationPrecheck.blockInPendingState,
-        );
-      case BlockDataStateLoadedStale():
-        return Actionable<BlockItemCreationPrecheck>.no(
-          errCode: BlockItemCreationPrecheck.blockInStaleState,
-        );
-      case BlockDataStateLoadedFresh():
-        break;
-    }
-    //
-    if (checkAllow) {
-      CheckAllowResult result = __checkItemCreationAllowed();
-      switch (result.result) {
-        case CheckAllow.allow:
-          return Actionable<BlockItemCreationPrecheck>.yes();
-        case CheckAllow.notAllow:
-          return Actionable<BlockItemCreationPrecheck>.no(
-            errCode: BlockItemCreationPrecheck.notAllow,
-          );
-        case CheckAllow.error:
-          return Actionable<BlockItemCreationPrecheck>.no(
-            errCode: BlockItemCreationPrecheck.checkAllowMethodError,
-            errorInfo: result.errorInfo,
-          );
-      }
-    }
-    //
-    return Actionable<BlockItemCreationPrecheck>.yes();
+    return BlockItemCreationPrecheckUtils.checkBeforeCreateItemOnForm(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      hasForm: formModel != null,
+      blockDataState: dataState,
+      checkAllow: checkAllow,
+      checkCreationAllowed: () => __checkQuickItemCreationAllowed(),
+    );
   }
 
   // ***************************************************************************
@@ -6481,98 +6355,22 @@ FORM_INPUT extends FormInput // EmptyFormInput
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<BlockItemEditPrecheck> __checkBeforeEditItem({
-    required ITEM item,
-    required bool checkBusy,
-    required bool checkAllow,
-  }) {
-    return BlockItemEditPrecheckUtils.checkBeforeEditItem<ITEM>(
-      checkBusy: checkBusy,
-      isBusy: FlutterArtist.executor.isBusy,
-      hasForm: formModel != null,
-      blockDataState: dataState,
-      formDataState: formModel?.dataState,
-      item: item,
-      checkAllow: checkAllow,
-      checkItemEditAllowed: (validItem) => _checkItemUpdateAllowed(item: validItem),
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_PrecheckPrivateMethod()
   Actionable<BlockQuickItemUpdatePrecheck> __checkBeforeQuickUpdateItem({
     required ITEM item,
     required bool checkBusy,
     required bool checkAllow,
     required bool errorIfItemNotInTheBlock,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockQuickItemUpdatePrecheck>.no(
-        errCode: BlockQuickItemUpdatePrecheck.busy,
-      );
-    }
-    // switch (dataState) {
-    //   case DataState.pending:
-    //     return Actionable<BlockQuickItemUpdatePrecheck>.no(
-    //       errCode: BlockQuickItemUpdatePrecheck.blockInPendingState,
-    //     );
-    //   case DataState.none:
-    //     return Actionable<BlockQuickItemUpdatePrecheck>.no(
-    //       errCode: BlockQuickItemUpdatePrecheck.blockInNoneState,
-    //     );
-    //   case DataState.loaded:
-    //     if (isLoadedAndStale) {
-    //       return Actionable<BlockQuickItemUpdatePrecheck>.no(
-    //         errCode: BlockQuickItemUpdatePrecheck.blockInStaleState,
-    //       );
-    //     }
-    //     break;
-    // }
-    switch (dataState) {
-      case BlockDataStateNone():
-        return Actionable<BlockQuickItemUpdatePrecheck>.no(
-          errCode: BlockQuickItemUpdatePrecheck.blockInNoneState,
-        );
-      case BlockDataStatePending():
-        return Actionable<BlockQuickItemUpdatePrecheck>.no(
-          errCode: BlockQuickItemUpdatePrecheck.blockInPendingState,
-        );
-      case BlockDataStateLoadedStale():
-        return Actionable<BlockQuickItemUpdatePrecheck>.no(
-          errCode: BlockQuickItemUpdatePrecheck.blockInStaleState,
-        );
-      case BlockDataStateLoadedFresh():
-        break;
-    }
-    //
-    ITEM? internalItem = findItemSameIdWith(item: item);
-    // Test Cases: [90b].
-    if (errorIfItemNotInTheBlock && internalItem == null) {
-      return Actionable<BlockQuickItemUpdatePrecheck>.no(
-        errCode: BlockQuickItemUpdatePrecheck.invalidTarget,
-      );
-    }
-    //
-    if (checkAllow) {
-      CheckAllowResult result = _checkItemUpdateAllowed(item: item);
-      switch (result.result) {
-        case CheckAllow.allow:
-          return Actionable<BlockQuickItemUpdatePrecheck>.yes();
-        case CheckAllow.notAllow:
-          return Actionable<BlockQuickItemUpdatePrecheck>.no(
-            errCode: BlockQuickItemUpdatePrecheck.notAllow,
-          );
-        case CheckAllow.error:
-          return Actionable<BlockQuickItemUpdatePrecheck>.no(
-            errCode: BlockQuickItemUpdatePrecheck.checkAllowMethodError,
-            errorInfo: result.errorInfo,
-          );
-      }
-    }
-    //
-    return Actionable<BlockQuickItemUpdatePrecheck>.yes();
+    return BlockQuickItemUpdatePrecheckUtils.checkBeforeQuickUpdateItem<ITEM>(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      blockDataState: dataState,
+      item: item,
+      containsItem: (targetItem) => containsItem(targetItem),
+      checkAllow: checkAllow,
+      checkQuickUpdateAllowed: (validItem) =>
+          __checkItemUpdateAllowed(item: validItem),
+    );
   }
 
   // ***************************************************************************
@@ -6583,47 +6381,13 @@ FORM_INPUT extends FormInput // EmptyFormInput
     required bool checkBusy,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockQuickItemCreationPrecheck>.no(
-        errCode: BlockQuickItemCreationPrecheck.busy,
-      );
-    }
-    //
-    switch (dataState) {
-      case BlockDataStateNone():
-        return Actionable<BlockQuickItemCreationPrecheck>.no(
-          errCode: BlockQuickItemCreationPrecheck.blockInNoneState,
-        );
-      case BlockDataStatePending():
-        return Actionable<BlockQuickItemCreationPrecheck>.no(
-          errCode: BlockQuickItemCreationPrecheck.blockInPendingState,
-        );
-      case BlockDataStateLoadedStale():
-        return Actionable<BlockQuickItemCreationPrecheck>.no(
-          errCode: BlockQuickItemCreationPrecheck.blockInStaleState,
-        );
-      case BlockDataStateLoadedFresh():
-        break;
-    }
-    //
-    if (checkAllow) {
-      CheckAllowResult result = __checkItemCreationAllowed();
-      switch (result.result) {
-        case CheckAllow.allow:
-          return Actionable<BlockQuickItemCreationPrecheck>.yes();
-        case CheckAllow.notAllow:
-          return Actionable<BlockQuickItemCreationPrecheck>.no(
-            errCode: BlockQuickItemCreationPrecheck.notAllow,
-          );
-        case CheckAllow.error:
-          return Actionable<BlockQuickItemCreationPrecheck>.no(
-            errCode: BlockQuickItemCreationPrecheck.checkAllowMethodError,
-            errorInfo: result.errorInfo,
-          );
-      }
-    }
-    //
-    return Actionable<BlockQuickItemCreationPrecheck>.yes();
+    return BlockQuickItemCreationPrecheckUtils.checkBeforeQuickCreateItem(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      blockDataState: dataState,
+      checkAllow: checkAllow,
+      checkQuickCreateAllowed: () => __checkQuickItemCreationAllowed(),
+    );
   }
 
   // ***************************************************************************
@@ -6634,71 +6398,15 @@ FORM_INPUT extends FormInput // EmptyFormInput
     required bool checkBusy,
     required bool checkAllow,
   }) {
-    if (formModel == null) {
-      return Actionable<BlockFormResetPrecheck>.no(
-        errCode: BlockFormResetPrecheck.noForm,
-      );
-    }
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockFormResetPrecheck>.no(
-        errCode: BlockFormResetPrecheck.busy,
-      );
-    }
-    if (!formModel!.isDirty()) {
-      return Actionable<BlockFormResetPrecheck>.no(
-        errCode: BlockFormResetPrecheck.formIsNotDirty,
-      );
-    }
-    // switch (formModel!.formMode) {
-    //   case BlockFormMode.none:
-    //     return Actionable<BlockFormResetPrecheck>.no(
-    //       errCode: BlockFormResetPrecheck.formInNoneMode,
-    //     );
-    //   case BlockFormMode.creation:
-    //     break; // Do nothing.
-    //   case BlockFormMode.edit:
-    //     break; // Do nothing.
-    // }
-
-    //
-    final FormDataState formDataState = formModel!.dataState;
-
-    if (formDataState.isNone) {
-      return Actionable<BlockFormResetPrecheck>.no(
-        errCode: BlockFormResetPrecheck.formInNoneState,
-      );
-    } else if (formDataState.isPending) {
-      return Actionable<BlockFormResetPrecheck>.no(
-        errCode: BlockFormResetPrecheck.formInPendingState,
-      );
-    } else if (formDataState.isFatalError) {
-      return Actionable<BlockFormResetPrecheck>.no(
-        errCode: BlockFormResetPrecheck.formInFatalErrorState,
-      );
-    } else if (formDataState.isStale) {
-      return Actionable<BlockFormResetPrecheck>.no(
-        errCode: BlockFormResetPrecheck.formInStaleState,
-      );
-    }
-
-    if (checkAllow) {
-      CheckAllowResult result = __checkFormResetAllowed();
-      switch (result.result) {
-        case CheckAllow.allow:
-          return Actionable<BlockFormResetPrecheck>.yes();
-        case CheckAllow.notAllow:
-          return Actionable<BlockFormResetPrecheck>.no(
-            errCode: BlockFormResetPrecheck.notAllow,
-          );
-        case CheckAllow.error:
-          return Actionable<BlockFormResetPrecheck>.no(
-            errCode: BlockFormResetPrecheck.checkAllowMethodError,
-            errorInfo: result.errorInfo,
-          );
-      }
-    }
-    //
-    return Actionable<BlockFormResetPrecheck>.yes();
+    return BlockFormResetPrecheckUtils.checkBeforeResetForm(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      hasForm: formModel != null,
+      formDataState: formModel?.dataState,
+      isDirty: formModel?.isDirty() ?? false,
+      checkAllow: checkAllow,
+      checkFormResetAllowed: () => __checkFormResetAllowed(),
+    );
   }
 
   // ***************************************************************************
@@ -6710,64 +6418,17 @@ FORM_INPUT extends FormInput // EmptyFormInput
     required bool checkAllow,
     required bool checkValidate,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockFormSavePrecheck>.no(
-        errCode: BlockFormSavePrecheck.busy,
-      );
-    }
-    if (formModel == null) {
-      return Actionable<BlockFormSavePrecheck>.no(
-        errCode: BlockFormSavePrecheck.noForm,
-      );
-    }
-    //
-    if (!formModel!.isDirty()) {
-      return Actionable<BlockFormSavePrecheck>.no(
-        errCode: BlockFormSavePrecheck.formIsNotDirty,
-      );
-    }
-    //
-    final FormDataState formDataState = formModel!.dataState;
-
-    if (formDataState.isNone) {
-      return Actionable<BlockFormSavePrecheck>.no(
-        errCode: BlockFormSavePrecheck.formInNoneState,
-      );
-    } else if (formDataState.isPending) {
-      return Actionable<BlockFormSavePrecheck>.no(
-        errCode: BlockFormSavePrecheck.formInPendingState,
-      );
-    } else if (formDataState.isFatalError) {
-      return Actionable<BlockFormSavePrecheck>.no(
-        errCode: BlockFormSavePrecheck.formInFatalErrorState,
-      );
-    } else if (formDataState.isStale) {
-      return Actionable<BlockFormSavePrecheck>.no(
-        errCode: BlockFormSavePrecheck.formInStaleState,
-      );
-    }
-
-    //
-    if (checkValidate) {
-      final activeForms = formModel!.ui._visibleFormBuilderStates;
-      bool allFormsAreValid = true;
-
-      if (activeForms.isEmpty) {
-        allFormsAreValid = true;
-      } else {
-        for (FormBuilderState formState in activeForms) {
-          bool isValid = formState.validate(focusOnInvalid: false);
-          allFormsAreValid = allFormsAreValid && isValid;
-        }
-      }
-
-      if (!allFormsAreValid) {
-        return Actionable<BlockFormSavePrecheck>.no(
-          errCode: BlockFormSavePrecheck.formInvalidated,
-        );
-      }
-    }
-    return Actionable<BlockFormSavePrecheck>.yes();
+    return BlockFormSavePrecheckUtils.checkBeforeSaveForm(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      hasForm: formModel != null,
+      formDataState: formModel?.dataState,
+      isDirty: formModel?.isDirty() ?? false,
+      checkValidate: checkValidate,
+      getActiveFormStates: formModel != null
+          ? () => formModel!.ui._visibleFormBuilderStates
+          : null,
+    );
   }
 
   // ***************************************************************************
@@ -6776,77 +6437,20 @@ FORM_INPUT extends FormInput // EmptyFormInput
   @_PrecheckPrivateMethod()
   Actionable<BlockItemEditPrecheck> __checkBeforeEditItemOnForm({
     required bool checkBusy,
-    required ITEM item,
+    required ITEM? item,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockItemEditPrecheck>.no(
-        errCode: BlockItemEditPrecheck.busy,
-      );
-    }
-    if (formModel == null) {
-      return Actionable<BlockItemEditPrecheck>.no(
-        errCode: BlockItemEditPrecheck.noForm,
-      );
-    }
-    if (formModel!.dataState.isFatalError) {
-      // Test Case: TODO
-      return Actionable<BlockItemEditPrecheck>.no(
-        errCode: BlockItemEditPrecheck.formInFatalErrorState,
-      );
-    }
-    //
-    // switch (formModel!.formMode) {
-    //   case BlockFormMode.none:
-    //     return Actionable<BlockItemEditPrecheck>.no(
-    //       errCode: BlockItemEditPrecheck.formModeInNone,
-    //     );
-    //   case BlockFormMode.creation:
-    //     break; // Do nothing.
-    //   case BlockFormMode.edit:
-    //     break; // Do nothing.
-    // }
-
-    // if(formModel!= null)  {
-    //   final FormDataState formDataState = formModel!.dataState;
-    //
-    //   if (formDataState.isNone) {
-    //     return Actionable<BlockItemEditPrecheck>.no(
-    //       errCode: BlockItemEditPrecheck.formInNoneState,
-    //     );
-    //   } else if (formDataState.isPending) {
-    //     return Actionable<BlockItemEditPrecheck>.no(
-    //       errCode: BlockItemEditPrecheck.formInPendingState,
-    //     );
-    //   } else if (formDataState.isFatalError) {
-    //     return Actionable<BlockItemEditPrecheck>.no(
-    //       errCode: BlockItemEditPrecheck.formInFatalErrorState,
-    //     );
-    //   } else if (formDataState.isStale) {
-    //     return Actionable<BlockItemEditPrecheck>.no(
-    //       errCode: BlockItemEditPrecheck.formInStaleState,
-    //     );
-    //   }
-    // }
-    //
-    if (checkAllow) {
-      CheckAllowResult result = _checkItemUpdateAllowed(item: item);
-      switch (result.result) {
-        case CheckAllow.allow:
-          return Actionable<BlockItemEditPrecheck>.yes();
-        case CheckAllow.notAllow:
-          return Actionable<BlockItemEditPrecheck>.no(
-            errCode: BlockItemEditPrecheck.notAllow,
-          );
-        case CheckAllow.error:
-          return Actionable<BlockItemEditPrecheck>.no(
-            errCode: BlockItemEditPrecheck.checkAllowMethodError,
-            errorInfo: result.errorInfo,
-          );
-      }
-    }
-    //
-    return Actionable<BlockItemEditPrecheck>.yes();
+    return BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<ITEM>(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      hasForm: formModel != null,
+      blockDataState: dataState,
+      formDataState: formModel?.dataState,
+      item: item,
+      checkAllow: checkAllow,
+      checkItemEditAllowed: (validItem) =>
+          __checkItemUpdateAllowed(item: validItem),
+    );
   }
 
   // ***************************************************************************
@@ -6857,18 +6461,9 @@ FORM_INPUT extends FormInput // EmptyFormInput
     required bool checkBusy,
     required bool checkAllow,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockItemEditPrecheck>.no(
-        errCode: BlockItemEditPrecheck.busy,
-      );
-    }
-    ITEM? curItem = currentItem;
-    if (curItem == null) {
-      return Actionable.no(errCode: BlockItemEditPrecheck.noTarget);
-    }
     return __checkBeforeEditItemOnForm(
+      item: currentItem,
       checkBusy: checkBusy,
-      item: curItem,
       checkAllow: checkAllow,
     );
   }
@@ -6883,29 +6478,13 @@ FORM_INPUT extends FormInput // EmptyFormInput
     required bool checkBusy,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
   }) {
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockSetCurrentItemPrecheck>.no(
-        errCode: BlockSetCurrentItemPrecheck.busy,
-      );
-    }
-    ITEM? internalItem = item;
-    if (item != null) {
-      internalItem = findItemSameIdWith(item: item);
-    }
-    // Test Cases: [03b].
-    if (internalItem == null) {
-      if (errCodeIfItemIsNull == ErrCodeIfItemIsNull.noTarget) {
-        return Actionable<BlockSetCurrentItemPrecheck>.no(
-          errCode: BlockSetCurrentItemPrecheck.noTarget,
-        );
-      } else {
-        return Actionable<BlockSetCurrentItemPrecheck>.no(
-          errCode: BlockSetCurrentItemPrecheck.invalidTarget,
-        );
-      }
-    }
-    //
-    return Actionable<BlockSetCurrentItemPrecheck>.yes();
+    return BlockSetCurrentItemPrecheckUtils.checkBeforeSetItemAsCurrent<ITEM>(
+      item: item,
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      errCodeIfItemIsNull: errCodeIfItemIsNull,
+      findItemSameIdWith: (targetItem) => findItemSameIdWith(item: targetItem),
+    );
   }
 
   // ***************************************************************************
@@ -6915,18 +6494,11 @@ FORM_INPUT extends FormInput // EmptyFormInput
   Actionable<BlockSetCurrentItemPrecheck> __checkBeforeRefreshCurrentItem({
     required bool checkBusy,
   }) {
-    if (currentItem == null) {
-      return Actionable<BlockSetCurrentItemPrecheck>.no(
-        errCode: BlockSetCurrentItemPrecheck.noTarget,
-      );
-    }
-    if (checkBusy && FlutterArtist.executor.isBusy) {
-      return Actionable<BlockSetCurrentItemPrecheck>.no(
-        errCode: BlockSetCurrentItemPrecheck.busy,
-      );
-    }
-    //
-    return Actionable<BlockSetCurrentItemPrecheck>.yes();
+    return __checkBeforeSetItemAsCurrent(
+      item: currentItem,
+      checkBusy: checkBusy,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
+    );
   }
 
   // ***************************************************************************
@@ -7095,7 +6667,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
 
   @_PrecheckMethod()
   Actionable<BlockItemCreationPrecheck> checkBeforeCreateItemWithForm() {
-    return __checkBeforeCreateItem(
+    return __checkBeforeCreateItemOnForm(
       checkBusy: true,
       checkAllow: true,
       creationType: ItemCreationType.form,
@@ -7127,20 +6699,6 @@ FORM_INPUT extends FormInput // EmptyFormInput
   Actionable<BlockClearItemsPrecheck> checkBeforeClearBlock() {
     return __checkBeforeClearItems(
       checkBusy: true,
-    );
-  }
-
-  // ***************************************************************************
-
-  @_PrecheckMethod()
-  Actionable<BlockItemEditPrecheck> checkBeforeEditItem({
-    required ITEM item,
-    bool checkAllow = true,
-  }) {
-    return __checkBeforeEditItem(
-      checkBusy: true,
-      item: item,
-      checkAllow: checkAllow,
     );
   }
 
@@ -7242,7 +6800,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
 
   @_PrecheckMethod()
   Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo() {
-    return _internalCanShowFormInfo(formModel: formModel);
+    return __checkBeforeShowFormInfo(formModel: formModel);
   }
 
   // ***************************************************************************
@@ -7268,95 +6826,26 @@ FORM_INPUT extends FormInput // EmptyFormInput
   Actionable<BlockFormEnablePrecheck> checkFormEnable({
     bool checkAllow = true,
   }) {
-    if (formModel == null) {
-      return Actionable<BlockFormEnablePrecheck>.no(
-        errCode: BlockFormEnablePrecheck.noForm,
-      );
-    }
-    if (!isStateReadyForForm()) {
-      return Actionable<BlockFormEnablePrecheck>.no(
-        errCode: BlockFormEnablePrecheck.noForm,
-      );
-    }
-    final FormDataState formDataState = formModel!.dataState;
+    return __checkFormEnable(
+      checkAllow: checkAllow,
+    );
+  }
 
-    if (formDataState.isNone) {
-      return Actionable<BlockFormEnablePrecheck>.no(
-        errCode: BlockFormEnablePrecheck.formInNoneState,
-      );
-    } else if (formDataState.isPending) {
-      return Actionable<BlockFormEnablePrecheck>.no(
-        errCode: BlockFormEnablePrecheck.formInPendingState,
-      );
-    } else if (formDataState.isFatalError) {
-      return Actionable<BlockFormEnablePrecheck>.no(
-        errCode: BlockFormEnablePrecheck.formInFatalErrorState,
-      );
-    } else if (formDataState.isStale) {
-      return Actionable<BlockFormEnablePrecheck>.no(
-        errCode: BlockFormEnablePrecheck.formInStaleState,
-      );
-    }
-    if (checkAllow && currentItem != null) {
-      CheckAllowResult result = _checkItemUpdateAllowed(item: currentItem!);
-      switch (result.result) {
-        case CheckAllow.allow:
-          return Actionable<BlockFormEnablePrecheck>.yes();
-        case CheckAllow.notAllow:
-          return Actionable<BlockFormEnablePrecheck>.no(
-            errCode: BlockFormEnablePrecheck.notAllow,
-          );
-        case CheckAllow.error:
-          return Actionable<BlockFormEnablePrecheck>.no(
-            errCode: BlockFormEnablePrecheck.checkAllowMethodError,
-            errorInfo: result.errorInfo,
-          );
-      }
-    }
-    return Actionable<BlockFormEnablePrecheck>.yes();
-    //
-    // switch (formModel!.formMode) {
-    //   case BlockFormMode.none:
-    //     return Actionable<BlockFormEnablementPrecheck>.no(
-    //       errCode: BlockFormEnablementPrecheck.formInNoneMode,
-    //     );
-    //   case BlockFormMode.creation:
-    //     if (formModel!.dataState.isFatalError) {
-    //       // Test Cases: [16a].
-    //       if (!formModel!.formInitialDataReady) {
-    //         return Actionable<BlockFormEnablementPrecheck>.no(
-    //           errCode: BlockFormEnablementPrecheck.formInitialDataNotReady,
-    //         );
-    //       }
-    //     }
-    //     return Actionable<BlockFormEnablementPrecheck>.yes();
-    //   case BlockFormMode.edit:
-    //     if (formModel!.dataState.isFatalError) {
-    //       // Test Cases: [16b].
-    //       if (!formModel!.formInitialDataReady) {
-    //         return Actionable<BlockFormEnablementPrecheck>.no(
-    //           errCode: BlockFormEnablementPrecheck.formInitialDataNotReady,
-    //         );
-    //       }
-    //     }
-    //     if (checkAllow) {
-    //       CheckAllowResult result = _checkItemUpdateAllowed(item: currentItem!);
-    //       switch (result.result) {
-    //         case CheckAllow.allow:
-    //           return Actionable<BlockFormEnablementPrecheck>.yes();
-    //         case CheckAllow.notAllow:
-    //           return Actionable<BlockFormEnablementPrecheck>.no(
-    //             errCode: BlockFormEnablementPrecheck.notAllow,
-    //           );
-    //         case CheckAllow.error:
-    //           return Actionable<BlockFormEnablementPrecheck>.no(
-    //             errCode: BlockFormEnablementPrecheck.checkAllowMethodError,
-    //             errorInfo: result.errorInfo,
-    //           );
-    //       }
-    //     }
-    //     return Actionable<BlockFormEnablementPrecheck>.yes();
-    // }
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockFormEnablePrecheck> __checkFormEnable({
+    bool checkAllow = true,
+  }) {
+    return BlockFormEnablePrecheckUtils.checkFormEnable<ITEM>(
+      hasForm: formModel != null,
+      isStateReadyForForm: isStateReadyForForm(),
+      formDataState: formModel?.dataState,
+      currentItem: currentItem,
+      checkAllow: checkAllow,
+      checkItemUpdateAllowed: (validItem) =>
+          __checkItemUpdateAllowed(item: validItem),
+    );
   }
 
   // ***************************************************************************
@@ -7364,7 +6853,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
 
   bool hasCurrentItemAndCanEditOnForm() {
     Actionable<BlockItemEditPrecheck> actionable =
-    __checkBeforeEditCurrentItemOnForm(
+        __checkBeforeEditCurrentItemOnForm(
       checkBusy: true,
       checkAllow: true,
     );
@@ -7379,7 +6868,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       return false;
     }
     Actionable<BlockItemDeletionPrecheck> actionable =
-    __checkBeforeDeleteCurrentItem(
+        __checkBeforeDeleteCurrentItem(
       checkBusy: true,
       checkAllow: true,
     );
@@ -7920,8 +7409,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
       showErrorSnackBar(
         message: "Can not change the position",
         errorDetails: [
-          "You need to set block.config.clientSideSortStrategy to ${SortStrategy
-              .manual}"
+          "You need to set block.config.clientSideSortStrategy to ${SortStrategy.manual}"
         ],
       );
       return false;
@@ -7993,7 +7481,7 @@ FORM_INPUT extends FormInput // EmptyFormInput
 
   _ProcessedQueryResult<ID, ITEM, FILTER_CRITERIA> __processQueryResult({
     required FilterCriteriaSnapshot<FILTER_CRITERIA>?
-    usedFilterCriteriaSnapshot,
+        usedFilterCriteriaSnapshot,
     required Pageable? usedPageable,
     //
     required List<ITEM>? queriedItemList,
@@ -8044,13 +7532,9 @@ FORM_INPUT extends FormInput // EmptyFormInput
           shelf: shelf,
           methodName: "resolveParentBlockItemId",
           warningMessage:
-          '${queriedItems
-              .length} items were just queried (${getClassNameWithoutGenerics(
-              this)}). '
-              '${errorItems
-              .length} items failed during the validation process, '
-              'and ${invalidItems
-              .length} items did not match the current item of the parent block.',
+              '${queriedItems.length} items were just queried (${getClassNameWithoutGenerics(this)}). '
+              '${errorItems.length} items failed during the validation process, '
+              'and ${invalidItems.length} items did not match the current item of the parent block.',
           stackTrace: null,
           showSnackBar: true,
           tipDocument: TipDocument.blockResolveParentBlockItemId,
@@ -8155,12 +7639,12 @@ FORM_INPUT extends FormInput // EmptyFormInput
   // ***************************************************************************
 
   BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>
-  _createEmptyItemDeletionResult() {
+      _createEmptyItemDeletionResult() {
     return BlockItemDeletionResult<ID, ITEM, ITEM_DETAIL>(candidateItem: null);
   }
 
   BlockItemsDeletionResult<ID, ITEM, ITEM_DETAIL>
-  _createEmptyItemsDeletionResult({
+      _createEmptyItemsDeletionResult({
     required List<ITEM> candidateItems,
   }) {
     return BlockItemsDeletionResult<ID, ITEM, ITEM_DETAIL>(

@@ -1,10 +1,10 @@
 part of '../core.dart';
 
 abstract class Scalar<
-ID extends Comparable,
-VALUE extends Identifiable<ID>,
-FILTER_INPUT extends FilterInput,
-FILTER_CRITERIA extends FilterCriteria> extends _Core {
+    ID extends Comparable,
+    VALUE extends Identifiable<ID>,
+    FILTER_INPUT extends FilterInput,
+    FILTER_CRITERIA extends FilterCriteria> extends _Core {
   late final Shelf shelf;
 
   QueryType __lastQueryType = QueryType.realQuery;
@@ -105,10 +105,10 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
   bool get isQuerying => __isQuerying;
 
   late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-  _registeredOrDefaultFilterModel;
+      _registeredOrDefaultFilterModel;
 
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>
-  get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
+      get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   FilterModel<FILTER_INPUT, FILTER_CRITERIA>? get filterModel {
     if (_registeredOrDefaultFilterModel is _DefaultFilterModel) {
@@ -126,7 +126,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
 
   FilterCriteriaSnapshot<FILTER_CRITERIA>? _filterCriteriaSnapshot;
   _ScalarValueWrap<ID, VALUE> __current =
-  _ScalarValueWrap<ID, VALUE>(id: null, value: null);
+      _ScalarValueWrap<ID, VALUE>(id: null, value: null);
 
   ScalarDataState _scalarDataState = const ScalarDataStatePending.initial();
   PageData<VALUE>? _lastQueryResult;
@@ -153,8 +153,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
 
   bool get hasError => scalarErrorInfo != null || filterErrorInfo != null;
 
-  ScalarErrorInfo? get scalarErrorInfo =>
-      switch (dataState) {
+  ScalarErrorInfo? get scalarErrorInfo => switch (dataState) {
         ScalarDataStatePending(:final errorInfo?) => errorInfo,
         ScalarDataStateLoadedStale(:final errorInfo?) => errorInfo,
         _ => null,
@@ -189,8 +188,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     required ScalarConfig config,
     required String? filterModelName,
     required List<Scalar>? childScalars,
-  })
-      : config = config.copy(),
+  })  : config = config.copy(),
         effectiveConfig = ScalarEffectiveConfig._fromConfig(config),
         registeredFilterModelName = filterModelName,
         _childScalars = childScalars ?? [] {
@@ -271,8 +269,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       executionTrace.addInfo(
         codeId: "#113200",
         shortDesc:
-        "Create new ${debugObjHtml(_ScalarSyncSessionState)} for ${debugObjHtml(
-            this)}",
+            "Create new ${debugObjHtml(_ScalarSyncSessionState)} for ${debugObjHtml(this)}",
         parameters: {
           "parentScalarValueId": parentScalarValueId,
           "filterCriteria": filterCriteria,
@@ -287,8 +284,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       executionTrace.addInfo(
         codeId: "#113300",
         shortDesc:
-        "${debugObjHtml(this)} use the current ${debugObjHtml(
-            _ScalarSyncSessionState)}, no need to create.",
+            "${debugObjHtml(this)} use the current ${debugObjHtml(_ScalarSyncSessionState)}, no need to create.",
       );
     }
     //
@@ -319,8 +315,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
         executionTrace.addInfo(
           codeId: "#113800",
           shortDesc:
-          "Transitioned ${debugObjHtml(this)} dataState to ${debugObjHtml(
-              nextState)} due to SyncSession update",
+              "Transitioned ${debugObjHtml(this)} dataState to ${debugObjHtml(nextState)} due to SyncSession update",
         );
         _scalarDataState = nextState;
       }
@@ -338,15 +333,14 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     required ExecutionUnitType executionUnitType,
     required XScalar<ID, VALUE> thisXScalar,
     required ScalarLoadExtraDataQuickActionIntent<ID, VALUE, DATA>
-    executionIntent,
+        executionIntent,
   }) async {
     __assertThisXScalar(thisXScalar);
 
     executionTrace.addInfo(
       codeId: "#040000",
       shortDesc:
-      "Begin ${debugObjHtml(this)} -> ${executionUnitType
-          .asDebugExecutionUnit()}.",
+          "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
     );
 
     final loadResult = executionIntent.resultWrapper._setResult(
@@ -369,7 +363,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       final ErrorInfo errorInfo = _handleError(
         module: shelf,
         methodName:
-        '${getClassName(executionIntent.action)}.performLoadExtraData',
+            '${getClassName(executionIntent.action)}.performLoadExtraData',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -379,8 +373,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       executionTrace.addInfo(
         codeId: "#040200",
         shortDesc:
-        "The ${debugObjHtml(executionIntent
-            .action)}.performLoadExtraData() method was called with an error!",
+            "The ${debugObjHtml(executionIntent.action)}.performLoadExtraData() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -393,7 +386,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       final ErrorInfo errorInfo = _handleRestError(
         shelf: shelf,
         methodName:
-        "${getClassName(executionIntent.action)}.performLoadExtraData",
+            "${getClassName(executionIntent.action)}.performLoadExtraData",
         message: result.error!.errorMessage,
         errorDetails: result.error!.errorDetails,
         showSnackBar: true,
@@ -402,8 +395,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       executionTrace.addInfo(
         codeId: "#040300",
         shortDesc:
-        "The ${debugObjHtml(executionIntent
-            .action)}.performLoadExtraData() method was called with an error!",
+            "The ${debugObjHtml(executionIntent.action)}.performLoadExtraData() method was called with an error!",
         errorInfo: errorInfo,
       );
     }
@@ -418,6 +410,9 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       success: success,
     );
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   Future<bool> _showAfterScalarLoadExtraData<DATA extends Object>({
     required ExecutionTrace executionTrace,
@@ -450,8 +445,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       executionTrace.addInfo(
         codeId: "#041300",
         shortDesc:
-        "The ${debugObjHtml(
-            action)}.onExtraDataLoaded() method was called with an error!",
+            "The ${debugObjHtml(action)}.onExtraDataLoaded() method was called with an error!",
         errorInfo: errorInfo,
       );
       success2 = false;
@@ -482,17 +476,14 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     executionTrace.addInfo(
       codeId: "#039000",
       shortDesc:
-      "Begin ${debugObjHtml(this)} -> ${executionUnitType
-          .asDebugExecutionUnit()}.",
+          "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
     );
 
     executionTrace.addInfo(
       codeId: "#039100",
       shortDesc: "${debugObjHtml(this)} -> Clear data and set to pending. "
           "Clear data of child scalars and set its to none."
-          "${_childScalars.isEmpty
-          ? '\n ** No children -> Nothing to do!'
-          : ''}",
+          "${_childScalars.isEmpty ? '\n ** No children -> Nothing to do!' : ''}",
     );
 
     executionIntent.resultWrapper._setResult(
@@ -531,8 +522,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     executionTrace.addInfo(
       codeId: "#012000",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()}",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -542,13 +532,13 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     );
 
     final bool provideScalarContext =
-    ui.hasVisibleViews(includeDescendants: true);
+        ui.hasVisibleViews(includeDescendants: true);
 
     final DebugScalarSyncSessionState<ID>? currentSyncSessionState =
         _scalarSyncSessionState;
 
     final ScalarQueryPlan<ID> queryPlan =
-    ScalarQueryStrategyResolver.resolveQueryPlan<ID>(
+        ScalarQueryStrategyResolver.resolveQueryPlan<ID>(
       scalar: this,
       syncSessionState: currentSyncSessionState,
       queryHint: initialQueryHint,
@@ -559,8 +549,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       executionTrace.addInfo(
         codeId: "#012080",
         shortDesc:
-        "QueryPlan action is NULL -> Skip query execution, @dataState: $dataState, @value: ${debugObjHtml(
-            value)}.",
+            "QueryPlan action is NULL -> Skip query execution, @dataState: $dataState, @value: ${debugObjHtml(value)}.",
       );
       return;
     }
@@ -570,17 +559,16 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     final XFilterModel xFilterModel = thisXScalar.xFilterModel;
     final FilterModel filterModel = xFilterModel.filterModel;
     final FilterCriteriaSnapshot<FILTER_CRITERIA>?
-    committedFilterCriteriaSnapshot =
-    filterModel._committedFilterCriteriaSnapshot
-    as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
+        committedFilterCriteriaSnapshot =
+        filterModel._committedFilterCriteriaSnapshot
+            as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
 
     if (committedFilterCriteriaSnapshot == null ||
         committedFilterCriteriaSnapshot.isError) {
       executionTrace.addInfo(
         codeId: "#012340",
         shortDesc:
-        "${debugObjHtml(filterModel)} error --> clear data of ${debugObjHtml(
-            this)} and set to error.",
+            "${debugObjHtml(filterModel)} error --> clear data of ${debugObjHtml(this)} and set to error.",
       );
       __stopQueryWithFilterErrorCascade(
         thisXScalar: thisXScalar,
@@ -590,7 +578,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     }
 
     committedFilterCriteriaSnapshot
-    as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
+        as FilterCriteriaSnapshotSuccess<FILTER_CRITERIA>;
     final bool filterCriteriaChanged = _isFilterCriteriaSnapshotChanged(
       newFilterCriteriaSnapshot: committedFilterCriteriaSnapshot,
     );
@@ -660,14 +648,14 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
       filterCriteriaChanged: filterCriteriaChanged,
     );
     final ScalarQueryCalculatorResult calculationResult =
-    ScalarQueryStateCalculator.calculate(calculationInput);
+        ScalarQueryStateCalculator.calculate(calculationInput);
 
     newScalarDataState = calculationResult.newScalarDataState;
 
     if (sclrErrorInfo != null) {
       _updateStateAfterQueryError(newScalarDataState: newScalarDataState);
       final List<XScalar> descendantXScalars =
-      thisXScalar.getDescendantXScalars(sameFilterOnly: true);
+          thisXScalar.getDescendantXScalars(sameFilterOnly: true);
 
       __stopDescendantQueryWithError(
         descendantXScalars: descendantXScalars,
@@ -777,7 +765,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     const fallbackDilemmaStrategy = FallbackDilemmaStrategy.preserveStableCache;
 
     final ScalarDataState newScalarDataState =
-    ScalarQueryStateCalculator.calculateDataStateOnError(
+        ScalarQueryStateCalculator.calculateDataStateOnError(
       currentDataState: dataState,
       scalarErrorOrigin: scalarErrorOrigin,
       scalarErrorInfo: scalarErrorInfo,
@@ -788,7 +776,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     _scalarDataState = newScalarDataState;
 
     final List<XScalar> descendantXScalars =
-    thisXScalar.getDescendantXScalars(sameFilterOnly: true);
+        thisXScalar.getDescendantXScalars(sameFilterOnly: true);
 
     __stopDescendantQueryWithError(
       descendantXScalars: descendantXScalars,
@@ -805,7 +793,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     for (final descendantXScalar in descendantXScalars) {
       final descendantScalar = descendantXScalar.scalar;
       final descendantState =
-      ScalarQueryStateCalculator.calculateDataStateOnError(
+          ScalarQueryStateCalculator.calculateDataStateOnError(
         currentDataState: descendantScalar.dataState,
         scalarErrorOrigin: scalarErrorOrigin,
         scalarErrorInfo: null,
@@ -1092,7 +1080,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core {
     final XShelf xShelf = _XShelfScalarClear(scalar: this);
     final XScalar thisXScalar = xShelf.findXScalarByName(name)!;
     final executionIntent =
-    thisXScalar._createAndSetScalarExecutionIntentClear();
+        thisXScalar._createAndSetScalarExecutionIntentClear();
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
     return executionIntent.result;

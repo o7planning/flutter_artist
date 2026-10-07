@@ -1,33 +1,33 @@
 part of '../__precheck.dart';
 
+/// Precheck enumeration for form model patch form fields operations.
 enum FormModelPatchFormFieldsPrecheck implements Precheck {
+  /// Operation aborted because the system executor is currently busy.
   busy(
     precheckCode: PrecheckCode.busy,
-    message: "Patch-form-fields feature is disabled",
-    details: [
-      "The executor is busy.",
-    ],
+    message: "Patching form fields is disabled.",
+    details: ["The system executor is currently busy. Please wait."],
   ),
+
+  /// Operation aborted because the form is in a none state.
   formInNoneState(
-    precheckCode: PrecheckCode.inErrorState,
-    message: "Enter-form-fields feature is disabled",
-    details: [
-      "The form in 'none' state.",
-    ],
+    precheckCode: PrecheckCode.formInNoneState,
+    message: "Patching form fields is disabled.",
+    details: ["The form is currently in a 'none' state."],
   ),
+
+  /// Operation aborted because the form is in a pending state.
   formInPendingState(
-    precheckCode: PrecheckCode.inErrorState,
-    message: "Enter-form-fields feature is disabled",
-    details: [
-      "The form in 'pending' state.",
-    ],
+    precheckCode: PrecheckCode.formInPendingState,
+    message: "Patching form fields is disabled.",
+    details: ["The form is currently in a 'pending' state."],
   ),
+
+  /// Operation aborted because the form is in a fatal error state.
   formInFatalErrorState(
-    precheckCode: PrecheckCode.inErrorState,
-    message: "Enter-form-fields feature is disabled",
-    details: [
-      "The form in 'fatal error' state.",
-    ],
+    precheckCode: PrecheckCode.formInFatalErrorState,
+    message: "Patching form fields is disabled.",
+    details: ["The form is currently in a fatal error state."],
   );
 
   @override

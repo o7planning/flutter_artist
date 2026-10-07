@@ -79,7 +79,7 @@ class _ProzessUiComponents extends _UiComponents {
 
   @override
   Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
-    return debugFindMountedWidgetStates(
+    return _debugFindMountedWidgetStates(
       withStageContentView: true,
       withForm: true,
       withStageControlBar: true,
@@ -89,7 +89,7 @@ class _ProzessUiComponents extends _UiComponents {
   }
 
   @DebugMethodAnnotation()
-  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> _debugFindMountedWidgetStates({
     required bool withStageContentView,
     required bool withForm,
     required bool withStageControlBar,

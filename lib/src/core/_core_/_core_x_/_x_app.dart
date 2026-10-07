@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-class XStorage {
+class XApp {
   ExecutionIntent? _executionIntent;
 
   bool get isEmpty {
@@ -15,7 +15,7 @@ class XStorage {
     _executionIntent = executionIntent;
   }
 
-  _StorageBackendActionExecutionUnit? _getNextExecutionUnit(
+  _AppBackendActionExecutionUnit? _getNextExecutionUnit(
       {required bool remove}) {
     if (_executionIntent == null) {
       return null;
@@ -24,8 +24,8 @@ class XStorage {
     if (remove) {
       _executionIntent = null;
     }
-    if (executionIntent is StorageBackendActionIntent) {
-      return _StorageBackendActionExecutionUnit(
+    if (executionIntent is AppBackendActionIntent) {
+      return _AppBackendActionExecutionUnit(
         executionIntent: executionIntent,
       );
     } else {

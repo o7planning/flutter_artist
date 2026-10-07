@@ -73,8 +73,8 @@ void main() {
         item: mockItem,
         errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
         checkAllow: true,
-        findItemSameIdWith: (target) =>
-            null, // Giả lập không tìm thấy item trong block
+        findItemSameIdWith: (target) => null,
+        // Giả lập không tìm thấy item trong block
         checkItemDeletionAllowed: (_) => CheckAllowResult.allow(),
       );
 

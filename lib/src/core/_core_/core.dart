@@ -164,7 +164,7 @@ part '_execution_intent_/scalar_execution_intent.dart';
 
 part '_execution_intent_/_execution_intent.dart';
 
-part '_execution_intent_/storage_execution_intent.dart';
+part '_execution_intent_/app_execution_intent.dart';
 
 part '_execution_intent_/activity_v1_execution_intent.dart';
 
@@ -516,7 +516,7 @@ part '_core_x_/_x_shelf_/_x_shelf_filter_panel_change.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_sort_panel_change.dart';
 
-part '_core_x_/_x_storage.dart';
+part '_core_x_/_x_app.dart';
 
 part '_utils_/_block_current_item_resolver.dart';
 
@@ -652,7 +652,7 @@ part '_execution_unit_result_/_stage_eur/_stage_submit_result.dart';
 
 part '_execution_unit_result_/_stage_eur/_stage_load_init_data_result.dart';
 
-part '_execution_unit_result_/_storage_backend_action_result.dart';
+part '_execution_unit_result_/_app_backend_action_result.dart';
 
 part '_execution_unit_/__shelf_member_resulted_execution_unit.dart';
 
@@ -728,7 +728,7 @@ part '_execution_unit_/shelf_member/_scalar_load_extra_data_quick_action_executi
 
 part '_execution_unit_/shelf_member/_scalar_query_execution_unit.dart';
 
-part '_execution_unit_/storage/_storage_backend_action_execution_unit.dart';
+part '_execution_unit_/app/_app_backend_action_execution_unit.dart';
 
 part '_ui_/__context_provider_view.dart';
 
@@ -1115,8 +1115,8 @@ class _ScalarClearAnnotation {
 
 // ******* Scalar QuickAction (START) ******************************************
 
-class _StorageBackendActionAnnotation {
-  const _StorageBackendActionAnnotation();
+class _AppBackendActionAnnotation {
+  const _AppBackendActionAnnotation();
 }
 
 class _ScalarLoadExtraDataQuickActionAnnotation {

@@ -3,7 +3,7 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 import '../action/__action.dart';
 import '../typedef/typedefs.dart';
 
-class BroadcastBackendEventsAction extends StorageBackendAction {
+class BroadcastBackendEventsAction extends AppBackendAction {
   final List<Type> events;
 
   BroadcastBackendEventsAction({
@@ -13,8 +13,8 @@ class BroadcastBackendEventsAction extends StorageBackendAction {
   }) : super(actionInfo: actionInfo ?? "Broadcast events $events");
 
   @override
-  StorageBackendActionConfig defineActionConfig() {
-    return StorageBackendActionConfig(
+  AppBackendActionConfig defineActionConfig() {
+    return AppBackendActionConfig(
       broadcastEvents: events,
     );
   }

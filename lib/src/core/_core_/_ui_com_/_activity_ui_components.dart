@@ -104,13 +104,15 @@ class _ActivityUiComponents extends _ModuleUiComponents {
         );
       }
     }
-
     return ret;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   @override
   Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
-    return debugFindMountedWidgetStates(
+    return _debugFindMountedWidgetStates(
       withTask: true,
       withProzess: true,
       withProzessControlBar: true,
@@ -119,7 +121,7 @@ class _ActivityUiComponents extends _ModuleUiComponents {
   }
 
   @DebugMethodAnnotation()
-  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> _debugFindMountedWidgetStates({
     required bool withTask,
     required bool withProzess,
     required bool withProzessControlBar,

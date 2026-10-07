@@ -299,7 +299,7 @@ class _ShelfUiComponents extends _ModuleUiComponents {
 
   @override
   Map<IContextProviderViewState, XState> _debugFindAllMountedWidgetStates() {
-    return debugFindMountedWidgetStates(
+    return _debugFindMountedWidgetStates(
       withBlockContentView: true,
       withScalarContentView: true,
       withPagination: true,
@@ -314,7 +314,7 @@ class _ShelfUiComponents extends _ModuleUiComponents {
   }
 
   @DebugMethodAnnotation()
-  Map<IContextProviderViewState, XState> debugFindMountedWidgetStates({
+  Map<IContextProviderViewState, XState> _debugFindMountedWidgetStates({
     required bool withBlockContentView,
     required bool withScalarContentView,
     required bool withPagination,
