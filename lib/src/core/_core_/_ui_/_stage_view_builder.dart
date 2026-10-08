@@ -4,6 +4,7 @@ class StageViewBuilder extends _ContextProviderView {
   final Stage stage;
   final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
+  final StageContextType  stageContextType;
 
   const StageViewBuilder({
     super.key,
@@ -11,6 +12,7 @@ class StageViewBuilder extends _ContextProviderView {
     required super.description,
     required this.stage,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    this.stageContextType= StageContextType.initData,
     required this.build,
   });
 
@@ -30,10 +32,6 @@ class _StageViewBuilderState
     return null;
   }
 
-  @override
-  Activity? _getRelatedActivity() {
-    return widget.stage.activity;
-  }
 
   @override
   String getWidgetOwnerClassName() {
@@ -41,34 +39,16 @@ class _StageViewBuilderState
   }
 
   @override
-  bool get provideScalarContext {
-    return false;
-  }
+  BlockContextType? get blockContextType => null;
 
   @override
-  bool get provideBlockContext {
-    return false;
-  }
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideItemContext {
-    return false;
-  }
+  StageContextType? get stageContextType => widget.stageContextType;
 
   @override
-  bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideStageContext {
-    return true;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
   void addWidgetState({required bool isVisible}) {

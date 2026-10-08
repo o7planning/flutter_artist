@@ -1,11 +1,11 @@
 part of '../core.dart';
 
-// bool _lockChangeEvent1 = false;
-
 class _FilterPanelBuilder extends _ContextProviderView {
   final FilterModel filterModel;
-
   final Widget Function() build;
+
+  final BlockContextType? blockContextType;
+  final ScalarContextType? scalarContextType;
 
   const _FilterPanelBuilder({
     super.key,
@@ -13,6 +13,8 @@ class _FilterPanelBuilder extends _ContextProviderView {
     required super.description,
     required this.filterModel,
     required this.build,
+    this.blockContextType,
+    this.scalarContextType,
   });
 
   @override
@@ -33,10 +35,6 @@ class _FilterPanelBuilderState
     return widget.filterModel.shelf;
   }
 
-  @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
 
   @override
   String getWidgetOwnerClassName() {
@@ -44,34 +42,16 @@ class _FilterPanelBuilderState
   }
 
   @override
-  bool get provideScalarContext {
-    return false;
-  }
+  BlockContextType? get blockContextType => widget.blockContextType;
 
   @override
-  bool get provideBlockContext {
-    return false;
-  }
+  ScalarContextType? get scalarContextType => widget.scalarContextType;
 
   @override
-  bool get provideItemContext {
-    return false;
-  }
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
   void setBuildingState({required bool isBuilding}) {

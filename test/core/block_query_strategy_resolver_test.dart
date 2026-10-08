@@ -22,7 +22,7 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.force,
-        provideBlockContext: true,
+        provideItemsContext: true,
       );
 
       expect(plan.action, isNull);
@@ -48,7 +48,7 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.none,
-        provideBlockContext:
+        provideItemsContext:
             true, // Visible UI escalates pending state to query
       );
 
@@ -76,7 +76,7 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.force,
-        provideBlockContext: true,
+        provideItemsContext: true,
       );
 
       expect(plan.action, equals(BlockResolvedQueryAction.performQuery));
@@ -113,7 +113,7 @@ void main() {
         ),
         syncSessionState: mockSession,
         queryHint: QueryHint.force,
-        provideBlockContext: true,
+        provideItemsContext: true,
       );
 
       expect(
@@ -146,7 +146,7 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.force,
-        provideBlockContext: true,
+        provideItemsContext: true,
       );
 
       expect(plan.action, equals(BlockResolvedQueryAction.performQuery));
@@ -182,7 +182,7 @@ void main() {
         ),
         syncSessionState: mockSession,
         queryHint: QueryHint.force,
-        provideBlockContext: true,
+        provideItemsContext: true,
       );
 
       expect(plan.action, equals(BlockResolvedQueryAction.performQuery));
@@ -225,7 +225,7 @@ void main() {
         ),
         syncSessionState: mockSession,
         queryHint: QueryHint.force,
-        provideBlockContext: true,
+        provideItemsContext: true,
       );
 
       expect(
@@ -268,7 +268,7 @@ void main() {
         ),
         syncSessionState: mockSession,
         queryHint: QueryHint.force,
-        provideBlockContext: true,
+        provideItemsContext: true,
       );
 
       expect(
@@ -297,7 +297,7 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.none,
-        provideBlockContext: true,
+        provideItemsContext: true,
       );
 
       expect(plan.action, isNull);
@@ -337,7 +337,7 @@ void main() {
         ),
         syncSessionState: mockSession,
         queryHint: QueryHint.force,
-        provideBlockContext: true,
+        provideItemsContext: true,
       );
 
       expect(plan.action, isNull);
@@ -378,7 +378,7 @@ void main() {
         ),
         syncSessionState: mockSession,
         queryHint: QueryHint.force,
-        provideBlockContext: true,
+        provideItemsContext: true,
       );
 
       expect(
@@ -407,7 +407,7 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.force,
-        provideBlockContext: true,
+        provideItemsContext: true,
       );
 
       expect(plan.action, equals(BlockResolvedQueryAction.performQuery));
@@ -416,10 +416,10 @@ void main() {
     });
 
     // -------------------------------------------------------------------------
-    // TEST 12: Hidden UI (provideBlockContext == false) and queryHint == none
+    // TEST 12: Hidden UI (provideItemsContext == false) and queryHint == none
     // -------------------------------------------------------------------------
     test(
-        '12. Hidden UI (provideBlockContext == false) and no force hint MUST resolve to NULL even if dataState is PENDING or STALE',
+        '12. Hidden UI (provideItemsContext == false) and no force hint MUST resolve to NULL even if dataState is PENDING or STALE',
         () {
       final plan = BlockQueryStrategyResolver.resolveQueryPlanInternal<String>(
         dataState: const BlockDataStatePending(),
@@ -433,7 +433,7 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.none,
-        provideBlockContext:
+        provideItemsContext:
             false, // Off-screen / hidden UI -> No query needed!
       );
 

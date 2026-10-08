@@ -21,17 +21,13 @@ class ActivityV1SectionViewBuilder extends _ContextProviderView {
 class _ActivitySectionViewBuilderState
     extends _ContextProviderViewState<ActivityV1SectionViewBuilder> {
   @override
-  ContextProviderViewType get type => ContextProviderViewType.activityFragment;
+  ContextProviderViewType get type => ContextProviderViewType.activityV1Section;
 
   @override
-  Shelf? _getRelatedShelf() {
+  FeatureModule? _getRelatedShelf() {
     return null;
   }
 
-  @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
 
   @override
   String getWidgetOwnerClassName() {
@@ -39,37 +35,19 @@ class _ActivitySectionViewBuilderState
   }
 
   @override
-  bool get provideScalarContext {
-    return false;
-  }
+  BlockContextType? get blockContextType => null;
 
   @override
-  bool get provideBlockContext {
-    return false;
-  }
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideItemContext {
-    return false;
-  }
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideFormContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
-
-  @override
-  bool get isActivityRepresentative {
+  bool get provideActivityV1Context {
     return false;
   }
 

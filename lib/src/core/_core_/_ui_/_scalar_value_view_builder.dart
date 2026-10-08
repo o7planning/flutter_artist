@@ -30,10 +30,6 @@ class _ScalarValueViewBuilderState
     return widget.scalar.shelf;
   }
 
-  @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
 
   @override
   String getWidgetOwnerClassName() {
@@ -41,34 +37,16 @@ class _ScalarValueViewBuilderState
   }
 
   @override
-  bool get provideScalarContext {
-    return true;
-  }
+  BlockContextType? get blockContextType => null;
 
   @override
-  bool get provideBlockContext {
-    return false;
-  }
+  ScalarContextType? get scalarContextType => ScalarContextType.value;
 
   @override
-  bool get provideItemContext {
-    return false;
-  }
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
   Widget buildContent(BuildContext context) {

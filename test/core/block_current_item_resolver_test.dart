@@ -31,8 +31,8 @@ void main() {
       Type? itemDetailType,
       Object? candidateCurrItem,
       bool inputForceReloadItem = false,
-      bool provideBlockContext = true,
-      bool provideItemContext = true,
+      bool provideItemsContext = true,
+      bool provideItemDetailContext = true,
       bool provideFormContext = false,
       AbsentItemContextPolicy absentItemContextPolicy =
           AbsentItemContextPolicy.tryNotSetAnItemAsCurrent,
@@ -50,8 +50,8 @@ void main() {
         itemDetailType: itemDetailType ?? MockItemDetail,
         candidateCurrItem: candidateCurrItem ?? candidateItem,
         inputForceReloadItem: inputForceReloadItem,
-        provideBlockContext: provideBlockContext,
-        provideItemContext: provideItemContext,
+        provideItemsContext: provideItemsContext,
+        provideItemDetailContext: provideItemDetailContext,
         provideFormContext: provideFormContext,
         absentItemContextPolicy: absentItemContextPolicy,
         unifiedItemRefreshPolicy: unifiedItemRefreshPolicy,
@@ -78,7 +78,7 @@ void main() {
               BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
           isCandidateItemDifferentFromCurrent: false,
           isCandidateCurrentItemInNewQueriedList: false,
-          provideItemContext: false,
+          provideItemDetailContext: false,
         );
         expect(plan.candidateAccepted, isTrue);
       });
@@ -93,7 +93,7 @@ void main() {
               BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
           isCandidateItemDifferentFromCurrent: true,
           isCandidateCurrentItemInNewQueriedList: true,
-          provideItemContext: true,
+          provideItemDetailContext: true,
         );
         expect(plan.candidateAccepted, isTrue);
       });
@@ -101,14 +101,14 @@ void main() {
       test(
           '1.3 Empty workspace protection: Candidate rejected when no UI demands item',
           () {
-        // Crucial fix: When no current item exists and provideItemContext == false
+        // Crucial fix: When no current item exists and provideItemDetailContext == false
         // under tryNotSetAnItemAsCurrent, candidate must NOT be accepted.
         final plan = executeInternal(
           setCurrentItemDirective:
               BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
           isCandidateItemDifferentFromCurrent: true,
           isCandidateCurrentItemInNewQueriedList: true,
-          provideItemContext: false,
+          provideItemDetailContext: false,
           absentItemContextPolicy:
               AbsentItemContextPolicy.tryNotSetAnItemAsCurrent,
         );
@@ -125,21 +125,21 @@ void main() {
               BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
           isCandidateItemDifferentFromCurrent: true,
           isCandidateCurrentItemInNewQueriedList: false,
-          provideItemContext: true,
+          provideItemDetailContext: true,
         );
         expect(plan.candidateAccepted, isTrue);
       });
 
       test(
-          '1.5 Policy trySetAnItemAsCurrent escalates acceptance for candidate even if provideItemContext is false',
+          '1.5 Policy trySetAnItemAsCurrent escalates acceptance for candidate even if provideItemDetailContext is false',
           () {
-        // Policy forces provideItemContextExt to true -> accepted.
+        // Policy forces provideItemDetailContextExt to true -> accepted.
         final plan = executeInternal(
           setCurrentItemDirective:
               BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
           isCandidateItemDifferentFromCurrent: true,
           isCandidateCurrentItemInNewQueriedList: false,
-          provideItemContext: false,
+          provideItemDetailContext: false,
           absentItemContextPolicy:
               AbsentItemContextPolicy.trySetAnItemAsCurrent,
         );
@@ -157,7 +157,7 @@ void main() {
             setCurrentItemDirective: directive,
             isCandidateItemDifferentFromCurrent: true,
             isCandidateCurrentItemInNewQueriedList: false,
-            provideItemContext: false,
+            provideItemDetailContext: false,
           );
           expect(plan.candidateAccepted, isTrue);
         }
@@ -172,7 +172,7 @@ void main() {
           '2.1 Extended via ItemAbsentRepresentativePolicy.trySetAnItemAsCurrent',
           () {
         final plan = executeInternal(
-          provideItemContext: false,
+          provideItemDetailContext: false,
           absentItemContextPolicy:
               AbsentItemContextPolicy.trySetAnItemAsCurrent,
           isCandidateItemDifferentFromCurrent: true,
@@ -185,7 +185,7 @@ void main() {
           '2.2 Disabled via ItemAbsentRepresentativePolicy.tryNotSetAnItemAsCurrent',
           () {
         final plan = executeInternal(
-          provideItemContext: false,
+          provideItemDetailContext: false,
           absentItemContextPolicy:
               AbsentItemContextPolicy.tryNotSetAnItemAsCurrent,
           isCandidateItemDifferentFromCurrent: true,
@@ -194,13 +194,13 @@ void main() {
         expect(plan.forceReloadItem, isFalse);
       });
 
-      test('2.3 Directives override provideItemContext to true', () {
+      test('2.3 Directives override provideItemDetailContext to true', () {
         for (final directive in [
           BlockSetCurrentItemDirective.setAnItemAsCurrent,
           BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm,
         ]) {
           final plan = executeInternal(
-            provideItemContext: false,
+            provideItemDetailContext: false,
             setCurrentItemDirective: directive,
             isCandidateItemDifferentFromCurrent: true,
           );
@@ -291,7 +291,7 @@ void main() {
 
       test('4.3 Suppressed when no item representative is active on UI', () {
         final plan = executeInternal(
-          provideItemContext: false,
+          provideItemDetailContext: false,
           isCandidateItemDifferentFromCurrent: true,
           isCandidateCurrentItemInNewQueriedList: true,
           absentItemContextPolicy:
@@ -302,7 +302,7 @@ void main() {
 
       test('4.4 Current item ID changed triggers detail fetch', () {
         final plan = executeInternal(
-          provideItemContext: true,
+          provideItemDetailContext: true,
           isCandidateItemDifferentFromCurrent: true,
           isCandidateCurrentItemInNewQueriedList: true,
         );
@@ -314,7 +314,7 @@ void main() {
           () {
         // Item is unchanged, but newly queried batch contains updated fields -> refresh
         final plan = executeInternal(
-          provideItemContext: true,
+          provideItemDetailContext: true,
           isCandidateItemDifferentFromCurrent: false,
           isCandidateCurrentItemInNewQueriedList: true,
         );
@@ -326,7 +326,7 @@ void main() {
           () {
         // Pagination / Append batch does not contain the current item -> keep stable, no reload
         final plan = executeInternal(
-          provideItemContext: true,
+          provideItemDetailContext: true,
           isCandidateItemDifferentFromCurrent: false,
           isCandidateCurrentItemInNewQueriedList: false,
         );

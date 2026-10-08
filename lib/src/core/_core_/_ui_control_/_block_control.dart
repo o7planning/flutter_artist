@@ -8,6 +8,7 @@ abstract class BlockControl extends _ContextProviderView {
   final Widget Function(VoidCallback? onPressed) build;
   final VoidCallback? navigate;
   final BlockControlActionType actionType;
+  final BlockContextType? blockContextType;
 
   const BlockControl({
     super.key,
@@ -18,6 +19,7 @@ abstract class BlockControl extends _ContextProviderView {
     required this.build,
     required this.actionType,
     required this.navigate,
+    required this.blockContextType,
   });
 
   @override
@@ -33,11 +35,6 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
   }
 
   @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
-
-  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
@@ -47,34 +44,16 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
       ContextProviderViewType.blockControlButton;
 
   @override
-  bool get provideScalarContext {
-    return false;
-  }
+  BlockContextType? get blockContextType => widget.blockContextType;
 
   @override
-  bool get provideBlockContext {
-    return false;
-  }
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideItemContext {
-    return false;
-  }
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
   Widget buildContent(BuildContext context) {

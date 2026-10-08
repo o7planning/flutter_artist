@@ -3,16 +3,17 @@ part of '../core.dart';
 class BlockItemDetailViewBuilder extends _ContextProviderView {
   final Block block;
   final Widget Function() build;
-  final bool provideFormContext;
+  final BlockContextType blockContextType;
 
   const BlockItemDetailViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.block,
-    this.provideFormContext = false,
+    this.blockContextType = BlockContextType.itemDetail,
     required this.build,
-  });
+  }) : assert(blockContextType == BlockContextType.itemDetail ||
+            blockContextType == BlockContextType.form);
 
   @override
   State<StatefulWidget> createState() {
@@ -28,11 +29,6 @@ class _BlockItemDetailViewBuilderState
   }
 
   @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
-
-  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
@@ -42,34 +38,16 @@ class _BlockItemDetailViewBuilderState
       ContextProviderViewType.blockItemDetailView;
 
   @override
-  bool get provideScalarContext {
-    return false;
-  }
+  BlockContextType? get blockContextType => widget.blockContextType;
 
   @override
-  bool get provideBlockContext {
-    return true;
-  }
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideItemContext {
-    return true;
-  }
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideFormContext {
-    return widget.provideFormContext;
-  }
-
-  @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
   void addWidgetState({required bool isVisible}) {

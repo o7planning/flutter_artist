@@ -6,6 +6,7 @@ class BlockControlFilledButton extends BlockControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.block,
+    super.blockContextType,
     required super.actionType,
     super.navigate,
     //
@@ -38,6 +39,7 @@ class BlockControlFilledButton extends BlockControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.block,
+    super.blockContextType,
     required super.actionType,
     super.navigate,
     //
@@ -74,6 +76,7 @@ class BlockControlFilledButton extends BlockControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.block,
+    super.blockContextType,
     required super.actionType,
     super.navigate,
     //
@@ -107,6 +110,7 @@ class BlockControlFilledButton extends BlockControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.block,
+    super.blockContextType,
     required super.actionType,
     super.navigate,
     //

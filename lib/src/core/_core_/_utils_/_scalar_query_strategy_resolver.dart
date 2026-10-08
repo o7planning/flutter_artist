@@ -14,14 +14,14 @@ class ScalarQueryStrategyResolver {
         scalar,
     required DebugScalarSyncSessionState<ID>? syncSessionState,
     required QueryHint queryHint,
-    required bool provideScalarContext,
+    required bool provideValueContext,
   }) {
     return resolveQueryPlanInternal<ID>(
       dataState: scalar.dataState,
       config: scalar.effectiveConfig,
       syncSessionState: syncSessionState,
       queryHint: queryHint,
-      provideScalarContext: provideScalarContext,
+      provideValueContext: provideValueContext,
     );
   }
 
@@ -31,7 +31,7 @@ class ScalarQueryStrategyResolver {
     required ScalarEffectiveConfig config,
     required DebugScalarSyncSessionState<ID>? syncSessionState,
     required QueryHint queryHint,
-    required bool provideScalarContext,
+    required bool provideValueContext,
   }) {
     // -------------------------------------------------------------------------
     // 1. UNINITIALIZED STATE (ScalarDataStateNone): Skip execution
@@ -47,7 +47,7 @@ class ScalarQueryStrategyResolver {
     // a. Prozess explicitly mandated force (queryHint == QueryHint.force)
     // b. Active UI component is visible AND data is unready (pending/stale)
     final bool effectiveForce = queryHint == QueryHint.force ||
-        (provideScalarContext && (dataState.isPending || dataState.isStale));
+        (provideValueContext && (dataState.isPending || dataState.isStale));
 
     // If there is no demand to execute or refresh, reject execution immediately
     if (!effectiveForce) {

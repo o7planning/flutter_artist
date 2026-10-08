@@ -6,6 +6,7 @@ class TaskControlBar extends BaseControlBar<
     TaskControlBarItem> {
   final Task task;
   final TaskControlBarConfig config;
+  final TaskContextType? taskContextType;
 
   const TaskControlBar({
     super.key,
@@ -13,6 +14,7 @@ class TaskControlBar extends BaseControlBar<
     required super.description,
     required this.task,
     this.config = const TaskControlBarConfig(),
+    this.taskContextType = TaskContextType.initData,
     super.style,
     super.leftItems = const [
       TaskControlBarItem.standard(TaskControlBarItemType.back),
@@ -39,28 +41,20 @@ class _TaskControlBarState extends _BaseControlBarState<
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
 
   @override
-  Shelf? _getRelatedShelf() => null;
+  Activity? _getRelatedShelf() => widget.task.activity;
+
 
   @override
-  Activity? _getRelatedActivity() => widget.task.activity;
+  BlockContextType? get blockContextType => null;
 
   @override
-  bool get provideScalarContext => false;
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideBlockContext => false;
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideItemContext => false;
-
-  @override
-  bool get provideFormContext => false;
-
-  @override
-  bool get provideStageContext => false;
-
-  @override
-  bool get provideTaskContext => true;
+  TaskContextType? get taskContextType => widget.taskContextType;
 
   @override
   Widget? buildStandardButton(TaskControlBarItem item) {
@@ -92,24 +86,24 @@ class _TaskControlBarState extends _BaseControlBarState<
           },
         );
 
-    // case TaskControlBarItemType.submit:
-    //   if (!widget.config.allowSubmitButton) return null;
-    //
-    //   final bool checkBeforeSubmit =
-    //       widget.task.dataState.isLoaded && !widget.task.isExecuting;
-    //
-    //   return ControlBarHelper.buildControlBarButton(
-    //     context,
-    //     style: widget.style,
-    //     tooltip: "Submit Task",
-    //     iconData: FaIconConstants.submitIconData,
-    //     onAction: widget.task.isExecuting,
-    //     onPressed: checkBeforeSubmit
-    //         ? () async {
-    //             await widget.task.submit();
-    //           }
-    //         : null,
-    //   );
+      // case TaskControlBarItemType.submit:
+      //   if (!widget.config.allowSubmitButton) return null;
+      //
+      //   final bool checkBeforeSubmit =
+      //       widget.task.dataState.isLoaded && !widget.task.isExecuting;
+      //
+      //   return ControlBarHelper.buildControlBarButton(
+      //     context,
+      //     style: widget.style,
+      //     tooltip: "Submit Task",
+      //     iconData: FaIconConstants.submitIconData,
+      //     onAction: widget.task.isExecuting,
+      //     onPressed: checkBeforeSubmit
+      //         ? () async {
+      //             await widget.task.submit();
+      //           }
+      //         : null,
+      //   );
 
       case TaskControlBarItemType.submit:
         if (!widget.config.allowSubmitButton) {
@@ -129,17 +123,17 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: widget.task.__isSubmitting,
           onPressed: actionable.yes
               ? () async {
-            final result = await widget.task.submit();
-            final NavigationIntent? intent =
-                widget.config.submitNavigationIntent;
-            if (intent != null) {
-              widget.task._processNavigationIntent(
-                context: context,
-                result: result,
-                intent: intent,
-              );
-            }
-          }
+                  final result = await widget.task.submit();
+                  final NavigationIntent? intent =
+                      widget.config.submitNavigationIntent;
+                  if (intent != null) {
+                    widget.task._processNavigationIntent(
+                      context: context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
+                }
               : null,
         );
 
@@ -154,13 +148,13 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: actionable.yes
               ? () {
-            DebugFormModelInspectorDialog.show(
-              context: context,
-              locationInfo:
-              getClassNameWithoutGenerics(widget.ownerClassInstance),
-              formModel: widget.task.formModel!,
-            );
-          }
+                  DebugFormModelInspectorDialog.show(
+                    context: context,
+                    locationInfo:
+                        getClassNameWithoutGenerics(widget.ownerClassInstance),
+                    formModel: widget.task.formModel!,
+                  );
+                }
               : null,
         );
 

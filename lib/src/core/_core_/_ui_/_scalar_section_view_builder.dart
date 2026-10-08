@@ -4,6 +4,7 @@ class ScalarSectionViewBuilder extends _ContextProviderView {
   final Scalar scalar;
   final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
+  final ScalarContextType? scalarContextType;
 
   const ScalarSectionViewBuilder({
     super.key,
@@ -12,6 +13,7 @@ class ScalarSectionViewBuilder extends _ContextProviderView {
     required this.scalar,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     required this.build,
+    this.scalarContextType = ScalarContextType.value,
   });
 
   @override
@@ -30,10 +32,6 @@ class _ScalarSectionViewBuilderState
     return widget.scalar.shelf;
   }
 
-  @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
 
   @override
   String getWidgetOwnerClassName() {
@@ -41,34 +39,16 @@ class _ScalarSectionViewBuilderState
   }
 
   @override
-  bool get provideScalarContext {
-    return true;
-  }
+  BlockContextType? get blockContextType => null;
 
   @override
-  bool get provideBlockContext {
-    return false;
-  }
+  ScalarContextType? get scalarContextType => widget.scalarContextType;
 
   @override
-  bool get provideItemContext {
-    return false;
-  }
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
   Widget buildContent(BuildContext context) {

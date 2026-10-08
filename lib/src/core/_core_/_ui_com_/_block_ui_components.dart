@@ -183,7 +183,7 @@ class _BlockUiComponents extends _UiComponents {
     bool includeDescendants = false,
   }) {
     String? componentName = __findVisibleViewWithContextKind(
-      contextKind: ContextKind.block,
+      contextKind: ContextKind.blockItems,
       includeDescendants: includeDescendants,
     );
     if (componentName != null) {
@@ -194,7 +194,7 @@ class _BlockUiComponents extends _UiComponents {
     }
     for (final Block childBlock in block._childBlocks) {
       componentName = childBlock.ui.__findVisibleViewWithContextKind(
-        contextKind: ContextKind.item,
+        contextKind: ContextKind.blockItemDetail,
         includeDescendants: includeDescendants,
       );
       if (componentName != null) {
@@ -210,7 +210,7 @@ class _BlockUiComponents extends _UiComponents {
     bool includeDescendants = false,
   }) {
     String? componentName = __findVisibleViewWithContextKind(
-      contextKind: ContextKind.item,
+      contextKind: ContextKind.blockItemDetail,
       includeDescendants: includeDescendants,
     );
     if (componentName != null) {
@@ -221,7 +221,7 @@ class _BlockUiComponents extends _UiComponents {
     }
     for (final Block childBlock in block._childBlocks) {
       componentName = childBlock.ui.__findVisibleViewWithContextKind(
-        contextKind: ContextKind.block,
+        contextKind: ContextKind.blockItems,
         includeDescendants: includeDescendants,
       );
       if (componentName != null) {
@@ -237,7 +237,7 @@ class _BlockUiComponents extends _UiComponents {
     bool includeDescendants = false,
   }) {
     return __findVisibleViewWithContextKind(
-      contextKind: ContextKind.form,
+      contextKind: ContextKind.blockForm,
       includeDescendants: includeDescendants,
     );
   }

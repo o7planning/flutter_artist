@@ -1,24 +1,22 @@
 part of '../core.dart';
 
 abstract class BlockItemsView<
-BLOCK extends Block<
-    Comparable, //
-    Identifiable<Comparable>,
-    Identifiable<Comparable>,
-    FilterInput,
-    FilterCriteria,
-    CreationPreset,
-    FormInput>> extends StatelessWidget {
+    BLOCK extends Block<
+        Comparable, //
+        Identifiable<Comparable>,
+        Identifiable<Comparable>,
+        FilterInput,
+        FilterCriteria,
+        CreationPreset,
+        FormInput>> extends StatelessWidget {
   final BLOCK block;
   final QuickSuggestionMode quickSuggestionMode;
-  final bool provideItemContext;
-  final bool provideFormContext;
+  final BlockContextType blockContextType;
 
   const BlockItemsView({
     required this.block,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
-    this.provideItemContext = false,
-    this.provideFormContext = false,
+    this.blockContextType = BlockContextType.items,
     super.key,
   });
 
@@ -29,8 +27,7 @@ BLOCK extends Block<
       ownerClassInstance: this,
       description: '',
       block: block,
-      provideItemContext: provideItemContext,
-      provideFormContext: provideFormContext,
+      blockContextType: blockContextType,
       quickSuggestionMode: quickSuggestionMode,
       build: () {
         return buildContent(context);

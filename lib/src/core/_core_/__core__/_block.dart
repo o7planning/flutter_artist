@@ -1301,12 +1301,12 @@ abstract class Block<
         filterModel._committedFilterCriteriaSnapshot
             as FilterCriteriaSnapshot<FILTER_CRITERIA>?;
 
-    final bool provideBlockContext =
+    final bool provideItemsContext =
         ui.hasBlockContext(includeDescendants: true);
 
     executionTrace.addInfo(
       codeId: "#003020",
-      shortDesc: "@provideBlockContext: ${debugObjHtml(provideBlockContext)}.",
+      shortDesc: "@provideItemsContext: ${debugObjHtml(provideItemsContext)}.",
       tipDocument: TipDocument.blockActiveUiComponents,
     );
 
@@ -1321,7 +1321,7 @@ abstract class Block<
       block: this,
       syncSessionState: currentSyncSessionState,
       queryHint: initialQueryHint,
-      provideBlockContext: provideBlockContext,
+      provideItemsContext: provideItemsContext,
     );
 
     final TraceStep step = executionTrace.addInfo(
@@ -1342,7 +1342,7 @@ abstract class Block<
               parentBlockCurrentItemId: parentBlockCurrentItemId,
               filterCriteria: filterCriteria,
               queryHint: initialQueryHint,
-              provideBlockContext: provideBlockContext,
+              provideItemsContext: provideItemsContext,
             ),
     );
 
@@ -2050,10 +2050,10 @@ abstract class Block<
       getItemId: _getItemIdInternal,
     );
     //
-    final bool provideBlockContext = ui.hasBlockContext(
+    final bool provideItemsContext = ui.hasBlockContext(
       includeDescendants: true,
     );
-    final bool provideItemContext = ui.hasItemContext(
+    final bool provideItemDetailContext = ui.hasItemContext(
       includeDescendants: true,
     );
     final bool provideFormContext = ui.hasFormContext();
@@ -2065,8 +2065,8 @@ abstract class Block<
       codeId: "#028640",
       shortDesc: "Debug:",
       parameters: {
-        "provideBlockContext": provideBlockContext,
-        "provideItemContext": provideItemContext,
+        "provideItemsContext": provideItemsContext,
+        "provideItemDetailContext": provideItemDetailContext,
         "provideFormContext": provideFormContext,
         "inputForceReloadItem": inputForceReloadItem,
       },
@@ -2083,8 +2083,8 @@ abstract class Block<
         "ITEM == ITEM_DETAIL?": ITEM == ITEM_DETAIL,
         "candidateCurrItem": candidateCurrItem,
         "inputForceReloadItem": inputForceReloadItem,
-        "provideBlockContext": provideBlockContext,
-        "provideItemContext": provideItemContext,
+        "provideItemsContext": provideItemsContext,
+        "provideItemDetailContext": provideItemDetailContext,
         "provideFormContext": provideFormContext,
         "absentItemContextPolicy": effectiveConfig.absentItemContextPolicy,
         "unifiedItemRefreshPolicy": effectiveConfig.unifiedItemRefreshPolicy,
@@ -2102,8 +2102,8 @@ abstract class Block<
       thisXBlock: thisXBlock,
       candidateCurrItem: candidateCurrItem,
       inputForceReloadItem: inputForceReloadItem,
-      provideBlockContext: provideBlockContext,
-      provideItemContext: provideItemContext,
+      provideItemsContext: provideItemsContext,
+      provideItemDetailContext: provideItemDetailContext,
       provideFormContext: provideFormContext,
       absentItemContextPolicy: effectiveConfig.absentItemContextPolicy,
       unifiedItemRefreshPolicy: effectiveConfig.unifiedItemRefreshPolicy,
@@ -7688,7 +7688,7 @@ abstract class Block<
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        final bool provideBlockContext = ui.hasBlockContext(
+        final bool provideItemsContext = ui.hasBlockContext(
           includeDescendants: true,
         );
         return DebugBlockSyncSessionStateDialog<ID>(
@@ -7700,7 +7700,7 @@ abstract class Block<
             parentBlockCurrentItemId: parentBlockCurrentItemId,
             filterCriteria: filterCriteria,
             queryHint: QueryHint.none,
-            provideBlockContext: provideBlockContext,
+            provideItemsContext: provideItemsContext,
           ),
         );
       },

@@ -36,10 +36,6 @@ class _CustomControlBarState
     return widget.block.shelf;
   }
 
-  @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
 
   @override
   String getWidgetOwnerClassName() {
@@ -50,36 +46,16 @@ class _CustomControlBarState
   ContextProviderViewType get type => ContextProviderViewType.customControlBar;
 
   @override
-  bool get provideScalarContext {
-    return false;
-  }
+  BlockContextType? get blockContextType => null;
 
   @override
-  bool get provideBlockContext {
-    // TODO:
-    return false;
-  }
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideItemContext {
-    // TODO:
-    return false;
-  }
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
   void addWidgetState({required bool isVisible}) {
@@ -110,4 +86,6 @@ class _CustomControlBarState
   void setBuildingState({required bool isBuilding}) {
     //
   }
+
+
 }

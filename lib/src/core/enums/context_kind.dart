@@ -1,11 +1,13 @@
 part of '_enums.dart';
 
 enum ContextKind {
-  scalar,
-  block,
-  item,
-  form,
+  scalarValue,
+  blockItems,
+  blockItemDetail,
+  blockForm,
+  stageForm,
+  taskForm,
   activity,
-  task,
-  stage;
+  taskInitData,
+  stageInitData;
 }

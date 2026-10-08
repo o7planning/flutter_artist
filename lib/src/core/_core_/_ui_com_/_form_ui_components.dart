@@ -20,6 +20,18 @@ class _FormUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  ContextKind _getFormContextKind() {
+    if (formModel is BlockFormModel) {
+      return ContextKind.blockForm;
+    } else if (formModel is StageFormModel) {
+      return ContextKind.stageForm;
+    } else if (formModel is TaskFormModel) {
+      return ContextKind.taskForm;
+    } else {
+      throw "TODO: _getFormContextKind()";
+    }
+  }
+
   Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
     required bool withFormView,
     required bool activeOnly,
@@ -100,8 +112,10 @@ class _FormUiComponents extends _UiComponents {
 
   /// Checks whether any view managed directly by this form model provides a form context.
   bool hasFormContext() {
+    final ContextKind formContextKind = _getFormContextKind();
+
     return hasVisibleViewsWithContextKind(
-      contextKind: ContextKind.form,
+      contextKind: formContextKind,
     );
   }
 

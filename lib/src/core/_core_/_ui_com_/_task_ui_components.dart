@@ -32,6 +32,11 @@ class _TaskUiComponents extends _WorkNodeUiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Resolves the class name of the view currently demanding the Form data context.
+  String? findVisibleFormContextView() {
+    return __findVisibleViewWithContextKind(contextKind: ContextKind.taskForm);
+  }
+
   Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
     required bool withTaskContentView,
     required bool withForm,
@@ -140,7 +145,8 @@ class _TaskUiComponents extends _WorkNodeUiComponents {
 
   /// Resolves the class name of the view currently demanding the Task data context.
   String? findVisibleTaskContextView() {
-    return __findVisibleViewWithContextKind(contextKind: ContextKind.task);
+    return __findVisibleViewWithContextKind(
+        contextKind: ContextKind.taskInitData);
   }
 
   @override

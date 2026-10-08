@@ -120,6 +120,8 @@ part '__core__/_block.dart';
 
 part '__core__/_block_ancestor_context.dart';
 
+part '__core__/_context_type.dart';
+
 part '_ui_/_stage_view.dart';
 
 part '_ui_/_stage_view_builder.dart';

@@ -7,6 +7,7 @@ class BlockControlFAB extends BlockControl {
     required super.ownerClassInstance,
     required super.block,
     required super.actionType,
+    super.blockContextType,
     super.navigate,
     //
     String? tooltip,
@@ -66,6 +67,7 @@ class BlockControlFAB extends BlockControl {
     required super.ownerClassInstance,
     required super.block,
     required super.actionType,
+    super.blockContextType,
     super.navigate,
     //
     Widget? icon,
@@ -130,6 +132,7 @@ class BlockControlFAB extends BlockControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.block,
+    super.blockContextType,
     required super.actionType,
     super.navigate,
     //
@@ -188,6 +191,7 @@ class BlockControlFAB extends BlockControl {
     required super.ownerClassInstance,
     required super.block,
     required super.actionType,
+    super.blockContextType,
     super.navigate,
     //
     String? tooltip,

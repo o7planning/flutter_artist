@@ -234,6 +234,8 @@ abstract class Scalar<
     return ui.hasVisibleViews(includeDescendants: true);
   }
 
+  // ***************************************************************************
+
   void _receiveEvent({
     required ExecutionTrace executionTrace,
     required EventSourceType eventSourceType,
@@ -531,7 +533,7 @@ abstract class Scalar<
       methodName: '_unitQuery',
     );
 
-    final bool provideScalarContext =
+    final bool provideValueContext =
         ui.hasVisibleViews(includeDescendants: true);
 
     final DebugScalarSyncSessionState<ID>? currentSyncSessionState =
@@ -542,14 +544,17 @@ abstract class Scalar<
       scalar: this,
       syncSessionState: currentSyncSessionState,
       queryHint: initialQueryHint,
-      provideScalarContext: provideScalarContext,
+      provideValueContext: provideValueContext,
     );
 
     if (queryPlan.action == null) {
       executionTrace.addInfo(
         codeId: "#012080",
-        shortDesc:
-            "QueryPlan action is NULL -> Skip query execution, @dataState: $dataState, @value: ${debugObjHtml(value)}.",
+        shortDesc: "QueryPlan action is NULL -> Skip query execution.",
+        parameters: {
+          "dataState": dataState,
+          "value": value,
+        },
       );
       return;
     }
@@ -713,6 +718,8 @@ abstract class Scalar<
     _scalarDataState = newScalarDataState;
   }
 
+  // ***************************************************************************
+
   void _clearValueWithDataState({
     required ScalarDataState scalarDataState,
     required bool errorInFilter,
@@ -730,6 +737,8 @@ abstract class Scalar<
     }
     __current = _ScalarValueWrap<ID, VALUE>(id: null, value: null);
   }
+
+  // ***************************************************************************
 
   void _updateData({
     required FilterCriteriaSnapshot<FILTER_CRITERIA>? filterCriteriaSnapshot,
@@ -753,6 +762,8 @@ abstract class Scalar<
       _filterCriteriaChangeCount++;
     }
   }
+
+  // ***************************************************************************
 
   void __stopQueryWithFilterErrorCascade({
     required XScalar thisXScalar,
@@ -784,6 +795,8 @@ abstract class Scalar<
     );
   }
 
+  // ***************************************************************************
+
   void __stopDescendantQueryWithError({
     required List<XScalar> descendantXScalars,
     required ScalarErrorOrigin scalarErrorOrigin,
@@ -807,6 +820,8 @@ abstract class Scalar<
     }
   }
 
+  // ***************************************************************************
+
   void __setQueryDataWithState({
     required XScalar thisXScalar,
     required FilterCriteriaSnapshot<FILTER_CRITERIA>? xFilterCriteria,
@@ -825,6 +840,8 @@ abstract class Scalar<
     );
   }
 
+  // ***************************************************************************
+
   void __clearAllChildrenScalarsToNone({required XScalar thisXScalar}) {
     __assertThisXScalar(thisXScalar);
     for (var childXScalar in thisXScalar.childXScalars) {
@@ -837,6 +854,8 @@ abstract class Scalar<
     }
   }
 
+  // ***************************************************************************
+
   void __clearAllChildrenScalarsToPending({required XScalar thisXScalar}) {
     __assertThisXScalar(thisXScalar);
     for (var childXScalar in thisXScalar.childXScalars) {
@@ -848,6 +867,8 @@ abstract class Scalar<
       );
     }
   }
+
+  // ***************************************************************************
 
   void __clearWithDataStateAndChildrenToNonCascade({
     required XScalar thisXScalar,
@@ -873,6 +894,8 @@ abstract class Scalar<
     }
   }
 
+  // ***************************************************************************
+
   void __clearValueWithDataState({
     required XScalar thisXScalar,
     required ScalarDataState scalarDataState,
@@ -887,12 +910,16 @@ abstract class Scalar<
     );
   }
 
+  // ***************************************************************************
+
   void __refreshQueryingState({required bool isQuerying}) {
     try {
       __isQuerying = isQuerying;
       ui.refreshControlBars();
     } catch (_) {}
   }
+
+  // ***************************************************************************
 
   void _broadcastScalarHidden() {
     switch (effectiveConfig.onHideAction) {
@@ -902,6 +929,8 @@ abstract class Scalar<
         break;
     }
   }
+
+  // ***************************************************************************
 
   bool isQueryAllowed() => true;
 
@@ -976,6 +1005,19 @@ abstract class Scalar<
   // ***************************************************************************
   // ***************************************************************************
 
+  @_PrecheckPrivateMethod()
+  Actionable<ScalarLoadExtraDataPrecheck> __checkBeforeLoadExtraData({
+    required bool checkBusy,
+  }) {
+    return ScalarLoadExtraDataPrecheckUtils.checkBeforeLoadExtraData(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<void> showDebugFilterCriteriaViewerDialog() async {
     BuildContext context = FlutterArtistCore.context;
     await DebugViewerDialog.openDebugFilterCriteriaInspector(
@@ -1022,6 +1064,8 @@ abstract class Scalar<
     required FILTER_CRITERIA filterCriteria,
   });
 
+  // ***************************************************************************
+
   @_RootMethodAnnotation()
   @_ScalarQueryAnnotation()
   Future<ScalarQueryResult> query({FILTER_INPUT? filterInput}) async {
@@ -1041,6 +1085,8 @@ abstract class Scalar<
     XScalar xScalar = xShelf.findXScalarByName(name)!;
     return xScalar.queryResult;
   }
+
+  // ***************************************************************************
 
   @_RootMethodAnnotation()
   @_ScalarClearAnnotation()

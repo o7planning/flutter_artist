@@ -26,28 +26,18 @@ class _BlockFormViewBuilderState
     return widget.formModel.shelf;
   }
 
-  @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
 
   @override
-  bool get provideBlockContext => true;
+  BlockContextType? get blockContextType => BlockContextType.form;
 
   @override
-  bool get provideItemContext => true;
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideFormContext => true;
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideScalarContext => false;
-
-  @override
-  bool get provideStageContext => false;
-
-  @override
-  bool get provideTaskContext => false;
+  TaskContextType? get taskContextType => null;
 
   @override
   Future<bool> handleSaveOnPop() async {

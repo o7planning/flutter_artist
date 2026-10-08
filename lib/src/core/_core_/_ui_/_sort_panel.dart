@@ -2,13 +2,11 @@ part of '../core.dart';
 
 abstract class SortPanel<ITEM extends Object> extends StatelessWidget {
   final SortModel<ITEM> sortModel;
-  final bool provideItemContext;
-  final bool provideFormContext;
+  final BlockContextType blockContextType;
 
   const SortPanel({
     required this.sortModel,
-    this.provideItemContext = false,
-    this.provideFormContext = false,
+    this.blockContextType = BlockContextType.items,
     super.key,
   });
 
@@ -19,8 +17,7 @@ abstract class SortPanel<ITEM extends Object> extends StatelessWidget {
       ownerClassInstance: this,
       description: '',
       sortModel: sortModel,
-      provideItemContext: provideItemContext,
-      provideFormContext: provideFormContext,
+      blockContextType: blockContextType,
       build: () {
         return buildContent(context);
       },

@@ -7,6 +7,7 @@ class BlockControlElevatedButton extends BlockControl {
     required super.ownerClassInstance,
     required super.block,
     required super.actionType,
+    super.blockContextType,
     super.navigate,
     //
     ValueChanged<bool>? onHover,
@@ -39,6 +40,7 @@ class BlockControlElevatedButton extends BlockControl {
     required super.ownerClassInstance,
     required super.block,
     required super.actionType,
+    super.blockContextType,
     super.navigate,
     //
     ValueChanged<bool>? onHover,

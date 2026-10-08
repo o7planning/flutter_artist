@@ -231,7 +231,7 @@ class _ScalarUiComponents extends _UiComponents {
     bool includeDescendants = false,
   }) {
     return __findVisibleViewWithContextKind(
-      contextKind: ContextKind.scalar,
+      contextKind: ContextKind.scalarValue,
       includeDescendants: includeDescendants,
     );
   }

@@ -10,13 +10,14 @@ abstract class BlockItemDetailView<
         CreationPreset,
         FormInput>> extends StatelessWidget {
   final BLOCK block;
-  final bool provideFormContext;
+  final BlockContextType blockContextType;
 
   const BlockItemDetailView({
     required this.block,
-    this.provideFormContext = false,
+    this.blockContextType = BlockContextType.itemDetail,
     super.key,
-  });
+  }) : assert(blockContextType == BlockContextType.itemDetail ||
+            blockContextType == BlockContextType.form);
 
   @override
   @nonVirtual
@@ -25,7 +26,7 @@ abstract class BlockItemDetailView<
       ownerClassInstance: this,
       description: '',
       block: block,
-      provideFormContext: provideFormContext,
+      blockContextType: blockContextType,
       build: () {
         return buildContent(context);
       },

@@ -836,11 +836,11 @@ class XBlock<
   // ***************************************************************************
 
   void printInfoCascade() {
-    bool provideBlockContext = block.ui.hasBlockContext(
+    bool provideItemsContext = block.ui.hasBlockContext(
       includeDescendants: false,
     );
     String msg = "${getClassName(this)}(${getClassName(block)}"
-        " - provideBlockContext: $provideBlockContext"
+        " - provideItemsContext: $provideItemsContext"
         " - QueryHint: $__queryHint - RefreshItem: $__forceReloadCurrItem";
     print(msg);
     for (XBlock xBlock in childXBlocks) {

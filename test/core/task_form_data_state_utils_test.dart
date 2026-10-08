@@ -3,6 +3,11 @@ import 'package:flutter_artist/src/core/error/_task_error_info.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:flutter_artist/flutter_artist.dart';
+import 'package:flutter_artist/src/core/error/_task_error_info.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
+import 'package:flutter_test/flutter_test.dart';
+
 void main() {
   group('TaskFormDataStateUtils Tests', () {
     final mockErrorInfo = ErrorInfo(
@@ -59,15 +64,16 @@ void main() {
     });
 
     test(
-        'Should return LoadedFresh when taskDataState is LoadedFresh and currentFormDataState is None',
+        'Should return Pending when taskDataState is LoadedFresh and currentFormDataState is None',
         () {
-      // Case: Form is initially none, task becomes fresh -> form becomes fresh directly
+      // Case: Form is initially none, task becomes fresh -> form becomes pending
+      // so it can execute its own independent data loading lifecycle.
       final resultFromNone = TaskFormDataStateUtils.calculateNewLazyDataState(
         currentFormDataState: const FormDataStateNone(),
         taskDataState: const TaskDataStateLoadedFresh(),
         hasInitData: true,
       );
-      expect(resultFromNone, isA<FormDataStateLoadedFresh>());
+      expect(resultFromNone, isA<FormDataStatePending>());
     });
 
     test(

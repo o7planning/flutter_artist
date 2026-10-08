@@ -10,6 +10,8 @@ abstract class _WorkNodeUiComponents extends _UiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+  String? findVisibleFormContextView();
+
   String? findVisibleView();
 
   /// Checks if any UI view connected to this stage is actively visible on screen.
@@ -29,10 +31,6 @@ abstract class _WorkNodeUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   });
 
-  /// Resolves the class name of the view currently demanding the Form data context.
-  String? findVisibleFormContextView() {
-    return __findVisibleViewWithContextKind(contextKind: ContextKind.form);
-  }
 
   // ***************************************************************************
   // ***************************************************************************

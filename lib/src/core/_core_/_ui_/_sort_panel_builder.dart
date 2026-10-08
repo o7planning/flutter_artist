@@ -2,9 +2,8 @@ part of '../core.dart';
 
 class _SortPanelBuilder extends _ContextProviderView {
   final SortModel sortModel;
-  final bool provideItemContext;
-  final bool provideFormContext;
 
+  final BlockContextType blockContextType;
   final Widget Function() build;
 
   const _SortPanelBuilder({
@@ -12,8 +11,7 @@ class _SortPanelBuilder extends _ContextProviderView {
     required super.ownerClassInstance,
     required super.description,
     required this.sortModel,
-    this.provideItemContext = false,
-    this.provideFormContext = false,
+    this.blockContextType = BlockContextType.items,
     required this.build,
   });
 
@@ -34,44 +32,21 @@ class _SortPanelBuilderState
   }
 
   @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
-
-  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.sortModel);
   }
 
   @override
-  bool get provideScalarContext {
-    return false;
-  }
+  BlockContextType? get blockContextType => widget.blockContextType;
 
   @override
-  bool get provideBlockContext {
-    return true;
-  }
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideItemContext {
-    return widget.provideItemContext;
-  }
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideFormContext {
-    return widget.provideFormContext;
-  }
-
-  @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
   void setBuildingState({required bool isBuilding}) {

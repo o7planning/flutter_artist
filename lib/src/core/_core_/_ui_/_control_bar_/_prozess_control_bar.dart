@@ -35,35 +35,24 @@ class ProzessControlBar extends BaseControlBar<
 }
 
 class _ProzessControlBarState extends _BaseControlBarState<Prozess,
-    ProzessControlBarItemType,
-    ProzessControlBarItem,
-    ProzessControlBar> {
+    ProzessControlBarItemType, ProzessControlBarItem, ProzessControlBar> {
   @override
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
 
   @override
-  Shelf? _getRelatedShelf() => null;
+  Activity? _getRelatedShelf() => widget.prozess.activity;
 
   @override
-  Activity? _getRelatedActivity() => widget.prozess.activity;
+  BlockContextType? get blockContextType => null;
 
   @override
-  bool get provideScalarContext => false;
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideBlockContext => false;
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideItemContext => false;
-
-  @override
-  bool get provideFormContext => false;
-
-  @override
-  bool get provideStageContext => false;
-
-  @override
-  bool get provideTaskContext => false;
+  TaskContextType? get taskContextType => null;
 
   @override
   Widget? buildStandardButton(ProzessControlBarItem item) {

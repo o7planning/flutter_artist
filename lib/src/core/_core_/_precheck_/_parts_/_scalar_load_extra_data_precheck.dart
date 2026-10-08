@@ -1,11 +1,12 @@
 part of '../__precheck.dart';
 
-// Name (OK)
+/// Precheck enumeration for scalar load extra data operations.
 enum ScalarLoadExtraDataPrecheck implements Precheck {
+  /// Operation aborted because the system executor is currently busy.
   busy(
     precheckCode: PrecheckCode.busy,
-    message: "Can not clear scalar.",
-    details: ["The executor is busy."],
+    message: "Loading extra data is disabled.",
+    details: ["The system executor is currently busy. Please wait."],
   );
 
   @override

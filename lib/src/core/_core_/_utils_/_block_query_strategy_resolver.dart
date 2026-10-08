@@ -17,7 +17,7 @@ class BlockQueryStrategyResolver {
         block,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
     required QueryHint queryHint,
-    required bool provideBlockContext,
+    required bool provideItemsContext,
   }) {
     return resolveQueryPlanInternal<ID>(
       dataState: block.dataState,
@@ -26,7 +26,7 @@ class BlockQueryStrategyResolver {
       config: block.effectiveConfig,
       syncSessionState: syncSessionState,
       queryHint: queryHint,
-      provideBlockContext: provideBlockContext,
+      provideItemsContext: provideItemsContext,
     );
   }
 
@@ -38,7 +38,7 @@ class BlockQueryStrategyResolver {
     required BlockEffectiveConfig config,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
     required QueryHint queryHint,
-    required bool provideBlockContext,
+    required bool provideItemsContext,
   }) {
     // -------------------------------------------------------------------------
     // 1. UNINITIALIZED STATE (BlockDataStateNone): Skip execution
@@ -54,7 +54,7 @@ class BlockQueryStrategyResolver {
     // a. Prozess explicitly mandated force (queryHint == QueryHint.force)
     // b. Active UI representation is visible AND dataset is unready (pending/stale)
     final bool effectiveForce = queryHint == QueryHint.force ||
-        (provideBlockContext && (dataState.isPending || dataState.isStale));
+        (provideItemsContext && (dataState.isPending || dataState.isStale));
 
     // If there is no demand to execute or refresh, reject execution immediately
     if (!effectiveForce) {

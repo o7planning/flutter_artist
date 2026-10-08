@@ -22,32 +22,22 @@ class _StageFormViewBuilderState
   ContextProviderViewType get type => ContextProviderViewType.stageView;
 
   @override
-  Shelf? _getRelatedShelf() {
-    return null;
-  }
-
-  @override
-  Activity? _getRelatedActivity() {
+  Activity? _getRelatedShelf() {
     return widget.formModel.stage.activity;
   }
 
-  @override
-  bool get provideBlockContext => false;
 
   @override
-  bool get provideItemContext => false;
+  BlockContextType? get blockContextType => null;
 
   @override
-  bool get provideFormContext => true;
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideScalarContext => false;
+  StageContextType? get stageContextType => StageContextType.form;
 
   @override
-  bool get provideStageContext => true;
-
-  @override
-  bool get provideTaskContext => false;
+  TaskContextType? get taskContextType => null;
 
   @override
   Future<bool> handleSaveOnPop() async {

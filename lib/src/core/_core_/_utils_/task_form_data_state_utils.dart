@@ -52,14 +52,13 @@ class TaskFormDataStateUtils {
 
       // Case 2: Task successfully loaded fresh INIT_DATA
       case TaskDataStateLoadedFresh():
-        // IMPORTANT NOTE:
-        // When the parent Task successfully reloads fresh init data from a stale/error state,
-        // we must NOT automatically force the Form's state to LoadedFresh.
-        // If the form is already initialized (not None), we transition it to LoadedStale (hostDataRefreshed)
-        // instead. This ensures the Form is prompted to execute its own data loading/refresh lifecycle
-        // independently, rather than bypassing its synchronization cycle with the new task init data.
+        // When the parent Task successfully loads fresh init data,
+        // if the form is currently in the None state, we transition it to Pending
+        // so that the Form can execute its own independent data loading lifecycle.
+        // If the form is already initialized, we transition it to Stale (hostDataRefreshed)
+        // to prompt the Form to execute its data refresh cycle.
         if (currentFormDataState.isNone) {
-          return const FormDataStateLoadedFresh();
+          return const FormDataStatePending.initial();
         }
         return FormDataStateLoadedStale.hostDataRefreshed();
 

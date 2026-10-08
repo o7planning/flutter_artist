@@ -120,6 +120,12 @@ class _StageUiComponents extends _WorkNodeUiComponents {
   // ***************************************************************************
   // ***************************************************************************
 
+
+  /// Resolves the class name of the view currently demanding the Form data context.
+  String? findVisibleFormContextView() {
+    return __findVisibleViewWithContextKind(contextKind: ContextKind.stageForm);
+  }
+
   /// Resolves the class name of any actively visible view for diagnostic inspection.
   @override
   String? findVisibleView() {
@@ -144,7 +150,7 @@ class _StageUiComponents extends _WorkNodeUiComponents {
 
   /// Resolves the class name of the view currently demanding the Stage data context.
   String? findVisibleStageContextView() {
-    return __findVisibleViewWithContextKind(contextKind: ContextKind.stage);
+    return __findVisibleViewWithContextKind(contextKind: ContextKind.stageInitData);
   }
 
   @override

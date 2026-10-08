@@ -13,15 +13,15 @@ class BlockCurrentItemResolver {
   ///   matches it (`!isCandidateItemDifferentFromCurrent`), [candidateAccepted] is unconditionally guaranteed
   ///   to resolve to `true`, preventing existing selections from being unexpectedly deselected.
   /// - **Empty Workspace Protection**: If the block has no current item and no UI component requires an item context
-  ///   (`provideItemContextExt == false`), new candidates from queried batches will NOT be forcibly set as current
+  ///   (`provideItemDetailContextExt == false`), new candidates from queried batches will NOT be forcibly set as current
   ///   under [BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed], preventing accidental selection/eviction loops.
   static BlockCurrentItemPlan resolveCurrentItem({
     required final ExecutionTrace executionTrace,
     required final XBlock thisXBlock,
     required final Object candidateCurrItem,
     required final bool inputForceReloadItem,
-    required final bool provideBlockContext,
-    required final bool provideItemContext,
+    required final bool provideItemsContext,
+    required final bool provideItemDetailContext,
     required final bool provideFormContext,
     required final AbsentItemContextPolicy absentItemContextPolicy,
     required final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy,
@@ -38,8 +38,8 @@ class BlockCurrentItemResolver {
       itemDetailType: block.getItemDetailType(),
       candidateCurrItem: candidateCurrItem,
       inputForceReloadItem: inputForceReloadItem,
-      provideBlockContext: provideBlockContext,
-      provideItemContext: provideItemContext,
+      provideItemsContext: provideItemsContext,
+      provideItemDetailContext: provideItemDetailContext,
       provideFormContext: provideFormContext,
       absentItemContextPolicy: absentItemContextPolicy,
       unifiedItemRefreshPolicy: unifiedItemRefreshPolicy,
@@ -58,8 +58,8 @@ class BlockCurrentItemResolver {
     required final Type itemDetailType,
     required final Object candidateCurrItem,
     required final bool inputForceReloadItem,
-    required final bool provideBlockContext,
-    required final bool provideItemContext,
+    required final bool provideItemsContext,
+    required final bool provideItemDetailContext,
     required final bool provideFormContext,
     required final AbsentItemContextPolicy absentItemContextPolicy,
     required final UnifiedItemRefreshPolicy unifiedItemRefreshPolicy,
@@ -75,11 +75,11 @@ class BlockCurrentItemResolver {
     // =========================================================================
     // Determine whether an item representative is required by the active UI layout
     // or escalated by configuration policies/directives.
-    bool provideItemContextExt = provideItemContext;
-    if (!provideItemContext &&
+    bool provideItemDetailContextExt = provideItemDetailContext;
+    if (!provideItemDetailContext &&
         absentItemContextPolicy ==
             AbsentItemContextPolicy.trySetAnItemAsCurrent) {
-      provideItemContextExt = true;
+      provideItemDetailContextExt = true;
       PrintUtils.debug(debug,
           " --> [Calc 1.1] Extended ItemRep to true via ItemAbsentRepresentativePolicy.trySetAnItemAsCurrent");
     }
@@ -88,7 +88,7 @@ class BlockCurrentItemResolver {
       case BlockSetCurrentItemDirective.setAnItemAsCurrent:
       case BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm:
       case BlockSetCurrentItemDirective.refresh:
-        provideItemContextExt = true;
+        provideItemDetailContextExt = true;
         PrintUtils.debug(debug,
             " --> [Calc 1.2] Extended ItemRep to true via Directive: $setCurrentItemDirective");
       case BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed:
@@ -103,9 +103,9 @@ class BlockCurrentItemResolver {
       case BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed:
         // Accept candidate IF:
         // 1. It is already the stable current item (!isCandidateItemDifferentFromCurrent), OR
-        // 2. The UI explicitly requires an item context (provideItemContextExt).
+        // 2. The UI explicitly requires an item context (provideItemDetailContextExt).
         candidateAccepted =
-            !isCandidateItemDifferentFromCurrent || provideItemContextExt;
+            !isCandidateItemDifferentFromCurrent || provideItemDetailContextExt;
         PrintUtils.debug(debug,
             " --> [Calc 2.1] Directive: setAnItemAsCurrentIfNeed, candidateAccepted: $candidateAccepted");
 
@@ -152,7 +152,7 @@ class BlockCurrentItemResolver {
       retForceReloadItem = true;
       PrintUtils.debug(debug,
           " --> [Calc 4.1] Force reload requested explicitly (directive / inputForceReloadItem) -> true");
-    } else if (!provideItemContextExt) {
+    } else if (!provideItemDetailContextExt) {
       retForceReloadItem = false;
       PrintUtils.debug(debug,
           " --> [Calc 4.2] No item representative present on active UI -> retForceReloadItem: false");
@@ -181,7 +181,7 @@ class BlockCurrentItemResolver {
       parameters: {
         "candidateAccepted": candidateAccepted,
         "canSkipDetailFetch": canSkipDetailFetch,
-        "provideItemContextExt": provideItemContextExt,
+        "provideItemDetailContextExt": provideItemDetailContextExt,
         "isCandidateItemDifferentFromCurrent":
             isCandidateItemDifferentFromCurrent,
         "retForceReloadItem": retForceReloadItem,

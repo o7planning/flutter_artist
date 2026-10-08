@@ -14,7 +14,7 @@ import '../../enums/_enums.dart';
 class BlockSyncDiagnosticSnapshot<ID extends Comparable> {
   final QueryHint queryHint;
 
-  final bool provideBlockContext;
+  final bool provideItemsContext;
 
   /// The structural data state of the block (e.g., Pending, LoadedFresh, LoadedStale)
   /// at the exact moment the snapshot was taken.
@@ -44,6 +44,6 @@ class BlockSyncDiagnosticSnapshot<ID extends Comparable> {
     required this.filterCriteria,
     required this.syncSessionState,
     required this.queryHint,
-    required this.provideBlockContext,
+    required this.provideItemsContext,
   });
 }

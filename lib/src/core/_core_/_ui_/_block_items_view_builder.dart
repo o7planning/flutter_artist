@@ -4,16 +4,14 @@ class BlockItemsViewBuilder extends _ContextProviderView {
   final Block block;
   final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
-  final bool provideItemContext;
-  final bool provideFormContext;
+  final BlockContextType blockContextType;
 
   const BlockItemsViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.block,
-    this.provideItemContext = false,
-    this.provideFormContext = false,
+    this.blockContextType = BlockContextType.items,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     required this.build,
   });
@@ -34,10 +32,6 @@ class _BlockItemsViewBuilderState
     return widget.block.shelf;
   }
 
-  @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
 
   @override
   String getWidgetOwnerClassName() {
@@ -45,34 +39,16 @@ class _BlockItemsViewBuilderState
   }
 
   @override
-  bool get provideScalarContext {
-    return false;
-  }
+  BlockContextType? get blockContextType => widget.blockContextType;
 
   @override
-  bool get provideBlockContext {
-    return true;
-  }
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideItemContext {
-    return widget.provideItemContext;
-  }
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideFormContext {
-    return widget.provideFormContext;
-  }
-
-  @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
   void addWidgetState({required bool isVisible}) {

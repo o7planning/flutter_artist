@@ -25,7 +25,7 @@ enum ContextProviderViewType {
     name: "FormModel",
     iconData: FaIconConstants.formModelIconData,
   ),
-  activityFragment(
+  activityV1Section(
     name: "ActivityFragment",
     iconData: FaIconConstants.activityFragmentIconData,
   ),

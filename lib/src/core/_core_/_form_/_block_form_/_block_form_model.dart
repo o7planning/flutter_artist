@@ -30,7 +30,7 @@ abstract class BlockFormModel<
   Shelf get shelf => block.shelf;
 
   @override
-  Shelf? get relatedShelf => shelf;
+  Shelf get relatedModule => shelf;
 
   @override
   Object? get rawDomainData => block.currentItemDetail;

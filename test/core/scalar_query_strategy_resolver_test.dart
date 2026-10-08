@@ -18,7 +18,7 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.force,
-        provideScalarContext: true,
+        provideValueContext: true,
       );
 
       expect(plan.action, isNull);
@@ -37,7 +37,7 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.none,
-        provideScalarContext:
+        provideValueContext:
             true, // Visible UI escalates pending state to query
       );
 
@@ -69,7 +69,7 @@ void main() {
         ),
         syncSessionState: mockSession,
         queryHint: QueryHint.none,
-        provideScalarContext: true, // Visible UI escalates stale state to query
+        provideValueContext: true, // Visible UI escalates stale state to query
       );
 
       expect(plan.action, equals(ScalarResolvedQueryAction.performQuery));
@@ -90,7 +90,7 @@ void main() {
         syncSessionState: null,
         queryHint: QueryHint.force,
         // Explicit user/prozess force
-        provideScalarContext: true,
+        provideValueContext: true,
       );
 
       expect(plan.action, equals(ScalarResolvedQueryAction.performQuery));
@@ -110,14 +110,14 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.none,
-        provideScalarContext: true,
+        provideValueContext: true,
       );
 
       expect(plan.action, isNull);
     });
 
     // -------------------------------------------------------------------------
-    // TEST 6: Hidden UI Context (provideScalarContext == false) without Force
+    // TEST 6: Hidden UI Context (provideValueContext == false) without Force
     // -------------------------------------------------------------------------
     test(
         '6. Hidden UI context and QueryHint.none MUST resolve to NULL even when dataState is PENDING',
@@ -130,7 +130,7 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.none,
-        provideScalarContext:
+        provideValueContext:
             false, // Off-screen / hidden UI -> No network call
       );
 
@@ -138,7 +138,7 @@ void main() {
     });
 
     // -------------------------------------------------------------------------
-    // TEST 7: Hidden UI Context (provideScalarContext == false) with STALE data
+    // TEST 7: Hidden UI Context (provideValueContext == false) with STALE data
     // -------------------------------------------------------------------------
     test(
         '7. Hidden UI context and QueryHint.none MUST resolve to NULL even when dataState is STALE with active session',
@@ -162,7 +162,7 @@ void main() {
         ),
         syncSessionState: mockSession,
         queryHint: QueryHint.none,
-        provideScalarContext: false, // Deferred query until screen mounts
+        provideValueContext: false, // Deferred query until screen mounts
       );
 
       expect(plan.action, isNull);
@@ -183,7 +183,7 @@ void main() {
         syncSessionState: null,
         queryHint: QueryHint.force,
         // Prozess mandates force fetch
-        provideScalarContext: false,
+        provideValueContext: false,
       );
 
       expect(plan.action, equals(ScalarResolvedQueryAction.performQuery));
@@ -208,7 +208,7 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.none,
-        provideScalarContext: true,
+        provideValueContext: true,
       );
 
       expect(plan.action, equals(ScalarResolvedQueryAction.performQuery));
@@ -227,14 +227,14 @@ class BlockQueryStrategyResolverTestHelper {
     required ScalarEffectiveConfig config,
     required DebugScalarSyncSessionState<ID>? syncSessionState,
     required QueryHint queryHint,
-    required bool provideScalarContext,
+    required bool provideValueContext,
   }) {
     return ScalarQueryStrategyResolver.resolveQueryPlanInternal<ID>(
       dataState: dataState,
       config: config,
       syncSessionState: syncSessionState,
       queryHint: queryHint,
-      provideScalarContext: provideScalarContext,
+      provideValueContext: provideValueContext,
     );
   }
 }

@@ -2,8 +2,7 @@ part of '../core.dart';
 
 class BlockSectionViewBuilder extends _ContextProviderView {
   final Block block;
-  final bool provideItemContext;
-  final bool provideFormContext;
+  final BlockContextType? blockContextType;
   final Widget Function() build;
 
   const BlockSectionViewBuilder({
@@ -11,8 +10,7 @@ class BlockSectionViewBuilder extends _ContextProviderView {
     required super.ownerClassInstance,
     required super.description,
     required this.block,
-    required this.provideItemContext,
-    this.provideFormContext = false,
+    required this.blockContextType,
     required this.build,
   });
 
@@ -32,10 +30,6 @@ class _BlockSectionViewBuilderState
     return widget.block.shelf;
   }
 
-  @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
 
   @override
   String getWidgetOwnerClassName() {
@@ -43,34 +37,16 @@ class _BlockSectionViewBuilderState
   }
 
   @override
-  bool get provideScalarContext {
-    return false;
-  }
+  BlockContextType? get blockContextType => widget.blockContextType;
 
   @override
-  bool get provideBlockContext {
-    return true;
-  }
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideItemContext {
-    return widget.provideItemContext;
-  }
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideFormContext {
-    return widget.provideFormContext;
-  }
-
-  @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
   void addWidgetState({required bool isVisible}) {

@@ -15,7 +15,7 @@ abstract class WorkNodeFormModel<
   Activity get activity;
 
   @override
-  Shelf? get relatedShelf => null;
+  Activity get relatedModule => activity;
 
   @override
   Object? get rawDomainData => initData;

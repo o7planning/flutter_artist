@@ -6,6 +6,7 @@ class ScalarControlBar extends BaseControlBar<
     ScalarControlBarItem> {
   final Scalar scalar;
   final ScalarControlBarConfig config;
+  final ScalarContextType? scalarContextType;
 
   const ScalarControlBar({
     super.key,
@@ -13,6 +14,7 @@ class ScalarControlBar extends BaseControlBar<
     required super.description,
     required this.scalar,
     required this.config,
+    this.scalarContextType = ScalarContextType.value,
     super.style,
     //
     super.leftItems = const [
@@ -42,40 +44,18 @@ class _ScalarControlBarState extends _BaseControlBarState<
     return widget.scalar.shelf;
   }
 
-  @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
 
   @override
-  bool get provideScalarContext {
-    return false;
-  }
+  BlockContextType? get blockContextType => null;
 
   @override
-  bool get provideBlockContext {
-    return false;
-  }
+  ScalarContextType? get scalarContextType => widget.scalarContextType;
 
   @override
-  bool get provideItemContext {
-    return false;
-  }
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
   Widget? buildStandardButton(ScalarControlBarItem item) {

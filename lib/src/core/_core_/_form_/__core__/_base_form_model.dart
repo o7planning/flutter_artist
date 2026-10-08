@@ -121,7 +121,7 @@ abstract class BaseFormModel<
   Object? get rawDomainData;
 
   /// Returns the Shelf context if available (Block), otherwise null (Activity).
-  Shelf? get relatedShelf;
+  FeatureModule get relatedModule;
 
   /// Internal hook resolving baseline initial values for simple form properties.
   /// BlockFormModel delegates to edit/creation methods, while ActivityFormModel delegates to initData.
@@ -296,6 +296,10 @@ abstract class BaseFormModel<
     executionTrace.addInfo(
       codeId: "#006000",
       shortDesc: "${debugObjHtml(this)} on _startNewFormActivity().",
+      parameters: {
+        "activityType": activityType,
+        "formInput": formInput,
+      },
     );
 
     if (activityType == FormActivityType.startCreatingOrEditing) {
@@ -311,7 +315,7 @@ abstract class BaseFormModel<
 
     switch (activityType) {
       case FormActivityType.startCreatingOrEditing:
-        if (relatedShelf != null) {
+        if (relatedModule is Shelf) {
           // BlockFormModel branch: distinguish creation vs edit
           currentFormMode = domainData == null
               ? InternalFormMode.creation
@@ -332,9 +336,15 @@ abstract class BaseFormModel<
         } else {
           _creationFormInput = null;
         }
-
+        executionTrace.addNonControllableCall(
+          codeId: "#006200",
+          caller: this,
+          methodName: '_performLoadAdditionalFormRelatedData',
+          suffixShortDesc: 'To get additionalFormRelatedData.',
+        );
         additionalFormRelatedData =
             await _performLoadAdditionalFormRelatedData(executionTrace);
+        // Null is error.
         if (additionalFormRelatedData == null) {
           return false;
         }
@@ -354,6 +364,7 @@ abstract class BaseFormModel<
         }
         additionalFormRelatedData = _additionalFormRelatedData;
         if (additionalFormRelatedData == null) {
+          // TODO: Dang loi o day.
           throw DevError(
             errorMessage:
                 "Dev Error. _additionalFormRelatedData is null in updateFromFormView.",
@@ -447,7 +458,7 @@ abstract class BaseFormModel<
         _formModelStructure._setFormError(formErrorInfo);
 
         final ErrorInfo errorInfo = _handleError(
-          module: relatedShelf,
+          module: relatedModule,
           methodName: formErrorInfo.methodName,
           error: formErrorInfo.error,
           stackTrace: formErrorInfo.errorStackTrace,
@@ -514,7 +525,7 @@ abstract class BaseFormModel<
           _formModelStructure._setFormError(formErrorInfo);
 
           final ErrorInfo errorInfo = _handleError(
-            module: relatedShelf,
+            module: relatedModule,
             methodName: formErrorInfo.methodName,
             error: formErrorInfo.error,
             stackTrace: formErrorInfo.errorStackTrace,
@@ -579,7 +590,7 @@ abstract class BaseFormModel<
           _formModelStructure._setFormError(formErrorInfo);
 
           final ErrorInfo transientErrorInfo = _handleError(
-            module: relatedShelf,
+            module: relatedModule,
             methodName: formErrorInfo.methodName,
             error: formErrorInfo.error,
             stackTrace: formErrorInfo.errorStackTrace,
@@ -649,7 +660,7 @@ abstract class BaseFormModel<
       _formModelStructure._setFormError(formErrorInfo);
 
       final ErrorInfo errorInfo = _handleError(
-        module: relatedShelf,
+        module: relatedModule,
         methodName: formErrorInfo.methodName,
         error: formErrorInfo.error,
         stackTrace: formErrorInfo.errorStackTrace,
@@ -962,7 +973,7 @@ abstract class BaseFormModel<
       );
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
-        module: relatedShelf,
+        module: relatedModule,
         methodName: "performLoadAdditionalFormRelatedData",
         error: e,
         stackTrace: stackTrace,
@@ -989,7 +1000,7 @@ abstract class BaseFormModel<
       _refreshControlBars();
     } catch (e, stackTrace) {
       _handleError(
-        module: relatedShelf,
+        module: relatedModule,
         methodName: "_clearDataWithDataState",
         error: e,
         stackTrace: stackTrace,
@@ -1090,7 +1101,7 @@ abstract class BaseFormModel<
       return true;
     } catch (e, stackTrace) {
       ErrorInfo errorInfo = _handleError(
-        module: relatedShelf,
+        module: relatedModule,
         methodName: "__endFormActivityWithDataState",
         error: e,
         stackTrace: stackTrace,

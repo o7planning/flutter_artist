@@ -42,39 +42,16 @@ class _FilterControlBarState extends _BaseControlBarState<
   }
 
   @override
-  Activity? _getRelatedActivity() {
-    return null;
-  }
+  BlockContextType? get blockContextType => null;
 
   @override
-  bool get provideScalarContext {
-    return false;
-  }
+  ScalarContextType? get scalarContextType => null;
 
   @override
-  bool get provideBlockContext {
-    return false;
-  }
+  StageContextType? get stageContextType => null;
 
   @override
-  bool get provideItemContext {
-    return false;
-  }
-
-  @override
-  bool get provideFormContext {
-    return false;
-  }
-
-  @override
-  bool get provideStageContext {
-    return false;
-  }
-
-  @override
-  bool get provideTaskContext {
-    return false;
-  }
+  TaskContextType? get taskContextType => null;
 
   @override
   Widget? buildStandardButton(FilterControlBarItem item) {
@@ -116,15 +93,13 @@ class _FilterControlBarState extends _BaseControlBarState<
     }
   }
 
-
   @override
   String getWidgetOwnerClassName() =>
       getClassNameWithoutGenerics(widget.filterModel);
 
   @override
-  void addWidgetState({required bool isVisible}) =>
-      widget.filterModel.ui
-          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) => widget.filterModel.ui
+      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

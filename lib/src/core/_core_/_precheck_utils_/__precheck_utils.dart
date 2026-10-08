@@ -26,3 +26,4 @@ part 'shelf_deferred_event_precheck_utils.dart';
 part 'show_form_info_precheck_utils.dart';
 part 'task_form_enable_precheck_utils.dart';
 part 'task_submit_precheck_utils.dart';
+part 'scalar_load_extra_data_precheck_utils.dart';
