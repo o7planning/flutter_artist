@@ -85,17 +85,17 @@ class XTaskFormModel<
   NxtExecutionUnit _getNextExecutionUnit({required bool debug}) {
     final formModelDataState = formModel.dataState;
     final bool visibleX = formModel.ui.hasVisibleViews();
-    final executionIntent = _executionIntent;
+    final originExecutionIntent = _executionIntent;
     final TaskDataState taskDataState = formModel.task.dataState;
 
     // =========================================================================
     // 0. TERMINAL INTENT INTERCEPTOR
     // =========================================================================
-    if (executionIntent is FormModelDoneIntent) {
+    if (originExecutionIntent is FormModelDoneIntent) {
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "TaskFormModel (0.1), (${formModel.task.name}), _executionIntent: $executionIntent, "
+            "TaskFormModel (0.1), (${formModel.task.name}), _executionIntent: $originExecutionIntent, "
             "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
       );
     }
@@ -104,7 +104,7 @@ class XTaskFormModel<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "TaskFormModel (0.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
+            "TaskFormModel (0.2), (${formModel.task.name}), _executionIntent: $originExecutionIntent, "
             "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
       );
     }
@@ -116,7 +116,7 @@ class XTaskFormModel<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "TaskFormModel (1.1), (${formModel.task.name}), _executionIntent: $executionIntent, "
+            "TaskFormModel (1.1), (${formModel.task.name}), _executionIntent: $originExecutionIntent, "
             "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
       );
     }
@@ -125,15 +125,15 @@ class XTaskFormModel<
     // 2. DATA STATE = PENDING
     // =========================================================================
     else if (formModelDataState.isPending) {
-      if (executionIntent is FormModelDataLoadIntent) {
+      if (originExecutionIntent is FormModelDataLoadIntent) {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _TaskFormModelLoadDataExecutionUnit(
             xTaskFormModel: this,
-            executionIntent: executionIntent,
+            executionIntent: originExecutionIntent,
           ),
           info:
-              "TaskFormModel (2.1), (${formModel.task.name}), _executionIntent: $executionIntent, "
+              "TaskFormModel (2.1), (${formModel.task.name}), _executionIntent: $originExecutionIntent, "
               "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -143,8 +143,8 @@ class XTaskFormModel<
       if (shouldLoad) {
         // Enforce FormModelDataLoadIntent to populate form fields before allowing mutations
         final FormModelDataLoadIntent intentToUse;
-        if (executionIntent is FormModelDataLoadIntent) {
-          intentToUse = executionIntent;
+        if (originExecutionIntent is FormModelDataLoadIntent) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetFormModelExecutionIntentLoad();
         }
@@ -156,7 +156,7 @@ class XTaskFormModel<
             executionIntent: intentToUse,
           ),
           info:
-              "TaskFormModel (2.2.1), (${formModel.task.name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "TaskFormModel (2.2.1), (${formModel.task.name}), _executionIntent: $originExecutionIntent --> $intentToUse, "
               "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -164,7 +164,7 @@ class XTaskFormModel<
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "TaskFormModel (2.2.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
+              "TaskFormModel (2.2.2), (${formModel.task.name}), _executionIntent: $originExecutionIntent, "
               "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -180,8 +180,8 @@ class XTaskFormModel<
       if (shouldLoad) {
         // Enforce FormModelDataLoadIntent to refresh form fields
         final FormModelDataLoadIntent intentToUse;
-        if (executionIntent is FormModelDataLoadIntent) {
-          intentToUse = executionIntent;
+        if (originExecutionIntent is FormModelDataLoadIntent) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetFormModelExecutionIntentLoad();
         }
@@ -193,7 +193,7 @@ class XTaskFormModel<
             executionIntent: intentToUse,
           ),
           info:
-              "TaskFormModel (3.1.1), (${formModel.task.name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "TaskFormModel (3.1.1), (${formModel.task.name}), _executionIntent: $originExecutionIntent --> $intentToUse, "
               "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -201,7 +201,7 @@ class XTaskFormModel<
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "TaskFormModel (3.1.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
+              "TaskFormModel (3.1.2), (${formModel.task.name}), _executionIntent: $originExecutionIntent, "
               "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -216,8 +216,8 @@ class XTaskFormModel<
 
       if (shouldLoad) {
         final FormModelDataLoadIntent intentToUse;
-        if (executionIntent is FormModelDataLoadIntent) {
-          intentToUse = executionIntent;
+        if (originExecutionIntent is FormModelDataLoadIntent) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetFormModelExecutionIntentLoad();
         }
@@ -229,7 +229,7 @@ class XTaskFormModel<
             executionIntent: intentToUse,
           ),
           info:
-              "TaskFormModel (4.1.1), (${formModel.task.name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "TaskFormModel (4.1.1), (${formModel.task.name}), _executionIntent: $originExecutionIntent --> $intentToUse, "
               "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -237,7 +237,7 @@ class XTaskFormModel<
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "TaskFormModel (4.1.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
+              "TaskFormModel (4.1.2), (${formModel.task.name}), _executionIntent: $originExecutionIntent, "
               "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -251,8 +251,8 @@ class XTaskFormModel<
       // 5.1. Force reload explicitly requested from form configuration
       if (_formLoadHint == FormLoadHint.force) {
         final FormModelDataLoadIntent intentToUse;
-        if (executionIntent is FormModelDataLoadIntent) {
-          intentToUse = executionIntent;
+        if (originExecutionIntent is FormModelDataLoadIntent) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetFormModelExecutionIntentLoad();
         }
@@ -264,7 +264,7 @@ class XTaskFormModel<
             executionIntent: intentToUse,
           ),
           info:
-              "TaskFormModel (5.1.2), (${formModel.task.name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "TaskFormModel (5.1.2), (${formModel.task.name}), _executionIntent: $originExecutionIntent --> $intentToUse, "
               "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -272,45 +272,45 @@ class XTaskFormModel<
 
       // IN: DATA STATE = FRESH
       // 5.2. Handle active execution intents
-      if (executionIntent != null) {
-        if (executionIntent is FormModelViewChangeIntent) {
+      if (originExecutionIntent != null) {
+        if (originExecutionIntent is FormModelViewChangeIntent) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _TaskFormViewChangeExecutionUnit(
               xTaskFormModel: this,
-              executionIntent: executionIntent,
+              executionIntent: originExecutionIntent,
             ),
             info:
-                "TaskFormModel (5.2.2), (${formModel.task.name}), _executionIntent: $executionIntent, "
+                "TaskFormModel (5.2.2), (${formModel.task.name}), _executionIntent: $originExecutionIntent, "
                 "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
           );
-        } else if (executionIntent is FormModelDataLoadIntent) {
+        } else if (originExecutionIntent is FormModelDataLoadIntent) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _TaskFormModelLoadDataExecutionUnit(
               xTaskFormModel: this,
-              executionIntent: executionIntent,
+              executionIntent: originExecutionIntent,
             ),
             info:
-                "TaskFormModel (5.2.3), (${formModel.task.name}), _executionIntent: $executionIntent, "
+                "TaskFormModel (5.2.3), (${formModel.task.name}), _executionIntent: $originExecutionIntent, "
                 "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
           );
-        } else if (executionIntent is FormModelPatchFormFieldsIntent) {
+        } else if (originExecutionIntent is FormModelPatchFormFieldsIntent) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _TaskFormModelPatchFormFieldsExecutionUnit(
               xTaskFormModel: this,
-              executionIntent: executionIntent,
+              executionIntent: originExecutionIntent,
             ),
             info:
-                "TaskFormModel (5.2.4), (${formModel.task.name}), _executionIntent: $executionIntent, "
+                "TaskFormModel (5.2.4), (${formModel.task.name}), _executionIntent: $originExecutionIntent, "
                 "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "TaskFormModel (5.2.4), (${formModel.task.name}), _executionIntent: $executionIntent, "
+                "TaskFormModel (5.2.4), (${formModel.task.name}), _executionIntent: $originExecutionIntent, "
                 "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
           );
         }
@@ -333,7 +333,7 @@ class XTaskFormModel<
     return NxtExecutionUnit.no(
       debug: debug,
       info:
-          "TaskFormModel (6.1) (${formModel.task.name}), _executionIntent: $executionIntent, "
+          "TaskFormModel (6.1) (${formModel.task.name}), _executionIntent: $originExecutionIntent, "
           "taskDataState: $taskDataState, formDataState: ${formModelDataState.toBriefInfo()}",
     );
   }

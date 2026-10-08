@@ -45,8 +45,8 @@ enum BlockQuickItemUpdatePrecheck implements Precheck {
 
   // Test Cases: [90b].
   /// Operation not allowed by application business rules.
-  notAllow(
-    precheckCode: PrecheckCode.notAllow,
+  notAllowed(
+    precheckCode: PrecheckCode.notAllowed,
     message: "Not allowed to update the item.",
     details: [
       "Application business rules do not allow this item to be updated."

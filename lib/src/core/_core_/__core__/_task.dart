@@ -13,7 +13,17 @@ abstract class Task<
     INIT_DATA, //
     RESULT_DATA, //
     FORM_INPUT,
-    FORM_OUTPUT> implements FormHost {
+    FORM_OUTPUT> implements FormHost, ClassDefViewable {
+  @override
+  Map<String, Type> getGenericsInfoMap() {
+    return {
+      "INIT_DATA": INIT_DATA,
+      "RESULT_DATA": RESULT_DATA,
+      "FORM_INPUT": FORM_INPUT,
+      "FORM_OUTPUT": FORM_OUTPUT,
+    };
+  }
+
   final TaskConfig config;
   final TaskEffectiveConfig effectiveConfig;
 
@@ -115,7 +125,7 @@ abstract class Task<
 
   /// Internal ExecutionUnit method handling asynchronous INIT_DATA retrieval.
   ///
-  /// Invoked by [_TaskLoadInitDataExcutionUnit].
+  /// Invoked by [_TaskLoadInitDataExecutionUnit].
   @_ExecutionUnitMethodAnnotation()
   Future<void> _unitLoadInitData({
     required ExecutionTrace executionTrace,
@@ -333,6 +343,42 @@ abstract class Task<
       isLibMethod: true,
     );
 
+    final bool checkBusyTrue = true;
+    final bool checkAllowTrue = true;
+
+    executionTrace.addNonControllableCall(
+      codeId: "#114000",
+      caller: this,
+      methodName: "__checkBeforeLoadInitData",
+      suffixShortDesc: "",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+        "checkAllow": checkAllowTrue,
+      },
+    );
+
+    final Actionable<TaskLoadInitDataPrecheck> actionable =
+        __checkBeforeLoadInitData(
+      checkBusy: checkBusyTrue,
+      checkAllow: checkAllowTrue,
+    );
+
+    if (!actionable.yes) {
+      // debug._deletionErrorCount++;
+      _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#114100",
+        prefixShortDesc: '__checkBeforeLoadInitData()',
+        module: activity,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
+      return TaskLoadInitDataResult<INIT_DATA, RESULT_DATA>(
+        precheck: actionable.errCode,
+      );
+    }
+
     final XActivity xActivity = _XActivityTaskLoadInitData(task: this);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -343,6 +389,70 @@ abstract class Task<
         FORM_INPUT,
         FORM_OUTPUT>;
     return thisXTask.loadInitDataResult;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool isLoadInitDataAllowed() {
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult __checkLoadInitDataAllowed() {
+    try {
+      bool allow = isLoadInitDataAllowed();
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
+    } catch (e, stackTrace) {
+      return CheckAllowResult.error(
+        errorInfo: ErrorInfo.fromError(
+          error: e,
+          stackTrace: stackTrace,
+        ),
+      );
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  bool canLoadInitData() {
+    final Actionable<TaskLoadInitDataPrecheck> actionable =
+        checkBeforeLoadInitData(checkAllow: true);
+    return actionable.yes;
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<TaskLoadInitDataPrecheck> checkBeforeLoadInitData({
+    bool checkAllow = true,
+  }) {
+    return __checkBeforeLoadInitData(
+      checkBusy: true,
+      checkAllow: checkAllow,
+    );
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<TaskLoadInitDataPrecheck> __checkBeforeLoadInitData({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    return TaskLoadInitDataPrecheckUtils.checkBeforeLoadInitData(
+      checkBusy: true,
+      isBusy: FlutterArtist.executor.isBusy,
+      checkAllow: checkAllow,
+      taskDataState: dataState,
+      allowReloadInitDataOnFresh: effectiveConfig.allowReloadInitDataOnFresh,
+      allowMultipleSubmissions: effectiveConfig.allowMultipleSubmissions,
+      checkLoadInitDataAllowed: () => __checkLoadInitDataAllowed(),
+    );
   }
 
   // ***************************************************************************
@@ -359,7 +469,6 @@ abstract class Task<
     return TaskSubmitPrecheckUtils.checkBeforeSubmit(
       checkBusy: checkBusy,
       isBusy: FlutterArtist.executor.isBusy,
-      checkAllow: checkAllow,
       checkValidate: checkValidate,
       taskDataState: dataState,
       hasForm: formModel != null,
@@ -385,6 +494,15 @@ abstract class Task<
     );
   }
 
+  // ***************************************************************************
+
+  bool canSubmit() {
+    final Actionable<TaskSubmitPrecheck> actionable = checkBeforeSubmit(
+      checkAllow: true,
+      checkValidate: true,
+    );
+    return actionable.yes;
+  }
   // ***************************************************************************
   // ***************************************************************************
 
@@ -489,7 +607,7 @@ abstract class Task<
   }) {
     return TaskFormEnablePrecheckUtils.checkFormEnable(
       hasForm: formModel != null,
-      isStateReadyForForm: isStateReadyForForm(),
+      taskDataState: dataState,
       formDataState: formModel?.dataState,
     );
   }
@@ -500,6 +618,20 @@ abstract class Task<
   @_PrecheckMethod()
   Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo() {
     return __checkBeforeShowFormInfo(formModel: formModel);
+  }
+
+  Future<Actionable<ShowFormInfoPrecheck>>
+      showFormModelInspectorDialog() async {
+    Actionable<ShowFormInfoPrecheck> actionable = checkBeforeShowFormInfo();
+    if (!actionable.yes) {
+      return actionable;
+    }
+    await DebugFormModelInspectorDialog.show(
+      context: FlutterArtistCore.context,
+      locationInfo: getClassNameWithoutGenerics(this),
+      formModel: formModel as BaseFormModel,
+    );
+    return actionable;
   }
 
   // ***************************************************************************

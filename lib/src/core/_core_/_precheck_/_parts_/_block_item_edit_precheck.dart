@@ -52,8 +52,8 @@ enum BlockItemEditPrecheck implements Precheck {
   ),
 
   /// Operation not allowed by application business rules.
-  notAllow(
-    precheckCode: PrecheckCode.notAllow,
+  notAllowed(
+    precheckCode: PrecheckCode.notAllowed,
     message: "Cannot edit item",
     details: ["Application business rules do not allow editing this item."],
   ),

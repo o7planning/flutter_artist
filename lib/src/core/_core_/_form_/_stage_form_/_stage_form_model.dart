@@ -2,7 +2,7 @@ part of '../../core.dart';
 
 /// Form model bound to an individual [Stage] within a multi-step [Prozess].
 abstract class StageFormModel<
-        STAGE_ENUM extends Enum,
+        STAGE_ENUM extends StageEnum,
         INIT_DATA extends StageInitData,
         RESULT_DATA extends StageResultData,
         PROZESS_CONTEXT_DATA extends ProzessContextData,
@@ -15,6 +15,19 @@ abstract class StageFormModel<
         FORM_INPUT,
         FORM_OUTPUT,
         ADDITIONAL_FORM_RELATED_DATA> {
+  @override
+  Map<String, Type> getGenericsInfoMap() {
+    return {
+      "STAGE_ENUM": STAGE_ENUM,
+      "INIT_DATA": INIT_DATA,
+      "RESULT_DATA": RESULT_DATA,
+      "PROZESS_CONTEXT_DATA": PROZESS_CONTEXT_DATA,
+      "FORM_INPUT": FORM_INPUT,
+      "FORM_OUTPUT": FORM_OUTPUT,
+      "ADDITIONAL_FORM_RELATED_DATA": ADDITIONAL_FORM_RELATED_DATA,
+    };
+  }
+
   late final Stage<
       STAGE_ENUM, //
       INIT_DATA,
@@ -35,7 +48,7 @@ abstract class StageFormModel<
   @override
   INIT_DATA? get initData => stage.initData;
 
-  PROZESS_CONTEXT_DATA get sharedContext => stage.sharedContext;
+  // PROZESS_CONTEXT_DATA get sharedContext => stage.sharedContext;
 
   @override
   String get pathInfo =>

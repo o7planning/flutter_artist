@@ -51,7 +51,7 @@ class BlockItemCreationPrecheckUtils {
           return Actionable<BlockItemCreationPrecheck>.yes();
         case CheckAllow.notAllow:
           return Actionable<BlockItemCreationPrecheck>.no(
-            errCode: BlockItemCreationPrecheck.notAllow,
+            errCode: BlockItemCreationPrecheck.notAllowed,
           );
         case CheckAllow.error:
           return Actionable<BlockItemCreationPrecheck>.no(

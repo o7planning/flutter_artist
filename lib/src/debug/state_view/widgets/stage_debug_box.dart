@@ -8,6 +8,7 @@ import '_debug_box.dart';
 import 'debug_style_utils.dart';
 import 'stage_data_state_info_widget.dart';
 import 'widgets/active_info_widget.dart';
+import 'widgets/class_def_viewable_info_widget.dart';
 
 class StageDebugBox extends BaseDebugBox {
   final Stage stage;
@@ -24,6 +25,12 @@ class StageDebugBox extends BaseDebugBox {
     final String? activeUI = stage.ui.findVisibleView();
 
     return [
+      if (options.showClassDefinition)
+        ClassDefViewableInfoWidget(
+          classDefViewable: stage,
+          labelStyle: DebugStyleUtils.getLabelStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
+        ),
       if (options.showUiActive)
         ActiveInfoWidget(
           activeElementType: ActiveElementType.stage,
@@ -34,7 +41,7 @@ class StageDebugBox extends BaseDebugBox {
           checkAgain: () {},
         ),
       IconLabelText(
-        label: "Active Stage: ",
+        label: "Stage Name: ",
         text: stage.name,
         labelStyle: DebugStyleUtils.getLabelStyle1(context),
         textStyle: DebugStyleUtils.getTextStyle0(context),
@@ -62,7 +69,7 @@ class StageDebugBox extends BaseDebugBox {
       if (options.showHasResultData)
         IconLabelText(
           label: "Has Result Data?: ",
-          text: (stage.lastResultData != null).toString(),
+          text: (stage.submitResultData != null).toString(),
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),

@@ -1,10 +1,21 @@
 part of '../core.dart';
 
 abstract class Scalar<
-    ID extends Comparable,
-    VALUE extends Identifiable<ID>,
-    FILTER_INPUT extends FilterInput,
-    FILTER_CRITERIA extends FilterCriteria> extends _Core {
+        ID extends Comparable,
+        VALUE extends Identifiable<ID>,
+        FILTER_INPUT extends FilterInput,
+        FILTER_CRITERIA extends FilterCriteria> extends _Core
+    implements ClassDefViewable {
+  @override
+  Map<String, Type> getGenericsInfoMap() {
+    return {
+      "ID": ID,
+      "VALUE": VALUE,
+      "FILTER_INPUT": FILTER_INPUT,
+      "FILTER_CRITERIA": FILTER_CRITERIA,
+    };
+  }
+
   late final Shelf shelf;
 
   QueryType __lastQueryType = QueryType.realQuery;
@@ -971,7 +982,7 @@ abstract class Scalar<
   CheckAllowResult __checkQueryAllowed() {
     try {
       bool allow = isQueryAllowed();
-      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
         errorInfo: ErrorInfo.fromError(error: e, stackTrace: stackTrace),

@@ -1,10 +1,10 @@
 part of '../../core.dart';
 
-class StageSubmitExecutionResult<
+class StageSubmitResult<
         STAGE_INIT_DATA extends StageInitData, //
         STAGE_RESULT_DATA extends StageResultData>
     extends ExecutionUnitResult<StageSubmitPrecheck> {
-  StageSubmitExecutionResult({required super.precheck});
+  StageSubmitResult({required super.precheck});
 
   @override
   bool get successForFirst {

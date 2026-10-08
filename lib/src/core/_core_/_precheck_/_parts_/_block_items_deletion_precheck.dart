@@ -10,8 +10,8 @@ enum BlockItemsDeletionPrecheck implements Precheck {
   ),
 
   /// Operation not allowed by application business rules for one or more items.
-  notAllow(
-    precheckCode: PrecheckCode.notAllow,
+  notAllowed(
+    precheckCode: PrecheckCode.notAllowed,
     message: "Cannot delete items",
     details: [
       "Application business rules do not allow deleting one or more selected items."

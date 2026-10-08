@@ -6,7 +6,7 @@ abstract class BaseFormModel<
         FORM_INPUT extends FormInput, //
         FORM_OUTPUT extends FormOutput, //
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends _Core {
+    extends _Core implements ClassDefViewable {
   /// Configuration options for the form model.
   final FormModelConfig config;
 
@@ -179,15 +179,15 @@ abstract class BaseFormModel<
     } on FormPropInvalidNameError catch (e) {
       String message = "Invalid Form propName '${e.propName}'.\n"
           "@see the '${getClassNameWithoutGenerics(this)}.defineFormModelStructure()' method for details.";
-      throw _createFatalAppError(message);
+      throw AppFatalErrorUtils._createFatalAppError(message);
     } on FormPropDuplicateNameError catch (e) {
       String message = "Duplicate Form propName '${e.propName}'.\n"
           "@see the '${getClassNameWithoutGenerics(this)}.defineFormModelStructure()' method for details.";
-      throw _createFatalAppError(message);
+      throw AppFatalErrorUtils._createFatalAppError(message);
     } catch (e, stackTrace) {
       print(stackTrace);
       String message = "Unknown Error $e in ${getClassName(this)}";
-      throw _createFatalAppError(message);
+      throw AppFatalErrorUtils._createFatalAppError(message);
     }
   }
 
@@ -980,9 +980,11 @@ abstract class BaseFormModel<
         showSnackBar: true,
         tipDocument: null,
       );
-      final fatalErrorInfo = FormDataStateFatalError(errorInfo: errorInfo);
+      final formDataStateFatalError = FormDataStateFatalError(
+        errorInfo: errorInfo,
+      );
       _formModelStructure._setFormDataState(
-        formDataState: fatalErrorInfo,
+        formDataState: formDataStateFatalError,
         error: e,
       );
       return null;

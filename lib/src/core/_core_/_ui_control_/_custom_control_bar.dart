@@ -32,7 +32,7 @@ class CustomControlBar extends _ContextProviderView {
 class _CustomControlBarState
     extends _ContextProviderViewState<CustomControlBar> {
   @override
-  Shelf? _getRelatedShelf() {
+  Shelf? _getRelatedModule() {
     return widget.block.shelf;
   }
 
@@ -46,16 +46,19 @@ class _CustomControlBarState
   ContextProviderViewType get type => ContextProviderViewType.customControlBar;
 
   @override
-  BlockContextType? get blockContextType => null;
+  BlockViewContext? get blockViewContext => null;
 
   @override
-  ScalarContextType? get scalarContextType => null;
+  ScalarViewContext? get scalarContextType => null;
 
   @override
-  StageContextType? get stageContextType => null;
+  ProzessViewContext? get prozessViewContext => null;
 
   @override
-  TaskContextType? get taskContextType => null;
+  StageViewContext? get stageViewContext => null;
+
+  @override
+  TaskViewContext? get taskViewContext => null;
 
   @override
   void addWidgetState({required bool isVisible}) {

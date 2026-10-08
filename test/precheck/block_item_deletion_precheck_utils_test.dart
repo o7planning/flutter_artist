@@ -17,7 +17,7 @@ void main() {
         errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
         checkAllow: true,
         findItemSameIdWith: (target) => target,
-        checkItemDeletionAllowed: (_) => CheckAllowResult.allow(),
+        checkItemDeletionAllowed: (_) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -36,7 +36,7 @@ void main() {
         errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
         checkAllow: true,
         findItemSameIdWith: (target) => target,
-        checkItemDeletionAllowed: (_) => CheckAllowResult.allow(),
+        checkItemDeletionAllowed: (_) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -55,7 +55,7 @@ void main() {
         errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
         checkAllow: true,
         findItemSameIdWith: (target) => target,
-        checkItemDeletionAllowed: (_) => CheckAllowResult.allow(),
+        checkItemDeletionAllowed: (_) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -75,7 +75,7 @@ void main() {
         checkAllow: true,
         findItemSameIdWith: (target) => null,
         // Giả lập không tìm thấy item trong block
-        checkItemDeletionAllowed: (_) => CheckAllowResult.allow(),
+        checkItemDeletionAllowed: (_) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -94,11 +94,11 @@ void main() {
         errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
         checkAllow: true,
         findItemSameIdWith: (target) => target,
-        checkItemDeletionAllowed: (_) => CheckAllowResult.notAllow(),
+        checkItemDeletionAllowed: (_) => CheckAllowResult.notAllowed(),
       );
 
       expect(result.yes, isFalse);
-      expect(result.errCode, equals(BlockItemDeletionPrecheck.notAllow));
+      expect(result.errCode, equals(BlockItemDeletionPrecheck.notAllowed));
     });
 
     test('Should return checkAllowMethodError when checkAllow returns error',
@@ -137,7 +137,7 @@ void main() {
         errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
         checkAllow: true,
         findItemSameIdWith: (target) => target,
-        checkItemDeletionAllowed: (_) => CheckAllowResult.allow(),
+        checkItemDeletionAllowed: (_) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isTrue);

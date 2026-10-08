@@ -45,8 +45,8 @@ enum BlockItemCreationPrecheck implements Precheck {
 
   // Test Cases: [01a]
   /// Operation not allowed by application business rules.
-  notAllow(
-    precheckCode: PrecheckCode.notAllow,
+  notAllowed(
+    precheckCode: PrecheckCode.notAllowed,
     message: "Not allowed to create item.",
     details: ["Application business rules do not allow creating a new item."],
   ),

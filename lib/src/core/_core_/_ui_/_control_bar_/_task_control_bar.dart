@@ -6,7 +6,7 @@ class TaskControlBar extends BaseControlBar<
     TaskControlBarItem> {
   final Task task;
   final TaskControlBarConfig config;
-  final TaskContextType? taskContextType;
+  final TaskViewContext? taskViewContext;
 
   const TaskControlBar({
     super.key,
@@ -14,7 +14,7 @@ class TaskControlBar extends BaseControlBar<
     required super.description,
     required this.task,
     this.config = const TaskControlBarConfig(),
-    this.taskContextType = TaskContextType.initData,
+    this.taskViewContext = TaskViewContext.initData,
     super.style,
     super.leftItems = const [
       TaskControlBarItem.standard(TaskControlBarItemType.back),
@@ -41,20 +41,22 @@ class _TaskControlBarState extends _BaseControlBarState<
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
 
   @override
-  Activity? _getRelatedShelf() => widget.task.activity;
-
-
-  @override
-  BlockContextType? get blockContextType => null;
+  Activity? _getRelatedModule() => widget.task.activity;
 
   @override
-  ScalarContextType? get scalarContextType => null;
+  BlockViewContext? get blockViewContext => null;
 
   @override
-  StageContextType? get stageContextType => null;
+  ScalarViewContext? get scalarContextType => null;
 
   @override
-  TaskContextType? get taskContextType => widget.taskContextType;
+  ProzessViewContext? get prozessViewContext => null;
+
+  @override
+  StageViewContext? get stageViewContext => null;
+
+  @override
+  TaskViewContext? get taskViewContext => widget.taskViewContext;
 
   @override
   Widget? buildStandardButton(TaskControlBarItem item) {
@@ -74,36 +76,24 @@ class _TaskControlBarState extends _BaseControlBarState<
         );
 
       case TaskControlBarItemType.loadInitData:
-        if (!widget.config.allowLoadInitDataButton) return null;
+        if (!widget.config.allowLoadInitDataButton) {
+          return null;
+        }
+        final actionable = widget.task.checkBeforeLoadInitData(
+          checkAllow: true,
+        );
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
           tooltip: "Load Init Data",
           iconData: FaIconConstants.formRefreshIconData,
           onAction: widget.task.isLoadingInitData,
-          onPressed: () async {
-            await widget.task.loadInitData();
-          },
+          onPressed: actionable.yes
+              ? () async {
+                  await widget.task.loadInitData();
+                }
+              : null,
         );
-
-      // case TaskControlBarItemType.submit:
-      //   if (!widget.config.allowSubmitButton) return null;
-      //
-      //   final bool checkBeforeSubmit =
-      //       widget.task.dataState.isLoaded && !widget.task.isExecuting;
-      //
-      //   return ControlBarHelper.buildControlBarButton(
-      //     context,
-      //     style: widget.style,
-      //     tooltip: "Submit Task",
-      //     iconData: FaIconConstants.submitIconData,
-      //     onAction: widget.task.isExecuting,
-      //     onPressed: checkBeforeSubmit
-      //         ? () async {
-      //             await widget.task.submit();
-      //           }
-      //         : null,
-      //   );
 
       case TaskControlBarItemType.submit:
         if (!widget.config.allowSubmitButton) {
@@ -112,7 +102,7 @@ class _TaskControlBarState extends _BaseControlBarState<
         final actionable = widget.task.checkBeforeSubmit(
           checkAllow: true,
           // IMPORTANT: Avoid error:
-          //  --> "setState() or markNeedsBuild() called during build.".
+          //  "setState() or markNeedsBuild() called during build.".
           checkValidate: false,
         );
         return ControlBarHelper.buildControlBarButton(
@@ -148,12 +138,7 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: actionable.yes
               ? () {
-                  DebugFormModelInspectorDialog.show(
-                    context: context,
-                    locationInfo:
-                        getClassNameWithoutGenerics(widget.ownerClassInstance),
-                    formModel: widget.task.formModel!,
-                  );
+                  widget.task.showFormModelInspectorDialog();
                 }
               : null,
         );

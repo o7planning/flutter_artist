@@ -61,6 +61,8 @@ enum TipDocument {
   backgroundActionRun(enabled: false),
   loginActivityPerformLogin(enabled: false),
   coordinatorPerformSetupOperation(enabled: false),
+  //
+  stageDetermineNextStage(enabled: false),
   ;
 
   final bool enabled;
@@ -197,6 +199,8 @@ enum TipDocument {
         return "UI Context Inspector";
       case TipDocument.debugMenu:
         return "Debug Menu";
+      case TipDocument.stageDetermineNextStage:
+        return "Stage.stageDetermineNextStage()";
     }
   }
 
@@ -306,6 +310,8 @@ enum TipDocument {
         return "UI Context Inspector";
       case TipDocument.debugMenu:
         return "Debug Menu";
+      case TipDocument.stageDetermineNextStage:
+        return "Stage.stageDetermineNextStage()";
     }
   }
 
@@ -494,6 +500,8 @@ enum TipDocument {
       case TipDocument.loginActivityPerformLogin:
         return [];
       case TipDocument.coordinatorPerformSetupOperation:
+        return [];
+      case TipDocument.stageDetermineNextStage:
         return [];
     }
   }

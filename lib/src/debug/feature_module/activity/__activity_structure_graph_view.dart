@@ -10,7 +10,7 @@ import '../../../core/utils/__utils.dart';
 import '../../../core/widgets/_custom_app_container.dart';
 import '../../constants/_debug_constants.dart';
 import '../_graph_configuration.dart';
-import '_graph_item_prozess_box.dart';
+import '_graph_item_process_box.dart';
 import '_graph_item_task_box.dart';
 
 /// A widget that visualizes the Activity execution structure using GraphView,
@@ -282,7 +282,7 @@ class _ActivityStructureGraphViewState
             const Divider(height: 10),
 
             // Displaying list of child Stages inside the Prozess node container
-            if (prozess.stages.isEmpty)
+            if (prozess.orderedStages.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Text(
@@ -295,7 +295,7 @@ class _ActivityStructureGraphViewState
                 ),
               )
             else
-              ...prozess.stages.map(
+              ...prozess.orderedStages.map(
                 (stage) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
                   child: Row(

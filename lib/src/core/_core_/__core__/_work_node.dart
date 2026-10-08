@@ -40,9 +40,9 @@ abstract class WorkNode<
 
   INIT_DATA? get initData => _initData;
 
-  RESULT_DATA? _lastResultData;
+  RESULT_DATA? _submitResultData;
 
-  RESULT_DATA? get lastResultData => _lastResultData;
+  RESULT_DATA? get submitResultData => _submitResultData;
 
   // ===========================================================================
   // Constructor
@@ -70,7 +70,7 @@ abstract class WorkNode<
   /// Clears shared node data and resets embedded cache.
   void clear() {
     _initData = null;
-    _lastResultData = null;
+    _submitResultData = null;
   }
 
   /// Updates loading state and triggers control bars refresh safely.

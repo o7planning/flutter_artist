@@ -25,7 +25,7 @@ void main() {
         defaultPageable: defaultPageable,
         currentPagination: paginationInfo,
         specifiedPageable: null,
-        checkQueryAllowed: () => CheckAllowResult.allow(),
+        checkQueryAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(res.actionable.yes, isFalse);
@@ -48,7 +48,7 @@ void main() {
         defaultPageable: defaultPageable,
         currentPagination: paginationInfo,
         specifiedPageable: null,
-        checkQueryAllowed: () => CheckAllowResult.allow(),
+        checkQueryAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(res.actionable.yes, isFalse);
@@ -70,7 +70,7 @@ void main() {
         currentPagination: paginationInfo,
         // On page 1, previous will return null from calculator
         specifiedPageable: null,
-        checkQueryAllowed: () => CheckAllowResult.allow(),
+        checkQueryAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(res.actionable.yes, isFalse);
@@ -91,11 +91,11 @@ void main() {
         defaultPageable: defaultPageable,
         currentPagination: paginationInfo,
         specifiedPageable: null,
-        checkQueryAllowed: () => CheckAllowResult.notAllow(), // Disallowed
+        checkQueryAllowed: () => CheckAllowResult.notAllowed(), // Disallowed
       );
 
       expect(res.actionable.yes, isFalse);
-      expect(res.actionable.errCode, equals(BlockQueryPrecheck.notAllow));
+      expect(res.actionable.errCode, equals(BlockQueryPrecheck.notAllowed));
     });
 
     test('Should return yes and correct isQueryMoreFlow when all checks pass',
@@ -111,7 +111,7 @@ void main() {
         defaultPageable: defaultPageable,
         currentPagination: paginationInfo,
         specifiedPageable: null,
-        checkQueryAllowed: () => CheckAllowResult.allow(),
+        checkQueryAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(res.actionable.yes, isTrue);

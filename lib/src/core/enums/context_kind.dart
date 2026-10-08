@@ -8,6 +8,7 @@ enum ContextKind {
   stageForm,
   taskForm,
   activity,
+  prozessInitData,
   taskInitData,
   stageInitData;
 }

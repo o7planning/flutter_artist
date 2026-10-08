@@ -1,4 +1,5 @@
 class DebugFormOptions {
+  final bool showClassDefinition;
   final bool showFormUiActive;
   final bool showFormEnable;
   final bool showFormDataState;
@@ -9,6 +10,7 @@ class DebugFormOptions {
   final bool showFormProps;
 
   const DebugFormOptions({
+    this.showClassDefinition = true,
     this.showFormUiActive = true,
     this.showFormEnable = true,
     this.showFormDataState = true,
@@ -20,6 +22,7 @@ class DebugFormOptions {
   });
 
   const DebugFormOptions.custom({
+    this.showClassDefinition = false,
     this.showFormUiActive = false,
     this.showFormEnable = false,
     this.showFormDataState = false,

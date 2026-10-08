@@ -7,6 +7,7 @@ import '../../../core/_core_/_precheck_/__precheck.dart';
 import '../options/_debug_form_options.dart';
 import '_debug_box.dart';
 import 'debug_style_utils.dart';
+import 'widgets/class_def_viewable_info_widget.dart';
 
 class FormDebugBox extends BaseDebugBox {
   final BaseFormModel formModel;
@@ -26,6 +27,12 @@ class FormDebugBox extends BaseDebugBox {
     FormEnablePrecheck? enablePrecheck = actionable.errCode;
     //
     List<Widget> list1 = [
+      if (options.showClassDefinition)
+        ClassDefViewableInfoWidget(
+          classDefViewable: formModel,
+          labelStyle: DebugStyleUtils.getLabelStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
+        ),
       if (options.showFormUiActive)
         IconLabelText(
           label: "Form UI Active?: ",

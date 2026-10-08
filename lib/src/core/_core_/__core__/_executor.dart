@@ -9,7 +9,7 @@ class _Executor {
   int? get executingXModuleId => __executingXModuleId;
 
   final Map<_ExecutionProgressBuilderState, bool>
-  _executionProgressViewWidgetStates = {};
+      _executionProgressViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -51,7 +51,7 @@ class _Executor {
         try {
           while (true) {
             _ExecutionUnit? executionUnit =
-            FlutterArtist._rootQueue.getNextExecutionUnit(
+                FlutterArtist._rootQueue.getNextExecutionUnit(
               removeEmptyRootQuery: true,
             );
             //
@@ -61,7 +61,7 @@ class _Executor {
               }
               pendingEventProcessed = true;
               final Set<String> excludeModuleNames =
-              executedModuleMap.keys.toSet();
+                  executedModuleMap.keys.toSet();
               //
               FlutterArtist.desk._reactionProcessor.addReactionExecutionUnits(
                 excludeModuleNames: excludeModuleNames,
@@ -80,7 +80,8 @@ class _Executor {
                 context: context,
               );
             }
-            print("\n EXECUTE ExecutionUnit: $executionUnit \n");
+            print(
+                "\n      >>>> EXECUTE: ${getClassNameWithoutGenerics(executionUnit)} \n");
             //
             await __executeExecutionUnit(
               executionUnit: executionUnit,
@@ -156,6 +157,24 @@ class _Executor {
           executionIntent: executionUnit.executionIntent,
         );
       }
+      // _ProzessLoadInitDataExecutionUnit
+      else if (executionUnit is _ProzessLoadInitDataExecutionUnit) {
+        await executionUnit.xProzess.prozess._unitLoadInitData(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXProzess: executionUnit.xProzess,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
+      // _ProzessDetermineNextStageExecutionUnit
+      else if (executionUnit is _ProzessDetermineNextStageExecutionUnit) {
+        await executionUnit.xProzess.prozess._unitDetermineNextStage(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXProzess: executionUnit.xProzess,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
       // _StageSubmitExecutionUnit
       else if (executionUnit is _StageSubmitExecutionUnit) {
         await executionUnit.xStage.stage._unitSubmit(
@@ -201,18 +220,18 @@ class _Executor {
           executionIntent: executionUnit.executionIntent,
         );
       }
-      // _TaskSubmitExecutionUnit
-      else if (executionUnit is _TaskSubmitExecutionUnit) {
-        await executionUnit.xTask.task._unitSubmit(
+      // _TaskLoadInitDataExecutionUnit
+      else if (executionUnit is _TaskLoadInitDataExecutionUnit) {
+        await executionUnit.xTask.task._unitLoadInitData(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXTask: executionUnit.xTask,
           executionIntent: executionUnit.executionIntent,
         );
       }
-      // _TaskLoadInitDataExecutionUnit
-      else if (executionUnit is _TaskLoadInitDataExecutionUnit) {
-        await executionUnit.xTask.task._unitLoadInitData(
+      // _TaskSubmitExecutionUnit
+      else if (executionUnit is _TaskSubmitExecutionUnit) {
+        await executionUnit.xTask.task._unitSubmit(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXTask: executionUnit.xTask,
@@ -448,9 +467,9 @@ class _Executor {
       bool onProgress = owner == null || executionUnitType == null
           ? false
           : state.isMatches(
-        owner: owner,
-        executionUnitType: executionUnitType,
-      );
+              owner: owner,
+              executionUnitType: executionUnitType,
+            );
       //
       state.onProgress = onProgress;
       state.refreshState(force: true);

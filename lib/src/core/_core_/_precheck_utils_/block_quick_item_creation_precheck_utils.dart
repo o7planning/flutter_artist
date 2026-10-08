@@ -44,7 +44,7 @@ class BlockQuickItemCreationPrecheckUtils {
           return Actionable<BlockQuickItemCreationPrecheck>.yes();
         case CheckAllow.notAllow:
           return Actionable<BlockQuickItemCreationPrecheck>.no(
-            errCode: BlockQuickItemCreationPrecheck.notAllow,
+            errCode: BlockQuickItemCreationPrecheck.notAllowed,
           );
         case CheckAllow.error:
           return Actionable<BlockQuickItemCreationPrecheck>.no(

@@ -10,7 +10,7 @@ void main() {
         checkBusy: true,
         isBusy: true, // Hệ thống đang bận
         checkAllow: true,
-        checkQueryAllowed: () => CheckAllowResult.allow(),
+        checkQueryAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -24,11 +24,11 @@ void main() {
         checkBusy: true,
         isBusy: false,
         checkAllow: true,
-        checkQueryAllowed: () => CheckAllowResult.notAllow(),
+        checkQueryAllowed: () => CheckAllowResult.notAllowed(),
       );
 
       expect(result.yes, isFalse);
-      expect(result.errCode, equals(ScalarQueryPrecheck.notAllow));
+      expect(result.errCode, equals(ScalarQueryPrecheck.notAllowed));
     });
 
     test(
@@ -58,7 +58,7 @@ void main() {
         checkBusy: true,
         isBusy: false,
         checkAllow: true,
-        checkQueryAllowed: () => CheckAllowResult.allow(),
+        checkQueryAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isTrue);

@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class XStageFormModel<
-    STAGE_ENUM extends Enum,
+    STAGE_ENUM extends StageEnum,
     INIT_DATA extends StageInitData,
     RESULT_DATA extends StageResultData,
     PROZESS_CONTEXT_DATA extends ProzessContextData,
@@ -11,7 +11,7 @@ class XStageFormModel<
 
   final StageFormModel formModel;
   late final XStage<
-      Enum, // STAGE_ENUM
+      StageEnum,
       INIT_DATA,
       RESULT_DATA,
       ProzessContextData,
@@ -96,16 +96,16 @@ class XStageFormModel<
   NxtExecutionUnit _getNextExecutionUnit({required bool debug}) {
     final formModelDataState = formModel.dataState;
     final bool visibleX = formModel.ui.hasVisibleViews();
-    final executionIntent = _executionIntent;
+    final originExecutionIntent = _executionIntent;
 
     // =========================================================================
     // 0. TERMINAL INTENT INTERCEPTOR
     // =========================================================================
-    if (executionIntent is FormModelDoneIntent) {
+    if (originExecutionIntent is FormModelDoneIntent) {
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "StageFormModel (0.0), (${formModel.stage.name}), _executionIntent: $executionIntent, "
+            "StageFormModel (0.0), (${formModel.stage.name}), _executionIntent: $originExecutionIntent, "
             "formDataState: ${formModelDataState.toBriefInfo()}",
       );
     }
@@ -117,7 +117,7 @@ class XStageFormModel<
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "StageFormModel (1.1), (${formModel.stage.name}), _executionIntent: $executionIntent, "
+            "StageFormModel (1.1), (${formModel.stage.name}), _executionIntent: $originExecutionIntent, "
             "formDataState: ${formModelDataState.toBriefInfo()}",
       );
     }
@@ -126,15 +126,15 @@ class XStageFormModel<
     // 2. DATA STATE = PENDING
     // =========================================================================
     else if (formModelDataState.isPending) {
-      if (executionIntent is FormModelDataLoadIntent) {
+      if (originExecutionIntent is FormModelDataLoadIntent) {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _StageFormModelLoadDataExecutionUnit(
             xStageFormModel: this,
-            executionIntent: executionIntent,
+            executionIntent: originExecutionIntent,
           ),
           info:
-              "StageFormModel (2.1), (${formModel.stage.name}), _executionIntent: $executionIntent, "
+              "StageFormModel (2.1), (${formModel.stage.name}), _executionIntent: $originExecutionIntent, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -144,8 +144,8 @@ class XStageFormModel<
       if (shouldLoad) {
         // Enforce FormModelDataLoadIntent to populate form fields before allowing mutations
         final FormModelDataLoadIntent intentToUse;
-        if (executionIntent is FormModelDataLoadIntent) {
-          intentToUse = executionIntent;
+        if (originExecutionIntent is FormModelDataLoadIntent) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetFormModelExecutionIntentLoad();
         }
@@ -157,7 +157,7 @@ class XStageFormModel<
             executionIntent: intentToUse,
           ),
           info:
-              "StageFormModel (2.2.1), (${formModel.stage.name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "StageFormModel (2.2.1), (${formModel.stage.name}), _executionIntent: $originExecutionIntent --> $intentToUse, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -165,7 +165,7 @@ class XStageFormModel<
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "StageFormModel (2.2.2), (${formModel.stage.name}), _executionIntent: $executionIntent, "
+              "StageFormModel (2.2.2), (${formModel.stage.name}), _executionIntent: $originExecutionIntent, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -181,8 +181,8 @@ class XStageFormModel<
       if (shouldLoad) {
         // Enforce FormModelDataLoadIntent to refresh form fields
         final FormModelDataLoadIntent intentToUse;
-        if (executionIntent is FormModelDataLoadIntent) {
-          intentToUse = executionIntent;
+        if (originExecutionIntent is FormModelDataLoadIntent) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetFormModelExecutionIntentLoad();
         }
@@ -194,7 +194,7 @@ class XStageFormModel<
             executionIntent: intentToUse,
           ),
           info:
-              "StageFormModel (3.1.1), (${formModel.stage.name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "StageFormModel (3.1.1), (${formModel.stage.name}), _executionIntent: $originExecutionIntent --> $intentToUse, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -202,7 +202,7 @@ class XStageFormModel<
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "StageFormModel (3.1.2), (${formModel.stage.name}), _executionIntent: $executionIntent, "
+              "StageFormModel (3.1.2), (${formModel.stage.name}), _executionIntent: $originExecutionIntent, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -217,8 +217,8 @@ class XStageFormModel<
 
       if (shouldLoad) {
         final FormModelDataLoadIntent intentToUse;
-        if (executionIntent is FormModelDataLoadIntent) {
-          intentToUse = executionIntent;
+        if (originExecutionIntent is FormModelDataLoadIntent) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetFormModelExecutionIntentLoad();
         }
@@ -230,7 +230,7 @@ class XStageFormModel<
             executionIntent: intentToUse,
           ),
           info:
-              "StageFormModel (4.1.1), (${formModel.stage.name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "StageFormModel (4.1.1), (${formModel.stage.name}), _executionIntent: $originExecutionIntent --> $intentToUse, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -238,7 +238,7 @@ class XStageFormModel<
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "StageFormModel (4.1.2), (${formModel.stage.name}), _executionIntent: $executionIntent, "
+              "StageFormModel (4.1.2), (${formModel.stage.name}), _executionIntent: $originExecutionIntent, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -252,8 +252,8 @@ class XStageFormModel<
       // 5.1. Force reload explicitly requested from form configuration
       if (_formLoadHint == FormLoadHint.force) {
         final FormModelDataLoadIntent intentToUse;
-        if (executionIntent is FormModelDataLoadIntent) {
-          intentToUse = executionIntent;
+        if (originExecutionIntent is FormModelDataLoadIntent) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetFormModelExecutionIntentLoad();
         }
@@ -265,7 +265,7 @@ class XStageFormModel<
             executionIntent: intentToUse,
           ),
           info:
-              "StageFormModel (5.1.2), (${formModel.stage.name}), _executionIntent: $executionIntent --> $intentToUse, "
+              "StageFormModel (5.1.2), (${formModel.stage.name}), _executionIntent: $originExecutionIntent --> $intentToUse, "
               "formDataState: ${formModelDataState.toBriefInfo()}, "
               "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
         );
@@ -273,45 +273,45 @@ class XStageFormModel<
 
       // IN: DATA STATE = FRESH
       // 5.2. Handle active execution intents
-      if (executionIntent != null) {
-        if (executionIntent is FormModelViewChangeIntent) {
+      if (originExecutionIntent != null) {
+        if (originExecutionIntent is FormModelViewChangeIntent) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _StageFormViewChangeExecutionUnit(
               xStageFormModel: this,
-              executionIntent: executionIntent,
+              executionIntent: originExecutionIntent,
             ),
             info:
-                "StageFormModel (5.2.2), (${formModel.stage.name}), _executionIntent: $executionIntent, "
+                "StageFormModel (5.2.2), (${formModel.stage.name}), _executionIntent: $originExecutionIntent, "
                 "formDataState: ${formModelDataState.toBriefInfo()}",
           );
-        } else if (executionIntent is FormModelDataLoadIntent) {
+        } else if (originExecutionIntent is FormModelDataLoadIntent) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _StageFormModelLoadDataExecutionUnit(
               xStageFormModel: this,
-              executionIntent: executionIntent,
+              executionIntent: originExecutionIntent,
             ),
             info:
-                "StageFormModel (5.2.3), (${formModel.stage.name}), _executionIntent: $executionIntent, "
+                "StageFormModel (5.2.3), (${formModel.stage.name}), _executionIntent: $originExecutionIntent, "
                 "formDataState: ${formModelDataState.toBriefInfo()}",
           );
-        } else if (executionIntent is FormModelPatchFormFieldsIntent) {
+        } else if (originExecutionIntent is FormModelPatchFormFieldsIntent) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _StageFormModelPatchFormFieldsExecutionUnit(
               xStageFormModel: this,
-              executionIntent: executionIntent,
+              executionIntent: originExecutionIntent,
             ),
             info:
-                "StageFormModel (5.2.4), (${formModel.stage.name}), _executionIntent: $executionIntent, "
+                "StageFormModel (5.2.4), (${formModel.stage.name}), _executionIntent: $originExecutionIntent, "
                 "formDataState: ${formModelDataState.toBriefInfo()}",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "StageFormModel (5.2.4), (${formModel.stage.name}), _executionIntent: $executionIntent, "
+                "StageFormModel (5.2.4), (${formModel.stage.name}), _executionIntent: $originExecutionIntent, "
                 "formDataState: ${formModelDataState.toBriefInfo()}",
           );
         }
@@ -334,7 +334,7 @@ class XStageFormModel<
     return NxtExecutionUnit.no(
       debug: debug,
       info:
-          "StageFormModel (6.1) (${formModel.stage.name}), _executionIntent: $executionIntent, "
+          "StageFormModel (6.1) (${formModel.stage.name}), _executionIntent: $originExecutionIntent, "
           "formDataState: ${formModelDataState.toBriefInfo()}",
     );
   }

@@ -43,9 +43,12 @@ enum ProzessControlBarItemType {
   back,
   cancel,
   reset,
-  loadCurrentStageInitData, // Load current Stage
-  submitCurrentStage, // Submit current Stage
+  loadStageInitData, // Load current Stage
+  submitStage, // Submit current Stage
   debugInspector,
+  debugForm, //
   divider,
+  moveToNextStage,
+  moveToPreviousStage,
   custom,
 }

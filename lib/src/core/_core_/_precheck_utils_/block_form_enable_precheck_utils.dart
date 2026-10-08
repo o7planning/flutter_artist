@@ -58,7 +58,7 @@ class BlockFormEnablePrecheckUtils {
           return Actionable<BlockFormEnablePrecheck>.yes();
         case CheckAllow.notAllow:
           return Actionable<BlockFormEnablePrecheck>.no(
-            errCode: BlockFormEnablePrecheck.notAllow,
+            errCode: BlockFormEnablePrecheck.notAllowed,
           );
         case CheckAllow.error:
           return Actionable<BlockFormEnablePrecheck>.no(

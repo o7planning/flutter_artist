@@ -7,6 +7,7 @@ import '../options/_debug_task_options.dart';
 import 'widgets/active_info_widget.dart';
 import '_debug_box.dart';
 import 'debug_style_utils.dart';
+import 'widgets/class_def_viewable_info_widget.dart';
 import 'widgets/task_data_state_info_widget.dart';
 
 class TaskDebugBox extends BaseDebugBox {
@@ -24,6 +25,12 @@ class TaskDebugBox extends BaseDebugBox {
     String? activeUI = task.ui.findVisibleView();
     String? xActiveUI = task.ui.findVisibleView();
     return [
+      if (options.showClassDefinition)
+        ClassDefViewableInfoWidget(
+          classDefViewable: task,
+          labelStyle: DebugStyleUtils.getLabelStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
+        ),
       if (options.showUiActive)
         ActiveInfoWidget(
           activeElementType: ActiveElementType.task,

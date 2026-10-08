@@ -14,7 +14,7 @@ void main() {
         hasForm: true,
         blockDataState: defaultBlockDataState,
         checkAllow: true,
-        checkCreationAllowed: () => CheckAllowResult.allow(),
+        checkCreationAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -31,7 +31,7 @@ void main() {
         // Form model is missing
         blockDataState: defaultBlockDataState,
         checkAllow: true,
-        checkCreationAllowed: () => CheckAllowResult.allow(),
+        checkCreationAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -47,7 +47,7 @@ void main() {
         blockDataState: const BlockDataStateNone(),
         // Block in none state
         checkAllow: true,
-        checkCreationAllowed: () => CheckAllowResult.allow(),
+        checkCreationAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -65,11 +65,11 @@ void main() {
         blockDataState: defaultBlockDataState,
         checkAllow: true,
         checkCreationAllowed: () =>
-            CheckAllowResult.notAllow(), // Disallowed by business rule
+            CheckAllowResult.notAllowed(), // Disallowed by business rule
       );
 
       expect(result.yes, isFalse);
-      expect(result.errCode, equals(BlockItemCreationPrecheck.notAllow));
+      expect(result.errCode, equals(BlockItemCreationPrecheck.notAllowed));
     });
 
     test('Should return yes when all precheck conditions pass successfully',
@@ -80,7 +80,7 @@ void main() {
         hasForm: true,
         blockDataState: defaultBlockDataState,
         checkAllow: true,
-        checkCreationAllowed: () => CheckAllowResult.allow(),
+        checkCreationAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isTrue);

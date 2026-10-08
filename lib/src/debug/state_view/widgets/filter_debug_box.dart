@@ -5,6 +5,7 @@ import '../../../core/_core_/core.dart';
 import '../options/_debug_filter_options.dart';
 import '_debug_box.dart';
 import 'debug_style_utils.dart';
+import 'widgets/class_def_viewable_info_widget.dart';
 
 class FilterDebugBox extends BaseDebugBox {
   final FilterModel filterModel;
@@ -23,6 +24,12 @@ class FilterDebugBox extends BaseDebugBox {
         structure.allMultiOptCriteria;
     //
     List<Widget> list1 = [
+      if (options.showClassDefinition)
+        ClassDefViewableInfoWidget(
+          classDefViewable: filterModel,
+          labelStyle: DebugStyleUtils.getLabelStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
+        ),
       if (options.showFilterUiActive)
         IconLabelText(
           label: "Filter UI Active?: ",

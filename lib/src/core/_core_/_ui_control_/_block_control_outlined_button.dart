@@ -6,7 +6,7 @@ class BlockControlOutlinedButton extends BlockControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.block,
-    super.blockContextType,
+    super.blockViewContext,
     required super.actionType,
     super.navigate,
     //
@@ -39,7 +39,7 @@ class BlockControlOutlinedButton extends BlockControl {
     required super.currentStackTrace,
     required super.ownerClassInstance,
     required super.block,
-    super.blockContextType,
+    super.blockViewContext,
     required super.actionType,
     super.navigate,
     //

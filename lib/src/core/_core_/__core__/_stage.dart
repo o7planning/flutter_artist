@@ -7,17 +7,28 @@ part of '../core.dart';
 /// -> (resolves INIT_DATA) -> [StageDataStateLoadedFresh]
 /// -> (submission) -> [StageDataStateSubmissionAttempted]
 abstract class Stage<
-STAGE_ENUM extends Enum, //
-INIT_DATA extends StageInitData,
-RESULT_DATA extends StageResultData,
-PROZESS_CONTEXT_DATA extends ProzessContextData,
-FORM_INPUT extends FormInput,
-FORM_OUTPUT extends FormOutput> extends WorkNode<
+    STAGE_ENUM extends StageEnum, //
+    INIT_DATA extends StageInitData,
+    RESULT_DATA extends StageResultData,
+    PROZESS_CONTEXT_DATA extends ProzessContextData,
+    FORM_INPUT extends FormInput,
+    FORM_OUTPUT extends FormOutput> extends WorkNode<
     INIT_DATA, //
     RESULT_DATA,
     FORM_INPUT,
-    FORM_OUTPUT>
-    implements FormHost {
+    FORM_OUTPUT> implements FormHost, ClassDefViewable {
+  @override
+  Map<String, Type> getGenericsInfoMap() {
+    return {
+      "STAGE_ENUM": STAGE_ENUM,
+      "INIT_DATA": INIT_DATA,
+      "RESULT_DATA": RESULT_DATA,
+      "PROZESS_CONTEXT_DATA": PROZESS_CONTEXT_DATA,
+      "FORM_INPUT": FORM_INPUT,
+      "FORM_OUTPUT": FORM_OUTPUT,
+    };
+  }
+
   final STAGE_ENUM stageId;
 
   final StageConfig config;
@@ -25,7 +36,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   late final debug = _StageDebugInfo(stage: this);
 
-  late final Prozess<STAGE_ENUM, PROZESS_CONTEXT_DATA> prozess;
+  late final Prozess<STAGE_ENUM, ProzessInitData, PROZESS_CONTEXT_DATA> prozess;
 
   late final ui = _StageUiComponents(stage: this);
 
@@ -35,7 +46,19 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
   @override
   Activity get activity => prozess.activity;
 
-  PROZESS_CONTEXT_DATA get sharedContext => prozess.contextData;
+  StageRouteStatus _stageRouteStatus = StageRouteStatus.unreached;
+
+  void _setStageRouteStatusToActive() {
+    _stageRouteStatus = StageRouteStatus.active;
+  }
+
+  void _setStageRouteStatusToBypassed() {
+    _stageRouteStatus = StageRouteStatus.bypassed;
+  }
+
+  StageRouteStatus get stageRouteStatus => _stageRouteStatus;
+
+  bool get isInActiveRoute => _stageRouteStatus == StageRouteStatus.active;
 
   @override
   StageFormModel<
@@ -63,6 +86,18 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   StageErrorInfo? get errorInfo => _dataState.errorInfo;
 
+  bool get isSubmitted {
+    return _dataState.isSubmissionAttemptedSuccess;
+  }
+
+  bool get isFrontierStage {
+    return prozess._isFrontierStage(this);
+  }
+
+  bool get isViewingStage {
+    return prozess._isViewingStage(this);
+  }
+
   // ===========================================================================
   // Constructor
   // ===========================================================================
@@ -80,14 +115,11 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
   // ===========================================================================
 
   XStage _createXStage({
-    required XProzess<STAGE_ENUM, PROZESS_CONTEXT_DATA> xProzess,
-    required XStageFormModel<STAGE_ENUM,
-        INIT_DATA,
-        RESULT_DATA,
-        PROZESS_CONTEXT_DATA,
-        FORM_INPUT,
-        FORM_OUTPUT>?
-    xStageFormModel,
+    required XProzess<STAGE_ENUM, ProzessInitData, PROZESS_CONTEXT_DATA>
+        xProzess,
+    required XStageFormModel<STAGE_ENUM, INIT_DATA, RESULT_DATA,
+            PROZESS_CONTEXT_DATA, FORM_INPUT, FORM_OUTPUT>?
+        xStageFormModel,
   }) {
     return XStage<
         STAGE_ENUM, //
@@ -104,8 +136,10 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   // ===========================================================================
 
-  void _bindToProzess(Prozess<STAGE_ENUM, dynamic> parentProzess) {
-    prozess = parentProzess as Prozess<STAGE_ENUM, PROZESS_CONTEXT_DATA>;
+  void _bindToProzess(
+      Prozess<STAGE_ENUM, ProzessInitData, PROZESS_CONTEXT_DATA>
+          parentProzess) {
+    prozess = parentProzess;
   }
 
   @override
@@ -137,8 +171,59 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
   Future<ApiResult<RESULT_DATA>> performSubmit({
     required INIT_DATA initData,
     required PROZESS_CONTEXT_DATA sharedContext,
-    required Map<String, dynamic> formStageData,
+    required FORM_OUTPUT? formData,
   });
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<StageSubmitResult<INIT_DATA, RESULT_DATA>>
+      _submitAfterPrecheckSuccessful() async {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "_submitAfterPrecheckSuccessful",
+      parameters: {},
+      isLibMethod: true,
+    );
+
+    // executionTrace.addNonControllableCall(
+    //   codeId: "#120000",
+    //   caller: this,
+    //   methodName: "checkBeforeSubmit",
+    //   suffixShortDesc: "",
+    // );
+    // Actionable<StageSubmitPrecheck> actionable =
+    //     prozess.__checkBeforeSubmitStage(
+    //   checkBusy: true,
+    //   checkTargetFormValidate: true,
+    //   targetStage: this,
+    // );
+    //
+    // if (!actionable.yes) {
+    //   _addErrorLogActionable(
+    //     executionTrace: executionTrace,
+    //     traceStepCodeId: "#120100",
+    //     prefixShortDesc: 'checkBeforeSubmit()',
+    //     module: module,
+    //     actionableFalse: actionable,
+    //     showErrSnackBar: true,
+    //     tipDocument: null,
+    //   );
+    //   return StageSubmitExecutionResult(precheck: actionable.errCode);
+    // }
+
+    final XActivity xActivity = _XActivityStageSubmit(stage: this);
+    final xStage = xActivity.findXStageByName(name) as XStage<STAGE_ENUM,
+        INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA, FORM_INPUT, FORM_OUTPUT>;
+
+    final StageSubmitIntent<STAGE_ENUM, INIT_DATA, RESULT_DATA,
+            PROZESS_CONTEXT_DATA> executionIntent =
+        xStage._createAndSetStageIntentSubmit();
+
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
+    await FlutterArtist.executor._executeExecutionUnitQueue();
+    return executionIntent.result;
+  }
 
   // ===========================================================================
   // EXECUTION UNIT: _unitLoadInitData
@@ -153,11 +238,11 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     required ExecutionUnitType executionUnitType,
     required XStage thisXStage,
     required StageLoadInitDataIntent<
-        STAGE_ENUM, //
-        INIT_DATA,
-        RESULT_DATA,
-        PROZESS_CONTEXT_DATA>
-    executionIntent,
+            STAGE_ENUM, //
+            INIT_DATA,
+            RESULT_DATA,
+            PROZESS_CONTEXT_DATA>
+        executionIntent,
   }) async {
     __assertThisXStage(thisXStage);
     thisXStage._createAndSetStageIntentDone(
@@ -167,8 +252,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     executionTrace.addInfo(
       codeId: "#092100",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()} (Stage Load InitData)",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Stage Load InitData)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -191,13 +275,13 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
         methodName: "performLoadInitData",
         suffixShortDesc: "",
         parameters: {
-          "sharedContext": sharedContext,
+          "sharedContext": prozess._prozessContextData,
         },
       );
       debug._performLoadInitDataCount++;
 
-      final ApiResult<INIT_DATA> result =
-      await performLoadInitData(sharedContext: sharedContext);
+      final ApiResult<INIT_DATA> result = await performLoadInitData(
+          sharedContext: prozess._prozessContextData!);
       result.throwIfError();
 
       _initData = result.data;
@@ -206,15 +290,13 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       executionTrace.addInfo(
         codeId: "#092140",
         shortDesc:
-        "${debugObjHtml(
-            this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(
-            _initData)}.",
+            "${debugObjHtml(this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(_initData)}.",
       );
 
       // Coordinate StageFormModel data state transition
       if (formModel != null) {
         final newFormDataState =
-        BlockFormDataStateUtils.calculateNewLazyDataState(
+            BlockFormDataStateUtils.calculateNewLazyDataState(
           currentFormDataState: formModel!.dataState,
           hasCurrentItem: _initData != null,
           currentItemChanged: true,
@@ -251,8 +333,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       executionTrace.addInfo(
         codeId: "#092160",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}.performLoadInitData() method encountered an error!",
+            "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
       );
     } finally {
@@ -267,36 +348,121 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
   Future<void> _unitSubmit({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XStage<Enum,
-        StageInitData,
-        StageResultData,
-        ProzessContextData,
-        FormInput,
-        FormOutput>
-    thisXStage,
-    required StageSubmitIntent<Enum,
-        StageInitData,
-        StageResultData,
-        ProzessContextData>
-    executionIntent,
+    required XStage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA,
+            FORM_INPUT, FORM_OUTPUT>
+        thisXStage,
+    required StageSubmitIntent<STAGE_ENUM, INIT_DATA, RESULT_DATA,
+            PROZESS_CONTEXT_DATA>
+        executionIntent,
   }) async {
-    // Handled in subsequent phase
+    __assertThisXStage(thisXStage);
+    thisXStage._createAndSetStageIntentDone(
+      lastIntentInfo: "Submit",
+    );
+
+    executionTrace.addInfo(
+      codeId: "#121100",
+      shortDesc:
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Submit)",
+    );
+
+    final executionResult = executionIntent.resultWrapper._setResult(
+      StageSubmitResult<INIT_DATA, RESULT_DATA>(precheck: null),
+      objectCaller: this,
+      methodName: '_unitSubmit',
+    );
+
+    FORM_OUTPUT? formOutput;
+    try {
+      formOutput = formModel?._getFormOutput();
+    } catch (e, stackTrace) {
+      formOutput = null;
+      final ErrorInfo errorInfo = _handleError(
+        module: module,
+        methodName: "convertToFormOutput",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+      executionResult._setErrorInfo(errorInfo: errorInfo);
+      //
+      StageErrorInfo stageErrorInfo = StageErrorInfo(
+        stageErrorMethod: StageErrorMethod.convertToFormOutput,
+        error: e,
+        errorStackTrace: stackTrace,
+      );
+      _dataState = StageDataStateSubmissionAttemptedFailed(
+        submissionErrorInfo: stageErrorInfo,
+      );
+      return;
+    }
+    RESULT_DATA? stageDataResult;
+    try {
+      ApiResult<RESULT_DATA> result = await performSubmit(
+        initData: initData!,
+        sharedContext: prozess._prozessContextData!,
+        formData: formOutput,
+      );
+      // Throw Error!
+      result.throwIfError();
+      stageDataResult = result.data;
+
+      if (stageDataResult == null) {
+        if (RESULT_DATA == EmptyStageResultData) {
+          stageDataResult = EmptyStageResultData() as RESULT_DATA;
+        } else {
+          throw AppError(
+            errorMessage:
+                '${getClassName(this)}.performSubmit() return null (${getClassName(RESULT_DATA)}).',
+          );
+        }
+      }
+    } catch (e, stackTrace) {
+      final ErrorInfo errorInfo = _handleError(
+        module: module,
+        methodName: "performSubmit",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+      executionResult._setErrorInfo(errorInfo: errorInfo);
+      //
+      StageErrorInfo stageErrorInfo = StageErrorInfo(
+        stageErrorMethod: StageErrorMethod.performSubmit,
+        error: e,
+        errorStackTrace: stackTrace,
+      );
+      _dataState = StageDataStateSubmissionAttemptedFailed(
+        submissionErrorInfo: stageErrorInfo,
+      );
+      return;
+    }
+    //
+    _dataState = StageDataStateSubmissionAttemptedSuccess();
+    _submitResultData = stageDataResult;
+
+    thisXStage.xProzess._createAndSetProzessIntentDetermineNextStage(
+      // TODO: Risk!
+      prozessInitData: thisXStage.xProzess.prozess._prozessInitData!,
+    );
   }
 
   // ===========================================================================
-  // PUBLIC CONTROLS
+  //
   // ===========================================================================
 
   /// Triggers resolution of stage baseline data through the execution queue.
   Future<
       StageLoadInitDataResult<
-          STAGE_ENUM,
+          STAGE_ENUM, //
           INIT_DATA,
-          RESULT_DATA, //
-          PROZESS_CONTEXT_DATA>> loadInitData() async {
+          RESULT_DATA,
+          PROZESS_CONTEXT_DATA>> _loadInitDataAfterPrecheckSuccessful() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "loadInitData",
+      methodName: "_loadInitDataAfterPrecheckSuccessful",
       parameters: null,
       isLibMethod: true,
     );
@@ -315,12 +481,13 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     return thisXStage.loadInitDataResult;
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
+  // ===========================================================================
+  // PUBLIC CONTROLS
+  // ===========================================================================
 
   @override
   bool isStateReadyForForm() {
-    if (dataState.isPending || dataState.isStale) {
+    if (dataState.isNone || dataState.isPending || dataState.isStale) {
       return false;
     } else if (dataState.isFresh ||
         dataState.isSubmissionAttemptedSuccess ||
@@ -328,47 +495,28 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       return true;
     } else {
       // Never run.
-      throw UnimplementedError("Stage: Never run");
+      throw UnimplementedError("Stage: Never run: $dataState");
     }
   }
 
-  // ***************************************************************************
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
   Actionable<StageFormEnablePrecheck> checkFormEnable({
     bool checkAllow = true,
   }) {
-    if (formModel == null) {
-      return Actionable<StageFormEnablePrecheck>.no(
-        errCode: StageFormEnablePrecheck.noForm,
-      );
-    }
-    if (!isStateReadyForForm()) {
-      return Actionable<StageFormEnablePrecheck>.no(
-        errCode: StageFormEnablePrecheck.noForm,
-      );
-    }
-    final FormDataState formDataState = formModel!.dataState;
+    final int? targetStageOrder = stageId.stageOrder;
+    final int? viewingStageOrder = prozess.viewingStage?.stageId.stageOrder;
 
-    if (formDataState.isNone) {
-      return Actionable<StageFormEnablePrecheck>.no(
-        errCode: StageFormEnablePrecheck.formInNoneState,
-      );
-    } else if (formDataState.isPending) {
-      return Actionable<StageFormEnablePrecheck>.no(
-        errCode: StageFormEnablePrecheck.formInPendingState,
-      );
-    } else if (formDataState.isFatalError) {
-      return Actionable<StageFormEnablePrecheck>.no(
-        errCode: StageFormEnablePrecheck.formInFatalErrorState,
-      );
-    } else if (formDataState.isStale) {
-      return Actionable<StageFormEnablePrecheck>.no(
-        errCode: StageFormEnablePrecheck.formInStaleState,
-      );
-    }
-    return Actionable<StageFormEnablePrecheck>.yes();
+    return StageFormEnablePrecheckUtils.checkFormEnable(
+      checkBusy: true,
+      isBusy: FlutterArtist.executor.isBusy,
+      targetStageOrder: targetStageOrder,
+      viewingStageOrder: viewingStageOrder,
+      hasForm: hasForm,
+      targetStageDataState: _dataState,
+      targetFormDataState: formModel?.dataState,
+    );
   }
 
   // ***************************************************************************

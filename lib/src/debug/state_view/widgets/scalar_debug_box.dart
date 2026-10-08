@@ -7,6 +7,7 @@ import '../options/_debug_scalar_options.dart';
 import 'widgets/active_info_widget.dart';
 import '_debug_box.dart';
 import 'debug_style_utils.dart';
+import 'widgets/class_def_viewable_info_widget.dart';
 import 'widgets/scalar_data_state_info_widget.dart';
 import 'widgets/scalar_filter_criteria_info_widget.dart';
 
@@ -25,6 +26,12 @@ class ScalarDebugBox extends BaseDebugBox {
     String? activeUI = scalar.ui.findVisibleView();
     String? xActiveUI = scalar.ui.findVisibleView(includeDescendants: true);
     return [
+      if (options.showClassDefinition)
+        ClassDefViewableInfoWidget(
+          classDefViewable: scalar,
+          labelStyle: DebugStyleUtils.getLabelStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
+        ),
       if (options.showUiActive)
         ActiveInfoWidget(
           activeElementType: ActiveElementType.scalar,

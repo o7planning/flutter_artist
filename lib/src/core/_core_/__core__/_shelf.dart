@@ -120,18 +120,6 @@ abstract class Shelf extends FeatureModule {
   // ***************************************************************************
   // ***************************************************************************
 
-  ///
-  /// Very Dangerous Method. Call Internal only.
-  ///
-  String ___registerError(String message) {
-    FlutterArtist._clearActivitiesAndShelves();
-    //
-    return _createFatalAppError(message);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   void __onInit() {
     _shelfStruct = defineShelfStructure();
     config = _shelfStruct._config;
@@ -169,7 +157,7 @@ abstract class Shelf extends FeatureModule {
 
   void __registerScalarCascade(Scalar scalar) {
     if (__scalarMap.containsKey(scalar.name)) {
-      throw ___registerError(
+      throw AppFatalErrorUtils.___registerError(
           "Duplicate scalar '${scalar.name}' in '${getClassName(this)}'\n"
           "Double-check ${getClassName(this)}.defineShelfStructure() method");
     } else {
@@ -181,7 +169,7 @@ abstract class Shelf extends FeatureModule {
       FilterModel? filterModel =
           _shelfStruct.filterModels[scalar.registeredFilterModelName!];
       if (filterModel == null) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
             "FilterModel not found '${scalar.registeredFilterModelName}' in '${getClassName(this)}'\n"
             "Double-check ${getClassName(this)}.defineShelfStructure() method");
       }
@@ -193,14 +181,14 @@ abstract class Shelf extends FeatureModule {
       final filterInputB = scalar.getFilterInputType().toString();
       //
       if (filterInputBF == filterInputBase) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
             "You need to create your own class that extends the '$filterInputBase' class \n"
             "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
             " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
       }
       //
       if (filterInputBF != filterInputB) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
             "The Scalar and its FilterModel must have the same FILTER_INPUT type.\n\n"
             " >> ${getClassName(scalar)}<FILTER_INPUT> = <$filterInputB> \n"
             " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
@@ -212,14 +200,14 @@ abstract class Shelf extends FeatureModule {
       final String filterCriteriaB = scalar.getFilterCriteriaType().toString();
       //
       if (filterCriteriaBF == filterCriteriaBase) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
             "You need to create your own class that extends from '$filterCriteriaBase' "
             "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
             " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       if (filterCriteriaBF != filterCriteriaB) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
             "The Scalar and its Filter-Model must have the same FILTER_CRITERIA type. \n"
             " >> ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
             " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
@@ -242,7 +230,7 @@ abstract class Shelf extends FeatureModule {
       final filterCriteriaB = scalar.getFilterCriteriaType().toString();
       //
       if (filterCriteriaB != filterCriteriaEmpty) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
             "Filter-Criteria of '${getClassName(scalar)}' scalar must be '$filterCriteriaEmpty' "
             "because this scalar does not have a FILTER_MODEL.\n\n"
             " >> Currently, ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
@@ -259,7 +247,7 @@ abstract class Shelf extends FeatureModule {
 
   void __registerBlockCascade(Block block) {
     if (__blockMap.containsKey(block.name)) {
-      throw ___registerError(
+      throw AppFatalErrorUtils.___registerError(
           "Duplicate block '${block.name}' in '${getClassName(this)}'\n"
           "Double-check ${getClassName(this)}.defineShelfStructure() method");
     } else {
@@ -274,7 +262,7 @@ abstract class Shelf extends FeatureModule {
       FilterModel? filterModel =
           _shelfStruct.filterModels[block.registeredFilterModelName!];
       if (filterModel == null) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
             "FilterModel not found '${block.registeredFilterModelName}' in '${getClassName(this)}'\n"
             "Double-check ${getClassName(this)}.defineShelfStructure() method");
       }
@@ -286,14 +274,14 @@ abstract class Shelf extends FeatureModule {
       final filterInputB = block.getFilterInputType().toString();
       //
       if (filterInputBF == filterInputBase) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
             "You need to create your own class that extends the '$filterInputBase' class \n"
             "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
             " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
       }
       //
       if (filterInputBF != filterInputB) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
             "The Block and its FilterModel must have the same FILTER_INPUT type.\n\n"
             " >> ${getClassName(block)}<FILTER_INPUT> = <$filterInputB> \n"
             " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
@@ -305,14 +293,14 @@ abstract class Shelf extends FeatureModule {
       final String filterCriteriaB = block.getFilterCriteriaType().toString();
       //
       if (filterCriteriaBF == filterCriteriaBase) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
             "You need to create your own class that extends from '$filterCriteriaBase' "
             "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
             " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       if (filterCriteriaBF != filterCriteriaB) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
             "The Block and its Filter-Model must have the same FILTER_CRITERIA type. \n"
             " >> ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
             " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
@@ -335,7 +323,7 @@ abstract class Shelf extends FeatureModule {
       final filterCriteriaB = block.getFilterCriteriaType().toString();
       //
       if (filterCriteriaB != filterCriteriaEmpty) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
             "Filter-Criteria of '${getClassName(block)}' block must be '$filterCriteriaEmpty' "
             "because this block does not have a FILTER_MODEL.\n\n"
             " >> Currently, ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB>");
@@ -347,7 +335,7 @@ abstract class Shelf extends FeatureModule {
     String formInputTypeStr = block.getFormInputType().toString();
 
     if (formInputTypeStr == formInputTypeB) {
-      throw ___registerError(
+      throw AppFatalErrorUtils.___registerError(
           "You need to create your own class that extends the '$formInputTypeB' class \n"
           "or use the 'EmptyFormInput' class to use in the '${getClassName(block)}' declaration \n\n"
           " >> Currently, ${getClassName(block)}<FORM_INPUT> = <$formInputTypeStr>");

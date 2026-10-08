@@ -67,7 +67,7 @@ class BlockItemEditPrecheckUtils {
           return Actionable<BlockItemEditPrecheck>.yes();
         case CheckAllow.notAllow:
           return Actionable<BlockItemEditPrecheck>.no(
-            errCode: BlockItemEditPrecheck.notAllow,
+            errCode: BlockItemEditPrecheck.notAllowed,
           );
         case CheckAllow.error:
           return Actionable<BlockItemEditPrecheck>.no(

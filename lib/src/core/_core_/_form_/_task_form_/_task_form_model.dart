@@ -13,6 +13,18 @@ abstract class TaskFormModel<
         FORM_INPUT,
         FORM_OUTPUT,
         ADDITIONAL_FORM_RELATED_DATA> {
+
+  @override
+  Map<String, Type> getGenericsInfoMap() {
+    return {
+      "INIT_DATA": INIT_DATA,
+      "RESULT_DATA": RESULT_DATA,
+      "FORM_INPUT": FORM_INPUT,
+      "FORM_OUTPUT": FORM_OUTPUT,
+      "ADDITIONAL_FORM_RELATED_DATA": ADDITIONAL_FORM_RELATED_DATA,
+    };
+  }
+
   late final Task<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT> task;
 
   @override

@@ -1,4 +1,5 @@
 class DebugStageOptions {
+  final bool showClassDefinition;
   final bool showUiActive;
   final bool showStageDataState;
   final bool showPerformLoadInitDataCount;
@@ -6,6 +7,7 @@ class DebugStageOptions {
   final bool showHasResultData;
 
   const DebugStageOptions({
+    this.showClassDefinition = true,
     this.showUiActive = true,
     this.showStageDataState = true,
     this.showPerformLoadInitDataCount = true,
@@ -14,6 +16,7 @@ class DebugStageOptions {
   });
 
   const DebugStageOptions.custom({
+    this.showClassDefinition = false,
     this.showUiActive = false,
     this.showStageDataState = false,
     this.showPerformLoadInitDataCount = false,

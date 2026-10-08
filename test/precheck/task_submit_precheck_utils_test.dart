@@ -1,7 +1,6 @@
 import 'package:flutter_artist/flutter_artist.dart';
 import 'package:test/test.dart';
 
-// Mock đơn giản cho FormState trong test
 class MockFormBuilderState {
   final bool isValidResult;
 
@@ -17,7 +16,6 @@ void main() {
       final result = TaskSubmitPrecheckUtils.checkBeforeSubmit(
         checkBusy: true,
         isBusy: true,
-        checkAllow: true,
         checkValidate: true,
         taskDataState: const TaskDataStateLoadedFresh(),
         hasForm: false,
@@ -33,7 +31,6 @@ void main() {
       final result = TaskSubmitPrecheckUtils.checkBeforeSubmit(
         checkBusy: true,
         isBusy: false,
-        checkAllow: true,
         checkValidate: true,
         taskDataState: const TaskDataStatePending.initial(),
         hasForm: false,
@@ -51,7 +48,6 @@ void main() {
       final result = TaskSubmitPrecheckUtils.checkBeforeSubmit(
         checkBusy: true,
         isBusy: false,
-        checkAllow: true,
         checkValidate: true,
         taskDataState: const TaskDataStateSubmissionAttemptedSuccess(),
         hasForm: false,
@@ -70,7 +66,6 @@ void main() {
       final result = TaskSubmitPrecheckUtils.checkBeforeSubmit(
         checkBusy: true,
         isBusy: false,
-        checkAllow: true,
         checkValidate: true,
         taskDataState: const TaskDataStateLoadedFresh(),
         hasForm: true,
@@ -90,7 +85,6 @@ void main() {
       final result = TaskSubmitPrecheckUtils.checkBeforeSubmit(
         checkBusy: true,
         isBusy: false,
-        checkAllow: true,
         checkValidate: true,
         taskDataState: const TaskDataStateLoadedFresh(),
         hasForm: true,

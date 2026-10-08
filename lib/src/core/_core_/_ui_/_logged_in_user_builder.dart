@@ -22,10 +22,9 @@ class _LoggedInUserBuilderState
   ContextProviderViewType get type => ContextProviderViewType.loggedInUser;
 
   @override
-  Shelf? _getRelatedShelf() {
+  Shelf? _getRelatedModule() {
     return null;
   }
-
 
   @override
   String getWidgetOwnerClassName() {
@@ -33,16 +32,19 @@ class _LoggedInUserBuilderState
   }
 
   @override
-  BlockContextType? get blockContextType => null;
+  BlockViewContext? get blockViewContext => null;
 
   @override
-  ScalarContextType? get scalarContextType => null;
+  ScalarViewContext? get scalarContextType => null;
 
   @override
-  StageContextType? get stageContextType => null;
+  ProzessViewContext? get prozessViewContext => null;
 
   @override
-  TaskContextType? get taskContextType => null;
+  StageViewContext? get stageViewContext => null;
+
+  @override
+  TaskViewContext? get taskViewContext => null;
 
   @override
   Widget buildContent(BuildContext context) {

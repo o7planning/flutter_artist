@@ -51,7 +51,7 @@ class BlockItemDeletionPrecheckUtils {
           return Actionable<BlockItemDeletionPrecheck>.yes();
         case CheckAllow.notAllow:
           return Actionable<BlockItemDeletionPrecheck>.no(
-            errCode: BlockItemDeletionPrecheck.notAllow,
+            errCode: BlockItemDeletionPrecheck.notAllowed,
           );
         case CheckAllow.error:
           return Actionable<BlockItemDeletionPrecheck>.no(

@@ -1,4 +1,5 @@
 class DebugFilterOptions {
+  final bool showClassDefinition;
   final bool showFilterUiActive;
   final bool showInitiatedAtLeastOnce;
   final bool showFilterDataState;
@@ -7,6 +8,7 @@ class DebugFilterOptions {
   final bool showFilterCriteria;
 
   const DebugFilterOptions({
+    this.showClassDefinition = true,
     this.showFilterUiActive = true,
     this.showInitiatedAtLeastOnce = true,
     this.showFilterDataState = true,
@@ -16,6 +18,7 @@ class DebugFilterOptions {
   });
 
   const DebugFilterOptions.custom({
+    this.showClassDefinition = false,
     this.showFilterUiActive = false,
     this.showInitiatedAtLeastOnce = false,
     this.showFilterDataState = false,

@@ -1,4 +1,5 @@
 class DebugBlockOptions {
+  final bool showClassDefinition;
   final bool showLastQueryType;
   final bool showUiActive;
   final bool showBlockDataState;
@@ -14,6 +15,7 @@ class DebugBlockOptions {
   final bool showHasParentBlockCurrentItem;
 
   const DebugBlockOptions({
+    this.showClassDefinition = true,
     this.showLastQueryType = true,
     this.showUiActive = true,
     this.showBlockDataState = true,
@@ -30,6 +32,7 @@ class DebugBlockOptions {
   });
 
   const DebugBlockOptions.custom({
+    this.showClassDefinition = false,
     this.showLastQueryType = false,
     this.showUiActive = false,
     this.showBlockDataState = false,

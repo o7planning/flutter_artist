@@ -7,7 +7,6 @@ class TaskSubmitPrecheckUtils {
   static Actionable<TaskSubmitPrecheck> checkBeforeSubmit({
     required bool checkBusy,
     required bool isBusy,
-    required bool checkAllow, // reserved or passed for consistency if needed
     required bool checkValidate,
     required TaskDataState taskDataState,
     required bool hasForm,
@@ -34,13 +33,15 @@ class TaskSubmitPrecheckUtils {
       );
     }
 
+    // 3. Priority 3: Prevent re-submitting an already successfully submitted task
+    // (User must restart the task if they wish to modify and submit again).
     if (taskDataState.isSubmissionAttemptedSuccess) {
       return Actionable<TaskSubmitPrecheck>.no(
         errCode: TaskSubmitPrecheck.taskAlreadySubmitted,
       );
     }
 
-    // 3. Priority 3: Check Form constraints (if formModel exists)
+    // 4. Priority 4: Check Form constraints (if formModel exists)
     if (hasForm && formDataState != null) {
       if (formDataState.isNone) {
         return Actionable<TaskSubmitPrecheck>.no(
@@ -60,12 +61,11 @@ class TaskSubmitPrecheckUtils {
         );
       }
 
-      // 4. Priority 4: Validate active UI form fields if requested
+      // 5. Priority 5: Validate active UI form fields if requested
       if (checkValidate && getActiveFormStates != null) {
         final List<dynamic> activeForms = getActiveFormStates();
         bool allFormsAreValid = true;
         for (final formState in activeForms) {
-          // Giả định formState có hàm validate(bool focusOnInvalid) như FormBuilderState
           bool isValid = formState.validate(focusOnInvalid: false);
           allFormsAreValid = allFormsAreValid && isValid;
         }

@@ -23,15 +23,13 @@ enum InternalFormMode {
     }
   }
 
-  BlockFormMode toBlockFormMode() =>
-      switch (this) {
+  BlockFormMode toBlockFormMode() => switch (this) {
         InternalFormMode.creation => BlockFormMode.creation,
         InternalFormMode.edit => BlockFormMode.edit,
         _ => BlockFormMode.none,
       };
 
-  WorkNodeFormMode toWorkNodeFormMode() =>
-      switch (this) {
+  WorkNodeFormMode toWorkNodeFormMode() => switch (this) {
         InternalFormMode.compose => WorkNodeFormMode.compose,
         _ => WorkNodeFormMode.none,
       };

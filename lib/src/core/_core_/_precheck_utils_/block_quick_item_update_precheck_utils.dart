@@ -60,7 +60,7 @@ class BlockQuickItemUpdatePrecheckUtils {
           return Actionable<BlockQuickItemUpdatePrecheck>.yes();
         case CheckAllow.notAllow:
           return Actionable<BlockQuickItemUpdatePrecheck>.no(
-            errCode: BlockQuickItemUpdatePrecheck.notAllow,
+            errCode: BlockQuickItemUpdatePrecheck.notAllowed,
           );
         case CheckAllow.error:
           return Actionable<BlockQuickItemUpdatePrecheck>.no(

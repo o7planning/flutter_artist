@@ -14,7 +14,7 @@ void main() {
         // System is busy
         blockDataState: defaultBlockDataState,
         checkAllow: true,
-        checkQuickCreateAllowed: () => CheckAllowResult.allow(),
+        checkQuickCreateAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -30,7 +30,7 @@ void main() {
         blockDataState: const BlockDataStateNone(),
         // Block in none state
         checkAllow: true,
-        checkQuickCreateAllowed: () => CheckAllowResult.allow(),
+        checkQuickCreateAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -48,7 +48,7 @@ void main() {
         blockDataState: const BlockDataStatePending(),
         // Block in pending state
         checkAllow: true,
-        checkQuickCreateAllowed: () => CheckAllowResult.allow(),
+        checkQuickCreateAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -66,11 +66,11 @@ void main() {
         blockDataState: defaultBlockDataState,
         checkAllow: true,
         checkQuickCreateAllowed: () =>
-            CheckAllowResult.notAllow(), // Disallowed by business rule
+            CheckAllowResult.notAllowed(), // Disallowed by business rule
       );
 
       expect(result.yes, isFalse);
-      expect(result.errCode, equals(BlockQuickItemCreationPrecheck.notAllow));
+      expect(result.errCode, equals(BlockQuickItemCreationPrecheck.notAllowed));
     });
 
     test('Should return yes when all precheck conditions pass successfully',
@@ -81,7 +81,7 @@ void main() {
         isBusy: false,
         blockDataState: defaultBlockDataState,
         checkAllow: true,
-        checkQuickCreateAllowed: () => CheckAllowResult.allow(),
+        checkQuickCreateAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isTrue);

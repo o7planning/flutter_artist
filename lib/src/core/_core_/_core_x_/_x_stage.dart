@@ -2,12 +2,12 @@ part of '../core.dart';
 
 /// Runtime operational context wrapper for individual [Stage] instances inside a [Prozess].
 class XStage<
-STAGE_ENUM extends Enum,
-STAGE_INIT_DATA extends StageInitData,
-STAGE_RESULT_DATA extends StageResultData,
-PROZESS_CONTEXT_DATA extends ProzessContextData,
-FORM_INPUT extends FormInput,
-FORM_OUTPUT extends FormOutput> {
+    STAGE_ENUM extends StageEnum,
+    STAGE_INIT_DATA extends StageInitData,
+    STAGE_RESULT_DATA extends StageResultData,
+    PROZESS_CONTEXT_DATA extends ProzessContextData,
+    FORM_INPUT extends FormInput,
+    FORM_OUTPUT extends FormOutput> {
   final XProzess xProzess;
 
   final XStageFormModel? xStageFormModel;
@@ -103,19 +103,27 @@ FORM_OUTPUT extends FormOutput> {
   /// Evaluates if this specific stage is active and has pending execution units.
   /// Evaluates and yields the next operational execution unit for this Stage.
   NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
-    final bool isCurrentStage = xProzess.prozess.currentStageId == stageId;
+    final bool isCurrentStage = xProzess.prozess.viewingStageEnum == stageId;
     if (!isCurrentStage) {
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-        "Stage (${stage.name}) is not the active stage in Prozess (${xProzess
-            .name}).",
+            "Stage (${stage.name}) is not the active stage in Prozess (${xProzess.name}).",
       );
     }
-
     final StageDataState stageDataState = stage.dataState;
-    final executionIntent = _executionIntent;
+    final originExecutionIntent = _executionIntent;
     final bool isVisible = stage.ui.hasVisibleViews();
+
+    // 0.0. Intercept terminal Done intent to prevent duplicate scheduler cycles
+    if (originExecutionIntent is StageDoneIntent) {
+      return NxtExecutionUnit.no(
+        debug: debug,
+        info:
+            "Stage (0.0), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent, "
+            "dataState: ${stageDataState.toBriefInfo()}",
+      );
+    }
 
     // =========================================================================
     // 1. DATA STATE = PENDING
@@ -125,15 +133,11 @@ FORM_OUTPUT extends FormOutput> {
           (_execHint == ExecHint.force || isVisible) && !_executed;
 
       if (shouldExecute) {
-        final StageLoadInitDataIntent<STAGE_ENUM,
-            STAGE_INIT_DATA,
-            STAGE_RESULT_DATA,
-            PROZESS_CONTEXT_DATA> intentToUse;
-        if (executionIntent is StageLoadInitDataIntent<STAGE_ENUM,
-            STAGE_INIT_DATA,
-            STAGE_RESULT_DATA,
-            PROZESS_CONTEXT_DATA>) {
-          intentToUse = executionIntent;
+        final StageLoadInitDataIntent<STAGE_ENUM, STAGE_INIT_DATA,
+            STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA> intentToUse;
+        if (originExecutionIntent is StageLoadInitDataIntent<STAGE_ENUM,
+            STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetStageIntentLoadInitData();
         }
@@ -141,26 +145,20 @@ FORM_OUTPUT extends FormOutput> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _StageLoadInitDataExecutionUnit<STAGE_ENUM,
-              STAGE_INIT_DATA,
-              STAGE_RESULT_DATA,
-              PROZESS_CONTEXT_DATA>(
+              STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
             xStage: this,
             executionIntent: intentToUse,
           ),
           info:
-          "Stage (1.1), ${getClassNameWithoutGenerics(
-              stage)}, _executionIntent: $executionIntent --> $intentToUse, "
-              "dataState: ${stageDataState
-              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+              "Stage (1.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
+              "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-          "Stage (1.2), ${getClassNameWithoutGenerics(
-              stage)}, _executionIntent: $executionIntent, "
-              "dataState: ${stageDataState
-              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+              "Stage (1.2), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent, "
+              "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       }
     }
@@ -173,42 +171,32 @@ FORM_OUTPUT extends FormOutput> {
           (_execHint == ExecHint.force || isVisible) && !_executed;
 
       if (shouldExecute) {
-        final StageSubmitIntent<STAGE_ENUM,
-            STAGE_INIT_DATA,
-            STAGE_RESULT_DATA,
+        final StageSubmitIntent<STAGE_ENUM, STAGE_INIT_DATA, STAGE_RESULT_DATA,
             PROZESS_CONTEXT_DATA> intentToUse;
-        if (executionIntent is StageSubmitIntent<STAGE_ENUM,
-            STAGE_INIT_DATA,
-            STAGE_RESULT_DATA,
-            PROZESS_CONTEXT_DATA>) {
-          intentToUse = executionIntent;
+        if (originExecutionIntent is StageSubmitIntent<STAGE_ENUM, STAGE_INIT_DATA,
+            STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetStageIntentSubmit();
         }
 
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _StageSubmitExecutionUnit<STAGE_ENUM,
-              STAGE_INIT_DATA,
-              STAGE_RESULT_DATA,
-              PROZESS_CONTEXT_DATA>(
+          executionUnit: _StageSubmitExecutionUnit<STAGE_ENUM, STAGE_INIT_DATA,
+              STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
             xStage: this,
             executionIntent: intentToUse,
           ),
           info:
-          "Stage (2.1), ${getClassNameWithoutGenerics(
-              stage)}, _executionIntent: $executionIntent --> $intentToUse, "
-              "dataState: ${stageDataState
-              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+              "Stage (2.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
+              "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-          "Stage (2.2), ${getClassNameWithoutGenerics(
-              stage)}, _executionIntent: $executionIntent, "
-              "dataState: ${stageDataState
-              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+              "Stage (2.2), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent, "
+              "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       }
     }
@@ -217,27 +205,13 @@ FORM_OUTPUT extends FormOutput> {
     // 3. DATA STATE = FRESH
     // =========================================================================
     else if (stageDataState.isFresh) {
-      // 3.0. Intercept terminal Done intent to prevent duplicate scheduler cycles
-      if (executionIntent is StageDoneIntent) {
-        return NxtExecutionUnit.no(
-          debug: debug,
-          info:
-          "Stage (3.0), ${getClassNameWithoutGenerics(
-              stage)}, _executionIntent: $executionIntent, "
-              "dataState: ${stageDataState.toBriefInfo()}",
-        );
-      }
       // 3.1. Force execution explicitly requested via ExecHint
       if (_execHint == ExecHint.force) {
-        final StageLoadInitDataIntent<STAGE_ENUM,
-            STAGE_INIT_DATA,
-            STAGE_RESULT_DATA,
-            PROZESS_CONTEXT_DATA> intentToUse;
-        if (executionIntent is StageLoadInitDataIntent<STAGE_ENUM,
-            STAGE_INIT_DATA,
-            STAGE_RESULT_DATA,
-            PROZESS_CONTEXT_DATA>) {
-          intentToUse = executionIntent;
+        final StageLoadInitDataIntent<STAGE_ENUM, STAGE_INIT_DATA,
+            STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA> intentToUse;
+        if (originExecutionIntent is StageLoadInitDataIntent<STAGE_ENUM,
+            STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetStageIntentLoadInitData();
         }
@@ -245,55 +219,44 @@ FORM_OUTPUT extends FormOutput> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _StageLoadInitDataExecutionUnit<STAGE_ENUM,
-              STAGE_INIT_DATA,
-              STAGE_RESULT_DATA,
-              PROZESS_CONTEXT_DATA>(
+              STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
             xStage: this,
             executionIntent: intentToUse,
           ),
           info:
-          "Stage (3.1), ${getClassNameWithoutGenerics(
-              stage)}, _executionIntent: $intentToUse, "
-              "dataState: ${stageDataState
-              .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+              "Stage (3.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
+              "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
         );
       }
       // 3.2. Handle active execution intents dispatched imperatively
-      if (executionIntent != null) {
-        if (executionIntent is StageNullIntent) {
+      if (originExecutionIntent != null) {
+        if (originExecutionIntent is StageNullIntent) {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-            "Stage (3.2.1), ${getClassNameWithoutGenerics(
-                stage)}, _executionIntent: $executionIntent, "
+                "Stage (3.2.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent, "
                 "dataState: ${stageDataState.toBriefInfo()}",
           );
         }
         // StageSubmitIntent
-        else if (executionIntent is StageSubmitIntent<STAGE_ENUM,
-            STAGE_INIT_DATA,
-            STAGE_RESULT_DATA,
-            PROZESS_CONTEXT_DATA>) {
+        else if (originExecutionIntent is StageSubmitIntent<STAGE_ENUM,
+            STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _StageSubmitExecutionUnit<STAGE_ENUM,
-                STAGE_INIT_DATA,
-                STAGE_RESULT_DATA,
-                PROZESS_CONTEXT_DATA>(
+                STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
               xStage: this,
-              executionIntent: executionIntent,
+              executionIntent: originExecutionIntent,
             ),
             info:
-            "Stage (3.2.2), ${getClassNameWithoutGenerics(
-                stage)}, _executionIntent: $executionIntent, "
+                "Stage (3.2.2), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent, "
                 "dataState: ${stageDataState.toBriefInfo()}",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-            "Stage (3.2.3), ${getClassNameWithoutGenerics(
-                stage)}, unhandled _executionIntent: $executionIntent, "
+                "Stage (3.2.3), ${getClassNameWithoutGenerics(stage)}, unhandled _executionIntent: $originExecutionIntent, "
                 "dataState: ${stageDataState.toBriefInfo()}",
           );
         }
@@ -302,21 +265,105 @@ FORM_OUTPUT extends FormOutput> {
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-        "Stage (3.3), ${getClassNameWithoutGenerics(
-            stage)}, _executionIntent: null, "
-            "dataState: ${stageDataState
-            .toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+            "Stage (3.3), ${getClassNameWithoutGenerics(stage)}, _executionIntent: null, "
+            "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
       );
     }
 
     // =========================================================================
-    // 4. UNHANDLED / FALLTHROUGH STATE
+    // 4. DATA STATE = SUBMISSION ATTEMPTED FAILED.
+    // =========================================================================
+    else if (stageDataState.isSubmissionAttemptedFailed) {
+      final bool shouldReload =
+          (_execHint == ExecHint.force) && !_executed;
+
+      if (shouldReload) {
+        final StageLoadInitDataIntent<STAGE_ENUM, STAGE_INIT_DATA,
+            STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA> intentToUse;
+        if (originExecutionIntent is StageLoadInitDataIntent<STAGE_ENUM,
+            STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
+          intentToUse = originExecutionIntent;
+        } else {
+          intentToUse = _createAndSetStageIntentLoadInitData();
+        }
+
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _StageLoadInitDataExecutionUnit<STAGE_ENUM,
+              STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
+            xStage: this,
+            executionIntent: intentToUse,
+          ),
+          info:
+              "Stage (4.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
+              "dataState: ${stageDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+        );
+      }
+      // !shouldReload
+      else {
+        if (originExecutionIntent != null) {
+          if (originExecutionIntent is StageNullIntent) {
+            return NxtExecutionUnit.no(
+              debug: debug,
+              info:
+                  "Stage (4.2.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent, "
+                  "dataState: ${stageDataState.toBriefInfo()}",
+            );
+          }
+          // StageSubmitIntent
+          else if (originExecutionIntent is StageSubmitIntent<STAGE_ENUM,
+              STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
+            return NxtExecutionUnit.yes(
+              debug: debug,
+              executionUnit: _StageSubmitExecutionUnit<STAGE_ENUM,
+                  STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
+                xStage: this,
+                executionIntent: originExecutionIntent,
+              ),
+              info:
+                  "Stage (4.2.2), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent, "
+                  "dataState: ${stageDataState.toBriefInfo()}",
+            );
+          } else {
+            return NxtExecutionUnit.no(
+              debug: debug,
+              info:
+                  "Stage (4.2.3), ${getClassNameWithoutGenerics(stage)}, unhandled _executionIntent: $originExecutionIntent, "
+                  "dataState: ${stageDataState.toBriefInfo()}",
+            );
+          }
+        }
+        // originExecutionIntent == null.
+        else {
+          return NxtExecutionUnit.no(
+            debug: debug,
+            info:
+                "Stage (4.3), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent, "
+                "dataState: ${stageDataState.toBriefInfo()}",
+          );
+        }
+      }
+    }
+
+    // =========================================================================
+    // 5. DATA STATE = SUBMISSION ATTEMPTED SUCCESS.
+    // =========================================================================
+    else if (stageDataState.isSubmissionAttemptedSuccess) {
+      return NxtExecutionUnit.no(
+        debug: debug,
+        info:
+            "Stage (5.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent, "
+            "dataState: ${stageDataState.toBriefInfo()}",
+      );
+    }
+
+    // =========================================================================
+    // 6. UNHANDLED / FALLTHROUGH STATE
     // =========================================================================
     return NxtExecutionUnit.no(
       debug: debug,
       info:
-      "Stage (4.1), ${getClassNameWithoutGenerics(
-          stage)}, _executionIntent: $executionIntent, "
+          "Stage (6.1), ${getClassNameWithoutGenerics(stage)}, _executionIntent: $originExecutionIntent, "
           "dataState: ${stageDataState.toBriefInfo()}, isVisible: $isVisible",
     );
   }

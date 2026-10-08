@@ -164,6 +164,8 @@ class FaIconConstants {
   static const IconData executionProgressViewIconData =
       cupertino.CupertinoIcons.timelapse;
 
+  static const IconData prozessViewIconData = Icons.account_tree_rounded;
+
   static const IconData stageViewIconData =
       cupertino.CupertinoIcons.asterisk_circle;
 
@@ -174,6 +176,8 @@ class FaIconConstants {
       cupertino.CupertinoIcons.person_crop_circle;
 
 // static const  IconData _shelfIconData = cupertino.CupertinoIcons.;
+
+  static const IconData prozessIconData = Icons.account_tree_rounded;
 
   static const IconData filterCriteriaIconData = Icons.filter_alt_outlined;
   static const IconData formIconData = cupertino.CupertinoIcons.calendar;
@@ -225,6 +229,12 @@ class FaIconConstants {
       cupertino.CupertinoIcons.doc_text;
   static const IconData formBackIconData =
       cupertino.CupertinoIcons.arrow_left_circle;
+
+  static const IconData stagePreviousIconData =
+      cupertino.CupertinoIcons.arrow_turn_down_left;
+
+  static const IconData stageNextIconData =
+      cupertino.CupertinoIcons.arrow_turn_down_right;
 
   static const IconData filterCriteriaDebugIconData =
       cupertino.CupertinoIcons.ant;

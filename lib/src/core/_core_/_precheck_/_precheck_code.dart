@@ -2,6 +2,7 @@ part of '__precheck.dart';
 
 enum PrecheckCode {
   busy,
+  restricted,
   pageableNotSupported,
   alreadyOnFirstPage,
   alreadyOnLastPage,
@@ -11,7 +12,7 @@ enum PrecheckCode {
   formInPendingState,
   formInFatalErrorState,
   formInStaleState,
-  notAllow,
+  notAllowed,
   checkAllowMethodError,
   //
   @Deprecated("Xoa di, thay the bang cach khac")
@@ -37,4 +38,8 @@ enum PrecheckCode {
   //
   taskInPendingState,
   taskAlreadySubmitted,
+  stageInPendingState,
+  stageAlreadySubmitted,
+  reexecutionNotAllowed,
+  stageNotSubmittedYet,
 }

@@ -22,23 +22,24 @@ class _TaskFormViewBuilderState
   ContextProviderViewType get type => ContextProviderViewType.taskView;
 
   @override
-  Activity? _getRelatedShelf() {
+  Activity? _getRelatedModule() {
     return widget.formModel.task.activity;
   }
 
+  @override
+  BlockViewContext? get blockViewContext => null;
 
   @override
-  BlockContextType? get blockContextType => null;
+  ScalarViewContext? get scalarContextType => null;
 
   @override
-  ScalarContextType? get scalarContextType => null;
+  ProzessViewContext? get prozessViewContext => null;
 
   @override
-  StageContextType? get stageContextType => null;
+  StageViewContext? get stageViewContext => null;
 
   @override
-  TaskContextType? get taskContextType => TaskContextType.form;
-
+  TaskViewContext? get taskViewContext => TaskViewContext.form;
 
   @override
   Future<bool> handleSaveOnPop() async {

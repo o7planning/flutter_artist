@@ -27,8 +27,8 @@ enum BlockSetCurrentItemPrecheck implements Precheck {
 
   // Test Cases: [03b] ??
   /// Operation not allowed by application business rules.
-  notAllow(
-    precheckCode: PrecheckCode.notAllow,
+  notAllowed(
+    precheckCode: PrecheckCode.notAllowed,
     message: "Action ignored.",
     details: [
       "Application business rules do not allow setting this item as current."

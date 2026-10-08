@@ -21,7 +21,7 @@ void main() {
         item: testItem,
         containsItem: mockContainsItem,
         checkAllow: true,
-        checkQuickUpdateAllowed: (item) => CheckAllowResult.allow(),
+        checkQuickUpdateAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -39,7 +39,7 @@ void main() {
         item: testItem,
         containsItem: mockContainsItem,
         checkAllow: true,
-        checkQuickUpdateAllowed: (item) => CheckAllowResult.allow(),
+        checkQuickUpdateAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -59,7 +59,7 @@ void main() {
         item: testItem,
         containsItem: mockContainsItem,
         checkAllow: true,
-        checkQuickUpdateAllowed: (item) => CheckAllowResult.allow(),
+        checkQuickUpdateAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -77,7 +77,7 @@ void main() {
         // Target item is null
         containsItem: mockContainsItem,
         checkAllow: true,
-        checkQuickUpdateAllowed: (item) => CheckAllowResult.allow(),
+        checkQuickUpdateAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -98,7 +98,7 @@ void main() {
         // Item not in list
         containsItem: mockContainsItem,
         checkAllow: true,
-        checkQuickUpdateAllowed: (item) => CheckAllowResult.allow(),
+        checkQuickUpdateAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -118,11 +118,11 @@ void main() {
         containsItem: mockContainsItem,
         checkAllow: true,
         checkQuickUpdateAllowed: (item) =>
-            CheckAllowResult.notAllow(), // Disallowed by business rule
+            CheckAllowResult.notAllowed(), // Disallowed by business rule
       );
 
       expect(result.yes, isFalse);
-      expect(result.errCode, equals(BlockQuickItemUpdatePrecheck.notAllow));
+      expect(result.errCode, equals(BlockQuickItemUpdatePrecheck.notAllowed));
     });
 
     test('Should return yes when all precheck conditions pass successfully',
@@ -135,7 +135,7 @@ void main() {
         item: testItem,
         containsItem: mockContainsItem,
         checkAllow: true,
-        checkQuickUpdateAllowed: (item) => CheckAllowResult.allow(),
+        checkQuickUpdateAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isTrue);

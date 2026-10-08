@@ -1,4 +1,4 @@
-part of '_built_in_filter_criteria.dart';
+part of '__built_in_model.dart';
 
 class IntIdFilterCriteria extends FilterCriteria {
   final int? idValue;

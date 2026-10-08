@@ -12,6 +12,7 @@ import 'widgets/block_data_state_info_widget.dart';
 import 'widgets/block_filter_criteria_info_widget.dart';
 import 'widgets/block_item_refresh_preview_info_widget.dart';
 import 'widgets/block_query_preview_info_widget.dart';
+import 'widgets/class_def_viewable_info_widget.dart';
 import 'widgets/item_data_state_info_widget.dart';
 
 class BlockDebugBox extends BaseDebugBox {
@@ -37,6 +38,12 @@ class BlockDebugBox extends BaseDebugBox {
       includeDescendants: true,
     );
     return [
+      if (options.showClassDefinition)
+        ClassDefViewableInfoWidget(
+          classDefViewable: block,
+          labelStyle: DebugStyleUtils.getLabelStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
+        ),
       if (options.showUiActive)
         ActiveInfoWidget(
           activeElementType: ActiveElementType.block,

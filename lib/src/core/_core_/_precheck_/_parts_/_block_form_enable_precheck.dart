@@ -45,8 +45,8 @@ enum BlockFormEnablePrecheck implements FormEnablePrecheck {
   ),
 
   /// Operation not allowed by application business rules.
-  notAllow(
-    precheckCode: PrecheckCode.notAllow,
+  notAllowed(
+    precheckCode: PrecheckCode.notAllowed,
     message: "The form is disabled.",
     details: ["Application business rules do not allow updating this item."],
   ),

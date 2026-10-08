@@ -37,25 +37,28 @@ class _FilterControlBarState extends _BaseControlBarState<
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
 
   @override
-  Shelf? _getRelatedShelf() {
+  Shelf? _getRelatedModule() {
     return widget.filterModel.shelf;
   }
 
   @override
-  BlockContextType? get blockContextType => null;
+  BlockViewContext? get blockViewContext => null;
 
   @override
-  ScalarContextType? get scalarContextType => null;
+  ScalarViewContext? get scalarContextType => null;
 
   @override
-  StageContextType? get stageContextType => null;
+  ProzessViewContext? get prozessViewContext => null;
 
   @override
-  TaskContextType? get taskContextType => null;
+  StageViewContext? get stageViewContext => null;
+
+  @override
+  TaskViewContext? get taskViewContext => null;
 
   @override
   Widget? buildStandardButton(FilterControlBarItem item) {
-    Enum type = item.type ?? FilterControlBarItemType.custom;
+    final type = item.type ?? FilterControlBarItemType.custom;
     switch (type) {
       case FilterControlBarItemType.back:
         if (!widget.config.allowBackButton) return null;
@@ -98,8 +101,9 @@ class _FilterControlBarState extends _BaseControlBarState<
       getClassNameWithoutGenerics(widget.filterModel);
 
   @override
-  void addWidgetState({required bool isVisible}) => widget.filterModel.ui
-      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) =>
+      widget.filterModel.ui
+          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

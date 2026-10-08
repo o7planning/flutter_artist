@@ -19,7 +19,7 @@ void main() {
         formDataState: defaultFormDataState,
         item: 'Test Item',
         checkAllow: true,
-        checkItemEditAllowed: (item) => CheckAllowResult.allow(),
+        checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -37,7 +37,7 @@ void main() {
         formDataState: null,
         item: 'Test Item',
         checkAllow: true,
-        checkItemEditAllowed: (item) => CheckAllowResult.allow(),
+        checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -64,7 +64,7 @@ void main() {
         // Form in fatal error state
         item: 'Test Item',
         checkAllow: true,
-        checkItemEditAllowed: (item) => CheckAllowResult.allow(),
+        checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -83,7 +83,7 @@ void main() {
         item: null,
         // No target item provided
         checkAllow: true,
-        checkItemEditAllowed: (item) => CheckAllowResult.allow(),
+        checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -102,7 +102,7 @@ void main() {
         formDataState: defaultFormDataState,
         item: 'Test Item',
         checkAllow: true,
-        checkItemEditAllowed: (item) => CheckAllowResult.allow(),
+        checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -122,11 +122,11 @@ void main() {
         item: 'Test Item',
         checkAllow: true,
         checkItemEditAllowed: (item) =>
-            CheckAllowResult.notAllow(), // Disallowed by business rule
+            CheckAllowResult.notAllowed(), // Disallowed by business rule
       );
 
       expect(result.yes, isFalse);
-      expect(result.errCode, equals(BlockItemEditPrecheck.notAllow));
+      expect(result.errCode, equals(BlockItemEditPrecheck.notAllowed));
     });
 
     test('Should return yes when all precheck conditions pass successfully',
@@ -140,7 +140,7 @@ void main() {
         formDataState: defaultFormDataState,
         item: 'Test Item',
         checkAllow: true,
-        checkItemEditAllowed: (item) => CheckAllowResult.allow(),
+        checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isTrue);

@@ -13,7 +13,7 @@ void main() {
         formDataState: null,
         currentItem: 'Item A',
         checkAllow: true,
-        checkItemUpdateAllowed: (item) => CheckAllowResult.allow(),
+        checkItemUpdateAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -28,7 +28,7 @@ void main() {
         formDataState: defaultFormDataState,
         currentItem: 'Item A',
         checkAllow: true,
-        checkItemUpdateAllowed: (item) => CheckAllowResult.allow(),
+        checkItemUpdateAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -46,11 +46,11 @@ void main() {
         currentItem: 'Item A',
         checkAllow: true,
         checkItemUpdateAllowed: (item) =>
-            CheckAllowResult.notAllow(), // Disallowed
+            CheckAllowResult.notAllowed(), // Disallowed
       );
 
       expect(result.yes, isFalse);
-      expect(result.errCode, equals(BlockFormEnablePrecheck.notAllow));
+      expect(result.errCode, equals(BlockFormEnablePrecheck.notAllowed));
     });
 
     test('Should return yes when all precheck conditions pass successfully',
@@ -61,7 +61,7 @@ void main() {
         formDataState: defaultFormDataState,
         currentItem: 'Item A',
         checkAllow: true,
-        checkItemUpdateAllowed: (item) => CheckAllowResult.allow(),
+        checkItemUpdateAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isTrue);

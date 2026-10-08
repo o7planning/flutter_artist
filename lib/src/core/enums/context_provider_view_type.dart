@@ -71,6 +71,14 @@ enum ContextProviderViewType {
     name: "Execution Progress View",
     iconData: FaIconConstants.executionProgressViewIconData,
   ),
+  prozessView(
+    name: "Prozess View",
+    iconData: FaIconConstants.prozessViewIconData,
+  ),
+  prozessStageViewSwitcher(
+    name: "Prozess Stages Switch View",
+    iconData: FaIconConstants.prozessViewIconData,
+  ),
   stageView(
     name: "Stage View",
     iconData: FaIconConstants.stageViewIconData,

@@ -1,3 +1,4 @@
+
 part of '__precheck_utils.dart';
 
 /// Utility class containing pure precheck logic for block form reset operations.
@@ -60,7 +61,7 @@ class BlockFormResetPrecheckUtils {
           return Actionable<BlockFormResetPrecheck>.yes();
         case CheckAllow.notAllow:
           return Actionable<BlockFormResetPrecheck>.no(
-            errCode: BlockFormResetPrecheck.notAllow,
+            errCode: BlockFormResetPrecheck.notAllowed,
           );
         case CheckAllow.error:
           return Actionable<BlockFormResetPrecheck>.no(

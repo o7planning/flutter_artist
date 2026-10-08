@@ -28,8 +28,7 @@ abstract class XActivity extends XRootQueueItem {
   XActivity({
     required this.activity,
     required this.xActivityType,
-  })
-      : xModuleId = __xModuleSequence++,
+  })  : xModuleId = __xModuleSequence++,
         xActivityId = __xActivitySequence++ {
     // 1. Build and bind active runtime Tasks
     for (final Task task in activity.tasks) {
@@ -84,14 +83,14 @@ abstract class XActivity extends XRootQueueItem {
     }
     //
     for (XProzess xProzess in allXProzesses) {
-      List<Stage> stages = xProzess.prozess.stages;
-      final Stage? firstStage = stages.firstOrNull;
+      List<Stage> orderedStages = xProzess.prozess.orderedStages;
+      final Stage? firstStage = orderedStages.firstOrNull;
       if (firstStage == null) {
         continue;
       }
       final XStage firstXStage = xProzess.findXStageById(firstStage.stageId)!;
 
-      for (Stage stage in stages) {
+      for (Stage stage in orderedStages) {
         final XStage xStage = xProzess.findXStageById(stage.stageId)!;
         final StageDataState stageDataStage = stage.dataState;
         if (stageDataStage.isNone) {
@@ -139,8 +138,7 @@ abstract class XActivity extends XRootQueueItem {
       }
     }
     PrintUtils.debug(debug,
-        "\nACTIVITY EXECUTION UNIT (Step $_executionUnitStep) >>> ${getClassNameWithoutGenerics(
-            this)}.getNextExecutionUnit()...");
+        "\nACTIVITY EXECUTION UNIT (Step $_executionUnitStep) >>> ${getClassNameWithoutGenerics(this)}.getNextExecutionUnit()...");
 
     // Priority 1: Check atomic standalone Tasks
     for (final xTask in allXTasks) {

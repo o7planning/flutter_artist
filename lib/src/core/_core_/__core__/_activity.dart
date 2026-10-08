@@ -42,17 +42,6 @@ abstract class Activity extends FeatureModule {
   // ***************************************************************************
   // ***************************************************************************
 
-  ///
-  /// Very Dangerous Method. Call Internal only.
-  ///
-  String ___registerError(String message) {
-    FlutterArtist._clearActivitiesAndShelves();
-    return _createFatalAppError(message);
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   void __onInit() {
     _activityStruct = defineActivityStructure();
     config = _activityStruct._config;
@@ -64,7 +53,7 @@ abstract class Activity extends FeatureModule {
     //
     for (Task task in _activityStruct.tasks) {
       if (__taskMap.containsKey(task.name)) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
           "Duplicate Task '${task.name}' in '${getClassName(this)}'\n"
           "Double-check ${getClassName(this)}.defineActivityStructure() method",
         );
@@ -83,7 +72,7 @@ abstract class Activity extends FeatureModule {
     //
     for (Prozess prozess in _activityStruct.prozesses) {
       if (__prozessMap.containsKey(prozess.name)) {
-        throw ___registerError(
+        throw AppFatalErrorUtils.___registerError(
           "Duplicate Prozess '${prozess.name}' in '${getClassName(this)}'\n"
           "Double-check ${getClassName(this)}.defineActivityStructure() method",
         );
@@ -93,7 +82,7 @@ abstract class Activity extends FeatureModule {
       prozess._bindToActivity(this);
 
       // Register Stage Form Models
-      for (Stage stage in prozess.stages) {
+      for (Stage stage in prozess.orderedStages) {
         if (stage.formModel != null) {
           _allStageFormModels.add(stage.formModel!);
         }

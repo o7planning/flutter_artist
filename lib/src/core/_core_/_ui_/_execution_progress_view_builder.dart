@@ -38,25 +38,27 @@ class _ExecutionProgressBuilderState
       ContextProviderViewType.executionProgressView;
 
   @override
-  Shelf? _getRelatedShelf() {
+  Shelf? _getRelatedModule() {
     return null;
   }
-
 
   // Update from Executor:
   bool onProgress = false;
 
   @override
-  BlockContextType? get blockContextType => null;
+  BlockViewContext? get blockViewContext => null;
 
   @override
-  ScalarContextType? get scalarContextType => null;
+  ScalarViewContext? get scalarContextType => null;
 
   @override
-  StageContextType? get stageContextType => null;
+  ProzessViewContext? get prozessViewContext => null;
 
   @override
-  TaskContextType? get taskContextType => null;
+  StageViewContext? get stageViewContext => null;
+
+  @override
+  TaskViewContext? get taskViewContext => null;
 
   bool isMatches(
       {required Object owner, required ExecutionUnitType executionUnitType}) {

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_artist/src/core/_core_/_precheck_/__precheck.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-as dialogs;
+    as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart'
     hide FlutterArtistLocaleAdapter;
@@ -47,12 +47,13 @@ import '../../debug/utils/_debug.dart';
 import '../action/__action.dart';
 import '../action/__action.dart';
 import '../annotation/annotation.dart';
-import '../built_in/_built_in_filter_criteria.dart';
+import '../built_in/__built_in_model.dart';
 import '../enums/_enums.dart';
 
 import '../error/_block_error_info.dart';
 import '../error/_dev_error.dart';
 import '../error/_filter_error_info.dart';
+import '../error/_process_error_info.dart';
 import '../error/_stage_error_info.dart';
 import '../error/_task_error_info.dart';
 import '../error/filter/filter_method_error.dart';
@@ -84,6 +85,9 @@ import '../error/form_register/form_prop_invalid_name_error.dart';
 import '_precheck_utils_/__precheck_utils.dart';
 import '_sync_/_block_sync_session_snapshot.dart';
 import '_utils_/block_data_state_utils.dart';
+import '_utils_/check_next_stage_utils.dart';
+import '_utils_/process_data_state_utils.dart';
+import '_utils_/task_data_state_utils.dart';
 import '_utils_/data_type_event_utils.dart';
 import '../icon/icon_constants.dart';
 import '../isar/fa_isar_storage.dart';
@@ -116,19 +120,37 @@ part '__core__/_background_executor.dart';
 
 part '_debug_info_/_block_debug_info.dart';
 
+part '_debug_info_/_process_debug_info.dart';
+
 part '__core__/_block.dart';
 
 part '__core__/_block_ancestor_context.dart';
 
 part '__core__/_context_type.dart';
 
-part '_ui_/_stage_view.dart';
+part '_ui_/_stage_view_/_stage_view.dart';
 
-part '_ui_/_stage_view_builder.dart';
+part '_ui_/_stage_view_/_stage_view_builder.dart';
 
-part '_ui_/_task_view.dart';
+part '_ui_/_stage_view_/_welcome_stage_view.dart';
 
-part '_ui_/_task_view_builder.dart';
+part '_ui_/_process_view_/_process_view.dart';
+
+part '_ui_/_process_view_/_process_stage_view_switcher.dart';
+
+part '_ui_/_process_view_/_process_stage_view_switcher_builder.dart';
+
+part '_ui_/_process_view_/_base_process_stage_view_switcher_builder.dart';
+
+part '_ui_/_process_view_/_process_view_builder.dart';
+
+part '_ui_/_process_view_/_welcome_process_stage_view_switcher_builder.dart';
+
+part '_ui_/_process_view_/_welcome_process_stage_view_switcher.dart';
+
+part '_ui_/_task_view/_task_view.dart';
+
+part '_ui_/_task_view/_task_view_builder.dart';
 
 part '_ui_com_/_activity_ui_components.dart';
 
@@ -138,17 +160,17 @@ part '_ui_com_/_task_ui_components.dart';
 
 part '_ui_com_/_work_node_ui_components.dart';
 
-part '_ui_com_/_prozess_ui_components.dart';
+part '_ui_com_/_process_ui_components.dart';
 
-part '__core__/_prozess_transition_result.dart';
+part '__core__/_process_transition_result.dart';
 
-part '__core__/_prozess_context_data.dart';
+part '__core__/_process_context_data.dart';
 
 part '__core__/_stage_data.dart';
 
 part '__core__/_task_data.dart';
 
-part '__core__/_prozess.dart';
+part '__core__/_process.dart';
 
 part '__core__/_work_node.dart';
 
@@ -172,15 +194,17 @@ part '_execution_intent_/activity_v1_execution_intent.dart';
 
 part '_execution_intent_/stage_execution_intent.dart';
 
+part '_execution_intent_/process_execution_intent.dart';
+
 part '_execution_intent_/task_execution_intent.dart';
 
 part '__core__/_activity_structure.dart';
 
-part '__core__/_prozess_structure.dart';
+part '__core__/_process_structure.dart';
 
 part '__core__/_stage.dart';
 
-part '_config_/_prozess_config.dart';
+part '_config_/_process_config.dart';
 
 part '_config_/_stage_config.dart';
 
@@ -192,7 +216,7 @@ part '_data_state_/_task_data_state.dart';
 
 part '_config_/_activity_config.dart';
 
-part '_data_state_/_prozess_data_state.dart';
+part '_data_state_/_process_data_state.dart';
 
 part '_debug_info_/_scalar_debug_info.dart';
 
@@ -412,11 +436,13 @@ part '_core_x_/_x_block.dart';
 
 part '__core__/__sequence.dart';
 
+part '__core__/__class_def_viewable.dart';
+
 part '_core_x_/_x_task.dart';
 
 part '_core_x_/_x_stage.dart';
 
-part '_core_x_/_x_prozess.dart';
+part '_core_x_/_x_process.dart';
 
 part '_core_x_/_x_filter_model.dart';
 
@@ -463,6 +489,8 @@ part '_core_x_/_x_activity_/_x_exec_/_x_activity_stage_load_init_data.dart';
 part '_core_x_/_x_activity_/_x_exec_/_x_activity_task_load_init_data.dart';
 
 part '_core_x_/_x_activity_/_x_exec_/_x_activity_task_submit.dart';
+
+part '_core_x_/_x_activity_/_x_exec_/_x_activity_stage_submit.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_shelf_external_reaction.dart';
 
@@ -650,6 +678,10 @@ part '_execution_unit_result_/_task_eur/_task_submit_result.dart';
 
 part '_execution_unit_result_/_task_eur/_task_load_init_data_result.dart';
 
+part '_execution_unit_result_/_process_eur/_process_load_init_data_result.dart';
+
+part '_execution_unit_result_/_process_eur/_process_determine_next_stage_result.dart';
+
 part '_execution_unit_result_/_stage_eur/_stage_submit_result.dart';
 
 part '_execution_unit_result_/_stage_eur/_stage_load_init_data_result.dart';
@@ -706,6 +738,10 @@ part '_execution_unit_/activity_member/_stage_load_init_data_execution_unit.dart
 
 part '_execution_unit_/activity_member/_task_load_init_data_execution_unit.dart';
 
+part '_execution_unit_/activity_member/_prozess_load_init_data_execution_unit.dart';
+
+part '_execution_unit_/activity_member/_prozess_determine_next_stage_execution_unit.dart';
+
 part '_execution_unit_/shelf_member/_block_backend_action_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_quick_item_creation_execution_unit.dart';
@@ -735,6 +771,10 @@ part '_execution_unit_/app/_app_backend_action_execution_unit.dart';
 part '_ui_/__context_provider_view.dart';
 
 part '_ui_/__context_provider_view_state.dart';
+
+part '_ui_/_process_view_/__process_stage_view_switcher_scope.dart';
+
+part '_ui_/__error_message_view.dart';
 
 part '_v1_/_activity_v1_section_view.dart';
 
@@ -776,7 +816,7 @@ part '_ui_/_control_bar_item_/_task_control_bar_item.dart';
 
 part '_ui_/_control_bar_item_/_filter_control_bar_item.dart';
 
-part '_ui_/_control_bar_item_/_prozess_control_bar_item.dart';
+part '_ui_/_control_bar_item_/_process_control_bar_item.dart';
 
 part '_ui_/_control_bar_/__base_control_bar_state.dart';
 
@@ -784,7 +824,7 @@ part '_ui_/_control_bar_config_/_filter_control_bar_config.dart';
 
 part '_ui_/_control_bar_/_filter_control_bar.dart';
 
-part '_ui_/_control_bar_/_prozess_control_bar.dart';
+part '_ui_/_control_bar_/_process_control_bar.dart';
 
 part '_ui_/_control_bar_/_block_control_bar.dart';
 
@@ -792,23 +832,23 @@ part '_ui_/_control_bar_/_scalar_control_bar.dart';
 
 part '_ui_/_control_bar_config_/_scalar_control_bar_config.dart';
 
-part '_ui_/_control_bar_config_/_prozess_control_bar_config.dart';
+part '_ui_/_control_bar_config_/_process_control_bar_config.dart';
 
 part '_ui_/_control_bar_config_/_task_control_bar_config.dart';
 
 part '_ui_/_control_bar_config_/_block_control_bar_config.dart';
 
-part '_ui_/_block_section_view.dart';
+part '_ui_/_block_view_/_block_section_view.dart';
 
-part '_ui_/_block_section_view_builder.dart';
+part '_ui_/_block_view_/_block_section_view_builder.dart';
 
-part '_ui_/_block_item_detail_view.dart';
+part '_ui_/_block_view_/_block_item_detail_view.dart';
 
-part '_ui_/_block_item_detail_view_builder.dart';
+part '_ui_/_block_view_/_block_item_detail_view_builder.dart';
 
-part '_ui_/_block_items_view.dart';
+part '_ui_/_block_view_/_block_items_view.dart';
 
-part '_ui_/_block_items_view_builder.dart';
+part '_ui_/_block_view_/_block_items_view_builder.dart';
 
 part '_ui_/_control_bar_item_/__control_bar_button.dart';
 
@@ -816,21 +856,23 @@ part '_ui_/_control_bar_helper_/_control_bar_helper.dart';
 
 part '_ui_/_dev_container.dart';
 
-part '_ui_/_filter_panel.dart';
+part '_ui_/_filter_panel_/_filter_panel.dart';
 
-part '_ui_/_filter_panel_builder.dart';
+part '_ui_/_filter_panel_/_filter_panel_builder.dart';
 
-part '_ui_/_sort_panel_builder.dart';
+part '_ui_/_sort_panel_/_sort_panel_builder.dart';
 
-part '_ui_/_sort_panel.dart';
+part '_ui_/_sort_panel_/_sort_panel.dart';
 
 part '_ui_/_form_view_/_block_form_view.dart';
+
+part '_ui_/_form_view_/_process_stage_form_view_switcher.dart';
 
 part '_ui_/_form_view_/_stage_form_view.dart';
 
 part '_ui_/_form_view_/_task_form_view.dart';
 
-part '_ui_/_base_form_view_builder.dart';
+part '_ui_/_form_view_builder_/_base_form_view_builder.dart';
 
 part '_ui_/_form_view_builder_/_block_form_view_builder.dart';
 
@@ -838,29 +880,31 @@ part '_ui_/_form_view_builder_/_stage_form_view_builder.dart';
 
 part '_ui_/_form_view_builder_/_task_form_view_builder.dart';
 
+part '_ui_/_form_view_builder_/_process_stage_form_view_switcher_builder.dart';
+
 part '_ui_/_logged_in_user_builder.dart';
 
 part '_ui_/_notification_button_builder.dart';
 
-part '_ui_/_block_number_pagination.dart';
+part '_ui_/_block_pagination_/_block_number_pagination.dart';
 
-part '_ui_/_block_pagination.dart';
+part '_ui_/_block_pagination_/_block_pagination.dart';
 
 part '_ui_/_quick_suggestion_bar.dart';
 
 part '_ui_/_quick_suggestion_button.dart';
 
-part '_ui_/_storage_section_view.dart';
+part '_ui_/_storage_view_/_storage_section_view.dart';
 
-part '_ui_/_storage_section_view_builder.dart';
+part '_ui_/_storage_view_/_storage_section_view_builder.dart';
 
-part '_ui_/_scalar_value_view.dart';
+part '_ui_/_stage_view_/_scalar_value_view.dart';
 
-part '_ui_/_scalar_value_view_builder.dart';
+part '_ui_/_scalar_view_/_scalar_value_view_builder.dart';
 
-part '_ui_/_scalar_section_view.dart';
+part '_ui_/_scalar_view_/_scalar_section_view.dart';
 
-part '_ui_/_scalar_section_view_builder.dart';
+part '_ui_/_scalar_view_/_scalar_section_view_builder.dart';
 
 part '_ui_/_execution_progress_view_builder.dart';
 
@@ -922,7 +966,7 @@ part '_ui_control_/_scalar_control_outlined_button.dart';
 
 part '_ui_control_/_scalar_control_text_button.dart';
 
-part '_utils_/_app_utils.dart';
+part '_utils_/_app_fatal_error_utils.dart';
 
 part '_utils_/_block_query_strategy_resolver.dart';
 

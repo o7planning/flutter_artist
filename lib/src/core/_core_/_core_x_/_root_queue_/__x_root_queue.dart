@@ -63,7 +63,7 @@ final class _XRootQueue {
         rootQueueKeys.remove(firstRootQueueItemName);
         if (removeEmptyRootQuery) {
           PrintUtils.debug(debug,
-              "\n(***) <<< @REMOVE >>> RootQueueName: $firstRootQueueItemName.\n");
+              "\n      *** REMOVE ***: RootQueueName: $firstRootQueueItemName.\n");
           __xRootQueueItemMap.remove(firstRootQueueItemName);
         }
       } else {

@@ -125,7 +125,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
     final bool isVisibleX = scalar.ui.hasVisibleViews(includeDescendants: true);
     final scalarDataState = scalar.dataState;
-    final executionIntent = _executionIntent;
+    final originExecutionIntent = _executionIntent;
 
     // =========================================================================
     // 1. DATA STATE = NONE
@@ -134,7 +134,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "Scalar (1.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+            "Scalar (1.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
             "dataState: ${scalarDataState.toBriefInfo()}",
       );
     }
@@ -149,8 +149,8 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
       if (shouldQuery) {
         // Enforce QueryIntent to resolve pending or stale state before executing other actions
         final ScalarQueryIntent<ID, VALUE> intentToUse;
-        if (executionIntent is ScalarQueryIntent<ID, VALUE>) {
-          intentToUse = executionIntent;
+        if (originExecutionIntent is ScalarQueryIntent<ID, VALUE>) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetScalarExecutionIntentQuery();
         }
@@ -162,7 +162,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
             executionIntent: intentToUse,
           ),
           info:
-              "Scalar (2.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent --> $intentToUse, "
+              "Scalar (2.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
               "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
@@ -172,7 +172,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Scalar (2.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+              "Scalar (2.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
               "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
@@ -188,8 +188,8 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
       if (shouldQuery) {
         // Enforce QueryIntent to resolve pending or stale state before executing other actions
         final ScalarQueryIntent<ID, VALUE> intentToUse;
-        if (executionIntent is ScalarQueryIntent<ID, VALUE>) {
-          intentToUse = executionIntent;
+        if (originExecutionIntent is ScalarQueryIntent<ID, VALUE>) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetScalarExecutionIntentQuery();
         }
@@ -201,14 +201,14 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
             executionIntent: intentToUse,
           ),
           info:
-              "Scalar (3.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $intentToUse, "
+              "Scalar (3.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
               "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Scalar (3.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+              "Scalar (3.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
               "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
@@ -220,11 +220,11 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
     else if (scalarDataState.isFresh) {
       // IN: scalarDataState.isFresh
       // 4.0. Intercept terminal Done intent to prevent duplicate scheduler cycles
-      if (executionIntent is ScalarDoneIntent) {
+      if (originExecutionIntent is ScalarDoneIntent) {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Scalar (4.0), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+              "Scalar (4.0), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
               "dataState: ${scalarDataState.toBriefInfo()}",
         );
       }
@@ -233,8 +233,8 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
       if (__queryHint == QueryHint.force) {
         // Reuse caller-provided QueryIntent if already attached to preserve completer hooks
         final ScalarQueryIntent<ID, VALUE> intentToUse;
-        if (executionIntent is ScalarQueryIntent<ID, VALUE>) {
-          intentToUse = executionIntent;
+        if (originExecutionIntent is ScalarQueryIntent<ID, VALUE>) {
+          intentToUse = originExecutionIntent;
         } else {
           intentToUse = _createAndSetScalarExecutionIntentQuery();
         }
@@ -246,68 +246,68 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
             executionIntent: intentToUse,
           ),
           info:
-              "Scalar (4.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $intentToUse, "
+              "Scalar (4.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
               "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
         );
       }
 
       // 4.2. Handle active execution intents
-      if (executionIntent != null) {
-        if (executionIntent is ScalarDoneIntent) {
+      if (originExecutionIntent != null) {
+        if (originExecutionIntent is ScalarDoneIntent) {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Scalar (4.2.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+                "Scalar (4.2.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
                 "dataState: ${scalarDataState.toBriefInfo()}",
           );
-        } else if (executionIntent is ScalarNullIntent) {
+        } else if (originExecutionIntent is ScalarNullIntent) {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Scalar (4.2.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+                "Scalar (4.2.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
                 "dataState: ${scalarDataState.toBriefInfo()}",
           );
-        } else if (executionIntent is ScalarQueryIntent<ID, VALUE>) {
+        } else if (originExecutionIntent is ScalarQueryIntent<ID, VALUE>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _ScalarQueryExecutionUnit(
               xScalar: this,
-              executionIntent: executionIntent,
+              executionIntent: originExecutionIntent,
             ),
             info:
-                "Scalar (4.2.3), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+                "Scalar (4.2.3), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
                 "dataState: ${scalarDataState.toBriefInfo()}",
           );
-        } else if (executionIntent
+        } else if (originExecutionIntent
             is ScalarLoadExtraDataQuickActionIntent<ID, VALUE, dynamic>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit:
                 _ScalarLoadExtraDataQuickActionExecutionUnit<ID, VALUE, Object>(
               xScalar: this,
-              executionIntent: executionIntent
+              executionIntent: originExecutionIntent
                   as ScalarLoadExtraDataQuickActionIntent<ID, VALUE, Object>,
             ),
             info:
-                "Scalar (4.2.4), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+                "Scalar (4.2.4), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
                 "dataState: ${scalarDataState.toBriefInfo()}",
           );
-        } else if (executionIntent is ScalarClearIntent<ID, VALUE>) {
+        } else if (originExecutionIntent is ScalarClearIntent<ID, VALUE>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _ScalarClearExecutionUnit<ID, VALUE>(
               xScalar: this,
-              executionIntent: executionIntent,
+              executionIntent: originExecutionIntent,
             ),
             info:
-                "Scalar (4.2.5), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+                "Scalar (4.2.5), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
                 "dataState: ${scalarDataState.toBriefInfo()}",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
-                "Scalar (4.2.6), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+                "Scalar (4.2.6), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
                 "dataState: ${scalarDataState.toBriefInfo()}",
           );
         }
@@ -329,7 +329,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
     return NxtExecutionUnit.no(
       debug: debug,
       info:
-          "Scalar (5.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $executionIntent, "
+          "Scalar (5.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
           "dataState: ${scalarDataState.toBriefInfo()}",
     );
   }

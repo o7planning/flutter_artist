@@ -27,7 +27,7 @@ class ScalarQueryPrecheckUtils {
           return Actionable<ScalarQueryPrecheck>.yes();
         case CheckAllow.notAllow:
           return Actionable<ScalarQueryPrecheck>.no(
-            errCode: ScalarQueryPrecheck.notAllow,
+            errCode: ScalarQueryPrecheck.notAllowed,
           );
         case CheckAllow.error:
           return Actionable<ScalarQueryPrecheck>.no(

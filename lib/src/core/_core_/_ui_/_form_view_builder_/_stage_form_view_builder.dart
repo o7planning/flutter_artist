@@ -22,28 +22,40 @@ class _StageFormViewBuilderState
   ContextProviderViewType get type => ContextProviderViewType.stageView;
 
   @override
-  Activity? _getRelatedShelf() {
+  Activity? _getRelatedModule() {
     return widget.formModel.stage.activity;
   }
 
+  @override
+  BlockViewContext? get blockViewContext => null;
 
   @override
-  BlockContextType? get blockContextType => null;
+  ScalarViewContext? get scalarContextType => null;
 
   @override
-  ScalarContextType? get scalarContextType => null;
+  ProzessViewContext? get prozessViewContext => null;
 
   @override
-  StageContextType? get stageContextType => StageContextType.form;
+  StageViewContext? get stageViewContext => StageViewContext.form;
 
   @override
-  TaskContextType? get taskContextType => null;
+  TaskViewContext? get taskViewContext => null;
+
+  @override
+  Widget buildContent(BuildContext context) {
+    // Guard clause: Ensure StageFormView is correctly placed inside a ProzessStageFormViewSwitcher.
+    final isValid = _StageFormViewSwitcherScope.maybeOf(context) != null;
+    if (!isValid) {
+      return const ErrorMessageView(
+        message:
+            'StageFormView and StageFormViewBuilder must be child widgets of ProzessStageFormViewSwitcher!',
+      );
+    }
+    return super.buildContent(context);
+  }
 
   @override
   Future<bool> handleSaveOnPop() async {
-    // final bool success = await widget.formModel.submit();
-    // return success;
-
     throw UnimplementedError("TODO: handleSaveOnPop");
   }
 

@@ -1,4 +1,5 @@
 class DebugScalarOptions {
+  final bool showClassDefinition;
   final bool showLastQueryType;
   final bool showUiActive;
   final bool showScalarDataState;
@@ -8,6 +9,7 @@ class DebugScalarOptions {
   final bool showFilterCriteria;
 
   const DebugScalarOptions({
+    this.showClassDefinition = true,
     this.showLastQueryType = true,
     this.showUiActive = true,
     this.showScalarDataState = true,
@@ -18,6 +20,7 @@ class DebugScalarOptions {
   });
 
   const DebugScalarOptions.custom({
+    this.showClassDefinition = false,
     this.showLastQueryType = false,
     this.showUiActive = false,
     this.showScalarDataState = false,

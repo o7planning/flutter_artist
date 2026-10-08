@@ -22,22 +22,24 @@ class _BlockFormViewBuilderState
   ContextProviderViewType get type => ContextProviderViewType.form;
 
   @override
-  Shelf? _getRelatedShelf() {
+  Shelf? _getRelatedModule() {
     return widget.formModel.shelf;
   }
 
+  @override
+  BlockViewContext? get blockViewContext => BlockViewContext.form;
 
   @override
-  BlockContextType? get blockContextType => BlockContextType.form;
+  ScalarViewContext? get scalarContextType => null;
 
   @override
-  ScalarContextType? get scalarContextType => null;
+  ProzessViewContext? get prozessViewContext => null;
 
   @override
-  StageContextType? get stageContextType => null;
+  StageViewContext? get stageViewContext => null;
 
   @override
-  TaskContextType? get taskContextType => null;
+  TaskViewContext? get taskViewContext => null;
 
   @override
   Future<bool> handleSaveOnPop() async {

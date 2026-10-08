@@ -4,11 +4,15 @@ import 'package:test/test.dart';
 void main() {
   group('TaskFormEnablePrecheckUtils Tests', () {
     const defaultFormDataState = FormDataStateLoadedFresh();
+    const freshTaskDataState = TaskDataStateLoadedFresh();
+    const pendingTaskDataState = TaskDataStatePending.initial();
+    const staleTaskDataState = TaskDataStateLoadedStale();
+    const successTaskDataState = TaskDataStateSubmissionAttemptedSuccess();
 
     test('Should return noForm when formModel is null', () {
       final result = TaskFormEnablePrecheckUtils.checkFormEnable(
         hasForm: false, // Form model is missing
-        isStateReadyForForm: true,
+        taskDataState: freshTaskDataState,
         formDataState: null,
       );
 
@@ -16,23 +20,45 @@ void main() {
       expect(result.errCode, equals(TaskFormEnablePrecheck.noForm));
     });
 
-    test('Should return hostStateNotReadyForForm when task state is not ready',
-        () {
+    test('Should return taskInPendingState when task state is pending', () {
       final result = TaskFormEnablePrecheckUtils.checkFormEnable(
         hasForm: true,
-        isStateReadyForForm: false, // State not ready
+        taskDataState: pendingTaskDataState, // State is pending
         formDataState: defaultFormDataState,
       );
 
       expect(result.yes, isFalse);
-      expect(result.errCode,
-          equals(TaskFormEnablePrecheck.hostStateNotReadyForForm));
+      expect(result.errCode, equals(TaskFormEnablePrecheck.taskInPendingState));
+    });
+
+    test('Should return taskInStaleState when task state is stale', () {
+      final result = TaskFormEnablePrecheckUtils.checkFormEnable(
+        hasForm: true,
+        taskDataState: staleTaskDataState, // State is stale
+        formDataState: defaultFormDataState,
+      );
+
+      expect(result.yes, isFalse);
+      expect(result.errCode, equals(TaskFormEnablePrecheck.taskInStaleState));
+    });
+
+    test('Should return taskAlreadySubmitted when task submission succeeded',
+        () {
+      final result = TaskFormEnablePrecheckUtils.checkFormEnable(
+        hasForm: true,
+        taskDataState: successTaskDataState, // Submission attempted success
+        formDataState: defaultFormDataState,
+      );
+
+      expect(result.yes, isFalse);
+      expect(
+          result.errCode, equals(TaskFormEnablePrecheck.taskAlreadySubmitted));
     });
 
     test('Should return formInNoneState when form dataState is none', () {
       final result = TaskFormEnablePrecheckUtils.checkFormEnable(
         hasForm: true,
-        isStateReadyForForm: true,
+        taskDataState: freshTaskDataState,
         formDataState: const FormDataStateNone(), // Form in none state
       );
 
@@ -45,7 +71,7 @@ void main() {
         () {
       final result = TaskFormEnablePrecheckUtils.checkFormEnable(
         hasForm: true,
-        isStateReadyForForm: true,
+        taskDataState: freshTaskDataState,
         formDataState: defaultFormDataState, // Loaded fresh
       );
 

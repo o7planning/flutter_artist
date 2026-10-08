@@ -10,11 +10,11 @@ class CheckAllowResult {
   final CheckAllow result;
   final ErrorInfo? errorInfo;
 
-  CheckAllowResult.allow()
+  CheckAllowResult.allowed()
       : result = CheckAllow.allow,
         errorInfo = null;
 
-  CheckAllowResult.notAllow()
+  CheckAllowResult.notAllowed()
       : result = CheckAllow.notAllow,
         errorInfo = null;
 

@@ -73,7 +73,9 @@ class _ActivityUiComponents extends _ModuleUiComponents {
   Map<_ContextProviderViewState, XState> _findMountedWidgetStates({
     required bool withTask,
     required bool withProzess,
+    required bool withProzessContentView,
     required bool withProzessControlBar,
+    required bool withStages,
     required bool activeOnly,
   }) {
     final Map<_ContextProviderViewState, XState> ret = {};
@@ -95,9 +97,8 @@ class _ActivityUiComponents extends _ModuleUiComponents {
       for (final Prozess prozess in activity.prozesses) {
         ret.addAll(
           prozess.ui._findMountedWidgetStates(
-            withStageContentView: true,
-            withForm: true,
-            withStageControlBar: true,
+            withProzessContentView: withProzessContentView,
+            withStages: withStages,
             withProzessControlBar: withProzessControlBar,
             activeOnly: activeOnly,
           ),
@@ -115,7 +116,9 @@ class _ActivityUiComponents extends _ModuleUiComponents {
     return _debugFindMountedWidgetStates(
       withTask: true,
       withProzess: true,
+      withProzessContentView: true,
       withProzessControlBar: true,
+      withStages: true,
       activeOnly: true,
     );
   }
@@ -124,13 +127,17 @@ class _ActivityUiComponents extends _ModuleUiComponents {
   Map<IContextProviderViewState, XState> _debugFindMountedWidgetStates({
     required bool withTask,
     required bool withProzess,
+    required bool withProzessContentView, 
     required bool withProzessControlBar,
+    required bool withStages,
     required bool activeOnly,
   }) {
     return _findMountedWidgetStates(
       withTask: withTask,
       withProzess: withProzess,
+      withProzessContentView:withProzessContentView,
       withProzessControlBar: withProzessControlBar,
+      withStages: withStages,
       activeOnly: activeOnly,
     );
   }
@@ -149,7 +156,7 @@ class _ActivityUiComponents extends _ModuleUiComponents {
       }
       //
       for (final Prozess prozess in activity.prozesses) {
-        prozess.ui.refreshAllViews();
+        prozess.ui.refreshAllViews(withStages: true);
       }
     } catch (e, stackTrace) {
       print("ERROR: $e");

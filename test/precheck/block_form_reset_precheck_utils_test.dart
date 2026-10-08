@@ -15,7 +15,7 @@ void main() {
         formDataState: defaultFormDataState,
         isDirty: true,
         checkAllow: true,
-        checkFormResetAllowed: () => CheckAllowResult.allow(),
+        checkFormResetAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -31,7 +31,7 @@ void main() {
         formDataState: null,
         isDirty: true,
         checkAllow: true,
-        checkFormResetAllowed: () => CheckAllowResult.allow(),
+        checkFormResetAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -47,7 +47,7 @@ void main() {
         isDirty: false,
         // Form is clean / not dirty
         checkAllow: true,
-        checkFormResetAllowed: () => CheckAllowResult.allow(),
+        checkFormResetAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -65,11 +65,11 @@ void main() {
         isDirty: true,
         checkAllow: true,
         checkFormResetAllowed: () =>
-            CheckAllowResult.notAllow(), // Disallowed by business rule
+            CheckAllowResult.notAllowed(), // Disallowed by business rule
       );
 
       expect(result.yes, isFalse);
-      expect(result.errCode, equals(BlockFormResetPrecheck.notAllow));
+      expect(result.errCode, equals(BlockFormResetPrecheck.notAllowed));
     });
 
     test('Should return yes when all precheck conditions pass successfully',
@@ -81,7 +81,7 @@ void main() {
         formDataState: defaultFormDataState,
         isDirty: true,
         checkAllow: true,
-        checkFormResetAllowed: () => CheckAllowResult.allow(),
+        checkFormResetAllowed: () => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isTrue);

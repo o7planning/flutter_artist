@@ -15,7 +15,7 @@ void main() {
         items: mockItems,
         errorIfItemNotInTheBlock: true,
         findItemSameIdWith: (target) => target,
-        checkItemsDeletionAllowed: (_) => CheckAllowResult.allow(),
+        checkItemsDeletionAllowed: (_) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -31,7 +31,7 @@ void main() {
         items: [],
         errorIfItemNotInTheBlock: true,
         findItemSameIdWith: (target) => target,
-        checkItemsDeletionAllowed: (_) => CheckAllowResult.allow(),
+        checkItemsDeletionAllowed: (_) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -49,7 +49,7 @@ void main() {
         errorIfItemNotInTheBlock: true,
         findItemSameIdWith: (target) => target == 'item_1' ? target : null,
         // item_2 không tìm thấy
-        checkItemsDeletionAllowed: (_) => CheckAllowResult.allow(),
+        checkItemsDeletionAllowed: (_) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -66,12 +66,12 @@ void main() {
         errorIfItemNotInTheBlock: true,
         findItemSameIdWith: (target) => target,
         checkItemsDeletionAllowed: (item) => item == 'item_2'
-            ? CheckAllowResult.notAllow()
-            : CheckAllowResult.allow(),
+            ? CheckAllowResult.notAllowed()
+            : CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
-      expect(result.errCode, equals(BlockItemsDeletionPrecheck.notAllow));
+      expect(result.errCode, equals(BlockItemsDeletionPrecheck.notAllowed));
     });
 
     test(
@@ -111,7 +111,7 @@ void main() {
         items: mockItems,
         errorIfItemNotInTheBlock: true,
         findItemSameIdWith: (target) => target,
-        checkItemsDeletionAllowed: (_) => CheckAllowResult.allow(),
+        checkItemsDeletionAllowed: (_) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isTrue);

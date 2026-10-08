@@ -15,7 +15,7 @@ abstract interface class IContextProviderViewState {
 // Google Search: Flutter NavigatorObserver Aware.
 abstract class _ContextProviderViewState<W extends _ContextProviderView>
     extends State<W> //
-// Google Search: Flutter NavigatorObserver Aware.
+    // Google Search: Flutter NavigatorObserver Aware.
     with
         RouteAware
     implements
@@ -51,44 +51,49 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
   @override
   ShowMode showMode = ShowMode.production;
 
-  BlockContextType? get blockContextType;
+  BlockViewContext? get blockViewContext;
 
-  ScalarContextType? get scalarContextType;
+  ScalarViewContext? get scalarContextType;
 
-  StageContextType? get stageContextType;
+  ProzessViewContext? get prozessViewContext;
 
-  TaskContextType? get taskContextType;
+  StageViewContext? get stageViewContext;
+
+  TaskViewContext? get taskViewContext;
 
   bool get provideBlockItemsContext =>
-      blockContextType?.provideItemsContext ?? false;
+      blockViewContext?.provideItemsContext ?? false;
 
   bool get provideBlockItemDetailContext =>
-      blockContextType?.provideItemDetailContext ?? false;
+      blockViewContext?.provideItemDetailContext ?? false;
 
   bool get provideBlockFormContext =>
-      blockContextType?.provideFormContext ?? false;
+      blockViewContext?.provideFormContext ?? false;
 
   bool get provideStageFormContext =>
-      stageContextType?.provideFormContext ?? false;
+      stageViewContext?.provideFormContext ?? false;
 
   bool get provideTaskFormContext =>
-      taskContextType?.provideFormContext ?? false;
+      taskViewContext?.provideFormContext ?? false;
 
   bool get provideScalarValueContext =>
       scalarContextType?.provideValueContext ?? false;
 
   bool get provideStageInitDataContext =>
-      stageContextType?.provideInitDataContext ?? false;
+      stageViewContext?.provideInitDataContext ?? false;
 
   bool get provideTaskInitDataContext =>
-      taskContextType?.provideInitDataContext ?? false;
+      taskViewContext?.provideInitDataContext ?? false;
+
+  bool get provideProzessInitDataContext =>
+      prozessViewContext?.provideInitDataContext ?? false;
 
   bool get provideActivityV1Context => false;
 
   bool isContextKind(ContextKind? contextKind) {
     switch (contextKind) {
       case null:
-        // Do not change!
+      // Do not change!
         return true;
       case ContextKind.scalarValue:
         return provideScalarValueContext;
@@ -108,6 +113,8 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
         return provideTaskInitDataContext;
       case ContextKind.stageInitData:
         return provideStageInitDataContext;
+      case ContextKind.prozessInitData:
+        return provideProzessInitDataContext;
     }
   }
 
@@ -162,16 +169,16 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     return showMode == ShowMode.production
         ? buildContent(context)
         : _DevContainer(
-            child: buildContent(context),
-          );
+      child: buildContent(context),
+    );
   }
 
-  FeatureModule? _getRelatedShelf();
+  FeatureModule? _getRelatedModule();
 
   void __addWidgetState({required bool isVisible}) {
     addWidgetState(isVisible: isVisible);
     if (isVisible) {
-      final FeatureModule? module = _getRelatedShelf();
+      final FeatureModule? module = _getRelatedModule();
       if (module != null) {
         module._markAsOrphaned(false);
       }
@@ -221,7 +228,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
         DebugPrinter.printDebug(
           DebugCat.routeAware,
           ' ---->  [RouteAware] ---------> didChangeDependencies (+): $__modelRouteName'
-          ' ---->  ${getClassNameWithoutGenerics(widget)}',
+              ' ---->  ${getClassNameWithoutGenerics(widget)}',
         );
       } else {
         if (modalRoute is! DialogRoute) {
@@ -230,7 +237,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
           DebugPrinter.printDebug(
             DebugCat.routeAware,
             ' ---->  [RouteAware] ---------> didChangeDependencies (-): $__modelRouteName'
-            ' ---->  ${getClassNameWithoutGenerics(widget)}',
+                ' ---->  ${getClassNameWithoutGenerics(widget)}',
           );
         }
       }
@@ -242,7 +249,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     DebugPrinter.printDebug(
       DebugCat.routeAware,
       ' ---->  [RouteAware] ---------> unsubscribe: $__modelRouteName'
-      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+          ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
     //
     FlutterArtist.navigatorObserver.unsubscribe(this);
@@ -267,7 +274,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     DebugPrinter.printDebug(
       DebugCat.routeAware,
       ' ---->  [RouteAware] ---------> didPush: ${modalRoute?.settings.name}'
-      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+          ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }
 
@@ -281,7 +288,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     DebugPrinter.printDebug(
       DebugCat.routeAware,
       ' ---->  [RouteAware] ---------> didPop: ${modalRoute?.settings.name}'
-      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+          ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }
 
@@ -292,8 +299,11 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
-      ' ---->  [RouteAware] ---------> didPushNext: ${ModalRoute.of(context)?.settings.name}'
-      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+      ' ---->  [RouteAware] ---------> didPushNext: ${ModalRoute
+          .of(context)
+          ?.settings
+          .name}'
+          ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }
 
@@ -304,8 +314,11 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
-      ' ---->  [RouteAware] ---------> didPopNext: ${ModalRoute.of(context)?.settings.name}'
-      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+      ' ---->  [RouteAware] ---------> didPopNext: ${ModalRoute
+          .of(context)
+          ?.settings
+          .name}'
+          ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }
 }

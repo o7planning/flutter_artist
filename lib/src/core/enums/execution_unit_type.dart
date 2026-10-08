@@ -36,6 +36,7 @@ enum ExecutionUnitType {
   //
   task,
   stage,
+  prozess,
   activity;
 
   String asDebugExecutionUnit([String? forName]) {

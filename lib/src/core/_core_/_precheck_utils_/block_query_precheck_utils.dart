@@ -106,7 +106,7 @@ class BlockQueryPrecheckUtils {
         case CheckAllow.notAllow:
           return BlockQueryPrecheckResult(
             actionable: Actionable<BlockQueryPrecheck>.no(
-              errCode: BlockQueryPrecheck.notAllow,
+              errCode: BlockQueryPrecheck.notAllowed,
             ),
             applyPageable: null,
             isQueryMoreFlow: isQueryMoreFlow,

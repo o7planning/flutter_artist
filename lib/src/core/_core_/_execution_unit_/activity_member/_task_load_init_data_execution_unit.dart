@@ -1,9 +1,9 @@
 part of '../../core.dart';
 
 class _TaskLoadInitDataExecutionUnit<
-TASK_INIT_DATA extends TaskInitData, //
-TASK_RESULT_DATA extends TaskResultData,
-FORM_INPUT extends FormInput> extends _ActivityMemberExecutionUnit {
+    TASK_INIT_DATA extends TaskInitData, //
+    TASK_RESULT_DATA extends TaskResultData,
+    FORM_INPUT extends FormInput> extends _ActivityMemberExecutionUnit {
   final XTask xTask;
 
   @override
@@ -15,9 +15,9 @@ FORM_INPUT extends FormInput> extends _ActivityMemberExecutionUnit {
     required this.xTask,
     required this.executionIntent,
   }) : super(
-    executionUnitType: ExecutionUnitType.task,
-    executionIntent: executionIntent,
-  );
+          executionUnitType: ExecutionUnitType.task,
+          executionIntent: executionIntent,
+        );
 
   @override
   Activity get activity => xTask.task.activity;

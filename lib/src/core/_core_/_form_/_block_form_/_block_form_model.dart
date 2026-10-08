@@ -7,8 +7,22 @@ abstract class BlockFormModel<
         FORM_INPUT extends FormInput,
         FORM_OUTPUT extends FormOutput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel<FORM_INPUT, FORM_OUTPUT,
+    extends BaseFormModel<
+        FORM_INPUT, //
+        FORM_OUTPUT,
         ADDITIONAL_FORM_RELATED_DATA> {
+  @override
+  Map<String, Type> getGenericsInfoMap() {
+    return {
+      "ID": ID,
+      "ITEM_DETAIL": ITEM_DETAIL,
+      "CREATION_PRESET": CREATION_PRESET,
+      "FORM_INPUT": FORM_INPUT,
+      "FORM_OUTPUT": FORM_OUTPUT,
+      "ADDITIONAL_FORM_RELATED_DATA": ADDITIONAL_FORM_RELATED_DATA,
+    };
+  }
+
   late final Block<
       ID, //
       Identifiable<ID>,

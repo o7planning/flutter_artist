@@ -1,63 +1,72 @@
 part of '../__precheck.dart';
 
-/// Precheck enumeration for task form enable operations.
+/// Precheck conditions and failure reasons for enabling a task form.
 enum TaskFormEnablePrecheck implements FormEnablePrecheck {
-  /// Operation aborted because the task state is not ready for the form.
-  hostStateNotReadyForForm(
-    precheckCode: PrecheckCode.noForm,
-    message: "Task state is not ready for form.",
-    details: ["The underlying task state does not permit form interaction."],
+  /// The system is currently busy executing another operation.
+  busy(
+    precheckCode: PrecheckCode.busy,
+    message: "Form interaction is disabled.",
+    details: ["The system is busy."],
   ),
 
-  /// Operation aborted because no form model is configured.
+  /// The task does not have an associated form model.
   noForm(
-    precheckCode: PrecheckCode.noForm,
-    message: "Task has no form.",
-    details: ["No form model is configured for this task."],
+    precheckCode: PrecheckCode.notAllowed,
+    message: "No form available.",
+    details: ["The task does not have an associated form model."],
   ),
 
-  /// Operation aborted because the form is in a none state.
-  formInNoneState(
-    precheckCode: PrecheckCode.formInNoneState,
-    message: "Task form is disabled.",
-    details: ["The form is currently in a 'none' state."],
-  ),
-
-  /// Operation aborted because the form is in a pending state.
-  formInPendingState(
-    precheckCode: PrecheckCode.formInPendingState,
-    message: "Task form is disabled.",
-    details: ["The form is currently in a 'pending' state."],
-  ),
-
-  /// Operation aborted because the form is in a fatal error state.
-  formInFatalErrorState(
-    precheckCode: PrecheckCode.formInFatalErrorState,
-    message: "Task form is disabled.",
-    details: ["The form is currently in a fatal error state."],
-  ),
-
-  /// Operation aborted because the form is in a stale state.
-  formInStaleState(
-    precheckCode: PrecheckCode.formInStaleState,
-    message: "Task form is disabled.",
-    details: ["The form is currently in a stale state."],
-  ),
-
-  /// Operation not allowed by application business rules.
-  notAllow(
-    precheckCode: PrecheckCode.notAllow,
-    message: "The form is disabled.",
+  /// The task is still in pending state and has not loaded initialization data.
+  taskInPendingState(
+    precheckCode: PrecheckCode.stageInPendingState,
+    message: "Form interaction is disabled.",
     details: [
-      "Application business rules do not allow this item to be updated."
+      "The task is still in pending state and has not loaded initialization data."
     ],
   ),
 
-  /// An error occurred while executing the allow-check method.
-  checkAllowMethodError(
-    precheckCode: PrecheckCode.checkAllowMethodError,
-    message: "The form is disabled.",
-    details: ["An error occurred during the permission check."],
+  /// The task data is stale and requires initialization data to be reloaded.
+  taskInStaleState(
+    precheckCode: PrecheckCode.stageInPendingState,
+    message: "Form interaction is disabled.",
+    details: ["The task data is stale and requires reloading."],
+  ),
+
+  /// The task has already been successfully submitted and its form is locked (read-only).
+  taskAlreadySubmitted(
+    precheckCode: PrecheckCode.stageAlreadySubmitted,
+    message: "Form interaction is disabled.",
+    details: [
+      "The task has already been successfully submitted. Use Restart to modify again."
+    ],
+  ),
+
+  /// The form model is in none state.
+  formInNoneState(
+    precheckCode: PrecheckCode.formInNoneState,
+    message: "Form is inactive.",
+    details: ["The form is currently in none state."],
+  ),
+
+  /// The form model is in pending state.
+  formInPendingState(
+    precheckCode: PrecheckCode.formInPendingState,
+    message: "Form is loading.",
+    details: ["The form data is currently pending."],
+  ),
+
+  /// The form model encountered a fatal initialization error.
+  formInFatalErrorState(
+    precheckCode: PrecheckCode.formInFatalErrorState,
+    message: "Form error.",
+    details: ["The form encountered a fatal error."],
+  ),
+
+  /// The form model is in stale state.
+  formInStaleState(
+    precheckCode: PrecheckCode.formInStaleState,
+    message: "Form is stale.",
+    details: ["The form data is outdated and needs refreshing."],
   );
 
   @override

@@ -1,79 +1,89 @@
 part of '../core.dart';
 
-enum BlockContextType {
+enum BlockViewContext {
   items,
   itemDetail,
   form;
 
   bool get provideItemsContext {
     return switch (this) {
-      BlockContextType.items => true,
-      BlockContextType.itemDetail => true,
-      BlockContextType.form => true,
+      BlockViewContext.items => true,
+      BlockViewContext.itemDetail => true,
+      BlockViewContext.form => true,
     };
   }
 
   bool get provideItemDetailContext {
     return switch (this) {
-      BlockContextType.items => false,
-      BlockContextType.itemDetail => true,
-      BlockContextType.form => true,
+      BlockViewContext.items => false,
+      BlockViewContext.itemDetail => true,
+      BlockViewContext.form => true,
     };
   }
 
   bool get provideFormContext {
     return switch (this) {
-      BlockContextType.items => false,
-      BlockContextType.itemDetail => false,
-      BlockContextType.form => true,
+      BlockViewContext.items => false,
+      BlockViewContext.itemDetail => false,
+      BlockViewContext.form => true,
     };
   }
 }
 
-enum ScalarContextType {
+enum ScalarViewContext {
   value;
 
   bool get provideValueContext {
     return switch (this) {
-      ScalarContextType.value => true,
+      ScalarViewContext.value => true,
     };
   }
 }
 
-enum TaskContextType {
+enum TaskViewContext {
   initData,
   form;
 
   bool get provideInitDataContext {
     return switch (this) {
-      TaskContextType.initData => true,
-      TaskContextType.form => true,
+      TaskViewContext.initData => true,
+      TaskViewContext.form => true,
     };
   }
 
   bool get provideFormContext {
     return switch (this) {
-      TaskContextType.initData => false,
-      TaskContextType.form => true,
+      TaskViewContext.initData => false,
+      TaskViewContext.form => true,
     };
   }
 }
 
-enum StageContextType {
+enum StageViewContext {
   initData,
   form;
 
   bool get provideInitDataContext {
     return switch (this) {
-      StageContextType.initData => true,
-      StageContextType.form => true,
+      StageViewContext.initData => true,
+      StageViewContext.form => true,
     };
   }
 
   bool get provideFormContext {
     return switch (this) {
-      StageContextType.initData => false,
-      StageContextType.form => true,
+      StageViewContext.initData => false,
+      StageViewContext.form => true,
+    };
+  }
+}
+
+enum ProzessViewContext {
+  initData;
+
+  bool get provideInitDataContext {
+    return switch (this) {
+      ProzessViewContext.initData => true,
     };
   }
 }

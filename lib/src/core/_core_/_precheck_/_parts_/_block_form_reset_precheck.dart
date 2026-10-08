@@ -52,8 +52,8 @@ enum BlockFormResetPrecheck implements Precheck {
   ),
 
   /// Operation not allowed by application business rules.
-  notAllow(
-    precheckCode: PrecheckCode.notAllow,
+  notAllowed(
+    precheckCode: PrecheckCode.notAllowed,
     message: "Form resetting is disabled.",
     details: ["Application business rules do not allow resetting this form."],
   ),

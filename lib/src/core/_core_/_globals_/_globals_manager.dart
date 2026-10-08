@@ -315,8 +315,8 @@ class GlobalsManager extends _Core {
       final warningHtmlMessage =
           "Warning: Unable to store <b>JSON String</b> to <b>Local</b>..\n"
           "This means that the login information cannot be remembered.";
-      final appWarning =
-          _createAppWarning(HtmlUtils.removeTags(warningHtmlMessage));
+      final appWarning = AppFatalErrorUtils._createAppWarning(
+          HtmlUtils.removeTags(warningHtmlMessage));
       //
       print(appWarning);
       //

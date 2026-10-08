@@ -76,7 +76,22 @@ abstract class Block<
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
     CREATION_PRESET extends CreationPreset, // EmptyCreationPreset
     FORM_INPUT extends FormInput // EmptyFormInput
-    > extends _Core implements FormHost {
+    > extends _Core implements FormHost, ClassDefViewable {
+
+  @override
+  Map<String, Type> getGenericsInfoMap() {
+     return {
+       "ID": ID,
+       "ITEM": ITEM ,
+      "ITEM_DETAIL": ITEM_DETAIL,
+      "FILTER_INPUT": FILTER_INPUT,
+      "FILTER_CRITERIA": FILTER_CRITERIA ,
+      "CREATION_PRESET": CREATION_PRESET ,
+      "FORM_INPUT": FORM_INPUT
+     };
+  }
+
+
   late final Shelf shelf;
 
   Shelf get module => shelf;
@@ -6172,7 +6187,7 @@ abstract class Block<
   CheckAllowResult __checkQueryAllowed() {
     try {
       bool allow = isQueryAllowed();
-      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
         errorInfo: ErrorInfo.fromError(error: e, stackTrace: stackTrace),
@@ -6190,7 +6205,7 @@ abstract class Block<
   CheckAllowResult __checkFormResetAllowed() {
     try {
       bool allow = isFormResetAllowed();
-      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
         errorInfo: ErrorInfo.fromError(
@@ -6213,7 +6228,7 @@ abstract class Block<
   }) {
     try {
       bool allow = isItemUpdateAllowed(item: item);
-      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
         errorInfo: ErrorInfo.fromError(
@@ -6234,7 +6249,7 @@ abstract class Block<
   CheckAllowResult __checkQuickItemCreationAllowed() {
     try {
       bool allow = isItemCreationAllowed();
-      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
         errorInfo: ErrorInfo.fromError(
@@ -6252,7 +6267,7 @@ abstract class Block<
   CheckAllowResult __checkItemCreationAllowed() {
     try {
       bool allow = isItemCreationAllowed();
-      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
         errorInfo: ErrorInfo.fromError(
@@ -6273,7 +6288,7 @@ abstract class Block<
   CheckAllowResult __checkItemDeletionAllowed({required ITEM item}) {
     try {
       bool allow = isItemDeletionAllowed(item: item);
-      return allow ? CheckAllowResult.allow() : CheckAllowResult.notAllow();
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
         errorInfo: ErrorInfo.fromError(

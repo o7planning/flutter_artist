@@ -6,7 +6,7 @@ class ScalarControlBar extends BaseControlBar<
     ScalarControlBarItem> {
   final Scalar scalar;
   final ScalarControlBarConfig config;
-  final ScalarContextType? scalarContextType;
+  final ScalarViewContext? scalarContextType;
 
   const ScalarControlBar({
     super.key,
@@ -14,7 +14,7 @@ class ScalarControlBar extends BaseControlBar<
     required super.description,
     required this.scalar,
     required this.config,
-    this.scalarContextType = ScalarContextType.value,
+    this.scalarContextType = ScalarViewContext.value,
     super.style,
     //
     super.leftItems = const [
@@ -40,22 +40,25 @@ class _ScalarControlBarState extends _BaseControlBarState<
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
 
   @override
-  Shelf? _getRelatedShelf() {
+  Shelf? _getRelatedModule() {
     return widget.scalar.shelf;
   }
 
 
   @override
-  BlockContextType? get blockContextType => null;
+  BlockViewContext? get blockViewContext => null;
 
   @override
-  ScalarContextType? get scalarContextType => widget.scalarContextType;
+  ScalarViewContext? get scalarContextType => widget.scalarContextType;
 
   @override
-  StageContextType? get stageContextType => null;
+  ProzessViewContext? get prozessViewContext => null;
 
   @override
-  TaskContextType? get taskContextType => null;
+  StageViewContext? get stageViewContext => null;
+
+  @override
+  TaskViewContext? get taskViewContext => null;
 
   @override
   Widget? buildStandardButton(ScalarControlBarItem item) {
@@ -95,12 +98,12 @@ class _ScalarControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: show
               ? () {
-                  DebugViewerDialog.openDebugFilterCriteriaInspector(
-                    context: context,
-                    locationInfo: '',
-                    filterModel: widget.scalar.registeredOrDefaultFilterModel,
-                  );
-                }
+            DebugViewerDialog.openDebugFilterCriteriaInspector(
+              context: context,
+              locationInfo: '',
+              filterModel: widget.scalar.registeredOrDefaultFilterModel,
+            );
+          }
               : null,
         );
 
@@ -114,8 +117,8 @@ class _ScalarControlBarState extends _BaseControlBarState<
           onPressed: item.onPressed == null
               ? null
               : () {
-                  item.onPressed!.call(widget.scalar, type);
-                },
+            item.onPressed!.call(widget.scalar, type);
+          },
         );
       default:
         return null;
@@ -127,8 +130,9 @@ class _ScalarControlBarState extends _BaseControlBarState<
       getClassNameWithoutGenerics(widget.scalar);
 
   @override
-  void addWidgetState({required bool isVisible}) => widget.scalar.ui
-      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) =>
+      widget.scalar.ui
+          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

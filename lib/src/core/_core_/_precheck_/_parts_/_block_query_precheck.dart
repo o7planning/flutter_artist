@@ -10,8 +10,8 @@ enum BlockQueryPrecheck implements Precheck {
   ),
 
   /// Operation not allowed by application business rules.
-  notAllow(
-    precheckCode: PrecheckCode.notAllow,
+  notAllowed(
+    precheckCode: PrecheckCode.notAllowed,
     message: "Cannot query data",
     details: [
       "Application business rules do not allow querying this block at the moment."

@@ -37,7 +37,7 @@ class _ProjectionManager {
             stackTrace: null,
           ),
         );
-        throw _createFatalAppError(errorMessage);
+        throw AppFatalErrorUtils._createFatalAppError(errorMessage);
       }
       _nameToFamilyMap[family.familyName] = family;
       //
@@ -58,7 +58,7 @@ class _ProjectionManager {
               stackTrace: null,
             ),
           );
-          throw _createFatalAppError(errorMessage);
+          throw AppFatalErrorUtils._createFatalAppError(errorMessage);
         }
         _typeToFamilyMap[type] = family;
       }
