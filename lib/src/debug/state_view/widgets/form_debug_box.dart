@@ -8,6 +8,7 @@ import '../options/_debug_form_options.dart';
 import '_debug_box.dart';
 import 'debug_style_utils.dart';
 import 'widgets/class_def_viewable_info_widget.dart';
+import 'widgets/form_mode_info_widget.dart';
 
 class FormDebugBox extends BaseDebugBox {
   final BaseFormModel formModel;
@@ -59,9 +60,8 @@ class FormDebugBox extends BaseDebugBox {
           textStyle: DebugStyleUtils.getTextStyle(context),
         ),
       if (options.showFormMode)
-        IconLabelText(
-          label: "Form Mode: ",
-          text: formModel.formMode.name.toString(),
+        FormModeInfoWidget(
+          formModel: formModel,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle(context),
         ),

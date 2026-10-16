@@ -68,7 +68,7 @@ abstract class WorkNode<
   // ===========================================================================
 
   /// Clears shared node data and resets embedded cache.
-  void clear() {
+  void _clearData() {
     _initData = null;
     _submitResultData = null;
   }

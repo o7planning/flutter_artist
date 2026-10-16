@@ -1,6 +1,6 @@
 part of '../../core.dart';
 
-class _ProzessLoadInitDataExecutionUnit<
+class _ProzessRestartExecutionUnit<
         STAGE_ENUM extends StageEnum, //
         PROZESS_INIT_DATA extends ProzessInitData,
         PROZESS_CONTEXT_DATA extends ProzessContextData>
@@ -8,12 +8,12 @@ class _ProzessLoadInitDataExecutionUnit<
   final XProzess xProzess;
 
   @override
-  final ProzessLoadInitDataIntent<
+  final ProzessRestartIntent<
       STAGE_ENUM, //
       PROZESS_INIT_DATA,
       PROZESS_CONTEXT_DATA> executionIntent;
 
-  _ProzessLoadInitDataExecutionUnit({
+  _ProzessRestartExecutionUnit({
     required this.xProzess,
     required this.executionIntent,
   }) : super(

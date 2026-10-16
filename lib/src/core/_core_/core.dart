@@ -164,7 +164,7 @@ part '_ui_com_/_process_ui_components.dart';
 
 part '__core__/_process_transition_result.dart';
 
-part '__core__/_process_context_data.dart';
+part '__core__/_process_data.dart';
 
 part '__core__/_stage_data.dart';
 
@@ -416,6 +416,8 @@ part '_event_/_scalar_received_event_info.dart';
 
 part '_event_/_block_event_reaction.dart';
 
+part '_dialog_/_process_restart_confirm_dialog.dart';
+
 part '_config_/_filter_model_config.dart';
 
 part '_config_/_filter_model_effective_config.dart';
@@ -437,6 +439,8 @@ part '_core_x_/_x_block.dart';
 part '__core__/__sequence.dart';
 
 part '__core__/__class_def_viewable.dart';
+
+part '__core__/__data_debugable.dart';
 
 part '_core_x_/_x_task.dart';
 
@@ -485,6 +489,8 @@ part '_core_x_/_x_activity_/_x_exec_/__target_task_and_options.dart';
 part '_core_x_/_x_activity_/_x_exec_/__target_stage_and_options.dart';
 
 part '_core_x_/_x_activity_/_x_exec_/_x_activity_stage_load_init_data.dart';
+
+part '_core_x_/_x_activity_/_x_exec_/_x_activity_prozess_start.dart';
 
 part '_core_x_/_x_activity_/_x_exec_/_x_activity_task_load_init_data.dart';
 
@@ -678,7 +684,7 @@ part '_execution_unit_result_/_task_eur/_task_submit_result.dart';
 
 part '_execution_unit_result_/_task_eur/_task_load_init_data_result.dart';
 
-part '_execution_unit_result_/_process_eur/_process_load_init_data_result.dart';
+part '_execution_unit_result_/_process_eur/_process_restart_result.dart';
 
 part '_execution_unit_result_/_process_eur/_process_determine_next_stage_result.dart';
 
@@ -738,7 +744,7 @@ part '_execution_unit_/activity_member/_stage_load_init_data_execution_unit.dart
 
 part '_execution_unit_/activity_member/_task_load_init_data_execution_unit.dart';
 
-part '_execution_unit_/activity_member/_prozess_load_init_data_execution_unit.dart';
+part '_execution_unit_/activity_member/_process_restart_execution_unit.dart';
 
 part '_execution_unit_/activity_member/_prozess_determine_next_stage_execution_unit.dart';
 

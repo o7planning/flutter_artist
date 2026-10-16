@@ -2,9 +2,11 @@ part of '../core.dart';
 
 class ErrorMessageView extends StatelessWidget {
   final String message;
+  final Alignment alignment;
 
   const ErrorMessageView({
     required this.message,
+    this.alignment = Alignment.center,
     super.key,
   });
 
@@ -12,7 +14,7 @@ class ErrorMessageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.red.shade700,
-      alignment: Alignment.center,
+      alignment: alignment,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -24,7 +26,7 @@ class ErrorMessageView extends StatelessWidget {
               message,
               style: const TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.normal,
                 fontSize: 14,
               ),
               textAlign: TextAlign.center,

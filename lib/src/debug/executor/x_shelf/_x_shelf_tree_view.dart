@@ -184,7 +184,7 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
             tooltip = "FormModel: $title";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
           } else {
-            prefixIconData = FaIconConstants.uknownIconData;
+            prefixIconData = FaIconConstants.unknownIconData;
             title = "UKNOWN";
           }
           return Material(

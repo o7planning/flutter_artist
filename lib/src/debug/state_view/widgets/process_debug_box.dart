@@ -3,12 +3,13 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../../core/_core_/core.dart';
 import '../../../core/enums/_enums.dart';
-import '../../utils/_debug.dart';
 import '../options/_debug_process_options.dart';
 import '_debug_box.dart';
 import 'debug_style_utils.dart';
 import 'widgets/active_info_widget.dart';
 import 'widgets/class_def_viewable_info_widget.dart';
+import 'widgets/prozess_context_data_info_widget.dart';
+import 'widgets/prozess_init_data_info_widget.dart';
 import 'widgets/stages_info_widget.dart';
 
 class ProzessDebugBox extends BaseDebugBox {
@@ -99,19 +100,15 @@ class ProzessDebugBox extends BaseDebugBox {
           labelStyle: DebugStyleUtils.getLabelStyle0(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
-      // if (options.showStageHistory)
-      //   IconLabelText(
-      //     label: "History: ",
-      //     text: prozess.stageHistory.isEmpty
-      //         ? "[]"
-      //         : prozess.stageHistory.map((e) => e.stageCode).join(" ➔ "),
-      //     labelStyle: DebugStyleUtils.getLabelStyle(context),
-      //     textStyle: DebugStyleUtils.getTextStyle0(context),
-      //   ),
+      if (options.showInitData)
+        ProzessInitDataInfoWidget(
+          prozess: prozess,
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle0(context),
+        ),
       if (options.showContextData)
-        IconLabelText(
-          label: "Context Data: ",
-          text: prozess.debug.sharedContextInfo,
+        ProzessContextDataInfoWidget(
+          prozess: prozess,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
@@ -162,9 +159,11 @@ class ProzessDebugBox extends BaseDebugBox {
         decoration: BoxDecoration(
           color: isCurrent ? color.withValues(alpha: 0.15) : Colors.transparent,
           borderRadius: BorderRadius.circular(4),
+          // FIX: Keep border width constant (1.0) to prevent subpixel layout shifts
+          // and avoid Flutter's strict fractional overflow detections.
           border: Border.all(
             color: isCurrent ? color : color.withValues(alpha: 0.35),
-            width: isCurrent ? 1.4 : 0.8,
+            width: 1.0,
           ),
         ),
         child: Row(

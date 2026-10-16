@@ -194,7 +194,7 @@ class FilterModelStructureCriteriaBaseViewState
             isMultiOpt = true;
             isMultiSelection = data.selectionType == SelectionType.multi;
           } else {
-            prefixIconData = FaIconConstants.uknownIconData;
+            prefixIconData = FaIconConstants.unknownIconData;
             title = "UNKNOWN";
           }
           return Material(

@@ -10,7 +10,7 @@ sealed class ProzessExecutionIntent<
   ProzessExecutionIntent();
 }
 
-class ProzessLoadInitDataIntent<
+class ProzessRestartIntent<
         STAGE_ENUM extends StageEnum, //
         PROZESS_INIT_DATA extends ProzessInitData,
         PROZESS_CONTEXT_DATA extends ProzessContextData>
@@ -18,10 +18,10 @@ class ProzessLoadInitDataIntent<
         STAGE_ENUM, //
         PROZESS_INIT_DATA,
         PROZESS_CONTEXT_DATA,
-        ProzessLoadInitDataPrecheck,
-        ProzessLoadInitDataResult<STAGE_ENUM, PROZESS_INIT_DATA,
+        ProzessRestartPrecheck,
+        ProzessRestartResult<STAGE_ENUM, PROZESS_INIT_DATA,
             PROZESS_CONTEXT_DATA>> {
-  ProzessLoadInitDataIntent();
+  ProzessRestartIntent();
 }
 
 class ProzessDetermineNextStageIntent<

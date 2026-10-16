@@ -29,6 +29,8 @@ abstract class Prozess<
 
   PROZESS_CONTEXT_DATA? _prozessContextData;
 
+  PROZESS_CONTEXT_DATA? get prozessContextData => _prozessContextData;
+
   late final debug = _ProzessDebugInfo(prozess: this);
 
   final Map<STAGE_ENUM, Stage> __stageMap = {};
@@ -64,6 +66,8 @@ abstract class Prozess<
   int get totalStageEnumCount;
 
   PROZESS_INIT_DATA? _prozessInitData;
+
+  PROZESS_INIT_DATA? get prozessInitData => _prozessInitData;
 
   bool _isStageReexecutionAllowed = false;
 
@@ -395,49 +399,201 @@ abstract class Prozess<
   }
 
   // ***************************************************************************
+  // ***************************************************************************
 
-  void _processStageSubmitResult(
-      NextStageDeterminationOutcome<STAGE_ENUM, StageResultData> result) {
-    if (result.isFinished) {
-      _dataState = ProzessDataStateCompleted();
-      return;
-    }
-    if (result.nextStageEnum != null) {
-      moveToStage(result.nextStageEnum!);
-    }
+  Future<bool> _showConfirmRestartStageDialog() async {
+    return await ProzessRestartConfirmDialog.show(
+      context: FlutterArtistCore.context,
+      prozess: this,
+      targetStage: viewingStage,
+      mode: _RestartConfirmMode.stage,
+    );
   }
 
-  Future<StageLoadInitDataResult> loadViewingStageInitData() async {
+  Future<bool> _showConfirmRestartProzessDialog() async {
+    return await ProzessRestartConfirmDialog.show(
+      context: FlutterArtistCore.context,
+      prozess: this,
+      targetStage: null,
+      mode: _RestartConfirmMode.process,
+    );
+  }
+
+  // ===========================================================================
+  // 🚀 RESTART PROZESS
+  // ===========================================================================
+
+  /// Restarts the entire Prozess from the beginning.
+  Future<ProzessRestartResult> restart({bool askConfirm = true}) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "loadViewingStageInitData",
-      parameters: {},
+      methodName: "restart",
+      parameters: {"askConfirm": askConfirm},
       isLibMethod: true,
     );
-    //
-    executionTrace.addNonControllableCall(
-      codeId: "#123000",
-      caller: this,
-      methodName: "checkBeforeViewingStageLoadInitData",
-      suffixShortDesc: "",
-    );
-    final Actionable<StageLoadInitDataPrecheck> actionable =
-        checkBeforeViewingStageLoadInitData();
+
+    print("~~~~~~~~~~~~~~~~~ CHAY VAO zAY1 ");
+
+    // 1. Precheck
+    final Actionable<ProzessRestartPrecheck> actionable = checkBeforeRestart();
 
     if (!actionable.yes) {
       _addErrorLogActionable(
         executionTrace: executionTrace,
-        traceStepCodeId: "#123100",
-        prefixShortDesc: 'checkBeforeViewingStageLoadInitData()',
+        traceStepCodeId: "#115200",
+        prefixShortDesc: 'checkBeforeRestart()',
         module: module,
         actionableFalse: actionable,
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return StageLoadInitDataResult(precheck: actionable.errCode);
+      return ProzessRestartResult(precheck: actionable.errCode!);
     }
+
+
+
+    // 2. Confirm Dialog
+    if (askConfirm) {
+      print("~~~~~~~~~~~~~~~~~ CHAY VAO zAY2 ");
+
+      bool confirm = await _showConfirmRestartProzessDialog();
+      if (!confirm) {
+        return ProzessRestartResult(precheck: ProzessRestartPrecheck.cancelled);
+      }
+    }
+    print("~~~~~~~~~~~~~~~~~ CHAY VAO zAY3 ");
+    final XActivity xActivity = _XActivityProzessStart(prozess: this);
+    final thisXProzess = xActivity.findXProzessByName(name) as XProzess<
+        STAGE_ENUM, //
+        PROZESS_INIT_DATA,
+        PROZESS_CONTEXT_DATA>;
+    final ProzessRestartIntent<
+            STAGE_ENUM, //
+            PROZESS_INIT_DATA,
+            PROZESS_CONTEXT_DATA> executionIntent =
+        thisXProzess._createAndSetProzessIntentRestart();
+
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
+    await FlutterArtist.executor._executeExecutionUnitQueue();
+    return executionIntent.result;
+  }
+
+  // ===========================================================================
+  // 🔄 RESTART VIEWING STAGE
+  // ===========================================================================
+
+  /// Restarts the currently viewing stage.
+  /// Asks for user confirmation before proceeding.
+  Future<StageLoadInitDataResult> restartViewingStage({
+    bool askConfirm = true,
+  }) async {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "restartViewingStage",
+      parameters: {"askConfirm": askConfirm},
+      isLibMethod: true,
+    );
+
+    // 1. Precheck
+    final Actionable<StageRestartPrecheck> actionable =
+        StageRestartPrecheckUtils.checkBeforeRestartStage(
+      checkBusy: true,
+      isBusy: FlutterArtist.executor.isBusy,
+      targetStage: viewingStage,
+      isRestartAllowed: true,
+    );
+
+    if (!actionable.yes) {
+      _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#126100",
+        prefixShortDesc: 'checkBeforeRestartStage()',
+        module: module,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
+      return StageLoadInitDataResult(precheck: actionable.errCode!);
+    }
+
+    // 2. Confirm Dialog
+    if (askConfirm) {
+      bool confirm = await _showConfirmRestartStageDialog();
+      if (!confirm) {
+        return StageLoadInitDataResult(
+          precheck: StageRestartPrecheck.cancelled,
+        );
+      }
+    }
+
+    // 3. Reset Stage State
+    _resetStageStateInternal(viewingStage!);
+
+    // 4. Load Stage Init Data lại từ đầu (Gọi lại hàm ông đã có)
     return await viewingStage!._loadInitDataAfterPrecheckSuccessful();
   }
+
+  void _resetStageStateInternal(Stage stage) {
+    // Chuyển Stage về Pending thay vì None vì chuẩn bị gọi loadInitData
+    stage._dataState = const StageDataStatePending();
+
+    // Clear Form của Stage đó
+    if (stage.formModel != null) {
+      stage.formModel!
+          ._clearDataWithDataState(formDataState: const FormDataStatePending());
+    }
+
+    // Nếu Restart Stage này, các Stage phía sau nó cũng phải bị reset về None (hủy route cũ)
+    bool pastTargetStage = false;
+    for (var s in _orderedStages) {
+      if (s.stageId == stage.stageId) {
+        pastTargetStage = true;
+        continue;
+      }
+      if (pastTargetStage) {
+        s._dataState = const StageDataStateNone();
+        s._stageRouteStatus = StageRouteStatus.unreached;
+        s.formModel
+            ?._clearDataWithDataState(formDataState: const FormDataStateNone());
+      }
+    }
+
+    // Cập nhật lại Frontier Stage (nếu cần thiết, tuỳ thuộc vào logic tìm Frontier của ông)
+  }
+
+  // ***************************************************************************
+
+  // Future<StageLoadInitDataResult> loadViewingStageInitData() async {
+  //   final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+  //     ownerClassInstance: this,
+  //     methodName: "loadViewingStageInitData",
+  //     parameters: {},
+  //     isLibMethod: true,
+  //   );
+  //   //
+  //   executionTrace.addNonControllableCall(
+  //     codeId: "#123000",
+  //     caller: this,
+  //     methodName: "checkBeforeViewingStageRestart",
+  //     suffixShortDesc: "",
+  //   );
+  //   final Actionable<StageRestartPrecheck> actionable =
+  //       checkBeforeViewingStageRestart();
+  //
+  //   if (!actionable.yes) {
+  //     _addErrorLogActionable(
+  //       executionTrace: executionTrace,
+  //       traceStepCodeId: "#123100",
+  //       prefixShortDesc: 'checkBeforeViewingStageRestart()',
+  //       module: module,
+  //       actionableFalse: actionable,
+  //       showErrSnackBar: true,
+  //       tipDocument: null,
+  //     );
+  //     return StageLoadInitDataResult(precheck: actionable.errCode);
+  //   }
+  //   return await viewingStage!._loadInitDataAfterPrecheckSuccessful();
+  // }
 
   Future<StageSubmitResult> submitViewingStage() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -471,10 +627,6 @@ abstract class Prozess<
     return await viewingStage!._submitAfterPrecheckSuccessful();
   }
 
-  void reset() {
-    // TODO...
-  }
-
   void showDebugContextDataViewerDialog(BuildContext context) {
     // TODO...
   }
@@ -505,14 +657,18 @@ abstract class Prozess<
   // ***************************************************************************
 
   @_PrecheckMethod()
-  Actionable<StageLoadInitDataPrecheck> checkBeforeViewingStageLoadInitData() {
-    return __checkBeforeViewingStageLoadInitData(
+  Actionable<StageRestartPrecheck> checkBeforeViewingStageRestart() {
+    return __checkBeforeViewingStageRestart(
       checkBusy: true,
       targetStage: viewingStage,
     );
   }
 
-  Actionable<StageLoadInitDataPrecheck> __checkBeforeViewingStageLoadInitData({
+  void cancel() {
+    //
+  }
+
+  Actionable<StageRestartPrecheck> __checkBeforeViewingStageRestart({
     required bool checkBusy,
     required Stage? targetStage,
   }) {
@@ -526,19 +682,39 @@ abstract class Prozess<
     final StageDataState targetStageDataState =
         targetStage?.dataState ?? StageDataStateNone();
 
-    return StageLoadInitDataPrecheckUtils.checkBeforeLoadInitData(
+    return StageRestartPrecheckUtils.checkBeforeRestartStage(
       checkBusy: checkBusy,
       isBusy: FlutterArtist.executor.isBusy,
-      targetStageOrder: targetStageOrder,
-      viewingStageOrder: viewingStageOrder,
-      frontierStageOrder: frontierStageOrder,
-      targetStageDataState: targetStageDataState,
-      reexecutionAllowed: reexecutionAllowed,
+      targetStage: targetStage,
+      isRestartAllowed: true,
+      // targetStageOrder: targetStageOrder,
+      // viewingStageOrder: viewingStageOrder,
+      // frontierStageOrder: frontierStageOrder,
+      // targetStageDataState: targetStageDataState,
+      // reexecutionAllowed: reexecutionAllowed,
     );
   }
 
   // ***************************************************************************
   // ***************************************************************************
+
+  @_PrecheckMethod()
+  Actionable<ProzessRestartPrecheck> checkBeforeRestart({
+    bool checkValidate = true,
+  }) {
+    return _checkBeforeRestart(
+      checkBusy: true,
+    );
+  }
+
+  Actionable<ProzessRestartPrecheck> _checkBeforeRestart({
+    required bool checkBusy,
+  }) {
+    return ProzessRestartPrecheckUtils.checkBeforeRestart(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+    );
+  }
 
   @_PrecheckMethod()
   Actionable<StageSubmitPrecheck> checkBeforeViewingStageSubmit({
@@ -589,11 +765,11 @@ abstract class Prozess<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> _unitLoadInitData({
+  Future<void> _unitRestartProzess({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XProzess thisXProzess,
-    required ProzessLoadInitDataIntent<STAGE_ENUM, PROZESS_INIT_DATA,
+    required ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
             PROZESS_CONTEXT_DATA>
         executionIntent,
   }) async {
@@ -603,15 +779,55 @@ abstract class Prozess<
       lastIntentInfo: "Load Init Data",
     );
 
+    print("~~~~~~~~~~~~~~~~~ CHAY VAO zAY4444444444444 ");
+
     final executionResult = executionIntent.resultWrapper._setResult(
-      ProzessLoadInitDataResult<STAGE_ENUM, PROZESS_INIT_DATA,
-          PROZESS_CONTEXT_DATA>(precheck: null),
+      ProzessRestartResult<STAGE_ENUM, PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
+          precheck: null),
       objectCaller: this,
-      methodName: '_unitLoadInitData',
+      methodName: '_unitRestartProzess',
     );
-    PROZESS_INIT_DATA? prozessInitData;
     ProzessErrorInfo? prozessErrorInfo;
     try {
+      executionTrace.addNonControllableCall(
+        codeId: "#116040",
+        caller: this,
+        methodName: '_resetProzessStateInternal',
+        suffixShortDesc: '',
+      );
+      _resetProzessStateInternal();
+    } catch (e, stackTrace) {
+      prozessErrorInfo = ProzessErrorInfo(
+        prozessErrorMethod: ProzessErrorMethod.resetProzessStateInternal,
+        error: e,
+        errorStackTrace: stackTrace,
+      );
+
+      final ErrorInfo errorInfo = _handleError(
+        module: module,
+        methodName: "_resetProzessStateInternal",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+      executionResult._setErrorInfo(errorInfo: errorInfo);
+      // Pending or LoadedStale.
+      _dataState = ProzessDataStateUtils.calculateDataStateOnLoadInitDataError(
+        currentDataState: _dataState,
+        errorInfo: prozessErrorInfo,
+        hasExistingInitData: _prozessInitData != null,
+      );
+      return;
+    }
+    PROZESS_INIT_DATA? prozessInitData;
+    try {
+      executionTrace.addControllableCall(
+        codeId: "#116600",
+        caller: this,
+        methodName: 'performLoadInitData',
+        suffixShortDesc: '',
+      );
       debug._performLoadInitDataCount++;
 
       ApiResult<PROZESS_INIT_DATA> result = await performLoadInitData();
@@ -637,7 +853,7 @@ abstract class Prozess<
       );
 
       final ErrorInfo errorInfo = _handleError(
-        module: null,
+        module: module,
         methodName: "performLoadInitData",
         error: e,
         stackTrace: stackTrace,
@@ -657,6 +873,12 @@ abstract class Prozess<
     // Now `prozessInitData` is not null.
     //
     try {
+      executionTrace.addControllableCall(
+        codeId: "#116700",
+        caller: this,
+        methodName: 'isStageReexecutionAllowed',
+        suffixShortDesc: '',
+      );
       _isStageReexecutionAllowed = isStageReexecutionAllowed(
         prozessInitData: prozessInitData,
       );
@@ -670,7 +892,7 @@ abstract class Prozess<
       );
 
       final ErrorInfo errorInfo = _handleError(
-        module: null,
+        module: module,
         methodName: "isStageReexecutionAllowed",
         error: e,
         stackTrace: stackTrace,
@@ -689,6 +911,12 @@ abstract class Prozess<
     }
     // Create createProzessContextData()
     try {
+      executionTrace.addControllableCall(
+        codeId: "#116800",
+        caller: this,
+        methodName: 'createProzessContextData',
+        suffixShortDesc: '',
+      );
       _prozessContextData = createProzessContextData(
         prozessInitData: prozessInitData,
       );
@@ -700,7 +928,7 @@ abstract class Prozess<
       );
 
       final ErrorInfo errorInfo = _handleError(
-        module: null,
+        module: module,
         methodName: "createProzessContextData",
         error: e,
         stackTrace: stackTrace,
@@ -719,9 +947,27 @@ abstract class Prozess<
     }
     _prozessInitData = prozessInitData;
     _dataState = ProzessDataStateLoadedFresh();
+
+    executionTrace.addInfo(
+      codeId: "#116900",
+      shortDesc: 'Create ${debugObjHtml(ProzessDetermineNextStageIntent)}.',
+    );
     thisXProzess._createAndSetProzessIntentDetermineNextStage(
       prozessInitData: prozessInitData,
     );
+  }
+
+  // ***************************************************************************
+
+  void _resetProzessStateInternal() {
+    _dataState = ProzessDataStatePending();
+    _prozessInitData = null;
+    _prozessContextData?.reset();
+    _viewingStageEnum = null;
+
+    for (var stage in _orderedStages) {
+      stage._resetStageStateInternal();
+    }
   }
 
   // ***************************************************************************
@@ -828,6 +1074,8 @@ abstract class Prozess<
       );
       return;
     }
+    //
+    STAGE_ENUM? determinedNextStageEnum;
     // Call determineNextStage() method.
     try {
       final Stage? currentFrontierStage = findFrontierStage();
@@ -843,8 +1091,7 @@ abstract class Prozess<
           "orderedActiveStageEnums": orderedActiveStageEnums,
         },
       );
-
-      final STAGE_ENUM? determinedNextStageEnum = determineNextStage(
+      determinedNextStageEnum = determineNextStage(
         orderedActiveStageEnums: orderedActiveStageEnums,
         sharedContext: prozessContextData,
         prozessInitData: prozessInitData,
@@ -856,8 +1103,9 @@ abstract class Prozess<
           "determinedNextStageEnum": determinedNextStageEnum,
         },
       );
-
-      // May throw AppError
+      //
+      // May throw AppError.
+      //
       CheckNextStageUtils.checkDeterminedNextStage(
         viewingStageEnum: _viewingStageEnum,
         determinedNextStageEnum: determinedNextStageEnum,
@@ -905,7 +1153,7 @@ abstract class Prozess<
         errorStackTrace: stackTrace,
       );
       final ErrorInfo errorInfo = _handleError(
-        module: null,
+        module: module,
         methodName: "determineNextStage",
         error: e,
         stackTrace: stackTrace,
@@ -921,6 +1169,42 @@ abstract class Prozess<
       );
       return;
     }
+    if (determinedNextStageEnum == null) {
+      try {
+        await onProzessCompleted();
+        //
+        _dataState = ProzessDataStateCompleted();
+      } catch (e, stackTrace) {
+        ProzessErrorInfo prozessErrorInfo = ProzessErrorInfo(
+          prozessErrorMethod: ProzessErrorMethod.determineInitialStage,
+          error: e,
+          errorStackTrace: stackTrace,
+        );
+        final ErrorInfo errorInfo = _handleError(
+          module: module,
+          methodName: "onProzessCompleted",
+          error: e,
+          stackTrace: stackTrace,
+          showSnackBar: true,
+          tipDocument: null,
+        );
+        executionResult._setErrorInfo(errorInfo: errorInfo);
+        // ProzessDataStateTransitioningFailed.
+        _dataState =
+            ProzessDataStateUtils.calculateDataStateOnDetermineNextStageError(
+          currentDataState: _dataState,
+          errorInfo: prozessErrorInfo,
+        );
+        return;
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> onProzessCompleted() async {
+    //
   }
 
   // ***************************************************************************
@@ -930,10 +1214,8 @@ abstract class Prozess<
     // TODO.
   }
 
-  Future<void> loadInitData() async {
-    // TODO.
-  }
-
+  @_PrecheckMethod()
+  @override
   Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo() {
     BaseFormModel? formModel = viewingStage?.formModel;
     return __checkBeforeShowFormInfo(formModel: formModel);
@@ -958,7 +1240,8 @@ abstract class Prozess<
   // ***************************************************************************
 
   void _refreshProzessAfterChangeViewingStage() {
-    ui.refreshAllViews(withStages: true, force: true);
+    module.ui.refreshAllViews();
+    FlutterArtist.storage.ui.refreshAllViews();
   }
 
   // ***************************************************************************

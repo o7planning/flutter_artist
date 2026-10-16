@@ -47,10 +47,14 @@ abstract class BaseInfoWidget extends StatelessWidget {
             child: SimpleSmallIconButton(
               iconData: DebugBtnType.getIconData(btnFunc.btnType),
               iconSize: 14,
-              iconColor: btnFunc.btnType.getColor(context),
-              onPressed: () {
-                btnFunc.onPressed(context);
-              },
+              iconColor: btnFunc.onPressed == null
+                  ? null
+                  : btnFunc.btnType.getColor(context),
+              onPressed: btnFunc.onPressed == null
+                  ? null
+                  : () {
+                      btnFunc.onPressed!.call(context);
+                    },
             ),
           ),
       ],
@@ -60,7 +64,7 @@ abstract class BaseInfoWidget extends StatelessWidget {
 
 class ButtonFunction {
   final DebugBtnType btnType;
-  final Function(BuildContext context) onPressed;
+  final Function(BuildContext context)? onPressed;
 
   ButtonFunction({required this.btnType, required this.onPressed});
 }

@@ -5,7 +5,7 @@ class DebugProzessOptions {
   final bool showDataState;
   final bool showViewingStage;
   final bool showFrontierStage;
-  final bool showStageHistory;
+  final bool showInitData;
   final bool showContextData;
   final bool showStagePipeline;
   final bool showPerformLoadInitDataCount;
@@ -18,7 +18,7 @@ class DebugProzessOptions {
     this.showDataState = true,
     this.showViewingStage = true,
     this.showFrontierStage = true,
-    this.showStageHistory = true,
+    this.showInitData = true,
     this.showContextData = true,
     this.showStagePipeline = true,
     this.showPerformLoadInitDataCount = true,
@@ -32,7 +32,7 @@ class DebugProzessOptions {
     this.showDataState = false,
     this.showViewingStage = false,
     this.showFrontierStage = false,
-    this.showStageHistory = false,
+    this.showInitData = false,
     this.showContextData = false,
     this.showStagePipeline = false,
     this.showPerformLoadInitDataCount = false,

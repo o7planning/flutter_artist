@@ -3,8 +3,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
-import '../../core/utils/__utils.dart';
-import 'class_definition_inspector_dialog.dart';
+import '../../core/widgets/class_linked_button.dart';
 
 /// A diagnostic dialog that inspects and lists all stages of a [Prozess]
 /// across individual rows, highlighting current viewing, frontier, and execution states,
@@ -59,7 +58,7 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
             ),
             const SizedBox(height: 8),
 
-            // Prozess Details (Name, Prozess State added below Name)
+            // Prozess Details
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
               child: Column(
@@ -67,8 +66,7 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
                 children: [
                   _buildProzessNameRow(context, prozess),
                   const SizedBox(height: 4),
-                  _buildMetadataRow(context, "Name:", prozess.name,
-                      isClickable: false),
+                  _buildMetadataRow(context, "Name:", prozess.name),
                   const SizedBox(height: 4),
                   _buildProzessStateRow(context, prozess),
                 ],
@@ -114,7 +112,6 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
 
   Widget _buildProzessNameRow(BuildContext context, Prozess prozess) {
     final colorScheme = Theme.of(context).colorScheme;
-    final String className = getClassNameWithoutGenerics(prozess);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,41 +128,10 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: InkWell(
-            onTap: () {
-              ClassDefinitionInspectorDialog.show(
-                context: context,
-                title: "Prozess Class Definition",
-                targetObject: prozess,
-              );
-            },
-            borderRadius: BorderRadius.circular(4),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Text(
-                      className,
-                      style: TextStyle(
-                        fontFamily: 'monospace',
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary,
-                        decoration: TextDecoration.underline,
-                        decorationColor:
-                            colorScheme.primary.withValues(alpha: 0.5),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Icon(Icons.open_in_new_rounded,
-                      size: 13,
-                      color: colorScheme.primary.withValues(alpha: 0.7)),
-                ],
-              ),
-            ),
+          child: ClassLinkedButton(
+            targetObject: prozess,
+            dialogTitle: "Prozess Class Definition",
+            fontSize: 12,
           ),
         ),
       ],
@@ -203,8 +169,7 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildMetadataRow(BuildContext context, String label, String value,
-      {bool isClickable = false}) {
+  Widget _buildMetadataRow(BuildContext context, String label, String value) {
     final colorScheme = Theme.of(context).colorScheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -288,49 +253,18 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
             ),
             const SizedBox(width: 10),
 
-            // Stage Details (Top: Class Name & Badges, Bottom: Stage Code & State)
+            // Stage Details
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Row 1: Class Name & View/Frontier Badges
+                  // Row 1: Class Name (via ClassLinkedButton) & Badges
                   Row(
                     children: [
-                      InkWell(
-                        onTap: () {
-                          ClassDefinitionInspectorDialog.show(
-                            context: context,
-                            title: "Stage Class Definition",
-                            targetObject: stage,
-                          );
-                        },
-                        borderRadius: BorderRadius.circular(4),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 2, horizontal: 4),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                getClassNameWithoutGenerics(stage),
-                                style: TextStyle(
-                                  fontFamily: 'monospace',
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                  color: colorScheme.primary,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: colorScheme.primary
-                                      .withValues(alpha: 0.5),
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              Icon(Icons.open_in_new_rounded,
-                                  size: 13,
-                                  color: colorScheme.primary
-                                      .withValues(alpha: 0.7)),
-                            ],
-                          ),
-                        ),
+                      ClassLinkedButton(
+                        targetObject: stage,
+                        dialogTitle: "Stage Class Definition",
+                        fontSize: 13,
                       ),
                       if (isViewing) ...[
                         const SizedBox(width: 6),
@@ -345,7 +279,7 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
 
-                  // Row 2: Stage Code & Stage State pushed down to bottom row to prevent text collision
+                  // Row 2: Stage Code & State
                   Padding(
                     padding: const EdgeInsets.only(left: 4),
                     child: Row(

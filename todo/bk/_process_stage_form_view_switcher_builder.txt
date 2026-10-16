@@ -1,0 +1,260 @@
+part of '../../core.dart';
+
+/// Builder class responsible for managing and switching between stage form views inside a [ProzessStageFormViewSwitcher].
+class ProzessStageFormViewSwitcherBuilder extends _ContextProviderView {
+  final QuickSuggestionMode quickSuggestionMode;
+  final List<StageFormViewBuilder> stageFormViewBuilders;
+  final List<StageFormView> stageFormViews;
+
+  const ProzessStageFormViewSwitcherBuilder({
+    super.key,
+    required super.ownerClassInstance,
+    required super.description,
+    required this.stageFormViewBuilders,
+    required this.stageFormViews,
+    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+  });
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ProzessStageFormViewSwitcherBuilderState();
+  }
+}
+
+class _ProzessStageFormViewSwitcherBuilderState
+    extends _ContextProviderViewState<ProzessStageFormViewSwitcherBuilder> {
+  final Set<Stage> _stages = {};
+  final Set<Prozess> _prozesses = {};
+  Stage? _duplicatedStage;
+  Prozess? _targetProzess;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Collect all stages from both StageFormView and StageFormViewBuilder items.
+    final allStages = <Stage>[
+      ...widget.stageFormViews.map((e) => e.formModel.stage),
+      ...widget.stageFormViewBuilders.map((e) => e.formModel.stage),
+    ];
+
+    for (final stage in allStages) {
+      if (_stages.contains(stage)) {
+        _duplicatedStage = stage;
+      }
+      _stages.add(stage);
+      _prozesses.add(stage.prozess);
+    }
+
+    if (_prozesses.length == 1) {
+      _targetProzess = _prozesses.first;
+    }
+  }
+
+  @override
+  ContextProviderViewType get type =>
+      ContextProviderViewType.prozessStageViewSwitcher;
+
+  @override
+  Activity? _getRelatedModule() {
+    return _targetProzess?.activity;
+  }
+
+  @override
+  String getWidgetOwnerClassName() {
+    return _targetProzess?.name ?? "";
+  }
+
+  @override
+  BlockViewContext? get blockViewContext => null;
+
+  @override
+  ScalarViewContext? get scalarContextType => null;
+
+  @override
+  ProzessViewContext? get prozessViewContext => ProzessViewContext.initData;
+
+  @override
+  StageViewContext? get stageViewContext => StageViewContext.form;
+
+  @override
+  TaskViewContext? get taskViewContext => null;
+
+  @override
+  void addWidgetState({required bool isVisible}) {
+    for (final prozess in _prozesses) {
+      prozess.ui._addProzessContentViewWidgetState(
+        widgetState: this,
+        isVisible: isVisible,
+      );
+    }
+  }
+
+  @override
+  void removeWidgetState() {
+    for (final prozess in _prozesses) {
+      prozess.ui._removeProzessContentViewWidgetState(
+        widgetState: this,
+      );
+    }
+  }
+
+  @override
+  Widget buildContent(BuildContext context) {
+    // 1. Validate empty stage form configuration.
+    if (_stages.isEmpty) {
+      return const ErrorMessageView(
+        message:
+            "Configuration Error: No Stage form views were provided to the ProzessStageFormViewSwitcher container.",
+      );
+    }
+    // 2. Validate prozess instance consistency across all stage form views.
+    else if (_prozesses.length > 1) {
+      return const ErrorMessageView(
+        message:
+            "Architectural Violation: All configured Stage form views must belong to the exact same Prozess instance.",
+      );
+    }
+    // 3. Validate duplicate stage form definitions.
+    else if (_duplicatedStage != null) {
+      return ErrorMessageView(
+        message:
+            "Configuration Error: Duplicate Stage form for '${getClassName(_duplicatedStage)}' detected inside ProzessStageFormViewSwitcher.",
+      );
+    }
+
+    final prozess = _targetProzess!;
+
+    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
+      return Stack(
+        children: [
+          _buildSortedFormsStack(prozess),
+          if (prozess.hasError)
+            Positioned(
+              top: 5,
+              right: 5,
+              child: _buildQuickSuggestionButtonsBar(context, prozess),
+            ),
+        ],
+      );
+    } else {
+      return _buildSortedFormsStack(prozess);
+    }
+  }
+
+  /// Builds the sorted form stack utilizing [Offstage] wrapped inside [AnimatedSize]
+  /// to eliminate trailing whitespace while preserving form states, and safely pads
+  /// any unprovided stage views with placeholder widgets to ensure correct index mapping.
+  Widget _buildSortedFormsStack(Prozess prozess) {
+    // If prozess is still pending initialization, render an empty container
+    // to prevent premature form mounting and wasted initialization cycles.
+    if (prozess.dataState.isPending) {
+      return const SizedBox.shrink();
+    }
+
+    // Map stage instances to their corresponding form widgets.
+    final Map<Stage, Widget> formWidgetMap = {};
+
+    for (final view in widget.stageFormViews) {
+      formWidgetMap[view.formModel.stage] = view;
+    }
+    for (final builder in widget.stageFormViewBuilders) {
+      formWidgetMap[builder.formModel.stage] = builder;
+    }
+
+    // Construct sorted widget list matching the prozess's canonical `orderedStages`.
+    // Automatically pad omitted stages with `SizedBox.shrink()` to preserve alignment.
+    final List<Widget> sortedWidgets = [];
+    for (final orderedStage in prozess.orderedStages) {
+      final widgetItem = formWidgetMap[orderedStage];
+      if (widgetItem != null) {
+        sortedWidgets.add(widgetItem);
+      } else {
+        sortedWidgets.add(const SizedBox.shrink());
+      }
+    }
+
+    // Determine current index based on the prozess's viewingStageEnum pointer.
+    final int rawIndex = prozess.orderedStages.indexWhere(
+      (stage) => stage.stageId == prozess.viewingStageEnum,
+    );
+
+    // Validate if the resolved index matches an actual configured stage form view.
+    final bool hasValidViewingStage =
+        rawIndex >= 0 && rawIndex < sortedWidgets.length;
+
+    final List<Widget> finalWidgets = [];
+    if (!hasValidViewingStage) {
+      finalWidgets.add(
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+          child: ErrorMessageView(
+            message:
+                "No active viewing stage form has been determined yet. Please check prozess pipeline state.",
+          ),
+        ),
+      );
+      // Keep all other stage forms offstaged when pipeline has no valid viewing stage
+      finalWidgets.addAll(sortedWidgets.map(
+          (w) => const Offstage(offstage: true, child: SizedBox.shrink())));
+    } else {
+      // Wrap each stage form with Offstage: active index is shown (offstage = false), others are hidden (offstage = true)
+      for (int i = 0; i < sortedWidgets.length; i++) {
+        finalWidgets.add(
+          Offstage(
+            offstage: i != rawIndex,
+            child: sortedWidgets[i],
+          ),
+        );
+      }
+    }
+
+    return _StageFormViewSwitcherScope(
+      child: AnimatedSize(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
+        alignment: Alignment.topCenter,
+        child: Stack(
+          children: finalWidgets,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickSuggestionButtonsBar(
+      BuildContext context, Prozess prozess) {
+    return _QuickSuggestionButtonsBar(
+      children: [
+        _QuickSuggestionButton.error(
+          tooltip: "View Error Diagnostics",
+          onPressed: () {
+            prozess.showProzessErrorViewerDialog(context);
+          },
+        ),
+        _QuickSuggestionButton.requery(
+          tooltip: "Reload Prozess Init Data",
+          onPressed: () async {
+            await prozess.loadInitData();
+          },
+        ),
+      ],
+    );
+  }
+
+  @override
+  void checkAndFreeMemory() {
+    for (final prozess in _prozesses) {
+      FlutterArtist.desk._checkToRemoveActivity(prozess.activity);
+    }
+  }
+
+  @override
+  void executeAfterBuild() {
+    // Do nothing.
+  }
+
+  @override
+  void setBuildingState({required bool isBuilding}) {
+    // Do nothing.
+  }
+}

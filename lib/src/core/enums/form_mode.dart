@@ -2,6 +2,8 @@ part of '_enums.dart';
 
 abstract interface class FormMode {
   String get name;
+
+  bool get isNone;
 }
 
 enum InternalFormMode {
@@ -20,6 +22,17 @@ enum InternalFormMode {
         return "None mode";
       case InternalFormMode.compose:
         return "Compose mode";
+    }
+  }
+
+  bool get isNone {
+    switch (this) {
+      case InternalFormMode.none:
+        return true;
+      case InternalFormMode.creation:
+      case InternalFormMode.edit:
+      case InternalFormMode.compose:
+        return false;
     }
   }
 

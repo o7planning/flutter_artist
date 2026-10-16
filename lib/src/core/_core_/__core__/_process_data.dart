@@ -1,6 +1,6 @@
 part of '../core.dart';
 
-abstract class ProzessInitData {
+abstract class ProzessInitData implements DataDebugable {
   //
 }
 
@@ -8,9 +8,14 @@ class EmptyProzessInitData extends ProzessInitData {
   EmptyProzessInitData._();
 
   factory EmptyProzessInitData() => EmptyProzessInitData._();
+
+  @override
+  Map<String, dynamic> toDebugMap() {
+    return {};
+  }
 }
 
-abstract class ProzessContextData {
+abstract class ProzessContextData implements DataDebugable {
   void _updateFromActiveStages(List<Stage> activeStages) {
     for (Stage activeStage in activeStages) {
       updateFromActiveStage(activeStage: activeStage);
@@ -34,4 +39,9 @@ class EmptyProzessContextData extends ProzessContextData {
   void updateFromActiveStage({
     required Stage activeStage,
   }) {}
+
+  @override
+  Map<String, dynamic> toDebugMap() {
+    return {};
+  }
 }

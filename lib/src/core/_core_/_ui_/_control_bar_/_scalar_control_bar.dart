@@ -64,6 +64,9 @@ class _ScalarControlBarState extends _BaseControlBarState<
   Widget? buildStandardButton(ScalarControlBarItem item) {
     final type = item.type ?? ScalarControlBarItemType.custom;
     switch (type) {
+      case ProzessControlBarItemType.divider:
+        return ControlBarHelper.buildDivider();
+
       case ScalarControlBarItemType.back:
         if (!widget.config.allowBackButton) return null;
         return ControlBarHelper.buildControlBarButton(

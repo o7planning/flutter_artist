@@ -1,11 +1,11 @@
 part of '../../core.dart';
 
-class ProzessLoadInitDataResult<
+class ProzessRestartResult<
         STAGE_ENUM extends StageEnum, //
         PROZESS_INIT_DATA extends ProzessInitData,
         PROZESS_CONTEXT_DATA extends ProzessContextData>
-    extends ExecutionUnitResult<ProzessLoadInitDataPrecheck> {
-  ProzessLoadInitDataResult({required super.precheck});
+    extends ExecutionUnitResult<ProzessRestartPrecheck> {
+  ProzessRestartResult({required super.precheck});
 
   @override
   bool get successForFirst {

@@ -13,8 +13,8 @@ class ProzessControlBarItem
   const ProzessControlBarItem.cancel()
       : super.standard(ProzessControlBarItemType.cancel);
 
-  const ProzessControlBarItem.reset()
-      : super.standard(ProzessControlBarItemType.reset);
+  const ProzessControlBarItem.restartProzess()
+      : super.standard(ProzessControlBarItemType.restartProzess);
 
   const ProzessControlBarItem.debugInspector()
       : super.standard(ProzessControlBarItemType.debugInspector);

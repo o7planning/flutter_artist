@@ -60,6 +60,9 @@ class _FilterControlBarState extends _BaseControlBarState<
   Widget? buildStandardButton(FilterControlBarItem item) {
     final type = item.type ?? FilterControlBarItemType.custom;
     switch (type) {
+      case ProzessControlBarItemType.divider:
+        return ControlBarHelper.buildDivider();
+
       case FilterControlBarItemType.back:
         if (!widget.config.allowBackButton) return null;
         return ControlBarHelper.buildControlBarButton(

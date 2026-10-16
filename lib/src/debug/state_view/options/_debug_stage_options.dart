@@ -3,16 +3,16 @@ class DebugStageOptions {
   final bool showUiActive;
   final bool showStageDataState;
   final bool showPerformLoadInitDataCount;
-  final bool showHasInitData;
-  final bool showHasResultData;
+  final bool showInitData;
+  final bool showResultData;
 
   const DebugStageOptions({
     this.showClassDefinition = true,
     this.showUiActive = true,
     this.showStageDataState = true,
     this.showPerformLoadInitDataCount = true,
-    this.showHasInitData = true,
-    this.showHasResultData = true,
+    this.showInitData = true,
+    this.showResultData = true,
   });
 
   const DebugStageOptions.custom({
@@ -20,7 +20,7 @@ class DebugStageOptions {
     this.showUiActive = false,
     this.showStageDataState = false,
     this.showPerformLoadInitDataCount = false,
-    this.showHasInitData = false,
-    this.showHasResultData = false,
+    this.showInitData = false,
+    this.showResultData = false,
   });
 }

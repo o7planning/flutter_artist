@@ -29,4 +29,5 @@ enum ProzessErrorMethod {
   determineInitialStage,
   contextDataReset,
   contextDataUpdateFromActiveStage,
+  resetProzessStateInternal;
 }

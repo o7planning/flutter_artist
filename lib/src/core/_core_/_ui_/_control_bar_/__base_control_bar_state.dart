@@ -64,11 +64,13 @@ W extends BaseControlBar<OWNER, ITEM_TYPE, CONTROL_BAR_ITEM>>
 
   List<Widget> _buildItemGroup(List<CONTROL_BAR_ITEM> items) {
     List<Widget?> rawWidgets = items.map((item) {
-      if (item.type == BlockControlBarItemType.divider) {
+      // Lấy tên của enum một cách dynamic (hoạt động cho mọi loại ControlBar)
+      final String typeName = item.type?.name ?? 'custom';
+
+      if (typeName == 'divider') {
         return const VerticalDivider(key: ValueKey('__divider_marker__'));
       }
-      if (item.type == BlockControlBarItemType.custom &&
-          item.customWidget != null) {
+      if (typeName == 'custom' && item.customWidget != null) {
         return item.customWidget;
       }
       return buildStandardButton(item);

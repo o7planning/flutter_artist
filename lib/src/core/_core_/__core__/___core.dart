@@ -302,6 +302,4 @@ abstract class _Core {
       isSystemUser: loggedInUser?.isSystemUser ?? false,
     );
   }
-
-
 }

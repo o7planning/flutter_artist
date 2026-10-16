@@ -1,6 +1,10 @@
 part of '../../core.dart';
 
 class ControlBarHelper {
+  static Widget buildDivider() {
+    return VerticalDivider();
+  }
+
   static Widget buildControlBarButton(
     BuildContext context, {
     required ControlBarStyle style,

@@ -63,6 +63,9 @@ class _TaskControlBarState extends _BaseControlBarState<
     final type = item.type ?? TaskControlBarItemType.custom;
 
     switch (type) {
+      case ProzessControlBarItemType.divider:
+        return ControlBarHelper.buildDivider();
+
       case TaskControlBarItemType.back:
         if (!widget.config.allowBackButton) return null;
         return ControlBarHelper.buildControlBarButton(
@@ -137,8 +140,8 @@ class _TaskControlBarState extends _BaseControlBarState<
           iconData: FaIconConstants.formIconData,
           onAction: false,
           onPressed: actionable.yes
-              ? () {
-                  widget.task.showFormModelInspectorDialog();
+              ? () async {
+                  await widget.task.showDebugFormModelInspectorDialog();
                 }
               : null,
         );

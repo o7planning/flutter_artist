@@ -9,6 +9,8 @@ import 'debug_style_utils.dart';
 import 'stage_data_state_info_widget.dart';
 import 'widgets/active_info_widget.dart';
 import 'widgets/class_def_viewable_info_widget.dart';
+import 'widgets/stage_init_data_info_widget.dart';
+import 'widgets/stage_result_data_info_widget.dart';
 
 class StageDebugBox extends BaseDebugBox {
   final Stage stage;
@@ -59,19 +61,17 @@ class StageDebugBox extends BaseDebugBox {
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle(context),
         ),
-      if (options.showHasInitData)
-        IconLabelText(
-          label: "Has Init Data?: ",
-          text: (stage.initData != null).toString(),
+      if (options.showInitData)
+        StageInitDataInfoWidget(
+          stage: stage,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
-          textStyle: DebugStyleUtils.getTextStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
         ),
-      if (options.showHasResultData)
-        IconLabelText(
-          label: "Has Result Data?: ",
-          text: (stage.submitResultData != null).toString(),
+      if (options.showResultData)
+        StageResultDataInfoWidget(
+          stage: stage,
           labelStyle: DebugStyleUtils.getLabelStyle(context),
-          textStyle: DebugStyleUtils.getTextStyle0(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
         ),
     ];
   }

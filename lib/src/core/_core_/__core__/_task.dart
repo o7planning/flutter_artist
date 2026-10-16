@@ -306,6 +306,16 @@ abstract class Task<
         initData: initData!,
         formData: formOutput,
       );
+      result.throwIfError();
+      final RESULT_DATA? data = result.data;
+      if (data == null) {
+        throw ApiError(
+          errorMessage:
+              "${getClassNameWithoutGenerics(this)}.performSubmit() return ResultData null",
+        );
+      }
+      _submitResultData = data;
+      _dataState = TaskDataStateSubmissionAttemptedSuccess();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         module: module,
@@ -317,7 +327,7 @@ abstract class Task<
       );
       executionResult._setErrorInfo(errorInfo: errorInfo);
       //
-      TaskErrorInfo taskErrorInfo = TaskErrorInfo(
+      final TaskErrorInfo taskErrorInfo = TaskErrorInfo(
         taskErrorMethod: TaskErrorMethod.performSubmit,
         error: e,
         errorStackTrace: stackTrace,
@@ -327,7 +337,6 @@ abstract class Task<
       );
       return;
     }
-    _dataState = TaskDataStateSubmissionAttemptedSuccess();
   }
 
   // ===========================================================================
@@ -616,20 +625,23 @@ abstract class Task<
   // ***************************************************************************
 
   @_PrecheckMethod()
+  @override
   Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo() {
     return __checkBeforeShowFormInfo(formModel: formModel);
   }
 
+  @override
   Future<Actionable<ShowFormInfoPrecheck>>
-      showFormModelInspectorDialog() async {
-    Actionable<ShowFormInfoPrecheck> actionable = checkBeforeShowFormInfo();
+  showDebugFormModelInspectorDialog() async {
+    final actionable = checkBeforeShowFormInfo();
     if (!actionable.yes) {
       return actionable;
     }
+    final BuildContext context = FlutterArtistCore.context;
     await DebugFormModelInspectorDialog.show(
-      context: FlutterArtistCore.context,
+      context: context,
       locationInfo: getClassNameWithoutGenerics(this),
-      formModel: formModel as BaseFormModel,
+      formModel: formModel!,
     );
     return actionable;
   }

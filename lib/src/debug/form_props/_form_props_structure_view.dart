@@ -179,7 +179,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
             isDirty = data.isDirty();
             isError = data.formErrorInfo != null;
           } else {
-            prefixIconData = FaIconConstants.uknownIconData;
+            prefixIconData = FaIconConstants.unknownIconData;
             title = "UNKNOWN";
           }
           return Material(

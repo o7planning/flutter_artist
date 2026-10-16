@@ -157,9 +157,9 @@ class _Executor {
           executionIntent: executionUnit.executionIntent,
         );
       }
-      // _ProzessLoadInitDataExecutionUnit
-      else if (executionUnit is _ProzessLoadInitDataExecutionUnit) {
-        await executionUnit.xProzess.prozess._unitLoadInitData(
+      // _ProzessRestartIntent
+      else if (executionUnit is _ProzessRestartExecutionUnit) {
+        await executionUnit.xProzess.prozess._unitRestartProzess(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXProzess: executionUnit.xProzess,

@@ -1,5 +1,7 @@
 part of '../../core.dart';
 
+/// Builder class responsible for rendering the active stage form view dynamically
+/// inside a [ProzessStageFormViewSwitcher] without using stacked or offstage layouts.
 class ProzessStageFormViewSwitcherBuilder extends _ContextProviderView {
   final QuickSuggestionMode quickSuggestionMode;
   final List<StageFormViewBuilder> stageFormViewBuilders;
@@ -104,7 +106,7 @@ class _ProzessStageFormViewSwitcherBuilderState
     if (_stages.isEmpty) {
       return const ErrorMessageView(
         message:
-            "Configuration Error: No Stage form views were provided to the ProzessStageFormsSwitching container.",
+            "Configuration Error: No Stage form views were provided to the ProzessStageFormViewSwitcher container.",
       );
     }
     // 2. Validate prozess instance consistency across all stage form views.
@@ -127,7 +129,7 @@ class _ProzessStageFormViewSwitcherBuilderState
     if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
       return Stack(
         children: [
-          _buildSortedFormsStack(prozess),
+          _buildActiveFormWidget(prozess),
           if (prozess.hasError)
             Positioned(
               top: 5,
@@ -137,13 +139,12 @@ class _ProzessStageFormViewSwitcherBuilderState
         ],
       );
     } else {
-      return _buildSortedFormsStack(prozess);
+      return _buildActiveFormWidget(prozess);
     }
   }
 
-  /// Builds the sorted IndexedStack for stage forms, or a safe empty placeholder
-  /// if the prozess is still pending and has not yet determined its active viewing stage.
-  Widget _buildSortedFormsStack(Prozess prozess) {
+  /// Dynamically renders only the form view corresponding to the prozess's current [viewingStageEnum].
+  Widget _buildActiveFormWidget(Prozess prozess) {
     // If prozess is still pending initialization, render an empty container
     // to prevent premature form mounting and wasted initialization cycles.
     if (prozess.dataState.isPending) {
@@ -160,25 +161,23 @@ class _ProzessStageFormViewSwitcherBuilderState
       formWidgetMap[builder.formModel.stage] = builder;
     }
 
-    // Construct sorted widget list matching the prozess's canonical `orderedStages`.
-    final List<Widget> sortedWidgets = [];
-    for (final orderedStage in prozess.orderedStages) {
-      final widgetItem = formWidgetMap[orderedStage];
-      if (widgetItem != null) {
-        sortedWidgets.add(widgetItem);
-      }
+    final Stage? viewingStage = prozess.viewingStage;
+    if (viewingStage == null) {
+      return const ErrorMessageView(
+        message: "No active viewing stage has been determined yet.",
+      );
     }
 
-    // Determine current index based on the prozess's viewingStageEnum pointer.
-    final int currentIndex = prozess.orderedStages.indexWhere(
-      (stage) => stage.stageId == prozess.viewingStageEnum,
-    );
+    final Widget? activeFormWidget = formWidgetMap[viewingStage];
+    if (activeFormWidget == null) {
+      return ErrorMessageView(
+        message:
+            "Configuration Error: No form view provided for active stage '${getClassName(viewingStage)}'.",
+      );
+    }
 
     return _StageFormViewSwitcherScope(
-      child: IndexedStack(
-        index: currentIndex >= 0 ? currentIndex : 0,
-        children: sortedWidgets,
-      ),
+      child: activeFormWidget,
     );
   }
 
@@ -195,7 +194,7 @@ class _ProzessStageFormViewSwitcherBuilderState
         _QuickSuggestionButton.requery(
           tooltip: "Reload Prozess Init Data",
           onPressed: () async {
-            await prozess.loadInitData();
+            // await prozess.loadInitData();
           },
         ),
       ],

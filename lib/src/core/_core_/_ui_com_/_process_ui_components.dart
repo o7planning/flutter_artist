@@ -9,7 +9,7 @@ class _ProzessUiComponents extends _UiComponents {
   /// The owner prozess bound to this UI coordinator.
   final Prozess prozess;
 
-  // Registered views: ProzessStageSwitchView, etc.
+  // Registered views: ProzessStageViewSwitcher, etc.
   final Map<_ContextProviderViewState, XState> __contentViewWidgetStates = {};
   // Registered views: ProzessControlBar widget states.
   final Map<_ContextProviderViewState, XState> __controlBarWidgetStates = {};
@@ -72,7 +72,7 @@ class _ProzessUiComponents extends _UiComponents {
 
   /// Resolves the class name of any actively visible view for diagnostic inspection.
   String? findVisibleView({bool includeDescendants = true}) {
-    // 1. Content View (ProzessStageSwitchView)
+    // 1. Content View (ProzessStageViewSwitcher)
     final String? componentName = findVisibleContentView(
       includeDescendants: false,
     );
@@ -101,7 +101,7 @@ class _ProzessUiComponents extends _UiComponents {
   // *****************************************************************==========
   // *****************************************************************==========
 
-  /// Checks if any content view (e.g. ProzessStageSwitchView) is actively visible on screen.
+  /// Checks if any content view (e.g. ProzessStageViewSwitcher) is actively visible on screen.
   bool hasVisibleContentView({bool includeDescendants = true}) {
     final String? componentName = findVisibleContentView(
       includeDescendants: includeDescendants,
@@ -266,7 +266,7 @@ class _ProzessUiComponents extends _UiComponents {
     }
   }
 
-  /// Rebuilds all mounted primary content views (ProzessStageSwitchView).
+  /// Rebuilds all mounted primary content views (ProzessStageViewSwitcher).
   void refreshContentViews({bool force = true}) {
     for (final _ContextProviderViewState state
     in __contentViewWidgetStates.keys) {

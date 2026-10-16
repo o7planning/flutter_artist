@@ -9,6 +9,8 @@ import '_debug_box.dart';
 import 'debug_style_utils.dart';
 import 'widgets/class_def_viewable_info_widget.dart';
 import 'widgets/task_data_state_info_widget.dart';
+import 'widgets/task_init_data_info_widget.dart';
+import 'widgets/task_result_data_info_widget.dart';
 
 class TaskDebugBox extends BaseDebugBox {
   final Task task;
@@ -56,12 +58,19 @@ class TaskDebugBox extends BaseDebugBox {
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle(context),
         ),
-      IconLabelText(
-        label: "Has Init Data?: ",
-        text: (task.initData != null).toString(),
-        labelStyle: DebugStyleUtils.getLabelStyle(context),
-        textStyle: DebugStyleUtils.getTextStyle0(context),
-      ),
+      if (options.showInitData)
+        TaskInitDataInfoWidget(
+          task: task,
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
+        ),
+      if (options.showResultData)
+        TaskResultDataInfoWidget(
+          task: task,
+          labelStyle: DebugStyleUtils.getLabelStyle(context),
+          textStyle: DebugStyleUtils.getTextStyle(context),
+        ),
+
     ];
   }
 }

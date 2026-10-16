@@ -208,7 +208,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
               throw "Never Run";
             }
           } else {
-            prefixIconData = FaIconConstants.uknownIconData;
+            prefixIconData = FaIconConstants.unknownIconData;
             title = "UNKNOWN";
           }
           Color itemColor = colorScheme.onSurface;

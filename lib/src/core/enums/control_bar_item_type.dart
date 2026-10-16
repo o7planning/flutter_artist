@@ -42,11 +42,11 @@ enum TaskControlBarItemType {
 enum ProzessControlBarItemType {
   back,
   cancel,
-  reset,
-  loadStageInitData, // Load current Stage
-  submitStage, // Submit current Stage
+  restartProzess, // Restart Prozess
+  restartViewingStage, // Restart Viewing Stage
+  submitViewingStage, // Submit Viewing Stage
   debugInspector,
-  debugForm, //
+  debugViewingStageForm, //
   divider,
   moveToNextStage,
   moveToPreviousStage,

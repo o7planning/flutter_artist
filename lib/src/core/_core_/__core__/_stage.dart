@@ -32,6 +32,7 @@ abstract class Stage<
   final STAGE_ENUM stageId;
 
   final StageConfig config;
+
   final StageEffectiveConfig effectiveConfig;
 
   late final debug = _StageDebugInfo(stage: this);
@@ -145,6 +146,17 @@ abstract class Stage<
   @override
   void _refreshControlBars() {
     ui.refreshControlBars();
+  }
+
+  // ===========================================================================
+
+  void _resetStageStateInternal() {
+    _dataState = const StageDataStateNone();
+     _clearData();
+    _stageRouteStatus = StageRouteStatus.unreached;
+    formModel?._clearDataWithDataState(
+      formDataState: const FormDataStateNone(),
+    );
   }
 
   // ===========================================================================
@@ -517,6 +529,31 @@ abstract class Stage<
       targetStageDataState: _dataState,
       targetFormDataState: formModel?.dataState,
     );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckMethod()
+  @override
+  Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo() {
+    return __checkBeforeShowFormInfo(formModel: formModel);
+  }
+
+  @override
+  Future<Actionable<ShowFormInfoPrecheck>>
+      showDebugFormModelInspectorDialog() async {
+    final actionable = checkBeforeShowFormInfo();
+    if (!actionable.yes) {
+      return actionable;
+    }
+    final BuildContext context = FlutterArtistCore.context;
+    await DebugFormModelInspectorDialog.show(
+      context: context,
+      locationInfo: getClassNameWithoutGenerics(this),
+      formModel: formModel!,
+    );
+    return actionable;
   }
 
   // ***************************************************************************

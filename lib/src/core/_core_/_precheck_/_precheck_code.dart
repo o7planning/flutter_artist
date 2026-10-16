@@ -42,4 +42,5 @@ enum PrecheckCode {
   stageAlreadySubmitted,
   reexecutionNotAllowed,
   stageNotSubmittedYet,
+  stageRestartRestricted,
 }

@@ -77,20 +77,18 @@ abstract class Block<
     CREATION_PRESET extends CreationPreset, // EmptyCreationPreset
     FORM_INPUT extends FormInput // EmptyFormInput
     > extends _Core implements FormHost, ClassDefViewable {
-
   @override
   Map<String, Type> getGenericsInfoMap() {
-     return {
-       "ID": ID,
-       "ITEM": ITEM ,
+    return {
+      "ID": ID,
+      "ITEM": ITEM,
       "ITEM_DETAIL": ITEM_DETAIL,
       "FILTER_INPUT": FILTER_INPUT,
-      "FILTER_CRITERIA": FILTER_CRITERIA ,
-      "CREATION_PRESET": CREATION_PRESET ,
+      "FILTER_CRITERIA": FILTER_CRITERIA,
+      "CREATION_PRESET": CREATION_PRESET,
       "FORM_INPUT": FORM_INPUT
-     };
+    };
   }
-
 
   late final Shelf shelf;
 
@@ -5478,7 +5476,7 @@ abstract class Block<
       },
       isLibMethod: true,
     );
-    return __refreshItemAndSetAsCurrent(
+    return await __refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshFirstItemAndSetAsCurrent",
       item: firstItem,
@@ -5509,7 +5507,7 @@ abstract class Block<
     //
     ITEM? nextItem = nextSiblingItem;
     //
-    return __refreshItemAndSetAsCurrent(
+    return await __refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshNextItemAndSetAsCurrent",
       item: nextItem,
@@ -5540,7 +5538,7 @@ abstract class Block<
     //
     ITEM? previousItem = previousSiblingItem;
     //
-    return __refreshItemAndSetAsCurrent(
+    return await __refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshPreviousItemAndSetAsCurrent",
       item: previousItem,
@@ -5769,7 +5767,7 @@ abstract class Block<
     );
     ITEM? currItem = currentItem;
     //
-    return __deleteItem(
+    return await __deleteItem(
       executionTrace: executionTrace,
       methodName: "deleteCurrentItem",
       item: currItem,
@@ -5797,7 +5795,7 @@ abstract class Block<
       },
       isLibMethod: true,
     );
-    return __deleteItem(
+    return await __deleteItem(
       executionTrace: executionTrace,
       methodName: "deleteItem",
       item: item,
@@ -6814,8 +6812,25 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckMethod()
+  @override
   Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo() {
     return __checkBeforeShowFormInfo(formModel: formModel);
+  }
+
+  @override
+  Future<Actionable<ShowFormInfoPrecheck>>
+      showDebugFormModelInspectorDialog() async {
+    final actionable = checkBeforeShowFormInfo();
+    if (!actionable.yes) {
+      return actionable;
+    }
+    final BuildContext context = FlutterArtistCore.context;
+    await DebugFormModelInspectorDialog.show(
+      context: context,
+      locationInfo: getClassNameWithoutGenerics(this),
+      formModel: formModel!,
+    );
+    return actionable;
   }
 
   // ***************************************************************************

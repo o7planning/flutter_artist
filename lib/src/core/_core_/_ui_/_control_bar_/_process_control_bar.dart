@@ -25,14 +25,17 @@ class ProzessControlBar extends BaseControlBar<
       ProzessControlBarItem.standard(
           ProzessControlBarItemType.moveToPreviousStage),
       ProzessControlBarItem.standard(ProzessControlBarItemType.moveToNextStage),
+      ProzessControlBarItem.standard(ProzessControlBarItemType.divider),
+      ProzessControlBarItem.standard(ProzessControlBarItemType.restartProzess),
     ],
     super.rightItems = const [
-      ProzessControlBarItem.standard(ProzessControlBarItemType.reset),
       ProzessControlBarItem.standard(
-          ProzessControlBarItemType.loadStageInitData),
-      ProzessControlBarItem.standard(ProzessControlBarItemType.submitStage),
+          ProzessControlBarItemType.restartViewingStage),
+      ProzessControlBarItem.standard(
+          ProzessControlBarItemType.submitViewingStage),
       ProzessControlBarItem.standard(ProzessControlBarItemType.divider),
-      ProzessControlBarItem.standard(ProzessControlBarItemType.debugForm),
+      ProzessControlBarItem.standard(
+          ProzessControlBarItemType.debugViewingStageForm),
       ProzessControlBarItem.standard(ProzessControlBarItemType.debugInspector),
     ],
   });
@@ -69,6 +72,9 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
     final type = item.type ?? ProzessControlBarItemType.custom;
 
     switch (type) {
+      case ProzessControlBarItemType.divider:
+        return ControlBarHelper.buildDivider();
+
       case ProzessControlBarItemType.back:
         if (!widget.config.allowBackButton) return null;
         return ControlBarHelper.buildControlBarButton(
@@ -90,7 +96,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           iconData: Icons.cancel_outlined,
           customColor: widget.style.deleteIconColor,
           onPressed: () async {
-            widget.prozess.reset();
+            widget.prozess.cancel();
             if (Navigator.of(context).canPop()) {
               Navigator.of(context).maybePop();
             }
@@ -127,35 +133,34 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
                 }
               : null,
         );
-      case ProzessControlBarItemType.reset:
+      case ProzessControlBarItemType.restartProzess:
         if (!widget.config.allowResetButton) return null;
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Reset All Stages",
-          iconData: FaIconConstants.formCleanIconData,
-          onPressed: () {
-            widget.prozess.reset();
+          tooltip: "Restart Prozess",
+          iconData: FaIconConstants.prozessStartIconData,
+          onPressed: () async {
+            await widget.prozess.restart();
           },
         );
 
-      case ProzessControlBarItemType.loadStageInitData:
+      case ProzessControlBarItemType.restartViewingStage:
         if (!widget.config.allowLoadStageInitDataButton) return null;
-        Actionable actionable =
-            widget.prozess.checkBeforeViewingStageLoadInitData();
+        Actionable actionable = widget.prozess.checkBeforeViewingStageRestart();
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Load Viewing Stage Init-Data",
+          tooltip: "Restart Viewing Stage",
           iconData: FaIconConstants.formRefreshIconData,
           onPressed: actionable.yes
               ? () {
-                  widget.prozess.loadViewingStageInitData();
+                  widget.prozess.restartViewingStage();
                 }
               : null,
         );
 
-      case ProzessControlBarItemType.submitStage:
+      case ProzessControlBarItemType.submitViewingStage:
         if (!widget.config.allowSubmitStageButton) return null;
         Actionable actionable = widget.prozess.checkBeforeViewingStageSubmit(
           // IMPORTANT: `checkValidate:false` to avoid error:
@@ -174,7 +179,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
               : null,
         );
 
-      case ProzessControlBarItemType.debugForm:
+      case ProzessControlBarItemType.debugViewingStageForm:
         if (!widget.config.allowDebugFormButton) return null;
         Actionable actionable = widget.prozess.checkBeforeShowFormInfo();
         return ControlBarHelper.buildControlBarButton(
@@ -184,8 +189,9 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           iconData: FaIconConstants.formIconData,
           onAction: false,
           onPressed: actionable.yes
-              ? () {
-                  widget.prozess.showViewingStageFormModelInspectorDialog();
+              ? () async {
+                  await widget.prozess
+                      .showViewingStageFormModelInspectorDialog();
                 }
               : null,
         );

@@ -6,4 +6,6 @@ abstract interface class StageEnum {
   int get stageOrder;
 
   String get welcomeMessage;
+
+  String get displayTitle;
 }

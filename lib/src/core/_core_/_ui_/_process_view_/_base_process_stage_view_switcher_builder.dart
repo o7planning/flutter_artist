@@ -22,7 +22,7 @@ abstract class _BaseProzessStageViewSwitcherBuilderState<
   /// Abstract contract for subclasses to supply the active target prozess instance.
   Prozess getProzess();
 
-  /// Abstract contract for subclasses to supply the sorted list of stage widgets to render inside the stack.
+  /// Abstract contract for subclasses to supply the sorted list of stage widgets to render.
   List<Widget> buildStageWidgets(BuildContext context);
 
   @override
@@ -73,7 +73,7 @@ abstract class _BaseProzessStageViewSwitcherBuilderState<
       return const SizedBox.shrink();
     }
 
-    final Widget content = _buildSortedStagesStack(context);
+    final Widget content = _buildActiveStageWidget(context);
 
     if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError &&
         prozess.hasError) {
@@ -92,20 +92,31 @@ abstract class _BaseProzessStageViewSwitcherBuilderState<
     return content;
   }
 
-  /// Builds the sorted IndexedStack for stages wrapped inside a switcher scope.
-  Widget _buildSortedStagesStack(BuildContext context) {
-    final List<Widget> sortedWidgets = buildStageWidgets(context);
+  /// Dynamically renders only the stage view corresponding to the prozess's current [viewingStageEnum].
+  Widget _buildActiveStageWidget(BuildContext context) {
+    final List<Widget> stageWidgets = buildStageWidgets(context);
 
     // Determine current index based on the prozess's viewingStageEnum pointer.
-    final int currentIndex = prozess.orderedStages.indexWhere(
+    final int rawIndex = prozess.orderedStages.indexWhere(
       (stage) => stage.stageId == prozess.viewingStageEnum,
     );
 
+    // Validate if the resolved index matches an actual configured stage view.
+    final bool hasValidViewingStage =
+        rawIndex >= 0 && rawIndex < stageWidgets.length;
+
+    if (!hasValidViewingStage) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+        child: ErrorMessageView(
+          message:
+              "No active viewing stage has been determined yet. Please check prozess pipeline state.",
+        ),
+      );
+    }
+
     return _StageViewSwitcherScope(
-      child: IndexedStack(
-        index: currentIndex >= 0 ? currentIndex : 0,
-        children: sortedWidgets,
-      ),
+      child: stageWidgets[rawIndex],
     );
   }
 
@@ -121,7 +132,7 @@ abstract class _BaseProzessStageViewSwitcherBuilderState<
         _QuickSuggestionButton.requery(
           tooltip: "Reload Prozess Init Data",
           onPressed: () async {
-            await prozess.loadInitData();
+            // await prozess.loadInitData();
           },
         ),
       ],

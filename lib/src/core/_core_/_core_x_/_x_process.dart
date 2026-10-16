@@ -99,18 +99,18 @@ class XProzess<
           (_loadInitDataHint == ExecHint.force || isVisible) &&
               !_initDataLoaded;
       if (shouldLoadInitData) {
-        final ProzessLoadInitDataIntent<STAGE_ENUM, PROZESS_INIT_DATA,
+        final ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
             PROZESS_CONTEXT_DATA> intentToUse;
-        if (originExecutionIntent is ProzessLoadInitDataIntent<STAGE_ENUM,
+        if (originExecutionIntent is ProzessRestartIntent<STAGE_ENUM,
             PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>) {
           intentToUse = originExecutionIntent;
         } else {
-          intentToUse = _createAndSetProzessIntentLoadInitData();
+          intentToUse = _createAndSetProzessIntentRestart();
         }
         // IN: DATA STATE = PENDING
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _ProzessLoadInitDataExecutionUnit<STAGE_ENUM,
+          executionUnit: _ProzessRestartExecutionUnit<STAGE_ENUM,
               PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
             xProzess: this,
             executionIntent: intentToUse,
@@ -136,18 +136,18 @@ class XProzess<
           (_loadInitDataHint == ExecHint.force || isVisible) &&
               !_initDataLoaded;
       if (shouldLoadInitData) {
-        final ProzessLoadInitDataIntent<STAGE_ENUM, PROZESS_INIT_DATA,
+        final ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
             PROZESS_CONTEXT_DATA> intentToUse;
-        if (originExecutionIntent is ProzessLoadInitDataIntent<STAGE_ENUM,
+        if (originExecutionIntent is ProzessRestartIntent<STAGE_ENUM,
             PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>) {
           intentToUse = originExecutionIntent;
         } else {
-          intentToUse = _createAndSetProzessIntentLoadInitData();
+          intentToUse = _createAndSetProzessIntentRestart();
         }
         // IN: DATA STATE = PENDING
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _ProzessLoadInitDataExecutionUnit<STAGE_ENUM,
+          executionUnit: _ProzessRestartExecutionUnit<STAGE_ENUM,
               PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
             xProzess: this,
             executionIntent: intentToUse,
@@ -172,18 +172,18 @@ class XProzess<
       final bool shouldLoadInitData =
           (_loadInitDataHint == ExecHint.force) && !_initDataLoaded;
       if (shouldLoadInitData) {
-        final ProzessLoadInitDataIntent<STAGE_ENUM, PROZESS_INIT_DATA,
+        final ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
             PROZESS_CONTEXT_DATA> intentToUse;
-        if (originExecutionIntent is ProzessLoadInitDataIntent<STAGE_ENUM,
+        if (originExecutionIntent is ProzessRestartIntent<STAGE_ENUM,
             PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>) {
           intentToUse = originExecutionIntent;
         } else {
-          intentToUse = _createAndSetProzessIntentLoadInitData();
+          intentToUse = _createAndSetProzessIntentRestart();
         }
         // IN: DATA STATE = LOADED FRESH
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _ProzessLoadInitDataExecutionUnit<STAGE_ENUM,
+          executionUnit: _ProzessRestartExecutionUnit<STAGE_ENUM,
               PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
             xProzess: this,
             executionIntent: intentToUse,
@@ -223,18 +223,18 @@ class XProzess<
       final bool shouldLoadInitData =
           (_loadInitDataHint == ExecHint.force) && !_initDataLoaded;
       if (shouldLoadInitData) {
-        final ProzessLoadInitDataIntent<STAGE_ENUM, PROZESS_INIT_DATA,
+        final ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
             PROZESS_CONTEXT_DATA> intentToUse;
-        if (originExecutionIntent is ProzessLoadInitDataIntent<STAGE_ENUM,
+        if (originExecutionIntent is ProzessRestartIntent<STAGE_ENUM,
             PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>) {
           intentToUse = originExecutionIntent;
         } else {
-          intentToUse = _createAndSetProzessIntentLoadInitData();
+          intentToUse = _createAndSetProzessIntentRestart();
         }
         // IN: DATA STATE = TRANSITIONING FAILED.
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _ProzessLoadInitDataExecutionUnit<STAGE_ENUM,
+          executionUnit: _ProzessRestartExecutionUnit<STAGE_ENUM,
               PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
             xProzess: this,
             executionIntent: intentToUse,
@@ -276,18 +276,18 @@ class XProzess<
       final bool shouldLoadInitData =
           (_loadInitDataHint == ExecHint.force) && !_initDataLoaded;
       if (shouldLoadInitData) {
-        final ProzessLoadInitDataIntent<STAGE_ENUM, PROZESS_INIT_DATA,
+        final ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
             PROZESS_CONTEXT_DATA> intentToUse;
-        if (originExecutionIntent is ProzessLoadInitDataIntent<STAGE_ENUM,
+        if (originExecutionIntent is ProzessRestartIntent<STAGE_ENUM,
             PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>) {
           intentToUse = originExecutionIntent;
         } else {
-          intentToUse = _createAndSetProzessIntentLoadInitData();
+          intentToUse = _createAndSetProzessIntentRestart();
         }
         // IN: DATA STATE = TRANSITIONING SUCCESS.
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _ProzessLoadInitDataExecutionUnit<STAGE_ENUM,
+          executionUnit: _ProzessRestartExecutionUnit<STAGE_ENUM,
               PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
             xProzess: this,
             executionIntent: intentToUse,
@@ -299,8 +299,24 @@ class XProzess<
       }
       // !shouldLoadInitData
       else {
-        if (originExecutionIntent is ProzessDetermineNextStageIntent<STAGE_ENUM,
+        // ProzessRestartIntent
+        if (originExecutionIntent is ProzessRestartIntent<STAGE_ENUM,
             PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>) {
+          return NxtExecutionUnit.yes(
+            debug: debug,
+            executionUnit: _ProzessRestartExecutionUnit<STAGE_ENUM,
+                PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
+              xProzess: this,
+              executionIntent: originExecutionIntent,
+            ),
+            info:
+                "Prozess (5.2.1), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
+                "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+          );
+        }
+        // ProzessDetermineNextStageIntent
+        else if (originExecutionIntent is ProzessDetermineNextStageIntent<
+            STAGE_ENUM, PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _ProzessDetermineNextStageExecutionUnit<STAGE_ENUM,
@@ -309,14 +325,14 @@ class XProzess<
               executionIntent: originExecutionIntent,
             ),
             info:
-                "Prozess (5.2.1), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent\, "
+                "Prozess (5.2.2), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent\, "
                 "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
           );
         }
         return NxtExecutionUnit.no(
           debug: debug,
           info:
-              "Prozess (5.2.2), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
+              "Prozess (5.2.3), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
               "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
         );
       }
@@ -352,10 +368,10 @@ class XProzess<
     );
   }
 
-  ProzessLoadInitDataIntent<STAGE_ENUM, PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>
-      _createAndSetProzessIntentLoadInitData() {
-    final executionIntent = ProzessLoadInitDataIntent<STAGE_ENUM,
-        PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>();
+  ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>
+      _createAndSetProzessIntentRestart() {
+    final executionIntent = ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
+        PROZESS_CONTEXT_DATA>();
     _executionIntent = executionIntent;
     return executionIntent;
   }
@@ -365,9 +381,9 @@ class XProzess<
     required PROZESS_INIT_DATA prozessInitData,
   }) {
     final executionIntent = ProzessDetermineNextStageIntent<STAGE_ENUM,
-        PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
-      // prozessInitData: prozessInitData,
-    );
+            PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
+        // prozessInitData: prozessInitData,
+        );
     _executionIntent = executionIntent;
     return executionIntent;
   }

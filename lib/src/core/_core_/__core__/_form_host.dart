@@ -8,4 +8,8 @@ abstract interface class FormHost {
   /// Note: This represents a necessary condition (condition needed),
   /// but not a sufficient condition, for the form to be enabled and interactive.
   bool isStateReadyForForm();
+
+  Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo();
+
+  Future<Actionable<ShowFormInfoPrecheck>> showDebugFormModelInspectorDialog();
 }

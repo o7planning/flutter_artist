@@ -21,7 +21,7 @@ class StageLoadInitDataIntent<
         STAGE_INIT_DATA,
         STAGE_RESULT_DATA,
         PROZESS_CONTEXT_DATA,
-        StageLoadInitDataPrecheck,
+        StageRestartPrecheck,
         StageLoadInitDataResult> {
   //
 }

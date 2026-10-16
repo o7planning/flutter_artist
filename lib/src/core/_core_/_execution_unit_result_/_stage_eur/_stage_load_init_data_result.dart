@@ -5,7 +5,7 @@ STAGE_ENUM extends StageEnum, //
 INIT_DATA extends StageInitData,
 RESULT_DATA extends StageResultData,
 PROZESS_CONTEXT_DATA extends ProzessContextData>
-    extends ExecutionUnitResult<StageLoadInitDataPrecheck> {
+    extends ExecutionUnitResult<StageRestartPrecheck> {
   StageLoadInitDataResult({required super.precheck});
 
   @override

@@ -137,7 +137,7 @@ class FaIconConstants {
   static const IconData simplePropOrCriterionIconData = Icons.adjust_rounded;
   static const IconData optPropOrCriterionIconData =
       Icons.scatter_plot_outlined;
-  static const IconData uknownIconData = Icons.question_mark;
+  static const IconData unknownIconData = Icons.question_mark;
   static const IconData multiSelectionIconData = Icons.table_rows_outlined;
 
   static const IconData otherClassIconData =
@@ -163,6 +163,10 @@ class FaIconConstants {
 
   static const IconData executionProgressViewIconData =
       cupertino.CupertinoIcons.timelapse;
+
+  static const IconData prozessStartIconData = cupertino.CupertinoIcons.arrow_2_squarepath;
+
+  static const IconData stageStartIconData = cupertino.CupertinoIcons.arrow_counterclockwise_circle;
 
   static const IconData prozessViewIconData = Icons.account_tree_rounded;
 
