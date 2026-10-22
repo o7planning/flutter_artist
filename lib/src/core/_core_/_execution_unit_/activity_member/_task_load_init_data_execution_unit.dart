@@ -1,17 +1,17 @@
 part of '../../core.dart';
 
-class _TaskLoadInitDataExecutionUnit<
+class _TaskRestartExecutionUnit<
     TASK_INIT_DATA extends TaskInitData, //
     TASK_RESULT_DATA extends TaskResultData,
     FORM_INPUT extends FormInput> extends _ActivityMemberExecutionUnit {
   final XTask xTask;
 
   @override
-  final TaskLoadInitDataIntent<
+  final TaskRestartIntent<
       TASK_INIT_DATA, //
       TASK_RESULT_DATA> executionIntent;
 
-  _TaskLoadInitDataExecutionUnit({
+  _TaskRestartExecutionUnit({
     required this.xTask,
     required this.executionIntent,
   }) : super(

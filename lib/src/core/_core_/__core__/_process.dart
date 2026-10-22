@@ -69,7 +69,7 @@ abstract class Prozess<
 
   PROZESS_INIT_DATA? get prozessInitData => _prozessInitData;
 
-  bool _isStageReexecutionAllowed = false;
+  bool _isReexecutionAllowed = false;
 
   Prozess({required this.name}) {
     __initializeProzess();
@@ -219,7 +219,7 @@ abstract class Prozess<
   });
 
   @_AbstractMethodAnnotation()
-  bool isStageReexecutionAllowed({required PROZESS_INIT_DATA prozessInitData});
+  bool isReexecutionAllowed({required PROZESS_INIT_DATA prozessInitData});
 
   // ***************************************************************************
   // ***************************************************************************
@@ -484,7 +484,7 @@ abstract class Prozess<
 
   /// Restarts the currently viewing stage.
   /// Asks for user confirmation before proceeding.
-  Future<StageLoadInitDataResult> restartViewingStage({
+  Future<StageRestartResult> restartViewingStage({
     bool askConfirm = true,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -513,14 +513,14 @@ abstract class Prozess<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return StageLoadInitDataResult(precheck: actionable.errCode!);
+      return StageRestartResult(precheck: actionable.errCode!);
     }
 
     // 2. Confirm Dialog
     if (askConfirm) {
       bool confirm = await _showConfirmRestartStageDialog();
       if (!confirm) {
-        return StageLoadInitDataResult(
+        return StageRestartResult(
           precheck: StageRestartPrecheck.cancelled,
         );
       }
@@ -529,21 +529,18 @@ abstract class Prozess<
     // 3. Reset Stage State
     _resetStageStateInternal(viewingStage!);
 
-    // 4. Load Stage Init Data lại từ đầu (Gọi lại hàm ông đã có)
-    return await viewingStage!._loadInitDataAfterPrecheckSuccessful();
+    // 4. Load Stage Init Data  
+    return await viewingStage!._restartAfterPrecheckSuccessful();
   }
 
   void _resetStageStateInternal(Stage stage) {
-    // Chuyển Stage về Pending thay vì None vì chuẩn bị gọi loadInitData
     stage._dataState = const StageDataStatePending();
 
-    // Clear Form của Stage đó
     if (stage.formModel != null) {
       stage.formModel!
           ._clearDataWithDataState(formDataState: const FormDataStatePending());
     }
 
-    // Nếu Restart Stage này, các Stage phía sau nó cũng phải bị reset về None (hủy route cũ)
     bool pastTargetStage = false;
     for (var s in _orderedStages) {
       if (s.stageId == stage.stageId) {
@@ -557,43 +554,9 @@ abstract class Prozess<
             ?._clearDataWithDataState(formDataState: const FormDataStateNone());
       }
     }
-
-    // Cập nhật lại Frontier Stage (nếu cần thiết, tuỳ thuộc vào logic tìm Frontier của ông)
   }
 
-  // ***************************************************************************
 
-  // Future<StageLoadInitDataResult> loadViewingStageInitData() async {
-  //   final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
-  //     ownerClassInstance: this,
-  //     methodName: "loadViewingStageInitData",
-  //     parameters: {},
-  //     isLibMethod: true,
-  //   );
-  //   //
-  //   executionTrace.addNonControllableCall(
-  //     codeId: "#123000",
-  //     caller: this,
-  //     methodName: "checkBeforeViewingStageRestart",
-  //     suffixShortDesc: "",
-  //   );
-  //   final Actionable<StageRestartPrecheck> actionable =
-  //       checkBeforeViewingStageRestart();
-  //
-  //   if (!actionable.yes) {
-  //     _addErrorLogActionable(
-  //       executionTrace: executionTrace,
-  //       traceStepCodeId: "#123100",
-  //       prefixShortDesc: 'checkBeforeViewingStageRestart()',
-  //       module: module,
-  //       actionableFalse: actionable,
-  //       showErrSnackBar: true,
-  //       tipDocument: null,
-  //     );
-  //     return StageLoadInitDataResult(precheck: actionable.errCode);
-  //   }
-  //   return await viewingStage!._loadInitDataAfterPrecheckSuccessful();
-  // }
 
   Future<StageSubmitResult> submitViewingStage() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -649,7 +612,7 @@ abstract class Prozess<
       targetStageOrder: targetStage?.stageId.stageOrder,
       hasTargetStage: targetStage != null,
       targetStageIsSubmitted: targetStage?.isSubmitted ?? false,
-      reexecutionAllowed: _isStageReexecutionAllowed,
+      reexecutionAllowed: _isReexecutionAllowed,
     );
   }
 
@@ -673,7 +636,7 @@ abstract class Prozess<
     required Stage? targetStage,
   }) {
     final Stage? frontierStage = findFrontierStage();
-    final bool reexecutionAllowed = _isStageReexecutionAllowed;
+    final bool reexecutionAllowed = _isReexecutionAllowed;
 
     final int? targetStageOrder = targetStage?.stageId.stageOrder;
     final int? viewingStageOrder = viewingStage?.stageId.stageOrder;
@@ -779,8 +742,6 @@ abstract class Prozess<
       lastIntentInfo: "Load Init Data",
     );
 
-    print("~~~~~~~~~~~~~~~~~ CHAY VAO zAY4444444444444 ");
-
     final executionResult = executionIntent.resultWrapper._setResult(
       ProzessRestartResult<STAGE_ENUM, PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
           precheck: null),
@@ -876,24 +837,24 @@ abstract class Prozess<
       executionTrace.addControllableCall(
         codeId: "#116700",
         caller: this,
-        methodName: 'isStageReexecutionAllowed',
+        methodName: 'isReexecutionAllowed',
         suffixShortDesc: '',
       );
-      _isStageReexecutionAllowed = isStageReexecutionAllowed(
+      _isReexecutionAllowed = isReexecutionAllowed(
         prozessInitData: prozessInitData,
       );
     } catch (e, stackTrace) {
-      _isStageReexecutionAllowed = false;
+      _isReexecutionAllowed = false;
 
       prozessErrorInfo = ProzessErrorInfo(
-        prozessErrorMethod: ProzessErrorMethod.isStageReexecutionAllowed,
+        prozessErrorMethod: ProzessErrorMethod.isReexecutionAllowed,
         error: e,
         errorStackTrace: stackTrace,
       );
 
       final ErrorInfo errorInfo = _handleError(
         module: module,
-        methodName: "isStageReexecutionAllowed",
+        methodName: "isReexecutionAllowed",
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,

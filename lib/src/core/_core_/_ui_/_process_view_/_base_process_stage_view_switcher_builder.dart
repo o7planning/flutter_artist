@@ -132,7 +132,7 @@ abstract class _BaseProzessStageViewSwitcherBuilderState<
         _QuickSuggestionButton.requery(
           tooltip: "Reload Prozess Init Data",
           onPressed: () async {
-            // await prozess.loadInitData();
+            // await prozess.restart();
           },
         ),
       ],

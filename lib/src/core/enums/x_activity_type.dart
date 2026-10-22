@@ -2,7 +2,7 @@ part of '_enums.dart';
 
 enum XActivityType {
   prozessStart,
-  stageLoadInitData,
+  stageRestart,
   taskLoadInitData,
   naturalExec,
   formViewChange,

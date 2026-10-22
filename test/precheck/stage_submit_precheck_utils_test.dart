@@ -1,16 +1,6 @@
 import 'package:flutter_artist/flutter_artist.dart';
 import 'package:test/test.dart';
 
-//*** /test/stage_submit_precheck_utils_test.dart  ***//
-
-import 'package:flutter_artist/flutter_artist.dart';
-import 'package:test/test.dart';
-
-//*** /test/stage_submit_precheck_utils_test.dart  ***//
-
-import 'package:flutter_artist/flutter_artist.dart';
-import 'package:test/test.dart';
-
 void main() {
   group('StageSubmitPrecheckUtils Tests', () {
     test('Returns busy precheck when executor is busy', () {
@@ -54,7 +44,8 @@ void main() {
         checkBusy: true,
         isBusy: false,
         targetStageOrder: 10,
-        viewingStageOrder: 20, // Mismatched viewing stage
+        viewingStageOrder: 20,
+        // Mismatched viewing stage
         targetStageDataState: const StageDataStateLoadedFresh(),
         checkTargetFormValidate: false,
         hasTargetForm: false,

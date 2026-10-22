@@ -96,7 +96,7 @@ class ProzessDebugBox extends BaseDebugBox {
       if (options.showStageReexecutionAllowed)
         IconLabelText(
           label: "Stage Reexecution Allowed?: ",
-          text: prozess.debug.isStageReexecutionAllowed.toString(),
+          text: prozess.debug.isReexecutionAllowed.toString(),
           labelStyle: DebugStyleUtils.getLabelStyle0(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),

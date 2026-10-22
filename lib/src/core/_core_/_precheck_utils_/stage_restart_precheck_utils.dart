@@ -1,6 +1,5 @@
 part of '__precheck_utils.dart';
 
-
 class StageRestartPrecheckUtils {
   static Actionable<StageRestartPrecheck> checkBeforeRestartStage({
     required bool checkBusy,

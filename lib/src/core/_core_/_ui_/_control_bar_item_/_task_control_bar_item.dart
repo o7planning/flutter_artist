@@ -8,8 +8,8 @@ class TaskControlBarItem extends ControlBarItem<Task, TaskControlBarItemType> {
 
   const TaskControlBarItem.back() : super.standard(TaskControlBarItemType.back);
 
-  const TaskControlBarItem.loadInitData()
-      : super.standard(TaskControlBarItemType.loadInitData);
+  const TaskControlBarItem.restart()
+      : super.standard(TaskControlBarItemType.restart);
 
   const TaskControlBarItem.submit()
       : super.standard(TaskControlBarItemType.submit);

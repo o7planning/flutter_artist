@@ -185,7 +185,7 @@ class _Executor {
         );
       }
       // _StageLoadInitDataExecutionUnit
-      else if (executionUnit is _StageLoadInitDataExecutionUnit) {
+      else if (executionUnit is _StageRestartExecutionUnit) {
         await executionUnit.xStage.stage._unitLoadInitData(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
@@ -221,8 +221,8 @@ class _Executor {
         );
       }
       // _TaskLoadInitDataExecutionUnit
-      else if (executionUnit is _TaskLoadInitDataExecutionUnit) {
-        await executionUnit.xTask.task._unitLoadInitData(
+      else if (executionUnit is _TaskRestartExecutionUnit) {
+        await executionUnit.xTask.task._unitRestart(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXTask: executionUnit.xTask,

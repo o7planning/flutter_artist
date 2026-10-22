@@ -130,8 +130,7 @@ void main() {
         ),
         syncSessionState: null,
         queryHint: QueryHint.none,
-        provideValueContext:
-            false, // Off-screen / hidden UI -> No network call
+        provideValueContext: false, // Off-screen / hidden UI -> No network call
       );
 
       expect(plan.action, isNull);

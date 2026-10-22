@@ -1,6 +1,6 @@
 part of '../../core.dart';
 
-class _StageLoadInitDataExecutionUnit<
+class _StageRestartExecutionUnit<
         STAGE_ENUM extends StageEnum, //
         STAGE_INIT_DATA extends StageInitData,
         STAGE_RESULT_DATA extends StageResultData,
@@ -9,13 +9,13 @@ class _StageLoadInitDataExecutionUnit<
   final XStage xStage;
 
   @override
-  final StageLoadInitDataIntent<
+  final StageRestartIntent<
       STAGE_ENUM, //
       STAGE_INIT_DATA,
       STAGE_RESULT_DATA,
       PROZESS_CONTEXT_DATA> executionIntent;
 
-  _StageLoadInitDataExecutionUnit({
+  _StageRestartExecutionUnit({
     required this.xStage,
     required this.executionIntent,
   }) : super(

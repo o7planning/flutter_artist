@@ -13,7 +13,7 @@ class _ProzessDebugInfo<
 
   int get performLoadInitDataCount => _performLoadInitDataCount;
 
-  bool get isStageReexecutionAllowed => _prozess._isStageReexecutionAllowed;
+  bool get isReexecutionAllowed => _prozess._isReexecutionAllowed;
 
   String get sharedContextInfo {
     return getClassName(_prozess._prozessContextData);

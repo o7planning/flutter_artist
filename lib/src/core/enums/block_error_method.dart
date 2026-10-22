@@ -13,7 +13,10 @@ enum BlockErrorMethod {
 enum TaskErrorMethod {
   performLoadInitData,
   performSubmit,
-  convertToFormOutput;
+  resetTaskStateInternal,
+  convertToFormOutput,
+  isMultipleSubmissionsAllowed,
+  isReexecutionAllowed;
 }
 
 enum StageErrorMethod {
@@ -24,7 +27,7 @@ enum StageErrorMethod {
 
 enum ProzessErrorMethod {
   performLoadInitData,
-  isStageReexecutionAllowed,
+  isReexecutionAllowed,
   createProzessContextData,
   determineInitialStage,
   contextDataReset,

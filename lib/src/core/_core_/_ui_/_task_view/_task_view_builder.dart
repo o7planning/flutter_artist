@@ -97,7 +97,7 @@ class _TaskViewBuilderState extends _ContextProviderViewState<TaskViewBuilder> {
         _QuickSuggestionButton.requery(
           tooltip: "Load Init Data",
           onPressed: () async {
-            await widget.task.loadInitData();
+            await widget.task.restart();
           },
         ),
       ],

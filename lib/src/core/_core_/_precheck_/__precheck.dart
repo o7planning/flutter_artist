@@ -40,7 +40,7 @@ part '_parts_/_stage_form_enable_precheck.dart';
 part '_parts_/_stage_rewind_precheck.dart';
 part '_parts_/_stage_submit_precheck.dart';
 part '_parts_/_task_form_enable_precheck.dart';
-part '_parts_/_task_load_init_data_precheck.dart';
+part '_parts_/_task_restart_precheck.dart';
 part '_parts_/_task_submit_precheck.dart';
 part '_precheck_code.dart';
 

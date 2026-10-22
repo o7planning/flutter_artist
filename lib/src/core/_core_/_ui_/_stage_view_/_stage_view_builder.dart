@@ -105,7 +105,7 @@ class _StageViewBuilderState
         _QuickSuggestionButton.requery(
           tooltip: "Load Init Data",
           onPressed: () async {
-            // await widget.stage.loadInitData();
+            // await widget.stage.restart();
           },
         ),
       ],

@@ -46,7 +46,7 @@ class XStage<
       dynamic,
       dynamic>? get executionIntent => _executionIntent;
 
-  final loadInitDataResult = StageLoadInitDataResult<
+  final stageRestartResult = StageRestartResult<
       STAGE_ENUM, //
       STAGE_INIT_DATA,
       STAGE_RESULT_DATA,
@@ -133,18 +133,18 @@ class XStage<
           (_execHint == ExecHint.force || isVisible) && !_executed;
 
       if (shouldExecute) {
-        final StageLoadInitDataIntent<STAGE_ENUM, STAGE_INIT_DATA,
+        final StageRestartIntent<STAGE_ENUM, STAGE_INIT_DATA,
             STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA> intentToUse;
-        if (originExecutionIntent is StageLoadInitDataIntent<STAGE_ENUM,
+        if (originExecutionIntent is StageRestartIntent<STAGE_ENUM,
             STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
           intentToUse = originExecutionIntent;
         } else {
-          intentToUse = _createAndSetStageIntentLoadInitData();
+          intentToUse = _createAndSetStageIntentRestart();
         }
 
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _StageLoadInitDataExecutionUnit<STAGE_ENUM,
+          executionUnit: _StageRestartExecutionUnit<STAGE_ENUM,
               STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
             xStage: this,
             executionIntent: intentToUse,
@@ -207,18 +207,18 @@ class XStage<
     else if (stageDataState.isFresh) {
       // 3.1. Force execution explicitly requested via ExecHint
       if (_execHint == ExecHint.force) {
-        final StageLoadInitDataIntent<STAGE_ENUM, STAGE_INIT_DATA,
+        final StageRestartIntent<STAGE_ENUM, STAGE_INIT_DATA,
             STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA> intentToUse;
-        if (originExecutionIntent is StageLoadInitDataIntent<STAGE_ENUM,
+        if (originExecutionIntent is StageRestartIntent<STAGE_ENUM,
             STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
           intentToUse = originExecutionIntent;
         } else {
-          intentToUse = _createAndSetStageIntentLoadInitData();
+          intentToUse = _createAndSetStageIntentRestart();
         }
 
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _StageLoadInitDataExecutionUnit<STAGE_ENUM,
+          executionUnit: _StageRestartExecutionUnit<STAGE_ENUM,
               STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
             xStage: this,
             executionIntent: intentToUse,
@@ -278,18 +278,18 @@ class XStage<
           (_execHint == ExecHint.force) && !_executed;
 
       if (shouldReload) {
-        final StageLoadInitDataIntent<STAGE_ENUM, STAGE_INIT_DATA,
+        final StageRestartIntent<STAGE_ENUM, STAGE_INIT_DATA,
             STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA> intentToUse;
-        if (originExecutionIntent is StageLoadInitDataIntent<STAGE_ENUM,
+        if (originExecutionIntent is StageRestartIntent<STAGE_ENUM,
             STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>) {
           intentToUse = originExecutionIntent;
         } else {
-          intentToUse = _createAndSetStageIntentLoadInitData();
+          intentToUse = _createAndSetStageIntentRestart();
         }
 
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _StageLoadInitDataExecutionUnit<STAGE_ENUM,
+          executionUnit: _StageRestartExecutionUnit<STAGE_ENUM,
               STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
             xStage: this,
             executionIntent: intentToUse,
@@ -395,12 +395,12 @@ class XStage<
     return executionIntent;
   }
 
-  StageLoadInitDataIntent<
+  StageRestartIntent<
       STAGE_ENUM, //
       STAGE_INIT_DATA,
       STAGE_RESULT_DATA,
-      PROZESS_CONTEXT_DATA> _createAndSetStageIntentLoadInitData() {
-    final executionIntent = StageLoadInitDataIntent<
+      PROZESS_CONTEXT_DATA> _createAndSetStageIntentRestart() {
+    final executionIntent = StageRestartIntent<
         STAGE_ENUM, //
         STAGE_INIT_DATA,
         STAGE_RESULT_DATA,

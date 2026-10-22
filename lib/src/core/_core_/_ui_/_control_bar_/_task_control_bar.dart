@@ -20,7 +20,7 @@ class TaskControlBar extends BaseControlBar<
       TaskControlBarItem.standard(TaskControlBarItemType.back),
     ],
     super.rightItems = const [
-      TaskControlBarItem.standard(TaskControlBarItemType.loadInitData),
+      TaskControlBarItem.standard(TaskControlBarItemType.restart),
       TaskControlBarItem.standard(TaskControlBarItemType.divider),
       TaskControlBarItem.standard(TaskControlBarItemType.submit),
       TaskControlBarItem.standard(TaskControlBarItemType.divider),
@@ -78,11 +78,11 @@ class _TaskControlBarState extends _BaseControlBarState<
               : null,
         );
 
-      case TaskControlBarItemType.loadInitData:
-        if (!widget.config.allowLoadInitDataButton) {
+      case TaskControlBarItemType.restart:
+        if (!widget.config.allowRestartButton) {
           return null;
         }
-        final actionable = widget.task.checkBeforeLoadInitData(
+        final actionable = widget.task.checkBeforeRestart(
           checkAllow: true,
         );
         return ControlBarHelper.buildControlBarButton(
@@ -93,7 +93,7 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: widget.task.isLoadingInitData,
           onPressed: actionable.yes
               ? () async {
-                  await widget.task.loadInitData();
+                  await widget.task.restart();
                 }
               : null,
         );

@@ -24,7 +24,8 @@ void main() {
         isBusy: false,
         targetStageOrder: 10,
         viewingStageOrder: 10,
-        hasForm: false, // No form attached
+        hasForm: false,
+        // No form attached
         targetStageDataState: const StageDataStateLoadedFresh(),
         targetFormDataState: null,
       );
@@ -37,7 +38,8 @@ void main() {
       final result = StageFormEnablePrecheckUtils.checkFormEnable(
         checkBusy: true,
         isBusy: false,
-        targetStageOrder: null, // Null target order
+        targetStageOrder: null,
+        // Null target order
         viewingStageOrder: 10,
         hasForm: true,
         targetStageDataState: const StageDataStateLoadedFresh(),
@@ -55,8 +57,8 @@ void main() {
         checkBusy: true,
         isBusy: false,
         targetStageOrder: 10,
-        viewingStageOrder:
-            20, // Viewing stage is 20, but target stage is 10 (mismatched)
+        viewingStageOrder: 20,
+        // Viewing stage is 20, but target stage is 10 (mismatched)
         hasForm: true,
         targetStageDataState: const StageDataStateLoadedFresh(),
         targetFormDataState: const FormDataStateLoadedFresh(),
@@ -73,7 +75,8 @@ void main() {
         targetStageOrder: 10,
         viewingStageOrder: 10,
         hasForm: true,
-        targetStageDataState: StageDataStatePending(), // Pending state
+        targetStageDataState: StageDataStatePending(),
+        // Pending state
         targetFormDataState: const FormDataStateLoadedFresh(),
       );
 
@@ -91,8 +94,8 @@ void main() {
         targetStageOrder: 10,
         viewingStageOrder: 10,
         hasForm: true,
-        targetStageDataState:
-            StageDataStateSubmissionAttemptedSuccess(), // Already submitted
+        targetStageDataState: StageDataStateSubmissionAttemptedSuccess(),
+        // Already submitted
         targetFormDataState: const FormDataStateLoadedFresh(),
       );
 

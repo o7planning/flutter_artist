@@ -62,6 +62,14 @@ abstract class Task<
   TaskErrorInfo? get errorInfo => _dataState.errorInfo;
 
   // ===========================================================================
+  // DYNAMIC CONFIGURATION STATE
+  // ===========================================================================
+
+  bool _isReexecutionAllowed = false;
+
+  bool _isMultipleSubmissionsAllowed = false;
+
+  // ===========================================================================
   // Constructor
   // ===========================================================================
 
@@ -106,36 +114,53 @@ abstract class Task<
   // ABSTRACT CONTRACTS
   // ===========================================================================
 
-  /// Asynchronously fetches baseline metadata/context required for this Task.
-  ///
-  /// Symmetric to [performQuery] in Scalar and [performLoadItemDetailById] in Block.
   @_AbstractMethodAnnotation()
   Future<ApiResult<INIT_DATA>> performLoadInitData();
 
-  /// Executes the core submission logic of the Task with user input.
   @_AbstractMethodAnnotation()
   Future<ApiResult<RESULT_DATA>> performSubmit({
     required INIT_DATA initData,
     required FORM_OUTPUT? formData,
   });
 
+  /// Evaluates whether this Task can be restarted to reload data and reset progress.
+  @_AbstractMethodAnnotation()
+  bool isReexecutionAllowed({required INIT_DATA initData});
+
+  /// Evaluates whether this Task permits submitting new forms repeatedly
+  /// without requiring a full restart.
+  @_AbstractMethodAnnotation()
+  bool isMultipleSubmissionsAllowed({required INIT_DATA initData});
+
   // ===========================================================================
-  // EXECUTION UNIT: _unitLoadInitData
+  // INTERNAL STATE RESET
   // ===========================================================================
 
-  /// Internal ExecutionUnit method handling asynchronous INIT_DATA retrieval.
-  ///
-  /// Invoked by [_TaskLoadInitDataExecutionUnit].
+  void _resetTaskStateInternal() {
+    _dataState = const TaskDataStatePending.initial();
+    _clearData(); // Clears _initData and _submitResultData inherited from WorkNode
+
+    if (formModel != null) {
+      formModel!._clearDataWithDataState(
+        formDataState: const FormDataStatePending(),
+      );
+    }
+  }
+
+  // ===========================================================================
+  // EXECUTION UNIT: _unitRestart
+  // ===========================================================================
+
   @_ExecutionUnitMethodAnnotation()
-  Future<void> _unitLoadInitData({
+  Future<void> _unitRestart({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XTask thisXTask,
-    required TaskLoadInitDataIntent<INIT_DATA, RESULT_DATA> executionIntent,
+    required TaskRestartIntent<INIT_DATA, RESULT_DATA> executionIntent,
   }) async {
     __assertThisXTask(thisXTask);
     thisXTask._createAndSetTaskIntentDone(
-      lastIntentInfo: "Load Init Data",
+      lastIntentInfo: "Restart",
     );
 
     final ExecHint initialExecHint = thisXTask.execHint;
@@ -144,16 +169,49 @@ abstract class Task<
     executionTrace.addInfo(
       codeId: "#090100",
       shortDesc:
-          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Load InitData)",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Restart Task)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
-      TaskLoadInitDataResult<INIT_DATA, RESULT_DATA>(precheck: null),
+      TaskRestartResult<INIT_DATA, RESULT_DATA>(precheck: null),
       objectCaller: this,
-      methodName: '_unitLoadInitData',
+      methodName: '_unitRestart',
     );
 
     TaskErrorInfo? taskErrorInfo;
+
+    // 1. Reset Internal State
+    try {
+      executionTrace.addNonControllableCall(
+        codeId: "#090140",
+        caller: this,
+        methodName: '_resetTaskStateInternal',
+        suffixShortDesc: '',
+      );
+      _resetTaskStateInternal();
+    } catch (e, stackTrace) {
+      taskErrorInfo = TaskErrorInfo(
+        taskErrorMethod: TaskErrorMethod.resetTaskStateInternal,
+        error: e,
+        errorStackTrace: stackTrace,
+      );
+
+      final ErrorInfo errorInfo = _handleError(
+        module: module,
+        methodName: "_resetTaskStateInternal",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+      executionResult._setErrorInfo(errorInfo: errorInfo);
+      _dataState = TaskDataStatePending.failed(errorInfo: taskErrorInfo);
+      return;
+    }
+
+    INIT_DATA? taskInitData;
+
+    // 2. Fetch INIT_DATA
     try {
       __refreshLoadingInitDataState(isLoading: true);
 
@@ -167,37 +225,17 @@ abstract class Task<
 
       final ApiResult<INIT_DATA> result = await performLoadInitData();
       result.throwIfError();
+      taskInitData = result.data;
 
-      _initData = result.data;
-      _dataState = const TaskDataStateLoadedFresh();
-
-      executionTrace.addInfo(
-        codeId: "#090240",
-        shortDesc: "INIT_DATA loaded successfully.",
-        parameters: {
-          "initData": _initData,
-          "dataState": _dataState,
-        },
-      );
-
-      // =======================================================================
-      // FORM MODEL LIFECYCLE COORDINATION (Transition from none to pending)
-      // =======================================================================
-      if (formModel != null) {
-        final newFormDataState =
-            TaskFormDataStateUtils.calculateNewLazyDataState(
-          currentFormDataState: formModel!.dataState,
-          taskDataState: _dataState,
-          hasInitData: _initData != null,
-        );
-        executionTrace.addInfo(
-          codeId: "#090300",
-          shortDesc:
-              "Transitioning FormModel state to ${newFormDataState.toBriefInfo()}.",
-        );
-        formModel!._formModelStructure._setFormDataState(
-          formDataState: newFormDataState,
-          error: null,
+      if (taskInitData == null) {
+        if (INIT_DATA == EmptyTaskInitData) {
+          taskInitData = EmptyTaskInitData() as INIT_DATA;
+        }
+      }
+      if (taskInitData == null) {
+        throw AppError(
+          errorMessage:
+              "${getClassName(this)}.performLoadInitData() return null InitData",
         );
       }
     } catch (e, stackTrace) {
@@ -217,14 +255,8 @@ abstract class Task<
       );
 
       executionResult._setErrorInfo(errorInfo: errorInfo);
+      _dataState = TaskDataStatePending.failed(errorInfo: taskErrorInfo);
 
-      // Transition to failed state preserving error info
-      if (_initData != null) {
-        _dataState = TaskDataStateLoadedStale(staleErrorInfo: taskErrorInfo);
-      } else {
-        _dataState = TaskDataStatePending.failed(errorInfo: taskErrorInfo);
-      }
-      // 🛑 Form Data State
       if (formModel != null) {
         final newFormDataState =
             TaskFormDataStateUtils.calculateNewLazyDataState(
@@ -237,14 +269,116 @@ abstract class Task<
           error: null,
         );
       }
+
       executionTrace.addInfo(
         codeId: "#090500",
         shortDesc:
             "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
       );
-    } finally {
       __refreshLoadingInitDataState(isLoading: false);
+      return;
+    }
+
+    // 3.1 Evaluate Dynamic Rules via Initial Data
+    try {
+      executionTrace.addControllableCall(
+        codeId: "#090600",
+        caller: this,
+        methodName: 'isReexecutionAllowed',
+        suffixShortDesc: '',
+      );
+      _isReexecutionAllowed = isReexecutionAllowed(initData: taskInitData);
+    } catch (e, stackTrace) {
+      _isReexecutionAllowed = false;
+
+      taskErrorInfo = TaskErrorInfo(
+        taskErrorMethod: TaskErrorMethod.isReexecutionAllowed,
+        error: e,
+        errorStackTrace: stackTrace,
+      );
+
+      final ErrorInfo errorInfo = _handleError(
+        module: module,
+        methodName: "isReexecutionAllowed",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+
+      executionResult._setErrorInfo(errorInfo: errorInfo);
+      _dataState = TaskDataStatePending.failed(errorInfo: taskErrorInfo);
+      __refreshLoadingInitDataState(isLoading: false);
+      return;
+    }
+
+    // 3.2 Evaluate Dynamic Rules via Initial Data
+    try {
+      executionTrace.addControllableCall(
+        codeId: "#090720",
+        caller: this,
+        methodName: 'isMultipleSubmissionsAllowed',
+        suffixShortDesc: '',
+      );
+      _isMultipleSubmissionsAllowed =
+          isMultipleSubmissionsAllowed(initData: taskInitData);
+    } catch (e, stackTrace) {
+      _isMultipleSubmissionsAllowed = false;
+
+      taskErrorInfo = TaskErrorInfo(
+        taskErrorMethod: TaskErrorMethod.isMultipleSubmissionsAllowed,
+        error: e,
+        errorStackTrace: stackTrace,
+      );
+
+      final ErrorInfo errorInfo = _handleError(
+        module: module,
+        methodName: "isMultipleSubmissionsAllowed",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+
+      executionResult._setErrorInfo(errorInfo: errorInfo);
+      _dataState = TaskDataStatePending.failed(errorInfo: taskErrorInfo);
+      __refreshLoadingInitDataState(isLoading: false);
+      return;
+    }
+
+    // 4. Commit State Transition
+    _initData = taskInitData;
+    _dataState = const TaskDataStateLoadedFresh();
+    __refreshLoadingInitDataState(isLoading: false);
+
+    executionTrace.addInfo(
+      codeId: "#090240",
+      shortDesc: "INIT_DATA loaded successfully.",
+      parameters: {
+        "initData": _initData,
+        "dataState": _dataState,
+        "isReexecutionAllowed": _isReexecutionAllowed,
+        "isMultipleSubmissionsAllowed": _isMultipleSubmissionsAllowed,
+      },
+    );
+
+    // 5. Coordinate FormModel Lifecycle
+    if (formModel != null) {
+      final newFormDataState = TaskFormDataStateUtils.calculateNewLazyDataState(
+        currentFormDataState: formModel!.dataState,
+        taskDataState: _dataState,
+        hasInitData: _initData != null,
+      );
+      executionTrace.addInfo(
+        codeId: "#090300",
+        shortDesc:
+            "Transitioning FormModel state to ${newFormDataState.toBriefInfo()}.",
+      );
+      formModel!._formModelStructure._setFormDataState(
+        formDataState: newFormDataState,
+        error: null,
+      );
     }
   }
 
@@ -344,10 +478,10 @@ abstract class Task<
   // ===========================================================================
 
   /// Triggers asynchronous loading of [INIT_DATA] through the framework queue.
-  Future<TaskLoadInitDataResult<INIT_DATA, RESULT_DATA>> loadInitData() async {
+  Future<TaskRestartResult<INIT_DATA, RESULT_DATA>> restart() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "loadInitData",
+      methodName: "restart",
       parameters: null,
       isLibMethod: true,
     );
@@ -358,7 +492,7 @@ abstract class Task<
     executionTrace.addNonControllableCall(
       codeId: "#114000",
       caller: this,
-      methodName: "__checkBeforeLoadInitData",
+      methodName: "__checkBeforeRestart",
       suffixShortDesc: "",
       parameters: {
         "checkBusy": checkBusyTrue,
@@ -366,8 +500,7 @@ abstract class Task<
       },
     );
 
-    final Actionable<TaskLoadInitDataPrecheck> actionable =
-        __checkBeforeLoadInitData(
+    final Actionable<TaskRestartPrecheck> actionable = __checkBeforeRestart(
       checkBusy: checkBusyTrue,
       checkAllow: checkAllowTrue,
     );
@@ -377,13 +510,13 @@ abstract class Task<
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#114100",
-        prefixShortDesc: '__checkBeforeLoadInitData()',
+        prefixShortDesc: '__checkBeforeRestart()',
         module: activity,
         actionableFalse: actionable,
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return TaskLoadInitDataResult<INIT_DATA, RESULT_DATA>(
+      return TaskRestartResult<INIT_DATA, RESULT_DATA>(
         precheck: actionable.errCode,
       );
     }
@@ -397,7 +530,7 @@ abstract class Task<
         RESULT_DATA,
         FORM_INPUT,
         FORM_OUTPUT>;
-    return thisXTask.loadInitDataResult;
+    return thisXTask.restartResult;
   }
 
   // ***************************************************************************
@@ -411,7 +544,7 @@ abstract class Task<
   // ***************************************************************************
 
   @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult __checkLoadInitDataAllowed() {
+  CheckAllowResult __checkRestartAllowed() {
     try {
       bool allow = isLoadInitDataAllowed();
       return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
@@ -429,18 +562,18 @@ abstract class Task<
   // ***************************************************************************
 
   bool canLoadInitData() {
-    final Actionable<TaskLoadInitDataPrecheck> actionable =
-        checkBeforeLoadInitData(checkAllow: true);
+    final Actionable<TaskRestartPrecheck> actionable =
+        checkBeforeRestart(checkAllow: true);
     return actionable.yes;
   }
 
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<TaskLoadInitDataPrecheck> checkBeforeLoadInitData({
+  Actionable<TaskRestartPrecheck> checkBeforeRestart({
     bool checkAllow = true,
   }) {
-    return __checkBeforeLoadInitData(
+    return __checkBeforeRestart(
       checkBusy: true,
       checkAllow: checkAllow,
     );
@@ -449,18 +582,17 @@ abstract class Task<
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<TaskLoadInitDataPrecheck> __checkBeforeLoadInitData({
+  Actionable<TaskRestartPrecheck> __checkBeforeRestart({
     required bool checkBusy,
     required bool checkAllow,
   }) {
-    return TaskLoadInitDataPrecheckUtils.checkBeforeLoadInitData(
+    return TaskRestartPrecheckUtils.checkBeforeRestart(
       checkBusy: true,
       isBusy: FlutterArtist.executor.isBusy,
       checkAllow: checkAllow,
       taskDataState: dataState,
-      allowReloadInitDataOnFresh: effectiveConfig.allowReloadInitDataOnFresh,
-      allowMultipleSubmissions: effectiveConfig.allowMultipleSubmissions,
-      checkLoadInitDataAllowed: () => __checkLoadInitDataAllowed(),
+      isReexecutionAllowed: _isReexecutionAllowed,
+      checkRestartAllowed: () => __checkRestartAllowed(),
     );
   }
 
@@ -632,7 +764,7 @@ abstract class Task<
 
   @override
   Future<Actionable<ShowFormInfoPrecheck>>
-  showDebugFormModelInspectorDialog() async {
+      showDebugFormModelInspectorDialog() async {
     final actionable = checkBeforeShowFormInfo();
     if (!actionable.yes) {
       return actionable;
@@ -652,9 +784,9 @@ abstract class Task<
 
   void _broadcastScalarHidden() {
     switch (effectiveConfig.onHideAction) {
-      case ScalarHiddenAction.none:
+      case TaskHiddenAction.none:
         break;
-      case ScalarHiddenAction.clear:
+      case TaskHiddenAction.clear:
         break;
     }
   }

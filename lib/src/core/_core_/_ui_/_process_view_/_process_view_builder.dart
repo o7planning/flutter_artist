@@ -98,7 +98,7 @@ class _ProzessViewBuilderState
         _QuickSuggestionButton.requery(
           tooltip: "Load Init Data",
           onPressed: () async {
-            // await widget.prozess.loadInitData();
+            // await widget.prozess.restart();
           },
         ),
       ],

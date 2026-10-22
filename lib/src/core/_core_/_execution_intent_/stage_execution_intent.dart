@@ -11,7 +11,7 @@ sealed class StageExecutionIntent<
   //
 }
 
-class StageLoadInitDataIntent<
+class StageRestartIntent<
         STAGE_ENUM extends StageEnum, //
         STAGE_INIT_DATA extends StageInitData,
         STAGE_RESULT_DATA extends StageResultData,
@@ -22,7 +22,7 @@ class StageLoadInitDataIntent<
         STAGE_RESULT_DATA,
         PROZESS_CONTEXT_DATA,
         StageRestartPrecheck,
-        StageLoadInitDataResult> {
+        StageRestartResult> {
   //
 }
 

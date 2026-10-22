@@ -1,10 +1,10 @@
 part of '../../core.dart';
 
-class TaskLoadInitDataResult<
+class TaskRestartResult<
         INIT_DATA extends TaskInitData, //
         RESULT_DATA extends TaskResultData>
-    extends ExecutionUnitResult<TaskLoadInitDataPrecheck> {
-  TaskLoadInitDataResult({required super.precheck});
+    extends ExecutionUnitResult<TaskRestartPrecheck> {
+  TaskRestartResult({required super.precheck});
 
   @override
   bool get successForFirst {

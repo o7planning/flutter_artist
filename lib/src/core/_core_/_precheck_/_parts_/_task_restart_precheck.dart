@@ -2,7 +2,7 @@ part of '../__precheck.dart';
 
 
 /// Precheck conditions and failure reasons for reloading a Task's initial data.
-enum TaskLoadInitDataPrecheck implements Precheck {
+enum TaskRestartPrecheck implements Precheck {
   /// The system is currently busy executing another operation.
   busy(
     precheckCode: PrecheckCode.busy,
@@ -58,7 +58,7 @@ enum TaskLoadInitDataPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const TaskLoadInitDataPrecheck({
+  const TaskRestartPrecheck({
     required this.precheckCode,
     required this.message,
     required this.details,

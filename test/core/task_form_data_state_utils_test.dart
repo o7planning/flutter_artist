@@ -3,11 +3,6 @@ import 'package:flutter_artist/src/core/error/_task_error_info.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_artist/flutter_artist.dart';
-import 'package:flutter_artist/src/core/error/_task_error_info.dart';
-import 'package:flutter_artist_core/flutter_artist_core.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 void main() {
   group('TaskFormDataStateUtils Tests', () {
     final mockErrorInfo = ErrorInfo(

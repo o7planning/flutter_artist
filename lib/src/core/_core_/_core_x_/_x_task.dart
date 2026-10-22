@@ -41,8 +41,8 @@ class XTask<
     required this.xTaskFormModel,
   });
 
-  final loadInitDataResult =
-      TaskLoadInitDataResult<TASK_INIT_DATA, TASK_RESULT_DATA>(precheck: null);
+  final restartResult =
+      TaskRestartResult<TASK_INIT_DATA, TASK_RESULT_DATA>(precheck: null);
 
   void setExecHint(ExecHint hint) {
     _execHint = hint;
@@ -109,18 +109,18 @@ class XTask<
           (_execHint == ExecHint.force || isVisible) && !_executed;
 
       if (shouldExecute) {
-        final TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
+        final TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
             intentToUse;
         if (originExecutionIntent
-            is TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
+            is TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
           intentToUse = originExecutionIntent;
         } else {
-          intentToUse = _createAndSetTaskIntentLoadInitData();
+          intentToUse = _createAndSetTaskIntentRestart();
         }
         // IN: DATA STATE = PENDING
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _TaskLoadInitDataExecutionUnit<
+          executionUnit: _TaskRestartExecutionUnit<
               TASK_INIT_DATA, //
               TASK_RESULT_DATA,
               FORM_INPUT>(
@@ -149,18 +149,18 @@ class XTask<
           (_execHint == ExecHint.force) && !_executed;
 
       if (shouldExecute) {
-        final TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
+        final TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
             intentToUse;
         if (originExecutionIntent
-            is TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
+            is TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
           intentToUse = originExecutionIntent;
         } else {
-          intentToUse = _createAndSetTaskIntentLoadInitData();
+          intentToUse = _createAndSetTaskIntentRestart();
         }
 
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _TaskLoadInitDataExecutionUnit(
+          executionUnit: _TaskRestartExecutionUnit(
             xTask: this,
             executionIntent: intentToUse,
           ),
@@ -185,18 +185,18 @@ class XTask<
       // IN: DATA STATE = FRESH
       // 3.1. Force execution explicitly requested via ExecHint
       if (_execHint == ExecHint.force) {
-        final TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
+        final TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
             intentToUse;
         if (originExecutionIntent
-            is TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
+            is TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
           intentToUse = originExecutionIntent;
         } else {
-          intentToUse = _createAndSetTaskIntentLoadInitData();
+          intentToUse = _createAndSetTaskIntentRestart();
         }
 
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _TaskLoadInitDataExecutionUnit(
+          executionUnit: _TaskRestartExecutionUnit(
             xTask: this,
             executionIntent: intentToUse,
           ),
@@ -256,17 +256,17 @@ class XTask<
           (_execHint == ExecHint.force || isVisible) && !_executed;
 
       if (shouldReload) {
-        final TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
+        final TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
             intentToUse;
         if (originExecutionIntent
-            is TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
+            is TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
           intentToUse = originExecutionIntent;
         } else {
-          intentToUse = _createAndSetTaskIntentLoadInitData();
+          intentToUse = _createAndSetTaskIntentRestart();
         }
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _TaskLoadInitDataExecutionUnit<TASK_INIT_DATA,
+          executionUnit: _TaskRestartExecutionUnit<TASK_INIT_DATA,
               TASK_RESULT_DATA, FORM_INPUT>(
             xTask: this,
             executionIntent: intentToUse,
@@ -362,10 +362,10 @@ class XTask<
     return executionIntent;
   }
 
-  TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
-      _createAndSetTaskIntentLoadInitData() {
+  TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
+      _createAndSetTaskIntentRestart() {
     final executionIntent =
-        TaskLoadInitDataIntent<TASK_INIT_DATA, TASK_RESULT_DATA>();
+        TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>();
     _executionIntent = executionIntent;
     return executionIntent;
   }

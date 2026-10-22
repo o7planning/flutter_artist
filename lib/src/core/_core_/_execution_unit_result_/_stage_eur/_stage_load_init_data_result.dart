@@ -1,12 +1,12 @@
 part of '../../core.dart';
 
-class StageLoadInitDataResult<
+class StageRestartResult<
 STAGE_ENUM extends StageEnum, //
 INIT_DATA extends StageInitData,
 RESULT_DATA extends StageResultData,
 PROZESS_CONTEXT_DATA extends ProzessContextData>
     extends ExecutionUnitResult<StageRestartPrecheck> {
-  StageLoadInitDataResult({required super.precheck});
+  StageRestartResult({required super.precheck});
 
   @override
   bool get successForFirst {

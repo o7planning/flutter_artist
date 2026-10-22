@@ -249,7 +249,7 @@ abstract class Stage<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XStage thisXStage,
-    required StageLoadInitDataIntent<
+    required StageRestartIntent<
             STAGE_ENUM, //
             INIT_DATA,
             RESULT_DATA,
@@ -268,7 +268,7 @@ abstract class Stage<
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
-      StageLoadInitDataResult<
+      StageRestartResult<
           STAGE_ENUM, //
           INIT_DATA,
           RESULT_DATA,
@@ -467,19 +467,19 @@ abstract class Stage<
 
   /// Triggers resolution of stage baseline data through the execution queue.
   Future<
-      StageLoadInitDataResult<
+      StageRestartResult<
           STAGE_ENUM, //
           INIT_DATA,
           RESULT_DATA,
-          PROZESS_CONTEXT_DATA>> _loadInitDataAfterPrecheckSuccessful() async {
+          PROZESS_CONTEXT_DATA>> _restartAfterPrecheckSuccessful() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "_loadInitDataAfterPrecheckSuccessful",
+      methodName: "_restartAfterPrecheckSuccessful",
       parameters: null,
       isLibMethod: true,
     );
 
-    final XActivity xActivity = _XActivityStageLoadInitData(stage: this);
+    final XActivity xActivity = _XActivityStageRestart(stage: this);
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();
 
@@ -490,7 +490,7 @@ abstract class Stage<
         PROZESS_CONTEXT_DATA,
         FORM_INPUT,
         FORM_OUTPUT>;
-    return thisXStage.loadInitDataResult;
+    return thisXStage.stageRestartResult;
   }
 
   // ===========================================================================

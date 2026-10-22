@@ -57,7 +57,8 @@ void main() {
         isBusy: false,
         targetStageOrder: 10,
         hasTargetStage: true,
-        targetStageIsSubmitted: false, // Not yet submitted
+        targetStageIsSubmitted: false,
+        // Not yet submitted
         reexecutionAllowed: true,
       );
 

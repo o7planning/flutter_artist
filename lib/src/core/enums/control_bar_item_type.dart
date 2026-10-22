@@ -32,7 +32,7 @@ enum FilterControlBarItemType {
 
 enum TaskControlBarItemType {
   back,
-  loadInitData,
+  restart,
   submit,
   divider,
   debugForm,

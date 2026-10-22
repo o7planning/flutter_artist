@@ -17,7 +17,7 @@ class XProzess<
 
   int get xModuleId => xActivity.xModuleId;
 
-  ExecHint _loadInitDataHint = ExecHint.none;
+  ExecHint _restartHint = ExecHint.none;
 
   bool _initDataLoaded = false;
 
@@ -96,7 +96,7 @@ class XProzess<
     // =========================================================================
     if (prozessDataState.isPending) {
       final bool shouldLoadInitData =
-          (_loadInitDataHint == ExecHint.force || isVisible) &&
+          (_restartHint == ExecHint.force || isVisible) &&
               !_initDataLoaded;
       if (shouldLoadInitData) {
         final ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
@@ -117,14 +117,14 @@ class XProzess<
           ),
           info:
               "Prozess (1.1), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+              "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
               "Prozess (1.2), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
-              "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+              "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
         );
       }
     }
@@ -133,7 +133,7 @@ class XProzess<
     // =========================================================================
     else if (prozessDataState.isStale) {
       final bool shouldLoadInitData =
-          (_loadInitDataHint == ExecHint.force || isVisible) &&
+          (_restartHint == ExecHint.force || isVisible) &&
               !_initDataLoaded;
       if (shouldLoadInitData) {
         final ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
@@ -154,14 +154,14 @@ class XProzess<
           ),
           info:
               "Prozess (2.1), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+              "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
         );
       } else {
         return NxtExecutionUnit.no(
           debug: debug,
           info:
               "Prozess (2.2), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
-              "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+              "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
         );
       }
     }
@@ -170,7 +170,7 @@ class XProzess<
     // =========================================================================
     else if (prozessDataState.isFresh) {
       final bool shouldLoadInitData =
-          (_loadInitDataHint == ExecHint.force) && !_initDataLoaded;
+          (_restartHint == ExecHint.force) && !_initDataLoaded;
       if (shouldLoadInitData) {
         final ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
             PROZESS_CONTEXT_DATA> intentToUse;
@@ -190,7 +190,7 @@ class XProzess<
           ),
           info:
               "Prozess (3.1), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+              "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
         );
       } else {
         if (originExecutionIntent is ProzessDetermineNextStageIntent<STAGE_ENUM,
@@ -204,14 +204,14 @@ class XProzess<
             ),
             info:
                 "Prozess (3.2.1), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+                "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
                 "Prozess (3.2.2), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+                "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
           );
         }
       }
@@ -221,7 +221,7 @@ class XProzess<
     // =========================================================================
     else if (prozessDataState.isTransitioningFailed) {
       final bool shouldLoadInitData =
-          (_loadInitDataHint == ExecHint.force) && !_initDataLoaded;
+          (_restartHint == ExecHint.force) && !_initDataLoaded;
       if (shouldLoadInitData) {
         final ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
             PROZESS_CONTEXT_DATA> intentToUse;
@@ -241,7 +241,7 @@ class XProzess<
           ),
           info:
               "Prozess (4.1), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+              "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
         );
       }
       // !shouldLoadInitData
@@ -257,14 +257,14 @@ class XProzess<
             ),
             info:
                 "Prozess (4.2.1), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+                "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
           );
         } else {
           return NxtExecutionUnit.no(
             debug: debug,
             info:
                 "Prozess (4.2.2), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+                "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
           );
         }
       }
@@ -274,7 +274,7 @@ class XProzess<
     // =========================================================================
     else if (prozessDataState.isTransitioningSuccess) {
       final bool shouldLoadInitData =
-          (_loadInitDataHint == ExecHint.force) && !_initDataLoaded;
+          (_restartHint == ExecHint.force) && !_initDataLoaded;
       if (shouldLoadInitData) {
         final ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
             PROZESS_CONTEXT_DATA> intentToUse;
@@ -294,7 +294,7 @@ class XProzess<
           ),
           info:
               "Prozess (5.1), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+              "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
         );
       }
       // !shouldLoadInitData
@@ -311,7 +311,7 @@ class XProzess<
             ),
             info:
                 "Prozess (5.2.1), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+                "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
           );
         }
         // ProzessDetermineNextStageIntent
@@ -326,14 +326,14 @@ class XProzess<
             ),
             info:
                 "Prozess (5.2.2), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent\, "
-                "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+                "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
           );
         }
         return NxtExecutionUnit.no(
           debug: debug,
           info:
               "Prozess (5.2.3), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
-              "dataState: ${prozessDataState.toBriefInfo()}, loadInitDataHint: $_loadInitDataHint, isVisible: $isVisible",
+              "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
         );
       }
     }

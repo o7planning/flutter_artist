@@ -9,14 +9,14 @@ sealed class TaskBaseExecutionIntent<
   TaskBaseExecutionIntent();
 }
 
-class TaskLoadInitDataIntent<
+class TaskRestartIntent<
     TASK_INIT_DATA extends TaskInitData, //
     TASK_RESULT_DATA extends TaskResultData> extends TaskBaseExecutionIntent<
     TASK_INIT_DATA,
     TASK_RESULT_DATA, //
-    TaskLoadInitDataPrecheck,
-    TaskLoadInitDataResult<TASK_INIT_DATA, TASK_RESULT_DATA>> {
-  TaskLoadInitDataIntent();
+    TaskRestartPrecheck,
+    TaskRestartResult<TASK_INIT_DATA, TASK_RESULT_DATA>> {
+  TaskRestartIntent();
 }
 
 class TaskSubmitIntent<
