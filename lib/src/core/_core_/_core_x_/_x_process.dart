@@ -96,8 +96,7 @@ class XProzess<
     // =========================================================================
     if (prozessDataState.isPending) {
       final bool shouldLoadInitData =
-          (_restartHint == ExecHint.force || isVisible) &&
-              !_initDataLoaded;
+          (_restartHint == ExecHint.force || isVisible) && !_initDataLoaded;
       if (shouldLoadInitData) {
         final ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
             PROZESS_CONTEXT_DATA> intentToUse;
@@ -133,8 +132,7 @@ class XProzess<
     // =========================================================================
     else if (prozessDataState.isStale) {
       final bool shouldLoadInitData =
-          (_restartHint == ExecHint.force || isVisible) &&
-              !_initDataLoaded;
+          (_restartHint == ExecHint.force || isVisible) && !_initDataLoaded;
       if (shouldLoadInitData) {
         final ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
             PROZESS_CONTEXT_DATA> intentToUse;
@@ -341,15 +339,30 @@ class XProzess<
     // 6. COMPLETED.
     // =========================================================================
     else if (prozessDataState.isCompleted) {
+      // ProzessRestartIntent
+      if (originExecutionIntent is ProzessRestartIntent<STAGE_ENUM,
+          PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>) {
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _ProzessRestartExecutionUnit<STAGE_ENUM,
+              PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
+            xProzess: this,
+            executionIntent: originExecutionIntent,
+          ),
+          info:
+              "Prozess (6.1), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
+              "dataState: ${prozessDataState.toBriefInfo()}, restartHint: $_restartHint, isVisible: $isVisible",
+        );
+      }
       return NxtExecutionUnit.no(
         debug: debug,
         info:
-            "Prozess (6.0), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
+            "Prozess (6.2), ${getClassNameWithoutGenerics(prozess)}, _executionIntent: $originExecutionIntent, "
             "dataState: ${prozessDataState.toBriefInfo()}, isVisible: $isVisible",
       );
     }
     // =========================================================================
-    // 77. OTHERS
+    // 7. OTHERS
     // =========================================================================
     return NxtExecutionUnit.no(
       debug: debug,

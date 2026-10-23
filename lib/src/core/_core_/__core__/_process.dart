@@ -432,8 +432,6 @@ abstract class Prozess<
       isLibMethod: true,
     );
 
-    print("~~~~~~~~~~~~~~~~~ CHAY VAO zAY1 ");
-
     // 1. Precheck
     final Actionable<ProzessRestartPrecheck> actionable = checkBeforeRestart();
 
@@ -450,18 +448,13 @@ abstract class Prozess<
       return ProzessRestartResult(precheck: actionable.errCode!);
     }
 
-
-
     // 2. Confirm Dialog
     if (askConfirm) {
-      print("~~~~~~~~~~~~~~~~~ CHAY VAO zAY2 ");
-
       bool confirm = await _showConfirmRestartProzessDialog();
       if (!confirm) {
         return ProzessRestartResult(precheck: ProzessRestartPrecheck.cancelled);
       }
     }
-    print("~~~~~~~~~~~~~~~~~ CHAY VAO zAY3 ");
     final XActivity xActivity = _XActivityProzessStart(prozess: this);
     final thisXProzess = xActivity.findXProzessByName(name) as XProzess<
         STAGE_ENUM, //
@@ -529,7 +522,7 @@ abstract class Prozess<
     // 3. Reset Stage State
     _resetStageStateInternal(viewingStage!);
 
-    // 4. Load Stage Init Data  
+    // 4. Load Stage Init Data
     return await viewingStage!._restartAfterPrecheckSuccessful();
   }
 
@@ -555,8 +548,6 @@ abstract class Prozess<
       }
     }
   }
-
-
 
   Future<StageSubmitResult> submitViewingStage() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -636,25 +627,12 @@ abstract class Prozess<
     required Stage? targetStage,
   }) {
     final Stage? frontierStage = findFrontierStage();
-    final bool reexecutionAllowed = _isReexecutionAllowed;
-
-    final int? targetStageOrder = targetStage?.stageId.stageOrder;
-    final int? viewingStageOrder = viewingStage?.stageId.stageOrder;
-    final int? frontierStageOrder = frontierStage?.stageId.stageOrder;
-
-    final StageDataState targetStageDataState =
-        targetStage?.dataState ?? StageDataStateNone();
 
     return StageRestartPrecheckUtils.checkBeforeRestartStage(
       checkBusy: checkBusy,
       isBusy: FlutterArtist.executor.isBusy,
       targetStage: targetStage,
       isRestartAllowed: true,
-      // targetStageOrder: targetStageOrder,
-      // viewingStageOrder: viewingStageOrder,
-      // frontierStageOrder: frontierStageOrder,
-      // targetStageDataState: targetStageDataState,
-      // reexecutionAllowed: reexecutionAllowed,
     );
   }
 
