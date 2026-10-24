@@ -4,8 +4,8 @@ class WelcomeProzessStageViewSwitcherBuilder
     extends _BaseProzessStageViewSwitcherBuilder {
   final Prozess prozess;
   final Widget Function(
-          BuildContext context, Stage currentStage, String promptMessage)?
-      customContentBuilder;
+      BuildContext context, Stage currentStage, String promptMessage)?
+  customContentBuilder;
 
   const WelcomeProzessStageViewSwitcherBuilder({
     super.key,
@@ -47,8 +47,8 @@ class _WelcomeProzessStageViewSwitcherBuilderState
 class _DefaultWelcomeStageCard extends StatelessWidget {
   final Stage stage;
   final Widget Function(
-          BuildContext context, Stage currentStage, String promptMessage)?
-      customContentBuilder;
+      BuildContext context, Stage currentStage, String promptMessage)?
+  customContentBuilder;
 
   const _DefaultWelcomeStageCard({
     required this.stage,
@@ -94,7 +94,8 @@ class _DefaultWelcomeStageCard extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              "Stage Code: ${stageEnum.stageCode} (Order:${stageEnum.stageOrder})",
+              "Stage Code: ${stageEnum.stageCode} (Order:${stageEnum
+                  .stageOrder})",
               style: const TextStyle(
                 fontSize: 14,
                 color: Colors.grey,

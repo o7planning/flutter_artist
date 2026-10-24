@@ -70,7 +70,6 @@ class TaskDebugBox extends BaseDebugBox {
           labelStyle: DebugStyleUtils.getLabelStyle(context),
           textStyle: DebugStyleUtils.getTextStyle(context),
         ),
-
     ];
   }
 }

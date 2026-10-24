@@ -11,12 +11,11 @@ class ProzessControlBarConfig {
   final bool allowDebugInspectorButton;
   final bool allowDebugFormButton;
 
-
   const ProzessControlBarConfig({
     this.allowBackButton = false,
     this.allowCancelButton = false,
-    this.allowMoveToPreviousStageButton= false,
-    this.allowMoveToNextStageButton=false,
+    this.allowMoveToPreviousStageButton = false,
+    this.allowMoveToNextStageButton = false,
     this.allowResetButton = false,
     this.allowLoadStageInitDataButton = false,
     this.allowSubmitStageButton = false,
@@ -27,8 +26,8 @@ class ProzessControlBarConfig {
   const ProzessControlBarConfig.allEnabled()
       : allowBackButton = true,
         allowCancelButton = true,
-        allowMoveToPreviousStageButton=true,
-        allowMoveToNextStageButton=true,
+        allowMoveToPreviousStageButton = true,
+        allowMoveToNextStageButton = true,
         allowResetButton = true,
         allowLoadStageInitDataButton = true,
         allowSubmitStageButton = true,

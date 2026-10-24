@@ -10,7 +10,7 @@ class ScalarEventReaction {
   /// Custom filter strategy to evaluate if this scalar should react.
   /// [isShelfInternalEvent] tells the scalar if the event originated from its own Shelf.
   final bool Function(ArtistEvent event, bool isShelfInternalEvent)?
-      shouldTrigger;
+  shouldTrigger;
 
   const ScalarEventReaction({
     required this.dataType,

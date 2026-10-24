@@ -11,6 +11,8 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   final Scalar<ID, VALUE, FilterInput, FilterCriteria> scalar;
 
+  ScalarExecutionIntent? _stashedIntent;
+
   ScalarExecutionIntent<
       ID, //
       VALUE,
@@ -123,215 +125,74 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   // ***************************************************************************
 
   NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
-    final bool isVisibleX = scalar.ui.hasVisibleViews(includeDescendants: true);
-    final scalarDataState = scalar.dataState;
-    final originExecutionIntent = _executionIntent;
-
-    // =========================================================================
-    // 1. DATA STATE = NONE
-    // =========================================================================
-    if (scalarDataState.isNone) {
-      return NxtExecutionUnit.no(
-        debug: debug,
-        info:
-            "Scalar (1.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
-            "dataState: ${scalarDataState.toBriefInfo()}",
-      );
+    // 1. Restore stashed intent if the current intent is null.
+    if (_executionIntent == null && _stashedIntent != null) {
+      _executionIntent = _stashedIntent as ScalarExecutionIntent<
+          ID, //
+          VALUE,
+          dynamic,
+          ExecutionUnitResult<dynamic>>;
+      _stashedIntent = null;
     }
 
-    // =========================================================================
-    // 2. DATA STATE = PENDING
-    // =========================================================================
-    else if (scalarDataState.isPending) {
-      final bool shouldQuery =
-          (__queryHint == QueryHint.force || isVisibleX) && !_queried;
-
-      if (shouldQuery) {
-        // Enforce QueryIntent to resolve pending or stale state before executing other actions
-        final ScalarQueryIntent<ID, VALUE> intentToUse;
-        if (originExecutionIntent is ScalarQueryIntent<ID, VALUE>) {
-          intentToUse = originExecutionIntent;
-        } else {
-          intentToUse = _createAndSetScalarExecutionIntentQuery();
-        }
-        // IN: DATA STATE = PENDING
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _ScalarQueryExecutionUnit(
-            xScalar: this,
-            executionIntent: intentToUse,
-          ),
-          info:
-              "Scalar (2.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
-        );
-      }
-      // IN: DATA STATE = PENDING
-      // !shouldQuery
-      else {
-        return NxtExecutionUnit.no(
-          debug: debug,
-          info:
-              "Scalar (2.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
-              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
-        );
-      }
-    }
-
-    // =========================================================================
-    // 3. DATA STATE = STALE
-    // =========================================================================
-    else if (scalarDataState.isStale) {
-      final bool shouldQuery =
-          (__queryHint == QueryHint.force || isVisibleX) && !_queried;
-
-      if (shouldQuery) {
-        // Enforce QueryIntent to resolve pending or stale state before executing other actions
-        final ScalarQueryIntent<ID, VALUE> intentToUse;
-        if (originExecutionIntent is ScalarQueryIntent<ID, VALUE>) {
-          intentToUse = originExecutionIntent;
-        } else {
-          intentToUse = _createAndSetScalarExecutionIntentQuery();
-        }
-
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _ScalarQueryExecutionUnit(
-            xScalar: this,
-            executionIntent: intentToUse,
-          ),
-          info:
-              "Scalar (3.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
-        );
-      } else {
-        return NxtExecutionUnit.no(
-          debug: debug,
-          info:
-              "Scalar (3.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
-              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
-        );
-      }
-    }
-
-    // =========================================================================
-    // 4. DATA STATE = FRESH
-    // =========================================================================
-    else if (scalarDataState.isFresh) {
-      // IN: scalarDataState.isFresh
-      // 4.0. Intercept terminal Done intent to prevent duplicate scheduler cycles
-      if (originExecutionIntent is ScalarDoneIntent) {
-        return NxtExecutionUnit.no(
-          debug: debug,
-          info:
-              "Scalar (4.0), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
-              "dataState: ${scalarDataState.toBriefInfo()}",
-        );
-      }
-
-      // 4.1. Force re-query explicitly requested
-      if (__queryHint == QueryHint.force) {
-        // Reuse caller-provided QueryIntent if already attached to preserve completer hooks
-        final ScalarQueryIntent<ID, VALUE> intentToUse;
-        if (originExecutionIntent is ScalarQueryIntent<ID, VALUE>) {
-          intentToUse = originExecutionIntent;
-        } else {
-          intentToUse = _createAndSetScalarExecutionIntentQuery();
-        }
-
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _ScalarQueryExecutionUnit(
-            xScalar: this,
-            executionIntent: intentToUse,
-          ),
-          info:
-              "Scalar (4.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
-        );
-      }
-
-      // 4.2. Handle active execution intents
-      if (originExecutionIntent != null) {
-        if (originExecutionIntent is ScalarDoneIntent) {
-          return NxtExecutionUnit.no(
-            debug: debug,
-            info:
-                "Scalar (4.2.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${scalarDataState.toBriefInfo()}",
-          );
-        } else if (originExecutionIntent is ScalarNullIntent) {
-          return NxtExecutionUnit.no(
-            debug: debug,
-            info:
-                "Scalar (4.2.2), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${scalarDataState.toBriefInfo()}",
-          );
-        } else if (originExecutionIntent is ScalarQueryIntent<ID, VALUE>) {
-          return NxtExecutionUnit.yes(
-            debug: debug,
-            executionUnit: _ScalarQueryExecutionUnit(
-              xScalar: this,
-              executionIntent: originExecutionIntent,
-            ),
-            info:
-                "Scalar (4.2.3), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${scalarDataState.toBriefInfo()}",
-          );
-        } else if (originExecutionIntent
-            is ScalarLoadExtraDataQuickActionIntent<ID, VALUE, dynamic>) {
-          return NxtExecutionUnit.yes(
-            debug: debug,
-            executionUnit:
-                _ScalarLoadExtraDataQuickActionExecutionUnit<ID, VALUE, Object>(
-              xScalar: this,
-              executionIntent: originExecutionIntent
-                  as ScalarLoadExtraDataQuickActionIntent<ID, VALUE, Object>,
-            ),
-            info:
-                "Scalar (4.2.4), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${scalarDataState.toBriefInfo()}",
-          );
-        } else if (originExecutionIntent is ScalarClearIntent<ID, VALUE>) {
-          return NxtExecutionUnit.yes(
-            debug: debug,
-            executionUnit: _ScalarClearExecutionUnit<ID, VALUE>(
-              xScalar: this,
-              executionIntent: originExecutionIntent,
-            ),
-            info:
-                "Scalar (4.2.5), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${scalarDataState.toBriefInfo()}",
-          );
-        } else {
-          return NxtExecutionUnit.no(
-            debug: debug,
-            info:
-                "Scalar (4.2.6), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${scalarDataState.toBriefInfo()}",
-          );
-        }
-      }
-
-      // IN: scalarDataState.isFresh
-      // 4.3. Idle state when data is fresh and no intent is active
-      return NxtExecutionUnit.no(
-        debug: debug,
-        info:
-            "Scalar (4.3), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: null, "
-            "dataState: ${scalarDataState.toBriefInfo()}, queryHint: $__queryHint, isVisibleX: $isVisibleX",
-      );
-    }
-
-    // =========================================================================
-    // 5. UNHANDLED / FALLTHROUGH STATE
-    // =========================================================================
-    return NxtExecutionUnit.no(
-      debug: debug,
-      info:
-          "Scalar (5.1), ${getClassNameWithoutGenerics(scalar)}, _executionIntent: $originExecutionIntent, "
-          "dataState: ${scalarDataState.toBriefInfo()}",
+    final input = ScalarNextUnitInput(
+      dataState: scalar.dataState,
+      currentIntent: _executionIntent,
+      queryHint: __queryHint,
+      isVisible: scalar.ui.hasVisibleViews(includeDescendants: true),
+      queried: _queried,
+      modelName: getClassNameWithoutGenerics(scalar),
     );
+
+    final output = ScalarExecutionCalculator.calculate(input);
+
+    // 2. _stashedIntent
+    if (output.preserveCurrentIntent) {
+      _stashedIntent = _executionIntent;
+    }
+
+    // 3. Add new Intent if missing
+    if (output.missingIntent == MissingIntentType.dataLoadOrQuery) {
+      _createAndSetScalarExecutionIntentQuery();
+    }
+
+    // 4. Returns an executable Unit
+    switch (output.action) {
+      case ScalarExecutionAction.query:
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _ScalarQueryExecutionUnit(
+            xScalar: this,
+            executionIntent: _executionIntent as ScalarQueryIntent<ID, VALUE>,
+          ),
+          info: output.debugInfo,
+        );
+      case ScalarExecutionAction.loadExtraData:
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _ScalarLoadExtraDataQuickActionExecutionUnit(
+            xScalar: this,
+            executionIntent: _executionIntent
+                as ScalarLoadExtraDataQuickActionIntent<ID, VALUE, Object>,
+          ),
+          info: output.debugInfo,
+        );
+      case ScalarExecutionAction.clear:
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _ScalarClearExecutionUnit(
+            xScalar: this,
+            executionIntent: _executionIntent as ScalarClearIntent<ID, VALUE>,
+          ),
+          info: output.debugInfo,
+        );
+      case ScalarExecutionAction.none:
+      default:
+        return NxtExecutionUnit.no(
+          debug: debug,
+          info: output.debugInfo,
+        );
+    }
   }
 
   // ***************************************************************************

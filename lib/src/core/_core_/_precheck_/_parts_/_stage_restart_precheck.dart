@@ -1,6 +1,5 @@
 part of '../__precheck.dart';
 
-
 /// Precheck enumeration for Stage restart operations.
 enum StageRestartPrecheck implements Precheck {
   busy(

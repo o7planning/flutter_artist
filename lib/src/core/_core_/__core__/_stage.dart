@@ -7,16 +7,17 @@ part of '../core.dart';
 /// -> (resolves INIT_DATA) -> [StageDataStateLoadedFresh]
 /// -> (submission) -> [StageDataStateSubmissionAttempted]
 abstract class Stage<
-    STAGE_ENUM extends StageEnum, //
-    INIT_DATA extends StageInitData,
-    RESULT_DATA extends StageResultData,
-    PROZESS_CONTEXT_DATA extends ProzessContextData,
-    FORM_INPUT extends FormInput,
-    FORM_OUTPUT extends FormOutput> extends WorkNode<
+STAGE_ENUM extends StageEnum, //
+INIT_DATA extends StageInitData,
+RESULT_DATA extends StageResultData,
+PROZESS_CONTEXT_DATA extends ProzessContextData,
+FORM_INPUT extends FormInput,
+FORM_OUTPUT extends FormOutput> extends WorkNode<
     INIT_DATA, //
     RESULT_DATA,
     FORM_INPUT,
-    FORM_OUTPUT> implements FormHost, ClassDefViewable {
+    FORM_OUTPUT>
+    implements FormHost, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {
@@ -117,10 +118,14 @@ abstract class Stage<
 
   XStage _createXStage({
     required XProzess<STAGE_ENUM, ProzessInitData, PROZESS_CONTEXT_DATA>
-        xProzess,
-    required XStageFormModel<STAGE_ENUM, INIT_DATA, RESULT_DATA,
-            PROZESS_CONTEXT_DATA, FORM_INPUT, FORM_OUTPUT>?
-        xStageFormModel,
+    xProzess,
+    required XStageFormModel<STAGE_ENUM,
+        INIT_DATA,
+        RESULT_DATA,
+        PROZESS_CONTEXT_DATA,
+        FORM_INPUT,
+        FORM_OUTPUT>?
+    xStageFormModel,
   }) {
     return XStage<
         STAGE_ENUM, //
@@ -137,9 +142,8 @@ abstract class Stage<
 
   // ===========================================================================
 
-  void _bindToProzess(
-      Prozess<STAGE_ENUM, ProzessInitData, PROZESS_CONTEXT_DATA>
-          parentProzess) {
+  void _bindToProzess(Prozess<STAGE_ENUM, ProzessInitData, PROZESS_CONTEXT_DATA>
+  parentProzess) {
     prozess = parentProzess;
   }
 
@@ -152,7 +156,7 @@ abstract class Stage<
 
   void _resetStageStateInternal() {
     _dataState = const StageDataStateNone();
-     _clearData();
+    _clearData();
     _stageRouteStatus = StageRouteStatus.unreached;
     formModel?._clearDataWithDataState(
       formDataState: const FormDataStateNone(),
@@ -190,7 +194,7 @@ abstract class Stage<
   // ***************************************************************************
 
   Future<StageSubmitResult<INIT_DATA, RESULT_DATA>>
-      _submitAfterPrecheckSuccessful() async {
+  _submitAfterPrecheckSuccessful() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "_submitAfterPrecheckSuccessful",
@@ -226,11 +230,17 @@ abstract class Stage<
 
     final XActivity xActivity = _XActivityStageSubmit(stage: this);
     final xStage = xActivity.findXStageByName(name) as XStage<STAGE_ENUM,
-        INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA, FORM_INPUT, FORM_OUTPUT>;
+        INIT_DATA,
+        RESULT_DATA,
+        PROZESS_CONTEXT_DATA,
+        FORM_INPUT,
+        FORM_OUTPUT>;
 
-    final StageSubmitIntent<STAGE_ENUM, INIT_DATA, RESULT_DATA,
-            PROZESS_CONTEXT_DATA> executionIntent =
-        xStage._createAndSetStageIntentSubmit();
+    final StageSubmitIntent<STAGE_ENUM,
+        INIT_DATA,
+        RESULT_DATA,
+        PROZESS_CONTEXT_DATA> executionIntent =
+    xStage._createAndSetStageIntentSubmit();
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -250,11 +260,11 @@ abstract class Stage<
     required ExecutionUnitType executionUnitType,
     required XStage thisXStage,
     required StageRestartIntent<
-            STAGE_ENUM, //
-            INIT_DATA,
-            RESULT_DATA,
-            PROZESS_CONTEXT_DATA>
-        executionIntent,
+        STAGE_ENUM, //
+        INIT_DATA,
+        RESULT_DATA,
+        PROZESS_CONTEXT_DATA>
+    executionIntent,
   }) async {
     __assertThisXStage(thisXStage);
     thisXStage._createAndSetStageIntentDone(
@@ -264,7 +274,8 @@ abstract class Stage<
     executionTrace.addInfo(
       codeId: "#092100",
       shortDesc:
-          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Stage Load InitData)",
+      "${debugObjHtml(this)} -> Begin ${executionUnitType
+          .asDebugExecutionUnit()} (Stage Load InitData)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -302,13 +313,15 @@ abstract class Stage<
       executionTrace.addInfo(
         codeId: "#092140",
         shortDesc:
-            "${debugObjHtml(this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(_initData)}.",
+        "${debugObjHtml(
+            this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(
+            _initData)}.",
       );
 
       // Coordinate StageFormModel data state transition
       if (formModel != null) {
         final newFormDataState =
-            BlockFormDataStateUtils.calculateNewLazyDataState(
+        BlockFormDataStateUtils.calculateNewLazyDataState(
           currentFormDataState: formModel!.dataState,
           hasCurrentItem: _initData != null,
           currentItemChanged: true,
@@ -345,7 +358,8 @@ abstract class Stage<
       executionTrace.addInfo(
         codeId: "#092160",
         shortDesc:
-            "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
+        "The ${debugObjHtml(
+            this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
       );
     } finally {
@@ -360,12 +374,18 @@ abstract class Stage<
   Future<void> _unitSubmit({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XStage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA,
-            FORM_INPUT, FORM_OUTPUT>
-        thisXStage,
-    required StageSubmitIntent<STAGE_ENUM, INIT_DATA, RESULT_DATA,
-            PROZESS_CONTEXT_DATA>
-        executionIntent,
+    required XStage<STAGE_ENUM,
+        INIT_DATA,
+        RESULT_DATA,
+        PROZESS_CONTEXT_DATA,
+        FORM_INPUT,
+        FORM_OUTPUT>
+    thisXStage,
+    required StageSubmitIntent<STAGE_ENUM,
+        INIT_DATA,
+        RESULT_DATA,
+        PROZESS_CONTEXT_DATA>
+    executionIntent,
   }) async {
     __assertThisXStage(thisXStage);
     thisXStage._createAndSetStageIntentDone(
@@ -375,7 +395,8 @@ abstract class Stage<
     executionTrace.addInfo(
       codeId: "#121100",
       shortDesc:
-          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Submit)",
+      "${debugObjHtml(this)} -> Begin ${executionUnitType
+          .asDebugExecutionUnit()} (Submit)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -426,7 +447,8 @@ abstract class Stage<
         } else {
           throw AppError(
             errorMessage:
-                '${getClassName(this)}.performSubmit() return null (${getClassName(RESULT_DATA)}).',
+            '${getClassName(this)}.performSubmit() return null (${getClassName(
+                RESULT_DATA)}).',
           );
         }
       }
@@ -542,7 +564,7 @@ abstract class Stage<
 
   @override
   Future<Actionable<ShowFormInfoPrecheck>>
-      showDebugFormModelInspectorDialog() async {
+  showDebugFormModelInspectorDialog() async {
     final actionable = checkBeforeShowFormInfo();
     if (!actionable.yes) {
       return actionable;

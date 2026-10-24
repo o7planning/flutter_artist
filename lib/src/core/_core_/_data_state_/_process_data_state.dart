@@ -8,13 +8,22 @@ sealed class ProzessDataState implements DataState {
   String get name;
 
   bool get isPending => this is ProzessDataStatePending;
+
   bool get isLoaded => this is ProzessDataStateLoaded;
+
   bool get isFresh => this is ProzessDataStateLoadedFresh;
+
   bool get isStale => this is ProzessDataStateLoadedStale;
+
   bool get isTransitioning => this is ProzessDataStateTransitioning;
-  bool get isTransitioningSuccess => this is ProzessDataStateTransitioningSuccess;
+
+  bool get isTransitioningSuccess =>
+      this is ProzessDataStateTransitioningSuccess;
+
   bool get isTransitioningFailed => this is ProzessDataStateTransitioningFailed;
+
   bool get isCompleted => this is ProzessDataStateCompleted;
+
   bool get isAborted => this is ProzessDataStateAborted;
 
   /// Quick accessor to diagnostic error payload across error-carrying states.
@@ -80,12 +89,14 @@ sealed class ProzessPendingReason {
   String toBriefInfo();
 
   bool get isInitial => this is ProzessPendingReasonInitial;
+
   bool get isFailed => this is ProzessPendingReasonFailed;
 
-  ProzessErrorInfo? get errorInfo => switch (this) {
-    ProzessPendingReasonFailed(:final errorInfo) => errorInfo,
-    _ => null,
-  };
+  ProzessErrorInfo? get errorInfo =>
+      switch (this) {
+        ProzessPendingReasonFailed(:final errorInfo) => errorInfo,
+        _ => null,
+      };
 
   @override
   bool operator ==(Object other);
@@ -204,7 +215,8 @@ sealed class ProzessDataStateTransitioning extends ProzessDataState {
 }
 
 /// Stage transition and next-stage determination completed successfully.
-final class ProzessDataStateTransitioningSuccess extends ProzessDataStateTransitioning {
+final class ProzessDataStateTransitioningSuccess
+    extends ProzessDataStateTransitioning {
   const ProzessDataStateTransitioningSuccess();
 
   @override
@@ -229,7 +241,8 @@ final class ProzessDataStateTransitioningSuccess extends ProzessDataStateTransit
 
 /// Stage transition or next-stage determination failed (e.g., determineNextStep error);
 /// allows executor or user to inspect and retry.
-final class ProzessDataStateTransitioningFailed extends ProzessDataStateTransitioning {
+final class ProzessDataStateTransitioningFailed
+    extends ProzessDataStateTransitioning {
   final ProzessErrorInfo transitionErrorInfo;
 
   const ProzessDataStateTransitioningFailed({

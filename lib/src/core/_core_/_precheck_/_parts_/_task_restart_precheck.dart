@@ -1,6 +1,5 @@
 part of '../__precheck.dart';
 
-
 /// Precheck conditions and failure reasons for reloading a Task's initial data.
 enum TaskRestartPrecheck implements Precheck {
   /// The system is currently busy executing another operation.
@@ -14,14 +13,18 @@ enum TaskRestartPrecheck implements Precheck {
   reloadRestrictedByConfig(
     precheckCode: PrecheckCode.notAllowed,
     message: "Action not allowed.",
-    details: ["Reloading initial data on a fresh state is disabled by task configuration."],
+    details: [
+      "Reloading initial data on a fresh state is disabled by task configuration."
+    ],
   ),
 
   /// Reloading initial data is restricted because the task has already been successfully submitted.
   restrictedBySubmitted(
     precheckCode: PrecheckCode.notAllowed,
     message: "Action not allowed.",
-    details: ["The task has already been successfully submitted and multiple submissions are not allowed."],
+    details: [
+      "The task has already been successfully submitted and multiple submissions are not allowed."
+    ],
   ),
 
   /// Loading initial data is not allowed under the current task state or configuration.

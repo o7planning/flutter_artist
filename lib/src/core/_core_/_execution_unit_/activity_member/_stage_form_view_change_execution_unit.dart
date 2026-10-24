@@ -12,9 +12,9 @@ class _StageFormViewChangeExecutionUnit extends _ActivityMemberExecutionUnit {
     required this.xStageFormModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.formModelFormViewChanged,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.formModelFormViewChanged,
+    executionIntent: executionIntent,
+  );
 
   @override
   XActivity get xActivity => xStageFormModel.xActivity;

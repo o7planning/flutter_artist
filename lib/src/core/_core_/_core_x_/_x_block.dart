@@ -419,7 +419,8 @@ class XBlock<
         }
         // IN: blockDataState.isFresh
         // IN: __queryHint = `none`.
-        else if (originExecutionIntent is BlockQueryIntent<ID, ITEM, ITEM_DETAIL>) {
+        else if (originExecutionIntent
+            is BlockQueryIntent<ID, ITEM, ITEM_DETAIL>) {
           return NxtExecutionUnit.yes(
             debug: debug,
             executionUnit: _BlockQueryExecutionUnit<ID, ITEM, ITEM_DETAIL>(

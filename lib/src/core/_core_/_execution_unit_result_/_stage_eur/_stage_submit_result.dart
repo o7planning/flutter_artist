@@ -1,8 +1,8 @@
 part of '../../core.dart';
 
 class StageSubmitResult<
-        STAGE_INIT_DATA extends StageInitData, //
-        STAGE_RESULT_DATA extends StageResultData>
+STAGE_INIT_DATA extends StageInitData, //
+STAGE_RESULT_DATA extends StageResultData>
     extends ExecutionUnitResult<StageSubmitPrecheck> {
   StageSubmitResult({required super.precheck});
 

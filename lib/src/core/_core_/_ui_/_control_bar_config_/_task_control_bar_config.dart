@@ -22,7 +22,8 @@ class TaskControlBarConfig {
   const TaskControlBarConfig.allEnabled({
     this.restartNavigationIntent,
     this.submitNavigationIntent,
-  })  : allowBackButton = true,
+  })
+      : allowBackButton = true,
         allowRestartButton = true,
         allowSubmitButton = true,
         allowDebugFormModelInspectorButton = true;

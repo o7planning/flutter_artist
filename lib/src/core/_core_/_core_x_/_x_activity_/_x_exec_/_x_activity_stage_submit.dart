@@ -4,9 +4,9 @@ class _XActivityStageSubmit extends _XActivityBaseExec {
   _XActivityStageSubmit({
     required Stage stage,
   }) : super(
-          xActivityType: XActivityType.submit,
-          activity: stage.activity,
-        ) {
+    xActivityType: XActivityType.submit,
+    activity: stage.activity,
+  ) {
     //
   }
 }

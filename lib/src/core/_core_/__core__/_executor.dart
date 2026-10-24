@@ -9,7 +9,7 @@ class _Executor {
   int? get executingXModuleId => __executingXModuleId;
 
   final Map<_ExecutionProgressBuilderState, bool>
-      _executionProgressViewWidgetStates = {};
+  _executionProgressViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -51,7 +51,7 @@ class _Executor {
         try {
           while (true) {
             _ExecutionUnit? executionUnit =
-                FlutterArtist._rootQueue.getNextExecutionUnit(
+            FlutterArtist._rootQueue.getNextExecutionUnit(
               removeEmptyRootQuery: true,
             );
             //
@@ -61,7 +61,7 @@ class _Executor {
               }
               pendingEventProcessed = true;
               final Set<String> excludeModuleNames =
-                  executedModuleMap.keys.toSet();
+              executedModuleMap.keys.toSet();
               //
               FlutterArtist.desk._reactionProcessor.addReactionExecutionUnits(
                 excludeModuleNames: excludeModuleNames,
@@ -81,7 +81,8 @@ class _Executor {
               );
             }
             print(
-                "\n      >>>> EXECUTE: ${getClassNameWithoutGenerics(executionUnit)} \n");
+                "\n      >>>> EXECUTE: ${getClassNameWithoutGenerics(
+                    executionUnit)} \n");
             //
             await __executeExecutionUnit(
               executionUnit: executionUnit,
@@ -467,9 +468,9 @@ class _Executor {
       bool onProgress = owner == null || executionUnitType == null
           ? false
           : state.isMatches(
-              owner: owner,
-              executionUnitType: executionUnitType,
-            );
+        owner: owner,
+        executionUnitType: executionUnitType,
+      );
       //
       state.onProgress = onProgress;
       state.refreshState(force: true);

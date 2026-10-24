@@ -13,7 +13,7 @@ class BlockItemDetailViewBuilder extends _ContextProviderView {
     this.blockViewContext = BlockViewContext.itemDetail,
     required this.build,
   }) : assert(blockViewContext == BlockViewContext.itemDetail ||
-      blockViewContext == BlockViewContext.form);
+            blockViewContext == BlockViewContext.form);
 
   @override
   State<StatefulWidget> createState() {

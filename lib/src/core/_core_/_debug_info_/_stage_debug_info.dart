@@ -16,8 +16,7 @@ class _StageDebugInfo {
   }
 
   String get classParametersDefinition {
-    return "<${_stage.getStageEnumType()}, ${_stage.getInitDataType()}, ${_stage
-        .getResultDataType()}, "
+    return "<${_stage.getStageEnumType()}, ${_stage.getInitDataType()}, ${_stage.getResultDataType()}, "
         "${_stage.getProzessContextDataType()}, ${_stage.getFormInputType()}>";
   }
 

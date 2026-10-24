@@ -1,16 +1,15 @@
 part of '../core.dart';
 
 class ExecutionUnitResultWrapper<
-    PRECHECK, //
-    EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>> {
+PRECHECK, //
+EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>> {
   EXECUTION_RESULT? _result;
 
   EXECUTION_RESULT? get result => _result;
 
   ExecutionUnitResultWrapper();
 
-  EXECUTION_RESULT _setResult(
-    EXECUTION_RESULT result, {
+  EXECUTION_RESULT _setResult(EXECUTION_RESULT result, {
     required Object objectCaller,
     required String methodName,
   }) {
@@ -33,7 +32,8 @@ abstract class ExecutionUnitResult<PRECHECK> {
   ExecutionUnitResult({
     PRECHECK? precheck,
     ErrorInfo? errorInfo,
-  })  : _precheck = precheck,
+  })
+      : _precheck = precheck,
         _errorInfo = errorInfo;
 
   bool get successForFirst;

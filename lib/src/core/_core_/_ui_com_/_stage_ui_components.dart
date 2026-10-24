@@ -150,7 +150,8 @@ class _StageUiComponents extends _WorkNodeUiComponents {
 
   /// Resolves the class name of the view currently demanding the Stage data context.
   String? findVisibleStageContextView() {
-    return __findVisibleViewWithContextKind(contextKind: ContextKind.stageInitData);
+    return __findVisibleViewWithContextKind(
+        contextKind: ContextKind.stageInitData);
   }
 
   @override

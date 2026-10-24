@@ -19,6 +19,8 @@ class XBlockFormModel<
 
   FormLoadHint get formLoadHint => _formLoadHint;
 
+  FormModelExecutionIntent? _stashedIntent;
+
   FormModelExecutionIntent? _executionIntent;
 
   ///
@@ -92,270 +94,83 @@ class XBlockFormModel<
   // ***************************************************************************
 
   NxtExecutionUnit _getNextExecutionUnit({required bool debug}) {
-    final formModelDataState = formModel.dataState;
-    final bool visibleX = formModel.ui.hasVisibleViews();
-    final originExecutionIntent = _executionIntent;
-
-    // =========================================================================
-    // 0. TERMINAL INTENT INTERCEPTOR
-    // =========================================================================
-    if (originExecutionIntent is FormModelDoneIntent) {
-      return NxtExecutionUnit.no(
-        debug: debug,
-        info:
-            "BlockFormModel (0.0), (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-            "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
-      );
+    // 1. Restore the stashed intent if the current intent is null.
+    if (_executionIntent == null && _stashedIntent != null) {
+      _executionIntent = _stashedIntent;
+      _stashedIntent = null;
     }
 
-    // =========================================================================
-    // 1. DATA STATE = NONE
-    // =========================================================================
-    if (formModelDataState.isNone) {
-      return NxtExecutionUnit.no(
-        debug: debug,
-        info:
-            "BlockFormModel (1.1), (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-            "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
-      );
-    }
-
-    // =========================================================================
-    // 2. DATA STATE = PENDING
-    // =========================================================================
-    else if (formModelDataState.isPending) {
-      if (originExecutionIntent is FormModelDataLoadIntent) {
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _BlockFormModelLoadDataExecutionUnit(
-            xBlockFormModel: this,
-            executionIntent: originExecutionIntent,
-          ),
-          info:
-              "BlockFormModel (2.1), (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
-              "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
-        );
-      }
-      final bool shouldLoad = (_formLoadHint == FormLoadHint.force || visibleX);
-
-      if (shouldLoad) {
-        // Enforce FormModelDataLoadIntent to populate form fields before allowing mutations
-        final FormModelDataLoadIntent intentToUse;
-        if (originExecutionIntent is FormModelDataLoadIntent) {
-          intentToUse = originExecutionIntent;
-        } else {
-          intentToUse = _createAndSetFormModelExecutionIntentLoad();
-        }
-
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _BlockFormModelLoadDataExecutionUnit(
-            xBlockFormModel: this,
-            executionIntent: intentToUse,
-          ),
-          info:
-              "BlockFormModel (2.2.1), (${formModel.block.name}), _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
-              "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
-        );
-      } else {
-        return NxtExecutionUnit.no(
-          debug: debug,
-          info:
-              "BlockFormModel (2.2.2), (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
-              "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
-        );
-      }
-    }
-
-    // =========================================================================
-    // 3. DATA STATE = STALE
-    // =========================================================================
-    else if (formModelDataState.isStale) {
-      final bool shouldLoad = (_formLoadHint == FormLoadHint.force || visibleX);
-
-      if (shouldLoad) {
-        // Enforce FormModelDataLoadIntent to populate form fields before allowing mutations
-        final FormModelDataLoadIntent intentToUse;
-        if (originExecutionIntent is FormModelDataLoadIntent) {
-          intentToUse = originExecutionIntent;
-        } else {
-          intentToUse = _createAndSetFormModelExecutionIntentLoad();
-        }
-
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _BlockFormModelLoadDataExecutionUnit(
-            xBlockFormModel: this,
-            executionIntent: intentToUse,
-          ),
-          info:
-              "BlockFormModel (3.1.1), (${formModel.block.name}), _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
-              "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
-        );
-      } else {
-        return NxtExecutionUnit.no(
-          debug: debug,
-          info:
-              "BlockFormModel (3.1.2), (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
-              "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
-        );
-      }
-    }
-
-    // =========================================================================
-    // 4. DATA STATE = FATAL ERROR
-    // =========================================================================
-    else if (formModelDataState.isFatalError) {
-      final bool shouldLoad = (_formLoadHint == FormLoadHint.force || visibleX);
-
-      if (shouldLoad) {
-        // Enforce FormModelDataLoadIntent to populate form fields before allowing mutations
-        final FormModelDataLoadIntent intentToUse;
-        if (originExecutionIntent is FormModelDataLoadIntent) {
-          intentToUse = originExecutionIntent;
-        } else {
-          intentToUse = _createAndSetFormModelExecutionIntentLoad();
-        }
-
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _BlockFormModelLoadDataExecutionUnit(
-            xBlockFormModel: this,
-            executionIntent: intentToUse,
-          ),
-          info:
-              "BlockFormModel (4.1.1), (${formModel.block.name}), _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
-              "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
-        );
-      } else {
-        return NxtExecutionUnit.no(
-          debug: debug,
-          info:
-              "BlockFormModel (4.1.2), (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
-              "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
-        );
-      }
-    }
-
-    // =========================================================================
-    // 5. DATA STATE = FRESH
-    // =========================================================================
-    else if (formModelDataState.isFresh) {
-      // 5.1. Force reload explicitly requested from form configuration
-      if (_formLoadHint == FormLoadHint.force) {
-        if (formModel.formMode == BlockFormMode.creation) {
-          return NxtExecutionUnit.no(
-            debug: debug,
-            info:
-                "BlockFormModel (5.1.1), (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
-                "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
-          );
-        }
-        final FormModelDataLoadIntent intentToUse;
-        if (originExecutionIntent is FormModelDataLoadIntent) {
-          intentToUse = originExecutionIntent;
-        } else {
-          intentToUse = _createAndSetFormModelExecutionIntentLoad();
-        }
-        // IN: DATA STATE = FRESH
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _BlockFormModelLoadDataExecutionUnit(
-            xBlockFormModel: this,
-            executionIntent: intentToUse,
-          ),
-          info:
-              "BlockFormModel (5.1.2), (${formModel.block.name}), _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
-              "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
-        );
-      }
-
-      // IN: DATA STATE = FRESH
-      // 5.2. Handle active execution intents
-      if (originExecutionIntent != null) {
-        if (originExecutionIntent is FormModelViewChangeIntent) {
-          return NxtExecutionUnit.yes(
-            debug: debug,
-            executionUnit: _BlockFormViewChangeExecutionUnit(
-              xBlockFormModel: this,
-              executionIntent: originExecutionIntent,
-            ),
-            info:
-                "BlockFormModel (5.2.2), (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
-          );
-        } else if (originExecutionIntent is FormModelDataLoadIntent) {
-          return NxtExecutionUnit.yes(
-            debug: debug,
-            executionUnit: _BlockFormModelLoadDataExecutionUnit(
-              xBlockFormModel: this,
-              executionIntent: originExecutionIntent,
-            ),
-            info:
-                "BlockFormModel (5.2.3), (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
-          );
-        } else if (originExecutionIntent is FormModelSaveIntent) {
-          return NxtExecutionUnit.yes(
-            debug: debug,
-            executionUnit: _FormModelSaveFormExecutionUnit(
-              xBlockFormModel: this,
-              executionIntent: originExecutionIntent,
-            ),
-            info:
-                "BlockFormModel (5.2.4), (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
-          );
-        } else if (originExecutionIntent is FormModelPatchFormFieldsIntent) {
-          return NxtExecutionUnit.yes(
-            debug: debug,
-            executionUnit: _BlockFormModelPatchFormFieldsExecutionUnit(
-              xBlockFormModel: this,
-              executionIntent: originExecutionIntent,
-            ),
-            info:
-                "BlockFormModel (5.2.5), (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
-          );
-        } else {
-          return NxtExecutionUnit.no(
-            debug: debug,
-            info:
-                "BlockFormModel (5.2.6), (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-                "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
-          );
-        }
-      }
-
-      // IN: DATA STATE = FRESH
-      // 5.3. Idle state when form data is fresh and no active intent is present
-      return NxtExecutionUnit.no(
-        debug: debug,
-        info:
-            "BlockFormModel (5.3), (${formModel.block.name}), _executionIntent: null, "
-            "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}, "
-            "_formLoadHint: $_formLoadHint, visibleX: $visibleX",
-      );
-    }
-
-    // =========================================================================
-    // 6. UNHANDLED / FALLTHROUGH STATE
-    // =========================================================================
-    return NxtExecutionUnit.no(
-      debug: debug,
-      info:
-          "BlockFormModel (6.1) (${formModel.block.name}), _executionIntent: $originExecutionIntent, "
-          "formDataState: ${formModelDataState.toBriefInfo()}, formMode: ${formModel.formMode.name}",
+    final input = BlockFormNextUnitInput(
+      dataState: formModel.dataState,
+      currentIntent: _executionIntent,
+      formLoadHint: _formLoadHint,
+      isVisible: formModel.ui.hasVisibleViews(),
+      formMode: formModel.formMode,
+      blockName: formModel.block.name,
     );
+
+    final output = BlockFormExecutionCalculator.calculate(input);
+
+    // 2. Preserve the old Intent if it gets displaced
+    if (output.preserveCurrentIntent) {
+      _stashedIntent = _executionIntent;
+    }
+
+    String finalDebugInfo = output.debugInfo;
+
+    // 3. Handling Side-effects: Pump Missing Intent (Load)
+    if (output.missingIntent == MissingIntentType.dataLoadOrQuery) {
+      final intentToUse = _createAndSetFormModelExecutionIntentLoad();
+      finalDebugInfo = finalDebugInfo.replaceFirst(
+          "_executionIntent: $_stashedIntent",
+          "_executionIntent: $_stashedIntent --> $intentToUse");
+    }
+
+    // 4. Return to Execution Unit
+    switch (output.action) {
+      case BlockFormExecutionAction.loadData:
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _BlockFormModelLoadDataExecutionUnit(
+            xBlockFormModel: this,
+            executionIntent: _executionIntent as FormModelDataLoadIntent,
+          ),
+          info: finalDebugInfo,
+        );
+      case BlockFormExecutionAction.viewChange:
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _BlockFormViewChangeExecutionUnit(
+            xBlockFormModel: this,
+            executionIntent: _executionIntent as FormModelViewChangeIntent,
+          ),
+          info: finalDebugInfo,
+        );
+      case BlockFormExecutionAction.save:
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _FormModelSaveFormExecutionUnit(
+            xBlockFormModel: this,
+            executionIntent: _executionIntent as FormModelSaveIntent,
+          ),
+          info: finalDebugInfo,
+        );
+      case BlockFormExecutionAction.patchFormFields:
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _BlockFormModelPatchFormFieldsExecutionUnit(
+            xBlockFormModel: this,
+            executionIntent: _executionIntent as FormModelPatchFormFieldsIntent,
+          ),
+          info: finalDebugInfo,
+        );
+      case BlockFormExecutionAction.none:
+      default:
+        return NxtExecutionUnit.no(
+          debug: debug,
+          info: finalDebugInfo,
+        );
+    }
   }
 
   // ***************************************************************************

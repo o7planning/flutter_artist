@@ -5,8 +5,6 @@ class TaskDataStateUtils {
     required TaskDataState currentTaskDataState,
     bool hasIncomingEvent = false,
   }) {
-
-
     return currentTaskDataState;
   }
 }

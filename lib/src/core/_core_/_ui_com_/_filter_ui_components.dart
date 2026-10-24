@@ -30,7 +30,11 @@ class _FilterUiComponents extends _UiComponents {
       ..._filterPanelWidgetStates.keys,
       ..._controlBarWidgetStates.keys,
     ];
-    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
+    return list
+        .map((v) => v.faRoute)
+        .nonNulls
+        .toList()
+        .toSet();
   }
 
   // ***************************************************************************
@@ -96,7 +100,7 @@ class _FilterUiComponents extends _UiComponents {
   List<FormBuilderState> get _visibleFormBuilderStates {
     final List<FormBuilderState> forms = [];
     for (final _ContextProviderViewState state
-        in _filterPanelWidgetStates.keys) {
+    in _filterPanelWidgetStates.keys) {
       if (state.mounted && state is _FilterPanelBuilderState) {
         final formState = state.formKey.currentState;
         if (formState != null) {
@@ -177,7 +181,7 @@ class _FilterUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-        in _filterPanelWidgetStates.keys) {
+    in _filterPanelWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -192,7 +196,7 @@ class _FilterUiComponents extends _UiComponents {
       }
     }
     for (final _ContextProviderViewState widgetState
-        in _controlBarWidgetStates.keys) {
+    in _controlBarWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -216,7 +220,7 @@ class _FilterUiComponents extends _UiComponents {
   // OLD: updateFilterBaseViews
   void refreshFilterPanels({bool force = true}) {
     for (final _ContextProviderViewState state
-        in _filterPanelWidgetStates.keys) {
+    in _filterPanelWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -226,7 +230,7 @@ class _FilterUiComponents extends _UiComponents {
   /// Rebuilds active filter control bars.
   void refreshControlBars({bool force = false}) {
     for (final _ContextProviderViewState state
-        in _controlBarWidgetStates.keys) {
+    in _controlBarWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }
@@ -273,8 +277,10 @@ class _FilterUiComponents extends _UiComponents {
   }) {
     _filterPanelWidgetStates.update(
       widgetState,
-      (xState) => xState.._setBuilding(isBuilding),
-      ifAbsent: () => XState().._setBuilding(isBuilding),
+          (xState) => xState.._setBuilding(isBuilding),
+      ifAbsent: () =>
+      XState()
+        .._setBuilding(isBuilding),
     );
   }
 
@@ -289,8 +295,10 @@ class _FilterUiComponents extends _UiComponents {
     final bool visibleOld = hasVisibleViews();
     _filterPanelWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     final bool visibleCurrent = hasVisibleViews();
 
@@ -324,8 +332,10 @@ class _FilterUiComponents extends _UiComponents {
     final bool visibleOld = hasVisibleViews();
     _controlBarWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     final bool visibleCurrent = hasVisibleViews();
 

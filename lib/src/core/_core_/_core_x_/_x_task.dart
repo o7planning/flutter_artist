@@ -3,10 +3,10 @@ part of '../core.dart';
 /// Runtime execution wrapper for [Task], managing intent delegation,
 /// single-stage progress lifecycle, and state mutation.
 class XTask<
-    TASK_INIT_DATA extends TaskInitData, //
-    TASK_RESULT_DATA extends TaskResultData,
-    FORM_INPUT extends FormInput,
-    FORM_OUTPUT extends FormOutput> {
+TASK_INIT_DATA extends TaskInitData, //
+TASK_RESULT_DATA extends TaskResultData,
+FORM_INPUT extends FormInput,
+FORM_OUTPUT extends FormOutput> {
   final XActivity xActivity;
 
   final XTaskFormModel? xTaskFormModel;
@@ -29,11 +29,20 @@ class XTask<
 
   ExecHint get execHint => _execHint;
 
-  TaskBaseExecutionIntent<TASK_INIT_DATA, TASK_RESULT_DATA, dynamic, dynamic>?
-      _executionIntent;
+  TaskBaseExecutionIntent<
+      TASK_INIT_DATA, //
+      TASK_RESULT_DATA,
+      dynamic,
+      ExecutionUnitResult<dynamic>>? _stashedIntent;
+
+  TaskBaseExecutionIntent<
+      TASK_INIT_DATA, //
+      TASK_RESULT_DATA,
+      dynamic,
+      ExecutionUnitResult<dynamic>>? _executionIntent;
 
   TaskBaseExecutionIntent<TASK_INIT_DATA, TASK_RESULT_DATA, dynamic, dynamic>?
-      get executionIntent => _executionIntent;
+  get executionIntent => _executionIntent;
 
   XTask._({
     required this.xActivity,
@@ -42,7 +51,7 @@ class XTask<
   });
 
   final restartResult =
-      TaskRestartResult<TASK_INIT_DATA, TASK_RESULT_DATA>(precheck: null);
+  TaskRestartResult<TASK_INIT_DATA, TASK_RESULT_DATA>(precheck: null);
 
   void setExecHint(ExecHint hint) {
     _execHint = hint;
@@ -88,261 +97,79 @@ class XTask<
 
   /// Evaluates and yields the next operational execution unit for this Task.
   NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
-    final TaskDataState taskDataState = task.dataState;
-    final originExecutionIntent = _executionIntent;
-    final bool isVisible = task.ui.hasVisibleViews();
-
-    if (originExecutionIntent is TaskDoneIntent) {
-      return NxtExecutionUnit.no(
-        debug: debug,
-        info:
-            "Task (0.0), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent, "
-            "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
-      );
+    // 1. Restore the stashed intent if the current intent is empty
+    if (_executionIntent == null && _stashedIntent != null) {
+      _executionIntent = _stashedIntent;
+      _stashedIntent = null;
     }
 
-    // =========================================================================
-    // 1. DATA STATE = PENDING
-    // =========================================================================
-    if (taskDataState.isPending) {
-      final bool shouldExecute =
-          (_execHint == ExecHint.force || isVisible) && !_executed;
+    final input = TaskNextUnitInput(
+      dataState: task.dataState,
+      currentIntent: _executionIntent,
+      execHint: _execHint,
+      isVisible: task.ui.hasVisibleViews(),
+      executed: _executed,
+      modelName: getClassNameWithoutGenerics(task),
+    );
 
-      if (shouldExecute) {
-        final TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
-            intentToUse;
-        if (originExecutionIntent
-            is TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
-          intentToUse = originExecutionIntent;
-        } else {
-          intentToUse = _createAndSetTaskIntentRestart();
-        }
-        // IN: DATA STATE = PENDING
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _TaskRestartExecutionUnit<
-              TASK_INIT_DATA, //
-              TASK_RESULT_DATA,
-              FORM_INPUT>(
-            xTask: this,
-            executionIntent: intentToUse,
-          ),
-          info:
-              "Task (1.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
-        );
-      } else {
-        return NxtExecutionUnit.no(
-          debug: debug,
-          info:
-              "Task (1.2), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent, "
-              "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
-        );
-      }
+    final output = TaskExecutionCalculator.calculate(input);
+
+    // 2. Retain the old Intent if necessary
+    if (output.preserveCurrentIntent) {
+      _stashedIntent = _executionIntent;
     }
 
-    // =========================================================================
-    // 2. DATA STATE = STALE
-    // =========================================================================
-    else if (taskDataState.isStale) {
-      final bool shouldExecute =
-          (_execHint == ExecHint.force) && !_executed;
+    String finalDebugInfo = output.debugInfo;
 
-      if (shouldExecute) {
-        final TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
-            intentToUse;
-        if (originExecutionIntent
-            is TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
-          intentToUse = originExecutionIntent;
-        } else {
-          intentToUse = _createAndSetTaskIntentRestart();
-        }
-
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _TaskRestartExecutionUnit(
-            xTask: this,
-            executionIntent: intentToUse,
-          ),
-          info:
-              "Task (2.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
-        );
-      } else {
-        return NxtExecutionUnit.no(
-          debug: debug,
-          info:
-              "Task (2.2), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent, "
-              "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
-        );
-      }
+    // 3. Inject the Missing Intent (if applicable) and update the Debug info to match the original version.
+    if (output.missingIntent == MissingIntentType.restart) {
+      final intentToUse = _createAndSetTaskIntentRestart();
+      finalDebugInfo = finalDebugInfo.replaceFirst(
+          "_executionIntent: $_stashedIntent",
+          "_executionIntent: $_stashedIntent --> $intentToUse");
+    } else if (output.missingIntent == MissingIntentType.submit) {
+      final intentToUse = _createAndSetTaskIntentSubmit();
+      finalDebugInfo = finalDebugInfo.replaceFirst(
+          "_executionIntent: $_stashedIntent",
+          "_executionIntent: $_stashedIntent --> $intentToUse");
     }
 
-    // =========================================================================
-    // 3. DATA STATE = FRESH
-    // =========================================================================
-    else if (taskDataState.isFresh) {
-      // IN: DATA STATE = FRESH
-      // 3.1. Force execution explicitly requested via ExecHint
-      if (_execHint == ExecHint.force) {
-        final TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
-            intentToUse;
-        if (originExecutionIntent
-            is TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
-          intentToUse = originExecutionIntent;
-        } else {
-          intentToUse = _createAndSetTaskIntentRestart();
-        }
-
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _TaskRestartExecutionUnit(
-            xTask: this,
-            executionIntent: intentToUse,
-          ),
-          info:
-              "Task (3.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
-        );
-      }
-      // IN: DATA STATE = FRESH
-      // 3.2. Handle active execution intents dispatched imperatively
-      if (originExecutionIntent != null) {
-        if (originExecutionIntent is TaskNullIntent) {
-          return NxtExecutionUnit.no(
-            debug: debug,
-            info:
-                "Task (3.2.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${taskDataState.toBriefInfo()}",
-          );
-        }
-        // TaskSubmitIntent
-        else if (originExecutionIntent is TaskSubmitIntent<TASK_INIT_DATA,
-            TASK_RESULT_DATA, FORM_OUTPUT>) {
-          return NxtExecutionUnit.yes(
-            debug: debug,
-            executionUnit: _TaskSubmitExecutionUnit(
-              xTask: this,
-              executionIntent: originExecutionIntent,
-            ),
-            info:
-                "Task (3.2.2), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${taskDataState.toBriefInfo()}",
-          );
-        } else {
-          return NxtExecutionUnit.no(
-            debug: debug,
-            info:
-                "Task (3.2.3), ${getClassNameWithoutGenerics(task)}, unhandled _executionIntent: $originExecutionIntent, "
-                "dataState: ${taskDataState.toBriefInfo()}",
-          );
-        }
-      }
-      // IN: DATA STATE = FRESH
-      // 3.3. Idle state when data is fresh and no intent is active
-      return NxtExecutionUnit.no(
-        debug: debug,
-        info:
-            "Task (3.3), ${getClassNameWithoutGenerics(task)}, _executionIntent: null, "
-            "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
-      );
-    }
-
-    // =========================================================================
-    // 4. DATA STATE = SUBMISSION ATTEMPTED FAILED.
-    // =========================================================================
-    else if (taskDataState.isSubmissionAttemptedFailed) {
-      final bool shouldReload =
-          (_execHint == ExecHint.force || isVisible) && !_executed;
-
-      if (shouldReload) {
-        final TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
-            intentToUse;
-        if (originExecutionIntent
-            is TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>) {
-          intentToUse = originExecutionIntent;
-        } else {
-          intentToUse = _createAndSetTaskIntentRestart();
-        }
+    // 4. Return to Execution Unit
+    switch (output.action) {
+      case TaskExecutionAction.restart:
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _TaskRestartExecutionUnit<TASK_INIT_DATA,
-              TASK_RESULT_DATA, FORM_INPUT>(
+              TASK_RESULT_DATA,
+              FORM_INPUT>(
             xTask: this,
-            executionIntent: intentToUse,
+            executionIntent: _executionIntent
+            as TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>,
           ),
-          info:
-              "Task (4.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent --> $intentToUse, "
-              "dataState: ${taskDataState.toBriefInfo()}, execHint: $_execHint, isVisible: $isVisible",
+          info: finalDebugInfo,
         );
-      }
-      // !shouldReload
-      else {
-        if (originExecutionIntent != null) {
-          if (originExecutionIntent is TaskNullIntent) {
-            return NxtExecutionUnit.no(
-              debug: debug,
-              info:
-                  "Task (4.2.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent, "
-                  "dataState: ${taskDataState.toBriefInfo()}",
-            );
-          }
-          // TaskSubmitIntent
-          else if (originExecutionIntent is TaskSubmitIntent<TASK_INIT_DATA,
-              TASK_RESULT_DATA, FORM_OUTPUT>) {
-            return NxtExecutionUnit.yes(
-              debug: debug,
-              executionUnit: _TaskSubmitExecutionUnit<TASK_INIT_DATA,
-                  TASK_RESULT_DATA, FORM_INPUT,FORM_OUTPUT>(
-                xTask: this,
-                executionIntent: originExecutionIntent,
-              ),
-              info:
-                  "Task (4.2.2), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent, "
-                  "dataState: ${taskDataState.toBriefInfo()}",
-            );
-          } else {
-            return NxtExecutionUnit.no(
-              debug: debug,
-              info:
-                  "Task (4.2.3), ${getClassNameWithoutGenerics(task)}, unhandled _executionIntent: $originExecutionIntent, "
-                  "dataState: ${taskDataState.toBriefInfo()}",
-            );
-          }
-        }
-        // originExecutionIntent == null.
-        else {
-          return NxtExecutionUnit.no(
-            debug: debug,
-            info:
-                "Task (4.3), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent, "
-                "dataState: ${taskDataState.toBriefInfo()}",
-          );
-        }
-      }
+      case TaskExecutionAction.submit:
+        return NxtExecutionUnit.yes(
+          debug: debug,
+          executionUnit: _TaskSubmitExecutionUnit<TASK_INIT_DATA,
+              TASK_RESULT_DATA,
+              FORM_INPUT,
+              FORM_OUTPUT>(
+            xTask: this,
+            executionIntent: _executionIntent as TaskSubmitIntent<
+                TASK_INIT_DATA,
+                TASK_RESULT_DATA,
+                FORM_OUTPUT>,
+          ),
+          info: finalDebugInfo,
+        );
+      case TaskExecutionAction.none:
+      default:
+        return NxtExecutionUnit.no(
+          debug: debug,
+          info: finalDebugInfo,
+        );
     }
-
-    // =========================================================================
-    // 5. DATA STATE = SUBMISSION ATTEMPTED SUCCESS.
-    // =========================================================================
-    else if (taskDataState.isSubmissionAttemptedSuccess) {
-      return NxtExecutionUnit.no(
-        debug: debug,
-        info:
-            "Task (5.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent, "
-            "dataState: ${taskDataState.toBriefInfo()}",
-      );
-    }
-
-    // =========================================================================
-    // 6. UNHANDLED / FALLTHROUGH STATE
-    // =========================================================================
-    return NxtExecutionUnit.no(
-      debug: debug,
-      info:
-          "Task (6.1), ${getClassNameWithoutGenerics(task)}, _executionIntent: $originExecutionIntent, "
-          "dataState: ${taskDataState.toBriefInfo()}, isVisible: $isVisible",
-    );
   }
 
   // ***************************************************************************
@@ -355,17 +182,17 @@ class XTask<
   }
 
   TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA, FORM_OUTPUT>
-      _createAndSetTaskIntentSubmit() {
+  _createAndSetTaskIntentSubmit() {
     final executionIntent =
-        TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA, FORM_OUTPUT>();
+    TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA, FORM_OUTPUT>();
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
   TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
-      _createAndSetTaskIntentRestart() {
+  _createAndSetTaskIntentRestart() {
     final executionIntent =
-        TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>();
+    TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>();
     _executionIntent = executionIntent;
     return executionIntent;
   }

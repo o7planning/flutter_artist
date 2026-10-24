@@ -13,7 +13,6 @@ abstract class TaskFormModel<
         FORM_INPUT,
         FORM_OUTPUT,
         ADDITIONAL_FORM_RELATED_DATA> {
-
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {

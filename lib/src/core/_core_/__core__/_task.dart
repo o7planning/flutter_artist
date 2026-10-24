@@ -6,14 +6,15 @@ part of '../core.dart';
 /// [TaskDataStatePending] -> (loads INIT_DATA) -> [TaskDataStateLoadedFresh]
 /// -> (submission) -> [TaskDataStateSubmissionAttempted]
 abstract class Task<
-    INIT_DATA extends TaskInitData, //
-    RESULT_DATA extends TaskResultData, //
-    FORM_INPUT extends FormInput,
-    FORM_OUTPUT extends FormOutput> extends WorkNode<
+INIT_DATA extends TaskInitData, //
+RESULT_DATA extends TaskResultData, //
+FORM_INPUT extends FormInput,
+FORM_OUTPUT extends FormOutput> extends WorkNode<
     INIT_DATA, //
     RESULT_DATA, //
     FORM_INPUT,
-    FORM_OUTPUT> implements FormHost, ClassDefViewable {
+    FORM_OUTPUT>
+    implements FormHost, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {
@@ -169,7 +170,8 @@ abstract class Task<
     executionTrace.addInfo(
       codeId: "#090100",
       shortDesc:
-          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Restart Task)",
+      "${debugObjHtml(this)} -> Begin ${executionUnitType
+          .asDebugExecutionUnit()} (Restart Task)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -235,7 +237,7 @@ abstract class Task<
       if (taskInitData == null) {
         throw AppError(
           errorMessage:
-              "${getClassName(this)}.performLoadInitData() return null InitData",
+          "${getClassName(this)}.performLoadInitData() return null InitData",
         );
       }
     } catch (e, stackTrace) {
@@ -259,7 +261,7 @@ abstract class Task<
 
       if (formModel != null) {
         final newFormDataState =
-            TaskFormDataStateUtils.calculateNewLazyDataState(
+        TaskFormDataStateUtils.calculateNewLazyDataState(
           currentFormDataState: formModel!.dataState,
           taskDataState: _dataState,
           hasInitData: _initData != null,
@@ -273,7 +275,8 @@ abstract class Task<
       executionTrace.addInfo(
         codeId: "#090500",
         shortDesc:
-            "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
+        "The ${debugObjHtml(
+            this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
       );
       __refreshLoadingInitDataState(isLoading: false);
@@ -373,7 +376,7 @@ abstract class Task<
       executionTrace.addInfo(
         codeId: "#090300",
         shortDesc:
-            "Transitioning FormModel state to ${newFormDataState.toBriefInfo()}.",
+        "Transitioning FormModel state to ${newFormDataState.toBriefInfo()}.",
       );
       formModel!._formModelStructure._setFormDataState(
         formDataState: newFormDataState,
@@ -391,7 +394,7 @@ abstract class Task<
     required ExecutionUnitType executionUnitType,
     required XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT> thisXTask,
     required TaskSubmitIntent<INIT_DATA, RESULT_DATA, FORM_OUTPUT>
-        executionIntent,
+    executionIntent,
   }) async {
     __assertThisXTask(thisXTask);
     thisXTask._createAndSetTaskIntentDone(
@@ -401,7 +404,8 @@ abstract class Task<
     executionTrace.addInfo(
       codeId: "#093100",
       shortDesc:
-          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Submit)",
+      "${debugObjHtml(this)} -> Begin ${executionUnitType
+          .asDebugExecutionUnit()} (Submit)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -445,7 +449,8 @@ abstract class Task<
       if (data == null) {
         throw ApiError(
           errorMessage:
-              "${getClassNameWithoutGenerics(this)}.performSubmit() return ResultData null",
+          "${getClassNameWithoutGenerics(
+              this)}.performSubmit() return ResultData null",
         );
       }
       _submitResultData = data;
@@ -563,7 +568,7 @@ abstract class Task<
 
   bool canLoadInitData() {
     final Actionable<TaskRestartPrecheck> actionable =
-        checkBeforeRestart(checkAllow: true);
+    checkBeforeRestart(checkAllow: true);
     return actionable.yes;
   }
 
@@ -644,6 +649,7 @@ abstract class Task<
     );
     return actionable.yes;
   }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -695,10 +701,10 @@ abstract class Task<
 
     final XActivity xActivity = _XActivityTaskSubmit(task: this);
     final xTask = xActivity.findXTaskByName(name)
-        as XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT>;
+    as XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT>;
 
     final TaskSubmitIntent<INIT_DATA, RESULT_DATA, FORM_OUTPUT>
-        executionIntent = xTask._createAndSetTaskIntentSubmit();
+    executionIntent = xTask._createAndSetTaskIntentSubmit();
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -764,7 +770,7 @@ abstract class Task<
 
   @override
   Future<Actionable<ShowFormInfoPrecheck>>
-      showDebugFormModelInspectorDialog() async {
+  showDebugFormModelInspectorDialog() async {
     final actionable = checkBeforeShowFormInfo();
     if (!actionable.yes) {
       return actionable;

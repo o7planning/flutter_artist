@@ -13,9 +13,9 @@ class _StageFormModelLoadDataExecutionUnit
     required this.xStageFormModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.formModelLoadData,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.formModelLoadData,
+    executionIntent: executionIntent,
+  );
 
   @override
   XActivity get xActivity => xStageFormModel.xActivity;

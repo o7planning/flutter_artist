@@ -5,8 +5,7 @@ class ControlBarHelper {
     return VerticalDivider();
   }
 
-  static Widget buildControlBarButton(
-    BuildContext context, {
+  static Widget buildControlBarButton(BuildContext context, {
     required ControlBarStyle style,
     required String tooltip,
     required IconData iconData,

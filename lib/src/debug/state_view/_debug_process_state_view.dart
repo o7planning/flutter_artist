@@ -36,7 +36,7 @@ class DebugProzessStateView extends DebugBaseStateView {
         final colorScheme = theme.colorScheme;
 
         // Resolve current active stage in the Prozess
-        final Stage? viewingStage = prozess. viewingStage ;
+        final Stage? viewingStage = prozess.viewingStage;
 
         List<Widget> children = [];
 

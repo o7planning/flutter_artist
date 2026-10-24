@@ -11,8 +11,7 @@ class ActivityConfig {
     this.onHideAction = ActivityHiddenAction.none,
   });
 
-  ActivityConfig copy() =>
-      ActivityConfig(
+  ActivityConfig copy() => ActivityConfig(
         onHideAction: onHideAction,
         releasePolicy: releasePolicy,
       );

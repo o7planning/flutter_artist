@@ -45,7 +45,9 @@ class ProzessControlBar extends BaseControlBar<
 }
 
 class _ProzessControlBarState extends _BaseControlBarState<Prozess,
-    ProzessControlBarItemType, ProzessControlBarItem, ProzessControlBar> {
+    ProzessControlBarItemType,
+    ProzessControlBarItem,
+    ProzessControlBar> {
   @override
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
 
@@ -114,8 +116,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           customColor: widget.style.activeIconColor,
           onPressed: canMove
               ? () async {
-                  widget.prozess.moveToPreviousStage();
-                }
+            widget.prozess.moveToPreviousStage();
+          }
               : null,
         );
       case ProzessControlBarItemType.moveToNextStage:
@@ -129,8 +131,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           customColor: widget.style.activeIconColor,
           onPressed: canMove
               ? () async {
-                  widget.prozess.moveToNextStage();
-                }
+            widget.prozess.moveToNextStage();
+          }
               : null,
         );
       case ProzessControlBarItemType.restartProzess:
@@ -155,8 +157,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           iconData: FaIconConstants.formRefreshIconData,
           onPressed: actionable.yes
               ? () {
-                  widget.prozess.restartViewingStage();
-                }
+            widget.prozess.restartViewingStage();
+          }
               : null,
         );
 
@@ -174,8 +176,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           iconData: FaIconConstants.submitIconData,
           onPressed: actionable.yes
               ? () {
-                  widget.prozess.submitViewingStage();
-                }
+            widget.prozess.submitViewingStage();
+          }
               : null,
         );
 
@@ -190,9 +192,9 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           onAction: false,
           onPressed: actionable.yes
               ? () async {
-                  await widget.prozess
-                      .showViewingStageFormModelInspectorDialog();
-                }
+            await widget.prozess
+                .showViewingStageFormModelInspectorDialog();
+          }
               : null,
         );
 

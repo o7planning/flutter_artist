@@ -33,17 +33,17 @@ class BlockDataStateUtils {
     }
 
     switch (currentBlockDataState) {
-      // Uninitialized blocks stay in Pending once parent identity is established
+    // Uninitialized blocks stay in Pending once parent identity is established
       case BlockDataStateNone():
         return const BlockDataStatePending.initial();
 
-      // Cold baseline states
+    // Cold baseline states
       case BlockDataStatePending(:final reason):
         if (filterCriteriaChanged) {
           final BlockPendingReasonFailed? priorFailure = switch (reason) {
             BlockPendingReasonFailed failure => failure,
             BlockPendingReasonFilterChanged(:final retainedFailureReason) =>
-              retainedFailureReason,
+            retainedFailureReason,
             _ => null,
           };
           return BlockDataStatePending.filterChanged(
@@ -52,7 +52,7 @@ class BlockDataStateUtils {
         }
         return currentBlockDataState;
 
-      // Active and clean dataset in RAM
+    // Active and clean dataset in RAM
       case BlockDataStateLoadedFresh(:final transientErrorInfo):
         if (filterCriteriaChanged) {
           return BlockDataStateLoadedStale.filterChanged();
@@ -62,18 +62,18 @@ class BlockDataStateUtils {
         }
         return currentBlockDataState;
 
-      // Dataset in RAM that is already marked stale
+    // Dataset in RAM that is already marked stale
       case BlockDataStateLoadedStale(:final reason):
-        // Extract existing failure reason across multiple hops
+      // Extract existing failure reason across multiple hops
         final BlockLoadedStateStaleReasonFailed? priorFailure =
-            switch (reason) {
+        switch (reason) {
           BlockLoadedStateStaleReasonFailed failure => failure,
           BlockLoadedStateStaleReasonEvent(:final retainedFailureReason) =>
-            retainedFailureReason,
+          retainedFailureReason,
           BlockLoadedStateStaleReasonFilterChanged(
-            :final retainedFailureReason
+              :final retainedFailureReason
           ) =>
-            retainedFailureReason,
+          retainedFailureReason,
         };
 
         if (filterCriteriaChanged) {

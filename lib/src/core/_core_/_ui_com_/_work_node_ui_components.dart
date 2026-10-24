@@ -49,7 +49,7 @@ abstract class _WorkNodeUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-        in __contentViewWidgetStates.keys) {
+    in __contentViewWidgetStates.keys) {
       if (!widgetState.mounted) continue;
       final bool visible =
           __contentViewWidgetStates[widgetState]?.isVisible ?? false;
@@ -73,7 +73,7 @@ abstract class _WorkNodeUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-        in __controlBarWidgetStates.keys) {
+    in __controlBarWidgetStates.keys) {
       if (!widgetState.mounted) continue;
       final bool visible =
           __controlBarWidgetStates[widgetState]?.isVisible ?? false;
@@ -90,7 +90,7 @@ abstract class _WorkNodeUiComponents extends _UiComponents {
   /// Rebuilds active stage control bars.
   void refreshControlBars({bool force = false}) {
     for (final _ContextProviderViewState widgetState
-        in __controlBarWidgetStates.keys) {
+    in __controlBarWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState(force: force);
       }
@@ -99,7 +99,7 @@ abstract class _WorkNodeUiComponents extends _UiComponents {
 
   void refreshContentViews({bool force = true}) {
     for (final _ContextProviderViewState state
-        in __contentViewWidgetStates.keys) {
+    in __contentViewWidgetStates.keys) {
       if (state.mounted) {
         state.refreshState(force: force);
       }

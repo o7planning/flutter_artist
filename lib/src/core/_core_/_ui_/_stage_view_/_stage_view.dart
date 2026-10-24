@@ -43,6 +43,7 @@ class DefaultStageView<
         FormInput,
         FormOutput>> extends StageView<STAGE> {
   final TextStyle? textStyle;
+
   const DefaultStageView({
     super.key,
     required super.stage,

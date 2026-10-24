@@ -11,6 +11,7 @@ class _ProzessUiComponents extends _UiComponents {
 
   // Registered views: ProzessStageViewSwitcher, etc.
   final Map<_ContextProviderViewState, XState> __contentViewWidgetStates = {};
+
   // Registered views: ProzessControlBar widget states.
   final Map<_ContextProviderViewState, XState> __controlBarWidgetStates = {};
 
@@ -289,7 +290,9 @@ class _ProzessUiComponents extends _UiComponents {
     __controlBarWidgetStates.update(
       widgetState,
           (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
     final bool prozessContextCurrent = hasProzessContext(
       includeDescendants: true,
@@ -322,7 +325,9 @@ class _ProzessUiComponents extends _UiComponents {
     __contentViewWidgetStates.update(
       widgetState,
           (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
 
     final bool prozessContextCurrent =

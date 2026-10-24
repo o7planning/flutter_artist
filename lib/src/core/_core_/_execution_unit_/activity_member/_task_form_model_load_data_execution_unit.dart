@@ -13,9 +13,9 @@ class _TaskFormModelLoadDataExecutionUnit
     required this.xTaskFormModel,
     required this.executionIntent,
   }) : super(
-    executionUnitType: ExecutionUnitType.formModelLoadData,
-    executionIntent: executionIntent,
-  );
+          executionUnitType: ExecutionUnitType.formModelLoadData,
+          executionIntent: executionIntent,
+        );
 
   @override
   XActivity get xActivity => xTaskFormModel.xActivity;

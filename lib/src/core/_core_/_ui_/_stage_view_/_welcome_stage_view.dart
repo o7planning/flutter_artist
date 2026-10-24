@@ -9,6 +9,7 @@ class WelcomeStageView<
         FormInput,
         FormOutput>> extends StageView<STAGE> {
   final TextStyle? textStyle;
+
   const WelcomeStageView({
     super.key,
     required super.stage,

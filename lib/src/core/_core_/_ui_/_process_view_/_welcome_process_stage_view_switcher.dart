@@ -1,15 +1,15 @@
 part of '../../core.dart';
 
 class WelcomeProzessStageViewSwitcher<
-    PROZESS extends Prozess<
-        StageEnum, //
-        ProzessInitData,
-        ProzessContextData>> extends StatelessWidget {
+PROZESS extends Prozess<
+    StageEnum, //
+    ProzessInitData,
+    ProzessContextData>> extends StatelessWidget {
   final PROZESS prozess;
   final QuickSuggestionMode quickSuggestionMode;
   final Widget Function(
-          BuildContext context, Stage currentStage, String promptMessage)?
-      customContentBuilder;
+      BuildContext context, Stage currentStage, String promptMessage)?
+  customContentBuilder;
   final String? description;
 
   const WelcomeProzessStageViewSwitcher({

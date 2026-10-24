@@ -34,8 +34,7 @@ class ConditionModelImpl extends ConditionModel {
     required this.criterionDef,
     required this.operator,
     required List<FilterOperator> supportedOperators,
-  })
-      : _supportedOperators = supportedOperators,
+  })  : _supportedOperators = supportedOperators,
         super._();
 
   @override
@@ -104,7 +103,7 @@ class ConditionGroupModelImpl extends ConditionModel {
       groupName: groupName,
       connector: connector,
       conditions:
-      _conditions.map((m) => m.toFilterConditionTildeVal()).toList(),
+          _conditions.map((m) => m.toFilterConditionTildeVal()).toList(),
     );
   }
 }

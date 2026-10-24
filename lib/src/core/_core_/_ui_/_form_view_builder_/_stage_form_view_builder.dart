@@ -48,7 +48,7 @@ class _StageFormViewBuilderState
     if (!isValid) {
       return const ErrorMessageView(
         message:
-            'StageFormView and StageFormViewBuilder must be child widgets of ProzessStageFormViewSwitcher!',
+        'StageFormView and StageFormViewBuilder must be child widgets of ProzessStageFormViewSwitcher!',
       );
     }
     return super.buildContent(context);

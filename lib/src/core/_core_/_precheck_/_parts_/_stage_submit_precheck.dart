@@ -16,7 +16,6 @@ enum StageSubmitPrecheck implements Precheck {
     message: "Action not allowed",
     details: ["You can only submit the stage that you are currently viewing."],
   ),
-
   stageAlreadySubmitted(
     precheckCode: PrecheckCode.stageAlreadySubmitted,
     message: "Stage already completed",
@@ -24,7 +23,6 @@ enum StageSubmitPrecheck implements Precheck {
       "This step has already been successfully submitted. To make changes, please restart the process from this step."
     ],
   ),
-
   stageInPendingState(
     precheckCode: PrecheckCode.stageInPendingState,
     message: "Stage is loading",
@@ -35,7 +33,6 @@ enum StageSubmitPrecheck implements Precheck {
     message: "Data is outdated",
     details: ["The stage data is out of date and requires reloading."],
   ),
-
   formInNoneState(
     precheckCode: PrecheckCode.formInNoneState,
     message: "Form is not ready",

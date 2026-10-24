@@ -127,7 +127,7 @@ class _ActivityUiComponents extends _ModuleUiComponents {
   Map<IContextProviderViewState, XState> _debugFindMountedWidgetStates({
     required bool withTask,
     required bool withProzess,
-    required bool withProzessContentView, 
+    required bool withProzessContentView,
     required bool withProzessControlBar,
     required bool withStages,
     required bool activeOnly,
@@ -135,7 +135,7 @@ class _ActivityUiComponents extends _ModuleUiComponents {
     return _findMountedWidgetStates(
       withTask: withTask,
       withProzess: withProzess,
-      withProzessContentView:withProzessContentView,
+      withProzessContentView: withProzessContentView,
       withProzessControlBar: withProzessControlBar,
       withStages: withStages,
       activeOnly: activeOnly,

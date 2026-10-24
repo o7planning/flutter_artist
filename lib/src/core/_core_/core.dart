@@ -10,7 +10,7 @@ import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_artist/src/core/_core_/_precheck_/__precheck.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart'
     hide FlutterArtistLocaleAdapter;
@@ -82,6 +82,7 @@ import '../error/filter_register/tilde_filter_criterion_suffix_invalid_error.dar
 import '../error/form/form_multi_opt_ms_mismatch_error.dart';
 import '../error/form/form_prop_type_mismatch_error.dart';
 import '../error/form_register/form_prop_invalid_name_error.dart';
+import '_execution_unit_calc_/_calc.dart';
 import '_precheck_utils_/__precheck_utils.dart';
 import '_sync_/_block_sync_session_snapshot.dart';
 import '_utils_/block_data_state_utils.dart';
@@ -189,6 +190,25 @@ part '_execution_intent_/scalar_execution_intent.dart';
 part '_execution_intent_/_execution_intent.dart';
 
 part '_execution_intent_/app_execution_intent.dart';
+
+part '_execution_unit_calc_/_model_/_filter_model_neu_model.dart';
+
+part '_execution_unit_calc_/_model_/_block_form_model_neu_model.dart';
+
+part '_execution_unit_calc_/_model_/_stage_form_neu_model.dart';
+
+part '_execution_unit_calc_/_model_/_task_form_model_neu_model.dart';
+
+
+part '_execution_unit_calc_/_model_/_block_neu_model.dart';
+
+part '_execution_unit_calc_/_model_/_scalar_neu_model.dart';
+
+part '_execution_unit_calc_/_model_/_process_neu_model.dart';
+
+part '_execution_unit_calc_/_model_/_stage_neu_model.dart';
+
+part '_execution_unit_calc_/_model_/_task_neu_model.dart';
 
 part '_execution_intent_/activity_v1_execution_intent.dart';
 

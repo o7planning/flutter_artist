@@ -1,8 +1,8 @@
 part of '../../core.dart';
 
 class TaskRestartResult<
-        INIT_DATA extends TaskInitData, //
-        RESULT_DATA extends TaskResultData>
+INIT_DATA extends TaskInitData, //
+RESULT_DATA extends TaskResultData>
     extends ExecutionUnitResult<TaskRestartPrecheck> {
   TaskRestartResult({required super.precheck});
 

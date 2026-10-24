@@ -93,8 +93,8 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: widget.task.isLoadingInitData,
           onPressed: actionable.yes
               ? () async {
-                  await widget.task.restart();
-                }
+            await widget.task.restart();
+          }
               : null,
         );
 
@@ -116,17 +116,17 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: widget.task.__isSubmitting,
           onPressed: actionable.yes
               ? () async {
-                  final result = await widget.task.submit();
-                  final NavigationIntent? intent =
-                      widget.config.submitNavigationIntent;
-                  if (intent != null) {
-                    widget.task._processNavigationIntent(
-                      context: context,
-                      result: result,
-                      intent: intent,
-                    );
-                  }
-                }
+            final result = await widget.task.submit();
+            final NavigationIntent? intent =
+                widget.config.submitNavigationIntent;
+            if (intent != null) {
+              widget.task._processNavigationIntent(
+                context: context,
+                result: result,
+                intent: intent,
+              );
+            }
+          }
               : null,
         );
 
@@ -141,8 +141,8 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: actionable.yes
               ? () async {
-                  await widget.task.showDebugFormModelInspectorDialog();
-                }
+            await widget.task.showDebugFormModelInspectorDialog();
+          }
               : null,
         );
 

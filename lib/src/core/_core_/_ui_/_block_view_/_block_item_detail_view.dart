@@ -1,14 +1,14 @@
 part of '../../core.dart';
 
 abstract class BlockItemDetailView<
-BLOCK extends Block<
-    Comparable, //
-    Identifiable<Comparable>,
-    Identifiable<Comparable>,
-    FilterInput,
-    FilterCriteria,
-    CreationPreset,
-    FormInput>> extends StatelessWidget {
+    BLOCK extends Block<
+        Comparable, //
+        Identifiable<Comparable>,
+        Identifiable<Comparable>,
+        FilterInput,
+        FilterCriteria,
+        CreationPreset,
+        FormInput>> extends StatelessWidget {
   final BLOCK block;
   final BlockViewContext blockViewContext;
 
@@ -17,7 +17,7 @@ BLOCK extends Block<
     this.blockViewContext = BlockViewContext.itemDetail,
     super.key,
   }) : assert(blockViewContext == BlockViewContext.itemDetail ||
-      blockViewContext == BlockViewContext.form);
+            blockViewContext == BlockViewContext.form);
 
   @override
   @nonVirtual
