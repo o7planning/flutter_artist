@@ -1,5 +1,5 @@
-import '../../enums/_enums.dart';
-import '../core.dart';
+import '../../../enums/_enums.dart';
+import '../../core.dart';
 
 part 'filter_execution_calculator.dart';
 
@@ -23,5 +23,4 @@ enum MissingIntentType {
   dataLoadOrQuery,
   setItemAsCurrent,
   restart,
-  submit,
 }

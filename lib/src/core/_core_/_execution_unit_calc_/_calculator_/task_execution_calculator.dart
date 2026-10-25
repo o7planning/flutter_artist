@@ -47,8 +47,9 @@ class TaskExecutionCalculator {
     // 2. DATA STATE = STALE
     // =========================================================================
     else if (state.isStale) {
-      // Lưu ý: Logic gốc của ông giáo ở đây KHÔNG chứa isVisible
-      final bool shouldExecute = (hint == ExecHint.force) && !executed;
+      // IMPORTANT: No condition: isVisible (?? TODO: Review in test case).
+      final bool shouldExecute =
+          (hint == ExecHint.force || isVisible) && !executed;
       if (shouldExecute) {
         final bool isRestart = intent is TaskRestartIntent;
         return TaskNextUnitOutput(

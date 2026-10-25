@@ -56,11 +56,11 @@ class StageExecutionCalculator {
       final bool shouldExecute =
           (hint == ExecHint.force || isVisible) && !executed;
       if (shouldExecute) {
-        final bool isSubmit = intent is StageSubmitIntent;
+        final bool isRestart = intent is StageRestartIntent;
         return StageNextUnitOutput(
-          action: StageExecutionAction.submit,
-          missingIntent: isSubmit ? null : MissingIntentType.submit,
-          preserveCurrentIntent: !isSubmit && intent != null,
+          action: StageExecutionAction.restart,
+          missingIntent: isRestart ? null : MissingIntentType.restart,
+          preserveCurrentIntent: !isRestart && intent != null,
           debugInfo: buildInfo("Stage (2.1)"),
         );
       } else {

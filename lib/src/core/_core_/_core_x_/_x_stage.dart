@@ -141,11 +141,6 @@ FORM_OUTPUT extends FormOutput> {
       finalDebugInfo = finalDebugInfo.replaceFirst(
           "_executionIntent: $_stashedIntent",
           "_executionIntent: $_stashedIntent --> $intentToUse");
-    } else if (output.missingIntent == MissingIntentType.submit) {
-      final intentToUse = _createAndSetStageIntentSubmit();
-      finalDebugInfo = finalDebugInfo.replaceFirst(
-          "_executionIntent: $_stashedIntent",
-          "_executionIntent: $_stashedIntent --> $intentToUse");
     }
 
     // 4. Return Execution Unit

@@ -9,8 +9,8 @@ class BlockExecutionCalculator {
 
     String buildInfo(String branch) {
       return "$branch, ${input.modelName}, _executionIntent: $intent, "
-          "dataState: ${state.toBriefInfo()}, itemDataState: ${itemState.toBriefInfo()}, "
-          "queryHint: $hint, isVisibleX: ${input.isVisible}}";
+          "dataState: ${state.toBriefInfo()}, itemDataState: ${itemState.toBriefInfo()}, itemCount: ${input.itemCount}, "
+          "queryHint: $hint, isVisibleX: ${input.isVisible}";
     }
 
     // =========================================================================
@@ -92,7 +92,7 @@ class BlockExecutionCalculator {
           debugInfo: buildInfo("Block (4.1)"),
         );
       }
-
+      // IN: DATA STATE = FRESH
       // 4.2. Handle active execution intents
       if (intent != null) {
         if (intent is BlockDoneIntent) {
@@ -157,39 +157,51 @@ class BlockExecutionCalculator {
           );
         }
       }
-      // 4.3. Automatic synchronization
+      // IN: DATA STATE = FRESH
+      // 4.3. intent == null
       else {
+        // IN: DATA STATE = FRESH
+        // IN: intent == null
         if (itemState.isNone) {
           if (input.hasFormModel && input.formMode == BlockFormMode.creation) {
             return BlockNextUnitOutput(
               action: BlockExecutionAction.none,
-              debugInfo: buildInfo("Block (4.3.1)"),
+              debugInfo: buildInfo("Block (4.3.1.1)"),
             );
           }
           if (input.itemCount > 0 && input.itemVisibleX) {
             return BlockNextUnitOutput(
               action: BlockExecutionAction.setCurrentItem,
               missingIntent: MissingIntentType.setItemAsCurrent,
-              debugInfo: buildInfo("Block (4.3.2.1)"),
+              debugInfo: buildInfo("Block (4.3.1.2)"),
             );
           } else {
             return BlockNextUnitOutput(
               action: BlockExecutionAction.none,
-              debugInfo: buildInfo("Block (4.3.2.2)"),
+              debugInfo: buildInfo("Block (4.3.1.3)"),
             );
           }
-        } else if (itemState.isFresh) {
+        }
+        // IN: DATA STATE = FRESH
+        // IN: intent == null
+        else if (itemState.isFresh) {
           return BlockNextUnitOutput(
             action: BlockExecutionAction.none,
-            debugInfo: buildInfo("Block (4.3.2.2)"),
+            debugInfo: buildInfo("Block (4.3.2.1)"),
           );
-        } else if (itemState.isStale) {
+        }
+        // IN: DATA STATE = FRESH
+        // IN: intent == null
+        else if (itemState.isStale) {
           return BlockNextUnitOutput(
             action: BlockExecutionAction.setCurrentItem,
             missingIntent: MissingIntentType.setItemAsCurrent,
-            debugInfo: buildInfo("Block (4.3.3)"),
+            debugInfo: buildInfo("Block (4.3.3.1)"),
           );
-        } else {
+        }
+        // IN: DATA STATE = FRESH
+        // IN: intent == null
+        else {
           throw UnimplementedError(
               "Unhandled itemDataState in Fresh block: ${itemState.toBriefInfo()}");
         }
