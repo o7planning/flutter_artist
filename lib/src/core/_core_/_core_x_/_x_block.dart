@@ -27,7 +27,7 @@ class XBlock<
       ITEM,
       ITEM_DETAIL>? _pendingSetCurrentItemIntent;
 
-  final _recentLoadedItemMap = <ID, _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL>>{};
+  final _recentLoadedItemMap = <ID, _BlockCurrentData<ID, ITEM, ITEM_DETAIL>>{};
 
   final Block<
       ID, //
@@ -254,14 +254,14 @@ class XBlock<
     required ITEM item,
     required ITEM_DETAIL itemDetail,
   }) {
-    _recentLoadedItemMap[itemId] = _BlockItem2Wrap(
+    _recentLoadedItemMap[itemId] = _BlockCurrentData(
       id: itemId,
       item: item,
       itemDetail: itemDetail,
     );
   }
 
-  _BlockItem2Wrap? _getRecentLoadedItem({required ID itemId}) {
+  _BlockCurrentData? _getRecentLoadedItem({required ID itemId}) {
     return _recentLoadedItemMap[itemId];
   }
 
@@ -279,7 +279,7 @@ class XBlock<
     // 1. Prepare Input.
     final input = BlockNextUnitInput(
       dataState: block.dataState,
-      itemDataState: block.blockItemDataState,
+      itemDataState: block.blockCurrentItemModel.dataState,
       currentIntent: _executionIntent,
       queryHint: __queryHint,
       isVisible: block.ui.hasVisibleViews(includeDescendants: true),

@@ -29,7 +29,7 @@ part '_parts_/_form_model_patch_form_fields_precheck.dart';
 part '_parts_/_form_model_view_changed_precheck.dart';
 part '_parts_/_process_determine_next_stage_precheck.dart';
 part '_parts_/_process_load_init_data_precheck.dart';
-part '_parts_/_prozess_restart_precheck.dart';
+part '_parts_/_process_restart_precheck.dart';
 part '_parts_/_scalar_clear_precheck.dart';
 part '_parts_/_scalar_load_extra_data_precheck.dart';
 part '_parts_/_scalar_query_precheck.dart';

@@ -129,7 +129,7 @@ part '__core__/_block_current_item_model.dart';
 
 part '__core__/_block_ancestor_context.dart';
 
-part '__core__/_context_type.dart';
+part '__core__/_view_context_type.dart';
 
 part '_ui_/_stage_view_/_stage_view.dart';
 
@@ -258,7 +258,7 @@ part '__core__/_coordinator.dart';
 
 part '__core__/_drawer_controller.dart';
 
-part '__core__/_block_item2_wrap.dart';
+part '__core__/_block_current_data.dart';
 
 part '../debug/_debug_utils.dart';
 
@@ -514,7 +514,7 @@ part '_core_x_/_x_activity_/_x_exec_/__target_stage_and_options.dart';
 
 part '_core_x_/_x_activity_/_x_exec_/_x_activity_stage_restart.dart';
 
-part '_core_x_/_x_activity_/_x_exec_/_x_activity_prozess_start.dart';
+part '_core_x_/_x_activity_/_x_exec_/_x_activity_process_start.dart';
 
 part '_core_x_/_x_activity_/_x_exec_/_x_activity_task_restart.dart';
 
@@ -770,7 +770,7 @@ part '_execution_unit_/activity_member/_task_load_init_data_execution_unit.dart'
 
 part '_execution_unit_/activity_member/_process_restart_execution_unit.dart';
 
-part '_execution_unit_/activity_member/_prozess_determine_next_stage_execution_unit.dart';
+part '_execution_unit_/activity_member/_process_determine_next_stage_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_backend_action_execution_unit.dart';
 

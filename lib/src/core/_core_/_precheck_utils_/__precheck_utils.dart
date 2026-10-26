@@ -6,7 +6,7 @@ import '../_utils_/pageable_calculator.dart';
 import '../core.dart';
 
 
-part 'prozess_restart_precheck_utils.dart';
+part 'process_restart_precheck_utils.dart';
 
 part 'stage_form_enable_precheck_utils.dart';
 

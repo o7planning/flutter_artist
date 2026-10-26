@@ -8,8 +8,8 @@ import '_debug_box.dart';
 import 'debug_style_utils.dart';
 import 'widgets/active_info_widget.dart';
 import 'widgets/class_def_viewable_info_widget.dart';
-import 'widgets/prozess_context_data_info_widget.dart';
-import 'widgets/prozess_init_data_info_widget.dart';
+import 'widgets/process_context_data_info_widget.dart';
+import 'widgets/process_init_data_info_widget.dart';
 import 'widgets/stages_info_widget.dart';
 
 class ProzessDebugBox extends BaseDebugBox {

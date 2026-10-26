@@ -15,7 +15,7 @@ class _EventDispatcher {
     required List<Type> eventDataTypes,
   }) {
     final ExecutionTrace executionTrace =
-    FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
+        FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
       ownerClassInstance: _EventDispatcher(),
       eventSourceType: EventSourceType.external,
     );
@@ -38,7 +38,7 @@ class _EventDispatcher {
     }
 
     final Set<Type> eventResolvedTypes =
-    DataTypeEventUtils.getProjectionsDataTypes(eventDataTypes);
+        DataTypeEventUtils.getProjectionsDataTypes(eventDataTypes);
     final _Storage storage = FlutterArtist.storage;
     const EventSourceType externalEventSourceType = EventSourceType.external;
 
@@ -63,14 +63,14 @@ class _EventDispatcher {
         }
 
         // System-wide events enforce MAX Strategy across all observation boundaries
-        block._receiveEventAtBlockLevel(
+        block._receiveEvent(
           executionTrace: executionTrace,
           eventSourceType: externalEventSourceType,
           eventDataKind: EventDataKind.main,
           eventDataTypes: eventDataTypes,
           syncStrategyOnFullQueryMode: BlockViewportSyncStrategy.nativeQuery,
           syncStrategyOnPageableQueryMode:
-          BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
+              BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
           effectedItemIds: null,
         );
       }
@@ -100,7 +100,7 @@ class _EventDispatcher {
     required List<Type> extraEvents,
   }) {
     final ExecutionTrace executionTrace =
-    FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
+        FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
       ownerClassInstance: _EventDispatcher(),
       eventSourceType: EventSourceType.external,
     );
@@ -128,21 +128,22 @@ class _EventDispatcher {
     final List<Type> mainDataTypes = mainEvents;
     final List<Type> extraDataTypes = extraEvents;
     final List<Type> allDataTypes =
-    {...mainDataTypes, ...extraDataTypes}.toList();
+        {...mainDataTypes, ...extraDataTypes}.toList();
 
     final _Storage storage = FlutterArtist.storage;
     final Shelf eventShelf = eventBlock.shelf;
     const EventSourceType externalEventSourceType = EventSourceType.external;
 
     final Set<Type> eventMainResolvedTypes =
-    DataTypeEventUtils.getProjectionsDataTypes(mainDataTypes);
+        DataTypeEventUtils.getProjectionsDataTypes(mainDataTypes);
     final Set<Type> eventExtraResolvedTypes =
-    DataTypeEventUtils.getProjectionsDataTypes(extraDataTypes);
+        DataTypeEventUtils.getProjectionsDataTypes(extraDataTypes);
 
     for (final String shelfName in storage._shelfMap.keys) {
       final Shelf? shelf = storage.findShelfByName(shelfName);
       if (shelf == null || identical(shelf, eventShelf)) {
-        continue; // Originating shelf is handled exclusively via broadcastInternal
+        // Originating shelf is handled exclusively via broadcastInternal
+        continue;
       }
 
       // =======================================================================
@@ -153,8 +154,7 @@ class _EventDispatcher {
         executionTrace.addInfo(
           codeId: "#025330",
           shortDesc:
-          "Skipping ${getClassNameWithoutGenerics(
-              shelf)}: Inbound reactionTags rejected source broadcastTags.",
+              "Skipping ${getClassNameWithoutGenerics(shelf)}: Inbound reactionTags rejected source broadcastTags.",
           parameters: {
             "sourceBroadcastTags": eventShelf.effectiveConfig.broadcastTags,
             "targetReactionTags": shelf.effectiveConfig.reactionTags,
@@ -174,8 +174,8 @@ class _EventDispatcher {
       for (final Block block in shelf.blocks) {
         // A1. Item-Level Dispatch
         final Set<Type> currentItemReactionTypes =
-        block.getResolvedReactionDataTypes(
-            target: BlockReactionTarget.currentItem);
+            block.getResolvedReactionDataTypes(
+                target: BlockReactionTarget.currentItem);
 
         final bool matchCurrentItem = DataTypeEventUtils.hasIntersection(
           eventMainResolvedTypes,
@@ -187,7 +187,7 @@ class _EventDispatcher {
               block.getItemType() == eventBlock.getItemType();
           final List<ID>? targetItemIds = isSameDomain ? effectedItemIds : null;
 
-          block._receiveEventAtItemLevel(
+          block.blockCurrentItemModel._receiveEvent(
             executionTrace: executionTrace,
             eventSourceType: externalEventSourceType,
             eventDataKind: EventDataKind.main,
@@ -202,7 +202,7 @@ class _EventDispatcher {
             .getResolvedReactionDataTypes(target: BlockReactionTarget.block);
 
         final BlockEventDispatchPlan<ID> plan =
-        BlockEventDispatchPlanResolver.resolvePlan<ID>(
+            BlockEventDispatchPlanResolver.resolvePlan<ID>(
           eventMainResolvedTypes: eventMainResolvedTypes,
           eventExtraResolvedTypes: eventExtraResolvedTypes,
           sourceEffectedItemIds: effectedItemIds,
@@ -215,17 +215,17 @@ class _EventDispatcher {
         }
 
         final BlockViewportSyncStrategy? syncStrategyOnFullQueryMode =
-        plan.requiresMaxSyncStrategy
-            ? BlockViewportSyncStrategy.nativeQuery
-            : null;
+            plan.requiresMaxSyncStrategy
+                ? BlockViewportSyncStrategy.nativeQuery
+                : null;
 
         final BlockViewportSyncStrategy? syncStrategyOnPageableQueryMode =
-        plan.requiresMaxSyncStrategy
-            ? BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery
-            : null;
+            plan.requiresMaxSyncStrategy
+                ? BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery
+                : null;
 
         // Dispatch main event batch
-        block._receiveEventAtBlockLevel(
+        block._receiveEvent(
           executionTrace: executionTrace,
           eventSourceType: externalEventSourceType,
           eventDataKind: EventDataKind.main,
@@ -237,7 +237,7 @@ class _EventDispatcher {
 
         // Dispatch extra event batch if present
         if (extraDataTypes.isNotEmpty) {
-          block._receiveEventAtBlockLevel(
+          block._receiveEvent(
             executionTrace: executionTrace,
             eventSourceType: externalEventSourceType,
             eventDataKind: EventDataKind.extra,
@@ -278,7 +278,7 @@ class _EventDispatcher {
     required List<ID> effectedItemIds,
   }) {
     final ExecutionTrace executionTrace =
-    FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
+        FlutterArtist.codeFlowLogger._createEventDispatcherExecutionTrace(
       ownerClassInstance: _EventDispatcher(),
       eventSourceType: EventSourceType.internal,
     );
@@ -298,18 +298,18 @@ class _EventDispatcher {
       shortDesc: "Config of eventBlock - ${debugObjHtml(eventBlock)}:",
       parameters: {
         "eventBroadcastEnabled (*)":
-        eventBlock.effectiveConfig.eventBroadcastEnabled,
+            eventBlock.effectiveConfig.eventBroadcastEnabled,
         "eventReactionEnabled": eventBlock.effectiveConfig.eventReactionEnabled,
       },
     );
 
     // Resolve event data types emitted by the source block
     final List<Type> mainDataTypes =
-    eventBlock.getDeclaredMainBroadcastDataTypes().toList();
+        eventBlock.getDeclaredMainBroadcastDataTypes().toList();
     final List<Type> extraDataTypes =
-    eventBlock.getDeclaredExtraBroadcastDataTypes().toList();
+        eventBlock.getDeclaredExtraBroadcastDataTypes().toList();
     final List<Type> allDataTypes =
-    {...mainDataTypes, ...extraDataTypes}.toList();
+        {...mainDataTypes, ...extraDataTypes}.toList();
 
     // Early exit if the source block emits no broadcastable data types
     if (allDataTypes.isEmpty) {
@@ -328,9 +328,9 @@ class _EventDispatcher {
 
     // Resolve projection families for accurate type matching
     final Set<Type> eventMainResolvedTypes =
-    eventBlock.getResolvedBroadcastDataTypes();
+        eventBlock.getResolvedBroadcastDataTypes();
     final Set<Type> eventExtraResolvedTypes =
-    DataTypeEventUtils.getProjectionsDataTypes(extraDataTypes);
+        DataTypeEventUtils.getProjectionsDataTypes(extraDataTypes);
 
     // =========================================================================
     // 1. DISPATCH TO BLOCKS IN THE SAME SHELF (INCLUDING eventBlock ITSELF)
@@ -343,8 +343,8 @@ class _EventDispatcher {
       // Dispatched to both Self and Peer/Parent blocks observing this entity.
       // -----------------------------------------------------------------------
       final Set<Type> currentItemReactionTypes =
-      block.getResolvedReactionDataTypes(
-          target: BlockReactionTarget.currentItem);
+          block.getResolvedReactionDataTypes(
+              target: BlockReactionTarget.currentItem);
 
       final bool matchCurrentItem = DataTypeEventUtils.hasIntersection(
         eventMainResolvedTypes,
@@ -359,10 +359,8 @@ class _EventDispatcher {
         executionTrace.addInfo(
           codeId: "#088600",
           shortDesc: isSelf
-              ? "Self-dispatching to ${getClassNameWithoutGenerics(
-              block)} for currentItem invalidation"
-              : "Dispatching currentItem invalidation to ${getClassNameWithoutGenerics(
-              block)}",
+              ? "Self-dispatching to ${getClassNameWithoutGenerics(block)} for currentItem invalidation"
+              : "Dispatching currentItem invalidation to ${getClassNameWithoutGenerics(block)}",
           parameters: {
             "eventSourceType": internalEventSourceType,
             "eventDataKind": EventDataKind.main,
@@ -371,7 +369,7 @@ class _EventDispatcher {
           },
         );
 
-        block._receiveEventAtItemLevel(
+        block.blockCurrentItemModel._receiveEvent(
           executionTrace: executionTrace,
           eventSourceType: internalEventSourceType,
           eventDataKind: EventDataKind.main,
@@ -385,12 +383,12 @@ class _EventDispatcher {
       // Unlocked for Self as well, supporting self re-query upon deletions/actions.
       // -----------------------------------------------------------------------
       final Set<Type> listenerTargetTypes =
-      block.getDeclaredMainBroadcastDataTypes();
+          block.getDeclaredMainBroadcastDataTypes();
       final Set<Type> listenerBlockReactionTypes =
-      block.getResolvedReactionDataTypes(target: BlockReactionTarget.block);
+          block.getResolvedReactionDataTypes(target: BlockReactionTarget.block);
 
       final BlockEventDispatchPlan<ID> plan =
-      BlockEventDispatchPlanResolver.resolvePlan<ID>(
+          BlockEventDispatchPlanResolver.resolvePlan<ID>(
         eventMainResolvedTypes: eventMainResolvedTypes,
         eventExtraResolvedTypes: eventExtraResolvedTypes,
         sourceEffectedItemIds: effectedItemIds,
@@ -403,14 +401,14 @@ class _EventDispatcher {
       }
 
       final BlockViewportSyncStrategy? syncStrategyOnFullQueryMode =
-      plan.requiresMaxSyncStrategy
-          ? BlockViewportSyncStrategy.nativeQuery
-          : null;
+          plan.requiresMaxSyncStrategy
+              ? BlockViewportSyncStrategy.nativeQuery
+              : null;
 
       final BlockViewportSyncStrategy? syncStrategyOnPageableQueryMode =
-      plan.requiresMaxSyncStrategy
-          ? BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery
-          : null;
+          plan.requiresMaxSyncStrategy
+              ? BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery
+              : null;
 
       executionTrace.addNonControllableCall(
         codeId: "#088600",
@@ -427,7 +425,7 @@ class _EventDispatcher {
         },
       );
 
-      block._receiveEventAtBlockLevel(
+      block._receiveEvent(
         executionTrace: executionTrace,
         eventSourceType: internalEventSourceType,
         eventDataKind: EventDataKind.main,
@@ -454,7 +452,7 @@ class _EventDispatcher {
           },
         );
 
-        block._receiveEventAtBlockLevel(
+        block._receiveEvent(
           executionTrace: executionTrace,
           eventSourceType: internalEventSourceType,
           eventDataKind: EventDataKind.extra,

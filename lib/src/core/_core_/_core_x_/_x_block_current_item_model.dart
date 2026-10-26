@@ -70,6 +70,6 @@ class XBlockCurrentItemModel<
 
   // BlockCurrentItemModel only (Not find in FormModel).
   NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
-    throw UnimplementedError();
+    return NxtExecutionUnit.no(info: "XXX", debug: debug);
   }
 }

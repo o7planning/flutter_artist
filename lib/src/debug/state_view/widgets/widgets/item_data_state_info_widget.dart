@@ -16,7 +16,7 @@ class BlockItemDataStateInfoWidget extends BaseInfoWidget {
 
   @override
   String? getButtonTooltip() {
-    return block.blockItemDataState.toBriefInfo();
+    return block.blockCurrentItemModel.dataState.toBriefInfo();
   }
 
   @override
@@ -26,17 +26,17 @@ class BlockItemDataStateInfoWidget extends BaseInfoWidget {
 
   @override
   String? getLeftTooltip() {
-    return block.blockItemDataState.toBriefInfo();
+    return block.blockCurrentItemModel.dataState.toBriefInfo();
   }
 
   @override
   String getText() {
-    return block.blockItemDataState.toBriefInfo();
+    return block.blockCurrentItemModel.dataState.toBriefInfo();
   }
 
   @override
   ButtonFunction? getButtonFunction() {
-    switch (block.blockItemDataState) {
+    switch (block.blockCurrentItemModel.dataState) {
       case BlockItemDataStateNone():
         return null;
       case BlockItemDataStateFresh():

@@ -360,7 +360,7 @@ abstract class Block<
 
   BlockDataState get dataState => _blockData._blockDataState;
 
-  BlockItemDataState get blockItemDataState => _blockData._blockItemDataState;
+  BlockItemDataState get blockItemDataState => blockCurrentItemModel.dataState;
 
   /// Does the FilterPanel contain uncommitted draft criteria that differs
   /// from the currently applied dataset criteria?
@@ -544,131 +544,6 @@ abstract class Block<
 
       _blockData._setBlockDataState(newBlockDataState: nextState);
     }
-  }
-
-  /// Manages item sync session instantiation, appends the received event info targeting
-  /// the active [currentItem], and marks [blockItemDataState] as stale.
-  void _updateBlockItemSyncSessionState({
-    required ExecutionTrace executionTrace,
-    required EventSourceType eventSourceType,
-    required List<Type> mainDataTypes,
-    required List<Type> extraDataTypes,
-    required List<ID> effectedItemIds,
-  }) {
-    final ID? activeItemId = currentItemId;
-    if (activeItemId == null) {
-      return;
-    }
-
-    executionTrace.addNonControllableCall(
-      codeId: "#086700",
-      caller: this,
-      methodName: "_updateBlockItemSyncSessionState",
-      suffixShortDesc: "",
-      parameters: {
-        "eventSourceType": eventSourceType,
-        "mainDataTypes": mainDataTypes,
-        "extraDataTypes": extraDataTypes,
-        "activeItemId": activeItemId,
-        "effectedItemIds": effectedItemIds,
-      },
-    );
-
-    // 1. Initialize or reset item session if missing or bound to a previous item identity
-    if (blockCurrentItemModel._blockItemSyncSessionState == null ||
-        !blockCurrentItemModel._blockItemSyncSessionState!
-            .isValidFor(activeItemId)) {
-      blockCurrentItemModel._blockItemSyncSessionState =
-          _BlockItemSyncSessionState<ID>(
-        block: this,
-        targetItemId: activeItemId,
-      );
-    }
-
-    // 2. Append received event metadata targeting this active item
-    blockCurrentItemModel._blockItemSyncSessionState!.addReceivedEventInfo(
-      eventSourceType: eventSourceType,
-      mainDataTypes: mainDataTypes,
-      extraDataTypes: extraDataTypes,
-      effectedItemIds: effectedItemIds,
-    );
-
-    executionTrace.addInfo(
-      codeId: "#086800",
-      shortDesc: "Added BlockReceivedEventInfo to active item sync session",
-    );
-
-    // 3. Mark the BlockItemDataState as stale to prompt an in-place currentItem reload
-    if (!blockItemDataState.isStale) {
-      _blockData._setBlockItemDataState(
-        newBlockItemDataState: const BlockItemDataStateStale(),
-      );
-      executionTrace.addInfo(
-        codeId: "#086900",
-        shortDesc:
-            "Transitioned BlockItem dataState to stale for active item ID: $activeItemId",
-      );
-    }
-  }
-
-  // ***************************************************************************
-
-  /// Manages item-level sync session instantiation, appends received events,
-  /// and marks the active item's selection data state as stale.
-  void _updateItemSyncSessionState({
-    required ExecutionTrace executionTrace,
-    required XBlock? xBlock,
-    required EventSourceType eventSourceType,
-    required List<Type> eventDataTypes,
-    required List<ID>? addedEffectiveIds,
-  }) {
-    final ID? activeItemId = currentItemId;
-    if (activeItemId == null) {
-      return;
-    }
-
-    executionTrace.addNonControllableCall(
-      codeId: "#083700",
-      caller: this,
-      methodName: "_updateItemSyncSessionState",
-      suffixShortDesc: "",
-      parameters: {
-        "eventSourceType": eventSourceType,
-        "activeItemId": activeItemId,
-        "addedEffectiveIds": addedEffectiveIds,
-      },
-    );
-
-    // Initialize or reset session if target item identity changed
-    if (blockCurrentItemModel._blockItemSyncSessionState == null ||
-        !blockCurrentItemModel._blockItemSyncSessionState!
-            .isValidFor(activeItemId)) {
-      blockCurrentItemModel._blockItemSyncSessionState =
-          _BlockItemSyncSessionState<ID>(
-        block: this,
-        targetItemId: activeItemId,
-      );
-    }
-
-    // Append received event metadata to current item sync session
-    blockCurrentItemModel._blockItemSyncSessionState?.addReceivedEventInfo(
-      eventSourceType: eventSourceType,
-      mainDataTypes: eventDataTypes,
-      extraDataTypes: [],
-      effectedItemIds: addedEffectiveIds ?? <ID>[],
-    );
-
-    // Transition the selection data state to stale
-    _blockData._blockItemDataState = const BlockItemDataStateStale();
-
-    // Mark XBlock to force reload the current item on next scheduler sweep
-    xBlock?.setForceReloadCurrItem(true);
-
-    executionTrace.addInfo(
-      codeId: "#083750",
-      shortDesc:
-          "${debugObjHtml(this)} - marked current item ($activeItemId) as stale due to event reaction",
-    );
   }
 
   // ***************************************************************************
@@ -877,85 +752,12 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Entry point called when this Block receives an event targeted specifically
-  /// at the active [currentItem] level (e.g., [BlockReactionTarget.currentItem]).
-  ///
-  /// This bypasses dataset queries and instead updates the [_blockItemSyncSessionState],
-  /// marking the active item data state as stale to command an in-place detail refresh.
-  void _receiveEventAtItemLevel({
-    required ExecutionTrace executionTrace,
-    required EventSourceType eventSourceType,
-    required EventDataKind eventDataKind,
-    required List<Type> eventDataTypes,
-    required List<ID>? effectedItemIds,
-  }) {
-    // 1. Guard against inactive item states or uninitialized blocks
-    if (dataState.isNone || currentItem == null) {
-      return;
-    }
-
-    if (eventDataTypes.isEmpty) {
-      return;
-    }
-
-    // 2. Resolve data types that this block listens to for currentItem reactions
-    final Set<Type> currentItemReactionTypes =
-        getResolvedReactionDataTypes(target: BlockReactionTarget.currentItem);
-
-    if (currentItemReactionTypes.isEmpty) {
-      return;
-    }
-
-    final bool isEffected = DataTypeEventUtils.hasIntersection(
-      currentItemReactionTypes,
-      eventDataTypes.toSet(),
-    );
-
-    if (!isEffected) {
-      return;
-    }
-
-    // 3. Check ID relevance:
-    // If effectedItemIds is provided (same domain), verify whether the current item ID is affected.
-    // If effectedItemIds is null (cross-domain invalidation or global signal), unconditionally invalidate.
-    final ID? activeItemId = currentItemId;
-    if (effectedItemIds != null && activeItemId != null) {
-      if (!effectedItemIds.contains(activeItemId)) {
-        return; // Current item ID is unaffected by this specific mutation
-      }
-    }
-
-    executionTrace.addNonControllableCall(
-      codeId: "#086500",
-      caller: this,
-      methodName: "_updateBlockItemSyncSessionState",
-      suffixShortDesc: "",
-      parameters: {
-        "eventSourceType": eventSourceType,
-        "eventDataKind": eventDataKind,
-        "eventDataTypes": eventDataTypes,
-        "effectedItemIds": effectedItemIds,
-      },
-    );
-
-    // 4. Update the item sync session state and transition BlockItemDataState to stale
-    _updateBlockItemSyncSessionState(
-      executionTrace: executionTrace,
-      eventSourceType: eventSourceType,
-      mainDataTypes: eventDataKind == EventDataKind.main ? eventDataTypes : [],
-      extraDataTypes:
-          eventDataKind == EventDataKind.extra ? eventDataTypes : [],
-      effectedItemIds:
-          effectedItemIds ?? (activeItemId != null ? [activeItemId] : []),
-    );
-  }
-
   /// Entry point called when this Block receives an event targeted at the dataset level
   /// (e.g., [BlockReactionTarget.block]).
   ///
   /// Manages session instantiation, appends the received event info, records viewport
   /// strategies, and recalculates the structural [dataState].
-  void _receiveEventAtBlockLevel({
+  void _receiveEvent({
     required ExecutionTrace executionTrace,
     required EventSourceType eventSourceType,
     required EventDataKind eventDataKind,
@@ -1034,17 +836,13 @@ abstract class Block<
   }) {
     __assertThisXBlock(thisXBlock);
     //
-    // 🛑 RESET
-    //
-    // thisXBlock.resetExecutionHints();
-    //
     _blockData._clearItemsWithDataState(
       blockDataState: blockDataState,
       errorInFilter: errorInFilter,
       resetSyncSessionState: resetSyncSessionState,
       resetRefreshItemCondition: resetRefreshItemCondition,
     );
-    _blockData._setBlockItemDataState(
+    blockCurrentItemModel._setBlockItemDataState(
       newBlockItemDataState: BlockItemDataStateNone(),
     );
     //
@@ -1256,7 +1054,7 @@ abstract class Block<
       methodName: '_unitClearCurrentItem',
     );
     //
-    __setCurrentItemOnlyAndItemState(
+    blockCurrentItemModel._setCurrentDataAndItemDataState(
       id: null,
       item: null,
       itemDetail: null,
@@ -1751,7 +1549,7 @@ abstract class Block<
         codeId: "#003600",
         shortDesc: "Set currentItem to <b>null</b>.",
       );
-      __setCurrentItemOnlyAndItemState(
+      blockCurrentItemModel._setCurrentDataAndItemDataState(
         id: null,
         item: null,
         itemDetail: null,
@@ -2053,7 +1851,7 @@ abstract class Block<
         );
       }
       //
-      _blockData._blockItemDataState = const BlockItemDataStateNone();
+      blockCurrentItemModel._dataState = const BlockItemDataStateNone();
       blockCurrentItemModel._resetBlockItemSyncSessionState(
         executionTrace: executionTrace,
       );
@@ -2160,7 +1958,7 @@ abstract class Block<
         trigger: CurrentItemTransitionTrigger.resetToNull,
       );
       //
-      __setCurrentItemOnlyAndItemState(
+      blockCurrentItemModel._setCurrentDataAndItemDataState(
         id: null,
         item: null,
         itemDetail: null,
@@ -2239,7 +2037,8 @@ abstract class Block<
     else {
       itemRefreshed = true;
       String? methodName;
-      final _BlockItem2Wrap? loadedCoupleItem = thisXBlock._getRecentLoadedItem(
+      final _BlockCurrentData? loadedCoupleItem =
+          thisXBlock._getRecentLoadedItem(
         itemId: candidateCurrItemId,
       );
       refreshedCurrentItemDetail = loadedCoupleItem?._itemDetail;
@@ -2340,7 +2139,7 @@ abstract class Block<
       );
       // Test Case: [04a].
       if (candidateCurrItem.id == currentItem?.id) {
-        __setCurrentItemOnlyAndItemState(
+        blockCurrentItemModel._setCurrentDataAndItemDataState(
           id: null,
           item: null,
           itemDetail: null,
@@ -2384,8 +2183,11 @@ abstract class Block<
           shortDesc: "Set current item to <b>null</b>.",
         );
         //
-        __setCurrentItemOnlyAndItemState(
-            id: null, item: null, itemDetail: null);
+        blockCurrentItemModel._setCurrentDataAndItemDataState(
+          id: null,
+          item: null,
+          itemDetail: null,
+        );
         //
         if (formModel != null) {
           executionTrace.addInfo(
@@ -2501,7 +2303,7 @@ abstract class Block<
             : CurrentItemTransitionTrigger.initialQueryDefault,
       );
       //
-      __setCurrentItemOnlyAndItemState(
+      blockCurrentItemModel._setCurrentDataAndItemDataState(
         id: candidateCurrItemId,
         item: candidateCurrItem,
         itemDetail: refreshedCurrentItemDetail,
@@ -2775,7 +2577,7 @@ abstract class Block<
         codeId: "#008300",
         shortDesc: "${debugObjHtml(this)} --> set current item to <b>null</b>.",
       );
-      __setCurrentItemOnlyAndItemState(
+      blockCurrentItemModel._setCurrentDataAndItemDataState(
         id: null,
         item: null,
         itemDetail: null,
@@ -2996,7 +2798,7 @@ abstract class Block<
           );
           currentItemDeleted = true;
 
-          __setCurrentItemOnlyAndItemState(
+          blockCurrentItemModel._setCurrentDataAndItemDataState(
             id: null,
             item: null,
             itemDetail: null,
@@ -3219,7 +3021,7 @@ abstract class Block<
     const ID? nullId = null;
     const ITEM? nullItem = null;
     const ITEM_DETAIL? nullItemDetail = null;
-    __setCurrentItemOnlyAndItemState(
+    blockCurrentItemModel._setCurrentDataAndItemDataState(
       id: nullId,
       item: nullItem,
       itemDetail: nullItemDetail,
@@ -3881,7 +3683,7 @@ abstract class Block<
         codeId: "#016320",
         shortDesc: "Set ${debugObjHtml(refreshedItem)} as current.",
       );
-      __setCurrentItemOnlyAndItemState(
+      blockCurrentItemModel._setCurrentDataAndItemDataState(
         id: itemId,
         itemDetail: savedItemDetail,
         item: refreshedItem,
@@ -3993,7 +3795,7 @@ abstract class Block<
           codeId: "#016620",
           shortDesc: "${debugObjHtml(this)} --> set current item to null.",
         );
-        __setCurrentItemOnlyAndItemState(
+        blockCurrentItemModel._setCurrentDataAndItemDataState(
           id: null,
           item: null,
           itemDetail: null,
@@ -5130,30 +4932,6 @@ abstract class Block<
   //     childBlock.__setChildrenForParent();
   //   }
   // }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __setCurrentItemOnlyAndItemState({
-    required ID? id,
-    required ITEM? item,
-    required ITEM_DETAIL? itemDetail,
-  }) {
-    _blockData._setCurrentItemOnly(
-      id: id,
-      refreshedItem: item,
-      refreshedItemDetail: itemDetail,
-    );
-    if (id == null) {
-      _blockData._setBlockItemDataState(
-        newBlockItemDataState: BlockItemDataStateNone(),
-      );
-    } else {
-      _blockData._setBlockItemDataState(
-        newBlockItemDataState: BlockItemDataStateFresh(),
-      );
-    }
-  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -6960,13 +6738,13 @@ abstract class Block<
   }
 
   ID? get currentItemId {
-    return blockCurrentItemModel.current._id;
+    return blockCurrentItemModel._currentData._id;
   }
 
-  ITEM? get currentItem => blockCurrentItemModel.current._item;
+  ITEM? get currentItem => blockCurrentItemModel._currentData._item;
 
   ITEM_DETAIL? get currentItemDetail =>
-      blockCurrentItemModel.current._itemDetail;
+      blockCurrentItemModel._currentData._itemDetail;
 
   int get currentItemIndex {
     ITEM? ci = currentItem;
