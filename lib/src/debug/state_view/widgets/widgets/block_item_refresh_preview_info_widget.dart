@@ -16,7 +16,7 @@ class BlockItemRefreshPreviewInfoWidget extends BaseInfoWidget {
 
   @override
   String? getButtonTooltip() {
-    return block.blockItemSyncSessionState == null
+    return block.blockCurrentItemModel.blockItemSyncSessionState == null
         ? "Clean item state (No active item sync session)"
         : "Item has accumulated refresh reactions";
   }
@@ -24,7 +24,7 @@ class BlockItemRefreshPreviewInfoWidget extends BaseInfoWidget {
   @override
   ButtonFunction? getButtonFunction() {
     return ButtonFunction(
-      btnType: block.blockItemSyncSessionState == null
+      btnType: block.blockCurrentItemModel.blockItemSyncSessionState == null
           ? DebugBtnType.success
           : DebugBtnType.warning,
       onPressed: (BuildContext context) {

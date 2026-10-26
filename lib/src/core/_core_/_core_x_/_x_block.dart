@@ -52,7 +52,7 @@ class XBlock<
   final List<XBlock> childXBlocks = [];
 
   final XFilterModel xFilterModel;
-  final XBlockFormModel? xBlockFormModel;
+  final XBlockCurrentItemModel xBlockCurrentItemModel;
 
   List<XBlock> getDescendantXBlocks({required bool sameFilterOnly}) {
     final List<XBlock> ret = [];
@@ -126,7 +126,7 @@ class XBlock<
   XBlock._({
     required this.block,
     required this.xFilterModel,
-    required this.xBlockFormModel,
+    required this.xBlockCurrentItemModel,
   });
 
   // ***************************************************************************
@@ -268,7 +268,7 @@ class XBlock<
   // ***************************************************************************
   // ***************************************************************************
 
-  // Block only (Not find in FilterModel, FormModel).
+  // Block only (Not find in FilterModel, BlockCurrentItemModel).
   NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
     // Restore the stashed intent if the current intent is null.
     if (_executionIntent == null && _stashedIntent != null) {
@@ -439,13 +439,7 @@ class XBlock<
     if (next.yes) {
       return next;
     }
-    if (xBlockFormModel != null) {
-      next = xBlockFormModel!._getNextExecutionUnit(debug: debug);
-      if (next.yes) {
-        return next;
-      }
-    }
-    return next;
+    return xBlockCurrentItemModel._getNextExecutionUnit(debug: debug);
   }
 
   // ***************************************************************************

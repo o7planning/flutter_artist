@@ -56,9 +56,6 @@ FORM_INPUT extends FormInput> {
 
   late PaginationInfo? _paginationInfo;
 
-  _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL> __current = _BlockItem2Wrap.ofNull();
-
-  _BlockItem2Wrap<ID, ITEM, ITEM_DETAIL> get current => __current;
 
   late BlockDataState _blockDataState;
 
@@ -108,7 +105,7 @@ FORM_INPUT extends FormInput> {
   List<ITEM> moveCurrentItemToEndOfList({
     required List<ITEM> itemList,
   }) {
-    ITEM? currItem = __current._item;
+    ITEM? currItem = block.currentItem;
     if (currItem == null) {
       return itemList;
     }
@@ -130,7 +127,7 @@ FORM_INPUT extends FormInput> {
   List<ITEM> getCheckedItems({
     required CurrentItemInclusion currentItemInclusion,
   }) {
-    ITEM? currItem = __current._item;
+    ITEM? currItem = block.currentItem;
     bool contains = isCurrentItemChecked;
     //
     //
@@ -159,7 +156,7 @@ FORM_INPUT extends FormInput> {
   List<ITEM> getSelectedItems({
     required CurrentItemInclusion currentItemInclusion,
   }) {
-    ITEM? currItem = __current._item;
+    ITEM? currItem = block.currentItem;
     bool contains = isCurrentItemSelected;
     //
     if (currItem != null) {
@@ -184,7 +181,7 @@ FORM_INPUT extends FormInput> {
   // ***************************************************************************
 
   bool get isCurrentItemChecked {
-    ITEM? currItem = __current._item;
+    ITEM? currItem = block.currentItem;
     if (currItem == null) {
       return false;
     }
@@ -198,7 +195,7 @@ FORM_INPUT extends FormInput> {
   // ***************************************************************************
 
   bool get isCurrentItemSelected {
-    ITEM? currItem = __current._item;
+    ITEM? currItem =block.currentItem;
     if (currItem == null) {
       return false;
     }
@@ -314,9 +311,9 @@ FORM_INPUT extends FormInput> {
     required ITEM? refreshedItem,
     required ITEM_DETAIL? refreshedItemDetail,
   }) {
-    final ID? oldId = __current._id;
+    final ID? oldId = block.currentItemId;
     //
-    __current = id == null
+    block.blockCurrentItemModel.__current = id == null
         ? _BlockItem2Wrap.ofNull()
         : _BlockItem2Wrap(
       id: id,
@@ -332,7 +329,7 @@ FORM_INPUT extends FormInput> {
         block.formModel!._triggerItemIdChanged();
       }
       // 🛑 RESET ITEM SESSION STATE
-      block._resetBlockItemSyncSessionState(executionTrace: null);
+      block.blockCurrentItemModel._resetBlockItemSyncSessionState(executionTrace: null);
     }
   }
 

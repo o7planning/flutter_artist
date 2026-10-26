@@ -34,7 +34,7 @@ ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberResultedExecutionUnit<
     xBlock.setForceReloadCurrItem(executionIntent.forceReloadItem);
     //
     if (executionIntent.formLoadHint != null) {
-      xBlock.xBlockFormModel?.setForceType(executionIntent.formLoadHint!);
+      xBlock.xBlockCurrentItemModel.xBlockFormModel?.setForceType(executionIntent.formLoadHint!);
     }
   }
 

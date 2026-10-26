@@ -8,8 +8,5 @@ class _XShelfFormModelSave extends XShelf {
           shelf: formModel.block.shelf,
         ) {
     //
-    // IMPORTANT:
-    //
-    XBlock xBlock = xBlockMap[formModel.block.name]!;
   }
 }

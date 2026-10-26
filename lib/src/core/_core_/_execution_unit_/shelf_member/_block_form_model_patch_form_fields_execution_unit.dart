@@ -31,6 +31,6 @@ class _BlockFormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
 
   @override
   String getObjectName() {
-    return xBlockFormModel.formModel.block.name;
+    return xBlockFormModel.formModel.name;
   }
 }

@@ -4,14 +4,14 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(
-    xShelfType: XShelfType.shelfExternalReaction,
-  ) {
+          xShelfType: XShelfType.shelfExternalReaction,
+        ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk.block._blockSyncSessionState == null &&
-          xBlk.block._blockItemSyncSessionState == null) {
+          xBlk.block.blockCurrentItemModel._blockItemSyncSessionState == null) {
         continue;
       }
-      // @@@hasActiveBlockFragment
+      //
       bool blockXBlockRep = xBlk.block.ui.hasBlockContext(
         includeDescendants: true,
       );
@@ -21,21 +21,15 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       if (xBlk.block._blockSyncSessionState != null &&
           xBlk.block._isMatchBlockSyncSessionState(
               xBlk.block._blockSyncSessionState)) {
-        // queryHint = blockXBlockRep ? QueryHint.force : QueryHint.markAsPending;
         if (blockXBlockRep) {
           queryHint = QueryHint.force;
         }
       }
-      if (xBlk.block._blockItemSyncSessionState != null &&
-          xBlk.block._blockItemSyncSessionState!
+      if (xBlk.block.blockCurrentItemModel._blockItemSyncSessionState != null &&
+          xBlk.block.blockCurrentItemModel._blockItemSyncSessionState!
               .isValidFor(xBlk.block.currentItemId)) {
         forceReloadItem = true;
       }
-      // if (xBlk.block._blockItemRefreshCondition != null &&
-      //     xBlk.block._isMatchBlockItemRefreshCon(
-      //         xBlk.block._blockItemRefreshCondition)) {
-      //   forceReloadItem = true;
-      // }
       //
       xBlk.setQueryHintToGreater(queryHint);
       xBlk.setForceReloadCurrItem(forceReloadItem);
@@ -76,7 +70,8 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
           }
         }
         //
-        XBlockFormModel? xBlockFormModel = xBlock.xBlockFormModel;
+        XBlockFormModel? xBlockFormModel =
+            xBlock.xBlockCurrentItemModel.xBlockFormModel;
         // Current: forShelfExternalReaction
         if (xBlockFormModel != null &&
             xBlockFormModel.formModel.ui.hasVisibleViews()) {

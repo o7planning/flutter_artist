@@ -31,6 +31,6 @@ class _BlockFormModelLoadDataExecutionUnit
 
   @override
   String getObjectName() {
-    return xBlockFormModel.formModel.block.name;
+    return xBlockFormModel.formModel.name;
   }
 }

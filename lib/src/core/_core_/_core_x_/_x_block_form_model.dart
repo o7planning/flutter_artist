@@ -3,18 +3,20 @@ part of '../core.dart';
 class XBlockFormModel<
     ID extends Comparable, //
     ITEM_DETAIL extends Identifiable<ID>> {
-  XShelf get xShelf => xBlock.xShelf;
+  XShelf get xShelf => xBlockCurrentItemModel.xBlock.xShelf;
 
   final BlockFormModel formModel;
-  late final XBlock<ID, Identifiable<ID>, ITEM_DETAIL> xBlock;
+  late final XBlockCurrentItemModel<ID, Identifiable<ID>, ITEM_DETAIL>
+      xBlockCurrentItemModel;
   final FormInput? formInput;
 
   int get xModuleId => xShelf.xModuleId;
 
-  String get name => xBlock.name;
+  String get name => xBlockCurrentItemModel.xBlock.name;
 
   //
   bool loaded = false;
+
   FormLoadHint _formLoadHint = FormLoadHint.auto;
 
   FormLoadHint get formLoadHint => _formLoadHint;
@@ -22,6 +24,8 @@ class XBlockFormModel<
   FormModelExecutionIntent? _stashedIntent;
 
   FormModelExecutionIntent? _executionIntent;
+
+
 
   ///
   /// IMPORTANT: To create new XBlockFormModel, use 'formModel._createXBlockFormModel' method
@@ -41,6 +45,8 @@ class XBlockFormModel<
       _formLoadHint = forceType;
     }
   }
+
+
 
   // ***************************************************************************
 

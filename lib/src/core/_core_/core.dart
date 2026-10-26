@@ -125,6 +125,8 @@ part '_debug_info_/_process_debug_info.dart';
 
 part '__core__/_block.dart';
 
+part '__core__/_block_current_item_model.dart';
+
 part '__core__/_block_ancestor_context.dart';
 
 part '__core__/_context_type.dart';
@@ -455,6 +457,8 @@ part '_config_/_shelf_config.dart';
 part '_v1_/_x_activity_v1.dart';
 
 part '_core_x_/_x_block.dart';
+
+part '_core_x_/_x_block_current_item_model.dart';
 
 part '__core__/__sequence.dart';
 

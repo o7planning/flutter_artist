@@ -13,6 +13,7 @@ abstract class XShelf extends XRootQueueItem {
   String get _fullName => "@XShelf-${shelf.name}";
 
   final Map<String, XFilterModel> xFilterModelMap = {};
+  final Map<String, XBlockCurrentItemModel> xBlockCurrentItemModelMap = {};
   final Map<String, XBlockFormModel> xBlockFormModelMap = {};
   final Map<String, XScalar> xScalarMap = {};
   final Map<String, XBlock> xBlockMap = {};
@@ -88,7 +89,10 @@ abstract class XShelf extends XRootQueueItem {
     }
     //
     for (Block block in shelf.blocks) {
-      final BlockFormModel? formModel = block.formModel;
+      final BlockCurrentItemModel blockCurrentItemModel =
+          block.blockCurrentItemModel;
+      final BlockFormModel? formModel = blockCurrentItemModel.formModel;
+
       XBlockFormModel? xBlockFormModel;
       if (formModel != null) {
         //
@@ -97,8 +101,16 @@ abstract class XShelf extends XRootQueueItem {
         //
         xBlockFormModel = formModel._createXBlockFormModel(formInput: null);
         allXBlockFormModels.add(xBlockFormModel);
-        xBlockFormModelMap[formModel.block.name] = xBlockFormModel;
+        xBlockFormModelMap[formModel.name] = xBlockFormModel;
       }
+
+      final xBlockCurrentItemModel =
+          blockCurrentItemModel._createXBlockCurrentItemModel(
+        xBlockFormModel: xBlockFormModel,
+      );
+      xBlockFormModel?.xBlockCurrentItemModel = xBlockCurrentItemModel;
+      xBlockCurrentItemModelMap[blockCurrentItemModel.name] = xBlockCurrentItemModel;
+
       //
       final FilterModel filterModel = block._registeredOrDefaultFilterModel;
       final xFilterModel = xFilterModelMap[filterModel.name]!;
@@ -108,9 +120,10 @@ abstract class XShelf extends XRootQueueItem {
       //
       final xBlock = block._createXBlock(
         xFilterModel: xFilterModel,
-        xBlockFormModel: xBlockFormModel,
+        xBlockCurrentItemModel: xBlockCurrentItemModel,
       );
-      xBlockFormModel?.xBlock = xBlock;
+      xBlockCurrentItemModel.xBlock = xBlock;
+
       //
       xFilterModel.xBlocks.add(xBlock);
       allXBlocks.add(xBlock);
@@ -173,7 +186,8 @@ abstract class XShelf extends XRootQueueItem {
             xBlock.setQueryHintToGreater(QueryHint.force);
           }
         }
-        XBlockFormModel? xBlockFormModel = xBlock.xBlockFormModel;
+        XBlockFormModel? xBlockFormModel =
+            xBlock.xBlockCurrentItemModel.xBlockFormModel;
         if (xBlockFormModel != null &&
             xBlockFormModel.formModel.ui.hasVisibleViews()) {
           if (xBlockFormModel.formModel.dataState.isPending ||

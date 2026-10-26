@@ -41,7 +41,7 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
             xBlock.setQueryHintToGreater(QueryHint.force);
           }
         }
-        XBlockFormModel? xBlockFormModel = xBlock.xBlockFormModel;
+        XBlockFormModel? xBlockFormModel = xBlock.xBlockCurrentItemModel.xBlockFormModel;
         if (xBlockFormModel != null &&
             xBlockFormModel.formModel.ui.hasVisibleViews()) {
           if (xBlockFormModel.formModel.dataState.isPending ||
