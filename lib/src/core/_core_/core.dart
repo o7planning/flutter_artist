@@ -187,6 +187,8 @@ part '_execution_intent_/form_model_execution_intent.dart';
 
 part '_execution_intent_/block_execution_intent.dart';
 
+part '_execution_intent_/block_current_item_model_execution_intent.dart';
+
 part '_execution_intent_/scalar_execution_intent.dart';
 
 part '_execution_intent_/_execution_intent.dart';
@@ -201,6 +203,7 @@ part '_execution_unit_calc_/_model_/_stage_form_neu_model.dart';
 
 part '_execution_unit_calc_/_model_/_task_form_model_neu_model.dart';
 
+part '_execution_unit_calc_/_model_/_block_current_item_model_neu_model.dart';
 
 part '_execution_unit_calc_/_model_/_block_neu_model.dart';
 
@@ -496,8 +499,6 @@ part '_sync_/_block_item_sync_session_state.dart';
 
 part '_sync_/_debug_block_item_sync_session_state.dart';
 
-part '_sync_/_block_item_refresh_condition.dart';
-
 part '_core_x_/_x_shelf_/_x_query_/__target_block_and_options.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/__target_scalar_and_options.dart';
@@ -732,7 +733,7 @@ part '_execution_unit_/shelf_member/_block_clear_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_scalar_clear_execution_unit.dart';
 
-part '_execution_unit_/shelf_member/_block_clear_current_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_current_item_model_clear_current_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_item_deletion_execution_unit.dart';
 
@@ -742,7 +743,7 @@ part '_execution_unit_/__activity_member_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_multi_item_deletion_execution_unit.dart';
 
-part '_execution_unit_/shelf_member/_block_prepare_form_to_create_item_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_current_item_model_prepare_form_to_create_item_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_query_execution_unit.dart';
 
@@ -778,7 +779,7 @@ part '_execution_unit_/shelf_member/_block_quick_item_creation_execution_unit.da
 
 part '_execution_unit_/shelf_member/_block_quick_item_update_execution_unit.dart';
 
-part '_execution_unit_/shelf_member/_block_set_item_as_current_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_current_item_model_set_item_as_current_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_filter_panel_change_execution_unit.dart';
 

@@ -41,7 +41,7 @@ class XBlockView extends StatelessWidget {
         SizedBox(height: 10),
         IconLabelText(
           label: "Refresh Current Item: ",
-          text: xBlock.forceReloadCurrItem.toString(),
+          text: xBlock.xBlockCurrentItemModel.forceReloadCurrItem.toString(),
           textStyle: TextStyle(color: Colors.red),
         ),
         Divider(),

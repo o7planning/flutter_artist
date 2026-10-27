@@ -5,6 +5,8 @@ part 'filter_execution_calculator.dart';
 
 part 'scalar_execution_calculator.dart';
 
+part 'block_current_item_model_execution_calculator.dart';
+
 part 'block_execution_calculator.dart';
 
 part 'stage_execution_calculator.dart';

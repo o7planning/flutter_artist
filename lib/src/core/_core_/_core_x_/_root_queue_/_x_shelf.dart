@@ -304,6 +304,10 @@ abstract class XShelf extends XRootQueueItem {
     return xBlockMap[name];
   }
 
+  XBlockCurrentItemModel? findXBlockCurrentItemModelByName(String name) {
+    return xBlockCurrentItemModelMap[name];
+  }
+
   XScalar? findXScalarByName(String name) {
     return xScalarMap[name];
   }

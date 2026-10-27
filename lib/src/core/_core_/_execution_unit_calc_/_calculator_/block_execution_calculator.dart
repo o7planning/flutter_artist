@@ -3,13 +3,12 @@ part of '_calc.dart';
 class BlockExecutionCalculator {
   static BlockNextUnitOutput calculate(BlockNextUnitInput input) {
     final state = input.dataState;
-    final itemState = input.itemDataState;
     final intent = input.currentIntent;
     final hint = input.queryHint;
 
     String buildInfo(String branch) {
       return "$branch, ${input.modelName}, _executionIntent: $intent, "
-          "dataState: ${state.toBriefInfo()}, itemDataState: ${itemState.toBriefInfo()}, itemCount: ${input.itemCount}, "
+          "dataState: ${state.toBriefInfo()}, "
           "queryHint: $hint, isVisibleX: ${input.isVisible}";
     }
 
@@ -92,6 +91,7 @@ class BlockExecutionCalculator {
           debugInfo: buildInfo("Block (4.1)"),
         );
       }
+
       // IN: DATA STATE = FRESH
       // 4.2. Handle active execution intents
       if (intent != null) {
@@ -110,102 +110,50 @@ class BlockExecutionCalculator {
             action: BlockExecutionAction.query,
             debugInfo: buildInfo("Block (4.2.3)"),
           );
-        } else if (intent is BlockSetCurrentItemIntent) {
+        } else if (intent is BlockClearItemsIntent) {
           return BlockNextUnitOutput(
-            action: BlockExecutionAction.setCurrentItem,
+            action: BlockExecutionAction.clearItems,
             debugInfo: buildInfo("Block (4.2.4)"),
-          );
-        } else if (intent is BlockClearCurrentItemIntent) {
-          return BlockNextUnitOutput(
-            action: BlockExecutionAction.clearCurrentItem,
-            debugInfo: buildInfo("Block (4.2.5)"),
           );
         } else if (intent is BlockDeleteItemIntent) {
           return BlockNextUnitOutput(
             action: BlockExecutionAction.deleteItem,
-            debugInfo: buildInfo("Block (4.2.6)"),
+            debugInfo: buildInfo("Block (4.2.5)"),
           );
         } else if (intent is BlockDeleteItemsIntent) {
           return BlockNextUnitOutput(
             action: BlockExecutionAction.deleteItems,
-            debugInfo: buildInfo("Block (4.2.7)"),
-          );
-        } else if (intent is BlockPrepareFormToCreateItemIntent) {
-          return BlockNextUnitOutput(
-            action: BlockExecutionAction.prepareFormToCreate,
-            debugInfo: buildInfo("Block (4.2.8)"),
+            debugInfo: buildInfo("Block (4.2.6)"),
           );
         } else if (intent is BlockQuickItemUpdateIntent) {
           return BlockNextUnitOutput(
             action: BlockExecutionAction.quickItemUpdate,
-            debugInfo: buildInfo("Block (4.2.9)"),
+            debugInfo: buildInfo("Block (4.2.7)"),
           );
         } else if (intent is BlockQuickItemCreationIntent) {
           return BlockNextUnitOutput(
             action: BlockExecutionAction.quickItemCreation,
-            debugInfo: buildInfo("Block (4.2.10)"),
+            debugInfo: buildInfo("Block (4.2.8)"),
           );
         } else if (intent is BlockBackendActionIntent) {
           return BlockNextUnitOutput(
             action: BlockExecutionAction.backendAction,
-            debugInfo: buildInfo("Block (4.2.11)"),
+            debugInfo: buildInfo("Block (4.2.9)"),
           );
         } else {
           return BlockNextUnitOutput(
             action: BlockExecutionAction.none,
-            debugInfo: buildInfo("Block (4.2.12)"),
+            debugInfo: buildInfo("Block (4.2.10)"),
           );
         }
       }
+
       // IN: DATA STATE = FRESH
-      // 4.3. intent == null
-      else {
-        // IN: DATA STATE = FRESH
-        // IN: intent == null
-        if (itemState.isNone) {
-          if (input.hasFormModel && input.formMode == BlockFormMode.creation) {
-            return BlockNextUnitOutput(
-              action: BlockExecutionAction.none,
-              debugInfo: buildInfo("Block (4.3.1.1)"),
-            );
-          }
-          if (input.itemCount > 0 && input.itemVisibleX) {
-            return BlockNextUnitOutput(
-              action: BlockExecutionAction.setCurrentItem,
-              missingIntent: MissingIntentType.setItemAsCurrent,
-              debugInfo: buildInfo("Block (4.3.1.2)"),
-            );
-          } else {
-            return BlockNextUnitOutput(
-              action: BlockExecutionAction.none,
-              debugInfo: buildInfo("Block (4.3.1.3)"),
-            );
-          }
-        }
-        // IN: DATA STATE = FRESH
-        // IN: intent == null
-        else if (itemState.isFresh) {
-          return BlockNextUnitOutput(
-            action: BlockExecutionAction.none,
-            debugInfo: buildInfo("Block (4.3.2.1)"),
-          );
-        }
-        // IN: DATA STATE = FRESH
-        // IN: intent == null
-        else if (itemState.isStale) {
-          return BlockNextUnitOutput(
-            action: BlockExecutionAction.setCurrentItem,
-            missingIntent: MissingIntentType.setItemAsCurrent,
-            debugInfo: buildInfo("Block (4.3.3.1)"),
-          );
-        }
-        // IN: DATA STATE = FRESH
-        // IN: intent == null
-        else {
-          throw UnimplementedError(
-              "Unhandled itemDataState in Fresh block: ${itemState.toBriefInfo()}");
-        }
-      }
+      // 4.3. Idle state when dataset is fresh and no block-level intent is active
+      return BlockNextUnitOutput(
+        action: BlockExecutionAction.none,
+        debugInfo: buildInfo("Block (4.3)"),
+      );
     }
 
     // =========================================================================

@@ -106,14 +106,6 @@ abstract class Block<
 
   bool get isDeleting => __isDeleting;
 
-  bool __isRefreshingCurrentItem = false;
-
-  bool get isRefreshingCurrentItem => __isRefreshingCurrentItem;
-
-  bool __isPreparingFormCreation = false;
-
-  bool get isPreparingFormCreation => __isPreparingFormCreation;
-
   late final _BlockDebugInfo<ID> debug = _BlockDebugInfo<ID>(block: this);
 
   final BlockConfig config;
@@ -515,7 +507,7 @@ abstract class Block<
       },
     );
     // 2. Append received event metadata and resolved viewport strategies into the session
-    _blockSyncSessionState!.addReceivedEventInfo(
+    _blockSyncSessionState!._addReceivedEventInfo(
       eventSourceType: eventSourceType,
       requiresMaxSyncStrategy: requiresMaxSyncStrategy,
       syncStrategyOnFullQueryMode: syncStrategyOnFullQueryMode,
@@ -891,7 +883,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void __clearAllChildrenBlocksToNone({
+  void _clearAllChildrenBlocksToNone({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
   }) {
     __assertThisXBlock(thisXBlock);
@@ -909,7 +901,7 @@ abstract class Block<
     }
   }
 
-  void __clearAllChildrenBlocksToPending({
+  void _clearAllChildrenBlocksToPending({
     required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
   }) {
     __assertThisXBlock(thisXBlock);
@@ -1027,63 +1019,6 @@ abstract class Block<
   // ***************************************************************************
 
   @_ExecutionUnitMethodAnnotation()
-  @_BlockClearCurrentItemAnnotation()
-  Future<void> _unitClearCurrentItem({
-    required ExecutionTrace executionTrace,
-    required ExecutionUnitType executionUnitType,
-    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL> executionIntent,
-  }) async {
-    __assertThisXBlock(thisXBlock);
-    thisXBlock._createAndSetBlockExecutionIntentDone(
-        lastIntentInfo: "Clear Current Item");
-    //
-    executionTrace.addInfo(
-      codeId: "#013000",
-      shortDesc:
-          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}",
-    );
-    //
-    executionTrace.addInfo(
-      codeId: "#013100",
-      shortDesc: "${debugObjHtml(this)} -> set currentItem to null.",
-    );
-    executionIntent.resultWrapper._setResult(
-      BlockClearCurrentItemResult(precheck: null),
-      objectCaller: this,
-      methodName: '_unitClearCurrentItem',
-    );
-    //
-    blockCurrentItemModel._setCurrentDataAndItemDataState(
-      id: null,
-      item: null,
-      itemDetail: null,
-    );
-    //
-    if (formModel != null) {
-      executionTrace.addInfo(
-        codeId: "#013200",
-        shortDesc:
-            "${debugObjHtml(formModel)} clear data and set state to <b>none</b>.",
-      );
-      formModel!._clearDataWithDataState(formDataState: FormDataStateNone());
-    }
-    //
-    executionTrace.addInfo(
-      codeId: "#013400",
-      shortDesc: "Clear data of all child blocks and set them to <b>none</b>."
-          "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-    );
-    // Test Case: [38b].
-    __clearAllChildrenBlocksToNone(
-      thisXBlock: thisXBlock,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_ExecutionUnitMethodAnnotation()
   @_BlockQueryAnnotation()
   @_BlockQueryMorePageAnnotation()
   @_BlockQueryNextPageAnnotation()
@@ -1099,7 +1034,8 @@ abstract class Block<
     __assertThisXBlock(thisXBlock);
 
     final QueryHint initialQueryHint = thisXBlock.queryHint;
-    final bool applyForceReloadCurrItem = thisXBlock.forceReloadCurrItem;
+    final bool applyForceReloadCurrItem =
+        thisXBlock.xBlockCurrentItemModel.forceReloadCurrItem;
 
     thisXBlock._setQueriedTrue();
     thisXBlock._createAndSetBlockExecutionIntentDone(lastIntentInfo: "Query");
@@ -1570,13 +1506,13 @@ abstract class Block<
             "Clear data of all child blocks and set them to <b>none</b> state."
             "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
       );
-      __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
+      _clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
     } else {
       switch (newBlockDataState) {
         case BlockDataStateNone():
         case BlockDataStatePending():
         case BlockDataStateLoadedStale():
-          __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
+          _clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
         case BlockDataStateLoadedFresh():
           break;
       }
@@ -1606,19 +1542,21 @@ abstract class Block<
       executionTrace.addExecutionIntent(
         codeId: "#003720",
         owner: this,
-        executionIntentType: BlockClearCurrentItemIntent,
+        executionIntentType: BlockCurrentItemModelClearCurrentItemIntent,
         suffixShortDesc: "@afterQueryDirective",
       );
-      thisXBlock._createAndSetBlockExecutionIntentClearCurrentItem();
+      thisXBlock.xBlockCurrentItemModel
+          ._createAndSetBlockCurrentItemModelExecutionIntentClearCurrentItem();
       return;
     } else if (afterQueryDirective == BlockAfterQueryDirective.createNewItem) {
       executionTrace.addExecutionIntent(
         codeId: "#003740",
         owner: this,
-        executionIntentType: BlockPrepareFormToCreateItemIntent,
+        executionIntentType: BlockCurrentItemModelPrepareFormToCreateItemIntent,
         suffixShortDesc: "@afterQueryDirective",
       );
-      thisXBlock._createAndSetBlockExecutionIntentPrepareFormToCreateItem(
+      thisXBlock.xBlockCurrentItemModel
+          ._createAndSetBlockCurrentItemModelExecutionIntentPrepareFormToCreateItem(
         xBlock: thisXBlock,
         initDirty: false,
         formInput: null,
@@ -1651,11 +1589,12 @@ abstract class Block<
     executionTrace.addExecutionIntent(
       codeId: "#003800",
       owner: this,
-      executionIntentType: BlockSetCurrentItemIntent,
+      executionIntentType: BlockCurrentItemModelSetCurrentItemIntent,
       suffixShortDesc: "@afterQueryDirective",
     );
 
-    thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
+    thisXBlock.xBlockCurrentItemModel
+        ._createAndSetBlockCurrentItemModelExecutionIntentSetCurrentItem(
       setCurrentItemDirective: setCurrentItemDirective,
       newQueriedList: queriedItemList ?? [],
       inputCandidateCurrItem: candidateCurrItem,
@@ -1707,11 +1646,12 @@ abstract class Block<
     executionTrace.addExecutionIntent(
       codeId: "#003140",
       owner: this,
-      executionIntentType: BlockSetCurrentItemIntent,
+      executionIntentType: BlockCurrentItemModelSetCurrentItemIntent,
       suffixShortDesc: "",
     );
 
-    thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
+    thisXBlock.xBlockCurrentItemModel
+        ._createAndSetBlockCurrentItemModelExecutionIntentSetCurrentItem(
       setCurrentItemDirective: setCurrentItemDirective ??
           BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
       newQueriedList: const [],
@@ -1719,671 +1659,6 @@ abstract class Block<
       forceReloadItem: applyForceReloadCurrItem,
       formLoadHint: null,
     );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_ExecutionUnitMethodAnnotation()
-  @_BlockFormModelLoadDataAnnotation()
-  @_BlockRefreshCurrentItemAnnotation()
-  @_BlockSetItemAsCurrentAnnotation()
-  @_BlockSelectNextItemAsCurrentAnnotation()
-  @_BlockSelectFirstItemAsCurrentAnnotation()
-  @_BlockSelectPreviousItemAsCurrentAnnotation()
-  Future<void> _unitSetItemAsCurrent({
-    required ExecutionTrace executionTrace,
-    required ExecutionUnitType executionUnitType,
-    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required final BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
-        executionIntent,
-  }) async {
-    __assertThisXBlock(thisXBlock);
-    thisXBlock._createAndSetBlockExecutionIntentDone(
-      lastIntentInfo: "Set Item As Current",
-    );
-    //
-    final List<ITEM> newQueriedList = executionIntent.newQueriedList;
-    final ITEM? inputCandidateCurrItem = executionIntent.inputCandidateCurrItem;
-    //
-    executionTrace.addInfo(
-      codeId: "#028000",
-      shortDesc:
-          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()}.",
-      parameters: {
-        "inputCandidateCurrItem": inputCandidateCurrItem,
-        "newQueriedList": newQueriedList,
-        "setCurrentItemDirective": executionIntent.setCurrentItemDirective,
-      },
-    );
-    //
-    final bool manualDirty = false;
-    if (formModel != null) {
-      executionTrace.addInfo(
-        codeId: "#028020",
-        shortDesc:
-            "${debugObjHtml(formModel)} -> set <b>manualDirty</b> to ${debugObjHtml(manualDirty)}.",
-      );
-      formModel?._formModelStructure._setManualDirty(manualDirty);
-    }
-    //
-    final blockSetCurrentItemResult = executionIntent.resultWrapper._setResult(
-      BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>(
-        precheck: null,
-        setCurrentItemDirective: executionIntent.setCurrentItemDirective,
-        candidateItem: inputCandidateCurrItem,
-        oldCurrentItem: currentItem,
-        currentItem: currentItem,
-      ),
-      objectCaller: this,
-      methodName: '_unitSetItemAsCurrent',
-    );
-    thisXBlock.attachToPredecessorIfAny(blockSetCurrentItemResult);
-    //
-    // In: _unitSetItemAsCurrent
-    //
-    if (dataState.isPending || dataState.isStale) {
-      // This case never runs in normal lifecycle
-      print("NEVER RUN: dataState.isPending || dataState.isStale");
-      return;
-    }
-    //
-    final ITEM? currItemOrigin = currentItem;
-    final ITEM? currItem;
-    if (currItemOrigin != null) {
-      if (containsItem(currItemOrigin)) {
-        currItem = currItemOrigin;
-      } else {
-        currItem = null;
-      }
-    } else {
-      currItem = null;
-    }
-    //
-    ITEM? candidateCurrItem;
-    //
-    if (inputCandidateCurrItem != null) {
-      if (!containsItem(inputCandidateCurrItem)) {
-        executionTrace.addInfo(
-          codeId: "#028120",
-          shortDesc:
-              "inputCandidateCurrItem: ${debugObjHtml(inputCandidateCurrItem)} not in the list items of the block.",
-        );
-        candidateCurrItem = null;
-      } else {
-        candidateCurrItem = inputCandidateCurrItem;
-      }
-    }
-    int? suggestIdx = specifyItemIndexToSetAsCurrent();
-    final ITEM? suggestCandidateItem;
-    if (suggestIdx != null) {
-      suggestCandidateItem = findItemByIndex(suggestIdx);
-    } else {
-      suggestCandidateItem = null;
-    }
-    candidateCurrItem = candidateCurrItem ??
-        currItem ??
-        newQueriedList.firstOrNull ??
-        suggestCandidateItem ??
-        firstItem;
-    //
-    if (candidateCurrItem == null) {
-      executionTrace.addInfo(
-        codeId: "#028080",
-        shortDesc:
-            "${debugObjHtml(this)} has no item -> clear all data in child blocks and set them to <b>none</b>."
-            "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-      );
-
-      // Record transition to null as there are no items available
-      blockSetCurrentItemResult.recordCurrentTransition(
-        previousItem: currentItem,
-        candidateItem: null,
-        finalItem: null,
-        trigger: CurrentItemTransitionTrigger.resetToNull,
-      );
-
-      // Record cascaded state changes for child blocks
-      for (final child in thisXBlock.childXBlocks) {
-        blockSetCurrentItemResult.recordCascadedEviction(
-          childBlockName: child.name,
-          targetState: const BlockDataStateNone(),
-        );
-      }
-      //
-      blockCurrentItemModel._dataState = const BlockItemDataStateNone();
-      blockCurrentItemModel._resetBlockItemSyncSessionState(
-        executionTrace: executionTrace,
-      );
-
-      if (formModel != null) {
-        formModel!._clearDataWithDataState(formDataState: FormDataStateNone());
-      }
-
-      __clearAllChildrenBlocksToNone(
-        thisXBlock: thisXBlock,
-      );
-      return;
-    }
-    //
-    // OK, Now candidateCurrItem is NOT NULl.
-    //
-    final bool isCandidateCurrentItemInNewQueriedList =
-        FaItemsUtils.isListContainItem<ITEM, ID>(
-      targetList: newQueriedList,
-      item: candidateCurrItem,
-      getItemId: _getItemIdInternal,
-    );
-    //
-    final bool provideItemsContext = ui.hasBlockContext(
-      includeDescendants: true,
-    );
-    final bool provideItemDetailContext = ui.hasItemContext(
-      includeDescendants: true,
-    );
-    final bool provideFormContext = ui.hasFormContext();
-    final bool inputForceReloadItem = thisXBlock.forceReloadCurrItem;
-    final bool currItemMaybeChanged =
-        candidateCurrItem.id != currItemOrigin?.id;
-    //
-    executionTrace.addInfo(
-      codeId: "#028640",
-      shortDesc: "Debug:",
-      parameters: {
-        "provideItemsContext": provideItemsContext,
-        "provideItemDetailContext": provideItemDetailContext,
-        "provideFormContext": provideFormContext,
-        "inputForceReloadItem": inputForceReloadItem,
-      },
-    );
-    //
-    executionTrace.addSeparator();
-    //
-    executionTrace.addNonControllableCall(
-      codeId: "#028660",
-      caller: BlockCurrentItemResolver,
-      methodName: "resolveCurrentItem",
-      suffixShortDesc: "",
-      parameters: {
-        "ITEM == ITEM_DETAIL?": ITEM == ITEM_DETAIL,
-        "candidateCurrItem": candidateCurrItem,
-        "inputForceReloadItem": inputForceReloadItem,
-        "provideItemsContext": provideItemsContext,
-        "provideItemDetailContext": provideItemDetailContext,
-        "provideFormContext": provideFormContext,
-        "absentItemContextPolicy": effectiveConfig.absentItemContextPolicy,
-        "unifiedItemRefreshPolicy": effectiveConfig.unifiedItemRefreshPolicy,
-        "setCurrentItemDirective": executionIntent.setCurrentItemDirective,
-        "isCandidateCurrentItemInNewQueriedList":
-            isCandidateCurrentItemInNewQueriedList,
-        "isCandidateItemDifferentFromCurrent": currItemMaybeChanged,
-      },
-    );
-    //
-    final BlockCurrentItemPlan blkState =
-        BlockCurrentItemResolver.resolveCurrentItem(
-      executionTrace: executionTrace,
-      debug: false,
-      thisXBlock: thisXBlock,
-      candidateCurrItem: candidateCurrItem,
-      inputForceReloadItem: inputForceReloadItem,
-      provideItemsContext: provideItemsContext,
-      provideItemDetailContext: provideItemDetailContext,
-      provideFormContext: provideFormContext,
-      absentItemContextPolicy: effectiveConfig.absentItemContextPolicy,
-      unifiedItemRefreshPolicy: effectiveConfig.unifiedItemRefreshPolicy,
-      setCurrentItemDirective: executionIntent.setCurrentItemDirective,
-      isCandidateCurrentItemInNewQueriedList:
-          isCandidateCurrentItemInNewQueriedList,
-      isCandidateItemDifferentFromCurrent: currItemMaybeChanged,
-    );
-    //
-    executionTrace.addSeparator();
-    //
-    final forceReloadItem = blkState.forceReloadItem;
-    final candidateItemAccepted = blkState.candidateAccepted;
-    final currentItemChanged = currItemMaybeChanged && candidateItemAccepted;
-
-    if (!candidateItemAccepted) {
-      executionTrace.addInfo(
-        codeId: "#028670",
-        shortDesc:
-            "@candidateItemAccepted: <b>false</b> --> Clean all data of child blocks and set them to none.",
-      );
-      // Record candidate rejection step
-      blockSetCurrentItemResult.recordCurrentTransition(
-        previousItem: currentItem,
-        candidateItem: candidateCurrItem,
-        finalItem: null,
-        trigger: CurrentItemTransitionTrigger.resetToNull,
-      );
-      //
-      blockCurrentItemModel._setCurrentDataAndItemDataState(
-        id: null,
-        item: null,
-        itemDetail: null,
-      );
-      //
-      for (final child in thisXBlock.childXBlocks) {
-        blockSetCurrentItemResult.recordCascadedEviction(
-          childBlockName: child.name,
-          targetState: const BlockDataStateNone(),
-        );
-      }
-
-      if (formModel != null) {
-        formModel!._clearDataWithDataState(formDataState: FormDataStateNone());
-      }
-
-      __clearAllChildrenBlocksToNone(
-        thisXBlock: thisXBlock,
-      );
-      return;
-    }
-    //
-    // NOW candidateItemAccepted.
-    //
-    executionTrace.addInfo(
-      codeId: "#028700",
-      shortDesc: "Calculated:",
-      parameters: {
-        "forceReloadItem": forceReloadItem,
-        "candidateItemAccepted": candidateItemAccepted,
-      },
-    );
-    //
-    final bool isCandidateIsCurrent = isCurrentItem(candidateCurrItem);
-    //
-    executionTrace.addInfo(
-      codeId: "#028720",
-      shortDesc: "Calculated:",
-      parameters: {
-        "ITEM == ITEM_DETAIL?": ITEM == ITEM_DETAIL,
-        "candidateCurrItem": candidateCurrItem,
-        "isCandidateIsCurrent": isCandidateIsCurrent,
-        "isCandidateCurrentItemInNewQueriedList":
-            isCandidateCurrentItemInNewQueriedList,
-        "absentItemContextPolicy": effectiveConfig.absentItemContextPolicy,
-      },
-    );
-    //
-    final ID candidateCurrItemId = __getItemIdShowErr(
-      candidateCurrItem,
-      showErr: true,
-    );
-    ITEM_DETAIL? refreshedCurrentItemDetail = currentItemDetail;
-
-    final bool itemRefreshed;
-    if (!forceReloadItem) {
-      itemRefreshed = false;
-      //
-      executionTrace.addInfo(
-        codeId: "#028800",
-        shortDesc:
-            "The candidate ${debugObjHtml(candidateCurrItem)} will not need to be reloaded.",
-      );
-      final ITEM? candidateCurrItemInNewQueriedList =
-          FaItemsUtils.findItemInList(
-        item: candidateCurrItem,
-        targetList: executionIntent.newQueriedList,
-        getItemId: _getItemIdInternal,
-      );
-      if (ITEM == ITEM_DETAIL && candidateCurrItemInNewQueriedList != null) {
-        refreshedCurrentItemDetail =
-            candidateCurrItemInNewQueriedList as ITEM_DETAIL;
-      }
-    }
-    // forceReloadItem
-    else {
-      itemRefreshed = true;
-      String? methodName;
-      final _BlockCurrentData? loadedCoupleItem =
-          thisXBlock._getRecentLoadedItem(
-        itemId: candidateCurrItemId,
-      );
-      refreshedCurrentItemDetail = loadedCoupleItem?._itemDetail;
-
-      if (refreshedCurrentItemDetail == null) {
-        methodName = "performLoadItemDetailById";
-        try {
-          __refreshRefreshingCurrentItemState(
-            isRefreshingCurrentItem: true,
-          );
-          //
-          executionTrace.addControllableCall(
-            codeId: "#028900",
-            caller: this,
-            methodName: methodName,
-            suffixShortDesc: "",
-            parameters: {
-              "candidateCurrItemId": candidateCurrItemId,
-            },
-          );
-          //
-          debug._performLoadItemDetailByIdCount++;
-          thisXBlock.currentItemReloadedInSession = true;
-          ApiResult<ITEM_DETAIL> result = await performLoadItemDetailById(
-            itemId: candidateCurrItemId,
-          );
-          result.throwIfError();
-          //
-          refreshedCurrentItemDetail = result.data;
-          thisXBlock.setForceReloadCurrItemDone();
-          //
-          executionTrace.addInfo(
-            codeId: "#028920",
-            shortDesc:
-                "Result --> @refreshedCurrentItemDetail: ${debugObjHtml(refreshedCurrentItemDetail)}.",
-          );
-        } catch (e, stackTrace) {
-          final ErrorInfo errorInfo = _handleError(
-            module: shelf,
-            methodName: methodName,
-            error: e,
-            stackTrace: stackTrace,
-            showSnackBar: true,
-            tipDocument: TipDocument.blockPerformLoadItemDetailById,
-          );
-          //
-          blockSetCurrentItemResult._setErrorInfo(
-            errorInfo: errorInfo,
-          );
-
-          blockSetCurrentItemResult.recordItemOperationFailure(
-            item: candidateCurrItem,
-            operation: methodName,
-            errorInfo: errorInfo,
-          );
-
-          executionTrace.addInfo(
-            codeId: "#029000",
-            shortDesc:
-                "The ${debugObjHtml(this)}.$methodName() method was called with an error!",
-            errorInfo: errorInfo,
-          );
-          return;
-        } finally {
-          __refreshRefreshingCurrentItemState(
-            isRefreshingCurrentItem: false,
-          );
-        }
-      }
-    } // end of forceReloadItem.
-
-    // ===========================================================================
-    // (***) STAGE 1: REMOTE NOT FOUND / EVICTION & FALLBACK HANDLING
-    // ===========================================================================
-    if (refreshedCurrentItemDetail == null) {
-      executionTrace.addInfo(
-        codeId: "#029040",
-        shortDesc:
-            "Candidate ${debugObjHtml(candidateCurrItem)} seems to have been deleted from the system "
-            "--> remove it from the block..",
-      );
-
-      blockSetCurrentItemResult.recordEviction(
-        item: candidateCurrItem,
-        reason: ItemEvictionReason.remoteNotFound,
-      );
-      // Find sibling before removing..
-      final ITEM? siblingItem = findSiblingItem(item: candidateCurrItem);
-
-      // 1.1 Remove the evicted item from the current dataset
-      executionTrace.addInfo(
-        codeId: "#029060",
-        shortDesc: "Remove ${debugObjHtml(candidateCurrItem)} from the list.",
-      );
-      await __removeItemFromList(
-        executionTrace: executionTrace,
-        removeItem: candidateCurrItem,
-      );
-      // Test Case: [04a].
-      if (candidateCurrItem.id == currentItem?.id) {
-        blockCurrentItemModel._setCurrentDataAndItemDataState(
-          id: null,
-          item: null,
-          itemDetail: null,
-        );
-      }
-      // 1.2 Non-current candidate evicted with a surviving current item -> Keep current item stable
-      if (!isCandidateIsCurrent && currItem != null) {
-        return;
-      }
-
-      // 1.3 Case A: Found a sibling to fall back to
-      if (siblingItem != null) {
-        executionTrace.addInfo(
-          codeId: "#029100",
-          shortDesc:
-              "Found new candidate ${debugObjHtml(siblingItem)} --> set it as current.",
-        );
-
-        blockSetCurrentItemResult.recordCurrentTransition(
-          previousItem: isCandidateIsCurrent ? candidateCurrItem : currentItem,
-          candidateItem: candidateCurrItem,
-          finalItem: siblingItem,
-          trigger: CurrentItemTransitionTrigger.siblingFallback,
-        );
-
-        thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
-          setCurrentItemDirective: executionIntent.setCurrentItemDirective,
-          newQueriedList: executionIntent.newQueriedList,
-          inputCandidateCurrItem: siblingItem,
-          forceReloadItem:
-              !isCandidateIsCurrent && executionIntent.forceReloadItem,
-          formLoadHint: null,
-        );
-        return;
-      }
-
-      // 1.4 Case B: No sibling available -> Clear current item and reset consumers to None
-      if (isCandidateIsCurrent) {
-        executionTrace.addInfo(
-          codeId: "#029180",
-          shortDesc: "Set current item to <b>null</b>.",
-        );
-        //
-        blockCurrentItemModel._setCurrentDataAndItemDataState(
-          id: null,
-          item: null,
-          itemDetail: null,
-        );
-        //
-        if (formModel != null) {
-          executionTrace.addInfo(
-            codeId: "#029200",
-            shortDesc:
-                "Set ${debugObjHtml(formModel!)} dataState to <b>none</b>.",
-          );
-          formModel!
-              ._clearDataWithDataState(formDataState: FormDataStateNone());
-        }
-
-        executionTrace.addInfo(
-          codeId: "#029220",
-          shortDesc:
-              "Clear all data in child blocks and set them to <b>none</b>."
-              "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-        );
-
-        for (final child in thisXBlock.childXBlocks) {
-          blockSetCurrentItemResult.recordCascadedEviction(
-            childBlockName: child.name,
-            targetState: const BlockDataStateNone(),
-          );
-        }
-
-        __clearAllChildrenBlocksToNone(thisXBlock: thisXBlock);
-      }
-      return;
-    }
-
-    // ===========================================================================
-    // STAGE 2: ITEM MUTATION, CONVERSION & STATE COMMIT
-    // ===========================================================================
-    if (currentItemChanged || itemRefreshed) {
-      executionTrace.addInfo(
-        codeId: "#029400",
-        shortDesc: "Debug",
-        parameters: {
-          "currentItemChanged": currentItemChanged,
-          "itemRefreshed": itemRefreshed,
-        },
-      );
-
-      // 2.1 Convert loaded ITEM_DETAIL to domain ITEM
-      final String methodName = "convertItemDetailToItem";
-      try {
-        executionTrace.addControllableCall(
-          codeId: "#029410",
-          caller: this,
-          methodName: methodName,
-          suffixShortDesc:
-              "To convert <b>ITEM_DETAIL</b> to <b>ITEM</b>, {debugObjHtml(refreshedCurrentItemDetail)} --> ${_debugItemTypeHtml()}.",
-        );
-
-        candidateCurrItem = __convertItemDetailToItem(
-          itemDetail: refreshedCurrentItemDetail,
-        );
-
-        executionTrace.addInfo(
-          codeId: "#029420",
-          shortDesc: "Got value: ${debugObjHtml(candidateCurrItem)}.",
-        );
-      } catch (e, stackTrace) {
-        final ErrorInfo errorInfo = _handleError(
-          module: shelf,
-          methodName: methodName,
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-          tipDocument: TipDocument.blockConvertItemDetailToItem,
-        );
-
-        blockSetCurrentItemResult.recordItemOperationFailure(
-          item: candidateCurrItem,
-          operation: methodName,
-          errorInfo: errorInfo,
-        );
-
-        executionTrace.addInfo(
-          codeId: "#029440",
-          shortDesc:
-              "The ${debugObjHtml(this)}.$methodName() method was called with an error!",
-          errorInfo: errorInfo,
-        );
-        return;
-      }
-
-      // 2.2 Synchronize list data and commit current item pointer
-      if (candidateCurrItem != null) {
-        executionTrace.addNonControllableCall(
-          codeId: "#029480",
-          caller: _blockData,
-          methodName: "_insertOrReplaceItem",
-          suffixShortDesc: "",
-          parameters: {
-            "item": candidateCurrItem,
-          },
-        );
-        _blockData._insertOrReplaceItem(item: candidateCurrItem);
-      }
-
-      executionTrace.addInfo(
-        codeId: "#029500",
-        shortDesc: "Set ${debugObjHtml(candidateCurrItem)} as current.",
-      );
-
-      blockSetCurrentItemResult.recordCurrentTransition(
-        previousItem: currItemOrigin,
-        candidateItem: inputCandidateCurrItem,
-        finalItem: candidateCurrItem,
-        trigger: itemRefreshed
-            ? CurrentItemTransitionTrigger.explicitSelect
-            : CurrentItemTransitionTrigger.initialQueryDefault,
-      );
-      //
-      blockCurrentItemModel._setCurrentDataAndItemDataState(
-        id: candidateCurrItemId,
-        item: candidateCurrItem,
-        itemDetail: refreshedCurrentItemDetail,
-      );
-      //
-      blockCurrentItemModel._resetBlockItemSyncSessionState(
-          executionTrace: executionTrace);
-    }
-
-    // ===========================================================================
-    // STAGE 3: FORM MODEL LIFECYCLE COORDINATION
-    // ===========================================================================
-    if (formModel != null) {
-      if (currentItemChanged || isCandidateCurrentItemInNewQueriedList) {
-        executionTrace.addInfo(
-          codeId: "#029520",
-          shortDesc:
-              "Current Item Changed/Queried --> Clear form and set to Pending.",
-        );
-        formModel!._clearDataWithDataState(
-          formDataState: FormDataStatePending(),
-        );
-      } else if (itemRefreshed) {
-        executionTrace.addInfo(
-          codeId: "#029530",
-          shortDesc: "Current Item Refreshed --> Set Form to Stale.",
-        );
-        final newFormDataState =
-            BlockFormDataStateUtils.calculateNewLazyDataState(
-          currentFormDataState: formModel!.dataState,
-          hasCurrentItem: true,
-          currentItemChanged: false,
-        );
-        formModel!._formModelStructure._setFormDataState(
-          formDataState: newFormDataState,
-          error: null,
-        );
-      }
-
-      // Explicit directive demanding immediate Form Load
-      if (executionIntent.setCurrentItemDirective ==
-          BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm) {
-        thisXBlock.xBlockCurrentItemModel.xBlockFormModel!
-            .setForceTypeIfLessThan(FormLoadHint.forceIfNeed);
-
-        executionTrace.addExecutionIntent(
-          codeId: "#029540",
-          owner: thisXBlock.xBlockCurrentItemModel.xBlockFormModel!.formModel,
-          executionIntentType: FormModelDataLoadIntent,
-          suffixShortDesc: "",
-        );
-        thisXBlock.xBlockCurrentItemModel.xBlockFormModel!
-            ._createAndSetFormModelExecutionIntentLoad();
-      }
-    }
-
-    // ===========================================================================
-    // STAGE 4: CASCADE CHILD BLOCKS TO PENDING
-    // ===========================================================================
-    if (currentItemChanged) {
-      blockSetCurrentItemResult._currentItem = candidateCurrItem;
-
-      executionTrace.addInfo(
-        codeId: "#029640",
-        shortDesc:
-            "The <b>currentItem</b> has changed --> clear all data in child blocks and set them to <b>pending</b>."
-            "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-      );
-
-      for (final child in thisXBlock.childXBlocks) {
-        blockSetCurrentItemResult.recordCascadedEviction(
-          childBlockName: child.name,
-          targetState: const BlockDataStatePending(),
-        );
-      }
-
-      __clearAllChildrenBlocksToPending(
-        thisXBlock: thisXBlock,
-      );
-    }
   }
 
   // ***************************************************************************
@@ -2525,7 +1800,7 @@ abstract class Block<
         shortDesc:
             "Remove ${debugObjHtml(executionIntent.item)} from ${debugObjHtml(this)}. (*) This item was not current item.",
       );
-      await __removeItemFromList(
+      await _removeItemFromList(
         executionTrace: executionTrace,
         removeItem: executionIntent.item,
       );
@@ -2568,7 +1843,7 @@ abstract class Block<
             "Remove ${debugObjHtml(executionIntent.item)} from ${debugObjHtml(this)}. (*) This item was current item.",
       );
 
-      await __removeItemFromList(
+      await _removeItemFromList(
         executionTrace: executionTrace,
         removeItem: executionIntent.item,
       );
@@ -2607,7 +1882,7 @@ abstract class Block<
         );
       }
 
-      __clearAllChildrenBlocksToNone(
+      _clearAllChildrenBlocksToNone(
         thisXBlock: thisXBlock,
       );
 
@@ -2623,7 +1898,8 @@ abstract class Block<
         final setCurrentItemDirective =
             BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed;
 
-        thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
+        thisXBlock.xBlockCurrentItemModel
+            ._createAndSetBlockCurrentItemModelExecutionIntentSetCurrentItem(
           setCurrentItemDirective: setCurrentItemDirective,
           newQueriedList: const [],
           inputCandidateCurrItem: siblingItem,
@@ -2669,23 +1945,6 @@ abstract class Block<
       effectedItemIds: effectedItemIds,
     );
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  // Future<void> processBroadcastInternal({
-  //   required ExecutionTrace executionTrace,
-  //   required XBlock<ID, ITEM, ITEM_DETAIL> thisEventXBlock,
-  //   required List<ID> effectiveItemIds,
-  // }) async {
-  //   __assertThisXBlock(thisEventXBlock);
-  //   //
-  //   _EventDispatcher.broadcastInternal<ID>(
-  //     eventType: EventType.mix,
-  //     eventBlock: thisEventXBlock.block,
-  //     effectedItemIds: effectiveItemIds,
-  //   );
-  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -2784,7 +2043,7 @@ abstract class Block<
         );
 
         // Remove item from in-memory collection
-        await __removeItemFromList(
+        await _removeItemFromList(
           executionTrace: executionTrace,
           removeItem: delItem,
         );
@@ -2829,7 +2088,7 @@ abstract class Block<
             );
           }
 
-          __clearAllChildrenBlocksToNone(
+          _clearAllChildrenBlocksToNone(
             thisXBlock: thisXBlock,
           );
         }
@@ -2932,12 +2191,13 @@ abstract class Block<
         executionTrace.addExecutionIntent(
           codeId: "#042910",
           owner: this,
-          executionIntentType: BlockSetCurrentItemIntent,
+          executionIntentType: BlockCurrentItemModelSetCurrentItemIntent,
           suffixShortDesc:
               "Active item was deleted in batch. Designating fallback candidate: ${debugObjHtml(nextCandidateItem)}.",
         );
 
-        thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
+        thisXBlock.xBlockCurrentItemModel
+            ._createAndSetBlockCurrentItemModelExecutionIntentSetCurrentItem(
           setCurrentItemDirective: setCurrentItemDirective,
           newQueriedList: const [],
           inputCandidateCurrItem: nextCandidateItem,
@@ -2979,118 +2239,6 @@ abstract class Block<
       eventBlock: this,
       effectedItemIds: effectedItemIds,
     );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_ExecutionUnitMethodAnnotation()
-  @_BlockPrepareFormToCreateItemAnnotation()
-  Future<bool> _unitPrepareFormToCreateItem({
-    required ExecutionTrace executionTrace,
-    required ExecutionUnitType executionUnitType,
-    required XBlock<ID, ITEM, ITEM_DETAIL> thisXBlock,
-    required BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>
-        executionIntent,
-  }) async {
-    __assertThisXBlock(thisXBlock);
-    thisXBlock._createAndSetBlockExecutionIntentDone(
-      lastIntentInfo: "Prepare Form To Create Item",
-    );
-
-    executionTrace.addInfo(
-      codeId: "#004000",
-      shortDesc: "Begin ${executionUnitType.asDebugExecutionUnit()}.",
-      parameters: {
-        "formInput": executionIntent.formInput,
-        "initDirty": executionIntent.initDirty,
-      },
-    );
-
-    executionTrace.addInfo(
-      codeId: "#004020",
-      shortDesc: "${debugObjHtml(this)} set currentItem to null.",
-    );
-
-    final executionResult = executionIntent.resultWrapper._setResult(
-      PrepareItemCreationResult(),
-      objectCaller: this,
-      methodName: '_unitPrepareFormToCreateItem',
-    );
-
-    const ID? nullId = null;
-    const ITEM? nullItem = null;
-    const ITEM_DETAIL? nullItemDetail = null;
-    blockCurrentItemModel._setCurrentDataAndItemDataState(
-      id: nullId,
-      item: nullItem,
-      itemDetail: nullItemDetail,
-    );
-
-    executionTrace.addInfo(
-      codeId: "#004040",
-      shortDesc: "Clear all data of child blocks and set them to <b>none</b>."
-          "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
-    );
-    __clearAllChildrenBlocksToNone(
-      thisXBlock: thisXBlock,
-    );
-
-    executionTrace.addInfo(
-      codeId: "#004060",
-      shortDesc: "${debugObjHtml(formModel)} set formMode to creation.",
-    );
-    formModel!._formModelStructure._setInternalFormModeAndState(
-      internalFormMode: InternalFormMode.creation,
-      formDataState: FormDataStateLoadedFresh(),
-    );
-
-    bool success = false;
-    try {
-      __refreshPreparingFormCreationState(
-        isPreparingFormCreation: true,
-      );
-
-      final activityType = FormActivityType.startCreatingOrEditing;
-
-      executionTrace.addNonControllableCall(
-        codeId: "#004100",
-        caller: formModel!,
-        methodName: "_startNewFormActivity",
-        suffixShortDesc: "",
-        parameters: {
-          "activityType": activityType,
-          "formInput": executionIntent.formInput,
-        },
-      );
-
-      // Delegate form initialization directly to the form model (creationPreset is resolved polymorphically)
-      success = await formModel!._startNewFormActivity(
-        executionTrace: executionTrace,
-        formInput: executionIntent.formInput as FORM_INPUT?,
-        activityType: activityType,
-        formKeyInstantValuesInUI: null,
-      );
-
-      if (success) {
-        executionTrace.addInfo(
-          codeId: "#004120",
-          shortDesc:
-              "${debugObjHtml(formModel)} manually set dirty to ${executionIntent.initDirty}.",
-        );
-        formModel!._formModelStructure
-            ._setManualDirty(executionIntent.initDirty);
-        formModel!._formModelStructure._setFormDataState(
-          formDataState: FormDataStateLoadedFresh(),
-          error: null,
-        );
-      }
-    } finally {
-      __refreshPreparingFormCreationState(
-        isPreparingFormCreation: false,
-      );
-    }
-    return success;
   }
 
   // ***************************************************************************
@@ -3657,7 +2805,7 @@ abstract class Block<
         suffixShortDesc:
             "To convert ${debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
       );
-      ITEM refreshedItem = __convertItemDetailToItem(
+      ITEM refreshedItem = _convertItemDetailToItem(
         itemDetail: savedItemDetail,
       );
       executionTrace.addInfo(
@@ -3698,7 +2846,7 @@ abstract class Block<
               "Just created an item -> clear data of all child blocks and set them to <b>pending</b>."
               "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         );
-        __clearAllChildrenBlocksToPending(
+        _clearAllChildrenBlocksToPending(
           thisXBlock: thisXBlock,
         );
       }
@@ -3742,7 +2890,7 @@ abstract class Block<
           suffixShortDesc:
               "To convert ${debugObjHtml(savedItemDetail)} to ${_debugItemTypeHtml()}.",
         );
-        savedItem = __convertItemDetailToItem(
+        savedItem = _convertItemDetailToItem(
           itemDetail: savedItemDetail,
         );
       } else {
@@ -3761,7 +2909,7 @@ abstract class Block<
                 "${debugObjHtml(this)} --> remove the ${debugObjHtml(removeItem)} from the list. "
                 "(*) This item is not current item.",
           );
-          await __removeItemFromList(
+          await _removeItemFromList(
             executionTrace: executionTrace,
             removeItem: removeItem,
           );
@@ -3786,7 +2934,7 @@ abstract class Block<
               "${debugObjHtml(this)} --> remove the current item ${debugObjHtml(removeItem)}.",
         );
         // Remove Item (Current Item)
-        await __removeItemFromList(
+        await _removeItemFromList(
           executionTrace: executionTrace,
           removeItem: removeItem,
         );
@@ -3820,7 +2968,7 @@ abstract class Block<
               "${_childBlocks.isEmpty ? '\n   ** No children -> Nothing to do!' : ''}",
         );
         // TODO: Test cases.
-        __clearAllChildrenBlocksToNone(
+        _clearAllChildrenBlocksToNone(
           thisXBlock: thisXBlock,
         );
       }
@@ -3896,7 +3044,8 @@ abstract class Block<
     //
     final thisXBlock =
         xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
-    thisXBlock._createAndSetBlockExecutionIntentClearCurrentItem();
+    thisXBlock.xBlockCurrentItemModel
+        ._createAndSetBlockCurrentItemModelExecutionIntentClearCurrentItem();
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
   }
@@ -3912,16 +3061,14 @@ abstract class Block<
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
     bool errorIfItemNotInTheBlock = true,
   }) async {
-    final bool checkBusyTrue = true;
     final bool checkAllowTrue = true;
     //
     executionTrace.addNonControllableCall(
       codeId: "#076000",
       caller: this,
-      methodName: "__checkBeforeDeleteItem",
+      methodName: "checkBeforeDeleteItem",
       suffixShortDesc: "",
       parameters: {
-        "checkBusy": checkBusyTrue,
         "checkAllow": checkAllowTrue,
         "item": item,
         "errCodeIfItemIsNull": errCodeIfItemIsNull,
@@ -3930,8 +3077,7 @@ abstract class Block<
     );
 
     // @Same-Code-Precheck-01
-    Actionable<BlockItemDeletionPrecheck> actionable = __checkBeforeDeleteItem(
-      checkBusy: checkBusyTrue,
+    Actionable<BlockItemDeletionPrecheck> actionable = checkBeforeDeleteItem(
       checkAllow: checkAllowTrue,
       item: item,
       errCodeIfItemIsNull: errCodeIfItemIsNull,
@@ -3943,7 +3089,7 @@ abstract class Block<
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#076400",
-        prefixShortDesc: '__checkBeforeSetItemAsCurrent()',
+        prefixShortDesc: 'checkBeforeDeleteItem()',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -4002,16 +3148,14 @@ abstract class Block<
         _blockData.moveCurrentItemToEndOfList(
       itemList: items,
     );
-    final bool checkBusyTrue = true;
     final bool checkAllowTrue = true;
 
     executionTrace.addNonControllableCall(
       codeId: "#065000",
       caller: this,
-      methodName: "__checkBeforeDeleteItems",
+      methodName: "checkBeforeDeleteItems",
       suffixShortDesc: "",
       parameters: {
-        "checkBusy": checkBusyTrue,
         "checkAllow": checkAllowTrue,
         "items": candidateDeleteItems,
         "errorIfItemNotInTheBlock": errorIfItemNotInTheBlock,
@@ -4019,9 +3163,7 @@ abstract class Block<
     );
 
     // @Same-Code-Precheck-01
-    Actionable<BlockItemsDeletionPrecheck> actionable =
-        __checkBeforeDeleteItems(
-      checkBusy: checkBusyTrue,
+    Actionable<BlockItemsDeletionPrecheck> actionable = checkBeforeDeleteItems(
       checkAllow: checkAllowTrue,
       errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
       items: candidateDeleteItems,
@@ -4032,7 +3174,7 @@ abstract class Block<
       final ErrorInfo? errorInfo = _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#065100",
-        prefixShortDesc: '__checkBeforeDeleteItems()',
+        prefixShortDesc: 'checkBeforeDeleteItems()',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -4085,98 +3227,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_BlockSetItemAsCurrentAnnotation()
-  @_ReturnExecutionUnitResultMethodAnnotation()
-  Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
-      __refreshItemAndSetAsCurrent({
-    required ExecutionTrace executionTrace,
-    required String methodName,
-    required ITEM? item,
-    required ErrCodeIfItemIsNull errCodeIfItemIsNull,
-    required bool forceLoadItem,
-    required bool forceLoadForm,
-  }) async {
-    final setCurrentItemDirective = forceLoadForm
-        ? BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm
-        : BlockSetCurrentItemDirective.setAnItemAsCurrent;
-    //
-    executionTrace.addInfo(
-      codeId: "#069000",
-      shortDesc:
-          "Calculated > @setCurrentItemDirective: ${debugObjHtml(setCurrentItemDirective)}",
-    );
-    //
-    final bool checkBusyTrue = true;
-    final bool checkAllowTrue = true;
-    executionTrace.addNonControllableCall(
-      codeId: "#069100",
-      caller: this,
-      methodName: "__checkBeforeSetItemAsCurrent",
-      suffixShortDesc: "",
-      parameters: {
-        "checkBusy": checkBusyTrue,
-        "checkAllow": checkAllowTrue,
-        "errCodeIfItemIsNull": errCodeIfItemIsNull,
-      },
-    );
-    //
-    // @Same-Code-Precheck-01
-    //
-    final Actionable<BlockSetCurrentItemPrecheck> actionable =
-        __checkBeforeSetItemAsCurrent(
-      item: item,
-      errCodeIfItemIsNull: errCodeIfItemIsNull,
-      checkBusy: checkBusyTrue,
-    );
-    //
-    if (!actionable.yes) {
-      // _refreshErrorCount++
-      final ErrorInfo? errorInfo = _addErrorLogActionable(
-        executionTrace: executionTrace,
-        traceStepCodeId: "#069200",
-        prefixShortDesc: '__checkBeforeSetItemAsCurrent()',
-        module: shelf,
-        actionableFalse: actionable,
-        showErrSnackBar: true,
-        tipDocument: null,
-      );
-      //
-      return BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>(
-        precheck: actionable.errCode,
-        setCurrentItemDirective: setCurrentItemDirective,
-        candidateItem: item,
-        oldCurrentItem: currentItem,
-        currentItem: currentItem,
-      );
-    }
-    //
-    executionTrace.addInfo(
-      codeId: "#069300",
-      shortDesc: "Creating <b>_XShelfBlockSetItemAsCurrent</b>...",
-    );
-    final XShelf xShelf = _XShelfBlockSetItemAsCurrent(block: this);
-    //
-    final thisXBlock =
-        xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
-    final executionIntent =
-        thisXBlock._createAndSetBlockExecutionIntentSetCurrentItem(
-      setCurrentItemDirective: setCurrentItemDirective,
-      newQueriedList: [],
-      inputCandidateCurrItem: item,
-      forceReloadItem: forceLoadItem,
-      formLoadHint: forceLoadForm //
-          ? FormLoadHint.force
-          : FormLoadHint.auto,
-    );
-    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeExecutionUnitQueue();
-    // Future<BlockSetCurrentItemResult<ID,ITEM,ITEM_DETAIL>>
-    return executionIntent.result;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSetItemAsCurrentAnnotation()
@@ -4194,7 +3244,7 @@ abstract class Block<
       },
       isLibMethod: true,
     );
-    return await __refreshItemAndSetAsCurrent(
+    return await blockCurrentItemModel.__refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshItemAndSetAsCurrent",
       item: item,
@@ -4226,27 +3276,22 @@ abstract class Block<
     );
 
     ///
-    final bool checkBusyTrue = true;
     executionTrace.addNonControllableCall(
       codeId: "#062000",
       caller: this,
-      methodName: "__checkBeforeClearItems",
+      methodName: "checkBeforeClearItems",
       suffixShortDesc: "",
-      parameters: {
-        "checkBusy": checkBusyTrue,
-      },
+      parameters: {},
     );
     // @Same-Code-Precheck-01
-    Actionable<BlockClearItemsPrecheck> actionable = __checkBeforeClearItems(
-      checkBusy: checkBusyTrue,
-    );
+    Actionable<BlockClearItemsPrecheck> actionable = checkBeforeClearItems();
     //
     if (!actionable.yes) {
       // _createItemErrorCount++;
       final ErrorInfo? errorInfo = _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#062100",
-        prefixShortDesc: '__checkBeforeClearItems()',
+        prefixShortDesc: 'checkBeforeClearItems()',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -4909,7 +3954,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  ITEM __convertItemDetailToItem({required ITEM_DETAIL itemDetail}) {
+  ITEM _convertItemDetailToItem({required ITEM_DETAIL itemDetail}) {
     return convertItemDetailToItem(itemDetail: itemDetail);
   }
 
@@ -4939,7 +3984,7 @@ abstract class Block<
   ///
   /// Remove this item from Interface because it no longer exists on the server
   ///
-  Future<void> __removeItemFromList({
+  Future<void> _removeItemFromList({
     required ExecutionTrace executionTrace,
     required ITEM removeItem,
   }) async {
@@ -4978,31 +4023,26 @@ abstract class Block<
       isLibMethod: true,
     );
     //
-    final bool checkBusyTrue = true;
     executionTrace.addNonControllableCall(
       codeId: "#071000",
       caller: this,
-      methodName: "__checkBeforeExecuteBackendAction",
+      methodName: "checkBeforeExecuteBackendAction",
       suffixShortDesc: "",
-      parameters: {
-        "checkBusy": checkBusyTrue,
-      },
+      parameters: {},
       tipDocument: TipDocument.canDoAction,
     );
     //
     // @Same-Code-Precheck-01
     //
     final Actionable<BlockBackendActionPrecheck> actionable =
-        __checkBeforeExecuteBackendAction(
-      checkBusy: checkBusyTrue,
-    );
+        checkBeforeExecuteBackendAction();
     //
     if (!actionable.yes) {
       // _createItemErrorCount++;
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#071200",
-        prefixShortDesc: '__checkBeforeExecuteBackendAction()',
+        prefixShortDesc: 'checkBeforeExecuteBackendAction()',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -5085,16 +4125,14 @@ abstract class Block<
       isLibMethod: true,
     );
     //
-    final bool checkBusyTrue = true;
     final bool checkAllowTrue = true;
     //
     executionTrace.addNonControllableCall(
       codeId: "#073000",
       caller: this,
-      methodName: "__checkBeforeQuickCreateItem",
+      methodName: "checkBeforeQuickCreateItem",
       suffixShortDesc: "",
       parameters: {
-        "checkBusy": checkBusyTrue,
         "checkAllow": checkAllowTrue,
       },
       tipDocument: TipDocument.canDoAction,
@@ -5103,8 +4141,7 @@ abstract class Block<
     // @Same-Code-Precheck-01
     //
     final Actionable<BlockQuickItemCreationPrecheck> actionable =
-        __checkBeforeQuickCreateItem(
-      checkBusy: checkBusyTrue,
+        checkBeforeQuickCreateItem(
       checkAllow: checkAllowTrue,
     );
     if (!actionable.yes) {
@@ -5112,7 +4149,7 @@ abstract class Block<
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#073040",
-        prefixShortDesc: '__checkBeforeQuickCreateItem()',
+        prefixShortDesc: 'checkBeforeQuickCreateItem()',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -5177,17 +4214,15 @@ abstract class Block<
       isLibMethod: true,
     );
     //
-    final bool checkBusyTrue = true;
     final bool checkAllowTrue = true;
     //
     executionTrace.addNonControllableCall(
       codeId: "#072000",
       caller: this,
-      methodName: "__checkBeforeQuickCreateItem",
+      methodName: "checkBeforeQuickUpdateItem",
       suffixShortDesc: "",
       parameters: {
         "item": action.item,
-        "checkBusy": checkBusyTrue,
         "checkAllow": checkAllowTrue,
         "errorIfItemNotInTheBlock": action.config.errorIfItemNotInTheBlock,
       },
@@ -5195,9 +4230,8 @@ abstract class Block<
     );
     // @Same-Code-Precheck-01
     final Actionable<BlockQuickItemUpdatePrecheck> actionable =
-        __checkBeforeQuickUpdateItem(
+        checkBeforeQuickUpdateItem(
       item: action.item,
-      checkBusy: checkBusyTrue,
       checkAllow: checkAllowTrue,
       errorIfItemNotInTheBlock: action.config.errorIfItemNotInTheBlock,
     );
@@ -5207,7 +4241,7 @@ abstract class Block<
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#072040",
-        prefixShortDesc: '__checkBeforeQuickUpdateItem()',
+        prefixShortDesc: 'checkBeforeQuickUpdateItem()',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -5272,7 +4306,7 @@ abstract class Block<
       },
       isLibMethod: true,
     );
-    return await __refreshItemAndSetAsCurrent(
+    return await blockCurrentItemModel.__refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshFirstItemAndSetAsCurrent",
       item: firstItem,
@@ -5303,7 +4337,7 @@ abstract class Block<
     //
     ITEM? nextItem = nextSiblingItem;
     //
-    return await __refreshItemAndSetAsCurrent(
+    return await blockCurrentItemModel.__refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshNextItemAndSetAsCurrent",
       item: nextItem,
@@ -5334,7 +4368,7 @@ abstract class Block<
     //
     ITEM? previousItem = previousSiblingItem;
     //
-    return await __refreshItemAndSetAsCurrent(
+    return await blockCurrentItemModel.__refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshPreviousItemAndSetAsCurrent",
       item: previousItem,
@@ -5384,34 +4418,28 @@ abstract class Block<
       isLibMethod: true,
     );
     //
-    final bool checkBusyTrue = true;
     final bool checkAllowTrue = true;
-    final creationTypeForm = ItemCreationType.form;
     //
     executionTrace.addNonControllableCall(
       codeId: "#077000",
       caller: this,
-      methodName: "__checkBeforeCreateItem",
+      methodName: "checkBeforeCreateItemOnForm",
       suffixShortDesc: "",
       parameters: {
-        "checkBusy": checkBusyTrue,
         "checkAllow": checkAllowTrue,
-        "creationType": creationTypeForm,
       },
     );
     // @Same-Code-Precheck-01
     Actionable<BlockItemCreationPrecheck> actionable =
-        __checkBeforeCreateItemOnForm(
-      checkBusy: checkBusyTrue,
+        checkBeforeCreateItemOnForm(
       checkAllow: checkAllowTrue,
-      creationType: creationTypeForm,
     );
     if (!actionable.yes) {
       // _createItemErrorCount++;
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#077040",
-        prefixShortDesc: '__checkBeforeCreateItem()',
+        prefixShortDesc: 'checkBeforeCreateItemOnForm()',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -5432,11 +4460,11 @@ abstract class Block<
     executionTrace.addExecutionIntent(
       codeId: "#077340",
       owner: this,
-      executionIntentType: BlockPrepareFormToCreateItemIntent,
+      executionIntentType: BlockCurrentItemModelPrepareFormToCreateItemIntent,
       suffixShortDesc: "",
     );
-    final executionIntent =
-        thisXBlock._createAndSetBlockExecutionIntentPrepareFormToCreateItem(
+    final executionIntent = thisXBlock.xBlockCurrentItemModel
+        ._createAndSetBlockCurrentItemModelExecutionIntentPrepareFormToCreateItem(
       xBlock: thisXBlock,
       initDirty: initDirty,
       formInput: formInput,
@@ -5621,7 +4649,7 @@ abstract class Block<
       isLibMethod: true,
     );
     //
-    return await __refreshItemAndSetAsCurrent(
+    return await blockCurrentItemModel.__refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: 'refreshCurrentItem',
       item: currentItem,
@@ -5993,31 +5021,10 @@ abstract class Block<
   // ***************************************************************************
 
   ///
-  /// Allows edit current item or not according to the application logic.
-  ///
-  @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult __checkFormResetAllowed() {
-    try {
-      bool allow = isFormResetAllowed();
-      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
-    } catch (e, stackTrace) {
-      return CheckAllowResult.error(
-        errorInfo: ErrorInfo.fromError(
-          error: e,
-          stackTrace: stackTrace,
-        ),
-      );
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
   /// Allows updating an Item or not according to the application logic.
   ///
   @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult __checkItemUpdateAllowed({
+  CheckAllowResult _checkItemUpdateAllowed({
     required ITEM item,
   }) {
     try {
@@ -6115,6 +5122,11 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
+  Actionable<BlockBackendActionPrecheck> checkBeforeExecuteBackendAction() {
+    return __checkBeforeExecuteBackendAction(checkBusy: true);
+  }
+
+  @_PrecheckPrivateMethod()
   Actionable<BlockBackendActionPrecheck> __checkBeforeExecuteBackendAction({
     required bool checkBusy,
   }) {
@@ -6129,23 +5141,9 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckPrivateMethod()
-  Actionable<BlockItemCreationPrecheck> __checkBeforeCreateItemOnForm({
-    required bool checkBusy,
-    required ItemCreationType creationType,
-    required bool checkAllow,
-  }) {
-    return BlockItemCreationPrecheckUtils.checkBeforeCreateItemOnForm(
-      checkBusy: checkBusy,
-      isBusy: FlutterArtist.executor.isBusy,
-      hasForm: formModel != null,
-      blockDataState: dataState,
-      checkAllow: checkAllow,
-      checkCreationAllowed: () => __checkQuickItemCreationAllowed(),
-    );
+  Actionable<BlockClearItemsPrecheck> checkBeforeClearItems() {
+    return __checkBeforeClearItems(checkBusy: true);
   }
-
-  // ***************************************************************************
-  // ***************************************************************************
 
   @_PrecheckPrivateMethod()
   Actionable<BlockClearItemsPrecheck> __checkBeforeClearItems({
@@ -6178,7 +5176,7 @@ abstract class Block<
       containsItem: (targetItem) => containsItem(targetItem),
       checkAllow: checkAllow,
       checkQuickUpdateAllowed: (validItem) =>
-          __checkItemUpdateAllowed(item: validItem),
+          _checkItemUpdateAllowed(item: validItem),
     );
   }
 
@@ -6196,117 +5194,6 @@ abstract class Block<
       blockDataState: dataState,
       checkAllow: checkAllow,
       checkQuickCreateAllowed: () => __checkQuickItemCreationAllowed(),
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_PrecheckPrivateMethod()
-  Actionable<BlockFormResetPrecheck> __checkBeforeResetForm({
-    required bool checkBusy,
-    required bool checkAllow,
-  }) {
-    return BlockFormResetPrecheckUtils.checkBeforeResetForm(
-      checkBusy: checkBusy,
-      isBusy: FlutterArtist.executor.isBusy,
-      hasForm: formModel != null,
-      formDataState: formModel?.dataState,
-      isDirty: formModel?.isDirty() ?? false,
-      checkAllow: checkAllow,
-      checkFormResetAllowed: () => __checkFormResetAllowed(),
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_PrecheckPrivateMethod()
-  Actionable<BlockFormSavePrecheck> __checkBeforeSaveForm({
-    required bool checkBusy,
-    required bool checkAllow,
-    required bool checkValidate,
-  }) {
-    return BlockFormSavePrecheckUtils.checkBeforeSaveForm(
-      checkBusy: checkBusy,
-      isBusy: FlutterArtist.executor.isBusy,
-      hasForm: formModel != null,
-      formDataState: formModel?.dataState,
-      isDirty: formModel?.isDirty() ?? false,
-      checkValidate: checkValidate,
-      getActiveFormStates: formModel != null
-          ? () => formModel!.ui._visibleFormBuilderStates
-          : null,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_PrecheckPrivateMethod()
-  Actionable<BlockItemEditPrecheck> __checkBeforeEditItemOnForm({
-    required bool checkBusy,
-    required ITEM? item,
-    required bool checkAllow,
-  }) {
-    return BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<ITEM>(
-      checkBusy: checkBusy,
-      isBusy: FlutterArtist.executor.isBusy,
-      hasForm: formModel != null,
-      blockDataState: dataState,
-      formDataState: formModel?.dataState,
-      item: item,
-      checkAllow: checkAllow,
-      checkItemEditAllowed: (validItem) =>
-          __checkItemUpdateAllowed(item: validItem),
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_PrecheckPrivateMethod()
-  Actionable<BlockItemEditPrecheck> __checkBeforeEditCurrentItemOnForm({
-    required bool checkBusy,
-    required bool checkAllow,
-  }) {
-    return __checkBeforeEditItemOnForm(
-      item: currentItem,
-      checkBusy: checkBusy,
-      checkAllow: checkAllow,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_PrecheckPrivateMethod()
-  // @seeAlso: __checkBeforeRefreshCurrentItem()
-  Actionable<BlockSetCurrentItemPrecheck> __checkBeforeSetItemAsCurrent({
-    required ITEM? item,
-    required bool checkBusy,
-    required ErrCodeIfItemIsNull errCodeIfItemIsNull,
-  }) {
-    return BlockSetCurrentItemPrecheckUtils.checkBeforeSetItemAsCurrent<ITEM>(
-      item: item,
-      checkBusy: checkBusy,
-      isBusy: FlutterArtist.executor.isBusy,
-      errCodeIfItemIsNull: errCodeIfItemIsNull,
-      findItemSameIdWith: (targetItem) => findItemSameIdWith(item: targetItem),
-    );
-  }
-
-  // ***************************************************************************
-
-  @_PrecheckPrivateMethod()
-  // @seeAlso: __checkBeforeSetItemAsCurrent()
-  Actionable<BlockSetCurrentItemPrecheck> __checkBeforeRefreshCurrentItem({
-    required bool checkBusy,
-  }) {
-    return __checkBeforeSetItemAsCurrent(
-      item: currentItem,
-      checkBusy: checkBusy,
-      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
     );
   }
 
@@ -6334,6 +5221,16 @@ abstract class Block<
   }) {
     return __checkBeforeDeleteCurrentItem(
       checkBusy: true,
+      checkAllow: checkAllow,
+    );
+  }
+
+  Actionable<BlockItemCreationPrecheck> checkBeforeCreateItemOnForm({
+    required bool checkAllow,
+  }) {
+    return blockCurrentItemModel._checkBeforeCreateItemOnForm(
+      checkBusy: true,
+      creationType: ItemCreationType.form,
       checkAllow: checkAllow,
     );
   }
@@ -6427,7 +5324,8 @@ abstract class Block<
 
   @_PrecheckMethod()
   Actionable<BlockItemDeletionPrecheck> checkBeforeDeleteItem({
-    required ITEM item,
+    required ITEM? item,
+    ErrCodeIfItemIsNull errCodeIfItemIsNull = ErrCodeIfItemIsNull.invalidTarget,
     bool errorIfItemNotInTheBlock = true,
     bool checkAllow = true,
   }) {
@@ -6435,7 +5333,7 @@ abstract class Block<
       checkBusy: true,
       checkAllow: checkAllow,
       item: item,
-      errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
+      errCodeIfItemIsNull: errCodeIfItemIsNull,
       errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
     );
   }
@@ -6476,7 +5374,7 @@ abstract class Block<
 
   @_PrecheckMethod()
   Actionable<BlockItemCreationPrecheck> checkBeforeCreateItemWithForm() {
-    return __checkBeforeCreateItemOnForm(
+    return blockCurrentItemModel._checkBeforeCreateItemOnForm(
       checkBusy: true,
       checkAllow: true,
       creationType: ItemCreationType.form,
@@ -6485,7 +5383,7 @@ abstract class Block<
 
   @_PrecheckMethod()
   Actionable<BlockSetCurrentItemPrecheck> checkBeforeEditCurrentItemWithForm() {
-    return __checkBeforeRefreshCurrentItem(
+    return blockCurrentItemModel._checkBeforeRefreshCurrentItem(
       checkBusy: true,
     );
   }
@@ -6533,7 +5431,7 @@ abstract class Block<
   Actionable<BlockFormResetPrecheck> checkBeforeResetForm({
     bool checkAllow = true,
   }) {
-    return __checkBeforeResetForm(
+    return blockCurrentItemModel._checkBeforeResetForm(
       checkBusy: true,
       checkAllow: checkAllow,
     );
@@ -6546,7 +5444,7 @@ abstract class Block<
     bool checkAllow = true,
     bool checkValidate = true,
   }) {
-    return __checkBeforeSaveForm(
+    return blockCurrentItemModel._checkBeforeSaveForm(
       checkBusy: true,
       checkAllow: checkAllow,
       checkValidate: checkValidate,
@@ -6560,7 +5458,7 @@ abstract class Block<
     required ITEM item,
     bool checkAllow = true,
   }) {
-    return __checkBeforeEditItemOnForm(
+    return blockCurrentItemModel._checkBeforeEditItemOnForm(
       checkBusy: true,
       item: item,
       checkAllow: checkAllow,
@@ -6571,7 +5469,7 @@ abstract class Block<
 
   @_PrecheckMethod()
   Actionable<BlockItemEditPrecheck> checkBeforeEditCurrentItemOnForm() {
-    return __checkBeforeEditCurrentItemOnForm(
+    return blockCurrentItemModel._checkBeforeEditCurrentItemOnForm(
       checkBusy: true,
       checkAllow: true,
     );
@@ -6584,7 +5482,7 @@ abstract class Block<
   Actionable<BlockSetCurrentItemPrecheck> checkBeforeSetItemAsCurrent({
     required ITEM item,
   }) {
-    return __checkBeforeSetItemAsCurrent(
+    return blockCurrentItemModel._checkBeforeSetItemAsCurrent(
       checkBusy: true,
       item: item,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
@@ -6599,7 +5497,7 @@ abstract class Block<
   @_PrecheckMethod()
   // @seeAlso: checkBeforeSetItemAsCurrent()
   Actionable<BlockSetCurrentItemPrecheck> checkBeforeRefreshCurrentItem() {
-    return __checkBeforeRefreshCurrentItem(
+    return blockCurrentItemModel._checkBeforeRefreshCurrentItem(
       checkBusy: true,
     );
   }
@@ -6670,7 +5568,7 @@ abstract class Block<
       currentItem: currentItem,
       checkAllow: checkAllow,
       checkItemUpdateAllowed: (validItem) =>
-          __checkItemUpdateAllowed(item: validItem),
+          _checkItemUpdateAllowed(item: validItem),
     );
   }
 
@@ -6679,7 +5577,7 @@ abstract class Block<
 
   bool hasCurrentItemAndCanEditOnForm() {
     Actionable<BlockItemEditPrecheck> actionable =
-        __checkBeforeEditCurrentItemOnForm(
+        blockCurrentItemModel._checkBeforeEditCurrentItemOnForm(
       checkBusy: true,
       checkAllow: true,
     );
@@ -6809,7 +5707,7 @@ abstract class Block<
   // ***************************************************************************
 
   bool isCurrentIndex(int index) {
-    ITEM? item = findItemByIndex(index);
+    final ITEM? item = findItemByIndex(index);
     if (item == null) {
       return false;
     }
@@ -7412,30 +6310,6 @@ abstract class Block<
   void _refreshSavingState({required bool isSaving}) {
     try {
       __isSaving = isSaving;
-      ui.refreshControlBars(force: true);
-    } catch (e) {}
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __refreshRefreshingCurrentItemState({
-    required bool isRefreshingCurrentItem,
-  }) {
-    try {
-      __isRefreshingCurrentItem = isRefreshingCurrentItem;
-      ui.refreshControlBars(force: true);
-    } catch (e) {}
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  void __refreshPreparingFormCreationState({
-    required bool isPreparingFormCreation,
-  }) {
-    try {
-      __isPreparingFormCreation = isPreparingFormCreation;
       ui.refreshControlBars(force: true);
     } catch (e) {}
   }

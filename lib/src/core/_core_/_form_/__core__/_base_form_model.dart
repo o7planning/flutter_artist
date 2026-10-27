@@ -108,10 +108,6 @@ abstract class BaseFormModel<
   /// Returns the runtime type of additional form related data.
   Type getAdditionalFormRelatedDataType() => ADDITIONAL_FORM_RELATED_DATA;
 
-  // ===========================================================================
-
-  /// Returns a string definition of class parameters for debugging purposes.
-  String debugClassParametersDefinition();
 
   // ===========================================================================
   // DOMAIN CONTRACTS (To be implemented by subclasses)
@@ -268,7 +264,7 @@ abstract class BaseFormModel<
   }
 
   /// Checks whether form fields can be patched based on current system and form state.
-  Actionable<FormModelPatchFormFieldsPrecheck> __checkBeforePatchFormFields({
+  Actionable<FormModelPatchFormFieldsPrecheck> _checkBeforePatchFormFields({
     required bool checkBusy,
   }) {
     return FormModelPatchFormFieldsPrecheckUtils.checkBeforePatchFormFields(

@@ -22,11 +22,6 @@ class XBlock<
       dynamic,
       ExecutionUnitResult<dynamic>>? _executionIntent;
 
-  BlockSetCurrentItemIntent<
-      ID, //
-      ITEM,
-      ITEM_DETAIL>? _pendingSetCurrentItemIntent;
-
   final _recentLoadedItemMap = <ID, _BlockCurrentData<ID, ITEM, ITEM_DETAIL>>{};
 
   final Block<
@@ -45,7 +40,6 @@ class XBlock<
     return parentXBlock!.rootXBlock;
   }
 
-  bool currentItemReloadedInSession = false;
   bool _queried = false;
 
   late final XBlock? parentXBlock;
@@ -76,7 +70,6 @@ class XBlock<
   // Options:
 
   QueryHint __queryHint = QueryHint.none;
-  bool __forceReloadCurrItem = false;
   QueryType __queryType = QueryType.realQuery;
 
   QueryType get queryType => __queryType;
@@ -92,8 +85,6 @@ class XBlock<
   // ***************************************************************************
 
   QueryHint get queryHint => __queryHint;
-
-  bool get forceReloadCurrItem => __forceReloadCurrItem;
 
   SuggestedSelection? get suggestedSelection => __suggestedSelection;
 
@@ -193,11 +184,6 @@ class XBlock<
 
   void resetExecutionHints() {
     __queryHint = QueryHint.none;
-    __forceReloadCurrItem = false;
-  }
-
-  void setForceReloadCurrItemDone() {
-    __forceReloadCurrItem = false;
   }
 
   void setQueryHint(QueryHint queryHint) {
@@ -208,10 +194,6 @@ class XBlock<
     if (__queryHint.isLessThan(queryHint)) {
       __queryHint = queryHint;
     }
-  }
-
-  void setForceReloadCurrItem(bool forceReloadCurrItem) {
-    __forceReloadCurrItem = forceReloadCurrItem;
   }
 
   BlockSetCurrentItemDirective? get setCurrentItemDirective =>
@@ -279,16 +261,11 @@ class XBlock<
     // 1. Prepare Input.
     final input = BlockNextUnitInput(
       dataState: block.dataState,
-      itemDataState: block.blockCurrentItemModel.dataState,
       currentIntent: _executionIntent,
       queryHint: __queryHint,
       isVisible: block.ui.hasVisibleViews(includeDescendants: true),
       queried: _queried,
       modelName: getClassNameWithoutGenerics(block),
-      hasFormModel: block.formModel != null,
-      formMode: block.formModel?.formMode,
-      itemCount: block.itemCount,
-      itemVisibleX: block.ui.hasItemContext(includeDescendants: true),
     );
 
     // 2. Calculate Output
@@ -299,28 +276,18 @@ class XBlock<
       _stashedIntent = _executionIntent;
     }
 
+    String finalDebugInfo = output.debugInfo;
+
     // 4. Inject a new Intent if it is missing.
     if (output.missingIntent == MissingIntentType.dataLoadOrQuery) {
-      _createAndSetBlockExecutionIntentQuery();
-    } else if (output.missingIntent == MissingIntentType.setItemAsCurrent) {
-      _createAndSetBlockExecutionIntentSetCurrentItem(
-        setCurrentItemDirective:
-            BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed,
-        newQueriedList: [],
-        inputCandidateCurrItem: null,
-        forceReloadItem: true,
-        formLoadHint: null,
+      final intentToUse = _createAndSetBlockExecutionIntentQuery();
+      finalDebugInfo = finalDebugInfo.replaceFirst(
+        "_executionIntent: $_stashedIntent",
+        "_executionIntent: $_stashedIntent --> $intentToUse",
       );
     }
 
-    // 5. Special handling for PendingSetCurrentItemIntent (Case 4.2.4)
-    if (output.action == BlockExecutionAction.setCurrentItem &&
-        _pendingSetCurrentItemIntent != null) {
-      _executionIntent = _pendingSetCurrentItemIntent;
-      _pendingSetCurrentItemIntent = null; // Consume
-    }
-
-    // 6. Map Action to Execution Unit
+    // 5. Map Action to Execution Unit
     switch (output.action) {
       case BlockExecutionAction.query:
         return NxtExecutionUnit.yes(
@@ -330,28 +297,17 @@ class XBlock<
             executionIntent:
                 _executionIntent as BlockQueryIntent<ID, ITEM, ITEM_DETAIL>,
           ),
-          info: output.debugInfo,
+          info: finalDebugInfo,
         );
-      case BlockExecutionAction.setCurrentItem:
+      case BlockExecutionAction.clearItems:
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit:
-              _BlockSetItemAsCurrentExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+          executionUnit: _BlockClearItemsExecutionUnit<ID, ITEM, ITEM_DETAIL>(
             xBlock: this,
             executionIntent: _executionIntent
-                as BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>,
+                as BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL>,
           ),
-          info: output.debugInfo,
-        );
-      case BlockExecutionAction.clearCurrentItem:
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit: _BlockClearCurrentExecutionUnit<ID, ITEM, ITEM_DETAIL>(
-            xBlock: this,
-            executionIntent: _executionIntent
-                as BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>,
-          ),
-          info: output.debugInfo,
+          info: finalDebugInfo,
         );
       case BlockExecutionAction.deleteItem:
         return NxtExecutionUnit.yes(
@@ -361,7 +317,7 @@ class XBlock<
             executionIntent: _executionIntent
                 as BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>,
           ),
-          info: output.debugInfo,
+          info: finalDebugInfo,
         );
       case BlockExecutionAction.deleteItems:
         return NxtExecutionUnit.yes(
@@ -372,18 +328,7 @@ class XBlock<
             executionIntent: _executionIntent
                 as BlockDeleteItemsIntent<ID, ITEM, ITEM_DETAIL>,
           ),
-          info: output.debugInfo,
-        );
-      case BlockExecutionAction.prepareFormToCreate:
-        return NxtExecutionUnit.yes(
-          debug: debug,
-          executionUnit:
-              _BlockPrepareFormToCreateItemExecutionUnit<ID, ITEM, ITEM_DETAIL>(
-            xBlock: this,
-            executionIntent: _executionIntent
-                as BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>,
-          ),
-          info: output.debugInfo,
+          info: finalDebugInfo,
         );
       case BlockExecutionAction.quickItemUpdate:
         return NxtExecutionUnit.yes(
@@ -394,7 +339,7 @@ class XBlock<
             executionIntent: _executionIntent
                 as BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>,
           ),
-          info: output.debugInfo,
+          info: finalDebugInfo,
         );
       case BlockExecutionAction.quickItemCreation:
         return NxtExecutionUnit.yes(
@@ -405,7 +350,7 @@ class XBlock<
             executionIntent: _executionIntent
                 as BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>,
           ),
-          info: output.debugInfo,
+          info: finalDebugInfo,
         );
       case BlockExecutionAction.backendAction:
         return NxtExecutionUnit.yes(
@@ -416,13 +361,13 @@ class XBlock<
             executionIntent: _executionIntent
                 as BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL>,
           ),
-          info: output.debugInfo,
+          info: finalDebugInfo,
         );
       case BlockExecutionAction.none:
       default:
         return NxtExecutionUnit.no(
           debug: debug,
-          info: output.debugInfo,
+          info: finalDebugInfo,
         );
     }
   }
@@ -444,21 +389,6 @@ class XBlock<
 
   // ***************************************************************************
   // ***************************************************************************
-
-  BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockExecutionIntentPrepareFormToCreateItem({
-    required XBlock<ID, ITEM, ITEM_DETAIL> xBlock,
-    required bool initDirty,
-    required FormInput? formInput,
-  }) {
-    final executionIntent =
-        BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>(
-      initDirty: initDirty,
-      formInput: formInput,
-    );
-    _executionIntent = executionIntent;
-    return executionIntent;
-  }
 
   BlockQueryIntent<ID, ITEM, ITEM_DETAIL>
       _createAndSetBlockExecutionIntentQuery({
@@ -524,14 +454,6 @@ class XBlock<
     return executionIntent;
   }
 
-  BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockExecutionIntentClearCurrentItem() {
-    final executionIntent =
-        BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>();
-    _executionIntent = executionIntent;
-    return executionIntent;
-  }
-
   BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL>
       _createAndSetBlockExecutionIntentClearItems() {
     final executionIntent = BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL>();
@@ -555,25 +477,48 @@ class XBlock<
     );
   }
 
-  BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
-      _createAndSetBlockExecutionIntentSetCurrentItem({
-    required BlockSetCurrentItemDirective setCurrentItemDirective,
-    required List<ITEM> newQueriedList,
-    required ITEM? inputCandidateCurrItem,
-    required bool forceReloadItem,
-    required FormLoadHint? formLoadHint,
-  }) {
-    final executionIntent = BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>(
-      setCurrentItemDirective: setCurrentItemDirective,
-      newQueriedList: newQueriedList,
-      inputCandidateCurrItem: inputCandidateCurrItem,
-      forceReloadItem: forceReloadItem,
-      formLoadHint: formLoadHint,
-    );
-    _executionIntent = executionIntent;
-    _pendingSetCurrentItemIntent ??= executionIntent;
-    return executionIntent;
-  }
+  // BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
+  //     _createAndSetBlockExecutionIntentClearCurrentItem() {
+  //   final executionIntent =
+  //       BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>();
+  //   _executionIntent = executionIntent;
+  //   return executionIntent;
+  // }
+
+  // BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>
+  //     _createAndSetBlockExecutionIntentPrepareFormToCreateItem({
+  //   required XBlock<ID, ITEM, ITEM_DETAIL> xBlock,
+  //   required bool initDirty,
+  //   required FormInput? formInput,
+  // }) {
+  //   final executionIntent =
+  //       BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>(
+  //     initDirty: initDirty,
+  //     formInput: formInput,
+  //   );
+  //   _executionIntent = executionIntent;
+  //   return executionIntent;
+  // }
+
+  // BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
+  //     _createAndSetBlockExecutionIntentSetCurrentItem({
+  //   required BlockSetCurrentItemDirective setCurrentItemDirective,
+  //   required List<ITEM> newQueriedList,
+  //   required ITEM? inputCandidateCurrItem,
+  //   required bool forceReloadItem,
+  //   required FormLoadHint? formLoadHint,
+  // }) {
+  //   final executionIntent = BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>(
+  //     setCurrentItemDirective: setCurrentItemDirective,
+  //     newQueriedList: newQueriedList,
+  //     inputCandidateCurrItem: inputCandidateCurrItem,
+  //     forceReloadItem: forceReloadItem,
+  //     formLoadHint: formLoadHint,
+  //   );
+  //   _executionIntent = executionIntent;
+  //   _pendingSetCurrentItemIntent ??= executionIntent;
+  //   return executionIntent;
+  // }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -584,7 +529,7 @@ class XBlock<
     );
     String msg = "${getClassName(this)}(${getClassName(block)}"
         " - provideItemsContext: $provideItemsContext"
-        " - QueryHint: $__queryHint - RefreshItem: $__forceReloadCurrItem";
+        " - QueryHint: $__queryHint";
     print(msg);
     for (XBlock xBlock in childXBlocks) {
       xBlock.printInfoCascade();

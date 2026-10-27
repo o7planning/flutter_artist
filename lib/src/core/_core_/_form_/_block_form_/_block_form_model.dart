@@ -76,11 +76,6 @@ abstract class BlockFormModel<
 
   // ===========================================================================
 
-  @override
-  String debugClassParametersDefinition() {
-    return "<${getIdType()}, ${getItemDetailType()}, ${getCreationPresetType()}, ${getFormInputType()}, ${getAdditionalFormRelatedDataType()}>";
-  }
-
   Type getCreationPresetType() => CREATION_PRESET;
 
   // ===========================================================================
@@ -550,7 +545,8 @@ abstract class BlockFormModel<
   }) async {
     final XShelf xShelf = _XShelfFormViewChange(formModel: this);
     XBlock xBlock = xShelf.findXBlockByName(block.name)!;
-    xBlock.xBlockCurrentItemModel.xBlockFormModel!._createAndSetFormModelExecutionIntentViewChange(
+    xBlock.xBlockCurrentItemModel.xBlockFormModel!
+        ._createAndSetFormModelExecutionIntentViewChange(
       formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
@@ -573,7 +569,7 @@ abstract class BlockFormModel<
     executionTrace.addNonControllableCall(
       codeId: "#097100",
       caller: this,
-      methodName: "__checkBeforePatchFormFields",
+      methodName: "_checkBeforePatchFormFields",
       suffixShortDesc: "",
       parameters: {
         "checkBusy": checkBusyTrue,
@@ -581,14 +577,14 @@ abstract class BlockFormModel<
     );
 
     final Actionable<FormModelPatchFormFieldsPrecheck> actionable =
-        __checkBeforePatchFormFields(
+        _checkBeforePatchFormFields(
       checkBusy: checkBusyTrue,
     );
     if (!actionable.yes) {
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#097200",
-        prefixShortDesc: '__checkBeforePatchFormFields()',
+        prefixShortDesc: '_checkBeforePatchFormFields()',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -623,14 +619,15 @@ abstract class BlockFormModel<
 
     executionTrace.addNonControllableCall(
       codeId: "#099000",
-      caller: block,
-      methodName: "__checkBeforeSaveForm",
+      caller: blockCurrentItemModel,
+      methodName: "_checkBeforeSaveForm",
       suffixShortDesc: "",
       parameters: {
         "checkBusy": checkBusyTrue,
       },
     );
-    Actionable<BlockFormSavePrecheck> actionable = block.__checkBeforeSaveForm(
+    Actionable<BlockFormSavePrecheck> actionable =
+        blockCurrentItemModel._checkBeforeSaveForm(
       checkBusy: checkBusyTrue,
       checkAllow: checkAllowTrue,
       checkValidate: checkValidateTrue,
@@ -639,7 +636,7 @@ abstract class BlockFormModel<
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#099100",
-        prefixShortDesc: '__checkBeforeSaveForm()',
+        prefixShortDesc: '_checkBeforeSaveForm()',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -650,8 +647,8 @@ abstract class BlockFormModel<
 
     final XShelf xShelf = _XShelfFormModelSave(formModel: this);
     XBlock xBlock = xShelf.findXBlockByName(block.name)!;
-    final executionIntent =
-        xBlock.xBlockCurrentItemModel.xBlockFormModel!._createAndSetFormModelExecutionIntentSave();
+    final executionIntent = xBlock.xBlockCurrentItemModel.xBlockFormModel!
+        ._createAndSetFormModelExecutionIntentSave();
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
