@@ -32,7 +32,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       }
       //
       xBlk.setQueryHintToGreater(queryHint);
-      xBlk.setForceReloadCurrItem(forceReloadItem);
+      xBlk.xBlockCurrentItemModel.setForceReloadCurrItem(forceReloadItem);
     }
     // -------------------------------------------------------------------------
     for (XBlock leafXBlock in allLeafXBlocks) {

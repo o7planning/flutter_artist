@@ -4,8 +4,13 @@ abstract class FilterPanel<FILTER_MODEL extends FilterModel>
     extends StatelessWidget {
   final FILTER_MODEL filterModel;
 
+  final BlockViewContext? blockViewContext;
+  final ScalarViewContext? scalarViewContext;
+
   const FilterPanel({
     required this.filterModel,
+    this.blockViewContext,
+    this.scalarViewContext,
     super.key,
   });
 
@@ -16,31 +21,14 @@ abstract class FilterPanel<FILTER_MODEL extends FilterModel>
       ownerClassInstance: this,
       description: '',
       filterModel: filterModel,
+      blockViewContext:blockViewContext,
+      scalarViewContext:scalarViewContext,
       build: () {
         return buildContent(context);
       },
     );
   }
 
-  // Widget buildFilterBar(
-  //   BuildContext context, {
-  //   Decoration? decoration,
-  //   EdgeInsetsGeometry? padding,
-  // }) {
-  //   return Container(
-  //     padding: padding ?? EdgeInsets.all(5),
-  //     decoration: decoration ??
-  //         BoxDecoration(
-  //           color: Colors.black12,
-  //         ),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.end,
-  //       children: [
-  //         buildDebugButton(),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget buildDebugButton({
     ButtonStyle? style,

@@ -9,7 +9,7 @@ class _Executor {
   int? get executingXModuleId => __executingXModuleId;
 
   final Map<_ExecutionProgressBuilderState, bool>
-  _executionProgressViewWidgetStates = {};
+      _executionProgressViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -51,7 +51,7 @@ class _Executor {
         try {
           while (true) {
             _ExecutionUnit? executionUnit =
-            FlutterArtist._rootQueue.getNextExecutionUnit(
+                FlutterArtist._rootQueue.getNextExecutionUnit(
               removeEmptyRootQuery: true,
             );
             //
@@ -61,7 +61,7 @@ class _Executor {
               }
               pendingEventProcessed = true;
               final Set<String> excludeModuleNames =
-              executedModuleMap.keys.toSet();
+                  executedModuleMap.keys.toSet();
               //
               FlutterArtist.desk._reactionProcessor.addReactionExecutionUnits(
                 excludeModuleNames: excludeModuleNames,
@@ -81,8 +81,7 @@ class _Executor {
               );
             }
             print(
-                "\n      >>>> EXECUTE: ${getClassNameWithoutGenerics(
-                    executionUnit)} \n");
+                "\n      >>>> EXECUTE: ${getClassNameWithoutGenerics(executionUnit)} \n");
             //
             await __executeExecutionUnit(
               executionUnit: executionUnit,
@@ -301,15 +300,6 @@ class _Executor {
           executionIntent: executionUnit.executionIntent,
         );
       }
-      // Block Clear Current:
-      else if (executionUnit is _BlockClearCurrentExecutionUnit) {
-        await executionUnit.xBlock.block._unitClearCurrentItem(
-          executionTrace: executionTrace,
-          executionUnitType: executionUnit.executionUnitType,
-          thisXBlock: executionUnit.xBlock,
-          executionIntent: executionUnit.executionIntent,
-        );
-      }
       // Block Clear All Items:
       else if (executionUnit is _BlockClearItemsExecutionUnit) {
         await executionUnit.xBlock.block._unitClearItems(
@@ -322,24 +312,6 @@ class _Executor {
       // Block Query:
       else if (executionUnit is _BlockQueryExecutionUnit) {
         await executionUnit.xBlock.block._unitQuery(
-          executionTrace: executionTrace,
-          executionUnitType: executionUnit.executionUnitType,
-          thisXBlock: executionUnit.xBlock,
-          executionIntent: executionUnit.executionIntent,
-        );
-      }
-      // Block PrepareCreate:
-      else if (executionUnit is _BlockPrepareFormToCreateItemExecutionUnit) {
-        await executionUnit.xBlock.block._unitPrepareFormToCreateItem(
-          executionTrace: executionTrace,
-          executionUnitType: executionUnit.executionUnitType,
-          thisXBlock: executionUnit.xBlock,
-          executionIntent: executionUnit.executionIntent,
-        );
-      }
-      // Block Select Item as Current:
-      else if (executionUnit is _BlockSetItemAsCurrentExecutionUnit) {
-        await executionUnit.xBlock.block._unitSetItemAsCurrent(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
@@ -388,6 +360,37 @@ class _Executor {
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXBlock: executionUnit.xBlock,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
+      // BlockCurrentItemModel Clear Current:
+      else if (executionUnit
+          is _BlockCurrentItemModelClearCurrentExecutionUnit) {
+        await executionUnit.xBlockCurrentItemModel.blockCurrentItemModel
+            ._unitClearCurrentItem(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlockCurrentItemModel: executionUnit.xBlockCurrentItemModel,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
+      // BlockCurrentItemModel PrepareCreate:
+      else if (executionUnit
+          is _BlockCurrentItemModelPrepareFormToCreateItemExecutionUnit) {
+        await executionUnit.xBlockCurrentItemModel.blockCurrentItemModel._unitPrepareFormToCreateItem(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlockCurrentItemModel: executionUnit.xBlockCurrentItemModel,
+          executionIntent: executionUnit.executionIntent,
+        );
+      }
+      // BlockCurrentItemModel Select Item as Current:
+      else if (executionUnit
+          is _BlockCurrentItemModelSetItemAsCurrentExecutionUnit) {
+        await executionUnit.xBlockCurrentItemModel.blockCurrentItemModel._unitSetItemAsCurrent(
+          executionTrace: executionTrace,
+          executionUnitType: executionUnit.executionUnitType,
+          thisXBlockCurrentItemModel: executionUnit.xBlockCurrentItemModel,
           executionIntent: executionUnit.executionIntent,
         );
       }
@@ -468,9 +471,9 @@ class _Executor {
       bool onProgress = owner == null || executionUnitType == null
           ? false
           : state.isMatches(
-        owner: owner,
-        executionUnitType: executionUnitType,
-      );
+              owner: owner,
+              executionUnitType: executionUnitType,
+            );
       //
       state.onProgress = onProgress;
       state.refreshState(force: true);

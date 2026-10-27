@@ -187,6 +187,8 @@ part '_execution_intent_/form_model_execution_intent.dart';
 
 part '_execution_intent_/block_execution_intent.dart';
 
+part '_execution_intent_/block_current_item_model_execution_intent.dart';
+
 part '_execution_intent_/scalar_execution_intent.dart';
 
 part '_execution_intent_/_execution_intent.dart';
@@ -732,7 +734,7 @@ part '_execution_unit_/shelf_member/_block_clear_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_scalar_clear_execution_unit.dart';
 
-part '_execution_unit_/shelf_member/_block_clear_current_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_current_item_model_clear_current_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_item_deletion_execution_unit.dart';
 
@@ -742,7 +744,7 @@ part '_execution_unit_/__activity_member_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_multi_item_deletion_execution_unit.dart';
 
-part '_execution_unit_/shelf_member/_block_prepare_form_to_create_item_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_current_item_model_prepare_form_to_create_item_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_query_execution_unit.dart';
 
@@ -778,7 +780,7 @@ part '_execution_unit_/shelf_member/_block_quick_item_creation_execution_unit.da
 
 part '_execution_unit_/shelf_member/_block_quick_item_update_execution_unit.dart';
 
-part '_execution_unit_/shelf_member/_block_set_item_as_current_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_current_item_model_set_item_as_current_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_filter_panel_change_execution_unit.dart';
 

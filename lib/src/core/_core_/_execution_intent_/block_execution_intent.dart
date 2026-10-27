@@ -72,24 +72,24 @@ final class BlockQuickItemCreationIntent<
   BlockQuickItemCreationIntent({required this.action});
 }
 
-final class BlockPrepareFormToCreateItemIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
-    extends BlockExecutionIntent<
-        ID, //
-        ITEM,
-        ITEM_DETAIL,
-        BlockItemCreationPrecheck,
-        PrepareItemCreationResult> {
-  final bool initDirty;
-  final FormInput? formInput;
-
-  BlockPrepareFormToCreateItemIntent({
-    required this.initDirty,
-    required this.formInput,
-  });
-}
+// final class BlockPrepareFormToCreateItemIntent<
+//         ID extends Comparable, //
+//         ITEM extends Identifiable<ID>,
+//         ITEM_DETAIL extends Identifiable<ID>> //
+//     extends BlockExecutionIntent<
+//         ID, //
+//         ITEM,
+//         ITEM_DETAIL,
+//         BlockItemCreationPrecheck,
+//         PrepareItemCreationResult> {
+//   final bool initDirty;
+//   final FormInput? formInput;
+//
+//   BlockPrepareFormToCreateItemIntent({
+//     required this.initDirty,
+//     required this.formInput,
+//   });
+// }
 
 final class BlockDeleteItemIntent<
         ID extends Comparable, //
@@ -127,18 +127,18 @@ final class BlockDeleteItemsIntent<
   });
 }
 
-final class BlockClearCurrentItemIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
-    extends BlockExecutionIntent<
-        ID, //
-        ITEM,
-        ITEM_DETAIL,
-        BlockClearCurrentItemPrecheck,
-        BlockClearCurrentItemResult> {
-  BlockClearCurrentItemIntent();
-}
+// final class BlockClearCurrentItemIntent<
+//         ID extends Comparable, //
+//         ITEM extends Identifiable<ID>,
+//         ITEM_DETAIL extends Identifiable<ID>> //
+//     extends BlockExecutionIntent<
+//         ID, //
+//         ITEM,
+//         ITEM_DETAIL,
+//         BlockClearCurrentItemPrecheck,
+//         BlockClearCurrentItemResult> {
+//   BlockClearCurrentItemIntent();
+// }
 
 final class BlockClearItemsIntent<
         ID extends Comparable, //
@@ -153,30 +153,30 @@ final class BlockClearItemsIntent<
   BlockClearItemsIntent();
 }
 
-final class BlockSetCurrentItemIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
-    extends BlockExecutionIntent<
-        ID, //
-        ITEM,
-        ITEM_DETAIL,
-        BlockSetCurrentItemPrecheck,
-        BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> {
-  final BlockSetCurrentItemDirective setCurrentItemDirective;
-  final List<ITEM> newQueriedList;
-  final ITEM? inputCandidateCurrItem;
-  final bool forceReloadItem;
-  final FormLoadHint? formLoadHint;
-
-  BlockSetCurrentItemIntent({
-    required this.setCurrentItemDirective,
-    required this.newQueriedList,
-    required this.inputCandidateCurrItem,
-    required this.forceReloadItem,
-    required this.formLoadHint,
-  });
-}
+// final class BlockSetCurrentItemIntent<
+//         ID extends Comparable, //
+//         ITEM extends Identifiable<ID>,
+//         ITEM_DETAIL extends Identifiable<ID>> //
+//     extends BlockExecutionIntent<
+//         ID, //
+//         ITEM,
+//         ITEM_DETAIL,
+//         BlockSetCurrentItemPrecheck,
+//         BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> {
+//   final BlockSetCurrentItemDirective setCurrentItemDirective;
+//   final List<ITEM> newQueriedList;
+//   final ITEM? inputCandidateCurrItem;
+//   final bool forceReloadItem;
+//   final FormLoadHint? formLoadHint;
+//
+//   BlockSetCurrentItemIntent({
+//     required this.setCurrentItemDirective,
+//     required this.newQueriedList,
+//     required this.inputCandidateCurrItem,
+//     required this.forceReloadItem,
+//     required this.formLoadHint,
+//   });
+// }
 
 final class BlockDoneIntent<
         ID extends Comparable, //

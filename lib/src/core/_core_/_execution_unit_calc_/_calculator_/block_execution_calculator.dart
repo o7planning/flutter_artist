@@ -110,17 +110,19 @@ class BlockExecutionCalculator {
             action: BlockExecutionAction.query,
             debugInfo: buildInfo("Block (4.2.3)"),
           );
-        } else if (intent is BlockSetCurrentItemIntent) {
-          return BlockNextUnitOutput(
-            action: BlockExecutionAction.setCurrentItem,
-            debugInfo: buildInfo("Block (4.2.4)"),
-          );
-        } else if (intent is BlockClearCurrentItemIntent) {
-          return BlockNextUnitOutput(
-            action: BlockExecutionAction.clearCurrentItem,
-            debugInfo: buildInfo("Block (4.2.5)"),
-          );
-        } else if (intent is BlockDeleteItemIntent) {
+        }
+        // else if (intent is BlockSetCurrentItemIntent) {
+        //   return BlockNextUnitOutput(
+        //     action: BlockExecutionAction.setCurrentItem,
+        //     debugInfo: buildInfo("Block (4.2.4)"),
+        //   );
+        // } else if (intent is BlockClearCurrentItemIntent) {
+        //   return BlockNextUnitOutput(
+        //     action: BlockExecutionAction.clearCurrentItem,
+        //     debugInfo: buildInfo("Block (4.2.5)"),
+        //   );
+        // }
+        else if (intent is BlockDeleteItemIntent) {
           return BlockNextUnitOutput(
             action: BlockExecutionAction.deleteItem,
             debugInfo: buildInfo("Block (4.2.6)"),
@@ -130,12 +132,14 @@ class BlockExecutionCalculator {
             action: BlockExecutionAction.deleteItems,
             debugInfo: buildInfo("Block (4.2.7)"),
           );
-        } else if (intent is BlockPrepareFormToCreateItemIntent) {
-          return BlockNextUnitOutput(
-            action: BlockExecutionAction.prepareFormToCreate,
-            debugInfo: buildInfo("Block (4.2.8)"),
-          );
-        } else if (intent is BlockQuickItemUpdateIntent) {
+        }
+        // else if (intent is BlockPrepareFormToCreateItemIntent) {
+        //   return BlockNextUnitOutput(
+        //     action: BlockExecutionAction.prepareFormToCreate,
+        //     debugInfo: buildInfo("Block (4.2.8)"),
+        //   );
+        // }
+        else if (intent is BlockQuickItemUpdateIntent) {
           return BlockNextUnitOutput(
             action: BlockExecutionAction.quickItemUpdate,
             debugInfo: buildInfo("Block (4.2.9)"),
