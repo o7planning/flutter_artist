@@ -60,15 +60,6 @@ abstract class StageFormModel<
 
   // ===========================================================================
 
-  @override
-  String debugClassParametersDefinition() {
-    return "<${getStageEnumType()}, ${getInitDataType()}, "
-        "${getResultDataType()}, ${getProzessContextDataType()}, "
-        "${getFormInputType()}, ${getAdditionalFormRelatedDataType()}>";
-  }
-
-  // ===========================================================================
-
   Type getStageEnumType() => STAGE_ENUM;
 
   Type getProzessContextDataType() => PROZESS_CONTEXT_DATA;
@@ -184,11 +175,11 @@ abstract class StageFormModel<
       FormLoadHint.force => true,
       FormLoadHint.forceIfNeed => (thisFormDataState.isPending ||
           thisFormDataState.isFatalError ||
-          thisFormDataState.isStale),
+          thisFormDataState.isLoadedStale),
       FormLoadHint.auto => visibleX &&
           (thisFormDataState.isPending ||
               thisFormDataState.isFatalError ||
-              thisFormDataState.isStale),
+              thisFormDataState.isLoadedStale),
     };
 
     if (!forceReloadForm) {
@@ -250,7 +241,7 @@ abstract class StageFormModel<
     executionTrace.addNonControllableCall(
       codeId: "#110000",
       caller: this,
-      methodName: "__checkBeforeSaveForm",
+      methodName: "_checkBeforeSaveForm",
       suffixShortDesc: "",
       parameters: {
         "checkBusy": checkBusyTrue,
@@ -258,14 +249,14 @@ abstract class StageFormModel<
     );
 
     final Actionable<FormModelPatchFormFieldsPrecheck> actionable =
-        __checkBeforePatchFormFields(
+        _checkBeforePatchFormFields(
       checkBusy: checkBusyTrue,
     );
     if (!actionable.yes) {
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#110100",
-        prefixShortDesc: '__checkBeforePatchFormFields()',
+        prefixShortDesc: '_checkBeforePatchFormFields()',
         module: module,
         actionableFalse: actionable,
         showErrSnackBar: true,

@@ -46,7 +46,7 @@ class ProzessExecutionCalculator {
     // =========================================================================
     // 2. LOADED STALE
     // =========================================================================
-    else if (state.isStale) {
+    else if (state.isLoadedStale) {
       final bool shouldLoadInitData =
           (hint == ExecHint.force || isVisible) && !initDataLoaded;
 
@@ -69,7 +69,7 @@ class ProzessExecutionCalculator {
     // =========================================================================
     // 3. LOADED FRESH
     // =========================================================================
-    else if (state.isFresh) {
+    else if (state.isLoadedFresh) {
       final bool shouldLoadInitData =
           (hint == ExecHint.force) && !initDataLoaded;
 
@@ -99,7 +99,7 @@ class ProzessExecutionCalculator {
     // =========================================================================
     // 4. TRANSITIONING FAILED
     // =========================================================================
-    else if (state.isTransitioningFailed) {
+    else if (state.isTransitionFailed) {
       final bool shouldLoadInitData =
           (hint == ExecHint.force) && !initDataLoaded;
 
@@ -129,7 +129,7 @@ class ProzessExecutionCalculator {
     // =========================================================================
     // 5. TRANSITIONING SUCCESS
     // =========================================================================
-    else if (state.isTransitioningSuccess) {
+    else if (state.isTransitionSuccess) {
       final bool shouldLoadInitData =
           (hint == ExecHint.force) && !initDataLoaded;
 

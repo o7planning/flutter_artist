@@ -7,9 +7,9 @@ sealed class BlockItemDataState {
 
   bool get isNone => this is BlockItemDataStateNone;
 
-  bool get isFresh => this is BlockItemDataStateFresh;
+  bool get isLoadedFresh => this is BlockItemDataStateFresh;
 
-  bool get isStale => this is BlockItemDataStateStale;
+  bool get isLoadedStale => this is BlockItemDataStateStale;
 
   String toBriefInfo();
 }

@@ -1,0 +1,95 @@
+
+// 1. Task đăng nhập bằng Username & Password
+class AppLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormInput, CredentialsFormOutput> {
+  static const String taskName = "app-login-task";
+  final loginRestProvider = LoginProvider();
+
+  AppLoginTask() : super(
+    name: taskName,
+    formModel: SimpleLoginFormModel<LoggedInUserData>(),
+  );
+
+  @override
+  Future<ApiResult<LoggedInUserData>> performLogin({
+    required CredentialsFormOutput? formData,
+  }) async {
+    return await loginRestProvider.login(formData!.userName, formData.password);
+  }
+
+  @override
+  Future<void> onTaskCompleted() async {
+    await FlutterArtist.router.off(DashboardScreen.routeName);
+  }
+}
+
+// 2. Task đăng nhập bằng Microsoft OAuth (Không cần FormModel!)
+class MicrosoftLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormInput, EmptyFormOutput> {
+  static const String taskName = "ms-login-task";
+
+  MicrosoftLoginTask() : super(
+    name: taskName,
+    formModel: null, // OAuth không dùng Form nhập liệu
+  );
+
+  @override
+  Future<ApiResult<LoggedInUserData>> performLogin({
+    required EmptyFormOutput? formData,
+  }) async {
+    // Toàn bộ code gọi AadOAuth.login() và msLoginProvider.loginMicrosoft() đặt tại đây...
+    return userResult;
+  }
+
+  @override
+  Future<void> onTaskCompleted() async {
+    await FlutterArtist.router.off(DashboardScreen.routeName);
+  }
+}
+
+
+
+
+// 1. Task đăng nhập bằng Username & Password
+class AppLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormInput, CredentialsFormOutput> {
+  static const String taskName = "app-login-task";
+  final loginRestProvider = LoginProvider();
+
+  AppLoginTask() : super(
+    name: taskName,
+    formModel: SimpleLoginFormModel<LoggedInUserData>(),
+  );
+
+  @override
+  Future<ApiResult<LoggedInUserData>> performLogin({
+    required CredentialsFormOutput? formData,
+  }) async {
+    return await loginRestProvider.login(formData!.userName, formData.password);
+  }
+
+  @override
+  Future<void> onTaskCompleted() async {
+    await FlutterArtist.router.off(DashboardScreen.routeName);
+  }
+}
+
+// 2. Task đăng nhập bằng Microsoft OAuth (Không cần FormModel!)
+class MicrosoftLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormInput, EmptyFormOutput> {
+  static const String taskName = "ms-login-task";
+
+  MicrosoftLoginTask() : super(
+    name: taskName,
+    formModel: null, // OAuth không dùng Form nhập liệu
+  );
+
+  @override
+  Future<ApiResult<LoggedInUserData>> performLogin({
+    required EmptyFormOutput? formData,
+  }) async {
+    // Toàn bộ code gọi AadOAuth.login() và msLoginProvider.loginMicrosoft() đặt tại đây...
+    return userResult;
+  }
+
+  @override
+  Future<void> onTaskCompleted() async {
+    await FlutterArtist.router.off(DashboardScreen.routeName);
+  }
+}

@@ -16,9 +16,9 @@ sealed class FormDataState implements DataState {
 
   bool get isLoaded => this is FormDataStateLoaded;
 
-  bool get isFresh => this is FormDataStateLoadedFresh;
+  bool get isLoadedFresh => this is FormDataStateLoadedFresh;
 
-  bool get isStale => this is FormDataStateLoadedStale;
+  bool get isLoadedStale => this is FormDataStateLoadedStale;
 
   /// Quick accessor to diagnostic error payload across all error-carrying states.
   ErrorInfo? get errorInfo;

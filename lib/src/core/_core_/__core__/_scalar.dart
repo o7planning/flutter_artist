@@ -239,7 +239,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core
   bool isPendingOrStale({required bool requiresVisible}) {
     final bool visible = ui.hasVisibleViews(includeDescendants: true);
     if (requiresVisible && !visible) return false;
-    return dataState.isPending || dataState.isStale;
+    return dataState.isPending || dataState.isLoadedStale;
   }
 
   bool hasAccumulatedEvents() {
@@ -1083,7 +1083,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core
   // ABSTRACT CONTRACTS
   // ===========================================================================
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Future<ApiResult<VALUE>> performQuery({
     required Object? parentScalarValue,
     required FILTER_CRITERIA filterCriteria,

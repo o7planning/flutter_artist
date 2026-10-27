@@ -164,7 +164,10 @@ class FaIconConstants {
   static const IconData executionProgressViewIconData =
       cupertino.CupertinoIcons.timelapse;
 
-  static const IconData prozessStartIconData =
+  static const IconData prozessRestartIconData =
+      cupertino.CupertinoIcons.arrow_2_squarepath;
+
+  static const IconData taskRestartIconData =
       cupertino.CupertinoIcons.arrow_2_squarepath;
 
   static const IconData stageStartIconData =

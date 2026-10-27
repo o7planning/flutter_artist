@@ -32,7 +32,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
       }
       //
       xBlk.setQueryHintToGreater(queryHint);
-      xBlk.setForceReloadCurrItem(forceReloadItem);
+      xBlk.xBlockCurrentItemModel.setForceReloadCurrItem(forceReloadItem);
     }
     // -------------------------------------------------------------------------
     for (XBlock leafXBlock in allLeafXBlocks) {
@@ -47,7 +47,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
         );
         if (blockXBlockRep) {
           if (xBlock.block.dataState.isPending ||
-              xBlock.block.dataState.isStale) {
+              xBlock.block.dataState.isLoadedStale) {
             xBlock.setQueryHintToGreater(QueryHint.force);
           }
         }
@@ -63,7 +63,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
             // break;
             // Test Cases: [65a].
             if (xBlock.block.dataState.isPending ||
-                xBlock.block.dataState.isStale) {
+                xBlock.block.dataState.isLoadedStale) {
               xBlock.setQueryHintToGreater(QueryHint.force);
               break;
             }
@@ -120,7 +120,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
         );
         if (hasXActiveUI) {
           if (xScalar.scalar.dataState.isPending ||
-              xScalar.scalar.dataState.isStale) {
+              xScalar.scalar.dataState.isLoadedStale) {
             xScalar.setQueryHintToGreater(QueryHint.force);
           }
         }
@@ -136,7 +136,7 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
             // break;
             // Test Cases:
             if (xScalar.scalar.dataState.isPending ||
-                xScalar.scalar.dataState.isStale) {
+                xScalar.scalar.dataState.isLoadedStale) {
               xScalar.setQueryHintToGreater(QueryHint.force);
               break;
             }

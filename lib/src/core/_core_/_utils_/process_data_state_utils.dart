@@ -26,7 +26,7 @@ class ProzessDataStateUtils {
   }) {
     // Transition into a failed transition state, preserving diagnostic error info
     // to allow error viewers or retry mechanisms to handle it.
-    return ProzessDataStateTransitioningFailed(
+    return ProzessDataStateTransitionFailed(
       transitionErrorInfo: errorInfo,
     );
   }

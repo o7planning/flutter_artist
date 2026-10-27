@@ -44,7 +44,7 @@ class BlockFormEnablePrecheckUtils {
       return Actionable<BlockFormEnablePrecheck>.no(
         errCode: BlockFormEnablePrecheck.formInFatalErrorState,
       );
-    } else if (formDataState.isStale) {
+    } else if (formDataState.isLoadedStale) {
       return Actionable<BlockFormEnablePrecheck>.no(
         errCode: BlockFormEnablePrecheck.formInStaleState,
       );

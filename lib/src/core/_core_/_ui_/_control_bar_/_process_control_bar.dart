@@ -27,10 +27,10 @@ class ProzessControlBar extends BaseControlBar<
       ProzessControlBarItem.standard(ProzessControlBarItemType.moveToNextStage),
       ProzessControlBarItem.standard(ProzessControlBarItemType.divider),
       ProzessControlBarItem.standard(ProzessControlBarItemType.restartProzess),
-    ],
-    super.rightItems = const [
       ProzessControlBarItem.standard(
           ProzessControlBarItemType.restartViewingStage),
+    ],
+    super.rightItems = const [
       ProzessControlBarItem.standard(
           ProzessControlBarItemType.submitViewingStage),
       ProzessControlBarItem.standard(ProzessControlBarItemType.divider),
@@ -45,9 +45,7 @@ class ProzessControlBar extends BaseControlBar<
 }
 
 class _ProzessControlBarState extends _BaseControlBarState<Prozess,
-    ProzessControlBarItemType,
-    ProzessControlBarItem,
-    ProzessControlBar> {
+    ProzessControlBarItemType, ProzessControlBarItem, ProzessControlBar> {
   @override
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
 
@@ -116,8 +114,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           customColor: widget.style.activeIconColor,
           onPressed: canMove
               ? () async {
-            widget.prozess.moveToPreviousStage();
-          }
+                  widget.prozess.moveToPreviousStage();
+                }
               : null,
         );
       case ProzessControlBarItemType.moveToNextStage:
@@ -131,24 +129,24 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           customColor: widget.style.activeIconColor,
           onPressed: canMove
               ? () async {
-            widget.prozess.moveToNextStage();
-          }
+                  widget.prozess.moveToNextStage();
+                }
               : null,
         );
       case ProzessControlBarItemType.restartProzess:
-        if (!widget.config.allowResetButton) return null;
+        if (!widget.config.allowRestartProzessButton) return null;
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
           tooltip: "Restart Prozess",
-          iconData: FaIconConstants.prozessStartIconData,
+          iconData: FaIconConstants.prozessRestartIconData,
           onPressed: () async {
             await widget.prozess.restart();
           },
         );
 
       case ProzessControlBarItemType.restartViewingStage:
-        if (!widget.config.allowLoadStageInitDataButton) return null;
+        if (!widget.config.allowRestartViewingStageButton) return null;
         Actionable actionable = widget.prozess.checkBeforeViewingStageRestart();
         return ControlBarHelper.buildControlBarButton(
           context,
@@ -157,8 +155,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           iconData: FaIconConstants.formRefreshIconData,
           onPressed: actionable.yes
               ? () {
-            widget.prozess.restartViewingStage();
-          }
+                  widget.prozess.restartViewingStage();
+                }
               : null,
         );
 
@@ -176,8 +174,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           iconData: FaIconConstants.submitIconData,
           onPressed: actionable.yes
               ? () {
-            widget.prozess.submitViewingStage();
-          }
+                  widget.prozess.submitViewingStage();
+                }
               : null,
         );
 
@@ -192,9 +190,9 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           onAction: false,
           onPressed: actionable.yes
               ? () async {
-            await widget.prozess
-                .showViewingStageFormModelInspectorDialog();
-          }
+                  await widget.prozess
+                      .showViewingStageFormModelInspectorDialog();
+                }
               : null,
         );
 

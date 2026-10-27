@@ -7,17 +7,16 @@ part of '../core.dart';
 /// -> (resolves INIT_DATA) -> [StageDataStateLoadedFresh]
 /// -> (submission) -> [StageDataStateSubmissionAttempted]
 abstract class Stage<
-STAGE_ENUM extends StageEnum, //
-INIT_DATA extends StageInitData,
-RESULT_DATA extends StageResultData,
-PROZESS_CONTEXT_DATA extends ProzessContextData,
-FORM_INPUT extends FormInput,
-FORM_OUTPUT extends FormOutput> extends WorkNode<
+    STAGE_ENUM extends StageEnum, //
+    INIT_DATA extends StageInitData,
+    RESULT_DATA extends StageResultData,
+    PROZESS_CONTEXT_DATA extends ProzessContextData,
+    FORM_INPUT extends FormInput,
+    FORM_OUTPUT extends FormOutput> extends WorkNode<
     INIT_DATA, //
     RESULT_DATA,
     FORM_INPUT,
-    FORM_OUTPUT>
-    implements FormHost, ClassDefViewable {
+    FORM_OUTPUT> implements FormHost, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {
@@ -89,7 +88,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
   StageErrorInfo? get errorInfo => _dataState.errorInfo;
 
   bool get isSubmitted {
-    return _dataState.isSubmissionAttemptedSuccess;
+    return _dataState.isSubmissionSuccess;
   }
 
   bool get isFrontierStage {
@@ -118,14 +117,10 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   XStage _createXStage({
     required XProzess<STAGE_ENUM, ProzessInitData, PROZESS_CONTEXT_DATA>
-    xProzess,
-    required XStageFormModel<STAGE_ENUM,
-        INIT_DATA,
-        RESULT_DATA,
-        PROZESS_CONTEXT_DATA,
-        FORM_INPUT,
-        FORM_OUTPUT>?
-    xStageFormModel,
+        xProzess,
+    required XStageFormModel<STAGE_ENUM, INIT_DATA, RESULT_DATA,
+            PROZESS_CONTEXT_DATA, FORM_INPUT, FORM_OUTPUT>?
+        xStageFormModel,
   }) {
     return XStage<
         STAGE_ENUM, //
@@ -142,8 +137,9 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   // ===========================================================================
 
-  void _bindToProzess(Prozess<STAGE_ENUM, ProzessInitData, PROZESS_CONTEXT_DATA>
-  parentProzess) {
+  void _bindToProzess(
+      Prozess<STAGE_ENUM, ProzessInitData, PROZESS_CONTEXT_DATA>
+          parentProzess) {
     prozess = parentProzess;
   }
 
@@ -177,13 +173,13 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   /// Synchronously or asynchronously resolves baseline [INIT_DATA] for this Stage
   /// from the shared [PROZESS_CONTEXT_DATA] and predecessor states.
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Future<ApiResult<INIT_DATA>> performLoadInitData({
     required PROZESS_CONTEXT_DATA sharedContext,
   });
 
   /// Submits the stage form inputs, commits data, and yields [RESULT_DATA].
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Future<ApiResult<RESULT_DATA>> performSubmit({
     required INIT_DATA initData,
     required PROZESS_CONTEXT_DATA sharedContext,
@@ -194,7 +190,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
   // ***************************************************************************
 
   Future<StageSubmitResult<INIT_DATA, RESULT_DATA>>
-  _submitAfterPrecheckSuccessful() async {
+      _submitAfterPrecheckSuccessful() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "_submitAfterPrecheckSuccessful",
@@ -202,45 +198,18 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       isLibMethod: true,
     );
 
-    // executionTrace.addNonControllableCall(
-    //   codeId: "#120000",
-    //   caller: this,
-    //   methodName: "checkBeforeSubmit",
-    //   suffixShortDesc: "",
-    // );
-    // Actionable<StageSubmitPrecheck> actionable =
-    //     prozess.__checkBeforeSubmitStage(
-    //   checkBusy: true,
-    //   checkTargetFormValidate: true,
-    //   targetStage: this,
-    // );
-    //
-    // if (!actionable.yes) {
-    //   _addErrorLogActionable(
-    //     executionTrace: executionTrace,
-    //     traceStepCodeId: "#120100",
-    //     prefixShortDesc: 'checkBeforeSubmit()',
-    //     module: module,
-    //     actionableFalse: actionable,
-    //     showErrSnackBar: true,
-    //     tipDocument: null,
-    //   );
-    //   return StageSubmitExecutionResult(precheck: actionable.errCode);
-    // }
-
     final XActivity xActivity = _XActivityStageSubmit(stage: this);
-    final xStage = xActivity.findXStageByName(name) as XStage<STAGE_ENUM,
+    final xStage = xActivity.findXStageByName(name) as XStage<
+        STAGE_ENUM, //
         INIT_DATA,
         RESULT_DATA,
         PROZESS_CONTEXT_DATA,
         FORM_INPUT,
         FORM_OUTPUT>;
 
-    final StageSubmitIntent<STAGE_ENUM,
-        INIT_DATA,
-        RESULT_DATA,
-        PROZESS_CONTEXT_DATA> executionIntent =
-    xStage._createAndSetStageIntentSubmit();
+    final StageSubmitIntent<STAGE_ENUM, INIT_DATA, RESULT_DATA,
+            PROZESS_CONTEXT_DATA> executionIntent =
+        xStage._createAndSetStageIntentSubmit();
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -260,11 +229,11 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     required ExecutionUnitType executionUnitType,
     required XStage thisXStage,
     required StageRestartIntent<
-        STAGE_ENUM, //
-        INIT_DATA,
-        RESULT_DATA,
-        PROZESS_CONTEXT_DATA>
-    executionIntent,
+            STAGE_ENUM, //
+            INIT_DATA,
+            RESULT_DATA,
+            PROZESS_CONTEXT_DATA>
+        executionIntent,
   }) async {
     __assertThisXStage(thisXStage);
     thisXStage._createAndSetStageIntentDone(
@@ -274,8 +243,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     executionTrace.addInfo(
       codeId: "#092100",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()} (Stage Load InitData)",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Stage Load InitData)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -304,7 +272,8 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       debug._performLoadInitDataCount++;
 
       final ApiResult<INIT_DATA> result = await performLoadInitData(
-          sharedContext: prozess._prozessContextData!);
+        sharedContext: prozess._prozessContextData!,
+      );
       result.throwIfError();
 
       _initData = result.data;
@@ -313,15 +282,13 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       executionTrace.addInfo(
         codeId: "#092140",
         shortDesc:
-        "${debugObjHtml(
-            this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(
-            _initData)}.",
+            "${debugObjHtml(this)} -> Successfully resolved Stage INIT_DATA: ${debugObjHtml(_initData)}.",
       );
 
       // Coordinate StageFormModel data state transition
       if (formModel != null) {
         final newFormDataState =
-        BlockFormDataStateUtils.calculateNewLazyDataState(
+            BlockFormDataStateUtils.calculateNewLazyDataState(
           currentFormDataState: formModel!.dataState,
           hasCurrentItem: _initData != null,
           currentItemChanged: true,
@@ -358,8 +325,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       executionTrace.addInfo(
         codeId: "#092160",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}.performLoadInitData() method encountered an error!",
+            "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
       );
     } finally {
@@ -374,18 +340,12 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
   Future<void> _unitSubmit({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XStage<STAGE_ENUM,
-        INIT_DATA,
-        RESULT_DATA,
-        PROZESS_CONTEXT_DATA,
-        FORM_INPUT,
-        FORM_OUTPUT>
-    thisXStage,
-    required StageSubmitIntent<STAGE_ENUM,
-        INIT_DATA,
-        RESULT_DATA,
-        PROZESS_CONTEXT_DATA>
-    executionIntent,
+    required XStage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA,
+            FORM_INPUT, FORM_OUTPUT>
+        thisXStage,
+    required StageSubmitIntent<STAGE_ENUM, INIT_DATA, RESULT_DATA,
+            PROZESS_CONTEXT_DATA>
+        executionIntent,
   }) async {
     __assertThisXStage(thisXStage);
     thisXStage._createAndSetStageIntentDone(
@@ -395,8 +355,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     executionTrace.addInfo(
       codeId: "#121100",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()} (Submit)",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Submit)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -425,7 +384,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
         error: e,
         errorStackTrace: stackTrace,
       );
-      _dataState = StageDataStateSubmissionAttemptedFailed(
+      _dataState = StageDataStateSubmissionFailed(
         submissionErrorInfo: stageErrorInfo,
       );
       return;
@@ -447,8 +406,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
         } else {
           throw AppError(
             errorMessage:
-            '${getClassName(this)}.performSubmit() return null (${getClassName(
-                RESULT_DATA)}).',
+                '${getClassName(this)}.performSubmit() return null (${getClassName(RESULT_DATA)}).',
           );
         }
       }
@@ -468,13 +426,13 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
         error: e,
         errorStackTrace: stackTrace,
       );
-      _dataState = StageDataStateSubmissionAttemptedFailed(
+      _dataState = StageDataStateSubmissionFailed(
         submissionErrorInfo: stageErrorInfo,
       );
       return;
     }
     //
-    _dataState = StageDataStateSubmissionAttemptedSuccess();
+    _dataState = StageDataStateSubmissionSuccess();
     _submitResultData = stageDataResult;
 
     thisXStage.xProzess._createAndSetProzessIntentDetermineNextStage(
@@ -521,11 +479,11 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   @override
   bool isStateReadyForForm() {
-    if (dataState.isNone || dataState.isPending || dataState.isStale) {
+    if (dataState.isNone || dataState.isPending || dataState.isLoadedStale) {
       return false;
-    } else if (dataState.isFresh ||
-        dataState.isSubmissionAttemptedSuccess ||
-        dataState.isSubmissionAttemptedFailed) {
+    } else if (dataState.isLoadedFresh ||
+        dataState.isSubmissionSuccess ||
+        dataState.isSubmissionFailed) {
       return true;
     } else {
       // Never run.
@@ -564,7 +522,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   @override
   Future<Actionable<ShowFormInfoPrecheck>>
-  showDebugFormModelInspectorDialog() async {
+      showDebugFormModelInspectorDialog() async {
     final actionable = checkBeforeShowFormInfo();
     if (!actionable.yes) {
       return actionable;

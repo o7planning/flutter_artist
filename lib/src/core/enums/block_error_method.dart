@@ -16,7 +16,8 @@ enum TaskErrorMethod {
   resetTaskStateInternal,
   convertToFormOutput,
   isMultipleSubmissionsAllowed,
-  isReexecutionAllowed;
+  isReexecutionAllowed,
+  onTaskCompleted;
 }
 
 enum StageErrorMethod {
@@ -32,5 +33,6 @@ enum ProzessErrorMethod {
   determineInitialStage,
   contextDataReset,
   contextDataUpdateFromActiveStage,
-  resetProzessStateInternal;
+  resetProzessStateInternal,
+  onProzessCompleted;
 }

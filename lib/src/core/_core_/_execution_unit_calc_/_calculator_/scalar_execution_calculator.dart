@@ -48,7 +48,7 @@ class ScalarExecutionCalculator {
     // =========================================================================
     // 3. DATA STATE = STALE
     // =========================================================================
-    else if (state.isStale) {
+    else if (state.isLoadedStale) {
       final bool shouldQuery =
           (hint == QueryHint.force || input.isVisible) && !input.queried;
 
@@ -72,7 +72,7 @@ class ScalarExecutionCalculator {
     // =========================================================================
     // 4. DATA STATE = FRESH
     // =========================================================================
-    else if (state.isFresh) {
+    else if (state.isLoadedFresh) {
       // 4.0. Intercept terminal Done intent
       if (intent is ScalarDoneIntent) {
         return ScalarNextUnitOutput(

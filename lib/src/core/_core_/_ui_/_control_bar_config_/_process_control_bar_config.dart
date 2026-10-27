@@ -5,8 +5,8 @@ class ProzessControlBarConfig {
   final bool allowCancelButton;
   final bool allowMoveToPreviousStageButton;
   final bool allowMoveToNextStageButton;
-  final bool allowResetButton;
-  final bool allowLoadStageInitDataButton;
+  final bool allowRestartProzessButton;
+  final bool allowRestartViewingStageButton;
   final bool allowSubmitStageButton;
   final bool allowDebugInspectorButton;
   final bool allowDebugFormButton;
@@ -16,8 +16,8 @@ class ProzessControlBarConfig {
     this.allowCancelButton = false,
     this.allowMoveToPreviousStageButton = false,
     this.allowMoveToNextStageButton = false,
-    this.allowResetButton = false,
-    this.allowLoadStageInitDataButton = false,
+    this.allowRestartProzessButton = false,
+    this.allowRestartViewingStageButton = false,
     this.allowSubmitStageButton = false,
     this.allowDebugInspectorButton = false,
     this.allowDebugFormButton = false,
@@ -28,8 +28,8 @@ class ProzessControlBarConfig {
         allowCancelButton = true,
         allowMoveToPreviousStageButton = true,
         allowMoveToNextStageButton = true,
-        allowResetButton = true,
-        allowLoadStageInitDataButton = true,
+        allowRestartProzessButton = true,
+        allowRestartViewingStageButton = true,
         allowSubmitStageButton = true,
         allowDebugInspectorButton = true,
         allowDebugFormButton = true;

@@ -101,7 +101,7 @@ class ScalarQueryStateCalculator {
         if (input.currentDataState.isLoaded) {
           // Background polling failure retains current metric freshness while attaching transient error
           if (input.isBackgroundPolling) {
-            resolvedState = input.currentDataState.isStale
+            resolvedState = input.currentDataState.isLoadedStale
                 ? input.currentDataState
                 : ScalarDataStateLoadedFresh(
               transientErrorInfo: input.scalarErrorInfo,

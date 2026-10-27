@@ -7,7 +7,7 @@ void main() {
     const freshTaskDataState = TaskDataStateLoadedFresh();
     const pendingTaskDataState = TaskDataStatePending.initial();
     const staleTaskDataState = TaskDataStateLoadedStale();
-    const successTaskDataState = TaskDataStateSubmissionAttemptedSuccess();
+    const successTaskDataState = TaskDataStateCompleted();
 
     test('Should return noForm when formModel is null', () {
       final result = TaskFormEnablePrecheckUtils.checkFormEnable(

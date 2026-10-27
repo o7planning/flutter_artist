@@ -77,7 +77,7 @@ abstract class XActivity extends XRootQueueItem {
       final TaskDataState dataState = xTask.task.dataState;
       bool hasActiveUiX = xTask.task.ui.hasTaskContext();
       if (hasActiveUiX) {
-        if (dataState.isPending || dataState.isStale) {
+        if (dataState.isPending || dataState.isLoadedStale) {
           xTask.setExecHintToGreater(ExecHint.force);
         }
       }
@@ -97,14 +97,14 @@ abstract class XActivity extends XRootQueueItem {
         if (stageDataStage.isNone) {
           break;
         }
-        if (stageDataStage.isPending || stageDataStage.isStale) {
+        if (stageDataStage.isPending || stageDataStage.isLoadedStale) {
           xStage.setExecHintToGreater(ExecHint.force);
           break;
         }
         //
-        // OK Now isFresh ...
+        // OK Now isLoadedFresh ...
         //
-        if (stageDataStage.isSubmissionAttemptedSuccess) {
+        if (stageDataStage.isSubmissionSuccess) {
           continue;
         }
         // Else (isSubmissionAttemptedFail)

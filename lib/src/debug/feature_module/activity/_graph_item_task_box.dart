@@ -99,9 +99,9 @@ class _GraphItemTaskBoxState extends State<GraphItemTaskBox> {
         stateBgColor = DebugConstants.graphBoxDataStatePendingBgColor(context);
       case TaskDataStateLoadedStale():
         stateBgColor = Colors.orangeAccent;
-      case TaskDataStateSubmissionAttemptedSuccess():
+      case TaskDataStateCompleted():
         stateBgColor = Colors.teal;
-      case TaskDataStateSubmissionAttemptedFailed():
+      case TaskDataStateSubmissionFailed():
         stateBgColor = DebugConstants.graphBoxDataStateErrorBgColor(context);
     }
 

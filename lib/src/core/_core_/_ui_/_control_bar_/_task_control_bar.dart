@@ -18,10 +18,10 @@ class TaskControlBar extends BaseControlBar<
     super.style,
     super.leftItems = const [
       TaskControlBarItem.standard(TaskControlBarItemType.back),
+      TaskControlBarItem.standard(TaskControlBarItemType.divider),
+      TaskControlBarItem.standard(TaskControlBarItemType.restart),
     ],
     super.rightItems = const [
-      TaskControlBarItem.standard(TaskControlBarItemType.restart),
-      TaskControlBarItem.standard(TaskControlBarItemType.divider),
       TaskControlBarItem.standard(TaskControlBarItemType.submit),
       TaskControlBarItem.standard(TaskControlBarItemType.divider),
       TaskControlBarItem.standard(TaskControlBarItemType.debugForm),
@@ -78,26 +78,6 @@ class _TaskControlBarState extends _BaseControlBarState<
               : null,
         );
 
-      case TaskControlBarItemType.restart:
-        if (!widget.config.allowRestartButton) {
-          return null;
-        }
-        final actionable = widget.task.checkBeforeRestart(
-          checkAllow: true,
-        );
-        return ControlBarHelper.buildControlBarButton(
-          context,
-          style: widget.style,
-          tooltip: "Load Init Data",
-          iconData: FaIconConstants.formRefreshIconData,
-          onAction: widget.task.isLoadingInitData,
-          onPressed: actionable.yes
-              ? () async {
-            await widget.task.restart();
-          }
-              : null,
-        );
-
       case TaskControlBarItemType.submit:
         if (!widget.config.allowSubmitButton) {
           return null;
@@ -116,17 +96,37 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: widget.task.__isSubmitting,
           onPressed: actionable.yes
               ? () async {
-            final result = await widget.task.submit();
-            final NavigationIntent? intent =
-                widget.config.submitNavigationIntent;
-            if (intent != null) {
-              widget.task._processNavigationIntent(
-                context: context,
-                result: result,
-                intent: intent,
-              );
-            }
-          }
+                  final result = await widget.task.submit();
+                  final NavigationIntent? intent =
+                      widget.config.submitNavigationIntent;
+                  if (intent != null) {
+                    widget.task._processNavigationIntent(
+                      context: context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
+                }
+              : null,
+        );
+
+      case TaskControlBarItemType.restart:
+        if (!widget.config.allowRestartButton) {
+          return null;
+        }
+        final actionable = widget.task.checkBeforeRestart(
+          checkAllow: true,
+        );
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
+          tooltip: "Restart Task",
+          iconData: FaIconConstants.taskRestartIconData,
+          onAction: widget.task.isLoadingInitData,
+          onPressed: actionable.yes
+              ? () async {
+                  await widget.task.restart();
+                }
               : null,
         );
 
@@ -141,8 +141,8 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: actionable.yes
               ? () async {
-            await widget.task.showDebugFormModelInspectorDialog();
-          }
+                  await widget.task.showDebugFormModelInspectorDialog();
+                }
               : null,
         );
 

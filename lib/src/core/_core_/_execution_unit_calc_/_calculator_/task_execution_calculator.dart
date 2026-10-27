@@ -46,7 +46,7 @@ class TaskExecutionCalculator {
     // =========================================================================
     // 2. DATA STATE = STALE
     // =========================================================================
-    else if (state.isStale) {
+    else if (state.isLoadedStale) {
       // IMPORTANT: No condition: isVisible (?? TODO: Review in test case).
       final bool shouldExecute =
           (hint == ExecHint.force || isVisible) && !executed;
@@ -69,7 +69,7 @@ class TaskExecutionCalculator {
     // =========================================================================
     // 3. DATA STATE = FRESH
     // =========================================================================
-    else if (state.isFresh) {
+    else if (state.isLoadedFresh) {
       if (hint == ExecHint.force) {
         final bool isRestart = intent is TaskRestartIntent;
         return TaskNextUnitOutput(
@@ -108,7 +108,7 @@ class TaskExecutionCalculator {
     // =========================================================================
     // 4. DATA STATE = SUBMISSION ATTEMPTED FAILED
     // =========================================================================
-    else if (state.isSubmissionAttemptedFailed) {
+    else if (state.isSubmissionFailed) {
       final bool shouldReload =
           (hint == ExecHint.force || isVisible) && !executed;
       if (shouldReload) {
@@ -149,10 +149,16 @@ class TaskExecutionCalculator {
     // =========================================================================
     // 5. DATA STATE = SUBMISSION ATTEMPTED SUCCESS
     // =========================================================================
-    else if (state.isSubmissionAttemptedSuccess) {
+    else if (state.isCompleted) {
+      if (intent is TaskRestartIntent) {
+        return TaskNextUnitOutput(
+          action: TaskExecutionAction.restart,
+          debugInfo: buildInfo("Task (5.1)"),
+        );
+      }
       return TaskNextUnitOutput(
         action: TaskExecutionAction.none,
-        debugInfo: buildInfo("Task (5.1)"),
+        debugInfo: buildInfo("Task (5.2)"),
       );
     }
 

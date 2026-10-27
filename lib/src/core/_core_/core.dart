@@ -187,6 +187,8 @@ part '_execution_intent_/form_model_execution_intent.dart';
 
 part '_execution_intent_/block_execution_intent.dart';
 
+part '_execution_intent_/block_current_item_model_execution_intent.dart';
+
 part '_execution_intent_/scalar_execution_intent.dart';
 
 part '_execution_intent_/_execution_intent.dart';
@@ -201,6 +203,7 @@ part '_execution_unit_calc_/_model_/_stage_form_neu_model.dart';
 
 part '_execution_unit_calc_/_model_/_task_form_model_neu_model.dart';
 
+part '_execution_unit_calc_/_model_/_block_current_item_model_neu_model.dart';
 
 part '_execution_unit_calc_/_model_/_block_neu_model.dart';
 
@@ -440,6 +443,8 @@ part '_event_/_block_event_reaction.dart';
 
 part '_dialog_/_process_restart_confirm_dialog.dart';
 
+part '_dialog_/_task_restart_confirm_dialog.dart';
+
 part '_config_/_filter_model_config.dart';
 
 part '_config_/_filter_model_effective_config.dart';
@@ -495,8 +500,6 @@ part '_sync_/_block_sync_session_state.dart';
 part '_sync_/_block_item_sync_session_state.dart';
 
 part '_sync_/_debug_block_item_sync_session_state.dart';
-
-part '_sync_/_block_item_refresh_condition.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/__target_block_and_options.dart';
 
@@ -650,7 +653,7 @@ part '_locale_/_locale_manager.dart';
 
 part '_locale_/_flutter_artist_locale_adapter.dart';
 
-part '_login_/_login_activity_v1.dart';
+part '_v1_/_login_activity_v1.dart';
 
 part '../notification/simple/_simple_notification_service.dart';
 
@@ -732,7 +735,7 @@ part '_execution_unit_/shelf_member/_block_clear_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_scalar_clear_execution_unit.dart';
 
-part '_execution_unit_/shelf_member/_block_clear_current_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_current_item_model_clear_current_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_item_deletion_execution_unit.dart';
 
@@ -742,7 +745,7 @@ part '_execution_unit_/__activity_member_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_multi_item_deletion_execution_unit.dart';
 
-part '_execution_unit_/shelf_member/_block_prepare_form_to_create_item_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_current_item_model_prepare_form_to_create_item_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_query_execution_unit.dart';
 
@@ -778,7 +781,7 @@ part '_execution_unit_/shelf_member/_block_quick_item_creation_execution_unit.da
 
 part '_execution_unit_/shelf_member/_block_quick_item_update_execution_unit.dart';
 
-part '_execution_unit_/shelf_member/_block_set_item_as_current_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_current_item_model_set_item_as_current_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_filter_panel_change_execution_unit.dart';
 
@@ -829,6 +832,8 @@ part '_navigation_intent_/_navigation_open_end_drawer_intent.dart';
 part '_navigation_intent_/_navigation_show_dialog_intent.dart';
 
 part '_navigation_intent_/__navigation_intent.dart';
+
+part '_login_/_session_establisher.dart';
 
 part '_ui_/_control_bar_/__base_control_bar.dart';
 
@@ -1011,8 +1016,12 @@ part '_xdata_/_tree_x_data.dart';
 // *****************************************************************************
 // *****************************************************************************
 
-class _AbstractMethodAnnotation {
-  const _AbstractMethodAnnotation();
+class AbstractMethodAnnotation {
+  const AbstractMethodAnnotation();
+}
+
+class OverridableMethodAnnotation {
+  const OverridableMethodAnnotation();
 }
 
 class _RootMethodAnnotation {
@@ -1043,9 +1052,6 @@ class _IsAllowPrivateMethodAnnotation {
   const _IsAllowPrivateMethodAnnotation();
 }
 
-class _OverridableMethodAnnotation {
-  const _OverridableMethodAnnotation();
-}
 
 class _ExecutionUnitClassAnnotation {
   const _ExecutionUnitClassAnnotation();

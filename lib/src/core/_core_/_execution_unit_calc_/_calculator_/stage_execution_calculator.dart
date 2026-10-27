@@ -52,7 +52,7 @@ class StageExecutionCalculator {
     // =========================================================================
     // 2. DATA STATE = STALE
     // =========================================================================
-    else if (state.isStale) {
+    else if (state.isLoadedStale) {
       final bool shouldExecute =
           (hint == ExecHint.force || isVisible) && !executed;
       if (shouldExecute) {
@@ -74,7 +74,7 @@ class StageExecutionCalculator {
     // =========================================================================
     // 3. DATA STATE = FRESH
     // =========================================================================
-    else if (state.isFresh) {
+    else if (state.isLoadedFresh) {
       if (hint == ExecHint.force) {
         final bool isRestart = intent is StageRestartIntent;
         return StageNextUnitOutput(
@@ -113,7 +113,7 @@ class StageExecutionCalculator {
     // =========================================================================
     // 4. DATA STATE = SUBMISSION ATTEMPTED FAILED
     // =========================================================================
-    else if (state.isSubmissionAttemptedFailed) {
+    else if (state.isSubmissionFailed) {
       final bool shouldReload = (hint == ExecHint.force) && !executed;
       if (shouldReload) {
         final bool isRestart = intent is StageRestartIntent;
@@ -153,7 +153,7 @@ class StageExecutionCalculator {
     // =========================================================================
     // 5. DATA STATE = SUBMISSION ATTEMPTED SUCCESS
     // =========================================================================
-    else if (state.isSubmissionAttemptedSuccess) {
+    else if (state.isSubmissionSuccess) {
       return StageNextUnitOutput(
         action: StageExecutionAction.none,
         debugInfo: buildInfo("Stage (5.1)"),

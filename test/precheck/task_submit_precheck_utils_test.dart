@@ -49,7 +49,7 @@ void main() {
         checkBusy: true,
         isBusy: false,
         checkValidate: true,
-        taskDataState: const TaskDataStateSubmissionAttemptedSuccess(),
+        taskDataState: const TaskDataStateCompleted(),
         hasForm: false,
         formDataState: null,
         getActiveFormStates: null,

@@ -54,7 +54,7 @@ class BlockQueryStrategyResolver {
     // a. Prozess explicitly mandated force (queryHint == QueryHint.force)
     // b. Active UI representation is visible AND dataset is unready (pending/stale)
     final bool effectiveForce = queryHint == QueryHint.force ||
-        (provideItemsContext && (dataState.isPending || dataState.isStale));
+        (provideItemsContext && (dataState.isPending || dataState.isLoadedStale));
 
     // If there is no demand to execute or refresh, reject execution immediately
     if (!effectiveForce) {

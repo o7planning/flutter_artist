@@ -29,8 +29,8 @@ class ProzessDebugBox extends BaseDebugBox {
       StageDataStatePending() => Colors.amber.shade800,
       StageDataStateLoadedFresh() => Colors.green.shade700,
       StageDataStateLoadedStale() => Colors.orange.shade700,
-      StageDataStateSubmissionAttemptedSuccess() => Colors.teal.shade700,
-      StageDataStateSubmissionAttemptedFailed() => Colors.red.shade700,
+      StageDataStateSubmissionSuccess() => Colors.teal.shade700,
+      StageDataStateSubmissionFailed() => Colors.red.shade700,
     };
   }
 

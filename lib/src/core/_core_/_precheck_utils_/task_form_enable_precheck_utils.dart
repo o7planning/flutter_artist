@@ -23,7 +23,7 @@ class TaskFormEnablePrecheckUtils {
       );
     }
 
-    if (taskDataState.isStale) {
+    if (taskDataState.isLoadedStale) {
       return Actionable<TaskFormEnablePrecheck>.no(
         errCode: TaskFormEnablePrecheck.taskInStaleState,
       );
@@ -31,7 +31,7 @@ class TaskFormEnablePrecheckUtils {
 
     // 3. Priority 3: If task was already successfully submitted, its form must remain locked (read-only).
     // (User must trigger Restart to unlock and modify again).
-    if (taskDataState.isSubmissionAttemptedSuccess) {
+    if (taskDataState.isCompleted) {
       return Actionable<TaskFormEnablePrecheck>.no(
         errCode: TaskFormEnablePrecheck.taskAlreadySubmitted,
       );
@@ -51,7 +51,7 @@ class TaskFormEnablePrecheckUtils {
         return Actionable<TaskFormEnablePrecheck>.no(
           errCode: TaskFormEnablePrecheck.formInFatalErrorState,
         );
-      } else if (formDataState.isStale) {
+      } else if (formDataState.isLoadedStale) {
         return Actionable<TaskFormEnablePrecheck>.no(
           errCode: TaskFormEnablePrecheck.formInStaleState,
         );

@@ -136,7 +136,7 @@ abstract class WorkNodeFormModel<
   // ABSTRACT CONTRACTS (User override in concrete FormModels)
   // ===========================================================================
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Future<XData?> performLoadMultiOptPropXData({
     required String multiOptPropName,
     required SelectionType selectionType,
@@ -146,13 +146,13 @@ abstract class WorkNodeFormModel<
     required INIT_DATA? initData,
   });
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Map<String, dynamic>? extractSimplePropValuesFromInitData({
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required INIT_DATA initData,
   });
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   OptValueWrap? extractMultiOptPropValueFromInitData({
     required String multiOptPropName,
     required SelectionType selectionType,
@@ -162,7 +162,7 @@ abstract class WorkNodeFormModel<
     required INIT_DATA initData,
   });
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Future<ADDITIONAL_FORM_RELATED_DATA> performLoadAdditionalFormRelatedData({
     required INIT_DATA? initData,
   });

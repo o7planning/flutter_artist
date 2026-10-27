@@ -57,7 +57,7 @@ class _XShelfBaseQuery extends XShelf {
         final Block parentBlock = parentXBlock.block;
         final bool isParentNeedQuery = parentBlock.dataState.isNone ||
             parentBlock.dataState.isPending ||
-            parentBlock.dataState.isStale;
+            parentBlock.dataState.isLoadedStale;
 
         if (isParentNeedQuery) {
           parentXBlock.setQueryHintToGreater(QueryHint.force);
@@ -83,7 +83,7 @@ class _XShelfBaseQuery extends XShelf {
         final Scalar parentScalar = parentXScalar.scalar;
         final bool isParentNeedQuery = parentScalar.dataState.isNone ||
             parentScalar.dataState.isPending ||
-            parentScalar.dataState.isStale;
+            parentScalar.dataState.isLoadedStale;
 
         if (isParentNeedQuery) {
           parentXScalar.setQueryHintToGreater(QueryHint.force);
@@ -137,7 +137,7 @@ class _XShelfBaseQuery extends XShelf {
           final Block parentBlock = parentXBlock.block;
           final bool isParentNeedQuery = parentBlock.dataState.isNone ||
               parentBlock.dataState.isPending ||
-              parentBlock.dataState.isStale;
+              parentBlock.dataState.isLoadedStale;
 
           if (isParentNeedQuery) {
             parentXBlock.setQueryHintToGreater(QueryHint.force);
@@ -188,7 +188,7 @@ class _XShelfBaseQuery extends XShelf {
           final Scalar parentScalar = parentXScalar.scalar;
           final bool isParentNeedQuery = parentScalar.dataState.isNone ||
               parentScalar.dataState.isPending ||
-              parentScalar.dataState.isStale;
+              parentScalar.dataState.isLoadedStale;
 
           if (isParentNeedQuery) {
             parentXScalar.setQueryHintToGreater(QueryHint.force);

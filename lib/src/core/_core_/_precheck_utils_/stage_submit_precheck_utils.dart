@@ -44,13 +44,13 @@ class StageSubmitPrecheckUtils {
       );
     }
 
-    if (targetStageDataState.isStale) {
+    if (targetStageDataState.isLoadedStale) {
       return Actionable<StageSubmitPrecheck>.no(
         errCode: StageSubmitPrecheck.stageInStaleState,
       );
     }
 
-    if (targetStageDataState.isSubmissionAttemptedSuccess) {
+    if (targetStageDataState.isSubmissionSuccess) {
       return Actionable<StageSubmitPrecheck>.no(
         errCode: StageSubmitPrecheck.stageAlreadySubmitted,
       );
@@ -70,7 +70,7 @@ class StageSubmitPrecheckUtils {
         return Actionable<StageSubmitPrecheck>.no(
           errCode: StageSubmitPrecheck.formInFatalErrorState,
         );
-      } else if (targetFormDataState.isStale) {
+      } else if (targetFormDataState.isLoadedStale) {
         return Actionable<StageSubmitPrecheck>.no(
           errCode: StageSubmitPrecheck.formInStaleState,
         );

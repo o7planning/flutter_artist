@@ -11,17 +11,15 @@ sealed class TaskDataState implements DataState {
 
   bool get isLoaded => this is TaskDataStateLoaded;
 
-  bool get isFresh => this is TaskDataStateLoadedFresh;
+  bool get isLoadedFresh => this is TaskDataStateLoadedFresh;
 
-  bool get isStale => this is TaskDataStateLoadedStale;
+  bool get isLoadedStale => this is TaskDataStateLoadedStale;
 
   bool get isSubmissionAttempted => this is TaskDataStateSubmissionAttempted;
 
-  bool get isSubmissionAttemptedSuccess =>
-      this is TaskDataStateSubmissionAttemptedSuccess;
+  bool get isSubmissionFailed => this is TaskDataStateSubmissionFailed;
 
-  bool get isSubmissionAttemptedFailed =>
-      this is TaskDataStateSubmissionAttemptedFailed;
+  bool get isCompleted => this is TaskDataStateCompleted;
 
   /// Quick accessor to diagnostic error payload across all error-carrying states.
   TaskErrorInfo? get errorInfo;
@@ -215,37 +213,35 @@ sealed class TaskDataStateSubmissionAttempted extends TaskDataState {
 }
 
 /// Task completed execution successfully, yielding transaction results.
-final class TaskDataStateSubmissionAttemptedSuccess
+final class TaskDataStateCompleted
     extends TaskDataStateSubmissionAttempted {
-  const TaskDataStateSubmissionAttemptedSuccess();
+  const TaskDataStateCompleted();
 
   @override
-  String get name => "submissionAttempted + success";
-
+  String get name => "submissionAttempted + completed";
   @override
   TaskErrorInfo? get errorInfo => null;
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is TaskDataStateSubmissionAttemptedSuccess;
+      identical(this, other) || other is TaskDataStateCompleted;
 
   @override
   int get hashCode => runtimeType.hashCode;
 
   @override
-  String toBriefInfo() => "submissionSuccess()";
+  String toBriefInfo() => "completed()";
 
   @override
-  String toString() => 'TaskDataState.submissionAttemptedSuccess()';
+  String toString() => 'TaskDataState.completed()';
 }
 
 /// Task execution/submission failed on server; inputs remain available for user correction.
-final class TaskDataStateSubmissionAttemptedFailed
+final class TaskDataStateSubmissionFailed
     extends TaskDataStateSubmissionAttempted {
   final TaskErrorInfo submissionErrorInfo;
 
-  const TaskDataStateSubmissionAttemptedFailed({
+  const TaskDataStateSubmissionFailed({
     required this.submissionErrorInfo,
   });
 
@@ -258,7 +254,7 @@ final class TaskDataStateSubmissionAttemptedFailed
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TaskDataStateSubmissionAttemptedFailed &&
+      other is TaskDataStateSubmissionFailed &&
           runtimeType == other.runtimeType &&
           submissionErrorInfo == other.submissionErrorInfo;
 

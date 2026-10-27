@@ -16,7 +16,7 @@ abstract class SortModelBuilder<ITEM extends Object> {
   // ***************************************************************************
   // ***************************************************************************
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   SortModelStructure defineSortModelStructure();
 
   // ***************************************************************************

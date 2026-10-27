@@ -82,7 +82,7 @@ void main() {
         isBusy: false,
         targetStageOrder: 10,
         viewingStageOrder: 10,
-        targetStageDataState: StageDataStateSubmissionAttemptedSuccess(),
+        targetStageDataState: StageDataStateSubmissionSuccess(),
         checkTargetFormValidate: false,
         hasTargetForm: false,
         targetFormDataState: null,

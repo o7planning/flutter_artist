@@ -392,6 +392,116 @@ class GlobalsManager extends _Core {
     return true;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Internal method invoked exclusively by the framework's Task or Prozess execution units
+  /// when a [SessionEstablisher] workflow completes its submission.
+  ///
+  /// Returns `true` if the session and global data were successfully initialized;
+  /// throws an [AppError] or returns `false` if any step fails.
+  Future<bool> _establishSessionFromWorkflow({
+    required ExecutionTrace executionTrace,
+    required Object workflowUnit,
+    required ILoggedInUser? loggedInUser,
+  }) async {
+    // 1. Security Whitelist Verification (AppConfig Guard)
+    // Ensures that arbitrary modules cannot hijack the global user session.
+    if (!FlutterArtist.appConfig
+        .isAuthorizedSessionEstablisher(workflowUnit.runtimeType)) {
+      throw AppError(
+        errorMessage:
+            "Security Violation: Workflow '${getClassName(workflowUnit)}' attempted "
+            "to establish a user session but is not registered in AppConfig.",
+      );
+    }
+
+    if (loggedInUser == null) {
+      final String message =
+          "No authenticated user data returned from ${getClassNameWithoutGenerics(workflowUnit)}.";
+      executionTrace.addInfo(
+        codeId: "#020060",
+        shortDesc: "Got value >> @loggedInUser: null.\n$message",
+      );
+      showErrorSnackBar(message: message, errorDetails: null);
+      return false;
+    }
+
+    // 2. Log Masked Access Token for Diagnostics
+    String? tokenPrefix = loggedInUser.accessToken;
+    if (tokenPrefix != null) {
+      tokenPrefix =
+          tokenPrefix.length > 2 ? tokenPrefix.substring(0, 2) : tokenPrefix;
+      tokenPrefix = "$tokenPrefix...";
+    }
+
+    executionTrace.addInfo(
+      codeId: "#020100",
+      shortDesc: "Got LoggedInUser: ${debugObjHtml(loggedInUser)}."
+          "\n - @accessToken: <b>$tokenPrefix</b>.",
+    );
+
+    // 3. Safely Update LoggedInUser in RAM & Persistent Storage
+    executionTrace.addNonControllableCall(
+      codeId: "#020200",
+      caller: this,
+      methodName: "_setOrUpdateLoggedInUserSafely",
+      suffixShortDesc: "",
+      parameters: {
+        "loggedInUser": loggedInUser,
+        "requiresTheSameUser": false,
+      },
+    );
+
+    bool success = await _setOrUpdateLoggedInUserSafely(
+      executionTrace: executionTrace,
+      loggedInUser: loggedInUser,
+      requiresTheSameUser: false,
+    );
+    if (!success) {
+      executionTrace.printToConsole();
+      return false;
+    }
+
+    // 4. Trigger Third-Party Login Adapters (Analytics, Push Notifications, etc.)
+    try {
+      executionTrace.addControllableCall(
+        codeId: "#022060",
+        caller: loginLogoutAdapter,
+        methodName: "addThirdPartyLogicOnLogin",
+        suffixShortDesc: "",
+        parameters: {"loggedInUser": loggedInUser},
+        tipDocument: TipDocument.loginLogoutAdapter,
+      );
+      loginLogoutAdapter.addThirdPartyLogicOnLogin(loggedInUser);
+    } catch (e, stackTrace) {
+      final errorInfo = ErrorInfo.fromError(error: e, stackTrace: stackTrace);
+      executionTrace.addInfo(
+        codeId: "#022080",
+        shortDesc:
+            "The ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method threw an error.",
+        errorInfo: errorInfo,
+      );
+      executionTrace.printToConsole();
+      return false;
+    }
+
+    // 5. Bootstrap Global Application Data (Permissions, Master Data, etc.)
+    success = await _performLoadGlobalDataSafely(
+      executionTrace: executionTrace,
+      loggedInUser: loggedInUser,
+    );
+    if (!success) {
+      executionTrace.printToConsole();
+      return false;
+    }
+
+    return true;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   Future<void> _logout() async {
     if (_loggedInUser != null) {
       FaIsarStorage.removeUser(_loggedInUser!.userName);

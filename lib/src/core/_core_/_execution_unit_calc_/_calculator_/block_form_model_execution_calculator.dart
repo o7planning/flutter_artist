@@ -60,7 +60,7 @@ class BlockFormExecutionCalculator {
     // =========================================================================
     // 3. DATA STATE = STALE
     // =========================================================================
-    else if (state.isStale) {
+    else if (state.isLoadedStale) {
       final bool shouldLoad = (hint == FormLoadHint.force || isVisible);
       if (shouldLoad) {
         final bool isLoadIntent = intent is FormModelDataLoadIntent;
@@ -104,7 +104,7 @@ class BlockFormExecutionCalculator {
     // =========================================================================
     // 5. DATA STATE = FRESH
     // =========================================================================
-    else if (state.isFresh) {
+    else if (state.isLoadedFresh) {
       if (hint == FormLoadHint.force) {
         if (formMode == BlockFormMode.creation) {
           return BlockFormNextUnitOutput(

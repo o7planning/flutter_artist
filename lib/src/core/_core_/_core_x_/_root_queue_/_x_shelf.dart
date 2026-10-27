@@ -166,7 +166,7 @@ abstract class XShelf extends XRootQueueItem {
         );
         if (hasActiveUiX) {
           if (xScalar.scalar.dataState.isPending ||
-              xScalar.scalar.dataState.isStale) {
+              xScalar.scalar.dataState.isLoadedStale) {
             xScalar.setQueryHintToGreater(QueryHint.force);
           }
         }
@@ -182,7 +182,7 @@ abstract class XShelf extends XRootQueueItem {
         );
         if (blockXBlockRep) {
           if (xBlock.block.dataState.isPending ||
-              xBlock.block.dataState.isStale) {
+              xBlock.block.dataState.isLoadedStale) {
             xBlock.setQueryHintToGreater(QueryHint.force);
           }
         }
@@ -302,6 +302,10 @@ abstract class XShelf extends XRootQueueItem {
 
   XBlock? findXBlockByName(String name) {
     return xBlockMap[name];
+  }
+
+  XBlockCurrentItemModel? findXBlockCurrentItemModelByName(String name) {
+    return xBlockCurrentItemModelMap[name];
   }
 
   XScalar? findXScalarByName(String name) {

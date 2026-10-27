@@ -94,7 +94,7 @@ void main() {
         targetStageOrder: 10,
         viewingStageOrder: 10,
         hasForm: true,
-        targetStageDataState: StageDataStateSubmissionAttemptedSuccess(),
+        targetStageDataState: StageDataStateSubmissionSuccess(),
         // Already submitted
         targetFormDataState: const FormDataStateLoadedFresh(),
       );

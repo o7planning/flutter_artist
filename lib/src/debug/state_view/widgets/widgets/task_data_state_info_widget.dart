@@ -50,9 +50,9 @@ class TaskDataStateInfoWidget extends BaseInfoWidget {
         );
       case TaskDataStateLoadedFresh():
         return null;
-      case TaskDataStateSubmissionAttemptedSuccess():
+      case TaskDataStateCompleted():
         return null;
-      case TaskDataStateSubmissionAttemptedFailed():
+      case TaskDataStateSubmissionFailed():
         return null;
     }
   }

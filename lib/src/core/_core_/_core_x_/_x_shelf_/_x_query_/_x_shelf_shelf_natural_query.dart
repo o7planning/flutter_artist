@@ -17,7 +17,7 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
         );
         if (hasXActiveUI) {
           if (xScalar.scalar.dataState.isPending ||
-              xScalar.scalar.dataState.isStale) {
+              xScalar.scalar.dataState.isLoadedStale) {
             xScalar.setQueryHintToGreater(QueryHint.force);
           }
         }
@@ -37,7 +37,7 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
         );
         if (blockVisibleX) {
           if (xBlock.block.dataState.isPending ||
-              xBlock.block.dataState.isStale) {
+              xBlock.block.dataState.isLoadedStale) {
             xBlock.setQueryHintToGreater(QueryHint.force);
           }
         }

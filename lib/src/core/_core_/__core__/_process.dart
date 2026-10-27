@@ -200,25 +200,25 @@ abstract class Prozess<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   ProzessStructure<STAGE_ENUM, PROZESS_CONTEXT_DATA> defineProzessStructure();
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Future<ApiResult<PROZESS_INIT_DATA>> performLoadInitData();
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   STAGE_ENUM? determineNextStage({
     required List<STAGE_ENUM> orderedActiveStageEnums,
     required PROZESS_CONTEXT_DATA sharedContext,
     required PROZESS_INIT_DATA prozessInitData,
   });
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   PROZESS_CONTEXT_DATA createProzessContextData({
     required PROZESS_INIT_DATA prozessInitData,
   });
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   bool isReexecutionAllowed({required PROZESS_INIT_DATA prozessInitData});
 
   // ***************************************************************************
@@ -238,7 +238,7 @@ abstract class Prozess<
       return null;
     }
     print("lastActiveStage.dataState: ${lastActiveStage.dataState}");
-    if (!lastActiveStage.dataState.isSubmissionAttemptedSuccess) {
+    if (!lastActiveStage.dataState.isSubmissionSuccess) {
       return lastActiveStage;
     }
     return null;
@@ -520,18 +520,20 @@ abstract class Prozess<
     }
 
     // 3. Reset Stage State
-    _resetStageStateInternal(viewingStage!);
+    _resetProzessAndStageStateInternal(viewingStage!);
 
     // 4. Load Stage Init Data
     return await viewingStage!._restartAfterPrecheckSuccessful();
   }
 
-  void _resetStageStateInternal(Stage stage) {
+  void _resetProzessAndStageStateInternal(Stage stage) {
+    _dataState = ProzessDataStateTransitionSuccess();
     stage._dataState = const StageDataStatePending();
 
     if (stage.formModel != null) {
-      stage.formModel!
-          ._clearDataWithDataState(formDataState: const FormDataStatePending());
+      stage.formModel!._clearDataWithDataState(
+        formDataState: const FormDataStatePending(),
+      );
     }
 
     bool pastTargetStage = false;
@@ -543,8 +545,9 @@ abstract class Prozess<
       if (pastTargetStage) {
         s._dataState = const StageDataStateNone();
         s._stageRouteStatus = StageRouteStatus.unreached;
-        s.formModel
-            ?._clearDataWithDataState(formDataState: const FormDataStateNone());
+        s.formModel?._clearDataWithDataState(
+          formDataState: const FormDataStateNone(),
+        );
       }
     }
   }
@@ -721,8 +724,12 @@ abstract class Prozess<
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
-      ProzessRestartResult<STAGE_ENUM, PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
-          precheck: null),
+      ProzessRestartResult<
+          STAGE_ENUM, //
+          PROZESS_INIT_DATA,
+          PROZESS_CONTEXT_DATA>(
+        precheck: null,
+      ),
       objectCaller: this,
       methodName: '_unitRestartProzess',
     );
@@ -1050,41 +1057,7 @@ abstract class Prozess<
         determinedNextStageEnum: determinedNextStageEnum,
       );
       // Now determinedNextStageEnum is valid.
-      _dataState = ProzessDataStateTransitioningSuccess();
-      if (determinedNextStageEnum != null) {
-        final Stage determinedNextStage =
-            findStageByEnum(determinedNextStageEnum);
-        executionTrace.addInfo(
-          codeId: "#124840",
-          shortDesc:
-              "Add ${debugObjHtml(determinedNextStage)} to Active Route.",
-        );
-        // New Frontier Stage:
-        determinedNextStage._setStageRouteStatusToActive();
-
-        for (Stage stage in _orderedStages) {
-          if (stage._stageRouteStatus != StageRouteStatus.active &&
-              stage.stageId.stageOrder <
-                  determinedNextStage.stageId.stageOrder) {
-            executionTrace.addInfo(
-              codeId: "#124860",
-              shortDesc:
-                  "Set ${debugObjHtml(determinedNextStage)}.stageRouteStatus to Bypassed.",
-            );
-            stage._setStageRouteStatusToBypassed();
-          }
-        }
-        determinedNextStage._dataState = StageDataStatePending();
-        _viewingStageEnum = determinedNextStageEnum;
-        executionTrace.addInfo(
-          codeId: "#124900",
-          shortDesc: "Debug.",
-          parameters: {
-            "viewingStageEnum": _viewingStageEnum,
-            "orderedActiveStageEnums": orderedActiveStageEnums,
-          },
-        );
-      }
+      _dataState = ProzessDataStateTransitionSuccess();
     } catch (e, stackTrace) {
       ProzessErrorInfo prozessErrorInfo = ProzessErrorInfo(
         prozessErrorMethod: ProzessErrorMethod.determineInitialStage,
@@ -1108,34 +1081,115 @@ abstract class Prozess<
       );
       return;
     }
+    //
+    // determinedNextStageEnum == null
+    //
+    //*** In _process.dart (_unitDetermineNextStage method) ***//
+
+    //
+    // determinedNextStageEnum == null (No more stages -> Workflow finished)
+    //
     if (determinedNextStageEnum == null) {
-      try {
-        await onProzessCompleted();
-        //
-        _dataState = ProzessDataStateCompleted();
-      } catch (e, stackTrace) {
-        ProzessErrorInfo prozessErrorInfo = ProzessErrorInfo(
-          prozessErrorMethod: ProzessErrorMethod.determineInitialStage,
-          error: e,
-          errorStackTrace: stackTrace,
-        );
-        final ErrorInfo errorInfo = _handleError(
-          module: module,
-          methodName: "onProzessCompleted",
-          error: e,
-          stackTrace: stackTrace,
-          showSnackBar: true,
-          tipDocument: null,
-        );
-        executionResult._setErrorInfo(errorInfo: errorInfo);
-        // ProzessDataStateTransitioningFailed.
-        _dataState =
-            ProzessDataStateUtils.calculateDataStateOnDetermineNextStageError(
-          currentDataState: _dataState,
-          errorInfo: prozessErrorInfo,
-        );
-        return;
+      // =======================================================================
+      // AUTOMATIC SESSION ESTABLISHMENT (If this Prozess is a SessionEstablisher)
+      // =======================================================================
+      if (this is SessionEstablisher) {
+        try {
+          final ILoggedInUser? authenticatedUser =
+              (this as SessionEstablisher).extractAuthenticatedUser();
+
+          final bool sessionSuccess =
+              await FlutterArtist.globalsManager._establishSessionFromWorkflow(
+            executionTrace: executionTrace,
+            workflowUnit: this,
+            loggedInUser: authenticatedUser,
+          );
+
+          if (!sessionSuccess) {
+            throw AppError(
+              errorMessage:
+                  "Failed to initialize global user session and application data.",
+            );
+          }
+        } catch (e, stackTrace) {
+          final ProzessErrorInfo prozessErrorInfo = ProzessErrorInfo(
+            prozessErrorMethod: ProzessErrorMethod.determineInitialStage,
+            error: e,
+            errorStackTrace: stackTrace,
+          );
+          final ErrorInfo errorInfo = _handleError(
+            module: module,
+            methodName: "establishSession",
+            error: e,
+            stackTrace: stackTrace,
+            showSnackBar: true,
+            tipDocument: null,
+          );
+          executionResult._setErrorInfo(errorInfo: errorInfo);
+          _dataState =
+              ProzessDataStateUtils.calculateDataStateOnDetermineNextStageError(
+            currentDataState: _dataState,
+            errorInfo: prozessErrorInfo,
+          );
+          return;
+        }
       }
+
+      _dataState = const ProzessDataStateCompleted();
+      await __onProzessCompletedInternal();
+    }
+    // determinedNextStageEnum != null
+    else {
+      final Stage determinedNextStage =
+          findStageByEnum(determinedNextStageEnum);
+      executionTrace.addInfo(
+        codeId: "#124840",
+        shortDesc: "Add ${debugObjHtml(determinedNextStage)} to Active Route.",
+      );
+      // New Frontier Stage:
+      determinedNextStage._setStageRouteStatusToActive();
+
+      for (Stage stage in _orderedStages) {
+        if (stage._stageRouteStatus != StageRouteStatus.active &&
+            stage.stageId.stageOrder < determinedNextStage.stageId.stageOrder) {
+          executionTrace.addInfo(
+            codeId: "#124860",
+            shortDesc:
+                "Set ${debugObjHtml(determinedNextStage)}.stageRouteStatus to Bypassed.",
+          );
+          stage._setStageRouteStatusToBypassed();
+        }
+      }
+      determinedNextStage._dataState = StageDataStatePending();
+      _viewingStageEnum = determinedNextStageEnum;
+      executionTrace.addInfo(
+        codeId: "#124900",
+        shortDesc: "Debug.",
+        parameters: {
+          "viewingStageEnum": _viewingStageEnum,
+          "orderedActiveStageEnums": orderedActiveStageEnums,
+        },
+      );
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Future<void> __onProzessCompletedInternal() async {
+    try {
+      await onProzessCompleted();
+      //
+      _dataState = ProzessDataStateCompleted();
+    } catch (e, stackTrace) {
+      final ErrorInfo errorInfo = _handleError(
+        module: module,
+        methodName: "onProzessCompleted",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
     }
   }
 

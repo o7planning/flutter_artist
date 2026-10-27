@@ -373,7 +373,7 @@ class DebugBlockSyncSessionStateDialog<ID extends Comparable>
               Expanded(
                 child: _buildPlanDetailItem(
                   "Block Data State",
-                  "${snapshot.blockDataState.toString()} ${snapshot.blockDataState.isStale ? '(Stale)' : ''}",
+                  "${snapshot.blockDataState.toString()} ${snapshot.blockDataState.isLoadedStale ? '(Stale)' : ''}",
                 ),
               ),
               Expanded(

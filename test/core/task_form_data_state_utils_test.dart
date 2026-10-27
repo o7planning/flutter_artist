@@ -133,7 +133,7 @@ void main() {
     test('Should transition to LoadedStale when task submission failed', () {
       final result = TaskFormDataStateUtils.calculateNewLazyDataState(
         currentFormDataState: const FormDataStateLoadedFresh(),
-        taskDataState: TaskDataStateSubmissionAttemptedFailed(
+        taskDataState: TaskDataStateSubmissionFailed(
           submissionErrorInfo: mockTaskErrorInfo,
         ),
         hasInitData: true,

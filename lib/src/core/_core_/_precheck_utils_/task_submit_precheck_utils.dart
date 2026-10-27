@@ -27,7 +27,7 @@ class TaskSubmitPrecheckUtils {
       );
     }
 
-    if (taskDataState.isStale) {
+    if (taskDataState.isLoadedStale) {
       return Actionable<TaskSubmitPrecheck>.no(
         errCode: TaskSubmitPrecheck.taskInStaleState,
       );
@@ -35,7 +35,7 @@ class TaskSubmitPrecheckUtils {
 
     // 3. Priority 3: Prevent re-submitting an already successfully submitted task
     // (User must restart the task if they wish to modify and submit again).
-    if (taskDataState.isSubmissionAttemptedSuccess) {
+    if (taskDataState.isCompleted) {
       return Actionable<TaskSubmitPrecheck>.no(
         errCode: TaskSubmitPrecheck.taskAlreadySubmitted,
       );
@@ -55,7 +55,7 @@ class TaskSubmitPrecheckUtils {
         return Actionable<TaskSubmitPrecheck>.no(
           errCode: TaskSubmitPrecheck.formInFatalErrorState,
         );
-      } else if (formDataState.isStale) {
+      } else if (formDataState.isLoadedStale) {
         return Actionable<TaskSubmitPrecheck>.no(
           errCode: TaskSubmitPrecheck.formInStaleState,
         );

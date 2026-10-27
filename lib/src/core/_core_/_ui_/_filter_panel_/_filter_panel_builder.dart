@@ -5,7 +5,7 @@ class _FilterPanelBuilder extends _ContextProviderView {
   final Widget Function() build;
 
   final BlockViewContext? blockViewContext;
-  final ScalarViewContext? scalarContextType;
+  final ScalarViewContext? scalarViewContext;
 
   const _FilterPanelBuilder({
     super.key,
@@ -14,7 +14,7 @@ class _FilterPanelBuilder extends _ContextProviderView {
     required this.filterModel,
     required this.build,
     this.blockViewContext,
-    this.scalarContextType,
+    this.scalarViewContext,
   });
 
   @override
@@ -44,7 +44,7 @@ class _FilterPanelBuilderState
   BlockViewContext? get blockViewContext => widget.blockViewContext;
 
   @override
-  ScalarViewContext? get scalarContextType => widget.scalarContextType;
+  ScalarViewContext? get scalarContextType => widget.scalarViewContext;
 
   @override
   ProzessViewContext? get prozessViewContext => null;

@@ -77,7 +77,7 @@ void main() {
         checkBusy: true,
         isBusy: false,
         checkAllow: true,
-        taskDataState: TaskDataStateSubmissionAttemptedSuccess(),
+        taskDataState: TaskDataStateCompleted(),
         isReexecutionAllowed: false, // Bị khóa
         checkRestartAllowed: () => CheckAllowResult.allowed(),
       );
@@ -109,7 +109,7 @@ void main() {
         checkBusy: true,
         isBusy: false,
         checkAllow: true,
-        taskDataState: TaskDataStateSubmissionAttemptedFailed(
+        taskDataState: TaskDataStateSubmissionFailed(
           submissionErrorInfo: TaskErrorInfo(
             taskErrorMethod: TaskErrorMethod.isReexecutionAllowed,
             error: "Error",
@@ -153,7 +153,7 @@ void main() {
         checkBusy: true,
         isBusy: false,
         checkAllow: true,
-        taskDataState: TaskDataStateSubmissionAttemptedSuccess(),
+        taskDataState: TaskDataStateCompleted(),
         isReexecutionAllowed: true,
         checkRestartAllowed: () =>
             CheckAllowResult.error(errorInfo: fakeErrorInfo),

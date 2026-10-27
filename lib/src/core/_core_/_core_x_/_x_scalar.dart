@@ -20,7 +20,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
       ExecutionUnitResult<dynamic>>? _executionIntent;
 
   bool get isLazy {
-    return scalar.dataState.isPending || scalar.dataState.isStale;
+    return scalar.dataState.isPending || scalar.dataState.isLoadedStale;
   }
 
   final XFilterModel xFilterModel;

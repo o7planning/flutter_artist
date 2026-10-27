@@ -108,10 +108,6 @@ abstract class BaseFormModel<
   /// Returns the runtime type of additional form related data.
   Type getAdditionalFormRelatedDataType() => ADDITIONAL_FORM_RELATED_DATA;
 
-  // ===========================================================================
-
-  /// Returns a string definition of class parameters for debugging purposes.
-  String debugClassParametersDefinition();
 
   // ===========================================================================
   // DOMAIN CONTRACTS (To be implemented by subclasses)
@@ -125,7 +121,7 @@ abstract class BaseFormModel<
 
   /// Internal hook resolving baseline initial values for simple form properties.
   /// BlockFormModel delegates to edit/creation methods, while ActivityFormModel delegates to initData.
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Map<String, dynamic>? _internalResolveInitialSimplePropValues({
     required ExecutionTrace executionTrace,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
@@ -133,7 +129,7 @@ abstract class BaseFormModel<
 
   /// Internal hook resolving baseline initial selection wrapper for a multi-option property.
   /// BlockFormModel delegates to edit/creation methods, while ActivityFormModel delegates to initData.
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   OptValueWrap? _internalResolveInitialMultiOptPropValue({
     required ExecutionTrace executionTrace,
     required String multiOptPropName,
@@ -154,7 +150,7 @@ abstract class BaseFormModel<
   });
 
   /// Asynchronously fetches auxiliary metadata specifically required for form display.
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Future<ADDITIONAL_FORM_RELATED_DATA>
       _internalPerformLoadAdditionalFormRelatedData({
     required Object? rawDomainData,
@@ -268,7 +264,7 @@ abstract class BaseFormModel<
   }
 
   /// Checks whether form fields can be patched based on current system and form state.
-  Actionable<FormModelPatchFormFieldsPrecheck> __checkBeforePatchFormFields({
+  Actionable<FormModelPatchFormFieldsPrecheck> _checkBeforePatchFormFields({
     required bool checkBusy,
   }) {
     return FormModelPatchFormFieldsPrecheckUtils.checkBeforePatchFormFields(
@@ -1213,13 +1209,13 @@ abstract class BaseFormModel<
   }
 
   /// Extracts update values foAbsr simple properties from form input.
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
     required FORM_INPUT formInput,
   });
 
   /// Extracts update value for a multi-option property from form input.
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   OptValueWrap? extractUpdateValueForMultiOptProp({
     required String multiOptPropName,
     required SelectionType selectionType,
@@ -1253,7 +1249,7 @@ abstract class BaseFormModel<
   ///   );
   /// }
   /// ```
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   FormModelStructure defineFormModelStructure();
 
   FORM_OUTPUT _getFormOutput() {
@@ -1274,7 +1270,7 @@ abstract class BaseFormModel<
   ///   return MapBasedFormOutput(formMapData: formMapData);
   /// }
   /// ```
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   FORM_OUTPUT convertToFormOutput({
     required Map<String, dynamic> formMapData,
   });

@@ -49,14 +49,14 @@ class StageFormEnablePrecheckUtils {
       );
     }
 
-    if (targetStageDataState.isStale) {
+    if (targetStageDataState.isLoadedStale) {
       return Actionable<StageFormEnablePrecheck>.no(
         errCode: StageFormEnablePrecheck.stageInStaleState,
       );
     }
 
     // 6. Priority 6: If stage was already successfully submitted, its form must remain locked (read-only).
-    if (targetStageDataState.isSubmissionAttemptedSuccess) {
+    if (targetStageDataState.isSubmissionSuccess) {
       return Actionable<StageFormEnablePrecheck>.no(
         errCode: StageFormEnablePrecheck.stageAlreadySubmitted,
       );
@@ -76,7 +76,7 @@ class StageFormEnablePrecheckUtils {
         return Actionable<StageFormEnablePrecheck>.no(
           errCode: StageFormEnablePrecheck.formInFatalErrorState,
         );
-      } else if (targetFormDataState.isStale) {
+      } else if (targetFormDataState.isLoadedStale) {
         return Actionable<StageFormEnablePrecheck>.no(
           errCode: StageFormEnablePrecheck.formInStaleState,
         );

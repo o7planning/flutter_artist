@@ -14,9 +14,9 @@ sealed class ScalarDataState implements DataState {
 
   bool get isLoaded => this is ScalarDataStateLoaded;
 
-  bool get isFresh => this is ScalarDataStateLoadedFresh;
+  bool get isLoadedFresh => this is ScalarDataStateLoadedFresh;
 
-  bool get isStale => this is ScalarDataStateLoadedStale;
+  bool get isLoadedStale => this is ScalarDataStateLoadedStale;
 
   /// Quick accessor to diagnostic error payload across all error-carrying states.
   ScalarErrorInfo? get errorInfo;

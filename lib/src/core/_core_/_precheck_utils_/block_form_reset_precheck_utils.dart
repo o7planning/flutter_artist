@@ -39,7 +39,7 @@ class BlockFormResetPrecheckUtils {
       return Actionable<BlockFormResetPrecheck>.no(
         errCode: BlockFormResetPrecheck.formInFatalErrorState,
       );
-    } else if (formDataState.isStale) {
+    } else if (formDataState.isLoadedStale) {
       return Actionable<BlockFormResetPrecheck>.no(
         errCode: BlockFormResetPrecheck.formInStaleState,
       );

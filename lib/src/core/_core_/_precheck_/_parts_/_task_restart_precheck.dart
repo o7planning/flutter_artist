@@ -8,6 +8,11 @@ enum TaskRestartPrecheck implements Precheck {
     message: "The application is currently busy.",
     details: ["The system is currently busy executing another operation."],
   ),
+  cancelled(
+    precheckCode: PrecheckCode.cancelled,
+    message: "Task restart cancelled.",
+    details: ["The operation was cancelled by the user."],
+  ),
 
   /// Reloading initial data is restricted by the current task configuration.
   reloadRestrictedByConfig(

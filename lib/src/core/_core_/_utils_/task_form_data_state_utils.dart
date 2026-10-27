@@ -71,11 +71,11 @@ class TaskFormDataStateUtils {
         return FormDataStateLoadedStale.hostDataRefreshed();
 
       // Case 4: Task submission attempted success
-      case TaskDataStateSubmissionAttemptedSuccess():
+      case TaskDataStateCompleted():
         return currentFormDataState;
 
       // Case 5: Task submission attempted failed
-      case TaskDataStateSubmissionAttemptedFailed(:final submissionErrorInfo):
+      case TaskDataStateSubmissionFailed(:final submissionErrorInfo):
         return FormDataStateLoadedStale.failed(
           errorInfo: submissionErrorInfo.toErrorInfo(),
         );

@@ -19,17 +19,17 @@ class TaskRestartPrecheckUtils {
       );
     }
 
-    // 2. States: isPending, isStale
+    // 2. States: isPending, isLoadedStale
     // If the task allows 'stale' (e.g., due to an event) or is loading for the first time,
     // it implicitly permits fetching initial data without checking re-execution rules.
-    if (taskDataState.isPending || taskDataState.isStale) {
+    if (taskDataState.isPending || taskDataState.isLoadedStale) {
       return Actionable<TaskRestartPrecheck>.yes();
     }
 
-    // 3. Now taskDataState >= Fresh (LoadedFresh, SubmissionAttemptedSuccess, SubmissionAttemptedFailed).
+    // 3. Now taskDataState >= Fresh (LoadedFresh, SubmissionSuccess, SubmissionFailed).
     // Since it already has data, restarting it requires explicit re-execution permission.
     if (!isReexecutionAllowed) {
-      if (taskDataState.isSubmissionAttemptedSuccess) {
+      if (taskDataState.isCompleted) {
         return Actionable<TaskRestartPrecheck>.no(
           errCode: TaskRestartPrecheck.restrictedBySubmitted,
         );

@@ -39,7 +39,7 @@ class _BlockSyncSessionState<ID extends Comparable> extends Equatable
     block.debug._lastPerformQueryItemIds = {};
   }
 
-  void addReceivedEventInfo({
+  void _addReceivedEventInfo({
     required EventSourceType eventSourceType,
     required bool requiresMaxSyncStrategy,
     required BlockViewportSyncStrategy? syncStrategyOnFullQueryMode,

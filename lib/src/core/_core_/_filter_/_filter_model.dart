@@ -200,7 +200,7 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   FilterModelStructure defineFilterModelStructure();
 
   // ***************************************************************************
@@ -209,7 +209,7 @@ abstract class FilterModel<
   ///
   /// Abstract method:
   ///
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Future<XData?> performLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
@@ -222,7 +222,7 @@ abstract class FilterModel<
   // ABSTRACT METHOD:
   // ***************************************************************************
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   OptValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
@@ -236,7 +236,7 @@ abstract class FilterModel<
   // ***************************************************************************
 
   // SAME-AS: #0011 (form - specifyDefaultValuesForSimpleProps)
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria();
 
   // ***************************************************************************
@@ -263,7 +263,7 @@ abstract class FilterModel<
   /// }
   /// ```
   ///
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
@@ -279,7 +279,7 @@ abstract class FilterModel<
 
   // OLD: getSimpleCriterionValuesFromFilterInput.
   // SAME-AS: #0010 (form - extractUpdateValuesForSimpleProps)
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleTildeCriteria({
     required FILTER_INPUT filterInput,
   });
@@ -301,7 +301,7 @@ abstract class FilterModel<
   ///  }
   /// ```
   ///
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   FILTER_CRITERIA createNewFilterCriteria({
     required Map<String, dynamic> tildeCriteriaMap,
   });

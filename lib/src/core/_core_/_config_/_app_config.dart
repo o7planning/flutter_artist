@@ -74,4 +74,8 @@ class EffectiveAppConfig {
       globalDataAdapter: config.globalDataAdapter,
     );
   }
+
+  bool isAuthorizedSessionEstablisher(Type loginableModule)  {
+    return true;
+  }
 }

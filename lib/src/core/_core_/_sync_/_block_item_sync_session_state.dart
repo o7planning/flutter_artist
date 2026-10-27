@@ -39,7 +39,7 @@ class _BlockItemSyncSessionState<ID extends Comparable> extends Equatable
   }
 
   /// Appends incoming event metadata that targeted this specific item.
-  void addReceivedEventInfo({
+  void _addReceivedEventInfo({
     required EventSourceType eventSourceType,
     required List<Type> mainDataTypes,
     required List<Type> extraDataTypes,

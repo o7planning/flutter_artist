@@ -13,17 +13,15 @@ sealed class StageDataState implements DataState {
 
   bool get isLoaded => this is StageDataStateLoaded;
 
-  bool get isFresh => this is StageDataStateLoadedFresh;
+  bool get isLoadedFresh => this is StageDataStateLoadedFresh;
 
-  bool get isStale => this is StageDataStateLoadedStale;
+  bool get isLoadedStale => this is StageDataStateLoadedStale;
 
   bool get isSubmissionAttempted => this is StageDataStateSubmissionAttempted;
 
-  bool get isSubmissionAttemptedSuccess =>
-      this is StageDataStateSubmissionAttemptedSuccess;
+  bool get isSubmissionSuccess => this is StageDataStateSubmissionSuccess;
 
-  bool get isSubmissionAttemptedFailed =>
-      this is StageDataStateSubmissionAttemptedFailed;
+  bool get isSubmissionFailed => this is StageDataStateSubmissionFailed;
 
   /// Quick accessor to diagnostic error payload across all error-carrying states.
   StageErrorInfo? get errorInfo;
@@ -243,9 +241,9 @@ sealed class StageDataStateSubmissionAttempted extends StageDataState {
 }
 
 /// Step submission confirmed, advancing prozess to next stage.
-final class StageDataStateSubmissionAttemptedSuccess
+final class StageDataStateSubmissionSuccess
     extends StageDataStateSubmissionAttempted {
-  const StageDataStateSubmissionAttemptedSuccess();
+  const StageDataStateSubmissionSuccess();
 
   @override
   String get name => "submissionAttempted + success";
@@ -255,8 +253,7 @@ final class StageDataStateSubmissionAttemptedSuccess
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is StageDataStateSubmissionAttemptedSuccess;
+      identical(this, other) || other is StageDataStateSubmissionSuccess;
 
   @override
   int get hashCode => runtimeType.hashCode;
@@ -269,11 +266,11 @@ final class StageDataStateSubmissionAttemptedSuccess
 }
 
 /// Step submission failed (validation/backend); stage remains active to fix inputs.
-final class StageDataStateSubmissionAttemptedFailed
+final class StageDataStateSubmissionFailed
     extends StageDataStateSubmissionAttempted {
   final StageErrorInfo submissionErrorInfo;
 
-  const StageDataStateSubmissionAttemptedFailed({
+  const StageDataStateSubmissionFailed({
     required this.submissionErrorInfo,
   });
 
@@ -286,7 +283,7 @@ final class StageDataStateSubmissionAttemptedFailed
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is StageDataStateSubmissionAttemptedFailed &&
+      other is StageDataStateSubmissionFailed &&
           runtimeType == other.runtimeType &&
           submissionErrorInfo == other.submissionErrorInfo;
 

@@ -169,7 +169,7 @@ class BlockQueryStateCalculator {
             } else {
               resolvedStrategy = ListUpdateStrategy.merge;
               // Incremental fetch/pagination failure preserves baseline data freshness while attaching transient error
-              resolvedState = input.currentDataState.isStale
+              resolvedState = input.currentDataState.isLoadedStale
                   ? input.currentDataState
                   : BlockDataStateLoadedFresh(
                       transientErrorInfo: input.blockErrorInfo,

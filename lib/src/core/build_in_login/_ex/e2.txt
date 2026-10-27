@@ -1,0 +1,169 @@
+// =============================================================================
+// 1. STAGE ENUM DEFINITION
+// =============================================================================
+enum MfaLoginStageEnum implements StageEnum {
+  credentials(stageOrder: 1, stageCode: "credentials", displayTitle: "Sign In"),
+  otpVerification(stageOrder: 2, stageCode: "otp", displayTitle: "Verify OTP");
+
+  @override
+  final int stageOrder;
+  @override
+  final String stageCode;
+  @override
+  final String displayTitle;
+
+  const MfaLoginStageEnum({
+    required this.stageOrder,
+    required this.stageCode,
+    required this.displayTitle,
+  });
+}
+
+// =============================================================================
+// 2. STAGE RESULT DATA (Dữ liệu trả về của từng Stage)
+// =============================================================================
+
+/// Result of Stage 1: Either direct login success OR a challenge token for OTP.
+class CredentialsStageResult extends StageResultData {
+  final bool requiresOtp;
+  final String? tempMfaToken;
+  final String? maskedPhoneOrEmail;
+  final LoggedInUserData? directUser; // Non-null if 2FA is disabled for this user
+
+  CredentialsStageResult({
+    required this.requiresOtp,
+    this.tempMfaToken,
+    this.maskedPhoneOrEmail,
+    this.directUser,
+  });
+
+  @override
+  Map<String, dynamic> toDebugMap() => {
+        "requiresOtp": requiresOtp,
+        "tempMfaToken": tempMfaToken != null ? "***" : null,
+        "maskedPhoneOrEmail": maskedPhoneOrEmail,
+        "directUser": directUser,
+      };
+}
+
+/// Result of Stage 2: Final verified user after OTP check.
+class OtpStageResult extends StageResultData {
+  final LoggedInUserData verifiedUser;
+
+  OtpStageResult({required this.verifiedUser});
+
+  @override
+  Map<String, dynamic> toDebugMap() => {
+        "verifiedUser": verifiedUser,
+      };
+}
+
+// =============================================================================
+// 3. SHARED PROZESS CONTEXT DATA (Kế thừa từ SimpleLoginProzessContextData)
+// =============================================================================
+class MfaLoginContextData extends SimpleLoginProzessContextData<LoggedInUserData> {
+  bool requiresOtp = false;
+  String? tempMfaToken;
+  String? maskedPhoneOrEmail;
+
+  @override
+  void onResetCustomFields() {
+    requiresOtp = false;
+    tempMfaToken = null;
+    maskedPhoneOrEmail = null;
+  }
+
+  @override
+  void updateFromActiveStage({required Stage activeStage}) {
+    final result = activeStage.submitResultData;
+    if (result is CredentialsStageResult) {
+      requiresOtp = result.requiresOtp;
+      tempMfaToken = result.tempMfaToken;
+      maskedPhoneOrEmail = result.maskedPhoneOrEmail;
+      if (!result.requiresOtp) {
+        authenticatedUser = result.directUser; // Gán thẳng nếu không cần OTP!
+      }
+    } else if (result is OtpStageResult) {
+      authenticatedUser = result.verifiedUser; // Gán User sau khi pass OTP!
+    }
+  }
+
+  @override
+  Map<String, dynamic> toCustomDebugMap() => {
+        "requiresOtp": requiresOtp,
+        "maskedPhoneOrEmail": maskedPhoneOrEmail,
+      };
+}
+
+// =============================================================================
+// 4. MAIN PROZESS IMPLEMENTATION (Kế thừa từ SimpleLoginProzess)
+// =============================================================================
+class MfaLoginProzess extends SimpleLoginProzess<
+    MfaLoginStageEnum,
+    LoggedInUserData,
+    MfaLoginContextData> {
+  static const String prozessName = "mfa-login-prozess";
+
+  MfaLoginProzess() : super(name: prozessName);
+
+  @override
+  int get totalStageEnumCount => MfaLoginStageEnum.values.length;
+
+  @override
+  MfaLoginContextData createProzessContextData({
+    required EmptyProzessInitData prozessInitData,
+  }) {
+    return MfaLoginContextData();
+  }
+
+  @override
+  ProzessStructure<MfaLoginStageEnum, MfaLoginContextData> defineProzessStructure() {
+    return ProzessStructure(
+      initialStageId: MfaLoginStageEnum.credentials,
+      stages: [
+        CredentialsStage(
+          stageId: MfaLoginStageEnum.credentials,
+          name: "credentials-stage",
+          formModel: CredentialsStageFormModel(),
+        ),
+        OtpVerificationStage(
+          stageId: MfaLoginStageEnum.otpVerification,
+          name: "otp-stage",
+          formModel: OtpStageFormModel(),
+        ),
+      ],
+    );
+  }
+
+  @override
+  MfaLoginStageEnum? determineNextStage({
+    required List<MfaLoginStageEnum> orderedActiveStageEnums,
+    required MfaLoginContextData sharedContext,
+    required EmptyProzessInitData prozessInitData,
+  }) {
+    // 1. Cold start -> Go to Credentials Stage
+    if (orderedActiveStageEnums.isEmpty) {
+      return MfaLoginStageEnum.credentials;
+    }
+
+    final lastStage = orderedActiveStageEnums.last;
+
+    // 2. After Credentials Stage:
+    if (lastStage == MfaLoginStageEnum.credentials) {
+      if (sharedContext.requiresOtp) {
+        return MfaLoginStageEnum.otpVerification; // Rẽ nhánh sang đòi OTP
+      } else {
+        return null; // Không cần OTP -> Kết thúc Prozess luôn (Bypassed OTP Stage)!
+      }
+    }
+
+    // 3. After OTP Stage -> Finished!
+    return null;
+  }
+
+  @override
+  Future<void> onProzessCompleted() async {
+    // Điều hướng sang Dashboard sau khi Session đã được thiết lập tự động!
+    await FlutterArtist.router.off(DashboardScreen.routeName);
+  }
+}

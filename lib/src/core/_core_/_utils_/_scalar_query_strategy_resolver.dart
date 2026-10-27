@@ -47,7 +47,7 @@ class ScalarQueryStrategyResolver {
     // a. Prozess explicitly mandated force (queryHint == QueryHint.force)
     // b. Active UI component is visible AND data is unready (pending/stale)
     final bool effectiveForce = queryHint == QueryHint.force ||
-        (provideValueContext && (dataState.isPending || dataState.isStale));
+        (provideValueContext && (dataState.isPending || dataState.isLoadedStale));
 
     // If there is no demand to execute or refresh, reject execution immediately
     if (!effectiveForce) {

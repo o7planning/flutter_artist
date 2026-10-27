@@ -6,15 +6,14 @@ part of '../core.dart';
 /// [TaskDataStatePending] -> (loads INIT_DATA) -> [TaskDataStateLoadedFresh]
 /// -> (submission) -> [TaskDataStateSubmissionAttempted]
 abstract class Task<
-INIT_DATA extends TaskInitData, //
-RESULT_DATA extends TaskResultData, //
-FORM_INPUT extends FormInput,
-FORM_OUTPUT extends FormOutput> extends WorkNode<
+    INIT_DATA extends TaskInitData, //
+    RESULT_DATA extends TaskResultData, //
+    FORM_INPUT extends FormInput,
+    FORM_OUTPUT extends FormOutput> extends WorkNode<
     INIT_DATA, //
     RESULT_DATA, //
     FORM_INPUT,
-    FORM_OUTPUT>
-    implements FormHost, ClassDefViewable {
+    FORM_OUTPUT> implements FormHost, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {
@@ -112,25 +111,42 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
   }
 
   // ===========================================================================
+  // UI & CONFIRMATION HOOKS
+  // ===========================================================================
+
+  @OverridableMethodAnnotation()
+  CustomConfirmation? createCustomRestartConfirmation() {
+    return null;
+  }
+
+  @OverridableMethodAnnotation()
+  String get restartConfirmMessage =>
+      "Are you sure you want to restart this task? "
+      "All current progress and unsaved data will be cleared.";
+
+  // ===========================================================================
   // ABSTRACT CONTRACTS
   // ===========================================================================
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Future<ApiResult<INIT_DATA>> performLoadInitData();
 
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   Future<ApiResult<RESULT_DATA>> performSubmit({
     required INIT_DATA initData,
     required FORM_OUTPUT? formData,
   });
 
+  @AbstractMethodAnnotation()
+  Future<void> onTaskCompleted();
+
   /// Evaluates whether this Task can be restarted to reload data and reset progress.
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   bool isReexecutionAllowed({required INIT_DATA initData});
 
   /// Evaluates whether this Task permits submitting new forms repeatedly
   /// without requiring a full restart.
-  @_AbstractMethodAnnotation()
+  @AbstractMethodAnnotation()
   bool isMultipleSubmissionsAllowed({required INIT_DATA initData});
 
   // ===========================================================================
@@ -139,7 +155,8 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   void _resetTaskStateInternal() {
     _dataState = const TaskDataStatePending.initial();
-    _clearData(); // Clears _initData and _submitResultData inherited from WorkNode
+    // Clears _initData and _submitResultData inherited from WorkNode.
+    _clearData();
 
     if (formModel != null) {
       formModel!._clearDataWithDataState(
@@ -170,8 +187,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     executionTrace.addInfo(
       codeId: "#090100",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()} (Restart Task)",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Restart Task)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -207,6 +223,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
         tipDocument: null,
       );
       executionResult._setErrorInfo(errorInfo: errorInfo);
+      // TODO Xem lai.........
       _dataState = TaskDataStatePending.failed(errorInfo: taskErrorInfo);
       return;
     }
@@ -237,7 +254,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       if (taskInitData == null) {
         throw AppError(
           errorMessage:
-          "${getClassName(this)}.performLoadInitData() return null InitData",
+              "${getClassName(this)}.performLoadInitData() return null InitData",
         );
       }
     } catch (e, stackTrace) {
@@ -261,7 +278,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
       if (formModel != null) {
         final newFormDataState =
-        TaskFormDataStateUtils.calculateNewLazyDataState(
+            TaskFormDataStateUtils.calculateNewLazyDataState(
           currentFormDataState: formModel!.dataState,
           taskDataState: _dataState,
           hasInitData: _initData != null,
@@ -275,8 +292,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       executionTrace.addInfo(
         codeId: "#090500",
         shortDesc:
-        "The ${debugObjHtml(
-            this)}.performLoadInitData() method encountered an error!",
+            "The ${debugObjHtml(this)}.performLoadInitData() method encountered an error!",
         errorInfo: errorInfo,
       );
       __refreshLoadingInitDataState(isLoading: false);
@@ -376,7 +392,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       executionTrace.addInfo(
         codeId: "#090300",
         shortDesc:
-        "Transitioning FormModel state to ${newFormDataState.toBriefInfo()}.",
+            "Transitioning FormModel state to ${newFormDataState.toBriefInfo()}.",
       );
       formModel!._formModelStructure._setFormDataState(
         formDataState: newFormDataState,
@@ -394,7 +410,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     required ExecutionUnitType executionUnitType,
     required XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT> thisXTask,
     required TaskSubmitIntent<INIT_DATA, RESULT_DATA, FORM_OUTPUT>
-    executionIntent,
+        executionIntent,
   }) async {
     __assertThisXTask(thisXTask);
     thisXTask._createAndSetTaskIntentDone(
@@ -404,8 +420,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     executionTrace.addInfo(
       codeId: "#093100",
       shortDesc:
-      "${debugObjHtml(this)} -> Begin ${executionUnitType
-          .asDebugExecutionUnit()} (Submit)",
+          "${debugObjHtml(this)} -> Begin ${executionUnitType.asDebugExecutionUnit()} (Submit)",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -434,7 +449,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
         error: e,
         errorStackTrace: stackTrace,
       );
-      _dataState = TaskDataStateSubmissionAttemptedFailed(
+      _dataState = TaskDataStateSubmissionFailed(
         submissionErrorInfo: taskErrorInfo,
       );
       return;
@@ -449,12 +464,10 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       if (data == null) {
         throw ApiError(
           errorMessage:
-          "${getClassNameWithoutGenerics(
-              this)}.performSubmit() return ResultData null",
+              "${getClassNameWithoutGenerics(this)}.performSubmit() return ResultData null",
         );
       }
       _submitResultData = data;
-      _dataState = TaskDataStateSubmissionAttemptedSuccess();
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         module: module,
@@ -471,10 +484,52 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
         error: e,
         errorStackTrace: stackTrace,
       );
-      _dataState = TaskDataStateSubmissionAttemptedFailed(
+      _dataState = TaskDataStateSubmissionFailed(
         submissionErrorInfo: taskErrorInfo,
       );
       return;
+    }
+    // =======================================================================
+    // AUTOMATIC SESSION ESTABLISHMENT (If this Task is a SessionEstablisher)
+    // =======================================================================
+    if (this is SessionEstablisher) {
+      final ILoggedInUser? authenticatedUser =
+          (this as SessionEstablisher).extractAuthenticatedUser();
+
+      final bool sessionSuccess =
+          await FlutterArtist.globalsManager._establishSessionFromWorkflow(
+        executionTrace: executionTrace,
+        workflowUnit: this,
+        loggedInUser: authenticatedUser,
+      );
+
+      if (!sessionSuccess) {
+        throw AppError(
+          errorMessage:
+              "Failed to initialize global user session and application data.",
+        );
+      }
+    }
+    // -------------------------------------------------------------------------
+    // COMPLETE:
+    // -------------------------------------------------------------------------
+    _dataState = TaskDataStateCompleted();
+    await __onTaskCompleted();
+    //
+  }
+
+  Future<void> __onTaskCompleted() async {
+    try {
+      await onTaskCompleted();
+    } catch (e, stackTrace) {
+      final ErrorInfo errorInfo = _handleError(
+        module: module,
+        methodName: "onTaskCompleted",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
     }
   }
 
@@ -482,31 +537,28 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
   // PUBLIC CONTROLS
   // ===========================================================================
 
-  /// Triggers asynchronous loading of [INIT_DATA] through the framework queue.
-  Future<TaskRestartResult<INIT_DATA, RESULT_DATA>> restart() async {
+  Future<TaskRestartResult<INIT_DATA, RESULT_DATA>> restart({
+    bool askConfirm = true,
+  }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "restart",
       parameters: null,
       isLibMethod: true,
     );
-
-    final bool checkBusyTrue = true;
     final bool checkAllowTrue = true;
 
     executionTrace.addNonControllableCall(
       codeId: "#114000",
       caller: this,
-      methodName: "__checkBeforeRestart",
+      methodName: "checkBeforeRestart",
       suffixShortDesc: "",
       parameters: {
-        "checkBusy": checkBusyTrue,
         "checkAllow": checkAllowTrue,
       },
     );
 
-    final Actionable<TaskRestartPrecheck> actionable = __checkBeforeRestart(
-      checkBusy: checkBusyTrue,
+    final Actionable<TaskRestartPrecheck> actionable = checkBeforeRestart(
       checkAllow: checkAllowTrue,
     );
 
@@ -515,7 +567,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#114100",
-        prefixShortDesc: '__checkBeforeRestart()',
+        prefixShortDesc: 'checkBeforeRestart()',
         module: activity,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -526,16 +578,29 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
       );
     }
 
-    final XActivity xActivity = _XActivityTaskLoadInitData(task: this);
-    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
-    await FlutterArtist.executor._executeExecutionUnitQueue();
+    // 2. Confirm Dialog
+    if (askConfirm) {
+      bool confirm = await _showConfirmRestartTaskDialog();
+      if (!confirm) {
+        return TaskRestartResult(precheck: TaskRestartPrecheck.cancelled);
+      }
+    }
 
+    final XActivity xActivity = _XActivityTaskRestart(task: this);
     final thisXTask = xActivity.findXTaskByName(name) as XTask<
         INIT_DATA, //
         RESULT_DATA,
         FORM_INPUT,
         FORM_OUTPUT>;
-    return thisXTask.restartResult;
+    final TaskRestartIntent<
+            INIT_DATA, //
+            RESULT_DATA> executionIntent =
+        thisXTask._createAndSetTaskIntentRestart();
+
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
+    await FlutterArtist.executor._executeExecutionUnitQueue();
+
+    return executionIntent.result;
   }
 
   // ***************************************************************************
@@ -546,6 +611,21 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
   }
 
   // ***************************************************************************
+  // ***************************************************************************
+
+  Future<bool> _showConfirmRestartTaskDialog() async {
+    final customConfirm = createCustomRestartConfirmation();
+
+    if (customConfirm != null) {
+      return await customConfirm(FlutterArtistCore.context);
+    } else {
+      return await TaskRestartConfirmDialog.show(
+        context: FlutterArtistCore.context,
+        task: this,
+      );
+    }
+  }
+
   // ***************************************************************************
 
   @_IsAllowPrivateMethodAnnotation()
@@ -568,7 +648,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   bool canLoadInitData() {
     final Actionable<TaskRestartPrecheck> actionable =
-    checkBeforeRestart(checkAllow: true);
+        checkBeforeRestart(checkAllow: true);
     return actionable.yes;
   }
 
@@ -658,7 +738,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
     if (requiresVisible && !visible) {
       return false;
     }
-    return dataState.isPending || dataState.isStale;
+    return dataState.isPending || dataState.isLoadedStale;
   }
 
   void showTaskErrorViewerDialog(BuildContext context) {
@@ -701,10 +781,10 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
     final XActivity xActivity = _XActivityTaskSubmit(task: this);
     final xTask = xActivity.findXTaskByName(name)
-    as XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT>;
+        as XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT>;
 
     final TaskSubmitIntent<INIT_DATA, RESULT_DATA, FORM_OUTPUT>
-    executionIntent = xTask._createAndSetTaskIntentSubmit();
+        executionIntent = xTask._createAndSetTaskIntentSubmit();
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -724,11 +804,11 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   @override
   bool isStateReadyForForm() {
-    if (dataState.isPending || dataState.isStale) {
+    if (dataState.isPending || dataState.isLoadedStale) {
       return false;
-    } else if (dataState.isFresh ||
-        dataState.isSubmissionAttemptedSuccess ||
-        dataState.isSubmissionAttemptedFailed) {
+    } else if (dataState.isLoadedFresh ||
+        dataState.isCompleted ||
+        dataState.isSubmissionFailed) {
       return true;
     } else {
       // Never run.
@@ -770,7 +850,7 @@ FORM_OUTPUT extends FormOutput> extends WorkNode<
 
   @override
   Future<Actionable<ShowFormInfoPrecheck>>
-  showDebugFormModelInspectorDialog() async {
+      showDebugFormModelInspectorDialog() async {
     final actionable = checkBeforeShowFormInfo();
     if (!actionable.yes) {
       return actionable;

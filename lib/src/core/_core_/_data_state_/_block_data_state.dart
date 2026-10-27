@@ -14,9 +14,9 @@ sealed class BlockDataState implements DataState {
 
   bool get isLoaded => this is BlockDataStateLoaded;
 
-  bool get isFresh => this is BlockDataStateLoadedFresh;
+  bool get isLoadedFresh => this is BlockDataStateLoadedFresh;
 
-  bool get isStale => this is BlockDataStateLoadedStale;
+  bool get isLoadedStale => this is BlockDataStateLoadedStale;
 
   /// Quick accessor to diagnostic error payload across all error-carrying states.
   BlockErrorInfo? get errorInfo;
