@@ -40,7 +40,7 @@ abstract class XActivity extends XRootQueueItem {
         // Create new XTaskFormModel via 'formModel._createXTaskFormModel' method
         // to have the same Generics Parameters with task.
         //
-        xTaskFormModel = formModel._createXTaskFormModel(formInput: null);
+        xTaskFormModel = formModel._createXTaskFormModel(formPatch: null);
         allXTaskFormModels.add(xTaskFormModel);
       }
       final xTask = task._createXTask(

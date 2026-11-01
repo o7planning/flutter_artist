@@ -88,7 +88,7 @@ class FilterCriterionDefView extends StatelessWidget {
   Widget _buildSelectionTypeRow(
       BuildContext context, MultiOptFilterCriterionDef def) {
     final colorScheme = Theme.of(context).colorScheme;
-    final isMulti = def.selectionType == SelectionType.multi;
+    final isMulti = def.selectionMode == MultiOptSelectionMode.multi;
 
     return Row(
       children: [

@@ -175,7 +175,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
-            isMultiSelection = data.selectionType == SelectionType.multi;
+            isMultiSelection = data.selectionMode == MultiOptSelectionMode.multi;
             isDirty = data.isDirty();
             isError = data.formErrorInfo != null;
           } else {

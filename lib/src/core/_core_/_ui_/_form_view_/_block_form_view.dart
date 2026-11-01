@@ -5,7 +5,7 @@ BLOCK_FORM_MODEL extends BlockFormModel<
     Comparable, //
     Identifiable<Comparable>,
     CreationPreset,
-    FormInput,
+    FormPatch,
     FormOutput,
     AdditionalFormRelatedData>> extends StatelessWidget {
   final BLOCK_FORM_MODEL formModel;

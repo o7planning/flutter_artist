@@ -19,7 +19,7 @@ class XFilterModel {
   }
 
   bool loadedInSession = false;
-  FilterInput? filterInput;
+  FilterPatch? filterPatch;
 
   bool get isDefaultFilterModel => filterModel.isDefaultFilterModel;
 
@@ -161,6 +161,6 @@ class XFilterModel {
 
   @override
   String toString() {
-    return "${getClassName(filterModel)} - Queried: $loadedInSession >>> FILTER_INPUT: $filterInput";
+    return "${getClassName(filterModel)} - Queried: $loadedInSession >>> FILTER_PATCH: $filterPatch";
   }
 }

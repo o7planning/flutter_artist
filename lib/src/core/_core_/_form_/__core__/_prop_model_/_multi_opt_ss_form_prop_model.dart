@@ -5,7 +5,7 @@ class MultiOptSsFormPropModel<V> extends MultiOptFormPropModel<V> {
     required super.parent,
     required super.propName,
     required super.reloadCondition,
-  }) : super._(selectionType: SelectionType.single);
+  }) : super._(selectionMode: MultiOptSelectionMode.single);
 
   @override
   V? get currentValue => _currentValue;

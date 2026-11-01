@@ -175,23 +175,23 @@ abstract class Shelf extends FeatureModule {
       }
       //
       //
-      const Type filterInputType = FilterInput;
-      final filterInputBase = filterInputType.toString();
-      final filterInputBF = filterModel.getFilterInputType().toString();
-      final filterInputB = scalar.getFilterInputType().toString();
+      const Type filterPatchType = FilterPatch;
+      final filterPatchBase = filterPatchType.toString();
+      final filterPatchBF = filterModel.getFilterPatchType().toString();
+      final filterPatchB = scalar.getFilterPatchType().toString();
       //
-      if (filterInputBF == filterInputBase) {
+      if (filterPatchBF == filterPatchBase) {
         throw AppFatalErrorUtils.___registerError(
-            "You need to create your own class that extends the '$filterInputBase' class \n"
-            "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
-            " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+            "You need to create your own class that extends the '$filterPatchBase' class \n"
+            "or use the 'EmptyFilterPatch' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_PATCH> = <$filterPatchBF>");
       }
       //
-      if (filterInputBF != filterInputB) {
+      if (filterPatchBF != filterPatchB) {
         throw AppFatalErrorUtils.___registerError(
-            "The Scalar and its FilterModel must have the same FILTER_INPUT type.\n\n"
-            " >> ${getClassName(scalar)}<FILTER_INPUT> = <$filterInputB> \n"
-            " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+            "The Scalar and its FilterModel must have the same FILTER_PATCH type.\n\n"
+            " >> ${getClassName(scalar)}<FILTER_PATCH> = <$filterPatchB> \n"
+            " >> ${getClassName(filterModel)}<FILTER_PATCH> = <$filterPatchBF>");
       }
       // -----------------
       const Type filterCriteriaType = FilterCriteria;
@@ -268,23 +268,23 @@ abstract class Shelf extends FeatureModule {
       }
       //
       //
-      const Type filterInputType = FilterInput;
-      final filterInputBase = filterInputType.toString();
-      final filterInputBF = filterModel.getFilterInputType().toString();
-      final filterInputB = block.getFilterInputType().toString();
+      const Type filterPatchType = FilterPatch;
+      final filterPatchBase = filterPatchType.toString();
+      final filterPatchBF = filterModel.getFilterPatchType().toString();
+      final filterPatchB = block.getFilterPatchType().toString();
       //
-      if (filterInputBF == filterInputBase) {
+      if (filterPatchBF == filterPatchBase) {
         throw AppFatalErrorUtils.___registerError(
-            "You need to create your own class that extends the '$filterInputBase' class \n"
-            "or use the 'EmptyFilterInput' class to use in the '${getClassName(filterModel)}' declaration \n\n"
-            " >> Currently, ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+            "You need to create your own class that extends the '$filterPatchBase' class \n"
+            "or use the 'EmptyFilterPatch' class to use in the '${getClassName(filterModel)}' declaration \n\n"
+            " >> Currently, ${getClassName(filterModel)}<FILTER_PATCH> = <$filterPatchBF>");
       }
       //
-      if (filterInputBF != filterInputB) {
+      if (filterPatchBF != filterPatchB) {
         throw AppFatalErrorUtils.___registerError(
-            "The Block and its FilterModel must have the same FILTER_INPUT type.\n\n"
-            " >> ${getClassName(block)}<FILTER_INPUT> = <$filterInputB> \n"
-            " >> ${getClassName(filterModel)}<FILTER_INPUT> = <$filterInputBF>");
+            "The Block and its FilterModel must have the same FILTER_PATCH type.\n\n"
+            " >> ${getClassName(block)}<FILTER_PATCH> = <$filterPatchB> \n"
+            " >> ${getClassName(filterModel)}<FILTER_PATCH> = <$filterPatchBF>");
       }
       // -----------------
       const Type filterCriteriaType = FilterCriteria;
@@ -330,15 +330,15 @@ abstract class Shelf extends FeatureModule {
       }
     }
     //
-    Type formInputB = FormInput;
-    String formInputTypeB = formInputB.toString();
-    String formInputTypeStr = block.getFormInputType().toString();
+    Type formPatchB = FormPatch;
+    String formPatchTypeB = formPatchB.toString();
+    String formPatchTypeStr = block.getFormPatchType().toString();
 
-    if (formInputTypeStr == formInputTypeB) {
+    if (formPatchTypeStr == formPatchTypeB) {
       throw AppFatalErrorUtils.___registerError(
-          "You need to create your own class that extends the '$formInputTypeB' class \n"
-          "or use the 'EmptyFormInput' class to use in the '${getClassName(block)}' declaration \n\n"
-          " >> Currently, ${getClassName(block)}<FORM_INPUT> = <$formInputTypeStr>");
+          "You need to create your own class that extends the '$formPatchTypeB' class \n"
+          "or use the 'EmptyFormPatch' class to use in the '${getClassName(block)}' declaration \n\n"
+          " >> Currently, ${getClassName(block)}<FORM_PATCH> = <$formPatchTypeStr>");
     }
     //
     for (Block childBlock in block.childBlocks) {

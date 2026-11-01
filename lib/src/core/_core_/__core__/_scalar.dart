@@ -3,7 +3,7 @@ part of '../core.dart';
 abstract class Scalar<
 ID extends Comparable,
 VALUE extends Identifiable<ID>,
-FILTER_INPUT extends FilterInput,
+FILTER_PATCH extends FilterPatch,
 FILTER_CRITERIA extends FilterCriteria> extends _Core
     implements ClassDefViewable {
   @override
@@ -11,7 +11,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core
     return {
       "ID": ID,
       "VALUE": VALUE,
-      "FILTER_INPUT": FILTER_INPUT,
+      "FILTER_PATCH": FILTER_PATCH,
       "FILTER_CRITERIA": FILTER_CRITERIA,
     };
   }
@@ -115,13 +115,13 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core
 
   bool get isQuerying => __isQuerying;
 
-  late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
+  late final FilterModel<FILTER_PATCH, FILTER_CRITERIA>
   _registeredOrDefaultFilterModel;
 
-  FilterModel<FILTER_INPUT, FILTER_CRITERIA>
+  FilterModel<FILTER_PATCH, FILTER_CRITERIA>
   get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
-  FilterModel<FILTER_INPUT, FILTER_CRITERIA>? get filterModel {
+  FilterModel<FILTER_PATCH, FILTER_CRITERIA>? get filterModel {
     if (_registeredOrDefaultFilterModel is _DefaultFilterModel) {
       return null;
     } else {
@@ -1075,7 +1075,7 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core
 
   Type getValueType() => VALUE;
 
-  Type getFilterInputType() => FILTER_INPUT;
+  Type getFilterPatchType() => FILTER_PATCH;
 
   Type getFilterCriteriaType() => FILTER_CRITERIA;
 
@@ -1093,16 +1093,16 @@ FILTER_CRITERIA extends FilterCriteria> extends _Core
 
   @_RootMethodAnnotation()
   @_ScalarQueryAnnotation()
-  Future<ScalarQueryResult> query({FILTER_INPUT? filterInput}) async {
+  Future<ScalarQueryResult> query({FILTER_PATCH? filterPatch}) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "query",
-      parameters: {"filterInput": filterInput},
+      parameters: {"filterPatch": filterPatch},
       isLibMethod: true,
     );
     final XShelf xShelf = _XShelfScalarQuery(
       scalar: this,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
     );
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();

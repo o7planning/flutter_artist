@@ -5,10 +5,10 @@ BLOCK extends Block<
     Comparable, //
     Identifiable<Comparable>,
     Identifiable<Comparable>,
-    FilterInput,
+    FilterPatch,
     FilterCriteria,
     CreationPreset,
-    FormInput>> extends StatelessWidget {
+    FormPatch>> extends StatelessWidget {
   final BlockViewContext? blockViewContext;
   final BLOCK block;
 

@@ -47,7 +47,7 @@ PROZESS_CONTEXT_DATA extends ProzessContextData> {
         // Create new XStageFormModel via 'formModel._createXStageFormModel' method
         // to have the same Generics Parameters with stage.
         //
-        xStageFormModel = formModel._createXStageFormModel(formInput: null);
+        xStageFormModel = formModel._createXStageFormModel(formPatch: null);
         allXStageFormModels.add(xStageFormModel);
       }
       //

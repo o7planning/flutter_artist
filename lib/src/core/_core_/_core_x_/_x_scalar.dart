@@ -9,7 +9,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   bool _queried = false;
 
-  final Scalar<ID, VALUE, FilterInput, FilterCriteria> scalar;
+  final Scalar<ID, VALUE, FilterPatch, FilterCriteria> scalar;
 
   ScalarExecutionIntent? _stashedIntent;
 
@@ -68,7 +68,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
     return __queryHint == QueryHint.none;
   }
 
-  bool affectByFilterInput = false;
+  bool affectByFilterPatch = false;
 
   String get name => scalar.name;
 

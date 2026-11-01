@@ -6,8 +6,8 @@ RESULT_DATA extends TaskResultData> {
   XActivity get xActivity => xTask.xActivity;
 
   final TaskFormModel formModel;
-  late final XTask<INIT_DATA, RESULT_DATA, FormInput, FormOutput> xTask;
-  final FormInput? formInput;
+  late final XTask<INIT_DATA, RESULT_DATA, FormPatch, FormOutput> xTask;
+  final FormPatch? formPatch;
 
   int get xModuleId => xActivity.xModuleId;
 
@@ -28,7 +28,7 @@ RESULT_DATA extends TaskResultData> {
   ///
   XTaskFormModel._({
     required this.formModel,
-    required this.formInput,
+    required this.formPatch,
   });
 
   void setForceType(FormLoadHint forceType) {
@@ -65,11 +65,11 @@ RESULT_DATA extends TaskResultData> {
 
   FormModelPatchFormFieldsIntent
   _createAndSetFormModelExecutionIntentPatchFormFields<
-  FORM_INPUT extends FormInput>({
-    required FORM_INPUT formInput,
+  FORM_PATCH extends FormPatch>({
+    required FORM_PATCH formPatch,
   }) {
     final executionIntent =
-    FormModelPatchFormFieldsIntent(formInput: formInput);
+    FormModelPatchFormFieldsIntent(formPatch: formPatch);
     _executionIntent = executionIntent;
     return executionIntent;
   }

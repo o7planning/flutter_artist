@@ -2,7 +2,7 @@ part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_FormModelPatchFormFieldsAnnotation()
-class _TaskFormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
+class _TaskFormModelPatchFormFieldsExecutionUnit<FORM_PATCH extends FormPatch>
     extends _ActivityMemberResultedExecutionUnit {
   final XTaskFormModel xTaskFormModel;
 

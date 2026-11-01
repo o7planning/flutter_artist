@@ -5,10 +5,10 @@ abstract class BlockItemsView<
         Comparable, //
         Identifiable<Comparable>,
         Identifiable<Comparable>,
-        FilterInput,
+        FilterPatch,
         FilterCriteria,
         CreationPreset,
-        FormInput>> extends StatelessWidget {
+        FormPatch>> extends StatelessWidget {
   final BLOCK block;
   final QuickSuggestionMode quickSuggestionMode;
   final BlockViewContext blockViewContext;

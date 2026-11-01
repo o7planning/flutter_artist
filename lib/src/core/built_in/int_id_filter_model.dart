@@ -2,7 +2,7 @@ part of '__built_in_model.dart';
 
 // Example: [14809].
 class IntIdFilterModel
-    extends FilterModel<IntIdFilterInput, IntIdFilterCriteria> {
+    extends FilterModel<IntIdFilterPatch, IntIdFilterCriteria> {
   final int? _idValue;
 
   IntIdFilterModel({int? idValue}) : _idValue = idValue;
@@ -33,30 +33,29 @@ class IntIdFilterModel
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
-    required IntIdFilterInput? filterInput,
+    required MultiOptSelectionMode multiOptSelectionMode,
   }) async {
     return null;
   }
 
   @override
-  OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
+  OptValueWrap? extractPatchValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptTildeCriterionXData,
-    required IntIdFilterInput filterInput,
+    required IntIdFilterPatch filterPatch,
   }) {
     return null;
   }
 
   @override
-  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleTildeCriteria({
-    required IntIdFilterInput filterInput,
+  Map<String, SimpleValueWrap?>? extractPatchValuesForSimpleTildeCriteria({
+    required IntIdFilterPatch filterPatch,
   }) {
     return {
-      "id$tildeSymbol": SimpleValueWrap.of(filterInput.idValue),
+      "id$tildeSymbol": SimpleValueWrap.of(filterPatch.idValue),
     };
   }
 
@@ -65,7 +64,7 @@ class IntIdFilterModel
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptTildeCriterionXData,
   }) {
     return null;

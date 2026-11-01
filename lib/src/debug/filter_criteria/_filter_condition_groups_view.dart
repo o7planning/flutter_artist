@@ -203,7 +203,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
               //
               isMultiOpt = true;
               isMultiSelection =
-                  criterionModel.selectionType == SelectionType.multi;
+                  criterionModel.selectionMode == MultiOptSelectionMode.multi;
             } else {
               throw "Never Run";
             }

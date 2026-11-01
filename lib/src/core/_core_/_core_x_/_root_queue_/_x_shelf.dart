@@ -99,7 +99,7 @@ abstract class XShelf extends XRootQueueItem {
         // Create new XBlockFormModel via 'formModel._createXBlockFormModel' method
         // to have the same Generics Parameters with block.
         //
-        xBlockFormModel = formModel._createXBlockFormModel(formInput: null);
+        xBlockFormModel = formModel._createXBlockFormModel(formPatch: null);
         allXBlockFormModels.add(xBlockFormModel);
         xBlockFormModelMap[formModel.name] = xBlockFormModel;
       }

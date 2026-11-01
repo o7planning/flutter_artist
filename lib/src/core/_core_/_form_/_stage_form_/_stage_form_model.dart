@@ -6,13 +6,13 @@ abstract class StageFormModel<
         INIT_DATA extends StageInitData,
         RESULT_DATA extends StageResultData,
         PROZESS_CONTEXT_DATA extends ProzessContextData,
-        FORM_INPUT extends FormInput,
+        FORM_PATCH extends FormPatch,
         FORM_OUTPUT extends FormOutput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends WorkNodeFormModel<
         INIT_DATA, //
         RESULT_DATA,
-        FORM_INPUT,
+        FORM_PATCH,
         FORM_OUTPUT,
         ADDITIONAL_FORM_RELATED_DATA> {
   @override
@@ -22,7 +22,7 @@ abstract class StageFormModel<
       "INIT_DATA": INIT_DATA,
       "RESULT_DATA": RESULT_DATA,
       "PROZESS_CONTEXT_DATA": PROZESS_CONTEXT_DATA,
-      "FORM_INPUT": FORM_INPUT,
+      "FORM_PATCH": FORM_PATCH,
       "FORM_OUTPUT": FORM_OUTPUT,
       "ADDITIONAL_FORM_RELATED_DATA": ADDITIONAL_FORM_RELATED_DATA,
     };
@@ -33,7 +33,7 @@ abstract class StageFormModel<
       INIT_DATA,
       RESULT_DATA,
       PROZESS_CONTEXT_DATA,
-      FORM_INPUT,
+      FORM_PATCH,
       FORM_OUTPUT> stage;
 
   @override
@@ -47,8 +47,6 @@ abstract class StageFormModel<
 
   @override
   INIT_DATA? get initData => stage.initData;
-
-  // PROZESS_CONTEXT_DATA get sharedContext => stage.sharedContext;
 
   @override
   String get pathInfo =>
@@ -67,7 +65,7 @@ abstract class StageFormModel<
   // ===========================================================================
 
   void _bindToStage(
-    Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA, FORM_INPUT,
+    Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA, FORM_PATCH,
             FORM_OUTPUT>
         parentStage,
   ) {
@@ -79,19 +77,19 @@ abstract class StageFormModel<
       INIT_DATA,
       RESULT_DATA,
       PROZESS_CONTEXT_DATA,
-      FORM_INPUT,
+      FORM_PATCH,
       FORM_OUTPUT> _createXStageFormModel({
-    required FORM_INPUT? formInput,
+    required FORM_PATCH? formPatch,
   }) {
     return XStageFormModel<
         STAGE_ENUM, //
         INIT_DATA,
         RESULT_DATA,
         PROZESS_CONTEXT_DATA,
-        FORM_INPUT,
+        FORM_PATCH,
         FORM_OUTPUT>._(
       formModel: this,
-      formInput: formInput,
+      formPatch: formPatch,
     );
   }
 
@@ -145,7 +143,7 @@ abstract class StageFormModel<
 
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      formInput: null,
+      formPatch: null,
       activityType: FormActivityType.updateFromFormView,
       formKeyInstantValuesInUI: executionIntent.formKeyInstantValuesInUI,
     );
@@ -189,10 +187,10 @@ abstract class StageFormModel<
       return true;
     }
 
-    final formInput = thisXStageFormModel.formInput as FORM_INPUT?;
+    final formPatch = thisXStageFormModel.formPatch as FORM_PATCH?;
     return await _startNewFormActivity(
       executionTrace: executionTrace,
-      formInput: formInput,
+      formPatch: formPatch,
       activityType: FormActivityType.startCreatingOrEditing,
       formKeyInstantValuesInUI: null,
     );
@@ -204,7 +202,7 @@ abstract class StageFormModel<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XStageFormModel thisXStageFormModel,
-    required FormModelPatchFormFieldsIntent<FORM_INPUT> executionIntent,
+    required FormModelPatchFormFieldsIntent<FORM_PATCH> executionIntent,
   }) async {
     __assertThisXStageFormModel(thisXStageFormModel);
     thisXStageFormModel._createAndSetFormModelExecutionIntentDone();
@@ -217,7 +215,7 @@ abstract class StageFormModel<
 
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      formInput: executionIntent.formInput,
+      formPatch: executionIntent.formPatch,
       activityType: FormActivityType.patchFormFields,
       formKeyInstantValuesInUI: null,
     );
@@ -227,7 +225,7 @@ abstract class StageFormModel<
   @_RootMethodAnnotation()
   @_FormModelPatchFormFieldsAnnotation()
   Future<FormModelPatchFormFieldsResult> patchFormFields({
-    required FORM_INPUT formInput,
+    required FORM_PATCH formPatch,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
@@ -269,8 +267,8 @@ abstract class StageFormModel<
         _XActivityFormModelPatchFormFields(formModel: this);
     XStage xStage = xActivity.findXStageByName(stage.name)!;
     final executionIntent = xStage.xStageFormModel!
-        ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_INPUT>(
-            formInput: formInput);
+        ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_PATCH>(
+            formPatch: formPatch);
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();

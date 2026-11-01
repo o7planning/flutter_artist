@@ -1,6 +1,6 @@
 part of '_enums.dart';
 
-enum SelectionType {
+enum MultiOptSelectionMode {
   single,
   multi;
 }

@@ -4,11 +4,11 @@ abstract class BlockFormModel<
         ID extends Comparable,
         ITEM_DETAIL extends Identifiable<ID>,
         CREATION_PRESET extends CreationPreset,
-        FORM_INPUT extends FormInput,
+        FORM_PATCH extends FormPatch,
         FORM_OUTPUT extends FormOutput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends BaseFormModel<
-        FORM_INPUT, //
+        FORM_PATCH, //
         FORM_OUTPUT,
         ADDITIONAL_FORM_RELATED_DATA> {
   @override
@@ -17,7 +17,7 @@ abstract class BlockFormModel<
       "ID": ID,
       "ITEM_DETAIL": ITEM_DETAIL,
       "CREATION_PRESET": CREATION_PRESET,
-      "FORM_INPUT": FORM_INPUT,
+      "FORM_PATCH": FORM_PATCH,
       "FORM_OUTPUT": FORM_OUTPUT,
       "ADDITIONAL_FORM_RELATED_DATA": ADDITIONAL_FORM_RELATED_DATA,
     };
@@ -27,19 +27,19 @@ abstract class BlockFormModel<
       ID, //
       Identifiable<ID>,
       ITEM_DETAIL,
-      FilterInput,
+      FilterPatch,
       FilterCriteria,
       CREATION_PRESET,
-      FORM_INPUT> get block => blockCurrentItemModel.block;
+      FORM_PATCH> get block => blockCurrentItemModel.block;
 
   late final BlockCurrentItemModel<
       ID, //
       Identifiable<ID>,
       ITEM_DETAIL,
-      FilterInput,
+      FilterPatch,
       FilterCriteria,
       CREATION_PRESET,
-      FORM_INPUT> blockCurrentItemModel;
+      FORM_PATCH> blockCurrentItemModel;
 
   String get name => block.name;
 
@@ -66,11 +66,11 @@ abstract class BlockFormModel<
   BlockFormModel({super.config});
 
   XBlockFormModel<ID, ITEM_DETAIL> _createXBlockFormModel({
-    required FORM_INPUT? formInput,
+    required FORM_PATCH? formPatch,
   }) {
     return XBlockFormModel<ID, ITEM_DETAIL>._(
       formModel: this,
-      formInput: formInput,
+      formPatch: formPatch,
     );
   }
 
@@ -136,7 +136,7 @@ abstract class BlockFormModel<
   OptValueWrap? _internalResolveInitialMultiOptPropValue({
     required ExecutionTrace executionTrace,
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
@@ -153,7 +153,7 @@ abstract class BlockFormModel<
         parameters: {
           "multiOptPropName": multiOptPropName,
           "parentMultiOptPropValue": parentMultiOptPropValue,
-          "selectionType": selectionType,
+          "multiOptSelectionMode": multiOptSelectionMode,
           "multiOptPropXData": multiOptPropXData,
           "itemDetail": itemDetail,
           "ancestorContext": ancestorContext,
@@ -162,7 +162,7 @@ abstract class BlockFormModel<
       );
       OptValueWrap? valueWrap = extractMultiOptPropValueFromItemDetail(
         multiOptPropName: multiOptPropName,
-        selectionType: selectionType,
+        multiOptSelectionMode: multiOptSelectionMode,
         multiOptPropXData: multiOptPropXData,
         itemDetail: itemDetail,
         parentMultiOptPropValue: parentMultiOptPropValue,
@@ -193,7 +193,7 @@ abstract class BlockFormModel<
         parameters: {
           "multiOptPropXData": multiOptPropXData,
           "multiOptPropName": multiOptPropName,
-          "selectionType": selectionType,
+          "multiOptSelectionMode": multiOptSelectionMode,
           "parentMultiOptPropValue": parentMultiOptPropValue,
           "ancestorContext": ancestorContext,
           "creationPreset": creationPreset,
@@ -203,7 +203,7 @@ abstract class BlockFormModel<
       OptValueWrap? valueWrap = specifyCreationValueForMultiOptProp(
         multiOptPropXData: multiOptPropXData,
         multiOptPropName: multiOptPropName,
-        selectionType: selectionType,
+        multiOptSelectionMode: multiOptSelectionMode,
         parentMultiOptPropValue: parentMultiOptPropValue,
         ancestorContext: ancestorContext,
         creationPreset: creationPreset,
@@ -230,18 +230,16 @@ abstract class BlockFormModel<
   @override
   Future<XData?> _internalPerformLoadMultiOptPropXData({
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required Object? parentMultiOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required FORM_INPUT? formInput,
     required Object? rawDomainData,
   }) {
     return performLoadMultiOptPropXData(
       multiOptPropName: multiOptPropName,
-      selectionType: selectionType,
+      multiOptSelectionMode: multiOptSelectionMode,
       parentMultiOptPropValue: parentMultiOptPropValue,
       additionalFormRelatedData: additionalFormRelatedData,
-      formInput: formInput,
       itemDetail: rawDomainData as ITEM_DETAIL?,
     );
   }
@@ -265,7 +263,7 @@ abstract class BlockFormModel<
   OptValueWrap? specifyCreationValueForMultiOptProp({
     required BlockAncestorContext ancestorContext,
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
     required CREATION_PRESET creationPreset,
@@ -282,10 +280,9 @@ abstract class BlockFormModel<
   @AbstractMethodAnnotation()
   Future<XData?> performLoadMultiOptPropXData({
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required Object? parentMultiOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required FORM_INPUT? formInput,
     required ITEM_DETAIL? itemDetail,
   });
 
@@ -299,7 +296,7 @@ abstract class BlockFormModel<
   @AbstractMethodAnnotation()
   OptValueWrap? extractMultiOptPropValueFromItemDetail({
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
     required BlockAncestorContext ancestorContext,
@@ -315,12 +312,12 @@ abstract class BlockFormModel<
 
   @AbstractMethodAnnotation()
   Future<ApiResult<ITEM_DETAIL>> performCreateItem({
-    required Map<String, dynamic> formMapData,
+    required FORM_OUTPUT formData,
   });
 
   @AbstractMethodAnnotation()
   Future<ApiResult<ITEM_DETAIL>> performUpdateItem({
-    required Map<String, dynamic> formMapData,
+    required FORM_OUTPUT formData,
   });
 
   // ===========================================================================
@@ -363,7 +360,7 @@ abstract class BlockFormModel<
 
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      formInput: null,
+      formPatch: null,
       activityType: FormActivityType.updateFromFormView,
       formKeyInstantValuesInUI: executionIntent.formKeyInstantValuesInUI,
     );
@@ -413,10 +410,10 @@ abstract class BlockFormModel<
       return true;
     }
 
-    final formInput = thisXBlockFormModel.formInput as FORM_INPUT?;
+    final formPatch = thisXBlockFormModel.formPatch as FORM_PATCH?;
     return await _startNewFormActivity(
       executionTrace: executionTrace,
-      formInput: formInput,
+      formPatch: formPatch,
       activityType: FormActivityType.startCreatingOrEditing,
       formKeyInstantValuesInUI: null,
     );
@@ -428,7 +425,7 @@ abstract class BlockFormModel<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XBlockFormModel thisXBlockFormModel,
-    required FormModelPatchFormFieldsIntent<FORM_INPUT> executionIntent,
+    required FormModelPatchFormFieldsIntent<FORM_PATCH> executionIntent,
   }) async {
     __assertThisXBlockFormModel(thisXBlockFormModel);
     thisXBlockFormModel._createAndSetFormModelExecutionIntentDone();
@@ -441,7 +438,7 @@ abstract class BlockFormModel<
 
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      formInput: executionIntent.formInput,
+      formPatch: executionIntent.formPatch,
       activityType: FormActivityType.patchFormFields,
       formKeyInstantValuesInUI: null,
     );
@@ -465,8 +462,24 @@ abstract class BlockFormModel<
       methodName: '_unitSaveForm',
     );
 
-    final Map<String, dynamic> formMapData =
-        _formModelStructure._currentFormData;
+    FORM_OUTPUT? formOutput;
+    try {
+      formOutput = _getFormOutput();
+    } catch (e, stackTrace) {
+      final ErrorInfo errorInfo = _handleError(
+        module: module,
+        methodName: "convertToFormOutput",
+        error: e,
+        stackTrace: stackTrace,
+        showSnackBar: true,
+        tipDocument: null,
+      );
+      executionResult._setErrorInfo(errorInfo: errorInfo);
+      return;
+    } finally {
+      block._refreshSavingState(isSaving: false);
+    }
+
     String calledMethodName =
         _formModelStructure.isNew ? 'performCreateItem' : 'performUpdateItem';
     ApiResult<ITEM_DETAIL> result;
@@ -475,8 +488,8 @@ abstract class BlockFormModel<
     try {
       block._refreshSavingState(isSaving: true);
       result = isNew
-          ? await performCreateItem(formMapData: formMapData)
-          : await performUpdateItem(formMapData: formMapData);
+          ? await performCreateItem(formData: formOutput)
+          : await performUpdateItem(formData: formOutput);
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         module: shelf,
@@ -556,7 +569,7 @@ abstract class BlockFormModel<
   @_RootMethodAnnotation()
   @_FormModelPatchFormFieldsAnnotation()
   Future<FormModelPatchFormFieldsResult> patchFormFields({
-    required FORM_INPUT formInput,
+    required FORM_PATCH formPatch,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
@@ -596,8 +609,8 @@ abstract class BlockFormModel<
     final XShelf xShelf = _XShelfBlockFormModelPatchFormFields(formModel: this);
     XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     final executionIntent = xBlock.xBlockCurrentItemModel.xBlockFormModel!
-        ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_INPUT>(
-            formInput: formInput);
+        ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_PATCH>(
+            formPatch: formPatch);
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();

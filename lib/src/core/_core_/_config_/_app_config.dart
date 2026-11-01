@@ -16,6 +16,10 @@ class EffectiveAppConfig {
   final Function() _registerShelves;
   final ShowDebugNetworkInspector _showDebugNetworkInspector;
   final FlutterArtistOverlayAdapter _overlayAdapter;
+
+  /// The immutable, whitelisted set of types permitted to establish global sessions.
+  final Set<Type> authorizedSessionEstablishers;
+
   final FlutterArtistLoginLogoutAdapter _loginLogoutAdapter;
   final FlutterArtistNotificationAdapter? _notificationAdapter;
   final FlutterArtistGlobalDataAdapter _globalDataAdapter;
@@ -37,11 +41,11 @@ class EffectiveAppConfig {
     required Function() registerShelves,
     required ShowDebugNetworkInspector showDebugNetworkInspector,
     required FlutterArtistOverlayAdapter overlayAdapter,
+    required this.authorizedSessionEstablishers,
     required FlutterArtistLoginLogoutAdapter loginLogoutAdapter,
     required FlutterArtistNotificationAdapter? notificationAdapter,
     required FlutterArtistGlobalDataAdapter globalDataAdapter,
-  })
-      : _updateLocale = updateLocale,
+  })  : _updateLocale = updateLocale,
         _registerActivities = registerActivities,
         _registerShelves = registerShelves,
         _showDebugNetworkInspector = showDebugNetworkInspector,
@@ -55,6 +59,8 @@ class EffectiveAppConfig {
     return EffectiveAppConfig._(
       appName: config.appName,
       // Deep copy or freeze the list to prevent external mutations
+      authorizedSessionEstablishers:
+          Set.unmodifiable(config.authorizedSessionEstablishers()),
       projectionFamilies: List.unmodifiable(config.projectionFamilies()),
       additionalThemes: List.unmodifiable(config.additionalThemes()),
       garbageCollectionInterval: config.garbageCollectionInterval,
@@ -75,7 +81,9 @@ class EffectiveAppConfig {
     );
   }
 
-  bool isAuthorizedSessionEstablisher(Type loginableModule)  {
-    return true;
+  /// Verifies if the given [loginableModule] (Task or Prozess Type) is legally
+  /// allowed to alter the global user session.
+  bool isAuthorizedSessionEstablisher(Type loginableModule) {
+    return authorizedSessionEstablishers.contains(loginableModule);
   }
 }

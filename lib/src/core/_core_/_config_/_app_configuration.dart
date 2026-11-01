@@ -19,6 +19,15 @@ abstract class AppConfiguration {
 
   Future<void> updateLocale({required Locale locale});
 
+  /// Defines the whitelist of [Task] or [Prozess] types that are explicitly
+  /// authorized to implement [SessionEstablisher] and mutate the global user session.
+  ///
+  /// Security enforcement: Any workflow attempting to establish a session that is
+  /// not registered in this list will be blocked and throw a fatal error.
+  ///
+  /// Example: `return [AppLoginTask, MicrosoftLoginTask, MfaLoginProzess];`
+  List<Type> authorizedSessionEstablishers();
+
   FlutterArtistLoginLogoutAdapter get loginLogoutAdapter;
 
   FlutterArtistNotificationAdapter? get notificationAdapter;

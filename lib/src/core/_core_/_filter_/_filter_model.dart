@@ -1,13 +1,13 @@
 part of '../core.dart';
 
 abstract class FilterModel<
-    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_PATCH extends FilterPatch, // EmptyFilterPatch
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
     > extends _Core implements ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {
-      "FILTER_INPUT": FILTER_INPUT,
+      "FILTER_PATCH": FILTER_PATCH,
       "FILTER_CRITERIA": FILTER_CRITERIA,
     };
   }
@@ -214,8 +214,7 @@ abstract class FilterModel<
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
-    required FILTER_INPUT? filterInput,
+    required MultiOptSelectionMode multiOptSelectionMode,
   });
 
   // ***************************************************************************
@@ -228,7 +227,7 @@ abstract class FilterModel<
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
     required XData multiOptTildeCriterionXData,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
   });
 
   // ***************************************************************************
@@ -246,16 +245,16 @@ abstract class FilterModel<
   ///
   /// ```dart
   /// @override
-  /// ValueWrap? extractUpdateValueForMultiOptTildeCriterion({
+  /// ValueWrap? extractPatchValueForMultiOptTildeCriterion({
   ///     required String multiOptTildeCriterionName,
   ///     required String multiOptCriterionBaseName,
   ///     required Object? parentMultiOptTildeCriterionValue,
-  ///     required SelectionType selectionType,
-  ///     required ExampleFilterInput filterInput,
+  ///     required MultiOptSelectionMode multiOptSelectionMode,
+  ///     required ExampleFilterPatch filterPatch,
   ///     required XData multiOptTildeCriterionXData,
   /// }) {
   ///    if(multiOptTildeCriterionName == "company") {
-  ///       int inputCompanyId = filterInput.filterInput;
+  ///       int inputCompanyId = filterPatch.companyId;
   ///       CompanyInfo? inputCompany = materPropData?.getItemById(inputCompanyId);
   ///       return ValueWrap.single(inputCompany)
   ///    }
@@ -264,24 +263,24 @@ abstract class FilterModel<
   /// ```
   ///
   @AbstractMethodAnnotation()
-  OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
+  OptValueWrap? extractPatchValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptTildeCriterionXData,
-    required FILTER_INPUT filterInput,
+    required FILTER_PATCH filterPatch,
   });
 
   // ***************************************************************************
   // ABSTRACT METHOD:
   // ***************************************************************************
 
-  // OLD: getSimpleCriterionValuesFromFilterInput.
-  // SAME-AS: #0010 (form - extractUpdateValuesForSimpleProps)
+  // OLD: getSimpleCriterionValuesFromFilterPatch.
+  // SAME-AS: #0010 (form - extractPatchValuesForSimpleProps)
   @AbstractMethodAnnotation()
-  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleTildeCriteria({
-    required FILTER_INPUT filterInput,
+  Map<String, SimpleValueWrap?>? extractPatchValuesForSimpleTildeCriteria({
+    required FILTER_PATCH filterPatch,
   });
 
   // ***************************************************************************
@@ -332,16 +331,16 @@ abstract class FilterModel<
   /// Applies the specified [FilterSyncDirective] to reconcile the draft workspace
   /// with the committed snapshot realm.
   ///
-  /// If a programmatic [filterInput] is supplied, it takes strict precedence over
+  /// If a programmatic [filterPatch] is supplied, it takes strict precedence over
   /// the directive and automatically commits the resulting snapshot to the committed realm.
   void _applyFilterSyncDirective({
     required FilterSyncDirective filterSyncDirective,
-    required FILTER_INPUT? filterInput,
+    required FILTER_PATCH? filterPatch,
   }) {
     // 1. Programmatic Input Override:
-    // When code explicitly injects a filterInput, it is an authoritative command
+    // When code explicitly injects a filterPatch, it is an authoritative command
     // that must be committed into the committed realm immediately.
-    if (filterInput != null) {
+    if (filterPatch != null) {
       _commitDraftSnapshotToCommitted();
       return;
     }
@@ -554,7 +553,7 @@ abstract class FilterModel<
     try {
       // SAME-AS: #0004
       if (!thisXFilterModel.loadedInSession) {
-        final filterInput = thisXFilterModel.filterInput as FILTER_INPUT?;
+        final filterPatch = thisXFilterModel.filterPatch as FILTER_PATCH?;
         //
         final bool isFirstTime = !__initiatedAtLeastOnce;
         executionTrace.addInfo(
@@ -571,7 +570,7 @@ abstract class FilterModel<
         _draftFilterCriteriaSnapshot = await _startNewFilterActivity(
           executionTrace: executionTrace,
           activityType: FilterActivityType.newFilt,
-          filterInput: filterInput,
+          filterPatch: filterPatch,
           formKeyInstantValuesInUI: null,
         );
         executionTrace.addInfo(
@@ -641,7 +640,7 @@ abstract class FilterModel<
           await _startNewFilterActivity(
         executionTrace: executionTrace,
         activityType: FilterActivityType.updateFromFilterPanel,
-        filterInput: null,
+        filterPatch: null,
         formKeyInstantValuesInUI: executionIntent.formKeyInstantValuesInUI,
       );
       // Under instant policy, auto-commit draft snapshot to committed realm.
@@ -864,7 +863,7 @@ abstract class FilterModel<
       "Called after changing in FilterPanel or Querying in Block or Scalar.")
   Future<FilterCriteriaSnapshot<FILTER_CRITERIA>?> _startNewFilterActivity({
     required ExecutionTrace executionTrace,
-    required FILTER_INPUT? filterInput,
+    required FILTER_PATCH? filterPatch,
     required FilterActivityType activityType,
     required Map<String, dynamic>? formKeyInstantValuesInUI,
   }) async {
@@ -890,7 +889,7 @@ abstract class FilterModel<
       _filterModelStructure._setupTemporaryStateForNewActivity(
         activityType: activityType,
         formKeyInstantValues: formKeyInstantValues,
-        filterInput: filterInput,
+        filterPatch: filterPatch,
       );
     } catch (e, stackTrace) {
       dynamic error = e;
@@ -942,7 +941,7 @@ abstract class FilterModel<
               "To load data for ${debugObjHtml(multiOptCriterion)} and its descendants.",
           parameters: {
             "activityType": activityType,
-            "filterInput": filterInput,
+            "filterPatch": filterPatch,
             "parentMultiOptTildeCriterionValue": null,
             "multiOptCriterion": multiOptCriterion,
             "formKeyInstantValues": formKeyInstantValues,
@@ -955,7 +954,7 @@ abstract class FilterModel<
         //
         await _loadMultiOptCriterionDataCascade(
           executionTrace: executionTrace,
-          filterInput: filterInput,
+          filterPatch: filterPatch,
           parentMultiOptTildeCriterionValue: null,
           multiOptCriterion: multiOptCriterion,
           formKeyInstantValues: formKeyInstantValues,
@@ -1018,21 +1017,21 @@ abstract class FilterModel<
       return _draftFilterCriteriaSnapshot;
     }
     //
-    if (filterInput != null) {
+    if (filterPatch != null) {
       try {
         executionTrace.addControllableCall(
           codeId: "#031140",
           caller: this,
           methodName: "updatedSimpleCriterionValues",
           suffixShortDesc:
-              "To get values from filterInput to update for simpleCriteria",
+              "To get values from filterPatch to update for simpleCriteria",
           parameters: {
-            "filterInput": filterInput,
+            "filterPatch": filterPatch,
           },
         );
         final Map<String, SimpleValueWrap?> updatedSimpleCriterionValues =
-            extractUpdateValuesForSimpleTildeCriteria(
-                  filterInput: filterInput,
+            extractPatchValuesForSimpleTildeCriteria(
+                  filterPatch: filterPatch,
                 ) ??
                 {};
         for (String tildeCriterionName in updatedSimpleCriterionValues.keys) {
@@ -1040,7 +1039,7 @@ abstract class FilterModel<
           __throwErrorIfNotASimpleCriterionName(
             tildeCriterionName: tildeCriterionName,
             filterErrorMethod:
-                FilterErrorMethod.extractUpdateValuesForSimpleTildeCriteria,
+                FilterErrorMethod.extractPatchValuesForSimpleTildeCriteria,
           );
           SimpleValueWrap? valueWrap =
               updatedSimpleCriterionValues[tildeCriterionName];
@@ -1055,7 +1054,7 @@ abstract class FilterModel<
       } catch (e, stackTrace) {
         final ErrorInfo errorInfo = _handleError(
           module: shelf,
-          methodName: "extractUpdateValuesForSimpleTildeCriteria",
+          methodName: "extractPatchValuesForSimpleTildeCriteria",
           error: e,
           stackTrace: stackTrace,
           showSnackBar: true,
@@ -1078,7 +1077,7 @@ abstract class FilterModel<
         return _draftFilterCriteriaSnapshot;
       }
     }
-    // filterInput is null
+    // filterPatch is null
     else {
       try {
         if (!__initiatedAtLeastOnce) {
@@ -1232,7 +1231,7 @@ abstract class FilterModel<
 
   Future<void> _loadMultiOptCriterionDataCascade({
     required ExecutionTrace executionTrace,
-    required FILTER_INPUT? filterInput,
+    required FILTER_PATCH? filterPatch,
     required Object? parentMultiOptTildeCriterionValue,
     required MultiOptTildeFilterCriterionModel multiOptCriterion,
     required Map<String, dynamic> formKeyInstantValues,
@@ -1241,14 +1240,14 @@ abstract class FilterModel<
     final String multiOptTildeCriterionName =
         multiOptCriterion.tildeCriterionName;
     final String multiOptCriterionBaseName = multiOptCriterion.criterionName;
-    final SelectionType selectionType = multiOptCriterion.selectionType;
+    final MultiOptSelectionMode multiOptSelectionMode = multiOptCriterion.selectionMode;
 
     executionTrace.addInfo(
       codeId: "#082000",
       shortDesc:
           "Begin of ${debugObjHtml(this)}._loadMultiOptCriterionDataCascade() method.",
       parameters: {
-        "filterInput": filterInput,
+        "filterPatch": filterPatch,
         "parentMultiOptTildeCriterionValue": parentMultiOptTildeCriterionValue,
         "multiOptCriterion": multiOptCriterion,
         "activityType": activityType,
@@ -1352,12 +1351,12 @@ abstract class FilterModel<
           shortDesc:
               "Calling ${debugObjHtml(this)}.performLoadMultiOptTildeCriterionXData():",
           parameters: {
-            "filterInput": filterInput,
+            "filterPatch": filterPatch,
             "parentMultiOptTildeCriterionValue":
                 parentMultiOptTildeCriterionValue,
             "multiOptCriterionBaseName": multiOptCriterionBaseName,
             "multiOptTildeCriterionName": multiOptTildeCriterionName,
-            "selectionType": selectionType,
+            "multiOptSelectionMode": multiOptSelectionMode,
           },
         );
         // May throw AppError, ApiError or others.
@@ -1367,11 +1366,10 @@ abstract class FilterModel<
         //
         tempMultiOptCriterionXData =
             await performLoadMultiOptTildeCriterionXData(
-          filterInput: filterInput,
           parentMultiOptTildeCriterionValue: parentMultiOptTildeCriterionValue,
           multiOptCriterionBaseName: multiOptCriterionBaseName,
           multiOptTildeCriterionName: multiOptTildeCriterionName,
-          selectionType: selectionType,
+          multiOptSelectionMode: multiOptSelectionMode,
         );
         executionTrace.addInfo(
           codeId: "#082400",
@@ -1400,15 +1398,15 @@ abstract class FilterModel<
     List? candidateSelectedItems;
     if (tempMultiOptCriterionXData != null) {
       OptValueWrap? inputValueWrap;
-      if (filterInput != null) {
+      if (filterPatch != null) {
         // Test Case: [20c], [20d].
-        inputValueWrap = __extractUpdateValueForMultiOptTildeCriterion(
-          filterInput: filterInput,
+        inputValueWrap = __extractPatchValueForMultiOptTildeCriterion(
+          filterPatch: filterPatch,
           parentMultiOptTildeCriterionValue: parentMultiOptTildeCriterionValue,
           multiOptTildeCriterionXData: tempMultiOptCriterionXData,
           multiOptCriterionBaseName: multiOptCriterionBaseName,
           multiOptTildeCriterionName: multiOptTildeCriterionName,
-          selectionType: selectionType,
+          multiOptSelectionMode: multiOptSelectionMode,
         );
       } else {
         final parentMatchSuffix = multiOptCriterion.parentMatchSuffix;
@@ -1428,7 +1426,7 @@ abstract class FilterModel<
                   parentMultiOptTildeCriterionValue,
               "multiOptCriterionBaseName": multiOptCriterionBaseName,
               "multiOptTildeCriterionName": multiOptTildeCriterionName,
-              "selectionType": selectionType,
+              "multiOptSelectionMode": multiOptSelectionMode,
             },
           );
           inputValueWrap = __specifyDefaultValueForMultiOptTildeCriterion(
@@ -1437,7 +1435,7 @@ abstract class FilterModel<
             parentMultiOptTildeCriterionValue:
                 parentMultiOptTildeCriterionValue,
             multiOptTildeCriterionXData: tempMultiOptCriterionXData,
-            selectionType: selectionType,
+            multiOptSelectionMode: multiOptSelectionMode,
           );
           executionTrace.addInfo(
             codeId: "#082470",
@@ -1502,7 +1500,7 @@ abstract class FilterModel<
     // TODO: Double check this code:
     //
     if (candidateSelectedItems != null && candidateSelectedItems.isNotEmpty) {
-      if (multiOptCriterion.selectionType == SelectionType.single) {
+      if (multiOptCriterion.selectionMode == MultiOptSelectionMode.single) {
         // IMPORTANT:
         //  - Update from ROOTs to LEAVES
         //  - And make sure children-OptCriterion to null if parent-Value is null or not selected.
@@ -1546,7 +1544,7 @@ abstract class FilterModel<
           in multiOptCriterion.children) {
         await _loadMultiOptCriterionDataCascade(
           executionTrace: executionTrace,
-          filterInput: filterInput,
+          filterPatch: filterPatch,
           parentMultiOptTildeCriterionValue: tempSelectedCriterionValue,
           multiOptCriterion: child,
           activityType: activityType,
@@ -1572,7 +1570,7 @@ abstract class FilterModel<
     }
     String message =
         "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptTildeCriterionName '$multiOptTildeCriterionName'. ";
-    if (multiOptCriterion.selectionType == SelectionType.single) {
+    if (multiOptCriterion.selectionMode == MultiOptSelectionMode.single) {
       message += "$OptValueWrap.single(null) or $OptValueWrap.single(value). ";
     } else {
       message +=
@@ -1604,25 +1602,25 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  OptValueWrap? __extractUpdateValueForMultiOptTildeCriterion({
+  OptValueWrap? __extractPatchValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptTildeCriterionXData,
-    required FILTER_INPUT filterInput,
+    required FILTER_PATCH filterPatch,
   }) {
-    OptValueWrap? valueWrap = extractUpdateValueForMultiOptTildeCriterion(
-      filterInput: filterInput,
+    OptValueWrap? valueWrap = extractPatchValueForMultiOptTildeCriterion(
+      filterPatch: filterPatch,
       parentMultiOptTildeCriterionValue: parentMultiOptTildeCriterionValue,
       multiOptTildeCriterionXData: multiOptTildeCriterionXData,
       multiOptCriterionBaseName: multiOptCriterionBaseName,
       multiOptTildeCriterionName: multiOptTildeCriterionName,
-      selectionType: selectionType,
+      multiOptSelectionMode: multiOptSelectionMode,
     );
     if (valueWrap == null) {
       __createNullValueWrapAppError(
-        methodName: "extractUpdateValueForMultiOptTildeCriterion",
+        methodName: "extractPatchValueForMultiOptTildeCriterion",
         multiOptTildeCriterionName: multiOptTildeCriterionName,
       );
       return null;
@@ -1641,7 +1639,7 @@ abstract class FilterModel<
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptTildeCriterionXData,
   }) {
     OptValueWrap? valueWrap = specifyDefaultValueForMultiOptTildeCriterion(
@@ -1649,7 +1647,7 @@ abstract class FilterModel<
       multiOptTildeCriterionName: multiOptTildeCriterionName,
       parentMultiOptTildeCriterionValue: parentMultiOptTildeCriterionValue,
       multiOptTildeCriterionXData: multiOptTildeCriterionXData,
-      selectionType: selectionType,
+      multiOptSelectionMode: multiOptSelectionMode,
     );
     if (valueWrap == null) {
       __createNullValueWrapAppError(
@@ -1717,20 +1715,15 @@ abstract class FilterModel<
 
   @DebugMethodAnnotation()
   String get debugClassDefinition {
-    return "${getClassName(this)}$debugClassParametersDefinition";
-  }
-
-  @DebugMethodAnnotation()
-  String get debugClassParametersDefinition {
-    return "<${getFilterInputType()}, ${getFilterCriteriaType()}>";
+    return "${getClassName(this)}${debugClassParametersDefinition()}";
   }
 
   Type getFilterCriteriaType() {
     return FILTER_CRITERIA;
   }
 
-  Type getFilterInputType() {
-    return FILTER_INPUT;
+  Type getFilterPatchType() {
+    return FILTER_PATCH;
   }
 
   // ***************************************************************************
@@ -1741,7 +1734,7 @@ abstract class FilterModel<
   ///
   @_RootMethodAnnotation()
   Future<bool> queryAll({
-    FILTER_INPUT? filterInput,
+    FILTER_PATCH? filterPatch,
   }) async {
     if (__lockAddMoreQuery) {
       return false;
@@ -1751,7 +1744,7 @@ abstract class FilterModel<
       ownerClassInstance: this,
       methodName: "queryAll",
       parameters: {
-        "filterInput": filterInput,
+        "filterPatch": filterPatch,
       },
       isLibMethod: true,
     );
@@ -1772,7 +1765,7 @@ abstract class FilterModel<
     return await __query(
       executionTrace: executionTrace,
       methodName: "queryAll",
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       forceQueryAll: true,
     );
   }
@@ -1784,7 +1777,7 @@ abstract class FilterModel<
   ///
   @_RootMethodAnnotation()
   Future<bool> query({
-    FILTER_INPUT? filterInput,
+    FILTER_PATCH? filterPatch,
   }) async {
     if (__lockAddMoreQuery) {
       return false;
@@ -1793,7 +1786,7 @@ abstract class FilterModel<
       ownerClassInstance: this,
       methodName: "query",
       parameters: {
-        "filterInput": filterInput,
+        "filterPatch": filterPatch,
       },
       isLibMethod: true,
     );
@@ -1805,7 +1798,7 @@ abstract class FilterModel<
     return await __query(
       executionTrace: executionTrace,
       methodName: "query",
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       forceQueryAll: false,
     );
   }
@@ -1815,7 +1808,7 @@ abstract class FilterModel<
 
   Future<bool> __query({
     required ExecutionTrace executionTrace,
-    FILTER_INPUT? filterInput,
+    FILTER_PATCH? filterPatch,
     required String methodName,
     required bool forceQueryAll,
   }) async {
@@ -1829,7 +1822,7 @@ abstract class FilterModel<
     //
     final XShelf xShelf = _XShelfFilterModelQuery(
       filterModel: this,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       forceQueryAll: forceQueryAll,
     );
     //

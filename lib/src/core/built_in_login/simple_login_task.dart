@@ -14,11 +14,11 @@ part of '_login.dart';
 ///    implement the OAuth trigger directly inside [performLogin].
 abstract class SimpleLoginTask<
     USER extends ILoggedInUser, //
-    FORM_INPUT extends FormInput,
+    FORM_PATCH extends FormPatch,
     FORM_OUTPUT extends FormOutput> extends Task<
     EmptyTaskInitData, //
     LoginTaskResultData<USER>,
-    FORM_INPUT,
+    FORM_PATCH,
     FORM_OUTPUT> implements SessionEstablisher<USER> {
   SimpleLoginTask({
     required super.name,

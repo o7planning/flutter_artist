@@ -2,7 +2,7 @@ part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_FormModelPatchFormFieldsAnnotation()
-class _BlockFormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
+class _BlockFormModelPatchFormFieldsExecutionUnit<FORM_PATCH extends FormPatch>
     extends _ShelfMemberResultedExecutionUnit {
   final XBlockFormModel xBlockFormModel;
 

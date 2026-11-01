@@ -6,11 +6,11 @@ class _XShelfBaseQuery extends XShelf {
     required super.shelf,
   });
 
-  void _updateQueryStateFromFilterModelAndFilterInput({
+  void _updateQueryStateFromFilterModelAndFilterPatch({
     required TargetBlockAndOptions? targetBlockAndOptions,
     required TargetScalarAndOptions? targetScalarAndOptions,
     required FilterModel filterModel,
-    required FilterInput? filterInput,
+    required FilterPatch? filterPatch,
     required bool forceQueryAll,
     required bool forceReloadFilter,
   }) {
@@ -23,10 +23,10 @@ class _XShelfBaseQuery extends XShelf {
 
     final XFilterModel thisXFilterModel = xFilterModelMap[filterModel.name]!;
     thisXFilterModel._setFilterApplyPolicy(FilterApplyPolicy.instant);
-    final oldFilterInput = thisXFilterModel.filterInput;
-    thisXFilterModel.filterInput = filterInput;
+    final oldFilterPatch = thisXFilterModel.filterPatch;
+    thisXFilterModel.filterPatch = filterPatch;
 
-    if (oldFilterInput != filterInput || forceReloadFilter) {
+    if (oldFilterPatch != filterPatch || forceReloadFilter) {
       thisXFilterModel._filterLoadHint = FilterLoadHint.force;
       thisXFilterModel.loadedInSession = false;
     }

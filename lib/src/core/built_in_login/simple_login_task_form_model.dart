@@ -5,8 +5,12 @@ part of '_login.dart';
 /// Developers can instantiate this class directly or subclass it to override initial
 /// default values (e.g., pre-filling a remembered username).
 class SimpleLoginTaskFormModel<USER extends ILoggedInUser>
-    extends TaskFormModel<EmptyTaskInitData, LoginTaskResultData<USER>,
-        EmptyFormInput, CredentialsFormOutput, EmptyAdditionalFormRelatedData> {
+    extends TaskFormModel<
+        EmptyTaskInitData, //
+        LoginTaskResultData<USER>,
+        EmptyFormPatch,
+        CredentialsFormOutput,
+        EmptyAdditionalFormRelatedData> {
   static const String propUserName = "userName";
   static const String propPassword = "password";
 
@@ -32,7 +36,7 @@ class SimpleLoginTaskFormModel<USER extends ILoggedInUser>
   @override
   OptValueWrap<Object>? extractMultiOptPropValueFromInitData({
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData<dynamic, dynamic, dynamic> multiOptPropXData,
     required Object? parentMultiOptPropValue,
     required EmptyAdditionalFormRelatedData additionalFormRelatedData,
@@ -42,19 +46,19 @@ class SimpleLoginTaskFormModel<USER extends ILoggedInUser>
   }
 
   @override
-  Map<String, SimpleValueWrap<Object>?>? extractUpdateValuesForSimpleProps({
-    required EmptyFormInput formInput,
+  Map<String, SimpleValueWrap<Object>?>? extractPatchValuesForSimpleProps({
+    required EmptyFormPatch formPatch,
   }) {
     return null;
   }
 
   @override
-  OptValueWrap<Object>? extractUpdateValueForMultiOptProp({
+  OptValueWrap<Object>? extractPatchValueForMultiOptProp({
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData<dynamic, dynamic, dynamic> multiOptPropXData,
     required Object? parentMultiOptPropValue,
-    required EmptyFormInput formInput,
+    required EmptyFormPatch formPatch,
   }) {
     return null;
   }
@@ -69,10 +73,9 @@ class SimpleLoginTaskFormModel<USER extends ILoggedInUser>
   @override
   Future<XData<dynamic, dynamic, dynamic>?> performLoadMultiOptPropXData({
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required Object? parentMultiOptPropValue,
     required EmptyAdditionalFormRelatedData additionalFormRelatedData,
-    required EmptyFormInput? formInput,
     required EmptyTaskInitData? initData,
   }) async {
     return null;

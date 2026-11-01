@@ -3,7 +3,7 @@ part of '../../../core.dart';
 class _XShelfBlockQueryThenPrepareToCreate extends _XShelfBaseQuery {
   _XShelfBlockQueryThenPrepareToCreate({
     required Block block,
-    required FilterInput? filterInput,
+    required FilterPatch? filterPatch,
     required Pageable? pageable,
     required ListUpdateStrategy? listUpdateStrategy,
     required BlockAfterQueryDirective? afterQueryDirective,
@@ -12,9 +12,9 @@ class _XShelfBlockQueryThenPrepareToCreate extends _XShelfBaseQuery {
           xShelfType: XShelfType.blockQueryAndPrepareToCreate,
           shelf: block.shelf,
         ) {
-    _updateQueryStateFromFilterModelAndFilterInput(
+    _updateQueryStateFromFilterModelAndFilterPatch(
       filterModel: block.registeredOrDefaultFilterModel,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       targetBlockAndOptions: TargetBlockAndOptions(
         block: block,
         queryType: QueryType.realQuery,

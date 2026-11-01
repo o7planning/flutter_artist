@@ -22,7 +22,7 @@ typedef AnyBlock = Block<
     Comparable, //
     Identifiable<Comparable>,
     Identifiable<Comparable>,
-    FilterInput,
+    FilterPatch,
     FilterCriteria,
     CreationPreset,
-    FormInput>;
+    FormPatch>;

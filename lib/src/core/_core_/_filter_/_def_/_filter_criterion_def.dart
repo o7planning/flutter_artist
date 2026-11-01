@@ -109,7 +109,7 @@ class MultiOptFilterCriterionDef<V extends Object>
     extends FilterCriterionDef<V> {
   late final MultiOptFilterCriterionDef? parent;
 
-  final SelectionType selectionType;
+  final MultiOptSelectionMode selectionMode;
 
   final List<TildeCriterionConfig> tildeCriterionConfigs;
 
@@ -138,7 +138,7 @@ class MultiOptFilterCriterionDef<V extends Object>
     required super.description,
     required this.tildeCriterionConfigs,
     required List<MultiOptFilterCriterionDef> children,
-    required this.selectionType,
+    required this.selectionMode,
   })
       : _children = children,
         super._() {
@@ -182,7 +182,7 @@ class MultiOptFilterCriterionDef<V extends Object>
       description: description,
       tildeCriterionConfigs: tildeCriterionConfigs,
       children: children,
-      selectionType: SelectionType.single,
+      selectionMode: MultiOptSelectionMode.single,
     );
   }
 
@@ -199,7 +199,7 @@ class MultiOptFilterCriterionDef<V extends Object>
       toFieldValue: toFieldValue,
       description: description,
       children: [],
-      selectionType: SelectionType.multi,
+      selectionMode: MultiOptSelectionMode.multi,
       tildeCriterionConfigs: tildeCriterionConfigs,
     );
   }
@@ -212,7 +212,7 @@ class MultiOptFilterCriterionDef<V extends Object>
     required DefaultSettingPolicy defaultSettingPolicy,
     required String parentMatchSuffix,
   }) {
-    return selectionType == SelectionType.single
+    return selectionMode == MultiOptSelectionMode.single
         ? MultiOptSsTildeFilterCriterionModel<V>(
       tildeCriterionName: tildeCriterionName,
       criterionName: criterionName,

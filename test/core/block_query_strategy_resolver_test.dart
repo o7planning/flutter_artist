@@ -480,6 +480,6 @@ class TestSyncSession<ID extends Comparable>
   }
 
   @override
-  Block<ID, Identifiable<ID>, Identifiable<ID>, FilterInput, FilterCriteria,
-      CreationPreset, FormInput> get block => throw UnimplementedError();
+  Block<ID, Identifiable<ID>, Identifiable<ID>, FilterPatch, FilterCriteria,
+      CreationPreset, FormPatch> get block => throw UnimplementedError();
 }

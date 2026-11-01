@@ -96,11 +96,11 @@ class BlockOrScalar extends Equatable {
     }
   }
 
-  String getFilterInputTypeAsString() {
+  String getFilterPatchTypeAsString() {
     if (block != null) {
-      return block!.getFilterInputType().toString();
+      return block!.getFilterPatchType().toString();
     } else {
-      return scalar!.getFilterInputType().toString();
+      return scalar!.getFilterPatchType().toString();
     }
   }
 
@@ -143,10 +143,10 @@ class BlockOrScalar extends Equatable {
   String get filterClassParametersDefinition {
     if (block != null) {
       return block!
-          .registeredOrDefaultFilterModel.debugClassParametersDefinition;
+          .registeredOrDefaultFilterModel.debugClassParametersDefinition();
     } else {
       return scalar!
-          .registeredOrDefaultFilterModel.debugClassParametersDefinition;
+          .registeredOrDefaultFilterModel.debugClassParametersDefinition();
     }
   }
 

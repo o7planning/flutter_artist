@@ -13,7 +13,7 @@ class MultiOptSsTildeFilterCriterionModel<V>
     required super.defaultSettingPolicy,
     required super.parentMatchSuffix,
     super.children = const [],
-  }) : super._(selectionType: SelectionType.single);
+  }) : super._(selectionMode: MultiOptSelectionMode.single);
 
   void __checkValue(dynamic value) {
     if (value == null) {

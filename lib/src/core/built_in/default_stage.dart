@@ -4,7 +4,7 @@ class DefaultStage<
         STAGE_ENUM extends StageEnum, //
         PROZESS_CONTEXT_DATA extends ProzessContextData>
     extends Stage<STAGE_ENUM, EmptyStageInitData, EmptyStageResultData,
-        PROZESS_CONTEXT_DATA, FormInput, FormOutput> {
+        PROZESS_CONTEXT_DATA, FormPatch, FormOutput> {
   final Future<ApiResult<EmptyStageInitData>> Function({
     required PROZESS_CONTEXT_DATA sharedContext,
   })? onLoadInit;

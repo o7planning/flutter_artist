@@ -11,11 +11,11 @@ abstract class Stage<
     INIT_DATA extends StageInitData,
     RESULT_DATA extends StageResultData,
     PROZESS_CONTEXT_DATA extends ProzessContextData,
-    FORM_INPUT extends FormInput,
+    FORM_PATCH extends FormPatch,
     FORM_OUTPUT extends FormOutput> extends WorkNode<
     INIT_DATA, //
     RESULT_DATA,
-    FORM_INPUT,
+    FORM_PATCH,
     FORM_OUTPUT> implements FormHost, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
@@ -24,7 +24,7 @@ abstract class Stage<
       "INIT_DATA": INIT_DATA,
       "RESULT_DATA": RESULT_DATA,
       "PROZESS_CONTEXT_DATA": PROZESS_CONTEXT_DATA,
-      "FORM_INPUT": FORM_INPUT,
+      "FORM_PATCH": FORM_PATCH,
       "FORM_OUTPUT": FORM_OUTPUT,
     };
   }
@@ -67,7 +67,7 @@ abstract class Stage<
       INIT_DATA,
       RESULT_DATA,
       PROZESS_CONTEXT_DATA,
-      FORM_INPUT,
+      FORM_PATCH,
       FORM_OUTPUT,
       AdditionalFormRelatedData>? formModel;
 
@@ -119,7 +119,7 @@ abstract class Stage<
     required XProzess<STAGE_ENUM, ProzessInitData, PROZESS_CONTEXT_DATA>
         xProzess,
     required XStageFormModel<STAGE_ENUM, INIT_DATA, RESULT_DATA,
-            PROZESS_CONTEXT_DATA, FORM_INPUT, FORM_OUTPUT>?
+            PROZESS_CONTEXT_DATA, FORM_PATCH, FORM_OUTPUT>?
         xStageFormModel,
   }) {
     return XStage<
@@ -127,7 +127,7 @@ abstract class Stage<
         INIT_DATA,
         RESULT_DATA,
         PROZESS_CONTEXT_DATA,
-        FORM_INPUT,
+        FORM_PATCH,
         FORM_OUTPUT>._(
       stage: this,
       xProzess: xProzess,
@@ -204,7 +204,7 @@ abstract class Stage<
         INIT_DATA,
         RESULT_DATA,
         PROZESS_CONTEXT_DATA,
-        FORM_INPUT,
+        FORM_PATCH,
         FORM_OUTPUT>;
 
     final StageSubmitIntent<STAGE_ENUM, INIT_DATA, RESULT_DATA,
@@ -341,7 +341,7 @@ abstract class Stage<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XStage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA,
-            FORM_INPUT, FORM_OUTPUT>
+            FORM_PATCH, FORM_OUTPUT>
         thisXStage,
     required StageSubmitIntent<STAGE_ENUM, INIT_DATA, RESULT_DATA,
             PROZESS_CONTEXT_DATA>
@@ -468,7 +468,7 @@ abstract class Stage<
         INIT_DATA,
         RESULT_DATA,
         PROZESS_CONTEXT_DATA,
-        FORM_INPUT,
+        FORM_PATCH,
         FORM_OUTPUT>;
     return thisXStage.stageRestartResult;
   }

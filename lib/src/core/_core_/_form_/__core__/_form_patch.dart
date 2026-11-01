@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
-abstract class FormInput {
+abstract class FormPatch {
   FormAction formAction = FormAction.create;
 
-  FormInput();
+  FormPatch();
 }

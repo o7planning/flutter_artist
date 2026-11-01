@@ -54,10 +54,10 @@ class XBlockCurrentItemModel<
       ID, //
       ITEM,
       ITEM_DETAIL,
-      FilterInput,
+      FilterPatch,
       FilterCriteria,
       CreationPreset,
-      FormInput> blockCurrentItemModel;
+      FormPatch> blockCurrentItemModel;
 
   XBlockCurrentItemModel({
     required this.blockCurrentItemModel,
@@ -225,12 +225,12 @@ class XBlockCurrentItemModel<
       _createAndSetBlockCurrentItemModelExecutionIntentPrepareFormToCreateItem({
     required XBlock<ID, ITEM, ITEM_DETAIL> xBlock,
     required bool initDirty,
-    required FormInput? formInput,
+    required FormPatch? formPatch,
   }) {
     final executionIntent = BlockCurrentItemModelPrepareFormToCreateItemIntent<
         ID, ITEM, ITEM_DETAIL>(
       initDirty: initDirty,
-      formInput: formInput,
+      formPatch: formPatch,
     );
     _executionIntent = executionIntent;
     return executionIntent;

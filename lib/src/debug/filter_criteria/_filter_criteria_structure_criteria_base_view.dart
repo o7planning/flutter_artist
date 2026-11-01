@@ -192,7 +192,7 @@ class FilterModelStructureCriteriaBaseViewState
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
-            isMultiSelection = data.selectionType == SelectionType.multi;
+            isMultiSelection = data.selectionMode == MultiOptSelectionMode.multi;
           } else {
             prefixIconData = FaIconConstants.unknownIconData;
             title = "UNKNOWN";

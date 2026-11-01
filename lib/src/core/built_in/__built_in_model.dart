@@ -11,30 +11,30 @@ part 'empty_creation_preset.dart';
 
 part 'empty_filter_criteria.dart';
 
-part 'empty_filter_input.dart';
+part 'empty_filter_patch.dart';
 
-part 'empty_form_input.dart';
+part 'empty_form_patch.dart';
 
 part 'int_id_filter_criteria.dart';
 
-part 'int_id_filter_input.dart';
+part 'int_id_filter_patch.dart';
 
 part 'int_id_filter_model.dart';
 
 part 'search_text_filter_criteria.dart';
 
-part 'search_text_filter_input.dart';
+part 'search_text_filter_patch.dart';
 
 part 'search_text_filter_model.dart';
 
 part 'string_id_filter_criteria.dart';
 
-part 'string_id_filter_input.dart';
+part 'string_id_filter_patch.dart';
 
 part 'string_id_filter_model.dart';
 
 part 'string_value_filter_criteria.dart';
 
-part 'string_value_filter_input.dart';
+part 'string_value_filter_patch.dart';
 
 part 'string_value_filter_model.dart';

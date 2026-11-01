@@ -7,10 +7,10 @@ enum FormErrorMethod {
   extractMultiOptPropValueFromItemDetail,
 
   // OLD: getMultiOptPropValueFromFormInput
-  extractUpdateValueForMultiOptProp,
+  extractPatchValueForMultiOptProp,
 
   // OLD: getSimplePropValuesFromFormInput
-  extractUpdateValuesForSimpleProps,
+  extractPatchValuesForSimpleProps,
 
   // OLD: specifyDefaultSimplePropValues
   specifyDefaultValuesForSimpleProps,

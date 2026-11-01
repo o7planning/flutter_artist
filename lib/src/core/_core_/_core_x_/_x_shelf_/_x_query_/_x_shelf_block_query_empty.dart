@@ -3,7 +3,7 @@ part of '../../../core.dart';
 class _XShelfBlockQueryEmpty extends _XShelfBaseQuery {
   _XShelfBlockQueryEmpty({
     required Block block,
-    required FilterInput? filterInput,
+    required FilterPatch? filterPatch,
     required Pageable? pageable,
     required ListUpdateStrategy? listUpdateStrategy,
     required BlockAfterQueryDirective? afterQueryDirective,
@@ -12,9 +12,9 @@ class _XShelfBlockQueryEmpty extends _XShelfBaseQuery {
     xShelfType: XShelfType.blockQueryEmpty,
     shelf: block.shelf,
   ) {
-    _updateQueryStateFromFilterModelAndFilterInput(
+    _updateQueryStateFromFilterModelAndFilterPatch(
       filterModel: block.registeredOrDefaultFilterModel,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       targetBlockAndOptions: TargetBlockAndOptions(
         block: block,
         queryType: QueryType.emptyQuery,

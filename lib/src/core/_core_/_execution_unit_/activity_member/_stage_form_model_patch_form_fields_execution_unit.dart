@@ -2,7 +2,7 @@ part of '../../core.dart';
 
 @_ExecutionUnitClassAnnotation()
 @_FormModelPatchFormFieldsAnnotation()
-class _StageFormModelPatchFormFieldsExecutionUnit<FORM_INPUT extends FormInput>
+class _StageFormModelPatchFormFieldsExecutionUnit<FORM_PATCH extends FormPatch>
     extends _ActivityMemberResultedExecutionUnit {
   final XStageFormModel xStageFormModel;
 

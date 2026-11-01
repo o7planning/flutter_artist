@@ -4,7 +4,7 @@ abstract interface class DebugScalarSyncSessionState<ID extends Comparable> {
   Scalar<
       Comparable, //
       Identifiable<Comparable>,
-      FilterInput,
+      FilterPatch,
       FilterCriteria> get scalar;
 
   Comparable? get parentScalarValueId;

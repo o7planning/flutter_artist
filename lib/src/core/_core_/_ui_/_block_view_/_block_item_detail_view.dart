@@ -5,10 +5,10 @@ abstract class BlockItemDetailView<
         Comparable, //
         Identifiable<Comparable>,
         Identifiable<Comparable>,
-        FilterInput,
+        FilterPatch,
         FilterCriteria,
         CreationPreset,
-        FormInput>> extends StatelessWidget {
+        FormPatch>> extends StatelessWidget {
   final BLOCK block;
   final BlockViewContext blockViewContext;
 

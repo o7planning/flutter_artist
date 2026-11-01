@@ -3,7 +3,7 @@ part of '../../core.dart';
 class _XShelfBlockBackendActionExecution extends XShelf {
   _XShelfBlockBackendActionExecution({
     required Block block,
-    required FilterInput? filterInput,
+    required FilterPatch? filterPatch,
     required BlockViewportSyncStrategy? viewportSyncStrategy,
   }) : super(
           xShelfType: XShelfType.blockBackendActionExecution,
@@ -14,7 +14,7 @@ class _XShelfBlockBackendActionExecution extends XShelf {
     // //
     // final thisXBlock = xBlockMap[block.name]!;
     // final xFilterModel = thisXBlock.xFilterModel;
-    // xFilterModel.filterInput = filterInput;
+    // xFilterModel.filterPatch = filterPatch;
     // //
     // switch (viewportSyncStrategy) {
     //   case null:

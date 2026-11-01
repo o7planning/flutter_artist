@@ -1,7 +1,7 @@
 part of '../core.dart';
 
 class _DefaultFilterModel
-    extends FilterModel<EmptyFilterInput, EmptyFilterCriteria> {
+    extends FilterModel<EmptyFilterPatch, EmptyFilterCriteria> {
   _DefaultFilterModel({
     required String name,
     required Shelf shelf,
@@ -29,28 +29,27 @@ class _DefaultFilterModel
   Future<ListXData?> performLoadMultiOptTildeCriterionXData({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required Object? parentMultiOptTildeCriterionValue,
-    required EmptyFilterInput? filterInput,
   }) async {
     return null;
   }
 
   @override
-  OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
+  OptValueWrap? extractPatchValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptTildeCriterionXData,
-    required EmptyFilterInput filterInput,
+    required EmptyFilterPatch filterPatch,
     required Object? parentMultiOptTildeCriterionValue,
   }) {
     return null;
   }
 
   @override
-  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleTildeCriteria({
-    required EmptyFilterInput filterInput,
+  Map<String, SimpleValueWrap?>? extractPatchValuesForSimpleTildeCriteria({
+    required EmptyFilterPatch filterPatch,
   }) {
     return null;
   }
@@ -59,7 +58,7 @@ class _DefaultFilterModel
   OptValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptTildeCriterionXData,
     required Object? parentMultiOptTildeCriterionValue,
   }) {

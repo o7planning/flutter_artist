@@ -1,7 +1,7 @@
 part of '__built_in_model.dart';
 
 class SearchTextFilterModel
-    extends FilterModel<SearchTextFilterInput, SearchTextFilterCriteria> {
+    extends FilterModel<SearchTextFilterPatch, SearchTextFilterCriteria> {
   final String? _searchText;
 
   SearchTextFilterModel({required String? searchText})
@@ -33,30 +33,29 @@ class SearchTextFilterModel
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
-    required SearchTextFilterInput? filterInput,
+    required MultiOptSelectionMode multiOptSelectionMode,
   }) async {
     return null;
   }
 
   @override
-  OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
+  OptValueWrap? extractPatchValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptTildeCriterionXData,
-    required SearchTextFilterInput filterInput,
+    required SearchTextFilterPatch filterPatch,
   }) {
     return null;
   }
 
   @override
-  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleTildeCriteria({
-    required SearchTextFilterInput filterInput,
+  Map<String, SimpleValueWrap?>? extractPatchValuesForSimpleTildeCriteria({
+    required SearchTextFilterPatch filterPatch,
   }) {
     return {
-      "searchText$tildeSymbol": SimpleValueWrap.of(filterInput.searchText),
+      "searchText$tildeSymbol": SimpleValueWrap.of(filterPatch.searchText),
     };
   }
 
@@ -65,7 +64,7 @@ class SearchTextFilterModel
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptTildeCriterionXData,
   }) {
     return null;

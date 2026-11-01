@@ -4,7 +4,7 @@ abstract class ScalarSectionView<
 SCALAR extends Scalar<
     Comparable, //
     Identifiable<Comparable>,
-    FilterInput,
+    FilterPatch,
     FilterCriteria>> extends StatelessWidget {
   final SCALAR scalar;
   final QuickSuggestionMode quickSuggestionMode;

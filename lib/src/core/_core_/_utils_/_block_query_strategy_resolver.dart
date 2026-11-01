@@ -10,10 +10,10 @@ class BlockQueryStrategyResolver {
             ID, //
             Identifiable<ID>,
             Identifiable<ID>,
-            FilterInput,
+            FilterPatch,
             FilterCriteria,
             CreationPreset,
-            FormInput>
+            FormPatch>
         block,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
     required QueryHint queryHint,

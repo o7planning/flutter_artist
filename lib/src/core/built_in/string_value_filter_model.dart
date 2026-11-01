@@ -1,7 +1,7 @@
 part of '__built_in_model.dart';
 
 class StringValueFilterModel
-    extends FilterModel<StringValueFilterInput, StringValueFilterCriteria> {
+    extends FilterModel<StringValueFilterPatch, StringValueFilterCriteria> {
   final String? _stringValue;
 
   StringValueFilterModel({required String? stringValue})
@@ -33,30 +33,29 @@ class StringValueFilterModel
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
-    required StringValueFilterInput? filterInput,
+    required MultiOptSelectionMode multiOptSelectionMode,
   }) async {
     return null;
   }
 
   @override
-  OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
+  OptValueWrap? extractPatchValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
-    required StringValueFilterInput filterInput,
+    required MultiOptSelectionMode multiOptSelectionMode,
+    required StringValueFilterPatch filterPatch,
     required XData multiOptTildeCriterionXData,
   }) {
     return null;
   }
 
   @override
-  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleTildeCriteria({
-    required StringValueFilterInput filterInput,
+  Map<String, SimpleValueWrap?>? extractPatchValuesForSimpleTildeCriteria({
+    required StringValueFilterPatch filterPatch,
   }) {
     return {
-      "string$tildeSymbol": SimpleValueWrap.of(filterInput.stringValue),
+      "string$tildeSymbol": SimpleValueWrap.of(filterPatch.stringValue),
     };
   }
 
@@ -65,7 +64,7 @@ class StringValueFilterModel
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptTildeCriterionXData,
   }) {
     return null;

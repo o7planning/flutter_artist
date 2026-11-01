@@ -5,7 +5,7 @@ STAGE_ENUM extends StageEnum,
 INIT_DATA extends StageInitData,
 RESULT_DATA extends StageResultData,
 PROZESS_CONTEXT_DATA extends ProzessContextData,
-FORM_INPUT extends FormInput,
+FORM_PATCH extends FormPatch,
 FORM_OUTPUT extends FormOutput> {
   XActivity get xActivity => xStage.xProzess.xActivity;
 
@@ -14,10 +14,10 @@ FORM_OUTPUT extends FormOutput> {
       INIT_DATA,
       RESULT_DATA,
       ProzessContextData,
-      FORM_INPUT,
+      FORM_PATCH,
       FORM_OUTPUT> xStage;
 
-  final FormInput? formInput;
+  final FormPatch? formPatch;
 
   int get xModuleId => xActivity.xModuleId;
 
@@ -38,7 +38,7 @@ FORM_OUTPUT extends FormOutput> {
   ///
   XStageFormModel._({
     required this.formModel,
-    required this.formInput,
+    required this.formPatch,
   });
 
   void setForceType(FormLoadHint forceType) {
@@ -75,11 +75,11 @@ FORM_OUTPUT extends FormOutput> {
 
   FormModelPatchFormFieldsIntent
   _createAndSetFormModelExecutionIntentPatchFormFields<
-  FORM_INPUT extends FormInput>({
-    required FORM_INPUT formInput,
+  FORM_PATCH extends FormPatch>({
+    required FORM_PATCH formPatch,
   }) {
     final executionIntent =
-    FormModelPatchFormFieldsIntent(formInput: formInput);
+    FormModelPatchFormFieldsIntent(formPatch: formPatch);
     _executionIntent = executionIntent;
     return executionIntent;
   }

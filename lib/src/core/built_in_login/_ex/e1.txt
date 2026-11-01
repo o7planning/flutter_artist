@@ -1,6 +1,6 @@
 
 // 1. Task đăng nhập bằng Username & Password
-class AppLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormInput, CredentialsFormOutput> {
+class AppLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormPatch, CredentialsFormOutput> {
   static const String taskName = "app-login-task";
   final loginRestProvider = LoginProvider();
 
@@ -23,7 +23,7 @@ class AppLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormInput, Cre
 }
 
 // 2. Task đăng nhập bằng Microsoft OAuth (Không cần FormModel!)
-class MicrosoftLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormInput, EmptyFormOutput> {
+class MicrosoftLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormPatch, EmptyFormOutput> {
   static const String taskName = "ms-login-task";
 
   MicrosoftLoginTask() : super(
@@ -49,7 +49,7 @@ class MicrosoftLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormInpu
 
 
 // 1. Task đăng nhập bằng Username & Password
-class AppLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormInput, CredentialsFormOutput> {
+class AppLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormPatch, CredentialsFormOutput> {
   static const String taskName = "app-login-task";
   final loginRestProvider = LoginProvider();
 
@@ -72,7 +72,7 @@ class AppLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormInput, Cre
 }
 
 // 2. Task đăng nhập bằng Microsoft OAuth (Không cần FormModel!)
-class MicrosoftLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormInput, EmptyFormOutput> {
+class MicrosoftLoginTask extends SimpleLoginTask<LoggedInUserData, EmptyFormPatch, EmptyFormOutput> {
   static const String taskName = "ms-login-task";
 
   MicrosoftLoginTask() : super(

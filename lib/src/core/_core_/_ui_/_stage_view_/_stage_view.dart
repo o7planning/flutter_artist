@@ -6,7 +6,7 @@ abstract class StageView<
         StageInitData,
         StageResultData,
         ProzessContextData,
-        FormInput,
+        FormPatch,
         FormOutput>> extends StatelessWidget {
   final STAGE stage;
   final QuickSuggestionMode quickSuggestionMode;
@@ -40,7 +40,7 @@ class DefaultStageView<
         StageInitData,
         StageResultData,
         ProzessContextData,
-        FormInput,
+        FormPatch,
         FormOutput>> extends StageView<STAGE> {
   final TextStyle? textStyle;
 

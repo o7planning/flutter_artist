@@ -9,7 +9,7 @@ abstract class MultiOptTildeFilterCriterionModel<V>
   int get loadCount => _loadCount;
 
   ///
-  /// In most cases this value is [SelectionType.single].
+  /// In most cases this value is [MultiOptSelectionMode.single].
   /// For example a Dropdown that only allows selection of one element.
   ///
   /// IMPORTANT:
@@ -17,7 +17,7 @@ abstract class MultiOptTildeFilterCriterionModel<V>
   /// Make sure you set the appropriate value for this property, otherwise an error will occur.
   /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
   ///
-  final SelectionType selectionType;
+  final MultiOptSelectionMode selectionMode;
   final List<MultiOptTildeFilterCriterionModel> _children;
 
   List<MultiOptTildeFilterCriterionModel> get children =>
@@ -34,7 +34,7 @@ abstract class MultiOptTildeFilterCriterionModel<V>
     required this.defaultSettingPolicy,
     required this.parentMatchSuffix,
     required List<MultiOptTildeFilterCriterionModel> children,
-    required this.selectionType,
+    required this.selectionMode,
   }) : _children = [...children];
 
   void _updateTempValueCascade({
@@ -49,7 +49,7 @@ abstract class MultiOptTildeFilterCriterionModel<V>
       //
       bool isSame;
       if (_tempCurrentXData != null) {
-        if (selectionType == SelectionType.single) {
+        if (selectionMode == MultiOptSelectionMode.single) {
           isSame = _tempCurrentXData!.isSame(
             item1: oldValue,
             item2: newValue,

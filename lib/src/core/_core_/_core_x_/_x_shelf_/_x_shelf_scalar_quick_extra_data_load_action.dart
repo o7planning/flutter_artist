@@ -3,7 +3,7 @@ part of '../../core.dart';
 class _XShelfScalarQuickExtraDataLoadAction extends XShelf {
   _XShelfScalarQuickExtraDataLoadAction({
     required Scalar scalar,
-    required FilterInput? filterInput,
+    required FilterPatch? filterPatch,
   }) : super(
           xShelfType: XShelfType.scalarQuickExtraDataLoadAction,
           shelf: scalar.shelf,
@@ -11,7 +11,7 @@ class _XShelfScalarQuickExtraDataLoadAction extends XShelf {
     //
     final thisXScalar = xScalarMap[scalar.name]!;
     final xFilterModel = thisXScalar.xFilterModel;
-    xFilterModel.filterInput = filterInput;
+    xFilterModel.filterPatch = filterPatch;
     //
     thisXScalar.setQueryHintToGreater(QueryHint.force);
   }

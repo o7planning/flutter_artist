@@ -33,11 +33,11 @@ final class FormModelDoneIntent extends FormModelExecutionIntent {
   //
 }
 
-final class FormModelPatchFormFieldsIntent<FORM_INPUT extends FormInput>
+final class FormModelPatchFormFieldsIntent<FORM_PATCH extends FormPatch>
     extends FormModelExecutionIntent<
         FormModelPatchFormFieldsPrecheck, //
         FormModelPatchFormFieldsResult> {
-  final FORM_INPUT formInput;
+  final FORM_PATCH formPatch;
 
-  FormModelPatchFormFieldsIntent({required this.formInput});
+  FormModelPatchFormFieldsIntent({required this.formPatch});
 }

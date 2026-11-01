@@ -6,7 +6,7 @@ STAGE_ENUM extends StageEnum,
 STAGE_INIT_DATA extends StageInitData,
 STAGE_RESULT_DATA extends StageResultData,
 PROZESS_CONTEXT_DATA extends ProzessContextData,
-FORM_INPUT extends FormInput,
+FORM_PATCH extends FormPatch,
 FORM_OUTPUT extends FormOutput> {
   final XProzess xProzess;
 
@@ -17,7 +17,7 @@ FORM_OUTPUT extends FormOutput> {
       STAGE_INIT_DATA,
       STAGE_RESULT_DATA,
       PROZESS_CONTEXT_DATA,
-      FORM_INPUT,
+      FORM_PATCH,
       FORM_OUTPUT> stage;
 
   String get name => stage.name;

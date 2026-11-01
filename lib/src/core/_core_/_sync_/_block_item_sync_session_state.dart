@@ -9,10 +9,10 @@ class _BlockItemSyncSessionState<ID extends Comparable> extends Equatable
       ID, //
       Identifiable<ID>,
       Identifiable<ID>,
-      FilterInput,
+      FilterPatch,
       FilterCriteria,
       CreationPreset,
-      FormInput> block;
+      FormPatch> block;
 
   /// The specific item identity bound to this sync session.
   final ID _targetItemId;

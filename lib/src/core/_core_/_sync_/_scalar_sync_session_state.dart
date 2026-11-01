@@ -6,7 +6,7 @@ class _ScalarSyncSessionState<ID extends Comparable> extends Equatable
   final Scalar<
       Comparable, //
       Identifiable<Comparable>,
-      FilterInput,
+      FilterPatch,
       FilterCriteria> scalar;
 
   @override

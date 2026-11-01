@@ -10,7 +10,7 @@ part 'credentials_form_output.dart';
 
 part 'login_task_result_data.dart';
 
-part 'simple_login_form_input.dart';
+part 'simple_login_form_patch.dart';
 
 part 'simple_login_form_view.dart';
 

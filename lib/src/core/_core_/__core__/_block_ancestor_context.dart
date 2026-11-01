@@ -10,7 +10,7 @@ part of '../core.dart';
 /// class EmployeeFormModel extends BlockFormModel<
 ///     int,
 ///     EmployeeData,
-///     EmptyFormInput,
+///     EmptyFormPatch,
 ///     EmptyAdditionalFormRelatedData> {
 ///
 ///   @override

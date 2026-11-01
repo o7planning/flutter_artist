@@ -5,10 +5,10 @@ class _BlockDebugInfo<ID extends Comparable> {
       ID, //
       Identifiable<ID>,
       Identifiable<ID>,
-      FilterInput,
+      FilterPatch,
       FilterCriteria,
       CreationPreset,
-      FormInput> _block;
+      FormPatch> _block;
 
   int _lazyLoadCount = 0;
 
@@ -53,8 +53,8 @@ class _BlockDebugInfo<ID extends Comparable> {
   String get classParametersDefinition {
     return "<${_block.getItemIdType()}, ${_block.getItemType()}, ${_block
         .getItemDetailType()}, "
-        "${_block.getFilterInputType()}, ${_block.getFilterCriteriaType()}, "
-        "${_block.getCreationPresetType()}, ${_block.getFormInputType()}>";
+        "${_block.getFilterPatchType()}, ${_block.getFilterCriteriaType()}, "
+        "${_block.getCreationPresetType()}, ${_block.getFormPatchType()}>";
   }
 
   Set<ID>? _lastPerformQueryItemIds;
@@ -79,10 +79,10 @@ class _BlockDebugInfo<ID extends Comparable> {
         ID, //
         Identifiable<ID>,
         Identifiable<ID>,
-        FilterInput,
+        FilterPatch,
         FilterCriteria,
         CreationPreset,
-        FormInput>
+        FormPatch>
     block,
   }) : _block = block;
 }

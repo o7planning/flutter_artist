@@ -2,10 +2,10 @@ part of '_login.dart';
 
 /// Form input configuration for the SimpleLoginTask.
 /// Allows setting an initial username if retrieved from local storage or previous sessions.
-class SimpleLoginFormInput extends FormInput {
+class SimpleLoginFormPatch extends FormPatch {
   final String? initialUsername;
 
-  SimpleLoginFormInput({
+  SimpleLoginFormPatch({
     this.initialUsername,
   });
 

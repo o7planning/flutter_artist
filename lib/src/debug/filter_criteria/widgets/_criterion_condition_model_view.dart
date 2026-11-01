@@ -124,7 +124,7 @@ class FilterConditionModelView extends StatelessWidget {
 
   Widget _buildSelectionTypeRow(
       BuildContext context, MultiOptTildeFilterCriterionModel model) {
-    final isMulti = model.selectionType == SelectionType.multi;
+    final isMulti = model.selectionMode == MultiOptSelectionMode.multi;
     return Row(
       children: [
         _buildBadge(context, "SINGLE", !isMulti, Icons.radio_button_checked),

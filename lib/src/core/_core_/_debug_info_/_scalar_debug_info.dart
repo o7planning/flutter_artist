@@ -18,7 +18,7 @@ class _ScalarDebugInfo {
   }
 
   String get classParametersDefinition {
-    return "<${_scalar.getFilterInputType()}, ${_scalar
+    return "<${_scalar.getFilterPatchType()}, ${_scalar
         .getValueType()}, ${_scalar.getFilterCriteriaType()}>";
   }
 

@@ -3,7 +3,7 @@ part of '../../core.dart';
 class _TaskRestartExecutionUnit<
     TASK_INIT_DATA extends TaskInitData, //
     TASK_RESULT_DATA extends TaskResultData,
-    FORM_INPUT extends FormInput> extends _ActivityMemberExecutionUnit {
+    FORM_PATCH extends FormPatch> extends _ActivityMemberExecutionUnit {
   final XTask xTask;
 
   @override

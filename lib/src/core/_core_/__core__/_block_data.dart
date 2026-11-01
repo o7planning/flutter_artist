@@ -4,10 +4,10 @@ class _BlockData<
     ID extends Comparable,
     ITEM extends Identifiable<ID>,
     ITEM_DETAIL extends Identifiable<ID>,
-    FILTER_INPUT extends FilterInput,
+    FILTER_PATCH extends FilterPatch,
     FILTER_CRITERIA extends FilterCriteria,
     CREATION_PRESET extends CreationPreset,
-    FORM_INPUT extends FormInput> {
+    FORM_PATCH extends FormPatch> {
   ///
   /// Owner block
   ///
@@ -15,10 +15,10 @@ class _BlockData<
       ID, //
       ITEM,
       ITEM_DETAIL,
-      FILTER_INPUT,
+      FILTER_PATCH,
       FILTER_CRITERIA,
       CREATION_PRESET,
-      FORM_INPUT> block;
+      FORM_PATCH> block;
 
   final List<ITEM> _items = [];
   final List<ITEM> _selectedItems = [];

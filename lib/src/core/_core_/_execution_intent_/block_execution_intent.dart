@@ -72,25 +72,6 @@ final class BlockQuickItemCreationIntent<
   BlockQuickItemCreationIntent({required this.action});
 }
 
-// final class BlockPrepareFormToCreateItemIntent<
-//         ID extends Comparable, //
-//         ITEM extends Identifiable<ID>,
-//         ITEM_DETAIL extends Identifiable<ID>> //
-//     extends BlockExecutionIntent<
-//         ID, //
-//         ITEM,
-//         ITEM_DETAIL,
-//         BlockItemCreationPrecheck,
-//         PrepareItemCreationResult> {
-//   final bool initDirty;
-//   final FormInput? formInput;
-//
-//   BlockPrepareFormToCreateItemIntent({
-//     required this.initDirty,
-//     required this.formInput,
-//   });
-// }
-
 final class BlockDeleteItemIntent<
         ID extends Comparable, //
         ITEM extends Identifiable<ID>,

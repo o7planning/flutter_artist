@@ -4,7 +4,7 @@ abstract class TaskView<
     TASK extends Task<
         TaskInitData, //
         TaskResultData,
-        FormInput,
+        FormPatch,
         FormOutput>> extends StatelessWidget {
   final TASK task;
   final QuickSuggestionMode quickSuggestionMode;

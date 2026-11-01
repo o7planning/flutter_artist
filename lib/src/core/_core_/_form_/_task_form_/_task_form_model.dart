@@ -4,13 +4,13 @@ part of '../../core.dart';
 abstract class TaskFormModel<
         INIT_DATA extends TaskInitData,
         RESULT_DATA extends TaskResultData,
-        FORM_INPUT extends FormInput,
+        FORM_PATCH extends FormPatch,
         FORM_OUTPUT extends FormOutput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends WorkNodeFormModel<
         INIT_DATA, //
         RESULT_DATA,
-        FORM_INPUT,
+        FORM_PATCH,
         FORM_OUTPUT,
         ADDITIONAL_FORM_RELATED_DATA> {
   @override
@@ -18,13 +18,13 @@ abstract class TaskFormModel<
     return {
       "INIT_DATA": INIT_DATA,
       "RESULT_DATA": RESULT_DATA,
-      "FORM_INPUT": FORM_INPUT,
+      "FORM_PATCH": FORM_PATCH,
       "FORM_OUTPUT": FORM_OUTPUT,
       "ADDITIONAL_FORM_RELATED_DATA": ADDITIONAL_FORM_RELATED_DATA,
     };
   }
 
-  late final Task<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT> task;
+  late final Task<INIT_DATA, RESULT_DATA, FORM_PATCH, FORM_OUTPUT> task;
 
   @override
   Task get host => task;
@@ -48,17 +48,17 @@ abstract class TaskFormModel<
   // ===========================================================================
 
   void _bindToTask(
-    Task<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT> parentTask,
+    Task<INIT_DATA, RESULT_DATA, FORM_PATCH, FORM_OUTPUT> parentTask,
   ) {
     task = parentTask;
   }
 
   XTaskFormModel<INIT_DATA, RESULT_DATA> _createXTaskFormModel({
-    required FORM_INPUT? formInput,
+    required FORM_PATCH? formPatch,
   }) {
     return XTaskFormModel<INIT_DATA, RESULT_DATA>._(
       formModel: this,
-      formInput: formInput,
+      formPatch: formPatch,
     );
   }
 
@@ -112,7 +112,7 @@ abstract class TaskFormModel<
 
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      formInput: null,
+      formPatch: null,
       activityType: FormActivityType.updateFromFormView,
       formKeyInstantValuesInUI: executionIntent.formKeyInstantValuesInUI,
     );
@@ -156,10 +156,10 @@ abstract class TaskFormModel<
       return true;
     }
 
-    final formInput = thisXTaskFormModel.formInput as FORM_INPUT?;
+    final formPatch = thisXTaskFormModel.formPatch as FORM_PATCH?;
     return await _startNewFormActivity(
       executionTrace: executionTrace,
-      formInput: formInput,
+      formPatch: formPatch,
       activityType: FormActivityType.startCreatingOrEditing,
       formKeyInstantValuesInUI: null,
     );
@@ -171,7 +171,7 @@ abstract class TaskFormModel<
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
     required XTaskFormModel thisXTaskFormModel,
-    required FormModelPatchFormFieldsIntent<FORM_INPUT> executionIntent,
+    required FormModelPatchFormFieldsIntent<FORM_PATCH> executionIntent,
   }) async {
     __assertThisXTaskFormModel(thisXTaskFormModel);
     thisXTaskFormModel._createAndSetFormModelExecutionIntentDone();
@@ -184,7 +184,7 @@ abstract class TaskFormModel<
 
     await _startNewFormActivity(
       executionTrace: executionTrace,
-      formInput: executionIntent.formInput,
+      formPatch: executionIntent.formPatch,
       activityType: FormActivityType.patchFormFields,
       formKeyInstantValuesInUI: null,
     );
@@ -194,7 +194,7 @@ abstract class TaskFormModel<
   @_RootMethodAnnotation()
   @_FormModelPatchFormFieldsAnnotation()
   Future<FormModelPatchFormFieldsResult> patchFormFields({
-    required FORM_INPUT formInput,
+    required FORM_PATCH formPatch,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
@@ -235,8 +235,8 @@ abstract class TaskFormModel<
         _XActivityFormModelPatchFormFields(formModel: this);
     XTask xTask = xActivity.findXTaskByName(task.name)!;
     final executionIntent = xTask.xTaskFormModel!
-        ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_INPUT>(
-            formInput: formInput);
+        ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_PATCH>(
+            formPatch: formPatch);
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();

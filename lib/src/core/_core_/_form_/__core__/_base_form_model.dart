@@ -3,7 +3,7 @@ part of '../../core.dart';
 /// Base abstract class representing a form model in the FlutterArtist framework,
 /// managing form state, structure, validation, and data lifecycle.
 abstract class BaseFormModel<
-        FORM_INPUT extends FormInput, //
+        FORM_PATCH extends FormPatch, //
         FORM_OUTPUT extends FormOutput, //
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends _Core implements ClassDefViewable {
@@ -55,8 +55,8 @@ abstract class BaseFormModel<
   /// Additional data required related to form operations.
   ADDITIONAL_FORM_RELATED_DATA? _additionalFormRelatedData;
 
-  /// Form input used when creating a new record.
-  FORM_INPUT? _creationFormInput;
+  /// Form Patch used when creating a new record.
+  FORM_PATCH? _creationFormPatch;
 
   /// Autovalidate mode for form fields, defaulting to user interaction.
   AutovalidateMode _autovalidateMode = AutovalidateMode.onUserInteraction;
@@ -103,7 +103,7 @@ abstract class BaseFormModel<
   // ===========================================================================
 
   /// Returns the runtime type of the form input.
-  Type getFormInputType() => FORM_INPUT;
+  Type getFormPatchType() => FORM_PATCH;
 
   /// Returns the runtime type of additional form related data.
   Type getAdditionalFormRelatedDataType() => ADDITIONAL_FORM_RELATED_DATA;
@@ -133,7 +133,7 @@ abstract class BaseFormModel<
   OptValueWrap? _internalResolveInitialMultiOptPropValue({
     required ExecutionTrace executionTrace,
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
@@ -142,10 +142,9 @@ abstract class BaseFormModel<
   /// Loads dynamic option dataset ([XData]) for a multi-option form property.
   Future<XData?> _internalPerformLoadMultiOptPropXData({
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required Object? parentMultiOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required FORM_INPUT? formInput,
     required Object? rawDomainData,
   });
 
@@ -283,7 +282,7 @@ abstract class BaseFormModel<
       "Called when Form Data is being loaded or user makes changes in FormView")
   Future<bool> _startNewFormActivity({
     required ExecutionTrace executionTrace,
-    required FORM_INPUT? formInput,
+    required FORM_PATCH? formPatch,
     required final FormActivityType activityType,
     required Map<String, dynamic>? formKeyInstantValuesInUI,
   }) async {
@@ -294,7 +293,7 @@ abstract class BaseFormModel<
       shortDesc: "${debugObjHtml(this)} on _startNewFormActivity().",
       parameters: {
         "activityType": activityType,
-        "formInput": formInput,
+        "formPatch": formPatch,
       },
     );
 
@@ -328,9 +327,9 @@ abstract class BaseFormModel<
         );
 
         if (currentFormMode == InternalFormMode.creation) {
-          _creationFormInput = formInput;
+          _creationFormPatch = formPatch;
         } else {
-          _creationFormInput = null;
+          _creationFormPatch = null;
         }
         executionTrace.addNonControllableCall(
           codeId: "#006200",
@@ -349,14 +348,14 @@ abstract class BaseFormModel<
 
       case FormActivityType.updateFromFormView:
         currentFormMode = _internalFormMode;
-        if (formInput != null) {
+        if (formPatch != null) {
           throw DevError(
             errorMessage:
-                "Dev Error. formInput must be null if FormModel.activityType = updateFromFormView.",
+                "Dev Error. formPatch must be null if FormModel.activityType = updateFromFormView.",
           );
         }
         if (currentFormMode == InternalFormMode.creation) {
-          formInput = _creationFormInput;
+          formPatch = _creationFormPatch;
         }
         additionalFormRelatedData = _additionalFormRelatedData;
         if (additionalFormRelatedData == null) {
@@ -370,10 +369,10 @@ abstract class BaseFormModel<
 
       case FormActivityType.patchFormFields:
         currentFormMode = _internalFormMode;
-        if (formInput == null) {
+        if (formPatch == null) {
           throw DevError(
             errorMessage:
-                "Dev Error. formInput must be not null if FormModel.activityType = patchFormFields.",
+                "Dev Error. formPatch must be not null if FormModel.activityType = patchFormFields.",
           );
         }
         additionalFormRelatedData = _additionalFormRelatedData;
@@ -477,31 +476,31 @@ abstract class BaseFormModel<
         return false;
       }
 
-      // Apply external FormInput overrides if present
-      if (formInput != null) {
+      // Apply external FormPatch overrides if present
+      if (formPatch != null) {
         try {
           executionTrace.addControllableCall(
             codeId: "#006620",
             caller: this,
-            methodName: "extractUpdateValuesForSimpleProps",
+            methodName: "extractPatchValuesForSimpleProps",
             suffixShortDesc: "",
             parameters: {
-              "formInput": formInput,
+              "formPatch": formPatch,
             },
           );
-          final Map<String, SimpleValueWrap?> updatedSimplePropValues =
-              extractUpdateValuesForSimpleProps(
-                    formInput: formInput,
+          final Map<String, SimpleValueWrap?> patchSimplePropValues =
+              extractPatchValuesForSimpleProps(
+                    formPatch: formPatch,
                   ) ??
                   {};
 
-          for (String propName in updatedSimplePropValues.keys) {
+          for (String propName in patchSimplePropValues.keys) {
             __throwErrorIfNotASimplePropName(
               propName: propName,
               formErrorMethod:
-                  FormErrorMethod.extractUpdateValuesForSimpleProps,
+                  FormErrorMethod.extractPatchValuesForSimpleProps,
             );
-            SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
+            SimpleValueWrap? valueWrap = patchSimplePropValues[propName];
             if (valueWrap != null && valueWrap.use) {
               _formModelStructure._setTempSimplePropValue(
                 propName: propName,
@@ -514,7 +513,7 @@ abstract class BaseFormModel<
           final formErrorInfo = FormErrorInfo(
             activityType: activityType,
             propName: null,
-            formErrorMethod: FormErrorMethod.extractUpdateValuesForSimpleProps,
+            formErrorMethod: FormErrorMethod.extractPatchValuesForSimpleProps,
             error: e,
             errorStackTrace: stackTrace,
           );
@@ -543,20 +542,20 @@ abstract class BaseFormModel<
     // CASE 3: PATCH FORM FIELDS
     // -------------------------------------------------------------------------
     else if (activityType == FormActivityType.patchFormFields) {
-      if (formInput != null) {
+      if (formPatch != null) {
         try {
           executionTrace.addControllableCall(
             codeId: "#006720",
             caller: this,
-            methodName: "extractUpdateValuesForSimpleProps",
+            methodName: "extractPatchValuesForSimpleProps",
             suffixShortDesc: "",
             parameters: {
-              "formInput": formInput,
+              "formPatch": formPatch,
             },
           );
           final Map<String, SimpleValueWrap?> updatedSimplePropValues =
-              extractUpdateValuesForSimpleProps(
-                    formInput: formInput,
+              extractPatchValuesForSimpleProps(
+                    formPatch: formPatch,
                   ) ??
                   {};
 
@@ -564,7 +563,7 @@ abstract class BaseFormModel<
             __throwErrorIfNotASimplePropName(
               propName: propName,
               formErrorMethod:
-                  FormErrorMethod.extractUpdateValuesForSimpleProps,
+                  FormErrorMethod.extractPatchValuesForSimpleProps,
             );
             SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
             if (valueWrap != null && valueWrap.use) {
@@ -579,7 +578,7 @@ abstract class BaseFormModel<
           final formErrorInfo = FormErrorInfo(
             activityType: activityType,
             propName: null,
-            formErrorMethod: FormErrorMethod.extractUpdateValuesForSimpleProps,
+            formErrorMethod: FormErrorMethod.extractPatchValuesForSimpleProps,
             error: e,
             errorStackTrace: stackTrace,
           );
@@ -616,7 +615,7 @@ abstract class BaseFormModel<
         await _loadMultiOptPropDataCascade(
           executionTrace: executionTrace,
           additionalFormRelatedData: additionalFormRelatedData,
-          formInput: formInput,
+          formPatch: formPatch,
           parentMultiOptPropValue: null,
           parentValueIsInitialValue: true,
           multiOptProp: multiOptProp,
@@ -697,14 +696,14 @@ abstract class BaseFormModel<
     required final ExecutionTrace executionTrace,
     required final FormActivityType activityType,
     required final ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required final FORM_INPUT? formInput,
+    required final FORM_PATCH? formPatch,
     required final Object? parentMultiOptPropValue,
     required final MultiOptFormPropModel multiOptProp,
     required final bool parentValueIsInitialValue,
     required final Map<String, dynamic> formKeyInstantValues,
   }) async {
     final String multiOptPropName = multiOptProp.propName;
-    final SelectionType selectionType = multiOptProp.selectionType;
+    final MultiOptSelectionMode selectionMode = multiOptProp.selectionMode;
 
     executionTrace.addInfo(
       codeId: "#017000",
@@ -784,19 +783,18 @@ abstract class BaseFormModel<
           parameters: {
             "multiOptPropName": multiOptPropName,
             "parentMultiOptPropValue": parentMultiOptPropValue,
-            "selectionType": selectionType,
+            "multiOptSelectionMode": selectionMode,
             "rawDomainData": rawDomainData,
-            "formInput": formInput,
+            "formPatch": formPatch,
             "additionalFormRelatedData": additionalFormRelatedData,
           },
         );
         tempMultiOptPropXData = await _internalPerformLoadMultiOptPropXData(
-          formInput: formInput,
           rawDomainData: rawDomainData,
           additionalFormRelatedData: additionalFormRelatedData,
           parentMultiOptPropValue: parentMultiOptPropValue,
           multiOptPropName: multiOptPropName,
-          selectionType: selectionType,
+          multiOptSelectionMode: selectionMode,
         );
       } catch (e, stackTrace) {
         throw FormMethodError(
@@ -820,30 +818,30 @@ abstract class BaseFormModel<
         initialValueWrap = _internalResolveInitialMultiOptPropValue(
           executionTrace: executionTrace,
           multiOptPropName: multiOptPropName,
-          selectionType: selectionType,
+          multiOptSelectionMode: selectionMode,
           multiOptPropXData: tempMultiOptPropXData,
           parentMultiOptPropValue: parentMultiOptPropValue,
           additionalFormRelatedData: additionalFormRelatedData,
         );
 
-        if (formInput != null && formInput is! EmptyFormInput) {
-          initialValueWrap = __extractUpdateValueForMultiOptProp(
+        if (formPatch != null && formPatch is! EmptyFormPatch) {
+          initialValueWrap = __extractPatchValueForMultiOptProp(
             executionTrace: executionTrace,
-            formInput: formInput,
+            formPatch: formPatch,
             multiOptPropXData: tempMultiOptPropXData,
             multiOptPropName: multiOptPropName,
-            selectionType: selectionType,
+            multiOptSelectionMode: selectionMode,
             parentMultiOptPropValue: parentMultiOptPropValue,
           );
         }
       } else if (activityType == FormActivityType.patchFormFields) {
-        if (formInput != null && formInput is! EmptyFormInput) {
-          initialValueWrap = __extractUpdateValueForMultiOptProp(
+        if (formPatch != null && formPatch is! EmptyFormPatch) {
+          initialValueWrap = __extractPatchValueForMultiOptProp(
             executionTrace: executionTrace,
-            formInput: formInput,
+            formPatch: formPatch,
             multiOptPropXData: tempMultiOptPropXData,
             multiOptPropName: multiOptPropName,
-            selectionType: selectionType,
+            multiOptSelectionMode: selectionMode,
             parentMultiOptPropValue: parentMultiOptPropValue,
           );
         }
@@ -909,7 +907,7 @@ abstract class BaseFormModel<
         [];
 
     if (candidateSelectedItems.isNotEmpty) {
-      if (multiOptProp.selectionType == SelectionType.single) {
+      if (multiOptProp.selectionMode == MultiOptSelectionMode.single) {
         Object? candidateSelectedItem = candidateSelectedItems.first;
         _formModelStructure._updatePropsTempValues({
           multiOptPropName: candidateSelectedItem,
@@ -935,7 +933,7 @@ abstract class BaseFormModel<
         await _loadMultiOptPropDataCascade(
           executionTrace: executionTrace,
           additionalFormRelatedData: additionalFormRelatedData,
-          formInput: formInput,
+          formPatch: formPatch,
           parentMultiOptPropValue: tempSelectedPropValue,
           parentValueIsInitialValue: multiOptValueIsInitialValue,
           multiOptProp: child,
@@ -1014,39 +1012,39 @@ abstract class BaseFormModel<
 
   /// Extracts update values for a multi-option property from form input.
   @_MayThrowFormTempErrorAnnotation()
-  OptValueWrap? __extractUpdateValueForMultiOptProp({
+  OptValueWrap? __extractPatchValueForMultiOptProp({
     required ExecutionTrace executionTrace,
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptPropXData,
-    required FORM_INPUT formInput,
+    required FORM_PATCH formPatch,
     required Object? parentMultiOptPropValue,
   }) {
-    if (formInput is EmptyFormInput) return null;
+    if (formPatch is EmptyFormPatch) return null;
     try {
       executionTrace.addControllableCall(
         codeId: "#018000",
         caller: this,
-        methodName: "extractUpdateValueForMultiOptProp",
+        methodName: "extractPatchValueForMultiOptProp",
         suffixShortDesc: "",
         parameters: {
           "multiOptPropName": multiOptPropName,
           "multiOptPropXData": multiOptPropXData,
-          "selectionType": selectionType,
+          "multiOptSelectionMode": multiOptSelectionMode,
           "parentMultiOptPropValue": parentMultiOptPropValue,
-          "formInput": formInput,
+          "formPatch": formPatch,
         },
       );
-      OptValueWrap? valueWrap = extractUpdateValueForMultiOptProp(
+      OptValueWrap? valueWrap = extractPatchValueForMultiOptProp(
         multiOptPropName: multiOptPropName,
         multiOptPropXData: multiOptPropXData,
-        selectionType: selectionType,
+        multiOptSelectionMode: multiOptSelectionMode,
         parentMultiOptPropValue: parentMultiOptPropValue,
-        formInput: formInput,
+        formPatch: formPatch,
       );
       if (valueWrap == null) {
         __createNullValueWrapAppError(
-          methodName: "extractUpdateValueForMultiOptProp",
+          methodName: "extractPatchValueForMultiOptProp",
           multiOptPropName: multiOptPropName,
         );
       }
@@ -1061,7 +1059,7 @@ abstract class BaseFormModel<
     } catch (e, stackTrace) {
       throw FormMethodError(
         propName: multiOptPropName,
-        formErrorMethod: FormErrorMethod.extractUpdateValueForMultiOptProp,
+        formErrorMethod: FormErrorMethod.extractPatchValueForMultiOptProp,
         error: e,
         stackTrace: stackTrace,
       );
@@ -1137,7 +1135,7 @@ abstract class BaseFormModel<
     }
     String message =
         "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptPropName '$multiOptPropName'. ";
-    if (multiOptProp.selectionType == SelectionType.single) {
+    if (multiOptProp.selectionMode == MultiOptSelectionMode.single) {
       message += "$OptValueWrap.single(null) or $OptValueWrap.single(value). ";
     } else {
       message +=
@@ -1210,18 +1208,18 @@ abstract class BaseFormModel<
 
   /// Extracts update values foAbsr simple properties from form input.
   @AbstractMethodAnnotation()
-  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleProps({
-    required FORM_INPUT formInput,
+  Map<String, SimpleValueWrap?>? extractPatchValuesForSimpleProps({
+    required FORM_PATCH formPatch,
   });
 
   /// Extracts update value for a multi-option property from form input.
   @AbstractMethodAnnotation()
-  OptValueWrap? extractUpdateValueForMultiOptProp({
+  OptValueWrap? extractPatchValueForMultiOptProp({
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
-    required FORM_INPUT formInput,
+    required FORM_PATCH formPatch,
   });
 
   /// Defines the form model structure containing properties, fields, and options.

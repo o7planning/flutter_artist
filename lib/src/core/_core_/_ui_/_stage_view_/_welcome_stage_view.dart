@@ -6,7 +6,7 @@ class WelcomeStageView<
         StageInitData,
         StageResultData,
         ProzessContextData,
-        FormInput,
+        FormPatch,
         FormOutput>> extends StageView<STAGE> {
   final TextStyle? textStyle;
 

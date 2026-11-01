@@ -9,7 +9,7 @@ class ScalarQueryStrategyResolver {
     required Scalar<
             ID, //
             Identifiable<ID>,
-            FilterInput,
+            FilterPatch,
             FilterCriteria>
         scalar,
     required DebugScalarSyncSessionState<ID>? syncSessionState,

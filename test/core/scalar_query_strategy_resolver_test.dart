@@ -257,6 +257,6 @@ class TestScalarSyncSession<ID extends Comparable>
   });
 
   @override
-  Scalar<Comparable, Identifiable<Comparable>, FilterInput, FilterCriteria>
+  Scalar<Comparable, Identifiable<Comparable>, FilterPatch, FilterCriteria>
       get scalar => throw UnimplementedError();
 }

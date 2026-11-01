@@ -16,7 +16,7 @@ class _TaskDebugInfo {
   }
 
   String get classParametersDefinition {
-    return "<${_task.getInitDataType()}, ${_task.getResultDataType()}, ${_task.getFormInputType()}>";
+    return "<${_task.getInitDataType()}, ${_task.getResultDataType()}, ${_task.getFormPatchType()}>";
   }
 
   _TaskDebugInfo({required Task task}) : _task = task;

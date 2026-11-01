@@ -462,7 +462,7 @@ class FilterModelStructure {
   void _setupTemporaryStateForNewActivity({
     required FilterActivityType activityType,
     required Map<String, dynamic> formKeyInstantValues,
-    required FilterInput? filterInput,
+    required FilterPatch? filterPatch,
   }) {
     __addCriteriaIfNeed(
       tildeCriterionNames: formKeyInstantValues.keys.toList(),
@@ -471,7 +471,7 @@ class FilterModelStructure {
     for (TildeFilterCriterionModel criterion in _allCriterionModelMapX.values) {
       switch (activityType) {
         case FilterActivityType.newFilt:
-          if (filterInput != null && filterInput is! EmptyFilterInput) {
+          if (filterPatch != null && filterPatch is! EmptyFilterPatch) {
             criterion._tempCurrentValue = null;
             criterion._tempCurrentXData = null;
             criterion._tempInitialValue = null;

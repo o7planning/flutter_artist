@@ -42,7 +42,7 @@ class MultiOptFormPropDef<V> extends FormPropDef<V> {
 
   final MultiOptPropReload reloadCondition;
 
-  final SelectionType selectionType;
+  final MultiOptSelectionMode selectionMode;
 
   final List<MultiOptFormPropDef> _children;
 
@@ -52,7 +52,7 @@ class MultiOptFormPropDef<V> extends FormPropDef<V> {
     required super.propName,
     required super.description,
     required List<MultiOptFormPropDef> children,
-    required this.selectionType,
+    required this.selectionMode,
     required this.reloadCondition,
   })  : _children = [...children],
         super._();
@@ -67,7 +67,7 @@ class MultiOptFormPropDef<V> extends FormPropDef<V> {
       propName: propName,
       description: description,
       children: children,
-      selectionType: SelectionType.single,
+      selectionMode: MultiOptSelectionMode.single,
       reloadCondition: reloadCondition,
     );
   }
@@ -81,7 +81,7 @@ class MultiOptFormPropDef<V> extends FormPropDef<V> {
       propName: propName,
       description: description,
       children: [],
-      selectionType: SelectionType.multi,
+      selectionMode: MultiOptSelectionMode.multi,
       reloadCondition: reloadCondition,
     );
   }
@@ -90,7 +90,7 @@ class MultiOptFormPropDef<V> extends FormPropDef<V> {
     required MultiOptFormPropModel? parent,
     required String propName,
   }) {
-    return selectionType == SelectionType.single
+    return selectionMode == MultiOptSelectionMode.single
         ? MultiOptSsFormPropModel<V>(
             propName: propName,
             parent: parent,

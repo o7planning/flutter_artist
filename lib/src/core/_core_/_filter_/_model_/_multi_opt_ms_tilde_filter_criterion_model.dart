@@ -12,7 +12,7 @@ class MultiOptMsTildeFilterCriterionModel<V>
     required super.tildeSuffix,
     required super.defaultSettingPolicy,
     required super.parentMatchSuffix,
-  }) : super._(selectionType: SelectionType.multi, children: const []);
+  }) : super._(selectionMode: MultiOptSelectionMode.multi, children: const []);
 
   void __checkValue(dynamic value) {
     if (value == null) {

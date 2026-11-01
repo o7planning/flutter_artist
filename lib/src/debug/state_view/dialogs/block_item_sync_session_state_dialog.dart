@@ -11,10 +11,10 @@ class DebugBlockItemSyncSessionStateDialog<ID extends Comparable>
       ID, //
       Identifiable<ID>,
       Identifiable<ID>,
-      FilterInput,
+      FilterPatch,
       FilterCriteria,
       CreationPreset,
-      FormInput> block;
+      FormPatch> block;
   final DebugBlockItemSyncSessionState<ID>? itemSyncSessionState;
 
   const DebugBlockItemSyncSessionStateDialog({

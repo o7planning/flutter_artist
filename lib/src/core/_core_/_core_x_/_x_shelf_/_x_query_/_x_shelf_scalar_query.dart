@@ -3,14 +3,14 @@ part of '../../../core.dart';
 class _XShelfScalarQuery extends _XShelfBaseQuery {
   _XShelfScalarQuery({
     required Scalar scalar,
-    required FilterInput? filterInput,
+    required FilterPatch? filterPatch,
   }) : super(
     xShelfType: XShelfType.scalarQuery,
     shelf: scalar.shelf,
   ) {
-    _updateQueryStateFromFilterModelAndFilterInput(
+    _updateQueryStateFromFilterModelAndFilterPatch(
       filterModel: scalar.registeredOrDefaultFilterModel,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       targetBlockAndOptions: null,
       targetScalarAndOptions: TargetScalarAndOptions(
         scalar: scalar,

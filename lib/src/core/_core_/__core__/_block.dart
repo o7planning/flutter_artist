@@ -6,7 +6,7 @@ part of '../core.dart';
 /// class EmployeeBlock
 ///       extends Block<int, EmployeeInfo, EmployeeData,
 ///                     EmptyFilerInput, EmptyFilterCriteria,
-///                     EmptyFormInput, AdditionalFormRelatedData> {
+///                     EmptyFormPatch, AdditionalFormRelatedData> {
 ///
 /// }
 /// ```
@@ -39,9 +39,9 @@ part of '../core.dart';
 /// }
 /// ```
 ///
-/// [FILTER_INPUT]: Additional data to create or modify [FilterModel].
+/// [FILTER_PATCH]: Additional data to create or modify [FilterModel].
 /// ```
-/// class EmployeeFilterInput extends FilterInput {
+/// class EmployeeFilterPatch extends FilterPatch {
 ///    String? searchText,
 ///    int? departmentId;
 /// }
@@ -60,10 +60,10 @@ part of '../core.dart';
 /// }
 /// ```
 ///
-/// [FORM_INPUT]: Form data are used to create a record in the Form.
+/// [FORM_PATCH]: Form data are used to create a record in the Form.
 /// For example: Create an employee with the specified name,...
 /// ```
-/// class EmployeeFormInput extends FormInput {
+/// class EmployeeFormPatch extends FormPatch {
 ///    String? name;
 /// }
 /// ```
@@ -72,10 +72,10 @@ abstract class Block<
     ID extends Comparable,
     ITEM extends Identifiable<ID>,
     ITEM_DETAIL extends Identifiable<ID>,
-    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_PATCH extends FilterPatch, // EmptyFilterPatch
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
     CREATION_PRESET extends CreationPreset, // EmptyCreationPreset
-    FORM_INPUT extends FormInput // EmptyFormInput
+    FORM_PATCH extends FormPatch // EmptyFormPatch
     > extends _Core implements FormHost, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
@@ -83,10 +83,10 @@ abstract class Block<
       "ID": ID,
       "ITEM": ITEM,
       "ITEM_DETAIL": ITEM_DETAIL,
-      "FILTER_INPUT": FILTER_INPUT,
+      "FILTER_PATCH": FILTER_PATCH,
       "FILTER_CRITERIA": FILTER_CRITERIA,
       "CREATION_PRESET": CREATION_PRESET,
-      "FORM_INPUT": FORM_INPUT
+      "FORM_PATCH": FORM_PATCH
     };
   }
 
@@ -141,21 +141,21 @@ abstract class Block<
   /// This field is not null.
   /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
   ///
-  late final FilterModel<FILTER_INPUT, FILTER_CRITERIA>
+  late final FilterModel<FILTER_PATCH, FILTER_CRITERIA>
       _registeredOrDefaultFilterModel;
 
   ///
   /// This field is not null.
   /// If this block does not declare a [FilterModel], it will have the default [FilterModel].
   ///
-  FilterModel<FILTER_INPUT, FILTER_CRITERIA>
+  FilterModel<FILTER_PATCH, FILTER_CRITERIA>
       get registeredOrDefaultFilterModel => _registeredOrDefaultFilterModel;
 
   ///
   /// Returns a FilterModel declared in the [Shelf.defineShelfStructure()] method.
   /// The return value may be null.
   ///
-  FilterModel<FILTER_INPUT, FILTER_CRITERIA>? get filterModel {
+  FilterModel<FILTER_PATCH, FILTER_CRITERIA>? get filterModel {
     if (_registeredOrDefaultFilterModel is _DefaultFilterModel) {
       return null;
     } else {
@@ -215,7 +215,7 @@ abstract class Block<
           ID, //
           ITEM_DETAIL,
           CREATION_PRESET,
-          FORM_INPUT,
+          FORM_PATCH,
           FormOutput,
           AdditionalFormRelatedData>?
       get formModel => blockCurrentItemModel.formModel;
@@ -224,10 +224,10 @@ abstract class Block<
       ID, //
       ITEM,
       ITEM_DETAIL,
-      FILTER_INPUT,
+      FILTER_PATCH,
       FILTER_CRITERIA,
       CREATION_PRESET,
-      FORM_INPUT> blockCurrentItemModel;
+      FORM_PATCH> blockCurrentItemModel;
 
   final List<Block> _childBlocks;
 
@@ -299,10 +299,10 @@ abstract class Block<
       ID, //
       ITEM,
       ITEM_DETAIL,
-      FILTER_INPUT,
+      FILTER_PATCH,
       FILTER_CRITERIA,
       CREATION_PRESET,
-      FORM_INPUT>._(
+      FORM_PATCH>._(
     block: this,
     pageable: config.pageable,
     nativeQueryMode: effectiveConfig.nativeQueryMode,
@@ -568,7 +568,7 @@ abstract class Block<
             ID, //
             ITEM_DETAIL,
             CREATION_PRESET,
-            FORM_INPUT,
+            FORM_PATCH,
             FormOutput,
             AdditionalFormRelatedData>?
         formModel,
@@ -935,8 +935,8 @@ abstract class Block<
     return ITEM_DETAIL;
   }
 
-  Type getFilterInputType() {
-    return FILTER_INPUT;
+  Type getFilterPatchType() {
+    return FILTER_PATCH;
   }
 
   Type getFilterCriteriaType() {
@@ -947,8 +947,8 @@ abstract class Block<
     return CREATION_PRESET;
   }
 
-  Type getFormInputType() {
-    return FORM_INPUT;
+  Type getFormPatchType() {
+    return FORM_PATCH;
   }
 
   // ***************************************************************************
@@ -1559,7 +1559,7 @@ abstract class Block<
           ._createAndSetBlockCurrentItemModelExecutionIntentPrepareFormToCreateItem(
         xBlock: thisXBlock,
         initDirty: false,
-        formInput: null,
+        formPatch: null,
       );
       return;
     }
@@ -3346,7 +3346,7 @@ abstract class Block<
       executionTrace: executionTrace,
       qryMethod: qryMethod,
       suggestedListUpdateStrategy: ListUpdateStrategy.replace,
-      filterInput: null,
+      filterPatch: null,
       afterQueryDirective: afterQueryDirective,
       suggestedSelection: null,
       specifiedPageable: null,
@@ -3385,7 +3385,7 @@ abstract class Block<
       executionTrace: executionTrace,
       qryMethod: qryMethod,
       suggestedListUpdateStrategy: ListUpdateStrategy.replace,
-      filterInput: null,
+      filterPatch: null,
       afterQueryDirective: afterQueryDirective,
       suggestedSelection: null,
       specifiedPageable: null,
@@ -3425,7 +3425,7 @@ abstract class Block<
       qryMethod: qryMethod,
       suggestedListUpdateStrategy: ListUpdateStrategy.merge,
       afterQueryDirective: afterQueryDirective,
-      filterInput: null,
+      filterPatch: null,
       suggestedSelection: null,
       specifiedPageable: null,
     );
@@ -3437,7 +3437,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   Future<bool> queryEmptyAndPrepareToCreate({
-    FILTER_INPUT? filterInput,
+    FILTER_PATCH? filterPatch,
     FilterSyncDirective filterSyncDirective = FilterSyncDirective.useCommitted,
   }) async {
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
@@ -3448,7 +3448,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "queryEmptyAndPrepareToCreate",
       parameters: {
-        "filterInput": filterInput,
+        "filterPatch": filterPatch,
         "filterSyncDirective": filterSyncDirective,
       },
       isLibMethod: true,
@@ -3457,13 +3457,13 @@ abstract class Block<
     if (filterModel != null) {
       filterModel!._applyFilterSyncDirective(
         filterSyncDirective: filterSyncDirective,
-        filterInput: filterInput,
+        filterPatch: filterPatch,
       );
     }
     //
     return await __queryEmpty(
       executionTrace: executionTrace,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       prepareFormToCreateItem: true,
     );
   }
@@ -3482,7 +3482,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   Future<bool> queryEmpty({
-    FILTER_INPUT? filterInput,
+    FILTER_PATCH? filterPatch,
     bool prepareFormToCreateItem = false,
     FilterSyncDirective filterSyncDirective = FilterSyncDirective.useCommitted,
   }) async {
@@ -3494,7 +3494,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "queryEmpty",
       parameters: {
-        "filterInput": filterInput,
+        "filterPatch": filterPatch,
         "prepareFormToCreateItem": prepareFormToCreateItem,
       },
       isLibMethod: true,
@@ -3503,13 +3503,13 @@ abstract class Block<
     if (filterModel != null) {
       filterModel!._applyFilterSyncDirective(
         filterSyncDirective: filterSyncDirective,
-        filterInput: filterInput,
+        filterPatch: filterPatch,
       );
     }
     //
     return await __queryEmpty(
       executionTrace: executionTrace,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       prepareFormToCreateItem: prepareFormToCreateItem,
     );
   }
@@ -3528,7 +3528,7 @@ abstract class Block<
   Future<BlockQueryResult> query({
     BlockAfterQueryDirective afterQueryDirective =
         BlockAfterQueryDirective.setAnItemAsCurrentIfNeed,
-    FILTER_INPUT? filterInput,
+    FILTER_PATCH? filterPatch,
     SuggestedSelection? suggestedSelection,
     Pageable? pageable,
     FilterSyncDirective filterSyncDirective = FilterSyncDirective.useCommitted,
@@ -3545,7 +3545,7 @@ abstract class Block<
       parameters: {
         "afterQueryDirective": afterQueryDirective,
         "suggestedListUpdateStrategy": suggestedListUpdateStrategy,
-        "filterInput": filterInput,
+        "filterPatch": filterPatch,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
       },
@@ -3554,7 +3554,7 @@ abstract class Block<
     if (filterModel != null) {
       filterModel!._applyFilterSyncDirective(
         filterSyncDirective: filterSyncDirective,
-        filterInput: filterInput,
+        filterPatch: filterPatch,
       );
     }
     //
@@ -3565,7 +3565,7 @@ abstract class Block<
       qryMethod: qryMethod,
       suggestedListUpdateStrategy: suggestedListUpdateStrategy,
       afterQueryDirective: afterQueryDirective,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       suggestedSelection: suggestedSelection,
       specifiedPageable: pageable,
     );
@@ -3583,7 +3583,7 @@ abstract class Block<
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockQueryAndPrepareToEditAnnotation()
   Future<BlockQueryResult> queryAndPrepareToEdit({
-    FILTER_INPUT? filterInput,
+    FILTER_PATCH? filterPatch,
     ListUpdateStrategy suggestedListUpdateStrategy = ListUpdateStrategy.replace,
     SuggestedSelection<ID>? suggestedSelection,
     Pageable? pageable,
@@ -3596,7 +3596,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "queryAndPrepareToEdit",
       parameters: {
-        "filterInput": filterInput,
+        "filterPatch": filterPatch,
         "suggestedListUpdateStrategy": suggestedListUpdateStrategy,
         "suggestedSelection": suggestedSelection,
         "pageable": pageable,
@@ -3608,13 +3608,13 @@ abstract class Block<
     if (filterModel != null) {
       filterModel!._applyFilterSyncDirective(
         filterSyncDirective: filterSyncDirective,
-        filterInput: filterInput,
+        filterPatch: filterPatch,
       );
     }
     //
     final XShelf xShelf = _XShelfBlockQueryThenPrepareToEdit(
       block: this,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       pageable: null,
       suggestedListUpdateStrategy: suggestedListUpdateStrategy,
       afterQueryDirective:
@@ -3642,7 +3642,7 @@ abstract class Block<
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockQueryAndPrepareToCreateAnnotation()
   Future<BlockQueryResult> queryAndPrepareToCreate({
-    FILTER_INPUT? filterInput,
+    FILTER_PATCH? filterPatch,
     FilterSyncDirective filterSyncDirective = FilterSyncDirective.useCommitted,
   }) async {
     if (filterModel != null && filterModel!.lockAddMoreQuery) {
@@ -3652,7 +3652,7 @@ abstract class Block<
       ownerClassInstance: this,
       methodName: "queryAndPrepareToCreate",
       parameters: {
-        "filterInput": filterInput,
+        "filterPatch": filterPatch,
         "filterSyncDirective": filterSyncDirective,
       },
       isLibMethod: true,
@@ -3661,7 +3661,7 @@ abstract class Block<
     if (filterModel != null) {
       filterModel!._applyFilterSyncDirective(
         filterSyncDirective: filterSyncDirective,
-        filterInput: filterInput,
+        filterPatch: filterPatch,
       );
     }
     //
@@ -3672,7 +3672,7 @@ abstract class Block<
     //
     final XShelf xShelf = _XShelfBlockQueryThenPrepareToCreate(
       block: this,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       pageable: null,
       listUpdateStrategy: ListUpdateStrategy.replace,
       afterQueryDirective: BlockAfterQueryDirective.createNewItem,
@@ -3748,7 +3748,7 @@ abstract class Block<
   /// This method is called before calling a Form to create.
   ///
   @AbstractMethodAnnotation()
-  FORM_INPUT buildFormInput({
+  FORM_PATCH buildFormPatch({
     required Object? parentBlockCurrentItem,
     required FILTER_CRITERIA filterCriteria,
   });
@@ -3756,7 +3756,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  FORM_INPUT __buildFormInput(ExecutionTrace executionTrace) {
+  FORM_PATCH __buildFormPatch(ExecutionTrace executionTrace) {
     final Object? parentBlockCurrentItem = parent?.currentItem;
     final FILTER_CRITERIA? currentFilterCriteria = filterCriteria;
 
@@ -3768,14 +3768,14 @@ abstract class Block<
     executionTrace.addControllableCall(
       codeId: "#005100",
       caller: this,
-      methodName: "buildFormInput",
+      methodName: "buildFormPatch",
       suffixShortDesc: "",
       parameters: {
         "parentBlockCurrentItem": parentBlockCurrentItem,
         "filterCriteria": currentFilterCriteria,
       },
     );
-    return buildFormInput(
+    return buildFormPatch(
       parentBlockCurrentItem: parentBlockCurrentItem,
       filterCriteria: currentFilterCriteria,
     );
@@ -4011,7 +4011,7 @@ abstract class Block<
   @_BlockBackendActionAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockBackendActionResult> executeBackendAction({
-    FILTER_INPUT? filterInput,
+    FILTER_PATCH? filterPatch,
     SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
     required BlockBackendAction<ID> action,
@@ -4086,7 +4086,7 @@ abstract class Block<
     //
     final XShelf xShelf = _XShelfBlockBackendActionExecution(
       block: this,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       viewportSyncStrategy: viewportSyncStrategy,
     );
     //
@@ -4405,14 +4405,14 @@ abstract class Block<
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockPrepareFormToCreateItemAnnotation()
   Future<PrepareItemCreationResult> prepareFormToCreateItem({
-    FORM_INPUT? formInput,
+    FORM_PATCH? formPatch,
     bool initDirty = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "prepareFormToCreateItem",
       parameters: {
-        "formInput": formInput,
+        "formPatch": formPatch,
         "initDirty": initDirty,
       },
       isLibMethod: true,
@@ -4451,7 +4451,7 @@ abstract class Block<
       );
     }
     //
-    formInput?.formAction = FormAction.create;
+    formPatch?.formAction = FormAction.create;
     //
     final XShelf xShelf = _XShelfPrepareFormToCreateItem(block: this);
     final thisXBlock =
@@ -4467,7 +4467,7 @@ abstract class Block<
         ._createAndSetBlockCurrentItemModelExecutionIntentPrepareFormToCreateItem(
       xBlock: thisXBlock,
       initDirty: initDirty,
-      formInput: formInput,
+      formPatch: formPatch,
     );
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -4846,7 +4846,7 @@ abstract class Block<
     required BlockQryMethodName qryMethod,
     required ListUpdateStrategy suggestedListUpdateStrategy,
     required BlockAfterQueryDirective afterQueryDirective,
-    required FILTER_INPUT? filterInput,
+    required FILTER_PATCH? filterPatch,
     required SuggestedSelection? suggestedSelection,
     required Pageable? specifiedPageable,
   }) async {
@@ -4866,7 +4866,7 @@ abstract class Block<
     //
     final XShelf xShelf = _XShelfBlockQuery(
       block: this,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       pageable: applyPageable,
       listUpdateStrategy: suggestedListUpdateStrategy,
       afterQueryDirective: afterQueryDirective,
@@ -4890,7 +4890,7 @@ abstract class Block<
 
   Future<bool> __queryEmpty({
     required ExecutionTrace executionTrace,
-    required FILTER_INPUT? filterInput,
+    required FILTER_PATCH? filterPatch,
     bool prepareFormToCreateItem = false,
   }) async {
     executionTrace.addInfo(
@@ -4900,7 +4900,7 @@ abstract class Block<
     //
     final XShelf xShelf = _XShelfBlockQueryEmpty(
       block: this,
-      filterInput: filterInput,
+      filterPatch: filterPatch,
       pageable: pageable,
       listUpdateStrategy: ListUpdateStrategy.replace,
       afterQueryDirective: prepareFormToCreateItem

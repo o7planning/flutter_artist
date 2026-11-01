@@ -4,10 +4,10 @@ class BlockCurrentItemModel<
     ID extends Comparable,
     ITEM extends Identifiable<ID>,
     ITEM_DETAIL extends Identifiable<ID>,
-    FILTER_INPUT extends FilterInput, // EmptyFilterInput
+    FILTER_PATCH extends FilterPatch, // EmptyFilterPatch
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
     CREATION_PRESET extends CreationPreset, // EmptyCreationPreset
-    FORM_INPUT extends FormInput // EmptyFormInput
+    FORM_PATCH extends FormPatch // EmptyFormPatch
     > extends _Core {
   String get name => block.name;
 
@@ -49,16 +49,16 @@ class BlockCurrentItemModel<
       ID, //
       ITEM,
       ITEM_DETAIL,
-      FILTER_INPUT,
+      FILTER_PATCH,
       FILTER_CRITERIA,
       CREATION_PRESET,
-      FORM_INPUT> block;
+      FORM_PATCH> block;
 
   final BlockFormModel<
       ID, //
       ITEM_DETAIL,
       CREATION_PRESET,
-      FORM_INPUT,
+      FORM_PATCH,
       FormOutput,
       AdditionalFormRelatedData>? formModel;
 
@@ -1025,7 +1025,7 @@ class BlockCurrentItemModel<
       codeId: "#004000",
       shortDesc: "Begin ${executionUnitType.asDebugExecutionUnit()}.",
       parameters: {
-        "formInput": executionIntent.formInput,
+        "formPatch": executionIntent.formPatch,
         "initDirty": executionIntent.initDirty,
       },
     );
@@ -1083,14 +1083,14 @@ class BlockCurrentItemModel<
         suffixShortDesc: "",
         parameters: {
           "activityType": activityType,
-          "formInput": executionIntent.formInput,
+          "formPatch": executionIntent.formPatch,
         },
       );
 
       // Delegate form initialization directly to the form model (creationPreset is resolved polymorphically)
       success = await formModel!._startNewFormActivity(
         executionTrace: executionTrace,
-        formInput: executionIntent.formInput as FORM_INPUT?,
+        formPatch: executionIntent.formPatch as FORM_PATCH?,
         activityType: activityType,
         formKeyInstantValuesInUI: null,
       );

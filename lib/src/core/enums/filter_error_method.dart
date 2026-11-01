@@ -7,11 +7,11 @@ enum FilterErrorMethod {
   // OLD: specifyDefaultValueForMultiOptTildeCriterion
   specifyDefaultValueForMultiOptTildeCriterion,
 
-  // OLD: getSimpleCriterionValuesFromFilterInput
-  extractUpdateValuesForSimpleTildeCriteria,
+  // OLD: getSimpleCriterionValuesFromFilterPatch
+  extractPatchValuesForSimpleTildeCriteria,
 
-  // OLD: getMultiOptCriterionValueFromFilterInput
-  extractUpdateValueForMultiOptTildeCriterion,
+  // OLD: getMultiOptCriterionValueFromFilterPatch
+  extractPatchValueForMultiOptTildeCriterion,
   createNewFilterCriteria,
   performLoadMultiOptTildeCriterionXData,
   //

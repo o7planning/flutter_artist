@@ -21,11 +21,11 @@ final class BlockCurrentItemModelPrepareFormToCreateItemIntent<
         BlockItemCreationPrecheck,
         PrepareItemCreationResult> {
   final bool initDirty;
-  final FormInput? formInput;
+  final FormPatch? formPatch;
 
   BlockCurrentItemModelPrepareFormToCreateItemIntent({
     required this.initDirty,
-    required this.formInput,
+    required this.formPatch,
   });
 }
 

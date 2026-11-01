@@ -3,7 +3,7 @@ part of '../core.dart';
 abstract class WorkNode<
     INIT_DATA extends Object, //
     RESULT_DATA extends Object, //
-    FORM_INPUT extends FormInput,
+    FORM_PATCH extends FormPatch,
     FORM_OUTPUT extends FormOutput> extends _Core implements FormHost {
   final String name;
   final String? description;
@@ -16,7 +16,7 @@ abstract class WorkNode<
   WorkNodeFormModel<
       INIT_DATA, //
       RESULT_DATA,
-      FORM_INPUT,
+      FORM_PATCH,
       FORM_OUTPUT,
       AdditionalFormRelatedData>? get formModel;
 
@@ -61,7 +61,7 @@ abstract class WorkNode<
 
   Type getResultDataType() => RESULT_DATA;
 
-  Type getFormInputType() => FORM_INPUT;
+  Type getFormPatchType() => FORM_PATCH;
 
   // ===========================================================================
   // COMMON METHODS

@@ -5,7 +5,7 @@ part of '../core.dart';
 class XTask<
 TASK_INIT_DATA extends TaskInitData, //
 TASK_RESULT_DATA extends TaskResultData,
-FORM_INPUT extends FormInput,
+FORM_PATCH extends FormPatch,
 FORM_OUTPUT extends FormOutput> {
   final XActivity xActivity;
 
@@ -14,7 +14,7 @@ FORM_OUTPUT extends FormOutput> {
   final Task<
       TASK_INIT_DATA, //
       TASK_RESULT_DATA,
-      FORM_INPUT,
+      FORM_PATCH,
       FORM_OUTPUT> task;
 
   bool _executed = false;
@@ -136,7 +136,7 @@ FORM_OUTPUT extends FormOutput> {
           debug: debug,
           executionUnit: _TaskRestartExecutionUnit<TASK_INIT_DATA,
               TASK_RESULT_DATA,
-              FORM_INPUT>(
+              FORM_PATCH>(
             xTask: this,
             executionIntent: _executionIntent
             as TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>,
@@ -148,7 +148,7 @@ FORM_OUTPUT extends FormOutput> {
           debug: debug,
           executionUnit: _TaskSubmitExecutionUnit<TASK_INIT_DATA,
               TASK_RESULT_DATA,
-              FORM_INPUT,
+              FORM_PATCH,
               FORM_OUTPUT>(
             xTask: this,
             executionIntent: _executionIntent as TaskSubmitIntent<

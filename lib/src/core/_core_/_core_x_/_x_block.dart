@@ -28,10 +28,10 @@ class XBlock<
       ID, //
       ITEM,
       ITEM_DETAIL,
-      FilterInput,
+      FilterPatch,
       FilterCriteria,
       CreationPreset,
-      FormInput> block;
+      FormPatch> block;
 
   XBlock get rootXBlock {
     if (parentXBlock == null) {
@@ -476,49 +476,6 @@ class XBlock<
       lastIntentInfo: lastIntentInfo,
     );
   }
-
-  // BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
-  //     _createAndSetBlockExecutionIntentClearCurrentItem() {
-  //   final executionIntent =
-  //       BlockClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>();
-  //   _executionIntent = executionIntent;
-  //   return executionIntent;
-  // }
-
-  // BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>
-  //     _createAndSetBlockExecutionIntentPrepareFormToCreateItem({
-  //   required XBlock<ID, ITEM, ITEM_DETAIL> xBlock,
-  //   required bool initDirty,
-  //   required FormInput? formInput,
-  // }) {
-  //   final executionIntent =
-  //       BlockPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>(
-  //     initDirty: initDirty,
-  //     formInput: formInput,
-  //   );
-  //   _executionIntent = executionIntent;
-  //   return executionIntent;
-  // }
-
-  // BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
-  //     _createAndSetBlockExecutionIntentSetCurrentItem({
-  //   required BlockSetCurrentItemDirective setCurrentItemDirective,
-  //   required List<ITEM> newQueriedList,
-  //   required ITEM? inputCandidateCurrItem,
-  //   required bool forceReloadItem,
-  //   required FormLoadHint? formLoadHint,
-  // }) {
-  //   final executionIntent = BlockSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>(
-  //     setCurrentItemDirective: setCurrentItemDirective,
-  //     newQueriedList: newQueriedList,
-  //     inputCandidateCurrItem: inputCandidateCurrItem,
-  //     forceReloadItem: forceReloadItem,
-  //     formLoadHint: formLoadHint,
-  //   );
-  //   _executionIntent = executionIntent;
-  //   _pendingSetCurrentItemIntent ??= executionIntent;
-  //   return executionIntent;
-  // }
 
   // ***************************************************************************
   // ***************************************************************************

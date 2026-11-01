@@ -8,18 +8,18 @@ part of '../core.dart';
 abstract class Task<
     INIT_DATA extends TaskInitData, //
     RESULT_DATA extends TaskResultData, //
-    FORM_INPUT extends FormInput,
+    FORM_PATCH extends FormPatch,
     FORM_OUTPUT extends FormOutput> extends WorkNode<
     INIT_DATA, //
     RESULT_DATA, //
-    FORM_INPUT,
+    FORM_PATCH,
     FORM_OUTPUT> implements FormHost, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {
       "INIT_DATA": INIT_DATA,
       "RESULT_DATA": RESULT_DATA,
-      "FORM_INPUT": FORM_INPUT,
+      "FORM_PATCH": FORM_PATCH,
       "FORM_OUTPUT": FORM_OUTPUT,
     };
   }
@@ -41,7 +41,7 @@ abstract class Task<
   TaskFormModel<
       INIT_DATA, //
       RESULT_DATA,
-      FORM_INPUT,
+      FORM_PATCH,
       FORM_OUTPUT,
       AdditionalFormRelatedData>? formModel;
 
@@ -91,7 +91,7 @@ abstract class Task<
     return XTask<
         INIT_DATA, //
         RESULT_DATA,
-        FORM_INPUT,
+        FORM_PATCH,
         FORM_OUTPUT>._(
       xActivity: xActivity,
       task: this,
@@ -408,7 +408,7 @@ abstract class Task<
   Future<void> _unitSubmit({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT> thisXTask,
+    required XTask<INIT_DATA, RESULT_DATA, FORM_PATCH, FORM_OUTPUT> thisXTask,
     required TaskSubmitIntent<INIT_DATA, RESULT_DATA, FORM_OUTPUT>
         executionIntent,
   }) async {
@@ -590,7 +590,7 @@ abstract class Task<
     final thisXTask = xActivity.findXTaskByName(name) as XTask<
         INIT_DATA, //
         RESULT_DATA,
-        FORM_INPUT,
+        FORM_PATCH,
         FORM_OUTPUT>;
     final TaskRestartIntent<
             INIT_DATA, //
@@ -781,7 +781,7 @@ abstract class Task<
 
     final XActivity xActivity = _XActivityTaskSubmit(task: this);
     final xTask = xActivity.findXTaskByName(name)
-        as XTask<INIT_DATA, RESULT_DATA, FORM_INPUT, FORM_OUTPUT>;
+        as XTask<INIT_DATA, RESULT_DATA, FORM_PATCH, FORM_OUTPUT>;
 
     final TaskSubmitIntent<INIT_DATA, RESULT_DATA, FORM_OUTPUT>
         executionIntent = xTask._createAndSetTaskIntentSubmit();

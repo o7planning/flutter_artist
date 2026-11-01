@@ -1,9 +1,9 @@
 part of '__built_in_model.dart';
 
-class StringIdFilterInput extends FilterInput {
+class StringIdFilterPatch extends FilterPatch {
   final String? idValue;
 
-  const StringIdFilterInput({required this.idValue});
+  const StringIdFilterPatch({required this.idValue});
 
   @override
   List<Object?> get props => [idValue];

@@ -128,7 +128,7 @@ part 'scalar_hidden_action.dart';
 
 part 'scalar_reaction_target.dart';
 
-part 'selection_type.dart';
+part 'muti_opt_selection_mode.dart';
 
 part 'shelf_release_policy.dart';
 

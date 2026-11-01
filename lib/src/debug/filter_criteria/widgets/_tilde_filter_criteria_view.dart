@@ -128,7 +128,7 @@ class TildeFilterCriterionView extends StatelessWidget {
 
   Widget _buildSelectionTypeRow(
       BuildContext context, MultiOptTildeFilterCriterionModel def) {
-    final isMulti = def.selectionType == SelectionType.multi;
+    final isMulti = def.selectionMode == MultiOptSelectionMode.multi;
     return Row(
       children: [
         _buildSelectionBadge(

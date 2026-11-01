@@ -7,10 +7,10 @@ class _BlockSyncSessionState<ID extends Comparable> extends Equatable
       ID, //
       Identifiable<ID>,
       Identifiable<ID>,
-      FilterInput,
+      FilterPatch,
       FilterCriteria,
       CreationPreset,
-      FormInput> block;
+      FormPatch> block;
 
   final Comparable? _parentBlockItemId;
 

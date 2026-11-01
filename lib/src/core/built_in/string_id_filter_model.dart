@@ -1,7 +1,7 @@
 part of '__built_in_model.dart';
 
 class StringIdFilterModel
-    extends FilterModel<StringIdFilterInput, StringIdFilterCriteria> {
+    extends FilterModel<StringIdFilterPatch, StringIdFilterCriteria> {
   final String? _idValue;
 
   StringIdFilterModel({required String? idValue}) : _idValue = idValue;
@@ -32,30 +32,29 @@ class StringIdFilterModel
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
-    required StringIdFilterInput? filterInput,
+    required MultiOptSelectionMode multiOptSelectionMode,
   }) async {
     return null;
   }
 
   @override
-  OptValueWrap? extractUpdateValueForMultiOptTildeCriterion({
+  OptValueWrap? extractPatchValueForMultiOptTildeCriterion({
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptTildeCriterionXData,
-    required StringIdFilterInput filterInput,
+    required StringIdFilterPatch filterPatch,
   }) {
     return null;
   }
 
   @override
-  Map<String, SimpleValueWrap?>? extractUpdateValuesForSimpleTildeCriteria({
-    required StringIdFilterInput filterInput,
+  Map<String, SimpleValueWrap?>? extractPatchValuesForSimpleTildeCriteria({
+    required StringIdFilterPatch filterPatch,
   }) {
     return {
-      "id$tildeSymbol": SimpleValueWrap.of(filterInput.idValue),
+      "id$tildeSymbol": SimpleValueWrap.of(filterPatch.idValue),
     };
   }
 
@@ -64,7 +63,7 @@ class StringIdFilterModel
     required String multiOptTildeCriterionName,
     required String multiOptCriterionBaseName,
     required Object? parentMultiOptTildeCriterionValue,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptTildeCriterionXData,
   }) {
     return null;

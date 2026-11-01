@@ -23,18 +23,18 @@ part of '../core.dart';
 abstract class SingleItemBlock<
 ID extends Comparable, //
 ITEM_DETAIL extends Identifiable<ID>,
-FILTER_INPUT extends FilterInput,
+FILTER_PATCH extends FilterPatch,
 FILTER_CRITERIA extends FilterCriteria,
 CREATION_PRESET extends CreationPreset,
-FORM_INPUT extends FormInput> //
+FORM_PATCH extends FormPatch> //
     extends Block<
         ID, //
         ITEM_DETAIL,
         ITEM_DETAIL,
-        FILTER_INPUT,
+        FILTER_PATCH,
         FILTER_CRITERIA,
         CREATION_PRESET,
-        FORM_INPUT> {
+        FORM_PATCH> {
   SingleItemBlock({
     required super.name,
     required super.description,

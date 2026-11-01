@@ -11,7 +11,7 @@ class ProzessStructure<
           StageInitData,
           StageResultData,
           PROZESS_CONTEXT_DATA,
-          FormInput,
+          FormPatch,
           FormOutput>> stages;
 
   final STAGE_ENUM? initialStageId;

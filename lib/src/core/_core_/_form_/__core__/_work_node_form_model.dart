@@ -7,10 +7,10 @@ part of '../../core.dart';
 abstract class WorkNodeFormModel<
         INIT_DATA extends Object,
         RESULT_DATA extends Object,
-        FORM_INPUT extends FormInput,
+        FORM_PATCH extends FormPatch,
         FORM_OUTPUT extends FormOutput,
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel<FORM_INPUT, FORM_OUTPUT,
+    extends BaseFormModel<FORM_PATCH, FORM_OUTPUT,
         ADDITIONAL_FORM_RELATED_DATA> {
   Activity get activity;
 
@@ -62,7 +62,7 @@ abstract class WorkNodeFormModel<
   OptValueWrap? _internalResolveInitialMultiOptPropValue({
     required ExecutionTrace executionTrace,
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
@@ -80,7 +80,7 @@ abstract class WorkNodeFormModel<
       parameters: {
         "multiOptPropName": multiOptPropName,
         "parentMultiOptPropValue": parentMultiOptPropValue,
-        "selectionType": selectionType,
+        "multiOptSelectionMode": multiOptSelectionMode,
         "multiOptPropXData": multiOptPropXData,
         "initData": currentInitData,
         "additionalFormRelatedData": additionalFormRelatedData,
@@ -88,7 +88,7 @@ abstract class WorkNodeFormModel<
     );
     OptValueWrap? valueWrap = extractMultiOptPropValueFromInitData(
       multiOptPropName: multiOptPropName,
-      selectionType: selectionType,
+      multiOptSelectionMode: multiOptSelectionMode,
       multiOptPropXData: multiOptPropXData,
       parentMultiOptPropValue: parentMultiOptPropValue,
       additionalFormRelatedData: additionalFormRelatedData,
@@ -106,18 +106,16 @@ abstract class WorkNodeFormModel<
   @override
   Future<XData?> _internalPerformLoadMultiOptPropXData({
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required Object? parentMultiOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required FORM_INPUT? formInput,
     required Object? rawDomainData,
   }) {
     return performLoadMultiOptPropXData(
       multiOptPropName: multiOptPropName,
-      selectionType: selectionType,
+      multiOptSelectionMode: multiOptSelectionMode,
       parentMultiOptPropValue: parentMultiOptPropValue,
       additionalFormRelatedData: additionalFormRelatedData,
-      formInput: formInput,
       initData: rawDomainData as INIT_DATA?,
     );
   }
@@ -139,10 +137,9 @@ abstract class WorkNodeFormModel<
   @AbstractMethodAnnotation()
   Future<XData?> performLoadMultiOptPropXData({
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required Object? parentMultiOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
-    required FORM_INPUT? formInput,
     required INIT_DATA? initData,
   });
 
@@ -155,7 +152,7 @@ abstract class WorkNodeFormModel<
   @AbstractMethodAnnotation()
   OptValueWrap? extractMultiOptPropValueFromInitData({
     required String multiOptPropName,
-    required SelectionType selectionType,
+    required MultiOptSelectionMode multiOptSelectionMode,
     required XData multiOptPropXData,
     required Object? parentMultiOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,

@@ -8,7 +8,7 @@ class XBlockFormModel<
   final BlockFormModel formModel;
   late final XBlockCurrentItemModel<ID, Identifiable<ID>, ITEM_DETAIL>
       xBlockCurrentItemModel;
-  final FormInput? formInput;
+  final FormPatch? formPatch;
 
   int get xModuleId => xShelf.xModuleId;
 
@@ -33,7 +33,7 @@ class XBlockFormModel<
   ///
   XBlockFormModel._({
     required this.formModel,
-    required this.formInput,
+    required this.formPatch,
   });
 
   void setForceType(FormLoadHint forceType) {
@@ -80,11 +80,11 @@ class XBlockFormModel<
 
   FormModelPatchFormFieldsIntent
       _createAndSetFormModelExecutionIntentPatchFormFields<
-          FORM_INPUT extends FormInput>({
-    required FORM_INPUT formInput,
+          FORM_PATCH extends FormPatch>({
+    required FORM_PATCH formPatch,
   }) {
     final executionIntent =
-        FormModelPatchFormFieldsIntent(formInput: formInput);
+        FormModelPatchFormFieldsIntent(formPatch: formPatch);
     _executionIntent = executionIntent;
     return executionIntent;
   }
