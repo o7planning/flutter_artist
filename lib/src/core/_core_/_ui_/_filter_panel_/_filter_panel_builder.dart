@@ -113,13 +113,27 @@ class _FilterPanelBuilderState
       isBuilding: true,
     );
     //
-    return FormBuilder(
-      key: formKey,
-      initialValue: widget.filterModel._initialValuesForFilterPanel(),
-      onChanged: _onChanged,
-      child: AbsorbPointer(
-        absorbing: !widget.filterModel.isEnabled(),
-        child: widget.build(),
+    return _buildFormBuilder(context);
+  }
+
+  Widget _buildFormBuilder(BuildContext context) {
+    return Focus(
+      canRequestFocus: false,
+      skipTraversal: true,
+      onKeyEvent: (node, event) => _FocusNavDispatcher.handleFilterKeyEvent(
+        node: node,
+        event: event,
+        filterModel: widget.filterModel,
+        formState: formKey.currentState,
+      ),
+      child: FormBuilder(
+        key: formKey,
+        initialValue: widget.filterModel._initialValuesForFilterPanel(),
+        onChanged: _onChanged,
+        child: AbsorbPointer(
+          absorbing: !widget.filterModel.isEnabled(),
+          child: widget.build(),
+        ),
       ),
     );
   }

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart' hide Action;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_artist/src/core/_core_/_precheck_/__precheck.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
 as dialogs;
@@ -644,6 +645,8 @@ part '_gc_/_garbage_collector.dart';
 part '_gc_/_garbage_scheduler.dart';
 
 part '_globals_/_globals_manager.dart';
+
+part '_keyboard_/_focus_nav.dart';
 
 part '_theme_/_theme_manager.dart';
 

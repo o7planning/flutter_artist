@@ -305,6 +305,16 @@ abstract class FilterModel<
     required Map<String, dynamic> tildeCriteriaMap,
   });
 
+
+  /// Override this method to customize TAB focus navigation between filter criteria on the UI.
+  /// Return `null` or [FocusNavAction.moveNext] to use default focus traversal.
+  @AbstractMethodAnnotation()
+  FocusNavAction? resolveNextFocus({
+    required String currentTildeCriterionName,
+    required dynamic currentValue,
+    required bool isCurrentFieldValid,
+  });
+
   // ***************************************************************************
   // SNAPSHOT SYNCHRONIZATION
   // ***************************************************************************

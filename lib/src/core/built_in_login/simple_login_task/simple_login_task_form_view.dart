@@ -1,4 +1,4 @@
-part of '_login.dart';
+part of '../_login.dart';
 
 /// A standard view component rendering username and password fields bound
 /// to the [SimpleLoginFormModel].

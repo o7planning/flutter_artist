@@ -85,4 +85,13 @@ class SearchTextFilterModel
       searchText: tildeCriteriaMap["searchText$tildeSymbol"],
     );
   }
+
+  @override
+  FocusNavAction? resolveNextFocus({
+    required String currentTildeCriterionName,
+    required currentValue,
+    required bool isCurrentFieldValid,
+  }) {
+    return null;
+  }
 }

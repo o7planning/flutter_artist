@@ -85,4 +85,13 @@ class StringValueFilterModel
       stringValue: tildeCriteriaMap["string$tildeSymbol"],
     );
   }
+
+  @override
+  FocusNavAction? resolveNextFocus({
+    required String currentTildeCriterionName,
+    required currentValue,
+    required bool isCurrentFieldValid,
+  }) {
+    return null;
+  }
 }

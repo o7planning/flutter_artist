@@ -1,4 +1,4 @@
-part of '_login.dart';
+part of '../_login.dart';
 
 /// Base shared context data for multi-stage authentication workflows.
 ///

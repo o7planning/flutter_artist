@@ -155,6 +155,13 @@ abstract class BaseFormModel<
     required Object? rawDomainData,
   });
 
+  @AbstractMethodAnnotation()
+  FocusNavAction? resolveNextFocus({
+    required String currentPropName,
+    required dynamic currentValue,
+    required bool isCurrentFieldValid,
+  });
+
   // ===========================================================================
   // ===========================================================================
 

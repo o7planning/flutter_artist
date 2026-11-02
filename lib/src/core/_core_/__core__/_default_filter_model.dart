@@ -76,4 +76,13 @@ class _DefaultFilterModel
   }) {
     return EmptyFilterCriteria();
   }
+
+  @override
+  FocusNavAction? resolveNextFocus({
+    required String currentTildeCriterionName,
+    required currentValue,
+    required bool isCurrentFieldValid,
+  }) {
+    return null;
+  }
 }

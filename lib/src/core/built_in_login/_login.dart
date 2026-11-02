@@ -8,16 +8,16 @@ import '../utils/__utils.dart';
 
 part 'credentials_form_output.dart';
 
-part 'login_task_result_data.dart';
+part 'simple_login_task/simple_login_task_result_data.dart';
 
 part 'simple_login_form_patch.dart';
 
-part 'simple_login_form_view.dart';
+part 'simple_login_task/simple_login_task_form_view.dart';
 
-part 'simple_login_process.dart';
+part 'simple_login_process/simple_login_process.dart';
 
-part 'simple_login_process_context_data.dart';
+part 'simple_login_process/simple_login_process_context_data.dart';
 
-part 'simple_login_task.dart';
+part 'simple_login_task/simple_login_task.dart';
 
-part 'simple_login_task_form_model.dart';
+part 'simple_login_task/simple_login_task_form_model.dart';

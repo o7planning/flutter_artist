@@ -62,6 +62,7 @@ class MultiOptFormPropDef<V> extends FormPropDef<V> {
     String? description,
     List<MultiOptFormPropDef> children = const [],
     MultiOptPropReload reloadCondition = MultiOptPropReload.ifCriteriaChanged,
+    String? nextPropName,
   }) {
     return MultiOptFormPropDef._(
       propName: propName,
@@ -76,6 +77,7 @@ class MultiOptFormPropDef<V> extends FormPropDef<V> {
     required String propName,
     String? description,
     MultiOptPropReload reloadCondition = MultiOptPropReload.ifCriteriaChanged,
+    String? nextPropName,
   }) {
     return MultiOptFormPropDef._(
       propName: propName,

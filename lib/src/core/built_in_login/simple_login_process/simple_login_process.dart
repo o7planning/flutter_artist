@@ -1,4 +1,4 @@
-part of '_login.dart';
+part of '../_login.dart';
 
 /// A pre-configured base [Prozess] tailored for multi-stage authentication workflows
 /// (such as Username/Password -> 2FA/OTP -> Workspace/Tenant Selection).

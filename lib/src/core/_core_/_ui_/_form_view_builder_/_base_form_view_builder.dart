@@ -132,13 +132,23 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
     }
   }
 
-  FormBuilder _buildFormBuilder(BuildContext context) {
-    return FormBuilder(
-      key: formKey,
-      initialValue: widget.formModel._getInitialValuesForFormView(),
-      autovalidateMode: widget.formModel._autovalidateModeForFormView,
-      onChanged: _onChanged,
-      child: _buildBody(context),
+  Widget _buildFormBuilder(BuildContext context) {
+    return Focus(
+      canRequestFocus: false,
+      skipTraversal: true,
+      onKeyEvent: (node, event) => _FocusNavDispatcher.handleFormKeyEvent(
+        node: node,
+        event: event,
+        formModel: widget.formModel,
+        formState: formKey.currentState,
+      ),
+      child: FormBuilder(
+        key: formKey,
+        initialValue: widget.formModel._getInitialValuesForFormView(),
+        autovalidateMode: widget.formModel._autovalidateModeForFormView,
+        onChanged: _onChanged,
+        child: _buildBody(context),
+      ),
     );
   }
 

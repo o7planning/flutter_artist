@@ -1,11 +1,11 @@
-part of '_login.dart';
+part of '../_login.dart';
 
 /// A pre-configured [Task] designed to streamline standard authentication workflows
 /// (such as Username/Password login or OAuth2/SSO token handshakes).
 ///
 /// This class implements [SessionEstablisher] out of the box, automatically binding
 /// the returned [USER] from [performLogin] into the framework's global session manager
-/// while wrapping the result inside [LoginTaskResultData] for state inspection.
+/// while wrapping the result inside [SimpleLoginTaskResultData] for state inspection.
 ///
 /// ### Usage Scenarios:
 /// 1. **Form-based Login (Username/Password)**: Provide a [SimpleLoginTaskFormModel] (or custom [TaskFormModel])
@@ -17,7 +17,7 @@ abstract class SimpleLoginTask<
     FORM_PATCH extends FormPatch,
     FORM_OUTPUT extends FormOutput> extends Task<
     EmptyTaskInitData, //
-    LoginTaskResultData<USER>,
+    SimpleLoginTaskResultData<USER>,
     FORM_PATCH,
     FORM_OUTPUT> implements SessionEstablisher<USER> {
   SimpleLoginTask({
@@ -51,7 +51,7 @@ abstract class SimpleLoginTask<
   }
 
   @override
-  Future<ApiResult<LoginTaskResultData<USER>>> performSubmit({
+  Future<ApiResult<SimpleLoginTaskResultData<USER>>> performSubmit({
     required EmptyTaskInitData initData,
     required FORM_OUTPUT? formData,
   }) async {
@@ -73,7 +73,7 @@ abstract class SimpleLoginTask<
 
     // 3. Wrap the clean USER domain object into LoginTaskResult for Task state & debuggers.
     return ApiResult.success(
-      data: LoginTaskResultData<USER>(user: authenticatedUser),
+      data: SimpleLoginTaskResultData<USER>(user: authenticatedUser),
     );
   }
 
