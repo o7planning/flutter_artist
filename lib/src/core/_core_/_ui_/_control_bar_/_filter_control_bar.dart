@@ -68,7 +68,7 @@ class _FilterControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Back",
+          tooltip: type.formatTooltip("Back"),
           iconData: FaIconConstants.formBackIconData,
           onPressed: Navigator.of(context).canPop()
               ? () => Navigator.of(context).maybePop()
@@ -83,7 +83,7 @@ class _FilterControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Debug Filter Model Inspector",
+          tooltip: type.formatTooltip("Debug Filter Model Inspector"),
           iconData: FaIconConstants.filterModelDebugIconData,
           onAction: false,
           onPressed: () {
@@ -104,9 +104,8 @@ class _FilterControlBarState extends _BaseControlBarState<
       getClassNameWithoutGenerics(widget.filterModel);
 
   @override
-  void addWidgetState({required bool isVisible}) =>
-      widget.filterModel.ui
-          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) => widget.filterModel.ui
+      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

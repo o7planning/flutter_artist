@@ -3,7 +3,7 @@ part of '../core.dart';
 abstract class FilterModel<
     FILTER_PATCH extends FilterPatch, // EmptyFilterPatch
     FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-    > extends _Core implements ClassDefViewable {
+    > extends _Core implements MnemonicScope, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {

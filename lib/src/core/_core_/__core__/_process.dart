@@ -4,7 +4,7 @@ abstract class Prozess<
         STAGE_ENUM extends StageEnum, //
         PROZESS_INIT_DATA extends ProzessInitData,
         PROZESS_CONTEXT_DATA extends ProzessContextData> extends _Core
-    implements ClassDefViewable {
+    implements MnemonicScope, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {

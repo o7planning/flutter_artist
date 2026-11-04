@@ -80,7 +80,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Back",
+          tooltip: type.formatTooltip("Back"),
           iconData: FaIconConstants.formBackIconData,
           onPressed: Navigator.of(context).canPop()
               ? () => Navigator.of(context).maybePop()
@@ -92,7 +92,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Cancel Prozess",
+          tooltip: type.formatTooltip("Cancel Prozess"),
           iconData: Icons.cancel_outlined,
           customColor: widget.style.deleteIconColor,
           onPressed: () async {
@@ -109,7 +109,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Move to Previous Stage",
+          tooltip: type.formatTooltip("Move to Previous Stage"),
           iconData: FaIconConstants.stagePreviousIconData,
           customColor: widget.style.activeIconColor,
           onPressed: canMove
@@ -124,7 +124,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Move to Next Stage",
+          tooltip: type.formatTooltip("Move to Next Stage"),
           iconData: FaIconConstants.stageNextIconData,
           customColor: widget.style.activeIconColor,
           onPressed: canMove
@@ -138,7 +138,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Restart Prozess",
+          tooltip: type.formatTooltip("Restart Prozess"),
           iconData: FaIconConstants.prozessRestartIconData,
           onPressed: () async {
             await widget.prozess.restart();
@@ -151,7 +151,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Restart Viewing Stage",
+          tooltip: type.formatTooltip("Restart Viewing Stage"),
           iconData: FaIconConstants.formRefreshIconData,
           onPressed: actionable.yes
               ? () {
@@ -170,7 +170,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Submit Viewing Stage",
+          tooltip: type.formatTooltip("Submit Viewing Stage"),
           iconData: FaIconConstants.submitIconData,
           onPressed: actionable.yes
               ? () {
@@ -185,7 +185,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Debug Form Model Inspector",
+          tooltip: type.formatTooltip("Debug Form Model Inspector"),
           iconData: FaIconConstants.formIconData,
           onAction: false,
           onPressed: actionable.yes
@@ -201,7 +201,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Inspect Prozess Context",
+          tooltip: type.formatTooltip("Inspect Prozess Context"),
           iconData: FaIconConstants.prozessIconData,
           onPressed: () {
             widget.prozess.showDebugContextDataViewerDialog(context);
@@ -212,7 +212,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: item.tooltip ?? "Custom",
+          tooltip: type.formatTooltip(item.tooltip ?? "Custom"),
           iconData: item.iconData ?? CupertinoIcons.question_diamond,
           onPressed: item.onPressed == null
               ? null

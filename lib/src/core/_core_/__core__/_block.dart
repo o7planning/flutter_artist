@@ -76,7 +76,7 @@ abstract class Block<
     FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
     CREATION_PRESET extends CreationPreset, // EmptyCreationPreset
     FORM_PATCH extends FormPatch // EmptyFormPatch
-    > extends _Core implements FormHost, ClassDefViewable {
+    > extends _Core implements FormHost, MnemonicScope, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {

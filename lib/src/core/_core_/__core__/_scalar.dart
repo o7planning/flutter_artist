@@ -5,7 +5,7 @@ ID extends Comparable,
 VALUE extends Identifiable<ID>,
 FILTER_PATCH extends FilterPatch,
 FILTER_CRITERIA extends FilterCriteria> extends _Core
-    implements ClassDefViewable {
+    implements MnemonicScope, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {

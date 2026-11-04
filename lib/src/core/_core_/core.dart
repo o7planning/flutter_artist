@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart' hide Action;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Action;
+import 'package:flutter/material.dart' as  material;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_artist/src/core/_core_/_precheck_/__precheck.dart';
@@ -155,6 +156,10 @@ part '_ui_/_process_view_/_welcome_process_stage_view_switcher.dart';
 part '_ui_/_task_view/_task_view.dart';
 
 part '_ui_/_task_view/_task_view_builder.dart';
+
+part '_ui_/_view_focus_/_view_focus_utils.dart';
+
+part '_ui_/_view_focus_/_focusable_view_region.dart';
 
 part '_ui_com_/_activity_ui_components.dart';
 
@@ -471,6 +476,8 @@ part '__core__/__sequence.dart';
 part '__core__/__class_def_viewable.dart';
 
 part '__core__/__data_debugable.dart';
+
+part '__core__/__mnemonic_scope.dart';
 
 part '_core_x_/_x_task.dart';
 
@@ -809,6 +816,8 @@ part '_ui_/__context_provider_view.dart';
 part '_ui_/__context_provider_view_state.dart';
 
 part '_ui_/_process_view_/__process_stage_view_switcher_scope.dart';
+
+part '_ui_/_mnemonic_/_control_mnemonic.dart';
 
 part '_ui_/__error_message_view.dart';
 

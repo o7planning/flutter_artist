@@ -6,7 +6,7 @@ abstract class BaseFormModel<
         FORM_PATCH extends FormPatch, //
         FORM_OUTPUT extends FormOutput, //
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends _Core implements ClassDefViewable {
+    extends _Core implements MnemonicScope, ClassDefViewable {
   /// Configuration options for the form model.
   final FormModelConfig config;
 
@@ -107,7 +107,6 @@ abstract class BaseFormModel<
 
   /// Returns the runtime type of additional form related data.
   Type getAdditionalFormRelatedDataType() => ADDITIONAL_FORM_RELATED_DATA;
-
 
   // ===========================================================================
   // DOMAIN CONTRACTS (To be implemented by subclasses)
@@ -504,8 +503,7 @@ abstract class BaseFormModel<
           for (String propName in patchSimplePropValues.keys) {
             __throwErrorIfNotASimplePropName(
               propName: propName,
-              formErrorMethod:
-                  FormErrorMethod.extractPatchValuesForSimpleProps,
+              formErrorMethod: FormErrorMethod.extractPatchValuesForSimpleProps,
             );
             SimpleValueWrap? valueWrap = patchSimplePropValues[propName];
             if (valueWrap != null && valueWrap.use) {
@@ -569,8 +567,7 @@ abstract class BaseFormModel<
           for (String propName in updatedSimplePropValues.keys) {
             __throwErrorIfNotASimplePropName(
               propName: propName,
-              formErrorMethod:
-                  FormErrorMethod.extractPatchValuesForSimpleProps,
+              formErrorMethod: FormErrorMethod.extractPatchValuesForSimpleProps,
             );
             SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
             if (valueWrap != null && valueWrap.use) {

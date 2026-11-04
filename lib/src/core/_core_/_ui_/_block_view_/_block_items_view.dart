@@ -12,11 +12,15 @@ abstract class BlockItemsView<
   final BLOCK block;
   final QuickSuggestionMode quickSuggestionMode;
   final BlockViewContext blockViewContext;
+  final ViewFocusStyle focusStyle;
+  final ViewMouseFocusPolicy mouseFocusPolicy;
 
   const BlockItemsView({
     required this.block,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     this.blockViewContext = BlockViewContext.items,
+    this.focusStyle = ViewFocusStyle.leftAccentBar,
+    this.mouseFocusPolicy = ViewMouseFocusPolicy.strictNavigationOnly,
     super.key,
   });
 
@@ -29,6 +33,8 @@ abstract class BlockItemsView<
       block: block,
       blockViewContext: blockViewContext,
       quickSuggestionMode: quickSuggestionMode,
+      focusStyle: focusStyle,
+      mouseFocusPolicy: mouseFocusPolicy,
       build: () {
         return buildContent(context);
       },

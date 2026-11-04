@@ -13,7 +13,7 @@ abstract class Task<
     INIT_DATA, //
     RESULT_DATA, //
     FORM_PATCH,
-    FORM_OUTPUT> implements FormHost, ClassDefViewable {
+    FORM_OUTPUT> implements FormHost, MnemonicScope, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {

@@ -71,7 +71,7 @@ class _TaskControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Back",
+          tooltip: type.formatTooltip("Back"),
           iconData: FaIconConstants.formBackIconData,
           onPressed: Navigator.of(context).canPop()
               ? () => Navigator.of(context).maybePop()
@@ -91,7 +91,7 @@ class _TaskControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Submit",
+          tooltip: type.formatTooltip("Submit"),
           iconData: FaIconConstants.submitIconData,
           onAction: widget.task.__isSubmitting,
           onPressed: actionable.yes
@@ -120,7 +120,7 @@ class _TaskControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Restart Task",
+          tooltip: type.formatTooltip("Restart Task"),
           iconData: FaIconConstants.taskRestartIconData,
           onAction: widget.task.isLoadingInitData,
           onPressed: actionable.yes
@@ -136,7 +136,7 @@ class _TaskControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Debug Form Model Inspector",
+          tooltip: type.formatTooltip("Debug Form Model Inspector"),
           iconData: FaIconConstants.formIconData,
           onAction: false,
           onPressed: actionable.yes
@@ -150,7 +150,7 @@ class _TaskControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: item.tooltip ?? "Custom",
+          tooltip: type.formatTooltip(item.tooltip ?? "Custom"),
           iconData: item.iconData ?? CupertinoIcons.question_diamond,
           onPressed: item.onPressed == null
               ? null

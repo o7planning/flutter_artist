@@ -6,3 +6,6 @@ class Blok, BlokForm.
 
 
 Thêm test gọi patchFormFields khi form đang pending, hoặc lỗi.
+
+May giat.
+https://www.tophangsi.vn/pages/may-giat-mini-da-nang?utm_source=DMG_N_Di_gA&utm_medium=All&utm_campaign=Care&utm_content=Maygiatmini&gad_source=2&gad_campaignid=23876980512&gclid=EAIaIQobChMI7qCkta_ulwMVZ4vUAR2_LCL6EAEYASAAEgKAivD_BwE

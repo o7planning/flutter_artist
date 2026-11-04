@@ -87,7 +87,7 @@ class _BlockControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Back",
+          tooltip: type.formatTooltip("Back"),
           iconData: FaIconConstants.formBackIconData,
           onPressed: Navigator.of(context).canPop()
               ? () => Navigator.of(context).maybePop()
@@ -103,7 +103,7 @@ class _BlockControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Create",
+          tooltip: type.formatTooltip("Create"),
           iconData: FaIconConstants.formCreateIconData,
           onAction: widget.block.blockCurrentItemModel.isPreparingFormCreation,
           onPressed: actionable.yes
@@ -130,7 +130,7 @@ class _BlockControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Edit",
+          tooltip: type.formatTooltip("Edit"),
           iconData: FaIconConstants.formEditIconData,
           onAction: widget.block.blockCurrentItemModel.isRefreshingCurrentItem,
           onPressed: actionable.yes
@@ -156,7 +156,7 @@ class _BlockControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Delete",
+          tooltip: type.formatTooltip("Delete"),
           iconData: FaIconConstants.formDeleteIconData,
           customColor: actionable.yes ? widget.style.deleteIconColor : null,
           onAction: widget.block.isDeleting,
@@ -189,7 +189,7 @@ class _BlockControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Save",
+          tooltip: type.formatTooltip("Save"),
           iconData: FaIconConstants.formSaveIconData,
           onAction: widget.block.__isSaving,
           onPressed: actionable.yes
@@ -214,7 +214,7 @@ class _BlockControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Refresh Current Item",
+          tooltip: type.formatTooltip("Refresh Current Item"),
           iconData: FaIconConstants.formRefreshIconData,
           onAction: widget.block.blockCurrentItemModel.isRefreshingCurrentItem,
           onPressed:
@@ -229,7 +229,7 @@ class _BlockControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Reset Form",
+          tooltip: type.formatTooltip("Reset Form"),
           iconData: FaIconConstants.formCleanIconData,
           onPressed:
               actionable.yes ? () => widget.block.formModel?.resetForm() : null,
@@ -241,7 +241,7 @@ class _BlockControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Re Query",
+          tooltip: type.formatTooltip("Re Query"),
           iconData: FaIconConstants.formQueryIconData,
           onAction: widget.block.isQuerying,
           onPressed: actionable.yes ? () => widget.block.query() : null,
@@ -253,7 +253,7 @@ class _BlockControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Debug Filter Criteria Inspector",
+          tooltip: type.formatTooltip("Debug Filter Criteria Inspector"),
           iconData: FaIconConstants.filterCriteriaIconData,
           onAction: false,
           onPressed: show
@@ -273,7 +273,7 @@ class _BlockControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: "Debug Form Model Inspector",
+          tooltip: type.formatTooltip("Debug Form Model Inspector"),
           iconData: FaIconConstants.formIconData,
           onAction: false,
           onPressed: actionable.yes
@@ -287,7 +287,7 @@ class _BlockControlBarState extends _BaseControlBarState<
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
-          tooltip: item.tooltip ?? "Custom",
+          tooltip: type.formatTooltip(item.tooltip ?? "Custom"),
           iconData: item.iconData ?? CupertinoIcons.question_diamond,
           onAction: false,
           onPressed: item.onPressed == null

@@ -6,6 +6,15 @@ class BlockItemsViewBuilder extends _ContextProviderView {
   final Widget Function() build;
   final BlockViewContext blockViewContext;
 
+  /// Whether this items view can receive keyboard focus and handle Up/Down arrow navigation.
+  final bool enableKeyboardNavigation;
+
+  /// Visual style used to highlight this region when it holds keyboard focus.
+  final ViewFocusStyle focusStyle;
+
+  /// Policy controlling whether clicking inside this view transfers keyboard focus to it.
+  final ViewMouseFocusPolicy mouseFocusPolicy;
+
   const BlockItemsViewBuilder({
     super.key,
     required super.ownerClassInstance,
@@ -13,6 +22,9 @@ class BlockItemsViewBuilder extends _ContextProviderView {
     required this.block,
     this.blockViewContext = BlockViewContext.items,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    this.enableKeyboardNavigation = true,
+    this.focusStyle = ViewFocusStyle.leftAccentBar,
+    this.mouseFocusPolicy = ViewMouseFocusPolicy.strictNavigationOnly,
     required this.build,
   });
 
@@ -69,8 +81,9 @@ class _BlockItemsViewBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
+    Widget content;
     if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
-      return Stack(
+      content = Stack(
         children: [
           widget.build(),
           if (widget.block.hasError)
@@ -82,8 +95,20 @@ class _BlockItemsViewBuilderState
         ],
       );
     } else {
-      return widget.build();
+      content = widget.build();
     }
+
+    return _FocusableViewRegion(
+      debugLabel: 'BlockItemsView(${widget.block.name})',
+      enabled: widget.enableKeyboardNavigation,
+      focusStyle: widget.focusStyle,
+      mouseFocusPolicy: widget.mouseFocusPolicy,
+      onKeyEvent: (node, event) => _ViewFocusUtils.handleBlockItemsKeyEvent(
+        block: widget.block,
+        event: event,
+      ),
+      child: content,
+    );
   }
 
   Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
