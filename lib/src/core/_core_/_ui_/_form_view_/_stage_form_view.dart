@@ -10,11 +10,9 @@ abstract class StageFormView<
         FormOutput,
         AdditionalFormRelatedData>> extends StatelessWidget {
   final STAGE_FORM_MODEL formModel;
-  final QuickSuggestionMode quickSuggestionMode;
 
   const StageFormView({
     required this.formModel,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     super.key,
   });
 
@@ -25,7 +23,6 @@ abstract class StageFormView<
       ownerClassInstance: this,
       description: '',
       formModel: formModel,
-      quickSuggestionMode: quickSuggestionMode,
       build: () {
         return buildContent(context);
       },

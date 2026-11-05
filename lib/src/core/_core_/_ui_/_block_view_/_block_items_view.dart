@@ -10,19 +10,13 @@ abstract class BlockItemsView<
         CreationPreset,
         FormPatch>> extends StatelessWidget {
   final BLOCK block;
-  final QuickSuggestionMode quickSuggestionMode;
-  final BlockViewContext blockViewContext;
-  final ViewFocusStyle focusStyle;
-  final ViewMouseFocusPolicy mouseFocusPolicy;
+  final BlockItemsViewConfig config;
 
   const BlockItemsView({
     required this.block,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
-    this.blockViewContext = BlockViewContext.items,
-    this.focusStyle = ViewFocusStyle.leftAccentBar,
-    this.mouseFocusPolicy = ViewMouseFocusPolicy.strictNavigationOnly,
+    required BlockItemsViewConfig? config,
     super.key,
-  });
+  }) : config = config ?? const BlockItemsViewConfig();
 
   @override
   @nonVirtual
@@ -31,10 +25,7 @@ abstract class BlockItemsView<
       ownerClassInstance: this,
       description: '',
       block: block,
-      blockViewContext: blockViewContext,
-      quickSuggestionMode: quickSuggestionMode,
-      focusStyle: focusStyle,
-      mouseFocusPolicy: mouseFocusPolicy,
+      config: config,
       build: () {
         return buildContent(context);
       },

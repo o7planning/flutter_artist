@@ -7,6 +7,7 @@ class TaskControlBar extends BaseControlBar<
   final Task task;
   final TaskControlBarConfig config;
   final TaskViewContext? taskViewContext;
+  final TaskScreenNavigationContext? screenNavigationContext;
 
   const TaskControlBar({
     super.key,
@@ -15,6 +16,7 @@ class TaskControlBar extends BaseControlBar<
     required this.task,
     this.config = const TaskControlBarConfig(),
     this.taskViewContext = TaskViewContext.initData,
+    this.screenNavigationContext,
     super.style,
     super.leftItems = const [
       TaskControlBarItem.standard(TaskControlBarItemType.back),
@@ -63,7 +65,7 @@ class _TaskControlBarState extends _BaseControlBarState<
     final type = item.type ?? TaskControlBarItemType.custom;
 
     switch (type) {
-      case ProzessControlBarItemType.divider:
+      case TaskControlBarItemType.divider:
         return ControlBarHelper.buildDivider();
 
       case TaskControlBarItemType.back:
@@ -98,10 +100,10 @@ class _TaskControlBarState extends _BaseControlBarState<
               ? () async {
                   final result = await widget.task.submit();
                   final NavigationIntent? intent =
-                      widget.config.submitNavigationIntent;
+                      widget.screenNavigationContext?.submitNavigationIntent;
                   if (intent != null) {
                     widget.task._processNavigationIntent(
-                      context: context,
+                      context,
                       result: result,
                       intent: intent,
                     );
@@ -125,7 +127,16 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: widget.task.isLoadingInitData,
           onPressed: actionable.yes
               ? () async {
-                  await widget.task.restart();
+                  final result = await widget.task.restart();
+                  final NavigationIntent? intent =
+                      widget.screenNavigationContext?.restartNavigationIntent;
+                  if (intent != null) {
+                    widget.task._processNavigationIntent(
+                      context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
                 }
               : null,
         );

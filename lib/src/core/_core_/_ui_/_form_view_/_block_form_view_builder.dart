@@ -1,14 +1,16 @@
 part of '../../core.dart';
 
 class BlockFormViewBuilder extends BaseFormViewBuilder<BlockFormModel> {
+  final BlockFormViewConfig config;
+
   const BlockFormViewBuilder({
-    super.key,
     required super.ownerClassInstance,
     required super.description,
     required super.formModel,
     required super.build,
-    super.quickSuggestionMode = QuickSuggestionMode.showIfError,
-  });
+    required BlockFormViewConfig? config,
+    super.key,
+  }) : config = config ?? const BlockFormViewConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -50,5 +52,18 @@ class _BlockFormViewBuilderState
   @override
   void checkAndFreeMemory() {
     FlutterArtist.storage._checkToRemoveShelf(widget.formModel.shelf);
+  }
+
+  @override
+  KeyEventResult handleFormMnemonicKeyEvent(
+    BuildContext context,
+    KeyEvent event,
+  ) {
+    return _BlockMnemonicHandler.handleKeyEvent(
+      context: context,
+      block: widget.formModel.block,
+      screenNavigationContext: widget.config.screenNavigationContext,
+      event: event,
+    );
   }
 }

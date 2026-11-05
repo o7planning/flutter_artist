@@ -7,13 +7,15 @@ class StageFormViewBuilder extends BaseFormViewBuilder<StageFormModel> {
     required super.description,
     required super.formModel,
     required super.build,
-    super.quickSuggestionMode = QuickSuggestionMode.showIfError,
   });
 
   @override
   State<StatefulWidget> createState() {
     return _StageFormViewBuilderState();
   }
+
+  @override
+  FormViewConfig get config => const InternalFormViewConfig();
 }
 
 class _StageFormViewBuilderState
@@ -48,7 +50,7 @@ class _StageFormViewBuilderState
     if (!isValid) {
       return const ErrorMessageView(
         message:
-        'StageFormView and StageFormViewBuilder must be child widgets of ProzessStageFormViewSwitcher!',
+            'StageFormView and StageFormViewBuilder must be child widgets of ProzessStageFormViewSwitcher!',
       );
     }
     return super.buildContent(context);
@@ -62,5 +64,19 @@ class _StageFormViewBuilderState
   @override
   void checkAndFreeMemory() {
     FlutterArtist.desk._checkToRemoveActivity(widget.formModel.stage.activity);
+  }
+
+  @override
+  KeyEventResult handleFormMnemonicKeyEvent(
+    BuildContext context,
+    KeyEvent event,
+  ) {
+    final switcherScope = _StageFormViewSwitcherScope.maybeOf(context);
+    return _ProzessMnemonicHandler.handleKeyEvent(
+      context: context,
+      prozess: widget.formModel.stage.prozess,
+      screenNavigationContext: switcherScope?.screenNavigationContext,
+      event: event,
+    );
   }
 }

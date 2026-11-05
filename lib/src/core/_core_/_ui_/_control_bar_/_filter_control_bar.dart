@@ -6,6 +6,7 @@ class FilterControlBar extends BaseControlBar<
     FilterControlBarItem> {
   final FilterModel filterModel;
   final FilterControlBarConfig config;
+  final FilterScreenNavigationContext? screenNavigationContext;
 
   const FilterControlBar({
     super.key,
@@ -13,6 +14,7 @@ class FilterControlBar extends BaseControlBar<
     required super.description,
     required this.filterModel,
     required this.config,
+    this.screenNavigationContext,
     super.style,
     //
     super.leftItems = const [
@@ -60,7 +62,7 @@ class _FilterControlBarState extends _BaseControlBarState<
   Widget? buildStandardButton(FilterControlBarItem item) {
     final type = item.type ?? FilterControlBarItemType.custom;
     switch (type) {
-      case ProzessControlBarItemType.divider:
+      case FilterControlBarItemType.divider:
         return ControlBarHelper.buildDivider();
 
       case FilterControlBarItemType.back:

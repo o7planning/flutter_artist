@@ -6,11 +6,13 @@ abstract class FilterPanel<FILTER_MODEL extends FilterModel>
 
   final BlockViewContext? blockViewContext;
   final ScalarViewContext? scalarViewContext;
+  final FilterScreenNavigationContext? screenNavigationContext;
 
   const FilterPanel({
     required this.filterModel,
     this.blockViewContext,
     this.scalarViewContext,
+    this.screenNavigationContext,
     super.key,
   });
 
@@ -21,14 +23,14 @@ abstract class FilterPanel<FILTER_MODEL extends FilterModel>
       ownerClassInstance: this,
       description: '',
       filterModel: filterModel,
-      blockViewContext:blockViewContext,
-      scalarViewContext:scalarViewContext,
+      blockViewContext: blockViewContext,
+      scalarViewContext: scalarViewContext,
+      screenNavigationContext: screenNavigationContext,
       build: () {
         return buildContent(context);
       },
     );
   }
-
 
   Widget buildDebugButton({
     ButtonStyle? style,

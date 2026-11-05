@@ -2,17 +2,17 @@ part of '../../core.dart';
 
 class BlockSectionViewBuilder extends _ContextProviderView {
   final Block block;
-  final BlockViewContext? blockViewContext;
   final Widget Function() build;
+  final BlockSectionViewConfig config;
 
   const BlockSectionViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.block,
-    required this.blockViewContext,
+    BlockSectionViewConfig? config,
     required this.build,
-  });
+  }) : config = config ?? const BlockSectionViewConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -36,7 +36,7 @@ class _BlockSectionViewBuilderState
   }
 
   @override
-  BlockViewContext? get blockViewContext => widget.blockViewContext;
+  BlockViewContext? get blockViewContext => widget.config.blockViewContext;
 
   @override
   ScalarViewContext? get scalarContextType => null;

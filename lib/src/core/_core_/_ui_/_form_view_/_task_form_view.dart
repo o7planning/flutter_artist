@@ -8,13 +8,13 @@ abstract class TaskFormView<
         FormOutput,
         AdditionalFormRelatedData>> extends StatelessWidget {
   final TASK_FORM_MODEL formModel;
-  final QuickSuggestionMode quickSuggestionMode;
+  final TaskFormViewConfig config;
 
   const TaskFormView({
     required this.formModel,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    required TaskFormViewConfig? config,
     super.key,
-  });
+  }) : config = config ?? const TaskFormViewConfig();
 
   @override
   @nonVirtual
@@ -23,7 +23,7 @@ abstract class TaskFormView<
       ownerClassInstance: this,
       description: '',
       formModel: formModel,
-      quickSuggestionMode: quickSuggestionMode,
+      config: config,
       build: () {
         return buildContent(context);
       },

@@ -1,17 +1,19 @@
 part of '../../core.dart';
 
 abstract class ScalarValueView<
-SCALAR extends Scalar<
-    Comparable, //
-    Identifiable<Comparable>,
-    FilterPatch,
-    FilterCriteria>> extends StatelessWidget {
+    SCALAR extends Scalar<
+        Comparable, //
+        Identifiable<Comparable>,
+        FilterPatch,
+        FilterCriteria>> extends StatelessWidget {
   final SCALAR scalar;
   final QuickSuggestionMode quickSuggestionMode;
+  final ScalarScreenNavigationContext? screenNavigationContext;
 
   const ScalarValueView({
     required this.scalar,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    this.screenNavigationContext,
     super.key,
   });
 
@@ -23,6 +25,7 @@ SCALAR extends Scalar<
       description: '',
       scalar: scalar,
       quickSuggestionMode: quickSuggestionMode,
+      screenNavigationContext: screenNavigationContext,
       build: () {
         return buildContent(context);
       },

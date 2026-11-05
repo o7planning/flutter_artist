@@ -1,7 +1,8 @@
 part of '../../core.dart';
 
 /// Wraps a button or interactive control to bind it to a single-character
-/// keyboard mnemonic shortcut (e.g., `Alt + S`) within a given [MnemonicScope].
+/// keyboard mnemonic shortcut (e.g., `Alt + S` on Windows, `Ctrl + S` on macOS)
+/// within a given [MnemonicScope].
 ///
 /// [ControlMnemonic] automatically inspects its descendant widget tree to locate
 /// and invoke the underlying button's action callback (`onPressed` or `onTap`)
@@ -22,6 +23,10 @@ class ControlMnemonic extends StatefulWidget {
   /// Single alphanumeric character (A-Z, 0-9) representing the shortcut key.
   final String charKey;
 
+  /// Modifier key combination required to trigger this mnemonic.
+  /// Defaults to [MnemonicModifier.mnemonic] (`Alt` on Windows/Linux, `Ctrl` on macOS).
+  final MnemonicModifier modifier;
+
   /// Optional target scope (such as a [Block], [Scalar], [BaseFormModel], [FilterModel],
   /// [Task]) that disambiguates duplicate shortcuts across regions.
   final MnemonicScope? scope;
@@ -38,13 +43,14 @@ class ControlMnemonic extends StatefulWidget {
   ControlMnemonic({
     super.key,
     required String charKey,
+    this.modifier = MnemonicModifier.mnemonic,
     this.scope,
     this.onTrigger,
     required this.child,
   }) : charKey = charKey.trim().toUpperCase() {
     assert(
-      this.charKey.length == 1,
-      'charKey must be a single character (e.g., "A", "S", "1"), but got "$charKey".',
+    this.charKey.length == 1,
+    'charKey must be a single character (e.g., "A", "S", "1"), but got "$charKey".',
     );
   }
 
@@ -58,27 +64,31 @@ class ControlMnemonicState extends State<ControlMnemonic> {
   /// Normalized uppercase character key (e.g., `"S"`).
   String get charKey => widget.charKey;
 
+  /// The modifier required to activate this control.
+  MnemonicModifier get modifier => widget.modifier;
+
   /// The explicit scope assigned to this control, if any.
   MnemonicScope? get scope => widget.scope;
 
   @override
   void initState() {
     super.initState();
-    // TODO: Register `this` with the central Mnemonic Registry.
+    _MnemonicDispatcher.register(this);
   }
 
   @override
   void didUpdateWidget(covariant ControlMnemonic oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.charKey != widget.charKey ||
+        oldWidget.modifier != widget.modifier ||
         oldWidget.scope != widget.scope) {
-      // TODO: Update registration in the central Mnemonic Registry if needed.
+      _MnemonicDispatcher.register(this);
     }
   }
 
   @override
   void dispose() {
-    // TODO: Unregister `this` from the central Mnemonic Registry.
+    _MnemonicDispatcher.unregister(this);
     super.dispose();
   }
 
@@ -204,7 +214,7 @@ class ControlMnemonicState extends State<ControlMnemonic> {
       if (actionableContext != null) return;
       if (element.widget is Actions) {
         final material.Action<ActivateIntent>? action =
-            material.Actions.maybeFind<ActivateIntent>(element);
+        material.Actions.maybeFind<ActivateIntent>(element);
         if (action != null && action.isActionEnabled) {
           actionableContext = element;
           return;

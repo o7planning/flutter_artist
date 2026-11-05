@@ -2,19 +2,19 @@ part of '../../core.dart';
 
 class ProzessViewBuilder extends _ContextProviderView {
   final Prozess prozess;
-  final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
-  final ProzessViewContext prozessViewContext;
+
+  final ProzessViewConfig config;
+
 
   const ProzessViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.prozess,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
-    this.prozessViewContext = ProzessViewContext.initData,
+    required ProzessViewConfig? config,
     required this.build,
-  });
+  }) : config = config ?? const ProzessViewConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -44,7 +44,8 @@ class _ProzessViewBuilderState
   ScalarViewContext? get scalarContextType => null;
 
   @override
-  ProzessViewContext? get prozessViewContext => widget.prozessViewContext;
+  ProzessViewContext? get prozessViewContext =>
+      widget.config.prozessViewContext;
 
   @override
   StageViewContext? get stageViewContext => null;
@@ -69,7 +70,7 @@ class _ProzessViewBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
+    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
       return Stack(
         children: [
           widget.build(),

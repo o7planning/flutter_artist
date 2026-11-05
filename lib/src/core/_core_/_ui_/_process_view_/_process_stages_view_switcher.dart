@@ -1,26 +1,27 @@
 part of '../../core.dart';
 
-class ProzessStageViewSwitcher extends StatelessWidget {
+class ProzessStagesViewSwitcher extends StatelessWidget {
   final List<StageView> stageViews;
   final List<StageViewBuilder> stageViewBuilders;
-  final QuickSuggestionMode quickSuggestionMode;
 
-  const ProzessStageViewSwitcher({
+  final ProzessViewConfig config;
+
+  const ProzessStagesViewSwitcher({
     required this.stageViews,
     this.stageViewBuilders = const [],
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    ProzessViewConfig? config,
     super.key,
-  });
+  }) : config = config ?? const ProzessViewConfig();
 
   @override
   @nonVirtual
   Widget build(BuildContext context) {
-    return ProzessStageViewSwitcherBuilder(
+    return ProzessStagesViewSwitcherBuilder(
       ownerClassInstance: this,
       description: 'Prozess Stages Switch Container',
       stageViews: stageViews,
       stageViewBuilders: stageViewBuilders,
-      quickSuggestionMode: quickSuggestionMode,
+      config: config,
     );
   }
 }

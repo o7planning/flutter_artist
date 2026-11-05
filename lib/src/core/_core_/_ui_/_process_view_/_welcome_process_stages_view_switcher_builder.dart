@@ -1,20 +1,23 @@
 part of '../../core.dart';
 
-class WelcomeProzessStageViewSwitcherBuilder
-    extends _BaseProzessStageViewSwitcherBuilder {
+class WelcomeProzessStagesViewSwitcherBuilder
+    extends _BaseProzessStagesViewSwitcherBuilder {
   final Prozess prozess;
   final Widget Function(
-      BuildContext context, Stage currentStage, String promptMessage)?
-  customContentBuilder;
+      BuildContext context, //
+      Stage currentStage,
+      String promptMessage)? customContentBuilder;
 
-  const WelcomeProzessStageViewSwitcherBuilder({
+  const WelcomeProzessStagesViewSwitcherBuilder({
     super.key,
     required super.ownerClassInstance,
     required this.prozess,
-    super.quickSuggestionMode,
     this.customContentBuilder,
     String? description,
-  }) : super(description: description ?? 'Welcome Prozess Stage Switcher');
+    required ProzessViewConfig? config,
+  }) : super(
+      config: config ?? const ProzessViewConfig(),
+      description: description ?? 'Welcome Prozess Stage Switcher');
 
   @override
   State<StatefulWidget> createState() =>
@@ -22,8 +25,8 @@ class WelcomeProzessStageViewSwitcherBuilder
 }
 
 class _WelcomeProzessStageViewSwitcherBuilderState
-    extends _BaseProzessStageViewSwitcherBuilderState<
-        WelcomeProzessStageViewSwitcherBuilder> {
+    extends _BaseProzessStagesViewSwitcherBuilderState<
+        WelcomeProzessStagesViewSwitcherBuilder> {
   @override
   Prozess getProzess() => widget.prozess;
 

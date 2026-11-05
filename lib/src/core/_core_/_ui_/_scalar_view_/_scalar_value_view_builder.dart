@@ -3,6 +3,8 @@ part of '../../core.dart';
 class ScalarValueViewBuilder extends _ContextProviderView {
   final Scalar scalar;
   final QuickSuggestionMode quickSuggestionMode;
+  final ScalarScreenNavigationContext? screenNavigationContext;
+
   final Widget Function() build;
 
   const ScalarValueViewBuilder({
@@ -11,6 +13,7 @@ class ScalarValueViewBuilder extends _ContextProviderView {
     required super.description,
     required this.scalar,
     this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    this.screenNavigationContext,
     required this.build,
   });
 

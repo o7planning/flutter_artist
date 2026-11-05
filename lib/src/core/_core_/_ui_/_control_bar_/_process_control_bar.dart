@@ -8,6 +8,7 @@ class ProzessControlBar extends BaseControlBar<
   final ProzessControlBarConfig config;
 
   final ProzessViewContext prozessViewContext;
+  final ProzessScreenNavigationContext? screenNavigationContext;
 
   const ProzessControlBar({
     super.key,
@@ -16,6 +17,7 @@ class ProzessControlBar extends BaseControlBar<
     required this.prozess,
     this.config = const ProzessControlBarConfig(),
     this.prozessViewContext = ProzessViewContext.initData,
+    this.screenNavigationContext,
     super.style,
     super.leftItems = const [
       ProzessControlBarItem.standard(ProzessControlBarItemType.back),
@@ -97,7 +99,15 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           customColor: widget.style.deleteIconColor,
           onPressed: () async {
             widget.prozess.cancel();
-            if (Navigator.of(context).canPop()) {
+            final NavigationIntent? intent =
+                widget.screenNavigationContext?.cancelNavigationIntent;
+            if (intent != null) {
+              widget.prozess._processNavigationIntent(
+                context,
+                result: null,
+                intent: intent,
+              );
+            } else if (Navigator.of(context).canPop()) {
               Navigator.of(context).maybePop();
             }
           },
@@ -118,6 +128,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
                 }
               : null,
         );
+
       case ProzessControlBarItemType.moveToNextStage:
         if (!widget.config.allowMoveToNextStageButton) return null;
         bool canMove = widget.prozess.canMoveToNextStage();
@@ -133,6 +144,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
                 }
               : null,
         );
+
       case ProzessControlBarItemType.restartProzess:
         if (!widget.config.allowRestartProzessButton) return null;
         return ControlBarHelper.buildControlBarButton(
@@ -173,8 +185,18 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           tooltip: type.formatTooltip("Submit Viewing Stage"),
           iconData: FaIconConstants.submitIconData,
           onPressed: actionable.yes
-              ? () {
-                  widget.prozess.submitViewingStage();
+              ? () async {
+                  final result = await widget.prozess.submitViewingStage();
+                  final NavigationIntent? intent = widget
+                      .screenNavigationContext
+                      ?.submitViewingStageNavigationIntent;
+                  if (intent != null && context.mounted) {
+                    widget.prozess._processNavigationIntent(
+                      context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
                 }
               : null,
         );

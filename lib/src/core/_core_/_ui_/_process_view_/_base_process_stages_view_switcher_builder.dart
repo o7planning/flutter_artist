@@ -2,20 +2,20 @@ part of '../../core.dart';
 
 /// Abstract base builder providing core lifecycle management, error handling,
 /// and quick suggestion toolbars for prozess stage switchers.
-abstract class _BaseProzessStageViewSwitcherBuilder
+abstract class _BaseProzessStagesViewSwitcherBuilder
     extends _ContextProviderView {
-  final QuickSuggestionMode quickSuggestionMode;
+  final ProzessViewConfig config;
 
-  const _BaseProzessStageViewSwitcherBuilder({
+  const _BaseProzessStagesViewSwitcherBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    required this.config,
   });
 }
 
-abstract class _BaseProzessStageViewSwitcherBuilderState<
-        W extends _BaseProzessStageViewSwitcherBuilder>
+abstract class _BaseProzessStagesViewSwitcherBuilderState<
+        W extends _BaseProzessStagesViewSwitcherBuilder>
     extends _ContextProviderViewState<W> {
   Prozess get prozess => getProzess();
 
@@ -75,7 +75,7 @@ abstract class _BaseProzessStageViewSwitcherBuilderState<
 
     final Widget content = _buildActiveStageWidget(context);
 
-    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError &&
+    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError &&
         prozess.hasError) {
       return Stack(
         children: [
@@ -115,7 +115,7 @@ abstract class _BaseProzessStageViewSwitcherBuilderState<
       );
     }
 
-    return _StageViewSwitcherScope(
+    return _StagesViewSwitcherScope(
       child: stageWidgets[rawIndex],
     );
   }

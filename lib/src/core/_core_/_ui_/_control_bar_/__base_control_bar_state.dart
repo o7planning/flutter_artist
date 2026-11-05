@@ -64,7 +64,6 @@ W extends BaseControlBar<OWNER, ITEM_TYPE, CONTROL_BAR_ITEM>>
 
   List<Widget> _buildItemGroup(List<CONTROL_BAR_ITEM> items) {
     List<Widget?> rawWidgets = items.map((item) {
-      // Lấy tên của enum một cách dynamic (hoạt động cho mọi loại ControlBar)
       final String typeName = item.type?.name ?? 'custom';
 
       if (typeName == 'divider') {

@@ -7,6 +7,7 @@ class BlockControlBar extends BaseControlBar<
   final Block block;
   final BlockControlBarConfig config;
   final BlockViewContext blockViewContext;
+  final BlockScreenNavigationContext? screenNavigationContext;
 
   const BlockControlBar({
     super.key,
@@ -15,6 +16,7 @@ class BlockControlBar extends BaseControlBar<
     required this.block,
     required this.config,
     this.blockViewContext = BlockViewContext.items,
+    this.screenNavigationContext,
     super.style,
     //
     super.leftItems = const [
@@ -79,7 +81,7 @@ class _BlockControlBarState extends _BaseControlBarState<
   Widget? buildStandardButton(BlockControlBarItem item) {
     final type = item.type ?? BlockControlBarItemType.custom;
     switch (type) {
-      case ProzessControlBarItemType.divider:
+      case BlockControlBarItemType.divider:
         return ControlBarHelper.buildDivider();
 
       case BlockControlBarItemType.back:
@@ -109,12 +111,11 @@ class _BlockControlBarState extends _BaseControlBarState<
           onPressed: actionable.yes
               ? () async {
                   final result = await widget.block.prepareFormToCreateItem();
-                  // widget.config.onNavigateCreate?.call(result);
                   final NavigationIntent? intent =
-                      widget.config.createNavigationIntent;
+                      widget.screenNavigationContext?.createNavigationIntent;
                   if (intent != null) {
                     widget.block._processNavigationIntent(
-                      context: context,
+                      context,
                       result: result,
                       intent: intent,
                     );
@@ -139,10 +140,10 @@ class _BlockControlBarState extends _BaseControlBarState<
                       await widget.block._prepareFormToEditCurrentItem();
                   //
                   final NavigationIntent? intent =
-                      widget.config.editNavigationIntent;
+                      widget.screenNavigationContext?.editNavigationIntent;
                   if (intent != null) {
                     widget.block._processNavigationIntent(
-                      context: context,
+                      context,
                       result: result,
                       intent: intent,
                     );
@@ -163,12 +164,11 @@ class _BlockControlBarState extends _BaseControlBarState<
           onPressed: actionable.yes
               ? () async {
                   final result = await widget.block.deleteCurrentItem();
-                  // widget.config.onNavigateDelete?.call(result);
                   final NavigationIntent? intent =
-                      widget.config.deleteNavigationIntent;
+                      widget.screenNavigationContext?.deleteNavigationIntent;
                   if (intent != null) {
                     widget.block._processNavigationIntent(
-                      context: context,
+                      context,
                       result: result,
                       intent: intent,
                     );
@@ -196,10 +196,10 @@ class _BlockControlBarState extends _BaseControlBarState<
               ? () async {
                   final result = await widget.block.formModel!.saveForm();
                   final NavigationIntent? intent =
-                      widget.config.saveNavigationIntent;
+                      widget.screenNavigationContext?.saveNavigationIntent;
                   if (intent != null) {
                     widget.block._processNavigationIntent(
-                      context: context,
+                      context,
                       result: result,
                       intent: intent,
                     );
@@ -222,7 +222,8 @@ class _BlockControlBarState extends _BaseControlBarState<
         );
 
       case BlockControlBarItemType.reset:
-        if (widget.block.formModel == null || !widget.config.allowSaveButton) {
+        if (widget.block.formModel == null ||
+            !widget.config.allowResetFormButton) {
           return null;
         }
         final actionable = widget.block.checkBeforeResetForm();

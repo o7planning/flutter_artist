@@ -2,31 +2,18 @@ part of '../../core.dart';
 
 class BlockItemsViewBuilder extends _ContextProviderView {
   final Block block;
-  final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
-  final BlockViewContext blockViewContext;
 
-  /// Whether this items view can receive keyboard focus and handle Up/Down arrow navigation.
-  final bool enableKeyboardNavigation;
-
-  /// Visual style used to highlight this region when it holds keyboard focus.
-  final ViewFocusStyle focusStyle;
-
-  /// Policy controlling whether clicking inside this view transfers keyboard focus to it.
-  final ViewMouseFocusPolicy mouseFocusPolicy;
+  final BlockItemsViewConfig config;
 
   const BlockItemsViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.block,
-    this.blockViewContext = BlockViewContext.items,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
-    this.enableKeyboardNavigation = true,
-    this.focusStyle = ViewFocusStyle.leftAccentBar,
-    this.mouseFocusPolicy = ViewMouseFocusPolicy.strictNavigationOnly,
+    BlockItemsViewConfig? config,
     required this.build,
-  });
+  }) : config = config ?? const BlockItemsViewConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -50,7 +37,7 @@ class _BlockItemsViewBuilderState
   }
 
   @override
-  BlockViewContext? get blockViewContext => widget.blockViewContext;
+  BlockViewContext? get blockViewContext => widget.config.blockViewContext;
 
   @override
   ScalarViewContext? get scalarContextType => null;
@@ -82,7 +69,7 @@ class _BlockItemsViewBuilderState
   @override
   Widget buildContent(BuildContext context) {
     Widget content;
-    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
+    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
       content = Stack(
         children: [
           widget.build(),
@@ -100,13 +87,27 @@ class _BlockItemsViewBuilderState
 
     return _FocusableViewRegion(
       debugLabel: 'BlockItemsView(${widget.block.name})',
-      enabled: widget.enableKeyboardNavigation,
-      focusStyle: widget.focusStyle,
-      mouseFocusPolicy: widget.mouseFocusPolicy,
-      onKeyEvent: (node, event) => _ViewFocusUtils.handleBlockItemsKeyEvent(
-        block: widget.block,
-        event: event,
-      ),
+      enabled: widget.config.enableKeyboardNavigation,
+      focusStyle: widget.config.focusStyle,
+      mouseFocusPolicy: widget.config.mouseFocusPolicy,
+      onKeyEvent: (node, event) {
+        // 1. Handle standard Up / Down / Home / End list navigation
+        final navResult = _ViewFocusUtils.handleBlockItemsKeyEvent(
+          block: widget.block,
+          event: event,
+        );
+        if (navResult == KeyEventResult.handled) {
+          return KeyEventResult.handled;
+        }
+
+        // 2. Handle Mnemonic Shortcuts (Alt+C, Alt+E, Alt+D, Alt+Q, Alt+R, etc.)
+        return _BlockMnemonicHandler.handleKeyEvent(
+          context: context,
+          block: widget.block,
+          screenNavigationContext: widget.config.screenNavigationContext,
+          event: event,
+        );
+      },
       child: content,
     );
   }

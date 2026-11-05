@@ -2,19 +2,17 @@ part of '../../core.dart';
 
 class TaskViewBuilder extends _ContextProviderView {
   final Task task;
-  final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
-  final TaskViewContext taskViewContext;
+  final TaskViewConfig config;
 
   const TaskViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.task,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
-    this.taskViewContext = TaskViewContext.initData,
+    required TaskViewConfig? config,
     required this.build,
-  });
+  }): config = config ?? const TaskViewConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -49,7 +47,7 @@ class _TaskViewBuilderState extends _ContextProviderViewState<TaskViewBuilder> {
   StageViewContext? get stageViewContext => null;
 
   @override
-  TaskViewContext? get taskViewContext => widget.taskViewContext;
+  TaskViewContext? get taskViewContext => widget.config.taskViewContext;
 
   @override
   void addWidgetState({required bool isVisible}) {
@@ -68,7 +66,7 @@ class _TaskViewBuilderState extends _ContextProviderViewState<TaskViewBuilder> {
 
   @override
   Widget buildContent(BuildContext context) {
-    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
+    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
       return Stack(
         children: [
           widget.build(),

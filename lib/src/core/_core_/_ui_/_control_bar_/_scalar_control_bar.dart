@@ -7,6 +7,7 @@ class ScalarControlBar extends BaseControlBar<
   final Scalar scalar;
   final ScalarControlBarConfig config;
   final ScalarViewContext? scalarContextType;
+  final ScalarScreenNavigationContext? screenNavigationContext;
 
   const ScalarControlBar({
     super.key,
@@ -15,6 +16,7 @@ class ScalarControlBar extends BaseControlBar<
     required this.scalar,
     required this.config,
     this.scalarContextType = ScalarViewContext.value,
+    this.screenNavigationContext,
     super.style,
     //
     super.leftItems = const [
@@ -63,7 +65,7 @@ class _ScalarControlBarState extends _BaseControlBarState<
   Widget? buildStandardButton(ScalarControlBarItem item) {
     final type = item.type ?? ScalarControlBarItemType.custom;
     switch (type) {
-      case ProzessControlBarItemType.divider:
+      case ScalarControlBarItemType.divider:
         return ControlBarHelper.buildDivider();
 
       case ScalarControlBarItemType.back:
@@ -100,12 +102,12 @@ class _ScalarControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: show
               ? () {
-            DebugViewerDialog.openDebugFilterCriteriaInspector(
-              context: context,
-              locationInfo: '',
-              filterModel: widget.scalar.registeredOrDefaultFilterModel,
-            );
-          }
+                  DebugViewerDialog.openDebugFilterCriteriaInspector(
+                    context: context,
+                    locationInfo: '',
+                    filterModel: widget.scalar.registeredOrDefaultFilterModel,
+                  );
+                }
               : null,
         );
 
@@ -119,8 +121,8 @@ class _ScalarControlBarState extends _BaseControlBarState<
           onPressed: item.onPressed == null
               ? null
               : () {
-            item.onPressed!.call(widget.scalar, type);
-          },
+                  item.onPressed!.call(widget.scalar, type);
+                },
         );
       default:
         return null;
@@ -132,9 +134,8 @@ class _ScalarControlBarState extends _BaseControlBarState<
       getClassNameWithoutGenerics(widget.scalar);
 
   @override
-  void addWidgetState({required bool isVisible}) =>
-      widget.scalar.ui
-          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) => widget.scalar.ui
+      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

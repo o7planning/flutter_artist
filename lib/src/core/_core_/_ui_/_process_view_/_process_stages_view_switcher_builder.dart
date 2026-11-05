@@ -1,27 +1,27 @@
 part of '../../core.dart';
 
-class ProzessStageViewSwitcherBuilder
-    extends _BaseProzessStageViewSwitcherBuilder {
+class ProzessStagesViewSwitcherBuilder
+    extends _BaseProzessStagesViewSwitcherBuilder {
   final List<StageViewBuilder> stageViewBuilders;
   final List<StageView> stageViews;
 
-  const ProzessStageViewSwitcherBuilder({
+  const ProzessStagesViewSwitcherBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.stageViewBuilders,
     required this.stageViews,
-    super.quickSuggestionMode,
-  });
+    required ProzessViewConfig? config,
+  }) : super(config: config ?? const ProzessViewConfig());
 
   @override
   State<StatefulWidget> createState() =>
-      _ProzessStageViewSwitcherBuilderState();
+      _ProzessStagesViewSwitcherBuilderState();
 }
 
-class _ProzessStageViewSwitcherBuilderState
-    extends _BaseProzessStageViewSwitcherBuilderState<
-        ProzessStageViewSwitcherBuilder> {
+class _ProzessStagesViewSwitcherBuilderState
+    extends _BaseProzessStagesViewSwitcherBuilderState<
+        ProzessStagesViewSwitcherBuilder> {
   final Set<Stage> _stages = {};
   final Set<Prozess> _prozesses = {};
   Stage? _duplicatedStage;
@@ -65,21 +65,22 @@ class _ProzessStageViewSwitcherBuilderState
     if (_stages.isEmpty) {
       return const ErrorMessageView(
         message:
-            "Configuration Error: No Stage views were provided to the ProzessStageViewSwitcher container.",
+        "Configuration Error: No Stage views were provided to the ProzessStageViewSwitcher container.",
       );
     }
     // 2. Validate prozess instance consistency across all stage views.
     else if (_prozesses.length > 1) {
       return const ErrorMessageView(
         message:
-            "Architectural Violation: All configured Stage views must belong to the exact same Prozess instance.",
+        "Architectural Violation: All configured Stage views must belong to the exact same Prozess instance.",
       );
     }
     // 3. Validate duplicate stage definitions.
     else if (_duplicatedStage != null) {
       return ErrorMessageView(
         message:
-            "Configuration Error: Duplicate Stage '${getClassName(_duplicatedStage)}' detected inside ProzessStageViewSwitcher.",
+        "Configuration Error: Duplicate Stage '${getClassName(
+            _duplicatedStage)}' detected inside ProzessStageViewSwitcher.",
       );
     }
 

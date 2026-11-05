@@ -7,7 +7,11 @@ class FormModelConfig {
     this.autovalidateMode = AutovalidateMode.onUserInteraction,
   });
 
-  FormModelConfig copy() {
-    return FormModelConfig(autovalidateMode: autovalidateMode);
+  FormModelConfig copy({
+    AutovalidateMode? autovalidateMode,
+  }) {
+    return FormModelConfig(
+      autovalidateMode: autovalidateMode ?? this.autovalidateMode,
+    );
   }
 }

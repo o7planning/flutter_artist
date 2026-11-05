@@ -87,6 +87,7 @@ import '../error/form_register/form_prop_invalid_name_error.dart';
 import '_execution_unit_calc_/_calculator_/_calc.dart';
 import '_precheck_utils_/__precheck_utils.dart';
 import '_sync_/_block_sync_session_snapshot.dart';
+import '_ui_/_mnemonic_/_utils_/_data_grid_navigation_utils.dart';
 import '_utils_/block_data_state_utils.dart';
 import '_utils_/check_next_stage_utils.dart';
 import '_utils_/process_data_state_utils.dart';
@@ -141,17 +142,17 @@ part '_ui_/_stage_view_/_welcome_stage_view.dart';
 
 part '_ui_/_process_view_/_process_view.dart';
 
-part '_ui_/_process_view_/_process_stage_view_switcher.dart';
+part '_ui_/_process_view_/_process_stages_view_switcher.dart';
 
-part '_ui_/_process_view_/_process_stage_view_switcher_builder.dart';
+part '_ui_/_process_view_/_process_stages_view_switcher_builder.dart';
 
-part '_ui_/_process_view_/_base_process_stage_view_switcher_builder.dart';
+part '_ui_/_process_view_/_base_process_stages_view_switcher_builder.dart';
 
 part '_ui_/_process_view_/_process_view_builder.dart';
 
-part '_ui_/_process_view_/_welcome_process_stage_view_switcher_builder.dart';
+part '_ui_/_process_view_/_welcome_process_stages_view_switcher_builder.dart';
 
-part '_ui_/_process_view_/_welcome_process_stage_view_switcher.dart';
+part '_ui_/_process_view_/_welcome_process_stages_view_switcher.dart';
 
 part '_ui_/_task_view/_task_view.dart';
 
@@ -815,9 +816,19 @@ part '_ui_/__context_provider_view.dart';
 
 part '_ui_/__context_provider_view_state.dart';
 
-part '_ui_/_process_view_/__process_stage_view_switcher_scope.dart';
+part '_ui_/_process_view_/__process_stages_view_switcher_scope.dart';
 
 part '_ui_/_mnemonic_/_control_mnemonic.dart';
+
+part '_ui_/_mnemonic_/_block_mnemonic_handler.dart';
+
+part '_ui_/_mnemonic_/_task_mnemonic_handler.dart';
+
+part '_ui_/_mnemonic_/_prozess_mnemonic_handler.dart';
+
+part '_ui_/_mnemonic_/_filter_mnemonic_handler.dart';
+
+part '_ui_/_mnemonic_/_mnemonic_dispatcher.dart';
 
 part '_ui_/__error_message_view.dart';
 
@@ -843,6 +854,8 @@ part '_navigation_intent_/_navigation_open_end_drawer_intent.dart';
 
 part '_navigation_intent_/_navigation_show_dialog_intent.dart';
 
+part '_navigation_context_/_screen_navigation_context.dart';
+
 part '_navigation_intent_/__navigation_intent.dart';
 
 part '_login_/_session_establisher.dart';
@@ -867,7 +880,7 @@ part '_ui_/_control_bar_item_/_process_control_bar_item.dart';
 
 part '_ui_/_control_bar_/__base_control_bar_state.dart';
 
-part '_ui_/_control_bar_config_/_filter_control_bar_config.dart';
+part '_ui_/_config_/_control_bar_config_/_filter_control_bar_config.dart';
 
 part '_ui_/_control_bar_/_filter_control_bar.dart';
 
@@ -875,15 +888,32 @@ part '_ui_/_control_bar_/_process_control_bar.dart';
 
 part '_ui_/_control_bar_/_block_control_bar.dart';
 
+part '_ui_/_config_/_vew_config_/_block_form_view_config.dart';
+
+part '_ui_/_config_/_vew_config_/_task_form_view_config.dart';
+
+part '_ui_/_config_/_vew_config_/__form_view_config.dart';
+
+part '_ui_/_config_/_vew_config_/_block_items_view_config.dart';
+
+part '_ui_/_config_/_vew_config_/_process_view_config.dart';
+
+
+part '_ui_/_config_/_vew_config_/_task_view_config.dart';
+
+part '_ui_/_config_/_vew_config_/_process_form_view_config.dart';
+
+part '_ui_/_config_/_vew_config_/_block_section_view_config.dart';
+
 part '_ui_/_control_bar_/_scalar_control_bar.dart';
 
-part '_ui_/_control_bar_config_/_scalar_control_bar_config.dart';
+part '_ui_/_config_/_control_bar_config_/_scalar_control_bar_config.dart';
 
-part '_ui_/_control_bar_config_/_process_control_bar_config.dart';
+part '_ui_/_config_/_control_bar_config_/_process_control_bar_config.dart';
 
-part '_ui_/_control_bar_config_/_task_control_bar_config.dart';
+part '_ui_/_config_/_control_bar_config_/_task_control_bar_config.dart';
 
-part '_ui_/_control_bar_config_/_block_control_bar_config.dart';
+part '_ui_/_config_/_control_bar_config_/_block_control_bar_config.dart';
 
 part '_ui_/_block_view_/_block_section_view.dart';
 
@@ -919,15 +949,17 @@ part '_ui_/_form_view_/_stage_form_view.dart';
 
 part '_ui_/_form_view_/_task_form_view.dart';
 
-part '_ui_/_form_view_builder_/_base_form_view_builder.dart';
+// part '_ui_/_keyboard_navigation_/_form_focus_traversal_utils.dart';
 
-part '_ui_/_form_view_builder_/_block_form_view_builder.dart';
+part '_ui_/_form_view_/_base_form_view_builder.dart';
 
-part '_ui_/_form_view_builder_/_stage_form_view_builder.dart';
+part '_ui_/_form_view_/_block_form_view_builder.dart';
 
-part '_ui_/_form_view_builder_/_task_form_view_builder.dart';
+part '_ui_/_form_view_/_stage_form_view_builder.dart';
 
-part '_ui_/_form_view_builder_/_process_stage_form_view_switcher_builder.dart';
+part '_ui_/_form_view_/_task_form_view_builder.dart';
+
+part '_ui_/_form_view_/_process_stage_form_view_switcher_builder.dart';
 
 part '_ui_/_logged_in_user_builder.dart';
 
@@ -945,7 +977,7 @@ part '_ui_/_storage_view_/_storage_section_view.dart';
 
 part '_ui_/_storage_view_/_storage_section_view_builder.dart';
 
-part '_ui_/_stage_view_/_scalar_value_view.dart';
+part '_ui_/_scalar_view_/_scalar_value_view.dart';
 
 part '_ui_/_scalar_view_/_scalar_value_view_builder.dart';
 

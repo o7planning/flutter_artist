@@ -1,4 +1,4 @@
-part of '../../core.dart';
+part of '../../../core.dart';
 
 class BlockControlBarConfig {
   final bool allowRefreshButton;
@@ -6,16 +6,12 @@ class BlockControlBarConfig {
   final bool allowCreateButton;
   final bool allowEditButton;
   final bool allowSaveButton;
+  final bool allowResetFormButton;
   final bool allowDeleteButton;
   final bool allowBackButton;
   final bool allowDebugFormModelInspectorButton;
   final bool allowDebugFilterCriteriaInspectorButton;
   final bool allowDebugButton;
-
-  final NavigationIntent? createNavigationIntent;
-  final NavigationIntent? editNavigationIntent;
-  final NavigationIntent? saveNavigationIntent;
-  final NavigationIntent? deleteNavigationIntent;
 
   const BlockControlBarConfig({
     required this.allowRefreshButton,
@@ -23,15 +19,11 @@ class BlockControlBarConfig {
     required this.allowCreateButton,
     this.allowEditButton = false,
     required this.allowSaveButton,
+    required this.allowResetFormButton,
     required this.allowDeleteButton,
     required this.allowBackButton,
     required this.allowDebugFormModelInspectorButton,
     this.allowDebugFilterCriteriaInspectorButton = false,
     this.allowDebugButton = false,
-    //
-    this.saveNavigationIntent,
-    this.createNavigationIntent,
-    this.editNavigationIntent,
-    this.deleteNavigationIntent,
   });
 }

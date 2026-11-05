@@ -3,9 +3,10 @@ part of '../../core.dart';
 /// Builder class responsible for rendering the active stage form view dynamically
 /// inside a [ProzessStageFormViewSwitcher] without using stacked or offstage layouts.
 class ProzessStageFormViewSwitcherBuilder extends _ContextProviderView {
-  final QuickSuggestionMode quickSuggestionMode;
   final List<StageFormViewBuilder> stageFormViewBuilders;
   final List<StageFormView> stageFormViews;
+
+  final ProzessFormViewConfig config;
 
   const ProzessStageFormViewSwitcherBuilder({
     super.key,
@@ -13,8 +14,8 @@ class ProzessStageFormViewSwitcherBuilder extends _ContextProviderView {
     required super.description,
     required this.stageFormViewBuilders,
     required this.stageFormViews,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
-  });
+    required ProzessFormViewConfig? config,
+  }) : config = config ?? const ProzessFormViewConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -126,7 +127,7 @@ class _ProzessStageFormViewSwitcherBuilderState
 
     final prozess = _targetProzess!;
 
-    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
+    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
       return Stack(
         children: [
           _buildActiveFormWidget(prozess),
@@ -177,6 +178,8 @@ class _ProzessStageFormViewSwitcherBuilderState
     }
 
     return _StageFormViewSwitcherScope(
+      screenNavigationContext: widget.config.screenNavigationContext,
+      circularFocusTraversal: widget.config.circularFocusTraversal,
       child: activeFormWidget,
     );
   }

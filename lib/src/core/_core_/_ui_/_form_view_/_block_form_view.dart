@@ -1,21 +1,21 @@
 part of '../../core.dart';
 
 abstract class BlockFormView<
-BLOCK_FORM_MODEL extends BlockFormModel<
-    Comparable, //
-    Identifiable<Comparable>,
-    CreationPreset,
-    FormPatch,
-    FormOutput,
-    AdditionalFormRelatedData>> extends StatelessWidget {
+    BLOCK_FORM_MODEL extends BlockFormModel<
+        Comparable, //
+        Identifiable<Comparable>,
+        CreationPreset,
+        FormPatch,
+        FormOutput,
+        AdditionalFormRelatedData>> extends StatelessWidget {
   final BLOCK_FORM_MODEL formModel;
-  final QuickSuggestionMode quickSuggestionMode;
+  final BlockFormViewConfig config;
 
   const BlockFormView({
     required this.formModel,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    required BlockFormViewConfig? config,
     super.key,
-  });
+  }) : config = config ?? const BlockFormViewConfig();
 
   @override
   @nonVirtual
@@ -24,7 +24,7 @@ BLOCK_FORM_MODEL extends BlockFormModel<
       ownerClassInstance: this,
       description: '',
       formModel: formModel,
-      quickSuggestionMode: quickSuggestionMode,
+      config: config,
       build: () {
         return buildContent(context);
       },

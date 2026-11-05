@@ -1,4 +1,4 @@
-part of '../../core.dart';
+part of '../../../core.dart';
 
 class TaskControlBarConfig {
   final bool allowBackButton;
@@ -6,23 +6,15 @@ class TaskControlBarConfig {
   final bool allowSubmitButton;
   final bool allowDebugFormModelInspectorButton;
 
-  final NavigationIntent? restartNavigationIntent;
-  final NavigationIntent? submitNavigationIntent;
-
   const TaskControlBarConfig({
     this.allowBackButton = false,
     this.allowRestartButton = false,
     this.allowSubmitButton = false,
     this.allowDebugFormModelInspectorButton = false,
-    this.restartNavigationIntent,
-    this.submitNavigationIntent,
   });
 
   // TODO: Rename?
-  const TaskControlBarConfig.allEnabled({
-    this.restartNavigationIntent,
-    this.submitNavigationIntent,
-  })
+  const TaskControlBarConfig.allEnabled()
       : allowBackButton = true,
         allowRestartButton = true,
         allowSubmitButton = true,

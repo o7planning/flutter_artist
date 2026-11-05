@@ -7,13 +7,13 @@ abstract class TaskView<
         FormPatch,
         FormOutput>> extends StatelessWidget {
   final TASK task;
-  final QuickSuggestionMode quickSuggestionMode;
+  final TaskViewConfig config;
 
   const TaskView({
     required this.task,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    required TaskViewConfig? config,
     super.key,
-  });
+  }) : config = config ?? const TaskViewConfig();
 
   @override
   @nonVirtual
@@ -22,7 +22,7 @@ abstract class TaskView<
       ownerClassInstance: this,
       description: '',
       task: task,
-      quickSuggestionMode: quickSuggestionMode,
+      config: config,
       build: () {
         return buildContent(context);
       },

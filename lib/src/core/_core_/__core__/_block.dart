@@ -4662,8 +4662,8 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  void _processNavigationIntent({
-    required BuildContext context,
+  void _processNavigationIntent(
+    BuildContext context, {
     required ExecutionUnitResult result,
     required NavigationIntent intent,
   }) {

@@ -223,7 +223,7 @@ abstract class Task<
         tipDocument: null,
       );
       executionResult._setErrorInfo(errorInfo: errorInfo);
-      // TODO Xem lai.........
+      // TODO Review .........
       _dataState = TaskDataStatePending.failed(errorInfo: taskErrorInfo);
       return;
     }
@@ -791,8 +791,8 @@ abstract class Task<
     return executionIntent.result;
   }
 
-  void _processNavigationIntent({
-    required BuildContext context,
+  void _processNavigationIntent(
+    BuildContext context, {
     required void result,
     required NavigationIntent intent,
   }) {

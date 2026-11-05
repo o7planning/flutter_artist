@@ -69,7 +69,7 @@ class _StageViewBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    final isValid = _StageViewSwitcherScope.maybeOf(context) != null;
+    final isValid = _StagesViewSwitcherScope.maybeOf(context) != null;
     if (!isValid) {
       return ErrorMessageView(
         message: 'StageView and StageViewBuilder must be child widget '

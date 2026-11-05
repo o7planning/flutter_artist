@@ -6,13 +6,13 @@ abstract class ProzessView<
         ProzessInitData,
         ProzessContextData>> extends StatelessWidget {
   final PROZESS prozess;
-  final QuickSuggestionMode quickSuggestionMode;
+  final ProzessViewConfig config;
 
   const ProzessView({
     required this.prozess,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    required ProzessViewConfig? config,
     super.key,
-  });
+  }) : config = config ?? const ProzessViewConfig();
 
   @override
   @nonVirtual
@@ -21,7 +21,7 @@ abstract class ProzessView<
       ownerClassInstance: this,
       description: '',
       prozess: prozess,
-      quickSuggestionMode: quickSuggestionMode,
+      config: config,
       build: () {
         return buildContent(context);
       },

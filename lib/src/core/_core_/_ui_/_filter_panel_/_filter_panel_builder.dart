@@ -6,6 +6,7 @@ class _FilterPanelBuilder extends _ContextProviderView {
 
   final BlockViewContext? blockViewContext;
   final ScalarViewContext? scalarViewContext;
+  final FilterScreenNavigationContext? screenNavigationContext;
 
   const _FilterPanelBuilder({
     super.key,
@@ -15,6 +16,7 @@ class _FilterPanelBuilder extends _ContextProviderView {
     required this.build,
     this.blockViewContext,
     this.scalarViewContext,
+    this.screenNavigationContext,
   });
 
   @override
@@ -120,12 +122,24 @@ class _FilterPanelBuilderState
     return Focus(
       canRequestFocus: false,
       skipTraversal: true,
-      onKeyEvent: (node, event) => _FocusNavDispatcher.handleFilterKeyEvent(
-        node: node,
-        event: event,
-        filterModel: widget.filterModel,
-        formState: formKey.currentState,
-      ),
+      onKeyEvent: (node, event) {
+        final mnemonicResult = _FilterMnemonicHandler.handleKeyEvent(
+          context: context,
+          filterModel: widget.filterModel,
+          screenNavigationContext: widget.screenNavigationContext,
+          event: event,
+        );
+        if (mnemonicResult == KeyEventResult.handled) {
+          return KeyEventResult.handled;
+        }
+
+        return _FocusNavDispatcher.handleFilterKeyEvent(
+          node: node,
+          event: event,
+          filterModel: widget.filterModel,
+          formState: formKey.currentState,
+        );
+      },
       child: FormBuilder(
         key: formKey,
         initialValue: widget.filterModel._initialValuesForFilterPanel(),

@@ -3,8 +3,9 @@ part of '../../core.dart';
 abstract class BaseFormViewBuilder<M extends BaseFormModel>
     extends _ContextProviderView {
   final M formModel;
-  final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
+
+  FormViewConfig get config;
 
   const BaseFormViewBuilder({
     super.key,
@@ -12,7 +13,6 @@ abstract class BaseFormViewBuilder<M extends BaseFormModel>
     required super.description,
     required this.formModel,
     required this.build,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
   });
 }
 
@@ -53,7 +53,6 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
     widget.formModel._afterBuildFormView();
   }
 
-  /// Handles form discard confirmation when closing the route with dirty changes.
   Future<void> _onPopInvokedWithResult(bool didPop, dynamic result) async {
     if (didPop || !widget.formModel.isDirty()) {
       return;
@@ -90,15 +89,12 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
         }
         break;
       case dialogs.YesNoCancel.cancel:
-        // Do nothing.
         break;
     }
   }
 
-  /// Hook implemented by specific form subclasses to persist data upon exit confirmation.
   Future<bool> handleSaveOnPop();
 
-  /// Guards against simultaneous executor sweeps and race conditions during UI changes.
   Future<void> _onChanged() async {
     if (FlutterArtist.executor.executingXModuleId != null) {
       return;
@@ -132,16 +128,82 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
     }
   }
 
+  KeyEventResult handleFormMnemonicKeyEvent(
+    BuildContext context,
+    KeyEvent event,
+  ) =>
+      KeyEventResult.ignored;
+
+  bool _isCircularFocusTraversal(BuildContext context) {
+    final _StageFormViewSwitcherScope? scope =
+        _StageFormViewSwitcherScope.maybeOf(context);
+    if (scope != null) {
+      return scope.circularFocusTraversal;
+    }
+    return widget.config.circularFocusTraversal;
+  }
+
   Widget _buildFormBuilder(BuildContext context) {
     return Focus(
       canRequestFocus: false,
       skipTraversal: true,
-      onKeyEvent: (node, event) => _FocusNavDispatcher.handleFormKeyEvent(
-        node: node,
-        event: event,
-        formModel: widget.formModel,
-        formState: formKey.currentState,
-      ),
+      onKeyEvent: (node, event) {
+        // 1. Handle Mnemonic Shortcuts first (e.g., Alt+S / Ctrl+S, Alt+U / Ctrl+U)
+        final mnemonicResult = handleFormMnemonicKeyEvent(context, event);
+        if (mnemonicResult == KeyEventResult.handled) {
+          return KeyEventResult.handled;
+        }
+
+        // 2. Handle custom Tab / Enter field focus navigation (resolveNextFocus)
+        final navResult = _FocusNavDispatcher.handleFormKeyEvent(
+          node: node,
+          event: event,
+          formModel: widget.formModel,
+          formState: formKey.currentState,
+        );
+        if (navResult == KeyEventResult.handled) {
+          return KeyEventResult.handled;
+        }
+
+        // 3. Fallback: Circular focus traversal within this FormView when resolveNextFocus() returns null
+        final bool isCircular = _isCircularFocusTraversal(context);
+
+        if (isCircular &&
+            (event is KeyDownEvent || event is KeyRepeatEvent) &&
+            event.logicalKey == LogicalKeyboardKey.tab) {
+          final HardwareKeyboard keyboard = HardwareKeyboard.instance;
+          // Do not intercept Ctrl+Tab / Alt+Tab / Meta+Tab (reserved for region/OS switching)
+          if (!keyboard.isControlPressed &&
+              !keyboard.isAltPressed &&
+              !keyboard.isMetaPressed) {
+            final FocusNode? primaryFocus = FocusManager.instance.primaryFocus;
+            if (primaryFocus != null && primaryFocus != node) {
+              final FocusTraversalPolicy policy =
+                  FocusTraversalGroup.maybeOf(context) ??
+                      ReadingOrderTraversalPolicy();
+
+              // Sort only focusable descendants inside THIS FormView's `node`
+              final List<FocusNode> formFocusNodes = policy
+                  .sortDescendants(node.traversalDescendants, primaryFocus)
+                  .toList();
+
+              if (formFocusNodes.isNotEmpty) {
+                final bool isShiftPressed = keyboard.isShiftPressed;
+                if (isShiftPressed && primaryFocus == formFocusNodes.first) {
+                  formFocusNodes.last.requestFocus();
+                  return KeyEventResult.handled;
+                } else if (!isShiftPressed &&
+                    primaryFocus == formFocusNodes.last) {
+                  formFocusNodes.first.requestFocus();
+                  return KeyEventResult.handled;
+                }
+              }
+            }
+          }
+        }
+
+        return KeyEventResult.ignored;
+      },
       child: FormBuilder(
         key: formKey,
         initialValue: widget.formModel._getInitialValuesForFormView(),
@@ -153,21 +215,22 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
   }
 
   Widget _buildBody(BuildContext context) {
-    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
-      return Stack(
-        children: [
-          _buildAbsorbPointer(),
-          if (widget.formModel.dataState.isFatalError)
-            Positioned(
-              top: 5,
-              right: 5,
-              child: _buildQuickSuggestionButtonsBar(context),
-            ),
-        ],
-      );
-    } else {
-      return _buildAbsorbPointer();
-    }
+    // if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
+    //   return Stack(
+    //     children: [
+    //       _buildAbsorbPointer(),
+    //       if (widget.formModel.dataState.isFatalError)
+    //         Positioned(
+    //           top: 5,
+    //           right: 5,
+    //           child: _buildQuickSuggestionButtonsBar(context),
+    //         ),
+    //     ],
+    //   );
+    // } else {
+    //   return _buildAbsorbPointer();
+    // }
+    return _buildAbsorbPointer();
   }
 
   Widget _buildAbsorbPointer() {

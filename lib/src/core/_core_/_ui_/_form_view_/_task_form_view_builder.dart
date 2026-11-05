@@ -1,14 +1,16 @@
 part of '../../core.dart';
 
 class TaskFormViewBuilder extends BaseFormViewBuilder<TaskFormModel> {
+  final TaskFormViewConfig config;
+
   const TaskFormViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required super.formModel,
     required super.build,
-    super.quickSuggestionMode = QuickSuggestionMode.showIfError,
-  });
+    required TaskFormViewConfig? config,
+  }) : config = config ?? const TaskFormViewConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -52,5 +54,18 @@ class _TaskFormViewBuilderState
   @override
   void checkAndFreeMemory() {
     FlutterArtist.desk._checkToRemoveActivity(widget.formModel.task.activity);
+  }
+
+  @override
+  KeyEventResult handleFormMnemonicKeyEvent(
+    BuildContext context,
+    KeyEvent event,
+  ) {
+    return _TaskMnemonicHandler.handleKeyEvent(
+      context: context,
+      task: widget.formModel.task,
+      screenNavigationContext: widget.config.screenNavigationContext,
+      event: event,
+    );
   }
 }

@@ -63,6 +63,7 @@ abstract class Prozess<
 
   /// Total number of stage enum values defined for this Prozess.
   /// Must be implemented by subclasses to ensure all stage enum members are correctly mapped.
+  @override
   int get totalStageEnumCount;
 
   PROZESS_INIT_DATA? _prozessInitData;
@@ -70,6 +71,10 @@ abstract class Prozess<
   PROZESS_INIT_DATA? get prozessInitData => _prozessInitData;
 
   bool _isReexecutionAllowed = false;
+
+  // ***************************************************************************
+  // *** Constructor ***********************************************************
+  // ***************************************************************************
 
   Prozess({required this.name}) {
     __initializeProzess();
@@ -1235,6 +1240,17 @@ abstract class Prozess<
   void _refreshProzessAfterChangeViewingStage() {
     module.ui.refreshAllViews();
     FlutterArtist.storage.ui.refreshAllViews();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _processNavigationIntent(
+    BuildContext context, {
+    Object? result,
+    required NavigationIntent intent,
+  }) {
+    // TODO
   }
 
   // ***************************************************************************
