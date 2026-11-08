@@ -65,22 +65,21 @@ class _ProzessStagesViewSwitcherBuilderState
     if (_stages.isEmpty) {
       return const ErrorMessageView(
         message:
-        "Configuration Error: No Stage views were provided to the ProzessStageViewSwitcher container.",
+            "Configuration Error: No Stage views were provided to the ProzessStageViewSwitcher container.",
       );
     }
     // 2. Validate prozess instance consistency across all stage views.
     else if (_prozesses.length > 1) {
       return const ErrorMessageView(
         message:
-        "Architectural Violation: All configured Stage views must belong to the exact same Prozess instance.",
+            "Architectural Violation: All configured Stage views must belong to the exact same Prozess instance.",
       );
     }
     // 3. Validate duplicate stage definitions.
     else if (_duplicatedStage != null) {
       return ErrorMessageView(
         message:
-        "Configuration Error: Duplicate Stage '${getClassName(
-            _duplicatedStage)}' detected inside ProzessStageViewSwitcher.",
+            "Configuration Error: Duplicate Stage '${getClassName(_duplicatedStage)}' detected inside ProzessStageViewSwitcher.",
       );
     }
 

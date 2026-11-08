@@ -1,7 +1,6 @@
 part of '../../../core.dart';
 
-class ProzessFormViewConfig  extends FormViewConfig{
-
+class ProzessFormViewConfig extends FormViewConfig {
   final QuickSuggestionMode quickSuggestionMode;
   final ProzessScreenNavigationContext? screenNavigationContext;
 

@@ -1,6 +1,7 @@
 part of '../../core.dart';
 
 class BlockFormViewBuilder extends BaseFormViewBuilder<BlockFormModel> {
+  @override
   final BlockFormViewConfig config;
 
   const BlockFormViewBuilder({

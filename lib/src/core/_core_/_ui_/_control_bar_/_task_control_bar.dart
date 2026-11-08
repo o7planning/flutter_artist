@@ -6,8 +6,6 @@ class TaskControlBar extends BaseControlBar<
     TaskControlBarItem> {
   final Task task;
   final TaskControlBarConfig config;
-  final TaskViewContext? taskViewContext;
-  final TaskScreenNavigationContext? screenNavigationContext;
 
   const TaskControlBar({
     super.key,
@@ -15,8 +13,6 @@ class TaskControlBar extends BaseControlBar<
     required super.description,
     required this.task,
     this.config = const TaskControlBarConfig(),
-    this.taskViewContext = TaskViewContext.initData,
-    this.screenNavigationContext,
     super.style,
     super.leftItems = const [
       TaskControlBarItem.standard(TaskControlBarItemType.back),
@@ -58,7 +54,7 @@ class _TaskControlBarState extends _BaseControlBarState<
   StageViewContext? get stageViewContext => null;
 
   @override
-  TaskViewContext? get taskViewContext => widget.taskViewContext;
+  TaskViewContext? get taskViewContext => widget.config.taskViewContext;
 
   @override
   Widget? buildStandardButton(TaskControlBarItem item) {
@@ -99,8 +95,8 @@ class _TaskControlBarState extends _BaseControlBarState<
           onPressed: actionable.yes
               ? () async {
                   final result = await widget.task.submit();
-                  final NavigationIntent? intent =
-                      widget.screenNavigationContext?.submitNavigationIntent;
+                  final NavigationIntent? intent = widget
+                      .config.screenNavigationContext?.submitNavigationIntent;
                   if (intent != null) {
                     widget.task._processNavigationIntent(
                       context,
@@ -128,8 +124,8 @@ class _TaskControlBarState extends _BaseControlBarState<
           onPressed: actionable.yes
               ? () async {
                   final result = await widget.task.restart();
-                  final NavigationIntent? intent =
-                      widget.screenNavigationContext?.restartNavigationIntent;
+                  final NavigationIntent? intent = widget
+                      .config.screenNavigationContext?.restartNavigationIntent;
                   if (intent != null) {
                     widget.task._processNavigationIntent(
                       context,

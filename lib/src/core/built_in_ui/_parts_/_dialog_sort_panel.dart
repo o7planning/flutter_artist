@@ -9,6 +9,7 @@ class DialogSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     super.key,
     required super.sortModel,
     this.style = const DialogSortPanelStyle(),
+    super.config,
   });
 
   void _showSortDialog(BuildContext context) {

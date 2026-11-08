@@ -13,6 +13,7 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     this.style = const DropdownSortPanelStyle(),
     this.alignment,
     this.margin,
+    super.config,
   });
 
   @override

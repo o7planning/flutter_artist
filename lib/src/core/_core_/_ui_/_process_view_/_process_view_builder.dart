@@ -6,7 +6,6 @@ class ProzessViewBuilder extends _ContextProviderView {
 
   final ProzessViewConfig config;
 
-
   const ProzessViewBuilder({
     super.key,
     required super.ownerClassInstance,

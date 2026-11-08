@@ -6,8 +6,6 @@ class BlockControlBar extends BaseControlBar<
     BlockControlBarItem> {
   final Block block;
   final BlockControlBarConfig config;
-  final BlockViewContext blockViewContext;
-  final BlockScreenNavigationContext? screenNavigationContext;
 
   const BlockControlBar({
     super.key,
@@ -15,8 +13,6 @@ class BlockControlBar extends BaseControlBar<
     required super.description,
     required this.block,
     required this.config,
-    this.blockViewContext = BlockViewContext.items,
-    this.screenNavigationContext,
     super.style,
     //
     super.leftItems = const [
@@ -63,7 +59,7 @@ class _BlockControlBarState extends _BaseControlBarState<
   }
 
   @override
-  BlockViewContext? get blockViewContext => widget.blockViewContext;
+  BlockViewContext? get blockViewContext => widget.config.blockViewContext;
 
   @override
   ScalarViewContext? get scalarContextType => null;
@@ -111,8 +107,8 @@ class _BlockControlBarState extends _BaseControlBarState<
           onPressed: actionable.yes
               ? () async {
                   final result = await widget.block.prepareFormToCreateItem();
-                  final NavigationIntent? intent =
-                      widget.screenNavigationContext?.createNavigationIntent;
+                  final NavigationIntent? intent = widget
+                      .config.screenNavigationContext?.createNavigationIntent;
                   if (intent != null) {
                     widget.block._processNavigationIntent(
                       context,
@@ -139,8 +135,8 @@ class _BlockControlBarState extends _BaseControlBarState<
                   final result =
                       await widget.block._prepareFormToEditCurrentItem();
                   //
-                  final NavigationIntent? intent =
-                      widget.screenNavigationContext?.editNavigationIntent;
+                  final NavigationIntent? intent = widget
+                      .config.screenNavigationContext?.editNavigationIntent;
                   if (intent != null) {
                     widget.block._processNavigationIntent(
                       context,
@@ -164,8 +160,8 @@ class _BlockControlBarState extends _BaseControlBarState<
           onPressed: actionable.yes
               ? () async {
                   final result = await widget.block.deleteCurrentItem();
-                  final NavigationIntent? intent =
-                      widget.screenNavigationContext?.deleteNavigationIntent;
+                  final NavigationIntent? intent = widget
+                      .config.screenNavigationContext?.deleteNavigationIntent;
                   if (intent != null) {
                     widget.block._processNavigationIntent(
                       context,
@@ -195,8 +191,8 @@ class _BlockControlBarState extends _BaseControlBarState<
           onPressed: actionable.yes
               ? () async {
                   final result = await widget.block.formModel!.saveForm();
-                  final NavigationIntent? intent =
-                      widget.screenNavigationContext?.saveNavigationIntent;
+                  final NavigationIntent? intent = widget
+                      .config.screenNavigationContext?.saveNavigationIntent;
                   if (intent != null) {
                     widget.block._processNavigationIntent(
                       context,

@@ -14,6 +14,7 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     this.alignment,
     this.padding,
     this.decoration,
+    super.config,
   });
 
   @override

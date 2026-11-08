@@ -26,7 +26,7 @@ class FilterModelDebugView extends StatelessWidget {
           HtmlInfoView(
             padding: EdgeInsets.symmetric(vertical: 5),
             infoAsHtml:
-                "<b>${getClassNameWithoutGenerics(filterModel)}</b><i>${filterModel.debugClassParametersDefinition}</i>",
+                "<b>${getClassNameWithoutGenerics(filterModel)}</b><i>${filterModel.debugClassParametersDefinition()}</i>",
             style: TextStyle(fontSize: 13),
           ),
           Divider(),

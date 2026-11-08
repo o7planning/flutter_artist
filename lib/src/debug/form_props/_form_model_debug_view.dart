@@ -31,7 +31,7 @@ class FormModelDebugView extends StatelessWidget {
           HtmlInfoView(
             padding: EdgeInsets.symmetric(vertical: 5),
             infoAsHtml:
-                "<b>${getClassNameWithoutGenerics(formModel)}</b><i>${formModel.debugClassParametersDefinition}</i>",
+                "<b>${getClassNameWithoutGenerics(formModel)}</b><i>${formModel.debugClassParametersDefinition()}</i>",
             style: TextStyle(fontSize: 13),
           ),
           Divider(),

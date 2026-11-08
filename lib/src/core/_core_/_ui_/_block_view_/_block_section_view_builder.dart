@@ -23,7 +23,7 @@ class BlockSectionViewBuilder extends _ContextProviderView {
 class _BlockSectionViewBuilderState
     extends _ContextProviderViewState<BlockSectionViewBuilder> {
   @override
-  ContextProviderViewType get type => ContextProviderViewType.blockFragment;
+  ContextProviderViewType get type => ContextProviderViewType.blockSection;
 
   @override
   Shelf? _getRelatedModule() {

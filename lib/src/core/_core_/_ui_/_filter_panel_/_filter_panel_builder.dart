@@ -4,20 +4,17 @@ class _FilterPanelBuilder extends _ContextProviderView {
   final FilterModel filterModel;
   final Widget Function() build;
 
-  final BlockViewContext? blockViewContext;
-  final ScalarViewContext? scalarViewContext;
-  final FilterScreenNavigationContext? screenNavigationContext;
+  final FilterPanelConfig config;
 
   const _FilterPanelBuilder({
-    super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.filterModel,
     required this.build,
-    this.blockViewContext,
-    this.scalarViewContext,
-    this.screenNavigationContext,
-  });
+
+    required FilterPanelConfig? config,
+    super.key,
+  }) : config = config ?? const FilterPanelConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -43,10 +40,10 @@ class _FilterPanelBuilderState
   }
 
   @override
-  BlockViewContext? get blockViewContext => widget.blockViewContext;
+  BlockViewContext? get blockViewContext => widget.config.blockViewContext;
 
   @override
-  ScalarViewContext? get scalarContextType => widget.scalarViewContext;
+  ScalarViewContext? get scalarContextType => widget.config.scalarViewContext;
 
   @override
   ProzessViewContext? get prozessViewContext => null;
@@ -126,7 +123,7 @@ class _FilterPanelBuilderState
         final mnemonicResult = _FilterMnemonicHandler.handleKeyEvent(
           context: context,
           filterModel: widget.filterModel,
-          screenNavigationContext: widget.screenNavigationContext,
+          screenNavigationContext: widget.config.screenNavigationContext,
           event: event,
         );
         if (mnemonicResult == KeyEventResult.handled) {

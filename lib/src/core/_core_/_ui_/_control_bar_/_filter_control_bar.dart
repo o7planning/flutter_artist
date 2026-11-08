@@ -6,7 +6,6 @@ class FilterControlBar extends BaseControlBar<
     FilterControlBarItem> {
   final FilterModel filterModel;
   final FilterControlBarConfig config;
-  final FilterScreenNavigationContext? screenNavigationContext;
 
   const FilterControlBar({
     super.key,
@@ -14,7 +13,6 @@ class FilterControlBar extends BaseControlBar<
     required super.description,
     required this.filterModel,
     required this.config,
-    this.screenNavigationContext,
     super.style,
     //
     super.leftItems = const [

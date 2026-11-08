@@ -1,6 +1,7 @@
 part of '../../core.dart';
 
 class TaskFormViewBuilder extends BaseFormViewBuilder<TaskFormModel> {
+  @override
   final TaskFormViewConfig config;
 
   const TaskFormViewBuilder({

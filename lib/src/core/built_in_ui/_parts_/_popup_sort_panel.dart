@@ -9,6 +9,7 @@ class PopupSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     super.key,
     required super.sortModel,
     this.style = const PopupSortPanelStyle(),
+    super.config,
   });
 
   @override

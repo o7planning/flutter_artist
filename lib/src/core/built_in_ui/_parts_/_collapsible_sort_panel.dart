@@ -12,6 +12,7 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     this.style = const CollapsibleSortPanelStyle(),
     this.alignment = MainAxisAlignment.start,
     this.minFullWidth = 450,
+    super.config,
   });
 
   @override

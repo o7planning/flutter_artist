@@ -10,6 +10,7 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     super.key,
     required super.sortModel,
     this.style = const AdaptiveSortPanelStyle(),
+      super.config,
   });
 
   @override

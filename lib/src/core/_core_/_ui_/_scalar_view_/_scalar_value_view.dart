@@ -7,15 +7,14 @@ abstract class ScalarValueView<
         FilterPatch,
         FilterCriteria>> extends StatelessWidget {
   final SCALAR scalar;
-  final QuickSuggestionMode quickSuggestionMode;
-  final ScalarScreenNavigationContext? screenNavigationContext;
+
+  final ScalarValueViewConfig config;
 
   const ScalarValueView({
     required this.scalar,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
-    this.screenNavigationContext,
+    required ScalarValueViewConfig? config,
     super.key,
-  });
+  }) : config = config ?? const ScalarValueViewConfig();
 
   @override
   @nonVirtual
@@ -24,8 +23,7 @@ abstract class ScalarValueView<
       ownerClassInstance: this,
       description: '',
       scalar: scalar,
-      quickSuggestionMode: quickSuggestionMode,
-      screenNavigationContext: screenNavigationContext,
+      config: config,
       build: () {
         return buildContent(context);
       },

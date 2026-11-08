@@ -2,19 +2,17 @@ part of '../../core.dart';
 
 class ScalarSectionViewBuilder extends _ContextProviderView {
   final Scalar scalar;
-  final QuickSuggestionMode quickSuggestionMode;
   final Widget Function() build;
-  final ScalarViewContext? scalarContextType;
+  final ScalarSectionViewConfig config;
 
   const ScalarSectionViewBuilder({
-    super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.scalar,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
     required this.build,
-    this.scalarContextType = ScalarViewContext.value,
-  });
+    required ScalarSectionViewConfig? config,
+    super.key,
+  }) : config = config ?? const ScalarSectionViewConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -25,7 +23,7 @@ class ScalarSectionViewBuilder extends _ContextProviderView {
 class _ScalarSectionViewBuilderState
     extends _ContextProviderViewState<ScalarSectionViewBuilder> {
   @override
-  ContextProviderViewType get type => ContextProviderViewType.scalarFragment;
+  ContextProviderViewType get type => ContextProviderViewType.scalarSection;
 
   @override
   Shelf? _getRelatedModule() {
@@ -41,7 +39,7 @@ class _ScalarSectionViewBuilderState
   BlockViewContext? get blockViewContext => null;
 
   @override
-  ScalarViewContext? get scalarContextType => widget.scalarContextType;
+  ScalarViewContext? get scalarContextType => widget.config.scalarContextType;
 
   @override
   ProzessViewContext? get prozessViewContext => null;
@@ -54,7 +52,7 @@ class _ScalarSectionViewBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
+    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
       return Stack(
         children: [
           widget.build(),

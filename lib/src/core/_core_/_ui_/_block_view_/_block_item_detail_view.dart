@@ -10,14 +10,19 @@ abstract class BlockItemDetailView<
         CreationPreset,
         FormPatch>> extends StatelessWidget {
   final BLOCK block;
-  final BlockViewContext blockViewContext;
 
-  const BlockItemDetailView({
+  final BlockItemDetailViewConfig config;
+
+  BlockItemDetailView({
     required this.block,
-    this.blockViewContext = BlockViewContext.itemDetail,
+    required BlockItemDetailViewConfig? config,
     super.key,
-  }) : assert(blockViewContext == BlockViewContext.itemDetail ||
-            blockViewContext == BlockViewContext.form);
+  })  : config = config ?? const BlockItemDetailViewConfig(),
+        assert(
+          config == null ||
+              config.blockViewContext == BlockViewContext.itemDetail ||
+              config.blockViewContext == BlockViewContext.form,
+        );
 
   @override
   @nonVirtual
@@ -26,7 +31,7 @@ abstract class BlockItemDetailView<
       ownerClassInstance: this,
       description: '',
       block: block,
-      blockViewContext: blockViewContext,
+      config: config,
       build: () {
         return buildContent(context);
       },

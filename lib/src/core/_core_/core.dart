@@ -905,6 +905,16 @@ part '_ui_/_config_/_vew_config_/_process_form_view_config.dart';
 
 part '_ui_/_config_/_vew_config_/_block_section_view_config.dart';
 
+part '_ui_/_config_/_vew_config_/_sort_panel_config.dart';
+
+part '_ui_/_config_/_vew_config_/_scalar_section_view_config.dart';
+
+part '_ui_/_config_/_vew_config_/_scalar_value_view_config.dart';
+
+part '_ui_/_config_/_vew_config_/_block_item_detail_view_config.dart';
+
+part '_ui_/_config_/_vew_config_/_filter_panel_config.dart';
+
 part '_ui_/_control_bar_/_scalar_control_bar.dart';
 
 part '_ui_/_config_/_control_bar_config_/_scalar_control_bar_config.dart';

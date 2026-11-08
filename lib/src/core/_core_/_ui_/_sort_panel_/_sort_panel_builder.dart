@@ -3,7 +3,7 @@ part of '../../core.dart';
 class _SortPanelBuilder extends _ContextProviderView {
   final SortModel sortModel;
 
-  final BlockViewContext blockViewContext;
+  final SortPanelConfig config;
   final Widget Function() build;
 
   const _SortPanelBuilder({
@@ -11,9 +11,9 @@ class _SortPanelBuilder extends _ContextProviderView {
     required super.ownerClassInstance,
     required super.description,
     required this.sortModel,
-    this.blockViewContext = BlockViewContext.items,
     required this.build,
-  });
+    required SortPanelConfig? config,
+  }) : config = config ?? const SortPanelConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -37,7 +37,7 @@ class _SortPanelBuilderState
   }
 
   @override
-  BlockViewContext? get blockViewContext => widget.blockViewContext;
+  BlockViewContext? get blockViewContext => widget.config.blockViewContext;
 
   @override
   ScalarViewContext? get scalarContextType => null;

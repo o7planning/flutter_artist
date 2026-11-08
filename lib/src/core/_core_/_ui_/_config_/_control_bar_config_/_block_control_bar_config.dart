@@ -1,6 +1,9 @@
 part of '../../../core.dart';
 
 class BlockControlBarConfig {
+  final BlockViewContext blockViewContext;
+  final BlockScreenNavigationContext? screenNavigationContext;
+
   final bool allowRefreshButton;
   final bool allowQueryButton;
   final bool allowCreateButton;
@@ -14,6 +17,8 @@ class BlockControlBarConfig {
   final bool allowDebugButton;
 
   const BlockControlBarConfig({
+    this.blockViewContext = BlockViewContext.items,
+    this.screenNavigationContext,
     required this.allowRefreshButton,
     required this.allowQueryButton,
     required this.allowCreateButton,

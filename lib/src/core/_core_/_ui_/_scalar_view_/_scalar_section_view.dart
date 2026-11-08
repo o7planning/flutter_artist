@@ -7,13 +7,13 @@ abstract class ScalarSectionView<
         FilterPatch,
         FilterCriteria>> extends StatelessWidget {
   final SCALAR scalar;
-  final QuickSuggestionMode quickSuggestionMode;
+  final ScalarSectionViewConfig config;
 
   const ScalarSectionView({
     required this.scalar,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    required ScalarSectionViewConfig? config,
     super.key,
-  });
+  }) : config = config ?? const ScalarSectionViewConfig();
 
   @override
   @nonVirtual
@@ -22,7 +22,7 @@ abstract class ScalarSectionView<
       ownerClassInstance: this,
       description: '',
       scalar: scalar,
-      quickSuggestionMode: quickSuggestionMode,
+      config: config,
       build: () {
         return buildContent(context);
       },

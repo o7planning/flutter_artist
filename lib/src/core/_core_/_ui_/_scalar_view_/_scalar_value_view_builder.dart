@@ -2,20 +2,19 @@ part of '../../core.dart';
 
 class ScalarValueViewBuilder extends _ContextProviderView {
   final Scalar scalar;
-  final QuickSuggestionMode quickSuggestionMode;
-  final ScalarScreenNavigationContext? screenNavigationContext;
+
+  final ScalarValueViewConfig config;
 
   final Widget Function() build;
 
   const ScalarValueViewBuilder({
-    super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.scalar,
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
-    this.screenNavigationContext,
     required this.build,
-  });
+    required ScalarValueViewConfig? config,
+    super.key,
+  }) : config = config ?? const ScalarValueViewConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -55,7 +54,7 @@ class _ScalarValueViewBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
+    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
       return Stack(
         children: [
           widget.build(),

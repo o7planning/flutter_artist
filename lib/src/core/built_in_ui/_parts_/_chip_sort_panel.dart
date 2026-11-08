@@ -10,6 +10,7 @@ class ChipSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     required super.sortModel,
     this.style = const ChipSortPanelStyle(),
     this.alignment = WrapAlignment.start,
+    super.config,
   });
 
   @override

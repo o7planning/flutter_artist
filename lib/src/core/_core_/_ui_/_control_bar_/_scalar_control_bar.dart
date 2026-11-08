@@ -6,8 +6,6 @@ class ScalarControlBar extends BaseControlBar<
     ScalarControlBarItem> {
   final Scalar scalar;
   final ScalarControlBarConfig config;
-  final ScalarViewContext? scalarContextType;
-  final ScalarScreenNavigationContext? screenNavigationContext;
 
   const ScalarControlBar({
     super.key,
@@ -15,8 +13,6 @@ class ScalarControlBar extends BaseControlBar<
     required super.description,
     required this.scalar,
     required this.config,
-    this.scalarContextType = ScalarViewContext.value,
-    this.screenNavigationContext,
     super.style,
     //
     super.leftItems = const [
@@ -50,7 +46,7 @@ class _ScalarControlBarState extends _BaseControlBarState<
   BlockViewContext? get blockViewContext => null;
 
   @override
-  ScalarViewContext? get scalarContextType => widget.scalarContextType;
+  ScalarViewContext? get scalarContextType => widget.config.scalarContextType;
 
   @override
   ProzessViewContext? get prozessViewContext => null;

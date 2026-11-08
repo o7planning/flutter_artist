@@ -29,7 +29,7 @@ enum ContextProviderViewType {
     name: "ActivityFragment",
     iconData: FaIconConstants.activityFragmentIconData,
   ),
-  blockFragment(
+  blockSection(
     name: "BlockFragment",
     iconData: FaIconConstants.blockFragmentIconData,
   ),
@@ -54,7 +54,7 @@ enum ContextProviderViewType {
     iconData: FaIconConstants.scalarControlButtonIconData,
   ),
   //
-  scalarFragment(
+  scalarSection(
     name: "ScalarFragment",
     iconData: FaIconConstants.scalarFragmentIconData,
   ),

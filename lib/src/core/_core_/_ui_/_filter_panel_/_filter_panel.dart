@@ -3,18 +3,13 @@ part of '../../core.dart';
 abstract class FilterPanel<FILTER_MODEL extends FilterModel>
     extends StatelessWidget {
   final FILTER_MODEL filterModel;
-
-  final BlockViewContext? blockViewContext;
-  final ScalarViewContext? scalarViewContext;
-  final FilterScreenNavigationContext? screenNavigationContext;
+  final FilterPanelConfig config;
 
   const FilterPanel({
     required this.filterModel,
-    this.blockViewContext,
-    this.scalarViewContext,
-    this.screenNavigationContext,
+    required FilterPanelConfig? config,
     super.key,
-  });
+  }) : config = config ?? const FilterPanelConfig();
 
   @override
   @nonVirtual
@@ -23,9 +18,7 @@ abstract class FilterPanel<FILTER_MODEL extends FilterModel>
       ownerClassInstance: this,
       description: '',
       filterModel: filterModel,
-      blockViewContext: blockViewContext,
-      scalarViewContext: scalarViewContext,
-      screenNavigationContext: screenNavigationContext,
+      config: config,
       build: () {
         return buildContent(context);
       },

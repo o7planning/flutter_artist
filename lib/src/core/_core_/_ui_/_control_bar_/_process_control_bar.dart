@@ -7,17 +7,12 @@ class ProzessControlBar extends BaseControlBar<
   final Prozess prozess;
   final ProzessControlBarConfig config;
 
-  final ProzessViewContext prozessViewContext;
-  final ProzessScreenNavigationContext? screenNavigationContext;
-
   const ProzessControlBar({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.prozess,
     this.config = const ProzessControlBarConfig(),
-    this.prozessViewContext = ProzessViewContext.initData,
-    this.screenNavigationContext,
     super.style,
     super.leftItems = const [
       ProzessControlBarItem.standard(ProzessControlBarItemType.back),
@@ -61,7 +56,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
   ScalarViewContext? get scalarContextType => null;
 
   @override
-  ProzessViewContext? get prozessViewContext => widget.prozessViewContext;
+  ProzessViewContext? get prozessViewContext => widget.config.prozessViewContext;
 
   @override
   StageViewContext? get stageViewContext => null;
@@ -100,7 +95,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           onPressed: () async {
             widget.prozess.cancel();
             final NavigationIntent? intent =
-                widget.screenNavigationContext?.cancelNavigationIntent;
+                widget.config.screenNavigationContext?.cancelNavigationIntent;
             if (intent != null) {
               widget.prozess._processNavigationIntent(
                 context,
@@ -188,7 +183,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
               ? () async {
                   final result = await widget.prozess.submitViewingStage();
                   final NavigationIntent? intent = widget
-                      .screenNavigationContext
+                      .config.screenNavigationContext
                       ?.submitViewingStageNavigationIntent;
                   if (intent != null && context.mounted) {
                     widget.prozess._processNavigationIntent(

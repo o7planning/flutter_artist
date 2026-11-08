@@ -3,17 +3,22 @@ part of '../../core.dart';
 class BlockItemDetailViewBuilder extends _ContextProviderView {
   final Block block;
   final Widget Function() build;
-  final BlockViewContext blockViewContext;
 
-  const BlockItemDetailViewBuilder({
+  final BlockItemDetailViewConfig config;
+
+  BlockItemDetailViewBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.block,
-    this.blockViewContext = BlockViewContext.itemDetail,
+    BlockItemDetailViewConfig? config,
     required this.build,
-  }) : assert(blockViewContext == BlockViewContext.itemDetail ||
-            blockViewContext == BlockViewContext.form);
+  })  : config = config ?? const BlockItemDetailViewConfig(),
+        assert(
+          config == null ||
+              config.blockViewContext == BlockViewContext.itemDetail ||
+              config.blockViewContext == BlockViewContext.form,
+        );
 
   @override
   State<StatefulWidget> createState() {
@@ -38,7 +43,7 @@ class _BlockItemDetailViewBuilderState
       ContextProviderViewType.blockItemDetailView;
 
   @override
-  BlockViewContext? get blockViewContext => widget.blockViewContext;
+  BlockViewContext? get blockViewContext => widget.config.blockViewContext;
 
   @override
   ScalarViewContext? get scalarContextType => null;
