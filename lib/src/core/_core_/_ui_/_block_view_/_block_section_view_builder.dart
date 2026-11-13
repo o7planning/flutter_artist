@@ -3,6 +3,7 @@ part of '../../core.dart';
 class BlockSectionViewBuilder extends _ContextProviderView {
   final Block block;
   final Widget Function() build;
+  @override
   final BlockSectionViewConfig config;
 
   const BlockSectionViewBuilder({
@@ -68,6 +69,25 @@ class _BlockSectionViewBuilderState
   @override
   Widget buildContent(BuildContext context) {
     return widget.build();
+  }
+
+  @override
+  String getDebugLabel() {
+    return "BlockSectionView(${widget.block.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.block.hasError;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [
+      QuickSuggestionBarUtils.createBlockErrorButton(context, widget.block),
+      QuickSuggestionBarUtils.createBlockRequeryButton(context, widget.block),
+    ];
   }
 
   @override

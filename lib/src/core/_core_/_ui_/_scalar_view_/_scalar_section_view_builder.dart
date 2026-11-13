@@ -3,6 +3,7 @@ part of '../../core.dart';
 class ScalarSectionViewBuilder extends _ContextProviderView {
   final Scalar scalar;
   final Widget Function() build;
+  @override
   final ScalarSectionViewConfig config;
 
   const ScalarSectionViewBuilder({
@@ -52,40 +53,32 @@ class _ScalarSectionViewBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
-      return Stack(
-        children: [
-          widget.build(),
-          if (widget.scalar.hasError)
-            Positioned(
-              top: 5,
-              right: 5,
-              child: _buildQuickSuggestionButtonsBar(context),
-            ),
-        ],
-      );
-    } else {
       return widget.build();
-    }
   }
 
-  Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
-    return _QuickSuggestionButtonsBar(
-      children: [
-        _QuickSuggestionButton.error(
-          tooltip: "Error",
-          onPressed: () {
-            widget.scalar.showScalarErrorViewerDialog(context);
-          },
-        ),
-        _QuickSuggestionButton.requery(
-          tooltip: "Re Query",
-          onPressed: () async {
-            await widget.scalar.query();
-          },
-        ),
-      ],
-    );
+  @override
+  String getDebugLabel() {
+    return "ScalarSectionView(${widget.scalar.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.scalar.hasError;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [
+      QuickSuggestionBarUtils.createScalarErrorButton(
+        context,
+        widget.scalar,
+      ),
+      QuickSuggestionBarUtils.createScalarRequeryButton(
+        context,
+        widget.scalar,
+      ),
+    ];
   }
 
   @override

@@ -5,6 +5,7 @@ class FilterControlBar extends BaseControlBar<
     FilterControlBarItemType,
     FilterControlBarItem> {
   final FilterModel filterModel;
+  @override
   final FilterControlBarConfig config;
 
   const FilterControlBar({
@@ -97,6 +98,17 @@ class _FilterControlBarState extends _BaseControlBarState<
       default:
         return null;
     }
+  }
+
+
+  @override
+  String getDebugLabel() {
+    return "FilterControlBar(${widget.filterModel.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.filterModel.hasError;
   }
 
   @override

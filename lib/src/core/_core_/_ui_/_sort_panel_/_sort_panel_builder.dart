@@ -3,6 +3,7 @@ part of '../../core.dart';
 class _SortPanelBuilder extends _ContextProviderView {
   final SortModel sortModel;
 
+  @override
   final SortPanelConfig config;
   final Widget Function() build;
 
@@ -88,6 +89,22 @@ class _SortPanelBuilderState
     );
     //
     return widget.build();
+  }
+
+  @override
+  String getDebugLabel() {
+    return "SortPanel(${widget.sortModel.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.sortModel.hasError;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [];
   }
 
   @override

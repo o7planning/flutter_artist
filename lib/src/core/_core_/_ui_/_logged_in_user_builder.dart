@@ -1,13 +1,25 @@
 part of '../core.dart';
 
+class LoggedInUserViewConfig extends ViewConfig {
+  const LoggedInUserViewConfig()
+      : super(
+          quickSuggestionMode: QuickSuggestionMode.none,
+          enableKeyboardNavigation: false,
+          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+        );
+}
+
 class LoggedInUserBuilder extends _ContextProviderView {
   final Widget Function(ILoggedInUser? user) build;
+  @override
+  final LoggedInUserViewConfig config;
 
   const LoggedInUserBuilder({
     super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.build,
+    this.config = const LoggedInUserViewConfig(),
   });
 
   @override
@@ -51,6 +63,22 @@ class _LoggedInUserBuilderState
     ILoggedInUser? user = FlutterArtist.loggedInUser;
     //
     return widget.build(user);
+  }
+
+  @override
+  String getDebugLabel() {
+    return "LoginUserView()";
+  }
+
+  @override
+  bool hasError() {
+    return false; // TODO: Hardcode
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [];
   }
 
   @override

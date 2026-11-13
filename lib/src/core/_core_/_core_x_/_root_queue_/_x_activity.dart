@@ -89,10 +89,10 @@ abstract class XActivity extends XRootQueueItem {
       if (firstStage == null) {
         continue;
       }
-      final XStage firstXStage = xProzess.findXStageById(firstStage.stageId)!;
+      final XStage firstXStage = xProzess.findXStageById(firstStage.stageId);
 
       for (Stage stage in orderedStages) {
-        final XStage xStage = xProzess.findXStageById(stage.stageId)!;
+        final XStage xStage = xProzess.findXStageById(stage.stageId);
         final StageDataState stageDataStage = stage.dataState;
         if (stageDataStage.isNone) {
           break;

@@ -4,6 +4,7 @@ class _FilterPanelBuilder extends _ContextProviderView {
   final FilterModel filterModel;
   final Widget Function() build;
 
+  @override
   final FilterPanelConfig config;
 
   const _FilterPanelBuilder({
@@ -11,7 +12,6 @@ class _FilterPanelBuilder extends _ContextProviderView {
     required super.description,
     required this.filterModel,
     required this.build,
-
     required FilterPanelConfig? config,
     super.key,
   }) : config = config ?? const FilterPanelConfig();
@@ -113,6 +113,27 @@ class _FilterPanelBuilderState
     );
     //
     return _buildFormBuilder(context);
+  }
+
+  @override
+  String getDebugLabel() {
+    return "FilterPanel(${widget.filterModel.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.filterModel.hasError;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [
+      QuickSuggestionBarUtils.createFilterModelErrorButton(
+          context, widget.filterModel),
+      QuickSuggestionBarUtils.createFilterModelRequeryButton(
+          context, widget.filterModel),
+    ];
   }
 
   Widget _buildFormBuilder(BuildContext context) {

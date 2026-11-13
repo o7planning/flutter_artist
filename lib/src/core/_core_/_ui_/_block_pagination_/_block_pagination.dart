@@ -3,13 +3,18 @@ part of '../../core.dart';
 abstract class BlockPagination extends _ContextProviderView {
   final Block block;
 
+  @override
+  final PaginationConfig config;
+
   const BlockPagination({
     super.key,
     required this.block,
     required super.description,
     required super.ownerClassInstance,
+    this.config = const PaginationConfig(),
   });
 
+  @override
   Widget build(BuildContext context);
 
   @override
@@ -45,6 +50,22 @@ class _BlockPaginationState extends _ContextProviderViewState<BlockPagination> {
   @override
   Widget buildContent(BuildContext context) {
     return widget.build(context);
+  }
+
+  @override
+  String getDebugLabel() {
+    return "Pagination(${widget.block.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.block.hasError;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [];
   }
 
   @override

@@ -1,11 +1,12 @@
 part of '../../../core.dart';
 
-class TaskViewConfig {
+class TaskViewConfig extends ViewConfig {
   final TaskViewContext taskViewContext;
-  final QuickSuggestionMode quickSuggestionMode;
 
   const TaskViewConfig({
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    super.enableKeyboardNavigation = false,
+    super.mouseFocusPolicy = ViewMouseFocusPolicy.strictNavigationOnly,
+    super.quickSuggestionMode = QuickSuggestionMode.none,
     this.taskViewContext = TaskViewContext.initData,
   });
 }

@@ -5,6 +5,7 @@ class ProzessControlBar extends BaseControlBar<
     ProzessControlBarItemType,
     ProzessControlBarItem> {
   final Prozess prozess;
+  @override
   final ProzessControlBarConfig config;
 
   const ProzessControlBar({
@@ -56,7 +57,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
   ScalarViewContext? get scalarContextType => null;
 
   @override
-  ProzessViewContext? get prozessViewContext => widget.config.prozessViewContext;
+  ProzessViewContext? get prozessViewContext =>
+      widget.config.prozessViewContext;
 
   @override
   StageViewContext? get stageViewContext => null;
@@ -183,7 +185,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
               ? () async {
                   final result = await widget.prozess.submitViewingStage();
                   final NavigationIntent? intent = widget
-                      .config.screenNavigationContext
+                      .config
+                      .screenNavigationContext
                       ?.submitViewingStageNavigationIntent;
                   if (intent != null && context.mounted) {
                     widget.prozess._processNavigationIntent(
@@ -235,10 +238,17 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
               ? null
               : () => item.onPressed!(widget.prozess, type),
         );
-
-      default:
-        return null;
     }
+  }
+
+  @override
+  String getDebugLabel() {
+    return "ProzessControlBar(${widget.prozess.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.prozess.hasError;
   }
 
   @override

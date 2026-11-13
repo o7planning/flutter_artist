@@ -1,5 +1,14 @@
 part of '../core.dart';
 
+class ScalarControlConfig extends ViewConfig {
+  const ScalarControlConfig()
+      : super(
+          quickSuggestionMode: QuickSuggestionMode.none,
+          enableKeyboardNavigation: false,
+          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+        );
+}
+
 @Deprecated(
     "Not yet ready for use, not yet designed, may be continued in a few months.")
 abstract class ScalarControl extends _ContextProviderView {
@@ -8,6 +17,7 @@ abstract class ScalarControl extends _ContextProviderView {
   final Widget Function(VoidCallback? onPressed) build;
   final VoidCallback? navigate;
   final ScalarControlActionType actionType;
+  final ScalarControlConfig config;
 
   const ScalarControl({
     super.key,
@@ -18,6 +28,7 @@ abstract class ScalarControl extends _ContextProviderView {
     required this.build,
     required this.actionType,
     required this.navigate,
+    this.config = const ScalarControlConfig(),
   });
 
   @override
@@ -31,7 +42,6 @@ class _ControlButtonState extends _ContextProviderViewState<ScalarControl> {
   Shelf? _getRelatedModule() {
     return widget.scalar.shelf;
   }
-
 
   @override
   String getWidgetOwnerClassName() {
@@ -65,15 +75,31 @@ class _ControlButtonState extends _ContextProviderViewState<ScalarControl> {
       onPressedAsync == null
           ? null
           : () {
-        () async {
-          bool success = await onPressedAsync();
-          if (success && widget.navigate != null) {
-            widget.navigate!();
-          }
-        }
-        ();
-      },
+              () async {
+                bool success = await onPressedAsync();
+                if (success && widget.navigate != null) {
+                  widget.navigate!();
+                }
+              }();
+            },
     );
+  }
+
+
+  @override
+  String getDebugLabel() {
+    return "ScalarControl()";
+  }
+
+  @override
+  bool hasError() {
+    return false;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [];
   }
 
   ControlPressedAsyncFunction? _getOnPressedFunction() {

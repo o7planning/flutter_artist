@@ -1,11 +1,12 @@
 part of '../../../core.dart';
 
-class ScalarValueViewConfig {
-  final QuickSuggestionMode quickSuggestionMode;
+class ScalarValueViewConfig extends ViewConfig {
   final ScalarScreenNavigationContext? screenNavigationContext;
 
   const ScalarValueViewConfig({
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    super.enableKeyboardNavigation = false,
+    super.mouseFocusPolicy = ViewMouseFocusPolicy.strictNavigationOnly,
+    super.quickSuggestionMode = QuickSuggestionMode.none,
     this.screenNavigationContext,
   });
 }

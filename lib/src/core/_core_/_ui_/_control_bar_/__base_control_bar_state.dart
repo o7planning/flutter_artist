@@ -33,6 +33,13 @@ abstract class _BaseControlBarState<
     );
   }
 
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [];
+  }
+
   Widget _buildVerticalSeparator() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: widget.style.itemSpacing),

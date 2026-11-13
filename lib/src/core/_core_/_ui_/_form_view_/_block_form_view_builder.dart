@@ -67,4 +67,25 @@ class _BlockFormViewBuilderState
       event: event,
     );
   }
+
+  @override
+  String getDebugLabel() {
+    return "BlockFormView(${widget.formModel.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.formModel.hasError;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [
+      QuickSuggestionBarUtils.createBlockFormModelErrorButton(
+        context,
+        widget.formModel,
+      ),
+    ];
+  }
 }

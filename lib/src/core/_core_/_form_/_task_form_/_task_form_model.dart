@@ -27,6 +27,9 @@ abstract class TaskFormModel<
   late final Task<INIT_DATA, RESULT_DATA, FORM_PATCH, FORM_OUTPUT> task;
 
   @override
+  String get name => task.name;
+
+  @override
   Task get host => task;
 
   @override
@@ -44,6 +47,9 @@ abstract class TaskFormModel<
   // ===========================================================================
 
   TaskFormModel({super.config});
+
+  // TODO: Hardcode.
+  bool get hasError => false;
 
   // ===========================================================================
 

@@ -9,6 +9,8 @@ class _FlutterArtist extends _Core {
   bool _navigatorStated = false;
   bool _lockAddMoreQuery = false;
 
+  final FocusTracker focusTracker = FocusTracker();
+
   final _Backstage backstage = _Backstage();
 
   final List<FeatureModule> _recentModules = [];

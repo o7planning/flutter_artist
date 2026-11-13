@@ -1,8 +1,18 @@
 part of '../core.dart';
 
+class ActivityV1ControlConfig extends ViewConfig {
+  const ActivityV1ControlConfig()
+      : super(
+          quickSuggestionMode: QuickSuggestionMode.none,
+          enableKeyboardNavigation: false,
+          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+        );
+}
+
 class ActivityV1SectionViewBuilder extends _ContextProviderView {
   final ActivityV1 activity;
   final Widget Function() build;
+  final ActivityV1ControlConfig config;
 
   const ActivityV1SectionViewBuilder({
     super.key,
@@ -10,6 +20,7 @@ class ActivityV1SectionViewBuilder extends _ContextProviderView {
     required super.description,
     required this.activity,
     required this.build,
+    this.config = const ActivityV1ControlConfig(),
   });
 
   @override
@@ -56,6 +67,22 @@ class _ActivitySectionViewBuilderState
   @override
   Widget buildContent(BuildContext context) {
     return widget.build();
+  }
+
+  @override
+  String getDebugLabel() {
+    return "ActivityV1SectionView()";
+  }
+
+  @override
+  bool hasError() {
+    return false;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [];
   }
 
   @override

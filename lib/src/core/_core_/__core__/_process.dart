@@ -63,7 +63,6 @@ abstract class Prozess<
 
   /// Total number of stage enum values defined for this Prozess.
   /// Must be implemented by subclasses to ensure all stage enum members are correctly mapped.
-  @override
   int get totalStageEnumCount;
 
   PROZESS_INIT_DATA? _prozessInitData;
@@ -126,7 +125,7 @@ abstract class Prozess<
     final stageCodes = <String>{};
 
     for (final stage in stages) {
-      final stageEnum = stage.stageId as STAGE_ENUM;
+      final stageEnum = stage.stageId;
 
       // Validate duplicate Stage IDs.
       if (!stageIds.add(stageEnum)) {
@@ -153,8 +152,8 @@ abstract class Prozess<
     // ===========================================================================
 
     final orderedStages = [...stages]..sort((a, b) {
-        final aOrder = (a.stageId as STAGE_ENUM).stageOrder;
-        final bOrder = (b.stageId as STAGE_ENUM).stageOrder;
+        final aOrder = a.stageId.stageOrder;
+        final bOrder = b.stageId.stageOrder;
 
         return aOrder.compareTo(bOrder);
       });
@@ -164,7 +163,7 @@ abstract class Prozess<
     // ===========================================================================
     final stageMap = <STAGE_ENUM, Stage>{};
     for (final stage in orderedStages) {
-      final stageEnum = stage.stageId as STAGE_ENUM;
+      final stageEnum = stage.stageId;
 
       stageMap[stageEnum] = stage;
       stage._bindToProzess(this);
@@ -1213,7 +1212,6 @@ abstract class Prozess<
   }
 
   @_PrecheckMethod()
-  @override
   Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo() {
     BaseFormModel? formModel = viewingStage?.formModel;
     return __checkBeforeShowFormInfo(formModel: formModel);

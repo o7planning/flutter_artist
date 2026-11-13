@@ -5,6 +5,7 @@ abstract class BaseFormViewBuilder<M extends BaseFormModel>
   final M formModel;
   final Widget Function() build;
 
+  @override
   FormViewConfig get config;
 
   const BaseFormViewBuilder({
@@ -215,21 +216,6 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
   }
 
   Widget _buildBody(BuildContext context) {
-    // if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
-    //   return Stack(
-    //     children: [
-    //       _buildAbsorbPointer(),
-    //       if (widget.formModel.dataState.isFatalError)
-    //         Positioned(
-    //           top: 5,
-    //           right: 5,
-    //           child: _buildQuickSuggestionButtonsBar(context),
-    //         ),
-    //     ],
-    //   );
-    // } else {
-    //   return _buildAbsorbPointer();
-    // }
     return _buildAbsorbPointer();
   }
 
@@ -237,35 +223,6 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
     return AbsorbPointer(
       absorbing: !widget.formModel.isEnabled(),
       child: widget.build(),
-    );
-  }
-
-  Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
-    return _QuickSuggestionButtonsBar(
-      children: [
-        if (widget.formModel.formInitialDataReady)
-          _QuickSuggestionButton.error(
-            tooltip: "Form Error",
-            onPressed: () {
-              widget.formModel.showFormErrorViewerDialog(context);
-            },
-          ),
-        if (!widget.formModel.formInitialDataReady)
-          _QuickSuggestionButton.fatal(
-            tooltip: "Form disabled due to error",
-            onPressed: () {
-              widget.formModel.showFormErrorViewerDialog(context);
-            },
-          ),
-        _QuickSuggestionButton.restore(
-          tooltip: "Restore the state before the error",
-          onPressed: widget.formModel.formInitialDataReady
-              ? () {
-                  widget.formModel.showFormErrorViewerDialog(context);
-                }
-              : null,
-        ),
-      ],
     );
   }
 }

@@ -56,6 +56,29 @@ class _StageFormViewBuilderState
     return super.buildContent(context);
   }
 
+
+  @override
+  String getDebugLabel() {
+    return "StageFormView(${widget.formModel.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.formModel.hasError;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [
+      QuickSuggestionBarUtils.createStageFormModelErrorButton(
+        context,
+        widget.formModel,
+      ),
+    ];
+  }
+
+
   @override
   Future<bool> handleSaveOnPop() async {
     throw UnimplementedError("TODO: handleSaveOnPop");

@@ -187,8 +187,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
           info: output.debugInfo,
         );
       case ScalarExecutionAction.none:
-      default:
-        return NxtExecutionUnit.no(
+      return NxtExecutionUnit.no(
           debug: debug,
           info: output.debugInfo,
         );

@@ -86,6 +86,24 @@ class _ProzessStagesViewSwitcherBuilderState
     return super.buildContent(context);
   }
 
+
+  @override
+  String getDebugLabel() {
+    return "ProzessStagesViewSwitcher()";
+  }
+
+  @override
+  bool hasError() {
+    // TODO: Hardcode.
+    return false;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [];
+  }
+
   @override
   List<Widget> buildStageWidgets(BuildContext context) {
     // Map stage instances to their corresponding UI widgets.

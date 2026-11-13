@@ -9,7 +9,6 @@ class SimpleLoginFormPatch extends FormPatch {
     this.initialUsername,
   });
 
-  @override
   Map<String, dynamic> toDebugMap() {
     return {
       "initialUsername": initialUsername,

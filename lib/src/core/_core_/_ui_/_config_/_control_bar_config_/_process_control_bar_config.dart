@@ -1,6 +1,6 @@
 part of '../../../core.dart';
 
-class ProzessControlBarConfig {
+class ProzessControlBarConfig extends ControlBarConfig {
   final ProzessViewContext prozessViewContext;
   final ProzessScreenNavigationContext? screenNavigationContext;
 
@@ -15,6 +15,7 @@ class ProzessControlBarConfig {
   final bool allowDebugFormButton;
 
   const ProzessControlBarConfig({
+    super.enableKeyboardNavigation = false,
     this.prozessViewContext = ProzessViewContext.initData,
     this.screenNavigationContext,
     this.allowBackButton = false,
@@ -29,9 +30,11 @@ class ProzessControlBarConfig {
   });
 
   const ProzessControlBarConfig.allEnabled({
+    super.enableKeyboardNavigation = false,
     this.prozessViewContext = ProzessViewContext.initData,
     this.screenNavigationContext,
-  })  : allowBackButton = true,
+  })
+      : allowBackButton = true,
         allowCancelButton = true,
         allowMoveToPreviousStageButton = true,
         allowMoveToNextStageButton = true,

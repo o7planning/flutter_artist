@@ -5,6 +5,7 @@ class TaskControlBar extends BaseControlBar<
     TaskControlBarItemType,
     TaskControlBarItem> {
   final Task task;
+  @override
   final TaskControlBarConfig config;
 
   const TaskControlBar({
@@ -163,10 +164,17 @@ class _TaskControlBarState extends _BaseControlBarState<
               ? null
               : () => item.onPressed!(widget.task, type),
         );
-
-      default:
-        return null;
     }
+  }
+
+  @override
+  String getDebugLabel() {
+    return "TaskControlBar(${widget.task.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.task.hasError;
   }
 
   @override

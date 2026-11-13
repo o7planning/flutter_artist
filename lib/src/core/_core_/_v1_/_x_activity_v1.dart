@@ -34,12 +34,10 @@ class XActivityV1 extends XRootQueueItem {
     );
   }
 
-  @override
   bool isEmptyExecutionUnit() {
     return _tasked;
   }
 
-  @override
   DebugXRootQueueItem toDebugXRootQueueItem() {
     throw UnimplementedError("toDebugXRootQueueItem");
   }

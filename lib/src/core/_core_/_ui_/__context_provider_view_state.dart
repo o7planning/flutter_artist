@@ -134,12 +134,57 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
 
   Widget buildContent(BuildContext context);
 
+  Widget __buildContentInternal(BuildContext context) {
+    Widget content;
+    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
+      content = Stack(
+        children: [
+          buildContent(context),
+          if (hasError())
+            Positioned(
+              top: 5,
+              right: 5,
+              child: _buildQuickSuggestionButtonsBar(context),
+            ),
+        ],
+      );
+    } else {
+      content = buildContent(context);
+    }
+
+    return _FocusableViewRegion(
+      debugLabel: getDebugLabel(), // 'BlockItemsView(${widget.block.name})',
+      enabled: widget.config.enableKeyboardNavigation,
+      mouseFocusPolicy: widget.config.mouseFocusPolicy,
+      onKeyEvent: onKeyEvent,
+      child: content,
+    );
+  }
+
+  Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
+    return _QuickSuggestionButtonsBar(
+      children: createQuickSuggestionButtons(context),
+    );
+  }
+
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+    BuildContext context,
+  );
+
+  String getDebugLabel();
+
+  bool hasError();
+
   ///
   /// Class name of Owner (Block, FormModel, FilterModel).
   ///
   String getWidgetOwnerClassName();
 
   void checkAndFreeMemory();
+
+  KeyEventResult onKeyEvent(FocusNode node, KeyEvent event) {
+    return KeyEventResult.ignored;
+  }
 
   @override
   String get description {
@@ -167,9 +212,9 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     setBuildingState(isBuilding: true);
     //
     return showMode == ShowMode.production
-        ? buildContent(context)
+        ? __buildContentInternal(context)
         : _DevContainer(
-            child: buildContent(context),
+            child: __buildContentInternal(context),
           );
   }
 

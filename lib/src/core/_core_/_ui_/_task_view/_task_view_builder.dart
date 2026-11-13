@@ -3,6 +3,7 @@ part of '../../core.dart';
 class TaskViewBuilder extends _ContextProviderView {
   final Task task;
   final Widget Function() build;
+  @override
   final TaskViewConfig config;
 
   const TaskViewBuilder({
@@ -12,7 +13,7 @@ class TaskViewBuilder extends _ContextProviderView {
     required this.task,
     required TaskViewConfig? config,
     required this.build,
-  }): config = config ?? const TaskViewConfig();
+  }) : config = config ?? const TaskViewConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -66,40 +67,29 @@ class _TaskViewBuilderState extends _ContextProviderViewState<TaskViewBuilder> {
 
   @override
   Widget buildContent(BuildContext context) {
-    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
-      return Stack(
-        children: [
-          widget.build(),
-          if (widget.task.hasError)
-            Positioned(
-              top: 5,
-              right: 5,
-              child: _buildQuickSuggestionButtonsBar(context),
-            ),
-        ],
-      );
-    } else {
-      return widget.build();
-    }
+    return widget.build();
   }
 
-  Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
-    return _QuickSuggestionButtonsBar(
-      children: [
-        _QuickSuggestionButton.error(
-          tooltip: "Error",
-          onPressed: () {
-            widget.task.showTaskErrorViewerDialog(context);
-          },
-        ),
-        _QuickSuggestionButton.requery(
-          tooltip: "Load Init Data",
-          onPressed: () async {
-            await widget.task.restart();
-          },
-        ),
-      ],
-    );
+  @override
+  String getDebugLabel() {
+    return "TaskView(${widget.task.name})";
+  }
+
+  @override
+  bool hasError() {
+    return false;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+    BuildContext context,
+  ) {
+    return [
+      QuickSuggestionBarUtils.createTaskErrorButton(
+        context,
+        widget.task,
+      ),
+    ];
   }
 
   @override

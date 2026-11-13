@@ -136,8 +136,7 @@ class XFilterModel {
           info: finalDebugInfo,
         );
       case FilterExecutionAction.none:
-      default:
-        return NxtExecutionUnit.no(
+      return NxtExecutionUnit.no(
           debug: debug,
           info: finalDebugInfo,
         );

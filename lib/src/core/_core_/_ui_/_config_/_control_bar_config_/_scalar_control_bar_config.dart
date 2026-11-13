@@ -1,6 +1,6 @@
 part of '../../../core.dart';
 
-class ScalarControlBarConfig {
+class ScalarControlBarConfig extends ControlBarConfig {
   final ScalarViewContext? scalarContextType;
   final ScalarScreenNavigationContext? screenNavigationContext;
 
@@ -9,6 +9,7 @@ class ScalarControlBarConfig {
   final bool allowDebugFilterCriteriaInspectorButton;
 
   const ScalarControlBarConfig({
+    super.enableKeyboardNavigation = false,
     this.scalarContextType = ScalarViewContext.value,
     this.screenNavigationContext,
     required this.allowQueryButton,

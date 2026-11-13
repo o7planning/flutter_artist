@@ -145,25 +145,6 @@ abstract class _BaseProzessStageViewSwitcherBuilderState<
     );
   }
 
-  Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
-    return _QuickSuggestionButtonsBar(
-      children: [
-        _QuickSuggestionButton.error(
-          tooltip: "View Error Diagnostics",
-          onPressed: () {
-            prozess.showProzessErrorViewerDialog(context);
-          },
-        ),
-        _QuickSuggestionButton.requery(
-          tooltip: "Reload Prozess Init Data",
-          onPressed: () async {
-            await prozess.restart();
-          },
-        ),
-      ],
-    );
-  }
-
   @override
   void checkAndFreeMemory() {
     FlutterArtist.desk._checkToRemoveActivity(prozess.activity);

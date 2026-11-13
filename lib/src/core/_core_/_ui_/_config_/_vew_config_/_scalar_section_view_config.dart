@@ -1,12 +1,13 @@
 part of '../../../core.dart';
 
-class ScalarSectionViewConfig {
-  final QuickSuggestionMode quickSuggestionMode;
+class ScalarSectionViewConfig extends ViewConfig {
   final ScalarScreenNavigationContext? screenNavigationContext;
   final ScalarViewContext scalarContextType;
 
   const ScalarSectionViewConfig({
-    this.quickSuggestionMode = QuickSuggestionMode.showIfError,
+    super.enableKeyboardNavigation = false,
+    super.mouseFocusPolicy = ViewMouseFocusPolicy.strictNavigationOnly,
+    super.quickSuggestionMode = QuickSuggestionMode.none,
     this.scalarContextType = ScalarViewContext.value,
     this.screenNavigationContext,
   });

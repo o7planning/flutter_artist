@@ -176,8 +176,7 @@ class XBlockCurrentItemModel<
           info: finalDebugInfo,
         );
       case BlockCurrentItemExecutionAction.none:
-      default:
-        return NxtExecutionUnit.no(
+      return NxtExecutionUnit.no(
           debug: debug,
           info: finalDebugInfo,
         );

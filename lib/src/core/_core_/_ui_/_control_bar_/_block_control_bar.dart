@@ -5,6 +5,7 @@ class BlockControlBar extends BaseControlBar<
     BlockControlBarItemType,
     BlockControlBarItem> {
   final Block block;
+  @override
   final BlockControlBarConfig config;
 
   const BlockControlBar({
@@ -293,9 +294,17 @@ class _BlockControlBarState extends _BaseControlBarState<
                   item.onPressed!.call(widget.block, type);
                 },
         );
-      default:
-        return null;
     }
+  }
+
+  @override
+  String getDebugLabel() {
+    return "BlockControlBar(${widget.block.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.block.hasError;
   }
 
   @override

@@ -7,6 +7,13 @@ abstract class BaseFormModel<
         FORM_OUTPUT extends FormOutput, //
         ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends _Core implements MnemonicScope, ClassDefViewable {
+
+  String get name;
+
+  // TODO: Hardcode.
+  bool get hasError => false;
+
+
   /// Configuration options for the form model.
   final FormModelConfig config;
 

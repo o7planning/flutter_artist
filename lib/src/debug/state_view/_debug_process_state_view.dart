@@ -31,6 +31,7 @@ class DebugProzessStateView extends DebugBaseStateView {
     return StorageSectionViewBuilder(
       ownerClassInstance: this,
       description: null,
+      config: null,
       build: () {
         final theme = Theme.of(context);
         final colorScheme = theme.colorScheme;

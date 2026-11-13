@@ -6,6 +6,7 @@ class ProzessStageFormViewSwitcherBuilder extends _ContextProviderView {
   final List<StageFormViewBuilder> stageFormViewBuilders;
   final List<StageFormView> stageFormViews;
 
+  @override
   final ProzessFormViewConfig config;
 
   const ProzessStageFormViewSwitcherBuilder({
@@ -126,22 +127,24 @@ class _ProzessStageFormViewSwitcherBuilderState
     }
 
     final prozess = _targetProzess!;
+    return _buildActiveFormWidget(prozess);
+  }
 
-    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
-      return Stack(
-        children: [
-          _buildActiveFormWidget(prozess),
-          if (prozess.hasError)
-            Positioned(
-              top: 5,
-              right: 5,
-              child: _buildQuickSuggestionButtonsBar(context, prozess),
-            ),
-        ],
-      );
-    } else {
-      return _buildActiveFormWidget(prozess);
-    }
+  @override
+  String getDebugLabel() {
+    return "ProzessStageFormViewSwitcher()";
+  }
+
+  @override
+  bool hasError() {
+    // TODO: Hardcode
+    return false;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [];
   }
 
   /// Dynamically renders only the form view corresponding to the prozess's current [viewingStageEnum].
@@ -181,26 +184,6 @@ class _ProzessStageFormViewSwitcherBuilderState
       screenNavigationContext: widget.config.screenNavigationContext,
       circularFocusTraversal: widget.config.circularFocusTraversal,
       child: activeFormWidget,
-    );
-  }
-
-  Widget _buildQuickSuggestionButtonsBar(
-      BuildContext context, Prozess prozess) {
-    return _QuickSuggestionButtonsBar(
-      children: [
-        _QuickSuggestionButton.error(
-          tooltip: "View Error Diagnostics",
-          onPressed: () {
-            prozess.showProzessErrorViewerDialog(context);
-          },
-        ),
-        _QuickSuggestionButton.requery(
-          tooltip: "Reload Prozess Init Data",
-          onPressed: () async {
-            // await prozess.restart();
-          },
-        ),
-      ],
     );
   }
 

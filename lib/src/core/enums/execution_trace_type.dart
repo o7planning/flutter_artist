@@ -65,9 +65,7 @@ enum ExecutionTraceType {
         return theme.colorScheme.onSurface.withValues(alpha: 0.5);
       case ExecutionTraceType.libMethodCall:
         return theme.colorScheme.onSurface.withValues(alpha: 0.5);
-      default:
-        return theme.colorScheme.onSurface.withValues(alpha: 0.5);
-    }
+      }
   }
 
   String getTooltipText() {

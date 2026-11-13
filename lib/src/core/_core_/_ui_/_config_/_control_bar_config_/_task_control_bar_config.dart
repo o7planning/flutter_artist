@@ -1,6 +1,6 @@
 part of '../../../core.dart';
 
-class TaskControlBarConfig {
+class TaskControlBarConfig extends ControlBarConfig {
   final TaskViewContext? taskViewContext;
   final TaskScreenNavigationContext? screenNavigationContext;
 
@@ -10,6 +10,7 @@ class TaskControlBarConfig {
   final bool allowDebugFormModelInspectorButton;
 
   const TaskControlBarConfig({
+    super.enableKeyboardNavigation = false,
     this.taskViewContext = TaskViewContext.initData,
     this.screenNavigationContext,
     this.allowBackButton = false,
@@ -20,6 +21,7 @@ class TaskControlBarConfig {
 
   // TODO: Rename?
   const TaskControlBarConfig.allEnabled({
+    super.enableKeyboardNavigation = false,
     this.taskViewContext = TaskViewContext.initData,
     this.screenNavigationContext,
   })  : allowBackButton = true,

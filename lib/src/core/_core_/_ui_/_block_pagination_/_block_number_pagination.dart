@@ -2,7 +2,9 @@ part of '../../core.dart';
 
 class BlockNumberPagination extends BlockPagination {
   final EdgeInsets padding;
-  final int visiblePagesCount;
+
+  @override
+  NumberPaginationConfig get config => super.config as NumberPaginationConfig;
 
   const BlockNumberPagination({
     super.key,
@@ -10,7 +12,7 @@ class BlockNumberPagination extends BlockPagination {
     required super.description,
     required super.ownerClassInstance,
     this.padding = EdgeInsets.zero,
-    required this.visiblePagesCount,
+    required NumberPaginationConfig super.config,
   });
 
   @override
@@ -26,7 +28,7 @@ class BlockNumberPagination extends BlockPagination {
             ),
           );
         },
-        visiblePagesCount: visiblePagesCount,
+        visiblePagesCount: config.visiblePagesCount,
         totalPages:
             block.paginationInfo == null ? 0 : block.paginationInfo!.totalPages,
         currentPage: block.paginationInfo == null

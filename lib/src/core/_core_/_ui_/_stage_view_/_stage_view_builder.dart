@@ -20,6 +20,9 @@ class StageViewBuilder extends _ContextProviderView {
   State<StatefulWidget> createState() {
     return _StageViewBuilderState();
   }
+
+  @override
+  ViewConfig get config => _InternalViewConfig();
 }
 
 class _StageViewBuilderState
@@ -76,40 +79,29 @@ class _StageViewBuilderState
             'of ProzessStageViewSwitcherBuilder or ProzessStageViewSwitcher!',
       );
     }
-    if (widget.quickSuggestionMode == QuickSuggestionMode.showIfError) {
-      return Stack(
-        children: [
-          widget.build(),
-          if (widget.stage.hasError)
-            Positioned(
-              top: 5,
-              right: 5,
-              child: _buildQuickSuggestionButtonsBar(context),
-            ),
-        ],
-      );
-    } else {
-      return widget.build();
-    }
+    return widget.build();
   }
 
-  Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
-    return _QuickSuggestionButtonsBar(
-      children: [
-        _QuickSuggestionButton.error(
-          tooltip: "Error",
-          onPressed: () {
-            widget.stage.showStageErrorViewerDialog(context);
-          },
-        ),
-        _QuickSuggestionButton.requery(
-          tooltip: "Load Init Data",
-          onPressed: () async {
-            // await widget.stage.restart();
-          },
-        ),
-      ],
-    );
+  @override
+  String getDebugLabel() {
+    return "StageView(${widget.stage.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.stage.hasError;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+    BuildContext context,
+  ) {
+    return [
+      QuickSuggestionBarUtils.createStageErrorButton(
+        context,
+        widget.stage,
+      ),
+    ];
   }
 
   @override

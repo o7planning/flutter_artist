@@ -3,12 +3,16 @@ part of '../../core.dart';
 class StorageSectionViewBuilder extends _ContextProviderView {
   final Widget Function() build;
 
+  @override
+  final StorageSectionViewConfig config;
+
   const StorageSectionViewBuilder({
-    super.key,
     required super.ownerClassInstance,
     required super.description,
     required this.build,
-  });
+    required StorageSectionViewConfig? config,
+    super.key,
+  }) : config = config ?? const StorageSectionViewConfig();
 
   @override
   State<StatefulWidget> createState() {
@@ -49,6 +53,23 @@ class _StorageSectionViewState
   @override
   Widget buildContent(BuildContext context) {
     return widget.build();
+  }
+
+  @override
+  String getDebugLabel() {
+    return "StorageSessionView()";
+  }
+
+  @override
+  bool hasError() {
+    return false;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+    BuildContext context,
+  ) {
+    return [];
   }
 
   @override

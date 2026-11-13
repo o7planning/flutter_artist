@@ -148,8 +148,7 @@ RESULT_DATA extends TaskResultData> {
           info: finalDebugInfo,
         );
       case TaskFormExecutionAction.none:
-      default:
-        return NxtExecutionUnit.no(
+      return NxtExecutionUnit.no(
           debug: debug,
           info: finalDebugInfo,
         );

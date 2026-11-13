@@ -41,6 +41,7 @@ abstract class BlockFormModel<
       CREATION_PRESET,
       FORM_PATCH> blockCurrentItemModel;
 
+  @override
   String get name => block.name;
 
   @override
@@ -64,6 +65,9 @@ abstract class BlockFormModel<
   BlockFormMode get formMode => _internalFormMode.toBlockFormMode();
 
   BlockFormModel({super.config});
+
+  // TODO: Hardcode.
+  bool get hasError => false;
 
   XBlockFormModel<ID, ITEM_DETAIL> _createXBlockFormModel({
     required FORM_PATCH? formPatch,

@@ -1,5 +1,14 @@
 part of '../core.dart';
 
+class BlockControlConfig extends ViewConfig {
+  const BlockControlConfig()
+      : super(
+          quickSuggestionMode: QuickSuggestionMode.none,
+          enableKeyboardNavigation: false,
+          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+        );
+}
+
 @Deprecated(
     "Not yet ready for use, not yet designed, may be continued in a few months.")
 abstract class BlockControl extends _ContextProviderView {
@@ -9,6 +18,7 @@ abstract class BlockControl extends _ContextProviderView {
   final VoidCallback? navigate;
   final BlockControlActionType actionType;
   final BlockViewContext? blockViewContext;
+  final BlockControlConfig config;
 
   const BlockControl({
     super.key,
@@ -20,6 +30,7 @@ abstract class BlockControl extends _ContextProviderView {
     required this.actionType,
     required this.navigate,
     required this.blockViewContext,
+    this.config = const BlockControlConfig(),
   });
 
   @override
@@ -74,6 +85,22 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
               }();
             },
     );
+  }
+
+  @override
+  String getDebugLabel() {
+    return "BlockControl()";
+  }
+
+  @override
+  bool hasError() {
+    return false;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [];
   }
 
   ControlPressedAsyncFunction? _getOnPressedFunction() {

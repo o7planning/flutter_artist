@@ -8,6 +8,8 @@ abstract class _ContextProviderView extends StatefulWidget {
 
   final String? description;
 
+  ViewConfig get config;
+
   const _ContextProviderView({
     required super.key,
     required this.ownerClassInstance,

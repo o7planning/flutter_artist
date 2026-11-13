@@ -31,7 +31,7 @@ class ClassLinkedButton extends StatelessWidget {
         ClassDefinitionInspectorDialog.show(
           context: context,
           title: dialogTitle,
-          targetObject: targetObject as ClassDefViewable,
+          targetObject: targetObject,
         );
       },
       borderRadius: BorderRadius.circular(4),

@@ -5,7 +5,6 @@ part of '../../core.dart';
 class _FocusableViewRegion extends StatefulWidget {
   final String debugLabel;
   final bool enabled;
-  final ViewFocusStyle focusStyle;
   final ViewMouseFocusPolicy mouseFocusPolicy;
   final FocusOnKeyEventCallback? onKeyEvent;
   final Widget child;
@@ -14,7 +13,6 @@ class _FocusableViewRegion extends StatefulWidget {
     super.key,
     required this.debugLabel,
     this.enabled = true,
-    this.focusStyle = ViewFocusStyle.leftAccentBar,
     this.mouseFocusPolicy = ViewMouseFocusPolicy.clickToFocus,
     this.onKeyEvent,
     required this.child,
@@ -69,24 +67,6 @@ class _FocusableViewRegionState extends State<_FocusableViewRegion> {
       return widget.child;
     }
 
-    final bool showIndicator =
-        _hasFocus && widget.focusStyle != ViewFocusStyle.none;
-
-    // IMPORTANT: Always keep the Stack wrapper stable in the widget tree!
-    // Conditionally wrapping/unwrapping `widget.child` in a Stack when `_hasFocus`
-    // changes would reparent `widget.child` and reset active gesture recognizers.
-    final Widget content = Stack(
-      fit: StackFit.passthrough,
-      children: [
-        widget.child,
-        if (showIndicator)
-          _ViewFocusUtils.buildFocusIndicatorOverlay(
-            context: context,
-            focusStyle: widget.focusStyle,
-          ),
-      ],
-    );
-
     return Listener(
       behavior: HitTestBehavior.translucent,
       onPointerUp: _onPointerUp,
@@ -99,7 +79,7 @@ class _FocusableViewRegionState extends State<_FocusableViewRegion> {
         descendantsAreTraversable: false,
         onFocusChange: _onFocusChange,
         onKeyEvent: widget.onKeyEvent,
-        child: content,
+        child: widget.child,
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/_core_/core.dart';
+// ignore: unused_import
 import '../../core/widgets/_table_container.dart';
 import '__debug_base_state_view.dart';
 import 'options/_debug_block_options.dart';
@@ -39,6 +40,7 @@ class DebugBlockStateView extends DebugBaseStateView {
     return StorageSectionViewBuilder(
       ownerClassInstance: this,
       description: null,
+      config: null,
       build: () {
         final theme = Theme.of(context);
         final colorScheme = theme.colorScheme;

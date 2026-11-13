@@ -159,8 +159,7 @@ FORM_OUTPUT extends FormOutput> {
           info: finalDebugInfo,
         );
       case TaskExecutionAction.none:
-      default:
-        return NxtExecutionUnit.no(
+      return NxtExecutionUnit.no(
           debug: debug,
           info: finalDebugInfo,
         );

@@ -28,6 +28,9 @@ abstract class StageFormModel<
     };
   }
 
+  @override
+  String get name => stage.name;
+
   late final Stage<
       STAGE_ENUM, //
       INIT_DATA,
@@ -55,6 +58,7 @@ abstract class StageFormModel<
   // ===========================================================================
 
   StageFormModel({super.config});
+
 
   // ===========================================================================
 

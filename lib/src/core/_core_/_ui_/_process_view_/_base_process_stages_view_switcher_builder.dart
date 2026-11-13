@@ -4,6 +4,7 @@ part of '../../core.dart';
 /// and quick suggestion toolbars for prozess stage switchers.
 abstract class _BaseProzessStagesViewSwitcherBuilder
     extends _ContextProviderView {
+  @override
   final ProzessViewConfig config;
 
   const _BaseProzessStagesViewSwitcherBuilder({
@@ -73,23 +74,24 @@ abstract class _BaseProzessStagesViewSwitcherBuilderState<
       return const SizedBox.shrink();
     }
 
-    final Widget content = _buildActiveStageWidget(context);
+    return _buildActiveStageWidget(context);
+  }
 
-    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError &&
-        prozess.hasError) {
-      return Stack(
-        children: [
-          content,
-          Positioned(
-            top: 5,
-            right: 5,
-            child: _buildQuickSuggestionButtonsBar(context),
-          ),
-        ],
-      );
-    }
+  @override
+  String getDebugLabel() {
+    return "BaseProzessStagesViewSwitcher()";
+  }
 
-    return content;
+  @override
+  bool hasError() {
+    // TODO: Hardcode.
+    return false;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [];
   }
 
   /// Dynamically renders only the stage view corresponding to the prozess's current [viewingStageEnum].
@@ -120,24 +122,24 @@ abstract class _BaseProzessStagesViewSwitcherBuilderState<
     );
   }
 
-  Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
-    return _QuickSuggestionButtonsBar(
-      children: [
-        _QuickSuggestionButton.error(
-          tooltip: "View Error Diagnostics",
-          onPressed: () {
-            prozess.showProzessErrorViewerDialog(context);
-          },
-        ),
-        _QuickSuggestionButton.requery(
-          tooltip: "Reload Prozess Init Data",
-          onPressed: () async {
-            // await prozess.restart();
-          },
-        ),
-      ],
-    );
-  }
+  // Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
+  //   return _QuickSuggestionButtonsBar(
+  //     children: [
+  //       _QuickSuggestionButton.error(
+  //         tooltip: "View Error Diagnostics",
+  //         onPressed: () {
+  //           prozess.showProzessErrorViewerDialog(context);
+  //         },
+  //       ),
+  //       _QuickSuggestionButton.requery(
+  //         tooltip: "Reload Prozess Init Data",
+  //         onPressed: () async {
+  //           // await prozess.restart();
+  //         },
+  //       ),
+  //     ],
+  //   );
+  // }
 
   @override
   void checkAndFreeMemory() {

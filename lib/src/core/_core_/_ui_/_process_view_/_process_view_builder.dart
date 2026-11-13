@@ -4,6 +4,7 @@ class ProzessViewBuilder extends _ContextProviderView {
   final Prozess prozess;
   final Widget Function() build;
 
+  @override
   final ProzessViewConfig config;
 
   const ProzessViewBuilder({
@@ -69,40 +70,28 @@ class _ProzessViewBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
-      return Stack(
-        children: [
-          widget.build(),
-          if (widget.prozess.hasError)
-            Positioned(
-              top: 5,
-              right: 5,
-              child: _buildQuickSuggestionButtonsBar(context),
-            ),
-        ],
-      );
-    } else {
-      return widget.build();
-    }
+    return widget.build();
   }
 
-  Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
-    return _QuickSuggestionButtonsBar(
-      children: [
-        _QuickSuggestionButton.error(
-          tooltip: "Error",
-          onPressed: () {
-            widget.prozess.showProzessErrorViewerDialog(context);
-          },
-        ),
-        _QuickSuggestionButton.requery(
-          tooltip: "Load Init Data",
-          onPressed: () async {
-            // await widget.prozess.restart();
-          },
-        ),
-      ],
-    );
+  @override
+  String getDebugLabel() {
+    return "ProzeeVieww(${widget.prozess.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.prozess.hasError;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [
+      QuickSuggestionBarUtils.createProzessErrorButton(
+        context,
+        widget.prozess,
+      ),
+    ];
   }
 
   @override

@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
@@ -8,8 +6,6 @@ import '../_core_/core.dart';
 import '../icon/icon_constants.dart';
 
 part 'absent_item_context_policy.dart';
-
-part 'view_focus_style.dart';
 
 part 'view_mouse_focus_style.dart';
 

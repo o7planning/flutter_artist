@@ -5,6 +5,7 @@ class ScalarControlBar extends BaseControlBar<
     ScalarControlBarItemType,
     ScalarControlBarItem> {
   final Scalar scalar;
+  @override
   final ScalarControlBarConfig config;
 
   const ScalarControlBar({
@@ -120,9 +121,18 @@ class _ScalarControlBarState extends _BaseControlBarState<
                   item.onPressed!.call(widget.scalar, type);
                 },
         );
-      default:
-        return null;
-    }
+      }
+  }
+
+
+  @override
+  String getDebugLabel() {
+    return "ScalarControlBar(${widget.scalar.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.scalar.hasError;
   }
 
   @override

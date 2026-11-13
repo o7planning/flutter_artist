@@ -364,8 +364,7 @@ class XBlock<
           info: finalDebugInfo,
         );
       case BlockExecutionAction.none:
-      default:
-        return NxtExecutionUnit.no(
+      return NxtExecutionUnit.no(
           debug: debug,
           info: finalDebugInfo,
         );

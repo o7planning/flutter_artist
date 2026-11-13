@@ -69,4 +69,26 @@ class _TaskFormViewBuilderState
       event: event,
     );
   }
+
+
+  @override
+  String getDebugLabel() {
+    return "TaskFormView(${widget.formModel.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.formModel.hasError;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [
+      QuickSuggestionBarUtils.createTaskFormModelErrorButton(
+        context,
+        widget.formModel,
+      ),
+    ];
+  }
 }

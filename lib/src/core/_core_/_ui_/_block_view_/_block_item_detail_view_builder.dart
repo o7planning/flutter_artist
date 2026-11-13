@@ -4,6 +4,7 @@ class BlockItemDetailViewBuilder extends _ContextProviderView {
   final Block block;
   final Widget Function() build;
 
+  @override
   final BlockItemDetailViewConfig config;
 
   BlockItemDetailViewBuilder({
@@ -76,6 +77,30 @@ class _BlockItemDetailViewBuilderState
   Widget buildContent(BuildContext context) {
     return widget.build();
   }
+
+  @override
+  String getDebugLabel() {
+    return "BlockItemDetailView(${widget.block.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.block.hasError;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [
+      QuickSuggestionBarUtils.createBlockErrorButton(context, widget.block),
+      QuickSuggestionBarUtils.createBlockRequeryButton(context, widget.block),
+    ];
+  }
+
+  // @override
+  // Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
+  //   return SizedBox();
+  // }
 
   @override
   void checkAndFreeMemory() {

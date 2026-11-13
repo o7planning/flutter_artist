@@ -4,6 +4,7 @@ class BlockItemsViewBuilder extends _ContextProviderView {
   final Block block;
   final Widget Function() build;
 
+  @override
   final BlockItemsViewConfig config;
 
   const BlockItemsViewBuilder({
@@ -68,67 +69,46 @@ class _BlockItemsViewBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-    Widget content;
-    if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
-      content = Stack(
-        children: [
-          widget.build(),
-          if (widget.block.hasError)
-            Positioned(
-              top: 5,
-              right: 5,
-              child: _buildQuickSuggestionButtonsBar(context),
-            ),
-        ],
-      );
-    } else {
-      content = widget.build();
+    return widget.build();
+  }
+
+  @override
+  KeyEventResult onKeyEvent(FocusNode node, KeyEvent event) {
+    // 1. Handle standard Up / Down / Home / End list navigation
+    final navResult = _ViewFocusUtils.handleBlockItemsKeyEvent(
+      block: widget.block,
+      event: event,
+    );
+    if (navResult == KeyEventResult.handled) {
+      return KeyEventResult.handled;
     }
 
-    return _FocusableViewRegion(
-      debugLabel: 'BlockItemsView(${widget.block.name})',
-      enabled: widget.config.enableKeyboardNavigation,
-      focusStyle: widget.config.focusStyle,
-      mouseFocusPolicy: widget.config.mouseFocusPolicy,
-      onKeyEvent: (node, event) {
-        // 1. Handle standard Up / Down / Home / End list navigation
-        final navResult = _ViewFocusUtils.handleBlockItemsKeyEvent(
-          block: widget.block,
-          event: event,
-        );
-        if (navResult == KeyEventResult.handled) {
-          return KeyEventResult.handled;
-        }
-
-        // 2. Handle Mnemonic Shortcuts (Alt+C, Alt+E, Alt+D, Alt+Q, Alt+R, etc.)
-        return _BlockMnemonicHandler.handleKeyEvent(
-          context: context,
-          block: widget.block,
-          screenNavigationContext: widget.config.screenNavigationContext,
-          event: event,
-        );
-      },
-      child: content,
+    // 2. Handle Mnemonic Shortcuts (Alt+C, Alt+E, Alt+D, Alt+Q, Alt+R, etc.)
+    return _BlockMnemonicHandler.handleKeyEvent(
+      context: context,
+      block: widget.block,
+      screenNavigationContext: widget.config.screenNavigationContext,
+      event: event,
     );
   }
 
-  Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
-    return _QuickSuggestionButtonsBar(
-      children: [
-        _QuickSuggestionButton.error(
-          tooltip: "Error",
-          onPressed: () {
-            widget.block.showBlockErrorViewerDialog(context);
-          },
-        ),
-        _QuickSuggestionButton.requery(
-          tooltip: "Requery",
-          onPressed: () async {
-            await widget.block.query();
-          },
-        ),
-      ],
-    );
+  @override
+  String getDebugLabel() {
+    return "BlockItemsView(${widget.block.name})";
+  }
+
+  @override
+  bool hasError() {
+    return widget.block.hasError;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [
+      QuickSuggestionBarUtils.createBlockErrorButton(context, widget.block),
+      QuickSuggestionBarUtils.createBlockRequeryButton(context, widget.block),
+    ];
   }
 
   @override

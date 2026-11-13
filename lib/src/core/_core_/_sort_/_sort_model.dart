@@ -1,6 +1,11 @@
 part of '../core.dart';
 
 abstract class SortModel<ITEM extends Object> {
+  String get name => block.name;
+
+  // TODO: Hardcode.
+  bool get hasError => false;
+
   late final Block block;
   final SortModelBuilder<ITEM>? sortModelBuilder;
 

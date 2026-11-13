@@ -171,8 +171,7 @@ class XBlockFormModel<
           info: finalDebugInfo,
         );
       case BlockFormExecutionAction.none:
-      default:
-        return NxtExecutionUnit.no(
+      return NxtExecutionUnit.no(
           debug: debug,
           info: finalDebugInfo,
         );

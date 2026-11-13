@@ -2,63 +2,6 @@ part of '../../core.dart';
 
 /// Utility class for building non-intrusive visual focus indicators and handling list navigation.
 class _ViewFocusUtils {
-  /// Builds a non-intrusive visual indicator overlay positioned inside a [Stack].
-  static Widget buildFocusIndicatorOverlay({
-    required BuildContext context,
-    required ViewFocusStyle focusStyle,
-  }) {
-    final Color primaryColor = Theme.of(context).colorScheme.primary;
-
-    switch (focusStyle) {
-      case ViewFocusStyle.none:
-        return const SizedBox.shrink();
-
-      case ViewFocusStyle.leftAccentBar:
-        return Positioned(
-          left: 0,
-          top: 2,
-          bottom: 2,
-          width: 3.5,
-          child: IgnorePointer(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: const BorderRadius.horizontal(
-                  right: Radius.circular(3),
-                ),
-              ),
-            ),
-          ),
-        );
-
-      case ViewFocusStyle.subtleTint:
-        return Positioned.fill(
-          child: IgnorePointer(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: primaryColor.withAlpha(12),
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-          ),
-        );
-
-      case ViewFocusStyle.outlineBorder:
-        return Positioned.fill(
-          child: IgnorePointer(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: primaryColor.withAlpha(180),
-                  width: 1.5,
-                ),
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-          ),
-        );
-    }
-  }
 
   /// Helper to handle Up / Down / Home / End arrow keys for any [Block] items list.
   static KeyEventResult handleBlockItemsKeyEvent({

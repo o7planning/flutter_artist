@@ -49,7 +49,6 @@ class DefaultStage<
     return ApiResult.success(data: EmptyStageResultData());
   }
 
-  @override
   StageEnum? determineNextStage({
     required PROZESS_CONTEXT_DATA prozessContextData,
     required EmptyStageResultData stageDataResult,

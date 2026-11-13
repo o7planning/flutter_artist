@@ -152,8 +152,7 @@ PROZESS_CONTEXT_DATA extends ProzessContextData> {
           info: finalDebugInfo,
         );
       case ProzessExecutionAction.none:
-      default:
-        return NxtExecutionUnit.no(
+      return NxtExecutionUnit.no(
           debug: debug,
           info: finalDebugInfo,
         );

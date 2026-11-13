@@ -1,5 +1,14 @@
 part of '../core.dart';
 
+class CustomControlBarConfig extends ViewConfig {
+  const CustomControlBarConfig()
+      : super(
+          quickSuggestionMode: QuickSuggestionMode.none,
+          enableKeyboardNavigation: false,
+          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+        );
+}
+
 @Deprecated(
     "Not yet ready for use, not yet designed, may be continued in a few months.")
 class CustomControlBar extends _ContextProviderView {
@@ -10,6 +19,7 @@ class CustomControlBar extends _ContextProviderView {
 
   final List<CustomControlBarItem> startControlBarItems;
   final List<CustomControlBarItem> endControlBarItems;
+  final CustomControlBarConfig config;
 
   const CustomControlBar({
     super.key,
@@ -21,6 +31,7 @@ class CustomControlBar extends _ContextProviderView {
     required this.block,
     required this.startControlBarItems,
     required this.endControlBarItems,
+    this.config = const CustomControlBarConfig(),
   });
 
   @override
@@ -35,7 +46,6 @@ class _CustomControlBarState
   Shelf? _getRelatedModule() {
     return widget.block.shelf;
   }
-
 
   @override
   String getWidgetOwnerClassName() {
@@ -70,6 +80,23 @@ class _CustomControlBarState
     return Text("TODO");
   }
 
+
+  @override
+  String getDebugLabel() {
+    return "CustomControlBar()";
+  }
+
+  @override
+  bool hasError() {
+    return false;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [];
+  }
+
   @override
   void removeWidgetState() {
     // TODO: implement removeWidgetState
@@ -89,6 +116,4 @@ class _CustomControlBarState
   void setBuildingState({required bool isBuilding}) {
     //
   }
-
-
 }

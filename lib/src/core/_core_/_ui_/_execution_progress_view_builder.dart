@@ -1,5 +1,15 @@
 part of '../core.dart';
 
+class ExecutionProgressViewConfig extends ViewConfig {
+  const ExecutionProgressViewConfig()
+      : super(
+    quickSuggestionMode: QuickSuggestionMode.none,
+    enableKeyboardNavigation: false,
+    mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+  );
+}
+
+
 class ExecutionProgressViewBuilder extends _ContextProviderView {
   final EdgeInsets progressOnMargin;
   final EdgeInsets progressOffMargin;
@@ -8,6 +18,8 @@ class ExecutionProgressViewBuilder extends _ContextProviderView {
   final List<ExecutionUnitType> executionUnitTypes;
   final List<Block> blocks;
   final List<Scalar> scalars;
+  @override
+  final ExecutionProgressViewConfig config;
 
   final Widget Function(
       bool onProgress,
@@ -23,6 +35,7 @@ class ExecutionProgressViewBuilder extends _ContextProviderView {
     required this.blocks,
     required this.scalars,
     required this.build,
+    this.config = const ExecutionProgressViewConfig(),
   });
 
   @override
@@ -104,6 +117,23 @@ class _ExecutionProgressBuilderState
       margin: onProgress ? widget.progressOnMargin : widget.progressOffMargin,
       child: widget.build(onProgress),
     );
+  }
+
+
+  @override
+  String getDebugLabel() {
+    return "ExecutionProgressView()";
+  }
+
+  @override
+  bool hasError() {
+    return false;
+  }
+
+  @override
+  List<_QuickSuggestionButton> createQuickSuggestionButtons(
+      BuildContext context) {
+    return [];
   }
 
   @override

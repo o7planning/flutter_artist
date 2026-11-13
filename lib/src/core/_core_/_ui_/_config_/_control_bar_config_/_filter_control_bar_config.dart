@@ -1,6 +1,6 @@
 part of '../../../core.dart';
 
-class FilterControlBarConfig {
+class FilterControlBarConfig extends ControlBarConfig {
   final FilterScreenNavigationContext? screenNavigationContext;
 
   final bool allowQueryButton;
@@ -8,6 +8,7 @@ class FilterControlBarConfig {
   final bool allowDebugFilterModelInspectorButton;
 
   const FilterControlBarConfig({
+    super.enableKeyboardNavigation = false,
     this.screenNavigationContext,
     this.allowQueryButton = false,
     this.allowBackButton = false,
