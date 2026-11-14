@@ -7,6 +7,8 @@ import '../icon/icon_constants.dart';
 
 part 'absent_item_context_policy.dart';
 
+part 'focus_region_type.dart';
+
 part 'view_mouse_focus_style.dart';
 
 part 'action_confirmation_type.dart';

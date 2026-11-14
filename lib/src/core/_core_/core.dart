@@ -472,7 +472,7 @@ part '__core__/__sequence.dart';
 
 part '__core__/__class_def_viewable.dart';
 
-part '__core__/__active_focus_region_info.dart';
+part '__core__/__active_focus_region.dart';
 
 part '__core__/__data_debugable.dart';
 
