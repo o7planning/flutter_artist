@@ -36,6 +36,17 @@ class _BlockSectionViewBuilderState
     return getClassName(widget.block);
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.blockSectionView;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.block.name;
+  }
+
   @override
   BlockViewContext? get blockViewContext => widget.config.blockViewContext;
 

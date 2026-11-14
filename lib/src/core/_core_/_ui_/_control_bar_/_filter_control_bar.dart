@@ -42,6 +42,17 @@ class _FilterControlBarState extends _BaseControlBarState<
     return widget.filterModel.shelf;
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.controlBar;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.filterModel.name;
+  }
+
   @override
   BlockViewContext? get blockViewContext => null;
 

@@ -37,6 +37,17 @@ class _ProzessViewBuilderState
     return getClassName(widget.prozess);
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return 	FocusRegionType.prozessView;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.prozess.name;
+  }
+
   @override
   BlockViewContext? get blockViewContext => null;
 

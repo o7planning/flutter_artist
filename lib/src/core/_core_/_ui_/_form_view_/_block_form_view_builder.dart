@@ -29,6 +29,17 @@ class _BlockFormViewBuilderState
     return widget.formModel.shelf;
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return 	FocusRegionType.blockFormView;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.formModel. name;
+  }
+
   @override
   BlockViewContext? get blockViewContext => BlockViewContext.form;
 

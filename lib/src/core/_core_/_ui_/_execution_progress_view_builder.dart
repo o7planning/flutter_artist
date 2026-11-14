@@ -55,6 +55,17 @@ class _ExecutionProgressBuilderState
     return null;
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.executionProgress ;
+  }
+
+  @override
+  String getUnitName() {
+    return "ExecutionProgress";
+  }
+
   // Update from Executor:
   bool onProgress = false;
 

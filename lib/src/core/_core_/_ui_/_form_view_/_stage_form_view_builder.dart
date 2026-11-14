@@ -28,6 +28,17 @@ class _StageFormViewBuilderState
     return widget.formModel.stage.activity;
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return 	FocusRegionType.stageFormView;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.formModel. name;
+  }
+
   @override
   BlockViewContext? get blockViewContext => null;
 

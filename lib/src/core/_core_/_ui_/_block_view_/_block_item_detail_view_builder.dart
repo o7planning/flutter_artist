@@ -34,9 +34,21 @@ class _BlockItemDetailViewBuilderState
     return widget.block.shelf;
   }
 
+
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
+  }
+
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.blockItemDetailView ;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.block.name;
   }
 
   @override
@@ -96,11 +108,6 @@ class _BlockItemDetailViewBuilderState
       QuickSuggestionBarUtils.createBlockRequeryButton(context, widget.block),
     ];
   }
-
-  // @override
-  // Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
-  //   return SizedBox();
-  // }
 
   @override
   void checkAndFreeMemory() {

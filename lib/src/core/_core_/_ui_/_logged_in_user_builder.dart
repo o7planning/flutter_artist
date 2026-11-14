@@ -43,6 +43,17 @@ class _LoggedInUserBuilderState
     return "LoggedInUserBuilder";
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return 	FocusRegionType.loggedInUser ;
+  }
+
+  @override
+  String getUnitName() {
+    return 'LoggedInUser';
+  }
+
   @override
   BlockViewContext? get blockViewContext => null;
 

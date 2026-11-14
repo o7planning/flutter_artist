@@ -69,6 +69,16 @@ class _ProzessStageFormViewSwitcherBuilderState
   }
 
   @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.prozessStagesFormSwitcher;
+  }
+
+  @override
+  String getUnitName() {
+    return _targetProzess?.name ?? "prozess";
+  }
+
+  @override
   BlockViewContext? get blockViewContext => null;
 
   @override

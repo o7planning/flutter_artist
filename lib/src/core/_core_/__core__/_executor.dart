@@ -23,9 +23,10 @@ class _Executor {
     if (__executingXModuleId == null) {
       return false;
     }
-    final _ExecutionUnit? unit = FlutterArtist._rootQueue
-        .getNextExecutionUnit(removeEmptyRootQuery: false);
-    return unit != null;
+    // final _ExecutionUnit? unit = FlutterArtist._rootQueue
+    //     .getNextExecutionUnit(removeEmptyRootQuery: false);
+    // return unit != null;
+    return true;
   }
 
   bool get isFree => !isBusy;
@@ -111,6 +112,12 @@ class _Executor {
         }
       },
     );
+
+    print("######## onExecutionQueueCompleted() - in Executor");
+
+    // Overlay is now closed and all views have rebuilt with fresh data.
+    // Restore focus to the preserved region if a strictNavigationOnly click triggered this batch.
+    _GlobalFocusGuard.onExecutionQueueCompleted();
   }
 
   // ***************************************************************************

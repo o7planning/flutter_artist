@@ -44,6 +44,17 @@ class _ActivitySectionViewBuilderState
     return getClassName(widget.activity);
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.blockItemsView  ;
+  }
+
+  @override
+  String getUnitName() {
+    return "activityV1";
+  }
+
   @override
   BlockViewContext? get blockViewContext => null;
 

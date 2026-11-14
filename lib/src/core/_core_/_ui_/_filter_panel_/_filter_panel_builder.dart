@@ -35,6 +35,16 @@ class _FilterPanelBuilderState
   }
 
   @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.filterPanel;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.filterModel.name;
+  }
+
+  @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.filterModel);
   }

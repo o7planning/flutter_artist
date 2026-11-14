@@ -36,6 +36,16 @@ class _StorageSectionViewState
   }
 
   @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.storageSectionView;
+  }
+
+  @override
+  String getUnitName() {
+    return "storage";
+  }
+
+  @override
   BlockViewContext? get blockViewContext => null;
 
   @override

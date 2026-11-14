@@ -26,7 +26,7 @@ class FocusTracker {
 
   /// Clears the active region only if [region] is still the currently tracked one.
   ///
-  /// This prevents race conditions where a newly focused region updates first
+  /// Prevents race conditions where a newly focused region updates first
   /// and an outgoing region's unfocus callback arrives immediately afterward.
   void notifyRegionUnfocused(ActiveFocusRegion region) {
     if (_activeRegion.value == region) {

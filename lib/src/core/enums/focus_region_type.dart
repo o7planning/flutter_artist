@@ -5,6 +5,7 @@ part of '_enums.dart';
 /// Used by [ActiveFocusRegion], [FaFocusTracker], status bars, and debug inspectors
 /// to identify the exact type of view currently holding keyboard focus.
 enum FocusRegionType {
+  temp('temp'),
   blockItemsView('itemsView'),
   blockItemDetailView('itemDetailView'),
   blockSectionView('sectionView'),
@@ -19,6 +20,7 @@ enum FocusRegionType {
   stageView('stageView'),
   prozessView('prozessView'),
   prozessStagesSwitcher('stagesSwitcher'),
+  prozessStagesFormSwitcher('stagesFormSwitcher'),
   controlBar('controlBar'),
   pagination('pagination'),
   storageSectionView('storageSectionView'),

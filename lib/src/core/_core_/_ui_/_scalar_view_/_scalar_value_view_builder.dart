@@ -38,6 +38,18 @@ class _ScalarValueViewBuilderState
     return getClassName(widget.scalar);
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.scalarValueView;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.scalar .name;
+  }
+
+
   @override
   BlockViewContext? get blockViewContext => null;
 

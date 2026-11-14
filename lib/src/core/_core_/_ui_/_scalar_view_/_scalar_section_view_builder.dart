@@ -37,6 +37,16 @@ class _ScalarSectionViewBuilderState
   }
 
   @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.scalarSectionView;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.scalar.name;
+  }
+
+  @override
   BlockViewContext? get blockViewContext => null;
 
   @override
@@ -53,7 +63,7 @@ class _ScalarSectionViewBuilderState
 
   @override
   Widget buildContent(BuildContext context) {
-      return widget.build();
+    return widget.build();
   }
 
   @override

@@ -32,6 +32,17 @@ class _BlockItemsViewBuilderState
     return widget.block.shelf;
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+     return FocusRegionType.blockItemsView;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.block.name;
+  }
+
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
@@ -125,4 +136,5 @@ class _BlockItemsViewBuilderState
   void setBuildingState({required bool isBuilding}) {
     //
   }
+
 }

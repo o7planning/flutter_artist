@@ -50,6 +50,17 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
   @override
   Activity? _getRelatedModule() => widget.prozess.activity;
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.controlBar;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.prozess.name;
+  }
+
   @override
   BlockViewContext? get blockViewContext => null;
 

@@ -7,6 +7,14 @@ abstract class ViewConfig {
 
   final ViewMouseFocusPolicy mouseFocusPolicy;
 
+  /// Whether this view participates in region-level focus tracking and
+  /// `Ctrl + Tab` traversal.
+  bool get enableRegionFocus => enableKeyboardNavigation;
+
+  /// Whether descendant widgets inside this view (such as form input fields)
+  /// are allowed to acquire focus individually.
+  bool get allowDescendantFocus => false;
+
   const ViewConfig({
     required this.quickSuggestionMode,
     required this.enableKeyboardNavigation,

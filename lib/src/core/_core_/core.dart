@@ -6,13 +6,14 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart' hide Action;
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:flutter/material.dart' as  material;
+import 'package:flutter/material.dart' as material;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_artist/src/core/_core_/_precheck_/__precheck.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-as dialogs;
+    as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart'
     hide FlutterArtistLocaleAdapter;
@@ -157,6 +158,8 @@ part '_ui_/_task_view/_task_view_builder.dart';
 part '_ui_/_view_focus_/_view_focus_utils.dart';
 
 part '_ui_/_view_focus_/_focusable_view_region.dart';
+
+part '_ui_/_view_focus_/_region_dispatcher.dart';
 
 part '_ui_com_/_activity_ui_components.dart';
 
@@ -822,11 +825,17 @@ part '_ui_/_mnemonic_/_control_mnemonic.dart';
 
 part '_ui_/_mnemonic_/_block_mnemonic_handler.dart';
 
+part '_ui_/_mnemonic_/_utils_/_region_traversal_utils.dart';
+
 part '_ui_/_mnemonic_/_task_mnemonic_handler.dart';
 
 part '_ui_/_mnemonic_/_prozess_mnemonic_handler.dart';
 
 part '_ui_/_mnemonic_/_filter_mnemonic_handler.dart';
+
+part '_ui_/_mnemonic_/_global_focus_guard.dart';
+
+part '_ui_/_mnemonic_/_dialogs_/_keyboard_shortcuts_dialog.dart';
 
 part '_ui_/_mnemonic_/_mnemonic_dispatcher.dart';
 
@@ -899,7 +908,6 @@ part '_ui_/_config_/_vew_config_/__form_view_config.dart';
 part '_ui_/_config_/_vew_config_/_block_items_view_config.dart';
 
 part '_ui_/_config_/_vew_config_/_process_view_config.dart';
-
 
 part '_ui_/_config_/_vew_config_/_task_view_config.dart';
 
@@ -1117,7 +1125,6 @@ class _PrecheckMethod {
 class _IsAllowPrivateMethodAnnotation {
   const _IsAllowPrivateMethodAnnotation();
 }
-
 
 class _ExecutionUnitClassAnnotation {
   const _ExecutionUnitClassAnnotation();

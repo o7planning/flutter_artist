@@ -35,6 +35,17 @@ class _TaskViewBuilderState extends _ContextProviderViewState<TaskViewBuilder> {
     return getClassName(widget.task);
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType. taskView ;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.task.name;
+  }
+
   @override
   BlockViewContext? get blockViewContext => null;
 

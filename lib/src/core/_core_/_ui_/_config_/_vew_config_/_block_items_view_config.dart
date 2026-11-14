@@ -6,7 +6,7 @@ class BlockItemsViewConfig extends ViewConfig {
   final BlockViewContext blockViewContext;
 
   const BlockItemsViewConfig({
-    super.enableKeyboardNavigation = false,
+    super.enableKeyboardNavigation = true,
     super.mouseFocusPolicy = ViewMouseFocusPolicy.strictNavigationOnly,
     this.screenNavigationContext,
     super.quickSuggestionMode = QuickSuggestionMode.showIfError,

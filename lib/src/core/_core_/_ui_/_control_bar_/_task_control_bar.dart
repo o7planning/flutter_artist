@@ -42,6 +42,17 @@ class _TaskControlBarState extends _BaseControlBarState<
   @override
   Activity? _getRelatedModule() => widget.task.activity;
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return 	FocusRegionType.controlBar;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.task.name;
+  }
+
   @override
   BlockViewContext? get blockViewContext => null;
 

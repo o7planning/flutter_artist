@@ -48,6 +48,17 @@ class _ControlButtonState extends _ContextProviderViewState<ScalarControl> {
     return getClassName(widget.scalar);
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType. temp ;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.scalar.name;
+  }
+
   @override
   ContextProviderViewType get type =>
       ContextProviderViewType.scalarControlButton;

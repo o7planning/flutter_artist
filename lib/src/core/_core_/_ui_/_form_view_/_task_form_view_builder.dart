@@ -29,6 +29,18 @@ class _TaskFormViewBuilderState
     return widget.formModel.task.activity;
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return 	FocusRegionType.taskFormView;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.formModel.task.name;
+  }
+
+
   @override
   BlockViewContext? get blockViewContext => null;
 

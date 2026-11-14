@@ -40,6 +40,17 @@ class _StageViewBuilderState
     return getClassName(widget.stage);
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.stageView;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.stage.name;
+  }
+
   @override
   BlockViewContext? get blockViewContext => null;
 

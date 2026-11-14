@@ -52,6 +52,17 @@ class _CustomControlBarState
     return getClassName(widget.block);
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType. temp ;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.block.name;
+  }
+
   @override
   ContextProviderViewType get type => ContextProviderViewType.customControlBar;
 

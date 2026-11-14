@@ -37,6 +37,18 @@ class _SortPanelBuilderState
     return getClassName(widget.sortModel);
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.sortPanel;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.sortModel.name;
+  }
+
+
   @override
   BlockViewContext? get blockViewContext => widget.config.blockViewContext;
 

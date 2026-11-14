@@ -32,6 +32,17 @@ class _BlockPaginationState extends _ContextProviderViewState<BlockPagination> {
     return widget.block.shelf;
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.pagination ;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.block.name;
+  }
+
   @override
   BlockViewContext? get blockViewContext => null;
 

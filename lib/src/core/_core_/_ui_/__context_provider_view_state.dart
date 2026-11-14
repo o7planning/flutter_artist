@@ -134,6 +134,13 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
 
   Widget buildContent(BuildContext context);
 
+  /// Returns the logical name of the unit owning this view
+  /// (e.g., [Block.name], [FilterModel.name], [Task.name]).
+  String getUnitName();
+
+  /// Returns the semantic [FocusRegionType] identifying this view region.
+  FocusRegionType getRegionType();
+
   Widget __buildContentInternal(BuildContext context) {
     Widget content;
     if (widget.config.quickSuggestionMode == QuickSuggestionMode.showIfError) {
@@ -152,11 +159,19 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
       content = buildContent(context);
     }
 
+    final ActiveFocusRegion regionInfo = ActiveFocusRegion(
+      moduleName: _getRelatedModule()?.name,
+      unitName: getUnitName(),
+      regionType: getRegionType(),
+    );
+
     return _FocusableViewRegion(
-      debugLabel: getDebugLabel(), // 'BlockItemsView(${widget.block.name})',
-      enabled: widget.config.enableKeyboardNavigation,
+      debugLabel: getDebugLabel(),
+      enabled: widget.config.enableRegionFocus,
+      allowDescendantFocus: widget.config.allowDescendantFocus,
       mouseFocusPolicy: widget.config.mouseFocusPolicy,
-      onKeyEvent: onKeyEvent,
+      onKeyEvent: widget.config.enableKeyboardNavigation ? onKeyEvent : null,
+      regionInfo: regionInfo,
       child: content,
     );
   }
@@ -315,7 +330,15 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     //
     final ModalRoute? modalRoute = ModalRoute.of(context);
     __setRouteName(modalRoute);
-    //
+
+    if (widget.config.enableRegionFocus) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          RegionTraversalUtils.ensureInitialFocusOnCurrentRoute();
+        }
+      });
+    }
+
     DebugPrinter.printDebug(
       DebugCat.routeAware,
       ' ---->  [RouteAware] ---------> didPush: ${modalRoute?.settings.name}'

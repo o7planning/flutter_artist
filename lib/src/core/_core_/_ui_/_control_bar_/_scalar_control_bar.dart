@@ -43,6 +43,17 @@ class _ScalarControlBarState extends _BaseControlBarState<
     return widget.scalar.shelf;
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return 	FocusRegionType.controlBar;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.scalar.name;
+  }
+
   @override
   BlockViewContext? get blockViewContext => null;
 

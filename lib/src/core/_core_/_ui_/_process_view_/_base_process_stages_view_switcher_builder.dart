@@ -37,6 +37,16 @@ abstract class _BaseProzessStagesViewSwitcherBuilderState<
   String getWidgetOwnerClassName() => getClassName(prozess);
 
   @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.prozessStagesSwitcher;
+  }
+
+  @override
+  String getUnitName() {
+    return prozess.name;
+  }
+
+  @override
   BlockViewContext? get blockViewContext => null;
 
   @override

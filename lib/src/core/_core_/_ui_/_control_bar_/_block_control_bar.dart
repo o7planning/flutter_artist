@@ -59,6 +59,17 @@ class _BlockControlBarState extends _BaseControlBarState<
     return widget.block.shelf;
   }
 
+
+  @override
+  FocusRegionType getRegionType() {
+    return FocusRegionType.controlBar;
+  }
+
+  @override
+  String getUnitName() {
+    return widget.block.name;
+  }
+
   @override
   BlockViewContext? get blockViewContext => widget.config.blockViewContext;
 
