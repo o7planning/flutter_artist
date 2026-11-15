@@ -46,7 +46,10 @@ class XBlock<
   final List<XBlock> childXBlocks = [];
 
   final XFilterModel xFilterModel;
-  final XBlockCurrentItemModel xBlockCurrentItemModel;
+  final XBlockCurrentItemModel<
+      ID, //
+      ITEM,
+      ITEM_DETAIL> xBlockCurrentItemModel;
 
   List<XBlock> getDescendantXBlocks({required bool sameFilterOnly}) {
     final List<XBlock> ret = [];
@@ -364,7 +367,7 @@ class XBlock<
           info: finalDebugInfo,
         );
       case BlockExecutionAction.none:
-      return NxtExecutionUnit.no(
+        return NxtExecutionUnit.no(
           debug: debug,
           info: finalDebugInfo,
         );

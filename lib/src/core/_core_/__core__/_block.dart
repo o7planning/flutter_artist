@@ -599,7 +599,8 @@ abstract class Block<
 
   XBlock<ID, ITEM, ITEM_DETAIL> _createXBlock({
     required XFilterModel xFilterModel,
-    required XBlockCurrentItemModel xBlockCurrentItemModel,
+    required XBlockCurrentItemModel<ID, ITEM, ITEM_DETAIL>
+        xBlockCurrentItemModel,
   }) {
     return XBlock<ID, ITEM, ITEM_DETAIL>._(
       block: this,
@@ -607,24 +608,6 @@ abstract class Block<
       xBlockCurrentItemModel: xBlockCurrentItemModel,
     );
   }
-
-  // ***************************************************************************
-
-  // /// Checks if this Block exposes or is associated with the given [type].
-  // bool _exposesDataType(Type type) {
-  //   // 1. Check against the core data types of the Block
-  //   if (type == ITEM || type == ITEM_DETAIL) {
-  //     return true;
-  //   }
-  //
-  //   // 2. Check against custom broadcasted events configured in BlockConfig
-  //   // (Mapping to the types this block is explicitly allowed to broadcast)
-  //   if (effectiveConfig.extraBroadcastEvents.any((event) => event == type)) {
-  //     return true;
-  //   }
-  //
-  //   return false;
-  // }
 
   // ***************************************************************************
   // ***************************************************************************

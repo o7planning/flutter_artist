@@ -113,8 +113,6 @@ class _Executor {
       },
     );
 
-    print("######## onExecutionQueueCompleted() - in Executor");
-
     // Overlay is now closed and all views have rebuilt with fresh data.
     // Restore focus to the preserved region if a strictNavigationOnly click triggered this batch.
     _GlobalFocusGuard.onExecutionQueueCompleted();

@@ -279,4 +279,22 @@ class _FormUiComponents extends _UiComponents {
       }
     }
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Triggers a focus request on the first validation error field across actively
+  /// visible form views. If multiple views are visible, the first one found handles it.
+  void focusFirstErrorField() {
+    for (final _ContextProviderViewState state in _formViewWidgetStates.keys) {
+      if (!state.mounted) continue;
+
+      final bool isVisible = _formViewWidgetStates[state]?.isVisible ?? false;
+      if (isVisible && state is _BaseFormViewBuilderState) {
+        state.focusFirstErrorFieldSilently();
+        // Focusing on just the first visible form view is sufficient for a good UX.
+        return;
+      }
+    }
+  }
 }

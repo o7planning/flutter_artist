@@ -2,8 +2,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 class FormFocusTraversalUtils {
-  /// Xử lý logic xoay vòng focus (Circular Focus Traversal) bên trong một Form.
-  /// Trả về [KeyEventResult.handled] nếu đã can thiệp vòng lặp, ngược lại trả về [KeyEventResult.ignored].
+  /// Handles circular Tab / Shift+Tab focus traversal inside a Form or FilterPanel.
+  ///
+  /// Returns [KeyEventResult.handled] if the focus wrap-around was intercepted,
+  /// otherwise returns [KeyEventResult.ignored].
   static KeyEventResult handleFormTabTraversal({
     required BuildContext context,
     required FocusNode node,
@@ -12,7 +14,6 @@ class FormFocusTraversalUtils {
   }) {
     if (!isCircular) return KeyEventResult.ignored;
 
-    // Chỉ bắt sự kiện KeyDown hoặc KeyRepeat của phím Tab
     if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
       return KeyEventResult.ignored;
     }
@@ -22,7 +23,7 @@ class FormFocusTraversalUtils {
 
     final HardwareKeyboard keyboard = HardwareKeyboard.instance;
 
-    // Bỏ qua Ctrl+Tab / Alt+Tab / Meta+Tab để hệ điều hành hoặc MnemonicRegionDirection xử lý
+    // Ignore Ctrl+Tab / Alt+Tab / Meta+Tab so OS or region traversal shortcuts handle them.
     if (keyboard.isControlPressed ||
         keyboard.isAltPressed ||
         keyboard.isMetaPressed) {
@@ -34,20 +35,16 @@ class FormFocusTraversalUtils {
       final FocusTraversalPolicy policy =
           FocusTraversalGroup.maybeOf(context) ?? ReadingOrderTraversalPolicy();
 
-      // Chỉ gom các focusable node nằm bên trong Node bọc ngoài của Form
       final List<FocusNode> formFocusNodes = policy
           .sortDescendants(node.traversalDescendants, primaryFocus)
           .toList();
 
       if (formFocusNodes.isNotEmpty) {
         final bool isShiftPressed = keyboard.isShiftPressed;
-        // Đang ở phần tử đầu tiên mà ấn Shift+Tab -> Vòng xuống cuối
         if (isShiftPressed && primaryFocus == formFocusNodes.first) {
           formFocusNodes.last.requestFocus();
           return KeyEventResult.handled;
-        }
-        // Đang ở phần tử cuối cùng mà ấn Tab -> Vòng lên đầu
-        else if (!isShiftPressed && primaryFocus == formFocusNodes.last) {
+        } else if (!isShiftPressed && primaryFocus == formFocusNodes.last) {
           formFocusNodes.first.requestFocus();
           return KeyEventResult.handled;
         }
@@ -55,5 +52,58 @@ class FormFocusTraversalUtils {
     }
 
     return KeyEventResult.ignored;
+  }
+
+  /// Prevents single-line [TextField] widgets from triggering Flutter's default
+  /// mobile-first `TextInputAction.done` (`unfocus()`) behavior on `Enter` when
+  /// no custom `resolveNextFocus()` action was executed.
+  ///
+  /// Multi-line text inputs (`maxLines != 1`), dropdowns, checkboxes, and
+  /// suffix icon buttons remain unaffected and handle `Enter` natively.
+  static KeyEventResult preventSingleLineEnterUnfocus(KeyEvent event) {
+    if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
+      return KeyEventResult.ignored;
+    }
+
+    if (event.logicalKey != LogicalKeyboardKey.enter &&
+        event.logicalKey != LogicalKeyboardKey.numpadEnter) {
+      return KeyEventResult.ignored;
+    }
+
+    final HardwareKeyboard keyboard = HardwareKeyboard.instance;
+    if (keyboard.isControlPressed ||
+        keyboard.isAltPressed ||
+        keyboard.isMetaPressed ||
+        keyboard.isShiftPressed) {
+      return KeyEventResult.ignored;
+    }
+
+    if (_isSingleLineTextInput(FocusManager.instance.primaryFocus)) {
+      return KeyEventResult.handled;
+    }
+
+    return KeyEventResult.ignored;
+  }
+
+  /// Inspects [focusNode] to verify whether it directly owns a single-line
+  /// [EditableText] widget (`maxLines == 1`).
+  static bool _isSingleLineTextInput(FocusNode? focusNode) {
+    if (focusNode == null) return false;
+    final BuildContext? ctx = focusNode.context;
+    if (ctx == null || !ctx.mounted) return false;
+
+    final EditableText? editable = ctx.widget is EditableText
+        ? ctx.widget as EditableText
+        : ctx.findAncestorWidgetOfExactType<EditableText>();
+
+    if (editable == null) return false;
+
+    // Ensure the FocusNode actually belongs to the EditableText itself
+    // rather than a focusable suffix/prefix icon button inside InputDecoration.
+    if (!identical(editable.focusNode, focusNode)) {
+      return false;
+    }
+
+    return editable.maxLines == 1;
   }
 }

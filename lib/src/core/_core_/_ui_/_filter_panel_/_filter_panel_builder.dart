@@ -151,6 +151,7 @@ class _FilterPanelBuilderState
       canRequestFocus: false,
       skipTraversal: true,
       onKeyEvent: (node, event) {
+        // 1. Handle Filter Mnemonic Shortcuts
         final mnemonicResult = _FilterMnemonicHandler.handleKeyEvent(
           context: context,
           filterModel: widget.filterModel,
@@ -161,12 +162,19 @@ class _FilterPanelBuilderState
           return KeyEventResult.handled;
         }
 
-        return _FocusNavDispatcher.handleFilterKeyEvent(
+        // 2. Handle custom Tab / Enter field focus navigation (resolveNextFocus)
+        final navResult = _FocusNavDispatcher.handleFilterKeyEvent(
           node: node,
           event: event,
           filterModel: widget.filterModel,
           formState: formKey.currentState,
         );
+        if (navResult == KeyEventResult.handled) {
+          return KeyEventResult.handled;
+        }
+
+        // 3. Prevent Enter on single-line filter inputs from unfocusing the FilterPanel
+        return FormFocusTraversalUtils.preventSingleLineEnterUnfocus(event);
       },
       child: FormBuilder(
         key: formKey,

@@ -166,44 +166,20 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
           return KeyEventResult.handled;
         }
 
-        // 3. Fallback: Circular focus traversal within this FormView when resolveNextFocus() returns null
-        final bool isCircular = _isCircularFocusTraversal(context);
-
-        if (isCircular &&
-            (event is KeyDownEvent || event is KeyRepeatEvent) &&
-            event.logicalKey == LogicalKeyboardKey.tab) {
-          final HardwareKeyboard keyboard = HardwareKeyboard.instance;
-          // Do not intercept Ctrl+Tab / Alt+Tab / Meta+Tab (reserved for region/OS switching)
-          if (!keyboard.isControlPressed &&
-              !keyboard.isAltPressed &&
-              !keyboard.isMetaPressed) {
-            final FocusNode? primaryFocus = FocusManager.instance.primaryFocus;
-            if (primaryFocus != null && primaryFocus != node) {
-              final FocusTraversalPolicy policy =
-                  FocusTraversalGroup.maybeOf(context) ??
-                      ReadingOrderTraversalPolicy();
-
-              // Sort only focusable descendants inside THIS FormView's `node`
-              final List<FocusNode> formFocusNodes = policy
-                  .sortDescendants(node.traversalDescendants, primaryFocus)
-                  .toList();
-
-              if (formFocusNodes.isNotEmpty) {
-                final bool isShiftPressed = keyboard.isShiftPressed;
-                if (isShiftPressed && primaryFocus == formFocusNodes.first) {
-                  formFocusNodes.last.requestFocus();
-                  return KeyEventResult.handled;
-                } else if (!isShiftPressed &&
-                    primaryFocus == formFocusNodes.last) {
-                  formFocusNodes.first.requestFocus();
-                  return KeyEventResult.handled;
-                }
-              }
-            }
-          }
+        // 3. Prevent Enter on single-line TextFields from unfocusing the form
+        final enterGuardResult =
+            FormFocusTraversalUtils.preventSingleLineEnterUnfocus(event);
+        if (enterGuardResult == KeyEventResult.handled) {
+          return KeyEventResult.handled;
         }
 
-        return KeyEventResult.ignored;
+        // 4. Fallback: Circular focus traversal within this FormView when resolveNextFocus() returns null
+        return FormFocusTraversalUtils.handleFormTabTraversal(
+          context: context,
+          node: node,
+          event: event,
+          isCircular: _isCircularFocusTraversal(context),
+        );
       },
       child: FormBuilder(
         key: formKey,
@@ -215,14 +191,119 @@ abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
     );
   }
 
+  // ***************************************************************************
+
   Widget _buildBody(BuildContext context) {
     return _buildAbsorbPointer();
   }
+
+  // ***************************************************************************
 
   Widget _buildAbsorbPointer() {
     return AbsorbPointer(
       absorbing: !widget.formModel.isEnabled(),
       child: widget.build(),
     );
+  }
+
+  // ***************************************************************************
+
+  void focusFirstErrorFieldSilently() {
+    try {
+      __focusFirstErrorField();
+    } catch (e, stackTrace) {
+      print("Error focusFirstErrorFieldSilently: $e");
+      print(stackTrace);
+    }
+  }
+
+  // ***************************************************************************
+
+  /// Scans the entire form to identify fields with validation errors, sorts them
+  /// according to their visual reading order (top-to-bottom, left-to-right),
+  /// and smoothly scrolls to and focuses the first invalid field.
+  void __focusFirstErrorField() {
+    final formState = formKey.currentState;
+    if (formState == null) return;
+
+    final List<FocusNode> errorNodes = [];
+    final Map<FocusNode, BuildContext> nodeContexts = {};
+
+    // 1. Filter out invalid fields and resolve their actual focusable descendant FocusNodes.
+    for (final field in formState.fields.values) {
+      if (field.hasError) {
+        final FocusNode? node = __resolveFieldFocusNode(field);
+        if (node != null && node.canRequestFocus) {
+          errorNodes.add(node);
+          nodeContexts[node] = field.context;
+        }
+      }
+    }
+
+    if (errorNodes.isEmpty) return;
+
+    // 2. Sort the error nodes based on their visual arrangement on the screen
+    // to ensure the focus jumps to the visually "first" error, regardless of
+    // the internal registration order within flutter_form_builder's map.
+    final FocusTraversalPolicy policy =
+        FocusTraversalGroup.maybeOf(context) ?? ReadingOrderTraversalPolicy();
+
+    final FocusNode scopeNode = FocusScope.of(context);
+    final List<FocusNode> sortedErrorNodes =
+        policy.sortDescendants(errorNodes, scopeNode).toList();
+
+    // 3. Scroll to the first errored field and request focus.
+    if (sortedErrorNodes.isNotEmpty) {
+      final FocusNode targetNode = sortedErrorNodes.first;
+      final BuildContext? targetContext = nodeContexts[targetNode];
+
+      if (targetContext != null && targetContext.mounted) {
+        Scrollable.ensureVisible(
+          targetContext,
+          alignment: 0.1,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOutCubic,
+        );
+      }
+
+      // Defer the focus request by one frame to allow the Scrollable animation
+      // to initialize properly before shifting the input focus.
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (targetNode.context != null && targetNode.context!.mounted) {
+          targetNode.requestFocus();
+        }
+      });
+    }
+  }
+
+  // ***************************************************************************
+
+  /// Resolves the actual focusable [FocusNode] owned by [field].
+  ///
+  /// Checks [FormBuilderFieldState.effectiveFocusNode] first, and falls back to
+  /// searching descendant [Focus] widgets inside [field.context].
+  FocusNode? __resolveFieldFocusNode(
+    FormBuilderFieldState<dynamic, dynamic> field,
+  ) {
+    final FocusNode effectiveNode = field.effectiveFocusNode;
+    if (effectiveNode.canRequestFocus) {
+      return effectiveNode;
+    }
+
+    if (!field.context.mounted) return null;
+
+    FocusNode? foundDescendant;
+    void visitor(Element element) {
+      if (foundDescendant != null) return;
+      final Widget w = element.widget;
+      if (w is Focus && w.focusNode != null && w.focusNode!.canRequestFocus) {
+        foundDescendant = w.focusNode;
+        return;
+      }
+      element.visitChildren(visitor);
+    }
+
+    field.context.visitChildElements(visitor);
+    return foundDescendant;
   }
 }

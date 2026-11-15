@@ -650,6 +650,10 @@ abstract class BlockFormModel<
       checkValidate: checkValidateTrue,
     );
     if (!actionable.yes) {
+      if (actionable.errCode == BlockFormSavePrecheck.formInvalidated) {
+        // Send a signal to FormModel UI to locate and focus the currently displayed FormView
+        block.formModel?.ui.focusFirstErrorField();
+      }
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#099100",
