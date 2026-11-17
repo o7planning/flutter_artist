@@ -12,7 +12,8 @@ class FaMetadata {
 
   FaMetadata({required this.userId});
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'id': id,
         'userId': userId,
         'themeName': themeName,

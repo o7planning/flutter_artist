@@ -91,12 +91,13 @@ class FilterDebugBox extends BaseDebugBox {
     List<Widget> list2 = [
       if (options.showFilterCriteria && optCriteria.isNotEmpty)
         ...optCriteria.map(
-          (optCriterion) => IconLabelText(
-            label: "Load Count (${optCriterion.tildeCriterionName}): ",
-            text: optCriterion.loadCount.toString(),
-            labelStyle: DebugStyleUtils.getLabelStyle0(context),
-            textStyle: DebugStyleUtils.getTextStyle0(context),
-          ),
+              (optCriterion) =>
+              IconLabelText(
+                label: "Load Count (${optCriterion.tildeCriterionName}): ",
+                text: optCriterion.loadCount.toString(),
+                labelStyle: DebugStyleUtils.getLabelStyle0(context),
+                textStyle: DebugStyleUtils.getTextStyle0(context),
+              ),
         ),
     ];
     return [

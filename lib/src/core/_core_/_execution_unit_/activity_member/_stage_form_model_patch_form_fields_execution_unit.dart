@@ -13,9 +13,9 @@ class _StageFormModelPatchFormFieldsExecutionUnit<FORM_PATCH extends FormPatch>
     required this.xStageFormModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.formModelPatchFormFields,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.formModelPatchFormFields,
+    executionIntent: executionIntent,
+  );
 
   @override
   XActivity get xActivity => xStageFormModel.xActivity;

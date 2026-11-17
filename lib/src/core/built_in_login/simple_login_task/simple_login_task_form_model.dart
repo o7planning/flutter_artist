@@ -5,10 +5,10 @@ part of '../_login.dart';
 /// Developers can instantiate this class directly or subclass it to override initial
 /// default values (e.g., pre-filling a remembered username).
 abstract class SimpleLoginTaskFormModel<
-    USER extends ILoggedInUser, //
-    FORM_PATCH extends FormPatch,
-    FORM_OUTPUT extends FormOutput // CredentialsFormOutput
-    > extends TaskFormModel<
+USER extends ILoggedInUser, //
+FORM_PATCH extends FormPatch,
+FORM_OUTPUT extends FormOutput // CredentialsFormOutput
+> extends TaskFormModel<
     EmptyTaskInitData, //
     SimpleLoginTaskResultData<USER>,
     FORM_PATCH,
@@ -66,35 +66,35 @@ abstract class SimpleLoginTaskFormModel<
     return null;
   }
 
-  // @override
-  // Map<String, SimpleValueWrap<Object>?>? extractPatchValuesForSimpleProps({
-  //   required EmptyFormPatch formPatch,
-  // }) {
-  //   return null;
-  // }
-  //
-  // @override
-  // OptValueWrap<Object>? extractPatchValueForMultiOptProp({
-  //   required String multiOptPropName,
-  //   required MultiOptSelectionMode multiOptSelectionMode,
-  //   required XData<dynamic, dynamic, dynamic> multiOptPropXData,
-  //   required Object? parentMultiOptPropValue,
-  //   required EmptyFormPatch formPatch,
-  // }) {
-  //   return null;
-  // }
+// @override
+// Map<String, SimpleValueWrap<Object>?>? extractPatchValuesForSimpleProps({
+//   required EmptyFormPatch formPatch,
+// }) {
+//   return null;
+// }
+//
+// @override
+// OptValueWrap<Object>? extractPatchValueForMultiOptProp({
+//   required String multiOptPropName,
+//   required MultiOptSelectionMode multiOptSelectionMode,
+//   required XData<dynamic, dynamic, dynamic> multiOptPropXData,
+//   required Object? parentMultiOptPropValue,
+//   required EmptyFormPatch formPatch,
+// }) {
+//   return null;
+// }
 
-  // @override
-  // CredentialsFormOutput convertToFormOutput({
-  //   required Map<String, dynamic> formMapData,
-  // }) {
-  //   final String userName =
-  //       (formMapData[propUserName] as String?)?.trim() ?? "";
-  //   final String password = (formMapData[propPassword] as String?) ?? "";
-  //
-  //   return CredentialsFormOutput(
-  //     userName: userName,
-  //     password: password,
-  //   );
-  // }
+// @override
+// CredentialsFormOutput convertToFormOutput({
+//   required Map<String, dynamic> formMapData,
+// }) {
+//   final String userName =
+//       (formMapData[propUserName] as String?)?.trim() ?? "";
+//   final String password = (formMapData[propPassword] as String?) ?? "";
+//
+//   return CredentialsFormOutput(
+//     userName: userName,
+//     password: password,
+//   );
+// }
 }

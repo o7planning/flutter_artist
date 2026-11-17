@@ -28,7 +28,8 @@ class Logger {
 
   int get totalWarningCount => __totalWarningCount;
 
-  LogSummary get logSummary => LogSummary(
+  LogSummary get logSummary =>
+      LogSummary(
         recentErrorCount: __recentErrorCount,
         recentWarningCount: __recentWarningCount,
         totalErrorCount: __totalErrorCount,

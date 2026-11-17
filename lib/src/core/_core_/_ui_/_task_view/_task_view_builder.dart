@@ -38,7 +38,7 @@ class _TaskViewBuilderState extends _ContextProviderViewState<TaskViewBuilder> {
 
   @override
   FocusRegionType getRegionType() {
-    return FocusRegionType. taskView ;
+    return FocusRegionType.taskView;
   }
 
   @override
@@ -93,8 +93,7 @@ class _TaskViewBuilderState extends _ContextProviderViewState<TaskViewBuilder> {
 
   @override
   List<_QuickSuggestionButton> createQuickSuggestionButtons(
-    BuildContext context,
-  ) {
+      BuildContext context,) {
     return [
       QuickSuggestionBarUtils.createTaskErrorButton(
         context,

@@ -77,7 +77,9 @@ class TildeFilterCriterionView extends StatelessWidget {
   }
 
   Widget _buildSubtitle(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -106,7 +108,7 @@ class TildeFilterCriterionView extends StatelessWidget {
               context,
               "Suffix: ",
               (criterion as MultiOptTildeFilterCriterionModel)
-                      .parentMatchSuffix ??
+                  .parentMatchSuffix ??
                   "null"),
         ]
       ],
@@ -114,7 +116,9 @@ class TildeFilterCriterionView extends StatelessWidget {
   }
 
   Widget _buildSubtitleItem(BuildContext context, String label, String text) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return IconLabelText(
       label: label,
       text: text,
@@ -126,8 +130,8 @@ class TildeFilterCriterionView extends StatelessWidget {
     );
   }
 
-  Widget _buildSelectionTypeRow(
-      BuildContext context, MultiOptTildeFilterCriterionModel def) {
+  Widget _buildSelectionTypeRow(BuildContext context,
+      MultiOptTildeFilterCriterionModel def) {
     final isMulti = def.selectionMode == MultiOptSelectionMode.multi;
     return Row(
       children: [
@@ -140,9 +144,11 @@ class TildeFilterCriterionView extends StatelessWidget {
     );
   }
 
-  Widget _buildSelectionBadge(
-      BuildContext context, String label, bool isActive, IconData icon) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildSelectionBadge(BuildContext context, String label, bool isActive,
+      IconData icon) {
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
@@ -216,9 +222,11 @@ class TildeFilterCriterionView extends StatelessWidget {
     );
   }
 
-  SimpleAccordionSection _buildAccordionSection(
-      BuildContext context, String title, dynamic value, Widget content) {
-    final colorScheme = Theme.of(context).colorScheme;
+  SimpleAccordionSection _buildAccordionSection(BuildContext context,
+      String title, dynamic value, Widget content) {
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return SimpleAccordionSection(
       initiallyExpanded: true,
       headerTitle: Text(
@@ -231,12 +239,12 @@ class TildeFilterCriterionView extends StatelessWidget {
       headerSubtitle: value == null
           ? null
           : Text(
-              " - ${value.runtimeType.toString()}",
-              style: TextStyle(
-                  fontSize: 10,
-                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
-                  fontStyle: FontStyle.italic),
-            ),
+        " - ${value.runtimeType.toString()}",
+        style: TextStyle(
+            fontSize: 10,
+            color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+            fontStyle: FontStyle.italic),
+      ),
       content: content,
     );
   }

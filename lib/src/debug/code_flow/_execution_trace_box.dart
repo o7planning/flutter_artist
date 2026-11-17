@@ -135,21 +135,21 @@ class ExecutionTraceBox extends StatelessWidget {
       ),
       suffixIcon: hasEvent
           ? Tooltip(
-              message: "There was an event broadcast here.",
-              child: Icon(
-                Icons.electric_bolt_outlined,
-                color: theme.colorScheme.tertiary,
-                size: 14,
-              ),
-            )
+        message: "There was an event broadcast here.",
+        child: Icon(
+          Icons.electric_bolt_outlined,
+          color: theme.colorScheme.tertiary,
+          size: 14,
+        ),
+      )
           : null,
       endIcon: errorInfo != null
           ? SimpleSmallIconButton(
-              iconData: Icons.error_outline,
-              iconColor: theme.colorScheme.error,
-              iconSize: 14,
-              onPressed: () => _showErrorDialog(context, errorInfo),
-            )
+        iconData: Icons.error_outline,
+        iconColor: theme.colorScheme.error,
+        iconSize: 14,
+        onPressed: () => _showErrorDialog(context, errorInfo),
+      )
           : null,
     );
   }

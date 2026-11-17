@@ -31,7 +31,8 @@ class FormModelDebugView extends StatelessWidget {
           HtmlInfoView(
             padding: EdgeInsets.symmetric(vertical: 5),
             infoAsHtml:
-                "<b>${getClassNameWithoutGenerics(formModel)}</b><i>${formModel.debugClassParametersDefinition()}</i>",
+            "<b>${getClassNameWithoutGenerics(formModel)}</b><i>${formModel
+                .debugClassParametersDefinition()}</i>",
             style: TextStyle(fontSize: 13),
           ),
           Divider(),
@@ -53,8 +54,14 @@ class FormModelDebugView extends StatelessWidget {
                   ? FaIconConstants.formInitialDataReadyTrueIconData
                   : FaIconConstants.formInitialDataReadyFalseIconData,
               color: formModel.formInitialDataReady
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.error,
+                  ? Theme
+                  .of(context)
+                  .colorScheme
+                  .primary
+                  : Theme
+                  .of(context)
+                  .colorScheme
+                  .error,
               size: 20,
             ),
           ),

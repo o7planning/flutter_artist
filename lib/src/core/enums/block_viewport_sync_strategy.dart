@@ -46,10 +46,10 @@ enum BlockViewportSyncStrategy {
   }) {
     switch (nativeQueryMode) {
       case BlockNativeQueryMode.fullQuery:
-        // ---------------------------------------------------------------------
-        // UNBOUNDED FLAT MODE: nativeQuery holds supreme authority.
-        // Hierarchy: nativeQuery (3) > effectedAndViewportItemIdsQuery (2) > effectedItemIdsQuery (1) > null (0)
-        // ---------------------------------------------------------------------
+      // ---------------------------------------------------------------------
+      // UNBOUNDED FLAT MODE: nativeQuery holds supreme authority.
+      // Hierarchy: nativeQuery (3) > effectedAndViewportItemIdsQuery (2) > effectedItemIdsQuery (1) > null (0)
+      // ---------------------------------------------------------------------
         final BlockViewportSyncStrategy floor =
             syncConfig.minStrategyOnFullQueryMode;
         final BlockViewportSyncStrategy? requestedIntent =
@@ -68,17 +68,17 @@ enum BlockViewportSyncStrategy {
         return requestedIntent!;
 
       case BlockNativeQueryMode.pageableQuery:
-        // ---------------------------------------------------------------------
-        // BOUNDED PAGINATED MODE: effectedAndViewportItemIdsQuery holds supreme authority.
-        // Hierarchy: effectedAndViewportItemIdsQuery (3) > effectedItemIdsQuery (2) > nativeQuery (1) > null (0)
-        // ---------------------------------------------------------------------
+      // ---------------------------------------------------------------------
+      // BOUNDED PAGINATED MODE: effectedAndViewportItemIdsQuery holds supreme authority.
+      // Hierarchy: effectedAndViewportItemIdsQuery (3) > effectedItemIdsQuery (2) > nativeQuery (1) > null (0)
+      // ---------------------------------------------------------------------
         final BlockViewportSyncStrategy floor =
             syncConfig.minStrategyOnPageableQueryMode;
         final BlockViewportSyncStrategy? requestedIntent =
             backendIntentInPageableQueryMode;
 
         final int requestedWeight =
-            _getWeightUnderPageableQuery(requestedIntent);
+        _getWeightUnderPageableQuery(requestedIntent);
         final int floorWeight = _getWeightUnderPageableQuery(floor);
 
         BlockViewportSyncStrategy resolved;
@@ -122,16 +122,16 @@ enum BlockViewportSyncStrategy {
 
     switch (nativeQueryMode) {
       case BlockNativeQueryMode.fullQuery:
-        // ---------------------------------------------------------------------
-        // UNBOUNDED FLAT MODE HIERARCHY:
-        // nativeQuery (3) > effectedAndViewportItemIdsQuery (2) > effectedItemIdsQuery (1) > null (0)
-        // ---------------------------------------------------------------------
+      // ---------------------------------------------------------------------
+      // UNBOUNDED FLAT MODE HIERARCHY:
+      // nativeQuery (3) > effectedAndViewportItemIdsQuery (2) > effectedItemIdsQuery (1) > null (0)
+      // ---------------------------------------------------------------------
         final BlockViewportSyncStrategy floor =
             syncConfig.minStrategyOnFullQueryMode;
 
         // Check if any event demands an absolute sweep due to missing mutation details (e.g., Storage Actions)
         final bool forceMax =
-            receivedEventInfos.any((info) => info.requiresMaxSyncStrategy);
+        receivedEventInfos.any((info) => info.requiresMaxSyncStrategy);
         if (forceMax) {
           return BlockViewportSyncStrategy
               .nativeQuery; // Highest authority in Full Query
@@ -157,14 +157,14 @@ enum BlockViewportSyncStrategy {
         return maxIntent!;
 
       case BlockNativeQueryMode.pageableQuery:
-        // ---------------------------------------------------------------------
-        // BOUNDED PAGINATED MODE HIERARCHY:
-        // effectedAndViewportItemIdsQuery (3) > effectedItemIdsQuery (2) > nativeQuery (1) > null (0)
-        // ---------------------------------------------------------------------
+      // ---------------------------------------------------------------------
+      // BOUNDED PAGINATED MODE HIERARCHY:
+      // effectedAndViewportItemIdsQuery (3) > effectedItemIdsQuery (2) > nativeQuery (1) > null (0)
+      // ---------------------------------------------------------------------
         final BlockViewportSyncStrategy floor =
             syncConfig.minStrategyOnPageableQueryMode;
         final bool forceMax =
-            receivedEventInfos.any((info) => info.requiresMaxSyncStrategy);
+        receivedEventInfos.any((info) => info.requiresMaxSyncStrategy);
 
         BlockViewportSyncStrategy maxIntent;
         int maxWeight;
@@ -187,7 +187,7 @@ enum BlockViewportSyncStrategy {
         }
         final int floorWeight = _getWeightUnderPageableQuery(floor);
         BlockViewportSyncStrategy resolved =
-            maxWeight < floorWeight ? floor : maxIntent;
+        maxWeight < floorWeight ? floor : maxIntent;
 
         // ️ RE-ARCHITECTED CEILING GUARD:
         if (resolved == BlockViewportSyncStrategy.nativeQuery &&

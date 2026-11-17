@@ -10,7 +10,6 @@ class _BlockMnemonicHandler {
     required KeyEvent event,
   }) {
     if (event is! KeyDownEvent) return KeyEventResult.ignored;
-    print("\n\n\n KEY-EVENT: $event");
 
     final List<MnemonicScope> scopes = [
       if (block.formModel != null) block.formModel!,
@@ -18,20 +17,15 @@ class _BlockMnemonicHandler {
     ];
     if (_MnemonicDispatcher.tryTriggerRegisteredControl(event,
         scopes: scopes)) {
-      print("  1 ---> handled");
       return KeyEventResult.handled;
     }
 
     final MnemonicShortcut? shortcut =
-        _MnemonicDispatcher.resolveShortcut(event);
+    _MnemonicDispatcher.resolveShortcut(event);
     if (shortcut == null) {
-      print("  2 ---> ignored");
       return KeyEventResult.ignored;
     }
-
-    print("  3 ---> check busy");
     if (FlutterArtist.executor.isBusy) return KeyEventResult.handled;
-    print("  4 ---> check busy");
 
     final bool isDataNav = DataGridNavigationUtils.handleBlockDataNavigation(
       context: context,
@@ -70,7 +64,8 @@ class _BlockMnemonicHandler {
         final actionable = block.checkBeforeCreateItemWithForm();
         if (!actionable.yes) return false;
 
-        () async {
+        () async
+        {
           final result = await block.prepareFormToCreateItem();
           final NavigationIntent? intent =
               screenNavigationContext?.createNavigationIntent;
@@ -81,7 +76,8 @@ class _BlockMnemonicHandler {
               intent: intent,
             );
           }
-        }();
+        }
+        ();
         return true;
 
       case MnemonicShortcut.edit:
@@ -89,7 +85,8 @@ class _BlockMnemonicHandler {
         final actionable = block.checkBeforeEditCurrentItemWithForm();
         if (!actionable.yes) return false;
 
-        () async {
+        () async
+        {
           final result = await block._prepareFormToEditCurrentItem();
           final NavigationIntent? intent =
               screenNavigationContext?.editNavigationIntent;
@@ -100,14 +97,16 @@ class _BlockMnemonicHandler {
               intent: intent,
             );
           }
-        }();
+        }
+        ();
         return true;
 
       case MnemonicShortcut.delete:
         final actionable = block.checkBeforeDeleteCurrentItem();
         if (!actionable.yes) return false;
 
-        () async {
+        () async
+        {
           final result = await block.deleteCurrentItem();
           final NavigationIntent? intent =
               screenNavigationContext?.deleteNavigationIntent;
@@ -118,7 +117,8 @@ class _BlockMnemonicHandler {
               intent: intent,
             );
           }
-        }();
+        }
+        ();
         return true;
 
       case MnemonicShortcut.save:
@@ -129,7 +129,8 @@ class _BlockMnemonicHandler {
         );
         if (!actionable.yes) return false;
 
-        () async {
+        () async
+        {
           final result = await block.formModel!.saveForm();
           final NavigationIntent? intent =
               screenNavigationContext?.saveNavigationIntent;
@@ -140,7 +141,8 @@ class _BlockMnemonicHandler {
               intent: intent,
             );
           }
-        }();
+        }
+        ();
         return true;
 
       case MnemonicShortcut.refresh:
@@ -162,17 +164,15 @@ class _BlockMnemonicHandler {
         block.query();
         return true;
 
-      case MnemonicShortcut.debugFilter:
-        if (!block.canShowFilterCriteria()) return false;
-        DebugViewerDialog.openDebugFilterCriteriaInspector(
-          context: context,
-          locationInfo: '',
-          filterModel: block.registeredOrDefaultFilterModel,
-        );
+      case MnemonicShortcut.debugFilterCriteria:
+        block.showDebugFilterCriteriaViewerDialog();
         return true;
 
-      case MnemonicShortcut.debugForm:
-        if (!block.checkBeforeShowFormInfo().yes) return false;
+      case MnemonicShortcut.debugFilterModel:
+        block.showDebugFilterModelViewerDialog();
+        return true;
+
+      case MnemonicShortcut.debugFormModel:
         block.showDebugFormModelInspectorDialog();
         return true;
 

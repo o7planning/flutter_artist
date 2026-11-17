@@ -27,8 +27,7 @@ class HtmlSelectableRichText extends StatefulWidget {
   final void Function(String)? onLinkTap;
   final TextAlign textAlign;
 
-  const HtmlSelectableRichText(
-    this.htmlText, {
+  const HtmlSelectableRichText(this.htmlText, {
     super.key,
     this.icon,
     this.label,
@@ -74,17 +73,20 @@ class _HtmlSelectableRichTextState extends State<HtmlSelectableRichText> {
       spans.add(TextSpan(
         text: widget.label!,
         style:
-            widget.labelStyle ?? const TextStyle(fontWeight: FontWeight.bold),
+        widget.labelStyle ?? const TextStyle(fontWeight: FontWeight.bold),
       ));
       spans.add(const WidgetSpan(child: SizedBox(width: 4)));
     }
 
     final baseStyle = widget.style ??
-        Theme.of(context).textTheme.bodyMedium ??
+        Theme
+            .of(context)
+            .textTheme
+            .bodyMedium ??
         const TextStyle();
 
     final tagRegex =
-        RegExp(r'''<(/?)([a-zA-Z0-9]+)(?:\s+href=["']([^"']*)["'])?>''');
+    RegExp(r'''<(/?)([a-zA-Z0-9]+)(?:\s+href=["']([^"']*)["'])?>''');
 
     int lastIndex = 0;
     List<TextStyle> styleStack = [baseStyle];

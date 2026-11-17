@@ -95,7 +95,11 @@ class _FormUiComponents extends _UiComponents {
     final List<_ContextProviderViewState> list = [
       ..._formViewWidgetStates.keys,
     ];
-    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
+    return list
+        .map((v) => v.faRoute)
+        .nonNulls
+        .toList()
+        .toSet();
   }
 
   // ***************************************************************************
@@ -146,7 +150,7 @@ class _FormUiComponents extends _UiComponents {
     required ContextKind? contextKind,
   }) {
     for (final _ContextProviderViewState widgetState
-        in _formViewWidgetStates.keys) {
+    in _formViewWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -202,8 +206,10 @@ class _FormUiComponents extends _UiComponents {
   }) {
     _formViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setBuilding(isBuilding),
-      ifAbsent: () => XState().._setBuilding(isBuilding),
+          (xState) => xState.._setBuilding(isBuilding),
+      ifAbsent: () =>
+      XState()
+        .._setBuilding(isBuilding),
     );
   }
 
@@ -218,8 +224,10 @@ class _FormUiComponents extends _UiComponents {
 
     _formViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
 
     final bool formContextCurrent = hasFormContext();

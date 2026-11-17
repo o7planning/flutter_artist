@@ -52,7 +52,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         children: [
           _buildCriteriaShortDocument(
             filterModelClassName:
-                getClassNameWithoutGenerics(widget.filterModel),
+            getClassNameWithoutGenerics(widget.filterModel),
             criteriaClassName: getClassNameWithoutGenerics(filterCriteria),
           ),
           SizedBox(height: 10),
@@ -90,7 +90,8 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
       start: ListView(
         children: (filterCriteria?.filterCriterionList ?? [])
             .map(
-              (c) => FilterCriterionView(
+              (c) =>
+              FilterCriterionView(
                 filterCriterion: c,
                 selected: c.filterCriterionName ==
                     _selectedFilterCriterion?.filterCriterionName,
@@ -100,7 +101,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
                   });
                 },
               ),
-            )
+        )
             .toList(),
       ),
       end: _buildFilterCriterionValue(),
@@ -192,11 +193,12 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         id: fieldBasedJsonTabId,
         text: ' Field-Based JSON',
         closable: false,
-        leading: (context, status) => Icon(
-          Icons.data_object,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: 16,
-        ),
+        leading: (context, status) =>
+            Icon(
+              Icons.data_object,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: 16,
+            ),
         view: _buildJsonContent(),
       ),
     );
@@ -205,11 +207,12 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
         id: supportedCriteriaTabId,
         text: ' Supported Criteria',
         closable: false,
-        leading: (context, status) => Icon(
-          Icons.policy_outlined,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: 16,
-        ),
+        leading: (context, status) =>
+            Icon(
+              Icons.policy_outlined,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: 16,
+            ),
         view: _buildLeftRightFilterCriterion(),
       ),
     );
@@ -218,7 +221,7 @@ class _FilterCriteriaViewState extends State<FilterCriteriaView> {
     TabbedView tabbedView = TabbedView(controller: _controller);
 
     TabbedViewThemeData themeData =
-        TabThemeUtils.getTabbedViewThemeData(context);
+    TabThemeUtils.getTabbedViewThemeData(context);
 
     TabbedViewTheme tabbedViewTheme = TabbedViewTheme(
       data: themeData,

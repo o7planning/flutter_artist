@@ -22,12 +22,12 @@ class ClassDefView extends StatelessWidget {
 
     // Extract clean class name without generic artifacts using the correct framework helper.
     final String className =
-        getTypeNameWithoutGenerics(targetObject.runtimeType);
+    getTypeNameWithoutGenerics(targetObject.runtimeType);
 
     // Automatically retrieve generic parameters map from the ClassDefViewable contract.
     final Map<String, Type> genericsInfoMap = targetObject.getGenericsInfoMap();
     final List<MapEntry<String, Type>> entriesList =
-        genericsInfoMap.entries.toList();
+    genericsInfoMap.entries.toList();
 
     // Dynamically calculate the maximum required width for parameter labels using TextSizeUtils.
     double maxLabelWidth = 100.0; // Minimum baseline width fallback
@@ -131,11 +131,11 @@ class ClassDefView extends StatelessWidget {
                   final String paramKey = entry.key;
                   final Type paramType = entry.value;
                   final String paramTypeName =
-                      getTypeNameWithoutGenerics(paramType);
+                  getTypeNameWithoutGenerics(paramType);
 
                   return Padding(
                     padding:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                    const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

@@ -115,7 +115,8 @@ class DebugShelfRetainingRoutesView extends StatelessWidget {
               ),
             )
           else
-            ...guards.map((guard) => Padding(
+            ...guards.map((guard) =>
+                Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
                   child: Row(
                     children: [

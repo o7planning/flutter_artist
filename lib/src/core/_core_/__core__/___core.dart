@@ -83,7 +83,8 @@ abstract class _Core {
         msg = "Call $methodName() warning: $warningMessage";
       } else {
         msg =
-            "Call ${getClassNameWithoutGenerics(this)}.$methodName() warning: $warningMessage";
+        "Call ${getClassNameWithoutGenerics(
+            this)}.$methodName() warning: $warningMessage";
       }
     }
     //
@@ -124,10 +125,13 @@ abstract class _Core {
     } else {
       if (methodName.contains("\\.")) {
         msg =
-            "The $methodName() method was called with an error:\n${appError.errorMessage}";
+        "The $methodName() method was called with an error:\n${appError
+            .errorMessage}";
       } else {
         msg =
-            "The ${getClassNameWithoutGenerics(this)}.$methodName() method was called with an error:\n${appError.errorMessage}";
+        "The ${getClassNameWithoutGenerics(
+            this)}.$methodName() method was called with an error:\n${appError
+            .errorMessage}";
       }
     }
     print(msg);
@@ -167,7 +171,7 @@ abstract class _Core {
       msg = "Call $methodName() error: $message";
     } else {
       msg =
-          "Call ${getClassNameWithoutGenerics(this)}.$methodName() error: $message";
+      "Call ${getClassNameWithoutGenerics(this)}.$methodName() error: $message";
     }
     print(msg);
     //
@@ -223,7 +227,8 @@ abstract class _Core {
         executionTrace.addInfo(
           codeId: traceStepCodeId,
           shortDesc:
-              "$prefixShortDesc. actionable.errorInfo: ${logEntry.errorInfo?.errorMessage}",
+          "$prefixShortDesc. actionable.errorInfo: ${logEntry.errorInfo
+              ?.errorMessage}",
           errorInfo: logEntry.errorInfo,
         );
       }
@@ -288,18 +293,6 @@ abstract class _Core {
   void showDeletedSnackBar({String? customMessage}) {
     FlutterArtist.appConfig._overlayAdapter.showDeletedSnackBar(
       customMessage: customMessage,
-    );
-  }
-
-  Actionable<ShowFormInfoPrecheck> __checkBeforeShowFormInfo({
-    required BaseFormModel? formModel,
-  }) {
-    final ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
-
-    return ShowFormInfoPrecheckUtils.checkBeforeShowFormInfo(
-      hasForm: formModel != null,
-      isLoggedIn: loggedInUser != null,
-      isSystemUser: loggedInUser?.isSystemUser ?? false,
     );
   }
 }

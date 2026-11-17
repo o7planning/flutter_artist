@@ -40,85 +40,87 @@ class NumberButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selected = number == NumberPageContainer.of(context).currentPage;
+    final selected = number == NumberPageContainer
+        .of(context)
+        .currentPage;
     return Flexible(
       child: Padding(
         padding: const EdgeInsets.all(1.5),
         child: enableInteraction
             ? ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: selected ? buttonElevation : 0,
-                  backgroundColor:
-                      selected ? selectedBgColor : unSelectedBgColor,
-                  surfaceTintColor: Colors.transparent,
-                  shadowColor: selected
-                      ? selectedBgColor.withValues(alpha: 0.4)
-                      : Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(buttonRadius),
-                    side: BorderSide(
-                      color: selected
-                          ? buttonSelectedBorderColor ?? Colors.transparent
-                          : buttonUnSelectedBorderColor ?? Colors.transparent,
-                      width: selected ? 1.5 : 1.0,
-                    ),
-                  ),
-                  padding: EdgeInsets.zero,
-                  fixedSize: fixedSize,
-                  minimumSize: fixedSize,
-                  overlayColor:
-                      selected ? null : selectedBgColor.withValues(alpha: 0.1),
-                ),
-                onPressed: () {
-                  onSelect(context, number);
-                },
-                child: Text(
-                  '$number',
-                  style: TextStyle(
-                    fontSize: fontSize,
-                    fontFamily: fontFamily,
-                    color: selected ? selectedFgColor : unSelectedFgColor,
-                    fontWeight: selected ? selectedNumberFontWeight : null,
-                  ),
-                ),
-              )
-            : TextButton(
-                style: TextButton.styleFrom(
-                  elevation: buttonElevation,
-                  surfaceTintColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    side: (buttonSelectedBorderColor != null ||
-                            buttonUnSelectedBorderColor != null)
-                        ? BorderSide(
-                            color: selected
-                                ? buttonSelectedBorderColor ??
-                                    const Color(0xFF000000)
-                                : buttonUnSelectedBorderColor ??
-                                    const Color(0xFF000000),
-                          )
-                        : BorderSide.none,
-                    borderRadius: BorderRadius.circular(buttonRadius),
-                  ),
-                  padding: EdgeInsets.zero,
-                  fixedSize: fixedSize,
-                  minimumSize: fixedSize,
-                  overlayColor: Colors.transparent,
-                  backgroundColor:
-                      selected ? selectedBgColor : unSelectedBgColor,
-                ),
-                onPressed: () {
-                  onSelect(context, number);
-                },
-                child: Text(
-                  '$number',
-                  style: TextStyle(
-                    fontSize: fontSize,
-                    fontFamily: fontFamily,
-                    color: selected ? selectedFgColor : unSelectedFgColor,
-                    fontWeight: selected ? selectedNumberFontWeight : null,
-                  ),
-                ),
+          style: ElevatedButton.styleFrom(
+            elevation: selected ? buttonElevation : 0,
+            backgroundColor:
+            selected ? selectedBgColor : unSelectedBgColor,
+            surfaceTintColor: Colors.transparent,
+            shadowColor: selected
+                ? selectedBgColor.withValues(alpha: 0.4)
+                : Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(buttonRadius),
+              side: BorderSide(
+                color: selected
+                    ? buttonSelectedBorderColor ?? Colors.transparent
+                    : buttonUnSelectedBorderColor ?? Colors.transparent,
+                width: selected ? 1.5 : 1.0,
               ),
+            ),
+            padding: EdgeInsets.zero,
+            fixedSize: fixedSize,
+            minimumSize: fixedSize,
+            overlayColor:
+            selected ? null : selectedBgColor.withValues(alpha: 0.1),
+          ),
+          onPressed: () {
+            onSelect(context, number);
+          },
+          child: Text(
+            '$number',
+            style: TextStyle(
+              fontSize: fontSize,
+              fontFamily: fontFamily,
+              color: selected ? selectedFgColor : unSelectedFgColor,
+              fontWeight: selected ? selectedNumberFontWeight : null,
+            ),
+          ),
+        )
+            : TextButton(
+          style: TextButton.styleFrom(
+            elevation: buttonElevation,
+            surfaceTintColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              side: (buttonSelectedBorderColor != null ||
+                  buttonUnSelectedBorderColor != null)
+                  ? BorderSide(
+                color: selected
+                    ? buttonSelectedBorderColor ??
+                    const Color(0xFF000000)
+                    : buttonUnSelectedBorderColor ??
+                    const Color(0xFF000000),
+              )
+                  : BorderSide.none,
+              borderRadius: BorderRadius.circular(buttonRadius),
+            ),
+            padding: EdgeInsets.zero,
+            fixedSize: fixedSize,
+            minimumSize: fixedSize,
+            overlayColor: Colors.transparent,
+            backgroundColor:
+            selected ? selectedBgColor : unSelectedBgColor,
+          ),
+          onPressed: () {
+            onSelect(context, number);
+          },
+          child: Text(
+            '$number',
+            style: TextStyle(
+              fontSize: fontSize,
+              fontFamily: fontFamily,
+              color: selected ? selectedFgColor : unSelectedFgColor,
+              fontWeight: selected ? selectedNumberFontWeight : null,
+            ),
+          ),
+        ),
       ),
     );
   }

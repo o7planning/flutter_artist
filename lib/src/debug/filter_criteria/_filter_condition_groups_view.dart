@@ -31,7 +31,7 @@ class FilterConditionGroupsView extends StatefulWidget {
 
 class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
   final MultiSplitViewController _splitViewController =
-      MultiSplitViewController();
+  MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
   TreeNode<dynamic>? _currentNode;
@@ -67,7 +67,8 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
       parent: null,
     );
     _currentNode = filterModelNode;
-    rootTreeNode = TreeNode.root()..add(filterModelNode);
+    rootTreeNode = TreeNode.root()
+      ..add(filterModelNode);
     //
     FilterModelStructure structure = widget.filterModel.filterModelStructure;
     ConditionGroupModelImpl rootCriteriaGroupModel =
@@ -81,7 +82,9 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
   }
 
   Widget _buildRight() {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     if (_currentNode == null) {
       return Center(
         child: Text(
@@ -156,8 +159,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
           width: 15,
         ),
         onTreeReady: (
-          TreeViewController<dynamic, TreeNode<dynamic>> controller,
-        ) {
+            TreeViewController<dynamic, TreeNode<dynamic>> controller,) {
           _treeViewController = controller;
           controller.expandAllChildren(rootTreeNode);
         },
@@ -178,7 +180,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
                 ? "AND - ${data.groupName}"
                 : "OR - ${data.groupName}";
             tooltip =
-                "${getClassNameWithoutGenerics(data)} > ${data.groupName}";
+            "${getClassNameWithoutGenerics(data)} > ${data.groupName}";
             prefixIconData = FaIconConstants.filterCriteriaGroupIconData;
             //
             isMultiOpt = false;
@@ -190,7 +192,8 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
             if (criterionModel is SimpleTildeFilterCriterionModel) {
               title = data.tildeCriterionName;
               tooltip =
-                  "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType.toString()}> ${data.tildeCriterionName}";
+              "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType
+                  .toString()}> ${data.tildeCriterionName}";
               prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
               //
               isMultiOpt = false;
@@ -198,7 +201,8 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
             } else if (criterionModel is MultiOptTildeFilterCriterionModel) {
               title = data.tildeCriterionName;
               tooltip =
-                  "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType.toString()}> ${data.tildeCriterionName}";
+              "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType
+                  .toString()}> ${data.tildeCriterionName}";
               prefixIconData = FaIconConstants.optPropOrCriterionIconData;
               //
               isMultiOpt = true;

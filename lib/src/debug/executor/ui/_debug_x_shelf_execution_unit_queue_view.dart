@@ -42,11 +42,13 @@ class _DebugXShelfExecutionUnitQueueViewState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ...widget.debugXShelfExecutionUnitQueue.mainExecutionUnits.map(
-                  (executionUnit) => DebugExecutionUnitView(
-                      executionUnit: executionUnit, isInMainQueue: true),
+                      (executionUnit) =>
+                      DebugExecutionUnitView(
+                          executionUnit: executionUnit, isInMainQueue: true),
                 ),
                 ...widget.debugXShelfExecutionUnitQueue.secondaryExecutionUnits
-                    .map((executionUnit) => DebugExecutionUnitView(
+                    .map((executionUnit) =>
+                    DebugExecutionUnitView(
                         executionUnit: executionUnit, isInMainQueue: false))
               ],
             ),
@@ -63,7 +65,7 @@ class _DebugXShelfExecutionUnitQueueViewState
       contentPadding: EdgeInsets.all(0),
       leading: Tooltip(
         message:
-            "XShelfID: ${widget.debugXShelfExecutionUnitQueue.xShelf.xModuleId}",
+        "XShelfID: ${widget.debugXShelfExecutionUnitQueue.xShelf.xModuleId}",
         child: CircleAvatar(
           radius: 18,
           child: Center(
@@ -83,7 +85,8 @@ class _DebugXShelfExecutionUnitQueueViewState
         ),
       ),
       title: Text(
-          "Execution Units in the Queue of XShelf (${widget.debugXShelfExecutionUnitQueue.xShelf.shelf.name})"),
+          "Execution Units in the Queue of XShelf (${widget
+              .debugXShelfExecutionUnitQueue.xShelf.shelf.name})"),
       subtitle: IconLabelText(
         label: "XShelf Execution Unit Type: ",
         text: widget.debugXShelfExecutionUnitQueue.xShelf.xShelfType.name,

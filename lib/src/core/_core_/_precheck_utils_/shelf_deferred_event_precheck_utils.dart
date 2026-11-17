@@ -6,7 +6,7 @@ class ShelfDeferredEventPrecheckUtils {
   ///
   /// - [checkBusy] & [isBusy]: Enforces system-wide busy check.
   static Actionable<ShelfDeferredEventExecutionPrecheck>
-      checkBeforeExecuteDelayedExternalReaction({
+  checkBeforeExecuteDelayedExternalReaction({
     required bool checkBusy,
     required bool isBusy,
   }) {

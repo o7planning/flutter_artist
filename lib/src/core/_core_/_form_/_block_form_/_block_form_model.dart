@@ -1,12 +1,12 @@
 part of '../../core.dart';
 
 abstract class BlockFormModel<
-        ID extends Comparable,
-        ITEM_DETAIL extends Identifiable<ID>,
-        CREATION_PRESET extends CreationPreset,
-        FORM_PATCH extends FormPatch,
-        FORM_OUTPUT extends FormOutput,
-        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
+ID extends Comparable,
+ITEM_DETAIL extends Identifiable<ID>,
+CREATION_PRESET extends CreationPreset,
+FORM_PATCH extends FormPatch,
+FORM_OUTPUT extends FormOutput,
+ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends BaseFormModel<
         FORM_PATCH, //
         FORM_OUTPUT,
@@ -113,7 +113,7 @@ abstract class BlockFormModel<
       );
     } else {
       final CREATION_PRESET? creationPreset =
-          block._buildCreationPreset(executionTrace);
+      block._buildCreationPreset(executionTrace);
       if (creationPreset == null) {
         return null;
       }
@@ -185,7 +185,7 @@ abstract class BlockFormModel<
         return null;
       }
       final CREATION_PRESET? creationPreset =
-          block._buildCreationPreset(executionTrace);
+      block._buildCreationPreset(executionTrace);
       if (creationPreset == null) {
         return null;
       }
@@ -250,7 +250,7 @@ abstract class BlockFormModel<
 
   @override
   Future<ADDITIONAL_FORM_RELATED_DATA>
-      _internalPerformLoadAdditionalFormRelatedData({
+  _internalPerformLoadAdditionalFormRelatedData({
     required Object? rawDomainData,
   }) {
     return performLoadAdditionalFormRelatedData(
@@ -354,7 +354,8 @@ abstract class BlockFormModel<
     executionTrace.addInfo(
       codeId: "#036000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
+      "Begin ${debugObjHtml(this)} -> ${executionUnitType
+          .asDebugExecutionUnit()}.",
     );
     final executionResult = executionIntent.resultWrapper._setResult(
       FormModelViewChangedResult(),
@@ -385,7 +386,8 @@ abstract class BlockFormModel<
     executionTrace.addInfo(
       codeId: "#037000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} -> ${executionUnitType.asDebugExecutionUnit()}.",
+      "Begin ${debugObjHtml(this)} -> ${executionUnitType
+          .asDebugExecutionUnit()}.",
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
@@ -398,10 +400,12 @@ abstract class BlockFormModel<
     final thisFormDataState = dataState;
     final bool forceReloadForm = switch (thisXBlockFormModel.formLoadHint) {
       FormLoadHint.force => true,
-      FormLoadHint.forceIfNeed => (thisFormDataState.isPending ||
+      FormLoadHint.forceIfNeed =>
+      (thisFormDataState.isPending ||
           thisFormDataState.isFatalError ||
           thisFormDataState.isLoadedStale),
-      FormLoadHint.auto => visibleX &&
+      FormLoadHint.auto =>
+      visibleX &&
           (thisFormDataState.isPending ||
               thisFormDataState.isFatalError ||
               thisFormDataState.isLoadedStale),
@@ -485,7 +489,7 @@ abstract class BlockFormModel<
     }
 
     String calledMethodName =
-        _formModelStructure.isNew ? 'performCreateItem' : 'performUpdateItem';
+    _formModelStructure.isNew ? 'performCreateItem' : 'performUpdateItem';
     ApiResult<ITEM_DETAIL> result;
     final bool isNew = _formModelStructure.isNew;
 
@@ -548,7 +552,10 @@ abstract class BlockFormModel<
       FlutterArtist.storage._lazyUiComponentTriggerQueue.addShelf(shelf);
 
   @override
-  bool _checkBeforeResetForm() => block.checkBeforeResetForm().yes;
+  bool _checkBeforeResetForm() =>
+      block
+          .checkBeforeResetForm()
+          .yes;
 
   @override
   void _refreshAllViews() => shelf.ui.refreshAllViews();
@@ -594,7 +601,7 @@ abstract class BlockFormModel<
     );
 
     final Actionable<FormModelPatchFormFieldsPrecheck> actionable =
-        _checkBeforePatchFormFields(
+    _checkBeforePatchFormFields(
       checkBusy: checkBusyTrue,
     );
     if (!actionable.yes) {
@@ -614,7 +621,7 @@ abstract class BlockFormModel<
     XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     final executionIntent = xBlock.xBlockCurrentItemModel.xBlockFormModel!
         ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_PATCH>(
-            formPatch: formPatch);
+        formPatch: formPatch);
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
@@ -644,7 +651,7 @@ abstract class BlockFormModel<
       },
     );
     Actionable<BlockFormSavePrecheck> actionable =
-        blockCurrentItemModel._checkBeforeSaveForm(
+    blockCurrentItemModel._checkBeforeSaveForm(
       checkBusy: checkBusyTrue,
       checkAllow: checkAllowTrue,
       checkValidate: checkValidateTrue,

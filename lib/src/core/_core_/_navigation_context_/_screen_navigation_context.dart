@@ -39,7 +39,8 @@ class BlockScreenNavigationContext extends ScreenNavigationContext {
     NavigationIntent? editNavigationIntent,
     NavigationIntent? deleteNavigationIntent,
     NavigationIntent? saveNavigationIntent,
-  })  : _createNavigationIntent = createNavigationIntent,
+  })
+      : _createNavigationIntent = createNavigationIntent,
         _editNavigationIntent = editNavigationIntent,
         _deleteNavigationIntent = deleteNavigationIntent,
         _saveNavigationIntent = saveNavigationIntent;
@@ -82,7 +83,8 @@ class TaskScreenNavigationContext extends ScreenNavigationContext {
   const TaskScreenNavigationContext({
     NavigationIntent? submitNavigationIntent,
     NavigationIntent? restartNavigationIntent,
-  })  : _submitNavigationIntent = submitNavigationIntent,
+  })
+      : _submitNavigationIntent = submitNavigationIntent,
         _restartNavigationIntent = restartNavigationIntent;
 
   /// Intent executed after `task.submit()` completes.
@@ -103,8 +105,9 @@ class ProzessScreenNavigationContext extends ScreenNavigationContext {
   const ProzessScreenNavigationContext({
     NavigationIntent? submitViewingStageNavigationIntent,
     NavigationIntent? cancelNavigationIntent,
-  })  : _submitViewingStageNavigationIntent =
-            submitViewingStageNavigationIntent,
+  })
+      : _submitViewingStageNavigationIntent =
+      submitViewingStageNavigationIntent,
         _cancelNavigationIntent = cancelNavigationIntent;
 
   /// Intent executed after `prozess.submitViewingStage()` completes.

@@ -3,10 +3,10 @@ part of '../core.dart';
 class CustomControlBarConfig extends ViewConfig {
   const CustomControlBarConfig()
       : super(
-          quickSuggestionMode: QuickSuggestionMode.none,
-          enableKeyboardNavigation: false,
-          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
-        );
+    quickSuggestionMode: QuickSuggestionMode.none,
+    enableKeyboardNavigation: false,
+    mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+  );
 }
 
 @Deprecated(
@@ -55,7 +55,7 @@ class _CustomControlBarState
 
   @override
   FocusRegionType getRegionType() {
-    return FocusRegionType. temp ;
+    return FocusRegionType.temp;
   }
 
   @override

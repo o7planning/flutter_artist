@@ -4,7 +4,7 @@ part of '__precheck_utils.dart';
 class BlockBackendActionPrecheckUtils {
   /// Evaluates whether executing a backend action on the block is permitted.
   static Actionable<BlockBackendActionPrecheck>
-      checkBeforeExecuteBackendAction({
+  checkBeforeExecuteBackendAction({
     required bool checkBusy,
     required bool isBusy,
     required BlockDataState blockDataState,

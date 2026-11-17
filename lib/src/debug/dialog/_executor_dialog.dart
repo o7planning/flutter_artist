@@ -22,7 +22,7 @@ class DebugExecutorDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size preferContentSize =
-        DialogSizeUtils.calculateDebugDialogSize(context);
+    DialogSizeUtils.calculateDebugDialogSize(context);
 
     Widget contentWidget = _buildMainWidget();
 

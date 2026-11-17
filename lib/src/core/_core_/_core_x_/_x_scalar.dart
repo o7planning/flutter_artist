@@ -173,7 +173,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
           executionUnit: _ScalarLoadExtraDataQuickActionExecutionUnit(
             xScalar: this,
             executionIntent: _executionIntent
-                as ScalarLoadExtraDataQuickActionIntent<ID, VALUE, Object>,
+            as ScalarLoadExtraDataQuickActionIntent<ID, VALUE, Object>,
           ),
           info: output.debugInfo,
         );
@@ -182,12 +182,12 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
           debug: debug,
           executionUnit: _ScalarClearExecutionUnit(
             xScalar: this,
-            executionIntent: _executionIntent as ScalarClearIntent<ID, VALUE>,
+            executionIntent: _executionIntent as ScalarClearValueIntent<ID, VALUE>,
           ),
           info: output.debugInfo,
         );
       case ScalarExecutionAction.none:
-      return NxtExecutionUnit.no(
+        return NxtExecutionUnit.no(
           debug: debug,
           info: output.debugInfo,
         );
@@ -228,13 +228,13 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   // ***************************************************************************
 
   ScalarLoadExtraDataQuickActionIntent
-      _createAndSetScalarExecutionIntentLoadExtraDataQuickAction<
-          DATA extends Object>({
+  _createAndSetScalarExecutionIntentLoadExtraDataQuickAction<
+  DATA extends Object>({
     required ScalarQuickExtraDataLoadAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
   }) {
     final executionIntent =
-        ScalarLoadExtraDataQuickActionIntent<ID, VALUE, DATA>(
+    ScalarLoadExtraDataQuickActionIntent<ID, VALUE, DATA>(
       action: action,
       afterQuickAction: afterQuickAction,
     );
@@ -244,8 +244,8 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   // ***************************************************************************
 
-  ScalarClearIntent _createAndSetScalarExecutionIntentClear() {
-    final executionIntent = ScalarClearIntent<ID, VALUE>();
+  ScalarClearValueIntent _createAndSetScalarExecutionIntentClear() {
+    final executionIntent = ScalarClearValueIntent<ID, VALUE>();
     _executionIntent = executionIntent;
     return executionIntent;
   }
@@ -256,12 +256,14 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   void printInfo() {
     bool hasActiveUI = scalar.ui.hasVisibleViews();
     String msg =
-        "${getClassName(this)}(${getClassName(scalar)} - UiActive: $hasActiveUI - queryHint: $queryHint)";
+        "${getClassName(this)}(${getClassName(
+        scalar)} - UiActive: $hasActiveUI - queryHint: $queryHint)";
     print(msg);
   }
 
   String toDebugHtmlString() {
-    return " - <b>XScalar (${getClassName(scalar)})</b> - <b>queryHint</b>: $queryHint";
+    return " - <b>XScalar (${getClassName(
+        scalar)})</b> - <b>queryHint</b>: $queryHint";
   }
 
   @override

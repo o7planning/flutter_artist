@@ -54,7 +54,8 @@ class MultiOptFormPropDef<V> extends FormPropDef<V> {
     required List<MultiOptFormPropDef> children,
     required this.selectionMode,
     required this.reloadCondition,
-  })  : _children = [...children],
+  })
+      : _children = [...children],
         super._();
 
   factory MultiOptFormPropDef.singleSelection({
@@ -94,15 +95,15 @@ class MultiOptFormPropDef<V> extends FormPropDef<V> {
   }) {
     return selectionMode == MultiOptSelectionMode.single
         ? MultiOptSsFormPropModel<V>(
-            propName: propName,
-            parent: parent,
-            reloadCondition: reloadCondition,
-          )
+      propName: propName,
+      parent: parent,
+      reloadCondition: reloadCondition,
+    )
         : MultiOptMsFormPropModel<V>(
-            propName: propName,
-            parent: parent,
-            reloadCondition: reloadCondition,
-          );
+      propName: propName,
+      parent: parent,
+      reloadCondition: reloadCondition,
+    );
   }
 }
 

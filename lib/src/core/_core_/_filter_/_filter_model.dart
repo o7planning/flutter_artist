@@ -305,7 +305,6 @@ abstract class FilterModel<
     required Map<String, dynamic> tildeCriteriaMap,
   });
 
-
   /// Override this method to customize TAB focus navigation between filter criteria on the UI.
   /// Return `null` or [FocusNavAction.moveNext] to use default focus traversal.
   @AbstractMethodAnnotation()
@@ -1250,7 +1249,8 @@ abstract class FilterModel<
     final String multiOptTildeCriterionName =
         multiOptCriterion.tildeCriterionName;
     final String multiOptCriterionBaseName = multiOptCriterion.criterionName;
-    final MultiOptSelectionMode multiOptSelectionMode = multiOptCriterion.selectionMode;
+    final MultiOptSelectionMode multiOptSelectionMode =
+        multiOptCriterion.selectionMode;
 
     executionTrace.addInfo(
       codeId: "#082000",
@@ -1844,27 +1844,89 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showDebugFilterModelViewerDialog() async {
-    BuildContext context = FlutterArtistCore.context;
-    //
+  /// Checks whether the full FilterModel debug inspector dialog can be opened.
+  @_PrecheckMethod()
+  Actionable<ShowFilterModelInspectorPrecheck>
+      checkBeforeShowFilterModelInspector() {
+    return ShowFilterModelInspectorPrecheckUtils
+        .checkBeforeShowFilterModelInspector(
+      hasFilterModel: this is! _DefaultFilterModel,
+      loggedInUser: FlutterArtist.loggedInUser,
+    );
+  }
+
+  /// Opens the full FilterModel debug inspector dialog if permitted.
+  ///
+  /// Displays an error snackbar using the precheck's [message] and [details]
+  /// if the precheck fails.
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowFilterModelInspectorPrecheck>>
+      showDebugFilterModelViewerDialog({
+    String locationInfo = '',
+  }) async {
+    final Actionable<ShowFilterModelInspectorPrecheck> actionable =
+        checkBeforeShowFilterModelInspector();
+
+    if (!actionable.yes) {
+      final ShowFilterModelInspectorPrecheck err = actionable.errCode!;
+      showErrorSnackBar(
+        message: err.message,
+        errorDetails: err.details,
+      );
+      return actionable;
+    }
+
+    final BuildContext context = FlutterArtistCore.context;
     await DebugViewerDialog.openDebugFilterModelInspector(
       context: context,
-      locationInfo: "locationInfo", // TODO: Remove.
+      locationInfo: locationInfo,
       filterModel: this,
     );
+    return actionable;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showDebugFilterCriteriaViewerDialog() async {
-    BuildContext context = FlutterArtistCore.context;
-    //
+  /// Checks whether the debug filter criteria / filter model inspector dialog can be opened.
+  @_PrecheckMethod()
+  Actionable<ShowFilterCriteriaInspectorPrecheck>
+      checkBeforeShowFilterCriteriaInspector() {
+    return ShowFilterCriteriaInspectorPrecheckUtils
+        .checkBeforeShowFilterCriteriaInspector(
+      hasFilterModel: this is! _DefaultFilterModel,
+      loggedInUser: FlutterArtist.loggedInUser,
+    );
+  }
+
+  /// Opens the debug filter criteria / filter model inspector dialog if permitted.
+  ///
+  /// Displays an error snackbar using the precheck's [message] and [details]
+  /// if the precheck fails.
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowFilterCriteriaInspectorPrecheck>>
+      showDebugFilterCriteriaViewerDialog({
+    String locationInfo = '',
+  }) async {
+    final Actionable<ShowFilterCriteriaInspectorPrecheck> actionable =
+        checkBeforeShowFilterCriteriaInspector();
+
+    if (!actionable.yes) {
+      final ShowFilterCriteriaInspectorPrecheck err = actionable.errCode!;
+      showErrorSnackBar(
+        message: err.message,
+        errorDetails: err.details,
+      );
+      return actionable;
+    }
+
+    final BuildContext context = FlutterArtistCore.context;
     await DebugViewerDialog.openDebugFilterCriteriaInspector(
       context: context,
-      locationInfo: '',
+      locationInfo: locationInfo,
       filterModel: this,
     );
+    return actionable;
   }
 
   // ***************************************************************************

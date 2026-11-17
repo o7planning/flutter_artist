@@ -30,20 +30,20 @@ class BlockOrScalar extends Equatable {
     if (block != null) {
       return switch (block!.dataState) {
         BlockDataStatePending() =>
-          DebugConstants.graphBoxDataStatePendingBgColor(context),
+            DebugConstants.graphBoxDataStatePendingBgColor(context),
         BlockDataStateLoaded() =>
-          DebugConstants.graphBoxDataStateReadyBgColor(context),
+            DebugConstants.graphBoxDataStateReadyBgColor(context),
         BlockDataStateNone() =>
-          DebugConstants.graphBoxDataStateNoneBgColor(context),
+            DebugConstants.graphBoxDataStateNoneBgColor(context),
       };
     } else {
       return switch (scalar!.dataState) {
         ScalarDataStatePending() =>
-          DebugConstants.graphBoxDataStatePendingBgColor(context),
+            DebugConstants.graphBoxDataStatePendingBgColor(context),
         ScalarDataStateLoaded() =>
-          DebugConstants.graphBoxDataStateReadyBgColor(context),
+            DebugConstants.graphBoxDataStateReadyBgColor(context),
         ScalarDataStateNone() =>
-          DebugConstants.graphBoxDataStateNoneBgColor(context),
+            DebugConstants.graphBoxDataStateNoneBgColor(context),
       };
     }
   }

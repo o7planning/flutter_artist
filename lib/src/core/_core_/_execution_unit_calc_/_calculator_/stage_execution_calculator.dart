@@ -10,7 +10,8 @@ class StageExecutionCalculator {
 
     String buildInfo(String branch) {
       return "$branch, ${input.modelName}, _executionIntent: $intent, "
-          "dataState: ${state.toBriefInfo()}, execHint: $hint, isVisible: $isVisible";
+          "dataState: ${state
+          .toBriefInfo()}, execHint: $hint, isVisible: $isVisible";
     }
 
     if (!input.isCurrentStage) {

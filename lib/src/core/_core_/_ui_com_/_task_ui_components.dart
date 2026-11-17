@@ -22,7 +22,11 @@ class _TaskUiComponents extends _WorkNodeUiComponents {
       ...__controlBarWidgetStates.keys,
     ];
     final Set<FaRouteData> faRoutes =
-        list.map((v) => v.faRoute).nonNulls.toList().toSet();
+    list
+        .map((v) => v.faRoute)
+        .nonNulls
+        .toList()
+        .toSet();
     if (task.formModel != null) {
       faRoutes.addAll(task.formModel!.ui.faRouteDatas);
     }
@@ -202,8 +206,10 @@ class _TaskUiComponents extends _WorkNodeUiComponents {
 
     __controlBarWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
 
     final bool taskContextCurrent = hasTaskContext();
@@ -231,8 +237,10 @@ class _TaskUiComponents extends _WorkNodeUiComponents {
 
     __contentViewWidgetStates.update(
       widgetState,
-      (xState) => xState.._setShowing(isVisible),
-      ifAbsent: () => XState().._setShowing(isVisible),
+          (xState) => xState.._setShowing(isVisible),
+      ifAbsent: () =>
+      XState()
+        .._setShowing(isVisible),
     );
 
     final bool taskContextCurrent = hasTaskContext();

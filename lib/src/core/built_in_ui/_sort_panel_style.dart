@@ -21,7 +21,7 @@ abstract class SortPanelStyle {
   /// Returns the appropriate text style based on the active state.
   TextStyle getTextStyle(BuildContext context, bool isActive) {
     final Color effectiveColor =
-        SortPanelHelper.getTextColor(context, isActive);
+    SortPanelHelper.getTextColor(context, isActive);
 
     final baseStyle = textStyle.copyWith(
       color: effectiveColor,

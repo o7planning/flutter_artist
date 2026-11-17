@@ -23,7 +23,8 @@ class DebugUiContextInspectorDialog extends StatefulWidget {
     required FeatureModule module,
     this.showActiveOnly = true,
     super.key,
-  })  : shelf = module is Shelf ? module : null,
+  })
+      : shelf = module is Shelf ? module : null,
         block = null,
         scalar = null,
         activity = module is Activity ? module : null,
@@ -35,7 +36,8 @@ class DebugUiContextInspectorDialog extends StatefulWidget {
     required Shelf this.shelf,
     this.showActiveOnly = true,
     super.key,
-  })  : block = null,
+  })
+      : block = null,
         scalar = null,
         activity = null,
         prozess = null,
@@ -46,7 +48,8 @@ class DebugUiContextInspectorDialog extends StatefulWidget {
     required Block this.block,
     this.showActiveOnly = true,
     super.key,
-  })  : shelf = null,
+  })
+      : shelf = null,
         scalar = null,
         activity = null,
         prozess = null,
@@ -57,7 +60,8 @@ class DebugUiContextInspectorDialog extends StatefulWidget {
     required Scalar this.scalar,
     this.showActiveOnly = true,
     super.key,
-  })  : shelf = null,
+  })
+      : shelf = null,
         block = null,
         activity = null,
         prozess = null,
@@ -155,7 +159,7 @@ class _DebugUiContextInspectorDialogState
 
   Widget _buildMainContent(BuildContext context) {
     Map<IContextProviderViewState, XState> widgetStates =
-        _debugFindWidgetStates();
+    _debugFindWidgetStates();
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,9 +177,10 @@ class _DebugUiContextInspectorDialogState
           child: ListView(
             children: [
               ...widgetStates.entries.map(
-                (entry) => _buildRowInfo(
-                  widgetStateEntry: entry,
-                ),
+                    (entry) =>
+                    _buildRowInfo(
+                      widgetStateEntry: entry,
+                    ),
               ),
             ],
           ),
@@ -224,7 +229,7 @@ class _DebugUiContextInspectorDialogState
               color: isVisible
                   ? colorScheme.primary.withValues(alpha: 0.15)
                   : theme.colorScheme.surfaceContainerHighest
-                      .withValues(alpha: 0.4),
+                  .withValues(alpha: 0.4),
               border: Border.all(
                 color: isVisible
                     ? colorScheme.primary.withValues(alpha: 0.5)
@@ -264,7 +269,7 @@ class _DebugUiContextInspectorDialogState
           ),
           onChanged: (bool? value) {
             widgetStateEntry.key.showMode =
-                (value ?? false) ? ShowMode.dev : ShowMode.production;
+            (value ?? false) ? ShowMode.dev : ShowMode.production;
             widgetStateEntry.key.setState(() {});
             setState(() {});
           },

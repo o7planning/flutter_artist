@@ -23,9 +23,9 @@ class BlockEffectiveConfig {
   BlockEffectiveConfig._fromConfig(this._baselineConfig) {
     _nativeQueryMode = _baselineConfig.nativeQueryMode;
     _currentPageable =
-        _baselineConfig.nativeQueryMode == BlockNativeQueryMode.fullQuery
-            ? null
-            : _baselineConfig.pageable.copy();
+    _baselineConfig.nativeQueryMode == BlockNativeQueryMode.fullQuery
+        ? null
+        : _baselineConfig.pageable.copy();
   }
 
   /// Factory constructor to instantiate an effective config bound to a baseline [BlockConfig].
@@ -129,8 +129,8 @@ class BlockEffectiveConfig {
   void resetToBaseline() {
     _nativeQueryMode = _baselineConfig.nativeQueryMode;
     _currentPageable =
-        _baselineConfig.nativeQueryMode == BlockNativeQueryMode.fullQuery
-            ? null
-            : _baselineConfig.pageable.copy();
+    _baselineConfig.nativeQueryMode == BlockNativeQueryMode.fullQuery
+        ? null
+        : _baselineConfig.pageable.copy();
   }
 }

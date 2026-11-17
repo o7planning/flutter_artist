@@ -12,8 +12,8 @@ class NavigationIntentExecutionTrace extends ExecutionTrace {
     required super.ownerClassInstance,
     required this.navigationIntent,
   }) : super(
-          executionTraceType: ExecutionTraceType.navigationIntent,
-        );
+    executionTraceType: ExecutionTraceType.navigationIntent,
+  );
 
   @override
   String getSubtitle() {
@@ -40,37 +40,39 @@ class MethodCallExecutionTrace extends ExecutionTrace {
     required this.funcCallInfo,
     required this.isLibMethod,
   }) : super(
-          executionTraceType: isLibMethod
-              ? ExecutionTraceType.libMethodCall
-              : ExecutionTraceType.userMethodCall,
-        );
+    executionTraceType: isLibMethod
+        ? ExecutionTraceType.libMethodCall
+        : ExecutionTraceType.userMethodCall,
+  );
 
   MethodCallExecutionTrace._methodCallFromStackTrace({
     required super.ownerClassInstance,
     required StackTrace currentStackTrace,
     required Map<String, dynamic>? arguments,
     required this.isLibMethod,
-  })  : funcCallInfo = FuncCallInfo.fromCurrentStackTrace(
-          currentStackTrace: currentStackTrace,
-          arguments: arguments,
-        ),
+  })
+      : funcCallInfo = FuncCallInfo.fromCurrentStackTrace(
+    currentStackTrace: currentStackTrace,
+    arguments: arguments,
+  ),
         super(
-          executionTraceType: isLibMethod
-              ? ExecutionTraceType.libMethodCall
-              : ExecutionTraceType.userMethodCall,
-        );
+        executionTraceType: isLibMethod
+            ? ExecutionTraceType.libMethodCall
+            : ExecutionTraceType.userMethodCall,
+      );
 
   MethodCallExecutionTrace._methodCall({
     required super.ownerClassInstance,
     required String methodName,
     required Map<String, dynamic>? arguments,
     required this.isLibMethod,
-  })  : funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
+  })
+      : funcCallInfo = FuncCallInfo(funcName: methodName, arguments: arguments),
         super(
-          executionTraceType: isLibMethod
-              ? ExecutionTraceType.libMethodCall
-              : ExecutionTraceType.userMethodCall,
-        );
+        executionTraceType: isLibMethod
+            ? ExecutionTraceType.libMethodCall
+            : ExecutionTraceType.userMethodCall,
+      );
 
   @override
   String getSubtitle() {
@@ -163,7 +165,8 @@ class ExecutionUnitExecutionTrace extends ExecutionTrace {
 
   @override
   String getSubtitle() {
-    return "${getClassNameWithoutGenerics(ownerClassInstance)} - (${traceSteps.length})";
+    return "${getClassNameWithoutGenerics(ownerClassInstance)} - (${traceSteps
+        .length})";
   }
 
   @override
@@ -201,15 +204,15 @@ class EventDispatcherExecutionTrace extends ExecutionTrace {
     required super.ownerClassInstance,
     required this.eventSourceType,
   }) : super(
-          executionTraceType: switch (eventSourceType) {
-            EventSourceType.internal =>
-              ExecutionTraceType.dispatchInternalEvents,
-            EventSourceType.special =>
-              ExecutionTraceType.dispatchInternalEvents,
-            EventSourceType.external =>
-              ExecutionTraceType.dispatchExternalEvents,
-          },
-        );
+    executionTraceType: switch (eventSourceType) {
+      EventSourceType.internal =>
+      ExecutionTraceType.dispatchInternalEvents,
+      EventSourceType.special =>
+      ExecutionTraceType.dispatchInternalEvents,
+      EventSourceType.external =>
+      ExecutionTraceType.dispatchExternalEvents,
+    },
+  );
 
   @override
   String getSubtitle() {
@@ -343,7 +346,8 @@ abstract class ExecutionTrace {
     String? note,
   }) {
     final shortDesc =
-        "Creating ExecutionIntent: ${debugObjHtml(executionIntentType)} for ${debugObjHtml(owner)}. $suffixShortDesc";
+        "Creating ExecutionIntent: ${debugObjHtml(
+        executionIntentType)} for ${debugObjHtml(owner)}. $suffixShortDesc";
 
     return _addRawStep(
       traceStepType: TraceStepType.executionIntent,

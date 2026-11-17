@@ -52,7 +52,10 @@ class FormPropView extends StatelessWidget {
                   : 'Multi Opt Prop Name: ',
               text: prop.propName,
               textStyle: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme
+                    .of(context)
+                    .colorScheme
+                    .primary,
               ),
             ),
             subtitle: IconLabelText(
@@ -201,10 +204,10 @@ class FormPropView extends StatelessWidget {
     return value == null
         ? null
         : Text(
-            " - ${value!.runtimeType.toString()}",
-            style: TextStyle(
-              fontSize: 12,
-            ),
-          );
+      " - ${value!.runtimeType.toString()}",
+      style: TextStyle(
+        fontSize: 12,
+      ),
+    );
   }
 }

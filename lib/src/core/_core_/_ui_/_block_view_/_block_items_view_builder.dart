@@ -35,7 +35,7 @@ class _BlockItemsViewBuilderState
 
   @override
   FocusRegionType getRegionType() {
-     return FocusRegionType.blockItemsView;
+    return FocusRegionType.blockItemsView;
   }
 
   @override

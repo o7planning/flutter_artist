@@ -1,11 +1,11 @@
 part of '../../core.dart';
 
 abstract class ScalarValueView<
-    SCALAR extends Scalar<
-        Comparable, //
-        Identifiable<Comparable>,
-        FilterPatch,
-        FilterCriteria>> extends StatelessWidget {
+SCALAR extends Scalar<
+    Comparable, //
+    Identifiable<Comparable>,
+    FilterPatch,
+    FilterCriteria>> extends StatelessWidget {
   final SCALAR scalar;
 
   final ScalarValueViewConfig config;

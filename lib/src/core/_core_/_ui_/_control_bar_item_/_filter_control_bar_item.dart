@@ -10,8 +10,8 @@ class FilterControlBarItem
   const FilterControlBarItem.back()
       : super.standard(FilterControlBarItemType.back);
 
-  const FilterControlBarItem.debugFilter()
-      : super.standard(FilterControlBarItemType.debugFilter);
+  const FilterControlBarItem.debugFilterModel()
+      : super.standard(FilterControlBarItemType.debugFilterModel);
 
   FilterControlBarItem.custom({
     required super.tooltip,

@@ -6,9 +6,9 @@ part of '../_login.dart';
 /// It eliminates boilerplate by using [EmptyProzessInitData] and automatically
 /// wiring [SessionEstablisher] to extract the [USER] from [SimpleLoginProzessContextData].
 abstract class SimpleLoginProzess<
-        STAGE_ENUM extends StageEnum,
-        USER extends ILoggedInUser,
-        CONTEXT_DATA extends SimpleLoginProzessContextData<USER>>
+STAGE_ENUM extends StageEnum,
+USER extends ILoggedInUser,
+CONTEXT_DATA extends SimpleLoginProzessContextData<USER>>
     extends Prozess<STAGE_ENUM, EmptyProzessInitData, CONTEXT_DATA>
     implements SessionEstablisher<USER> {
   SimpleLoginProzess({required super.name});

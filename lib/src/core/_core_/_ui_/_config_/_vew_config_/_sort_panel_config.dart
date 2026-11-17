@@ -7,7 +7,7 @@ class SortPanelConfig extends ViewConfig {
     super.quickSuggestionMode = QuickSuggestionMode.none,
     this.blockViewContext = BlockViewContext.items,
   }) : super(
-          enableKeyboardNavigation: false,
-          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
-        );
+    enableKeyboardNavigation: false,
+    mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+  );
 }

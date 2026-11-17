@@ -31,11 +31,11 @@ class BlockControlBarItem
   const BlockControlBarItem.reset()
       : super.standard(BlockControlBarItemType.reset);
 
-  const BlockControlBarItem.debugFilter()
-      : super.standard(BlockControlBarItemType.debugFilter);
+  const BlockControlBarItem.debugFilterCriteria()
+      : super.standard(BlockControlBarItemType.debugFilterCriteria);
 
-  const BlockControlBarItem.debugForm()
-      : super.standard(BlockControlBarItemType.debugForm);
+  const BlockControlBarItem.debugFormModel()
+      : super.standard(BlockControlBarItemType.debugFormModel);
 
   BlockControlBarItem.custom({
     required super.tooltip,

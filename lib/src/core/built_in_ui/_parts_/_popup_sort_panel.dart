@@ -32,7 +32,7 @@ class PopupSortPanel<ITEM extends Object> extends SortPanel<ITEM>
         borderRadius: BorderRadius.circular(tokens.radius.sm),
         onTap: null,
         hoverColor:
-            SortPanelHelper.getTextColor(context, true).withValues(alpha: 0.08),
+        SortPanelHelper.getTextColor(context, true).withValues(alpha: 0.08),
         child: Container(
           height: style.height,
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -40,7 +40,7 @@ class PopupSortPanel<ITEM extends Object> extends SortPanel<ITEM>
               BoxDecoration(
                 color: SortPanelHelper.getBackgroundColor(context),
                 border:
-                    Border.fromBorderSide(SortPanelHelper.getBorder(context)),
+                Border.fromBorderSide(SortPanelHelper.getBorder(context)),
                 borderRadius: BorderRadius.circular(tokens.radius.sm),
                 boxShadow: context.faTheme.shadow.popup,
               ),
@@ -58,19 +58,21 @@ class PopupSortPanel<ITEM extends Object> extends SortPanel<ITEM>
           ),
         ),
       ),
-      itemBuilder: (context) => [
+      itemBuilder: (context) =>
+      [
         PopupMenuItem<void>(
           enabled: false,
           padding: EdgeInsets.zero,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: sortModel.criteria
-                .map((c) => SortMenuItem(
-                      criterion: c,
-                      sortModel: sortModel,
-                      style: style,
-                      iconBuilder: style.iconBuilder,
-                    ))
+                .map((c) =>
+                SortMenuItem(
+                  criterion: c,
+                  sortModel: sortModel,
+                  style: style,
+                  iconBuilder: style.iconBuilder,
+                ))
                 .toList(),
           ),
         ),
@@ -78,8 +80,8 @@ class PopupSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     );
   }
 
-  List<Widget> _buildTriggerContent(
-      BuildContext context, SortCriterion? active, bool isActive) {
+  List<Widget> _buildTriggerContent(BuildContext context, SortCriterion? active,
+      bool isActive) {
     final List<Widget> children = [];
     final iconWidget = (style.iconBuilder ?? defaultSortIcon)(
         context, active?.direction, false, style.sortIconSize, null);

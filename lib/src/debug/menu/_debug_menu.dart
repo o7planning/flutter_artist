@@ -48,23 +48,23 @@ class __DebugMenuState extends State<DebugMenu> implements ILogListener {
       onTapDown: !isSystemUser && !hasLogs
           ? null
           : (TapDownDetails details) {
-              // Getting the tap position
-              final RelativeRect position =
-                  widget.calculatePopupPosition != null
-                      ? widget.calculatePopupPosition!(details)
-                      : RelativeRect.fromLTRB(
-                          details.globalPosition.dx,
-                          details.globalPosition.dy + 22,
-                          details.globalPosition.dx,
-                          details.globalPosition.dy,
-                        );
+        // Getting the tap position
+        final RelativeRect position =
+        widget.calculatePopupPosition != null
+            ? widget.calculatePopupPosition!(details)
+            : RelativeRect.fromLTRB(
+          details.globalPosition.dx,
+          details.globalPosition.dy + 22,
+          details.globalPosition.dx,
+          details.globalPosition.dy,
+        );
 
-              // Showing the menu
-              DebugMenuBuilder.build(
-                menuItemIconSize: widget.menuItemIconSize,
-                menuItemIconColor: widget.menuItemIconColor,
-              ).show(context: context, position: position);
-            },
+        // Showing the menu
+        DebugMenuBuilder.build(
+          menuItemIconSize: widget.menuItemIconSize,
+          menuItemIconColor: widget.menuItemIconColor,
+        ).show(context: context, position: position);
+      },
       child: widget.menuButtonBuilder(
         logSummary: LogSummary(
           recentErrorCount: FlutterArtist.logger.recentErrorCount,

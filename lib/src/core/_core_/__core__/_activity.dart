@@ -55,7 +55,8 @@ abstract class Activity extends FeatureModule {
       if (__taskMap.containsKey(task.name)) {
         throw AppFatalErrorUtils.___registerError(
           "Duplicate Task '${task.name}' in '${getClassName(this)}'\n"
-          "Double-check ${getClassName(this)}.defineActivityStructure() method",
+              "Double-check ${getClassName(
+              this)}.defineActivityStructure() method",
         );
       }
       __taskMap[task.name] = task;
@@ -74,7 +75,8 @@ abstract class Activity extends FeatureModule {
       if (__prozessMap.containsKey(prozess.name)) {
         throw AppFatalErrorUtils.___registerError(
           "Duplicate Prozess '${prozess.name}' in '${getClassName(this)}'\n"
-          "Double-check ${getClassName(this)}.defineActivityStructure() method",
+              "Double-check ${getClassName(
+              this)}.defineActivityStructure() method",
         );
       }
       __prozessMap[prozess.name] = prozess;
@@ -123,19 +125,19 @@ abstract class Activity extends FeatureModule {
     executionTrace.addInfo(
       codeId: "#001000",
       shortDesc:
-          "Find lazy model-components (stage, task) that are in a state where they need to execute or load data.",
+      "Find lazy model-components (stage, task) that are in a state where they need to execute or load data.",
     );
     //
     // Natural Execute:
     //
     final XActivity xActivity =
-        _XActivityActivityNaturalExec(activity: activity);
+    _XActivityActivityNaturalExec(activity: activity);
     try {
       executionTrace.addInfo(
         codeId: "#001100",
         shortDesc: "Create ${debugObjHtml(xActivity)} for <b>Natural-Load</b>.",
         note:
-            "<b>XActivity</b> is a <b>RootQueueItem</b> and contains multiple <b>Execution Units</b>.",
+        "<b>XActivity</b> is a <b>RootQueueItem</b> and contains multiple <b>Execution Units</b>.",
       );
       executionTrace.addNonControllableCall(
         codeId: "#001120",
@@ -147,7 +149,7 @@ abstract class Activity extends FeatureModule {
       executionTrace.addInfo(
         codeId: "#001160",
         shortDesc:
-            "Add ${debugObjHtml(xActivity)} (RootQueueItem) to <b>Root-Queue</b>.",
+        "Add ${debugObjHtml(xActivity)} (RootQueueItem) to <b>Root-Queue</b>.",
       );
       FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
       //
@@ -156,7 +158,7 @@ abstract class Activity extends FeatureModule {
         caller: FlutterArtist.executor,
         methodName: "_executeExecutionUnitQueue",
         suffixShortDesc:
-            "To execute <b>RootQueueItem(s)</b> on the queue and its <b>Execution Units</b>...",
+        "To execute <b>RootQueueItem(s)</b> on the queue and its <b>Execution Units</b>...",
       );
       await FlutterArtist.executor._executeExecutionUnitQueue();
     } finally {

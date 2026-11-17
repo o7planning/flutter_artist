@@ -2,11 +2,11 @@ part of '../../core.dart';
 
 /// Form model specifically bound to a standalone [Task].
 abstract class TaskFormModel<
-        INIT_DATA extends TaskInitData,
-        RESULT_DATA extends TaskResultData,
-        FORM_PATCH extends FormPatch,
-        FORM_OUTPUT extends FormOutput,
-        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
+INIT_DATA extends TaskInitData,
+RESULT_DATA extends TaskResultData,
+FORM_PATCH extends FormPatch,
+FORM_OUTPUT extends FormOutput,
+ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends WorkNodeFormModel<
         INIT_DATA, //
         RESULT_DATA,
@@ -54,8 +54,7 @@ abstract class TaskFormModel<
   // ===========================================================================
 
   void _bindToTask(
-    Task<INIT_DATA, RESULT_DATA, FORM_PATCH, FORM_OUTPUT> parentTask,
-  ) {
+      Task<INIT_DATA, RESULT_DATA, FORM_PATCH, FORM_OUTPUT> parentTask,) {
     task = parentTask;
   }
 
@@ -146,10 +145,12 @@ abstract class TaskFormModel<
     final thisFormDataState = dataState;
     final bool forceReloadForm = switch (thisXTaskFormModel.formLoadHint) {
       FormLoadHint.force => true,
-      FormLoadHint.forceIfNeed => (thisFormDataState.isPending ||
+      FormLoadHint.forceIfNeed =>
+      (thisFormDataState.isPending ||
           thisFormDataState.isFatalError ||
           thisFormDataState.isLoadedStale),
-      FormLoadHint.auto => visibleX &&
+      FormLoadHint.auto =>
+      visibleX &&
           (thisFormDataState.isPending ||
               thisFormDataState.isFatalError ||
               thisFormDataState.isLoadedStale),
@@ -221,7 +222,7 @@ abstract class TaskFormModel<
     );
 
     final Actionable<FormModelPatchFormFieldsPrecheck> actionable =
-        _checkBeforePatchFormFields(
+    _checkBeforePatchFormFields(
       checkBusy: checkBusyTrue,
     );
     if (!actionable.yes) {
@@ -238,11 +239,11 @@ abstract class TaskFormModel<
     }
 
     final XActivity xActivity =
-        _XActivityFormModelPatchFormFields(formModel: this);
+    _XActivityFormModelPatchFormFields(formModel: this);
     XTask xTask = xActivity.findXTaskByName(task.name)!;
     final executionIntent = xTask.xTaskFormModel!
         ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_PATCH>(
-            formPatch: formPatch);
+        formPatch: formPatch);
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();

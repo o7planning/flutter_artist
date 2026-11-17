@@ -17,7 +17,7 @@ class TildeCriterionConfig {
     afterTildeSuffix = tsObj.suffixWithoutTilde;
     //
     TildeSuffixObj ptsObj =
-        TildeSuffixObj.parse(tildeSuffix: this.parentMatchSuffix);
+    TildeSuffixObj.parse(tildeSuffix: this.parentMatchSuffix);
     parentMatchAfterTildeSuffix = ptsObj.suffixWithoutTilde;
   }
 }

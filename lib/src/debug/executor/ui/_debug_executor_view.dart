@@ -31,10 +31,11 @@ class _DebugExecutorViewState extends State<DebugExecutorView> {
         children: widget.debugXShelfQueue.debugXRootQueueItems
             .where((sq) => sq.isNotEmpty)
             .map(
-              (subQueue) => DebugXShelfExecutionUnitQueueView(
+              (subQueue) =>
+              DebugXShelfExecutionUnitQueueView(
                 debugXShelfExecutionUnitQueue: subQueue,
               ),
-            )
+        )
             .toList(),
       ),
     );

@@ -46,7 +46,7 @@ final class _XRootQueue {
 
       // XShelf or XActivity:
       final XRootQueueItem rootQueueItem =
-          __xRootQueueItemMap[firstRootQueueItemName]!;
+      __xRootQueueItemMap[firstRootQueueItemName]!;
 
       final NxtExecutionUnit? next;
       if (rootQueueItem is XShelf) {
@@ -73,8 +73,7 @@ final class _XRootQueue {
   }
 
   void _addAppBackendActionExecutionIntent(
-    AppBackendActionIntent executionIntent,
-  ) {
+      AppBackendActionIntent executionIntent,) {
     _xStorage._addExecutionIntent(
       executionIntent,
     );

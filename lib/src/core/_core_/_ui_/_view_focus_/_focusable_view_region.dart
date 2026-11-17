@@ -186,8 +186,8 @@ class _FocusableViewRegionState extends State<_FocusableViewRegion> {
 
     // Filter out internal structural scope nodes while keeping actual field nodes
     final Iterable<FocusNode> rawNodes = _focusNode.descendants.where(
-      (node) =>
-          node != _focusNode && node is! FocusScopeNode && !node.skipTraversal,
+          (node) =>
+      node != _focusNode && node is! FocusScopeNode && !node.skipTraversal,
     );
 
     return policy.sortDescendants(rawNodes, _focusNode).toList();

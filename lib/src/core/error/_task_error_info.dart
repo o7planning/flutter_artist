@@ -28,10 +28,10 @@ class TaskErrorInfo {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TaskErrorInfo &&
-          runtimeType == other.runtimeType &&
-          taskErrorMethod == other.taskErrorMethod &&
-          error == other.error;
+          other is TaskErrorInfo &&
+              runtimeType == other.runtimeType &&
+              taskErrorMethod == other.taskErrorMethod &&
+              error == other.error;
 
   @override
   int get hashCode => Object.hash(runtimeType, taskErrorMethod, error);

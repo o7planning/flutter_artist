@@ -3,25 +3,26 @@ part of '../../core.dart';
 @_ExecutionUnitClassAnnotation()
 @_BlockPrepareFormToCreateItemAnnotation()
 class _BlockCurrentItemModelPrepareFormToCreateItemExecutionUnit<
-    ID extends Comparable, //
-    ITEM extends Identifiable<ID>,
-    ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
   final XBlockCurrentItemModel xBlockCurrentItemModel;
 
   @override
-  final BlockCurrentItemModelPrepareFormToCreateItemIntent<ID, ITEM,
+  final BlockCurrentItemModelPrepareFormToCreateItemIntent<ID,
+      ITEM,
       ITEM_DETAIL> executionIntent;
 
   _BlockCurrentItemModelPrepareFormToCreateItemExecutionUnit({
     required this.xBlockCurrentItemModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.blockPrepareToCreateItem,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.blockPrepareToCreateItem,
+    executionIntent: executionIntent,
+  );
 
   @override
-  XShelf get xShelf =>  xBlockCurrentItemModel.xBlock.xShelf;
+  XShelf get xShelf => xBlockCurrentItemModel.xBlock.xShelf;
 
   @override
   int get xModuleId => xBlockCurrentItemModel.xBlock.xModuleId;
@@ -30,7 +31,8 @@ class _BlockCurrentItemModelPrepareFormToCreateItemExecutionUnit<
   Shelf get shelf => xBlockCurrentItemModel.blockCurrentItemModel.shelf;
 
   @override
-  BlockCurrentItemModel get owner => xBlockCurrentItemModel.blockCurrentItemModel;
+  BlockCurrentItemModel get owner =>
+      xBlockCurrentItemModel.blockCurrentItemModel;
 
   @override
   String getObjectName() {

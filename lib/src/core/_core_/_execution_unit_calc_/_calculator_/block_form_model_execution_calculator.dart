@@ -10,7 +10,8 @@ class BlockFormExecutionCalculator {
 
     String buildInfo(String branch) {
       return "$branch, (${input.blockName}), _executionIntent: $intent, "
-          "formDataState: ${state.toBriefInfo()}, formMode: ${formMode.name}, _formLoadHint: $hint, visibleX: $isVisible";
+          "formDataState: ${state.toBriefInfo()}, formMode: ${formMode
+          .name}, _formLoadHint: $hint, visibleX: $isVisible";
     }
 
     if (intent is FormModelDoneIntent) {
@@ -67,7 +68,7 @@ class BlockFormExecutionCalculator {
         return BlockFormNextUnitOutput(
           action: BlockFormExecutionAction.loadData,
           missingIntent:
-              isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isLoadIntent && intent != null,
           debugInfo: buildInfo("BlockFormModel (3.1.1)"),
         );
@@ -89,7 +90,7 @@ class BlockFormExecutionCalculator {
         return BlockFormNextUnitOutput(
           action: BlockFormExecutionAction.loadData,
           missingIntent:
-              isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isLoadIntent && intent != null,
           debugInfo: buildInfo("BlockFormModel (4.1.1)"),
         );
@@ -116,7 +117,7 @@ class BlockFormExecutionCalculator {
         return BlockFormNextUnitOutput(
           action: BlockFormExecutionAction.loadData,
           missingIntent:
-              isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isLoadIntent && intent != null,
           debugInfo: buildInfo("BlockFormModel (5.1.2)"),
         );

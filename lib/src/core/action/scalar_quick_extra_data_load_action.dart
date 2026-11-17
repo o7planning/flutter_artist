@@ -9,8 +9,7 @@ abstract class ScalarQuickExtraDataLoadAction<DATA extends Object>
 
   Future<ApiResult<DATA>?> performLoadExtraData();
 
-  Future<void> onExtraDataLoaded(
-    BuildContext context, {
+  Future<void> onExtraDataLoaded(BuildContext context, {
     required bool success,
     required DATA? extraData,
   });

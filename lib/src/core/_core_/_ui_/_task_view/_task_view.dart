@@ -1,11 +1,11 @@
 part of '../../core.dart';
 
 abstract class TaskView<
-    TASK extends Task<
-        TaskInitData, //
-        TaskResultData,
-        FormPatch,
-        FormOutput>> extends StatelessWidget {
+TASK extends Task<
+    TaskInitData, //
+    TaskResultData,
+    FormPatch,
+    FormOutput>> extends StatelessWidget {
   final TASK task;
   final TaskViewConfig config;
 

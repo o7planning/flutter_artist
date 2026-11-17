@@ -3,10 +3,16 @@ import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 class DebugConstants {
   static Color eventSourceIconColor(BuildContext context) =>
-      Theme.of(context).colorScheme.primary;
+      Theme
+          .of(context)
+          .colorScheme
+          .primary;
 
   static Color listenerIconColor(BuildContext context) =>
-      Theme.of(context).colorScheme.error;
+      Theme
+          .of(context)
+          .colorScheme
+          .error;
 
   static Color classParametersColor(BuildContext context) {
     //  FaColorUtils.technicalHighlight(context);
@@ -14,18 +20,23 @@ class DebugConstants {
   }
 
   static Color rootGraphBoxBgColor(BuildContext context) {
-    return Theme.of(context)
+    return Theme
+        .of(context)
         .colorScheme
         .primaryContainer
         .withValues(alpha: 0.9);
   }
 
   static Color activeGraphBoxBgColor(BuildContext context) {
-    return Theme.of(context).colorScheme.surface;
+    return Theme
+        .of(context)
+        .colorScheme
+        .surface;
   }
 
   static Color? inactiveGraphBoxBgColor(BuildContext context) {
-    return Theme.of(context)
+    return Theme
+        .of(context)
         .colorScheme
         .surfaceContainerHighest
         .withValues(alpha: 0.5);

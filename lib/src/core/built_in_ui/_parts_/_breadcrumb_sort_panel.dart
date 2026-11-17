@@ -24,7 +24,7 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     return Container(
       alignment: alignment,
       padding:
-          padding ?? const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      padding ?? const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       decoration: decoration ??
           BoxDecoration(
             color: SortPanelHelper.getBackgroundColor(context)
@@ -41,28 +41,29 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     );
   }
 
-  BreadCrumbItem _buildBreadCrumbItem(
-      BuildContext context, SortCriterion criterion, FaThemeTokens tokens) {
+  BreadCrumbItem _buildBreadCrumbItem(BuildContext context,
+      SortCriterion criterion, FaThemeTokens tokens) {
     return BreadCrumbItem(
       content: DragTarget<SortCriterion>(
         onWillAcceptWithDetails: (details) =>
-            details.data.criterionName != criterion.criterionName,
+        details.data.criterionName != criterion.criterionName,
         onAcceptWithDetails: (details) {
           sortModel.moveCriterion(
             movingCriterionName: details.data.criterionName,
             destCriterionName: criterion.criterionName,
           );
         },
-        builder: (context, _, __) => Draggable<SortCriterion>(
-          data: criterion,
-          axis: Axis.horizontal,
-          feedback: _buildDragFeedback(context, criterion, tokens),
-          childWhenDragging: Opacity(
-            opacity: 0.3,
-            child: _buildCriterionView(context, criterion, false, tokens),
-          ),
-          child: _buildCriterionView(context, criterion, false, tokens),
-        ),
+        builder: (context, _, __) =>
+            Draggable<SortCriterion>(
+              data: criterion,
+              axis: Axis.horizontal,
+              feedback: _buildDragFeedback(context, criterion, tokens),
+              childWhenDragging: Opacity(
+                opacity: 0.3,
+                child: _buildCriterionView(context, criterion, false, tokens),
+              ),
+              child: _buildCriterionView(context, criterion, false, tokens),
+            ),
       ),
     );
   }
@@ -113,8 +114,8 @@ class BreadcrumbSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     );
   }
 
-  Widget _buildDragFeedback(
-      BuildContext context, SortCriterion criterion, FaThemeTokens tokens) {
+  Widget _buildDragFeedback(BuildContext context, SortCriterion criterion,
+      FaThemeTokens tokens) {
     return Material(
       color: Colors.transparent,
       child: Container(

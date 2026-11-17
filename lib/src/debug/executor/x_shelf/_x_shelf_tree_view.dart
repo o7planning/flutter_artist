@@ -30,7 +30,7 @@ class XShelfTreeView extends StatefulWidget {
 
 class _XShelfTreeViewState extends State<XShelfTreeView> {
   final MultiSplitViewController _splitViewController =
-      MultiSplitViewController();
+  MultiSplitViewController();
 
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
@@ -71,7 +71,8 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
       parent: null,
     );
     _currentNode = xShelfNode;
-    rootTreeNode = TreeNode.root()..add(xShelfNode);
+    rootTreeNode = TreeNode.root()
+      ..add(xShelfNode);
     //
     List<XBlock> allRootXBlocks = widget.xShelf.allRootXBlocks;
     for (XBlock multiOptCriterion in allRootXBlocks) {
@@ -141,8 +142,7 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
           thickness: 1,
         ),
         onTreeReady: (
-          TreeViewController<dynamic, TreeNode<dynamic>> controller,
-        ) {
+            TreeViewController<dynamic, TreeNode<dynamic>> controller,) {
           _treeViewController = controller;
           controller.expandAllChildren(rootTreeNode);
         },

@@ -26,51 +26,51 @@ class BlockFormDataStateUtils {
     }
 
     switch (currentFormDataState) {
-      // 2. Uninitialized states transition directly to Pending.
+    // 2. Uninitialized states transition directly to Pending.
       case FormDataStateNone():
         return const FormDataStatePending.initial();
 
-      // 3. Already pending states:
-      // If identity changed, reset to initial pending; otherwise, retain current pending state.
+    // 3. Already pending states:
+    // If identity changed, reset to initial pending; otherwise, retain current pending state.
       case FormDataStatePending():
         if (currentItemChanged) {
           return const FormDataStatePending.initial();
         }
         return currentFormDataState;
 
-      // 4. Fatal bootstrapping failure:
-      // If the target item changed, discard previous fatal errors and restart bootstrapping via Pending.hostDataRefreshed.
-      // Otherwise, retain the fatal lock until the user or system triggers an explicit reload.
+    // 4. Fatal bootstrapping failure:
+    // If the target item changed, discard previous fatal errors and restart bootstrapping via Pending.hostDataRefreshed.
+    // Otherwise, retain the fatal lock until the user or system triggers an explicit reload.
       case FormDataStateFatalError():
         if (currentItemChanged) {
           return FormDataStatePending.hostDataRefreshed();
         }
         return currentFormDataState;
 
-      // 5. Clean data in RAM (LoadedFresh):
-      // If identity changed, enter Pending (carrying optional prior failure context if applicable).
-      // If refreshed in-place, transition to Stale with reason hostDataRefreshed.
+    // 5. Clean data in RAM (LoadedFresh):
+    // If identity changed, enter Pending (carrying optional prior failure context if applicable).
+    // If refreshed in-place, transition to Stale with reason hostDataRefreshed.
       case FormDataStateLoadedFresh():
         if (currentItemChanged) {
           return FormDataStatePending.hostDataRefreshed();
         }
         return FormDataStateLoadedStale.hostDataRefreshed();
 
-      // 6. Outdated data in RAM (LoadedStale):
-      // If identity changed, cache is evicted to Pending.hostDataRefreshed.
-      // If refreshed in-place, mark reason as hostDataRefreshed while preserving any prior failure history.
+    // 6. Outdated data in RAM (LoadedStale):
+    // If identity changed, cache is evicted to Pending.hostDataRefreshed.
+    // If refreshed in-place, mark reason as hostDataRefreshed while preserving any prior failure history.
       case FormDataStateLoadedStale(:final reason):
         if (currentItemChanged) {
           // Extract prior failure before evicting to pending if needed, or clear.
           final FormLoadedStateStaleReasonFailed? priorFailure =
-              switch (reason) {
+          switch (reason) {
             FormLoadedStateStaleReasonFailed failure => failure,
             FormLoadedStateStaleReasonHostDataRefreshed(
-              :final retainedFailureReason
+                :final retainedFailureReason
             ) =>
-              retainedFailureReason,
+            retainedFailureReason,
             FormLoadedStateStaleReasonEvent(:final retainedFailureReason) =>
-              retainedFailureReason,
+            retainedFailureReason,
           };
           return FormDataStatePending.hostDataRefreshed(
             retainedFailureReason: priorFailure != null
@@ -83,11 +83,11 @@ class BlockFormDataStateUtils {
         final FormLoadedStateStaleReasonFailed? priorFailure = switch (reason) {
           FormLoadedStateStaleReasonFailed failure => failure,
           FormLoadedStateStaleReasonHostDataRefreshed(
-            :final retainedFailureReason
+              :final retainedFailureReason
           ) =>
-            retainedFailureReason,
+          retainedFailureReason,
           FormLoadedStateStaleReasonEvent(:final retainedFailureReason) =>
-            retainedFailureReason,
+          retainedFailureReason,
         };
 
         return FormDataStateLoadedStale.hostDataRefreshed(

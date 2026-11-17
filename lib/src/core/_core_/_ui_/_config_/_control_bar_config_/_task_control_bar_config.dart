@@ -7,6 +7,7 @@ class TaskControlBarConfig extends ControlBarConfig {
   final bool allowBackButton;
   final bool allowRestartButton;
   final bool allowSubmitButton;
+  final bool allowResetButton;
   final bool allowDebugFormModelInspectorButton;
 
   const TaskControlBarConfig({
@@ -16,6 +17,7 @@ class TaskControlBarConfig extends ControlBarConfig {
     this.allowBackButton = false,
     this.allowRestartButton = false,
     this.allowSubmitButton = false,
+    this.allowResetButton = false,
     this.allowDebugFormModelInspectorButton = false,
   });
 
@@ -27,5 +29,6 @@ class TaskControlBarConfig extends ControlBarConfig {
   })  : allowBackButton = true,
         allowRestartButton = true,
         allowSubmitButton = true,
+        allowResetButton = true,
         allowDebugFormModelInspectorButton = true;
 }

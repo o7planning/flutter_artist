@@ -21,7 +21,8 @@ class CustomAppContainer extends StatelessWidget {
     this.height,
     this.margin = const EdgeInsets.all(0),
     this.padding = const EdgeInsets.all(10),
-  })  : type = _typeDefaullt,
+  })
+      : type = _typeDefaullt,
         backgroundColor = null;
 
   const CustomAppContainer.transparent({
@@ -31,7 +32,8 @@ class CustomAppContainer extends StatelessWidget {
     this.margin = const EdgeInsets.all(0),
     this.padding = const EdgeInsets.all(0),
     super.key,
-  })  : type = _typeTransparent,
+  })
+      : type = _typeTransparent,
         backgroundColor = null;
 
   const CustomAppContainer.bar({
@@ -41,7 +43,8 @@ class CustomAppContainer extends StatelessWidget {
     this.margin = const EdgeInsets.all(0),
     this.padding = const EdgeInsets.all(5),
     super.key,
-  })  : type = _typeBar,
+  })
+      : type = _typeBar,
         backgroundColor = null;
 
   const CustomAppContainer.customBackground({
@@ -57,7 +60,9 @@ class CustomAppContainer extends StatelessWidget {
   Color _color(BuildContext context) {
     switch (type) {
       case _typeDefaullt:
-        return Theme.of(context).cardColor;
+        return Theme
+            .of(context)
+            .cardColor;
       case _typeTransparent:
         return Colors.transparent;
       case _typeBar:
@@ -72,7 +77,9 @@ class CustomAppContainer extends StatelessWidget {
   Border? _border(BuildContext context) {
     switch (type) {
       case _typeDefaullt:
-        return Border.all(color: Theme.of(context).dividerColor);
+        return Border.all(color: Theme
+            .of(context)
+            .dividerColor);
       case _typeTransparent:
         return null;
       default:

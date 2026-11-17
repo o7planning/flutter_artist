@@ -3,9 +3,9 @@ part of '../../core.dart';
 @_ExecutionUnitClassAnnotation()
 @_BlockQuickItemCreationActionAnnotation()
 class _BlockQuickItemCreationExecutionUnit<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>>
     extends _ShelfMemberResultedExecutionUnit<BlockQuickItemCreationResult> {
   final XBlock xBlock;
 
@@ -16,9 +16,9 @@ class _BlockQuickItemCreationExecutionUnit<
     required this.xBlock,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.blockQuickCreateItem,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.blockQuickCreateItem,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

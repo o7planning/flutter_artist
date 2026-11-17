@@ -45,7 +45,7 @@ class BlockCurrentItemResolver {
       unifiedItemRefreshPolicy: unifiedItemRefreshPolicy,
       setCurrentItemDirective: setCurrentItemDirective,
       isCandidateCurrentItemInNewQueriedList:
-          isCandidateCurrentItemInNewQueriedList,
+      isCandidateCurrentItemInNewQueriedList,
       isCandidateItemDifferentFromCurrent: isCandidateItemDifferentFromCurrent,
       debug: debug,
     );
@@ -101,9 +101,9 @@ class BlockCurrentItemResolver {
     bool candidateAccepted;
     switch (setCurrentItemDirective) {
       case BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed:
-        // Accept candidate IF:
-        // 1. It is already the stable current item (!isCandidateItemDifferentFromCurrent), OR
-        // 2. The UI explicitly requires an item context (provideItemDetailContextExt).
+      // Accept candidate IF:
+      // 1. It is already the stable current item (!isCandidateItemDifferentFromCurrent), OR
+      // 2. The UI explicitly requires an item context (provideItemDetailContextExt).
         candidateAccepted =
             !isCandidateItemDifferentFromCurrent || provideItemDetailContextExt;
         PrintUtils.debug(debug,
@@ -183,7 +183,7 @@ class BlockCurrentItemResolver {
         "canSkipDetailFetch": canSkipDetailFetch,
         "provideItemDetailContextExt": provideItemDetailContextExt,
         "isCandidateItemDifferentFromCurrent":
-            isCandidateItemDifferentFromCurrent,
+        isCandidateItemDifferentFromCurrent,
         "retForceReloadItem": retForceReloadItem,
       },
     );

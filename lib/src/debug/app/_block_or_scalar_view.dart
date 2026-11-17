@@ -62,22 +62,24 @@ class _BlockOrScalarViewState extends State<BlockOrScalarView> {
         id: "General",
         text: ' General',
         closable: false,
-        leading: (context, status) => Icon(
-          Icons.apps,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: 16,
-        ),
+        leading: (context, status) =>
+            Icon(
+              Icons.apps,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: 16,
+            ),
         view: _buildGeneralTab(context),
       ),
       TabData(
         id: "Debug",
         text: ' Debug',
         closable: false,
-        leading: (context, status) => Icon(
-          Icons.bug_report,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: 16,
-        ),
+        leading: (context, status) =>
+            Icon(
+              Icons.bug_report,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: 16,
+            ),
         view: _buildDebugTab(),
       ),
     ];

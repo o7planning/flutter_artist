@@ -1,14 +1,14 @@
 part of '../../core.dart';
 
 abstract class BlockSectionView<
-    BLOCK extends Block<
-        Comparable, //
-        Identifiable<Comparable>,
-        Identifiable<Comparable>,
-        FilterPatch,
-        FilterCriteria,
-        CreationPreset,
-        FormPatch>> extends StatelessWidget {
+BLOCK extends Block<
+    Comparable, //
+    Identifiable<Comparable>,
+    Identifiable<Comparable>,
+    FilterPatch,
+    FilterCriteria,
+    CreationPreset,
+    FormPatch>> extends StatelessWidget {
   final BLOCK block;
   final BlockSectionViewConfig config;
 

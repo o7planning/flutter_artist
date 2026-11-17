@@ -1,4 +1,4 @@
-part of '../../core.dart';
+part of '../core.dart';
 
 /// Central registry and dispatcher for [ControlMnemonic] widgets and view-level
 /// [MnemonicShortcut] actions.
@@ -48,8 +48,7 @@ class _MnemonicDispatcher {
 
   /// Attempts to trigger a registered [ControlMnemonic] widget matching the
   /// pressed key combination within the given [scopes].
-  static bool tryTriggerRegisteredControl(
-    KeyEvent event, {
+  static bool tryTriggerRegisteredControl(KeyEvent event, {
     required List<MnemonicScope> scopes,
   }) {
     if (event is! KeyDownEvent) return false;
@@ -61,10 +60,10 @@ class _MnemonicDispatcher {
 
     final List<ControlMnemonicState> candidates = _registeredControls
         .where((c) =>
-            c.mounted &&
-            c.charKey == keyLabel &&
-            c.modifier.isPressed(keyboard) &&
-            c.isActionEnabled)
+    c.mounted &&
+        c.charKey == keyLabel &&
+        c.modifier.isPressed(keyboard) &&
+        c.isActionEnabled)
         .toList();
 
     if (candidates.isEmpty) return false;

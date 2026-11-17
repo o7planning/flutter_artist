@@ -10,7 +10,7 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     super.key,
     required super.sortModel,
     this.style = const AdaptiveSortPanelStyle(),
-      super.config,
+    super.config,
   });
 
   @override
@@ -78,13 +78,13 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                 Flexible(
                   child: Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: SortPanelHelper.getBackgroundColor(context),
                       border: Border.fromBorderSide(
                           SortPanelHelper.getBorder(context)),
                       borderRadius:
-                          BorderRadius.circular(tokens.radius.borderRadius),
+                      BorderRadius.circular(tokens.radius.borderRadius),
                       boxShadow: context.faTheme.shadow.card,
                     ),
                     child: ClipRect(
@@ -121,7 +121,7 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
     final theme = Theme.of(context);
 
     final activeInHidden = hiddenItems.firstWhere(
-      (c) => c.direction != null,
+          (c) => c.direction != null,
       orElse: () => hiddenItems.first,
     );
     final bool hasActiveSort = activeInHidden.direction != null;
@@ -149,9 +149,9 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
             Text(
               activeInHidden.text,
               style: style.getTextStyle(context, hasActiveSort).copyWith(
-                    fontSize: 13,
-                    color: SortPanelHelper.getTextColor(context, hasActiveSort),
-                  ),
+                fontSize: 13,
+                color: SortPanelHelper.getTextColor(context, hasActiveSort),
+              ),
             ),
             if (hasActiveSort) ...[
               const SizedBox(width: 6),
@@ -182,18 +182,20 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
           ],
         ),
       ),
-      itemBuilder: (context) => [
+      itemBuilder: (context) =>
+      [
         PopupMenuItem<void>(
           enabled: false,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: hiddenItems
-                .map((c) => SortMenuItem(
-                      criterion: c,
-                      sortModel: sortModel,
-                      style: style,
-                      iconBuilder: style.iconBuilder,
-                    ))
+                .map((c) =>
+                SortMenuItem(
+                  criterion: c,
+                  sortModel: sortModel,
+                  style: style,
+                  iconBuilder: style.iconBuilder,
+                ))
                 .toList(),
           ),
         ),
@@ -206,7 +208,9 @@ class AdaptiveSortPanel<ITEM extends Object> extends SortPanel<ITEM>
       margin: const EdgeInsets.symmetric(horizontal: 8),
       width: 1,
       height: 14,
-      color: SortPanelHelper.getBorder(context).color,
+      color: SortPanelHelper
+          .getBorder(context)
+          .color,
     );
   }
 

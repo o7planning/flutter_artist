@@ -31,12 +31,12 @@ class _StageFormViewBuilderState
 
   @override
   FocusRegionType getRegionType() {
-    return 	FocusRegionType.stageFormView;
+    return FocusRegionType.stageFormView;
   }
 
   @override
   String getUnitName() {
-    return widget.formModel. name;
+    return widget.formModel.name;
   }
 
   @override
@@ -61,7 +61,7 @@ class _StageFormViewBuilderState
     if (!isValid) {
       return const ErrorMessageView(
         message:
-            'StageFormView and StageFormViewBuilder must be child widgets of ProzessStageFormViewSwitcher!',
+        'StageFormView and StageFormViewBuilder must be child widgets of ProzessStageFormViewSwitcher!',
       );
     }
     return super.buildContent(context);
@@ -101,10 +101,8 @@ class _StageFormViewBuilderState
   }
 
   @override
-  KeyEventResult handleFormMnemonicKeyEvent(
-    BuildContext context,
-    KeyEvent event,
-  ) {
+  KeyEventResult handleFormMnemonicKeyEvent(BuildContext context,
+      KeyEvent event,) {
     final switcherScope = _StageFormViewSwitcherScope.maybeOf(context);
     return _ProzessMnemonicHandler.handleKeyEvent(
       context: context,

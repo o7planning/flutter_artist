@@ -9,8 +9,8 @@ class _ActivityV1MemberExecutionUnit extends _ExecutionUnit {
     required this.xActivityV1,
     required super.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.activity,
-        );
+    executionUnitType: ExecutionUnitType.activity,
+  );
 
   @override
   ActivityV1 get owner => xActivityV1.activityV1;

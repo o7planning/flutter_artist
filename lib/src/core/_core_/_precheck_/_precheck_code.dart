@@ -43,4 +43,5 @@ enum PrecheckCode {
   reexecutionNotAllowed,
   stageNotSubmittedYet,
   stageRestartRestricted,
+  noFilterModel, prozessNotStarted, noPreviousStage, noNextStage, nextStageNotReached, noViewingStage, stageNotReady, formDataNotLoaded, allowCheckError, taskNotReady,
 }

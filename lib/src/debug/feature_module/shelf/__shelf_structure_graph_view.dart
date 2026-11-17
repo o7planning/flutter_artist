@@ -27,9 +27,10 @@ class ShelfStructureGraphView extends StatefulWidget {
 }
 
 class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
-  final Graph graph = Graph()..isTree = false;
+  final Graph graph = Graph()
+    ..isTree = false;
   BuchheimWalkerConfiguration configuration =
-      CustomBuchheimWalkerConfiguration();
+  CustomBuchheimWalkerConfiguration();
   late Map<String, GraphItem> graphItemMap;
 
   String? _highlighFilterModelName;
@@ -83,7 +84,8 @@ class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
       graph.addEdge(
         currentNode,
         childNode,
-        paint: Paint()..color = Colors.black87,
+        paint: Paint()
+          ..color = Colors.black87,
       );
 
       if (childGraphItem.children.isNotEmpty) {
@@ -166,19 +168,19 @@ class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
       },
       child: item.shelf != null
           ? GraphItemShelfBox(
-              shelf: item.shelf!,
-              gotoStorage: widget.onPressedBack,
-            )
+        shelf: item.shelf!,
+        gotoStorage: widget.onPressedBack,
+      )
           : GraphItemBlockOrScalarBox(
-              key: Key("Blk-${item.blockOrScalar!.name}"),
-              blockOrScalar: item.blockOrScalar!,
-              highlightFilterModelName: _highlighFilterModelName,
-              showClassParameters: _showClassParameters,
-              refreshGraph: (String? filterName) {
-                _highlighFilterModelName = filterName;
-                setState(() {});
-              },
-            ),
+        key: Key("Blk-${item.blockOrScalar!.name}"),
+        blockOrScalar: item.blockOrScalar!,
+        highlightFilterModelName: _highlighFilterModelName,
+        showClassParameters: _showClassParameters,
+        refreshGraph: (String? filterName) {
+          _highlighFilterModelName = filterName;
+          setState(() {});
+        },
+      ),
     );
   }
 

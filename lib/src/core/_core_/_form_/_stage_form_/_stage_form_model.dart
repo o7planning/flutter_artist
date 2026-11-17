@@ -2,13 +2,13 @@ part of '../../core.dart';
 
 /// Form model bound to an individual [Stage] within a multi-step [Prozess].
 abstract class StageFormModel<
-        STAGE_ENUM extends StageEnum,
-        INIT_DATA extends StageInitData,
-        RESULT_DATA extends StageResultData,
-        PROZESS_CONTEXT_DATA extends ProzessContextData,
-        FORM_PATCH extends FormPatch,
-        FORM_OUTPUT extends FormOutput,
-        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
+STAGE_ENUM extends StageEnum,
+INIT_DATA extends StageInitData,
+RESULT_DATA extends StageResultData,
+PROZESS_CONTEXT_DATA extends ProzessContextData,
+FORM_PATCH extends FormPatch,
+FORM_OUTPUT extends FormOutput,
+ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends WorkNodeFormModel<
         INIT_DATA, //
         RESULT_DATA,
@@ -68,11 +68,13 @@ abstract class StageFormModel<
 
   // ===========================================================================
 
-  void _bindToStage(
-    Stage<STAGE_ENUM, INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA, FORM_PATCH,
-            FORM_OUTPUT>
-        parentStage,
-  ) {
+  void _bindToStage(Stage<STAGE_ENUM,
+      INIT_DATA,
+      RESULT_DATA,
+      PROZESS_CONTEXT_DATA,
+      FORM_PATCH,
+      FORM_OUTPUT>
+  parentStage,) {
     stage = parentStage;
   }
 
@@ -175,10 +177,12 @@ abstract class StageFormModel<
     final thisFormDataState = dataState;
     final bool forceReloadForm = switch (thisXStageFormModel.formLoadHint) {
       FormLoadHint.force => true,
-      FormLoadHint.forceIfNeed => (thisFormDataState.isPending ||
+      FormLoadHint.forceIfNeed =>
+      (thisFormDataState.isPending ||
           thisFormDataState.isFatalError ||
           thisFormDataState.isLoadedStale),
-      FormLoadHint.auto => visibleX &&
+      FormLoadHint.auto =>
+      visibleX &&
           (thisFormDataState.isPending ||
               thisFormDataState.isFatalError ||
               thisFormDataState.isLoadedStale),
@@ -251,7 +255,7 @@ abstract class StageFormModel<
     );
 
     final Actionable<FormModelPatchFormFieldsPrecheck> actionable =
-        _checkBeforePatchFormFields(
+    _checkBeforePatchFormFields(
       checkBusy: checkBusyTrue,
     );
     if (!actionable.yes) {
@@ -268,11 +272,11 @@ abstract class StageFormModel<
     }
 
     final XActivity xActivity =
-        _XActivityFormModelPatchFormFields(formModel: this);
+    _XActivityFormModelPatchFormFields(formModel: this);
     XStage xStage = xActivity.findXStageByName(stage.name)!;
     final executionIntent = xStage.xStageFormModel!
         ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_PATCH>(
-            formPatch: formPatch);
+        formPatch: formPatch);
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();

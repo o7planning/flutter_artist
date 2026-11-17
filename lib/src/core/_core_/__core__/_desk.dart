@@ -33,7 +33,7 @@ class _Desk extends _DeskCore {
     // @Same-Code-Precheck-01
     //
     final Actionable<AppBackendActionPrecheck> actionable =
-        __checkBeforeExecuteAppBackendAction(
+    __checkBeforeExecuteAppBackendAction(
       checkBusy: checkBusyTrue,
     );
     //
@@ -78,7 +78,7 @@ class _Desk extends _DeskCore {
       suffixShortDesc: "",
     );
     final executionIntent =
-        _createAndSetAppExecutionIntentBackendAction(action: action);
+    _createAndSetAppExecutionIntentBackendAction(action: action);
     //
     await FlutterArtist.executor._executeExecutionUnitQueue();
     //
@@ -113,7 +113,8 @@ class _Desk extends _DeskCore {
     executionTrace.addInfo(
       codeId: "#035000",
       shortDesc:
-          "Begin ${debugObjHtml(this)} ->  ${executionUnitType.asDebugExecutionUnit()}.",
+      "Begin ${debugObjHtml(this)} ->  ${executionUnitType
+          .asDebugExecutionUnit()}.",
     );
     final executionUnitResult = executionIntent.resultWrapper._setResult(
       AppBackendActionResult(),
@@ -136,7 +137,7 @@ class _Desk extends _DeskCore {
       final ErrorInfo errorInfo = _handleError(
         module: null,
         methodName:
-            '${getClassName(executionIntent.action)}.performBackendOperation',
+        '${getClassName(executionIntent.action)}.performBackendOperation',
         error: e,
         stackTrace: stackTrace,
         showSnackBar: true,
@@ -149,7 +150,8 @@ class _Desk extends _DeskCore {
       executionTrace.addInfo(
         codeId: "#035200",
         shortDesc:
-            "The ${debugObjHtml(executionIntent.action)}.performBackendOperation() method was called with an error!",
+        "The ${debugObjHtml(executionIntent
+            .action)}.performBackendOperation() method was called with an error!",
         errorInfo: errorInfo,
       );
       return false;

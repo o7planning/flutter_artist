@@ -93,7 +93,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
   bool isContextKind(ContextKind? contextKind) {
     switch (contextKind) {
       case null:
-        // Do not change!
+      // Do not change!
         return true;
       case ContextKind.scalarValue:
         return provideScalarValueContext;
@@ -183,8 +183,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
   }
 
   List<_QuickSuggestionButton> createQuickSuggestionButtons(
-    BuildContext context,
-  );
+      BuildContext context,);
 
   String getDebugLabel();
 
@@ -229,8 +228,8 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     return showMode == ShowMode.production
         ? __buildContentInternal(context)
         : _DevContainer(
-            child: __buildContentInternal(context),
-          );
+      child: __buildContentInternal(context),
+    );
   }
 
   FeatureModule? _getRelatedModule();
@@ -288,7 +287,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
         DebugPrinter.printDebug(
           DebugCat.routeAware,
           ' ---->  [RouteAware] ---------> didChangeDependencies (+): $__modelRouteName'
-          ' ---->  ${getClassNameWithoutGenerics(widget)}',
+              ' ---->  ${getClassNameWithoutGenerics(widget)}',
         );
       } else {
         if (modalRoute is! DialogRoute) {
@@ -297,7 +296,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
           DebugPrinter.printDebug(
             DebugCat.routeAware,
             ' ---->  [RouteAware] ---------> didChangeDependencies (-): $__modelRouteName'
-            ' ---->  ${getClassNameWithoutGenerics(widget)}',
+                ' ---->  ${getClassNameWithoutGenerics(widget)}',
           );
         }
       }
@@ -309,7 +308,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     DebugPrinter.printDebug(
       DebugCat.routeAware,
       ' ---->  [RouteAware] ---------> unsubscribe: $__modelRouteName'
-      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+          ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
     //
     FlutterArtist.navigatorObserver.unsubscribe(this);
@@ -342,7 +341,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     DebugPrinter.printDebug(
       DebugCat.routeAware,
       ' ---->  [RouteAware] ---------> didPush: ${modalRoute?.settings.name}'
-      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+          ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }
 
@@ -356,7 +355,7 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     DebugPrinter.printDebug(
       DebugCat.routeAware,
       ' ---->  [RouteAware] ---------> didPop: ${modalRoute?.settings.name}'
-      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+          ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }
 
@@ -367,8 +366,11 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
-      ' ---->  [RouteAware] ---------> didPushNext: ${ModalRoute.of(context)?.settings.name}'
-      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+      ' ---->  [RouteAware] ---------> didPushNext: ${ModalRoute
+          .of(context)
+          ?.settings
+          .name}'
+          ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }
 
@@ -379,8 +381,11 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
     //
     DebugPrinter.printDebug(
       DebugCat.routeAware,
-      ' ---->  [RouteAware] ---------> didPopNext: ${ModalRoute.of(context)?.settings.name}'
-      ' ---->  ${getClassNameWithoutGenerics(widget)}',
+      ' ---->  [RouteAware] ---------> didPopNext: ${ModalRoute
+          .of(context)
+          ?.settings
+          .name}'
+          ' ---->  ${getClassNameWithoutGenerics(widget)}',
     );
   }
 }

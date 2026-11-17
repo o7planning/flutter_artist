@@ -1,4 +1,4 @@
-part of '../../../core.dart';
+part of '../../core.dart';
 
 /// Utility class managing global shortcut triggers (`F1`), keyboard region
 /// cycling (`Ctrl + \`` and `Ctrl + Shift + \``), and initial focus rescue
@@ -58,7 +58,7 @@ class RegionTraversalUtils {
     // 2. Region traversal (Ctrl + ` / Ctrl + Shift + `)
     final bool isNext = MnemonicRegionDirection.next.matches(event, keyboard);
     final bool isPrevious =
-        MnemonicRegionDirection.previous.matches(event, keyboard);
+    MnemonicRegionDirection.previous.matches(event, keyboard);
 
     if (!isNext && !isPrevious) {
       return KeyEventResult.ignored;
@@ -67,18 +67,18 @@ class RegionTraversalUtils {
     _markEventHandled(event);
 
     final List<_FocusableViewRegionState> regions =
-        _RegionDispatcher.getActiveRouteRegions();
+    _RegionDispatcher.getActiveRouteRegions();
     if (regions.isEmpty) {
       return KeyEventResult.ignored;
     }
 
     final int currentIndex =
-        regions.indexWhere((region) => region.hasRegionFocus);
+    regions.indexWhere((region) => region.hasRegionFocus);
 
     // Rescue focus into FlutterArtist if focus is currently outside all managed regions.
     if (currentIndex == -1) {
       final _FocusableViewRegionState entryRegion =
-          isNext ? regions.first : regions.last;
+      isNext ? regions.first : regions.last;
       entryRegion.requestRegionFocus();
       return KeyEventResult.handled;
     }
@@ -99,7 +99,7 @@ class RegionTraversalUtils {
   /// FlutterArtist region currently holds focus.
   static void ensureInitialFocusOnCurrentRoute() {
     final List<_FocusableViewRegionState> regions =
-        _RegionDispatcher.getActiveRouteRegions();
+    _RegionDispatcher.getActiveRouteRegions();
     if (regions.isEmpty) return;
 
     final bool alreadyFocused = regions.any((region) => region.hasRegionFocus);

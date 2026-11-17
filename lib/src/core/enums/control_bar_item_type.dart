@@ -12,8 +12,8 @@ enum BlockControlBarItemType {
   reset(MnemonicShortcut.reset),
   custom(null),
   divider(null),
-  debugFilter(MnemonicShortcut.debugFilter),
-  debugForm(MnemonicShortcut.debugForm);
+  debugFilterCriteria(MnemonicShortcut.debugFilterCriteria),
+  debugFormModel(MnemonicShortcut.debugFormModel);
 
   /// The default mnemonic shortcut associated with this control bar item, if any.
   final MnemonicShortcut? mnemonicShortcut;
@@ -33,7 +33,7 @@ enum ScalarControlBarItemType {
   query(MnemonicShortcut.query),
   custom(null),
   divider(null),
-  debugFilter(MnemonicShortcut.debugFilter);
+  debugFilterCriteria(MnemonicShortcut.debugFilterCriteria);
 
   /// The default mnemonic shortcut associated with this control bar item, if any.
   final MnemonicShortcut? mnemonicShortcut;
@@ -52,7 +52,8 @@ enum FilterControlBarItemType {
   back(MnemonicShortcut.back),
   divider(null),
   custom(null),
-  debugFilter(MnemonicShortcut.debugFilter);
+  debugFilterModel(MnemonicShortcut.debugFilterModel),
+  ;
 
   /// The default mnemonic shortcut associated with this control bar item, if any.
   final MnemonicShortcut? mnemonicShortcut;
@@ -71,8 +72,9 @@ enum TaskControlBarItemType {
   back(MnemonicShortcut.back),
   restart(MnemonicShortcut.restart),
   submit(MnemonicShortcut.submit),
+  reset(MnemonicShortcut.reset),
   divider(null),
-  debugForm(MnemonicShortcut.debugForm),
+  debugFormModel(MnemonicShortcut.debugFormModel),
   custom(null);
 
   /// The default mnemonic shortcut associated with this control bar item, if any.
@@ -95,7 +97,7 @@ enum ProzessControlBarItemType {
   restartViewingStage(MnemonicShortcut.restart),
   submitViewingStage(MnemonicShortcut.submit),
   debugInspector(MnemonicShortcut.debugInspector),
-  debugViewingStageForm(MnemonicShortcut.debugForm),
+  debugViewingStageFormModel(MnemonicShortcut.debugFormModel),
   divider(null),
   moveToNextStage(MnemonicShortcut.moveToNextStage),
   moveToPreviousStage(MnemonicShortcut.moveToPreviousStage),

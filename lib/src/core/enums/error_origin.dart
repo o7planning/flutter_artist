@@ -18,7 +18,8 @@ enum BlockErrorOrigin {
   ///   ([parentCascade]) is mapped to [parentCascade] from the child's perspective.
   /// - A shared criteria extraction error ([filterModel]) preserves its [filterModel]
   ///   origin across the entire shared-filter subtree.
-  BlockErrorOrigin toCascadedOrigin() => switch (this) {
+  BlockErrorOrigin toCascadedOrigin() =>
+      switch (this) {
         directFetch || parentCascade => parentCascade,
         filterModel => filterModel,
       };
@@ -42,7 +43,8 @@ enum ScalarErrorOrigin {
   ///   ([parentCascade]) is mapped to [parentCascade] from the child's perspective.
   /// - A shared criteria extraction error ([filterModel]) preserves its [filterModel]
   ///   origin across the entire shared-filter subtree.
-  ScalarErrorOrigin toCascadedOrigin() => switch (this) {
+  ScalarErrorOrigin toCascadedOrigin() =>
+      switch (this) {
         directFetch || parentCascade => parentCascade,
         filterModel => filterModel,
       };

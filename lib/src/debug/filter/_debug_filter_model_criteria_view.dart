@@ -49,11 +49,12 @@ class _DebugFilterModelCriteriaViewState
           id: "block-${block.name}",
           text: ' ${getClassNameWithoutGenerics(block)}',
           closable: false,
-          leading: (context, status) => Icon(
-            FaIconConstants.blockIconData,
-            color: TabThemeUtils.getTabIconColor(context, status),
-            size: 16,
-          ),
+          leading: (context, status) =>
+              Icon(
+                FaIconConstants.blockIconData,
+                color: TabThemeUtils.getTabIconColor(context, status),
+                size: 16,
+              ),
           view: DebugBlockCriteriaView(block: block),
         ),
       );
@@ -64,11 +65,12 @@ class _DebugFilterModelCriteriaViewState
           id: "scalar-${scalar.name}",
           text: ' ${getClassNameWithoutGenerics(scalar)}',
           closable: false,
-          leading: (context, status) => Icon(
-            FaIconConstants.scalarIconData,
-            color: TabThemeUtils.getTabIconColor(context, status),
-            size: 16,
-          ),
+          leading: (context, status) =>
+              Icon(
+                FaIconConstants.scalarIconData,
+                color: TabThemeUtils.getTabIconColor(context, status),
+                size: 16,
+              ),
           view: DebugScalarCriteriaView(scalar: scalar),
         ),
       );
@@ -80,9 +82,9 @@ class _DebugFilterModelCriteriaViewState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     String filterModelClassName =
-        getClassNameWithoutGenerics(widget.filterModel);
+    getClassNameWithoutGenerics(widget.filterModel);
     String criteriaClassName =
-        widget.filterModel.getFilterCriteriaType().toString();
+    widget.filterModel.getFilterCriteriaType().toString();
 
     return Padding(
       padding: const EdgeInsets.all(8),

@@ -5,12 +5,13 @@ part of '../../core.dart';
 /// Encapsulates common lifecycle workflows driven by transactional [INIT_DATA]
 /// rather than entity item details managed by a [Shelf].
 abstract class WorkNodeFormModel<
-        INIT_DATA extends Object,
-        RESULT_DATA extends Object,
-        FORM_PATCH extends FormPatch,
-        FORM_OUTPUT extends FormOutput,
-        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
-    extends BaseFormModel<FORM_PATCH, FORM_OUTPUT,
+INIT_DATA extends Object,
+RESULT_DATA extends Object,
+FORM_PATCH extends FormPatch,
+FORM_OUTPUT extends FormOutput,
+ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
+    extends BaseFormModel<FORM_PATCH,
+        FORM_OUTPUT,
         ADDITIONAL_FORM_RELATED_DATA> {
   Activity get activity;
 
@@ -122,7 +123,7 @@ abstract class WorkNodeFormModel<
 
   @override
   Future<ADDITIONAL_FORM_RELATED_DATA>
-      _internalPerformLoadAdditionalFormRelatedData({
+  _internalPerformLoadAdditionalFormRelatedData({
     required Object? rawDomainData,
   }) {
     return performLoadAdditionalFormRelatedData(

@@ -9,9 +9,9 @@ class _XShelfBlockQuery extends _XShelfBaseQuery {
     required BlockAfterQueryDirective? afterQueryDirective,
     required SuggestedSelection<dynamic>? suggestedSelection,
   }) : super(
-          xShelfType: XShelfType.blockQuery,
-          shelf: block.shelf,
-        ) {
+    xShelfType: XShelfType.blockQuery,
+    shelf: block.shelf,
+  ) {
     _updateQueryStateFromFilterModelAndFilterPatch(
       filterModel: block.registeredOrDefaultFilterModel,
       filterPatch: filterPatch,

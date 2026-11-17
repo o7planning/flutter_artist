@@ -76,7 +76,9 @@ class FilterConditionModelView extends StatelessWidget {
   }
 
   Widget _buildSubtitle(BuildContext context, TildeFilterCriterionModel model) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -105,7 +107,9 @@ class FilterConditionModelView extends StatelessWidget {
 
   Widget _buildOperatorRow(BuildContext context, String label, String text,
       {bool isPrimary = false}) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return IconLabelSelectableText(
       label: label,
       text: text,
@@ -122,8 +126,8 @@ class FilterConditionModelView extends StatelessWidget {
     );
   }
 
-  Widget _buildSelectionTypeRow(
-      BuildContext context, MultiOptTildeFilterCriterionModel model) {
+  Widget _buildSelectionTypeRow(BuildContext context,
+      MultiOptTildeFilterCriterionModel model) {
     final isMulti = model.selectionMode == MultiOptSelectionMode.multi;
     return Row(
       children: [
@@ -134,9 +138,11 @@ class FilterConditionModelView extends StatelessWidget {
     );
   }
 
-  Widget _buildBadge(
-      BuildContext context, String label, bool isActive, IconData icon) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildBadge(BuildContext context, String label, bool isActive,
+      IconData icon) {
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
@@ -168,7 +174,9 @@ class FilterConditionModelView extends StatelessWidget {
   }
 
   Widget _buildDetails(BuildContext context, TildeFilterCriterionModel model) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return Column(
       children: [
         SimpleAccordion(
@@ -185,9 +193,11 @@ class FilterConditionModelView extends StatelessWidget {
     );
   }
 
-  SimpleAccordionSection _buildSection(
-      BuildContext context, String title, dynamic value) {
-    final colorScheme = Theme.of(context).colorScheme;
+  SimpleAccordionSection _buildSection(BuildContext context, String title,
+      dynamic value) {
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return SimpleAccordionSection(
       initiallyExpanded: true,
       headerTitle: Text(title,
@@ -198,15 +208,15 @@ class FilterConditionModelView extends StatelessWidget {
       headerSubtitle: value == null
           ? null
           : Text(" - ${value.runtimeType}",
-              style: TextStyle(
-                  fontSize: 10,
-                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
-                  fontStyle: FontStyle.italic)),
+          style: TextStyle(
+              fontSize: 10,
+              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+              fontStyle: FontStyle.italic)),
       content: value is Map || value is List
           ? DynamicValueView(value: value)
           : (value is XData
-              ? XDataView(xData: value)
-              : DynamicValueView(value: value)),
+          ? XDataView(xData: value)
+          : DynamicValueView(value: value)),
     );
   }
 }

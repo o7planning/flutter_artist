@@ -4,7 +4,7 @@ part of '__precheck_utils.dart';
 class BlockQuickItemUpdatePrecheckUtils {
   /// Evaluates whether quick updating an item is permitted.
   static Actionable<BlockQuickItemUpdatePrecheck>
-      checkBeforeQuickUpdateItem<ITEM>({
+  checkBeforeQuickUpdateItem<ITEM>({
     required bool checkBusy,
     required bool isBusy,
     required BlockDataState blockDataState,

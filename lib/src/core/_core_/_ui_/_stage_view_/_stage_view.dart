@@ -1,13 +1,13 @@
 part of '../../core.dart';
 
 abstract class StageView<
-    STAGE extends Stage<
-        StageEnum, //
-        StageInitData,
-        StageResultData,
-        ProzessContextData,
-        FormPatch,
-        FormOutput>> extends StatelessWidget {
+STAGE extends Stage<
+    StageEnum, //
+    StageInitData,
+    StageResultData,
+    ProzessContextData,
+    FormPatch,
+    FormOutput>> extends StatelessWidget {
   final STAGE stage;
   final QuickSuggestionMode quickSuggestionMode;
 
@@ -35,13 +35,13 @@ abstract class StageView<
 }
 
 class DefaultStageView<
-    STAGE extends Stage<
-        StageEnum, //
-        StageInitData,
-        StageResultData,
-        ProzessContextData,
-        FormPatch,
-        FormOutput>> extends StageView<STAGE> {
+STAGE extends Stage<
+    StageEnum, //
+    StageInitData,
+    StageResultData,
+    ProzessContextData,
+    FormPatch,
+    FormOutput>> extends StageView<STAGE> {
   final TextStyle? textStyle;
 
   const DefaultStageView({

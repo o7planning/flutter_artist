@@ -29,10 +29,10 @@ class SegmentedSortPanel<ITEM extends Object> extends SortPanel<ITEM>
               backgroundColor: SortPanelHelper.getBackgroundColor(context),
               foregroundColor: SortPanelHelper.getTextColor(context, false),
               selectedBackgroundColor:
-                  SortPanelHelper.getTextColor(context, true)
-                      .withValues(alpha: 0.1),
+              SortPanelHelper.getTextColor(context, true)
+                  .withValues(alpha: 0.1),
               selectedForegroundColor:
-                  SortPanelHelper.getTextColor(context, true),
+              SortPanelHelper.getTextColor(context, true),
               side: SortPanelHelper.getBorder(context),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(tokens.radius.sm),
@@ -67,53 +67,55 @@ class SegmentedSortPanel<ITEM extends Object> extends SortPanel<ITEM>
   }
 
   /// Builds the draggable label with localized refresh support.
-  Widget _buildDraggableSegment(
-      BuildContext context, SortCriterion criterion, bool isActive) {
+  Widget _buildDraggableSegment(BuildContext context, SortCriterion criterion,
+      bool isActive) {
     return DragTarget<SortCriterion>(
       onWillAcceptWithDetails: (details) =>
-          details.data.criterionName != criterion.criterionName,
+      details.data.criterionName != criterion.criterionName,
       onAcceptWithDetails: (details) {
         sortModel.moveCriterion(
             movingCriterionName: details.data.criterionName,
             destCriterionName: criterion.criterionName);
       },
-      builder: (context, _, __) => Draggable<SortCriterion>(
-        data: criterion,
-        axis: Axis.horizontal,
-        feedback: Material(
-            color: Colors.transparent,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: SortPanelHelper.getBackgroundColor(context)
-                    .withValues(alpha: 0.9),
-                borderRadius: BorderRadius.circular(4),
-                boxShadow: const [
-                  BoxShadow(color: Colors.black12, blurRadius: 4)
-                ],
-                border:
+      builder: (context, _, __) =>
+          Draggable<SortCriterion>(
+            data: criterion,
+            axis: Axis.horizontal,
+            feedback: Material(
+                color: Colors.transparent,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: SortPanelHelper.getBackgroundColor(context)
+                        .withValues(alpha: 0.9),
+                    borderRadius: BorderRadius.circular(4),
+                    boxShadow: const [
+                      BoxShadow(color: Colors.black12, blurRadius: 4)
+                    ],
+                    border:
                     Border.fromBorderSide(SortPanelHelper.getBorder(context)),
-              ),
-              child: Text(criterion.text,
-                  style: style.textStyle.copyWith(
-                      color: SortPanelHelper.getTextColor(context, false))),
-            )),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(criterion.text, style: style.getTextStyle(context, isActive)),
-            SizedBox(width: style.iconSpacing),
-            buildSortButton(
-                context: context,
-                sortModel: sortModel,
-                criterion: criterion,
-                enabled: false,
-                isDragging: false,
-                iconSize: style.sortIconSize,
-                draggingColor: style.draggingColor),
-          ],
-        ),
-      ),
+                  ),
+                  child: Text(criterion.text,
+                      style: style.textStyle.copyWith(
+                          color: SortPanelHelper.getTextColor(context, false))),
+                )),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(criterion.text,
+                    style: style.getTextStyle(context, isActive)),
+                SizedBox(width: style.iconSpacing),
+                buildSortButton(
+                    context: context,
+                    sortModel: sortModel,
+                    criterion: criterion,
+                    enabled: false,
+                    isDragging: false,
+                    iconSize: style.sortIconSize,
+                    draggingColor: style.draggingColor),
+              ],
+            ),
+          ),
     );
   }
 }

@@ -4,8 +4,8 @@ class _XActivityActivityNaturalExec extends _XActivityBaseExec {
   _XActivityActivityNaturalExec({
     required super.activity,
   }) : super(
-          xActivityType: XActivityType.naturalExec,
-        ) {
+    xActivityType: XActivityType.naturalExec,
+  ) {
     //
   }
 }

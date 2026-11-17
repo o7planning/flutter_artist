@@ -21,7 +21,7 @@ class ConditionGroupView extends StatelessWidget {
 
     final bool isOr = conditionGroupModel.connector == FilterConnector.or;
     final Color connectorColor =
-        isOr ? colorScheme.tertiary : colorScheme.primary;
+    isOr ? colorScheme.tertiary : colorScheme.primary;
 
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),
@@ -97,7 +97,8 @@ class ConditionGroupView extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context)
+              color: Theme
+                  .of(context)
                   .colorScheme
                   .onSurface
                   .withValues(alpha: 0.6),

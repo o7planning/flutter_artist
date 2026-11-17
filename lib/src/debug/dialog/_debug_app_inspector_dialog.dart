@@ -40,7 +40,7 @@ class _DebugAppInspectorDialogState extends State<DebugAppInspectorDialog> {
   @override
   Widget build(BuildContext context) {
     final Size preferContentSize =
-        DialogSizeUtils.calculateDebugDialogSize(context);
+    DialogSizeUtils.calculateDebugDialogSize(context);
 
     Widget contentWidget = PageStorage(
       bucket: _bucket,

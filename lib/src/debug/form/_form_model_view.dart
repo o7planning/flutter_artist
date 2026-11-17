@@ -79,11 +79,12 @@ class _FormModelViewState extends State<FormModelView> {
         id: "Properties",
         text: ' Properties',
         closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: iconSize,
-        ),
+        leading: (context, status) =>
+            Icon(
+              FaIconConstants.formValueIconData,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: iconSize,
+            ),
         view: _buildTabFormPropsStructure(),
       ),
     );
@@ -92,11 +93,12 @@ class _FormModelViewState extends State<FormModelView> {
         id: "Initial",
         text: ' Initial',
         closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: iconSize,
-        ),
+        leading: (context, status) =>
+            Icon(
+              FaIconConstants.formValueIconData,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: iconSize,
+            ),
         view: _buildTabContent(
           infoAsHtml: "Initial Form values",
           json: initial1Json,
@@ -108,15 +110,17 @@ class _FormModelViewState extends State<FormModelView> {
         id: "Current",
         text: ' Current',
         closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.formValueIconData,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: iconSize,
-        ),
+        leading: (context, status) =>
+            Icon(
+              FaIconConstants.formValueIconData,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: iconSize,
+            ),
         view: _buildTabContent(
           infoAsHtml: "The current values of the form (Will be passed to the "
               "<b>${getClassName(widget.formModel)}.performCreateItem()</b> or "
-              "<b>${getClassName(widget.formModel)}.performUpdateItem()</b> method).",
+              "<b>${getClassName(
+              widget.formModel)}.performUpdateItem()</b> method).",
           json: instantJson,
         ),
       ),
@@ -242,7 +246,10 @@ class _FormModelViewState extends State<FormModelView> {
             icon: Icon(
               FaIconConstants.locationIconData,
               size: iconSize,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              color: Theme
+                  .of(context)
+                  .colorScheme
+                  .onSurfaceVariant,
             ),
             label: "Location: ",
             text: widget.locationInfo,

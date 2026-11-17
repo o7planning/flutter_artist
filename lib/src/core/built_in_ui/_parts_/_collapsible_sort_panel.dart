@@ -69,9 +69,9 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
               Text(
                 activeCriterion.text,
                 style: style.getTextStyle(context, hasActiveSort).copyWith(
-                      color:
-                          SortPanelHelper.getTextColor(context, hasActiveSort),
-                    ),
+                  color:
+                  SortPanelHelper.getTextColor(context, hasActiveSort),
+                ),
               ),
               const SizedBox(width: 8),
               buildSortButton(
@@ -86,17 +86,19 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
             ],
           ),
         ),
-        itemBuilder: (context) => [
+        itemBuilder: (context) =>
+        [
           PopupMenuItem<void>(
             enabled: false,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: sortModel.criteria
-                  .map((c) => SortMenuItem(
-                        criterion: c,
-                        sortModel: sortModel,
-                        style: style,
-                      ))
+                  .map((c) =>
+                  SortMenuItem(
+                    criterion: c,
+                    sortModel: sortModel,
+                    style: style,
+                  ))
                   .toList(),
             ),
           ),
@@ -145,7 +147,10 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
       margin: EdgeInsets.symmetric(horizontal: style.buttonSpacing / 2),
       width: 1,
       height: 14,
-      color: SortPanelHelper.getBorder(context).color.withValues(alpha: 0.6),
+      color: SortPanelHelper
+          .getBorder(context)
+          .color
+          .withValues(alpha: 0.6),
     );
   }
 
@@ -157,7 +162,7 @@ class CollapsibleSortPanel<ITEM extends Object> extends SortPanel<ITEM>
       borderRadius: BorderRadius.circular(tokens.radius.sm),
       onTap: () => toggleCriterionByName(sortModel, criterion),
       hoverColor:
-          SortPanelHelper.getTextColor(context, true).withValues(alpha: 0.1),
+      SortPanelHelper.getTextColor(context, true).withValues(alpha: 0.1),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
         child: Row(

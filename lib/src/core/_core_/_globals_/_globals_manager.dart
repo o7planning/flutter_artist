@@ -36,7 +36,7 @@ class GlobalsManager extends _Core {
     executionTrace.addInfo(
       codeId: "#GM000",
       shortDesc:
-          "Call <b>FaIsarStorage.getLatestMetadata()</b> to read user information that was previously saved locally.",
+      "Call <b>FaIsarStorage.getLatestMetadata()</b> to read user information that was previously saved locally.",
     );
     _faMetadata = await FaIsarStorage.getLatestMetadata();
 
@@ -51,7 +51,8 @@ class GlobalsManager extends _Core {
     executionTrace.addInfo(
       codeId: "#GM050",
       shortDesc:
-          "Prefer theme: <b>${_faMetadata!.themeName}</b>. Prefer locale: <b>${_faMetadata!.localeCode}</b>",
+      "Prefer theme: <b>${_faMetadata!
+          .themeName}</b>. Prefer locale: <b>${_faMetadata!.localeCode}</b>",
     );
 
     print("Read stored themeName: ${_faMetadata!.themeName}");
@@ -74,7 +75,7 @@ class GlobalsManager extends _Core {
         },
       );
       final String? loggedInUserJson =
-          await FaIsarStorage.getDecryptedUserJson(_faMetadata!.userId);
+      await FaIsarStorage.getDecryptedUserJson(_faMetadata!.userId);
 
       if (loggedInUserJson != null) {
         final traceStep = executionTrace.addControllableCall(
@@ -82,7 +83,8 @@ class GlobalsManager extends _Core {
           caller: loginLogoutAdapter,
           methodName: "fromJson",
           suffixShortDesc:
-              "To convert above <b>JSON String</b> to <b>${getTypeNameWithoutGenerics(ILoggedInUser)}</b> object.",
+          "To convert above <b>JSON String</b> to <b>${getTypeNameWithoutGenerics(
+              ILoggedInUser)}</b> object.",
           parameters: {
             "jsonString": loggedInUserJson,
           },
@@ -104,7 +106,8 @@ class GlobalsManager extends _Core {
       executionTrace.addInfo(
         codeId: "#GM120",
         shortDesc:
-            "The ${debugObjHtml(loginLogoutAdapter)}.fromJson() method was called with an error.",
+        "The ${debugObjHtml(
+            loginLogoutAdapter)}.fromJson() method was called with an error.",
         note: "You need to log in again via the login page.",
         errorInfo: errorInfo,
       );
@@ -115,7 +118,8 @@ class GlobalsManager extends _Core {
       executionTrace.addInfo(
         codeId: "#GM140",
         shortDesc:
-            "The ${debugObjHtml(loginLogoutAdapter)}.fromJson() method returned null.",
+        "The ${debugObjHtml(
+            loginLogoutAdapter)}.fromJson() method returned null.",
         note: "You need to log in again via the login page.",
       );
       return;
@@ -139,7 +143,8 @@ class GlobalsManager extends _Core {
       executionTrace.addInfo(
         codeId: "#GM180",
         shortDesc:
-            "The ${debugObjHtml(loginLogoutAdapter)}.performReloadLoggedInUser() method was called with an error.",
+        "The ${debugObjHtml(
+            loginLogoutAdapter)}.performReloadLoggedInUser() method was called with an error.",
         errorInfo: errorInfo,
       );
       executionTrace.printToConsole();
@@ -149,7 +154,8 @@ class GlobalsManager extends _Core {
       executionTrace.addInfo(
         codeId: "#GM190",
         shortDesc:
-            "The ${debugObjHtml(loginLogoutAdapter)}.performReloadLoggedInUser() an invalid user, the username has been changed.",
+        "The ${debugObjHtml(
+            loginLogoutAdapter)}.performReloadLoggedInUser() an invalid user, the username has been changed.",
       );
       executionTrace.printToConsole();
       return;
@@ -186,7 +192,8 @@ class GlobalsManager extends _Core {
       executionTrace.addInfo(
         codeId: "#GM240",
         shortDesc:
-            "The ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
+        "The ${debugObjHtml(
+            loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
         errorInfo: errorInfo,
       );
       executionTrace.printToConsole();
@@ -207,7 +214,8 @@ class GlobalsManager extends _Core {
           "loggedInUser": loggedInUser,
         },
         note:
-            "This method requires calling an <b>API</b> to retrieve global data for user ${debugObjHtml(loggedInUser)}.",
+        "This method requires calling an <b>API</b> to retrieve global data for user ${debugObjHtml(
+            loggedInUser)}.",
         tipDocument: TipDocument.loginLogoutAdapter,
       );
       // Load Global Data:
@@ -222,7 +230,8 @@ class GlobalsManager extends _Core {
       executionTrace.addInfo(
         codeId: "#GM420",
         shortDesc:
-            "The ${debugObjHtml(globalDataAdapter)}.performLoadGlobalData() method was called with an error.",
+        "The ${debugObjHtml(
+            globalDataAdapter)}.performLoadGlobalData() method was called with an error.",
         errorInfo: errorInfo,
       );
       executionTrace.printToConsole();
@@ -233,9 +242,9 @@ class GlobalsManager extends _Core {
     executionTrace.addInfo(
       codeId: "#GM640",
       shortDesc:
-          "Reading <b>Extra Global Prop Names</b> from <b>Local</b>. For example: favorite 'locale' and 'theme'.",
+      "Reading <b>Extra Global Prop Names</b> from <b>Local</b>. For example: favorite 'locale' and 'theme'.",
       note:
-          "This information is stored locally when the user selects a preferred 'locale' or 'theme'.",
+      "This information is stored locally when the user selects a preferred 'locale' or 'theme'.",
       tipDocument: TipDocument.locale,
     );
   }
@@ -293,7 +302,7 @@ class GlobalsManager extends _Core {
         caller: loginLogoutAdapter,
         methodName: "toJson",
         suffixShortDesc:
-            "To convert ${debugObjHtml(loggedInUser)} to <b>JSON String</b>.",
+        "To convert ${debugObjHtml(loggedInUser)} to <b>JSON String</b>.",
         parameters: {
           "loggedInUser": loggedInUser,
         },
@@ -353,7 +362,7 @@ class GlobalsManager extends _Core {
           "loggedInUser": loggedInUser,
         },
         note:
-            "You can access global data via <b>FlutterArtist.globalsManager.globalData</b>.",
+        "You can access global data via <b>FlutterArtist.globalsManager.globalData</b>.",
         tipDocument: TipDocument.globalData,
       );
       _performLoadGlobalDataCount++;
@@ -378,7 +387,8 @@ class GlobalsManager extends _Core {
       executionTrace.addInfo(
         codeId: "#034300",
         shortDesc:
-            "The ${debugObjHtml(globalDataAdapter)}.performLoadGlobalData() method called with an error!",
+        "The ${debugObjHtml(
+            globalDataAdapter)}.performLoadGlobalData() method called with an error!",
         errorInfo: errorInfo,
       );
       return false;
@@ -411,14 +421,16 @@ class GlobalsManager extends _Core {
         .isAuthorizedSessionEstablisher(workflowUnit.runtimeType)) {
       throw AppError(
         errorMessage:
-            "Security Violation: Workflow '${getClassName(workflowUnit)}' attempted "
+        "Security Violation: Workflow '${getClassName(
+            workflowUnit)}' attempted "
             "to establish a user session but is not registered in AppConfig.",
       );
     }
 
     if (loggedInUser == null) {
       final String message =
-          "No authenticated user data returned from ${getClassNameWithoutGenerics(workflowUnit)}.";
+          "No authenticated user data returned from ${getClassNameWithoutGenerics(
+          workflowUnit)}.";
       executionTrace.addInfo(
         codeId: "#020060",
         shortDesc: "Got value >> @loggedInUser: null.\n$message",
@@ -431,7 +443,7 @@ class GlobalsManager extends _Core {
     String? tokenPrefix = loggedInUser.accessToken;
     if (tokenPrefix != null) {
       tokenPrefix =
-          tokenPrefix.length > 2 ? tokenPrefix.substring(0, 2) : tokenPrefix;
+      tokenPrefix.length > 2 ? tokenPrefix.substring(0, 2) : tokenPrefix;
       tokenPrefix = "$tokenPrefix...";
     }
 
@@ -479,7 +491,8 @@ class GlobalsManager extends _Core {
       executionTrace.addInfo(
         codeId: "#022080",
         shortDesc:
-            "The ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method threw an error.",
+        "The ${debugObjHtml(
+            loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method threw an error.",
         errorInfo: errorInfo,
       );
       executionTrace.printToConsole();

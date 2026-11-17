@@ -69,9 +69,9 @@ class CustomArrowEdgeRenderer extends EdgeRenderer {
 
       // Calculate start and sweep angles based on point1, point2, and center
       final double startAngle =
-          math.atan2(point1.dy - center.dy, point1.dx - center.dx);
+      math.atan2(point1.dy - center.dy, point1.dx - center.dx);
       final double endAngle =
-          math.atan2(point2.dy - center.dy, point2.dx - center.dx);
+      math.atan2(point2.dy - center.dy, point2.dx - center.dx);
       final double sweepAngle =
           endAngle - startAngle; // Adjust for arc direction if needed
 
@@ -80,8 +80,8 @@ class CustomArrowEdgeRenderer extends EdgeRenderer {
     });
   }
 
-  List<double> drawTriangle(
-      Canvas canvas, Paint paint, double x1, double y1, double x2, double y2) {
+  List<double> drawTriangle(Canvas canvas, Paint paint, double x1, double y1,
+      double x2, double y2) {
     var angle = (atan2(y2 - y1, x2 - x1) + pi);
     var x3 = (x2 + ARROW_LENGTH * cos((angle - ARROW_DEGREES)));
     var y3 = (y2 + ARROW_LENGTH * sin((angle - ARROW_DEGREES)));

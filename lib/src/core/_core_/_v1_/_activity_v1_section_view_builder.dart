@@ -3,10 +3,10 @@ part of '../core.dart';
 class ActivityV1ControlConfig extends ViewConfig {
   const ActivityV1ControlConfig()
       : super(
-          quickSuggestionMode: QuickSuggestionMode.none,
-          enableKeyboardNavigation: false,
-          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
-        );
+    quickSuggestionMode: QuickSuggestionMode.none,
+    enableKeyboardNavigation: false,
+    mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+  );
 }
 
 class ActivityV1SectionViewBuilder extends _ContextProviderView {
@@ -47,7 +47,7 @@ class _ActivitySectionViewBuilderState
 
   @override
   FocusRegionType getRegionType() {
-    return FocusRegionType.blockItemsView  ;
+    return FocusRegionType.blockItemsView;
   }
 
   @override

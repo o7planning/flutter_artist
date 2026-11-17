@@ -7,6 +7,7 @@ abstract interface class ClassDefViewable {
 extension ClassDefViewableExt on ClassDefViewable {
   String debugClassParametersDefinition() {
     Map<String, Type> map = getGenericsInfoMap();
-    return "<${map.entries.map((entry) => getTypeNameWithoutGenerics(entry.value)).join(', ')}>";
+    return "<${map.entries.map((entry) =>
+        getTypeNameWithoutGenerics(entry.value)).join(', ')}>";
   }
 }

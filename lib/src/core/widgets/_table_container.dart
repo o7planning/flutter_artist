@@ -15,7 +15,7 @@ class TableContainer extends StatelessWidget {
   Map<int, TableColumnWidth> _columnWidths() {
     Map<int, double> mapFlex = flexes.asMap();
     Map<int, TableColumnWidth> map =
-        mapFlex.map((k, v) => MapEntry(k, FlexColumnWidth(v)));
+    mapFlex.map((k, v) => MapEntry(k, FlexColumnWidth(v)));
     return map;
   }
 
@@ -29,12 +29,13 @@ class TableContainer extends StatelessWidget {
           TableRow(
             children: widgets
                 .map(
-                  (w) => TableCell(
+                  (w) =>
+                  TableCell(
                     verticalAlignment:
-                        TableCellVerticalAlignment.intrinsicHeight,
+                    TableCellVerticalAlignment.intrinsicHeight,
                     child: w,
                   ),
-                )
+            )
                 .toList(),
           ),
         ],

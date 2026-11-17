@@ -1,19 +1,19 @@
 part of '../core.dart';
 
 sealed class BlockExecutionIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>,
-        PRECHECK,
-        EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>,
+PRECHECK,
+EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
     extends ExecutionIntent<PRECHECK, EXECUTION_RESULT> {
   BlockExecutionIntent();
 }
 
 final class BlockQueryIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> //
     extends BlockExecutionIntent<
         ID, //
         ITEM,
@@ -28,9 +28,9 @@ final class BlockQueryIntent<
 }
 
 final class BlockBackendActionIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> //
     extends BlockExecutionIntent<
         ID, //
         ITEM,
@@ -43,9 +43,9 @@ final class BlockBackendActionIntent<
 }
 
 final class BlockQuickItemUpdateIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> //
     extends BlockExecutionIntent<
         ID, //
         ITEM,
@@ -58,9 +58,9 @@ final class BlockQuickItemUpdateIntent<
 }
 
 final class BlockQuickItemCreationIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> //
     extends BlockExecutionIntent<
         ID, //
         ITEM,
@@ -73,9 +73,9 @@ final class BlockQuickItemCreationIntent<
 }
 
 final class BlockDeleteItemIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> //
     extends BlockExecutionIntent<
         ID, //
         ITEM,
@@ -90,9 +90,9 @@ final class BlockDeleteItemIntent<
 }
 
 final class BlockDeleteItemsIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> //
     extends BlockExecutionIntent<
         ID, //
         ITEM,
@@ -122,9 +122,9 @@ final class BlockDeleteItemsIntent<
 // }
 
 final class BlockClearItemsIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> //
     extends BlockExecutionIntent<
         ID, //
         ITEM,
@@ -160,22 +160,26 @@ final class BlockClearItemsIntent<
 // }
 
 final class BlockDoneIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockExecutionIntent<ID, ITEM, ITEM_DETAIL, dynamic,
-        EmptyExecutionUnitResult> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionIntent<ID,
+    ITEM,
+    ITEM_DETAIL,
+    dynamic,
+    EmptyExecutionUnitResult> {
   final String lastIntentInfo;
 
   BlockDoneIntent({required this.lastIntentInfo});
 }
 
 final class BlockNullIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockExecutionIntent<ID, ITEM, ITEM_DETAIL, dynamic,
-        EmptyExecutionUnitResult> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionIntent<ID,
+    ITEM,
+    ITEM_DETAIL,
+    dynamic,
+    EmptyExecutionUnitResult> {
   final String lastIntentInfo;
 
   BlockNullIntent({required this.lastIntentInfo});

@@ -3,9 +3,9 @@ part of '../../core.dart';
 @_ExecutionUnitClassAnnotation()
 @_BlockBackendActionAnnotation()
 class _BlockBackendActionExecutionUnit<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>>
     extends _ShelfMemberResultedExecutionUnit<BlockBackendActionResult> {
   final XBlock xBlock;
 
@@ -16,9 +16,9 @@ class _BlockBackendActionExecutionUnit<
     required this.xBlock,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.blockBackendAction,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.blockBackendAction,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xBlock.xShelf;

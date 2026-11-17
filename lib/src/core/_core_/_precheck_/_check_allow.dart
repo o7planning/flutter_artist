@@ -19,4 +19,8 @@ class CheckAllowResult {
         errorInfo = null;
 
   CheckAllowResult.error({required this.errorInfo}) : result = CheckAllow.error;
+
+  bool get isError => result == CheckAllow.error;
+
+  bool get isAllowed => result == CheckAllow.allow;
 }

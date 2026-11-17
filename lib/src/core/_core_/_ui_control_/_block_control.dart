@@ -3,10 +3,10 @@ part of '../core.dart';
 class BlockControlConfig extends ViewConfig {
   const BlockControlConfig()
       : super(
-          quickSuggestionMode: QuickSuggestionMode.none,
-          enableKeyboardNavigation: false,
-          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
-        );
+    quickSuggestionMode: QuickSuggestionMode.none,
+    enableKeyboardNavigation: false,
+    mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+  );
 }
 
 @Deprecated(
@@ -53,7 +53,7 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
 
   @override
   FocusRegionType getRegionType() {
-    return FocusRegionType. temp ;
+    return FocusRegionType.temp;
   }
 
   @override
@@ -88,13 +88,14 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
       onPressedAsync == null
           ? null
           : () {
-              () async {
-                bool success = await onPressedAsync();
-                if (success && widget.navigate != null) {
-                  widget.navigate!();
-                }
-              }();
-            },
+        () async {
+          bool success = await onPressedAsync();
+          if (success && widget.navigate != null) {
+            widget.navigate!();
+          }
+        }
+        ();
+      },
     );
   }
 
@@ -118,28 +119,29 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
     switch (widget.actionType) {
       case BlockControlActionType.createItem:
         Actionable createActionable =
-            widget.block.checkBeforeCreateItemWithForm();
+        widget.block.checkBeforeCreateItemWithForm();
         return createActionable.yes ? __prepareFormToCreateItem : null;
       case BlockControlActionType.query:
         Actionable queryActionable = widget.block.checkBeforeQuery();
         return queryActionable.yes ? __queryBlock : null;
       case BlockControlActionType.saveForm:
         Actionable<BlockFormSavePrecheck> saveActionable =
-            widget.block.checkBeforeSaveForm();
+        widget.block.checkBeforeSaveForm();
         return saveActionable.yes ? __saveForm : null;
       case BlockControlActionType.refreshCurrentItem:
         Actionable refreshActionable =
-            widget.block.checkBeforeRefreshCurrentItem();
+        widget.block.checkBeforeRefreshCurrentItem();
         return refreshActionable.yes ? __refreshCurrentItem : null;
       case BlockControlActionType.resetForm:
         Actionable resetActionable = widget.block.checkBeforeResetForm();
         return resetActionable.yes ? __resetForm : null;
       case BlockControlActionType.deleteCurrentItem:
         Actionable deleteActionable =
-            widget.block.checkBeforeDeleteCurrentItem();
+        widget.block.checkBeforeDeleteCurrentItem();
         return deleteActionable.yes ? __deleteCurrentItem : null;
-      case BlockControlActionType.showFormInfo:
-        Actionable formInfoActionable = widget.block.checkBeforeShowFormInfo();
+      case BlockControlActionType.showFormModel:
+        Actionable formInfoActionable = widget.block
+            .checkBeforeShowFormModelInspector();
         return formInfoActionable.yes ? __showDebugFormModelnspector : null;
     }
   }
@@ -177,7 +179,7 @@ class _BlockControlButtonState extends _ContextProviderViewState<BlockControl> {
     }
     //
     PrepareItemCreationResult result =
-        await widget.block.prepareFormToCreateItem();
+    await widget.block.prepareFormToCreateItem();
     return result.successForAll;
   }
 

@@ -53,8 +53,8 @@ abstract class BaseInfoWidget extends StatelessWidget {
               onPressed: btnFunc.onPressed == null
                   ? null
                   : () {
-                      btnFunc.onPressed!.call(context);
-                    },
+                btnFunc.onPressed!.call(context);
+              },
             ),
           ),
       ],

@@ -14,7 +14,7 @@ class FilterMultiOptMsMismatchError {
   AppError toAppError({required dynamic filterModelName}) {
     return AppError(
       errorMessage:
-          "The input field type of `$tildeCriterionName` does not match between the definition and the actual type. "
+      "The input field type of `$tildeCriterionName` does not match between the definition and the actual type. "
           "Defined as `Multi Selection`, but is actually `Single Selection` or something else. "
           "Check `$filterModelName` and its `FilterPanel` for details.",
     );

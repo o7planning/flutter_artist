@@ -49,7 +49,8 @@ String __debugObjHtml(Object? obj, bool asHtml) {
   } else if (obj is OptValueWrap) {
     return "${b1}${getClassName(obj)}(${obj.values})${b2}";
   } else if (obj is Pageable) {
-    return "${b1}${getClassName(obj)}(page: ${obj.page}, pageSize: ${obj.pageSize})${b2}";
+    return "${b1}${getClassName(obj)}(page: ${obj.page}, pageSize: ${obj
+        .pageSize})${b2}";
   } else if (obj is PageData) {
     int count = obj.items.length;
     return "${b1}${getClassName(obj)}($count items)${b2}";
@@ -70,7 +71,8 @@ String __debugObjHtml(Object? obj, bool asHtml) {
   } else if (obj is Function) {
     return "${b1}[Function]${b2}";
   } else if (obj is Locale) {
-    return "${b1}${getClassName(obj)}(${obj.languageCode}, ${obj.countryCode})${b2}";
+    return "${b1}${getClassName(obj)}(${obj.languageCode}, ${obj
+        .countryCode})${b2}";
   } else if (obj is Type) {
     return "${b1}${getTypeNameWithoutGenerics(obj)}${b2}";
   } else if (obj is Block) {

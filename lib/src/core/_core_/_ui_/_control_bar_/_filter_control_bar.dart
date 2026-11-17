@@ -21,7 +21,7 @@ class FilterControlBar extends BaseControlBar<
     ],
     super.rightItems = const [
       FilterControlBarItem.standard(FilterControlBarItemType.divider),
-      FilterControlBarItem.standard(FilterControlBarItemType.debugFilter),
+      FilterControlBarItem.standard(FilterControlBarItemType.debugFilterModel),
     ],
   });
 
@@ -41,7 +41,6 @@ class _FilterControlBarState extends _BaseControlBarState<
   Shelf? _getRelatedModule() {
     return widget.filterModel.shelf;
   }
-
 
   @override
   FocusRegionType getRegionType() {
@@ -86,31 +85,26 @@ class _FilterControlBarState extends _BaseControlBarState<
               ? () => Navigator.of(context).maybePop()
               : null,
         );
-      case FilterControlBarItemType.debugFilter:
-        if (!widget.config.allowDebugFilterModelInspectorButton) {
-          return null;
-        }
-        // widget.filterModel.canShowFilterModelCriteria()
-        // bool show = true;
+      case FilterControlBarItemType.debugFilterModel:
+        if (!widget.config.allowDebugFilterModelInspectorButton) return null;
+        final actionable =
+        widget.filterModel.checkBeforeShowFilterModelInspector();
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
           tooltip: type.formatTooltip("Debug Filter Model Inspector"),
           iconData: FaIconConstants.filterModelDebugIconData,
           onAction: false,
-          onPressed: () {
-            DebugViewerDialog.openDebugFilterModelInspector(
-              context: context,
-              locationInfo: '',
-              filterModel: widget.filterModel,
-            );
-          },
+          onPressed: actionable.yes
+              ? () async {
+            await widget.filterModel.showDebugFilterModelViewerDialog();
+          }
+              : null,
         );
       default:
         return null;
     }
   }
-
 
   @override
   String getDebugLabel() {
@@ -127,8 +121,9 @@ class _FilterControlBarState extends _BaseControlBarState<
       getClassNameWithoutGenerics(widget.filterModel);
 
   @override
-  void addWidgetState({required bool isVisible}) => widget.filterModel.ui
-      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) =>
+      widget.filterModel.ui
+          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

@@ -1,13 +1,13 @@
 part of '../../core.dart';
 
 class WelcomeStageView<
-    STAGE extends Stage<
-        StageEnum, //
-        StageInitData,
-        StageResultData,
-        ProzessContextData,
-        FormPatch,
-        FormOutput>> extends StageView<STAGE> {
+STAGE extends Stage<
+    StageEnum, //
+    StageInitData,
+    StageResultData,
+    ProzessContextData,
+    FormPatch,
+    FormOutput>> extends StageView<STAGE> {
   final TextStyle? textStyle;
 
   const WelcomeStageView({

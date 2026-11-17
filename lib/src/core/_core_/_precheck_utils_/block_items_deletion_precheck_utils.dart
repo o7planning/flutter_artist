@@ -11,7 +11,7 @@ class BlockItemsDeletionPrecheckUtils {
     required bool errorIfItemNotInTheBlock,
     required ITEM? Function(ITEM targetItem) findItemSameIdWith,
     required CheckAllowResult Function(ITEM validItem)
-        checkItemsDeletionAllowed,
+    checkItemsDeletionAllowed,
   }) {
     // 1. Check if the system is busy
     if (checkBusy && isBusy) {

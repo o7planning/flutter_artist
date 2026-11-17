@@ -22,9 +22,7 @@ class ComparisonUtils {
   /// This function is used to check for "dirty" in a form.
   ///
   static bool _compareMapAndMap(Map map, Map other) {
-    Set<dynamic> keys = {}
-      ..addAll(map.keys)
-      ..addAll(other.keys);
+    Set<dynamic> keys = {}..addAll(map.keys)..addAll(other.keys);
 
     for (dynamic key in keys) {
       dynamic v1 = map[key];

@@ -105,8 +105,7 @@ class _StageViewBuilderState
 
   @override
   List<_QuickSuggestionButton> createQuickSuggestionButtons(
-    BuildContext context,
-  ) {
+      BuildContext context,) {
     return [
       QuickSuggestionBarUtils.createStageErrorButton(
         context,

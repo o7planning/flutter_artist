@@ -35,7 +35,9 @@ class FocusNavAction {
 
   /// Jumps directly to [targetName] (`propName` in Form, or `tildeCriterionName` in Filter).
   factory FocusNavAction.moveTo(String targetName) {
-    assert(targetName.trim().isNotEmpty, 'targetName must not be empty.');
+    assert(targetName
+        .trim()
+        .isNotEmpty, 'targetName must not be empty.');
     return FocusNavAction._(
       type: FocusNavType.moveTo,
       targetName: targetName,
@@ -143,7 +145,8 @@ class _FocusNavDispatcher {
         return KeyEventResult.ignored;
       }
 
-      final String? currentFocusTargetName = _resolveActiveTargetName(formState);
+      final String? currentFocusTargetName = _resolveActiveTargetName(
+          formState);
       if (currentFocusTargetName == null) {
         return KeyEventResult.ignored;
       }

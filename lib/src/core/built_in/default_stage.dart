@@ -1,22 +1,25 @@
 part of '__built_in_model.dart';
 
 class DefaultStage<
-        STAGE_ENUM extends StageEnum, //
-        PROZESS_CONTEXT_DATA extends ProzessContextData>
-    extends Stage<STAGE_ENUM, EmptyStageInitData, EmptyStageResultData,
-        PROZESS_CONTEXT_DATA, FormPatch, FormOutput> {
+STAGE_ENUM extends StageEnum, //
+PROZESS_CONTEXT_DATA extends ProzessContextData> extends Stage<STAGE_ENUM,
+    EmptyStageInitData,
+    EmptyStageResultData,
+    PROZESS_CONTEXT_DATA,
+    FormPatch,
+    FormOutput> {
   final Future<ApiResult<EmptyStageInitData>> Function({
-    required PROZESS_CONTEXT_DATA sharedContext,
+  required PROZESS_CONTEXT_DATA sharedContext,
   })? onLoadInit;
 
   final Future<ApiResult<EmptyStageResultData>> Function({
-    required EmptyStageInitData initData,
-    required PROZESS_CONTEXT_DATA sharedContext,
+  required EmptyStageInitData initData,
+  required PROZESS_CONTEXT_DATA sharedContext,
   })? onSubmit;
 
   final STAGE_ENUM Function({
-    required PROZESS_CONTEXT_DATA prozessContextData,
-    required EmptyStageResultData stageDataResult,
+  required PROZESS_CONTEXT_DATA prozessContextData,
+  required EmptyStageResultData stageDataResult,
   })? onDetermineNextStage;
 
   DefaultStage({

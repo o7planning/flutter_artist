@@ -68,17 +68,17 @@ final class ScalarDataStatePending extends ScalarDataState {
   ScalarDataStatePending.filterChanged({
     ScalarPendingReasonFailed? retainedFailureReason,
   }) : reason = ScalarPendingReasonFilterChanged(
-          retainedFailureReason: retainedFailureReason,
-        );
+    retainedFailureReason: retainedFailureReason,
+  );
 
   /// Factory constructor for blocked baseline state caused by direct query, filter, or upstream cascade failures.
   ScalarDataStatePending.failed({
     required ScalarErrorOrigin errorOrigin,
     ScalarErrorInfo? errorInfo,
   }) : reason = ScalarPendingReasonFailed(
-          errorOrigin: errorOrigin,
-          errorInfo: errorInfo,
-        );
+    errorOrigin: errorOrigin,
+    errorInfo: errorInfo,
+  );
 
   @override
   String get name => "pending";
@@ -97,9 +97,9 @@ final class ScalarDataStatePending extends ScalarDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScalarDataStatePending &&
-          runtimeType == other.runtimeType &&
-          reason == other.reason;
+          other is ScalarDataStatePending &&
+              runtimeType == other.runtimeType &&
+              reason == other.reason;
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
@@ -140,9 +140,9 @@ final class ScalarDataStateLoadedFresh extends ScalarDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScalarDataStateLoadedFresh &&
-          runtimeType == other.runtimeType &&
-          transientErrorInfo == other.transientErrorInfo;
+          other is ScalarDataStateLoadedFresh &&
+              runtimeType == other.runtimeType &&
+              transientErrorInfo == other.transientErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, transientErrorInfo);
@@ -166,24 +166,24 @@ final class ScalarDataStateLoadedStale extends ScalarDataStateLoaded {
   ScalarDataStateLoadedStale.event({
     ScalarLoadedStateStaleReasonFailed? retainedFailureReason,
   }) : reason = ScalarLoadedStateStaleReasonEvent(
-          retainedFailureReason: retainedFailureReason,
-        );
+    retainedFailureReason: retainedFailureReason,
+  );
 
   /// Factory constructor for filter-changed stale state.
   ScalarDataStateLoadedStale.filterChanged({
     ScalarLoadedStateStaleReasonFailed? retainedFailureReason,
   }) : reason = ScalarLoadedStateStaleReasonFilterChanged(
-          retainedFailureReason: retainedFailureReason,
-        );
+    retainedFailureReason: retainedFailureReason,
+  );
 
   /// Factory constructor for query-failure stale state.
   ScalarDataStateLoadedStale.failed({
     required ScalarErrorOrigin errorOrigin,
     ScalarErrorInfo? errorInfo,
   }) : reason = ScalarLoadedStateStaleReasonFailed(
-          errorOrigin: errorOrigin,
-          errorInfo: errorInfo,
-        );
+    errorOrigin: errorOrigin,
+    errorInfo: errorInfo,
+  );
 
   @override
   String get name => "loaded + stale";
@@ -202,9 +202,9 @@ final class ScalarDataStateLoadedStale extends ScalarDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScalarDataStateLoadedStale &&
-          runtimeType == other.runtimeType &&
-          reason == other.reason;
+          other is ScalarDataStateLoadedStale &&
+              runtimeType == other.runtimeType &&
+              reason == other.reason;
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
@@ -240,10 +240,11 @@ sealed class ScalarPendingReason {
   ScalarErrorInfo? get errorInfo => underlyingFailureReason?.errorInfo;
 
   /// Resolves the underlying failure reason across the pending reason hierarchy.
-  ScalarPendingReasonFailed? get underlyingFailureReason => switch (this) {
+  ScalarPendingReasonFailed? get underlyingFailureReason =>
+      switch (this) {
         ScalarPendingReasonFailed failure => failure,
         ScalarPendingReasonFilterChanged(:final retainedFailureReason) =>
-          retainedFailureReason,
+        retainedFailureReason,
         _ => null,
       };
 
@@ -298,9 +299,9 @@ final class ScalarPendingReasonFilterChanged extends ScalarPendingReason {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScalarPendingReasonFilterChanged &&
-          runtimeType == other.runtimeType &&
-          retainedFailureReason == other.retainedFailureReason;
+          other is ScalarPendingReasonFilterChanged &&
+              runtimeType == other.runtimeType &&
+              retainedFailureReason == other.retainedFailureReason;
 
   @override
   int get hashCode => Object.hash(runtimeType, retainedFailureReason);
@@ -330,10 +331,10 @@ final class ScalarPendingReasonFailed extends ScalarPendingReason {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScalarPendingReasonFailed &&
-          runtimeType == other.runtimeType &&
-          errorOrigin == other.errorOrigin &&
-          errorInfo == other.errorInfo;
+          other is ScalarPendingReasonFailed &&
+              runtimeType == other.runtimeType &&
+              errorOrigin == other.errorOrigin &&
+              errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorOrigin, errorInfo);
@@ -373,11 +374,11 @@ sealed class ScalarLoadedStateStaleReason {
       switch (this) {
         ScalarLoadedStateStaleReasonFailed failure => failure,
         ScalarLoadedStateStaleReasonEvent(:final retainedFailureReason) =>
-          retainedFailureReason,
+        retainedFailureReason,
         ScalarLoadedStateStaleReasonFilterChanged(
-          :final retainedFailureReason
+            :final retainedFailureReason
         ) =>
-          retainedFailureReason,
+        retainedFailureReason,
       };
 
   /// Returns true if this reason either represents a failure or carries a preserved previous failure.
@@ -385,7 +386,7 @@ sealed class ScalarLoadedStateStaleReason {
 
   /// Convenience constant for event-induced stale reason without previous failure.
   static const ScalarLoadedStateStaleReason event =
-      ScalarLoadedStateStaleReasonEvent();
+  ScalarLoadedStateStaleReasonEvent();
 
   /// Convenience factory for query-failure stale reason.
   static ScalarLoadedStateStaleReason failed({
@@ -417,9 +418,9 @@ final class ScalarLoadedStateStaleReasonEvent
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScalarLoadedStateStaleReasonEvent &&
-          runtimeType == other.runtimeType &&
-          retainedFailureReason == other.retainedFailureReason;
+          other is ScalarLoadedStateStaleReasonEvent &&
+              runtimeType == other.runtimeType &&
+              retainedFailureReason == other.retainedFailureReason;
 
   @override
   int get hashCode => Object.hash(runtimeType, retainedFailureReason);
@@ -445,9 +446,9 @@ final class ScalarLoadedStateStaleReasonFilterChanged
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScalarLoadedStateStaleReasonFilterChanged &&
-          runtimeType == other.runtimeType &&
-          retainedFailureReason == other.retainedFailureReason;
+          other is ScalarLoadedStateStaleReasonFilterChanged &&
+              runtimeType == other.runtimeType &&
+              retainedFailureReason == other.retainedFailureReason;
 
   @override
   int get hashCode => Object.hash(runtimeType, retainedFailureReason);
@@ -478,10 +479,10 @@ final class ScalarLoadedStateStaleReasonFailed
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScalarLoadedStateStaleReasonFailed &&
-          runtimeType == other.runtimeType &&
-          errorOrigin == other.errorOrigin &&
-          errorInfo == other.errorInfo;
+          other is ScalarLoadedStateStaleReasonFailed &&
+              runtimeType == other.runtimeType &&
+              errorOrigin == other.errorOrigin &&
+              errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorOrigin, errorInfo);

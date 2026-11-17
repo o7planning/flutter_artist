@@ -20,8 +20,9 @@ class DebugFilterCriteriaView extends StatefulWidget {
     super.key,
     required Block this.block,
     required this.onDebugFilterModelPressed,
-  })  : filterCriteria =
-            block.registeredOrDefaultFilterModel.committedFilterCriteria,
+  })
+      : filterCriteria =
+      block.registeredOrDefaultFilterModel.committedFilterCriteria,
         scalar = null,
         filterModel = block.registeredOrDefaultFilterModel;
 
@@ -29,8 +30,9 @@ class DebugFilterCriteriaView extends StatefulWidget {
     super.key,
     required Scalar this.scalar,
     required this.onDebugFilterModelPressed,
-  })  : filterCriteria =
-            scalar.registeredOrDefaultFilterModel.committedFilterCriteria,
+  })
+      : filterCriteria =
+      scalar.registeredOrDefaultFilterModel.committedFilterCriteria,
         block = null,
         filterModel = scalar.registeredOrDefaultFilterModel;
 
@@ -38,7 +40,8 @@ class DebugFilterCriteriaView extends StatefulWidget {
     super.key,
     required FilterModel this.filterModel,
     required this.onDebugFilterModelPressed,
-  })  : filterCriteria = filterModel.committedFilterCriteria,
+  })
+      : filterCriteria = filterModel.committedFilterCriteria,
         block = null,
         scalar = null;
 
@@ -66,11 +69,12 @@ class _DebugFilterCriteriaViewState extends State<DebugFilterCriteriaView> {
           id: "filterCriteria",
           text: getClassNameWithoutGenerics(widget.filterCriteria!),
           closable: false,
-          leading: (context, status) => Icon(
-            FaIconConstants.filterCriteriaIconData,
-            color: TabThemeUtils.getTabIconColor(context, status),
-            size: 16,
-          ),
+          leading: (context, status) =>
+              Icon(
+                FaIconConstants.filterCriteriaIconData,
+                color: TabThemeUtils.getTabIconColor(context, status),
+                size: 16,
+              ),
           view: FilterCriteriaView(
             filterModel: widget.filterModel,
             onDebugFilterModelPressed: widget.onDebugFilterModelPressed,
@@ -83,11 +87,12 @@ class _DebugFilterCriteriaViewState extends State<DebugFilterCriteriaView> {
         id: "filterModel",
         text: getClassNameWithoutGenerics(widget.filterModel),
         closable: false,
-        leading: (context, status) => Icon(
-          FaIconConstants.filterModelIconData,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: 16,
-        ),
+        leading: (context, status) =>
+            Icon(
+              FaIconConstants.filterModelIconData,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: 16,
+            ),
         view: DebugFilterModelCriteriaView(
           filterModel: widget.filterModel,
         ),

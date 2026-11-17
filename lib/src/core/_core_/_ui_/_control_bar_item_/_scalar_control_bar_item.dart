@@ -13,8 +13,8 @@ class ScalarControlBarItem
   const ScalarControlBarItem.query()
       : super.standard(ScalarControlBarItemType.query);
 
-  const ScalarControlBarItem.debugFilter()
-      : super.standard(ScalarControlBarItemType.debugFilter);
+  const ScalarControlBarItem.debugFilterCriteria()
+      : super.standard(ScalarControlBarItemType.debugFilterCriteria);
 
   ScalarControlBarItem.custom({
     required super.tooltip,

@@ -42,8 +42,8 @@ class DebugScalarCriteriaView extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
               border: Border.all(
                 color:
-                    (isCriteriaNull ? colorScheme.error : colorScheme.primary)
-                        .withValues(alpha: 0.2),
+                (isCriteriaNull ? colorScheme.error : colorScheme.primary)
+                    .withValues(alpha: 0.2),
               ),
             ),
             child: IconLabelSelectableText(
@@ -89,7 +89,7 @@ class DebugScalarCriteriaView extends StatelessWidget {
   }) {
     return HtmlInfoView(
       infoAsHtml:
-          "The <b>$filterClassName.filterCriteria</b> is used as a parameter to query the <b>$scalarClassName</b>. "
+      "The <b>$filterClassName.filterCriteria</b> is used as a parameter to query the <b>$scalarClassName</b>. "
           "If successful, it will be assigned to <b>$scalarClassName.filterCriteria</b>. "
           "Otherwise, it can be <b>null</b>. "
           "It also resets to <b>null</b> if the Scalar is in <b>'none'</b> or <b>'pending'</b> state.",

@@ -67,9 +67,9 @@ final class ProzessDataStatePending extends ProzessDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ProzessDataStatePending &&
-          runtimeType == other.runtimeType &&
-          reason == other.reason;
+          other is ProzessDataStatePending &&
+              runtimeType == other.runtimeType &&
+              reason == other.reason;
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
@@ -91,7 +91,8 @@ sealed class ProzessPendingReason {
 
   bool get isFailed => this is ProzessPendingReasonFailed;
 
-  ProzessErrorInfo? get errorInfo => switch (this) {
+  ProzessErrorInfo? get errorInfo =>
+      switch (this) {
         ProzessPendingReasonFailed(:final errorInfo) => errorInfo,
         _ => null,
       };
@@ -129,9 +130,9 @@ final class ProzessPendingReasonFailed extends ProzessPendingReason {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ProzessPendingReasonFailed &&
-          runtimeType == other.runtimeType &&
-          errorInfo == other.errorInfo;
+          other is ProzessPendingReasonFailed &&
+              runtimeType == other.runtimeType &&
+              errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);
@@ -188,9 +189,9 @@ final class ProzessDataStateLoadedStale extends ProzessDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ProzessDataStateLoadedStale &&
-          runtimeType == other.runtimeType &&
-          staleErrorInfo == other.staleErrorInfo;
+          other is ProzessDataStateLoadedStale &&
+              runtimeType == other.runtimeType &&
+              staleErrorInfo == other.staleErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, staleErrorInfo);
@@ -256,9 +257,9 @@ final class ProzessDataStateTransitionFailed
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ProzessDataStateTransitionFailed &&
-          runtimeType == other.runtimeType &&
-          transitionErrorInfo == other.transitionErrorInfo;
+          other is ProzessDataStateTransitionFailed &&
+              runtimeType == other.runtimeType &&
+              transitionErrorInfo == other.transitionErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, transitionErrorInfo);
@@ -316,9 +317,9 @@ final class ProzessDataStateAborted extends ProzessDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ProzessDataStateAborted &&
-          runtimeType == other.runtimeType &&
-          reason == other.reason;
+          other is ProzessDataStateAborted &&
+              runtimeType == other.runtimeType &&
+              reason == other.reason;
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);

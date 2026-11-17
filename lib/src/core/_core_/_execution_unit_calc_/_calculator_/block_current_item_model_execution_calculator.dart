@@ -10,7 +10,8 @@ class BlockCurrentItemExecutionCalculator {
 
     String buildInfo(String branch) {
       return "$branch, (${input.modelName}), _executionIntent: $intent, "
-          "itemDataState: ${state.toBriefInfo()}, forceReloadCurrItem: $forceReload, "
+          "itemDataState: ${state
+          .toBriefInfo()}, forceReloadCurrItem: $forceReload, "
           "isVisibleX: $isVisible, blockFormMode: ${input.formMode}";
     }
 
@@ -86,11 +87,11 @@ class BlockCurrentItemExecutionCalculator {
     else if (state.isLoadedFresh) {
       if (forceReload) {
         final bool isSetIntent =
-            intent is BlockCurrentItemModelSetCurrentItemIntent;
+        intent is BlockCurrentItemModelSetCurrentItemIntent;
         return BlockCurrentItemNextUnitOutput(
           action: BlockCurrentItemExecutionAction.setCurrentItem,
           missingIntent:
-              isSetIntent ? null : MissingIntentType.setItemAsCurrent,
+          isSetIntent ? null : MissingIntentType.setItemAsCurrent,
           preserveCurrentIntent: !isSetIntent && intent != null,
           debugInfo: buildInfo("BlockCurrentItemModel (2.1)"),
         );
@@ -143,11 +144,11 @@ class BlockCurrentItemExecutionCalculator {
       final bool shouldReload = forceReload || isVisible;
       if (shouldReload) {
         final bool isSetIntent =
-            intent is BlockCurrentItemModelSetCurrentItemIntent;
+        intent is BlockCurrentItemModelSetCurrentItemIntent;
         return BlockCurrentItemNextUnitOutput(
           action: BlockCurrentItemExecutionAction.setCurrentItem,
           missingIntent:
-              isSetIntent ? null : MissingIntentType.setItemAsCurrent,
+          isSetIntent ? null : MissingIntentType.setItemAsCurrent,
           preserveCurrentIntent: !isSetIntent && intent != null,
           debugInfo: buildInfo("BlockCurrentItemModel (3.1)"),
         );

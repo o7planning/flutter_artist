@@ -8,7 +8,8 @@ class ScalarExecutionCalculator {
 
     String buildInfo(String branch) {
       return "$branch, ${input.modelName}, _executionIntent: $intent, "
-          "dataState: ${state.toBriefInfo()}, queryHint: $hint, isVisibleX: ${input.isVisible}";
+          "dataState: ${state
+          .toBriefInfo()}, queryHint: $hint, isVisibleX: ${input.isVisible}";
     }
 
     // =========================================================================
@@ -33,7 +34,7 @@ class ScalarExecutionCalculator {
         return ScalarNextUnitOutput(
           action: ScalarExecutionAction.query,
           missingIntent:
-              isQueryIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isQueryIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isQueryIntent && intent != null,
           debugInfo: buildInfo("Scalar (2.1)"),
         );
@@ -57,7 +58,7 @@ class ScalarExecutionCalculator {
         return ScalarNextUnitOutput(
           action: ScalarExecutionAction.query,
           missingIntent:
-              isQueryIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isQueryIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isQueryIntent && intent != null,
           debugInfo: buildInfo("Scalar (3.1)"),
         );
@@ -87,7 +88,7 @@ class ScalarExecutionCalculator {
         return ScalarNextUnitOutput(
           action: ScalarExecutionAction.query,
           missingIntent:
-              isQueryIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isQueryIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isQueryIntent && intent != null,
           debugInfo: buildInfo("Scalar (4.1)"),
         );
@@ -115,7 +116,7 @@ class ScalarExecutionCalculator {
             action: ScalarExecutionAction.loadExtraData,
             debugInfo: buildInfo("Scalar (4.2.4)"),
           );
-        } else if (intent is ScalarClearIntent) {
+        } else if (intent is ScalarClearValueIntent) {
           return ScalarNextUnitOutput(
             action: ScalarExecutionAction.clear,
             debugInfo: buildInfo("Scalar (4.2.5)"),

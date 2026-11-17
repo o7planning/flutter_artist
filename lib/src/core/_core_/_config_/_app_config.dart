@@ -45,7 +45,8 @@ class EffectiveAppConfig {
     required FlutterArtistLoginLogoutAdapter loginLogoutAdapter,
     required FlutterArtistNotificationAdapter? notificationAdapter,
     required FlutterArtistGlobalDataAdapter globalDataAdapter,
-  })  : _updateLocale = updateLocale,
+  })
+      : _updateLocale = updateLocale,
         _registerActivities = registerActivities,
         _registerShelves = registerShelves,
         _showDebugNetworkInspector = showDebugNetworkInspector,
@@ -60,7 +61,7 @@ class EffectiveAppConfig {
       appName: config.appName,
       // Deep copy or freeze the list to prevent external mutations
       authorizedSessionEstablishers:
-          Set.unmodifiable(config.authorizedSessionEstablishers()),
+      Set.unmodifiable(config.authorizedSessionEstablishers()),
       projectionFamilies: List.unmodifiable(config.projectionFamilies()),
       additionalThemes: List.unmodifiable(config.additionalThemes()),
       garbageCollectionInterval: config.garbageCollectionInterval,

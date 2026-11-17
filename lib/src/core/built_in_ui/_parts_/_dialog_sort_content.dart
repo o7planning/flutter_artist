@@ -66,14 +66,14 @@ class DialogSortContentState extends State<DialogSortContent> {
             key: ValueKey('dialog_item_${criterion.criterionName}'),
             onTap: canToggle
                 ? () {
-                    setState(() {
-                      criterion.updateDirectionIfCopied(
-                        isActive
-                            ? null
-                            : (criterion.initialDirection ?? SortDirection.asc),
-                      );
-                    });
-                  }
+              setState(() {
+                criterion.updateDirectionIfCopied(
+                  isActive
+                      ? null
+                      : (criterion.initialDirection ?? SortDirection.asc),
+                );
+              });
+            }
                 : null,
             leading: Tooltip(
               message: isActive ? 'Active' : 'Non-active',
@@ -84,15 +84,15 @@ class DialogSortContentState extends State<DialogSortContent> {
                   activeTrackColor: SortPanelHelper.getTextColor(context, true),
                   onChanged: canToggle
                       ? (val) {
-                          setState(() {
-                            criterion.updateDirectionIfCopied(
-                              val
-                                  ? (criterion.initialDirection ??
-                                      SortDirection.asc)
-                                  : null,
-                            );
-                          });
-                        }
+                    setState(() {
+                      criterion.updateDirectionIfCopied(
+                        val
+                            ? (criterion.initialDirection ??
+                            SortDirection.asc)
+                            : null,
+                      );
+                    });
+                  }
                       : null,
                 ),
               ),

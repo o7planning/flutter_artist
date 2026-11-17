@@ -1,9 +1,9 @@
 part of '../core.dart';
 
 class _ProcessedQueryResult<
-    ID extends Comparable, //
-    ITEM extends Identifiable<ID>,
-    FILTER_CRITERIA extends FilterCriteria> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+FILTER_CRITERIA extends FilterCriteria> {
   final Comparable? parentBlockCurrentItemId;
   final FilterCriteriaSnapshot<FILTER_CRITERIA>? usedXFilterCriteria;
   final Pageable? usedPageable;

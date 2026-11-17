@@ -24,11 +24,12 @@ class _LoggedInUserUiComponents extends _UiComponents {
 
     if (withLoggedInUserView) {
       for (final _ContextProviderViewState ws
-          in _loggedInUserWidgetStates.keys) {
+      in _loggedInUserWidgetStates.keys) {
         if (ws.mounted) {
           final bool isVisible = _loggedInUserWidgetStates[ws] ?? false;
           if (!activeOnly || isVisible) {
-            ret[ws] = XState().._setShowing(isVisible);
+            ret[ws] = XState()
+              .._setShowing(isVisible);
           }
         }
       }
@@ -65,7 +66,11 @@ class _LoggedInUserUiComponents extends _UiComponents {
     final List<_ContextProviderViewState> list = [
       ..._loggedInUserWidgetStates.keys,
     ];
-    return list.map((v) => v.faRoute).nonNulls.toList().toSet();
+    return list
+        .map((v) => v.faRoute)
+        .nonNulls
+        .toList()
+        .toSet();
   }
 
   // ***************************************************************************
@@ -85,7 +90,7 @@ class _LoggedInUserUiComponents extends _UiComponents {
   // OLD: hasActiveUiComponent
   bool hasVisibleViews() {
     for (final _ContextProviderViewState widgetState
-        in _loggedInUserWidgetStates.keys) {
+    in _loggedInUserWidgetStates.keys) {
       if (!widgetState.mounted) {
         continue;
       }
@@ -104,7 +109,7 @@ class _LoggedInUserUiComponents extends _UiComponents {
   // OLD: updateAllUiComponents
   void refreshAllViews() {
     for (final _ContextProviderViewState widgetState
-        in _loggedInUserWidgetStates.keys) {
+    in _loggedInUserWidgetStates.keys) {
       if (widgetState.mounted) {
         widgetState.refreshState();
       }

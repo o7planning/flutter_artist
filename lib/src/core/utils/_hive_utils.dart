@@ -3,19 +3,19 @@ part of '__utils.dart';
 class HiveUtils {
   static Future<Box<DateTime>> openHiveBoxDateTime() async {
     var box =
-        await Hive.openBox<DateTime>('_flutter_artist_hive_box_datetime_');
+    await Hive.openBox<DateTime>('_flutter_artist_hive_box_datetime_');
     return box;
   }
 
   static Future<Box<String>> openHiveBoxNotification() async {
     var box =
-        await Hive.openBox<String>('_flutter_artist_hive_notification_box_');
+    await Hive.openBox<String>('_flutter_artist_hive_notification_box_');
     return box;
   }
 
   static Future<Box<String>> openHiveBoxLoggedInUser() async {
     var box =
-        await Hive.openBox<String>('_flutter_artist_hive_logged_in_user_box_');
+    await Hive.openBox<String>('_flutter_artist_hive_logged_in_user_box_');
     return box;
   }
 

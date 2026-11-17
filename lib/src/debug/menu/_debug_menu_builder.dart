@@ -31,7 +31,10 @@ class DebugMenuBuilder {
         if (hasLogs)
           _buildPopupMenuItem(
             iconData: FaIconConstants.errorIconData,
-            iconColor: Theme.of(context).colorScheme.error,
+            iconColor: Theme
+                .of(context)
+                .colorScheme
+                .error,
             title: 'Log Viewer',
             trainingTooltip: null,
             onTap: () {
@@ -140,14 +143,14 @@ class DebugMenuBuilder {
         trailing: trainingIconData == null
             ? null
             : IconButton(
-                icon: Icon(
-                  trainingIconData,
-                  size: menuItemIconSize,
-                  color: trainingIconColor,
-                ),
-                tooltip: trainingTooltip,
-                onPressed: trainingCallback,
-              ),
+          icon: Icon(
+            trainingIconData,
+            size: menuItemIconSize,
+            color: trainingIconColor,
+          ),
+          tooltip: trainingTooltip,
+          onPressed: trainingCallback,
+        ),
         title: SizedBox(
           width: 180,
           child: Text(

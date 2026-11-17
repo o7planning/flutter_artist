@@ -20,7 +20,7 @@ class DownloadHelperImpl implements DownloadHelper {
     final anchor = web.HTMLAnchorElement()
       ..href = url
       ..setAttribute('download', fileName)
-      // Programmatically clicks the anchor to trigger download
+    // Programmatically clicks the anchor to trigger download
       ..click();
 
     web.URL.revokeObjectURL(anchor.href);

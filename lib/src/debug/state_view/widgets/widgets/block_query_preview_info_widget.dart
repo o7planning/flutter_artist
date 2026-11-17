@@ -45,6 +45,7 @@ class BlockQueryPreviewInfoWidget extends BaseInfoWidget {
 
   @override
   String getText() {
-    return "${block.debug.performQueryCount} / ${block.debug.performQueryByItemIdsCount}";
+    return "${block.debug.performQueryCount} / ${block.debug
+        .performQueryByItemIdsCount}";
   }
 }

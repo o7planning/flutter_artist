@@ -53,36 +53,23 @@ class _ProzessMnemonicHandler {
         return KeyEventResult.handled;
 
       case MnemonicShortcut.moveToPreviousStage:
-        if (prozess.canMoveToPreviousStage()) {
-          prozess.moveToPreviousStage();
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
+        prozess.moveToPreviousStage();
+        return KeyEventResult.handled;
 
       case MnemonicShortcut.moveToNextStage:
-        if (prozess.canMoveToNextStage()) {
-          prozess.moveToNextStage();
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
+        prozess.moveToNextStage();
+        return KeyEventResult.handled;
 
       case MnemonicShortcut.restartAll:
         prozess.restart();
         return KeyEventResult.handled;
 
       case MnemonicShortcut.restart:
-      case MnemonicShortcut.refresh:
-        if (prozess.checkBeforeViewingStageRestart().yes) {
-          prozess.restartViewingStage();
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
+        prozess.restartViewingStage();
+        return KeyEventResult.handled;
 
       case MnemonicShortcut.submit:
       case MnemonicShortcut.save:
-        if (!prozess.checkBeforeViewingStageSubmit(checkValidate: false).yes) {
-          return KeyEventResult.ignored;
-        }
         () async {
           final result = await prozess.submitViewingStage();
           final NavigationIntent? intent =
@@ -98,19 +85,12 @@ class _ProzessMnemonicHandler {
         return KeyEventResult.handled;
 
       case MnemonicShortcut.reset:
-        final stageForm = prozess.viewingStage?.formModel;
-        if (stageForm != null && stageForm.isDirty()) {
-          stageForm.resetForm();
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
+        prozess.resetViewingStageForm();
+        return KeyEventResult.handled;
 
-      case MnemonicShortcut.debugForm:
-        if (prozess.checkBeforeShowFormInfo().yes) {
-          prozess.showViewingStageFormModelInspectorDialog();
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
+      case MnemonicShortcut.debugFormModel:
+        prozess.showDebugViewingStageFormModelInspectorDialog();
+        return KeyEventResult.handled;
 
       case MnemonicShortcut.debugInspector:
         prozess.showDebugContextDataViewerDialog(context);

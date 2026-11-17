@@ -34,8 +34,8 @@ enum CurrentItemTransitionTrigger {
 /// captured throughout an execution lifecycle.
 @immutable
 sealed class BlockOperationStep<
-    ID extends Comparable, //
-    ITEM extends Identifiable<ID>> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>> {
   final DateTime timestamp;
   final String description;
 
@@ -49,8 +49,8 @@ sealed class BlockOperationStep<
 
 /// 1. EVICTION: An item was removed or discarded from in-memory management.
 final class ItemEvictionStep<
-    ID extends Comparable, //
-    ITEM extends Identifiable<ID>> extends BlockOperationStep<ID, ITEM> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>> extends BlockOperationStep<ID, ITEM> {
   final ITEM item;
   final ItemEvictionReason reason;
   final ErrorInfo? errorInfo;
@@ -60,14 +60,14 @@ final class ItemEvictionStep<
     required this.reason,
     this.errorInfo,
   }) : super(
-          description: 'Evicted item (${reason.name}): $item',
-        );
+    description: 'Evicted item (${reason.name}): $item',
+  );
 }
 
 /// 2. TRANSITION: Current representative item shifted or was assigned.
 final class CurrentItemTransitionStep<
-    ID extends Comparable, //
-    ITEM extends Identifiable<ID>> extends BlockOperationStep<ID, ITEM> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>> extends BlockOperationStep<ID, ITEM> {
   final ITEM? previousItem;
   final ITEM? candidateItem;
   final ITEM? finalItem;
@@ -79,15 +79,15 @@ final class CurrentItemTransitionStep<
     required this.finalItem,
     required this.trigger,
   }) : super(
-          description:
-              'Current shifted from $previousItem to $finalItem via ${trigger.name}',
-        );
+    description:
+    'Current shifted from $previousItem to $finalItem via ${trigger.name}',
+  );
 }
 
 /// 3. FAILURE: A localized error occurred on an item without terminating the entire queue.
 final class ItemOperationFailedStep<
-    ID extends Comparable, //
-    ITEM extends Identifiable<ID>> extends BlockOperationStep<ID, ITEM> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>> extends BlockOperationStep<ID, ITEM> {
   final ITEM? item;
   final String operation;
   final ErrorInfo errorInfo;
@@ -97,15 +97,15 @@ final class ItemOperationFailedStep<
     required this.operation,
     required this.errorInfo,
   }) : super(
-          description:
-              'Operation "$operation" failed on $item: ${errorInfo.errorMessage}',
-        );
+    description:
+    'Operation "$operation" failed on $item: ${errorInfo.errorMessage}',
+  );
 }
 
 /// 4. CASCADE: Downstream child nodes received a cascading eviction/reset.
 final class CascadedEvictionStep<
-    ID extends Comparable, //
-    ITEM extends Identifiable<ID>> extends BlockOperationStep<ID, ITEM> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>> extends BlockOperationStep<ID, ITEM> {
   final String childBlockName;
   final BlockDataState targetState;
 
@@ -113,15 +113,15 @@ final class CascadedEvictionStep<
     required this.childBlockName,
     required this.targetState,
   }) : super(
-          description:
-              'Cascaded child "$childBlockName" to state ${targetState.name}',
-        );
+    description:
+    'Cascaded child "$childBlockName" to state ${targetState.name}',
+  );
 }
 
 /// 5. FOOTPRINT: Batch or backend side-effect impact footprint recorded for bulk operations.
 final class BackendOperationFootprintStep<
-    ID extends Comparable, //
-    ITEM extends Identifiable<ID>> extends BlockOperationStep<ID, ITEM> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>> extends BlockOperationStep<ID, ITEM> {
   final String actionName;
   final List<ID> effectedItemIds;
   final BlockViewportSyncStrategy resolvedSyncStrategy;
@@ -131,7 +131,8 @@ final class BackendOperationFootprintStep<
     required this.effectedItemIds,
     required this.resolvedSyncStrategy,
   }) : super(
-          description:
-              'Action "$actionName" affected ${effectedItemIds.length} items using strategy ${resolvedSyncStrategy.name}',
-        );
+    description:
+    'Action "$actionName" affected ${effectedItemIds
+        .length} items using strategy ${resolvedSyncStrategy.name}',
+  );
 }

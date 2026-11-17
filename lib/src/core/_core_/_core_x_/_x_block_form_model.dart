@@ -1,13 +1,13 @@
 part of '../core.dart';
 
 class XBlockFormModel<
-    ID extends Comparable, //
-    ITEM_DETAIL extends Identifiable<ID>> {
+ID extends Comparable, //
+ITEM_DETAIL extends Identifiable<ID>> {
   XShelf get xShelf => xBlockCurrentItemModel.xBlock.xShelf;
 
   final BlockFormModel formModel;
   late final XBlockCurrentItemModel<ID, Identifiable<ID>, ITEM_DETAIL>
-      xBlockCurrentItemModel;
+  xBlockCurrentItemModel;
   final FormPatch? formPatch;
 
   int get xModuleId => xShelf.xModuleId;
@@ -24,7 +24,6 @@ class XBlockFormModel<
   FormModelExecutionIntent? _stashedIntent;
 
   FormModelExecutionIntent? _executionIntent;
-
 
 
   ///
@@ -45,7 +44,6 @@ class XBlockFormModel<
       _formLoadHint = forceType;
     }
   }
-
 
 
   // ***************************************************************************
@@ -79,12 +77,12 @@ class XBlockFormModel<
   // ***************************************************************************
 
   FormModelPatchFormFieldsIntent
-      _createAndSetFormModelExecutionIntentPatchFormFields<
-          FORM_PATCH extends FormPatch>({
+  _createAndSetFormModelExecutionIntentPatchFormFields<
+  FORM_PATCH extends FormPatch>({
     required FORM_PATCH formPatch,
   }) {
     final executionIntent =
-        FormModelPatchFormFieldsIntent(formPatch: formPatch);
+    FormModelPatchFormFieldsIntent(formPatch: formPatch);
     _executionIntent = executionIntent;
     return executionIntent;
   }
@@ -171,7 +169,7 @@ class XBlockFormModel<
           info: finalDebugInfo,
         );
       case BlockFormExecutionAction.none:
-      return NxtExecutionUnit.no(
+        return NxtExecutionUnit.no(
           debug: debug,
           info: finalDebugInfo,
         );

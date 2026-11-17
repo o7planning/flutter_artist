@@ -63,9 +63,9 @@ final class TaskDataStatePending extends TaskDataState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TaskDataStatePending &&
-          runtimeType == other.runtimeType &&
-          reason == other.reason;
+          other is TaskDataStatePending &&
+              runtimeType == other.runtimeType &&
+              reason == other.reason;
 
   @override
   int get hashCode => Object.hash(runtimeType, reason);
@@ -87,7 +87,8 @@ sealed class TaskPendingReason {
 
   bool get isFailed => this is TaskPendingReasonFailed;
 
-  TaskErrorInfo? get errorInfo => switch (this) {
+  TaskErrorInfo? get errorInfo =>
+      switch (this) {
         TaskPendingReasonFailed(:final errorInfo) => errorInfo,
         _ => null,
       };
@@ -127,9 +128,9 @@ final class TaskPendingReasonFailed extends TaskPendingReason {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TaskPendingReasonFailed &&
-          runtimeType == other.runtimeType &&
-          errorInfo == other.errorInfo;
+          other is TaskPendingReasonFailed &&
+              runtimeType == other.runtimeType &&
+              errorInfo == other.errorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, errorInfo);
@@ -189,9 +190,9 @@ final class TaskDataStateLoadedStale extends TaskDataStateLoaded {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TaskDataStateLoadedStale &&
-          runtimeType == other.runtimeType &&
-          staleErrorInfo == other.staleErrorInfo;
+          other is TaskDataStateLoadedStale &&
+              runtimeType == other.runtimeType &&
+              staleErrorInfo == other.staleErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, staleErrorInfo);
@@ -213,12 +214,12 @@ sealed class TaskDataStateSubmissionAttempted extends TaskDataState {
 }
 
 /// Task completed execution successfully, yielding transaction results.
-final class TaskDataStateCompleted
-    extends TaskDataStateSubmissionAttempted {
+final class TaskDataStateCompleted extends TaskDataStateSubmissionAttempted {
   const TaskDataStateCompleted();
 
   @override
   String get name => "submissionAttempted + completed";
+
   @override
   TaskErrorInfo? get errorInfo => null;
 
@@ -254,9 +255,9 @@ final class TaskDataStateSubmissionFailed
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TaskDataStateSubmissionFailed &&
-          runtimeType == other.runtimeType &&
-          submissionErrorInfo == other.submissionErrorInfo;
+          other is TaskDataStateSubmissionFailed &&
+              runtimeType == other.runtimeType &&
+              submissionErrorInfo == other.submissionErrorInfo;
 
   @override
   int get hashCode => Object.hash(runtimeType, submissionErrorInfo);

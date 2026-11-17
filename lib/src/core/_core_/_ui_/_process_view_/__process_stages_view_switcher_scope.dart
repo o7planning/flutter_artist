@@ -34,5 +34,5 @@ class _StageFormViewSwitcherScope extends InheritedWidget {
   @override
   bool updateShouldNotify(_StageFormViewSwitcherScope oldWidget) =>
       oldWidget.screenNavigationContext != screenNavigationContext ||
-      oldWidget.circularFocusTraversal != circularFocusTraversal;
+          oldWidget.circularFocusTraversal != circularFocusTraversal;
 }

@@ -9,7 +9,9 @@ abstract interface class FormHost {
   /// but not a sufficient condition, for the form to be enabled and interactive.
   bool isStateReadyForForm();
 
-  Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo();
+  Actionable<ShowFormModelInspectorPrecheck>
+  checkBeforeShowFormModelInspector();
 
-  Future<Actionable<ShowFormInfoPrecheck>> showDebugFormModelInspectorDialog();
+  Future<Actionable<ShowFormModelInspectorPrecheck>>
+  showDebugFormModelInspectorDialog();
 }

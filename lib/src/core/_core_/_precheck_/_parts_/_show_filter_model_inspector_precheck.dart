@@ -1,27 +1,27 @@
 part of '../__precheck.dart';
 
-/// Precheck enumeration for showing form debug information operations.
-enum ShowFormInfoPrecheck implements Precheck {
-  /// Operation aborted because no form model is configured.
-  noForm(
-    precheckCode: PrecheckCode.noForm,
-    message: "Cannot show form info",
-    details: ["No form model is configured for this component."],
+/// Precheck enumeration for showing full FilterModel debug inspector operations.
+enum ShowFilterModelInspectorPrecheck implements Precheck {
+  /// Operation aborted because no filter model is configured.
+  noFilterModel(
+    precheckCode: PrecheckCode.noFilterModel,
+    message: "Cannot show filter model inspector",
+    details: ["No filter model is configured for this component."],
   ),
 
   /// Operation aborted because no user is currently logged in.
   noLoggedInUser(
     precheckCode: PrecheckCode.noLoggedInUser,
-    message: "Cannot show form info",
+    message: "Cannot show filter model inspector",
     details: ["No user is currently logged in. Authentication required."],
   ),
 
   /// Operation aborted because the logged-in user lacks system privileges.
   userIsNotSystemUser(
     precheckCode: PrecheckCode.userIsNotSystemUser,
-    message: "Cannot show form info",
+    message: "Cannot show filter model inspector",
     details: [
-      "Insufficient permissions. System user privileges are required to view raw form data."
+      "Insufficient permissions. System user privileges are required to inspect the FilterModel."
     ],
   );
 
@@ -34,7 +34,7 @@ enum ShowFormInfoPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const ShowFormInfoPrecheck({
+  const ShowFilterModelInspectorPrecheck({
     required this.precheckCode,
     required this.message,
     required this.details,

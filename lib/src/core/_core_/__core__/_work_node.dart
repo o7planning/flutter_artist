@@ -1,10 +1,11 @@
 part of '../core.dart';
 
 abstract class WorkNode<
-    INIT_DATA extends Object, //
-    RESULT_DATA extends Object, //
-    FORM_PATCH extends FormPatch,
-    FORM_OUTPUT extends FormOutput> extends _Core implements FormHost {
+INIT_DATA extends Object, //
+RESULT_DATA extends Object, //
+FORM_PATCH extends FormPatch,
+FORM_OUTPUT extends FormOutput> extends _Core
+    implements FormHost {
   final String name;
   final String? description;
 

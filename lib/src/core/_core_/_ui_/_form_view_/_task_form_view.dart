@@ -1,12 +1,12 @@
 part of '../../core.dart';
 
 abstract class TaskFormView<
-    TASK_FORM_MODEL extends TaskFormModel<
-        TaskInitData, //
-        TaskResultData,
-        FormPatch,
-        FormOutput,
-        AdditionalFormRelatedData>> extends StatelessWidget {
+TASK_FORM_MODEL extends TaskFormModel<
+    TaskInitData, //
+    TaskResultData,
+    FormPatch,
+    FormOutput,
+    AdditionalFormRelatedData>> extends StatelessWidget {
   final TASK_FORM_MODEL formModel;
   final TaskFormViewConfig config;
 

@@ -31,7 +31,8 @@ class ActiveInfoWidget extends BaseInfoWidget {
 
   @override
   String getText() {
-    return "${activeUiComponentName != null} / ${xActiveUiComponentName != null}";
+    return "${activeUiComponentName != null} / ${xActiveUiComponentName !=
+        null}";
   }
 
   @override
@@ -39,8 +40,8 @@ class ActiveInfoWidget extends BaseInfoWidget {
     return activeUiComponentName != null
         ? "Active UI: $activeUiComponentName"
         : xActiveUiComponentName != null
-            ? "Active UI: $xActiveUiComponentName"
-            : "";
+        ? "Active UI: $xActiveUiComponentName"
+        : "";
   }
 
   @override

@@ -28,8 +28,8 @@ class DialogSortPanel<ITEM extends Object> extends SortPanel<ITEM>
           title: Text(
             style.title,
             style: style.getTextStyle(context, false).copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+              fontWeight: FontWeight.bold,
+            ),
           ),
           constraints: BoxConstraints(maxWidth: style.dialogMaxWidth),
           contentPadding: const EdgeInsets.symmetric(vertical: 8),
@@ -118,8 +118,8 @@ class DialogSortPanel<ITEM extends Object> extends SortPanel<ITEM>
             Text(
               style.title,
               style: style.getTextStyle(context, hasActiveSort).copyWith(
-                    color: SortPanelHelper.getTextColor(context, hasActiveSort),
-                  ),
+                color: SortPanelHelper.getTextColor(context, hasActiveSort),
+              ),
             ),
           ],
         ),

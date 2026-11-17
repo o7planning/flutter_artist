@@ -1,4 +1,4 @@
-part of '../../core.dart';
+part of '../core.dart';
 
 /// Global pointer and execution guard that preserves active region focus when
 /// clicking non-focusable regions (e.g., [BlockItemsView] with
@@ -33,9 +33,9 @@ class _GlobalFocusGuard {
       if (activeRegion != null) {
         _lastValidRegion = activeRegion;
         _lastLeafFocusNode =
-            (primary != null && primary != activeRegion.focusNode)
-                ? primary
-                : null;
+        (primary != null && primary != activeRegion.focusNode)
+            ? primary
+            : null;
         _lastLeafOrdinalIndex = _resolveOrdinalIndex(activeRegion, primary);
         _pointerDownCaptured = true;
       } else {
@@ -93,21 +93,17 @@ class _GlobalFocusGuard {
     });
   }
 
-  static int? _resolveOrdinalIndex(
-    _FocusableViewRegionState region,
-    FocusNode? target,
-  ) {
+  static int? _resolveOrdinalIndex(_FocusableViewRegionState region,
+      FocusNode? target,) {
     if (target == null || target == region.focusNode) return null;
     final List<FocusNode> nodes = region.getStableDescendantNodes();
     final int idx = nodes.indexOf(target);
     return idx >= 0 ? idx : null;
   }
 
-  static void _tryRestoreFocus(
-    _FocusableViewRegionState candidateRegion,
-    FocusNode? candidateLeaf,
-    int? candidateIndex,
-  ) {
+  static void _tryRestoreFocus(_FocusableViewRegionState candidateRegion,
+      FocusNode? candidateLeaf,
+      int? candidateIndex,) {
     // 1. Do not interfere if primaryFocus is currently held by an actual leaf widget
     //    (e.g., another TextField or a clickToFocus region).
     //    When focus drops due to unfocusing or widget rebuilds, Flutter sets

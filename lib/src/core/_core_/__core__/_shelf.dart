@@ -159,7 +159,8 @@ abstract class Shelf extends FeatureModule {
     if (__scalarMap.containsKey(scalar.name)) {
       throw AppFatalErrorUtils.___registerError(
           "Duplicate scalar '${scalar.name}' in '${getClassName(this)}'\n"
-          "Double-check ${getClassName(this)}.defineShelfStructure() method");
+              "Double-check ${getClassName(
+              this)}.defineShelfStructure() method");
     } else {
       __scalarMap[scalar.name] = scalar;
     }
@@ -167,11 +168,13 @@ abstract class Shelf extends FeatureModule {
     scalar.shelf = this;
     if (scalar.registeredFilterModelName != null) {
       FilterModel? filterModel =
-          _shelfStruct.filterModels[scalar.registeredFilterModelName!];
+      _shelfStruct.filterModels[scalar.registeredFilterModelName!];
       if (filterModel == null) {
         throw AppFatalErrorUtils.___registerError(
-            "FilterModel not found '${scalar.registeredFilterModelName}' in '${getClassName(this)}'\n"
-            "Double-check ${getClassName(this)}.defineShelfStructure() method");
+            "FilterModel not found '${scalar
+                .registeredFilterModelName}' in '${getClassName(this)}'\n"
+                "Double-check ${getClassName(
+                this)}.defineShelfStructure() method");
       }
       //
       //
@@ -183,15 +186,18 @@ abstract class Shelf extends FeatureModule {
       if (filterPatchBF == filterPatchBase) {
         throw AppFatalErrorUtils.___registerError(
             "You need to create your own class that extends the '$filterPatchBase' class \n"
-            "or use the 'EmptyFilterPatch' class to use in the '${getClassName(filterModel)}' declaration \n\n"
-            " >> Currently, ${getClassName(filterModel)}<FILTER_PATCH> = <$filterPatchBF>");
+                "or use the 'EmptyFilterPatch' class to use in the '${getClassName(
+                filterModel)}' declaration \n\n"
+                " >> Currently, ${getClassName(
+                filterModel)}<FILTER_PATCH> = <$filterPatchBF>");
       }
       //
       if (filterPatchBF != filterPatchB) {
         throw AppFatalErrorUtils.___registerError(
             "The Scalar and its FilterModel must have the same FILTER_PATCH type.\n\n"
-            " >> ${getClassName(scalar)}<FILTER_PATCH> = <$filterPatchB> \n"
-            " >> ${getClassName(filterModel)}<FILTER_PATCH> = <$filterPatchBF>");
+                " >> ${getClassName(scalar)}<FILTER_PATCH> = <$filterPatchB> \n"
+                " >> ${getClassName(
+                filterModel)}<FILTER_PATCH> = <$filterPatchBF>");
       }
       // -----------------
       const Type filterCriteriaType = FilterCriteria;
@@ -202,15 +208,18 @@ abstract class Shelf extends FeatureModule {
       if (filterCriteriaBF == filterCriteriaBase) {
         throw AppFatalErrorUtils.___registerError(
             "You need to create your own class that extends from '$filterCriteriaBase' "
-            "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
-            " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+                "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
+                " >> Currently, ${getClassName(
+                filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       if (filterCriteriaBF != filterCriteriaB) {
         throw AppFatalErrorUtils.___registerError(
             "The Scalar and its Filter-Model must have the same FILTER_CRITERIA type. \n"
-            " >> ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
-            " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+                " >> ${getClassName(
+                scalar)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
+                " >> ${getClassName(
+                filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       filterModel._scalars.add(scalar);
@@ -231,9 +240,11 @@ abstract class Shelf extends FeatureModule {
       //
       if (filterCriteriaB != filterCriteriaEmpty) {
         throw AppFatalErrorUtils.___registerError(
-            "Filter-Criteria of '${getClassName(scalar)}' scalar must be '$filterCriteriaEmpty' "
-            "because this scalar does not have a FILTER_MODEL.\n\n"
-            " >> Currently, ${getClassName(scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
+            "Filter-Criteria of '${getClassName(
+                scalar)}' scalar must be '$filterCriteriaEmpty' "
+                "because this scalar does not have a FILTER_MODEL.\n\n"
+                " >> Currently, ${getClassName(
+                scalar)}<FILTER_CRITERIA> = <$filterCriteriaB>");
       }
     }
     //
@@ -249,7 +260,8 @@ abstract class Shelf extends FeatureModule {
     if (__blockMap.containsKey(block.name)) {
       throw AppFatalErrorUtils.___registerError(
           "Duplicate block '${block.name}' in '${getClassName(this)}'\n"
-          "Double-check ${getClassName(this)}.defineShelfStructure() method");
+              "Double-check ${getClassName(
+              this)}.defineShelfStructure() method");
     } else {
       __blockMap[block.name] = block;
       if (block.formModel != null) {
@@ -260,11 +272,13 @@ abstract class Shelf extends FeatureModule {
     block.shelf = this;
     if (block.registeredFilterModelName != null) {
       FilterModel? filterModel =
-          _shelfStruct.filterModels[block.registeredFilterModelName!];
+      _shelfStruct.filterModels[block.registeredFilterModelName!];
       if (filterModel == null) {
         throw AppFatalErrorUtils.___registerError(
-            "FilterModel not found '${block.registeredFilterModelName}' in '${getClassName(this)}'\n"
-            "Double-check ${getClassName(this)}.defineShelfStructure() method");
+            "FilterModel not found '${block
+                .registeredFilterModelName}' in '${getClassName(this)}'\n"
+                "Double-check ${getClassName(
+                this)}.defineShelfStructure() method");
       }
       //
       //
@@ -276,15 +290,18 @@ abstract class Shelf extends FeatureModule {
       if (filterPatchBF == filterPatchBase) {
         throw AppFatalErrorUtils.___registerError(
             "You need to create your own class that extends the '$filterPatchBase' class \n"
-            "or use the 'EmptyFilterPatch' class to use in the '${getClassName(filterModel)}' declaration \n\n"
-            " >> Currently, ${getClassName(filterModel)}<FILTER_PATCH> = <$filterPatchBF>");
+                "or use the 'EmptyFilterPatch' class to use in the '${getClassName(
+                filterModel)}' declaration \n\n"
+                " >> Currently, ${getClassName(
+                filterModel)}<FILTER_PATCH> = <$filterPatchBF>");
       }
       //
       if (filterPatchBF != filterPatchB) {
         throw AppFatalErrorUtils.___registerError(
             "The Block and its FilterModel must have the same FILTER_PATCH type.\n\n"
-            " >> ${getClassName(block)}<FILTER_PATCH> = <$filterPatchB> \n"
-            " >> ${getClassName(filterModel)}<FILTER_PATCH> = <$filterPatchBF>");
+                " >> ${getClassName(block)}<FILTER_PATCH> = <$filterPatchB> \n"
+                " >> ${getClassName(
+                filterModel)}<FILTER_PATCH> = <$filterPatchBF>");
       }
       // -----------------
       const Type filterCriteriaType = FilterCriteria;
@@ -295,15 +312,18 @@ abstract class Shelf extends FeatureModule {
       if (filterCriteriaBF == filterCriteriaBase) {
         throw AppFatalErrorUtils.___registerError(
             "You need to create your own class that extends from '$filterCriteriaBase' "
-            "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
-            " >> Currently, ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+                "as FILTER_CRITERIA for '${getClassName(filterModel)}'\n\n"
+                " >> Currently, ${getClassName(
+                filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       if (filterCriteriaBF != filterCriteriaB) {
         throw AppFatalErrorUtils.___registerError(
             "The Block and its Filter-Model must have the same FILTER_CRITERIA type. \n"
-            " >> ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
-            " >> ${getClassName(filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
+                " >> ${getClassName(
+                block)}<FILTER_CRITERIA> = <$filterCriteriaB> \n"
+                " >> ${getClassName(
+                filterModel)}<FILTER_CRITERIA> = <$filterCriteriaBF>");
       }
       //
       filterModel._blocks.add(block);
@@ -324,9 +344,11 @@ abstract class Shelf extends FeatureModule {
       //
       if (filterCriteriaB != filterCriteriaEmpty) {
         throw AppFatalErrorUtils.___registerError(
-            "Filter-Criteria of '${getClassName(block)}' block must be '$filterCriteriaEmpty' "
-            "because this block does not have a FILTER_MODEL.\n\n"
-            " >> Currently, ${getClassName(block)}<FILTER_CRITERIA> = <$filterCriteriaB>");
+            "Filter-Criteria of '${getClassName(
+                block)}' block must be '$filterCriteriaEmpty' "
+                "because this block does not have a FILTER_MODEL.\n\n"
+                " >> Currently, ${getClassName(
+                block)}<FILTER_CRITERIA> = <$filterCriteriaB>");
       }
     }
     //
@@ -337,8 +359,10 @@ abstract class Shelf extends FeatureModule {
     if (formPatchTypeStr == formPatchTypeB) {
       throw AppFatalErrorUtils.___registerError(
           "You need to create your own class that extends the '$formPatchTypeB' class \n"
-          "or use the 'EmptyFormPatch' class to use in the '${getClassName(block)}' declaration \n\n"
-          " >> Currently, ${getClassName(block)}<FORM_PATCH> = <$formPatchTypeStr>");
+              "or use the 'EmptyFormPatch' class to use in the '${getClassName(
+              block)}' declaration \n\n"
+              " >> Currently, ${getClassName(
+              block)}<FORM_PATCH> = <$formPatchTypeStr>");
     }
     //
     for (Block childBlock in block.childBlocks) {
@@ -452,7 +476,7 @@ abstract class Shelf extends FeatureModule {
     executionTrace.addInfo(
       codeId: "#002000",
       shortDesc:
-          "Find lazy model-components (block, scalar or formModel) that are in a state where they need to query or load data.",
+      "Find lazy model-components (block, scalar or formModel) that are in a state where they need to query or load data.",
     );
     //
     // Natural Query:
@@ -463,7 +487,7 @@ abstract class Shelf extends FeatureModule {
         codeId: "#002100",
         shortDesc: "Create ${debugObjHtml(xShelf)} for <b>Natural-Load</b>.",
         note:
-            "<b>XShelf</b> is a <b>RootQueueItem</b> and contains multiple <b>Execution Units</b>.",
+        "<b>XShelf</b> is a <b>RootQueueItem</b> and contains multiple <b>Execution Units</b>.",
       );
       executionTrace.addNonControllableCall(
         codeId: "#002120",
@@ -475,7 +499,7 @@ abstract class Shelf extends FeatureModule {
       executionTrace.addInfo(
         codeId: "#002160",
         shortDesc:
-            "Add ${debugObjHtml(xShelf)} (RootQueueItem) to <b>Root-Queue</b>.",
+        "Add ${debugObjHtml(xShelf)} (RootQueueItem) to <b>Root-Queue</b>.",
       );
       FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
       //
@@ -484,7 +508,7 @@ abstract class Shelf extends FeatureModule {
         caller: FlutterArtist.executor,
         methodName: "_executeExecutionUnitQueue",
         suffixShortDesc:
-            "To execute <b>RootQueueItem(s)</b> on the queue and its <b>Execution Units</b>...",
+        "To execute <b>RootQueueItem(s)</b> on the queue and its <b>Execution Units</b>...",
       );
       await FlutterArtist.executor._executeExecutionUnitQueue();
     } finally {
@@ -533,7 +557,8 @@ abstract class Shelf extends FeatureModule {
     executionTrace.addInfo(
       codeId: "#052000",
       shortDesc:
-          "Creating <b>$_XShelfShelfExternalReaction</b> for ${debugObjHtml(this)}..",
+      "Creating <b>$_XShelfShelfExternalReaction</b> for ${debugObjHtml(
+          this)}..",
     );
     //
     final XShelf xShelf = _XShelfShelfExternalReaction(
@@ -549,7 +574,7 @@ abstract class Shelf extends FeatureModule {
   }
 
   Future<ShelfDeferredEventExecutionResult>
-      executeDelayedExternalReactionExecutionUnit() async {
+  executeDelayedExternalReactionExecutionUnit() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "executeDelayedExternalReactionExecutionUnit",
@@ -568,7 +593,7 @@ abstract class Shelf extends FeatureModule {
       },
     );
     Actionable<ShelfDeferredEventExecutionPrecheck> actionable =
-        __checkBeforeExecuteDelayedExternalReaction(
+    __checkBeforeExecuteDelayedExternalReaction(
       checkBusy: checkBusyTrue,
     );
     //
@@ -598,7 +623,7 @@ abstract class Shelf extends FeatureModule {
 
   @_PrecheckPrivateMethod()
   Actionable<ShelfDeferredEventExecutionPrecheck>
-      checkBeforeExecuteDelayedExternalReaction() {
+  checkBeforeExecuteDelayedExternalReaction() {
     return __checkBeforeExecuteDelayedExternalReaction(checkBusy: true);
   }
 
@@ -606,7 +631,7 @@ abstract class Shelf extends FeatureModule {
 
   @_PrecheckPrivateMethod()
   Actionable<ShelfDeferredEventExecutionPrecheck>
-      __checkBeforeExecuteDelayedExternalReaction({
+  __checkBeforeExecuteDelayedExternalReaction({
     required bool checkBusy,
   }) {
     return ShelfDeferredEventPrecheckUtils

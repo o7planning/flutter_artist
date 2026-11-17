@@ -53,7 +53,7 @@ class XFilterModel {
   // ***************************************************************************
 
   FilterModelFilterPanelChangeIntent
-      _createAndSetFilterModelExecutionIntentPanelChange({
+  _createAndSetFilterModelExecutionIntentPanelChange({
     required Map<String, dynamic> formKeyInstantValuesInUI,
   }) {
     final executionIntent = FilterModelFilterPanelChangeIntent(
@@ -131,12 +131,12 @@ class XFilterModel {
           executionUnit: _FilterPanelChangeExecutionUnit(
             xFilterModel: this,
             executionIntent:
-                _executionIntent as FilterModelFilterPanelChangeIntent,
+            _executionIntent as FilterModelFilterPanelChangeIntent,
           ),
           info: finalDebugInfo,
         );
       case FilterExecutionAction.none:
-      return NxtExecutionUnit.no(
+        return NxtExecutionUnit.no(
           debug: debug,
           info: finalDebugInfo,
         );
@@ -160,6 +160,7 @@ class XFilterModel {
 
   @override
   String toString() {
-    return "${getClassName(filterModel)} - Queried: $loadedInSession >>> FILTER_PATCH: $filterPatch";
+    return "${getClassName(
+        filterModel)} - Queried: $loadedInSession >>> FILTER_PATCH: $filterPatch";
   }
 }

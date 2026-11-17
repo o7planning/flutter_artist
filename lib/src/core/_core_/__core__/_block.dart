@@ -5386,15 +5386,6 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckMethod()
-  Actionable<BlockClearItemsPrecheck> checkBeforeClearBlock() {
-    return __checkBeforeClearItems(
-      checkBusy: true,
-    );
-  }
-
-  // ***************************************************************************
-
-  @_PrecheckMethod()
   Actionable<BlockQuickItemUpdatePrecheck> checkBeforeQuickUpdateItem({
     required ITEM item,
     bool checkAllow = true,
@@ -5483,31 +5474,6 @@ abstract class Block<
     return blockCurrentItemModel._checkBeforeRefreshCurrentItem(
       checkBusy: true,
     );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_PrecheckMethod()
-  @override
-  Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo() {
-    return __checkBeforeShowFormInfo(formModel: formModel);
-  }
-
-  @override
-  Future<Actionable<ShowFormInfoPrecheck>>
-      showDebugFormModelInspectorDialog() async {
-    final actionable = checkBeforeShowFormInfo();
-    if (!actionable.yes) {
-      return actionable;
-    }
-    final BuildContext context = FlutterArtistCore.context;
-    await DebugFormModelInspectorDialog.show(
-      context: context,
-      locationInfo: getClassNameWithoutGenerics(this),
-      formModel: formModel!,
-    );
-    return actionable;
   }
 
   // ***************************************************************************
@@ -6342,13 +6308,67 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showDebugFilterCriteriaViewerDialog() async {
-    BuildContext context = FlutterArtistCore.context;
-    //
-    await DebugViewerDialog.openDebugFilterCriteriaInspector(
-      context: context,
-      locationInfo: '',
-      filterModel: registeredOrDefaultFilterModel,
+  @_PrecheckMethod()
+  Actionable<ShowFilterModelInspectorPrecheck>
+      checkBeforeShowFilterModelInspector() {
+    return registeredOrDefaultFilterModel.checkBeforeShowFilterModelInspector();
+  }
+
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowFilterModelInspectorPrecheck>>
+      showDebugFilterModelViewerDialog() async {
+    return await registeredOrDefaultFilterModel
+        .showDebugFilterModelViewerDialog(
+      locationInfo: getClassNameWithoutGenerics(this),
+    );
+  }
+
+  @_PrecheckMethod()
+  Actionable<ShowFilterCriteriaInspectorPrecheck>
+      checkBeforeShowFilterCriteriaInspector() {
+    return registeredOrDefaultFilterModel
+        .checkBeforeShowFilterCriteriaInspector();
+  }
+
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowFilterCriteriaInspectorPrecheck>>
+      showDebugFilterCriteriaViewerDialog() async {
+    return await registeredOrDefaultFilterModel
+        .showDebugFilterCriteriaViewerDialog(
+      locationInfo: getClassNameWithoutGenerics(this),
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @override
+  @_PrecheckMethod()
+  Actionable<ShowFormModelInspectorPrecheck>
+      checkBeforeShowFormModelInspector() {
+    if (formModel == null) {
+      return Actionable.no(
+        errCode: ShowFormModelInspectorPrecheck.noForm,
+      );
+    }
+    return formModel!.checkBeforeShowFormModelInspector();
+  }
+
+  @override
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowFormModelInspectorPrecheck>>
+      showDebugFormModelInspectorDialog() async {
+    final actionable = checkBeforeShowFormModelInspector();
+    if (!actionable.yes) {
+      final ShowFormModelInspectorPrecheck err = actionable.errCode!;
+      showErrorSnackBar(
+        message: err.message,
+        errorDetails: err.details,
+      );
+      return actionable;
+    }
+    return await formModel!.showDebugFormModelInspectorDialog(
+      locationInfo: getClassNameWithoutGenerics(this),
     );
   }
 

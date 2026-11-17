@@ -9,7 +9,7 @@ class _Executor {
   int? get executingXModuleId => __executingXModuleId;
 
   final Map<_ExecutionProgressBuilderState, bool>
-      _executionProgressViewWidgetStates = {};
+  _executionProgressViewWidgetStates = {};
 
   // ***************************************************************************
   // ***************************************************************************
@@ -52,7 +52,7 @@ class _Executor {
         try {
           while (true) {
             _ExecutionUnit? executionUnit =
-                FlutterArtist._rootQueue.getNextExecutionUnit(
+            FlutterArtist._rootQueue.getNextExecutionUnit(
               removeEmptyRootQuery: true,
             );
             //
@@ -62,7 +62,7 @@ class _Executor {
               }
               pendingEventProcessed = true;
               final Set<String> excludeModuleNames =
-                  executedModuleMap.keys.toSet();
+              executedModuleMap.keys.toSet();
               //
               FlutterArtist.desk._reactionProcessor.addReactionExecutionUnits(
                 excludeModuleNames: excludeModuleNames,
@@ -82,7 +82,8 @@ class _Executor {
               );
             }
             print(
-                "\n      >>>> EXECUTE: ${getClassNameWithoutGenerics(executionUnit)} \n");
+                "\n      >>>> EXECUTE: ${getClassNameWithoutGenerics(
+                    executionUnit)} \n");
             //
             await __executeExecutionUnit(
               executionUnit: executionUnit,
@@ -370,7 +371,7 @@ class _Executor {
       }
       // BlockCurrentItemModel Clear Current:
       else if (executionUnit
-          is _BlockCurrentItemModelClearCurrentExecutionUnit) {
+      is _BlockCurrentItemModelClearCurrentExecutionUnit) {
         await executionUnit.xBlockCurrentItemModel.blockCurrentItemModel
             ._unitClearCurrentItem(
           executionTrace: executionTrace,
@@ -381,7 +382,7 @@ class _Executor {
       }
       // BlockCurrentItemModel PrepareCreate:
       else if (executionUnit
-          is _BlockCurrentItemModelPrepareFormToCreateItemExecutionUnit) {
+      is _BlockCurrentItemModelPrepareFormToCreateItemExecutionUnit) {
         await executionUnit.xBlockCurrentItemModel.blockCurrentItemModel
             ._unitPrepareFormToCreateItem(
           executionTrace: executionTrace,
@@ -392,7 +393,7 @@ class _Executor {
       }
       // BlockCurrentItemModel Select Item as Current:
       else if (executionUnit
-          is _BlockCurrentItemModelSetItemAsCurrentExecutionUnit) {
+      is _BlockCurrentItemModelSetItemAsCurrentExecutionUnit) {
         await executionUnit.xBlockCurrentItemModel.blockCurrentItemModel
             ._unitSetItemAsCurrent(
           executionTrace: executionTrace,
@@ -439,7 +440,7 @@ class _Executor {
       }
       // Scalar Clear Value:
       else if (executionUnit is _ScalarClearExecutionUnit) {
-        await executionUnit.xScalar.scalar._unitClear(
+        await executionUnit.xScalar.scalar._unitClearValue(
           executionTrace: executionTrace,
           executionUnitType: executionUnit.executionUnitType,
           thisXScalar: executionUnit.xScalar,
@@ -478,9 +479,9 @@ class _Executor {
       bool onProgress = owner == null || executionUnitType == null
           ? false
           : state.isMatches(
-              owner: owner,
-              executionUnitType: executionUnitType,
-            );
+        owner: owner,
+        executionUnitType: executionUnitType,
+      );
       //
       state.onProgress = onProgress;
       state.refreshState(force: true);

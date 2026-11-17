@@ -13,7 +13,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_artist/src/core/_core_/_precheck_/__precheck.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart'
     hide FlutterArtistLocaleAdapter;
@@ -86,8 +86,8 @@ import '../error/form_register/form_prop_invalid_name_error.dart';
 import '_execution_unit_calc_/_calculator_/_calc.dart';
 import '_precheck_utils_/__precheck_utils.dart';
 import '_sync_/_block_sync_session_snapshot.dart';
-import '_ui_/_mnemonic_/_utils_/_data_grid_navigation_utils.dart';
-import '_ui_/_mnemonic_/_utils_/_form_focus_traversal_utils.dart';
+import '_mnemonic_/_utils_/_data_grid_navigation_utils.dart';
+import '_mnemonic_/_utils_/_form_focus_traversal_utils.dart';
 import '_utils_/block_data_state_utils.dart';
 import '_utils_/check_next_stage_utils.dart';
 import '_utils_/process_data_state_utils.dart';
@@ -574,7 +574,7 @@ part '_core_x_/_x_shelf_/_x_shelf_block_set_item_as_current.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_block_clear_items.dart';
 
-part '_core_x_/_x_shelf_/_x_shelf_scalar_clear.dart';
+part '_core_x_/_x_shelf_/_x_shelf_scalar_clear_value.dart';
 
 part '_core_x_/_x_shelf_/_x_shelf_scalar_backend_action.dart';
 
@@ -658,7 +658,7 @@ part '_gc_/_garbage_scheduler.dart';
 
 part '_globals_/_globals_manager.dart';
 
-part '_keyboard_/_focus_nav.dart';
+part '_mnemonic_/_focus_nav.dart';
 
 part '_theme_/_theme_manager.dart';
 
@@ -692,7 +692,7 @@ part '_execution_unit_result_/_block_eur/_block_clear_items_result.dart';
 
 part '_execution_unit_result_/_block_eur/_block_clear_current_item_result.dart';
 
-part '_execution_unit_result_/_scalar_eur/_scalar_clear_result.dart';
+part '_execution_unit_result_/_scalar_eur/_scalar_clear_value_result.dart';
 
 part '_execution_unit_result_/_block_eur/_block_item_creation_result.dart';
 
@@ -822,23 +822,23 @@ part '_ui_/__context_provider_view_state.dart';
 
 part '_ui_/_process_view_/__process_stages_view_switcher_scope.dart';
 
-part '_ui_/_mnemonic_/_control_mnemonic.dart';
+part '_mnemonic_/_control_mnemonic.dart';
 
-part '_ui_/_mnemonic_/_block_mnemonic_handler.dart';
+part '_mnemonic_/_handler_/_block_mnemonic_handler.dart';
 
-part '_ui_/_mnemonic_/_utils_/_region_traversal_utils.dart';
+part '_mnemonic_/_utils_/_region_traversal_utils.dart';
 
-part '_ui_/_mnemonic_/_task_mnemonic_handler.dart';
+part '_mnemonic_/_handler_/_task_mnemonic_handler.dart';
 
-part '_ui_/_mnemonic_/_prozess_mnemonic_handler.dart';
+part '_mnemonic_/_handler_/_prozess_mnemonic_handler.dart';
 
-part '_ui_/_mnemonic_/_filter_mnemonic_handler.dart';
+part '_mnemonic_/_handler_/_filter_mnemonic_handler.dart';
 
-part '_ui_/_mnemonic_/_global_focus_guard.dart';
+part '_mnemonic_/_global_focus_guard.dart';
 
-part '_ui_/_mnemonic_/_dialogs_/_keyboard_shortcuts_dialog.dart';
+part '_mnemonic_/_dialogs_/_keyboard_shortcuts_dialog.dart';
 
-part '_ui_/_mnemonic_/_mnemonic_dispatcher.dart';
+part '_mnemonic_/_mnemonic_dispatcher.dart';
 
 part '_ui_/__error_message_view.dart';
 
@@ -1265,8 +1265,8 @@ class _ScalarQueryAnnotation {
   const _ScalarQueryAnnotation();
 }
 
-class _ScalarClearAnnotation {
-  const _ScalarClearAnnotation();
+class _ScalarClearValueAnnotation {
+  const _ScalarClearValueAnnotation();
 }
 
 // ******* Scalar QuickAction (START) ******************************************

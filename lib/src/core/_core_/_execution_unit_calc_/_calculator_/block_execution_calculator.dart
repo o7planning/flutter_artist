@@ -33,7 +33,7 @@ class BlockExecutionCalculator {
         return BlockNextUnitOutput(
           action: BlockExecutionAction.query,
           missingIntent:
-              isQueryIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isQueryIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isQueryIntent && intent != null,
           debugInfo: buildInfo("Block (2.1)"),
         );
@@ -56,7 +56,7 @@ class BlockExecutionCalculator {
         return BlockNextUnitOutput(
           action: BlockExecutionAction.query,
           missingIntent:
-              isQueryIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isQueryIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isQueryIntent && intent != null,
           debugInfo: buildInfo("Block (3.1)"),
         );
@@ -86,7 +86,7 @@ class BlockExecutionCalculator {
         return BlockNextUnitOutput(
           action: BlockExecutionAction.query,
           missingIntent:
-              isQueryIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isQueryIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isQueryIntent && intent != null,
           debugInfo: buildInfo("Block (4.1)"),
         );

@@ -8,7 +8,7 @@ class NameUtils {
 
   //
   static final tildeFilterCriterionNameRegex =
-      RegExp(r'^[a-zA-Z_][a-zA-Z0-9_-]*~[a-zA-Z0-9]*$');
+  RegExp(r'^[a-zA-Z_][a-zA-Z0-9_-]*~[a-zA-Z0-9]*$');
   static final tildeSuffixRegex = RegExp(r'~[a-zA-Z0-9]*$');
 
   static bool isValidFilterCriterionName(String name) {

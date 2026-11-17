@@ -12,13 +12,11 @@ mixin SortPanelMixin {
   }
 }
 
-Widget defaultSortIcon(
-  BuildContext context,
-  SortDirection? direction,
-  bool isDragging,
-  double size,
-  Color? draggingColor,
-) {
+Widget defaultSortIcon(BuildContext context,
+    SortDirection? direction,
+    bool isDragging,
+    double size,
+    Color? draggingColor,) {
   final isActive = direction != null;
   final color = isDragging
       ? draggingColor
@@ -35,10 +33,8 @@ Widget defaultSortIcon(
   }
 }
 
-void toggleCriterion(
-  SortModel sortModel,
-  SortCriterion criterion,
-) {
+void toggleCriterion(SortModel sortModel,
+    SortCriterion criterion,) {
   sortModel.updateSortingCriterionByName(
     criterionName: criterion.criterionName,
     direction: criterion.nextDirection,

@@ -24,10 +24,11 @@ class ClassDefinitionInspectorDialog extends StatelessWidget {
   }) async {
     await showDialog(
       context: context,
-      builder: (context) => ClassDefinitionInspectorDialog(
-        title: title,
-        targetObject: targetObject,
-      ),
+      builder: (context) =>
+          ClassDefinitionInspectorDialog(
+            title: title,
+            targetObject: targetObject,
+          ),
     );
   }
 
@@ -35,7 +36,7 @@ class ClassDefinitionInspectorDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     // Derive a clean default header title if the passed title is empty.
     final String resolvedTitle =
-        title.isEmpty ? "Class Definition View" : title;
+    title.isEmpty ? "Class Definition View" : title;
 
     return FaDialog(
       titleText: resolvedTitle,

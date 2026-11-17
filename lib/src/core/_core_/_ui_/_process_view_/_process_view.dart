@@ -1,10 +1,10 @@
 part of '../../core.dart';
 
 abstract class ProzessView<
-    PROZESS extends Prozess<
-        StageEnum, //
-        ProzessInitData,
-        ProzessContextData>> extends StatelessWidget {
+PROZESS extends Prozess<
+    StageEnum, //
+    ProzessInitData,
+    ProzessContextData>> extends StatelessWidget {
   final PROZESS prozess;
   final ProzessViewConfig config;
 

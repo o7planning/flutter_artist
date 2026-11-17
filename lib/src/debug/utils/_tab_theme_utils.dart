@@ -93,15 +93,15 @@ class TabThemeUtils {
   static Color getTabTextColor(BuildContext context, TabStatus status) {
     switch (status) {
       case TabStatus.selected:
-        // Anchored core typography text value inside selected interaction contexts
+      // Anchored core typography text value inside selected interaction contexts
         return context.faColors.ink.primary;
 
       case TabStatus.hovered:
-        // Supporting accompaniment ink for focused hover states
+      // Supporting accompaniment ink for focused hover states
         return context.faColors.ink.secondary;
 
       case TabStatus.unselected:
-        // Low-contrast regular typography for idle unselected viewports
+      // Low-contrast regular typography for idle unselected viewports
         return context.faColors.ink.tertiary;
     }
   }

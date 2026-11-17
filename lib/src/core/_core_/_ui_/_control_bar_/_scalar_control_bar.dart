@@ -22,7 +22,8 @@ class ScalarControlBar extends BaseControlBar<
     super.rightItems = const [
       ScalarControlBarItem.standard(ScalarControlBarItemType.query),
       ScalarControlBarItem.standard(ScalarControlBarItemType.divider),
-      ScalarControlBarItem.standard(ScalarControlBarItemType.debugFilter),
+      ScalarControlBarItem.standard(
+          ScalarControlBarItemType.debugFilterCriteria),
     ],
   });
 
@@ -43,10 +44,9 @@ class _ScalarControlBarState extends _BaseControlBarState<
     return widget.scalar.shelf;
   }
 
-
   @override
   FocusRegionType getRegionType() {
-    return 	FocusRegionType.controlBar;
+    return FocusRegionType.controlBar;
   }
 
   @override
@@ -99,23 +99,20 @@ class _ScalarControlBarState extends _BaseControlBarState<
           onPressed: actionable.yes ? () => widget.scalar.query() : null,
         );
 
-      case ScalarControlBarItemType.debugFilter:
+      case ScalarControlBarItemType.debugFilterCriteria:
         if (!widget.config.allowDebugFilterCriteriaInspectorButton) return null;
-        bool show = widget.scalar.canShowFilterCriteria();
+        final actionable =
+        widget.scalar.checkBeforeShowFilterCriteriaInspector();
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
           tooltip: type.formatTooltip("Debug Filter Criteria Inspector"),
           iconData: FaIconConstants.filterCriteriaIconData,
           onAction: false,
-          onPressed: show
-              ? () {
-                  DebugViewerDialog.openDebugFilterCriteriaInspector(
-                    context: context,
-                    locationInfo: '',
-                    filterModel: widget.scalar.registeredOrDefaultFilterModel,
-                  );
-                }
+          onPressed: actionable.yes
+              ? () async {
+            await widget.scalar.showDebugFilterCriteriaViewerDialog();
+          }
               : null,
         );
 
@@ -129,12 +126,11 @@ class _ScalarControlBarState extends _BaseControlBarState<
           onPressed: item.onPressed == null
               ? null
               : () {
-                  item.onPressed!.call(widget.scalar, type);
-                },
+            item.onPressed!.call(widget.scalar, type);
+          },
         );
-      }
+    }
   }
-
 
   @override
   String getDebugLabel() {
@@ -151,8 +147,9 @@ class _ScalarControlBarState extends _BaseControlBarState<
       getClassNameWithoutGenerics(widget.scalar);
 
   @override
-  void addWidgetState({required bool isVisible}) => widget.scalar.ui
-      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) =>
+      widget.scalar.ui
+          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

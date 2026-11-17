@@ -61,10 +61,10 @@ class DropdownSortPanel<ITEM extends Object> extends SortPanel<ITEM>
                   Text(
                     criterion.text,
                     style:
-                        style.getTextStyle(context, isSelectedInMenu).copyWith(
-                              color: SortPanelHelper.getTextColor(
-                                  context, isSelectedInMenu),
-                            ),
+                    style.getTextStyle(context, isSelectedInMenu).copyWith(
+                      color: SortPanelHelper.getTextColor(
+                          context, isSelectedInMenu),
+                    ),
                   ),
                   const SizedBox(width: 8),
                   defaultSortIcon(

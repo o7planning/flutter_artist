@@ -1,14 +1,14 @@
 part of '../../core.dart';
 
 abstract class BlockItemsView<
-    BLOCK extends Block<
-        Comparable, //
-        Identifiable<Comparable>,
-        Identifiable<Comparable>,
-        FilterPatch,
-        FilterCriteria,
-        CreationPreset,
-        FormPatch>> extends StatelessWidget {
+BLOCK extends Block<
+    Comparable, //
+    Identifiable<Comparable>,
+    Identifiable<Comparable>,
+    FilterPatch,
+    FilterCriteria,
+    CreationPreset,
+    FormPatch>> extends StatelessWidget {
   final BLOCK block;
   final BlockItemsViewConfig config;
 

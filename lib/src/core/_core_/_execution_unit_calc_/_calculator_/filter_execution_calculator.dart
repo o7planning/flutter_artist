@@ -9,8 +9,10 @@ class FilterExecutionCalculator {
 
     String buildInfo(String branch) {
       return "$branch, ${input.modelName}, _executionIntent: $intent, "
-          "committedDataState**: ${committed.toBriefInfo()}, draftDataState: ${draft.toBriefInfo()}, "
-          "filterLoadHint: $hint, xFilterModel.loadedInSession: ${input.loadedInSession}.";
+          "committedDataState**: ${committed
+          .toBriefInfo()}, draftDataState: ${draft.toBriefInfo()}, "
+          "filterLoadHint: $hint, xFilterModel.loadedInSession: ${input
+          .loadedInSession}.";
     }
 
     if (input.loadedInSession) {
@@ -84,7 +86,7 @@ class FilterExecutionCalculator {
         return FilterNextUnitOutput(
           action: FilterExecutionAction.loadData,
           missingIntent:
-              isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isLoadIntent && intent != null,
           debugInfo: buildInfo("FilterModel (4.1)"),
         );

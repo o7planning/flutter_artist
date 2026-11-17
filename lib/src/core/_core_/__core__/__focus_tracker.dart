@@ -7,7 +7,7 @@ part of '../core.dart';
 /// introducing coupling back into the core framework.
 class FocusTracker {
   final ValueNotifier<ActiveFocusRegion?> _activeRegion =
-      ValueNotifier<ActiveFocusRegion?>(null);
+  ValueNotifier<ActiveFocusRegion?>(null);
 
   /// Read-only listenable emitting updates whenever the active focus region changes.
   ValueListenable<ActiveFocusRegion?> get activeRegionListenable =>

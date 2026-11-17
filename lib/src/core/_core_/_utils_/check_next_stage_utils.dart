@@ -19,7 +19,7 @@ class CheckNextStageUtils {
       if (determinedNextStageEnum == null) {
         throw AppError(
           errorMessage:
-              "Pipeline Error: No initial stage could be determined to commence the prozess.",
+          "Pipeline Error: No initial stage could be determined to commence the prozess.",
         );
       }
     }
@@ -29,9 +29,11 @@ class CheckNextStageUtils {
           determinedNextStageEnum.stageOrder <= viewingStageEnum.stageOrder) {
         throw AppError(
           errorMessage:
-              "Pipeline Architectural Violation: The determined next stage order "
-              "(${determinedNextStageEnum.stageOrder}) must be strictly greater than the current "
-              "viewing stage order (${viewingStageEnum.stageOrder}). Backward stage transitions are not permitted.",
+          "Pipeline Architectural Violation: The determined next stage order "
+              "(${determinedNextStageEnum
+              .stageOrder}) must be strictly greater than the current "
+              "viewing stage order (${viewingStageEnum
+              .stageOrder}). Backward stage transitions are not permitted.",
         );
       }
     }

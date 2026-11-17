@@ -7,7 +7,8 @@ class TextSizeUtils {
       text: TextSpan(text: text, style: style),
       maxLines: 1,
       textDirection: TextDirection.ltr,
-    )..layout(minWidth: 0, maxWidth: double.infinity);
+    )
+      ..layout(minWidth: 0, maxWidth: double.infinity);
     return textPainter.size;
   }
 }

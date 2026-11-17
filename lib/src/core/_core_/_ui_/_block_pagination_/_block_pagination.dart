@@ -35,7 +35,7 @@ class _BlockPaginationState extends _ContextProviderViewState<BlockPagination> {
 
   @override
   FocusRegionType getRegionType() {
-    return FocusRegionType.pagination ;
+    return FocusRegionType.pagination;
   }
 
   @override

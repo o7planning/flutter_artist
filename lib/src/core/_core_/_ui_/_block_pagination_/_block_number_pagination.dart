@@ -30,7 +30,7 @@ class BlockNumberPagination extends BlockPagination {
         },
         visiblePagesCount: config.visiblePagesCount,
         totalPages:
-            block.paginationInfo == null ? 0 : block.paginationInfo!.totalPages,
+        block.paginationInfo == null ? 0 : block.paginationInfo!.totalPages,
         currentPage: block.paginationInfo == null
             ? 1
             : block.paginationInfo!.currentPage,

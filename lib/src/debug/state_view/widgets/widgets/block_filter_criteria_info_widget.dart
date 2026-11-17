@@ -39,21 +39,21 @@ class BlockFilterCriteriaInfoWidget extends BaseInfoWidget {
           message: blockFilterCriteria == null
               ? ""
               : filterModelFilterCriteria == blockFilterCriteria
-                  ? "The block is using the latest filtering criteria."
-                  : "Warning: The block is using old filtering criteria.",
+              ? "The block is using the latest filtering criteria."
+              : "Warning: The block is using old filtering criteria.",
           child: SimpleSmallIconButton(
             iconData: Icons.view_agenda,
             iconSize: 14,
             iconColor: blockFilterCriteria == null
                 ? context.faColors.action.ink.info
                 : filterModelFilterCriteria == blockFilterCriteria
-                    ? context.faColors.action.ink.success
-                    : context.faColors.action.ink.error,
+                ? context.faColors.action.ink.success
+                : context.faColors.action.ink.error,
             onPressed: blockFilterCriteria == null
                 ? null
                 : () {
-                    block.showDebugFilterCriteriaViewerDialog();
-                  },
+              block.showDebugFilterCriteriaViewerDialog();
+            },
           ),
         ),
       ],
@@ -70,8 +70,8 @@ class BlockFilterCriteriaInfoWidget extends BaseInfoWidget {
     return blockFilterCriteria == null
         ? ""
         : filterModelFilterCriteria == blockFilterCriteria
-            ? "The block is using the latest filtering criteria."
-            : "Warning: The block is using old filtering criteria.";
+        ? "The block is using the latest filtering criteria."
+        : "Warning: The block is using old filtering criteria.";
   }
 
   @override

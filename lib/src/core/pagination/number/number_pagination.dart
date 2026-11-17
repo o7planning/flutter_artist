@@ -145,36 +145,40 @@ class NumberPagination extends StatelessWidget {
       {bool isForward = false}) {
     return ListenableBuilder(
       listenable: pageService,
-      builder: (_, __) => Row(
-        children: [
-          ControlPaginationButton(
-            buttonElevation,
-            buttonRadius,
-            isForward ? nextPageIcon : firstPageIcon,
-            isForward
-                ? pageService.currentPage != totalPages
-                : pageService.currentPage != 1,
-            (c) => _changePage(c, isForward ? pageService.currentPage + 1 : 1),
-            controlButtonSize,
-            controlButtonColor,
-            enableInteraction,
+      builder: (_, __) =>
+          Row(
+            children: [
+              ControlPaginationButton(
+                buttonElevation,
+                buttonRadius,
+                isForward ? nextPageIcon : firstPageIcon,
+                isForward
+                    ? pageService.currentPage != totalPages
+                    : pageService.currentPage != 1,
+                    (c) =>
+                    _changePage(c, isForward ? pageService.currentPage + 1 : 1),
+                controlButtonSize,
+                controlButtonColor,
+                enableInteraction,
+              ),
+              SizedBox(width: navigationButtonSpacing),
+              ControlPaginationButton(
+                buttonElevation,
+                buttonRadius,
+                isForward ? lastPageIcon : previousPageIcon,
+                isForward
+                    ? pageService.currentPage != totalPages
+                    : pageService.currentPage != 1,
+                    (c) =>
+                    _changePage(
+                        c,
+                        isForward ? totalPages : pageService.currentPage - 1),
+                controlButtonSize,
+                controlButtonColor,
+                enableInteraction,
+              ),
+            ],
           ),
-          SizedBox(width: navigationButtonSpacing),
-          ControlPaginationButton(
-            buttonElevation,
-            buttonRadius,
-            isForward ? lastPageIcon : previousPageIcon,
-            isForward
-                ? pageService.currentPage != totalPages
-                : pageService.currentPage != 1,
-            (c) => _changePage(
-                c, isForward ? totalPages : pageService.currentPage - 1),
-            controlButtonSize,
-            controlButtonColor,
-            enableInteraction,
-          ),
-        ],
-      ),
     );
   }
 
@@ -239,8 +243,12 @@ class NumberPagination extends StatelessWidget {
   void _changePage(BuildContext context, int targetPage) {
     final int newPage = targetPage.clamp(1, totalPages);
 
-    if (NumberPageContainer.of(context).currentPage != newPage) {
-      NumberPageContainer.of(context).currentPage = newPage;
+    if (NumberPageContainer
+        .of(context)
+        .currentPage != newPage) {
+      NumberPageContainer
+          .of(context)
+          .currentPage = newPage;
       onPageChanged(newPage);
     }
   }

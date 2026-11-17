@@ -108,9 +108,9 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
           borderRadius: BorderRadius.circular(4),
           border: isSelected
               ? Border.all(
-                  color: context.faColors.action.stroke.primary,
-                  width: 0.5,
-                )
+            color: context.faColors.action.stroke.primary,
+            width: 0.5,
+          )
               : null,
         ),
         child: FlagCdnView.flagHeight(langCode: langCode, height: 14),
@@ -150,15 +150,15 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
         if (snapshot.hasData && snapshot.data!.ready) {
           filteredDocs = snapshot.data!.allDocs
               .where((doc) =>
-                  doc.langCode == _selectedLangCode &&
-                  widget.documentIds.contains(doc.id))
+          doc.langCode == _selectedLangCode &&
+              widget.documentIds.contains(doc.id))
               .toList();
         }
 
         // 5. Handling Empty Collection Fallbacks Dynamically Based on Locale
         if (filteredDocs.isEmpty) {
           final String missingLangLabel =
-              _selectedLangCode == 'vi' ? "Vietnamese" : "English";
+          _selectedLangCode == 'vi' ? "Vietnamese" : "English";
           return Center(
             child: Text(
               "No $missingLangLabel documentation available for this example.",
@@ -187,8 +187,7 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
   }
 
   /// Compiles a responsive, standardized diagnostic error card layout.
-  Widget _buildErrorView(
-    BuildContext context, {
+  Widget _buildErrorView(BuildContext context, {
     required String message,
     required String? details,
   }) {
@@ -214,7 +213,9 @@ class _DocumentSelectionDialogState extends State<DocumentSelectionDialog> {
                 color: context.faColors.ink.primary,
               ),
             ),
-            if (details != null && details.trim().isNotEmpty) ...[
+            if (details != null && details
+                .trim()
+                .isNotEmpty) ...[
               const SizedBox(height: 4),
               Container(
                 padding: const EdgeInsets.all(8),

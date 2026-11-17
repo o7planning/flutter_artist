@@ -32,7 +32,8 @@ class _BlockSyncSessionState<ID extends Comparable> extends Equatable
     required this.block,
     required Comparable? parentItemId,
     required FilterCriteria? filterCriteria,
-  })  : _parentBlockItemId = parentItemId,
+  })
+      : _parentBlockItemId = parentItemId,
         _filterCriteria = filterCriteria {
     block.debug._querySessionCount++;
     block.debug._lastViewportSyncStrategy = null;
@@ -72,7 +73,7 @@ class _BlockSyncSessionState<ID extends Comparable> extends Equatable
   @override
   Set<ID> getPerformQueryItemIds(List<ID> blockItemIds) {
     final viewportSyncStrategy =
-        BlockViewportSyncStrategy.resolveViewportSyncStrategy(
+    BlockViewportSyncStrategy.resolveViewportSyncStrategy(
       nativeQueryMode: block.effectiveConfig.nativeQueryMode,
       syncConfig: block.effectiveConfig.viewportSyncConfig,
       receivedEventInfos: _receivedEventInfos,
@@ -103,6 +104,7 @@ class _BlockSyncSessionState<ID extends Comparable> extends Equatable
 
   @override
   String toString() {
-    return "parentItemId: $parentBlockItemId, filterCriteria: ${filterCriteria == null ? 'null' : 'OK'}";
+    return "parentItemId: $parentBlockItemId, filterCriteria: ${filterCriteria ==
+        null ? 'null' : 'OK'}";
   }
 }

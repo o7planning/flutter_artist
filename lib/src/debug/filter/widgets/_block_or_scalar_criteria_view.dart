@@ -51,7 +51,9 @@ class BlockOrScalarCriteriaView extends StatelessWidget {
   }
 
   Widget _buildStatusBar(BuildContext context, BlockOrScalar blockOrScalar) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     // DataState dataState = blockOrScalar.dataState;
     FilterCriteria? filterCriteria = blockOrScalar.filterCriteria;
 
@@ -83,7 +85,7 @@ class BlockOrScalarCriteriaView extends StatelessWidget {
           label: "Filter Criteria: ",
           value: filterCriteria == null ? 'NULL' : 'NOT NULL',
           valueColor:
-              filterCriteria == null ? colorScheme.error : colorScheme.primary,
+          filterCriteria == null ? colorScheme.error : colorScheme.primary,
           labelStyle: labelStyle,
           textStyle: textStyle,
         ),
@@ -91,8 +93,7 @@ class BlockOrScalarCriteriaView extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusItem(
-    BuildContext context, {
+  Widget _buildStatusItem(BuildContext context, {
     required String label,
     required String value,
     required Color valueColor,

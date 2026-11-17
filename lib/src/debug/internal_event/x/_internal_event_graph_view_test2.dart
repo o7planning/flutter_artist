@@ -80,7 +80,7 @@ class _InternalEventGraphViewTest2State
                   onPressed: () {
                     final node12 = Node.Id(r.nextInt(100));
                     var edge =
-                        graph.getNodeAtPosition(r.nextInt(graph.nodeCount()));
+                    graph.getNodeAtPosition(r.nextInt(graph.nodeCount()));
                     print(edge);
                     graph.addEdge(edge, node12);
                     setState(() {});

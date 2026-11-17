@@ -1,9 +1,9 @@
 part of '../../core.dart';
 
 class _ProzessRestartExecutionUnit<
-        STAGE_ENUM extends StageEnum, //
-        PROZESS_INIT_DATA extends ProzessInitData,
-        PROZESS_CONTEXT_DATA extends ProzessContextData>
+STAGE_ENUM extends StageEnum, //
+PROZESS_INIT_DATA extends ProzessInitData,
+PROZESS_CONTEXT_DATA extends ProzessContextData>
     extends _ActivityMemberExecutionUnit {
   final XProzess xProzess;
 
@@ -17,9 +17,9 @@ class _ProzessRestartExecutionUnit<
     required this.xProzess,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.prozess,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.prozess,
+    executionIntent: executionIntent,
+  );
 
   @override
   Activity get activity => xProzess.prozess.activity;

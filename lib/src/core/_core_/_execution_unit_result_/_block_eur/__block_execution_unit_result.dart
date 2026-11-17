@@ -3,10 +3,10 @@ part of '../../core.dart';
 /// Base execution unit result class holding domain-level mutation journals
 /// specifically tailored for [Block] operations and item lifecycle transitions.
 abstract class BlockExecutionUnitResult<
-    ID extends Comparable,
-    ITEM extends Identifiable<ID>,
-    ITEM_DETAIL extends Identifiable<ID>,
-    PRECHECK> extends ExecutionUnitResult<PRECHECK> {
+ID extends Comparable,
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>,
+PRECHECK> extends ExecutionUnitResult<PRECHECK> {
   /// Chronological audit journal recording atomic mutation steps executed during this intent.
   final List<BlockOperationStep<ID, ITEM>> _journalSteps = [];
 
@@ -135,14 +135,17 @@ abstract class BlockExecutionUnitResult<
   // ===========================================================================
 
   /// Resolves the list of all entities evicted or deleted during this execution session.
-  List<ITEM> get evictedItems => journalSteps
-      .whereType<ItemEvictionStep<ID, ITEM>>()
-      .map((step) => step.item)
-      .toList();
+  List<ITEM> get evictedItems =>
+      journalSteps
+          .whereType<ItemEvictionStep<ID, ITEM>>()
+          .map((step) => step.item)
+          .toList();
 
   /// Retrieves the latest current item transition recorded in this execution session, if any.
   CurrentItemTransitionStep<ID, ITEM>? get lastCurrentTransition =>
-      journalSteps.whereType<CurrentItemTransitionStep<ID, ITEM>>().lastOrNull;
+      journalSteps
+          .whereType<CurrentItemTransitionStep<ID, ITEM>>()
+          .lastOrNull;
 
   // ===========================================================================
   // DEBUG LOGGING UTILITY

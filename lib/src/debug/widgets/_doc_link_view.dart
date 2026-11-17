@@ -73,7 +73,7 @@ class DocLinkView extends StatelessWidget {
               SimpleCopyButton(
                 iconSize: 16,
                 getText: () =>
-                    faDoc.published && demoRelease ? faDoc.url : draftUrl,
+                faDoc.published && demoRelease ? faDoc.url : draftUrl,
               ),
             ],
           ),

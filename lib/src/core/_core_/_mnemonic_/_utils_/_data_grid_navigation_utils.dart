@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../../core.dart';
+import '../../core.dart';
 
 class DataGridNavigationUtils {
   /// Xử lý các thao tác điều hướng dữ liệu (Lật trang, Load More, Đổi bản ghi hiện tại).
@@ -33,7 +33,7 @@ class DataGridNavigationUtils {
         return true;
 
       case MnemonicShortcut.firstPage:
-        // Có thể gọi block.queryFirstPage() hoặc block.query() với cấu hình trang = 1
+      // Có thể gọi block.queryFirstPage() hoặc block.query() với cấu hình trang = 1
         block.query();
         return true;
 
@@ -42,7 +42,7 @@ class DataGridNavigationUtils {
         return true;
 
       default:
-        // Không phải phím điều hướng dữ liệu
+      // Không phải phím điều hướng dữ liệu
         return false;
     }
   }

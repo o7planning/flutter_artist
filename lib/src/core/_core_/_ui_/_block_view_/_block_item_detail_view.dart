@@ -1,14 +1,14 @@
 part of '../../core.dart';
 
 abstract class BlockItemDetailView<
-    BLOCK extends Block<
-        Comparable, //
-        Identifiable<Comparable>,
-        Identifiable<Comparable>,
-        FilterPatch,
-        FilterCriteria,
-        CreationPreset,
-        FormPatch>> extends StatelessWidget {
+BLOCK extends Block<
+    Comparable, //
+    Identifiable<Comparable>,
+    Identifiable<Comparable>,
+    FilterPatch,
+    FilterCriteria,
+    CreationPreset,
+    FormPatch>> extends StatelessWidget {
   final BLOCK block;
 
   final BlockItemDetailViewConfig config;
@@ -17,11 +17,12 @@ abstract class BlockItemDetailView<
     required this.block,
     required BlockItemDetailViewConfig? config,
     super.key,
-  })  : config = config ?? const BlockItemDetailViewConfig(),
+  })
+      : config = config ?? const BlockItemDetailViewConfig(),
         assert(
-          config == null ||
-              config.blockViewContext == BlockViewContext.itemDetail ||
-              config.blockViewContext == BlockViewContext.form,
+        config == null ||
+            config.blockViewContext == BlockViewContext.itemDetail ||
+            config.blockViewContext == BlockViewContext.form,
         );
 
   @override

@@ -23,9 +23,10 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
   }) async {
     await showDialog(
       context: context,
-      builder: (context) => ProzessStagesInspectorDialog(
-        prozess: prozess,
-      ),
+      builder: (context) =>
+          ProzessStagesInspectorDialog(
+            prozess: prozess,
+          ),
     );
   }
 
@@ -111,7 +112,9 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
   }
 
   Widget _buildProzessNameRow(BuildContext context, Prozess prozess) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,7 +142,9 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
   }
 
   Widget _buildProzessStateRow(BuildContext context, Prozess prozess) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -170,7 +175,9 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
   }
 
   Widget _buildMetadataRow(BuildContext context, String label, String value) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

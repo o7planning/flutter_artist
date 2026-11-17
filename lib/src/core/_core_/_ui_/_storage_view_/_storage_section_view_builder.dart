@@ -77,8 +77,7 @@ class _StorageSectionViewState
 
   @override
   List<_QuickSuggestionButton> createQuickSuggestionButtons(
-    BuildContext context,
-  ) {
+      BuildContext context,) {
     return [];
   }
 

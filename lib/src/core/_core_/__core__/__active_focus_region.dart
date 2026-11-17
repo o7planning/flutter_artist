@@ -23,11 +23,11 @@ class ActiveFocusRegion {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ActiveFocusRegion &&
-          runtimeType == other.runtimeType &&
-          moduleName == other.moduleName &&
-          unitName == other.unitName &&
-          regionType == other.regionType;
+          other is ActiveFocusRegion &&
+              runtimeType == other.runtimeType &&
+              moduleName == other.moduleName &&
+              unitName == other.unitName &&
+              regionType == other.regionType;
 
   @override
   int get hashCode => Object.hash(moduleName, unitName, regionType);

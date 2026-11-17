@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 
 class ControlPaginationButton extends StatelessWidget {
-  const ControlPaginationButton(
-    this.buttonElevation,
-    this.buttonRadius,
-    this.icon,
-    this.enabled,
-    this.onTap,
-    this.fixedSize,
-    this.backgroundColor,
-    this.enableInteraction, {
-    super.key,
-  });
+  const ControlPaginationButton(this.buttonElevation,
+      this.buttonRadius,
+      this.icon,
+      this.enabled,
+      this.onTap,
+      this.fixedSize,
+      this.backgroundColor,
+      this.enableInteraction, {
+        super.key,
+      });
 
   final double buttonElevation;
   final double buttonRadius;
@@ -26,42 +25,42 @@ class ControlPaginationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return enableInteraction
         ? ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              elevation: buttonElevation,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(buttonRadius),
-              ),
-              surfaceTintColor: Colors.transparent,
-              padding: EdgeInsets.zero,
-              fixedSize: fixedSize,
-              minimumSize: fixedSize,
-              overlayColor: Colors.transparent,
-              disabledBackgroundColor: Colors.transparent,
-              backgroundColor: Colors.transparent,
-              // backgroundColor,
-              animationDuration: Duration.zero,
-            ),
-            onPressed: enabled ? () => onTap(context) : null,
-            child: icon,
-          )
+      style: ElevatedButton.styleFrom(
+        elevation: buttonElevation,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(buttonRadius),
+        ),
+        surfaceTintColor: Colors.transparent,
+        padding: EdgeInsets.zero,
+        fixedSize: fixedSize,
+        minimumSize: fixedSize,
+        overlayColor: Colors.transparent,
+        disabledBackgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        // backgroundColor,
+        animationDuration: Duration.zero,
+      ),
+      onPressed: enabled ? () => onTap(context) : null,
+      child: icon,
+    )
         : TextButton(
-            style: TextButton.styleFrom(
-              elevation: buttonElevation,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(buttonRadius),
-              ),
-              surfaceTintColor: Colors.transparent,
-              padding: EdgeInsets.zero,
-              fixedSize: fixedSize,
-              minimumSize: fixedSize,
-              overlayColor: Colors.transparent,
-              disabledBackgroundColor: Colors.transparent,
-              backgroundColor: Colors.transparent,
-              // backgroundColor,
-              animationDuration: Duration.zero,
-            ),
-            onPressed: enabled ? () => onTap(context) : null,
-            child: icon,
-          );
+      style: TextButton.styleFrom(
+        elevation: buttonElevation,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(buttonRadius),
+        ),
+        surfaceTintColor: Colors.transparent,
+        padding: EdgeInsets.zero,
+        fixedSize: fixedSize,
+        minimumSize: fixedSize,
+        overlayColor: Colors.transparent,
+        disabledBackgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        // backgroundColor,
+        animationDuration: Duration.zero,
+      ),
+      onPressed: enabled ? () => onTap(context) : null,
+      child: icon,
+    );
   }
 }

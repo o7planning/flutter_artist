@@ -20,7 +20,7 @@ class SSENotificationService
 
     // 1. Listen to the data stream from the Adapter
     _subscription = adapter.sseStream.listen(
-      (INotification summary) {
+          (INotification summary) {
         print("Receive Notification: $summary");
         // FlutterArtist._notifyNotification(summary);
       },

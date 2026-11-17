@@ -12,7 +12,8 @@ class FaNotificationMessage {
 
   FaNotificationMessage({required this.receiverId});
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'id': id,
         'messageId': messageId,
         'receiverId': receiverId,

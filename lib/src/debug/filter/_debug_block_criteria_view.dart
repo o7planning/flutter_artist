@@ -44,8 +44,8 @@ class DebugBlockCriteriaView extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
               border: Border.all(
                 color:
-                    (isCriteriaNull ? colorScheme.error : colorScheme.primary)
-                        .withValues(alpha: 0.2),
+                (isCriteriaNull ? colorScheme.error : colorScheme.primary)
+                    .withValues(alpha: 0.2),
               ),
             ),
             child: IconLabelSelectableText(
@@ -93,7 +93,7 @@ class DebugBlockCriteriaView extends StatelessWidget {
   }) {
     return HtmlInfoView(
       infoAsHtml:
-          "The <b>$filterClassName.filterCriteria</b> is used as a parameter to query the <b>$blockClassName</b>. "
+      "The <b>$filterClassName.filterCriteria</b> is used as a parameter to query the <b>$blockClassName</b>. "
           "If successful, it will be assigned to <b>$blockClassName.filterCriteria</b>. "
           "Otherwise, it can be <b>null</b>, except in the case of pagination (<b>queryNextPage</b>, etc.). "
           "It also resets to <b>null</b> if the Block is in <b>'none'</b> or <b>'pending'</b> state.",

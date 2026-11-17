@@ -1,14 +1,14 @@
 part of '../core.dart';
 
 sealed class ExecutionIntent<
-    PRECHECK, //
-    EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>> {
+PRECHECK, //
+EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>> {
   final Completer<EXECUTION_RESULT> _completer = Completer<EXECUTION_RESULT>();
 
   Future<EXECUTION_RESULT> get result => _completer.future;
 
   final resultWrapper =
-      ExecutionUnitResultWrapper<PRECHECK, EXECUTION_RESULT>();
+  ExecutionUnitResultWrapper<PRECHECK, EXECUTION_RESULT>();
 
   ExecutionIntent();
 

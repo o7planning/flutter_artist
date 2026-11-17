@@ -32,12 +32,12 @@ class _BlockFormViewBuilderState
 
   @override
   FocusRegionType getRegionType() {
-    return 	FocusRegionType.blockFormView;
+    return FocusRegionType.blockFormView;
   }
 
   @override
   String getUnitName() {
-    return widget.formModel. name;
+    return widget.formModel.name;
   }
 
   @override
@@ -67,10 +67,8 @@ class _BlockFormViewBuilderState
   }
 
   @override
-  KeyEventResult handleFormMnemonicKeyEvent(
-    BuildContext context,
-    KeyEvent event,
-  ) {
+  KeyEventResult handleFormMnemonicKeyEvent(BuildContext context,
+      KeyEvent event,) {
     return _BlockMnemonicHandler.handleKeyEvent(
       context: context,
       block: widget.formModel.block,

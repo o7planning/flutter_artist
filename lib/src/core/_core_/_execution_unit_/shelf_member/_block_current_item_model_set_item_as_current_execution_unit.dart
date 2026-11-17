@@ -7,36 +7,36 @@ part of '../../core.dart';
 @_BlockSelectFirstItemAsCurrentAnnotation()
 @_BlockSelectPreviousItemAsCurrentAnnotation()
 class _BlockCurrentItemModelSetItemAsCurrentExecutionUnit<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
-    extends _ShelfMemberResultedExecutionUnit<
-        BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberResultedExecutionUnit<
+    BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> {
   final XBlockCurrentItemModel<ID, ITEM, ITEM_DETAIL> xBlockCurrentItemModel;
 
   @override
   final BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
-      executionIntent;
+  executionIntent;
 
   _BlockCurrentItemModelSetItemAsCurrentExecutionUnit({
     required this.xBlockCurrentItemModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.blockSetItemAsCurrent,
-          executionIntent: executionIntent,
-          // executionUnitResult: BlockSetCurrentItemResult<ID,ITEM,ITEM_DETAIL>(
-          //   precheck: null,
-          //   setCurrentItemDirective: executionIntent.setCurrentItemDirective,
-          //   getItemId: xBlock.block._getItemIdInternal,
-          //   candidateItem: executionIntent.inputCandidateCurrItem,
-          //   oldCurrentItem: xBlock.block.currentItem,
-          //   currentItem: xBlock.block.currentItem,
-          // ),
-        ) {
-    xBlockCurrentItemModel.setForceReloadCurrItem(executionIntent.forceReloadItem);
+    executionUnitType: ExecutionUnitType.blockSetItemAsCurrent,
+    executionIntent: executionIntent,
+    // executionUnitResult: BlockSetCurrentItemResult<ID,ITEM,ITEM_DETAIL>(
+    //   precheck: null,
+    //   setCurrentItemDirective: executionIntent.setCurrentItemDirective,
+    //   getItemId: xBlock.block._getItemIdInternal,
+    //   candidateItem: executionIntent.inputCandidateCurrItem,
+    //   oldCurrentItem: xBlock.block.currentItem,
+    //   currentItem: xBlock.block.currentItem,
+    // ),
+  ) {
+    xBlockCurrentItemModel.setForceReloadCurrItem(
+        executionIntent.forceReloadItem);
     //
     if (executionIntent.formLoadHint != null) {
-       xBlockCurrentItemModel.xBlockFormModel
+      xBlockCurrentItemModel.xBlockFormModel
           ?.setForceType(executionIntent.formLoadHint!);
     }
   }
@@ -51,7 +51,8 @@ class _BlockCurrentItemModelSetItemAsCurrentExecutionUnit<
   Shelf get shelf => xBlockCurrentItemModel.blockCurrentItemModel.shelf;
 
   @override
-  BlockCurrentItemModel get owner => xBlockCurrentItemModel.blockCurrentItemModel;
+  BlockCurrentItemModel get owner =>
+      xBlockCurrentItemModel.blockCurrentItemModel;
 
   @override
   String getObjectName() {

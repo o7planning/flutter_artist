@@ -20,16 +20,17 @@ ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
   );
 
   @override
-  XShelf get xShelf =>xBlockCurrentItemModel. xBlock.xShelf;
+  XShelf get xShelf => xBlockCurrentItemModel.xBlock.xShelf;
 
   @override
-  int get xModuleId =>xBlockCurrentItemModel. xBlock.xModuleId;
+  int get xModuleId => xBlockCurrentItemModel.xBlock.xModuleId;
 
   @override
-  Shelf get shelf =>xBlockCurrentItemModel. xBlock.block.shelf;
+  Shelf get shelf => xBlockCurrentItemModel.xBlock.block.shelf;
 
   @override
-  BlockCurrentItemModel get owner => xBlockCurrentItemModel.blockCurrentItemModel ;
+  BlockCurrentItemModel get owner =>
+      xBlockCurrentItemModel.blockCurrentItemModel;
 
   @override
   String getObjectName() {

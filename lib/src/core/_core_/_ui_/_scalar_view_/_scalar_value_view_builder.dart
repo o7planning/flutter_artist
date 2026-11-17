@@ -46,7 +46,7 @@ class _ScalarValueViewBuilderState
 
   @override
   String getUnitName() {
-    return widget.scalar .name;
+    return widget.scalar.name;
   }
 
 
@@ -82,8 +82,7 @@ class _ScalarValueViewBuilderState
 
   @override
   List<_QuickSuggestionButton> createQuickSuggestionButtons(
-    BuildContext context,
-  ) {
+      BuildContext context,) {
     return [
       QuickSuggestionBarUtils.createScalarErrorButton(
         context,

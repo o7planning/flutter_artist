@@ -17,11 +17,11 @@ final class ScalarQueryIntent<
   //
 }
 
-final class ScalarClearIntent<
+final class ScalarClearValueIntent<
         ID extends Comparable, //
         VALUE extends Identifiable<ID>>
-    extends ScalarExecutionIntent<ID, VALUE, ScalarClearPrecheck,
-        ScalarClearResult> {
+    extends ScalarExecutionIntent<ID, VALUE, ScalarClearValuePrecheck,
+        ScalarClearValueResult> {
   //
 }
 

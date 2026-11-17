@@ -7,11 +7,11 @@ class ScalarQueryStrategyResolver {
   /// Resolves the exact query execution plan for a given [scalar].
   static ScalarQueryPlan<ID> resolveQueryPlan<ID extends Comparable>({
     required Scalar<
-            ID, //
-            Identifiable<ID>,
-            FilterPatch,
-            FilterCriteria>
-        scalar,
+        ID, //
+        Identifiable<ID>,
+        FilterPatch,
+        FilterCriteria>
+    scalar,
     required DebugScalarSyncSessionState<ID>? syncSessionState,
     required QueryHint queryHint,
     required bool provideValueContext,
@@ -47,7 +47,8 @@ class ScalarQueryStrategyResolver {
     // a. Prozess explicitly mandated force (queryHint == QueryHint.force)
     // b. Active UI component is visible AND data is unready (pending/stale)
     final bool effectiveForce = queryHint == QueryHint.force ||
-        (provideValueContext && (dataState.isPending || dataState.isLoadedStale));
+        (provideValueContext &&
+            (dataState.isPending || dataState.isLoadedStale));
 
     // If there is no demand to execute or refresh, reject execution immediately
     if (!effectiveForce) {

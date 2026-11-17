@@ -1,7 +1,7 @@
 part of '../__precheck.dart';
 
 /// Precheck enumeration for scalar clear operations.
-enum ScalarClearPrecheck implements Precheck {
+enum ScalarClearValuePrecheck implements Precheck {
   /// Operation aborted because the system executor is currently busy.
   busy(
     precheckCode: PrecheckCode.busy,
@@ -34,7 +34,7 @@ enum ScalarClearPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const ScalarClearPrecheck({
+  const ScalarClearValuePrecheck({
     required this.precheckCode,
     required this.message,
     required this.details,

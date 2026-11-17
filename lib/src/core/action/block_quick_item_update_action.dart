@@ -1,9 +1,9 @@
 part of '__action.dart';
 
 abstract class BlockQuickItemUpdateAction<
-    ID extends Comparable, //
-    ITEM extends Identifiable<ID>,
-    ITEM_DETAIL extends Identifiable<ID>> extends Action {
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> extends Action {
   final BlockQuickItemUpdateActionConfig config;
   final ITEM item;
 

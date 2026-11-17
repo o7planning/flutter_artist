@@ -19,20 +19,20 @@ class BlockControlFilledButton extends BlockControl {
     WidgetStatesController? statesController,
     Widget? child,
   }) : super(
-          build: (VoidCallback? onPressed) {
-            return FilledButton(
-              onPressed: onPressed,
-              onHover: onHover,
-              onFocusChange: onFocusChange,
-              style: style,
-              focusNode: focusNode,
-              autofocus: autofocus,
-              clipBehavior: clipBehavior,
-              statesController: statesController,
-              child: child,
-            );
-          },
-        );
+    build: (VoidCallback? onPressed) {
+      return FilledButton(
+        onPressed: onPressed,
+        onHover: onHover,
+        onFocusChange: onFocusChange,
+        style: style,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        clipBehavior: clipBehavior,
+        statesController: statesController,
+        child: child,
+      );
+    },
+  );
 
   BlockControlFilledButton.icon({
     super.key,
@@ -54,22 +54,22 @@ class BlockControlFilledButton extends BlockControl {
     Widget? icon,
     IconAlignment iconAlignment = IconAlignment.start,
   }) : super(
-          build: (VoidCallback? onPressed) {
-            return FilledButton.icon(
-              onPressed: onPressed,
-              onHover: onHover,
-              onFocusChange: onFocusChange,
-              style: style,
-              focusNode: focusNode,
-              autofocus: autofocus,
-              clipBehavior: clipBehavior = Clip.none,
-              statesController: statesController,
-              iconAlignment: iconAlignment,
-              icon: icon,
-              label: label,
-            );
-          },
-        );
+    build: (VoidCallback? onPressed) {
+      return FilledButton.icon(
+        onPressed: onPressed,
+        onHover: onHover,
+        onFocusChange: onFocusChange,
+        style: style,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        clipBehavior: clipBehavior = Clip.none,
+        statesController: statesController,
+        iconAlignment: iconAlignment,
+        icon: icon,
+        label: label,
+      );
+    },
+  );
 
   BlockControlFilledButton.tonal({
     super.key,
@@ -90,20 +90,20 @@ class BlockControlFilledButton extends BlockControl {
     Widget? child,
     IconAlignment iconAlignment = IconAlignment.start,
   }) : super(
-          build: (VoidCallback? onPressed) {
-            return FilledButton.tonal(
-              onPressed: onPressed,
-              onHover: onHover,
-              onFocusChange: onFocusChange,
-              style: style,
-              focusNode: focusNode,
-              autofocus: autofocus,
-              clipBehavior: clipBehavior,
-              statesController: statesController,
-              child: child,
-            );
-          },
-        );
+    build: (VoidCallback? onPressed) {
+      return FilledButton.tonal(
+        onPressed: onPressed,
+        onHover: onHover,
+        onFocusChange: onFocusChange,
+        style: style,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        clipBehavior: clipBehavior,
+        statesController: statesController,
+        child: child,
+      );
+    },
+  );
 
   BlockControlFilledButton.tonalIcon({
     super.key,
@@ -125,20 +125,20 @@ class BlockControlFilledButton extends BlockControl {
     Widget? icon,
     IconAlignment iconAlignment = IconAlignment.start,
   }) : super(
-          build: (VoidCallback? onPressed) {
-            return FilledButton.tonalIcon(
-              onPressed: onPressed,
-              onHover: onHover,
-              onFocusChange: onFocusChange,
-              style: style,
-              focusNode: focusNode,
-              autofocus: autofocus,
-              clipBehavior: clipBehavior = Clip.none,
-              statesController: statesController,
-              iconAlignment: iconAlignment,
-              icon: icon,
-              label: label,
-            );
-          },
-        );
+    build: (VoidCallback? onPressed) {
+      return FilledButton.tonalIcon(
+        onPressed: onPressed,
+        onHover: onHover,
+        onFocusChange: onFocusChange,
+        style: style,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        clipBehavior: clipBehavior = Clip.none,
+        statesController: statesController,
+        iconAlignment: iconAlignment,
+        icon: icon,
+        label: label,
+      );
+    },
+  );
 }

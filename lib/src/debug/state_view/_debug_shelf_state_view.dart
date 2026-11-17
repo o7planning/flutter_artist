@@ -78,18 +78,20 @@ class DebugShelfStateView extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         ...allBlocks.map(
-          (block) => _buildBlockDebugStateView(
-            block: block,
-            vertical: true,
-            fixedWidth: minColumnWidth,
-          ),
+              (block) =>
+              _buildBlockDebugStateView(
+                block: block,
+                vertical: true,
+                fixedWidth: minColumnWidth,
+              ),
         ),
         ...allScalars.map(
-          (scalar) => _buildScalarDebugStateView(
-            scalar: scalar,
-            vertical: true,
-            fixedWidth: minColumnWidth,
-          ),
+              (scalar) =>
+              _buildScalarDebugStateView(
+                scalar: scalar,
+                vertical: true,
+                fixedWidth: minColumnWidth,
+              ),
         ),
       ].expand((w) => [w, SizedBox(width: 5)]).toList()
         ..removeLast(),

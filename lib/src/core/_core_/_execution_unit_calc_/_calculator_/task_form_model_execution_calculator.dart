@@ -10,7 +10,8 @@ class TaskFormExecutionCalculator {
 
     String buildInfo(String branch) {
       return "$branch, (${input.taskName}), _executionIntent: $intent, "
-          "taskDataState: $taskDataState, formDataState: ${state.toBriefInfo()}, _formLoadHint: $hint, visibleX: $isVisible";
+          "taskDataState: $taskDataState, formDataState: ${state
+          .toBriefInfo()}, _formLoadHint: $hint, visibleX: $isVisible";
     }
 
     if (intent is FormModelDoneIntent) {
@@ -74,7 +75,7 @@ class TaskFormExecutionCalculator {
         return TaskFormNextUnitOutput(
           action: TaskFormExecutionAction.loadData,
           missingIntent:
-              isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isLoadIntent && intent != null,
           debugInfo: buildInfo("TaskFormModel (3.1.1)"),
         );
@@ -96,7 +97,7 @@ class TaskFormExecutionCalculator {
         return TaskFormNextUnitOutput(
           action: TaskFormExecutionAction.loadData,
           missingIntent:
-              isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isLoadIntent && intent != null,
           debugInfo: buildInfo("TaskFormModel (4.1.1)"),
         );
@@ -117,7 +118,7 @@ class TaskFormExecutionCalculator {
         return TaskFormNextUnitOutput(
           action: TaskFormExecutionAction.loadData,
           missingIntent:
-              isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isLoadIntent && intent != null,
           debugInfo: buildInfo("TaskFormModel (5.1.2)"),
         );

@@ -1,4 +1,4 @@
-part of '../../core.dart';
+part of '../core.dart';
 
 /// Wraps a button or interactive control to bind it to a single-character
 /// keyboard mnemonic shortcut (e.g., `Alt + S` on Windows, `Ctrl + S` on macOS)

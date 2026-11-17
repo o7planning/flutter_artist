@@ -4,7 +4,7 @@ part of '__precheck_utils.dart';
 class BlockSetCurrentItemPrecheckUtils {
   /// Evaluates whether setting an item as current is permitted.
   static Actionable<BlockSetCurrentItemPrecheck>
-      checkBeforeSetItemAsCurrent<ITEM>({
+  checkBeforeSetItemAsCurrent<ITEM>({
     required ITEM? item,
     required bool checkBusy,
     required bool isBusy,

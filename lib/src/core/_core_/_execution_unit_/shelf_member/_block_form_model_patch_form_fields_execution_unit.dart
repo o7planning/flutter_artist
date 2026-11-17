@@ -13,9 +13,9 @@ class _BlockFormModelPatchFormFieldsExecutionUnit<FORM_PATCH extends FormPatch>
     required this.xBlockFormModel,
     required this.executionIntent,
   }) : super(
-          executionUnitType: ExecutionUnitType.formModelPatchFormFields,
-          executionIntent: executionIntent,
-        );
+    executionUnitType: ExecutionUnitType.formModelPatchFormFields,
+    executionIntent: executionIntent,
+  );
 
   @override
   XShelf get xShelf => xBlockFormModel.xShelf;

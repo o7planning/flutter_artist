@@ -27,7 +27,7 @@ class FilterCriterionView extends StatelessWidget {
         borderRadius: BorderRadius.circular(2.0),
         side: selected
             ? BorderSide(
-                color: context.faColors.action.stroke.primary, width: 0.5)
+            color: context.faColors.action.stroke.primary, width: 0.5)
             : BorderSide.none,
       ),
       child: ListTile(

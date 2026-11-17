@@ -27,10 +27,10 @@ class HtmlInfoView extends StatelessWidget {
         infoAsHtml,
         icon: showIcon
             ? Icon(
-                FaIconConstants.infoIconData,
-                size: 16,
-                color: colorScheme.primary,
-              )
+          FaIconConstants.infoIconData,
+          size: 16,
+          color: colorScheme.primary,
+        )
             : null,
         tagStyles: {
           'b': TextStyle(

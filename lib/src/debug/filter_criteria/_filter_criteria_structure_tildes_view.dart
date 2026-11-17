@@ -31,7 +31,7 @@ class FilterCriteriaStructureTildesView extends StatefulWidget {
 class FilterCriteriaStructureTildesViewState
     extends State<FilterCriteriaStructureTildesView> {
   final MultiSplitViewController _splitViewController =
-      MultiSplitViewController();
+  MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
   TreeNode<dynamic>? _currentNode;
@@ -67,14 +67,15 @@ class FilterCriteriaStructureTildesViewState
       parent: null,
     );
     _currentNode = filterModelNode;
-    rootTreeNode = TreeNode.root()..add(filterModelNode);
+    rootTreeNode = TreeNode.root()
+      ..add(filterModelNode);
     //
     FilterModelStructure structure = widget.filterModel.filterModelStructure;
 
     List<MultiOptTildeFilterCriterionModel> rootMultiOptCriterion =
         structure.debugRootOptCriteria;
     for (MultiOptTildeFilterCriterionModel multiOptCriterion
-        in rootMultiOptCriterion) {
+    in rootMultiOptCriterion) {
       _addMultiOptCriterionCascade(filterModelNode, multiOptCriterion);
     }
     List<SimpleTildeFilterCriterionModel> simpleCriteria =
@@ -149,8 +150,7 @@ class FilterCriteriaStructureTildesViewState
           width: 10,
         ),
         onTreeReady: (
-          TreeViewController<dynamic, TreeNode<dynamic>> controller,
-        ) {
+            TreeViewController<dynamic, TreeNode<dynamic>> controller,) {
           _treeViewController = controller;
           controller.expandAllChildren(rootTreeNode);
         },
@@ -169,7 +169,8 @@ class FilterCriteriaStructureTildesViewState
           } else if (data is SimpleTildeFilterCriterionModel) {
             title = data.tildeCriterionName;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.tildeCriterionName}";
+            "${getClassNameWithoutGenerics(data)}<${data.dataType
+                .toString()}> ${data.tildeCriterionName}";
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
@@ -177,11 +178,13 @@ class FilterCriteriaStructureTildesViewState
           } else if (data is MultiOptTildeFilterCriterionModel) {
             title = data.tildeCriterionName;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.tildeCriterionName}";
+            "${getClassNameWithoutGenerics(data)}<${data.dataType
+                .toString()}> ${data.tildeCriterionName}";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
-            isMultiSelection = data.selectionMode == MultiOptSelectionMode.multi;
+            isMultiSelection =
+                data.selectionMode == MultiOptSelectionMode.multi;
           } else {
             prefixIconData = FaIconConstants.unknownIconData;
             title = "UNKNOWN";
@@ -261,13 +264,13 @@ class FilterCriteriaStructureTildesViewState
     //
     currentNode.add(childNode);
     for (MultiOptTildeFilterCriterionModel childMultiOptCriterion
-        in multiOptCriterion.children) {
+    in multiOptCriterion.children) {
       _addMultiOptCriterionCascade(childNode, childMultiOptCriterion);
     }
   }
 
-  void _addSimpleCriterion(
-      TreeNode currentNode, SimpleTildeFilterCriterionModel simpleCriterion) {
+  void _addSimpleCriterion(TreeNode currentNode,
+      SimpleTildeFilterCriterionModel simpleCriterion) {
     TreeNode childNode = TreeNode(
       key: "SimpleCriterion-${simpleCriterion.tildeCriterionName}",
       data: simpleCriterion,

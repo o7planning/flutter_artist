@@ -30,7 +30,7 @@ class FormPropsStructureView extends StatefulWidget {
 
 class _FormPropsStructureViewState extends State<FormPropsStructureView> {
   final MultiSplitViewController _splitViewController =
-      MultiSplitViewController();
+  MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
   late TreeNode<dynamic> _currentNode;
@@ -45,7 +45,8 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
       parent: null,
     );
     _currentNode = formModelNode;
-    rootTreeNode = TreeNode.root()..add(formModelNode);
+    rootTreeNode = TreeNode.root()
+      ..add(formModelNode);
     //
     FormModelStructure structure = widget.formModel.formModelStructure;
 
@@ -125,7 +126,9 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
         expansionIndicatorBuilder: (context, node) {
           return ChevronIndicator.upDown(
             tree: node,
-            color: Theme.of(context).hintColor,
+            color: Theme
+                .of(context)
+                .hintColor,
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.fromLTRB(0, 8, 20, 8),
             icon: Icons.keyboard_arrow_down_outlined,
@@ -137,8 +140,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           width: 10,
         ),
         onTreeReady: (
-          TreeViewController<dynamic, TreeNode<dynamic>> controller,
-        ) {
+            TreeViewController<dynamic, TreeNode<dynamic>> controller,) {
           _treeViewController = controller;
           controller.expandAllChildren(rootTreeNode);
         },
@@ -161,7 +163,8 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           } else if (data is SimpleFormPropModel) {
             title = data.propName;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.propName}";
+            "${getClassNameWithoutGenerics(data)}<${data.dataType
+                .toString()}> ${data.propName}";
             prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
             //
             isMultiOpt = false;
@@ -171,11 +174,13 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           } else if (data is MultiOptFormPropModel) {
             title = data.propName;
             tooltip =
-                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.propName}";
+            "${getClassNameWithoutGenerics(data)}<${data.dataType
+                .toString()}> ${data.propName}";
             prefixIconData = FaIconConstants.optPropOrCriterionIconData;
             //
             isMultiOpt = true;
-            isMultiSelection = data.selectionMode == MultiOptSelectionMode.multi;
+            isMultiSelection =
+                data.selectionMode == MultiOptSelectionMode.multi;
             isDirty = data.isDirty();
             isError = data.formErrorInfo != null;
           } else {
@@ -202,7 +207,10 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
                       size: 16,
                       color: isError
                           ? Colors.red
-                          : Theme.of(context).iconTheme.color,
+                          : Theme
+                          .of(context)
+                          .iconTheme
+                          .color,
                     ),
                   ),
                   SizedBox(width: 5),
@@ -255,8 +263,8 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     );
   }
 
-  void _addMultiOptPropCascade(
-      TreeNode currentNode, MultiOptFormPropModel multiOptProp) {
+  void _addMultiOptPropCascade(TreeNode currentNode,
+      MultiOptFormPropModel multiOptProp) {
     TreeNode childNode = TreeNode(
       key: "MultiOptProp-${multiOptProp.propName}",
       data: multiOptProp,

@@ -4,7 +4,7 @@ part of '__precheck_utils.dart';
 class FormModelPatchFormFieldsPrecheckUtils {
   /// Evaluates whether patching form fields is permitted based on system busy state and form data states.
   static Actionable<FormModelPatchFormFieldsPrecheck>
-      checkBeforePatchFormFields({
+  checkBeforePatchFormFields({
     required bool checkBusy,
     required bool isBusy,
     required FormDataState formDataState,

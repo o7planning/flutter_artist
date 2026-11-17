@@ -85,9 +85,11 @@ class FilterCriterionDefView extends StatelessWidget {
     );
   }
 
-  Widget _buildSelectionTypeRow(
-      BuildContext context, MultiOptFilterCriterionDef def) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildSelectionTypeRow(BuildContext context,
+      MultiOptFilterCriterionDef def) {
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     final isMulti = def.selectionMode == MultiOptSelectionMode.multi;
 
     return Row(
@@ -109,9 +111,11 @@ class FilterCriterionDefView extends StatelessWidget {
     );
   }
 
-  Widget _buildSelectionBadge(
-      BuildContext context, String label, bool isActive, IconData icon) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildSelectionBadge(BuildContext context, String label, bool isActive,
+      IconData icon) {
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
@@ -147,7 +151,9 @@ class FilterCriterionDefView extends StatelessWidget {
   }
 
   Widget _buildDetails(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     bool needsConversion =
         !criterion.isSimpleDataType && !criterion.toFieldValueProvided;
 
@@ -170,11 +176,13 @@ class FilterCriterionDefView extends StatelessWidget {
           context,
           label: "toFieldValue(): ",
           value:
-              criterion.toFieldValueProvided ? "[Provided]" : "[Not Provided]",
+          criterion.toFieldValueProvided ? "[Provided]" : "[Not Provided]",
           isError: needsConversion,
           desc: criterion.isSimpleDataType
-              ? "Simple data type <${criterion.dataType}>, conversion is handled automatically."
-              : "Data type <${criterion.dataType}> requires a custom conversion function.",
+              ? "Simple data type <${criterion
+              .dataType}>, conversion is handled automatically."
+              : "Data type <${criterion
+              .dataType}> requires a custom conversion function.",
         ),
         const SizedBox(height: 15),
         IconLabelSelectableText(
@@ -193,10 +201,12 @@ class FilterCriterionDefView extends StatelessWidget {
 
   Widget _buildInfoBlock(BuildContext context,
       {required String label,
-      required String value,
-      required bool isError,
-      required String desc}) {
-    final colorScheme = Theme.of(context).colorScheme;
+        required String value,
+        required bool isError,
+        required String desc}) {
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -241,7 +251,11 @@ class FilterCriterionDefView extends StatelessWidget {
     return TextStyle(
       fontSize: 11,
       fontWeight: FontWeight.bold,
-      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
+      color: Theme
+          .of(context)
+          .colorScheme
+          .onSurface
+          .withValues(alpha: 0.5),
     );
   }
 }

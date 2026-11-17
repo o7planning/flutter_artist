@@ -842,26 +842,113 @@ abstract class Task<
   // ***************************************************************************
   // ***************************************************************************
 
+  @OverridableMethodAnnotation()
+  bool isFormResetAllowed() {
+    return true;
+  }
+
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult _checkFormResetAllowed() {
+    try {
+      bool allow = isFormResetAllowed();
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
+    } catch (e, stackTrace) {
+      return CheckAllowResult.error(
+        errorInfo: ErrorInfo.fromError(
+          error: e,
+          stackTrace: stackTrace,
+        ),
+      );
+    }
+  }
+
+  /// Checks whether the form of this task can be reset to its initial state.
   @_PrecheckMethod()
+  Actionable<TaskFormResetPrecheck> checkBeforeResetForm({
+    bool checkAllow = true,
+  }) {
+    return __checkBeforeResetForm(
+      checkBusy: true,
+      checkAllow: checkAllow,
+    );
+  }
+
+  @_PrecheckPrivateMethod()
+  Actionable<TaskFormResetPrecheck> __checkBeforeResetForm({
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    return TaskFormResetPrecheckUtils.checkBeforeResetForm(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      hasForm: formModel != null,
+      taskDataState: dataState,
+      formDataState: formModel?.dataState,
+      isDirty: formModel?.isDirty() ?? false,
+      checkAllow: checkAllow,
+      checkFormResetAllowed: () => _checkFormResetAllowed(),
+    );
+  }
+
+  /// Resets the form of this task to its initial state.
+  @_RootMethodAnnotation()
+  void resetForm() {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "resetForm",
+      parameters: null,
+      isLibMethod: true,
+    );
+
+    final Actionable<TaskFormResetPrecheck> actionable = checkBeforeResetForm();
+
+    if (!actionable.yes) {
+      _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#129100",
+        prefixShortDesc: 'checkBeforeResetForm()',
+        module: module,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
+      return;
+    }
+
+    formModel!.resetForm();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @override
-  Actionable<ShowFormInfoPrecheck> checkBeforeShowFormInfo() {
-    return __checkBeforeShowFormInfo(formModel: formModel);
+  @_PrecheckMethod()
+  Actionable<ShowFormModelInspectorPrecheck>
+      checkBeforeShowFormModelInspector() {
+    if (formModel == null) {
+      return Actionable.no(
+        errCode: ShowFormModelInspectorPrecheck.noForm,
+      );
+    }
+    return formModel!.checkBeforeShowFormModelInspector();
   }
 
   @override
-  Future<Actionable<ShowFormInfoPrecheck>>
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowFormModelInspectorPrecheck>>
       showDebugFormModelInspectorDialog() async {
-    final actionable = checkBeforeShowFormInfo();
+    final actionable = checkBeforeShowFormModelInspector();
     if (!actionable.yes) {
+      final ShowFormModelInspectorPrecheck err = actionable.errCode!;
+      showErrorSnackBar(
+        message: err.message,
+        errorDetails: err.details,
+      );
       return actionable;
     }
-    final BuildContext context = FlutterArtistCore.context;
-    await DebugFormModelInspectorDialog.show(
-      context: context,
+    return await formModel!.showDebugFormModelInspectorDialog(
       locationInfo: getClassNameWithoutGenerics(this),
-      formModel: formModel!,
     );
-    return actionable;
   }
 
   // ***************************************************************************

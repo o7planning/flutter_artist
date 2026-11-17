@@ -42,12 +42,12 @@ class TaskResultDataInfoWidget extends BaseInfoWidget {
       onPressed: task.submitResultData == null
           ? null
           : (BuildContext context) {
-              DataDebugDialog.show(
-                context: context,
-                title: '',
-                targetObject: task.submitResultData!,
-              );
-            },
+        DataDebugDialog.show(
+          context: context,
+          title: '',
+          targetObject: task.submitResultData!,
+        );
+      },
     );
   }
 }

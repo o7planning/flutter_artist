@@ -90,11 +90,11 @@ class FaIsarStorage {
 
     await _isar.writeTxn(() async {
       final meta =
-          await metaCol.filter().where((m) => m.userId == userId).findFirst();
+      await metaCol.filter().where((m) => m.userId == userId).findFirst();
       if (meta != null) await metaCol.delete(meta.id);
 
       final messages =
-          await msgCol.filter().where((m) => m.receiverId == userId).findAll();
+      await msgCol.filter().where((m) => m.receiverId == userId).findAll();
       for (var msg in messages) {
         await msgCol.delete(msg.id);
       }

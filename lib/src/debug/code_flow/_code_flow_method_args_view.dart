@@ -38,9 +38,11 @@ class CodeFlowMethodArgsView extends StatelessWidget {
     );
   }
 
-  Widget _buildArgNameAndType(
-      BuildContext context, MapEntry<String, dynamic> argEntry) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildArgNameAndType(BuildContext context,
+      MapEntry<String, dynamic> argEntry) {
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     return Row(
       children: [
         Text(
@@ -71,8 +73,8 @@ class CodeFlowMethodArgsView extends StatelessWidget {
     );
   }
 
-  Widget? _buildContentArgValue(
-      BuildContext context, MapEntry<String, dynamic> argEntry) {
+  Widget? _buildContentArgValue(BuildContext context,
+      MapEntry<String, dynamic> argEntry) {
     dynamic value = argEntry.value;
     if (value == null || _isCoreType(value)) {
       return null;
@@ -99,9 +101,11 @@ class CodeFlowMethodArgsView extends StatelessWidget {
     );
   }
 
-  Widget _buildSubtitleArgValue(
-      BuildContext context, MapEntry<String, dynamic> argEntry) {
-    final colorScheme = Theme.of(context).colorScheme;
+  Widget _buildSubtitleArgValue(BuildContext context,
+      MapEntry<String, dynamic> argEntry) {
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     final bool isNull = argEntry.value == null;
 
     return Padding(
@@ -110,8 +114,8 @@ class CodeFlowMethodArgsView extends StatelessWidget {
         isNull
             ? "null"
             : _isCoreType(argEntry.value)
-                ? argEntry.value.toString()
-                : "Instance of '${getClassName(argEntry.value)}'",
+            ? argEntry.value.toString()
+            : "Instance of '${getClassName(argEntry.value)}'",
         style: TextStyle(
           color: isNull
               ? colorScheme.error.withValues(alpha: 0.7)
@@ -128,13 +132,14 @@ class CodeFlowMethodArgsView extends StatelessWidget {
       children: (arguments ?? {})
           .entries
           .map(
-            (argEntry) => SimpleAccordionSection(
+            (argEntry) =>
+            SimpleAccordionSection(
               initiallyExpanded: true,
               headerTitle: _buildArgNameAndType(context, argEntry),
               headerSubtitle: _buildSubtitleArgValue(context, argEntry),
               content: _buildContentArgValue(context, argEntry),
             ),
-          )
+      )
           .toList(),
     );
   }

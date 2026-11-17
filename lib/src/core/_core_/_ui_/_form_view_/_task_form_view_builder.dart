@@ -32,7 +32,7 @@ class _TaskFormViewBuilderState
 
   @override
   FocusRegionType getRegionType() {
-    return 	FocusRegionType.taskFormView;
+    return FocusRegionType.taskFormView;
   }
 
   @override
@@ -70,10 +70,8 @@ class _TaskFormViewBuilderState
   }
 
   @override
-  KeyEventResult handleFormMnemonicKeyEvent(
-    BuildContext context,
-    KeyEvent event,
-  ) {
+  KeyEventResult handleFormMnemonicKeyEvent(BuildContext context,
+      KeyEvent event,) {
     return _TaskMnemonicHandler.handleKeyEvent(
       context: context,
       task: widget.formModel.task,

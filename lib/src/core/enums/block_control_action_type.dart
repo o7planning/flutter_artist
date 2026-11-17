@@ -7,5 +7,5 @@ enum BlockControlActionType {
   refreshCurrentItem,
   resetForm,
   deleteCurrentItem,
-  showFormInfo;
+  showFormModel;
 }

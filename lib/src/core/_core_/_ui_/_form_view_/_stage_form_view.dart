@@ -1,14 +1,14 @@
 part of '../../core.dart';
 
 abstract class StageFormView<
-    STAGE_FORM_MODEL extends StageFormModel<
-        StageEnum, //
-        StageInitData,
-        StageResultData,
-        ProzessContextData,
-        FormPatch,
-        FormOutput,
-        AdditionalFormRelatedData>> extends StatelessWidget {
+STAGE_FORM_MODEL extends StageFormModel<
+    StageEnum, //
+    StageInitData,
+    StageResultData,
+    ProzessContextData,
+    FormPatch,
+    FormOutput,
+    AdditionalFormRelatedData>> extends StatelessWidget {
   final STAGE_FORM_MODEL formModel;
 
   const StageFormView({

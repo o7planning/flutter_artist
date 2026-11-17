@@ -42,12 +42,12 @@ class ProzessInitDataInfoWidget extends BaseInfoWidget {
       onPressed: prozess.prozessInitData == null
           ? null
           : (BuildContext context) {
-              DataDebugDialog.show(
-                context: context,
-                title: '',
-                targetObject: prozess.prozessInitData!,
-              );
-            },
+        DataDebugDialog.show(
+          context: context,
+          title: '',
+          targetObject: prozess.prozessInitData!,
+        );
+      },
     );
   }
 }

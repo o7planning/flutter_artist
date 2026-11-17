@@ -18,7 +18,7 @@ class _FilterMnemonicHandler {
     }
 
     final MnemonicShortcut? shortcut =
-        _MnemonicDispatcher.resolveShortcut(event);
+    _MnemonicDispatcher.resolveShortcut(event);
     if (shortcut == null) return KeyEventResult.ignored;
 
     if (FlutterArtist.executor.isBusy) return KeyEventResult.handled;
@@ -31,11 +31,9 @@ class _FilterMnemonicHandler {
         }
         return KeyEventResult.ignored;
 
-      case MnemonicShortcut.debugFilter:
-        DebugViewerDialog.openDebugFilterModelInspector(
-          context: context,
+      case MnemonicShortcut.debugFilterModel:
+        filterModel.showDebugFilterModelViewerDialog(
           locationInfo: '',
-          filterModel: filterModel,
         );
         return KeyEventResult.handled;
 

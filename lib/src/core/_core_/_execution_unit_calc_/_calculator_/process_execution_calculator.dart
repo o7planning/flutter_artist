@@ -10,7 +10,8 @@ class ProzessExecutionCalculator {
 
     String buildInfo(String branch) {
       return "$branch, ${input.modelName}, _executionIntent: $intent, "
-          "dataState: ${state.toBriefInfo()}, restartHint: $hint, isVisible: $isVisible";
+          "dataState: ${state
+          .toBriefInfo()}, restartHint: $hint, isVisible: $isVisible";
     }
 
     if (intent is ProzessDoneIntent) {

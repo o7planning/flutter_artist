@@ -28,10 +28,10 @@ class ProzessErrorInfo {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ProzessErrorInfo &&
-          runtimeType == other.runtimeType &&
-          prozessErrorMethod == other.prozessErrorMethod &&
-          error == other.error;
+          other is ProzessErrorInfo &&
+              runtimeType == other.runtimeType &&
+              prozessErrorMethod == other.prozessErrorMethod &&
+              error == other.error;
 
   @override
   int get hashCode => Object.hash(runtimeType, prozessErrorMethod, error);

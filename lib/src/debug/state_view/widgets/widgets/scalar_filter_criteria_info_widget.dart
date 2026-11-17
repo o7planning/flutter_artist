@@ -39,21 +39,21 @@ class ScalarFilterCriteriaInfoWidget extends BaseInfoWidget {
           message: scalarFilterCriteria == null
               ? ""
               : filterModelFilterCriteria == scalarFilterCriteria
-                  ? "The scalar is using the latest filtering criteria."
-                  : "Warning: The scalar is using old filtering criteria.",
+              ? "The scalar is using the latest filtering criteria."
+              : "Warning: The scalar is using old filtering criteria.",
           child: SimpleSmallIconButton(
             iconData: Icons.view_agenda,
             iconSize: 14,
             iconColor: scalarFilterCriteria == null
                 ? context.faColors.action.ink.info
                 : filterModelFilterCriteria == scalarFilterCriteria
-                    ? context.faColors.action.ink.success
-                    : context.faColors.action.ink.error,
+                ? context.faColors.action.ink.success
+                : context.faColors.action.ink.error,
             onPressed: scalarFilterCriteria == null
                 ? null
                 : () {
-                    scalar.showDebugFilterCriteriaViewerDialog();
-                  },
+              scalar.showDebugFilterCriteriaViewerDialog();
+            },
           ),
         ),
       ],
@@ -70,8 +70,8 @@ class ScalarFilterCriteriaInfoWidget extends BaseInfoWidget {
     return scalarFilterCriteria == null
         ? ""
         : filterModelFilterCriteria == scalarFilterCriteria
-            ? "The scalar is using the latest filtering criteria."
-            : "Warning: The scalar is using old filtering criteria.";
+        ? "The scalar is using the latest filtering criteria."
+        : "Warning: The scalar is using old filtering criteria.";
   }
 
   @override

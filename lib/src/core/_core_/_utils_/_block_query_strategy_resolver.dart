@@ -7,14 +7,14 @@ class BlockQueryStrategyResolver {
   /// Resolves the exact query execution plan for a given [block].
   static BlockQueryPlan<ID> resolveQueryPlan<ID extends Comparable>({
     required Block<
-            ID, //
-            Identifiable<ID>,
-            Identifiable<ID>,
-            FilterPatch,
-            FilterCriteria,
-            CreationPreset,
-            FormPatch>
-        block,
+        ID, //
+        Identifiable<ID>,
+        Identifiable<ID>,
+        FilterPatch,
+        FilterCriteria,
+        CreationPreset,
+        FormPatch>
+    block,
     required DebugBlockSyncSessionState<ID>? syncSessionState,
     required QueryHint queryHint,
     required bool provideItemsContext,
@@ -54,7 +54,8 @@ class BlockQueryStrategyResolver {
     // a. Prozess explicitly mandated force (queryHint == QueryHint.force)
     // b. Active UI representation is visible AND dataset is unready (pending/stale)
     final bool effectiveForce = queryHint == QueryHint.force ||
-        (provideItemsContext && (dataState.isPending || dataState.isLoadedStale));
+        (provideItemsContext &&
+            (dataState.isPending || dataState.isLoadedStale));
 
     // If there is no demand to execute or refresh, reject execution immediately
     if (!effectiveForce) {
@@ -89,7 +90,7 @@ class BlockQueryStrategyResolver {
 
       // Bounded Paginated Mode (pageableQuery):
       final Set<ID> accumulatedEffectedIds =
-          syncSessionState.getEffectedItemIds();
+      syncSessionState.getEffectedItemIds();
 
       if (accumulatedEffectedIds.isEmpty) {
         // No pending mutated IDs: Sweep initial page (Page 1)
@@ -116,7 +117,7 @@ class BlockQueryStrategyResolver {
 
       // Resolve final strategy using block's viewportSyncConfig
       final BlockViewportSyncStrategy? resolvedStrategy =
-          BlockViewportSyncStrategy.resolveViewportSyncStrategy(
+      BlockViewportSyncStrategy.resolveViewportSyncStrategy(
         nativeQueryMode: nativeQueryMode,
         syncConfig: syncConfig,
         receivedEventInfos: receivedEvents,
@@ -142,7 +143,7 @@ class BlockQueryStrategyResolver {
           return BlockQueryPlan(
             action: BlockResolvedQueryAction.performQueryByItemIds,
             viewportSyncStrategy:
-                BlockViewportSyncStrategy.effectedItemIdsQuery,
+            BlockViewportSyncStrategy.effectedItemIdsQuery,
             targetItemIds: effectedIds,
           );
 
@@ -150,7 +151,7 @@ class BlockQueryStrategyResolver {
           final List<ID> currentBlockItemIds = itemIds;
 
           final Set<ID> performQueryIds =
-              syncSessionState.getPerformQueryItemIds(currentBlockItemIds);
+          syncSessionState.getPerformQueryItemIds(currentBlockItemIds);
 
           // Fallback to full query if target ID pool resolves empty
           if (performQueryIds.isEmpty) {
@@ -163,7 +164,7 @@ class BlockQueryStrategyResolver {
           return BlockQueryPlan(
             action: BlockResolvedQueryAction.performQueryByItemIds,
             viewportSyncStrategy:
-                BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
+            BlockViewportSyncStrategy.effectedAndViewportItemIdsQuery,
             targetItemIds: performQueryIds,
           );
       }

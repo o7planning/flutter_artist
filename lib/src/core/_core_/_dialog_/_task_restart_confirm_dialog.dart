@@ -16,9 +16,10 @@ class TaskRestartConfirmDialog extends StatelessWidget {
     final result = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      builder: (context) => TaskRestartConfirmDialog(
-        task: task,
-      ),
+      builder: (context) =>
+          TaskRestartConfirmDialog(
+            task: task,
+          ),
     );
     return result ?? false;
   }

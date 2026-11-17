@@ -12,9 +12,9 @@ abstract class FormViewConfig extends ViewConfig {
   const FormViewConfig({
     required super.quickSuggestionMode,
   }) : super(
-          enableKeyboardNavigation: false,
-          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
-        );
+    enableKeyboardNavigation: false,
+    mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+  );
 }
 
 class InternalFormViewConfig extends FormViewConfig {

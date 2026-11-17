@@ -23,9 +23,9 @@ class SimpleErrorViewerDialog extends StatelessWidget {
       contentPadding: EdgeInsets.all(8),
       preferredContentWidth: 440,
       preferredContentHeight:
-          appError.errorDetails == null || appError.errorDetails!.isEmpty
-              ? 160
-              : 240,
+      appError.errorDetails == null || appError.errorDetails!.isEmpty
+          ? 160
+          : 240,
       content: _buildContent(context, appError),
     );
     return alert;
@@ -67,10 +67,10 @@ class SimpleErrorViewerDialog extends StatelessWidget {
         Expanded(
           child: ListView(
             children: appError.errorDetails != null &&
-                    appError.errorDetails!.isNotEmpty
+                appError.errorDetails!.isNotEmpty
                 ? appError.errorDetails!
-                    .map((errorDetail) => _buildErrorDetail(errorDetail))
-                    .toList()
+                .map((errorDetail) => _buildErrorDetail(errorDetail))
+                .toList()
                 : [],
           ),
         ),

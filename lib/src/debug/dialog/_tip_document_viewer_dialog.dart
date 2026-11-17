@@ -78,7 +78,8 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
           ),
           const SizedBox(width: 4),
           Text(
-            "${tipDocument.getPosition()} / ${TipDocument.enabledValues.length}",
+            "${tipDocument.getPosition()} / ${TipDocument.enabledValues
+                .length}",
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.bold,
@@ -91,10 +92,10 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
           _buildLangFlag("vi"),
           const Spacer(),
           _buildNavButton(Icons.arrow_back_ios_new_rounded,
-              () => _refresh(tipDocument.previous())),
+                  () => _refresh(tipDocument.previous())),
           const SizedBox(width: 4),
           _buildNavButton(Icons.arrow_forward_ios_rounded,
-              () => _refresh(tipDocument.next())),
+                  () => _refresh(tipDocument.next())),
         ],
       ),
     );
@@ -117,7 +118,7 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
               : context.faColors.action.fill.primary,
           border: isSelected
               ? Border.all(
-                  color: context.faColors.action.stroke.primary, width: 0.5)
+              color: context.faColors.action.stroke.primary, width: 0.5)
               : null,
           borderRadius: BorderRadius.circular(4),
         ),
@@ -160,14 +161,14 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
         if (snapshot.hasData && snapshot.data!.ready) {
           filteredDocs = snapshot.data!.allDocs
               .where((doc) =>
-                  doc.langCode == _selectedLangCode && docIds.contains(doc.id))
+          doc.langCode == _selectedLangCode && docIds.contains(doc.id))
               .toList();
         }
 
         // 5. Handling Empty Collection Fallbacks Dynamically Based on Locale
         if (filteredDocs.isEmpty) {
           final String missingLangLabel =
-              _selectedLangCode == 'vi' ? "Vietnamese" : "English";
+          _selectedLangCode == 'vi' ? "Vietnamese" : "English";
           return Center(
             child: Text(
               "No $missingLangLabel documentation available for this example.",
@@ -193,11 +194,12 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
             ),
             const SizedBox(height: 8),
             ...filteredDocs.map(
-              (doc) => DocLinkView(
-                faDoc: doc,
-                padding: const EdgeInsets.all(8),
-                margin: const EdgeInsets.only(bottom: 8),
-              ),
+                  (doc) =>
+                  DocLinkView(
+                    faDoc: doc,
+                    padding: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.only(bottom: 8),
+                  ),
             ),
           ],
         );
@@ -206,8 +208,7 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
   }
 
   /// Compiles a responsive, standardized diagnostic error card layout.
-  Widget _buildErrorView(
-    BuildContext context, {
+  Widget _buildErrorView(BuildContext context, {
     required String message,
     required String? details,
   }) {
@@ -233,7 +234,9 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
                 color: context.faColors.ink.primary,
               ),
             ),
-            if (details != null && details.trim().isNotEmpty) ...[
+            if (details != null && details
+                .trim()
+                .isNotEmpty) ...[
               const SizedBox(height: 4),
               Container(
                 padding: const EdgeInsets.all(8),
@@ -287,22 +290,24 @@ class _TipDocumentViewerDialogState extends State<TipDocumentViewerDialog> {
         id: "tips",
         text: ' Tips',
         closable: false,
-        leading: (context, status) => Icon(
-          Icons.tips_and_updates_outlined,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: 16,
-        ),
+        leading: (context, status) =>
+            Icon(
+              Icons.tips_and_updates_outlined,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: 16,
+            ),
         view: _buildTip(),
       ),
       TabData(
         id: "docs",
         text: ' Docs',
         closable: false,
-        leading: (context, status) => Icon(
-          Icons.policy_outlined,
-          color: TabThemeUtils.getTabIconColor(context, status),
-          size: 16,
-        ),
+        leading: (context, status) =>
+            Icon(
+              Icons.policy_outlined,
+              color: TabThemeUtils.getTabIconColor(context, status),
+              size: 16,
+            ),
         view: _buildDocumentList(context),
       ),
     ];

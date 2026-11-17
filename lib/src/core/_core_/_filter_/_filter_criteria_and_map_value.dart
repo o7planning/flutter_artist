@@ -9,12 +9,14 @@ sealed class FilterCriteriaSnapshot<FILTER_CRITERIA extends FilterCriteria>
 
   bool get isError => this is FilterCriteriaSnapshotError<FILTER_CRITERIA>;
 
-  FILTER_CRITERIA? get criteriaOrNull => switch (this) {
+  FILTER_CRITERIA? get criteriaOrNull =>
+      switch (this) {
         FilterCriteriaSnapshotSuccess(:final filterCriteria) => filterCriteria,
         _ => null,
       };
 
-  ErrorInfo? get errorInfoOrNull => switch (this) {
+  ErrorInfo? get errorInfoOrNull =>
+      switch (this) {
         FilterCriteriaSnapshotError(:final errorInfo) => errorInfo,
         _ => null,
       };
@@ -22,7 +24,7 @@ sealed class FilterCriteriaSnapshot<FILTER_CRITERIA extends FilterCriteria>
 
 /// A fully resolved, valid criteria snapshot ready for consumption.
 final class FilterCriteriaSnapshotSuccess<
-        FILTER_CRITERIA extends FilterCriteria>
+FILTER_CRITERIA extends FilterCriteria>
     extends FilterCriteriaSnapshot<FILTER_CRITERIA> {
   final FILTER_CRITERIA filterCriteria;
   final Map<String, dynamic> filterCriteriaMap;

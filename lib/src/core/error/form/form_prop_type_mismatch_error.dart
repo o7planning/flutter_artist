@@ -16,7 +16,7 @@ class FormPropTypeMismatchError {
   AppError toAppError({required dynamic formModelName}) {
     return AppError(
       errorMessage:
-          "The data type of `$propName` does not match between the definition and the actual type (or value type). "
+      "The data type of `$propName` does not match between the definition and the actual type (or value type). "
           "Defined as `${getTypeNameWithoutGenerics(definedPropType)}`, "
           "actually `${getTypeNameWithoutGenerics(actualValue.runtimeType)}`. "
           "Check `$formModelName` and its `FormView` (or its value) for details.",

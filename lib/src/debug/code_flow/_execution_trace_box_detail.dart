@@ -110,7 +110,8 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
       ),
       items: TraceStepType.values
           .map(
-            (traceStepType) => BreadCrumbItem(
+            (traceStepType) =>
+            BreadCrumbItem(
               content: Tooltip(
                 message: traceStepType.desc,
                 child: IconedCheckbox(
@@ -128,7 +129,7 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
                 ),
               ),
             ),
-          )
+      )
           .toList(),
     );
   }
@@ -149,7 +150,7 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
             color: theme.colorScheme.primary.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(8),
             border:
-                Border.all(color: theme.dividerColor.withValues(alpha: 0.1)),
+            Border.all(color: theme.dividerColor.withValues(alpha: 0.1)),
           ),
           child: CodeFlowMethodView(executionTrace: executionTrace),
         ),
@@ -183,13 +184,14 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
           SizedBox(height: 10),
         ...traceSteps
             .map(
-              (e) => TraceStepBox(
+              (e) =>
+              TraceStepBox(
                 traceStep: e,
               ),
-            )
+        )
             .expand(
               (w) => [w, SizedBox(height: 5)],
-            ),
+        ),
       ],
     );
   }

@@ -66,7 +66,7 @@ class BlockEventDispatchPlanResolver {
         shouldDispatch: true,
         isSameDomainFamily: isMainSameDomain && !matchExtra,
         effectiveItemIds:
-            null, // Strip IDs to prevent cross-entity query pollution.
+        null, // Strip IDs to prevent cross-entity query pollution.
         requiresMaxSyncStrategy: true,
       );
     }
@@ -78,7 +78,7 @@ class BlockEventDispatchPlanResolver {
       shouldDispatch: true,
       isSameDomainFamily: true,
       effectiveItemIds:
-          sourceEffectedItemIds.isNotEmpty ? sourceEffectedItemIds : null,
+      sourceEffectedItemIds.isNotEmpty ? sourceEffectedItemIds : null,
       requiresMaxSyncStrategy: false,
     );
   }

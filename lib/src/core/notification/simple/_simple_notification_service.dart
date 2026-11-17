@@ -18,7 +18,7 @@ class SimpleNotificationService
     await __getNotificationSummary();
     Timer.periodic(
       FlutterArtist.appConfig.notificationFetchInterval,
-      (Timer timer) {
+          (Timer timer) {
         __getNotificationSummary();
       },
     );
@@ -38,20 +38,20 @@ class SimpleNotificationService
     //
     final Box<DateTime> hiveBoxDateTime = await HiveUtils.openHiveBoxDateTime();
     final Box<String> notificationSummaryBox =
-        await HiveUtils.openHiveBoxNotification();
+    await HiveUtils.openHiveBoxNotification();
 
     //
     final String lastFetchKey =
-        __keyForLastFetchNotificationSummary(loggedInUserName);
+    __keyForLastFetchNotificationSummary(loggedInUserName);
     final String notificationSummaryKey =
-        __keyForNotificationSummary(loggedInUserName);
+    __keyForNotificationSummary(loggedInUserName);
 
     try {
       final DateTime? lastFetch = hiveBoxDateTime.get(lastFetchKey);
       await hiveBoxDateTime.put(lastFetchKey, DateTime.now());
       //
       final String? notificationSummaryJsonLocal =
-          notificationSummaryBox.get(notificationSummaryKey);
+      notificationSummaryBox.get(notificationSummaryKey);
       INotificationSummary? notificationSummaryLocal;
       try {
         if (notificationSummaryJsonLocal != null) {
@@ -85,7 +85,7 @@ class SimpleNotificationService
       try {
         // Fetch from Server:
         ApiResult<INotificationSummary> result =
-            await adapter.performLoadSummary();
+        await adapter.performLoadSummary();
         if (result.error != null) {
           FlutterArtist.logger.addError(
             moduleName: null,

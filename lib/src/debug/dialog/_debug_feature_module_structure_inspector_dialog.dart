@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 
 import '../../core/_core_/core.dart';
 import '../../core/enums/_enums.dart';
@@ -50,7 +50,7 @@ class _DebugFeatureModuleStructureInspectorDialogState
     dialogs.FaDialog alert = dialogs.FaDialog(
       iconData: FaIconConstants.moduleStructureIconData,
       titleText:
-          "Debug Shelf Structure Inspector - ${getClassName(widget.module)}",
+      "Debug Shelf Structure Inspector - ${getClassName(widget.module)}",
       contentPadding: const EdgeInsets.all(5),
       preferredContentWidth: preferContentSize.width,
       preferredContentHeight: preferContentSize.height,

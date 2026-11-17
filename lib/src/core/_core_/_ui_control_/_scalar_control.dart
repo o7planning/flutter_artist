@@ -3,10 +3,10 @@ part of '../core.dart';
 class ScalarControlConfig extends ViewConfig {
   const ScalarControlConfig()
       : super(
-          quickSuggestionMode: QuickSuggestionMode.none,
-          enableKeyboardNavigation: false,
-          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
-        );
+    quickSuggestionMode: QuickSuggestionMode.none,
+    enableKeyboardNavigation: false,
+    mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+  );
 }
 
 @Deprecated(
@@ -51,7 +51,7 @@ class _ControlButtonState extends _ContextProviderViewState<ScalarControl> {
 
   @override
   FocusRegionType getRegionType() {
-    return FocusRegionType. temp ;
+    return FocusRegionType.temp;
   }
 
   @override
@@ -86,13 +86,14 @@ class _ControlButtonState extends _ContextProviderViewState<ScalarControl> {
       onPressedAsync == null
           ? null
           : () {
-              () async {
-                bool success = await onPressedAsync();
-                if (success && widget.navigate != null) {
-                  widget.navigate!();
-                }
-              }();
-            },
+        () async {
+          bool success = await onPressedAsync();
+          if (success && widget.navigate != null) {
+            widget.navigate!();
+          }
+        }
+        ();
+      },
     );
   }
 

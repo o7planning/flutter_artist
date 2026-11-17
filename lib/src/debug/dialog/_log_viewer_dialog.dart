@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-    as dialogs;
+as dialogs;
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
@@ -80,11 +80,11 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
       onHelpPressed: loggedInUser == null || !loggedInUser.isSystemUser
           ? null
           : () {
-              TipDocumentViewerDialog.show(
-                context: context,
-                tipDocument: TipDocument.logViewer,
-              );
-            },
+        TipDocumentViewerDialog.show(
+          context: context,
+          tipDocument: TipDocument.logViewer,
+        );
+      },
     );
   }
 
@@ -109,11 +109,11 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
               onPressed: tipDocument == null || !tipDocument.enabled
                   ? null
                   : () {
-                      TipDocumentViewerDialog.show(
-                        context: context,
-                        tipDocument: tipDocument,
-                      );
-                    },
+                TipDocumentViewerDialog.show(
+                  context: context,
+                  tipDocument: tipDocument,
+                );
+              },
             ),
           ),
           const Spacer(),
@@ -183,9 +183,9 @@ class _LogViewerDialogState extends State<LogViewerDialog> {
               decoration: BoxDecoration(
                 color: isSelected
                     ? (isError
-                            ? context.faColors.action.fill.danger
-                            : context.faColors.action.fill.warning)
-                        .withValues(alpha: 0.3)
+                    ? context.faColors.action.fill.danger
+                    : context.faColors.action.fill.warning)
+                    .withValues(alpha: 0.3)
                     : themeColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(4),
                 border: Border.all(

@@ -9,7 +9,8 @@ class StageFormExecutionCalculator {
 
     String buildInfo(String branch) {
       return "$branch, (${input.stageName}), _executionIntent: $intent, "
-          "formDataState: ${state.toBriefInfo()}, _formLoadHint: $hint, visibleX: $isVisible";
+          "formDataState: ${state
+          .toBriefInfo()}, _formLoadHint: $hint, visibleX: $isVisible";
     }
 
     if (intent is FormModelDoneIntent) {
@@ -66,7 +67,7 @@ class StageFormExecutionCalculator {
         return StageFormNextUnitOutput(
           action: StageFormExecutionAction.loadData,
           missingIntent:
-              isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isLoadIntent && intent != null,
           debugInfo: buildInfo("StageFormModel (3.1.1)"),
         );
@@ -88,7 +89,7 @@ class StageFormExecutionCalculator {
         return StageFormNextUnitOutput(
           action: StageFormExecutionAction.loadData,
           missingIntent:
-              isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isLoadIntent && intent != null,
           debugInfo: buildInfo("StageFormModel (4.1.1)"),
         );
@@ -109,7 +110,7 @@ class StageFormExecutionCalculator {
         return StageFormNextUnitOutput(
           action: StageFormExecutionAction.loadData,
           missingIntent:
-              isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
+          isLoadIntent ? null : MissingIntentType.dataLoadOrQuery,
           preserveCurrentIntent: !isLoadIntent && intent != null,
           debugInfo: buildInfo("StageFormModel (5.1.2)"),
         );

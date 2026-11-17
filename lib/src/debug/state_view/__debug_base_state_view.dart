@@ -12,11 +12,11 @@ abstract class DebugBaseStateView extends StatelessWidget {
       children: children.length <= 1
           ? children
           : (children
-              .expand(
-                (w) => [w, SizedBox(height: 5)],
-              )
-              .toList()
-            ..removeLast()),
+          .expand(
+            (w) => [w, SizedBox(height: 5)],
+      )
+          .toList()
+        ..removeLast()),
     );
   }
 

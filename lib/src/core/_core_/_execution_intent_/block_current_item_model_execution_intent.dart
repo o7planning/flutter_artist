@@ -1,19 +1,19 @@
 part of '../core.dart';
 
 sealed class BlockCurrentItemModelExecutionIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>,
-        PRECHECK,
-        EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>,
+PRECHECK,
+EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
     extends ExecutionIntent<PRECHECK, EXECUTION_RESULT> {
   BlockCurrentItemModelExecutionIntent();
 }
 
 final class BlockCurrentItemModelPrepareFormToCreateItemIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> //
     extends BlockCurrentItemModelExecutionIntent<
         ID, //
         ITEM,
@@ -30,9 +30,9 @@ final class BlockCurrentItemModelPrepareFormToCreateItemIntent<
 }
 
 final class BlockCurrentItemModelClearCurrentItemIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> //
     extends BlockCurrentItemModelExecutionIntent<
         ID, //
         ITEM,
@@ -43,9 +43,9 @@ final class BlockCurrentItemModelClearCurrentItemIntent<
 }
 
 final class BlockCurrentItemModelSetCurrentItemIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>> //
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>> //
     extends BlockCurrentItemModelExecutionIntent<
         ID, //
         ITEM,
@@ -68,10 +68,13 @@ final class BlockCurrentItemModelSetCurrentItemIntent<
 }
 
 final class BlockCurrentItemModelDoneIntent<
-        ID extends Comparable, //
-        ITEM extends Identifiable<ID>,
-        ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockCurrentItemModelExecutionIntent<ID, ITEM, ITEM_DETAIL, dynamic,
+ID extends Comparable, //
+ITEM extends Identifiable<ID>,
+ITEM_DETAIL extends Identifiable<ID>>
+    extends BlockCurrentItemModelExecutionIntent<ID,
+        ITEM,
+        ITEM_DETAIL,
+        dynamic,
         EmptyExecutionUnitResult> {
   final String lastIntentInfo;
 

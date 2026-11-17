@@ -16,7 +16,7 @@ abstract class _BaseProzessStagesViewSwitcherBuilder
 }
 
 abstract class _BaseProzessStagesViewSwitcherBuilderState<
-        W extends _BaseProzessStagesViewSwitcherBuilder>
+W extends _BaseProzessStagesViewSwitcherBuilder>
     extends _ContextProviderViewState<W> {
   Prozess get prozess => getProzess();
 
@@ -110,7 +110,7 @@ abstract class _BaseProzessStagesViewSwitcherBuilderState<
 
     // Determine current index based on the prozess's viewingStageEnum pointer.
     final int rawIndex = prozess.orderedStages.indexWhere(
-      (stage) => stage.stageId == prozess.viewingStageEnum,
+          (stage) => stage.stageId == prozess.viewingStageEnum,
     );
 
     // Validate if the resolved index matches an actual configured stage view.
@@ -122,7 +122,7 @@ abstract class _BaseProzessStagesViewSwitcherBuilderState<
         padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: ErrorMessageView(
           message:
-              "No active viewing stage has been determined yet. Please check prozess pipeline state.",
+          "No active viewing stage has been determined yet. Please check prozess pipeline state.",
         ),
       );
     }

@@ -38,7 +38,8 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
       executionTrace.addInfo(
         codeId: "#020040",
         shortDesc:
-            "The ${debugObjHtml(this)}.performLogin() method was called with an error!",
+        "The ${debugObjHtml(
+            this)}.performLogin() method was called with an error!",
         errorInfo: errorInfo,
       );
       return;
@@ -96,7 +97,7 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
     // This method never throw an error!
     //
     bool success =
-        await FlutterArtist.globalsManager._setOrUpdateLoggedInUserSafely(
+    await FlutterArtist.globalsManager._setOrUpdateLoggedInUserSafely(
       executionTrace: executionTrace,
       loggedInUser: loggedInUser,
       requiresTheSameUser: false,
@@ -128,7 +129,8 @@ abstract class LoginActivityV1<USER extends ILoggedInUser> extends ActivityV1 {
       executionTrace.addInfo(
         codeId: "#022080",
         shortDesc:
-            "The ${debugObjHtml(loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
+        "The ${debugObjHtml(
+            loginLogoutAdapter)}.addThirdPartyLogicOnLogin() method was called with an error.",
         errorInfo: errorInfo,
       );
       executionTrace.printToConsole();

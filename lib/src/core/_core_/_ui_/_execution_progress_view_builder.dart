@@ -58,7 +58,7 @@ class _ExecutionProgressBuilderState
 
   @override
   FocusRegionType getRegionType() {
-    return FocusRegionType.executionProgress ;
+    return FocusRegionType.executionProgress;
   }
 
   @override

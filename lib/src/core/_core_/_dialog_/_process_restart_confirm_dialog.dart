@@ -26,11 +26,12 @@ class ProzessRestartConfirmDialog extends StatelessWidget {
     final result = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
-      builder: (context) => ProzessRestartConfirmDialog(
-        prozess: prozess,
-        targetStage: targetStage,
-        mode: mode,
-      ),
+      builder: (context) =>
+          ProzessRestartConfirmDialog(
+            prozess: prozess,
+            targetStage: targetStage,
+            mode: mode,
+          ),
     );
     return result ?? false;
   }
@@ -121,8 +122,8 @@ class ProzessRestartConfirmDialog extends StatelessWidget {
     return stage.stageId.stageOrder >= targetStage!.stageId.stageOrder;
   }
 
-  Widget _buildTimelineNode(
-      BuildContext context, Stage stage, bool isLast, bool willBeReset) {
+  Widget _buildTimelineNode(BuildContext context, Stage stage, bool isLast,
+      bool willBeReset) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -146,7 +147,7 @@ class ProzessRestartConfirmDialog extends StatelessWidget {
 
     // 2. INDICATOR LAYER: Render the destructive marker above the node if it will be reset
     Widget topIndicator =
-        const SizedBox(height: 24); // Fixed height placeholder
+    const SizedBox(height: 24); // Fixed height placeholder
     if (willBeReset) {
       topIndicator = SizedBox(
         height: 24,

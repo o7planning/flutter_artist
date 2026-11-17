@@ -21,9 +21,10 @@ class TaskControlBar extends BaseControlBar<
       TaskControlBarItem.standard(TaskControlBarItemType.restart),
     ],
     super.rightItems = const [
+      TaskControlBarItem.standard(TaskControlBarItemType.reset),
       TaskControlBarItem.standard(TaskControlBarItemType.submit),
       TaskControlBarItem.standard(TaskControlBarItemType.divider),
-      TaskControlBarItem.standard(TaskControlBarItemType.debugForm),
+      TaskControlBarItem.standard(TaskControlBarItemType.debugFormModel),
     ],
   });
 
@@ -42,10 +43,9 @@ class _TaskControlBarState extends _BaseControlBarState<
   @override
   Activity? _getRelatedModule() => widget.task.activity;
 
-
   @override
   FocusRegionType getRegionType() {
-    return 	FocusRegionType.controlBar;
+    return FocusRegionType.controlBar;
   }
 
   @override
@@ -85,6 +85,26 @@ class _TaskControlBarState extends _BaseControlBarState<
           iconData: FaIconConstants.formBackIconData,
           onPressed: Navigator.of(context).canPop()
               ? () => Navigator.of(context).maybePop()
+              : null,
+        );
+
+      case TaskControlBarItemType.reset:
+        if (!widget.config.allowResetButton) {
+          return null;
+        }
+        final actionable = widget.task.checkBeforeResetForm(
+          checkAllow: true,
+        );
+        return ControlBarHelper.buildControlBarButton(
+          context,
+          style: widget.style,
+          tooltip: type.formatTooltip("Reset Form"),
+          iconData: FaIconConstants.formResetIconData,
+          onAction: false,
+          onPressed: actionable.yes
+              ? () {
+                  widget.task.resetForm();
+                }
               : null,
         );
 
@@ -149,9 +169,9 @@ class _TaskControlBarState extends _BaseControlBarState<
               : null,
         );
 
-      case TaskControlBarItemType.debugForm:
+      case TaskControlBarItemType.debugFormModel:
         if (!widget.config.allowDebugFormModelInspectorButton) return null;
-        Actionable actionable = widget.task.checkBeforeShowFormInfo();
+        Actionable actionable = widget.task.checkBeforeShowFormModelInspector();
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,

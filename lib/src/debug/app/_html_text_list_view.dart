@@ -62,11 +62,11 @@ class _HtmlTextListViewState extends State<HtmlTextListView> {
             onPressed: widget.tipDocument == null
                 ? null
                 : () {
-                    TipDocumentViewerDialog.show(
-                      context: context,
-                      tipDocument: widget.tipDocument!,
-                    );
-                  },
+              TipDocumentViewerDialog.show(
+                context: context,
+                tipDocument: widget.tipDocument!,
+              );
+            },
           ),
         ),
       ],

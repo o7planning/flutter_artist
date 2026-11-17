@@ -1,9 +1,9 @@
 part of '../core.dart';
 
 class _ProzessDebugInfo<
-    STAGE_ENUM extends StageEnum, //
-    PROZESS_INIT_DATA extends ProzessInitData,
-    PROZESS_CONTEXT_DATA extends ProzessContextData> {
+STAGE_ENUM extends StageEnum, //
+PROZESS_INIT_DATA extends ProzessInitData,
+PROZESS_CONTEXT_DATA extends ProzessContextData> {
   final Prozess<
       STAGE_ENUM, //
       PROZESS_INIT_DATA,
@@ -21,6 +21,6 @@ class _ProzessDebugInfo<
 
   _ProzessDebugInfo({
     required Prozess<STAGE_ENUM, PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>
-        prozess,
+    prozess,
   }) : _prozess = prozess;
 }

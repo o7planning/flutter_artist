@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 class CodeFlowConstants {
   static Color getSelectedBg(BuildContext context) =>
-      Theme.of(context).colorScheme.primary.withValues(alpha: 0.15);
+      Theme
+          .of(context)
+          .colorScheme
+          .primary
+          .withValues(alpha: 0.15);
 
   static Color getDeselectedBg(BuildContext context) {
     final theme = Theme.of(context);
@@ -12,7 +16,10 @@ class CodeFlowConstants {
   }
 
   static Color getMainIconColor(BuildContext context) =>
-      Theme.of(context).colorScheme.onSurface;
+      Theme
+          .of(context)
+          .colorScheme
+          .onSurface;
 
   // Tạm thời đưa trở lại:
   static final Color devCodeIconColor = Colors.indigo;
@@ -25,6 +32,9 @@ TextStyle codeStyle(BuildContext context, {bool isBold = false}) {
     fontFamily: 'Courier',
     fontSize: 12,
     fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
-    color: Theme.of(context).colorScheme.onSurfaceVariant,
+    color: Theme
+        .of(context)
+        .colorScheme
+        .onSurfaceVariant,
   );
 }

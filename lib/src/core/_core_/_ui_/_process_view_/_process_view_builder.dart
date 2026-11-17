@@ -40,7 +40,7 @@ class _ProzessViewBuilderState
 
   @override
   FocusRegionType getRegionType() {
-    return 	FocusRegionType.prozessView;
+    return FocusRegionType.prozessView;
   }
 
   @override

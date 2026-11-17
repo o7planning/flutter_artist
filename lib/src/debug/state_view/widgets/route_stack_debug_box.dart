@@ -19,14 +19,15 @@ class RouteStackDebugBox extends BaseDebugBox {
         .asMap()
         .entries
         .map(
-          (entry) => IconLabelText(
+          (entry) =>
+          IconLabelText(
             label: entry.key.toString(),
             text: entry.value.path,
             labelTextSpacing: 5,
             labelStyle: DebugStyleUtils.getLabelStyle0(context),
             textStyle: DebugStyleUtils.getTextStyle0(context),
           ),
-        )
+    )
         .toList();
     return list1;
   }

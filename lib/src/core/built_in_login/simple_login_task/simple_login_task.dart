@@ -13,13 +13,14 @@ part of '../_login.dart';
 /// 2. **Passwordless / OAuth Login (e.g., Microsoft, Google)**: Pass `formModel: null` and
 ///    implement the OAuth trigger directly inside [performLogin].
 abstract class SimpleLoginTask<
-    USER extends ILoggedInUser, //
-    FORM_PATCH extends FormPatch,
-    FORM_OUTPUT extends FormOutput> extends Task<
+USER extends ILoggedInUser, //
+FORM_PATCH extends FormPatch,
+FORM_OUTPUT extends FormOutput> extends Task<
     EmptyTaskInitData, //
     SimpleLoginTaskResultData<USER>,
     FORM_PATCH,
-    FORM_OUTPUT> implements SessionEstablisher<USER> {
+    FORM_OUTPUT>
+    implements SessionEstablisher<USER> {
   SimpleLoginTask({
     required super.name,
     super.description,
@@ -67,7 +68,8 @@ abstract class SimpleLoginTask<
     if (authenticatedUser == null) {
       throw AppError(
         errorMessage:
-            "${getClassNameWithoutGenerics(this)}.performLogin() returned null user data.",
+        "${getClassNameWithoutGenerics(
+            this)}.performLogin() returned null user data.",
       );
     }
 

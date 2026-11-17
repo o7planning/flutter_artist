@@ -15,8 +15,10 @@ class _TaskMnemonicHandler {
       if (task.formModel != null) task.formModel!,
       task,
     ];
-    if (_MnemonicDispatcher.tryTriggerRegisteredControl(event,
-        scopes: scopes)) {
+    if (_MnemonicDispatcher.tryTriggerRegisteredControl(
+      event,
+      scopes: scopes,
+    )) {
       return KeyEventResult.handled;
     }
 
@@ -36,12 +38,6 @@ class _TaskMnemonicHandler {
 
       case MnemonicShortcut.submit:
       case MnemonicShortcut.save:
-        final actionable = task.checkBeforeSubmit(
-          checkAllow: true,
-          checkValidate: false,
-        );
-        if (!actionable.yes) return KeyEventResult.ignored;
-
         () async {
           final result = await task.submit();
           final NavigationIntent? intent =
@@ -58,9 +54,6 @@ class _TaskMnemonicHandler {
 
       case MnemonicShortcut.restart:
       case MnemonicShortcut.refresh:
-        final actionable = task.checkBeforeRestart(checkAllow: true);
-        if (!actionable.yes) return KeyEventResult.ignored;
-
         () async {
           final result = await task.restart();
           final NavigationIntent? intent =
@@ -76,18 +69,12 @@ class _TaskMnemonicHandler {
         return KeyEventResult.handled;
 
       case MnemonicShortcut.reset:
-        if (task.formModel != null && task.formModel!.isDirty()) {
-          task.formModel!.resetForm();
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
+        task.resetForm();
+        return KeyEventResult.handled;
 
-      case MnemonicShortcut.debugForm:
-        if (task.checkBeforeShowFormInfo().yes) {
-          task.showDebugFormModelInspectorDialog();
-          return KeyEventResult.handled;
-        }
-        return KeyEventResult.ignored;
+      case MnemonicShortcut.debugFormModel:
+        task.showDebugFormModelInspectorDialog();
+        return KeyEventResult.handled;
 
       default:
         return KeyEventResult.ignored;

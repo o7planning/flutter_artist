@@ -22,9 +22,9 @@ class BlockErrorViewerDialog extends StatelessWidget {
       contentPadding: EdgeInsets.all(8),
       preferredContentWidth: 440,
       preferredContentHeight:
-          apiError.errorDetails == null || apiError.errorDetails!.isEmpty
-              ? 200
-              : 280,
+      apiError.errorDetails == null || apiError.errorDetails!.isEmpty
+          ? 200
+          : 280,
       content: _buildContent(context, apiError),
     );
     return alert;
@@ -77,10 +77,10 @@ class BlockErrorViewerDialog extends StatelessWidget {
         Expanded(
           child: ListView(
             children: apiError.errorDetails != null &&
-                    apiError.errorDetails!.isNotEmpty
+                apiError.errorDetails!.isNotEmpty
                 ? apiError.errorDetails!
-                    .map((errorDetail) => _buildErrorDetail(errorDetail))
-                    .toList()
+                .map((errorDetail) => _buildErrorDetail(errorDetail))
+                .toList()
                 : [],
           ),
         ),

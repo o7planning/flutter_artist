@@ -14,11 +14,12 @@ class BlockItemDetailViewBuilder extends _ContextProviderView {
     required this.block,
     BlockItemDetailViewConfig? config,
     required this.build,
-  })  : config = config ?? const BlockItemDetailViewConfig(),
+  })
+      : config = config ?? const BlockItemDetailViewConfig(),
         assert(
-          config == null ||
-              config.blockViewContext == BlockViewContext.itemDetail ||
-              config.blockViewContext == BlockViewContext.form,
+        config == null ||
+            config.blockViewContext == BlockViewContext.itemDetail ||
+            config.blockViewContext == BlockViewContext.form,
         );
 
   @override
@@ -43,7 +44,7 @@ class _BlockItemDetailViewBuilderState
 
   @override
   FocusRegionType getRegionType() {
-    return FocusRegionType.blockItemDetailView ;
+    return FocusRegionType.blockItemDetailView;
   }
 
   @override

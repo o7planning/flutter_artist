@@ -22,7 +22,9 @@ class ClassLinkedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme
+        .of(context)
+        .colorScheme;
     final String className =
         customDisplayClassName ?? getClassNameWithoutGenerics(targetObject);
 
