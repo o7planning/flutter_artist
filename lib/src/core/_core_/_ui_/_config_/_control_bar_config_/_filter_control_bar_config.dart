@@ -9,6 +9,7 @@ class FilterControlBarConfig extends ControlBarConfig {
 
   const FilterControlBarConfig({
     super.enableKeyboardNavigation = false,
+    super.focusIndicatorConfig,
     this.screenNavigationContext,
     this.allowQueryButton = false,
     this.allowBackButton = false,

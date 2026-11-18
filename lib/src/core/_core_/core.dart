@@ -826,6 +826,8 @@ part '_mnemonic_/_control_mnemonic.dart';
 
 part '_mnemonic_/_handler_/_block_mnemonic_handler.dart';
 
+part '_mnemonic_/_handler_/_scalar_mnemonic_handler.dart';
+
 part '_mnemonic_/_utils_/_region_traversal_utils.dart';
 
 part '_mnemonic_/_handler_/_task_mnemonic_handler.dart';
@@ -903,6 +905,8 @@ part '_ui_/_config_/_vew_config_/_block_form_view_config.dart';
 part '_ui_/_config_/_vew_config_/_task_form_view_config.dart';
 
 part '_ui_/_config_/_vew_config_/__view_config.dart';
+
+part '_ui_/_config_/_vew_config_/__focus_indicator_config.dart';
 
 part '_ui_/_config_/_vew_config_/__form_view_config.dart';
 

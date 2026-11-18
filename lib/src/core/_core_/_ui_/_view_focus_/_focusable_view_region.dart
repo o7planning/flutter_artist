@@ -15,6 +15,7 @@ class _FocusableViewRegion extends StatefulWidget {
   final ViewMouseFocusPolicy mouseFocusPolicy;
   final FocusOnKeyEventCallback? onKeyEvent;
   final ActiveFocusRegion regionInfo;
+  final FocusIndicatorConfig indicatorConfig;
   final Widget child;
 
   const _FocusableViewRegion({
@@ -25,6 +26,7 @@ class _FocusableViewRegion extends StatefulWidget {
     this.mouseFocusPolicy = ViewMouseFocusPolicy.strictNavigationOnly,
     this.onKeyEvent,
     required this.regionInfo,
+    this.indicatorConfig = const FocusIndicatorConfig(),
     required this.child,
   });
 
@@ -32,9 +34,16 @@ class _FocusableViewRegion extends StatefulWidget {
   State<_FocusableViewRegion> createState() => _FocusableViewRegionState();
 }
 
-class _FocusableViewRegionState extends State<_FocusableViewRegion> {
+class _FocusableViewRegionState extends State<_FocusableViewRegion>
+    with SingleTickerProviderStateMixin {
   late final FocusNode _focusNode;
   bool _hasFocus = false;
+
+  late final AnimationController _indicatorController;
+  late final Animation<double> _indicatorOpacity;
+
+  bool _activePulseShowDot = false;
+  bool _activePulseShowOverlay = false;
 
   /// Exposes the internal [FocusNode] for programmatic region switching.
   FocusNode get focusNode => _focusNode;
@@ -103,6 +112,25 @@ class _FocusableViewRegionState extends State<_FocusableViewRegion> {
   void initState() {
     super.initState();
     _focusNode = FocusNode(debugLabel: widget.debugLabel);
+    _indicatorController = AnimationController(
+      vsync: this,
+      duration: widget.indicatorConfig.duration,
+    );
+
+    // Hold full visibility briefly (25%), then fade out smoothly (75%).
+    _indicatorOpacity = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: ConstantTween<double>(1.0),
+        weight: 25,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.0, end: 0.0).chain(
+          CurveTween(curve: Curves.easeOutCubic),
+        ),
+        weight: 75,
+      ),
+    ]).animate(_indicatorController);
+
     if (widget.enabled) {
       _RegionDispatcher.register(this);
       RegionTraversalUtils.ensureGlobalHandlerInstalled();
@@ -127,6 +155,7 @@ class _FocusableViewRegionState extends State<_FocusableViewRegion> {
 
   @override
   void dispose() {
+    _indicatorController.dispose();
     _RegionDispatcher.unregister(this);
     FlutterArtist.focusTracker.notifyRegionUnfocused(widget.regionInfo);
     _focusNode.dispose();
@@ -138,10 +167,21 @@ class _FocusableViewRegionState extends State<_FocusableViewRegion> {
       _hasFocus = hasFocus;
       if (hasFocus) {
         FlutterArtist.focusTracker.notifyRegionFocused(widget.regionInfo);
+        _onRegionFocusGained();
       } else {
         FlutterArtist.focusTracker.notifyRegionUnfocused(widget.regionInfo);
       }
     }
+  }
+
+  void _onRegionFocusGained() {
+    final config = widget.indicatorConfig;
+    if (!config.enabled) return;
+
+    flashFocusIndicator(
+      showDot: config.flashDotOnFocus,
+      showOverlay: config.flashOverlayOnFocus,
+    );
   }
 
   void _onPointerUp(PointerUpEvent event) {
@@ -172,8 +212,86 @@ class _FocusableViewRegionState extends State<_FocusableViewRegion> {
         descendantsAreTraversable: widget.allowDescendantFocus,
         onFocusChange: _onFocusChange,
         onKeyEvent: widget.onKeyEvent,
-        child: widget.child,
+        child: _wrapWithFocusIndicator(context, widget.child),
       ),
+    );
+  }
+
+  /// Wraps [child] with non-interactive visual focus indicator layers.
+  Widget _wrapWithFocusIndicator(BuildContext context, Widget child) {
+    final FocusIndicatorConfig config = widget.indicatorConfig;
+    if (!config.enabled) return child;
+
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final Color effectiveDotColor = config.dotColor ?? colorScheme.primary;
+    final Color effectiveOverlayColor =
+        config.overlayColor ?? effectiveDotColor.withValues(alpha: 0.08);
+    final Color effectiveBorderColor =
+        config.borderColor ?? effectiveDotColor.withValues(alpha: 0.45);
+
+    return Stack(
+      fit: StackFit.passthrough,
+      children: [
+        child,
+        AnimatedBuilder(
+          animation: _indicatorOpacity,
+          builder: (context, _) {
+            final double opacity = _indicatorOpacity.value;
+            if (opacity <= 0.0) {
+              return const SizedBox.shrink();
+            }
+
+            return Positioned.fill(
+              child: IgnorePointer(
+                child: Opacity(
+                  opacity: opacity,
+                  child: Stack(
+                    children: [
+                      if (_activePulseShowOverlay)
+                        Positioned.fill(
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: effectiveOverlayColor,
+                              border: Border.all(
+                                color: effectiveBorderColor,
+                                width: 1.5,
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                config.overlayBorderRadius,
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (_activePulseShowDot)
+                        Positioned(
+                          top: config.dotTopOffset,
+                          right: config.dotRightOffset,
+                          child: Container(
+                            width: config.dotSize,
+                            height: config.dotSize,
+                            decoration: BoxDecoration(
+                              color: effectiveDotColor,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: effectiveDotColor.withValues(
+                                    alpha: 0.45,
+                                  ),
+                                  blurRadius: 4,
+                                  spreadRadius: 0.5,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 
@@ -186,8 +304,8 @@ class _FocusableViewRegionState extends State<_FocusableViewRegion> {
 
     // Filter out internal structural scope nodes while keeping actual field nodes
     final Iterable<FocusNode> rawNodes = _focusNode.descendants.where(
-          (node) =>
-      node != _focusNode && node is! FocusScopeNode && !node.skipTraversal,
+      (node) =>
+          node != _focusNode && node is! FocusScopeNode && !node.skipTraversal,
     );
 
     return policy.sortDescendants(rawNodes, _focusNode).toList();
@@ -231,7 +349,31 @@ class _FocusableViewRegionState extends State<_FocusableViewRegion> {
     }
 
     // 4. Entire form/region is currently disabled (read-only mode) -> focus the
-    //    outer region wrapper so status bar context and mnemonic shortcuts stay active.
+    //    outer region node so status bar context and mnemonic shortcuts stay active.
     _focusNode.requestFocus();
+  }
+
+  /// Triggers a transient visual pulse on this region's indicator dot and/or
+  /// full-region tint overlay.
+  ///
+  /// When [showDot] or [showOverlay] are omitted, defaults to the explicit
+  /// locate settings ([FocusIndicatorConfig.flashDotOnLocate] and
+  /// [FocusIndicatorConfig.flashOverlayOnLocate]).
+  void flashFocusIndicator({
+    bool? showDot,
+    bool? showOverlay,
+  }) {
+    final FocusIndicatorConfig config = widget.indicatorConfig;
+    if (!config.enabled || !mounted) return;
+
+    final bool resolvedDot = showDot ?? config.flashDotOnLocate;
+    final bool resolvedOverlay = showOverlay ?? config.flashOverlayOnLocate;
+
+    if (!resolvedDot && !resolvedOverlay) return;
+
+    _activePulseShowDot = resolvedDot;
+    _activePulseShowOverlay = resolvedOverlay;
+    _indicatorController.duration = config.duration;
+    _indicatorController.forward(from: 0.0);
   }
 }

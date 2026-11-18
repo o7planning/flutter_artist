@@ -19,6 +19,7 @@ class BlockControlBarConfig extends ControlBarConfig {
 
   const BlockControlBarConfig({
     super.enableKeyboardNavigation = false,
+    super.focusIndicatorConfig,
     this.blockViewContext = BlockViewContext.items,
     this.screenNavigationContext,
     required this.allowRefreshButton,

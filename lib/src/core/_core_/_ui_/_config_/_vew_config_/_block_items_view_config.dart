@@ -11,5 +11,6 @@ class BlockItemsViewConfig extends ViewConfig {
     this.screenNavigationContext,
     super.quickSuggestionMode = QuickSuggestionMode.showIfError,
     this.blockViewContext = BlockViewContext.items,
+    super.focusIndicatorConfig,
   });
 }

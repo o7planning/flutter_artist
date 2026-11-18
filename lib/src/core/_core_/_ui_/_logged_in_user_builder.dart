@@ -3,10 +3,11 @@ part of '../core.dart';
 class LoggedInUserViewConfig extends ViewConfig {
   const LoggedInUserViewConfig()
       : super(
-    quickSuggestionMode: QuickSuggestionMode.none,
-    enableKeyboardNavigation: false,
-    mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
-  );
+          quickSuggestionMode: QuickSuggestionMode.none,
+          enableKeyboardNavigation: false,
+          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+          focusIndicatorConfig: null,
+        );
 }
 
 class LoggedInUserBuilder extends _ContextProviderView {
@@ -42,7 +43,6 @@ class _LoggedInUserBuilderState
   String getWidgetOwnerClassName() {
     return "LoggedInUserBuilder";
   }
-
 
   @override
   FocusRegionType getRegionType() {

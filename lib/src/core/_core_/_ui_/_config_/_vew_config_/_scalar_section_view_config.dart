@@ -10,5 +10,6 @@ class ScalarSectionViewConfig extends ViewConfig {
     super.quickSuggestionMode = QuickSuggestionMode.none,
     this.scalarContextType = ScalarViewContext.value,
     this.screenNavigationContext,
+    super.focusIndicatorConfig,
   });
 }

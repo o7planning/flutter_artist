@@ -38,7 +38,6 @@ class _ScalarValueViewBuilderState
     return getClassName(widget.scalar);
   }
 
-
   @override
   FocusRegionType getRegionType() {
     return FocusRegionType.scalarValueView;
@@ -48,7 +47,6 @@ class _ScalarValueViewBuilderState
   String getUnitName() {
     return widget.scalar.name;
   }
-
 
   @override
   BlockViewContext? get blockViewContext => null;
@@ -71,6 +69,15 @@ class _ScalarValueViewBuilderState
   }
 
   @override
+  KeyEventResult onKeyEvent(FocusNode node, KeyEvent event) {
+    return _ScalarMnemonicHandler.handleKeyEvent(
+      context: context,
+      scalar: widget.scalar,
+      event: event,
+    );
+  }
+
+  @override
   String getDebugLabel() {
     return "ScalarValueView(${widget.scalar.name})";
   }
@@ -82,7 +89,8 @@ class _ScalarValueViewBuilderState
 
   @override
   List<_QuickSuggestionButton> createQuickSuggestionButtons(
-      BuildContext context,) {
+    BuildContext context,
+  ) {
     return [
       QuickSuggestionBarUtils.createScalarErrorButton(
         context,

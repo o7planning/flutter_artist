@@ -102,7 +102,7 @@ class _ScalarControlBarState extends _BaseControlBarState<
       case ScalarControlBarItemType.debugFilterCriteria:
         if (!widget.config.allowDebugFilterCriteriaInspectorButton) return null;
         final actionable =
-        widget.scalar.checkBeforeShowFilterCriteriaInspector();
+            widget.scalar.checkBeforeShowFilterCriteriaInspector();
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
@@ -111,8 +111,8 @@ class _ScalarControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: actionable.yes
               ? () async {
-            await widget.scalar.showDebugFilterCriteriaViewerDialog();
-          }
+                  await widget.scalar.showDebugFilterCriteriaViewerDialog();
+                }
               : null,
         );
 
@@ -126,10 +126,19 @@ class _ScalarControlBarState extends _BaseControlBarState<
           onPressed: item.onPressed == null
               ? null
               : () {
-            item.onPressed!.call(widget.scalar, type);
-          },
+                  item.onPressed!.call(widget.scalar, type);
+                },
         );
     }
+  }
+
+  @override
+  KeyEventResult onKeyEvent(FocusNode node, KeyEvent event) {
+    return _ScalarMnemonicHandler.handleKeyEvent(
+      context: context,
+      scalar: widget.scalar,
+      event: event,
+    );
   }
 
   @override
@@ -147,9 +156,8 @@ class _ScalarControlBarState extends _BaseControlBarState<
       getClassNameWithoutGenerics(widget.scalar);
 
   @override
-  void addWidgetState({required bool isVisible}) =>
-      widget.scalar.ui
-          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) => widget.scalar.ui
+      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

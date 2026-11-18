@@ -8,5 +8,6 @@ class TaskViewConfig extends ViewConfig {
     super.mouseFocusPolicy = ViewMouseFocusPolicy.strictNavigationOnly,
     super.quickSuggestionMode = QuickSuggestionMode.none,
     this.taskViewContext = TaskViewContext.initData,
+    super.focusIndicatorConfig,
   });
 }

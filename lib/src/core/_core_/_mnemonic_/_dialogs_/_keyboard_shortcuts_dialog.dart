@@ -5,7 +5,8 @@ part of '../../core.dart';
 class _KeyboardShortcutCatalog {
   /// Returns the ordered list of [MnemonicShortcutDescriptor] entries for [regionType].
   static List<MnemonicShortcutDescriptor> buildEntriesForRegion(
-      FocusRegionType regionType,) {
+    FocusRegionType regionType,
+  ) {
     final List<MnemonicShortcutDescriptor> entries = [];
 
     // 1. Domain & CRUD Actions based on region family (highest priority)
@@ -23,6 +24,7 @@ class _KeyboardShortcutCatalog {
             MnemonicShortcut.refresh.toDescriptor(),
             MnemonicShortcut.query.toDescriptor(),
             MnemonicShortcut.reset.toDescriptor(),
+            MnemonicShortcut.debugFilterModel.toDescriptor(),
             MnemonicShortcut.debugFilterCriteria.toDescriptor(
               customActionLabel: 'Inspect Filter Criteria',
             ),
@@ -31,11 +33,27 @@ class _KeyboardShortcutCatalog {
         );
         break;
 
+      case FocusRegionType.scalarValueView:
+        entries.addAll(
+          [
+            MnemonicShortcut.query.toDescriptor(),
+            MnemonicShortcut.refresh.toDescriptor(
+              customActionLabel: 'Refresh Scalar Value',
+            ),
+            MnemonicShortcut.debugFilterModel.toDescriptor(),
+            MnemonicShortcut.debugFilterCriteria.toDescriptor(),
+          ],
+        );
+        break;
+
       case FocusRegionType.filterPanel:
-        entries.add(
-          MnemonicShortcut.debugFilterModel.toDescriptor(
-            customActionLabel: 'Inspect Filter Model',
-          ),
+        entries.addAll(
+          [
+            MnemonicShortcut.debugFilterModel.toDescriptor(
+              customActionLabel: 'Inspect Filter Model',
+            ),
+            MnemonicShortcut.debugFilterCriteria.toDescriptor(),
+          ],
         );
         break;
 
@@ -61,22 +79,25 @@ class _KeyboardShortcutCatalog {
       case FocusRegionType.prozessStagesSwitcher:
       case FocusRegionType.stageView:
       case FocusRegionType.stageFormView:
-        entries.addAll([
-          MnemonicShortcut.submit.toDescriptor(
-            customActionLabel: 'Submit Viewing Stage',
-          ),
-          MnemonicShortcut.moveToNextStage.toDescriptor(),
-          MnemonicShortcut.moveToPreviousStage.toDescriptor(),
-          MnemonicShortcut.restart.toDescriptor(
-            customActionLabel: 'Restart Viewing Stage',
-          ),
-          MnemonicShortcut.restartAll.toDescriptor(
-            customActionLabel: 'Restart All',
-          ),
-          MnemonicShortcut.cancel.toDescriptor(),
-          MnemonicShortcut.debugFormModel.toDescriptor(),
-          MnemonicShortcut.debugInspector.toDescriptor(),
-        ]);
+        entries.addAll(
+          [
+            MnemonicShortcut.submit.toDescriptor(
+              customActionLabel: 'Submit Viewing Stage',
+            ),
+            MnemonicShortcut.reset.toDescriptor(
+              customActionLabel: 'Reset Viewing Stage Form',
+            ),
+            MnemonicShortcut.moveToNextStage.toDescriptor(),
+            MnemonicShortcut.moveToPreviousStage.toDescriptor(),
+            MnemonicShortcut.restart.toDescriptor(
+              customActionLabel: 'Restart Viewing Stage',
+            ),
+            MnemonicShortcut.restartAll.toDescriptor(),
+            MnemonicShortcut.cancel.toDescriptor(),
+            MnemonicShortcut.debugFormModel.toDescriptor(),
+            MnemonicShortcut.debugInspector.toDescriptor(),
+          ],
+        );
         break;
 
       default:
@@ -156,11 +177,11 @@ class _KeyboardShortcutCatalog {
       final List<String> caps = control.modifier == MnemonicModifier.none
           ? [control.charKey]
           : [
-        ...control.modifier.label.split('+').map((e) => e.trim()),
-        control.charKey,
-      ];
+              ...control.modifier.label.split('+').map((e) => e.trim()),
+              control.charKey,
+            ];
       final String scopeSuffix =
-      control.scope != null ? ' (${control.scope.runtimeType})' : '';
+          control.scope != null ? ' (${control.scope.runtimeType})' : '';
       entries.add(
         MnemonicShortcutDescriptor(
           group: MnemonicShortcutGroup.customControls,
@@ -171,24 +192,27 @@ class _KeyboardShortcutCatalog {
     }
 
     // 4. Global & Region Navigation (always available at the bottom)
-    entries.addAll([
-      MnemonicShortcutDescriptor(
-        group: MnemonicShortcutGroup.globalNavigation,
-        actionLabel: 'Next View Region',
-        keyCaps: MnemonicRegionDirection.next.keyCaps,
-      ),
-      MnemonicShortcutDescriptor(
-        group: MnemonicShortcutGroup.globalNavigation,
-        actionLabel: 'Previous View Region',
-        keyCaps: MnemonicRegionDirection.previous.keyCaps,
-      ),
-      const MnemonicShortcutDescriptor(
-        group: MnemonicShortcutGroup.globalNavigation,
-        actionLabel: 'Open Keyboard Shortcuts Help',
-        keyCaps: ['F1'],
-      ),
-      MnemonicShortcut.back.toDescriptor(),
-    ]);
+    entries.addAll(
+      [
+        MnemonicShortcut.locateRegion.toDescriptor(),
+        MnemonicShortcutDescriptor(
+          group: MnemonicShortcutGroup.globalNavigation,
+          actionLabel: 'Next View Region',
+          keyCaps: MnemonicRegionDirection.next.keyCaps,
+        ),
+        MnemonicShortcutDescriptor(
+          group: MnemonicShortcutGroup.globalNavigation,
+          actionLabel: 'Previous View Region',
+          keyCaps: MnemonicRegionDirection.previous.keyCaps,
+        ),
+        const MnemonicShortcutDescriptor(
+          group: MnemonicShortcutGroup.globalNavigation,
+          actionLabel: 'Open Keyboard Shortcuts Help',
+          keyCaps: ['F1'],
+        ),
+        MnemonicShortcut.back.toDescriptor(),
+      ],
+    );
 
     return entries;
   }
@@ -253,6 +277,7 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
   static const List<FocusRegionType> _selectableRegionTypes = [
     FocusRegionType.blockItemsView,
     FocusRegionType.blockFormView,
+    FocusRegionType.scalarValueView,
     FocusRegionType.filterPanel,
     FocusRegionType.blockItemDetailView,
     FocusRegionType.taskFormView,
@@ -264,25 +289,29 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final FocusNode _listFocusNode = FocusNode(debugLabel: 'ShortcutsListFocus');
+  late final FocusNode _searchFocusNode;
 
   @override
   void initState() {
     super.initState();
     _selectedRegionType = widget.initialActiveRegion?.regionType ??
         FocusRegionType.blockItemsView;
+    _searchFocusNode = FocusNode(
+      debugLabel: 'ShortcutsSearchFocus',
+      onKeyEvent: _handleScrollKeyEvent,
+    );
   }
 
   @override
   void dispose() {
     _searchController.dispose();
     _scrollController.dispose();
-    _listFocusNode.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
   /// Handles keyboard scrolling (`ArrowUp`, `ArrowDown`, `PageUp`, `PageDown`,
-  /// `Home`, `End`) so 100% keyboard users can browse long shortcut lists effortlessly.
+  /// `Home`, `End`) even while focus resides inside the search [TextField].
   KeyEventResult _handleScrollKeyEvent(FocusNode node, KeyEvent event) {
     if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
       return KeyEventResult.ignored;
@@ -296,6 +325,10 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
     const double lineStep = 48.0;
     final double pageStep = (pos.viewportDimension * 0.85).clamp(120.0, 600.0);
 
+    final bool isEditingSearchText =
+        FocusManager.instance.primaryFocus == _searchFocusNode &&
+            _searchController.text.isNotEmpty;
+
     double? targetOffset;
     if (key == LogicalKeyboardKey.arrowDown) {
       targetOffset = (pos.pixels + lineStep).clamp(0.0, pos.maxScrollExtent);
@@ -305,9 +338,9 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
       targetOffset = (pos.pixels + pageStep).clamp(0.0, pos.maxScrollExtent);
     } else if (key == LogicalKeyboardKey.pageUp) {
       targetOffset = (pos.pixels - pageStep).clamp(0.0, pos.maxScrollExtent);
-    } else if (key == LogicalKeyboardKey.home) {
+    } else if (key == LogicalKeyboardKey.home && !isEditingSearchText) {
       targetOffset = 0.0;
-    } else if (key == LogicalKeyboardKey.end) {
+    } else if (key == LogicalKeyboardKey.end && !isEditingSearchText) {
       targetOffset = pos.maxScrollExtent;
     }
 
@@ -332,30 +365,30 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
       contentPadding: const EdgeInsets.all(12),
       preferredContentWidth: 640,
       preferredContentHeight: 480,
-      content: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildContextAndSearchHeader(context, hasActiveContext),
-          const Divider(height: 16),
-          Expanded(
-            child: Focus(
-              focusNode: _listFocusNode,
-              autofocus: true,
-              onKeyEvent: _handleScrollKeyEvent,
+      content: Focus(
+        onKeyEvent: _handleScrollKeyEvent,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildContextAndSearchHeader(context, hasActiveContext),
+            const Divider(height: 16),
+            Expanded(
               child: Scrollbar(
                 controller: _scrollController,
                 thumbVisibility: true,
                 child: _buildShortcutList(context),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildContextAndSearchHeader(BuildContext context,
-      bool hasActiveContext,) {
+  Widget _buildContextAndSearchHeader(
+    BuildContext context,
+    bool hasActiveContext,
+  ) {
     final ThemeData theme = Theme.of(context);
 
     return Row(
@@ -368,13 +401,15 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
               : _buildRegionSelectorDropdown(context),
         ),
         const SizedBox(width: 10),
-        // Right: Quick search filter
+        // Right: Quick search filter (autofocused when the dialog opens)
         Expanded(
           flex: 2,
           child: SizedBox(
             height: 32,
             child: TextField(
               controller: _searchController,
+              focusNode: _searchFocusNode,
+              autofocus: true,
               style: const TextStyle(fontSize: 12.5),
               decoration: InputDecoration(
                 hintText: 'Filter shortcuts...',
@@ -385,12 +420,13 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
                 prefixIcon: const Icon(Icons.search, size: 16),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? InkWell(
-                  onTap: () {
-                    _searchController.clear();
-                    setState(() => _searchQuery = '');
-                  },
-                  child: const Icon(Icons.close, size: 14),
-                )
+                        onTap: () {
+                          _searchController.clear();
+                          setState(() => _searchQuery = '');
+                          _searchFocusNode.requestFocus();
+                        },
+                        child: const Icon(Icons.close, size: 14),
+                      )
                     : null,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                 border: OutlineInputBorder(
@@ -413,9 +449,7 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
 
   Widget _buildActiveContextBadge(BuildContext context) {
     final ActiveFocusRegion region = widget.initialActiveRegion!;
-    final ColorScheme colors = Theme
-        .of(context)
-        .colorScheme;
+    final ColorScheme colors = Theme.of(context).colorScheme;
 
     return Container(
       height: 32,
@@ -448,9 +482,9 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
 
   Widget _buildRegionSelectorDropdown(BuildContext context) {
     final List<FocusRegionType> items =
-    _selectableRegionTypes.contains(_selectedRegionType)
-        ? _selectableRegionTypes
-        : [_selectedRegionType, ..._selectableRegionTypes];
+        _selectableRegionTypes.contains(_selectedRegionType)
+            ? _selectableRegionTypes
+            : [_selectedRegionType, ..._selectableRegionTypes];
 
     return SizedBox(
       height: 32,
@@ -459,17 +493,14 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
         isDense: true,
         decoration: InputDecoration(
           contentPadding:
-          const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6),
           ),
         ),
         style: TextStyle(
           fontSize: 12.5,
-          color: Theme
-              .of(context)
-              .colorScheme
-              .onSurface,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
         items: items.map((regionType) {
           return DropdownMenuItem<FocusRegionType>(
@@ -486,7 +517,7 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
             if (_scrollController.hasClients) {
               _scrollController.jumpTo(0);
             }
-            _listFocusNode.requestFocus();
+            _searchFocusNode.requestFocus();
           }
         },
       ),
@@ -495,18 +526,18 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
 
   Widget _buildShortcutList(BuildContext context) {
     final List<MnemonicShortcutDescriptor> allEntries =
-    _KeyboardShortcutCatalog.buildEntriesForRegion(_selectedRegionType);
+        _KeyboardShortcutCatalog.buildEntriesForRegion(_selectedRegionType);
 
     final List<MnemonicShortcutDescriptor> filteredEntries =
-    _searchQuery.isEmpty
-        ? allEntries
-        : allEntries.where((entry) {
-      final bool matchLabel =
-      entry.actionLabel.toLowerCase().contains(_searchQuery);
-      final bool matchKey = entry.keyCaps
-          .any((k) => k.toLowerCase().contains(_searchQuery));
-      return matchLabel || matchKey;
-    }).toList();
+        _searchQuery.isEmpty
+            ? allEntries
+            : allEntries.where((entry) {
+                final bool matchLabel =
+                    entry.actionLabel.toLowerCase().contains(_searchQuery);
+                final bool matchKey = entry.keyCaps
+                    .any((k) => k.toLowerCase().contains(_searchQuery));
+                return matchLabel || matchKey;
+              }).toList();
 
     if (filteredEntries.isEmpty) {
       return Center(
@@ -514,9 +545,7 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
           'No matching shortcuts found.',
           style: TextStyle(
             fontSize: 13,
-            color: Theme
-                .of(context)
-                .hintColor,
+            color: Theme.of(context).hintColor,
           ),
         ),
       );
@@ -524,7 +553,7 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
 
     // Group entries by MnemonicShortcutGroup while preserving canonical enum order.
     final Map<MnemonicShortcutGroup, List<MnemonicShortcutDescriptor>> grouped =
-    {};
+        {};
     for (final group in MnemonicShortcutGroup.values) {
       final items = filteredEntries.where((e) => e.group == group).toList();
       if (items.isNotEmpty) {
@@ -541,9 +570,11 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
     );
   }
 
-  Widget _buildGroupSection(BuildContext context,
-      MnemonicShortcutGroup group,
-      List<MnemonicShortcutDescriptor> entries,) {
+  Widget _buildGroupSection(
+    BuildContext context,
+    MnemonicShortcutGroup group,
+    List<MnemonicShortcutDescriptor> entries,
+  ) {
     final ThemeData theme = Theme.of(context);
 
     return Padding(
@@ -569,8 +600,10 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
     );
   }
 
-  Widget _buildShortcutRow(BuildContext context,
-      MnemonicShortcutDescriptor entry,) {
+  Widget _buildShortcutRow(
+    BuildContext context,
+    MnemonicShortcutDescriptor entry,
+  ) {
     final ThemeData theme = Theme.of(context);
 
     return Container(
@@ -614,9 +647,7 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
               '/',
               style: TextStyle(
                 fontSize: 11,
-                color: Theme
-                    .of(context)
-                    .hintColor,
+                color: Theme.of(context).hintColor,
               ),
             ),
           ),
@@ -630,9 +661,7 @@ class _KeyboardShortcutsDialogState extends State<KeyboardShortcutsDialog> {
             '+',
             style: TextStyle(
               fontSize: 11,
-              color: Theme
-                  .of(context)
-                  .hintColor,
+              color: Theme.of(context).hintColor,
             ),
           ),
         );

@@ -9,5 +9,6 @@ class SortPanelConfig extends ViewConfig {
   }) : super(
     enableKeyboardNavigation: false,
     mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+    focusIndicatorConfig:null,
   );
 }

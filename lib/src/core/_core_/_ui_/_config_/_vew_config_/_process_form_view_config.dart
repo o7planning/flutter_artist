@@ -10,5 +10,6 @@ class ProzessFormViewConfig extends FormViewConfig {
     super.quickSuggestionMode = QuickSuggestionMode.none,
     this.screenNavigationContext,
     this.circularFocusTraversal = true,
+    super.focusIndicatorConfig,
   });
 }

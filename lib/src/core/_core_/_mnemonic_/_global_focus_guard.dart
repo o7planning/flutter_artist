@@ -1,9 +1,12 @@
 part of '../core.dart';
 
-/// Global pointer and execution guard that preserves active region focus when
-/// clicking non-focusable regions (e.g., [BlockItemsView] with
-/// [ViewMouseFocusPolicy.strictNavigationOnly]), even across asynchronous
-/// [ExecutionUnit] batches that display a full-screen loading overlay.
+/// Global pointer, keyboard, and execution guard that:
+/// 1. Preserves active region focus when clicking non-focusable regions (e.g.,
+///    [BlockItemsView] with [ViewMouseFocusPolicy.strictNavigationOnly]), even
+///    across asynchronous [ExecutionUnit] batches that display a full-screen
+///    loading overlay.
+/// 2. Listens for [MnemonicShortcut.locateRegion] globally to trigger a visual
+///    focus indicator pulse on the currently active [_FocusableViewRegionState].
 class _GlobalFocusGuard {
   static bool _installed = false;
 
@@ -17,12 +20,37 @@ class _GlobalFocusGuard {
 
   static bool _pointerDownCaptured = false;
 
-  /// Installs the global pointer route handler once.
+  /// Installs the global pointer route and hardware keyboard handlers once.
   static void ensureInstalled() {
     if (_installed) return;
     _installed = true;
     GestureBinding.instance.pointerRouter.addGlobalRoute(_handlePointerEvent);
+    HardwareKeyboard.instance.addHandler(_handleKeyEvent);
   }
+
+  // ***************************************************************************
+
+  /// Intercepts global keyboard shortcuts managed at the focus-guard level,
+  /// such as [MnemonicShortcut.locateRegion] (`Ctrl/Alt + L`).
+  static bool _handleKeyEvent(KeyEvent event) {
+    if (event is! KeyDownEvent) return false;
+
+    if (MnemonicShortcut.locateRegion.matches(
+      event,
+      HardwareKeyboard.instance,
+    )) {
+      final _FocusableViewRegionState? activeRegion =
+          _RegionDispatcher.currentlyFocusedRegion;
+      if (activeRegion != null && activeRegion.mounted) {
+        activeRegion.flashFocusIndicator();
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  // ***************************************************************************
 
   static void _handlePointerEvent(PointerEvent event) {
     if (event is PointerDownEvent) {
@@ -33,10 +61,13 @@ class _GlobalFocusGuard {
       if (activeRegion != null) {
         _lastValidRegion = activeRegion;
         _lastLeafFocusNode =
-        (primary != null && primary != activeRegion.focusNode)
-            ? primary
-            : null;
-        _lastLeafOrdinalIndex = _resolveOrdinalIndex(activeRegion, primary);
+            (primary != null && primary != activeRegion.focusNode)
+                ? primary
+                : null;
+        _lastLeafOrdinalIndex = _resolveOrdinalIndex(
+          focusableRegionState: activeRegion,
+          targetFocusNode: primary,
+        );
         _pointerDownCaptured = true;
       } else {
         _pointerDownCaptured = false;
@@ -65,7 +96,11 @@ class _GlobalFocusGuard {
           return;
         }
 
-        _tryRestoreFocus(region, leaf, index);
+        _tryRestoreFocus(
+          candidateRegionState: region,
+          candidateLeaf: leaf,
+          candidateIndex: index,
+        );
       });
     } else if (event is PointerCancelEvent) {
       _pointerDownCaptured = false;
@@ -74,6 +109,8 @@ class _GlobalFocusGuard {
       _lastLeafOrdinalIndex = null;
     }
   }
+
+  // ***************************************************************************
 
   /// Invoked by [_Executor] once all queued execution units have finished,
   /// views have been refreshed, and the blocking overlay has been removed.
@@ -89,21 +126,37 @@ class _GlobalFocusGuard {
     if (region == null) return;
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      _tryRestoreFocus(region, leaf, index);
+      _tryRestoreFocus(
+        candidateRegionState: region,
+        candidateLeaf: leaf,
+        candidateIndex: index,
+      );
     });
   }
 
-  static int? _resolveOrdinalIndex(_FocusableViewRegionState region,
-      FocusNode? target,) {
-    if (target == null || target == region.focusNode) return null;
-    final List<FocusNode> nodes = region.getStableDescendantNodes();
-    final int idx = nodes.indexOf(target);
+  // ***************************************************************************
+
+  static int? _resolveOrdinalIndex({
+    required _FocusableViewRegionState focusableRegionState,
+    required FocusNode? targetFocusNode,
+  }) {
+    if (targetFocusNode == null ||
+        targetFocusNode == focusableRegionState.focusNode) {
+      return null;
+    }
+    final List<FocusNode> nodes =
+        focusableRegionState.getStableDescendantNodes();
+    final int idx = nodes.indexOf(targetFocusNode);
     return idx >= 0 ? idx : null;
   }
 
-  static void _tryRestoreFocus(_FocusableViewRegionState candidateRegion,
-      FocusNode? candidateLeaf,
-      int? candidateIndex,) {
+  // ***************************************************************************
+
+  static void _tryRestoreFocus({
+    required _FocusableViewRegionState candidateRegionState,
+    required FocusNode? candidateLeaf,
+    required int? candidateIndex,
+  }) {
     // 1. Do not interfere if primaryFocus is currently held by an actual leaf widget
     //    (e.g., another TextField or a clickToFocus region).
     //    When focus drops due to unfocusing or widget rebuilds, Flutter sets
@@ -114,11 +167,11 @@ class _GlobalFocusGuard {
     }
 
     // 2. Abort if the region wrapper is no longer mounted or enabled.
-    if (!candidateRegion.mounted || !candidateRegion.widget.enabled) {
+    if (!candidateRegionState.mounted || !candidateRegionState.widget.enabled) {
       return;
     }
 
-    final BuildContext ctx = candidateRegion.context;
+    final BuildContext ctx = candidateRegionState.context;
 
     // 3. Route isolation: Abort if the region's route is no longer the
     //    top-most active route (works for both page navigation and Dialogs).
@@ -147,11 +200,11 @@ class _GlobalFocusGuard {
 
     // Tier 2: Restore by stable ordinal index with nearest-enabled-neighbor & read-only fallback.
     if (candidateIndex != null) {
-      candidateRegion.restoreFocusAtIndex(candidateIndex);
+      candidateRegionState.restoreFocusAtIndex(candidateIndex);
       return;
     }
 
     // Tier 3: Initial entry fallback (first enabled field or outer region wrapper).
-    candidateRegion.requestRegionFocus();
+    candidateRegionState.requestRegionFocus();
   }
 }

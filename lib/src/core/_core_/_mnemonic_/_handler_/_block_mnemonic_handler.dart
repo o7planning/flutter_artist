@@ -15,13 +15,15 @@ class _BlockMnemonicHandler {
       if (block.formModel != null) block.formModel!,
       block,
     ];
-    if (_MnemonicDispatcher.tryTriggerRegisteredControl(event,
-        scopes: scopes)) {
+    if (_MnemonicDispatcher.tryTriggerRegisteredControl(
+      event,
+      scopes: scopes,
+    )) {
       return KeyEventResult.handled;
     }
 
     final MnemonicShortcut? shortcut =
-    _MnemonicDispatcher.resolveShortcut(event);
+        _MnemonicDispatcher.resolveShortcut(event);
     if (shortcut == null) {
       return KeyEventResult.ignored;
     }
@@ -34,7 +36,6 @@ class _BlockMnemonicHandler {
     );
     if (isDataNav) return KeyEventResult.handled;
 
-    // Nếu không phải phím Data Navigation thì chạy tiếp logic CRUD cũ (Create, Edit, Save...)
     final bool handled = _executeBlockShortcut(
       context: context,
       block: block,
@@ -60,12 +61,7 @@ class _BlockMnemonicHandler {
         return false;
 
       case MnemonicShortcut.create:
-        if (block.formModel == null) return false;
-        final actionable = block.checkBeforeCreateItemWithForm();
-        if (!actionable.yes) return false;
-
-        () async
-        {
+        () async {
           final result = await block.prepareFormToCreateItem();
           final NavigationIntent? intent =
               screenNavigationContext?.createNavigationIntent;
@@ -76,17 +72,11 @@ class _BlockMnemonicHandler {
               intent: intent,
             );
           }
-        }
-        ();
+        }();
         return true;
 
       case MnemonicShortcut.edit:
-        if (block.formModel == null) return false;
-        final actionable = block.checkBeforeEditCurrentItemWithForm();
-        if (!actionable.yes) return false;
-
-        () async
-        {
+        () async {
           final result = await block._prepareFormToEditCurrentItem();
           final NavigationIntent? intent =
               screenNavigationContext?.editNavigationIntent;
@@ -97,16 +87,11 @@ class _BlockMnemonicHandler {
               intent: intent,
             );
           }
-        }
-        ();
+        }();
         return true;
 
       case MnemonicShortcut.delete:
-        final actionable = block.checkBeforeDeleteCurrentItem();
-        if (!actionable.yes) return false;
-
-        () async
-        {
+        () async {
           final result = await block.deleteCurrentItem();
           final NavigationIntent? intent =
               screenNavigationContext?.deleteNavigationIntent;
@@ -117,21 +102,12 @@ class _BlockMnemonicHandler {
               intent: intent,
             );
           }
-        }
-        ();
+        }();
         return true;
 
       case MnemonicShortcut.save:
-        if (block.formModel == null) return false;
-        final actionable = block.checkBeforeSaveForm(
-          checkAllow: true,
-          checkValidate: false,
-        );
-        if (!actionable.yes) return false;
-
-        () async
-        {
-          final result = await block.formModel!.saveForm();
+        () async {
+          final result = await block.saveForm();
           final NavigationIntent? intent =
               screenNavigationContext?.saveNavigationIntent;
           if (intent != null && context.mounted) {
@@ -141,26 +117,18 @@ class _BlockMnemonicHandler {
               intent: intent,
             );
           }
-        }
-        ();
+        }();
         return true;
 
       case MnemonicShortcut.refresh:
-        final actionable = block.checkBeforeRefreshCurrentItem();
-        if (!actionable.yes) return false;
         block.refreshCurrentItem();
         return true;
 
       case MnemonicShortcut.reset:
-        if (block.formModel == null) return false;
-        final actionable = block.checkBeforeResetForm();
-        if (!actionable.yes) return false;
-        block.formModel!.resetForm();
+        block.resetForm();
         return true;
 
       case MnemonicShortcut.query:
-        final actionable = block.checkBeforeQuery();
-        if (!actionable.yes) return false;
         block.query();
         return true;
 

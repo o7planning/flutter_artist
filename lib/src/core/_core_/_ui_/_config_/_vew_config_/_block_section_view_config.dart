@@ -8,5 +8,6 @@ class BlockSectionViewConfig extends ViewConfig {
     super.mouseFocusPolicy = ViewMouseFocusPolicy.strictNavigationOnly,
     super.quickSuggestionMode = QuickSuggestionMode.none,
     this.blockViewContext = BlockViewContext.items,
+    super.focusIndicatorConfig,
   });
 }

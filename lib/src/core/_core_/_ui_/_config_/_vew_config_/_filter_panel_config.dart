@@ -16,6 +16,7 @@ class FilterPanelConfig extends ViewConfig {
     this.blockViewContext,
     this.scalarViewContext,
     this.screenNavigationContext,
+    super.focusIndicatorConfig,
   }) : super(
     enableKeyboardNavigation: false,
     mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,

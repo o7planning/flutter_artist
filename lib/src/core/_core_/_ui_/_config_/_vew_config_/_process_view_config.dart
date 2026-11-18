@@ -8,5 +8,6 @@ class ProzessViewConfig extends ViewConfig {
     super.mouseFocusPolicy = ViewMouseFocusPolicy.strictNavigationOnly,
     super.quickSuggestionMode = QuickSuggestionMode.none,
     this.prozessViewContext = ProzessViewContext.initData,
+    super.focusIndicatorConfig,
   });
 }

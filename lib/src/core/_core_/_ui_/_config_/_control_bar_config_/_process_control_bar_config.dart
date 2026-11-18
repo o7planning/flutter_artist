@@ -16,6 +16,7 @@ class ProzessControlBarConfig extends ControlBarConfig {
 
   const ProzessControlBarConfig({
     super.enableKeyboardNavigation = false,
+    super.focusIndicatorConfig,
     this.prozessViewContext = ProzessViewContext.initData,
     this.screenNavigationContext,
     this.allowBackButton = false,

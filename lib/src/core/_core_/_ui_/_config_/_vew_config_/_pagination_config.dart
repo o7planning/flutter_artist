@@ -6,5 +6,6 @@ class PaginationConfig extends ViewConfig {
     enableKeyboardNavigation: false,
     mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
     quickSuggestionMode: QuickSuggestionMode.none,
+     focusIndicatorConfig: null,
   );
 }

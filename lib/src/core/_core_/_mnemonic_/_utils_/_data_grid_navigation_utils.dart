@@ -4,18 +4,15 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 import '../../core.dart';
 
 class DataGridNavigationUtils {
-  /// Xử lý các thao tác điều hướng dữ liệu (Lật trang, Load More, Đổi bản ghi hiện tại).
-  /// Trả về `true` nếu shortcut thuộc về điều hướng dữ liệu và đã được xử lý.
+  /// Handles data navigation operations (paging, loading more, changing the current record).
+  /// Returns `true` if the shortcut pertains to data navigation and has been processed.
   static bool handleBlockDataNavigation({
     required BuildContext context,
     required Block block,
     required MnemonicShortcut shortcut,
   }) {
-    print("handleBlockDataNavigation: shortcut1: $shortcut");
-
-    // Nếu hệ thống đang bận thực thi logic khác, tạm thời nuốt sự kiện này
+    // If the system is busy executing other logic, temporarily swallow this event.
     if (FlutterArtist.executor.isBusy) return true;
-    print("handleBlockDataNavigation: shortcut2: $shortcut");
 
     switch (shortcut) {
       case MnemonicShortcut.nextItem:
@@ -33,7 +30,7 @@ class DataGridNavigationUtils {
         return true;
 
       case MnemonicShortcut.firstPage:
-      // Có thể gọi block.queryFirstPage() hoặc block.query() với cấu hình trang = 1
+        // You can call block.queryFirstPage() or block.query() with the page configuration set to 1
         block.query();
         return true;
 
@@ -42,7 +39,7 @@ class DataGridNavigationUtils {
         return true;
 
       default:
-      // Không phải phím điều hướng dữ liệu
+        // Not a data navigation key
         return false;
     }
   }

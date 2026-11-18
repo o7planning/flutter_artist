@@ -6,6 +6,7 @@ class CustomControlBarConfig extends ViewConfig {
     quickSuggestionMode: QuickSuggestionMode.none,
     enableKeyboardNavigation: false,
     mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+     focusIndicatorConfig:null,
   );
 }
 

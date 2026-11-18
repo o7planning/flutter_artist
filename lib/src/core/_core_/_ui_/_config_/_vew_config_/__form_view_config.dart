@@ -11,6 +11,7 @@ abstract class FormViewConfig extends ViewConfig {
 
   const FormViewConfig({
     required super.quickSuggestionMode,
+    super.focusIndicatorConfig,
   }) : super(
     enableKeyboardNavigation: false,
     mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,

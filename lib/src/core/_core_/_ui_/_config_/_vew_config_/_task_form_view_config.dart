@@ -10,5 +10,6 @@ class TaskFormViewConfig extends FormViewConfig {
     this.screenNavigationContext,
     super.quickSuggestionMode = QuickSuggestionMode.showIfError,
     this.circularFocusTraversal = true,
+    super.focusIndicatorConfig,
   });
 }

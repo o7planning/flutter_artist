@@ -10,6 +10,7 @@ class ScalarControlBarConfig extends ControlBarConfig {
 
   const ScalarControlBarConfig({
     super.enableKeyboardNavigation = false,
+    super.focusIndicatorConfig,
     this.scalarContextType = ScalarViewContext.value,
     this.screenNavigationContext,
     required this.allowQueryButton,

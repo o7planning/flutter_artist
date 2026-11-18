@@ -108,7 +108,9 @@ class _BlockControlBarState extends _BaseControlBarState<
             !widget.config.allowCreateButton) {
           return null;
         }
-        final actionable = widget.block.checkBeforeCreateItemWithForm();
+        final actionable = widget.block.checkBeforeCreateItemOnForm(
+          checkAllow: true,
+        );
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
@@ -117,17 +119,17 @@ class _BlockControlBarState extends _BaseControlBarState<
           onAction: widget.block.blockCurrentItemModel.isPreparingFormCreation,
           onPressed: actionable.yes
               ? () async {
-            final result = await widget.block.prepareFormToCreateItem();
-            final NavigationIntent? intent = widget
-                .config.screenNavigationContext?.createNavigationIntent;
-            if (intent != null) {
-              widget.block._processNavigationIntent(
-                context,
-                result: result,
-                intent: intent,
-              );
-            }
-          }
+                  final result = await widget.block.prepareFormToCreateItem();
+                  final NavigationIntent? intent = widget
+                      .config.screenNavigationContext?.createNavigationIntent;
+                  if (intent != null) {
+                    widget.block._processNavigationIntent(
+                      context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
+                }
               : null,
         );
       case BlockControlBarItemType.edit:
@@ -143,19 +145,19 @@ class _BlockControlBarState extends _BaseControlBarState<
           onAction: widget.block.blockCurrentItemModel.isRefreshingCurrentItem,
           onPressed: actionable.yes
               ? () async {
-            final result =
-            await widget.block._prepareFormToEditCurrentItem();
-            //
-            final NavigationIntent? intent = widget
-                .config.screenNavigationContext?.editNavigationIntent;
-            if (intent != null) {
-              widget.block._processNavigationIntent(
-                context,
-                result: result,
-                intent: intent,
-              );
-            }
-          }
+                  final result =
+                      await widget.block._prepareFormToEditCurrentItem();
+                  //
+                  final NavigationIntent? intent = widget
+                      .config.screenNavigationContext?.editNavigationIntent;
+                  if (intent != null) {
+                    widget.block._processNavigationIntent(
+                      context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
+                }
               : null,
         );
       case BlockControlBarItemType.delete:
@@ -170,17 +172,17 @@ class _BlockControlBarState extends _BaseControlBarState<
           onAction: widget.block.isDeleting,
           onPressed: actionable.yes
               ? () async {
-            final result = await widget.block.deleteCurrentItem();
-            final NavigationIntent? intent = widget
-                .config.screenNavigationContext?.deleteNavigationIntent;
-            if (intent != null) {
-              widget.block._processNavigationIntent(
-                context,
-                result: result,
-                intent: intent,
-              );
-            }
-          }
+                  final result = await widget.block.deleteCurrentItem();
+                  final NavigationIntent? intent = widget
+                      .config.screenNavigationContext?.deleteNavigationIntent;
+                  if (intent != null) {
+                    widget.block._processNavigationIntent(
+                      context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
+                }
               : null,
         );
       case BlockControlBarItemType.save:
@@ -201,17 +203,17 @@ class _BlockControlBarState extends _BaseControlBarState<
           onAction: widget.block.__isSaving,
           onPressed: actionable.yes
               ? () async {
-            final result = await widget.block.formModel!.saveForm();
-            final NavigationIntent? intent = widget
-                .config.screenNavigationContext?.saveNavigationIntent;
-            if (intent != null) {
-              widget.block._processNavigationIntent(
-                context,
-                result: result,
-                intent: intent,
-              );
-            }
-          }
+                  final result = await widget.block.formModel!.saveForm();
+                  final NavigationIntent? intent = widget
+                      .config.screenNavigationContext?.saveNavigationIntent;
+                  if (intent != null) {
+                    widget.block._processNavigationIntent(
+                      context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
+                }
               : null,
         );
 
@@ -225,7 +227,7 @@ class _BlockControlBarState extends _BaseControlBarState<
           iconData: FaIconConstants.formRefreshIconData,
           onAction: widget.block.blockCurrentItemModel.isRefreshingCurrentItem,
           onPressed:
-          actionable.yes ? () => widget.block.refreshCurrentItem() : null,
+              actionable.yes ? () => widget.block.refreshCurrentItem() : null,
         );
 
       case BlockControlBarItemType.reset:
@@ -240,7 +242,7 @@ class _BlockControlBarState extends _BaseControlBarState<
           tooltip: type.formatTooltip("Reset Form"),
           iconData: FaIconConstants.formResetIconData,
           onPressed:
-          actionable.yes ? () => widget.block.formModel?.resetForm() : null,
+              actionable.yes ? () => widget.block.formModel?.resetForm() : null,
         );
 
       case BlockControlBarItemType.query:
@@ -258,7 +260,7 @@ class _BlockControlBarState extends _BaseControlBarState<
       case BlockControlBarItemType.debugFilterCriteria:
         if (!widget.config.allowDebugFilterCriteriaInspectorButton) return null;
         final actionable =
-        widget.block.checkBeforeShowFilterCriteriaInspector();
+            widget.block.checkBeforeShowFilterCriteriaInspector();
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
@@ -267,15 +269,15 @@ class _BlockControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: actionable.yes
               ? () async {
-            await widget.block.showDebugFilterCriteriaViewerDialog();
-          }
+                  await widget.block.showDebugFilterCriteriaViewerDialog();
+                }
               : null,
         );
 
       case BlockControlBarItemType.debugFormModel:
         if (!widget.config.allowDebugFormModelInspectorButton) return null;
-        Actionable actionable = widget.block
-            .checkBeforeShowFormModelInspector();
+        Actionable actionable =
+            widget.block.checkBeforeShowFormModelInspector();
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
@@ -284,8 +286,8 @@ class _BlockControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: actionable.yes
               ? () async {
-            await widget.block.showDebugFormModelInspectorDialog();
-          }
+                  await widget.block.showDebugFormModelInspectorDialog();
+                }
               : null,
         );
 
@@ -299,10 +301,30 @@ class _BlockControlBarState extends _BaseControlBarState<
           onPressed: item.onPressed == null
               ? null
               : () {
-            item.onPressed!.call(widget.block, type);
-          },
+                  item.onPressed!.call(widget.block, type);
+                },
         );
     }
+  }
+
+  @override
+  KeyEventResult onKeyEvent(FocusNode node, KeyEvent event) {
+    // 1. Handle standard Up / Down / Home / End list navigation
+    final navResult = _ViewFocusUtils.handleBlockItemsKeyEvent(
+      block: widget.block,
+      event: event,
+    );
+    if (navResult == KeyEventResult.handled) {
+      return KeyEventResult.handled;
+    }
+
+    // 2. Handle Mnemonic Shortcuts (Alt+C, Alt+E, Alt+D, Alt+Q, Alt+R, etc.)
+    return _BlockMnemonicHandler.handleKeyEvent(
+      context: context,
+      block: widget.block,
+      screenNavigationContext: widget.config.screenNavigationContext,
+      event: event,
+    );
   }
 
   @override
@@ -319,9 +341,8 @@ class _BlockControlBarState extends _BaseControlBarState<
   String getWidgetOwnerClassName() => getClassNameWithoutGenerics(widget.block);
 
   @override
-  void addWidgetState({required bool isVisible}) =>
-      widget.block.ui
-          ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
+  void addWidgetState({required bool isVisible}) => widget.block.ui
+      ._addControlBarWidgetState(widgetState: this, isVisible: isVisible);
 
   @override
   void removeWidgetState() =>

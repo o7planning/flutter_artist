@@ -3,10 +3,11 @@ part of '../core.dart';
 class ActivityV1ControlConfig extends ViewConfig {
   const ActivityV1ControlConfig()
       : super(
-    quickSuggestionMode: QuickSuggestionMode.none,
-    enableKeyboardNavigation: false,
-    mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
-  );
+          quickSuggestionMode: QuickSuggestionMode.none,
+          enableKeyboardNavigation: false,
+          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+          focusIndicatorConfig: null,
+        );
 }
 
 class ActivityV1SectionViewBuilder extends _ContextProviderView {
@@ -43,7 +44,6 @@ class _ActivitySectionViewBuilderState
   String getWidgetOwnerClassName() {
     return getClassName(widget.activity);
   }
-
 
   @override
   FocusRegionType getRegionType() {

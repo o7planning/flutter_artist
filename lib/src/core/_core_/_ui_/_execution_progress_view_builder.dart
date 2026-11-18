@@ -3,12 +3,12 @@ part of '../core.dart';
 class ExecutionProgressViewConfig extends ViewConfig {
   const ExecutionProgressViewConfig()
       : super(
-    quickSuggestionMode: QuickSuggestionMode.none,
-    enableKeyboardNavigation: false,
-    mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
-  );
+          quickSuggestionMode: QuickSuggestionMode.none,
+          enableKeyboardNavigation: false,
+          mouseFocusPolicy: ViewMouseFocusPolicy.strictNavigationOnly,
+          focusIndicatorConfig: null,
+        );
 }
-
 
 class ExecutionProgressViewBuilder extends _ContextProviderView {
   final EdgeInsets progressOnMargin;
@@ -22,8 +22,8 @@ class ExecutionProgressViewBuilder extends _ContextProviderView {
   final ExecutionProgressViewConfig config;
 
   final Widget Function(
-      bool onProgress,
-      ) build;
+    bool onProgress,
+  ) build;
 
   const ExecutionProgressViewBuilder({
     super.key,
@@ -54,7 +54,6 @@ class _ExecutionProgressBuilderState
   Shelf? _getRelatedModule() {
     return null;
   }
-
 
   @override
   FocusRegionType getRegionType() {
@@ -129,7 +128,6 @@ class _ExecutionProgressBuilderState
       child: widget.build(onProgress),
     );
   }
-
 
   @override
   String getDebugLabel() {

@@ -3002,6 +3002,66 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Saves the form of this block if precheck passes.
+  @_RootMethodAnnotation()
+  Future<BlockFormSaveResult> saveForm() async {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "saveForm",
+      parameters: null,
+      isLibMethod: true,
+    );
+
+    final Actionable<BlockFormSavePrecheck> actionable = checkBeforeSaveForm();
+
+    if (!actionable.yes) {
+      _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#131100",
+        prefixShortDesc: 'checkBeforeSaveForm()',
+        module: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
+      return BlockFormSaveResult(precheck: actionable.errCode);
+    }
+
+    return await formModel!.saveForm();
+  }
+
+  /// Resets the form of this block to its initial state if precheck passes.
+  @_RootMethodAnnotation()
+  void resetForm() {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "resetForm",
+      parameters: null,
+      isLibMethod: true,
+    );
+
+    final Actionable<BlockFormResetPrecheck> actionable =
+        checkBeforeResetForm();
+
+    if (!actionable.yes) {
+      _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#130200",
+        prefixShortDesc: 'checkBeforeResetForm()',
+        module: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
+      return;
+    }
+
+    formModel!.resetForm();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @_RootMethodAnnotation()
   @_BlockClearCurrentItemAnnotation()
   Future<void> clearCurrentItem() async {
@@ -5209,12 +5269,21 @@ abstract class Block<
   }
 
   Actionable<BlockItemCreationPrecheck> checkBeforeCreateItemOnForm({
-    required bool checkAllow,
+    bool checkAllow = true,
   }) {
     return blockCurrentItemModel._checkBeforeCreateItemOnForm(
       checkBusy: true,
       creationType: ItemCreationType.form,
       checkAllow: checkAllow,
+    );
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckMethod()
+  Actionable<BlockSetCurrentItemPrecheck> checkBeforeEditCurrentItemWithForm() {
+    return blockCurrentItemModel._checkBeforeRefreshCurrentItem(
+      checkBusy: true,
     );
   }
 
@@ -5341,33 +5410,6 @@ abstract class Block<
       findItemSameIdWith: (targetItem) => findItemSameIdWith(item: targetItem),
       checkItemDeletionAllowed: (validItem) =>
           __checkItemDeletionAllowed(item: validItem),
-    );
-  }
-
-  // ***************************************************************************
-
-  @_PrecheckMethod()
-  Actionable<BlockBackendActionPrecheck> checkBeforeQuickAction() {
-    return __checkBeforeExecuteBackendAction(
-      checkBusy: true,
-    );
-  }
-
-  // ***************************************************************************
-
-  @_PrecheckMethod()
-  Actionable<BlockItemCreationPrecheck> checkBeforeCreateItemWithForm() {
-    return blockCurrentItemModel._checkBeforeCreateItemOnForm(
-      checkBusy: true,
-      checkAllow: true,
-      creationType: ItemCreationType.form,
-    );
-  }
-
-  @_PrecheckMethod()
-  Actionable<BlockSetCurrentItemPrecheck> checkBeforeEditCurrentItemWithForm() {
-    return blockCurrentItemModel._checkBeforeRefreshCurrentItem(
-      checkBusy: true,
     );
   }
 

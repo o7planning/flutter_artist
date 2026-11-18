@@ -67,6 +67,15 @@ class _ScalarSectionViewBuilderState
   }
 
   @override
+  KeyEventResult onKeyEvent(FocusNode node, KeyEvent event) {
+    return _ScalarMnemonicHandler.handleKeyEvent(
+      context: context,
+      scalar: widget.scalar,
+      event: event,
+    );
+  }
+
+  @override
   String getDebugLabel() {
     return "ScalarSectionView(${widget.scalar.name})";
   }

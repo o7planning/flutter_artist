@@ -12,6 +12,7 @@ class TaskControlBarConfig extends ControlBarConfig {
 
   const TaskControlBarConfig({
     super.enableKeyboardNavigation = false,
+    super.focusIndicatorConfig,
     this.taskViewContext = TaskViewContext.initData,
     this.screenNavigationContext,
     this.allowBackButton = false,
@@ -24,6 +25,7 @@ class TaskControlBarConfig extends ControlBarConfig {
   // TODO: Rename?
   const TaskControlBarConfig.allEnabled({
     super.enableKeyboardNavigation = false,
+    super.focusIndicatorConfig,
     this.taskViewContext = TaskViewContext.initData,
     this.screenNavigationContext,
   })  : allowBackButton = true,
