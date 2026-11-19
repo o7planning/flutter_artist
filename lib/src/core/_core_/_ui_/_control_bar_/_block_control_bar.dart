@@ -136,7 +136,7 @@ class _BlockControlBarState extends _BaseControlBarState<
         if (widget.block.formModel == null || !widget.config.allowEditButton) {
           return null;
         }
-        final actionable = widget.block.checkBeforeEditCurrentItemWithForm();
+        final actionable = widget.block.checkBeforeEditCurrentItemOnForm();
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
@@ -190,7 +190,6 @@ class _BlockControlBarState extends _BaseControlBarState<
           return null;
         }
         final actionable = widget.block.checkBeforeSaveForm(
-          checkAllow: true,
           // IMPORTANT: Avoid error:
           //  --> "setState() or markNeedsBuild() called during build.".
           checkValidate: false,

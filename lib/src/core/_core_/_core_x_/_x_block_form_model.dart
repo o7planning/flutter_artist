@@ -1,14 +1,16 @@
 part of '../core.dart';
 
 class XBlockFormModel<
-ID extends Comparable, //
-ITEM_DETAIL extends Identifiable<ID>> {
+    ID extends Comparable, //
+    ITEM_DETAIL extends Identifiable<ID>> {
   XShelf get xShelf => xBlockCurrentItemModel.xBlock.xShelf;
 
   final BlockFormModel formModel;
   late final XBlockCurrentItemModel<ID, Identifiable<ID>, ITEM_DETAIL>
-  xBlockCurrentItemModel;
+      xBlockCurrentItemModel;
   final FormPatch? formPatch;
+
+  bool focusFlag = false;
 
   int get xModuleId => xShelf.xModuleId;
 
@@ -24,7 +26,6 @@ ITEM_DETAIL extends Identifiable<ID>> {
   FormModelExecutionIntent? _stashedIntent;
 
   FormModelExecutionIntent? _executionIntent;
-
 
   ///
   /// IMPORTANT: To create new XBlockFormModel, use 'formModel._createXBlockFormModel' method
@@ -44,7 +45,6 @@ ITEM_DETAIL extends Identifiable<ID>> {
       _formLoadHint = forceType;
     }
   }
-
 
   // ***************************************************************************
 
@@ -77,12 +77,12 @@ ITEM_DETAIL extends Identifiable<ID>> {
   // ***************************************************************************
 
   FormModelPatchFormFieldsIntent
-  _createAndSetFormModelExecutionIntentPatchFormFields<
-  FORM_PATCH extends FormPatch>({
+      _createAndSetFormModelExecutionIntentPatchFormFields<
+          FORM_PATCH extends FormPatch>({
     required FORM_PATCH formPatch,
   }) {
     final executionIntent =
-    FormModelPatchFormFieldsIntent(formPatch: formPatch);
+        FormModelPatchFormFieldsIntent(formPatch: formPatch);
     _executionIntent = executionIntent;
     return executionIntent;
   }

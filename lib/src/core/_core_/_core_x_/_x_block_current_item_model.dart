@@ -1,9 +1,9 @@
 part of '../core.dart';
 
 class XBlockCurrentItemModel<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>> {
+    ID extends Comparable, //
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>> {
   String get name => blockCurrentItemModel.name;
 
   late final XBlock<
@@ -11,7 +11,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
       ITEM,
       ITEM_DETAIL> xBlock;
 
-  final XBlockFormModel? xBlockFormModel;
+  final XBlockFormModel<ID, ITEM_DETAIL>? xBlockFormModel;
 
   XShelf get xShelf => xBlock.xShelf;
 
@@ -115,10 +115,10 @@ ITEM_DETAIL extends Identifiable<ID>> {
     // due to it being stale or requiring a forced reload)
     if (output.missingIntent == MissingIntentType.setItemAsCurrent) {
       final intentToUse =
-      _createAndSetBlockCurrentItemModelExecutionIntentSetCurrentItem(
+          _createAndSetBlockCurrentItemModelExecutionIntentSetCurrentItem(
         // Giữ lại bản ghi hiện tại, chỉ load lại dữ liệu (forceReloadItem = true)
         setCurrentItemDirective:
-        BlockSetCurrentItemDirective.setAnItemAsCurrent,
+            BlockSetCurrentItemDirective.setAnItemAsCurrent,
         newQueriedList: const [],
         inputCandidateCurrItem: blockCurrentItemModel.currentItem,
         forceReloadItem: true,
@@ -142,13 +142,11 @@ ITEM_DETAIL extends Identifiable<ID>> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _BlockCurrentItemModelSetItemAsCurrentExecutionUnit<ID,
-              ITEM,
-              ITEM_DETAIL>(
+              ITEM, ITEM_DETAIL>(
             xBlockCurrentItemModel: this,
             executionIntent: _executionIntent
-            as BlockCurrentItemModelSetCurrentItemIntent<ID,
-                ITEM,
-                ITEM_DETAIL>,
+                as BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM,
+                    ITEM_DETAIL>,
           ),
           info: finalDebugInfo,
         );
@@ -156,13 +154,11 @@ ITEM_DETAIL extends Identifiable<ID>> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _BlockCurrentItemModelClearCurrentExecutionUnit<ID,
-              ITEM,
-              ITEM_DETAIL>(
+              ITEM, ITEM_DETAIL>(
             xBlockCurrentItemModel: this,
             executionIntent: _executionIntent
-            as BlockCurrentItemModelClearCurrentItemIntent<ID,
-                ITEM,
-                ITEM_DETAIL>,
+                as BlockCurrentItemModelClearCurrentItemIntent<ID, ITEM,
+                    ITEM_DETAIL>,
           ),
           info: finalDebugInfo,
         );
@@ -170,14 +166,12 @@ ITEM_DETAIL extends Identifiable<ID>> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit:
-          _BlockCurrentItemModelPrepareFormToCreateItemExecutionUnit<ID,
-              ITEM,
-              ITEM_DETAIL>(
+              _BlockCurrentItemModelPrepareFormToCreateItemExecutionUnit<ID,
+                  ITEM, ITEM_DETAIL>(
             xBlockCurrentItemModel: this,
             executionIntent: _executionIntent
-            as BlockCurrentItemModelPrepareFormToCreateItemIntent<ID,
-                ITEM,
-                ITEM_DETAIL>,
+                as BlockCurrentItemModelPrepareFormToCreateItemIntent<ID, ITEM,
+                    ITEM_DETAIL>,
           ),
           info: finalDebugInfo,
         );
@@ -198,7 +192,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
   }
 
   BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
-  _createAndSetBlockCurrentItemModelExecutionIntentSetCurrentItem({
+      _createAndSetBlockCurrentItemModelExecutionIntentSetCurrentItem({
     required BlockSetCurrentItemDirective setCurrentItemDirective,
     required List<ITEM> newQueriedList,
     required ITEM? inputCandidateCurrItem,
@@ -206,7 +200,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
     required FormLoadHint? formLoadHint,
   }) {
     final executionIntent =
-    BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>(
+        BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>(
       setCurrentItemDirective: setCurrentItemDirective,
       newQueriedList: newQueriedList,
       inputCandidateCurrItem: inputCandidateCurrItem,
@@ -219,23 +213,21 @@ ITEM_DETAIL extends Identifiable<ID>> {
   }
 
   BlockCurrentItemModelClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
-  _createAndSetBlockCurrentItemModelExecutionIntentClearCurrentItem() {
+      _createAndSetBlockCurrentItemModelExecutionIntentClearCurrentItem() {
     final executionIntent =
-    BlockCurrentItemModelClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>();
+        BlockCurrentItemModelClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>();
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
   BlockCurrentItemModelPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>
-  _createAndSetBlockCurrentItemModelExecutionIntentPrepareFormToCreateItem({
+      _createAndSetBlockCurrentItemModelExecutionIntentPrepareFormToCreateItem({
     required XBlock<ID, ITEM, ITEM_DETAIL> xBlock,
     required bool initDirty,
     required FormPatch? formPatch,
   }) {
     final executionIntent = BlockCurrentItemModelPrepareFormToCreateItemIntent<
-        ID,
-        ITEM,
-        ITEM_DETAIL>(
+        ID, ITEM, ITEM_DETAIL>(
       initDirty: initDirty,
       formPatch: formPatch,
     );

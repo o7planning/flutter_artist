@@ -48,7 +48,7 @@ class TaskFormResetPrecheckUtils {
       final CheckAllowResult allowResult = checkFormResetAllowed();
       if (allowResult.isError) {
         return Actionable.no(
-          errCode: TaskFormResetPrecheck.allowCheckError,
+          errCode: TaskFormResetPrecheck.checkAllowMethodError,
           errorInfo: allowResult.errorInfo,
         );
       }

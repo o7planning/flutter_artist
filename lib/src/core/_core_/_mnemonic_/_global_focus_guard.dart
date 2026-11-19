@@ -1,11 +1,14 @@
 part of '../core.dart';
 
-/// Global pointer, keyboard, and execution guard that:
+/// Global pointer, keyboard, and post-execution focus coordinator that:
 /// 1. Preserves active region focus when clicking non-focusable regions (e.g.,
 ///    [BlockItemsView] with [ViewMouseFocusPolicy.strictNavigationOnly]), even
 ///    across asynchronous [ExecutionUnit] batches that display a full-screen
 ///    loading overlay.
-/// 2. Listens for [MnemonicShortcut.locateRegion] globally to trigger a visual
+/// 2. Transfers focus to an explicit target [ActiveFocusRegion] requested by an
+///    [ExecutionUnit] (e.g., moving focus into [BlockFormView] after preparing
+///    a form for creation or editing), superseding passive focus restoration.
+/// 3. Listens for [MnemonicShortcut.locateRegion] globally to trigger a visual
 ///    focus indicator pulse on the currently active [_FocusableViewRegionState].
 class _GlobalFocusGuard {
   static bool _installed = false;
@@ -14,6 +17,10 @@ class _GlobalFocusGuard {
   static FocusNode? _lastLeafFocusNode;
   static int? _lastLeafOrdinalIndex;
 
+  // Priority 1: Explicit target region requested by an ExecutionUnit.
+  static ActiveFocusRegion? _pendingExplicitFocusRegion;
+
+  // Priority 2: Passive fallback region captured before a pointer-triggered batch.
   static _FocusableViewRegionState? _pendingRegionAfterExecution;
   static FocusNode? _pendingLeafNodeAfterExecution;
   static int? _pendingLeafIndexAfterExecution;
@@ -26,6 +33,33 @@ class _GlobalFocusGuard {
     _installed = true;
     GestureBinding.instance.pointerRouter.addGlobalRoute(_handlePointerEvent);
     HardwareKeyboard.instance.addHandler(_handleKeyEvent);
+  }
+
+  // ***************************************************************************
+
+  /// Requests that keyboard focus be transferred to [targetRegion] once the
+  /// current execution batch finishes, the loading overlay is dismissed, and
+  /// target views have rebuilt.
+  ///
+  /// Takes highest priority and clears any pending passive focus restoration
+  /// captured from a preceding pointer event. If the executor is currently idle,
+  /// schedules the focus transfer on the next post-frame callback.
+  static void requestFocusAfterExecution(ActiveFocusRegion targetRegion) {
+    _pendingExplicitFocusRegion = targetRegion;
+    _clearPassiveRestoreTarget();
+
+    if (!FlutterArtist.executor.isBusy &&
+        FlutterArtist.executor.executingXModuleId == null) {
+      onExecutionQueueCompleted();
+    }
+  }
+
+  // ***************************************************************************
+
+  static void _clearPassiveRestoreTarget() {
+    _pendingRegionAfterExecution = null;
+    _pendingLeafNodeAfterExecution = null;
+    _pendingLeafIndexAfterExecution = null;
   }
 
   // ***************************************************************************
@@ -61,9 +95,9 @@ class _GlobalFocusGuard {
       if (activeRegion != null) {
         _lastValidRegion = activeRegion;
         _lastLeafFocusNode =
-            (primary != null && primary != activeRegion.focusNode)
-                ? primary
-                : null;
+        (primary != null && primary != activeRegion.focusNode)
+            ? primary
+            : null;
         _lastLeafOrdinalIndex = _resolveOrdinalIndex(
           focusableRegionState: activeRegion,
           targetFocusNode: primary,
@@ -90,9 +124,12 @@ class _GlobalFocusGuard {
         // restoration until the executor finishes and dismisses the overlay.
         if (FlutterArtist.executor.isBusy ||
             FlutterArtist.executor.executingXModuleId != null) {
-          _pendingRegionAfterExecution = region;
-          _pendingLeafNodeAfterExecution = leaf;
-          _pendingLeafIndexAfterExecution = index;
+          // Do not overwrite if an explicit target region was already requested.
+          if (_pendingExplicitFocusRegion == null) {
+            _pendingRegionAfterExecution = region;
+            _pendingLeafNodeAfterExecution = leaf;
+            _pendingLeafIndexAfterExecution = index;
+          }
           return;
         }
 
@@ -115,22 +152,36 @@ class _GlobalFocusGuard {
   /// Invoked by [_Executor] once all queued execution units have finished,
   /// views have been refreshed, and the blocking overlay has been removed.
   static void onExecutionQueueCompleted() {
-    final _FocusableViewRegionState? region = _pendingRegionAfterExecution;
-    final FocusNode? leaf = _pendingLeafNodeAfterExecution;
-    final int? index = _pendingLeafIndexAfterExecution;
+    final ActiveFocusRegion? explicitRegion = _pendingExplicitFocusRegion;
+    final _FocusableViewRegionState? passiveRegion =
+        _pendingRegionAfterExecution;
+    final FocusNode? passiveLeaf = _pendingLeafNodeAfterExecution;
+    final int? passiveIndex = _pendingLeafIndexAfterExecution;
 
-    _pendingRegionAfterExecution = null;
-    _pendingLeafNodeAfterExecution = null;
-    _pendingLeafIndexAfterExecution = null;
+    _pendingExplicitFocusRegion = null;
+    _clearPassiveRestoreTarget();
 
-    if (region == null) return;
+    if (explicitRegion == null && passiveRegion == null) return;
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      _tryRestoreFocus(
-        candidateRegionState: region,
-        candidateLeaf: leaf,
-        candidateIndex: index,
-      );
+      // Priority 1: Explicit focus transfer requested by an ExecutionUnit.
+      if (explicitRegion != null) {
+        final _FocusableViewRegionState? targetState =
+        _RegionDispatcher.findEligibleRegion(explicitRegion);
+        if (targetState != null) {
+          targetState.requestRegionFocus();
+        }
+        return;
+      }
+
+      // Priority 2: Passive focus preservation after pointer-driven rebuild.
+      if (passiveRegion != null) {
+        _tryRestoreFocus(
+          candidateRegionState: passiveRegion,
+          candidateLeaf: passiveLeaf,
+          candidateIndex: passiveIndex,
+        );
+      }
     });
   }
 
@@ -145,7 +196,7 @@ class _GlobalFocusGuard {
       return null;
     }
     final List<FocusNode> nodes =
-        focusableRegionState.getStableDescendantNodes();
+    focusableRegionState.getStableDescendantNodes();
     final int idx = nodes.indexOf(targetFocusNode);
     return idx >= 0 ? idx : null;
   }

@@ -9,6 +9,22 @@ enum BlockBackendActionPrecheck implements Precheck {
     details: ["The system executor is currently busy. Please wait."],
   ),
 
+  /// Operation not allowed by application business rules.
+  notAllowed(
+    precheckCode: PrecheckCode.notAllowed,
+    message: "Backend action is not allowed.",
+    details: [
+      "Application business rules do not allow executing this backend action."
+    ],
+  ),
+
+  /// An error occurred while executing the backend action allow-check method.
+  checkAllowMethodError(
+    precheckCode: PrecheckCode.checkAllowMethodError,
+    message: "Backend action is not allowed.",
+    details: ["An error occurred during the backend action permission check."],
+  ),
+
   /// Operation aborted because the block is in a pending state.
   blockInPendingState(
     precheckCode: PrecheckCode.blockInPendingState,

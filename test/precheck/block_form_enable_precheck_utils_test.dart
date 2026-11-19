@@ -13,7 +13,7 @@ void main() {
         formDataState: null,
         currentItem: 'Item A',
         checkAllow: true,
-        checkItemUpdateAllowed: (item) => CheckAllowResult.allowed(),
+        checkEditItemOnFormAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -28,7 +28,7 @@ void main() {
         formDataState: defaultFormDataState,
         currentItem: 'Item A',
         checkAllow: true,
-        checkItemUpdateAllowed: (item) => CheckAllowResult.allowed(),
+        checkEditItemOnFormAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isFalse);
@@ -45,7 +45,7 @@ void main() {
         formDataState: defaultFormDataState,
         currentItem: 'Item A',
         checkAllow: true,
-        checkItemUpdateAllowed: (item) =>
+        checkEditItemOnFormAllowed: (item) =>
             CheckAllowResult.notAllowed(), // Disallowed
       );
 
@@ -61,7 +61,7 @@ void main() {
         formDataState: defaultFormDataState,
         currentItem: 'Item A',
         checkAllow: true,
-        checkItemUpdateAllowed: (item) => CheckAllowResult.allowed(),
+        checkEditItemOnFormAllowed: (item) => CheckAllowResult.allowed(),
       );
 
       expect(result.yes, isTrue);

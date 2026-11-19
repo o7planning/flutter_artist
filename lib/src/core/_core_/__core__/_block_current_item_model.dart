@@ -797,7 +797,7 @@ class BlockCurrentItemModel<
           caller: this,
           methodName: methodName,
           suffixShortDesc:
-              "To convert <b>ITEM_DETAIL</b> to <b>ITEM</b>, {debugObjHtml(refreshedCurrentItemDetail)} --> ${block._debugItemTypeHtml()}.",
+              "To convert <b>ITEM_DETAIL</b> to <b>ITEM</b>, ${debugObjHtml(refreshedCurrentItemDetail)} --> ${block._debugItemTypeHtml()}.",
         );
 
         candidateCurrItem = block._convertItemDetailToItem(
@@ -1107,6 +1107,18 @@ class BlockCurrentItemModel<
           formDataState: FormDataStateLoadedFresh(),
           error: null,
         );
+        // *new-focus*
+        final xBlockFormModel = thisXBlockCurrentItemModel.xBlockFormModel;
+        if (xBlockFormModel != null) {
+          xBlockFormModel.focusFlag = true;
+          _GlobalFocusGuard.requestFocusAfterExecution(
+            ActiveFocusRegion(
+              moduleName: shelf.name,
+              unitName: name,
+              regionType: FocusRegionType.blockFormView,
+            ),
+          );
+        }
       }
     } finally {
       __refreshPreparingFormCreationState(
@@ -1141,7 +1153,6 @@ class BlockCurrentItemModel<
     );
     //
     final bool checkBusyTrue = true;
-    final bool checkAllowTrue = true;
     executionTrace.addNonControllableCall(
       codeId: "#069100",
       caller: this,
@@ -1149,7 +1160,6 @@ class BlockCurrentItemModel<
       suffixShortDesc: "",
       parameters: {
         "checkBusy": checkBusyTrue,
-        "checkAllow": checkAllowTrue,
         "errCodeIfItemIsNull": errCodeIfItemIsNull,
       },
     );
@@ -1274,7 +1284,6 @@ class BlockCurrentItemModel<
   @_PrecheckPrivateMethod()
   Actionable<BlockItemCreationPrecheck> _checkBeforeCreateItemOnForm({
     required bool checkBusy,
-    required ItemCreationType creationType,
     required bool checkAllow,
   }) {
     return BlockItemCreationPrecheckUtils.checkBeforeCreateItemOnForm(
@@ -1283,7 +1292,7 @@ class BlockCurrentItemModel<
       hasForm: formModel != null,
       blockDataState: block.dataState,
       checkAllow: checkAllow,
-      checkCreationAllowed: () => block.__checkQuickItemCreationAllowed(),
+      checkCreationAllowed: () => block._checkCreateItemOnFormAllowed(),
     );
   }
 
@@ -1333,7 +1342,6 @@ class BlockCurrentItemModel<
   @_PrecheckPrivateMethod()
   Actionable<BlockFormSavePrecheck> _checkBeforeSaveForm({
     required bool checkBusy,
-    required bool checkAllow,
     required bool checkValidate,
   }) {
     return BlockFormSavePrecheckUtils.checkBeforeSaveForm(
@@ -1367,7 +1375,7 @@ class BlockCurrentItemModel<
       item: item,
       checkAllow: checkAllow,
       checkItemEditAllowed: (validItem) =>
-          block._checkItemUpdateAllowed(item: validItem),
+          block._checkEditItemOnFormAllowed(item: validItem),
     );
   }
 

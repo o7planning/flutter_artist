@@ -66,7 +66,7 @@ enum StageFormEnablePrecheck implements FormEnablePrecheck {
   checkAllowMethodError(
     precheckCode: PrecheckCode.checkAllowMethodError,
     message: "The Form is disabled.",
-    details: ["The isItemUpdateAllowed() method error."],
+    details: ["The isEditItemOnFormAllowed() method error."],
   ),
   ;
 

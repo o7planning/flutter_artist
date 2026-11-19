@@ -15,8 +15,6 @@ enum PrecheckCode {
   notAllowed,
   checkAllowMethodError,
   //
-  @Deprecated("Xoa di, thay the bang cach khac")
-  filterError,
   queryLockedTemporarily,
   //
   blockInStaleState,
@@ -43,5 +41,14 @@ enum PrecheckCode {
   reexecutionNotAllowed,
   stageNotSubmittedYet,
   stageRestartRestricted,
-  noFilterModel, prozessNotStarted, noPreviousStage, noNextStage, nextStageNotReached, noViewingStage, stageNotReady, formDataNotLoaded, allowCheckError, taskNotReady,
+  noFilterModel,
+  prozessNotStarted,
+  noPreviousStage,
+  noNextStage,
+  nextStageNotReached,
+  noViewingStage,
+  stageNotReady,
+  formDataNotLoaded,
+  // allowCheckError,
+  taskNotReady,
 }

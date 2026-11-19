@@ -18,7 +18,7 @@ abstract class BaseFormViewBuilder<M extends BaseFormModel>
 }
 
 abstract class _BaseFormViewBuilderState<W extends BaseFormViewBuilder<M>,
-M extends BaseFormModel> extends _ContextProviderViewState<W> {
+    M extends BaseFormModel> extends _ContextProviderViewState<W> {
   GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -65,8 +65,7 @@ M extends BaseFormModel> extends _ContextProviderViewState<W> {
       selection = await dialogs.showYesNoCancelDialog(
         context: context,
         message:
-        "Do you want to save changes to [${getClassName(
-            widget.formModel)}] before closing?",
+            "Do you want to save changes to [${getClassName(widget.formModel)}] before closing?",
         details: "",
         defaultOption: dialogs.YesNoCancel.yes,
       );
@@ -130,13 +129,15 @@ M extends BaseFormModel> extends _ContextProviderViewState<W> {
     }
   }
 
-  KeyEventResult handleFormMnemonicKeyEvent(BuildContext context,
-      KeyEvent event,) =>
+  KeyEventResult handleFormMnemonicKeyEvent(
+    BuildContext context,
+    KeyEvent event,
+  ) =>
       KeyEventResult.ignored;
 
   bool _isCircularFocusTraversal(BuildContext context) {
     final _StageFormViewSwitcherScope? scope =
-    _StageFormViewSwitcherScope.maybeOf(context);
+        _StageFormViewSwitcherScope.maybeOf(context);
     if (scope != null) {
       return scope.circularFocusTraversal;
     }
@@ -167,7 +168,7 @@ M extends BaseFormModel> extends _ContextProviderViewState<W> {
 
         // 3. Prevent Enter on single-line TextFields from unfocusing the form
         final enterGuardResult =
-        FormFocusTraversalUtils.preventSingleLineEnterUnfocus(event);
+            FormFocusTraversalUtils.preventSingleLineEnterUnfocus(event);
         if (enterGuardResult == KeyEventResult.handled) {
           return KeyEventResult.handled;
         }
@@ -238,7 +239,6 @@ M extends BaseFormModel> extends _ContextProviderViewState<W> {
         }
       }
     }
-
     if (errorNodes.isEmpty) return;
 
     // 2. Sort the error nodes based on their visual arrangement on the screen
@@ -249,7 +249,7 @@ M extends BaseFormModel> extends _ContextProviderViewState<W> {
 
     final FocusNode scopeNode = FocusScope.of(context);
     final List<FocusNode> sortedErrorNodes =
-    policy.sortDescendants(errorNodes, scopeNode).toList();
+        policy.sortDescendants(errorNodes, scopeNode).toList();
 
     // 3. Scroll to the first errored field and request focus.
     if (sortedErrorNodes.isNotEmpty) {
@@ -282,7 +282,8 @@ M extends BaseFormModel> extends _ContextProviderViewState<W> {
   /// Checks [FormBuilderFieldState.effectiveFocusNode] first, and falls back to
   /// searching descendant [Focus] widgets inside [field.context].
   FocusNode? __resolveFieldFocusNode(
-      FormBuilderFieldState<dynamic, dynamic> field,) {
+    FormBuilderFieldState<dynamic, dynamic> field,
+  ) {
     final FocusNode effectiveNode = field.effectiveFocusNode;
     if (effectiveNode.canRequestFocus) {
       return effectiveNode;

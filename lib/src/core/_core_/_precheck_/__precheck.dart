@@ -27,8 +27,6 @@ part '_parts_/_block_clear_items_precheck.dart';
 
 part '_parts_/_block_form_enable_precheck.dart';
 
-part '_parts_/_block_form_patch_form_fields_precheck.dart';
-
 part '_parts_/_block_form_reset_precheck.dart';
 
 part '_parts_/_block_form_save_precheck.dart';

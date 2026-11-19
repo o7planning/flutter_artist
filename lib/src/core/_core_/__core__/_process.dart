@@ -651,6 +651,9 @@ abstract class Prozess<
         checkBeforeViewingStageSubmit();
 
     if (!actionable.yes) {
+      if (actionable.errCode == StageSubmitPrecheck.formInvalidated) {
+        viewingStage?.formModel?.ui.focusFirstErrorField();
+      }
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#122100",

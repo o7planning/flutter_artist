@@ -64,7 +64,7 @@ class StageFormResetPrecheckUtils {
       final CheckAllowResult allowResult = checkFormResetAllowed();
       if (allowResult.isError) {
         return Actionable.no(
-          errCode: StageFormResetPrecheck.allowCheckError,
+          errCode: StageFormResetPrecheck.checkAllowMethodError,
           errorInfo: allowResult.errorInfo,
         );
       }

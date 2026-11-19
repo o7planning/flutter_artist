@@ -9,7 +9,8 @@ class BlockFormEnablePrecheckUtils {
     required FormDataState? formDataState,
     required ITEM? currentItem,
     required bool checkAllow,
-    required CheckAllowResult Function(ITEM validItem) checkItemUpdateAllowed,
+    required CheckAllowResult Function(ITEM validItem)
+        checkEditItemOnFormAllowed,
   }) {
     // 1. Check if form model exists
     if (!hasForm) {
@@ -52,7 +53,7 @@ class BlockFormEnablePrecheckUtils {
 
     // 4. Check business permission rules if currentItem exists
     if (checkAllow && currentItem != null) {
-      final CheckAllowResult result = checkItemUpdateAllowed(currentItem);
+      final CheckAllowResult result = checkEditItemOnFormAllowed(currentItem);
       switch (result.result) {
         case CheckAllow.allow:
           return Actionable<BlockFormEnablePrecheck>.yes();

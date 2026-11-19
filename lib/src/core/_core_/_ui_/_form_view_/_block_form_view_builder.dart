@@ -29,7 +29,6 @@ class _BlockFormViewBuilderState
     return widget.formModel.shelf;
   }
 
-
   @override
   FocusRegionType getRegionType() {
     return FocusRegionType.blockFormView;
@@ -67,8 +66,10 @@ class _BlockFormViewBuilderState
   }
 
   @override
-  KeyEventResult handleFormMnemonicKeyEvent(BuildContext context,
-      KeyEvent event,) {
+  KeyEventResult handleFormMnemonicKeyEvent(
+    BuildContext context,
+    KeyEvent event,
+  ) {
     return _BlockMnemonicHandler.handleKeyEvent(
       context: context,
       block: widget.formModel.block,

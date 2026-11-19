@@ -140,7 +140,7 @@ class BlockAncestorContext {
   /// - `depth = 3`: Great-grandparent
   T? getItemAtDepth<T>({int depth = 1}) {
     assert(depth >= 1, "Ancestor depth must be greater than or equal to 1");
-    final List<Block> ancestors = currentBlock.ancestorBlocks;
+    final List<Block> ancestors = currentBlock.ascendingAncestorBlocks;
     if (depth <= ancestors.length) {
       return ancestors[depth - 1].currentItem as T?;
     }
@@ -150,7 +150,7 @@ class BlockAncestorContext {
   /// Resolves the active [currentItemDetail] at a specific generational ancestor distance.
   D? getItemDetailAtDepth<D>({int depth = 1}) {
     assert(depth >= 1, "Ancestor depth must be greater than or equal to 1");
-    final List<Block> ancestors = currentBlock.ancestorBlocks;
+    final List<Block> ancestors = currentBlock.ascendingAncestorBlocks;
     if (depth <= ancestors.length) {
       return ancestors[depth - 1].currentItemDetail as D?;
     }

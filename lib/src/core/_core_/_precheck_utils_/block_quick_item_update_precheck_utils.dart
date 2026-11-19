@@ -4,14 +4,15 @@ part of '__precheck_utils.dart';
 class BlockQuickItemUpdatePrecheckUtils {
   /// Evaluates whether quick updating an item is permitted.
   static Actionable<BlockQuickItemUpdatePrecheck>
-  checkBeforeQuickUpdateItem<ITEM>({
+      checkBeforeQuickUpdateItem<ITEM>({
     required bool checkBusy,
     required bool isBusy,
     required BlockDataState blockDataState,
     required ITEM? item,
+    required bool errorIfItemNotInTheBlock,
     required bool Function(ITEM targetItem) containsItem,
     required bool checkAllow,
-    required CheckAllowResult Function(ITEM validItem) checkQuickUpdateAllowed,
+    required CheckAllowResult Function() checkQuickUpdateAllowed,
   }) {
     // 1. Priority 1: Check if the system executor is busy
     if (checkBusy && isBusy) {
@@ -45,8 +46,8 @@ class BlockQuickItemUpdatePrecheckUtils {
       );
     }
 
-    // 4. Priority 4: Check if item exists in the list
-    if (!containsItem(item)) {
+    // 4. Priority 4: Check if item exists in the list when enforced by config
+    if (errorIfItemNotInTheBlock && !containsItem(item)) {
       return Actionable<BlockQuickItemUpdatePrecheck>.no(
         errCode: BlockQuickItemUpdatePrecheck.invalidTarget,
       );
@@ -54,7 +55,7 @@ class BlockQuickItemUpdatePrecheckUtils {
 
     // 5. Priority 5: Check business permission rules
     if (checkAllow) {
-      final CheckAllowResult result = checkQuickUpdateAllowed(item);
+      final CheckAllowResult result = checkQuickUpdateAllowed();
       switch (result.result) {
         case CheckAllow.allow:
           return Actionable<BlockQuickItemUpdatePrecheck>.yes();

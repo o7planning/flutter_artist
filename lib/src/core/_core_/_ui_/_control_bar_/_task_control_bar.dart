@@ -113,7 +113,6 @@ class _TaskControlBarState extends _BaseControlBarState<
           return null;
         }
         final actionable = widget.task.checkBeforeSubmit(
-          checkAllow: true,
           // IMPORTANT: Avoid error:
           //  "setState() or markNeedsBuild() called during build.".
           checkValidate: false,

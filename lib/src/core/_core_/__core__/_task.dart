@@ -654,7 +654,7 @@ abstract class Task<
 
   // ***************************************************************************
 
-  @_PrecheckPrivateMethod()
+  @_PrecheckMethod()
   Actionable<TaskRestartPrecheck> checkBeforeRestart({
     bool checkAllow = true,
   }) {
@@ -672,7 +672,7 @@ abstract class Task<
     required bool checkAllow,
   }) {
     return TaskRestartPrecheckUtils.checkBeforeRestart(
-      checkBusy: true,
+      checkBusy: checkBusy,
       isBusy: FlutterArtist.executor.isBusy,
       checkAllow: checkAllow,
       taskDataState: dataState,
@@ -689,7 +689,6 @@ abstract class Task<
   @_PrecheckPrivateMethod()
   Actionable<TaskSubmitPrecheck> __checkBeforeSubmit({
     required bool checkBusy,
-    required bool checkAllow,
     required bool checkValidate,
   }) {
     return TaskSubmitPrecheckUtils.checkBeforeSubmit(
@@ -710,12 +709,10 @@ abstract class Task<
   /// Public entry point evaluating whether this Task permits submitting its current state.
   @_PrecheckMethod()
   Actionable<TaskSubmitPrecheck> checkBeforeSubmit({
-    bool checkAllow = true,
     bool checkValidate = true,
   }) {
     return __checkBeforeSubmit(
       checkBusy: true,
-      checkAllow: checkAllow,
       checkValidate: checkValidate,
     );
   }
@@ -724,7 +721,6 @@ abstract class Task<
 
   bool canSubmit() {
     final Actionable<TaskSubmitPrecheck> actionable = checkBeforeSubmit(
-      checkAllow: true,
       checkValidate: true,
     );
     return actionable.yes;
@@ -767,6 +763,9 @@ abstract class Task<
     Actionable<TaskSubmitPrecheck> actionable = checkBeforeSubmit();
 
     if (!actionable.yes) {
+      if (actionable.errCode == TaskSubmitPrecheck.formInvalidated) {
+        formModel?.ui.focusFirstErrorField();
+      }
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#094100",

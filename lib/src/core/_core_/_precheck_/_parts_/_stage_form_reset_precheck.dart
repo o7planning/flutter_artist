@@ -61,8 +61,8 @@ enum StageFormResetPrecheck implements Precheck {
   ),
 
   /// Operation aborted due to an unexpected error while evaluating permission.
-  allowCheckError(
-    precheckCode: PrecheckCode.allowCheckError,
+  checkAllowMethodError(
+    precheckCode: PrecheckCode.checkAllowMethodError,
     message: "Cannot reset stage form",
     details: ["An error occurred while checking form reset permissions."],
   );

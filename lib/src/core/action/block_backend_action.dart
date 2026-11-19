@@ -19,6 +19,18 @@ abstract class BlockBackendAction<ID extends Comparable> extends Action {
   });
 
   ID? suggestNewCurrentItemId({required List<ID> itemIds});
+
+  /// Evaluates whether this backend action is allowed to execute
+  /// according to application business rules.
+  ///
+  /// Receives [parentBlockItem] from the immediate parent block (if any).
+  /// Override this method to enforce custom permission or state constraints.
+  @OverridableMethodAnnotation()
+  bool isAllowed({
+    required Object? parentBlockItem,
+  }) {
+    return true;
+  }
 }
 
 /// Configuration class specifically tailored for [BlockBackendAction].

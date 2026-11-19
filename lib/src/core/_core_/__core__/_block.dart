@@ -2523,13 +2523,23 @@ abstract class Block<
     }
     // Error.
     if (actionResult.error != null) {
-      _handleRestError(
+      final ErrorInfo errorInfo = _handleRestError(
         shelf: shelf,
         methodName: "${getClassName(action)}.performBackendOperation",
         message: actionResult.error!.errorMessage,
         errorDetails: actionResult.error!.errorDetails,
         showSnackBar: true,
         tipDocument: null,
+      );
+      //
+      executionUnitResult._setErrorInfo(
+        errorInfo: errorInfo,
+      );
+      executionTrace.addInfo(
+        codeId: "#045300",
+        shortDesc:
+            "The ${debugObjHtml(action)}.performBackendOperation() method was called with an error!",
+        errorInfo: errorInfo,
       );
       return;
     }
@@ -2800,9 +2810,6 @@ abstract class Block<
         item: refreshedItem,
       );
       //
-      Actionable<BlockItemEditPrecheck> actionable =
-          checkBeforeEditItemOnForm(item: refreshedItem);
-      //
       final ID itemId = __getItemIdShowErr(refreshedItem, showErr: true);
       thisXBlock._addRecentLoadedItem(
         itemId: itemId,
@@ -3002,23 +3009,26 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Saves the form of this block if precheck passes.
+  /// Saves the form of this block by delegating directly to [formModel].
+  ///
+  /// Logs a [BlockFormSavePrecheck.noForm] error and displays an error snackbar
+  /// if [formModel] is `null`.
   @_RootMethodAnnotation()
   Future<BlockFormSaveResult> saveForm() async {
-    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
-      ownerClassInstance: this,
-      methodName: "saveForm",
-      parameters: null,
-      isLibMethod: true,
-    );
-
-    final Actionable<BlockFormSavePrecheck> actionable = checkBeforeSaveForm();
-
-    if (!actionable.yes) {
+    if (formModel == null) {
+      final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+        ownerClassInstance: this,
+        methodName: "saveForm",
+        parameters: null,
+        isLibMethod: true,
+      );
+      final actionable = Actionable<BlockFormSavePrecheck>.no(
+        errCode: BlockFormSavePrecheck.noForm,
+      );
       _addErrorLogActionable(
         executionTrace: executionTrace,
-        traceStepCodeId: "#131100",
-        prefixShortDesc: 'checkBeforeSaveForm()',
+        traceStepCodeId: "#130100",
+        prefixShortDesc: 'formModel == null',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -3030,24 +3040,27 @@ abstract class Block<
     return await formModel!.saveForm();
   }
 
-  /// Resets the form of this block to its initial state if precheck passes.
+  /// Resets the form of this block to its initial state by delegating directly
+  /// to [formModel].
+  ///
+  /// Logs a [BlockFormResetPrecheck.noForm] error and displays an error snackbar
+  /// if [formModel] is `null`.
   @_RootMethodAnnotation()
   void resetForm() {
-    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
-      ownerClassInstance: this,
-      methodName: "resetForm",
-      parameters: null,
-      isLibMethod: true,
-    );
-
-    final Actionable<BlockFormResetPrecheck> actionable =
-        checkBeforeResetForm();
-
-    if (!actionable.yes) {
+    if (formModel == null) {
+      final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+        ownerClassInstance: this,
+        methodName: "resetForm",
+        parameters: null,
+        isLibMethod: true,
+      );
+      final actionable = Actionable<BlockFormResetPrecheck>.no(
+        errCode: BlockFormResetPrecheck.noForm,
+      );
       _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#130200",
-        prefixShortDesc: 'checkBeforeResetForm()',
+        prefixShortDesc: 'formModel == null',
         module: shelf,
         actionableFalse: actionable,
         showErrSnackBar: true,
@@ -3354,6 +3367,10 @@ abstract class Block<
         xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
     final BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
         thisXBlock._createAndSetBlockExecutionIntentClearItems();
+    //
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
+    await FlutterArtist.executor._executeExecutionUnitQueue();
+    //
     return executionIntent.result;
   }
 
@@ -3622,7 +3639,6 @@ abstract class Block<
   ///
   @nonVirtual
   @_RootMethodAnnotation()
-  @_ReturnExecutionUnitResultMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockQueryAndPrepareToEditAnnotation()
   Future<BlockQueryResult> queryAndPrepareToEdit({
@@ -4066,20 +4082,27 @@ abstract class Block<
       isLibMethod: true,
     );
     //
+    final bool checkAllowTrue = true;
+    //
     executionTrace.addNonControllableCall(
       codeId: "#071000",
       caller: this,
       methodName: "checkBeforeExecuteBackendAction",
       suffixShortDesc: "",
-      parameters: {},
+      parameters: {
+        "action": action,
+        "checkAllow": checkAllowTrue,
+      },
       tipDocument: TipDocument.canDoAction,
     );
     //
     // @Same-Code-Precheck-01
     //
     final Actionable<BlockBackendActionPrecheck> actionable =
-        checkBeforeExecuteBackendAction();
-    //
+        checkBeforeExecuteBackendAction(
+      action: action,
+      checkAllow: checkAllowTrue,
+    );
     if (!actionable.yes) {
       // _createItemErrorCount++;
       _addErrorLogActionable(
@@ -4176,6 +4199,7 @@ abstract class Block<
       methodName: "checkBeforeQuickCreateItem",
       suffixShortDesc: "",
       parameters: {
+        "action": action,
         "checkAllow": checkAllowTrue,
       },
       tipDocument: TipDocument.canDoAction,
@@ -4185,6 +4209,7 @@ abstract class Block<
     //
     final Actionable<BlockQuickItemCreationPrecheck> actionable =
         checkBeforeQuickCreateItem(
+      action: action,
       checkAllow: checkAllowTrue,
     );
     if (!actionable.yes) {
@@ -4265,19 +4290,21 @@ abstract class Block<
       methodName: "checkBeforeQuickUpdateItem",
       suffixShortDesc: "",
       parameters: {
+        "action": action,
         "item": action.item,
         "checkAllow": checkAllowTrue,
         "errorIfItemNotInTheBlock": action.config.errorIfItemNotInTheBlock,
       },
       tipDocument: TipDocument.canDoAction,
     );
+
     // @Same-Code-Precheck-01
     final Actionable<BlockQuickItemUpdatePrecheck> actionable =
         checkBeforeQuickUpdateItem(
-      item: action.item,
+      action: action,
       checkAllow: checkAllowTrue,
-      errorIfItemNotInTheBlock: action.config.errorIfItemNotInTheBlock,
     );
+
     //
     if (!actionable.yes) {
       // _createItemErrorCount++;
@@ -4430,7 +4457,7 @@ abstract class Block<
   Future<BlockSetCurrentItemResult> _prepareFormToEditCurrentItem() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "_prepareFormToEditItem",
+      methodName: "_prepareFormToEditCurrentItem",
       parameters: {},
       isLibMethod: true,
     );
@@ -4992,21 +5019,29 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  ///
-  /// Allows creating a new Item or not according to the application logic.
-  ///
-  bool isItemCreationAllowed() {
+  /// Returns whether preparing the form to create a new item is allowed
+  /// according to application business rules.
+  // OLD: `isItemCreation Allowed
+  bool isCreateItemOnFormAllowed() {
     return true;
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Allows edit an Item or not according to the application logic.
-  ///
-  bool isItemUpdateAllowed({required ITEM item}) {
+  /// Returns whether editing [item] on the form is allowed according to
+  /// application business rules.
+  // OLD: `isItemUpdate Allowed
+  bool isEditItemOnFormAllowed({required ITEM item}) {
     return true;
+  }
+
+  /// Returns whether editing the [currentItem] on the form is allowed.
+  /// Returns `false` if there is no [currentItem].
+  // OLD: `isCurrentItemUpdate Allowed
+  bool isEditCurrentItemOnFormAllowed() {
+    final ITEM? currItem = currentItem;
+    if (currItem == null) {
+      return false;
+    }
+    return isEditItemOnFormAllowed(item: currItem);
   }
 
   // ***************************************************************************
@@ -5017,17 +5052,6 @@ abstract class Block<
   ///
   bool isItemDeletionAllowed({required ITEM item}) {
     return true;
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  bool isCurrentItemUpdateAllowed() {
-    ITEM? currentItem = this.currentItem;
-    if (currentItem == null) {
-      return false;
-    }
-    return isItemUpdateAllowed(item: currentItem);
   }
 
   // ***************************************************************************
@@ -5056,68 +5080,6 @@ abstract class Block<
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
         errorInfo: ErrorInfo.fromError(error: e, stackTrace: stackTrace),
-      );
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Allows updating an Item or not according to the application logic.
-  ///
-  @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult _checkItemUpdateAllowed({
-    required ITEM item,
-  }) {
-    try {
-      bool allow = isItemUpdateAllowed(item: item);
-      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
-    } catch (e, stackTrace) {
-      return CheckAllowResult.error(
-        errorInfo: ErrorInfo.fromError(
-          error: e,
-          stackTrace: stackTrace,
-        ),
-      );
-    }
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  ///
-  /// Allows creating a new Item or not according to the application logic.
-  ///
-  @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult __checkQuickItemCreationAllowed() {
-    try {
-      bool allow = isItemCreationAllowed();
-      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
-    } catch (e, stackTrace) {
-      return CheckAllowResult.error(
-        errorInfo: ErrorInfo.fromError(
-          error: e,
-          stackTrace: stackTrace,
-        ),
-      );
-    }
-  }
-
-  ///
-  /// Allows creating a new Item or not according to the application logic.
-  ///
-  @_IsAllowPrivateMethodAnnotation()
-  CheckAllowResult __checkItemCreationAllowed() {
-    try {
-      bool allow = isItemCreationAllowed();
-      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
-    } catch (e, stackTrace) {
-      return CheckAllowResult.error(
-        errorInfo: ErrorInfo.fromError(
-          error: e,
-          stackTrace: stackTrace,
-        ),
       );
     }
   }
@@ -5162,28 +5124,78 @@ abstract class Block<
   }
 
   // ***************************************************************************
+  // *********** _checkAllowXXX() method ***************************************
   // ***************************************************************************
 
-  @_PrecheckPrivateMethod()
-  Actionable<BlockBackendActionPrecheck> checkBeforeExecuteBackendAction() {
-    return __checkBeforeExecuteBackendAction(checkBusy: true);
+  /// Evaluates [isCreateItemOnFormAllowed] safely and wraps any thrown error.
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult _checkCreateItemOnFormAllowed() {
+    try {
+      final bool allow = isCreateItemOnFormAllowed();
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
+    } catch (e, stackTrace) {
+      return CheckAllowResult.error(
+        errorInfo: ErrorInfo.fromError(
+          error: e,
+          stackTrace: stackTrace,
+        ),
+      );
+    }
+  }
+
+  /// Evaluates [isEditItemOnFormAllowed] for [item] safely and wraps any thrown error.
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult _checkEditItemOnFormAllowed({
+    required ITEM item,
+  }) {
+    try {
+      final bool allow = isEditItemOnFormAllowed(item: item);
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
+    } catch (e, stackTrace) {
+      return CheckAllowResult.error(
+        errorInfo: ErrorInfo.fromError(
+          error: e,
+          stackTrace: stackTrace,
+        ),
+      );
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckMethod()
+  Actionable<BlockBackendActionPrecheck> checkBeforeExecuteBackendAction({
+    required BlockBackendAction<ID> action,
+    bool checkAllow = true,
+  }) {
+    return __checkBeforeExecuteBackendAction(
+      action: action,
+      checkBusy: true,
+      checkAllow: checkAllow,
+    );
   }
 
   @_PrecheckPrivateMethod()
   Actionable<BlockBackendActionPrecheck> __checkBeforeExecuteBackendAction({
+    required BlockBackendAction<ID> action,
     required bool checkBusy,
+    required bool checkAllow,
   }) {
     return BlockBackendActionPrecheckUtils.checkBeforeExecuteBackendAction(
       checkBusy: checkBusy,
       isBusy: FlutterArtist.executor.isBusy,
       blockDataState: dataState,
+      checkAllow: checkAllow,
+      checkBackendActionAllowed: () =>
+          __checkBackendActionAllowed(action: action),
     );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckPrivateMethod()
+  @_PrecheckMethod()
   Actionable<BlockClearItemsPrecheck> checkBeforeClearItems() {
     return __checkBeforeClearItems(checkBusy: true);
   }
@@ -5204,40 +5216,64 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckPrivateMethod()
-  Actionable<BlockQuickItemUpdatePrecheck> __checkBeforeQuickUpdateItem({
-    required ITEM item,
-    required bool checkBusy,
-    required bool checkAllow,
-    required bool errorIfItemNotInTheBlock,
+  /// Evaluates [action.isAllowed] safely and wraps any thrown error.
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult __checkQuickItemCreationAllowed({
+    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
   }) {
-    return BlockQuickItemUpdatePrecheckUtils.checkBeforeQuickUpdateItem<ITEM>(
-      checkBusy: checkBusy,
-      isBusy: FlutterArtist.executor.isBusy,
-      blockDataState: dataState,
-      item: item,
-      containsItem: (targetItem) => containsItem(targetItem),
-      checkAllow: checkAllow,
-      checkQuickUpdateAllowed: (validItem) =>
-          _checkItemUpdateAllowed(item: validItem),
-    );
+    try {
+      final bool allow = action.isAllowed(
+        parentBlockItem: parent?.currentItem,
+      );
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
+    } catch (e, stackTrace) {
+      return CheckAllowResult.error(
+        errorInfo: ErrorInfo.fromError(
+          error: e,
+          stackTrace: stackTrace,
+        ),
+      );
+    }
   }
 
-  // ***************************************************************************
-  // ***************************************************************************
-
-  @_PrecheckPrivateMethod()
-  Actionable<BlockQuickItemCreationPrecheck> __checkBeforeQuickCreateItem({
-    required bool checkBusy,
-    required bool checkAllow,
+  /// Evaluates [action.isAllowed] safely and wraps any thrown error.
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult __checkQuickItemUpdateAllowed({
+    required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
   }) {
-    return BlockQuickItemCreationPrecheckUtils.checkBeforeQuickCreateItem(
-      checkBusy: checkBusy,
-      isBusy: FlutterArtist.executor.isBusy,
-      blockDataState: dataState,
-      checkAllow: checkAllow,
-      checkQuickCreateAllowed: () => __checkQuickItemCreationAllowed(),
-    );
+    try {
+      final bool allow = action.isAllowed(
+        parentBlockItem: parent?.currentItem,
+      );
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
+    } catch (e, stackTrace) {
+      return CheckAllowResult.error(
+        errorInfo: ErrorInfo.fromError(
+          error: e,
+          stackTrace: stackTrace,
+        ),
+      );
+    }
+  }
+
+  /// Evaluates [action.isAllowed] safely and wraps any thrown error.
+  @_IsAllowPrivateMethodAnnotation()
+  CheckAllowResult __checkBackendActionAllowed({
+    required BlockBackendAction<ID> action,
+  }) {
+    try {
+      final bool allow = action.isAllowed(
+        parentBlockItem: parent?.currentItem,
+      );
+      return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
+    } catch (e, stackTrace) {
+      return CheckAllowResult.error(
+        errorInfo: ErrorInfo.fromError(
+          error: e,
+          stackTrace: stackTrace,
+        ),
+      );
+    }
   }
 
   // ***************************************************************************
@@ -5268,22 +5304,13 @@ abstract class Block<
     );
   }
 
+  @_PrecheckMethod()
   Actionable<BlockItemCreationPrecheck> checkBeforeCreateItemOnForm({
     bool checkAllow = true,
   }) {
     return blockCurrentItemModel._checkBeforeCreateItemOnForm(
       checkBusy: true,
-      creationType: ItemCreationType.form,
       checkAllow: checkAllow,
-    );
-  }
-
-  // ***************************************************************************
-
-  @_PrecheckMethod()
-  Actionable<BlockSetCurrentItemPrecheck> checkBeforeEditCurrentItemWithForm() {
-    return blockCurrentItemModel._checkBeforeRefreshCurrentItem(
-      checkBusy: true,
     );
   }
 
@@ -5331,7 +5358,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckPrivateMethod()
+  @_PrecheckMethod()
   Actionable<BlockItemsDeletionPrecheck> checkBeforeDeleteItems({
     required bool checkAllow,
     required List<ITEM> items,
@@ -5417,27 +5444,60 @@ abstract class Block<
 
   @_PrecheckMethod()
   Actionable<BlockQuickItemCreationPrecheck> checkBeforeQuickCreateItem({
+    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
     bool checkAllow = true,
   }) {
     return __checkBeforeQuickCreateItem(
+      action: action,
       checkBusy: true,
       checkAllow: checkAllow,
     );
   }
 
-  // ***************************************************************************
+  @_PrecheckPrivateMethod()
+  Actionable<BlockQuickItemCreationPrecheck> __checkBeforeQuickCreateItem({
+    required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    return BlockQuickItemCreationPrecheckUtils.checkBeforeQuickCreateItem(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      blockDataState: dataState,
+      checkAllow: checkAllow,
+      checkQuickCreateAllowed: () =>
+          __checkQuickItemCreationAllowed(action: action),
+    );
+  }
 
   @_PrecheckMethod()
   Actionable<BlockQuickItemUpdatePrecheck> checkBeforeQuickUpdateItem({
-    required ITEM item,
+    required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
     bool checkAllow = true,
-    bool errorIfItemNotInTheBlock = true,
   }) {
     return __checkBeforeQuickUpdateItem(
+      action: action,
       checkBusy: true,
-      item: item,
       checkAllow: checkAllow,
-      errorIfItemNotInTheBlock: errorIfItemNotInTheBlock,
+    );
+  }
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockQuickItemUpdatePrecheck> __checkBeforeQuickUpdateItem({
+    required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
+    required bool checkBusy,
+    required bool checkAllow,
+  }) {
+    return BlockQuickItemUpdatePrecheckUtils.checkBeforeQuickUpdateItem<ITEM>(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      blockDataState: dataState,
+      item: action.item,
+      errorIfItemNotInTheBlock: action.config.errorIfItemNotInTheBlock,
+      containsItem: (targetItem) => containsItem(targetItem),
+      checkAllow: checkAllow,
+      checkQuickUpdateAllowed: () =>
+          __checkQuickItemUpdateAllowed(action: action),
     );
   }
 
@@ -5457,12 +5517,10 @@ abstract class Block<
 
   @_PrecheckMethod()
   Actionable<BlockFormSavePrecheck> checkBeforeSaveForm({
-    bool checkAllow = true,
     bool checkValidate = true,
   }) {
     return blockCurrentItemModel._checkBeforeSaveForm(
       checkBusy: true,
-      checkAllow: checkAllow,
       checkValidate: checkValidate,
     );
   }
@@ -5484,10 +5542,12 @@ abstract class Block<
   // ***************************************************************************
 
   @_PrecheckMethod()
-  Actionable<BlockItemEditPrecheck> checkBeforeEditCurrentItemOnForm() {
+  Actionable<BlockItemEditPrecheck> checkBeforeEditCurrentItemOnForm({
+    bool checkAllow = true,
+  }) {
     return blockCurrentItemModel._checkBeforeEditCurrentItemOnForm(
       checkBusy: true,
-      checkAllow: true,
+      checkAllow: checkAllow,
     );
   }
 
@@ -5537,7 +5597,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckPrivateMethod()
+  @_PrecheckMethod()
   Actionable<BlockFormEnablePrecheck> checkFormEnable({
     bool checkAllow = true,
   }) {
@@ -5558,8 +5618,8 @@ abstract class Block<
       formDataState: formModel?.dataState,
       currentItem: currentItem,
       checkAllow: checkAllow,
-      checkItemUpdateAllowed: (validItem) =>
-          _checkItemUpdateAllowed(item: validItem),
+      checkEditItemOnFormAllowed: (validItem) =>
+          _checkEditItemOnFormAllowed(item: validItem),
     );
   }
 
