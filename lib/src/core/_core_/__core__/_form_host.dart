@@ -10,8 +10,8 @@ abstract interface class FormHost {
   bool isStateReadyForForm();
 
   Actionable<ShowFormModelInspectorPrecheck>
-  checkBeforeShowFormModelInspector();
+      checkBeforeShowFormModelInspector();
 
   Future<Actionable<ShowFormModelInspectorPrecheck>>
-  showDebugFormModelInspectorDialog();
+      showDebugFormModelInspector({bool showErrorSnackBar = true});
 }

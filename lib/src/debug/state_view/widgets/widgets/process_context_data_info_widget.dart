@@ -42,12 +42,8 @@ class ProzessContextDataInfoWidget extends BaseInfoWidget {
       onPressed: prozess.prozessContextData == null
           ? null
           : (BuildContext context) {
-        DataDebugDialog.show(
-          context: context,
-          title: '',
-          targetObject: prozess.prozessContextData!,
-        );
-      },
+              prozess.showDebugContextDataInspector();
+            },
     );
   }
 }

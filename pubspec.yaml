@@ -13,6 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  collection: ^1.19.1
   stack_trace: ^1.12.1
   path_provider: ^2.1.5
   encrypt: ^5.0.3

@@ -9,6 +9,6 @@ class ScalarLoadExtraDataResult
     if (precheck != null) {
       return false;
     }
-    return true;
+    return errorInfo == null;
   }
 }

@@ -78,7 +78,8 @@ void main() {
         isBusy: false,
         checkAllow: true,
         taskDataState: TaskDataStateCompleted(),
-        isReexecutionAllowed: false, // Bị khóa
+        isReexecutionAllowed: false,
+        // Bị khóa
         checkRestartAllowed: () => CheckAllowResult.allowed(),
       );
 
@@ -94,7 +95,8 @@ void main() {
         isBusy: false,
         checkAllow: true,
         taskDataState: const TaskDataStateLoadedFresh(),
-        isReexecutionAllowed: false, // Bị khóa
+        isReexecutionAllowed: false,
+        // Bị khóa
         checkRestartAllowed: () => CheckAllowResult.allowed(),
       );
 
@@ -116,7 +118,8 @@ void main() {
             errorStackTrace: StackTrace.current,
           ),
         ),
-        isReexecutionAllowed: false, // Bị khóa
+        isReexecutionAllowed: false,
+        // Bị khóa
         checkRestartAllowed: () => CheckAllowResult.allowed(),
       );
 
@@ -133,7 +136,8 @@ void main() {
         isBusy: false,
         checkAllow: true,
         taskDataState: const TaskDataStateLoadedFresh(),
-        isReexecutionAllowed: true, // Được phép re-execution
+        isReexecutionAllowed: true,
+        // Được phép re-execution
         checkRestartAllowed: () =>
             CheckAllowResult.notAllowed(), // Bị block bởi Business Rule
       );
@@ -168,7 +172,8 @@ void main() {
       final result = TaskRestartPrecheckUtils.checkBeforeRestart(
         checkBusy: true,
         isBusy: false,
-        checkAllow: false, // Bypass business rules
+        checkAllow: false,
+        // Bypass business rules
         taskDataState: const TaskDataStateLoadedFresh(),
         isReexecutionAllowed: true,
         checkRestartAllowed: () =>

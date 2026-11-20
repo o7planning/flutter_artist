@@ -112,7 +112,7 @@ abstract class FilterModel<
 
   FilterModelStructure get filterModelStructure => _filterModelStructure;
 
-  /// Error information resolved from the committed committed state.
+  /// Error information resolved from the committed state.
   ErrorInfo? get errorInfo {
     return switch (committedDataState) {
       FilterDataStateError(:final errorInfo) => errorInfo,
@@ -120,7 +120,7 @@ abstract class FilterModel<
     };
   }
 
-  /// True if the committed committed state holds an error.
+  /// True if the committed state holds an error.
   bool get hasError {
     return committedDataState.isError;
   }
@@ -816,12 +816,7 @@ abstract class FilterModel<
       multiOptTildeCriterionName,
     );
     //
-    dynamic data = multiOptTildeCriterionXData?.data;
-    if (data != null) {
-      return data;
-    } else {
-      return data;
-    }
+    return multiOptTildeCriterionXData?.data;
   }
 
   // ***************************************************************************
@@ -1739,17 +1734,22 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  ///
-  /// Query all Scalars and Blocks of this FilterModel.
-  ///
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Queries all [Scalar]s and [Block]s bound to this [FilterModel],
+  /// regardless of whether they are currently visible on the UI.
   @_RootMethodAnnotation()
-  Future<bool> queryAll({
+  @_ReturnExecutionUnitResultMethodAnnotation()
+  Future<FilterModelQueryResult> queryAll({
     FILTER_PATCH? filterPatch,
   }) async {
     if (__lockAddMoreQuery) {
-      return false;
+      // IMPORTANT: Silently ignored as a no-op success.
+      // Intentionally placed before CodeFlowLogger to suppress spurious
+      // onChanged callbacks triggered during programmatic patchValue().
+      return FilterModelQueryResult();
     }
-    print("\n FILTER MODEL queryAll() \n");
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "queryAll",
@@ -1780,17 +1780,20 @@ abstract class FilterModel<
     );
   }
 
+  /// Queries all [Scalar]s and [Block]s bound to this [FilterModel]
+  /// that are currently visible on the UI.
   ///
-  /// Query all Scalars and Blocks of this FilterModel if they are visible on the UI.
-  ///
-  /// Any Scalar or Block that is not queried will be set to LAZY state.
-  ///
+  /// Any bound [Scalar] or [Block] that is not visible will transition to a lazy state.
   @_RootMethodAnnotation()
-  Future<bool> query({
+  @_ReturnExecutionUnitResultMethodAnnotation()
+  Future<FilterModelQueryResult> query({
     FILTER_PATCH? filterPatch,
   }) async {
     if (__lockAddMoreQuery) {
-      return false;
+      // IMPORTANT: Silently ignored as a no-op success.
+      // Intentionally placed before CodeFlowLogger to suppress spurious
+      // onChanged callbacks triggered during programmatic patchValue().
+      return FilterModelQueryResult();
     }
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
@@ -1800,9 +1803,6 @@ abstract class FilterModel<
       },
       isLibMethod: true,
     );
-
-    // Commit current draft snapshot to committed realm before query dispatch.
-    _commitDraftSnapshotToCommitted();
 
     // Test Cases: [48b] - query() & queryAll().
     return await __query(
@@ -1816,29 +1816,79 @@ abstract class FilterModel<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> __query({
+  Future<FilterModelQueryResult> __query({
     required ExecutionTrace executionTrace,
     FILTER_PATCH? filterPatch,
     required String methodName,
     required bool forceQueryAll,
   }) async {
-    if (__lockAddMoreQuery) {
-      return false;
-    }
-    executionTrace.addInfo(
+    executionTrace.addNonControllableCall(
       codeId: "#055000",
+      caller: this,
+      methodName: "checkBeforeQuery",
+      suffixShortDesc: "",
+      parameters: {},
+    );
+
+    final Actionable<FilterModelQueryPrecheck> actionable = checkBeforeQuery();
+    if (!actionable.yes) {
+      _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#055200",
+        prefixShortDesc: 'checkBeforeQuery()',
+        module: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
+      return FilterModelQueryResult(
+        precheck: actionable.errCode,
+      );
+    }
+
+    // Commit current draft snapshot to committed realm before query dispatch.
+    _commitDraftSnapshotToCommitted();
+
+    executionTrace.addInfo(
+      codeId: "#055600",
       shortDesc: "Creating <b>$_XShelfFilterModelQuery</b>..",
     );
-    //
+
     final XShelf xShelf = _XShelfFilterModelQuery(
       filterModel: this,
       filterPatch: filterPatch,
       forceQueryAll: forceQueryAll,
     );
-    //
+
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    return true;
+
+    return FilterModelQueryResult(
+      precheck: null,
+      errorInfo: errorInfo,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Evaluates whether [query] or [queryAll] is permitted on this [FilterModel].
+  @_PrecheckMethod()
+  Actionable<FilterModelQueryPrecheck> checkBeforeQuery() {
+    return __checkBeforeQuery(checkBusy: true);
+  }
+
+  @_PrecheckPrivateMethod()
+  Actionable<FilterModelQueryPrecheck> __checkBeforeQuery({
+    required bool checkBusy,
+  }) {
+    // Remove condition: __lockAddMoreQuery
+    final bool isBusy = FlutterArtist.executor.isBusy;
+
+    return FilterModelQueryPrecheckUtils.checkBeforeQuery(
+      checkBusy: checkBusy,
+      isBusy: isBusy,
+    );
   }
 
   // ***************************************************************************
@@ -1858,21 +1908,24 @@ abstract class FilterModel<
   /// Opens the full FilterModel debug inspector dialog if permitted.
   ///
   /// Displays an error snackbar using the precheck's [message] and [details]
-  /// if the precheck fails.
+  /// if the precheck fails and [showErrorSnackBar] is `true`.
   @_RootMethodAnnotation()
   Future<Actionable<ShowFilterModelInspectorPrecheck>>
-      showDebugFilterModelViewerDialog({
+      showDebugFilterModelInspector({
     String locationInfo = '',
+    bool showErrorSnackBar = true,
   }) async {
     final Actionable<ShowFilterModelInspectorPrecheck> actionable =
         checkBeforeShowFilterModelInspector();
 
     if (!actionable.yes) {
-      final ShowFilterModelInspectorPrecheck err = actionable.errCode!;
-      showErrorSnackBar(
-        message: err.message,
-        errorDetails: err.details,
-      );
+      if (showErrorSnackBar) {
+        final ShowFilterModelInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
       return actionable;
     }
 
@@ -1902,21 +1955,24 @@ abstract class FilterModel<
   /// Opens the debug filter criteria / filter model inspector dialog if permitted.
   ///
   /// Displays an error snackbar using the precheck's [message] and [details]
-  /// if the precheck fails.
+  /// if the precheck fails and [showErrorSnackBar] is `true`.
   @_RootMethodAnnotation()
   Future<Actionable<ShowFilterCriteriaInspectorPrecheck>>
-      showDebugFilterCriteriaViewerDialog({
+      showDebugFilterCriteriaInspector({
     String locationInfo = '',
+    bool showErrorSnackBar = true,
   }) async {
     final Actionable<ShowFilterCriteriaInspectorPrecheck> actionable =
         checkBeforeShowFilterCriteriaInspector();
 
     if (!actionable.yes) {
-      final ShowFilterCriteriaInspectorPrecheck err = actionable.errCode!;
-      showErrorSnackBar(
-        message: err.message,
-        errorDetails: err.details,
-      );
+      if (showErrorSnackBar) {
+        final ShowFilterCriteriaInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
       return actionable;
     }
 

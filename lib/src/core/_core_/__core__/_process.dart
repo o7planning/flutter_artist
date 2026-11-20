@@ -79,7 +79,7 @@ abstract class Prozess<
     __initializeProzess();
   }
 
-  get hasError => false; // TODO.
+  bool get hasError => _dataState.hasError;
 
   // ***************************************************************************
 
@@ -228,20 +228,11 @@ abstract class Prozess<
   // ***************************************************************************
   // ***************************************************************************
 
-  Stage? findStage(STAGE_ENUM stageId) {
-    return __stageMap[stageId];
-  }
-
   Stage? findFrontierStage() {
-    print("\n\n\n\n findFrontierStage");
-    print("orderedActiveStages: ${orderedActiveStages}");
     Stage? lastActiveStage = orderedActiveStages.lastOrNull;
-
-    print("lastActiveStage: ${lastActiveStage}");
     if (lastActiveStage == null) {
       return null;
     }
-    print("lastActiveStage.dataState: ${lastActiveStage.dataState}");
     if (!lastActiveStage.dataState.isSubmissionSuccess) {
       return lastActiveStage;
     }
@@ -288,22 +279,77 @@ abstract class Prozess<
   // ROUTING & NAVIGATION CONTROLS (StageRouteStatus Aware)
   // ***************************************************************************
 
-  /// Navigates the prozess view pointer to the specified [stageId].
+  @_PrecheckMethod()
+  Actionable<ProzessMoveToStagePrecheck> checkBeforeMoveToStage(
+    STAGE_ENUM stageId,
+  ) {
+    return __checkBeforeMoveToStage(
+      stageId: stageId,
+      checkBusy: true,
+    );
+  }
+
+  @_PrecheckPrivateMethod()
+  Actionable<ProzessMoveToStagePrecheck> __checkBeforeMoveToStage({
+    required STAGE_ENUM stageId,
+    required bool checkBusy,
+  }) {
+    final Stage targetStage = findStageByEnum(stageId);
+    return ProzessMoveToStagePrecheckUtils.checkBeforeMoveToStage(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      isTargetStageInActiveRoute: targetStage.isInActiveRoute,
+    );
+  }
+
+  /// Evaluates whether the prozess can navigate to the specified [stageId].
+  bool canMoveToStage(STAGE_ENUM stageId) {
+    return checkBeforeMoveToStage(stageId).yes;
+  }
+
+  /// Navigates the prozess view pointer to the specified active [stageId].
   ///
-  /// Returns `false` if the target stage does not exist or is not eligible to become active.
+  /// Returns `true` if successful, or `false` (with an error snackbar and trace log)
+  /// if precheck fails.
   bool moveToStage(STAGE_ENUM stageId) {
-    final Stage? targetStage = findStage(stageId);
-    if (targetStage == null) {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "moveToStage",
+      parameters: {
+        "stageId": stageId,
+      },
+      isLibMethod: true,
+    );
+
+    final Actionable<ProzessMoveToStagePrecheck> actionable =
+        checkBeforeMoveToStage(stageId);
+
+    if (!actionable.yes) {
+      _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#131300",
+        prefixShortDesc: 'checkBeforeMoveToStage()',
+        module: module,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
       return false;
     }
 
-    // Update route status for the target stage to active.
-    targetStage._stageRouteStatus = StageRouteStatus.active;
     _viewingStageEnum = stageId;
-
-    // Refresh UI representations to reflect the new viewing stage.
     _refreshProzessAfterChangeViewingStage();
     return true;
+  }
+
+  @_PrecheckMethod()
+  Actionable<ShowProzessContextDataInspectorPrecheck>
+      checkBeforeShowContextDataInspector() {
+    return ShowProzessContextDataInspectorPrecheckUtils
+        .checkBeforeShowContextDataInspector(
+      hasContextData: _prozessContextData != null,
+      loggedInUser: FlutterArtist.loggedInUser,
+    );
   }
 
   /// Checks whether the form of the currently viewing stage can be reset.
@@ -318,6 +364,76 @@ abstract class Prozess<
       );
     }
     return currentStage.checkBeforeResetForm(checkAllow: checkAllow);
+  }
+
+  @_PrecheckMethod()
+  Actionable<ShowStageResultDataInspectorPrecheck>
+      checkBeforeShowViewingStageResultDataInspector() {
+    final Stage? currentStage = viewingStage;
+    if (currentStage == null) {
+      return Actionable.no(
+        errCode: ShowStageResultDataInspectorPrecheck.noViewingStage,
+      );
+    }
+    return currentStage.checkBeforeShowResultDataInspector();
+  }
+
+  @_PrecheckMethod()
+  Actionable<ShowStageInitDataInspectorPrecheck>
+      checkBeforeShowViewingStageInitDataInspector() {
+    final Stage? currentStage = viewingStage;
+    if (currentStage == null) {
+      return Actionable.no(
+        errCode: ShowStageInitDataInspectorPrecheck.noViewingStage,
+      );
+    }
+    return currentStage.checkBeforeShowInitDataInspector();
+  }
+
+  void cancel() {
+    // TODO
+  }
+
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowStageInitDataInspectorPrecheck>>
+      showDebugViewingStageInitDataInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final actionable = checkBeforeShowViewingStageInitDataInspector();
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowStageInitDataInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
+    }
+    return await viewingStage!.showDebugInitDataInspector(
+      showErrorSnackBar: showErrorSnackBar,
+    );
+  }
+
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowStageResultDataInspectorPrecheck>>
+      showDebugViewingStageResultDataInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final actionable = checkBeforeShowViewingStageResultDataInspector();
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowStageResultDataInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
+    }
+    return await viewingStage!.showDebugResultDataInspector(
+      showErrorSnackBar: showErrorSnackBar,
+    );
   }
 
   /// Resets the form of the currently viewing stage to its initial state.
@@ -465,7 +581,7 @@ abstract class Prozess<
     if (!actionable.yes) {
       _addErrorLogActionable(
         executionTrace: executionTrace,
-        traceStepCodeId: "#127200",
+        traceStepCodeId: "#132200",
         prefixShortDesc: 'checkBeforeMoveToPreviousStage()',
         module: module,
         actionableFalse: actionable,
@@ -511,7 +627,9 @@ abstract class Prozess<
   // ===========================================================================
 
   /// Restarts the entire Prozess from the beginning.
-  Future<ProzessRestartResult> restart({bool askConfirm = true}) async {
+  Future<
+      ProzessRestartResult<STAGE_ENUM, PROZESS_INIT_DATA,
+          PROZESS_CONTEXT_DATA>> restart({bool askConfirm = true}) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "restart",
@@ -669,8 +787,68 @@ abstract class Prozess<
     return await viewingStage!._submitAfterPrecheckSuccessful();
   }
 
-  void showDebugContextDataViewerDialog(BuildContext context) {
-    // TODO...
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowProzessContextDataInspectorPrecheck>>
+      showDebugContextDataInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final Actionable<ShowProzessContextDataInspectorPrecheck> actionable =
+        checkBeforeShowContextDataInspector();
+
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowProzessContextDataInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
+    }
+    final BuildContext context = FlutterArtistCore.context;
+    await DataDebugDialog.show(
+      context: context,
+      title: '',
+      targetObject: prozessContextData!,
+    );
+    return actionable;
+  }
+
+  @_PrecheckMethod()
+  Actionable<ShowProzessInitDataInspectorPrecheck>
+      checkBeforeShowInitDataInspector() {
+    return ShowProzessInitDataInspectorPrecheckUtils
+        .checkBeforeShowInitDataInspector(
+      hasInitData: _prozessInitData != null,
+      loggedInUser: FlutterArtist.loggedInUser,
+    );
+  }
+
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowProzessInitDataInspectorPrecheck>>
+      showDebugInitDataInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final Actionable<ShowProzessInitDataInspectorPrecheck> actionable =
+        checkBeforeShowInitDataInspector();
+
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowProzessInitDataInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
+    }
+    final BuildContext context = FlutterArtistCore.context;
+    await DataDebugDialog.show(
+      context: context,
+      title: '',
+      targetObject: prozessInitData!,
+    );
+    return actionable;
   }
 
   void _broadcastProzessHidden() {
@@ -694,19 +872,24 @@ abstract class Prozess<
 
   @_RootMethodAnnotation()
   Future<Actionable<ShowFormModelInspectorPrecheck>>
-      showDebugViewingStageFormModelInspectorDialog() async {
+      showDebugViewingStageFormInspector({
+    bool showErrorSnackBar = true,
+  }) async {
     final actionable = checkBeforeShowViewingStageFormModelInspector();
     if (!actionable.yes) {
-      final ShowFormModelInspectorPrecheck err = actionable.errCode!;
-      showErrorSnackBar(
-        message: err.message,
-        errorDetails: err.details,
-      );
+      if (showErrorSnackBar) {
+        final ShowFormModelInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
       return actionable;
     }
     BaseFormModel? formModel = viewingStage?.formModel;
-    return await formModel!.showDebugFormModelInspectorDialog(
+    return await formModel!.showDebugFormModelInspector(
       locationInfo: getClassNameWithoutGenerics(this),
+      showErrorSnackBar: showErrorSnackBar,
     );
   }
 
@@ -716,14 +899,14 @@ abstract class Prozess<
   @_PrecheckMethod()
   Actionable<StageRewindPrecheck> checkBeforeRewindFrontierToStage(
       STAGE_ENUM targetStageEnum) {
-    final Stage? targetStage = findStage(targetStageEnum);
+    final Stage targetStage = findStageByEnum(targetStageEnum);
 
     return StageRewindPrecheckUtils.checkBeforeRewindFrontierToStage(
       checkBusy: true,
       isBusy: FlutterArtist.executor.isBusy,
-      targetStageOrder: targetStage?.stageId.stageOrder,
-      hasTargetStage: targetStage != null,
-      targetStageIsSubmitted: targetStage?.isSubmitted ?? false,
+      targetStageOrder: targetStage.stageId.stageOrder,
+      hasTargetStage: true,
+      targetStageIsSubmitted: targetStage.isSubmitted,
       reexecutionAllowed: _isReexecutionAllowed,
     );
   }
@@ -737,10 +920,6 @@ abstract class Prozess<
       checkBusy: true,
       targetStage: viewingStage,
     );
-  }
-
-  void cancel() {
-    //
   }
 
   Actionable<StageRestartPrecheck> __checkBeforeViewingStageRestart({
@@ -759,9 +938,7 @@ abstract class Prozess<
   // ***************************************************************************
 
   @_PrecheckMethod()
-  Actionable<ProzessRestartPrecheck> checkBeforeRestart({
-    bool checkValidate = true,
-  }) {
+  Actionable<ProzessRestartPrecheck> checkBeforeRestart() {
     return _checkBeforeRestart(
       checkBusy: true,
     );
@@ -787,17 +964,14 @@ abstract class Prozess<
     );
   }
 
-  @_PrecheckMethod()
+  @_PrecheckPrivateMethod()
   Actionable<StageSubmitPrecheck> __checkBeforeSubmitStage({
     required bool checkBusy,
     required bool checkTargetFormValidate,
     required Stage? targetStage,
   }) {
-    final Stage? frontierStage = findFrontierStage();
-
     final int? targetStageOrder = targetStage?.stageId.stageOrder;
     final int? viewingStageOrder = viewingStage?.stageId.stageOrder;
-    final int? frontierStageOrder = frontierStage?.stageId.stageOrder;
 
     final bool hasTargetForm = targetStage?.formModel != null;
     final StageDataState targetStageDataState =
@@ -1271,7 +1445,7 @@ abstract class Prozess<
           executionTrace.addInfo(
             codeId: "#124860",
             shortDesc:
-                "Set ${debugObjHtml(determinedNextStage)}.stageRouteStatus to Bypassed.",
+                "Set ${debugObjHtml(stage)}.stageRouteStatus to Bypassed.",
           );
           stage._setStageRouteStatusToBypassed();
         }

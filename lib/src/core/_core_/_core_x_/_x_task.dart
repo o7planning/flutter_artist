@@ -3,13 +3,14 @@ part of '../core.dart';
 /// Runtime execution wrapper for [Task], managing intent delegation,
 /// single-stage progress lifecycle, and state mutation.
 class XTask<
-TASK_INIT_DATA extends TaskInitData, //
-TASK_RESULT_DATA extends TaskResultData,
-FORM_PATCH extends FormPatch,
-FORM_OUTPUT extends FormOutput> {
+    TASK_INIT_DATA extends TaskInitData, //
+    TASK_RESULT_DATA extends TaskResultData,
+    FORM_PATCH extends FormPatch,
+    FORM_OUTPUT extends FormOutput> {
   final XActivity xActivity;
 
-  final XTaskFormModel? xTaskFormModel;
+  final XTaskFormModel<TASK_INIT_DATA, TASK_RESULT_DATA, FORM_PATCH>?
+      xTaskFormModel;
 
   final Task<
       TASK_INIT_DATA, //
@@ -42,7 +43,7 @@ FORM_OUTPUT extends FormOutput> {
       ExecutionUnitResult<dynamic>>? _executionIntent;
 
   TaskBaseExecutionIntent<TASK_INIT_DATA, TASK_RESULT_DATA, dynamic, dynamic>?
-  get executionIntent => _executionIntent;
+      get executionIntent => _executionIntent;
 
   XTask._({
     required this.xActivity,
@@ -50,8 +51,8 @@ FORM_OUTPUT extends FormOutput> {
     required this.xTaskFormModel,
   });
 
-  final restartResult =
-  TaskRestartResult<TASK_INIT_DATA, TASK_RESULT_DATA>(precheck: null);
+  // final restartResult =
+  //     TaskRestartResult<TASK_INIT_DATA, TASK_RESULT_DATA>(precheck: null);
 
   void setExecHint(ExecHint hint) {
     _execHint = hint;
@@ -135,11 +136,10 @@ FORM_OUTPUT extends FormOutput> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _TaskRestartExecutionUnit<TASK_INIT_DATA,
-              TASK_RESULT_DATA,
-              FORM_PATCH>(
+              TASK_RESULT_DATA, FORM_PATCH>(
             xTask: this,
             executionIntent: _executionIntent
-            as TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>,
+                as TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>,
           ),
           info: finalDebugInfo,
         );
@@ -147,14 +147,10 @@ FORM_OUTPUT extends FormOutput> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _TaskSubmitExecutionUnit<TASK_INIT_DATA,
-              TASK_RESULT_DATA,
-              FORM_PATCH,
-              FORM_OUTPUT>(
+              TASK_RESULT_DATA, FORM_PATCH, FORM_OUTPUT>(
             xTask: this,
             executionIntent: _executionIntent as TaskSubmitIntent<
-                TASK_INIT_DATA,
-                TASK_RESULT_DATA,
-                FORM_OUTPUT>,
+                TASK_INIT_DATA, TASK_RESULT_DATA, FORM_OUTPUT>,
           ),
           info: finalDebugInfo,
         );
@@ -176,17 +172,17 @@ FORM_OUTPUT extends FormOutput> {
   }
 
   TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA, FORM_OUTPUT>
-  _createAndSetTaskIntentSubmit() {
+      _createAndSetTaskIntentSubmit() {
     final executionIntent =
-    TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA, FORM_OUTPUT>();
+        TaskSubmitIntent<TASK_INIT_DATA, TASK_RESULT_DATA, FORM_OUTPUT>();
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
   TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>
-  _createAndSetTaskIntentRestart() {
+      _createAndSetTaskIntentRestart() {
     final executionIntent =
-    TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>();
+        TaskRestartIntent<TASK_INIT_DATA, TASK_RESULT_DATA>();
     _executionIntent = executionIntent;
     return executionIntent;
   }

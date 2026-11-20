@@ -97,7 +97,7 @@ class _FilterControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: actionable.yes
               ? () async {
-            await widget.filterModel.showDebugFilterModelViewerDialog();
+            await widget.filterModel.showDebugFilterModelInspector();
           }
               : null,
         );

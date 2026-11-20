@@ -7,33 +7,42 @@ part of '../../core.dart';
 @_BlockSelectFirstItemAsCurrentAnnotation()
 @_BlockSelectPreviousItemAsCurrentAnnotation()
 class _BlockCurrentItemModelSetItemAsCurrentExecutionUnit<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberResultedExecutionUnit<
-    BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> {
-  final XBlockCurrentItemModel<ID, ITEM, ITEM_DETAIL> xBlockCurrentItemModel;
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>,
+        FORM_PATCH extends FormPatch>
+    extends _ShelfMemberResultedExecutionUnit<
+        BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> {
+  final XBlockCurrentItemModel<
+      ID, //
+      ITEM,
+      ITEM_DETAIL,
+      FORM_PATCH> xBlockCurrentItemModel;
 
   @override
-  final BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
-  executionIntent;
+  final BlockCurrentItemModelSetCurrentItemIntent<
+      ID, //
+      ITEM,
+      ITEM_DETAIL,
+      FORM_PATCH> executionIntent;
 
   _BlockCurrentItemModelSetItemAsCurrentExecutionUnit({
     required this.xBlockCurrentItemModel,
     required this.executionIntent,
   }) : super(
-    executionUnitType: ExecutionUnitType.blockSetItemAsCurrent,
-    executionIntent: executionIntent,
-    // executionUnitResult: BlockSetCurrentItemResult<ID,ITEM,ITEM_DETAIL>(
-    //   precheck: null,
-    //   setCurrentItemDirective: executionIntent.setCurrentItemDirective,
-    //   getItemId: xBlock.block._getItemIdInternal,
-    //   candidateItem: executionIntent.inputCandidateCurrItem,
-    //   oldCurrentItem: xBlock.block.currentItem,
-    //   currentItem: xBlock.block.currentItem,
-    // ),
-  ) {
-    xBlockCurrentItemModel.setForceReloadCurrItem(
-        executionIntent.forceReloadItem);
+          executionUnitType: ExecutionUnitType.blockSetItemAsCurrent,
+          executionIntent: executionIntent,
+          // executionUnitResult: BlockSetCurrentItemResult<ID,ITEM,ITEM_DETAIL>(
+          //   precheck: null,
+          //   setCurrentItemDirective: executionIntent.setCurrentItemDirective,
+          //   getItemId: xBlock.block._getItemIdInternal,
+          //   candidateItem: executionIntent.inputCandidateCurrItem,
+          //   oldCurrentItem: xBlock.block.currentItem,
+          //   currentItem: xBlock.block.currentItem,
+          // ),
+        ) {
+    xBlockCurrentItemModel
+        .setForceReloadCurrItem(executionIntent.forceReloadItem);
     //
     if (executionIntent.formLoadHint != null) {
       xBlockCurrentItemModel.xBlockFormModel

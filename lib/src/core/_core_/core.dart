@@ -40,6 +40,7 @@ import '../../debug/dialog/_debug_form_model_inspector_dialog.dart';
 import '../../debug/dialog/_scalar_error_viewer_dialog.dart';
 import '../../debug/dialog/_debug_app_inspector_dialog.dart';
 import '../../debug/dialog/_debug_ui_context_inspector_dialog.dart';
+import '../../debug/dialog/data_debug_dialog.dart';
 import '../../debug/executor/model/_debug_x_root_queue_item.dart';
 import '../../debug/executor/model/_debug_execution_unit.dart';
 import '../../debug/menu/_debug_menu_builder.dart';
@@ -54,6 +55,7 @@ import '../built_in/__built_in_model.dart';
 import '../error/_block_error_info.dart';
 import '../error/_dev_error.dart';
 import '../error/_filter_error_info.dart';
+import '../error/_lov_model_error_info.dart';
 import '../error/_process_error_info.dart';
 import '../error/_stage_error_info.dart';
 import '../error/_task_error_info.dart';
@@ -125,6 +127,8 @@ part '_debug_info_/_block_debug_info.dart';
 part '_debug_info_/_process_debug_info.dart';
 
 part '__core__/_block.dart';
+
+part '__core__/_lov_model.dart';
 
 part '__core__/_block_current_item_model.dart';
 
@@ -200,7 +204,7 @@ part '_execution_intent_/scalar_execution_intent.dart';
 
 part '_execution_intent_/_execution_intent.dart';
 
-part '_execution_intent_/app_execution_intent.dart';
+part '_execution_intent_/storage_execution_intent.dart';
 
 part '_execution_unit_calc_/_model_/_filter_model_neu_model.dart';
 
@@ -259,6 +263,8 @@ part '_debug_info_/_stage_debug_info.dart';
 part '_data_state_/__data_state.dart';
 
 part '__core__/_block_data.dart';
+
+part '_data_state_/_lov_model_data_state.dart';
 
 part '_data_state_/_block_data_state.dart';
 
@@ -438,6 +444,8 @@ part '_config_/_block_effective_config.dart';
 
 part '_config_/_block_config.dart';
 
+part '_config_/_lov_model_config.dart';
+
 part '_config_/_coordinator_config.dart';
 
 part '_config_/_event_config.dart';
@@ -545,10 +553,6 @@ part '_core_x_/_x_shelf_/_x_query_/__x_shelf_base_query.dart';
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_block_query.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_block_query_empty.dart';
-
-part '_core_x_/_x_shelf_/_x_query_/_x_shelf_block_query_and_prepare_to_edit.dart';
-
-part '_core_x_/_x_shelf_/_x_query_/_x_shelf_block_query_and_prepare_to_create.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_filter_model_query.dart';
 
@@ -676,6 +680,8 @@ part '_observer_/_navigator_observer.dart';
 
 part '_execution_unit_step_/block_operation_step.dart';
 
+part '_execution_unit_result_/_block_eur/_block_refresh_current_item_result.dart';
+
 part '_execution_unit_result_/_block_eur/__block_execution_unit_result.dart';
 
 part '_execution_unit_result_/__execution_unit_result.dart';
@@ -700,7 +706,11 @@ part '_execution_unit_result_/_block_eur/_block_set_current_item_result.dart';
 
 part '_execution_unit_result_/_block_eur/_block_item_deletion_result.dart';
 
+part '_execution_unit_result_/_block_eur/_block_item_edit_result.dart';
+
 part '_execution_unit_result_/_block_eur/_block_items_deletion_result.dart';
+
+part '_execution_unit_result_/_block_eur/_block_query_empty_result.dart';
 
 part '_execution_unit_result_/_block_eur/_block_query_result.dart';
 
@@ -715,6 +725,8 @@ part '_execution_unit_result_/_form_eur/_form_model_data_load_result.dart';
 part '_execution_unit_result_/_form_eur/_form_model_view_changed_result.dart';
 
 part '_execution_unit_result_/_filter_eur/_filter_model_data_load_result.dart';
+
+part '_execution_unit_result_/_filter_eur/_filter_model_query_result.dart';
 
 part '_execution_unit_result_/_form_eur/_form_model_save_result.dart';
 
@@ -734,7 +746,7 @@ part '_execution_unit_result_/_stage_eur/_stage_submit_result.dart';
 
 part '_execution_unit_result_/_stage_eur/_stage_load_init_data_result.dart';
 
-part '_execution_unit_result_/_app_backend_action_result.dart';
+part '_execution_unit_result_/_storage_backend_action_result.dart';
 
 part '_execution_unit_/__shelf_member_resulted_execution_unit.dart';
 
@@ -814,7 +826,7 @@ part '_execution_unit_/shelf_member/_scalar_load_extra_data_quick_action_executi
 
 part '_execution_unit_/shelf_member/_scalar_query_execution_unit.dart';
 
-part '_execution_unit_/app/_app_backend_action_execution_unit.dart';
+part '_execution_unit_/storage/_storage_backend_action_execution_unit.dart';
 
 part '_ui_/__context_provider_view.dart';
 
@@ -1243,8 +1255,8 @@ class _ScalarClearValueAnnotation {
 
 // ******* Scalar QuickAction (START) ******************************************
 
-class _AppBackendActionAnnotation {
-  const _AppBackendActionAnnotation();
+class _StorageBackendActionAnnotation {
+  const _StorageBackendActionAnnotation();
 }
 
 class _ScalarLoadExtraDataQuickActionAnnotation {

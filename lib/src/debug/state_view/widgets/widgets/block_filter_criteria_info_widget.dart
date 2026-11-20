@@ -52,7 +52,7 @@ class BlockFilterCriteriaInfoWidget extends BaseInfoWidget {
             onPressed: blockFilterCriteria == null
                 ? null
                 : () {
-              block.showDebugFilterCriteriaViewerDialog();
+              block.showDebugFilterCriteriaInspector();
             },
           ),
         ),
@@ -84,7 +84,7 @@ class BlockFilterCriteriaInfoWidget extends BaseInfoWidget {
     return ButtonFunction(
       btnType: DebugBtnType.success,
       onPressed: (BuildContext context) {
-        block.showDebugFilterCriteriaViewerDialog();
+        block.showDebugFilterCriteriaInspector();
       },
     );
   }

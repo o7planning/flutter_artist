@@ -12,6 +12,10 @@ abstract class BlockBackendAction<ID extends Comparable> extends Action {
     _config = defineActionConfig();
   }
 
+  @override
+  @OverridableMethodAnnotation()
+  ActionKind get actionKind => ActionKind.mix;
+
   BlockBackendActionConfig defineActionConfig();
 
   Future<ApiResult<ListData<ID>?>> performBackendOperation({

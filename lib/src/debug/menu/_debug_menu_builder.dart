@@ -38,7 +38,7 @@ class DebugMenuBuilder {
             title: 'Log Viewer',
             trainingTooltip: null,
             onTap: () {
-              _showLogViewerDialog(context);
+              _showDebugLogViewer(context);
             },
           ),
         if (isSystemUser && hasLogs) _divider(),
@@ -48,7 +48,7 @@ class DebugMenuBuilder {
             title: 'App Inspector',
             trainingTooltip: null,
             onTap: () {
-              _showDebugAppInspectorDialog(context);
+              _showDebugAppInspector(context);
             },
           ),
         if (isSystemUser &&
@@ -61,7 +61,7 @@ class DebugMenuBuilder {
               _showDebugModuleStructureInspector(context);
             },
           ),
-        if (isSystemUser && FlutterArtist.canShowDebugUiComponentDialog())
+        if (isSystemUser && FlutterArtist.canShowDebugUiContextInspector())
           _buildPopupMenuItem(
             iconData: FaIconConstants.uiComponentsIconData,
             title: 'UI Context Inspector',
@@ -99,7 +99,7 @@ class DebugMenuBuilder {
             title: 'Code Flow Inspector',
             trainingTooltip: "Clear Data",
             onTap: () {
-              _showCodeFlowInspector(context);
+              _showDebugFlowInspector(context);
             },
             trainingIconData: FaIconConstants.clearCodeFlowIconData,
             // trainingIconColor: Theme.of(context).colorScheme.primary,
@@ -180,9 +180,9 @@ class DebugMenuBuilder {
     await FlutterArtist.showDebugNetworkInspector();
   }
 
-  Future<void> _showDebugAppInspectorDialog(BuildContext context) async {
+  Future<void> _showDebugAppInspector(BuildContext context) async {
     Navigator.pop(context, null);
-    await FlutterArtist.showDebugAppInspectorDialog();
+    await FlutterArtist.showDebugAppInspector();
   }
 
   Future<void> _showDebugThemeInspector(BuildContext context) async {
@@ -205,9 +205,9 @@ class DebugMenuBuilder {
     FlutterArtist.codeFlowLogger.clear();
   }
 
-  Future<void> _showCodeFlowInspector(BuildContext context) async {
+  Future<void> _showDebugFlowInspector(BuildContext context) async {
     Navigator.pop(context, null);
-    await FlutterArtist.showCodeFlowInspector();
+    await FlutterArtist.showDebugFlowInspector();
   }
 
   Future<void> _showDebugModuleStructureInspector(BuildContext context) async {
@@ -215,9 +215,9 @@ class DebugMenuBuilder {
     await FlutterArtist.showDebugModuleStructureInspector();
   }
 
-  Future<void> _showLogViewerDialog(BuildContext context) async {
+  Future<void> _showDebugLogViewer(BuildContext context) async {
     Navigator.pop(context, null);
     // docs: [14545].
-    await FlutterArtist.showLogViewerDialog();
+    await FlutterArtist.showDebugLogViewer();
   }
 }

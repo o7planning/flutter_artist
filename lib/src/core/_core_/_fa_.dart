@@ -9,6 +9,8 @@ class _FlutterArtist extends _Core {
   bool _navigatorStated = false;
   bool _lockAddMoreQuery = false;
 
+  final deskV1 = _DeskCoreV1();
+
   final FocusTracker focusTracker = FocusTracker();
 
   final _Backstage backstage = _Backstage();
@@ -46,8 +48,6 @@ class _FlutterArtist extends _Core {
   final garbageScheduler = _GarbageScheduler();
 
   late final storage = _Storage();
-
-  late final desk = _Desk();
 
   final executor = _Executor();
 
@@ -259,7 +259,7 @@ class _FlutterArtist extends _Core {
     );
 
     final executionTrace =
-    FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
+        FlutterArtist.codeFlowLogger._addStartup(ownerClassInstance: this);
     try {
       await __start(executionTrace: executionTrace);
       garbageScheduler.start();
@@ -318,7 +318,7 @@ class _FlutterArtist extends _Core {
       caller: globalsManager,
       methodName: "_init",
       suffixShortDesc:
-      "This method will read all the user data that was previously stored in <b>Local</b>.",
+          "This method will read all the user data that was previously stored in <b>Local</b>.",
       tipDocument: TipDocument.globalData,
     );
     await globalsManager._init(executionTrace);
@@ -388,8 +388,7 @@ class _FlutterArtist extends _Core {
     //
     if (__notificationService != null) {
       print(
-          "[FLUTTER_ARTIST] ${getClassNameWithoutGenerics(
-              __notificationService)}.initialize()");
+          "[FLUTTER_ARTIST] ${getClassNameWithoutGenerics(__notificationService)}.initialize()");
       __notificationService.initialize();
     }
   }
@@ -443,15 +442,14 @@ class _FlutterArtist extends _Core {
     _runWithOverlay(
       asyncFunction: () async {
         await Future.doWhile(
-              () =>
-              Future.delayed(
-                // Default?
-                const Duration(milliseconds: 0),
-              ).then(
-                    (_) {
-                  return __futureExecutionUnitList.isNotEmpty;
-                },
-              ),
+          () => Future.delayed(
+            // Default?
+            const Duration(milliseconds: 0),
+          ).then(
+            (_) {
+              return __futureExecutionUnitList.isNotEmpty;
+            },
+          ),
         );
       },
     );
@@ -482,32 +480,83 @@ class _FlutterArtist extends _Core {
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showDebugNetworkInspector() async {
+  Actionable<ShowDebugInspectorPrecheck> checkBeforeShowDebugInspector({
+    bool requiresRecentModule = false,
+  }) {
+    return ShowDebugInspectorPrecheckUtils.checkBeforeShowDebugInspector(
+      loggedInUser: loggedInUser,
+      requiresRecentModule: requiresRecentModule,
+      hasRecentModule: _getRecentModule() != null,
+    );
+  }
+
+  Future<Actionable<ShowDebugInspectorPrecheck>> showDebugNetworkInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final actionable = checkBeforeShowDebugInspector();
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowDebugInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
+    }
     await appConfig._showDebugNetworkInspector(FlutterArtistCore.context);
+    return actionable;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
   // TODO: Show all active components of all shelves.
-  Future<void> showDebugUiContextInspector() async {
-    FeatureModule? module = _getRecentModule();
-    if (module == null) {
-      return;
+  Future<Actionable<ShowDebugInspectorPrecheck>> showDebugUiContextInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final actionable = checkBeforeShowDebugInspector(
+      requiresRecentModule: true,
+    );
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowDebugInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
     }
-    await module.showDebugUiContextInspector();
+    final FeatureModule module = _getRecentModule()!;
+    return await module.showDebugUiContextInspector(
+      showErrorSnackBar: showErrorSnackBar,
+    );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<void> showDebugAppInspectorDialog() async {
-    BuildContext context = FlutterArtistCore.context;
-    //
+  Future<Actionable<ShowDebugInspectorPrecheck>> showDebugAppInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final actionable = checkBeforeShowDebugInspector();
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowDebugInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
+    }
+    final BuildContext context = FlutterArtistCore.context;
     await DebugAppInspectorDialog.show(
       context: context,
       shelf: null,
     );
+    return actionable;
   }
 
   Future<void> showDebugFaThemeInspector() async {
@@ -520,33 +569,77 @@ class _FlutterArtist extends _Core {
     await FaColorsInspectorDialog.show(context);
   }
 
-  Future<void> showCodeFlowInspector() async {
-    BuildContext context = FlutterArtistCore.context;
-    await CodeFlowInspectorDialog.show(context: context);
-  }
-
-  Future<void> showDebugModuleStructureInspector() async {
-    final FeatureModule? module = _getRecentModule();
-    if (module == null) {
-      return;
+  Future<Actionable<ShowDebugInspectorPrecheck>> showDebugFlowInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final actionable = checkBeforeShowDebugInspector();
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowDebugInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
     }
-    await module.showDebugModuleStructureInspector();
+    final BuildContext context = FlutterArtistCore.context;
+    await CodeFlowInspectorDialog.show(context: context);
+    return actionable;
   }
 
-  Future<void> showLogViewerDialog({int? logEntryId}) async {
-    BuildContext context = FlutterArtistCore.context;
+  Future<Actionable<ShowDebugInspectorPrecheck>>
+      showDebugModuleStructureInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final actionable = checkBeforeShowDebugInspector(
+      requiresRecentModule: true,
+    );
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowDebugInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
+    }
+    final FeatureModule module = _getRecentModule()!;
+    return await module.showDebugModuleStructureInspector(
+      showErrorSnackBar: showErrorSnackBar,
+    );
+  }
+
+  Future<Actionable<ShowDebugInspectorPrecheck>> showDebugLogViewer({
+    int? logEntryId,
+    bool showErrorSnackBar = true,
+  }) async {
+    final actionable = checkBeforeShowDebugInspector();
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowDebugInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
+    }
+    final BuildContext context = FlutterArtistCore.context;
     await LogViewerDialog.show(
       context: context,
       logger: logger,
       logEntryId: logEntryId,
     );
+    return actionable;
   }
 
   // TODO: (Internal)
   void internalNotifyLog() {
     Future.delayed(
       Duration.zero,
-          () {
+      () {
         for (ILogListener listener in [..._logListeners]) {
           if (listener is State) {
             State state = listener as State;
@@ -566,7 +659,7 @@ class _FlutterArtist extends _Core {
       if (listener is State) {
         State state = listener as State;
         if (!state.mounted) {
-          _logListeners.remove(listener);
+          _notificationListeners.remove(listener);
           continue;
         }
       }
@@ -579,7 +672,7 @@ class _FlutterArtist extends _Core {
     return module != null;
   }
 
-  bool canShowDebugUiComponentDialog() {
+  bool canShowDebugUiContextInspector() {
     FeatureModule? module = _getRecentModule();
     return module != null;
   }
@@ -607,7 +700,7 @@ class _FlutterArtist extends _Core {
   /// Very Dangerous Method. Call Internal only.
   ///
   void _clearActivitiesAndShelves() {
-    storage.__clearShelves();
-    desk.__clearActivities();
+    // storage.__clearShelves();
+    // desk.__clearActivities();
   }
 }

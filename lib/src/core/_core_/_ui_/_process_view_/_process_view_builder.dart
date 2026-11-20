@@ -37,7 +37,6 @@ class _ProzessViewBuilderState
     return getClassName(widget.prozess);
   }
 
-
   @override
   FocusRegionType getRegionType() {
     return FocusRegionType.prozessView;
@@ -86,7 +85,7 @@ class _ProzessViewBuilderState
 
   @override
   String getDebugLabel() {
-    return "ProzeeVieww(${widget.prozess.name})";
+    return "ProzessView(${widget.prozess.name})";
   }
 
   @override
@@ -107,7 +106,7 @@ class _ProzessViewBuilderState
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.desk._checkToRemoveActivity(widget.prozess.activity);
+    FlutterArtist.storage.desk._checkToRemoveActivity(widget.prozess.activity);
   }
 
   @override

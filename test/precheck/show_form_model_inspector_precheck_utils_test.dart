@@ -2,9 +2,6 @@ import 'package:flutter_artist/flutter_artist.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:test/test.dart';
 
-import 'package:flutter_artist/flutter_artist.dart';
-import 'package:test/test.dart';
-
 class _MockLoggedInUser implements ILoggedInUser {
   @override
   final bool isSystemUser;

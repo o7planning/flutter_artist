@@ -36,8 +36,8 @@ class ShelfInfoView extends StatelessWidget {
           onPressed: shelf == null
               ? null
               : () {
-            shelf!.showFeatureModuleStructureInspector();
-          },
+                  shelf!.showDebugModuleStructureInspector();
+                },
         ),
       ),
       title: Text(

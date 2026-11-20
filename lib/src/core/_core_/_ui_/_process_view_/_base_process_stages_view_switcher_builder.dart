@@ -16,7 +16,7 @@ abstract class _BaseProzessStagesViewSwitcherBuilder
 }
 
 abstract class _BaseProzessStagesViewSwitcherBuilderState<
-W extends _BaseProzessStagesViewSwitcherBuilder>
+        W extends _BaseProzessStagesViewSwitcherBuilder>
     extends _ContextProviderViewState<W> {
   Prozess get prozess => getProzess();
 
@@ -110,7 +110,7 @@ W extends _BaseProzessStagesViewSwitcherBuilder>
 
     // Determine current index based on the prozess's viewingStageEnum pointer.
     final int rawIndex = prozess.orderedStages.indexWhere(
-          (stage) => stage.stageId == prozess.viewingStageEnum,
+      (stage) => stage.stageId == prozess.viewingStageEnum,
     );
 
     // Validate if the resolved index matches an actual configured stage view.
@@ -122,7 +122,7 @@ W extends _BaseProzessStagesViewSwitcherBuilder>
         padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: ErrorMessageView(
           message:
-          "No active viewing stage has been determined yet. Please check prozess pipeline state.",
+              "No active viewing stage has been determined yet. Please check prozess pipeline state.",
         ),
       );
     }
@@ -132,28 +132,9 @@ W extends _BaseProzessStagesViewSwitcherBuilder>
     );
   }
 
-  // Widget _buildQuickSuggestionButtonsBar(BuildContext context) {
-  //   return _QuickSuggestionButtonsBar(
-  //     children: [
-  //       _QuickSuggestionButton.error(
-  //         tooltip: "View Error Diagnostics",
-  //         onPressed: () {
-  //           prozess.showProzessErrorViewerDialog(context);
-  //         },
-  //       ),
-  //       _QuickSuggestionButton.requery(
-  //         tooltip: "Reload Prozess Init Data",
-  //         onPressed: () async {
-  //           // await prozess.restart();
-  //         },
-  //       ),
-  //     ],
-  //   );
-  // }
-
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.desk._checkToRemoveActivity(prozess.activity);
+    FlutterArtist.storage.desk._checkToRemoveActivity(prozess.activity);
   }
 
   @override

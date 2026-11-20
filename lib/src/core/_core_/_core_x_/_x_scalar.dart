@@ -11,7 +11,11 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   final Scalar<ID, VALUE, FilterPatch, FilterCriteria> scalar;
 
-  ScalarExecutionIntent? _stashedIntent;
+  ScalarExecutionIntent<
+      ID, //
+      VALUE,
+      dynamic,
+      ExecutionUnitResult<dynamic>>? _stashedIntent;
 
   ScalarExecutionIntent<
       ID, //
@@ -74,7 +78,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   int get xModuleId => xShelf.xModuleId;
 
-  final ScalarQueryResult queryResult = ScalarQueryResult(precheck: null);
+  final queryResult = ScalarQueryResult<ID, VALUE>._(precheck: null);
 
   // ***************************************************************************
   // ***************************************************************************
@@ -127,11 +131,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   NxtExecutionUnit __getNextExecutionUnit({required bool debug}) {
     // 1. Restore stashed intent if the current intent is null.
     if (_executionIntent == null && _stashedIntent != null) {
-      _executionIntent = _stashedIntent as ScalarExecutionIntent<
-          ID, //
-          VALUE,
-          dynamic,
-          ExecutionUnitResult<dynamic>>;
+      _executionIntent = _stashedIntent;
       _stashedIntent = null;
     }
 
@@ -173,7 +173,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
           executionUnit: _ScalarLoadExtraDataQuickActionExecutionUnit(
             xScalar: this,
             executionIntent: _executionIntent
-            as ScalarLoadExtraDataQuickActionIntent<ID, VALUE, Object>,
+                as ScalarLoadExtraDataQuickActionIntent<ID, VALUE, Object>,
           ),
           info: output.debugInfo,
         );
@@ -182,7 +182,8 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
           debug: debug,
           executionUnit: _ScalarClearExecutionUnit(
             xScalar: this,
-            executionIntent: _executionIntent as ScalarClearValueIntent<ID, VALUE>,
+            executionIntent:
+                _executionIntent as ScalarClearValueIntent<ID, VALUE>,
           ),
           info: output.debugInfo,
         );
@@ -227,14 +228,14 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   // ***************************************************************************
 
-  ScalarLoadExtraDataQuickActionIntent
-  _createAndSetScalarExecutionIntentLoadExtraDataQuickAction<
-  DATA extends Object>({
+  ScalarLoadExtraDataQuickActionIntent<ID, VALUE, DATA>
+      _createAndSetScalarExecutionIntentLoadExtraDataQuickAction<
+          DATA extends Object>({
     required ScalarQuickExtraDataLoadAction<DATA> action,
     required AfterScalarLoadExtraDataQuickAction afterQuickAction,
   }) {
     final executionIntent =
-    ScalarLoadExtraDataQuickActionIntent<ID, VALUE, DATA>(
+        ScalarLoadExtraDataQuickActionIntent<ID, VALUE, DATA>(
       action: action,
       afterQuickAction: afterQuickAction,
     );
@@ -244,7 +245,7 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
 
   // ***************************************************************************
 
-  ScalarClearValueIntent _createAndSetScalarExecutionIntentClear() {
+  ScalarClearValueIntent<ID, VALUE> _createAndSetScalarExecutionIntentClear() {
     final executionIntent = ScalarClearValueIntent<ID, VALUE>();
     _executionIntent = executionIntent;
     return executionIntent;
@@ -256,14 +257,12 @@ class XScalar<ID extends Comparable, VALUE extends Identifiable<ID>> {
   void printInfo() {
     bool hasActiveUI = scalar.ui.hasVisibleViews();
     String msg =
-        "${getClassName(this)}(${getClassName(
-        scalar)} - UiActive: $hasActiveUI - queryHint: $queryHint)";
+        "${getClassName(this)}(${getClassName(scalar)} - UiActive: $hasActiveUI - queryHint: $queryHint)";
     print(msg);
   }
 
   String toDebugHtmlString() {
-    return " - <b>XScalar (${getClassName(
-        scalar)})</b> - <b>queryHint</b>: $queryHint";
+    return " - <b>XScalar (${getClassName(scalar)})</b> - <b>queryHint</b>: $queryHint";
   }
 
   @override

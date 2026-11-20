@@ -14,6 +14,10 @@ abstract class BlockQuickItemUpdateAction<
     required super.actionInfo,
   });
 
+  @override
+  @OverridableMethodAnnotation()
+  ActionKind get actionKind => ActionKind.update;
+
   Future<ApiResult<ITEM_DETAIL>> performQuickUpdateItem({
     required Object? parentBlockItem,
   });

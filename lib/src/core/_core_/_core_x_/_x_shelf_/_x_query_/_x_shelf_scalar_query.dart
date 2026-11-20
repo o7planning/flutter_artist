@@ -5,9 +5,9 @@ class _XShelfScalarQuery extends _XShelfBaseQuery {
     required Scalar scalar,
     required FilterPatch? filterPatch,
   }) : super(
-    xShelfType: XShelfType.scalarQuery,
-    shelf: scalar.shelf,
-  ) {
+          xShelfType: XShelfType.scalarQuery,
+          shelf: scalar.shelf,
+        ) {
     _updateQueryStateFromFilterModelAndFilterPatch(
       filterModel: scalar.registeredOrDefaultFilterModel,
       filterPatch: filterPatch,
@@ -19,6 +19,5 @@ class _XShelfScalarQuery extends _XShelfBaseQuery {
       forceQueryAll: false,
       forceReloadFilter: false,
     );
-    printInfo();
   }
 }

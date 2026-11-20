@@ -13,7 +13,7 @@ class XApp {
     _executionIntent = executionIntent;
   }
 
-  _AppBackendActionExecutionUnit? _getNextExecutionUnit(
+  _StorageBackendActionExecutionUnit? _getNextExecutionUnit(
       {required bool remove}) {
     if (_executionIntent == null) {
       return null;
@@ -22,8 +22,8 @@ class XApp {
     if (remove) {
       _executionIntent = null;
     }
-    if (executionIntent is AppBackendActionIntent) {
-      return _AppBackendActionExecutionUnit(
+    if (executionIntent is StorageBackendActionIntent) {
+      return _StorageBackendActionExecutionUnit(
         executionIntent: executionIntent,
       );
     } else {

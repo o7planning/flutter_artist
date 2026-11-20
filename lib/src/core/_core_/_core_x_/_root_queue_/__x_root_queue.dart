@@ -72,8 +72,8 @@ final class _XRootQueue {
     }
   }
 
-  void _addAppBackendActionExecutionIntent(
-      AppBackendActionIntent executionIntent,) {
+  void _addStorageBackendActionExecutionIntent(
+      StorageBackendActionIntent executionIntent,) {
     _xStorage._addExecutionIntent(
       executionIntent,
     );

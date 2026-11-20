@@ -2,11 +2,11 @@ part of '../../core.dart';
 
 /// Form model specifically bound to a standalone [Task].
 abstract class TaskFormModel<
-INIT_DATA extends TaskInitData,
-RESULT_DATA extends TaskResultData,
-FORM_PATCH extends FormPatch,
-FORM_OUTPUT extends FormOutput,
-ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
+        INIT_DATA extends TaskInitData,
+        RESULT_DATA extends TaskResultData,
+        FORM_PATCH extends FormPatch,
+        FORM_OUTPUT extends FormOutput,
+        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     extends WorkNodeFormModel<
         INIT_DATA, //
         RESULT_DATA,
@@ -48,20 +48,20 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
 
   TaskFormModel({super.config});
 
-  // TODO: Hardcode.
-  bool get hasError => false;
+  bool get hasError => dataState.isFatalError;
 
   // ===========================================================================
 
   void _bindToTask(
-      Task<INIT_DATA, RESULT_DATA, FORM_PATCH, FORM_OUTPUT> parentTask,) {
+    Task<INIT_DATA, RESULT_DATA, FORM_PATCH, FORM_OUTPUT> parentTask,
+  ) {
     task = parentTask;
   }
 
-  XTaskFormModel<INIT_DATA, RESULT_DATA> _createXTaskFormModel({
+  XTaskFormModel<INIT_DATA, RESULT_DATA, FORM_PATCH> _createXTaskFormModel({
     required FORM_PATCH? formPatch,
   }) {
-    return XTaskFormModel<INIT_DATA, RESULT_DATA>._(
+    return XTaskFormModel<INIT_DATA, RESULT_DATA, FORM_PATCH>._(
       formModel: this,
       formPatch: formPatch,
     );
@@ -72,7 +72,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
 
   @override
   Actionable<TaskFormEnablePrecheck> checkFormEnable() {
-    return task.checkFormEnable(checkAllow: true);
+    return task.checkFormEnable();
   }
 
   // ***************************************************************************
@@ -135,7 +135,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     __assertThisXTaskFormModel(thisXTaskFormModel);
     thisXTaskFormModel._createAndSetFormModelExecutionIntentDone();
 
-    executionIntent.resultWrapper._setResult(
+    final executionResult = executionIntent.resultWrapper._setResult(
       FormModelDataLoadResult(),
       objectCaller: this,
       methodName: '_unitLoadFormData',
@@ -145,12 +145,10 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     final thisFormDataState = dataState;
     final bool forceReloadForm = switch (thisXTaskFormModel.formLoadHint) {
       FormLoadHint.force => true,
-      FormLoadHint.forceIfNeed =>
-      (thisFormDataState.isPending ||
+      FormLoadHint.forceIfNeed => (thisFormDataState.isPending ||
           thisFormDataState.isFatalError ||
           thisFormDataState.isLoadedStale),
-      FormLoadHint.auto =>
-      visibleX &&
+      FormLoadHint.auto => visibleX &&
           (thisFormDataState.isPending ||
               thisFormDataState.isFatalError ||
               thisFormDataState.isLoadedStale),
@@ -164,12 +162,22 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     }
 
     final formPatch = thisXTaskFormModel.formPatch as FORM_PATCH?;
-    return await _startNewFormActivity(
+    final bool success = await _startNewFormActivity(
       executionTrace: executionTrace,
       formPatch: formPatch,
       activityType: FormActivityType.startCreatingOrEditing,
       formKeyInstantValuesInUI: null,
     );
+    if (!success) {
+      final ErrorInfo? fatalErrorInfo = switch (dataState) {
+        FormDataStateFatalError(:final errorInfo) => errorInfo,
+        _ => null,
+      };
+      if (fatalErrorInfo != null) {
+        executionResult._setErrorInfo(errorInfo: fatalErrorInfo);
+      }
+    }
+    return success;
   }
 
   @_ExecutionUnitMethodAnnotation()
@@ -222,7 +230,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     );
 
     final Actionable<FormModelPatchFormFieldsPrecheck> actionable =
-    _checkBeforePatchFormFields(
+        _checkBeforePatchFormFields(
       checkBusy: checkBusyTrue,
     );
     if (!actionable.yes) {
@@ -239,11 +247,11 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
     }
 
     final XActivity xActivity =
-    _XActivityFormModelPatchFormFields(formModel: this);
+        _XActivityFormModelPatchFormFields(formModel: this);
     XTask xTask = xActivity.findXTaskByName(task.name)!;
     final executionIntent = xTask.xTaskFormModel!
-        ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_PATCH>(
-        formPatch: formPatch);
+        ._createAndSetFormModelExecutionIntentPatchFormFields(
+            formPatch: formPatch);
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();

@@ -53,7 +53,7 @@ class XFilterModel {
   // ***************************************************************************
 
   FilterModelFilterPanelChangeIntent
-  _createAndSetFilterModelExecutionIntentPanelChange({
+      _createAndSetFilterModelExecutionIntentPanelChange({
     required Map<String, dynamic> formKeyInstantValuesInUI,
   }) {
     final executionIntent = FilterModelFilterPanelChangeIntent(
@@ -82,7 +82,7 @@ class XFilterModel {
   // ***************************************************************************
 
   NxtExecutionUnit _getNextExecutionUnit({required bool debug}) {
-    // 1. Phục hồi stashed intent nếu intent hiện tại đã rỗng
+    // 1. Restore the stashed intent if the current intent is null.
     if (_executionIntent == null && _stashedIntent != null) {
       _executionIntent = _stashedIntent;
       _stashedIntent = null;
@@ -99,14 +99,14 @@ class XFilterModel {
 
     final output = FilterExecutionCalculator.calculate(input);
 
-    // 2. Bảo lưu Intent cũ nếu bị chèn ép tải dữ liệu
+    // 2. Preserve the current intent if displaced by a forced data load.
     if (output.preserveCurrentIntent) {
       _stashedIntent = _executionIntent;
     }
 
     String finalDebugInfo = output.debugInfo;
 
-    // 3. Xử lý Side-effects: Bơm Missing Intent (Load) nếu cần thiết
+    // 3. Handle side-effects: inject a missing Load intent if needed.
     if (output.missingIntent == MissingIntentType.dataLoadOrQuery) {
       final intentToUse = _createAndSetFilterModelExecutionIntentLoad();
       finalDebugInfo = finalDebugInfo.replaceFirst(
@@ -114,7 +114,7 @@ class XFilterModel {
           "_executionIntent: $_stashedIntent --> $intentToUse");
     }
 
-    // 4. Trả về Execution Unit tương ứng
+    // 4. Return the corresponding Execution Unit.
     switch (output.action) {
       case FilterExecutionAction.loadData:
         return NxtExecutionUnit.yes(
@@ -131,7 +131,7 @@ class XFilterModel {
           executionUnit: _FilterPanelChangeExecutionUnit(
             xFilterModel: this,
             executionIntent:
-            _executionIntent as FilterModelFilterPanelChangeIntent,
+                _executionIntent as FilterModelFilterPanelChangeIntent,
           ),
           info: finalDebugInfo,
         );
@@ -160,7 +160,6 @@ class XFilterModel {
 
   @override
   String toString() {
-    return "${getClassName(
-        filterModel)} - Queried: $loadedInSession >>> FILTER_PATCH: $filterPatch";
+    return "${getClassName(filterModel)} - Queried: $loadedInSession >>> FILTER_PATCH: $filterPatch";
   }
 }

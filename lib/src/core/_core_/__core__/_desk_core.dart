@@ -1,12 +1,47 @@
 part of '../core.dart';
 
-class _DeskCore extends _DeskCoreV1 {
+class _DeskCore extends _Core {
   final Map<String, ActivityCreator> __activityCreatorMap = {};
   final Map<String, Activity> _activityMap = {};
 
   List<String> get activeActivityNames => List.unmodifiable(_activityMap.keys);
 
   List<Activity> get activeActivities => List.unmodifiable(_activityMap.values);
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _collectGarbage() {
+    final now = FlutterArtist.clock.now();
+    //
+    final keys = _activityMap.keys.toList();
+    for (final key in keys) {
+      final activity = _activityMap[key];
+      if (activity == null) continue;
+      final orphanedAt = activity.orphanedAt;
+      if (orphanedAt == null) continue;
+
+      if (now.difference(orphanedAt).inMilliseconds >=
+          FlutterArtist.appConfig.garbageCollectionInterval.inMilliseconds) {
+        Activity? removedActivity = _activityMap.remove(key);
+        if (removedActivity != null) {
+          FlutterArtist._removeRecentModule(removedActivity);
+        }
+        print("Unmount $key");
+      }
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  Activity? findActivityByName(String activityName) {
+    return _activityMap[activityName];
+  }
+
+  List<Activity> getAllActivities() {
+    return List.unmodifiable(_activityMap.values);
+  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -18,6 +53,11 @@ class _DeskCore extends _DeskCoreV1 {
   @DebugMethodAnnotation()
   String debugGetActivityName(Type type) {
     return _getActivityName(type);
+  }
+
+  @DebugMethodAnnotation()
+  Activity? debugFindActivity(Type activityType) {
+    return _findActivity(activityType);
   }
 
   // ***************************************************************************
@@ -42,6 +82,9 @@ class _DeskCore extends _DeskCoreV1 {
     _createActivity(activityName);
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   F _createActivity<F extends Activity>(String activityName) {
     F? activity = _activityMap[activityName] as F?;
     if (activity != null) {
@@ -55,7 +98,7 @@ class _DeskCore extends _DeskCoreV1 {
     if (creator == null) {
       throw DebugUtils.getFatalError(
           " - ERROR: '$activityName' not found. You need to call:\n "
-              " FlutterArtist.storage.registerActivity(()=> $activityName())");
+          " FlutterArtist.storage.desk.registerActivity(()=> $activityName())");
     }
     activity = creator() as F;
     if (FlutterArtist._navigatorStated) {
@@ -65,12 +108,18 @@ class _DeskCore extends _DeskCoreV1 {
     return activity;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   Activity? _findActivity(Type activityType) {
     final String activityName = _getActivityName(activityType);
     Activity? activity = _activityMap[activityName];
     activity ??= _createActivity(activityName);
     return activity;
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   F findActivity<F extends Activity>() {
     final String activityName = _getActivityName(F);
@@ -79,16 +128,32 @@ class _DeskCore extends _DeskCoreV1 {
     return activity as F;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   F? findActivityOrNull<F extends Activity>() {
     final String activityName = _getActivityName(F);
     F? activity = _activityMap[activityName] as F?;
     return activity;
   }
 
+  // ***************************************************************************
+  // ***************************************************************************
+
   void __clearActivities() {
     __activityCreatorMap.clear();
     _activityMap.clear();
   }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void _logout() {
+    _activityMap.clear();
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
 
   void _checkToRemoveActivity(Activity activity) {
     bool hasMountedUiComponent = activity.ui.hasMountedViews();
@@ -96,20 +161,17 @@ class _DeskCore extends _DeskCoreV1 {
       switch (activity.config.releasePolicy) {
         case ActivityReleasePolicy.retain:
           print(
-              "[FLUTTER_ARTIST] ---------> RETAIN_IN_MEMORY: ${getClassName(
-                  activity)}");
+              "[FLUTTER_ARTIST] ---------> RETAIN_IN_MEMORY: ${getClassName(activity)}");
           return;
         case ActivityReleasePolicy.unmount:
           print(
-              "[FLUTTER_ARTIST] ---------> MARK_TO_RELEASE_AND_PRUNE: ${getClassName(
-                  activity)} - ${DateTime.now()}");
+              "[FLUTTER_ARTIST] ---------> MARK_TO_RELEASE_AND_PRUNE: ${getClassName(activity)} - ${DateTime.now()}");
           activity._markAsOrphaned(true);
           return;
       }
     } else {
       print(
-          "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(
-              activity)} - ${DateTime.now()}");
+          "[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: ${getClassName(activity)} - ${DateTime.now()}");
       activity._markAsOrphaned(false);
     }
   }

@@ -10,6 +10,10 @@ abstract class BackgroundWebDownloadAction extends BackgroundAction {
     required super.actionInfo,
   });
 
+  @override
+  @OverridableMethodAnnotation()
+  ActionKind get actionKind => ActionKind.general;
+
   Future<ApiResult<List<int>?>> performDownload();
 
   @override

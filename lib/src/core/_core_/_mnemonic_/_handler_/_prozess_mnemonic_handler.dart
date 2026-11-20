@@ -89,11 +89,11 @@ class _ProzessMnemonicHandler {
         return KeyEventResult.handled;
 
       case MnemonicShortcut.debugFormModel:
-        prozess.showDebugViewingStageFormModelInspectorDialog();
+        prozess.showDebugViewingStageFormInspector();
         return KeyEventResult.handled;
 
       case MnemonicShortcut.debugInspector:
-        prozess.showDebugContextDataViewerDialog(context);
+        prozess.showDebugContextDataInspector();
         return KeyEventResult.handled;
 
       default:

@@ -40,7 +40,6 @@ class _StageViewBuilderState
     return getClassName(widget.stage);
   }
 
-
   @override
   FocusRegionType getRegionType() {
     return FocusRegionType.stageView;
@@ -105,7 +104,8 @@ class _StageViewBuilderState
 
   @override
   List<_QuickSuggestionButton> createQuickSuggestionButtons(
-      BuildContext context,) {
+    BuildContext context,
+  ) {
     return [
       QuickSuggestionBarUtils.createStageErrorButton(
         context,
@@ -116,7 +116,7 @@ class _StageViewBuilderState
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.desk._checkToRemoveActivity(widget.stage.activity);
+    FlutterArtist.storage.desk._checkToRemoveActivity(widget.stage.activity);
   }
 
   @override

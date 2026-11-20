@@ -2,9 +2,9 @@ part of '../core.dart';
 
 /// Runtime prozess coordinator maintaining multi-stage progression and transitions.
 class XProzess<
-STAGE_ENUM extends StageEnum, //
-PROZESS_INIT_DATA extends ProzessInitData,
-PROZESS_CONTEXT_DATA extends ProzessContextData> {
+    STAGE_ENUM extends StageEnum, //
+    PROZESS_INIT_DATA extends ProzessInitData,
+    PROZESS_CONTEXT_DATA extends ProzessContextData> {
   final XActivity xActivity;
   final Prozess<STAGE_ENUM, PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA> prozess;
 
@@ -77,7 +77,7 @@ PROZESS_CONTEXT_DATA extends ProzessContextData> {
     final Stage? frontierStage = prozess.findFrontierStage();
     if (frontierStage != null) {
       XStage frontierXStage =
-      findXStageById(frontierStage.stageId as STAGE_ENUM);
+          findXStageById(frontierStage.stageId as STAGE_ENUM);
       next = frontierXStage._getNextExecutionUnit(debug: debug);
       if (next.yes) {
         return next;
@@ -127,13 +127,10 @@ PROZESS_CONTEXT_DATA extends ProzessContextData> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _ProzessRestartExecutionUnit<STAGE_ENUM,
-              PROZESS_INIT_DATA,
-              PROZESS_CONTEXT_DATA>(
+              PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
             xProzess: this,
             executionIntent: _executionIntent as ProzessRestartIntent<
-                STAGE_ENUM,
-                PROZESS_INIT_DATA,
-                PROZESS_CONTEXT_DATA>,
+                STAGE_ENUM, PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>,
           ),
           info: finalDebugInfo,
         );
@@ -141,13 +138,11 @@ PROZESS_CONTEXT_DATA extends ProzessContextData> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _ProzessDetermineNextStageExecutionUnit<STAGE_ENUM,
-              PROZESS_INIT_DATA,
-              PROZESS_CONTEXT_DATA>(
+              PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
             xProzess: this,
             executionIntent: _executionIntent
-            as ProzessDetermineNextStageIntent<STAGE_ENUM,
-                PROZESS_INIT_DATA,
-                PROZESS_CONTEXT_DATA>,
+                as ProzessDetermineNextStageIntent<STAGE_ENUM,
+                    PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>,
           ),
           info: finalDebugInfo,
         );
@@ -169,24 +164,21 @@ PROZESS_CONTEXT_DATA extends ProzessContextData> {
   }
 
   ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>
-  _createAndSetProzessIntentRestart() {
-    final executionIntent = ProzessRestartIntent<STAGE_ENUM,
-        PROZESS_INIT_DATA,
+      _createAndSetProzessIntentRestart() {
+    final executionIntent = ProzessRestartIntent<STAGE_ENUM, PROZESS_INIT_DATA,
         PROZESS_CONTEXT_DATA>();
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
-  ProzessDetermineNextStageIntent<STAGE_ENUM,
-      PROZESS_INIT_DATA,
+  ProzessDetermineNextStageIntent<STAGE_ENUM, PROZESS_INIT_DATA,
       PROZESS_CONTEXT_DATA> _createAndSetProzessIntentDetermineNextStage({
     required PROZESS_INIT_DATA prozessInitData,
   }) {
     final executionIntent = ProzessDetermineNextStageIntent<STAGE_ENUM,
-        PROZESS_INIT_DATA,
-        PROZESS_CONTEXT_DATA>(
-      // prozessInitData: prozessInitData,
-    );
+            PROZESS_INIT_DATA, PROZESS_CONTEXT_DATA>(
+        // prozessInitData: prozessInitData,
+        );
     _executionIntent = executionIntent;
     return executionIntent;
   }

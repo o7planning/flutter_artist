@@ -113,7 +113,7 @@ class _ActivitySectionViewBuilderState
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.desk._checkToRemoveActivityV1(widget.activity);
+    FlutterArtist.deskV1._checkToRemoveActivityV1(widget.activity);
   }
 
   @override

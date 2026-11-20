@@ -26,7 +26,7 @@ FORM_OUTPUT extends FormOutput> extends TaskBaseExecutionIntent<
     TASK_INIT_DATA,
     TASK_RESULT_DATA, //
     TaskSubmitPrecheck,
-    TaskSubmitExecutionResult<TASK_INIT_DATA, TASK_RESULT_DATA>> {
+    TaskSubmitResult<TASK_INIT_DATA, TASK_RESULT_DATA>> {
   TaskSubmitIntent();
 }
 

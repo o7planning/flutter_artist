@@ -111,7 +111,7 @@ class _ScalarControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: actionable.yes
               ? () async {
-                  await widget.scalar.showDebugFilterCriteriaViewerDialog();
+                  await widget.scalar.showDebugFilterCriteriaInspector();
                 }
               : null,
         );

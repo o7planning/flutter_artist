@@ -5,10 +5,10 @@ part of '__action.dart';
 ///
 @Deprecated("TODO: Do it?")
 abstract class BlockQuickItemReplacementAction<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>,
-FILTER_CRITERIA extends FilterCriteria> extends Action {
+    ID extends Comparable, //
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>,
+    FILTER_CRITERIA extends FilterCriteria> extends Action {
   final ITEM item;
 
   const BlockQuickItemReplacementAction({
@@ -16,6 +16,10 @@ FILTER_CRITERIA extends FilterCriteria> extends Action {
     required super.needToConfirm,
     required super.actionInfo,
   });
+
+  @override
+  @OverridableMethodAnnotation()
+  ActionKind get actionKind => ActionKind.general;
 
   Future<ApiResult<ITEM_DETAIL>> performQuickReplaceItem({
     required Object? parentBlockItem,

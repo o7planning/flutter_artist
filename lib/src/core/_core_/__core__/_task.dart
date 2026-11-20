@@ -86,7 +86,7 @@ abstract class Task<
 
   XTask _createXTask({
     required XActivity xActivity,
-    required XTaskFormModel? xTaskFormModel,
+    required XTaskFormModel<INIT_DATA, RESULT_DATA, FORM_PATCH>? xTaskFormModel,
   }) {
     return XTask<
         INIT_DATA, //
@@ -181,7 +181,6 @@ abstract class Task<
       lastIntentInfo: "Restart",
     );
 
-    final ExecHint initialExecHint = thisXTask.execHint;
     thisXTask.resetExecutionHints();
 
     executionTrace.addInfo(
@@ -223,7 +222,7 @@ abstract class Task<
         tipDocument: null,
       );
       executionResult._setErrorInfo(errorInfo: errorInfo);
-      // TODO Review .........
+      // TODO Review
       _dataState = TaskDataStatePending.failed(errorInfo: taskErrorInfo);
       return;
     }
@@ -424,7 +423,7 @@ abstract class Task<
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
-      TaskSubmitExecutionResult<INIT_DATA, RESULT_DATA>(precheck: null),
+      TaskSubmitResult<INIT_DATA, RESULT_DATA>(precheck: null),
       objectCaller: this,
       methodName: '_unitSubmit',
     );
@@ -493,21 +492,42 @@ abstract class Task<
     // AUTOMATIC SESSION ESTABLISHMENT (If this Task is a SessionEstablisher)
     // =======================================================================
     if (this is SessionEstablisher) {
-      final ILoggedInUser? authenticatedUser =
-          (this as SessionEstablisher).extractAuthenticatedUser();
+      try {
+        final ILoggedInUser? authenticatedUser =
+            (this as SessionEstablisher).extractAuthenticatedUser();
 
-      final bool sessionSuccess =
-          await FlutterArtist.globalsManager._establishSessionFromWorkflow(
-        executionTrace: executionTrace,
-        workflowUnit: this,
-        loggedInUser: authenticatedUser,
-      );
-
-      if (!sessionSuccess) {
-        throw AppError(
-          errorMessage:
-              "Failed to initialize global user session and application data.",
+        final bool sessionSuccess =
+            await FlutterArtist.globalsManager._establishSessionFromWorkflow(
+          executionTrace: executionTrace,
+          workflowUnit: this,
+          loggedInUser: authenticatedUser,
         );
+
+        if (!sessionSuccess) {
+          throw AppError(
+            errorMessage:
+                "Failed to initialize global user session and application data.",
+          );
+        }
+      } catch (e, stackTrace) {
+        final ErrorInfo errorInfo = _handleError(
+          module: module,
+          methodName: "establishSession",
+          error: e,
+          stackTrace: stackTrace,
+          showSnackBar: true,
+          tipDocument: null,
+        );
+        executionResult._setErrorInfo(errorInfo: errorInfo);
+        final TaskErrorInfo taskErrorInfo = TaskErrorInfo(
+          taskErrorMethod: TaskErrorMethod.performSubmit,
+          error: e,
+          errorStackTrace: stackTrace,
+        );
+        _dataState = TaskDataStateSubmissionFailed(
+          submissionErrorInfo: taskErrorInfo,
+        );
+        return;
       }
     }
     // -------------------------------------------------------------------------
@@ -606,7 +626,7 @@ abstract class Task<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool isLoadInitDataAllowed() {
+  bool isRestartAllowed() {
     return true;
   }
 
@@ -628,10 +648,92 @@ abstract class Task<
 
   // ***************************************************************************
 
+  @_PrecheckMethod()
+  Actionable<ShowTaskInitDataInspectorPrecheck>
+      checkBeforeShowInitDataInspector() {
+    return ShowTaskInitDataInspectorPrecheckUtils
+        .checkBeforeShowInitDataInspector(
+      hasInitData: initData != null,
+      loggedInUser: FlutterArtist.loggedInUser,
+    );
+  }
+
+  // ***************************************************************************
+
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowTaskInitDataInspectorPrecheck>>
+      showDebugInitDataInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final Actionable<ShowTaskInitDataInspectorPrecheck> actionable =
+        checkBeforeShowInitDataInspector();
+
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowTaskInitDataInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
+    }
+    final BuildContext context = FlutterArtistCore.context;
+    await DataDebugDialog.show(
+      context: context,
+      title: '',
+      targetObject: initData!,
+    );
+    return actionable;
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckMethod()
+  Actionable<ShowTaskResultDataInspectorPrecheck>
+      checkBeforeShowResultDataInspector() {
+    return ShowTaskResultDataInspectorPrecheckUtils
+        .checkBeforeShowResultDataInspector(
+      hasResultData: submitResultData != null,
+      loggedInUser: FlutterArtist.loggedInUser,
+    );
+  }
+
+  // ***************************************************************************
+
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowTaskResultDataInspectorPrecheck>>
+      showDebugResultDataInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final Actionable<ShowTaskResultDataInspectorPrecheck> actionable =
+        checkBeforeShowResultDataInspector();
+
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowTaskResultDataInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
+    }
+    final BuildContext context = FlutterArtistCore.context;
+    await DataDebugDialog.show(
+      context: context,
+      title: '',
+      targetObject: submitResultData!,
+    );
+    return actionable;
+  }
+
+  // ***************************************************************************
+
   @_IsAllowPrivateMethodAnnotation()
   CheckAllowResult __checkRestartAllowed() {
     try {
-      bool allow = isLoadInitDataAllowed();
+      bool allow = isRestartAllowed();
       return allow ? CheckAllowResult.allowed() : CheckAllowResult.notAllowed();
     } catch (e, stackTrace) {
       return CheckAllowResult.error(
@@ -646,7 +748,7 @@ abstract class Task<
   // ***************************************************************************
   // ***************************************************************************
 
-  bool canLoadInitData() {
+  bool canRestart() {
     final Actionable<TaskRestartPrecheck> actionable =
         checkBeforeRestart(checkAllow: true);
     return actionable.yes;
@@ -746,7 +848,7 @@ abstract class Task<
     }
   }
 
-  Future<TaskSubmitExecutionResult<INIT_DATA, RESULT_DATA>> submit() async {
+  Future<TaskSubmitResult<INIT_DATA, RESULT_DATA>> submit() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "submit",
@@ -775,7 +877,7 @@ abstract class Task<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      return TaskSubmitExecutionResult(precheck: actionable.errCode);
+      return TaskSubmitResult(precheck: actionable.errCode);
     }
 
     final XActivity xActivity = _XActivityTaskSubmit(task: this);
@@ -818,19 +920,13 @@ abstract class Task<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_PrecheckPrivateMethod()
-  Actionable<TaskFormEnablePrecheck> checkFormEnable({
-    bool checkAllow = true,
-  }) {
-    return __checkFormEnable(
-      checkAllow: checkAllow,
-    );
+  @_PrecheckMethod()
+  Actionable<TaskFormEnablePrecheck> checkFormEnable() {
+    return __checkFormEnable();
   }
 
   @_PrecheckPrivateMethod()
-  Actionable<TaskFormEnablePrecheck> __checkFormEnable({
-    bool checkAllow = true,
-  }) {
+  Actionable<TaskFormEnablePrecheck> __checkFormEnable() {
     return TaskFormEnablePrecheckUtils.checkFormEnable(
       checkBusy: true,
       isBusy: FlutterArtist.executor.isBusy,
@@ -937,33 +1033,29 @@ abstract class Task<
   @override
   @_RootMethodAnnotation()
   Future<Actionable<ShowFormModelInspectorPrecheck>>
-      showDebugFormModelInspectorDialog() async {
+      showDebugFormModelInspector({
+    bool showErrorSnackBar = true,
+  }) async {
     final actionable = checkBeforeShowFormModelInspector();
     if (!actionable.yes) {
-      final ShowFormModelInspectorPrecheck err = actionable.errCode!;
-      showErrorSnackBar(
-        message: err.message,
-        errorDetails: err.details,
-      );
+      if (showErrorSnackBar) {
+        final ShowFormModelInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
       return actionable;
     }
-    return await formModel!.showDebugFormModelInspectorDialog(
+    return await formModel!.showDebugFormModelInspector(
       locationInfo: getClassNameWithoutGenerics(this),
+      showErrorSnackBar: showErrorSnackBar,
     );
   }
 
   // ***************************************************************************
   // ***************************************************************************
   // ***************************************************************************
-
-  void _broadcastScalarHidden() {
-    switch (effectiveConfig.onHideAction) {
-      case TaskHiddenAction.none:
-        break;
-      case TaskHiddenAction.clear:
-        break;
-    }
-  }
 
   void _broadcastTaskHidden() {
     // TODO

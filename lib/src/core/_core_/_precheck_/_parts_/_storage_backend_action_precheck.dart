@@ -1,7 +1,7 @@
 part of '../__precheck.dart';
 
 /// Precheck enumeration for application-level backend action executions.
-enum AppBackendActionPrecheck implements Precheck {
+enum StorageBackendActionPrecheck implements Precheck {
   /// Operation aborted because the system executor is currently busy.
   busy(
     precheckCode: PrecheckCode.busy,
@@ -25,7 +25,7 @@ enum AppBackendActionPrecheck implements Precheck {
   @override
   final List<String>? details;
 
-  const AppBackendActionPrecheck({
+  const StorageBackendActionPrecheck({
     required this.precheckCode,
     required this.message,
     required this.details,

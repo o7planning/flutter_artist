@@ -1,8 +1,8 @@
 part of '../core.dart';
 
-class AppBackendActionResult
-    extends ExecutionUnitResult<AppBackendActionPrecheck> {
-  AppBackendActionResult({
+class StorageBackendActionResult
+    extends ExecutionUnitResult<StorageBackendActionPrecheck> {
+  StorageBackendActionResult({
     super.precheck,
     super.errorInfo,
   });

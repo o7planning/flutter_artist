@@ -1,5 +1,9 @@
 part of '_enums.dart';
 
+enum LovModelErrorMethod {
+  performQuery,
+}
+
 enum BlockErrorMethod {
   getItemId,
   convertItemDetailToItem,

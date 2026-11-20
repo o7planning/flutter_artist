@@ -45,7 +45,7 @@ class BlockCurrentItemResolver {
       unifiedItemRefreshPolicy: unifiedItemRefreshPolicy,
       setCurrentItemDirective: setCurrentItemDirective,
       isCandidateCurrentItemInNewQueriedList:
-      isCandidateCurrentItemInNewQueriedList,
+          isCandidateCurrentItemInNewQueriedList,
       isCandidateItemDifferentFromCurrent: isCandidateItemDifferentFromCurrent,
       debug: debug,
     );
@@ -87,7 +87,6 @@ class BlockCurrentItemResolver {
     switch (setCurrentItemDirective) {
       case BlockSetCurrentItemDirective.setAnItemAsCurrent:
       case BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm:
-      case BlockSetCurrentItemDirective.refresh:
         provideItemDetailContextExt = true;
         PrintUtils.debug(debug,
             " --> [Calc 1.2] Extended ItemRep to true via Directive: $setCurrentItemDirective");
@@ -101,9 +100,9 @@ class BlockCurrentItemResolver {
     bool candidateAccepted;
     switch (setCurrentItemDirective) {
       case BlockSetCurrentItemDirective.setAnItemAsCurrentIfNeed:
-      // Accept candidate IF:
-      // 1. It is already the stable current item (!isCandidateItemDifferentFromCurrent), OR
-      // 2. The UI explicitly requires an item context (provideItemDetailContextExt).
+        // Accept candidate IF:
+        // 1. It is already the stable current item (!isCandidateItemDifferentFromCurrent), OR
+        // 2. The UI explicitly requires an item context (provideItemDetailContextExt).
         candidateAccepted =
             !isCandidateItemDifferentFromCurrent || provideItemDetailContextExt;
         PrintUtils.debug(debug,
@@ -111,7 +110,6 @@ class BlockCurrentItemResolver {
 
       case BlockSetCurrentItemDirective.setAnItemAsCurrent:
       case BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm:
-      case BlockSetCurrentItemDirective.refresh:
         candidateAccepted = true;
         PrintUtils.debug(debug,
             " --> [Calc 2.2] Directive: $setCurrentItemDirective, candidateAccepted: true");
@@ -145,13 +143,11 @@ class BlockCurrentItemResolver {
     // 4. CALCULATE FORCE RELOAD ITEM
     // =========================================================================
     bool retForceReloadItem = false;
-    final bool isExplicitRefreshDirective =
-        setCurrentItemDirective == BlockSetCurrentItemDirective.refresh;
 
-    if (isExplicitRefreshDirective || inputForceReloadItem) {
+    if (inputForceReloadItem) {
       retForceReloadItem = true;
       PrintUtils.debug(debug,
-          " --> [Calc 4.1] Force reload requested explicitly (directive / inputForceReloadItem) -> true");
+          " --> [Calc 4.1] Force reload requested explicitly (inputForceReloadItem) -> true");
     } else if (!provideItemDetailContextExt) {
       retForceReloadItem = false;
       PrintUtils.debug(debug,
@@ -183,7 +179,7 @@ class BlockCurrentItemResolver {
         "canSkipDetailFetch": canSkipDetailFetch,
         "provideItemDetailContextExt": provideItemDetailContextExt,
         "isCandidateItemDifferentFromCurrent":
-        isCandidateItemDifferentFromCurrent,
+            isCandidateItemDifferentFromCurrent,
         "retForceReloadItem": retForceReloadItem,
       },
     );

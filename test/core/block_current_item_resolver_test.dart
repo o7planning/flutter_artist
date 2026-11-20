@@ -151,7 +151,6 @@ void main() {
         for (final directive in [
           BlockSetCurrentItemDirective.setAnItemAsCurrent,
           BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm,
-          BlockSetCurrentItemDirective.refresh,
         ]) {
           final plan = executeInternal(
             setCurrentItemDirective: directive,
@@ -272,15 +271,7 @@ void main() {
     // SECTION 4: FORCE RELOAD ITEM CALCULATION
     // =========================================================================
     group('Section 4 - Force Reload Item Calculation', () {
-      test('4.1 Explicit refresh directive triggers force reload', () {
-        final plan = executeInternal(
-          setCurrentItemDirective: BlockSetCurrentItemDirective.refresh,
-          inputForceReloadItem: false,
-        );
-        expect(plan.forceReloadItem, isTrue);
-      });
-
-      test('4.2 inputForceReloadItem flag triggers force reload', () {
+      test('4.1 inputForceReloadItem flag triggers force reload', () {
         final plan = executeInternal(
           inputForceReloadItem: true,
           isCandidateItemDifferentFromCurrent: false,
@@ -289,7 +280,7 @@ void main() {
         expect(plan.forceReloadItem, isTrue);
       });
 
-      test('4.3 Suppressed when no item representative is active on UI', () {
+      test('4.2 Suppressed when no item representative is active on UI', () {
         final plan = executeInternal(
           provideItemDetailContext: false,
           isCandidateItemDifferentFromCurrent: true,
@@ -300,7 +291,7 @@ void main() {
         expect(plan.forceReloadItem, isFalse);
       });
 
-      test('4.4 Current item ID changed triggers detail fetch', () {
+      test('4.3 Current item ID changed triggers detail fetch', () {
         final plan = executeInternal(
           provideItemDetailContext: true,
           isCandidateItemDifferentFromCurrent: true,
@@ -310,7 +301,7 @@ void main() {
       });
 
       test(
-          '4.5 Retained current item present in new queried batch triggers detail refresh',
+          '4.4 Retained current item present in new queried batch triggers detail refresh',
           () {
         // Item is unchanged, but newly queried batch contains updated fields -> refresh
         final plan = executeInternal(
@@ -322,7 +313,7 @@ void main() {
       });
 
       test(
-          '4.6 Retained current item absent from newly queried batch remains stable without reload',
+          '4.5 Retained current item absent from newly queried batch remains stable without reload',
           () {
         // Pagination / Append batch does not contain the current item -> keep stable, no reload
         final plan = executeInternal(

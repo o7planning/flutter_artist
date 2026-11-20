@@ -1,13 +1,20 @@
 part of '../__precheck.dart';
 
-// Name (OK)
+/// Precheck enumeration for block current item clearing operations.
 enum BlockClearCurrentItemPrecheck implements Precheck {
+  /// Operation aborted because the system executor is currently busy.
   busy(
     precheckCode: PrecheckCode.busy,
-    message: "Can not clear current item.",
-    details: ["The executor is busy."],
+    message: "Cannot clear current item.",
+    details: ["The system executor is currently busy. Please wait."],
   ),
-  ;
+
+  /// Operation aborted because there is no active current item to clear.
+  noTarget(
+    precheckCode: PrecheckCode.noTarget,
+    message: "Cannot clear current item.",
+    details: ["There is no active current item to clear."],
+  );
 
   @override
   final PrecheckCode precheckCode;

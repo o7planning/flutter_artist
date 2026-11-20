@@ -35,7 +35,6 @@ class _TaskViewBuilderState extends _ContextProviderViewState<TaskViewBuilder> {
     return getClassName(widget.task);
   }
 
-
   @override
   FocusRegionType getRegionType() {
     return FocusRegionType.taskView;
@@ -93,7 +92,8 @@ class _TaskViewBuilderState extends _ContextProviderViewState<TaskViewBuilder> {
 
   @override
   List<_QuickSuggestionButton> createQuickSuggestionButtons(
-      BuildContext context,) {
+    BuildContext context,
+  ) {
     return [
       QuickSuggestionBarUtils.createTaskErrorButton(
         context,
@@ -104,7 +104,7 @@ class _TaskViewBuilderState extends _ContextProviderViewState<TaskViewBuilder> {
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.desk._checkToRemoveActivity(widget.task.activity);
+    FlutterArtist.storage.desk._checkToRemoveActivity(widget.task.activity);
   }
 
   @override

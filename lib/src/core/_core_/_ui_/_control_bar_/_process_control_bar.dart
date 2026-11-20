@@ -43,9 +43,7 @@ class ProzessControlBar extends BaseControlBar<
 }
 
 class _ProzessControlBarState extends _BaseControlBarState<Prozess,
-    ProzessControlBarItemType,
-    ProzessControlBarItem,
-    ProzessControlBar> {
+    ProzessControlBarItemType, ProzessControlBarItem, ProzessControlBar> {
   @override
   ContextProviderViewType get type => ContextProviderViewType.controlBar;
 
@@ -133,8 +131,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           customColor: widget.style.activeIconColor,
           onPressed: canMove
               ? () async {
-            widget.prozess.moveToPreviousStage();
-          }
+                  widget.prozess.moveToPreviousStage();
+                }
               : null,
         );
 
@@ -149,8 +147,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           customColor: widget.style.activeIconColor,
           onPressed: canMove
               ? () async {
-            widget.prozess.moveToNextStage();
-          }
+                  widget.prozess.moveToNextStage();
+                }
               : null,
         );
 
@@ -176,8 +174,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           iconData: FaIconConstants.formRefreshIconData,
           onPressed: actionable.yes
               ? () {
-            widget.prozess.restartViewingStage();
-          }
+                  widget.prozess.restartViewingStage();
+                }
               : null,
         );
 
@@ -195,26 +193,26 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           iconData: FaIconConstants.submitIconData,
           onPressed: actionable.yes
               ? () async {
-            final result = await widget.prozess.submitViewingStage();
-            final NavigationIntent? intent = widget
-                .config
-                .screenNavigationContext
-                ?.submitViewingStageNavigationIntent;
-            if (intent != null && context.mounted) {
-              widget.prozess._processNavigationIntent(
-                context,
-                result: result,
-                intent: intent,
-              );
-            }
-          }
+                  final result = await widget.prozess.submitViewingStage();
+                  final NavigationIntent? intent = widget
+                      .config
+                      .screenNavigationContext
+                      ?.submitViewingStageNavigationIntent;
+                  if (intent != null && context.mounted) {
+                    widget.prozess._processNavigationIntent(
+                      context,
+                      result: result,
+                      intent: intent,
+                    );
+                  }
+                }
               : null,
         );
 
       case ProzessControlBarItemType.debugViewingStageFormModel:
         if (!widget.config.allowDebugFormButton) return null;
         Actionable actionable =
-        widget.prozess.checkBeforeShowViewingStageFormModelInspector();
+            widget.prozess.checkBeforeShowViewingStageFormModelInspector();
         return ControlBarHelper.buildControlBarButton(
           context,
           style: widget.style,
@@ -223,9 +221,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           onAction: false,
           onPressed: actionable.yes
               ? () async {
-            await widget.prozess
-                .showDebugViewingStageFormModelInspectorDialog();
-          }
+                  await widget.prozess.showDebugViewingStageFormInspector();
+                }
               : null,
         );
 
@@ -237,7 +234,7 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
           tooltip: type.formatTooltip("Inspect Prozess Context"),
           iconData: FaIconConstants.prozessIconData,
           onPressed: () {
-            widget.prozess.showDebugContextDataViewerDialog(context);
+            widget.prozess.showDebugContextDataInspector();
           },
         );
 
@@ -280,8 +277,8 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
       widget.prozess.ui._removeControlBarWidgetState(widgetState: this);
 
   @override
-  void checkAndFreeMemory() =>
-      FlutterArtist.desk._checkToRemoveActivity(widget.prozess.activity);
+  void checkAndFreeMemory() => FlutterArtist.storage.desk
+      ._checkToRemoveActivity(widget.prozess.activity);
 
   @override
   void executeAfterBuild() {}

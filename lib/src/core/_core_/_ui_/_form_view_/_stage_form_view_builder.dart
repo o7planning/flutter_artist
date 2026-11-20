@@ -28,7 +28,6 @@ class _StageFormViewBuilderState
     return widget.formModel.stage.activity;
   }
 
-
   @override
   FocusRegionType getRegionType() {
     return FocusRegionType.stageFormView;
@@ -61,12 +60,11 @@ class _StageFormViewBuilderState
     if (!isValid) {
       return const ErrorMessageView(
         message:
-        'StageFormView and StageFormViewBuilder must be child widgets of ProzessStageFormViewSwitcher!',
+            'StageFormView and StageFormViewBuilder must be child widgets of ProzessStageFormViewSwitcher!',
       );
     }
     return super.buildContent(context);
   }
-
 
   @override
   String getDebugLabel() {
@@ -89,7 +87,6 @@ class _StageFormViewBuilderState
     ];
   }
 
-
   @override
   Future<bool> handleSaveOnPop() async {
     throw UnimplementedError("TODO: handleSaveOnPop");
@@ -97,12 +94,15 @@ class _StageFormViewBuilderState
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.desk._checkToRemoveActivity(widget.formModel.stage.activity);
+    FlutterArtist.storage.desk
+        ._checkToRemoveActivity(widget.formModel.stage.activity);
   }
 
   @override
-  KeyEventResult handleFormMnemonicKeyEvent(BuildContext context,
-      KeyEvent event,) {
+  KeyEventResult handleFormMnemonicKeyEvent(
+    BuildContext context,
+    KeyEvent event,
+  ) {
     final switcherScope = _StageFormViewSwitcherScope.maybeOf(context);
     return _ProzessMnemonicHandler.handleKeyEvent(
       context: context,

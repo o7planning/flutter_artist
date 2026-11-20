@@ -52,7 +52,7 @@ class ScalarFilterCriteriaInfoWidget extends BaseInfoWidget {
             onPressed: scalarFilterCriteria == null
                 ? null
                 : () {
-              scalar.showDebugFilterCriteriaViewerDialog();
+              scalar.showDebugFilterCriteriaInspector();
             },
           ),
         ),
@@ -84,7 +84,7 @@ class ScalarFilterCriteriaInfoWidget extends BaseInfoWidget {
     return ButtonFunction(
       btnType: DebugBtnType.success,
       onPressed: (BuildContext context) {
-        scalar.showDebugFilterCriteriaViewerDialog();
+        scalar.showDebugFilterCriteriaInspector();
       },
     );
   }

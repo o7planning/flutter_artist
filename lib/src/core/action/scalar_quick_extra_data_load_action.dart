@@ -7,6 +7,10 @@ abstract class ScalarQuickExtraDataLoadAction<DATA extends Object>
     required super.actionInfo,
   });
 
+  @override
+  @OverridableMethodAnnotation()
+  ActionKind get actionKind => ActionKind.read;
+
   Future<ApiResult<DATA>?> performLoadExtraData();
 
   Future<void> onExtraDataLoaded(BuildContext context, {

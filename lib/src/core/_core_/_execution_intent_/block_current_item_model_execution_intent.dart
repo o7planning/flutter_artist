@@ -1,27 +1,30 @@
 part of '../core.dart';
 
 sealed class BlockCurrentItemModelExecutionIntent<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>,
-PRECHECK,
-EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>,
+        FORM_PATCH extends FormPatch,
+        PRECHECK,
+        EXECUTION_RESULT extends ExecutionUnitResult<PRECHECK>>
     extends ExecutionIntent<PRECHECK, EXECUTION_RESULT> {
   BlockCurrentItemModelExecutionIntent();
 }
 
 final class BlockCurrentItemModelPrepareFormToCreateItemIntent<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>> //
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>,
+        FORM_PATCH extends FormPatch> //
     extends BlockCurrentItemModelExecutionIntent<
         ID, //
         ITEM,
         ITEM_DETAIL,
+        FORM_PATCH,
         BlockItemCreationPrecheck,
-        PrepareItemCreationResult> {
+        BlockPrepareItemCreationResult<ID, ITEM, ITEM_DETAIL>> {
   final bool initDirty;
-  final FormPatch? formPatch;
+  final FORM_PATCH? formPatch;
 
   BlockCurrentItemModelPrepareFormToCreateItemIntent({
     required this.initDirty,
@@ -30,26 +33,30 @@ ITEM_DETAIL extends Identifiable<ID>> //
 }
 
 final class BlockCurrentItemModelClearCurrentItemIntent<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>> //
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>,
+        FORM_PATCH extends FormPatch> //
     extends BlockCurrentItemModelExecutionIntent<
         ID, //
         ITEM,
         ITEM_DETAIL,
+        FORM_PATCH,
         BlockClearCurrentItemPrecheck,
-        BlockClearCurrentItemResult> {
+        BlockClearCurrentItemResult<ID, ITEM, ITEM_DETAIL>> {
   BlockCurrentItemModelClearCurrentItemIntent();
 }
 
 final class BlockCurrentItemModelSetCurrentItemIntent<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>> //
+        ID extends Comparable, //
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>,
+        FORM_PATCH extends FormPatch> //
     extends BlockCurrentItemModelExecutionIntent<
         ID, //
         ITEM,
         ITEM_DETAIL,
+        FORM_PATCH,
         BlockSetCurrentItemPrecheck,
         BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> {
   final BlockSetCurrentItemDirective setCurrentItemDirective;
@@ -68,14 +75,16 @@ ITEM_DETAIL extends Identifiable<ID>> //
 }
 
 final class BlockCurrentItemModelDoneIntent<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockCurrentItemModelExecutionIntent<ID,
-        ITEM,
-        ITEM_DETAIL,
-        dynamic,
-        EmptyExecutionUnitResult> {
+    ID extends Comparable, //
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>,
+    FORM_PATCH extends FormPatch> extends BlockCurrentItemModelExecutionIntent<
+    ID, //
+    ITEM,
+    ITEM_DETAIL,
+    FORM_PATCH,
+    dynamic,
+    EmptyExecutionUnitResult> {
   final String lastIntentInfo;
 
   BlockCurrentItemModelDoneIntent({required this.lastIntentInfo});

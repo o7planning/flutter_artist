@@ -2,13 +2,25 @@ part of '../core.dart';
 
 class XBlockFormModel<
     ID extends Comparable, //
-    ITEM_DETAIL extends Identifiable<ID>> {
+    ITEM_DETAIL extends Identifiable<ID>,
+    FORM_PATCH extends FormPatch> {
   XShelf get xShelf => xBlockCurrentItemModel.xBlock.xShelf;
 
-  final BlockFormModel formModel;
-  late final XBlockCurrentItemModel<ID, Identifiable<ID>, ITEM_DETAIL>
-      xBlockCurrentItemModel;
-  final FormPatch? formPatch;
+  final BlockFormModel<
+      ID, //
+      ITEM_DETAIL,
+      CreationPreset,
+      FORM_PATCH,
+      FormOutput,
+      AdditionalFormRelatedData> formModel;
+
+  late final XBlockCurrentItemModel<
+      ID, //
+      Identifiable<ID>,
+      ITEM_DETAIL,
+      FORM_PATCH> xBlockCurrentItemModel;
+
+  final FORM_PATCH? formPatch;
 
   bool focusFlag = false;
 
@@ -27,6 +39,8 @@ class XBlockFormModel<
 
   FormModelExecutionIntent? _executionIntent;
 
+  FormModelDataLoadIntent? _lastDataLoadIntent;
+
   ///
   /// IMPORTANT: To create new XBlockFormModel, use 'formModel._createXBlockFormModel' method
   /// to have the same Generics Parameters with the formModel.
@@ -44,6 +58,15 @@ class XBlockFormModel<
     if (_formLoadHint.lessThan(forceType)) {
       _formLoadHint = forceType;
     }
+  }
+
+  // ***************************************************************************
+
+  FormModelDataLoadIntent _createAndSetFormModelExecutionIntentLoad() {
+    final executionIntent = FormModelDataLoadIntent();
+    _executionIntent = executionIntent;
+    _lastDataLoadIntent = executionIntent;
+    return executionIntent;
   }
 
   // ***************************************************************************
@@ -68,21 +91,12 @@ class XBlockFormModel<
 
   // ***************************************************************************
 
-  FormModelDataLoadIntent _createAndSetFormModelExecutionIntentLoad() {
-    final executionIntent = FormModelDataLoadIntent();
-    _executionIntent = executionIntent;
-    return executionIntent;
-  }
-
-  // ***************************************************************************
-
-  FormModelPatchFormFieldsIntent
-      _createAndSetFormModelExecutionIntentPatchFormFields<
-          FORM_PATCH extends FormPatch>({
+  FormModelPatchFormFieldsIntent<FORM_PATCH>
+      _createAndSetFormModelExecutionIntentPatchFormFields({
     required FORM_PATCH formPatch,
   }) {
     final executionIntent =
-        FormModelPatchFormFieldsIntent(formPatch: formPatch);
+        FormModelPatchFormFieldsIntent<FORM_PATCH>(formPatch: formPatch);
     _executionIntent = executionIntent;
     return executionIntent;
   }
@@ -164,7 +178,8 @@ class XBlockFormModel<
           debug: debug,
           executionUnit: _BlockFormModelPatchFormFieldsExecutionUnit(
             xBlockFormModel: this,
-            executionIntent: _executionIntent as FormModelPatchFormFieldsIntent,
+            executionIntent:
+                _executionIntent as FormModelPatchFormFieldsIntent<FORM_PATCH>,
           ),
           info: finalDebugInfo,
         );

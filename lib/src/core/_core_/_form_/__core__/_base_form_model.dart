@@ -1215,7 +1215,7 @@ abstract class BaseFormModel<
     );
   }
 
-  /// Extracts update values foAbsr simple properties from form input.
+  /// Extracts update values for simple properties from form input.
   @AbstractMethodAnnotation()
   Map<String, SimpleValueWrap?>? extractPatchValuesForSimpleProps({
     required FORM_PATCH formPatch,
@@ -1329,21 +1329,24 @@ abstract class BaseFormModel<
   /// Opens the FormModel debug inspector dialog if permitted.
   ///
   /// Displays an error snackbar using the precheck's [message] and [details]
-  /// if the precheck fails.
+  /// if the precheck fails and [showErrorSnackBar] is `true`.
   @_RootMethodAnnotation()
   Future<Actionable<ShowFormModelInspectorPrecheck>>
-      showDebugFormModelInspectorDialog({
+      showDebugFormModelInspector({
     String locationInfo = '',
+    bool showErrorSnackBar = true,
   }) async {
     final Actionable<ShowFormModelInspectorPrecheck> actionable =
         checkBeforeShowFormModelInspector();
 
     if (!actionable.yes) {
-      final ShowFormModelInspectorPrecheck err = actionable.errCode!;
-      showErrorSnackBar(
-        message: err.message,
-        errorDetails: err.details,
-      );
+      if (showErrorSnackBar) {
+        final ShowFormModelInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
       return actionable;
     }
 

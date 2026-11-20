@@ -41,7 +41,7 @@ class FormModeInfoWidget extends BaseInfoWidget {
       onPressed: formModel.formMode.isNone
           ? null
           : (BuildContext context) {
-        formModel.host.showDebugFormModelInspectorDialog();
+        formModel.host.showDebugFormModelInspector();
       },
     );
   }

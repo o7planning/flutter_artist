@@ -42,12 +42,8 @@ class StageInitDataInfoWidget extends BaseInfoWidget {
       onPressed: stage.initData == null
           ? null
           : (BuildContext context) {
-        DataDebugDialog.show(
-          context: context,
-          title: '',
-          targetObject: stage.initData!,
-        );
-      },
+              stage.showDebugInitDataInspector();
+            },
     );
   }
 }

@@ -1,19 +1,27 @@
 part of '../core.dart';
 
 class XTaskFormModel<
-INIT_DATA extends TaskInitData, //
-RESULT_DATA extends TaskResultData> {
+    INIT_DATA extends TaskInitData, //
+    RESULT_DATA extends TaskResultData,
+    FORM_PATCH extends FormPatch> {
   XActivity get xActivity => xTask.xActivity;
 
-  final TaskFormModel formModel;
-  late final XTask<INIT_DATA, RESULT_DATA, FormPatch, FormOutput> xTask;
-  final FormPatch? formPatch;
+  final TaskFormModel<
+      INIT_DATA, //
+      RESULT_DATA,
+      FORM_PATCH,
+      FormOutput,
+      AdditionalFormRelatedData> formModel;
+  late final XTask<INIT_DATA, RESULT_DATA, FORM_PATCH, FormOutput> xTask;
+
+  final FORM_PATCH? formPatch;
 
   int get xModuleId => xActivity.xModuleId;
 
   String get name => xTask.name;
 
   bool loaded = false;
+
   FormLoadHint _formLoadHint = FormLoadHint.auto;
 
   FormLoadHint get formLoadHint => _formLoadHint;
@@ -63,13 +71,12 @@ RESULT_DATA extends TaskResultData> {
 
   // ***************************************************************************
 
-  FormModelPatchFormFieldsIntent
-  _createAndSetFormModelExecutionIntentPatchFormFields<
-  FORM_PATCH extends FormPatch>({
+  FormModelPatchFormFieldsIntent<FORM_PATCH>
+      _createAndSetFormModelExecutionIntentPatchFormFields({
     required FORM_PATCH formPatch,
   }) {
     final executionIntent =
-    FormModelPatchFormFieldsIntent(formPatch: formPatch);
+        FormModelPatchFormFieldsIntent<FORM_PATCH>(formPatch: formPatch);
     _executionIntent = executionIntent;
     return executionIntent;
   }
@@ -143,7 +150,8 @@ RESULT_DATA extends TaskResultData> {
           debug: debug,
           executionUnit: _TaskFormModelPatchFormFieldsExecutionUnit(
             xTaskFormModel: this,
-            executionIntent: _executionIntent as FormModelPatchFormFieldsIntent,
+            executionIntent:
+                _executionIntent as FormModelPatchFormFieldsIntent<FORM_PATCH>,
           ),
           info: finalDebugInfo,
         );

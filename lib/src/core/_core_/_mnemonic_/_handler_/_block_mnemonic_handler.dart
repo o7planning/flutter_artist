@@ -77,7 +77,7 @@ class _BlockMnemonicHandler {
 
       case MnemonicShortcut.edit:
         () async {
-          final result = await block._prepareFormToEditCurrentItem();
+          final result = await block.prepareFormToEditCurrentItem();
           final NavigationIntent? intent =
               screenNavigationContext?.editNavigationIntent;
           if (intent != null && context.mounted) {
@@ -133,15 +133,15 @@ class _BlockMnemonicHandler {
         return true;
 
       case MnemonicShortcut.debugFilterCriteria:
-        block.showDebugFilterCriteriaViewerDialog();
+        block.showDebugFilterCriteriaInspector();
         return true;
 
       case MnemonicShortcut.debugFilterModel:
-        block.showDebugFilterModelViewerDialog();
+        block.showDebugFilterModelInspector();
         return true;
 
       case MnemonicShortcut.debugFormModel:
-        block.showDebugFormModelInspectorDialog();
+        block.showDebugFormModelInspector();
         return true;
 
       default:

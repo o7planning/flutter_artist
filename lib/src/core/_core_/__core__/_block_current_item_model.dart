@@ -73,12 +73,13 @@ class BlockCurrentItemModel<
   // ***************************************************************************
 
   XBlockCurrentItemModel _createXBlockCurrentItemModel({
-    required XBlockFormModel<ID, ITEM_DETAIL>? xBlockFormModel,
+    required XBlockFormModel<ID, ITEM_DETAIL, FORM_PATCH>? xBlockFormModel,
   }) {
     return XBlockCurrentItemModel<
         ID, //
         ITEM,
-        ITEM_DETAIL>(
+        ITEM_DETAIL,
+        FORM_PATCH>(
       blockCurrentItemModel: this,
       xBlockFormModel: xBlockFormModel,
     );
@@ -274,6 +275,183 @@ class BlockCurrentItemModel<
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Prepares the block's [formModel] to edit the active [currentItem].
+  ///
+  /// - Runs [BlockItemEditPrecheck] first (blocking dataset-level stale,
+  ///   missing form/target, or business rule denial).
+  /// - When [forceReload] is `false` (default): refreshes [currentItem] only if
+  ///   item-level data is stale or missing, and loads the form only if it is not
+  ///   already loaded-fresh in edit mode; if both are already ready, skips all
+  ///   network calls and focuses the form immediately.
+  /// - When [forceReload] is `true`: forces a fresh reload of both [currentItemDetail]
+  ///   and [formModel].
+  @_ReturnExecutionUnitResultMethodAnnotation()
+  Future<BlockPrepareItemEditResult<ID, ITEM, ITEM_DETAIL>>
+      __prepareFormToEditCurrentItem({
+    required ExecutionTrace executionTrace,
+    required bool forceReload,
+  }) async {
+    final ITEM? targetItem = currentItem;
+    const bool checkBusyTrue = true;
+    const bool checkAllowTrue = true;
+
+    executionTrace.addNonControllableCall(
+      codeId: "#078000",
+      caller: this,
+      methodName: "_checkBeforeEditCurrentItemOnForm",
+      suffixShortDesc: "",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+        "checkAllow": checkAllowTrue,
+      },
+    );
+
+    final Actionable<BlockItemEditPrecheck> actionable =
+        _checkBeforeEditCurrentItemOnForm(
+      checkBusy: checkBusyTrue,
+      checkAllow: checkAllowTrue,
+    );
+
+    if (!actionable.yes) {
+      _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#078040",
+        prefixShortDesc: '_checkBeforeEditCurrentItemOnForm()',
+        module: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
+      return BlockPrepareItemEditResult<ID, ITEM, ITEM_DETAIL>(
+        precheck: actionable.errCode,
+        errorInfo: actionable.errorInfo,
+        targetItem: targetItem,
+        currentItem: currentItem,
+        formReady: false,
+      );
+    }
+
+    final ITEM validTargetItem = targetItem!;
+    final bool needRefreshItem = forceReload ||
+        dataState.isLoadedStale ||
+        _blockItemSyncSessionState != null ||
+        currentItemDetail == null;
+
+    final bool needLoadForm = forceReload ||
+        needRefreshItem ||
+        !formModel!.dataState.isLoadedFresh ||
+        formModel!.formMode != BlockFormMode.edit;
+
+    executionTrace.addInfo(
+      codeId: "#078100",
+      shortDesc: "Resolved edit preparation plan:",
+      parameters: {
+        "forceReload": forceReload,
+        "needRefreshItem": needRefreshItem,
+        "needLoadForm": needLoadForm,
+      },
+    );
+
+    // Case 1: Both currentItemDetail and FormModel are already fresh in edit mode.
+    // Skip ExecutionUnit queue and move keyboard focus directly to the form.
+    if (!needRefreshItem && !needLoadForm) {
+      executionTrace.addInfo(
+        codeId: "#078120",
+        shortDesc:
+            "Both currentItemDetail and formModel are already loaded-fresh in edit mode -> skip reload and focus form.",
+      );
+      _GlobalFocusGuard.requestFocusAfterExecution(
+        ActiveFocusRegion(
+          moduleName: shelf.name,
+          unitName: name,
+          regionType: FocusRegionType.blockFormView,
+        ),
+      );
+      _GlobalFocusGuard.onExecutionQueueCompleted();
+
+      return BlockPrepareItemEditResult<ID, ITEM, ITEM_DETAIL>(
+        precheck: null,
+        errorInfo: null,
+        targetItem: validTargetItem,
+        currentItem: currentItem,
+        formReady: true,
+      );
+    }
+
+    // Case 2 & 3: At least one of ItemDetail or FormModel needs to be loaded.
+    final XShelf xShelf = _XShelfBlockSetItemAsCurrent(block: block);
+    final thisXBlockCurrentItemModel =
+        xShelf.findXBlockCurrentItemModelByName(name)
+            as XBlockCurrentItemModel<ID, ITEM, ITEM_DETAIL, FORM_PATCH>;
+    final XBlockFormModel<ID, ITEM_DETAIL, FORM_PATCH> xBlockFormModel =
+        thisXBlockCurrentItemModel.xBlockFormModel!;
+
+    xBlockFormModel.focusFlag = true;
+
+    BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL,
+        FORM_PATCH>? setItemIntent;
+
+    if (needRefreshItem) {
+      // Step 1 (Refresh ItemDetail) -> Step 2 (Load FormModel via directive)
+      thisXBlockCurrentItemModel.setForceReloadCurrItem(true);
+      setItemIntent = thisXBlockCurrentItemModel
+          ._createAndSetBlockCurrentItemModelExecutionIntentSetCurrentItem(
+        setCurrentItemDirective:
+            BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm,
+        newQueriedList: const [],
+        inputCandidateCurrItem: validTargetItem,
+        forceReloadItem: true,
+        formLoadHint:
+            forceReload ? FormLoadHint.force : FormLoadHint.forceIfNeed,
+      );
+    } else {
+      // ItemDetail is already fresh; only load FormModel directly.
+      // TODO (Change to FormLoadHint.force): Need to decide after run Test Cases.
+      xBlockFormModel.setForceType(
+        forceReload ? FormLoadHint.force : FormLoadHint.forceIfNeed,
+      );
+      xBlockFormModel._createAndSetFormModelExecutionIntentLoad();
+    }
+
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
+    await FlutterArtist.executor._executeExecutionUnitQueue();
+
+    final BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>? setItemResult =
+        setItemIntent?.resultWrapper.result;
+    final FormModelDataLoadResult? formLoadResult =
+        xBlockFormModel._lastDataLoadIntent?.resultWrapper.result;
+
+    final ErrorInfo? combinedErrorInfo =
+        setItemResult?.errorInfo ?? formLoadResult?.errorInfo;
+
+    final bool formReady = combinedErrorInfo == null &&
+        currentItem?.id == validTargetItem.id &&
+        formModel!.dataState.isLoadedFresh &&
+        formModel!.formMode == BlockFormMode.edit;
+
+    final result = BlockPrepareItemEditResult<ID, ITEM, ITEM_DETAIL>(
+      precheck: null,
+      errorInfo: combinedErrorInfo,
+      targetItem: validTargetItem,
+      currentItem: currentItem,
+      formReady: formReady,
+    );
+
+    if (setItemResult != null) {
+      for (final step in setItemResult.journalSteps) {
+        result.recordStep(step);
+      }
+      if (setItemResult.nextResult != null) {
+        result.linkNextResult(setItemResult.nextResult!);
+      }
+    }
+
+    return result;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @_ExecutionUnitMethodAnnotation()
   @_BlockFormModelLoadDataAnnotation()
   @_BlockRefreshCurrentItemAnnotation()
@@ -284,10 +462,10 @@ class BlockCurrentItemModel<
   Future<void> _unitSetItemAsCurrent({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XBlockCurrentItemModel<ID, ITEM, ITEM_DETAIL>
+    required XBlockCurrentItemModel<ID, ITEM, ITEM_DETAIL, FORM_PATCH>
         thisXBlockCurrentItemModel,
     required final BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM,
-            ITEM_DETAIL>
+            ITEM_DETAIL, FORM_PATCH>
         executionIntent,
   }) async {
     __assertThisXBlockCurrentItemModel(thisXBlockCurrentItemModel);
@@ -335,8 +513,6 @@ class BlockCurrentItemModel<
       methodName: '_unitSetItemAsCurrent',
     );
     thisXBlock.attachToPredecessorIfAny(blockSetCurrentItemResult);
-    //
-    // In: _unitSetItemAsCurrent (??????????????????????????????????????????)
     //
     if (block.dataState.isPending || block.dataState.isLoadedStale) {
       // This case never runs in normal lifecycle
@@ -398,6 +574,7 @@ class BlockCurrentItemModel<
         finalItem: null,
         trigger: CurrentItemTransitionTrigger.resetToNull,
       );
+      blockSetCurrentItemResult.setCurrentItem(null);
 
       // Record cascaded state changes for child blocks
       for (final child in thisXBlock.childXBlocks) {
@@ -422,7 +599,7 @@ class BlockCurrentItemModel<
       return;
     }
     //
-    // OK, Now candidateCurrItem is NOT NULl.
+    // OK, now candidateCurrItem is NOT NULL.
     //
     final bool isCandidateCurrentItemInNewQueriedList =
         FaItemsUtils.isListContainItem<ITEM, ID>(
@@ -437,9 +614,13 @@ class BlockCurrentItemModel<
     final bool provideItemDetailContext = block.ui.hasItemContext(
       includeDescendants: true,
     );
-    final bool provideFormContext = block.ui.hasFormContext();
+    final bool provideFormContext = block.ui.hasFormContext() ||
+        (formModel != null &&
+            executionIntent.setCurrentItemDirective ==
+                BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm);
     final bool inputForceReloadItem =
-        thisXBlockCurrentItemModel.forceReloadCurrItem;
+        thisXBlockCurrentItemModel.forceReloadCurrItem ||
+            executionIntent.forceReloadItem;
     final bool currItemMaybeChanged =
         candidateCurrItem.id != currItemOrigin?.id;
     //
@@ -520,6 +701,7 @@ class BlockCurrentItemModel<
         item: null,
         itemDetail: null,
       );
+      blockSetCurrentItemResult.setCurrentItem(null);
       //
       for (final child in thisXBlock.childXBlocks) {
         blockSetCurrentItemResult.recordCascadedEviction(
@@ -652,6 +834,11 @@ class BlockCurrentItemModel<
             errorInfo: errorInfo,
           );
 
+          // Cancel pending form load/focus hints on item fetch failure
+          thisXBlockCurrentItemModel.xBlockFormModel?.focusFlag = false;
+          thisXBlockCurrentItemModel.xBlockFormModel
+              ?.setForceType(FormLoadHint.auto);
+
           executionTrace.addInfo(
             codeId: "#029000",
             shortDesc:
@@ -671,6 +858,9 @@ class BlockCurrentItemModel<
     // (***) STAGE 1: REMOTE NOT FOUND / EVICTION & FALLBACK HANDLING
     // ===========================================================================
     if (refreshedCurrentItemDetail == null) {
+      // Do not move focus to the form if the targeted item was evicted remotely
+      thisXBlockCurrentItemModel.xBlockFormModel?.focusFlag = false;
+
       executionTrace.addInfo(
         codeId: "#029040",
         shortDesc:
@@ -746,6 +936,7 @@ class BlockCurrentItemModel<
           item: null,
           itemDetail: null,
         );
+        blockSetCurrentItemResult.setCurrentItem(null);
         //
         if (formModel != null) {
           executionTrace.addInfo(
@@ -818,11 +1009,20 @@ class BlockCurrentItemModel<
           tipDocument: TipDocument.blockConvertItemDetailToItem,
         );
 
+        blockSetCurrentItemResult._setErrorInfo(
+          errorInfo: errorInfo,
+        );
+
         blockSetCurrentItemResult.recordItemOperationFailure(
           item: candidateCurrItem,
           operation: methodName,
           errorInfo: errorInfo,
         );
+
+        // Cancel pending form load/focus hints on item conversion failure
+        thisXBlockCurrentItemModel.xBlockFormModel?.focusFlag = false;
+        thisXBlockCurrentItemModel.xBlockFormModel
+            ?.setForceType(FormLoadHint.auto);
 
         executionTrace.addInfo(
           codeId: "#029440",
@@ -864,6 +1064,7 @@ class BlockCurrentItemModel<
         item: candidateCurrItem,
         itemDetail: refreshedCurrentItemDetail,
       );
+      blockSetCurrentItemResult.setCurrentItem(candidateCurrItem);
       //
       _resetBlockItemSyncSessionState(executionTrace: executionTrace);
     }
@@ -901,8 +1102,10 @@ class BlockCurrentItemModel<
       // Explicit directive demanding immediate Form Load
       if (executionIntent.setCurrentItemDirective ==
           BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm) {
+        final FormLoadHint targetHint =
+            executionIntent.formLoadHint ?? FormLoadHint.forceIfNeed;
         thisXBlock.xBlockCurrentItemModel.xBlockFormModel!
-            .setForceTypeIfLessThan(FormLoadHint.forceIfNeed);
+            .setForceTypeIfLessThan(targetHint);
 
         executionTrace.addExecutionIntent(
           codeId: "#029540",
@@ -919,8 +1122,6 @@ class BlockCurrentItemModel<
     // STAGE 4: CASCADE CHILD BLOCKS TO PENDING
     // ===========================================================================
     if (currentItemChanged) {
-      blockSetCurrentItemResult._currentItem = candidateCurrItem;
-
       executionTrace.addInfo(
         codeId: "#029640",
         shortDesc:
@@ -949,9 +1150,13 @@ class BlockCurrentItemModel<
   Future<void> _unitClearCurrentItem({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XBlockCurrentItemModel<ID, ITEM, ITEM_DETAIL>
+    required XBlockCurrentItemModel<ID, ITEM, ITEM_DETAIL, FORM_PATCH>
         thisXBlockCurrentItemModel,
-    required BlockCurrentItemModelClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
+    required BlockCurrentItemModelClearCurrentItemIntent<
+            ID, //
+            ITEM,
+            ITEM_DETAIL,
+            FORM_PATCH>
         executionIntent,
   }) async {
     __assertThisXBlockCurrentItemModel(thisXBlockCurrentItemModel);
@@ -970,7 +1175,7 @@ class BlockCurrentItemModel<
       shortDesc: "${debugObjHtml(this)} -> set currentItem to null.",
     );
     executionIntent.resultWrapper._setResult(
-      BlockClearCurrentItemResult(precheck: null),
+      BlockClearCurrentItemResult<ID, ITEM, ITEM_DETAIL>(precheck: null),
       objectCaller: this,
       methodName: '_unitClearCurrentItem',
     );
@@ -1009,10 +1214,10 @@ class BlockCurrentItemModel<
   Future<bool> _unitPrepareFormToCreateItem({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XBlockCurrentItemModel<ID, ITEM, ITEM_DETAIL>
+    required XBlockCurrentItemModel<ID, ITEM, ITEM_DETAIL, FORM_PATCH>
         thisXBlockCurrentItemModel,
     required BlockCurrentItemModelPrepareFormToCreateItemIntent<ID, ITEM,
-            ITEM_DETAIL>
+            ITEM_DETAIL, FORM_PATCH>
         executionIntent,
   }) async {
     __assertThisXBlockCurrentItemModel(thisXBlockCurrentItemModel);
@@ -1036,7 +1241,7 @@ class BlockCurrentItemModel<
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
-      PrepareItemCreationResult(),
+      BlockPrepareItemCreationResult<ID, ITEM, ITEM_DETAIL>(),
       objectCaller: this,
       methodName: '_unitPrepareFormToCreateItem',
     );
@@ -1090,7 +1295,7 @@ class BlockCurrentItemModel<
       // Delegate form initialization directly to the form model (creationPreset is resolved polymorphically)
       success = await formModel!._startNewFormActivity(
         executionTrace: executionTrace,
-        formPatch: executionIntent.formPatch as FORM_PATCH?,
+        formPatch: executionIntent.formPatch,
         activityType: activityType,
         formKeyInstantValuesInUI: null,
       );
@@ -1119,6 +1324,14 @@ class BlockCurrentItemModel<
             ),
           );
         }
+      } else {
+        final ErrorInfo? fatalErrorInfo = switch (formModel!.dataState) {
+          FormDataStateFatalError(:final errorInfo) => errorInfo,
+          _ => null,
+        };
+        if (fatalErrorInfo != null) {
+          executionResult._setErrorInfo(errorInfo: fatalErrorInfo);
+        }
       }
     } finally {
       __refreshPreparingFormCreationState(
@@ -1126,6 +1339,67 @@ class BlockCurrentItemModel<
       );
     }
     return success;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_BlockRefreshCurrentItemAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
+  Future<BlockRefreshCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
+      __refreshCurrentItem({
+    required ExecutionTrace executionTrace,
+    required FormContextAvailability formContextAvailability,
+  }) async {
+    final ITEM? targetItem = currentItem;
+    final bool checkBusyTrue = true;
+
+    executionTrace.addNonControllableCall(
+      codeId: "#069500",
+      caller: this,
+      methodName: "_checkBeforeRefreshCurrentItem",
+      suffixShortDesc: "",
+      parameters: {
+        "checkBusy": checkBusyTrue,
+      },
+    );
+
+    final Actionable<BlockRefreshCurrentItemPrecheck> actionable =
+        _checkBeforeRefreshCurrentItem(
+      checkBusy: checkBusyTrue,
+    );
+
+    if (!actionable.yes) {
+      _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#069520",
+        prefixShortDesc: '_checkBeforeRefreshCurrentItem()',
+        module: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
+      return BlockRefreshCurrentItemResult<ID, ITEM, ITEM_DETAIL>(
+        precheck: actionable.errCode,
+        targetItem: targetItem,
+        oldCurrentItem: targetItem,
+        currentItem: targetItem,
+      );
+    }
+
+    final BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL> internalResult =
+        await __dispatchSetItemAsCurrentAfterPrecheck(
+      executionTrace: executionTrace,
+      item: targetItem!,
+      forceLoadItem: true,
+      formContextAvailability: formContextAvailability,
+    );
+
+    return BlockRefreshCurrentItemResult<ID, ITEM,
+        ITEM_DETAIL>._fromSetCurrentItemResult(internalResult);
   }
 
   // ***************************************************************************
@@ -1140,18 +1414,22 @@ class BlockCurrentItemModel<
     required ITEM? item,
     required ErrCodeIfItemIsNull errCodeIfItemIsNull,
     required bool forceLoadItem,
-    required bool forceLoadForm,
+    required FormContextAvailability formContextAvailability,
   }) async {
-    final setCurrentItemDirective = forceLoadForm
-        ? BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm
-        : BlockSetCurrentItemDirective.setAnItemAsCurrent;
-    //
+    final bool effectiveWithFormContext =
+        formContextAvailability == FormContextAvailability.assumeAvailable &&
+            formModel != null;
+    final BlockSetCurrentItemDirective setCurrentItemDirective =
+        effectiveWithFormContext
+            ? BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm
+            : BlockSetCurrentItemDirective.setAnItemAsCurrent;
+
     executionTrace.addInfo(
       codeId: "#069000",
       shortDesc:
           "Calculated > @setCurrentItemDirective: ${debugObjHtml(setCurrentItemDirective)}",
     );
-    //
+
     final bool checkBusyTrue = true;
     executionTrace.addNonControllableCall(
       codeId: "#069100",
@@ -1163,19 +1441,16 @@ class BlockCurrentItemModel<
         "errCodeIfItemIsNull": errCodeIfItemIsNull,
       },
     );
-    //
-    // @Same-Code-Precheck-01
-    //
+
     final Actionable<BlockSetCurrentItemPrecheck> actionable =
         _checkBeforeSetItemAsCurrent(
       item: item,
       errCodeIfItemIsNull: errCodeIfItemIsNull,
       checkBusy: checkBusyTrue,
     );
-    //
+
     if (!actionable.yes) {
-      // _refreshErrorCount++
-      final ErrorInfo? errorInfo = _addErrorLogActionable(
+      _addErrorLogActionable(
         executionTrace: executionTrace,
         traceStepCodeId: "#069200",
         prefixShortDesc: '_checkBeforeSetItemAsCurrent()',
@@ -1184,7 +1459,6 @@ class BlockCurrentItemModel<
         showErrSnackBar: true,
         tipDocument: null,
       );
-      //
       return BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>(
         precheck: actionable.errCode,
         setCurrentItemDirective: setCurrentItemDirective,
@@ -1193,16 +1467,47 @@ class BlockCurrentItemModel<
         currentItem: currentItem,
       );
     }
-    //
+
+    return await __dispatchSetItemAsCurrentAfterPrecheck(
+      executionTrace: executionTrace,
+      item: item!,
+      forceLoadItem: forceLoadItem,
+      formContextAvailability: formContextAvailability,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  /// Dispatches the internal set-current-item execution unit after precheck passes.
+  ///
+  /// When [formContextAvailability] is [FormContextAvailability.assumeAvailable]
+  /// and this block has a [formModel], the execution
+  /// behaves as if a [BlockFormView] is actively visible (using [FormLoadHint.forceIfNeed]).
+  Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
+      __dispatchSetItemAsCurrentAfterPrecheck({
+    required ExecutionTrace executionTrace,
+    required ITEM item,
+    required bool forceLoadItem,
+    required FormContextAvailability formContextAvailability,
+  }) async {
+    final bool effectiveWithFormContext =
+        formContextAvailability == FormContextAvailability.assumeAvailable &&
+            formModel != null;
+    final BlockSetCurrentItemDirective setCurrentItemDirective =
+        effectiveWithFormContext
+            ? BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm
+            : BlockSetCurrentItemDirective.setAnItemAsCurrent;
+
     executionTrace.addInfo(
       codeId: "#069300",
       shortDesc: "Creating <b>_XShelfBlockSetItemAsCurrent</b>...",
     );
+
     final XShelf xShelf = _XShelfBlockSetItemAsCurrent(block: block);
-    //
     final thisXBlockCurrentItemModel =
         xShelf.findXBlockCurrentItemModelByName(name)
-            as XBlockCurrentItemModel<ID, ITEM, ITEM_DETAIL>;
+            as XBlockCurrentItemModel<ID, ITEM, ITEM_DETAIL, FORM_PATCH>;
 
     final executionIntent = thisXBlockCurrentItemModel
         ._createAndSetBlockCurrentItemModelExecutionIntentSetCurrentItem(
@@ -1210,14 +1515,45 @@ class BlockCurrentItemModel<
       newQueriedList: [],
       inputCandidateCurrItem: item,
       forceReloadItem: forceLoadItem,
-      formLoadHint: forceLoadForm //
-          ? FormLoadHint.force
+      formLoadHint: effectiveWithFormContext
+          ? FormLoadHint.forceIfNeed
           : FormLoadHint.auto,
     );
+
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
-    // Future<BlockSetCurrentItemResult<ID,ITEM,ITEM_DETAIL>>
     return executionIntent.result;
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockClearCurrentItemPrecheck> _checkBeforeClearCurrentItem({
+    required bool checkBusy,
+  }) {
+    return BlockClearCurrentItemPrecheckUtils.checkBeforeClearCurrentItem<ITEM>(
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      currentItem: currentItem,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockRefreshCurrentItemPrecheck> _checkBeforeRefreshCurrentItem({
+    required bool checkBusy,
+  }) {
+    return BlockRefreshCurrentItemPrecheckUtils.checkBeforeRefreshCurrentItem<
+        ITEM>(
+      currentItem: currentItem,
+      checkBusy: checkBusy,
+      isBusy: FlutterArtist.executor.isBusy,
+      findItemSameIdWith: (targetItem) =>
+          block.findItemSameIdWith(item: targetItem),
+    );
   }
 
   // ***************************************************************************
@@ -1242,20 +1578,6 @@ class BlockCurrentItemModel<
       __isPreparingFormCreation = isPreparingFormCreation;
       block.ui.refreshControlBars(force: true);
     } catch (e) {}
-  }
-
-  // ***************************************************************************
-
-  @_PrecheckPrivateMethod()
-  // @seeAlso: _checkBeforeSetItemAsCurrent()
-  Actionable<BlockSetCurrentItemPrecheck> _checkBeforeRefreshCurrentItem({
-    required bool checkBusy,
-  }) {
-    return _checkBeforeSetItemAsCurrent(
-      item: currentItem,
-      checkBusy: checkBusy,
-      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
-    );
   }
 
   // ***************************************************************************
@@ -1319,7 +1641,7 @@ class BlockCurrentItemModel<
   // ***************************************************************************
 
   ///
-  /// Allows edit current item or not according to the application logic.
+  /// Allows resetting the form or not...
   ///
   @_IsAllowPrivateMethodAnnotation()
   CheckAllowResult _checkFormResetAllowed() {
@@ -1371,7 +1693,6 @@ class BlockCurrentItemModel<
       isBusy: FlutterArtist.executor.isBusy,
       hasForm: formModel != null,
       blockDataState: block.dataState,
-      formDataState: formModel?.dataState,
       item: item,
       checkAllow: checkAllow,
       checkItemEditAllowed: (validItem) =>

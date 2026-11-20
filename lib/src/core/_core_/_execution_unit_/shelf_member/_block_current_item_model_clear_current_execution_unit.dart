@@ -3,9 +3,10 @@ part of '../../core.dart';
 @_ExecutionUnitClassAnnotation()
 @_BlockClearCurrentItemAnnotation()
 class _BlockCurrentItemModelClearCurrentExecutionUnit<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
+    ID extends Comparable, //
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>,
+    FORM_PATCH extends FormPatch> extends _ShelfMemberExecutionUnit {
   final XBlockCurrentItemModel xBlockCurrentItemModel;
 
   @override
@@ -15,9 +16,9 @@ ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
     required this.xBlockCurrentItemModel,
     required this.executionIntent,
   }) : super(
-    executionUnitType: ExecutionUnitType.blockClearCurrentItem,
-    executionIntent: executionIntent,
-  );
+          executionUnitType: ExecutionUnitType.blockClearCurrentItem,
+          executionIntent: executionIntent,
+        );
 
   @override
   XShelf get xShelf => xBlockCurrentItemModel.xBlock.xShelf;

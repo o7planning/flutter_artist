@@ -3,23 +3,23 @@ part of '../../core.dart';
 @_ExecutionUnitClassAnnotation()
 @_BlockPrepareFormToCreateItemAnnotation()
 class _BlockCurrentItemModelPrepareFormToCreateItemExecutionUnit<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>> extends _ShelfMemberExecutionUnit {
+    ID extends Comparable, //
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>,
+    FORM_PATCH extends FormPatch> extends _ShelfMemberExecutionUnit {
   final XBlockCurrentItemModel xBlockCurrentItemModel;
 
   @override
-  final BlockCurrentItemModelPrepareFormToCreateItemIntent<ID,
-      ITEM,
-      ITEM_DETAIL> executionIntent;
+  final BlockCurrentItemModelPrepareFormToCreateItemIntent<ID, ITEM,
+      ITEM_DETAIL, FORM_PATCH> executionIntent;
 
   _BlockCurrentItemModelPrepareFormToCreateItemExecutionUnit({
     required this.xBlockCurrentItemModel,
     required this.executionIntent,
   }) : super(
-    executionUnitType: ExecutionUnitType.blockPrepareToCreateItem,
-    executionIntent: executionIntent,
-  );
+          executionUnitType: ExecutionUnitType.blockPrepareToCreateItem,
+          executionIntent: executionIntent,
+        );
 
   @override
   XShelf get xShelf => xBlockCurrentItemModel.xBlock.xShelf;

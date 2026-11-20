@@ -1,9 +1,10 @@
 part of '../core.dart';
 
 class XBlock<
-ID extends Comparable, //
-ITEM extends Identifiable<ID>,
-ITEM_DETAIL extends Identifiable<ID>> {
+    ID extends Comparable, //
+    ITEM extends Identifiable<ID>,
+    ITEM_DETAIL extends Identifiable<ID>,
+    FORM_PATCH extends FormPatch> {
   XShelf get xShelf => xFilterModel.xShelf;
 
   int get xModuleId => xShelf.xModuleId;
@@ -31,7 +32,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
       FilterPatch,
       FilterCriteria,
       CreationPreset,
-      FormPatch> block;
+      FORM_PATCH> block;
 
   XBlock get rootXBlock {
     if (parentXBlock == null) {
@@ -49,7 +50,8 @@ ITEM_DETAIL extends Identifiable<ID>> {
   final XBlockCurrentItemModel<
       ID, //
       ITEM,
-      ITEM_DETAIL> xBlockCurrentItemModel;
+      ITEM_DETAIL,
+      FORM_PATCH> xBlockCurrentItemModel;
 
   List<XBlock> getDescendantXBlocks({required bool sameFilterOnly}) {
     final List<XBlock> ret = [];
@@ -82,8 +84,8 @@ ITEM_DETAIL extends Identifiable<ID>> {
   BlockAfterQueryDirective? __afterQueryDirective;
   Pageable? __pageable;
 
-  // TODO: Delete ít! ??????????????????????????????????????????????????????????
-  final queryResult = BlockQueryResult._();
+  // // TODO: Delete it!
+  // final queryResult = BlockQueryResult<ID, ITEM, ITEM_DETAIL>._();
 
   // ***************************************************************************
 
@@ -97,13 +99,13 @@ ITEM_DETAIL extends Identifiable<ID>> {
     switch (queryType) {
       case QueryType.realQuery:
         Pageable? usedPageable = block.effectiveConfig.nativeQueryMode ==
-            BlockNativeQueryMode.fullQuery
+                BlockNativeQueryMode.fullQuery
             ? null
             : (pageable ?? block.config.pageable);
         return usedPageable;
       case QueryType.emptyQuery:
         Pageable? usedPageable = block.effectiveConfig.nativeQueryMode ==
-            BlockNativeQueryMode.fullQuery
+                BlockNativeQueryMode.fullQuery
             ? null
             : block._blockData._emptyPageable;
         return usedPageable;
@@ -127,7 +129,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
   // ***************************************************************************
 
   BlockExecutionUnitResult<ID, ITEM, ITEM_DETAIL, dynamic>?
-  _pendingPredecessorResult;
+      _pendingPredecessorResult;
 
   void stagePredecessorResult(
       BlockExecutionUnitResult<ID, ITEM, ITEM_DETAIL, dynamic> result) {
@@ -208,7 +210,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
   }
 
   ListUpdateStrategy? get listUpdateStrategy {
-    // TODO: Xem lai gia tri mac dinh
+    // TODO: Review default value.
     return __listUpdateStrategy; // ?? ListUpdateStrategy.replace;
   }
 
@@ -298,7 +300,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
           executionUnit: _BlockQueryExecutionUnit<ID, ITEM, ITEM_DETAIL>(
             xBlock: this,
             executionIntent:
-            _executionIntent as BlockQueryIntent<ID, ITEM, ITEM_DETAIL>,
+                _executionIntent as BlockQueryIntent<ID, ITEM, ITEM_DETAIL>,
           ),
           info: finalDebugInfo,
         );
@@ -308,7 +310,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
           executionUnit: _BlockClearItemsExecutionUnit<ID, ITEM, ITEM_DETAIL>(
             xBlock: this,
             executionIntent: _executionIntent
-            as BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL>,
+                as BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL>,
           ),
           info: finalDebugInfo,
         );
@@ -318,7 +320,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
           executionUnit: _BlockItemDeletionExecutionUnit<ID, ITEM, ITEM_DETAIL>(
             xBlock: this,
             executionIntent: _executionIntent
-            as BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>,
+                as BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>,
           ),
           info: finalDebugInfo,
         );
@@ -326,10 +328,10 @@ ITEM_DETAIL extends Identifiable<ID>> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit:
-          _BlockMultiItemDeletionExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+              _BlockMultiItemDeletionExecutionUnit<ID, ITEM, ITEM_DETAIL>(
             xBlock: this,
             executionIntent: _executionIntent
-            as BlockDeleteItemsIntent<ID, ITEM, ITEM_DETAIL>,
+                as BlockDeleteItemsIntent<ID, ITEM, ITEM_DETAIL>,
           ),
           info: finalDebugInfo,
         );
@@ -337,10 +339,10 @@ ITEM_DETAIL extends Identifiable<ID>> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit:
-          _BlockQuickItemUpdateExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+              _BlockQuickItemUpdateExecutionUnit<ID, ITEM, ITEM_DETAIL>(
             xBlock: this,
             executionIntent: _executionIntent
-            as BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>,
+                as BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>,
           ),
           info: finalDebugInfo,
         );
@@ -348,10 +350,10 @@ ITEM_DETAIL extends Identifiable<ID>> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit:
-          _BlockQuickItemCreationExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+              _BlockQuickItemCreationExecutionUnit<ID, ITEM, ITEM_DETAIL>(
             xBlock: this,
             executionIntent: _executionIntent
-            as BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>,
+                as BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>,
           ),
           info: finalDebugInfo,
         );
@@ -359,10 +361,10 @@ ITEM_DETAIL extends Identifiable<ID>> {
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit:
-          _BlockBackendActionExecutionUnit<ID, ITEM, ITEM_DETAIL>(
+              _BlockBackendActionExecutionUnit<ID, ITEM, ITEM_DETAIL>(
             xBlock: this,
             executionIntent: _executionIntent
-            as BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL>,
+                as BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL>,
           ),
           info: finalDebugInfo,
         );
@@ -393,7 +395,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
   // ***************************************************************************
 
   BlockQueryIntent<ID, ITEM, ITEM_DETAIL>
-  _createAndSetBlockExecutionIntentQuery({
+      _createAndSetBlockExecutionIntentQuery({
     bool isQueryMoreFlow = false,
   }) {
     final executionIntent = BlockQueryIntent<ID, ITEM, ITEM_DETAIL>(
@@ -404,7 +406,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
   }
 
   BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>
-  _createAndSetBlockExecutionIntentDeleteItem({
+      _createAndSetBlockExecutionIntentDeleteItem({
     required ITEM item,
   }) {
     final executionIntent = BlockDeleteItemIntent<ID, ITEM, ITEM_DETAIL>(
@@ -415,7 +417,7 @@ ITEM_DETAIL extends Identifiable<ID>> {
   }
 
   BlockDeleteItemsIntent<ID, ITEM, ITEM_DETAIL>
-  _createAndSetBlockExecutionIntentDeleteItems({
+      _createAndSetBlockExecutionIntentDeleteItems({
     required List<ITEM> items,
     required bool stopIfError,
   }) {
@@ -431,33 +433,33 @@ ITEM_DETAIL extends Identifiable<ID>> {
     required BlockBackendAction<ID> action,
   }) {
     final executionIntent =
-    BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL>(action: action);
+        BlockBackendActionIntent<ID, ITEM, ITEM_DETAIL>(action: action);
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
   BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>
-  _createAndSetBlockQuickItemUpdate({
+      _createAndSetBlockQuickItemUpdate({
     required BlockQuickItemUpdateAction<ID, ITEM, ITEM_DETAIL> action,
   }) {
     final executionIntent =
-    BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>(action: action);
+        BlockQuickItemUpdateIntent<ID, ITEM, ITEM_DETAIL>(action: action);
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
   BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>
-  _createAndSetBlockQuickItemCreation({
+      _createAndSetBlockQuickItemCreation({
     required BlockQuickItemCreationAction<ID, ITEM, ITEM_DETAIL> action,
   }) {
     final executionIntent =
-    BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>(action: action);
+        BlockQuickItemCreationIntent<ID, ITEM, ITEM_DETAIL>(action: action);
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
   BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL>
-  _createAndSetBlockExecutionIntentClearItems() {
+      _createAndSetBlockExecutionIntentClearItems() {
     final executionIntent = BlockClearItemsIntent<ID, ITEM, ITEM_DETAIL>();
     _executionIntent = executionIntent;
     return executionIntent;

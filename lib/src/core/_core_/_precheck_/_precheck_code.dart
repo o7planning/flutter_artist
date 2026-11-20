@@ -49,4 +49,9 @@ enum PrecheckCode {
   noNextStage,
   noViewingStage,
   isNotViewingStage,
+  noContextData,
+  noActiveModule,
+  noInitData,
+  noResultData,
+  stageNotInActiveRoute, noData,
 }

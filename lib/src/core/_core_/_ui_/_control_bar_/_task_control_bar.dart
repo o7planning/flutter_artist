@@ -179,7 +179,7 @@ class _TaskControlBarState extends _BaseControlBarState<
           onAction: false,
           onPressed: actionable.yes
               ? () async {
-                  await widget.task.showDebugFormModelInspectorDialog();
+                  await widget.task.showDebugFormModelInspector();
                 }
               : null,
         );
@@ -223,7 +223,7 @@ class _TaskControlBarState extends _BaseControlBarState<
 
   @override
   void checkAndFreeMemory() =>
-      FlutterArtist.desk._checkToRemoveActivity(widget.task.activity);
+      FlutterArtist.storage.desk._checkToRemoveActivity(widget.task.activity);
 
   @override
   void executeAfterBuild() {}

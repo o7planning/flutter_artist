@@ -11,7 +11,8 @@ void main() {
       final result =
           BlockBackendActionPrecheckUtils.checkBeforeExecuteBackendAction(
         checkBusy: true,
-        isBusy: true, // System is busy
+        isBusy: true,
+        // System is busy
         blockDataState: defaultBlockDataState,
         checkAllow: true,
         checkBackendActionAllowed: () => CheckAllowResult.allowed(),
@@ -27,7 +28,8 @@ void main() {
           BlockBackendActionPrecheckUtils.checkBeforeExecuteBackendAction(
         checkBusy: true,
         isBusy: false,
-        blockDataState: const BlockDataStateNone(), // Block in none state
+        blockDataState: const BlockDataStateNone(),
+        // Block in none state
         checkAllow: true,
         checkBackendActionAllowed: () => CheckAllowResult.allowed(),
       );
@@ -46,7 +48,8 @@ void main() {
           BlockBackendActionPrecheckUtils.checkBeforeExecuteBackendAction(
         checkBusy: true,
         isBusy: false,
-        blockDataState: const BlockDataStatePending(), // Block in pending state
+        blockDataState: const BlockDataStatePending(),
+        // Block in pending state
         checkAllow: true,
         checkBackendActionAllowed: () => CheckAllowResult.allowed(),
       );
@@ -64,8 +67,8 @@ void main() {
           BlockBackendActionPrecheckUtils.checkBeforeExecuteBackendAction(
         checkBusy: true,
         isBusy: false,
-        blockDataState:
-            BlockDataStateLoadedStale.event(), // Block in stale state
+        blockDataState: BlockDataStateLoadedStale.event(),
+        // Block in stale state
         checkAllow: true,
         checkBackendActionAllowed: () => CheckAllowResult.allowed(),
       );
@@ -140,7 +143,8 @@ void main() {
           BlockBackendActionPrecheckUtils.checkBeforeExecuteBackendAction(
         checkBusy: true,
         isBusy: false,
-        blockDataState: defaultBlockDataState, // Loaded fresh
+        blockDataState: defaultBlockDataState,
+        // Loaded fresh
         checkAllow: true,
         checkBackendActionAllowed: () => CheckAllowResult.allowed(),
       );

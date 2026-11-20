@@ -67,7 +67,7 @@ class _StorageSectionViewState
 
   @override
   String getDebugLabel() {
-    return "StorageSessionView()";
+    return "StorageSectionView()";
   }
 
   @override
@@ -77,7 +77,8 @@ class _StorageSectionViewState
 
   @override
   List<_QuickSuggestionButton> createQuickSuggestionButtons(
-      BuildContext context,) {
+    BuildContext context,
+  ) {
     return [];
   }
 
@@ -98,9 +99,7 @@ class _StorageSectionViewState
 
   @override
   void checkAndFreeMemory() {
-    // for (Shelf shelf in widget.shelves) {
-    //   FlutterArtist.storage._checkToRemoveShelf(shelf);
-    // }
+    // Do nothing.
   }
 
   @override

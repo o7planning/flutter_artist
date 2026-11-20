@@ -2,15 +2,21 @@ part of '../core.dart';
 
 /// Runtime operational context wrapper for individual [Stage] instances inside a [Prozess].
 class XStage<
-STAGE_ENUM extends StageEnum,
-STAGE_INIT_DATA extends StageInitData,
-STAGE_RESULT_DATA extends StageResultData,
-PROZESS_CONTEXT_DATA extends ProzessContextData,
-FORM_PATCH extends FormPatch,
-FORM_OUTPUT extends FormOutput> {
+    STAGE_ENUM extends StageEnum,
+    STAGE_INIT_DATA extends StageInitData,
+    STAGE_RESULT_DATA extends StageResultData,
+    PROZESS_CONTEXT_DATA extends ProzessContextData,
+    FORM_PATCH extends FormPatch,
+    FORM_OUTPUT extends FormOutput> {
   final XProzess xProzess;
 
-  final XStageFormModel? xStageFormModel;
+  final XStageFormModel<
+      STAGE_ENUM, //
+      STAGE_INIT_DATA,
+      STAGE_RESULT_DATA,
+      PROZESS_CONTEXT_DATA,
+      FORM_PATCH,
+      FORM_OUTPUT>? xStageFormModel;
 
   final Stage<
       STAGE_ENUM, //
@@ -53,12 +59,6 @@ FORM_OUTPUT extends FormOutput> {
       PROZESS_CONTEXT_DATA,
       dynamic,
       dynamic>? get executionIntent => _executionIntent;
-
-  final stageRestartResult = StageRestartResult<
-      STAGE_ENUM, //
-      STAGE_INIT_DATA,
-      STAGE_RESULT_DATA,
-      PROZESS_CONTEXT_DATA>(precheck: null);
 
   XStage._({
     required this.xProzess,
@@ -148,30 +148,22 @@ FORM_OUTPUT extends FormOutput> {
       case StageExecutionAction.restart:
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _StageRestartExecutionUnit<STAGE_ENUM,
-              STAGE_INIT_DATA,
-              STAGE_RESULT_DATA,
-              PROZESS_CONTEXT_DATA>(
+          executionUnit: _StageRestartExecutionUnit<STAGE_ENUM, STAGE_INIT_DATA,
+              STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
             xStage: this,
             executionIntent: _executionIntent as StageRestartIntent<STAGE_ENUM,
-                STAGE_INIT_DATA,
-                STAGE_RESULT_DATA,
-                PROZESS_CONTEXT_DATA>,
+                STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>,
           ),
           info: finalDebugInfo,
         );
       case StageExecutionAction.submit:
         return NxtExecutionUnit.yes(
           debug: debug,
-          executionUnit: _StageSubmitExecutionUnit<STAGE_ENUM,
-              STAGE_INIT_DATA,
-              STAGE_RESULT_DATA,
-              PROZESS_CONTEXT_DATA>(
+          executionUnit: _StageSubmitExecutionUnit<STAGE_ENUM, STAGE_INIT_DATA,
+              STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>(
             xStage: this,
             executionIntent: _executionIntent as StageSubmitIntent<STAGE_ENUM,
-                STAGE_INIT_DATA,
-                STAGE_RESULT_DATA,
-                PROZESS_CONTEXT_DATA>,
+                STAGE_INIT_DATA, STAGE_RESULT_DATA, PROZESS_CONTEXT_DATA>,
           ),
           info: finalDebugInfo,
         );

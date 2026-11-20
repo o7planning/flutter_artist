@@ -29,7 +29,6 @@ class _TaskFormViewBuilderState
     return widget.formModel.task.activity;
   }
 
-
   @override
   FocusRegionType getRegionType() {
     return FocusRegionType.taskFormView;
@@ -39,7 +38,6 @@ class _TaskFormViewBuilderState
   String getUnitName() {
     return widget.formModel.task.name;
   }
-
 
   @override
   BlockViewContext? get blockViewContext => null;
@@ -58,20 +56,20 @@ class _TaskFormViewBuilderState
 
   @override
   Future<bool> handleSaveOnPop() async {
-    // final TaskSubmitExecutionResult result =
-    //     await widget.formModel.task.submit();
-    // return result.precheck == null && result.successForFirst;
     throw UnimplementedError("TODO: handleSaveOnPop");
   }
 
   @override
   void checkAndFreeMemory() {
-    FlutterArtist.desk._checkToRemoveActivity(widget.formModel.task.activity);
+    FlutterArtist.storage.desk
+        ._checkToRemoveActivity(widget.formModel.task.activity);
   }
 
   @override
-  KeyEventResult handleFormMnemonicKeyEvent(BuildContext context,
-      KeyEvent event,) {
+  KeyEventResult handleFormMnemonicKeyEvent(
+    BuildContext context,
+    KeyEvent event,
+  ) {
     return _TaskMnemonicHandler.handleKeyEvent(
       context: context,
       task: widget.formModel.task,
@@ -79,7 +77,6 @@ class _TaskFormViewBuilderState
       event: event,
     );
   }
-
 
   @override
   String getDebugLabel() {

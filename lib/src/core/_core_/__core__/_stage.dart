@@ -447,10 +447,7 @@ abstract class Stage<
 
   /// Triggers resolution of stage baseline data through the execution queue.
   Future<
-      StageRestartResult<
-          STAGE_ENUM, //
-          INIT_DATA,
-          RESULT_DATA,
+      StageRestartResult<STAGE_ENUM, INIT_DATA, RESULT_DATA,
           PROZESS_CONTEXT_DATA>> _restartAfterPrecheckSuccessful() async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
@@ -460,17 +457,19 @@ abstract class Stage<
     );
 
     final XActivity xActivity = _XActivityStageRestart(stage: this);
+    final thisXStage = xActivity.findXStageByName(name) as XStage<STAGE_ENUM,
+        INIT_DATA, RESULT_DATA, PROZESS_CONTEXT_DATA, FORM_PATCH, FORM_OUTPUT>;
+    final StageRestartIntent<
+            STAGE_ENUM, //
+            INIT_DATA,
+            RESULT_DATA,
+            PROZESS_CONTEXT_DATA> executionIntent =
+        thisXStage._createAndSetStageIntentRestart();
+
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xActivity);
     await FlutterArtist.executor._executeExecutionUnitQueue();
 
-    final thisXStage = xActivity.findXStageByName(name) as XStage<
-        STAGE_ENUM, //
-        INIT_DATA,
-        RESULT_DATA,
-        PROZESS_CONTEXT_DATA,
-        FORM_PATCH,
-        FORM_OUTPUT>;
-    return thisXStage.stageRestartResult;
+    return executionIntent.result;
   }
 
   // ===========================================================================
@@ -493,10 +492,21 @@ abstract class Stage<
 
   // ***************************************************************************
 
-  @_PrecheckPrivateMethod()
-  Actionable<StageFormEnablePrecheck> checkFormEnable({
-    bool checkAllow = true,
-  }) {
+  @_PrecheckMethod()
+  Actionable<ShowStageInitDataInspectorPrecheck>
+      checkBeforeShowInitDataInspector() {
+    return ShowStageInitDataInspectorPrecheckUtils
+        .checkBeforeShowInitDataInspector(
+      stageRouteStatus: stageRouteStatus,
+      hasInitData: initData != null,
+      loggedInUser: FlutterArtist.loggedInUser,
+    );
+  }
+
+  // ***************************************************************************
+
+  @_PrecheckMethod()
+  Actionable<StageFormEnablePrecheck> checkFormEnable() {
     final int? targetStageOrder = stageId.stageOrder;
     final int? viewingStageOrder = prozess.viewingStage?.stageId.stageOrder;
 
@@ -529,19 +539,74 @@ abstract class Stage<
   @override
   @_RootMethodAnnotation()
   Future<Actionable<ShowFormModelInspectorPrecheck>>
-      showDebugFormModelInspectorDialog() async {
+      showDebugFormModelInspector({
+    bool showErrorSnackBar = true,
+  }) async {
     final actionable = checkBeforeShowFormModelInspector();
     if (!actionable.yes) {
-      final ShowFormModelInspectorPrecheck err = actionable.errCode!;
-      showErrorSnackBar(
-        message: err.message,
-        errorDetails: err.details,
-      );
+      if (showErrorSnackBar) {
+        final ShowFormModelInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
       return actionable;
     }
-    return await formModel!.showDebugFormModelInspectorDialog(
+    return await formModel!.showDebugFormModelInspector(
       locationInfo: getClassNameWithoutGenerics(this),
+      showErrorSnackBar: showErrorSnackBar,
     );
+  }
+
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowStageInitDataInspectorPrecheck>>
+      showDebugInitDataInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final actionable = checkBeforeShowInitDataInspector();
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowStageInitDataInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
+    }
+    final BuildContext context = FlutterArtistCore.context;
+    await DataDebugDialog.show(
+      context: context,
+      title: '',
+      targetObject: initData!,
+    );
+    return actionable;
+  }
+
+  @_RootMethodAnnotation()
+  Future<Actionable<ShowStageResultDataInspectorPrecheck>>
+      showDebugResultDataInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    final actionable = checkBeforeShowResultDataInspector();
+    if (!actionable.yes) {
+      if (showErrorSnackBar) {
+        final ShowStageResultDataInspectorPrecheck err = actionable.errCode!;
+        this.showErrorSnackBar(
+          message: err.message,
+          errorDetails: err.details,
+        );
+      }
+      return actionable;
+    }
+    final BuildContext context = FlutterArtistCore.context;
+    await DataDebugDialog.show(
+      context: context,
+      title: '',
+      targetObject: submitResultData!,
+    );
+    return actionable;
   }
 
   bool isFormResetAllowed() {
@@ -567,6 +632,17 @@ abstract class Stage<
     return __checkBeforeResetForm(
       checkBusy: true,
       checkAllow: checkAllow,
+    );
+  }
+
+  @_PrecheckMethod()
+  Actionable<ShowStageResultDataInspectorPrecheck>
+      checkBeforeShowResultDataInspector() {
+    return ShowStageResultDataInspectorPrecheckUtils
+        .checkBeforeShowResultDataInspector(
+      stageRouteStatus: stageRouteStatus,
+      hasResultData: submitResultData != null,
+      loggedInUser: FlutterArtist.loggedInUser,
     );
   }
 

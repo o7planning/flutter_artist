@@ -1,5 +1,16 @@
 part of '_enums.dart';
 
+
+/// Identifies the architectural layer or trigger source that caused a LOV query failure.
+enum LovErrorOrigin {
+  /// Error occurred directly during `LovModel.performQuery()`.
+  directFetch,
+
+  /// Error originated from the LOV's own [FilterModel].
+  filterModel,
+}
+
+
 /// Categorizes the root architectural source or trigger layer that caused a query failure.
 enum BlockErrorOrigin {
   /// The failure originated directly from this block's own remote data fetch or execution method.

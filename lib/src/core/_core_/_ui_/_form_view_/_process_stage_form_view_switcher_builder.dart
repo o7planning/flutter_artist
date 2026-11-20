@@ -118,22 +118,21 @@ class _ProzessStageFormViewSwitcherBuilderState
     if (_stages.isEmpty) {
       return const ErrorMessageView(
         message:
-        "Configuration Error: No Stage form views were provided to the ProzessStageFormViewSwitcher container.",
+            "Configuration Error: No Stage form views were provided to the ProzessStageFormViewSwitcher container.",
       );
     }
     // 2. Validate prozess instance consistency across all stage form views.
     else if (_prozesses.length > 1) {
       return const ErrorMessageView(
         message:
-        "Architectural Violation: All configured Stage form views must belong to the exact same Prozess instance.",
+            "Architectural Violation: All configured Stage form views must belong to the exact same Prozess instance.",
       );
     }
     // 3. Validate duplicate stage form definitions.
     else if (_duplicatedStage != null) {
       return ErrorMessageView(
         message:
-        "Configuration Error: Duplicate Stage form for '${getClassName(
-            _duplicatedStage)}' detected inside ProzessStageFormViewSwitcher.",
+            "Configuration Error: Duplicate Stage form for '${getClassName(_duplicatedStage)}' detected inside ProzessStageFormViewSwitcher.",
       );
     }
 
@@ -187,8 +186,7 @@ class _ProzessStageFormViewSwitcherBuilderState
     if (activeFormWidget == null) {
       return ErrorMessageView(
         message:
-        "Configuration Error: No form view provided for active stage '${getClassName(
-            viewingStage)}'.",
+            "Configuration Error: No form view provided for active stage '${getClassName(viewingStage)}'.",
       );
     }
 
@@ -202,7 +200,7 @@ class _ProzessStageFormViewSwitcherBuilderState
   @override
   void checkAndFreeMemory() {
     for (final prozess in _prozesses) {
-      FlutterArtist.desk._checkToRemoveActivity(prozess.activity);
+      FlutterArtist.storage.desk._checkToRemoveActivity(prozess.activity);
     }
   }
 

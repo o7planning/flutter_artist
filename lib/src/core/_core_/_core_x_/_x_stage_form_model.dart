@@ -1,23 +1,32 @@
 part of '../core.dart';
 
 class XStageFormModel<
-STAGE_ENUM extends StageEnum,
-INIT_DATA extends StageInitData,
-RESULT_DATA extends StageResultData,
-PROZESS_CONTEXT_DATA extends ProzessContextData,
-FORM_PATCH extends FormPatch,
-FORM_OUTPUT extends FormOutput> {
+    STAGE_ENUM extends StageEnum,
+    INIT_DATA extends StageInitData,
+    RESULT_DATA extends StageResultData,
+    PROZESS_CONTEXT_DATA extends ProzessContextData,
+    FORM_PATCH extends FormPatch,
+    FORM_OUTPUT extends FormOutput> {
   XActivity get xActivity => xStage.xProzess.xActivity;
 
-  final StageFormModel formModel;
-  late final XStage<StageEnum,
+  final StageFormModel<
+      STAGE_ENUM, //
       INIT_DATA,
       RESULT_DATA,
-      ProzessContextData,
+      PROZESS_CONTEXT_DATA,
+      FORM_PATCH,
+      FORM_OUTPUT,
+      AdditionalFormRelatedData> formModel;
+
+  late final XStage<
+      STAGE_ENUM, //
+      INIT_DATA,
+      RESULT_DATA,
+      PROZESS_CONTEXT_DATA,
       FORM_PATCH,
       FORM_OUTPUT> xStage;
 
-  final FormPatch? formPatch;
+  final FORM_PATCH? formPatch;
 
   int get xModuleId => xActivity.xModuleId;
 
@@ -73,13 +82,12 @@ FORM_OUTPUT extends FormOutput> {
 
   // ***************************************************************************
 
-  FormModelPatchFormFieldsIntent
-  _createAndSetFormModelExecutionIntentPatchFormFields<
-  FORM_PATCH extends FormPatch>({
+  FormModelPatchFormFieldsIntent<FORM_PATCH>
+      _createAndSetFormModelExecutionIntentPatchFormFields({
     required FORM_PATCH formPatch,
   }) {
     final executionIntent =
-    FormModelPatchFormFieldsIntent(formPatch: formPatch);
+        FormModelPatchFormFieldsIntent<FORM_PATCH>(formPatch: formPatch);
     _executionIntent = executionIntent;
     return executionIntent;
   }
@@ -151,7 +159,8 @@ FORM_OUTPUT extends FormOutput> {
           debug: debug,
           executionUnit: _StageFormModelPatchFormFieldsExecutionUnit(
             xStageFormModel: this,
-            executionIntent: _executionIntent as FormModelPatchFormFieldsIntent,
+            executionIntent:
+                _executionIntent as FormModelPatchFormFieldsIntent<FORM_PATCH>,
           ),
           info: finalDebugInfo,
         );

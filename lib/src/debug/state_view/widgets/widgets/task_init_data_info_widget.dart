@@ -42,12 +42,8 @@ class TaskInitDataInfoWidget extends BaseInfoWidget {
       onPressed: task.initData == null
           ? null
           : (BuildContext context) {
-        DataDebugDialog.show(
-          context: context,
-          title: '',
-          targetObject: task.initData!,
-        );
-      },
+              task.showDebugInitDataInspector();
+            },
     );
   }
 }

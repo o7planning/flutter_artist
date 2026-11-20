@@ -66,13 +66,12 @@ abstract class BlockFormModel<
 
   BlockFormModel({super.config});
 
-  // TODO: Hardcode.
-  bool get hasError => false;
+  bool get hasError => dataState.isFatalError;
 
-  XBlockFormModel<ID, ITEM_DETAIL> _createXBlockFormModel({
+  XBlockFormModel<ID, ITEM_DETAIL, FORM_PATCH> _createXBlockFormModel({
     required FORM_PATCH? formPatch,
   }) {
-    return XBlockFormModel<ID, ITEM_DETAIL>._(
+    return XBlockFormModel<ID, ITEM_DETAIL, FORM_PATCH>._(
       formModel: this,
       formPatch: formPatch,
     );
@@ -398,7 +397,8 @@ abstract class BlockFormModel<
     final thisFormDataState = dataState;
     final bool forceReloadForm = switch (thisXBlockFormModel.formLoadHint) {
       FormLoadHint.force => true,
-      FormLoadHint.forceIfNeed => (thisFormDataState.isPending ||
+      FormLoadHint.forceIfNeed => (thisFormDataState.isNone ||
+          thisFormDataState.isPending ||
           thisFormDataState.isFatalError ||
           thisFormDataState.isLoadedStale),
       FormLoadHint.auto => visibleX &&
@@ -414,6 +414,7 @@ abstract class BlockFormModel<
       return true;
     }
 
+    //
     final formPatch = thisXBlockFormModel.formPatch as FORM_PATCH?;
     final bool success = await _startNewFormActivity(
       executionTrace: executionTrace,
@@ -421,6 +422,25 @@ abstract class BlockFormModel<
       activityType: FormActivityType.startCreatingOrEditing,
       formKeyInstantValuesInUI: null,
     );
+
+    if (!success) {
+      final ErrorInfo? fatalErrorInfo = switch (dataState) {
+        FormDataStateFatalError(:final errorInfo) => errorInfo,
+        _ => null,
+      };
+      if (fatalErrorInfo != null) {
+        executionResult._setErrorInfo(errorInfo: fatalErrorInfo);
+      }
+    } else if (thisXBlockFormModel.focusFlag) {
+      _GlobalFocusGuard.requestFocusAfterExecution(
+        ActiveFocusRegion(
+          moduleName: shelf.name,
+          unitName: block.name,
+          regionType: FocusRegionType.blockFormView,
+        ),
+      );
+    }
+
     return success;
   }
 
@@ -455,7 +475,7 @@ abstract class BlockFormModel<
   Future<void> _unitSaveForm({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XBlockFormModel<ID, ITEM_DETAIL> thisXBlockFormModel,
+    required XBlockFormModel<ID, ITEM_DETAIL, FORM_PATCH> thisXBlockFormModel,
     required FormModelSaveIntent executionIntent,
   }) async {
     __assertThisXBlockFormModel(thisXBlockFormModel);
@@ -511,7 +531,7 @@ abstract class BlockFormModel<
     }
 
     try {
-      await block._processSaveActionRestResult(
+      final ErrorInfo? restErrorInfo = await block._processSaveActionRestResult(
         executionTrace: executionTrace,
         thisXBlock: thisXBlockFormModel.xBlockCurrentItemModel.xBlock,
         isNew: isNew,
@@ -520,6 +540,9 @@ abstract class BlockFormModel<
         result: result,
         item: block.currentItem,
       );
+      if (restErrorInfo != null) {
+        executionResult._setErrorInfo(errorInfo: restErrorInfo);
+      }
     } catch (e, stackTrace) {
       final ErrorInfo errorInfo = _handleError(
         module: shelf,
@@ -614,7 +637,7 @@ abstract class BlockFormModel<
     final XShelf xShelf = _XShelfBlockFormModelPatchFormFields(formModel: this);
     XBlock xBlock = xShelf.findXBlockByName(block.name)!;
     final executionIntent = xBlock.xBlockCurrentItemModel.xBlockFormModel!
-        ._createAndSetFormModelExecutionIntentPatchFormFields<FORM_PATCH>(
+        ._createAndSetFormModelExecutionIntentPatchFormFields(
             formPatch: formPatch);
 
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
@@ -632,7 +655,6 @@ abstract class BlockFormModel<
     );
     //
     final bool checkBusyTrue = true;
-    final bool checkAllowTrue = true;
     final bool checkValidateTrue = true;
 
     executionTrace.addNonControllableCall(

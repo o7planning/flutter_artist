@@ -174,7 +174,7 @@ abstract class Scalar<
 
   _ScalarSyncSessionState<ID>? _scalarSyncSessionState;
 
-  void _resetBlockSyncSessionState({
+  void _resetScalarSyncSessionState({
     required ExecutionTrace? executionTrace,
   }) {
     _scalarSyncSessionState = null;
@@ -278,7 +278,7 @@ abstract class Scalar<
   }) {
     if (_scalarSyncSessionState == null ||
         _scalarSyncSessionState!.filterCriteria != filterCriteria ||
-        _scalarSyncSessionState!.parentScalarValueId != _parent?.valueId) {
+        _scalarSyncSessionState!.parentScalarValueId != parentScalarValueId) {
       executionTrace.addInfo(
         codeId: "#113200",
         shortDesc:
@@ -317,7 +317,7 @@ abstract class Scalar<
     if (_scalarSyncSessionState != null) {
       final nextState = ScalarDataStateUtils.calculateNewLazyDataState(
         currentScalarDataState: dataState,
-        hasParentValue: _parent != null,
+        hasParentValue: _parent?.value != null,
         isRootScalar: isRoot,
         parentValueChanged: false,
         filterCriteriaChanged: false,
@@ -405,6 +405,7 @@ abstract class Scalar<
         showSnackBar: true,
         tipDocument: null,
       );
+      loadResult._setErrorInfo(errorInfo: errorInfo);
       executionTrace.addInfo(
         codeId: "#040300",
         shortDesc:
@@ -481,7 +482,7 @@ abstract class Scalar<
   Future<void> _unitClearValue({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XScalar thisXScalar,
+    required XScalar<ID, VALUE> thisXScalar,
     required ScalarClearValueIntent<ID, VALUE> executionIntent,
   }) async {
     __assertThisXScalar(thisXScalar);
@@ -522,7 +523,7 @@ abstract class Scalar<
   Future<void> _unitQuery({
     required ExecutionTrace executionTrace,
     required ExecutionUnitType executionUnitType,
-    required XScalar thisXScalar,
+    required XScalar<ID, VALUE> thisXScalar,
     required ScalarQueryIntent<ID, VALUE> executionIntent,
   }) async {
     __assertThisXScalar(thisXScalar);
@@ -539,7 +540,7 @@ abstract class Scalar<
     );
 
     final executionResult = executionIntent.resultWrapper._setResult(
-      ScalarQueryResult(precheck: null),
+      ScalarQueryResult<ID, VALUE>._(precheck: null),
       objectCaller: this,
       methodName: '_unitQuery',
     );
@@ -586,6 +587,7 @@ abstract class Scalar<
         shortDesc:
             "${debugObjHtml(filterModel)} error --> clear data of ${debugObjHtml(this)} and set to error.",
       );
+      executionResult._setFilterError();
       __stopQueryWithFilterErrorCascade(
         thisXScalar: thisXScalar,
         scalarErrorInfo: null,
@@ -632,7 +634,7 @@ abstract class Scalar<
       queryResultState = ActionResultState.success;
       newValue = result.data;
       newValueId = newValue?.id;
-      _resetBlockSyncSessionState(executionTrace: executionTrace);
+      _resetScalarSyncSessionState(executionTrace: executionTrace);
     } catch (e, stackTrace) {
       queryResultState = ActionResultState.fail;
 
@@ -738,7 +740,7 @@ abstract class Scalar<
   }) {
     _scalarDataState = scalarDataState;
     if (resetSyncSessionState) {
-      _resetBlockSyncSessionState(executionTrace: null);
+      _resetScalarSyncSessionState(executionTrace: null);
     }
     if (hasError) {
       _lastQueryResultState = ActionResultState.fail;
@@ -967,9 +969,12 @@ abstract class Scalar<
     required bool checkBusy,
     required bool checkAllow,
   }) {
+    // Remove condition: __lockAddMoreQuery
+    final bool isBusy = FlutterArtist.executor.isBusy;
+
     return ScalarQueryPrecheckUtils.checkBeforeQuery(
       checkBusy: checkBusy,
-      isBusy: FlutterArtist.executor.isBusy,
+      isBusy: isBusy,
       checkAllow: checkAllow,
       checkQueryAllowed: () => __checkQueryAllowed(),
     );
@@ -1035,10 +1040,12 @@ abstract class Scalar<
 
   @_RootMethodAnnotation()
   Future<Actionable<ShowFilterModelInspectorPrecheck>>
-      showDebugFilterModelViewerDialog() async {
-    return await registeredOrDefaultFilterModel
-        .showDebugFilterModelViewerDialog(
+      showDebugFilterModelInspector({
+    bool showErrorSnackBar = true,
+  }) async {
+    return await registeredOrDefaultFilterModel.showDebugFilterModelInspector(
       locationInfo: getClassNameWithoutGenerics(this),
+      showErrorSnackBar: showErrorSnackBar,
     );
   }
 
@@ -1051,10 +1058,13 @@ abstract class Scalar<
 
   @_RootMethodAnnotation()
   Future<Actionable<ShowFilterCriteriaInspectorPrecheck>>
-      showDebugFilterCriteriaViewerDialog() async {
+      showDebugFilterCriteriaInspector({
+    bool showErrorSnackBar = true,
+  }) async {
     return await registeredOrDefaultFilterModel
-        .showDebugFilterCriteriaViewerDialog(
+        .showDebugFilterCriteriaInspector(
       locationInfo: getClassNameWithoutGenerics(this),
+      showErrorSnackBar: showErrorSnackBar,
     );
   }
 
@@ -1099,13 +1109,66 @@ abstract class Scalar<
 
   @_RootMethodAnnotation()
   @_ScalarQueryAnnotation()
-  Future<ScalarQueryResult> query({FILTER_PATCH? filterPatch}) async {
+  Future<ScalarQueryResult<ID, VALUE>> query({
+    FILTER_PATCH? filterPatch,
+    FilterSyncDirective filterSyncDirective = FilterSyncDirective.useCommitted,
+  }) async {
+    if (filterModel != null && filterModel!.lockAddMoreQuery) {
+      // IMPORTANT: Silently ignored as a no-op success.
+      // Intentionally placed before CodeFlowLogger to suppress spurious
+      // onChanged callbacks triggered during programmatic patchValue().
+      return ScalarQueryResult<ID, VALUE>._(precheck: null);
+    }
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "query",
-      parameters: {"filterPatch": filterPatch},
+      parameters: {
+        "filterPatch": filterPatch,
+        "filterSyncDirective": filterSyncDirective,
+      },
       isLibMethod: true,
     );
+
+    const bool checkAllowTrue = true;
+    executionTrace.addNonControllableCall(
+      codeId: "#096000",
+      caller: this,
+      methodName: "checkBeforeQuery",
+      suffixShortDesc: "",
+      parameters: {
+        "checkAllow": checkAllowTrue,
+      },
+    );
+
+    final Actionable<ScalarQueryPrecheck> actionable = checkBeforeQuery(
+      checkAllow: checkAllowTrue,
+    );
+    if (!actionable.yes) {
+      _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#096100",
+        prefixShortDesc: 'checkBeforeQuery()',
+        module: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
+      final failResult = ScalarQueryResult<ID, VALUE>._(
+        precheck: actionable.errCode,
+      );
+      if (actionable.errorInfo != null) {
+        failResult._setErrorInfo(errorInfo: actionable.errorInfo!);
+      }
+      return failResult;
+    }
+
+    if (filterModel != null) {
+      filterModel!._applyFilterSyncDirective(
+        filterSyncDirective: filterSyncDirective,
+        filterPatch: filterPatch,
+      );
+    }
+
     final XShelf xShelf = _XShelfScalarQuery(
       scalar: this,
       filterPatch: filterPatch,
@@ -1113,7 +1176,7 @@ abstract class Scalar<
     FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
     await FlutterArtist.executor._executeExecutionUnitQueue();
 
-    XScalar xScalar = xShelf.findXScalarByName(name)!;
+    final xScalar = xShelf.findXScalarByName(name) as XScalar<ID, VALUE>;
     return xScalar.queryResult;
   }
 

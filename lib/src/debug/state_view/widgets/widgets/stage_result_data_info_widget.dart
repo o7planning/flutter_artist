@@ -43,11 +43,7 @@ class StageResultDataInfoWidget extends BaseInfoWidget {
       onPressed: stage.submitResultData == null
           ? null
           : (BuildContext context) {
-              DataDebugDialog.show(
-                context: context,
-                title: '',
-                targetObject: stage.submitResultData!,
-              );
+              stage.showDebugResultDataInspector();
             },
     );
   }

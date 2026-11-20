@@ -9,6 +9,8 @@ abstract class Action {
     required this.actionInfo,
   });
 
+  ActionKind get actionKind;
+
   ///
   /// Example:
   /// ```dart

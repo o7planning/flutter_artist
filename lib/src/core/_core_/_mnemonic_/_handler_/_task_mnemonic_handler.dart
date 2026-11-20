@@ -73,7 +73,7 @@ class _TaskMnemonicHandler {
         return KeyEventResult.handled;
 
       case MnemonicShortcut.debugFormModel:
-        task.showDebugFormModelInspectorDialog();
+        task.showDebugFormModelInspector();
         return KeyEventResult.handled;
 
       default:

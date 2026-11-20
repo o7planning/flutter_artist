@@ -57,11 +57,11 @@ class _ScalarMnemonicHandler {
         return true;
 
       case MnemonicShortcut.debugFilterCriteria:
-        scalar.showDebugFilterCriteriaViewerDialog();
+        scalar.showDebugFilterCriteriaInspector();
         return true;
 
       case MnemonicShortcut.debugFilterModel:
-        scalar.showDebugFilterModelViewerDialog();
+        scalar.showDebugFilterModelInspector();
         return true;
 
       default:

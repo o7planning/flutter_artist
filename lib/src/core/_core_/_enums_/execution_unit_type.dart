@@ -4,7 +4,7 @@ enum ExecutionUnitType {
   shelfQuery,
   shelfInternalReact,
   //
-  appBackendAction,
+  storageBackendAction,
   empty,
   //
   blockClearCurrentItem,

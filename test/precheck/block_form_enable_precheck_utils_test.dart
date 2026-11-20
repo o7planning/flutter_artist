@@ -26,7 +26,8 @@ void main() {
       final result = BlockFormEnablePrecheckUtils.checkFormEnable<String>(
         checkBusy: true,
         isBusy: false,
-        hasForm: false, // Form model is missing
+        hasForm: false,
+        // Form model is missing
         isStateReadyForForm: true,
         formDataState: null,
         currentItem: 'Item A',
@@ -43,7 +44,8 @@ void main() {
         checkBusy: true,
         isBusy: false,
         hasForm: true,
-        isStateReadyForForm: false, // State not ready
+        isStateReadyForForm: false,
+        // State not ready
         formDataState: defaultFormDataState,
         currentItem: 'Item A',
         checkAllow: true,

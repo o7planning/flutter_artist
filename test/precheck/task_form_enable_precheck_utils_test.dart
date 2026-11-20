@@ -12,7 +12,8 @@ void main() {
     test('Should return busy when checkBusy is true and isBusy is true', () {
       final result = TaskFormEnablePrecheckUtils.checkFormEnable(
         checkBusy: true,
-        isBusy: true, // System is busy
+        isBusy: true,
+        // System is busy
         hasForm: true,
         taskDataState: freshTaskDataState,
         formDataState: defaultFormDataState,
@@ -26,7 +27,8 @@ void main() {
       final result = TaskFormEnablePrecheckUtils.checkFormEnable(
         checkBusy: true,
         isBusy: false,
-        hasForm: false, // Form model is missing
+        hasForm: false,
+        // Form model is missing
         taskDataState: freshTaskDataState,
         formDataState: null,
       );
@@ -40,7 +42,8 @@ void main() {
         checkBusy: true,
         isBusy: false,
         hasForm: true,
-        taskDataState: pendingTaskDataState, // State is pending
+        taskDataState: pendingTaskDataState,
+        // State is pending
         formDataState: defaultFormDataState,
       );
 
@@ -53,7 +56,8 @@ void main() {
         checkBusy: true,
         isBusy: false,
         hasForm: true,
-        taskDataState: staleTaskDataState, // State is stale
+        taskDataState: staleTaskDataState,
+        // State is stale
         formDataState: defaultFormDataState,
       );
 
@@ -67,7 +71,8 @@ void main() {
         checkBusy: true,
         isBusy: false,
         hasForm: true,
-        taskDataState: successTaskDataState, // Submission attempted success
+        taskDataState: successTaskDataState,
+        // Submission attempted success
         formDataState: defaultFormDataState,
       );
 

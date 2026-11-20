@@ -1,9 +1,12 @@
 part of '../../core.dart';
 
-class ScalarQueryResult extends ExecutionUnitResult<ScalarQueryPrecheck> {
+class ScalarQueryResult<
+        ID extends Comparable, //
+        VALUE extends Identifiable<ID>>
+    extends ExecutionUnitResult<ScalarQueryPrecheck> {
   bool isFilterError = false;
 
-  ScalarQueryResult({required super.precheck});
+  ScalarQueryResult._({required super.precheck});
 
   void _setFilterError() {
     // _setPrecheck(ScalarQueryPrecheck.filterError);
@@ -15,7 +18,7 @@ class ScalarQueryResult extends ExecutionUnitResult<ScalarQueryPrecheck> {
     if (precheck != null) {
       return false;
     }
-    if (isFilterError != null) {
+    if (isFilterError) {
       return false;
     }
     return errorInfo == null;

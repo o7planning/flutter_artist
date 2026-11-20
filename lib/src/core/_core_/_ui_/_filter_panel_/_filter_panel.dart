@@ -38,23 +38,13 @@ abstract class FilterPanel<FILTER_MODEL extends FilterModel>
             padding: EdgeInsets.zero,
           ),
       onPressed: () {
-        showDebugFilterModelViewerDialog();
+        filterModel.showDebugFilterModelInspector();
       },
       child: Icon(
         FaIconConstants.filterModelDebugIconData,
         size: iconSize ?? 16,
         color: iconColor,
       ),
-    );
-  }
-
-  Future<void> showDebugFilterModelViewerDialog() async {
-    BuildContext context = FlutterArtistCore.context;
-    //
-    await DebugViewerDialog.openDebugFilterModelInspector(
-      context: context,
-      locationInfo: getClassName(this),
-      filterModel: filterModel,
     );
   }
 

@@ -5,37 +5,94 @@ import '../_precheck_/__precheck.dart';
 import '../_utils_/pageable_calculator.dart';
 import '../core.dart';
 
-part 'app_backend_action_precheck_utils.dart';
+part 'show_stage_init_data_inspector_precheck_utils.dart';
+
+part 'show_stage_result_data_inspector_precheck_utils.dart';
+
+part 'prozess_move_to_stage_precheck_utils.dart';
+
+part 'show_task_init_data_inspector_precheck_utils.dart';
+
+part 'show_task_result_data_inspector_precheck_utils.dart';
+
+part 'show_prozess_init_data_inspector_precheck_utils.dart';
+
+part 'show_debug_inspector_precheck_utils.dart';
+
+part 'show_prozess_context_data_inspector_precheck_utils.dart';
+
+part 'filter_model_query_precheck_utils.dart';
+
+part 'block_clear_current_item_precheck_utils.dart';
+
+part 'block_refresh_current_item_precheck_utils.dart';
+
+part 'block_query_empty_precheck_utils.dart';
+
+part 'storage_backend_action_precheck_utils.dart';
+
 part 'block_backend_action_precheck_utils.dart';
+
 part 'block_clear_items_precheck_utils.dart';
+
 part 'block_form_enable_precheck_utils.dart';
+
 part 'block_form_reset_precheck_utils.dart';
+
 part 'block_form_save_precheck_utils.dart';
+
 part 'block_item_creation_precheck_utils.dart';
+
 part 'block_item_deletion_precheck_utils.dart';
+
 part 'block_item_edit_precheck_utils.dart';
+
 part 'block_items_deletion_precheck_utils.dart';
+
 part 'block_query_precheck_utils.dart';
+
 part 'block_quick_item_creation_precheck_utils.dart';
+
 part 'block_quick_item_update_precheck_utils.dart';
+
 part 'block_set_current_item_precheck_utils.dart';
+
 part 'form_model_patch_form_fields_precheck_utils.dart';
+
 part 'process_move_to_next_stage_precheck_utils.dart';
+
 part 'process_move_to_previous_stage_precheck_utils.dart';
+
 part 'process_restart_precheck_utils.dart';
+
 part 'scalar_clear_value_precheck_utils.dart';
+
 part 'scalar_load_extra_data_precheck_utils.dart';
+
 part 'scalar_query_precheck_utils.dart';
+
 part 'shelf_deferred_event_precheck_utils.dart';
+
 part 'show_filter_criteria_inspector_precheck_utils.dart';
+
 part 'show_filter_model_inspector_precheck_utils.dart';
+
 part 'show_form_model_inspector_precheck_utils.dart';
+
 part 'stage_form_enable_precheck_utils.dart';
+
 part 'stage_form_reset_precheck_utils.dart';
+
 part 'stage_restart_precheck_utils.dart';
+
 part 'stage_rewind_precheck_utils.dart';
+
 part 'stage_submit_precheck_utils.dart';
+
 part 'task_form_enable_precheck_utils.dart';
+
 part 'task_form_reset_precheck_utils.dart';
+
 part 'task_restart_precheck_utils.dart';
+
 part 'task_submit_precheck_utils.dart';

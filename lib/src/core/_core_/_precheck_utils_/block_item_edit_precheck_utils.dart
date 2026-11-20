@@ -8,7 +8,6 @@ class BlockItemEditPrecheckUtils {
     required bool isBusy,
     required bool hasForm,
     required BlockDataState blockDataState,
-    required FormDataState? formDataState,
     required ITEM? item,
     required bool checkAllow,
     required CheckAllowResult Function(ITEM validItem) checkItemEditAllowed,
@@ -27,21 +26,15 @@ class BlockItemEditPrecheckUtils {
       );
     }
 
-    // 3. Check if form is in fatal error state directly from FormDataState
-    if (formDataState?.isFatalError ?? false) {
-      return Actionable<BlockItemEditPrecheck>.no(
-        errCode: BlockItemEditPrecheck.formInFatalErrorState,
-      );
-    }
-
-    // 4. Check if target item exists
+    // 3. Check if target item exists
     if (item == null) {
       return Actionable<BlockItemEditPrecheck>.no(
         errCode: BlockItemEditPrecheck.noTarget,
       );
     }
 
-    // 5. Check Block DataState constraints
+    // 4. Check Block DataState constraints (block-level stale is blocked;
+    // item-level stale is permitted and will be refreshed automatically)
     switch (blockDataState) {
       case BlockDataStateNone():
         return Actionable<BlockItemEditPrecheck>.no(
@@ -59,7 +52,7 @@ class BlockItemEditPrecheckUtils {
         break;
     }
 
-    // 6. Check business permission rules
+    // 5. Check business permission rules
     if (checkAllow) {
       final CheckAllowResult result = checkItemEditAllowed(item);
       switch (result.result) {

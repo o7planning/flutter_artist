@@ -3,15 +3,17 @@ part of '../core.dart';
 class XBlockCurrentItemModel<
     ID extends Comparable, //
     ITEM extends Identifiable<ID>,
-    ITEM_DETAIL extends Identifiable<ID>> {
+    ITEM_DETAIL extends Identifiable<ID>,
+    FORM_PATCH extends FormPatch> {
   String get name => blockCurrentItemModel.name;
 
   late final XBlock<
       ID, //
       ITEM,
-      ITEM_DETAIL> xBlock;
+      ITEM_DETAIL,
+      FORM_PATCH> xBlock;
 
-  final XBlockFormModel<ID, ITEM_DETAIL>? xBlockFormModel;
+  final XBlockFormModel<ID, ITEM_DETAIL, FORM_PATCH>? xBlockFormModel;
 
   XShelf get xShelf => xBlock.xShelf;
 
@@ -35,6 +37,7 @@ class XBlockCurrentItemModel<
       ID, //
       ITEM,
       ITEM_DETAIL,
+      FORM_PATCH,
       dynamic,
       ExecutionUnitResult<dynamic>>? _stashedIntent;
 
@@ -42,13 +45,15 @@ class XBlockCurrentItemModel<
       ID, //
       ITEM,
       ITEM_DETAIL,
+      FORM_PATCH,
       dynamic,
       ExecutionUnitResult<dynamic>>? _executionIntent;
 
   BlockCurrentItemModelSetCurrentItemIntent<
       ID, //
       ITEM,
-      ITEM_DETAIL>? _pendingSetCurrentItemIntent;
+      ITEM_DETAIL,
+      FORM_PATCH>? _pendingSetCurrentItemIntent;
 
   final BlockCurrentItemModel<
       ID, //
@@ -57,7 +62,7 @@ class XBlockCurrentItemModel<
       FilterPatch,
       FilterCriteria,
       CreationPreset,
-      FormPatch> blockCurrentItemModel;
+      FORM_PATCH> blockCurrentItemModel;
 
   XBlockCurrentItemModel({
     required this.blockCurrentItemModel,
@@ -116,7 +121,6 @@ class XBlockCurrentItemModel<
     if (output.missingIntent == MissingIntentType.setItemAsCurrent) {
       final intentToUse =
           _createAndSetBlockCurrentItemModelExecutionIntentSetCurrentItem(
-        // Giữ lại bản ghi hiện tại, chỉ load lại dữ liệu (forceReloadItem = true)
         setCurrentItemDirective:
             BlockSetCurrentItemDirective.setAnItemAsCurrent,
         newQueriedList: const [],
@@ -142,11 +146,11 @@ class XBlockCurrentItemModel<
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _BlockCurrentItemModelSetItemAsCurrentExecutionUnit<ID,
-              ITEM, ITEM_DETAIL>(
+              ITEM, ITEM_DETAIL, FORM_PATCH>(
             xBlockCurrentItemModel: this,
             executionIntent: _executionIntent
                 as BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM,
-                    ITEM_DETAIL>,
+                    ITEM_DETAIL, FORM_PATCH>,
           ),
           info: finalDebugInfo,
         );
@@ -154,11 +158,11 @@ class XBlockCurrentItemModel<
         return NxtExecutionUnit.yes(
           debug: debug,
           executionUnit: _BlockCurrentItemModelClearCurrentExecutionUnit<ID,
-              ITEM, ITEM_DETAIL>(
+              ITEM, ITEM_DETAIL, FORM_PATCH>(
             xBlockCurrentItemModel: this,
             executionIntent: _executionIntent
                 as BlockCurrentItemModelClearCurrentItemIntent<ID, ITEM,
-                    ITEM_DETAIL>,
+                    ITEM_DETAIL, FORM_PATCH>,
           ),
           info: finalDebugInfo,
         );
@@ -167,11 +171,11 @@ class XBlockCurrentItemModel<
           debug: debug,
           executionUnit:
               _BlockCurrentItemModelPrepareFormToCreateItemExecutionUnit<ID,
-                  ITEM, ITEM_DETAIL>(
+                  ITEM, ITEM_DETAIL, FORM_PATCH>(
             xBlockCurrentItemModel: this,
             executionIntent: _executionIntent
                 as BlockCurrentItemModelPrepareFormToCreateItemIntent<ID, ITEM,
-                    ITEM_DETAIL>,
+                    ITEM_DETAIL, FORM_PATCH>,
           ),
           info: finalDebugInfo,
         );
@@ -186,12 +190,13 @@ class XBlockCurrentItemModel<
   void _createAndSetBlockCurrentItemModelExecutionIntentDone({
     required String lastIntentInfo,
   }) {
-    _executionIntent = BlockCurrentItemModelDoneIntent<ID, ITEM, ITEM_DETAIL>(
+    _executionIntent =
+        BlockCurrentItemModelDoneIntent<ID, ITEM, ITEM_DETAIL, FORM_PATCH>(
       lastIntentInfo: lastIntentInfo,
     );
   }
 
-  BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
+  BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL, FORM_PATCH>
       _createAndSetBlockCurrentItemModelExecutionIntentSetCurrentItem({
     required BlockSetCurrentItemDirective setCurrentItemDirective,
     required List<ITEM> newQueriedList,
@@ -199,8 +204,8 @@ class XBlockCurrentItemModel<
     required bool forceReloadItem,
     required FormLoadHint? formLoadHint,
   }) {
-    final executionIntent =
-        BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM, ITEM_DETAIL>(
+    final executionIntent = BlockCurrentItemModelSetCurrentItemIntent<ID, ITEM,
+        ITEM_DETAIL, FORM_PATCH>(
       setCurrentItemDirective: setCurrentItemDirective,
       newQueriedList: newQueriedList,
       inputCandidateCurrItem: inputCandidateCurrItem,
@@ -212,22 +217,23 @@ class XBlockCurrentItemModel<
     return executionIntent;
   }
 
-  BlockCurrentItemModelClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>
+  BlockCurrentItemModelClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL, FORM_PATCH>
       _createAndSetBlockCurrentItemModelExecutionIntentClearCurrentItem() {
-    final executionIntent =
-        BlockCurrentItemModelClearCurrentItemIntent<ID, ITEM, ITEM_DETAIL>();
+    final executionIntent = BlockCurrentItemModelClearCurrentItemIntent<ID,
+        ITEM, ITEM_DETAIL, FORM_PATCH>();
     _executionIntent = executionIntent;
     return executionIntent;
   }
 
-  BlockCurrentItemModelPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL>
+  BlockCurrentItemModelPrepareFormToCreateItemIntent<ID, ITEM, ITEM_DETAIL,
+          FORM_PATCH>
       _createAndSetBlockCurrentItemModelExecutionIntentPrepareFormToCreateItem({
-    required XBlock<ID, ITEM, ITEM_DETAIL> xBlock,
+    required XBlock<ID, ITEM, ITEM_DETAIL, FORM_PATCH> xBlock,
     required bool initDirty,
-    required FormPatch? formPatch,
+    required FORM_PATCH? formPatch,
   }) {
     final executionIntent = BlockCurrentItemModelPrepareFormToCreateItemIntent<
-        ID, ITEM, ITEM_DETAIL>(
+        ID, ITEM, ITEM_DETAIL, FORM_PATCH>(
       initDirty: initDirty,
       formPatch: formPatch,
     );

@@ -1,10 +1,10 @@
 part of '../../core.dart';
 
-class TaskSubmitExecutionResult<
-TASK_INIT_DATA extends TaskInitData, //
-TASK_RESULT_DATA extends TaskResultData>
+class TaskSubmitResult<
+        TASK_INIT_DATA extends TaskInitData, //
+        TASK_RESULT_DATA extends TaskResultData>
     extends ExecutionUnitResult<TaskSubmitPrecheck> {
-  TaskSubmitExecutionResult({required super.precheck});
+  TaskSubmitResult({required super.precheck});
 
   @override
   bool get successForFirst {

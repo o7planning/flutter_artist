@@ -1,7 +1,5 @@
 part of '../__precheck.dart';
 
-// ---------------------------------------------------------------------------
-
 /// Precheck enumeration for Prozess restart operations.
 enum ProzessRestartPrecheck implements Precheck {
   busy(

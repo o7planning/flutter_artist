@@ -9,6 +9,10 @@ ITEM_DETAIL extends Identifiable<ID>> extends Action {
     required super.actionInfo,
   });
 
+  @override
+  @OverridableMethodAnnotation()
+  ActionKind get actionKind => ActionKind.creation;
+
   Future<ApiResult<ITEM_DETAIL>> performQuickCreateItem({
     required Object? parentBlockItem,
   });

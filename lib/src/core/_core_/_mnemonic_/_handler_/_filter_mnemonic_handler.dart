@@ -32,7 +32,7 @@ class _FilterMnemonicHandler {
         return KeyEventResult.ignored;
 
       case MnemonicShortcut.debugFilterModel:
-        filterModel.showDebugFilterModelViewerDialog(
+        filterModel.showDebugFilterModelInspector(
           locationInfo: '',
         );
         return KeyEventResult.handled;
