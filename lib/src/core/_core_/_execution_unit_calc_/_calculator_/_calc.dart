@@ -1,4 +1,4 @@
-import '../../../enums/_enums.dart';
+import '../../_enums_/_enums.dart';
 import '../../core.dart';
 
 part 'filter_execution_calculator.dart';

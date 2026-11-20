@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
+import '../_core_/_enums_/_enums.dart';
 import '../_core_/core.dart';
-import '../enums/_enums.dart';
 
 part '_menu_item.dart';
 

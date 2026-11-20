@@ -11,14 +11,14 @@ enum TaskFormEnablePrecheck implements FormEnablePrecheck {
 
   /// The task does not have an associated form model.
   noForm(
-    precheckCode: PrecheckCode.notAllowed,
+    precheckCode: PrecheckCode.noForm,
     message: "No form available.",
     details: ["The task does not have an associated form model."],
   ),
 
   /// The task is still in pending state and has not loaded initialization data.
   taskInPendingState(
-    precheckCode: PrecheckCode.stageInPendingState,
+    precheckCode: PrecheckCode.taskInPendingState,
     message: "Form interaction is disabled.",
     details: [
       "The task is still in pending state and has not loaded initialization data."
@@ -27,14 +27,14 @@ enum TaskFormEnablePrecheck implements FormEnablePrecheck {
 
   /// The task data is stale and requires initialization data to be reloaded.
   taskInStaleState(
-    precheckCode: PrecheckCode.stageInPendingState,
+    precheckCode: PrecheckCode.taskInStaleState,
     message: "Form interaction is disabled.",
     details: ["The task data is stale and requires reloading."],
   ),
 
   /// The task has already been successfully submitted and its form is locked (read-only).
   taskAlreadySubmitted(
-    precheckCode: PrecheckCode.stageAlreadySubmitted,
+    precheckCode: PrecheckCode.taskAlreadySubmitted,
     message: "Form interaction is disabled.",
     details: [
       "The task has already been successfully submitted. Use Restart to modify again."

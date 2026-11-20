@@ -4,7 +4,7 @@ class ShowFilterCriteriaInspectorPrecheckUtils {
   /// Evaluates whether the current session and [hasFilterModel] permit opening
   /// the debug filter criteria / filter model inspector dialog.
   static Actionable<ShowFilterCriteriaInspectorPrecheck>
-  checkBeforeShowFilterCriteriaInspector({
+      checkBeforeShowFilterCriteriaInspector({
     required bool hasFilterModel,
     required ILoggedInUser? loggedInUser,
   }) {

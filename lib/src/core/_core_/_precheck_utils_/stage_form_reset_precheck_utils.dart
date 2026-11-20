@@ -18,7 +18,7 @@ class StageFormResetPrecheckUtils {
   }) {
     if (checkBusy && isBusy) {
       return Actionable.no(
-        errCode: StageFormResetPrecheck.executorIsBusy,
+        errCode: StageFormResetPrecheck.busy,
       );
     }
 
@@ -30,7 +30,7 @@ class StageFormResetPrecheckUtils {
 
     if (targetStageOrder != viewingStageOrder) {
       return Actionable.no(
-        errCode: StageFormResetPrecheck.notViewingStage,
+        errCode: StageFormResetPrecheck.isNotViewingStage,
       );
     }
 
@@ -56,7 +56,7 @@ class StageFormResetPrecheckUtils {
 
     if (!isDirty) {
       return Actionable.no(
-        errCode: StageFormResetPrecheck.formNotDirty,
+        errCode: StageFormResetPrecheck.formIsNotDirty,
       );
     }
 

@@ -150,7 +150,7 @@ class BlockCurrentItemModel<
         shortDesc:
             "Transiting BlockItem dataState to stale for active item ID: $activeItemId",
       );
-      _dataState = const BlockItemDataStateStale();
+      _dataState = const BlockItemDataStateLoadedStale();
     }
   }
 
@@ -187,7 +187,7 @@ class BlockCurrentItemModel<
     if (id == null) {
       _dataState = BlockItemDataStateNone();
     } else {
-      _dataState = BlockItemDataStateFresh();
+      _dataState = BlockItemDataStateLoadedFresh();
     }
   }
 

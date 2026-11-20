@@ -4,6 +4,8 @@ part of '__precheck_utils.dart';
 class BlockFormEnablePrecheckUtils {
   /// Evaluates whether the block form is permitted to be enabled.
   static Actionable<BlockFormEnablePrecheck> checkFormEnable<ITEM>({
+    required bool checkBusy,
+    required bool isBusy,
     required bool hasForm,
     required bool isStateReadyForForm,
     required FormDataState? formDataState,
@@ -12,21 +14,28 @@ class BlockFormEnablePrecheckUtils {
     required CheckAllowResult Function(ITEM validItem)
         checkEditItemOnFormAllowed,
   }) {
-    // 1. Check if form model exists
+    // 1. Priority 1: Check if the global executor is busy
+    if (checkBusy && isBusy) {
+      return Actionable<BlockFormEnablePrecheck>.no(
+        errCode: BlockFormEnablePrecheck.busy,
+      );
+    }
+
+    // 2. Check if form model exists
     if (!hasForm) {
       return Actionable<BlockFormEnablePrecheck>.no(
         errCode: BlockFormEnablePrecheck.noForm,
       );
     }
 
-    // 2. Check if block state is ready for form
+    // 3. Check if block state is ready for form
     if (!isStateReadyForForm) {
       return Actionable<BlockFormEnablePrecheck>.no(
         errCode: BlockFormEnablePrecheck.hostStateNotReadyForForm,
       );
     }
 
-    // 3. Check FormDataState constraints
+    // 4. Check FormDataState constraints
     if (formDataState == null) {
       return Actionable<BlockFormEnablePrecheck>.no(
         errCode: BlockFormEnablePrecheck.noForm,
@@ -51,7 +60,7 @@ class BlockFormEnablePrecheckUtils {
       );
     }
 
-    // 4. Check business permission rules if currentItem exists
+    // 5. Check business permission rules if currentItem exists
     if (checkAllow && currentItem != null) {
       final CheckAllowResult result = checkEditItemOnFormAllowed(currentItem);
       switch (result.result) {

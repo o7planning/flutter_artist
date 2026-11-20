@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../core/enums/_enums.dart';
+import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/widgets/_html_selectable_rich_text.dart';
 import '../dialog/_tip_document_viewer_dialog.dart';
@@ -62,11 +62,11 @@ class _HtmlTextListViewState extends State<HtmlTextListView> {
             onPressed: widget.tipDocument == null
                 ? null
                 : () {
-              TipDocumentViewerDialog.show(
-                context: context,
-                tipDocument: widget.tipDocument!,
-              );
-            },
+                    TipDocumentViewerDialog.show(
+                      context: context,
+                      tipDocument: widget.tipDocument!,
+                    );
+                  },
           ),
         ),
       ],

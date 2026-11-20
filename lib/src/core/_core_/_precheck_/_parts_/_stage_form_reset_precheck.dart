@@ -1,11 +1,9 @@
 part of '../__precheck.dart';
 
-
-
 /// Precheck enumeration for resetting a [StageFormModel] within a [Stage].
 enum StageFormResetPrecheck implements Precheck {
   /// Operation aborted because the execution engine is currently busy.
-  executorIsBusy(
+  busy(
     precheckCode: PrecheckCode.busy,
     message: "Cannot reset stage form",
     details: ["System is currently busy processing another task."],
@@ -19,8 +17,8 @@ enum StageFormResetPrecheck implements Precheck {
   ),
 
   /// Operation aborted because the target stage is not the currently viewing stage.
-  notViewingStage(
-    precheckCode: PrecheckCode.noViewingStage,
+  isNotViewingStage(
+    precheckCode: PrecheckCode.isNotViewingStage,
     message: "Cannot reset stage form",
     details: ["You can only reset the form of the currently viewing stage."],
   ),
@@ -47,7 +45,7 @@ enum StageFormResetPrecheck implements Precheck {
   ),
 
   /// Operation aborted because the form has no unsaved changes.
-  formNotDirty(
+  formIsNotDirty(
     precheckCode: PrecheckCode.formIsNotDirty,
     message: "Cannot reset stage form",
     details: ["The form has no changes to reset."],

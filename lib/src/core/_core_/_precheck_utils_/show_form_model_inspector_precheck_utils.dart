@@ -6,10 +6,9 @@ class ShowFormModelInspectorPrecheckUtils {
   /// Evaluates whether the current session and [hasForm] permit opening
   /// the FormModel debug inspector dialog.
   static Actionable<ShowFormModelInspectorPrecheck>
-  checkBeforeShowFormModelInspector({
+      checkBeforeShowFormModelInspector({
     required bool hasForm,
-    required bool isLoggedIn,
-    required bool isSystemUser,
+    required ILoggedInUser? loggedInUser,
   }) {
     if (!hasForm) {
       return Actionable.no(
@@ -17,13 +16,13 @@ class ShowFormModelInspectorPrecheckUtils {
       );
     }
 
-    if (!isLoggedIn) {
+    if (loggedInUser == null) {
       return Actionable.no(
         errCode: ShowFormModelInspectorPrecheck.noLoggedInUser,
       );
     }
 
-    if (!isSystemUser) {
+    if (!loggedInUser.isSystemUser) {
       return Actionable.no(
         errCode: ShowFormModelInspectorPrecheck.userIsNotSystemUser,
       );

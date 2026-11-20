@@ -2,7 +2,6 @@ part of '__precheck.dart';
 
 enum PrecheckCode {
   busy,
-  restricted,
   pageableNotSupported,
   alreadyOnFirstPage,
   alreadyOnLastPage,
@@ -12,43 +11,42 @@ enum PrecheckCode {
   formInPendingState,
   formInFatalErrorState,
   formInStaleState,
+  formDataNotLoaded,
+  formIsNotDirty,
+  formInvalidated,
   notAllowed,
   checkAllowMethodError,
   //
-  queryLockedTemporarily,
-  //
-  blockInStaleState,
-  blockInPendingState, // State
   blockInNoneState,
+  blockInPendingState,
+  blockInStaleState,
   //
   noTarget,
   invalidTarget,
-  formIsNotDirty,
-  formInvalidated,
   //
   noLoggedInUser,
-  permissionDenied,
   userIsNotSystemUser,
+  noFilterModel,
   //
   cancelled,
-  //
   hasActiveViews,
   //
   taskInPendingState,
+  taskInStaleState,
   taskAlreadySubmitted,
+  taskNotReady,
+  //
+  stageInNoneState,
   stageInPendingState,
+  stageInStaleState,
   stageAlreadySubmitted,
-  reexecutionNotAllowed,
   stageNotSubmittedYet,
   stageRestartRestricted,
-  noFilterModel,
-  prozessNotStarted,
+  stageNotReady,
+  reexecutionNotAllowed,
+  //
   noPreviousStage,
   noNextStage,
-  nextStageNotReached,
   noViewingStage,
-  stageNotReady,
-  formDataNotLoaded,
-  // allowCheckError,
-  taskNotReady,
+  isNotViewingStage,
 }

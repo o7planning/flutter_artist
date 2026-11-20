@@ -1,5 +1,6 @@
 part of '../__precheck.dart';
 
+/// Precheck conditions and failure reasons for enabling a stage form.
 enum StageFormEnablePrecheck implements FormEnablePrecheck {
   busy(
     precheckCode: PrecheckCode.busy,
@@ -8,8 +9,8 @@ enum StageFormEnablePrecheck implements FormEnablePrecheck {
   ),
   noForm(
     precheckCode: PrecheckCode.noForm,
-    message: "Stage has no Form",
-    details: [],
+    message: "Stage has no form.",
+    details: ["No form model is configured for this stage."],
   ),
   noTargetStage(
     precheckCode: PrecheckCode.noTarget,
@@ -17,9 +18,14 @@ enum StageFormEnablePrecheck implements FormEnablePrecheck {
     details: ["No target stage specified."],
   ),
   isNotViewingStage(
-    precheckCode: PrecheckCode.invalidTarget,
+    precheckCode: PrecheckCode.isNotViewingStage,
     message: "Form interaction is disabled.",
     details: ["The target stage is not the active viewing stage."],
+  ),
+  stageInNoneState(
+    precheckCode: PrecheckCode.stageInNoneState,
+    message: "Form interaction is disabled.",
+    details: ["The stage has not been reached or initialized yet."],
   ),
   stageInPendingState(
     precheckCode: PrecheckCode.stageInPendingState,
@@ -27,7 +33,7 @@ enum StageFormEnablePrecheck implements FormEnablePrecheck {
     details: ["The stage is still in pending state."],
   ),
   stageInStaleState(
-    precheckCode: PrecheckCode.stageInPendingState,
+    precheckCode: PrecheckCode.stageInStaleState,
     message: "Form interaction is disabled.",
     details: ["The stage data is stale and requires reloading."],
   ),
@@ -40,35 +46,24 @@ enum StageFormEnablePrecheck implements FormEnablePrecheck {
   ),
   formInNoneState(
     precheckCode: PrecheckCode.formInNoneState,
-    message: "Stage Form is disabled.",
+    message: "Stage form is disabled.",
     details: ["The form is in none state."],
   ),
   formInPendingState(
     precheckCode: PrecheckCode.formInPendingState,
-    message: "Stage Form is disabled.",
+    message: "Stage form is disabled.",
     details: ["The form is in pending state."],
   ),
   formInFatalErrorState(
     precheckCode: PrecheckCode.formInFatalErrorState,
-    message: "Stage Form is disabled.",
+    message: "Stage form is disabled.",
     details: ["The form is in fatal error state."],
   ),
   formInStaleState(
     precheckCode: PrecheckCode.formInStaleState,
-    message: "Stage Form is disabled.",
+    message: "Stage form is disabled.",
     details: ["The form is in stale state."],
-  ),
-  notAllowed(
-    precheckCode: PrecheckCode.notAllowed,
-    message: "The Form is disabled.",
-    details: ["The application logic does not allow this item to be updated."],
-  ),
-  checkAllowMethodError(
-    precheckCode: PrecheckCode.checkAllowMethodError,
-    message: "The Form is disabled.",
-    details: ["The isEditItemOnFormAllowed() method error."],
-  ),
-  ;
+  );
 
   @override
   final PrecheckCode precheckCode;

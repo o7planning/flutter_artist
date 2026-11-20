@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
+import '../_core_/_enums_/_enums.dart';
 import '../_core_/core.dart';
 import '../built_in/__built_in_model.dart';
-import '../enums/_enums.dart';
 import '../utils/__utils.dart';
 
 part 'credentials_form_output.dart';

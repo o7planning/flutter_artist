@@ -4,7 +4,7 @@ part of '__precheck_utils.dart';
 class BlockSetCurrentItemPrecheckUtils {
   /// Evaluates whether setting an item as current is permitted.
   static Actionable<BlockSetCurrentItemPrecheck>
-  checkBeforeSetItemAsCurrent<ITEM>({
+      checkBeforeSetItemAsCurrent<ITEM>({
     required ITEM? item,
     required bool checkBusy,
     required bool isBusy,
@@ -18,15 +18,8 @@ class BlockSetCurrentItemPrecheckUtils {
       );
     }
 
-    // 2. Priority 2: Resolve internal item matching existing list items if provided
-    ITEM? internalItem = item;
-    if (item != null) {
-      internalItem = findItemSameIdWith(item);
-    }
-
-    // 3. Priority 3: Check if resolved item is null and return corresponding error code
-    // Test Cases: [03b].
-    if (internalItem == null) {
+    // 2. Priority 2: Check if the target item is null
+    if (item == null) {
       if (errCodeIfItemIsNull == ErrCodeIfItemIsNull.noTarget) {
         return Actionable<BlockSetCurrentItemPrecheck>.no(
           errCode: BlockSetCurrentItemPrecheck.noTarget,
@@ -36,6 +29,15 @@ class BlockSetCurrentItemPrecheckUtils {
           errCode: BlockSetCurrentItemPrecheck.invalidTarget,
         );
       }
+    }
+
+    // 3. Priority 3: Check if the item exists in the block's current list
+    // Test Cases: [03b].
+    final ITEM? foundItem = findItemSameIdWith(item);
+    if (foundItem == null) {
+      return Actionable<BlockSetCurrentItemPrecheck>.no(
+        errCode: BlockSetCurrentItemPrecheck.invalidTarget,
+      );
     }
 
     return Actionable<BlockSetCurrentItemPrecheck>.yes();

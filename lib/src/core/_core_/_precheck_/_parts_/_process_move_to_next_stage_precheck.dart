@@ -1,10 +1,9 @@
 part of '../__precheck.dart';
 
-
 /// Precheck enumeration for moving forward to the next active stage in a [Prozess].
 enum ProzessMoveToNextStagePrecheck implements Precheck {
   /// Operation aborted because the execution engine is currently busy.
-  executorIsBusy(
+  busy(
     precheckCode: PrecheckCode.busy,
     message: "Cannot move to next stage",
     details: ["System is currently busy processing another task."],

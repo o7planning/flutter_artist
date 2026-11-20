@@ -367,7 +367,7 @@ abstract class Prozess<
     final int currentIndex =
         currentStage == null ? -1 : activeStages.indexOf(currentStage);
 
-    return ProzessStageNavigationPrecheckUtils.checkBeforeMoveToNextStage(
+    return ProzessMoveToNextStagePrecheckUtils.checkBeforeMoveToNextStage(
       checkBusy: checkBusy,
       isBusy: FlutterArtist.executor.isBusy,
       hasViewingStage: _viewingStageEnum != null && currentStage != null,
@@ -392,7 +392,8 @@ abstract class Prozess<
     final int currentIndex =
         currentStage == null ? -1 : activeStages.indexOf(currentStage);
 
-    return ProzessStageNavigationPrecheckUtils.checkBeforeMoveToPreviousStage(
+    return ProzessMoveToPreviousStagePrecheckUtils
+        .checkBeforeMoveToPreviousStage(
       checkBusy: checkBusy,
       isBusy: FlutterArtist.executor.isBusy,
       hasViewingStage: _viewingStageEnum != null && currentStage != null,

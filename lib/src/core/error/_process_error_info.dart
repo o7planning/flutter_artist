@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../core/enums/_enums.dart';
+import '../_core_/_enums_/_enums.dart';
 
 class ProzessErrorInfo {
   final ProzessErrorMethod prozessErrorMethod;
@@ -28,10 +28,10 @@ class ProzessErrorInfo {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is ProzessErrorInfo &&
-              runtimeType == other.runtimeType &&
-              prozessErrorMethod == other.prozessErrorMethod &&
-              error == other.error;
+      other is ProzessErrorInfo &&
+          runtimeType == other.runtimeType &&
+          prozessErrorMethod == other.prozessErrorMethod &&
+          error == other.error;
 
   @override
   int get hashCode => Object.hash(runtimeType, prozessErrorMethod, error);

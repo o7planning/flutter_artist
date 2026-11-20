@@ -1,5 +1,5 @@
-import '../../enums/_enums.dart';
 import '../../error/_block_error_info.dart';
+import '../_enums_/_enums.dart';
 import '../core.dart';
 
 /// Immutable parameter blueprint feeding into the state calculator engine.

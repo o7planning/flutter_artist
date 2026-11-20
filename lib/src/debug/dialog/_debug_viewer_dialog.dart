@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
+import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/_core_/core.dart';
-import '../../core/enums/_enums.dart';
 import '../../core/icon/icon_constants.dart';
 import '../feature_module/shelf/__shelf_structure_graph_view.dart';
 import '../filter/_debug_filter_criteria_view.dart';

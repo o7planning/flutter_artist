@@ -4071,7 +4071,6 @@ abstract class Block<
   @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockBackendActionResult> executeBackendAction({
     FILTER_PATCH? filterPatch,
-    SuggestedSelection? suggestedSelection,
     required ActionConfirmationType actionConfirmationType,
     required BlockBackendAction<ID> action,
   }) async {
@@ -5021,21 +5020,21 @@ abstract class Block<
 
   /// Returns whether preparing the form to create a new item is allowed
   /// according to application business rules.
-  // OLD: `isItemCreation Allowed
+  // OLD: `isItemCreationAllowed
   bool isCreateItemOnFormAllowed() {
     return true;
   }
 
   /// Returns whether editing [item] on the form is allowed according to
   /// application business rules.
-  // OLD: `isItemUpdate Allowed
+  // OLD: `isItemUpdateAllowed
   bool isEditItemOnFormAllowed({required ITEM item}) {
     return true;
   }
 
   /// Returns whether editing the [currentItem] on the form is allowed.
   /// Returns `false` if there is no [currentItem].
-  // OLD: `isCurrentItemUpdate Allowed
+  // OLD: `isCurrentItemUpdateAllowed
   bool isEditCurrentItemOnFormAllowed() {
     final ITEM? currItem = currentItem;
     if (currItem == null) {
@@ -5613,6 +5612,8 @@ abstract class Block<
     bool checkAllow = true,
   }) {
     return BlockFormEnablePrecheckUtils.checkFormEnable<ITEM>(
+      checkBusy: true,
+      isBusy: FlutterArtist.executor.isBusy,
       hasForm: formModel != null,
       isStateReadyForForm: isStateReadyForForm(),
       formDataState: formModel?.dataState,

@@ -3,7 +3,7 @@ part of '../__precheck.dart';
 /// Precheck enumeration for resetting a [TaskFormModel] within a [Task].
 enum TaskFormResetPrecheck implements Precheck {
   /// Operation aborted because the execution engine is currently busy.
-  executorIsBusy(
+  busy(
     precheckCode: PrecheckCode.busy,
     message: "Cannot reset task form",
     details: ["System is currently busy processing another task."],
@@ -31,7 +31,7 @@ enum TaskFormResetPrecheck implements Precheck {
   ),
 
   /// Operation aborted because the form has no unsaved changes.
-  formNotDirty(
+  formIsNotDirty(
     precheckCode: PrecheckCode.formIsNotDirty,
     message: "Cannot reset task form",
     details: ["The form has no changes to reset."],

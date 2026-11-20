@@ -43,6 +43,12 @@ class StageFormEnablePrecheckUtils {
     }
 
     // 5. Priority 5: Check Stage DataState constraints
+    if (targetStageDataState.isNone) {
+      return Actionable<StageFormEnablePrecheck>.no(
+        errCode: StageFormEnablePrecheck.stageInNoneState,
+      );
+    }
+
     if (targetStageDataState.isPending) {
       return Actionable<StageFormEnablePrecheck>.no(
         errCode: StageFormEnablePrecheck.stageInPendingState,

@@ -4,7 +4,7 @@ import 'package:flutter_artist_doc/flutter_artist_doc.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
-import '../../core/enums/_enums.dart';
+import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/icon/icon_constants.dart';
 import '../utils/_tab_theme_utils.dart';
 import '../widgets/_doc_link_view.dart';

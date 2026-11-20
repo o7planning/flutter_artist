@@ -1,3 +1,17 @@
+
+
+
+rm -rf /Volumes/apps/Apps/flutter/bin/cache
+flutter doctor -v
+flutter precache
+
+
+
+
+
+
+
+
 https://excalidraw.com
 https://thuvienvector.vn/logo-ao-dai-vector/
 

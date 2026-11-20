@@ -14,7 +14,7 @@ enum TaskSubmitPrecheck implements Precheck {
     ],
   ),
   taskInStaleState(
-    precheckCode: PrecheckCode.taskInPendingState,
+    precheckCode: PrecheckCode.taskInStaleState,
     message: "Task submission is disabled.",
     details: [
       "The task is in stale state and requires initialization data to be reloaded."
@@ -28,22 +28,22 @@ enum TaskSubmitPrecheck implements Precheck {
   formInNoneState(
     precheckCode: PrecheckCode.formInNoneState,
     message: "Task submission is disabled.",
-    details: ["The form in none state."],
+    details: ["The form is in none state."],
   ),
   formInPendingState(
     precheckCode: PrecheckCode.formInPendingState,
     message: "Task submission is disabled.",
-    details: ["The form in pending state."],
+    details: ["The form is in pending state."],
   ),
   formInFatalErrorState(
     precheckCode: PrecheckCode.formInFatalErrorState,
     message: "Task submission is disabled.",
-    details: ["The form in fatal error state."],
+    details: ["The form is in fatal error state."],
   ),
   formInStaleState(
     precheckCode: PrecheckCode.formInStaleState,
     message: "Task submission is disabled.",
-    details: ["The form in stale state."],
+    details: ["The form is in stale state."],
   ),
   formInvalidated(
     precheckCode: PrecheckCode.formInvalidated,

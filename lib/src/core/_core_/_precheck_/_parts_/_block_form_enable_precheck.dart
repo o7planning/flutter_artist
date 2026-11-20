@@ -2,9 +2,15 @@ part of '../__precheck.dart';
 
 /// Precheck enumeration for block form enable operations.
 enum BlockFormEnablePrecheck implements FormEnablePrecheck {
+  busy(
+    precheckCode: PrecheckCode.busy,
+    message: "Form interaction is disabled.",
+    details: ["The system is busy."],
+  ),
+
   /// Operation aborted because the block state is not ready for the form.
   hostStateNotReadyForForm(
-    precheckCode: PrecheckCode.noForm,
+    precheckCode: PrecheckCode.hostStateNotReadyForForm,
     message: "Block state is not ready for form.",
     details: ["The underlying block state does not permit form interaction."],
   ),
@@ -48,14 +54,16 @@ enum BlockFormEnablePrecheck implements FormEnablePrecheck {
   notAllowed(
     precheckCode: PrecheckCode.notAllowed,
     message: "The form is disabled.",
-    details: ["Application business rules do not allow updating this item."],
+    details: [
+      "Application business rules do not allow editing this item on the form."
+    ],
   ),
 
-  /// An error occurred while executing the item update allow-check method.
+  /// An error occurred while executing the item edit allow-check method.
   checkAllowMethodError(
     precheckCode: PrecheckCode.checkAllowMethodError,
     message: "The form is disabled.",
-    details: ["An error occurred during the item update permission check."],
+    details: ["An error occurred during the item edit permission check."],
   );
 
   @override

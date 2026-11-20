@@ -4,7 +4,7 @@ import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../../core/_core_/_sync_/_block_sync_session_snapshot.dart';
 import '../../../core/_core_/core.dart';
-import '../../../core/enums/_enums.dart';
+import '../../../core/_core_/_enums_/_enums.dart';
 import 'debug_id_list_dialog.dart';
 
 // =============================================================================

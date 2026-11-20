@@ -23,16 +23,6 @@ enum BlockSetCurrentItemPrecheck implements Precheck {
     precheckCode: PrecheckCode.invalidTarget,
     message: "Action ignored.",
     details: ["The target item is not present in the current list."],
-  ),
-
-  // Test Cases: [03b] ??
-  /// Operation not allowed by application business rules.
-  notAllowed(
-    precheckCode: PrecheckCode.notAllowed,
-    message: "Action ignored.",
-    details: [
-      "Application business rules do not allow setting this item as current."
-    ],
   );
 
   @override

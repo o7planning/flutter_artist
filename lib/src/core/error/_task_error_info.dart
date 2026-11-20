@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../core/enums/_enums.dart';
+import '../_core_/_enums_/_enums.dart';
 
 class TaskErrorInfo {
   final TaskErrorMethod taskErrorMethod;
@@ -28,10 +28,10 @@ class TaskErrorInfo {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is TaskErrorInfo &&
-              runtimeType == other.runtimeType &&
-              taskErrorMethod == other.taskErrorMethod &&
-              error == other.error;
+      other is TaskErrorInfo &&
+          runtimeType == other.runtimeType &&
+          taskErrorMethod == other.taskErrorMethod &&
+          error == other.error;
 
   @override
   int get hashCode => Object.hash(runtimeType, taskErrorMethod, error);

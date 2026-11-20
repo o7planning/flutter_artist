@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/_core_/_enums_/_enums.dart';
 import '../../../../core/_core_/core.dart';
-import '../../../../core/enums/_enums.dart';
 import '_base_info_widget.dart';
 
 class BlockItemDataStateInfoWidget extends BaseInfoWidget {
@@ -39,9 +39,9 @@ class BlockItemDataStateInfoWidget extends BaseInfoWidget {
     switch (block.blockCurrentItemModel.dataState) {
       case BlockItemDataStateNone():
         return null;
-      case BlockItemDataStateFresh():
+      case BlockItemDataStateLoadedFresh():
         return null;
-      case BlockItemDataStateStale(:final errorInfo):
+      case BlockItemDataStateLoadedStale(:final errorInfo):
         if (errorInfo == null) {
           return null;
         }

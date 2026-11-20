@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
-import '../../core/enums/_enums.dart';
+import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/icon/icon_constants.dart';
 import '../dialog/_tip_document_viewer_dialog.dart';
 import '../feature_module/widget/_block_or_scalar_info_view.dart';
@@ -62,24 +62,22 @@ class _BlockOrScalarViewState extends State<BlockOrScalarView> {
         id: "General",
         text: ' General',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              Icons.apps,
-              color: TabThemeUtils.getTabIconColor(context, status),
-              size: 16,
-            ),
+        leading: (context, status) => Icon(
+          Icons.apps,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: 16,
+        ),
         view: _buildGeneralTab(context),
       ),
       TabData(
         id: "Debug",
         text: ' Debug',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              Icons.bug_report,
-              color: TabThemeUtils.getTabIconColor(context, status),
-              size: 16,
-            ),
+        leading: (context, status) => Icon(
+          Icons.bug_report,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: 16,
+        ),
         view: _buildDebugTab(),
       ),
     ];

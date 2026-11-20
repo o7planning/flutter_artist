@@ -5,18 +5,27 @@ class TaskFormEnablePrecheckUtils {
   /// Evaluates whether the task form is permitted to be enabled for user interaction
   /// based on task execution states and underlying form data states.
   static Actionable<TaskFormEnablePrecheck> checkFormEnable({
+    required bool checkBusy,
+    required bool isBusy,
     required bool hasForm,
     required TaskDataState taskDataState,
     required FormDataState? formDataState,
   }) {
-    // 1. Priority 1: Check if form model exists
+    // 1. Priority 1: Check if the global executor is busy
+    if (checkBusy && isBusy) {
+      return Actionable<TaskFormEnablePrecheck>.no(
+        errCode: TaskFormEnablePrecheck.busy,
+      );
+    }
+
+    // 2. Priority 2: Check if form model exists
     if (!hasForm) {
       return Actionable<TaskFormEnablePrecheck>.no(
         errCode: TaskFormEnablePrecheck.noForm,
       );
     }
 
-    // 2. Priority 2: Check Task DataState constraints (matching Stage pattern)
+    // 3. Priority 3: Check Task DataState constraints (matching Stage pattern)
     if (taskDataState.isPending) {
       return Actionable<TaskFormEnablePrecheck>.no(
         errCode: TaskFormEnablePrecheck.taskInPendingState,
@@ -29,7 +38,7 @@ class TaskFormEnablePrecheckUtils {
       );
     }
 
-    // 3. Priority 3: If task was already successfully submitted, its form must remain locked (read-only).
+    // 4. Priority 4: If task was already successfully submitted, its form must remain locked (read-only).
     // (User must trigger Restart to unlock and modify again).
     if (taskDataState.isCompleted) {
       return Actionable<TaskFormEnablePrecheck>.no(
@@ -37,7 +46,7 @@ class TaskFormEnablePrecheckUtils {
       );
     }
 
-    // 4. Priority 4: Check Form DataState constraints
+    // 5. Priority 5: Check Form DataState constraints
     if (formDataState != null) {
       if (formDataState.isNone) {
         return Actionable<TaskFormEnablePrecheck>.no(

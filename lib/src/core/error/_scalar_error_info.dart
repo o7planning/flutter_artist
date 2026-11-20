@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../enums/_enums.dart';
+import '../_core_/_enums_/_enums.dart';
 
 class ScalarErrorInfo {
   final ScalarErrorMethod scalarErrorMethod;

@@ -12,9 +12,14 @@ enum StageSubmitPrecheck implements Precheck {
     details: ["No target stage is currently selected."],
   ),
   isNotViewingStage(
-    precheckCode: PrecheckCode.invalidTarget,
+    precheckCode: PrecheckCode.isNotViewingStage,
     message: "Action not allowed",
     details: ["You can only submit the stage that you are currently viewing."],
+  ),
+  stageInNoneState(
+    precheckCode: PrecheckCode.stageInNoneState,
+    message: "Stage is not active",
+    details: ["This stage has not been reached or initialized yet."],
   ),
   stageAlreadySubmitted(
     precheckCode: PrecheckCode.stageAlreadySubmitted,
@@ -29,7 +34,7 @@ enum StageSubmitPrecheck implements Precheck {
     details: ["The stage is still loading initialization data. Please wait."],
   ),
   stageInStaleState(
-    precheckCode: PrecheckCode.stageInPendingState,
+    precheckCode: PrecheckCode.stageInStaleState,
     message: "Data is outdated",
     details: ["The stage data is out of date and requires reloading."],
   ),

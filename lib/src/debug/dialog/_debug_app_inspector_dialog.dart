@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
+import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/_core_/core.dart';
-import '../../core/enums/_enums.dart';
 import '../../core/icon/icon_constants.dart';
 import '../app/_debug_app_view.dart';
 import '../utils/_dialog_size.dart';
@@ -40,7 +40,7 @@ class _DebugAppInspectorDialogState extends State<DebugAppInspectorDialog> {
   @override
   Widget build(BuildContext context) {
     final Size preferContentSize =
-    DialogSizeUtils.calculateDebugDialogSize(context);
+        DialogSizeUtils.calculateDebugDialogSize(context);
 
     Widget contentWidget = PageStorage(
       bucket: _bucket,

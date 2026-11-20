@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../core/enums/_enums.dart';
+import '../_core_/_enums_/_enums.dart';
 
 class BlockErrorInfo {
   final BlockErrorMethod blockErrorMethod;
@@ -28,10 +28,10 @@ class BlockErrorInfo {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is BlockErrorInfo &&
-              runtimeType == other.runtimeType &&
-              blockErrorMethod == other.blockErrorMethod &&
-              error == other.error;
+      other is BlockErrorInfo &&
+          runtimeType == other.runtimeType &&
+          blockErrorMethod == other.blockErrorMethod &&
+          error == other.error;
 
   @override
   int get hashCode => Object.hash(runtimeType, blockErrorMethod, error);

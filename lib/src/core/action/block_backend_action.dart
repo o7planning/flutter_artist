@@ -18,7 +18,9 @@ abstract class BlockBackendAction<ID extends Comparable> extends Action {
     required Object? parentBlockItem,
   });
 
-  ID? suggestNewCurrentItemId({required List<ID> itemIds});
+  ID? suggestNewCurrentItemId({required List<ID> itemIds}) {
+    return null;
+  }
 
   /// Evaluates whether this backend action is allowed to execute
   /// according to application business rules.

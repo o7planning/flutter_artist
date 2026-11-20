@@ -8,6 +8,8 @@ enum TaskRestartPrecheck implements Precheck {
     message: "The application is currently busy.",
     details: ["The system is currently busy executing another operation."],
   ),
+
+  /// The task restart operation was cancelled by the user.
   cancelled(
     precheckCode: PrecheckCode.cancelled,
     message: "Task restart cancelled.",
@@ -48,13 +50,6 @@ enum TaskRestartPrecheck implements Precheck {
     details: [
       "An error occurred during the task load init-data permission check."
     ],
-  ),
-
-  /// Custom rule or external restriction prevents loading initial data.
-  customNotAllowed(
-    precheckCode: PrecheckCode.notAllowed,
-    message: "Action not allowed.",
-    details: ["Custom check condition returned false."],
   );
 
   @override

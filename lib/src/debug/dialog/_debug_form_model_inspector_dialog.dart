@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
 as dialogs;
 
+import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/_core_/core.dart';
-import '../../core/enums/_enums.dart';
+import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/__utils.dart';
 

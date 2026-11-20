@@ -1,6 +1,6 @@
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 
-import '../../enums/_enums.dart';
+import '../_enums_/_enums.dart';
 
 /// Utility calculator responsible for resolving target pageable parameters
 /// based on query methods and pagination states.

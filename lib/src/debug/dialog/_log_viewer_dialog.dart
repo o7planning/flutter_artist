@@ -5,8 +5,9 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
+import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/_core_/core.dart';
-import '../../core/enums/_enums.dart';
+import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/logger/_logger.dart';
 import '../../core/widgets/_custom_app_container.dart';

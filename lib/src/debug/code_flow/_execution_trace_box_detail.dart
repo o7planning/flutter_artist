@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
+import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/_core_/core.dart';
-import '../../core/enums/_enums.dart';
 import '../../core/widgets/_iconed_checkbox.dart';
 import '../../core/widgets/_simple_copy_button.dart';
 import '../feature_module/widget/_shelf_info_view.dart';
@@ -110,8 +110,7 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
       ),
       items: TraceStepType.values
           .map(
-            (traceStepType) =>
-            BreadCrumbItem(
+            (traceStepType) => BreadCrumbItem(
               content: Tooltip(
                 message: traceStepType.desc,
                 child: IconedCheckbox(
@@ -129,7 +128,7 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
                 ),
               ),
             ),
-      )
+          )
           .toList(),
     );
   }
@@ -150,7 +149,7 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
             color: theme.colorScheme.primary.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(8),
             border:
-            Border.all(color: theme.dividerColor.withValues(alpha: 0.1)),
+                Border.all(color: theme.dividerColor.withValues(alpha: 0.1)),
           ),
           child: CodeFlowMethodView(executionTrace: executionTrace),
         ),
@@ -184,14 +183,13 @@ class _ExecutionTraceDetailViewState extends State<ExecutionTraceDetailView> {
           SizedBox(height: 10),
         ...traceSteps
             .map(
-              (e) =>
-              TraceStepBox(
+              (e) => TraceStepBox(
                 traceStep: e,
               ),
-        )
+            )
             .expand(
               (w) => [w, SizedBox(height: 5)],
-        ),
+            ),
       ],
     );
   }

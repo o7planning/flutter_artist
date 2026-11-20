@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/enums/_enums.dart';
+import '../../../../core/_core_/_enums_/_enums.dart';
 import '_base_info_widget.dart';
 
 class ActiveInfoWidget extends BaseInfoWidget {

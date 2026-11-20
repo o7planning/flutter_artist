@@ -16,7 +16,7 @@ class TaskFormResetPrecheckUtils {
   }) {
     if (checkBusy && isBusy) {
       return Actionable.no(
-        errCode: TaskFormResetPrecheck.executorIsBusy,
+        errCode: TaskFormResetPrecheck.busy,
       );
     }
 
@@ -40,7 +40,7 @@ class TaskFormResetPrecheckUtils {
 
     if (!isDirty) {
       return Actionable.no(
-        errCode: TaskFormResetPrecheck.formNotDirty,
+        errCode: TaskFormResetPrecheck.formIsNotDirty,
       );
     }
 

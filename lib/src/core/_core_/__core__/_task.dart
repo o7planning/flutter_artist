@@ -832,6 +832,8 @@ abstract class Task<
     bool checkAllow = true,
   }) {
     return TaskFormEnablePrecheckUtils.checkFormEnable(
+      checkBusy: true,
+      isBusy: FlutterArtist.executor.isBusy,
       hasForm: formModel != null,
       taskDataState: dataState,
       formDataState: formModel?.dataState,

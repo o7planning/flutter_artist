@@ -1,5 +1,5 @@
-import '../../enums/_enums.dart';
 import '../../error/_scalar_error_info.dart';
+import '../_enums_/_enums.dart';
 import '../core.dart';
 
 /// Immutable parameter blueprint feeding into the scalar state calculator engine.
@@ -104,8 +104,8 @@ class ScalarQueryStateCalculator {
             resolvedState = input.currentDataState.isLoadedStale
                 ? input.currentDataState
                 : ScalarDataStateLoadedFresh(
-              transientErrorInfo: input.scalarErrorInfo,
-            );
+                    transientErrorInfo: input.scalarErrorInfo,
+                  );
           } else {
             // Explicit root refresh failure evaluates fallback dilemma policy
             if (input.dilemmaStrategy ==

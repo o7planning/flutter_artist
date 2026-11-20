@@ -26,14 +26,7 @@ class BlockFormSavePrecheckUtils {
       );
     }
 
-    // 3. Priority 3: Check if form is dirty (has modifications)
-    if (!isDirty) {
-      return Actionable<BlockFormSavePrecheck>.no(
-        errCode: BlockFormSavePrecheck.formIsNotDirty,
-      );
-    }
-
-    // 4. Priority 4: Check FormDataState constraints
+    // 3. Priority 3: Check FormDataState constraints
     if (formDataState.isNone) {
       return Actionable<BlockFormSavePrecheck>.no(
         errCode: BlockFormSavePrecheck.formInNoneState,
@@ -49,6 +42,13 @@ class BlockFormSavePrecheckUtils {
     } else if (formDataState.isLoadedStale) {
       return Actionable<BlockFormSavePrecheck>.no(
         errCode: BlockFormSavePrecheck.formInStaleState,
+      );
+    }
+
+    // 4. Priority 4: Check if form is dirty (has modifications)
+    if (!isDirty) {
+      return Actionable<BlockFormSavePrecheck>.no(
+        errCode: BlockFormSavePrecheck.formIsNotDirty,
       );
     }
 

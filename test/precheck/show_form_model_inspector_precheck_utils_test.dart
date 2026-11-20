@@ -1,17 +1,30 @@
 import 'package:flutter_artist/flutter_artist.dart';
+import 'package:flutter_artist_core/flutter_artist_core.dart';
 import 'package:test/test.dart';
 
 import 'package:flutter_artist/flutter_artist.dart';
 import 'package:test/test.dart';
 
+class _MockLoggedInUser implements ILoggedInUser {
+  @override
+  final bool isSystemUser;
+
+  const _MockLoggedInUser({required this.isSystemUser});
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 void main() {
   group('ShowFormModelInspectorPrecheckUtils Tests', () {
+    const systemUser = _MockLoggedInUser(isSystemUser: true);
+    const regularUser = _MockLoggedInUser(isSystemUser: false);
+
     test('Should return noForm when formModel is null', () {
       final result =
           ShowFormModelInspectorPrecheckUtils.checkBeforeShowFormModelInspector(
         hasForm: false, // Form is missing
-        isLoggedIn: true,
-        isSystemUser: true,
+        loggedInUser: systemUser,
       );
 
       expect(result.yes, isFalse);
@@ -22,8 +35,7 @@ void main() {
       final result =
           ShowFormModelInspectorPrecheckUtils.checkBeforeShowFormModelInspector(
         hasForm: true,
-        isLoggedIn: false, // User not logged in
-        isSystemUser: false,
+        loggedInUser: null, // User not logged in
       );
 
       expect(result.yes, isFalse);
@@ -39,8 +51,7 @@ void main() {
         final result = ShowFormModelInspectorPrecheckUtils
             .checkBeforeShowFormModelInspector(
           hasForm: true,
-          isLoggedIn: true,
-          isSystemUser: false, // Lacks system privileges
+          loggedInUser: regularUser, // Lacks system privileges
         );
 
         expect(result.yes, isFalse);
@@ -57,8 +68,7 @@ void main() {
         final result = ShowFormModelInspectorPrecheckUtils
             .checkBeforeShowFormModelInspector(
           hasForm: true,
-          isLoggedIn: true,
-          isSystemUser: true, // Valid system user
+          loggedInUser: systemUser, // Valid system user
         );
 
         expect(result.yes, isTrue);

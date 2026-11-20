@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/_core_/_enums_/_enums.dart';
 import '../../../../core/_core_/core.dart';
-import '../../../../core/enums/_enums.dart';
+import '../../../../core/_core_/_enums_/_enums.dart';
 import '_base_info_widget.dart';
 
 class BlockQueryPreviewInfoWidget extends BaseInfoWidget {

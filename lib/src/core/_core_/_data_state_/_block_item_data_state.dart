@@ -7,15 +7,21 @@ sealed class BlockItemDataState {
 
   bool get isNone => this is BlockItemDataStateNone;
 
-  bool get isLoadedFresh => this is BlockItemDataStateFresh;
+  bool get isLoaded => this is BlockItemDataStateLoaded;
 
-  bool get isLoadedStale => this is BlockItemDataStateStale;
+  bool get isLoadedFresh => this is BlockItemDataStateLoadedFresh;
+
+  bool get isLoadedStale => this is BlockItemDataStateLoadedStale;
 
   String toBriefInfo();
 }
 
+sealed class BlockItemDataStateLoaded extends BlockItemDataState {
+  const BlockItemDataStateLoaded();
+}
+
 /// No item is currently selected.
-final class BlockItemDataStateNone extends BlockItemDataState {
+final class BlockItemDataStateNone extends BlockItemDataStateLoaded {
   const BlockItemDataStateNone();
 
   @override
@@ -26,8 +32,8 @@ final class BlockItemDataStateNone extends BlockItemDataState {
 }
 
 /// Item detail is fully loaded and fresh in RAM.
-final class BlockItemDataStateFresh extends BlockItemDataState {
-  const BlockItemDataStateFresh();
+final class BlockItemDataStateLoadedFresh extends BlockItemDataStateLoaded {
+  const BlockItemDataStateLoadedFresh();
 
   @override
   String toBriefInfo() => "loadedFresh()";
@@ -37,10 +43,10 @@ final class BlockItemDataStateFresh extends BlockItemDataState {
 }
 
 /// Item detail in RAM is outdated due to incoming target:currentItem events.
-final class BlockItemDataStateStale extends BlockItemDataState {
+final class BlockItemDataStateLoadedStale extends BlockItemDataState {
   final ErrorInfo? errorInfo;
 
-  const BlockItemDataStateStale({this.errorInfo});
+  const BlockItemDataStateLoadedStale({this.errorInfo});
 
   @override
   String toBriefInfo() => "loadedStale(${errorInfo == null ? '' : 'err'})";

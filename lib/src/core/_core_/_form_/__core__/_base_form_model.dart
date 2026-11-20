@@ -3,10 +3,10 @@ part of '../../core.dart';
 /// Base abstract class representing a form model in the FlutterArtist framework,
 /// managing form state, structure, validation, and data lifecycle.
 abstract class BaseFormModel<
-FORM_PATCH extends FormPatch, //
-FORM_OUTPUT extends FormOutput, //
-ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
-    implements MnemonicScope, ClassDefViewable {
+        FORM_PATCH extends FormPatch, //
+        FORM_OUTPUT extends FormOutput, //
+        ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData>
+    extends _Core implements MnemonicScope, ClassDefViewable {
   String get name;
 
   // TODO: Hardcode.
@@ -100,8 +100,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
   /// Constructor initializes configuration and builds the form model structure.
   BaseFormModel({
     FormModelConfig config = const FormModelConfig(),
-  })
-      : config = config.copy(),
+  })  : config = config.copy(),
         _autovalidateMode = config.autovalidateMode {
     __defineFormModelStructure();
   }
@@ -156,7 +155,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
   /// Asynchronously fetches auxiliary metadata specifically required for form display.
   @AbstractMethodAnnotation()
   Future<ADDITIONAL_FORM_RELATED_DATA>
-  _internalPerformLoadAdditionalFormRelatedData({
+      _internalPerformLoadAdditionalFormRelatedData({
     required Object? rawDomainData,
   });
 
@@ -185,13 +184,11 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
       _formModelStructure.formModel = this;
     } on FormPropInvalidNameError catch (e) {
       String message = "Invalid Form propName '${e.propName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFormModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFormModelStructure()' method for details.";
       throw AppFatalErrorUtils._createFatalAppError(message);
     } on FormPropDuplicateNameError catch (e) {
       String message = "Duplicate Form propName '${e.propName}'.\n"
-          "@see the '${getClassNameWithoutGenerics(
-          this)}.defineFormModelStructure()' method for details.";
+          "@see the '${getClassNameWithoutGenerics(this)}.defineFormModelStructure()' method for details.";
       throw AppFatalErrorUtils._createFatalAppError(message);
     } catch (e, stackTrace) {
       print(stackTrace);
@@ -352,7 +349,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
           suffixShortDesc: 'To get additionalFormRelatedData.',
         );
         additionalFormRelatedData =
-        await _performLoadAdditionalFormRelatedData(executionTrace);
+            await _performLoadAdditionalFormRelatedData(executionTrace);
         // Null is error.
         if (additionalFormRelatedData == null) {
           return false;
@@ -365,7 +362,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
         if (formPatch != null) {
           throw DevError(
             errorMessage:
-            "Dev Error. formPatch must be null if FormModel.activityType = updateFromFormView.",
+                "Dev Error. formPatch must be null if FormModel.activityType = updateFromFormView.",
           );
         }
         if (currentFormMode == InternalFormMode.creation) {
@@ -376,7 +373,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
           // TODO: Dang loi o day.
           throw DevError(
             errorMessage:
-            "Dev Error. _additionalFormRelatedData is null in updateFromFormView.",
+                "Dev Error. _additionalFormRelatedData is null in updateFromFormView.",
           );
         }
         break;
@@ -386,14 +383,14 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
         if (formPatch == null) {
           throw DevError(
             errorMessage:
-            "Dev Error. formPatch must be not null if FormModel.activityType = patchFormFields.",
+                "Dev Error. formPatch must be not null if FormModel.activityType = patchFormFields.",
           );
         }
         additionalFormRelatedData = _additionalFormRelatedData;
         if (additionalFormRelatedData == null) {
           throw DevError(
             errorMessage:
-            "Dev Error. _additionalFormRelatedData is null in patchFormFields.",
+                "Dev Error. _additionalFormRelatedData is null in patchFormFields.",
           );
         }
         break;
@@ -431,16 +428,16 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
       try {
         final Map<String, dynamic> simplePropValueMap =
             _internalResolveInitialSimplePropValues(
-              executionTrace: executionTrace,
-              additionalFormRelatedData: additionalFormRelatedData,
-            ) ??
+                  executionTrace: executionTrace,
+                  additionalFormRelatedData: additionalFormRelatedData,
+                ) ??
                 {};
 
         for (String propName in simplePropValueMap.keys) {
           __throwErrorIfNotASimplePropName(
             propName: propName,
             formErrorMethod:
-            FormErrorMethod.extractSimplePropValuesFromItemDetail,
+                FormErrorMethod.extractSimplePropValuesFromItemDetail,
           );
           dynamic value = simplePropValueMap[propName];
           _formModelStructure._setTempSimplePropValue(
@@ -460,7 +457,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
           activityType: activityType,
           propName: null,
           formErrorMethod:
-          FormErrorMethod.extractSimplePropValuesFromItemDetail,
+              FormErrorMethod.extractSimplePropValuesFromItemDetail,
           error: error,
           errorStackTrace: stackTrace,
         );
@@ -484,8 +481,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
         executionTrace.addInfo(
           codeId: "#006400",
           shortDesc:
-          "The ${debugObjHtml(
-              this)}._internalResolveInitialSimplePropValues() method encountered an error!",
+              "The ${debugObjHtml(this)}._internalResolveInitialSimplePropValues() method encountered an error!",
           errorInfo: errorInfo,
         );
         return false;
@@ -505,8 +501,8 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
           );
           final Map<String, SimpleValueWrap?> patchSimplePropValues =
               extractPatchValuesForSimpleProps(
-                formPatch: formPatch,
-              ) ??
+                    formPatch: formPatch,
+                  ) ??
                   {};
 
           for (String propName in patchSimplePropValues.keys) {
@@ -569,8 +565,8 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
           );
           final Map<String, SimpleValueWrap?> updatedSimplePropValues =
               extractPatchValuesForSimpleProps(
-                formPatch: formPatch,
-              ) ??
+                    formPatch: formPatch,
+                  ) ??
                   {};
 
           for (String propName in updatedSimplePropValues.keys) {
@@ -624,7 +620,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
     // =========================================================================
     try {
       for (MultiOptFormPropModel multiOptProp
-      in _formModelStructure._rootOptPropModels) {
+          in _formModelStructure._rootOptPropModels) {
         await _loadMultiOptPropDataCascade(
           executionTrace: executionTrace,
           additionalFormRelatedData: additionalFormRelatedData,
@@ -678,11 +674,11 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
 
       final FormDataState formDataState = switch (activityType) {
         FormActivityType.startCreatingOrEditing =>
-            FormDataStateFatalError(errorInfo: errorInfo),
+          FormDataStateFatalError(errorInfo: errorInfo),
         FormActivityType.updateFromFormView =>
-            FormDataStateLoadedFresh(transientErrorInfo: errorInfo),
+          FormDataStateLoadedFresh(transientErrorInfo: errorInfo),
         FormActivityType.patchFormFields =>
-            FormDataStateLoadedFresh(transientErrorInfo: errorInfo)
+          FormDataStateLoadedFresh(transientErrorInfo: errorInfo)
       };
 
       __endFormActivityWithDataState(
@@ -721,11 +717,11 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
     executionTrace.addInfo(
       codeId: "#017000",
       shortDesc:
-      "Loading Data for ${debugObjHtml(multiOptProp)} and its children..",
+          "Loading Data for ${debugObjHtml(multiOptProp)} and its children..",
     );
 
     XData? tempMultiOptPropXData =
-    _formModelStructure._getTempMultiOptPropXData(
+        _formModelStructure._getTempMultiOptPropXData(
       propName: multiOptPropName,
     );
 
@@ -861,14 +857,14 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
       }
 
       final dynamic tempCurrentValue =
-      _formModelStructure._getTempCurrentPropValue(
+          _formModelStructure._getTempCurrentPropValue(
         propName: multiOptPropName,
       );
 
       if (tempCurrentValue != null) {
         if (tempCurrentValue is List) {
           currentSelectedItems =
-          tempCurrentValue.isEmpty ? null : tempCurrentValue;
+              tempCurrentValue.isEmpty ? null : tempCurrentValue;
         } else {
           currentSelectedItems = [tempCurrentValue];
         }
@@ -913,10 +909,10 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
     }
 
     candidateSelectedItems = tempMultiOptPropXData?._resolveItemsFromRawData(
-      dynamicValues: candidateSelectedItems,
-      addOrphan: true,
-      clearOrphanItems: false,
-    ) ??
+          dynamicValues: candidateSelectedItems,
+          addOrphan: true,
+          clearOrphanItems: false,
+        ) ??
         [];
 
     if (candidateSelectedItems.isNotEmpty) {
@@ -937,7 +933,7 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
     }
 
     Object? tempSelectedPropValue =
-    _formModelStructure._getTempCurrentPropValue(
+        _formModelStructure._getTempCurrentPropValue(
       propName: multiOptPropName,
     );
 
@@ -963,7 +959,8 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
 
   /// Loads auxiliary form related data asynchronously.
   Future<ADDITIONAL_FORM_RELATED_DATA?> _performLoadAdditionalFormRelatedData(
-      ExecutionTrace executionTrace,) async {
+    ExecutionTrace executionTrace,
+  ) async {
     try {
       executionTrace.addControllableCall(
         codeId: "#091000",
@@ -1120,11 +1117,11 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
       _formKeyPatchValue(newCurrentValue: _formModelStructure._currentFormData);
       final fallbackState = switch (activityType) {
         FormActivityType.startCreatingOrEditing =>
-            FormDataStateFatalError(errorInfo: errorInfo),
+          FormDataStateFatalError(errorInfo: errorInfo),
         FormActivityType.updateFromFormView =>
-            FormDataStateLoadedFresh(transientErrorInfo: errorInfo),
+          FormDataStateLoadedFresh(transientErrorInfo: errorInfo),
         FormActivityType.patchFormFields =>
-            FormDataStateLoadedFresh(transientErrorInfo: errorInfo),
+          FormDataStateLoadedFresh(transientErrorInfo: errorInfo),
       };
 
       _formModelStructure._setFormDataState(
@@ -1141,21 +1138,20 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
     required String multiOptPropName,
   }) {
     MultiOptFormPropModel? multiOptProp =
-    _formModelStructure._getMultiOptFormProp(multiOptPropName);
+        _formModelStructure._getMultiOptFormProp(multiOptPropName);
     if (multiOptProp == null) {
       throw "The '$multiOptPropName' is not $MultiOptFormPropModel";
     }
     String message =
-        "The ${getClassName(
-        this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptPropName '$multiOptPropName'. ";
+        "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptPropName '$multiOptPropName'. ";
     if (multiOptProp.selectionMode == MultiOptSelectionMode.single) {
       message += "$OptValueWrap.single(null) or $OptValueWrap.single(value). ";
     } else {
       message +=
-      "$OptValueWrap.multi([null]) or $OptValueWrap.multi([value]). ";
+          "$OptValueWrap.multi([null]) or $OptValueWrap.multi([value]). ";
     }
     message +=
-    "And return null for not $MultiOptFormPropModel. See the specification of this method for more information.";
+        "And return null for not $MultiOptFormPropModel. See the specification of this method for more information.";
   }
 
   /// Throws an error if the provided property name does not correspond to a simple property.
@@ -1166,10 +1162,9 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
     if (_formModelStructure._isMultiOptFormProp(propName)) {
       throw DevError(
         errorMessage:
-        '$propName is not a ${getTypeNameWithoutGenerics(SimpleFormPropModel)}',
+            '$propName is not a ${getTypeNameWithoutGenerics(SimpleFormPropModel)}',
         errorDetails: [
-          "See ${getClassNameWithoutGenerics(
-              this)}.${getClassNameWithoutGenerics(formErrorMethod)}() method."
+          "See ${getClassNameWithoutGenerics(this)}.${getClassNameWithoutGenerics(formErrorMethod)}() method."
         ],
       );
     }
@@ -1319,13 +1314,12 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
   /// Checks whether the FormModel debug inspector dialog can be opened.
   @_PrecheckMethod()
   Actionable<ShowFormModelInspectorPrecheck>
-  checkBeforeShowFormModelInspector() {
+      checkBeforeShowFormModelInspector() {
     ILoggedInUser? loggedInUser = FlutterArtist.loggedInUser;
     return ShowFormModelInspectorPrecheckUtils
         .checkBeforeShowFormModelInspector(
       hasForm: true,
-      isLoggedIn: loggedInUser != null,
-      isSystemUser: loggedInUser != null && loggedInUser.isSystemUser,
+      loggedInUser: loggedInUser,
     );
   }
 
@@ -1338,11 +1332,11 @@ ADDITIONAL_FORM_RELATED_DATA extends AdditionalFormRelatedData> extends _Core
   /// if the precheck fails.
   @_RootMethodAnnotation()
   Future<Actionable<ShowFormModelInspectorPrecheck>>
-  showDebugFormModelInspectorDialog({
+      showDebugFormModelInspectorDialog({
     String locationInfo = '',
   }) async {
     final Actionable<ShowFormModelInspectorPrecheck> actionable =
-    checkBeforeShowFormModelInspector();
+        checkBeforeShowFormModelInspector();
 
     if (!actionable.yes) {
       final ShowFormModelInspectorPrecheck err = actionable.errCode!;

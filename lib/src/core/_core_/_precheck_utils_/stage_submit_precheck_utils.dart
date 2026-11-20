@@ -38,6 +38,12 @@ class StageSubmitPrecheckUtils {
     }
 
     // 4. Priority 4: Evaluate Stage DataState to control submission behavior cleanly
+    if (targetStageDataState.isNone) {
+      return Actionable<StageSubmitPrecheck>.no(
+        errCode: StageSubmitPrecheck.stageInNoneState,
+      );
+    }
+
     if (targetStageDataState.isPending) {
       return Actionable<StageSubmitPrecheck>.no(
         errCode: StageSubmitPrecheck.stageInPendingState,
