@@ -5,6 +5,8 @@ import '../_precheck_/__precheck.dart';
 import '../_utils_/pageable_calculator.dart';
 import '../core.dart';
 
+part 'block_refresh_current_item_precheck_utils.dart';
+part 'block_query_empty_precheck_utils.dart';
 part 'app_backend_action_precheck_utils.dart';
 part 'block_backend_action_precheck_utils.dart';
 part 'block_clear_items_precheck_utils.dart';

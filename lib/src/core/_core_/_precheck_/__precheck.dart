@@ -3,6 +3,10 @@ import 'package:flutter_artist_core/flutter_artist_core.dart';
 import '../../annotation/annotation.dart';
 import '../../utils/__utils.dart';
 
+part '_parts_/_block_refresh_current_item_precheck.dart';
+
+part '_parts_/_block_query_empty_precheck.dart';
+
 part '_parts_/_show_form_model_inspector_precheck.dart';
 
 part '_parts_/_show_filter_criteria_inspector_precheck.dart';

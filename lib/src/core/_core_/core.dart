@@ -676,6 +676,8 @@ part '_observer_/_navigator_observer.dart';
 
 part '_execution_unit_step_/block_operation_step.dart';
 
+part '_execution_unit_result_/_block_eur/_block_refresh_current_item_result.dart';
+
 part '_execution_unit_result_/_block_eur/__block_execution_unit_result.dart';
 
 part '_execution_unit_result_/__execution_unit_result.dart';
@@ -700,7 +702,11 @@ part '_execution_unit_result_/_block_eur/_block_set_current_item_result.dart';
 
 part '_execution_unit_result_/_block_eur/_block_item_deletion_result.dart';
 
+part '_execution_unit_result_/_block_eur/_block_item_edit_result.dart';
+
 part '_execution_unit_result_/_block_eur/_block_items_deletion_result.dart';
+
+part '_execution_unit_result_/_block_eur/_block_query_empty_result.dart';
 
 part '_execution_unit_result_/_block_eur/_block_query_result.dart';
 

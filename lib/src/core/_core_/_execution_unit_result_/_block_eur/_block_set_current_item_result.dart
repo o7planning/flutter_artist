@@ -49,7 +49,6 @@ ITEM_DETAIL extends Identifiable<ID>> extends BlockExecutionUnitResult<ID,
     switch (setCurrentItemDirective) {
       case BlockSetCurrentItemDirective.setAnItemAsCurrentThenLoadForm:
       case BlockSetCurrentItemDirective.setAnItemAsCurrent:
-      case BlockSetCurrentItemDirective.refresh:
       // Must successfully match the targeted initial candidate item
         if (initialCandidateItem == null || _currentItem == null) {
           return false;

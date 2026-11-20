@@ -5,18 +5,15 @@ import 'package:test/test.dart';
 void main() {
   group('BlockItemEditPrecheckUtils Tests', () {
     const defaultBlockDataState = BlockDataStateLoadedFresh();
-    const defaultFormDataState = FormDataStateLoadedFresh();
 
     test('Should return busy error when checkBusy is true and isBusy is true',
         () {
       final result =
           BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
         checkBusy: true,
-        isBusy: true,
-        // System is busy
+        isBusy: true, // System is busy
         hasForm: true,
         blockDataState: defaultBlockDataState,
-        formDataState: defaultFormDataState,
         item: 'Test Item',
         checkAllow: true,
         checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
@@ -31,10 +28,8 @@ void main() {
           BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
         checkBusy: true,
         isBusy: false,
-        hasForm: false,
-        // No form model configured
+        hasForm: false, // No form model configured
         blockDataState: defaultBlockDataState,
-        formDataState: null,
         item: 'Test Item',
         checkAllow: true,
         checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
@@ -44,34 +39,6 @@ void main() {
       expect(result.errCode, equals(BlockItemEditPrecheck.noForm));
     });
 
-    test(
-        'Should return formInFatalErrorState error when form model is in fatal error',
-        () {
-      final fatalErrorFormDataState = FormDataStateFatalError(
-        errorInfo: ErrorInfo(
-            errorMessage: 'Fatal form error',
-            errorDetails: [],
-            stackTrace: null),
-      );
-
-      final result =
-          BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
-        checkBusy: true,
-        isBusy: false,
-        hasForm: true,
-        blockDataState: defaultBlockDataState,
-        formDataState: fatalErrorFormDataState,
-        // Form in fatal error state
-        item: 'Test Item',
-        checkAllow: true,
-        checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
-      );
-
-      expect(result.yes, isFalse);
-      expect(
-          result.errCode, equals(BlockItemEditPrecheck.formInFatalErrorState));
-    });
-
     test('Should return noTarget error when target item is null', () {
       final result =
           BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
@@ -79,9 +46,7 @@ void main() {
         isBusy: false,
         hasForm: true,
         blockDataState: defaultBlockDataState,
-        formDataState: defaultFormDataState,
-        item: null,
-        // No target item provided
+        item: null, // No target item provided
         checkAllow: true,
         checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
       );
@@ -97,9 +62,7 @@ void main() {
         checkBusy: true,
         isBusy: false,
         hasForm: true,
-        blockDataState: const BlockDataStateNone(),
-        // Block in none state
-        formDataState: defaultFormDataState,
+        blockDataState: const BlockDataStateNone(), // Block in none state
         item: 'Test Item',
         checkAllow: true,
         checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
@@ -110,7 +73,46 @@ void main() {
     });
 
     test(
-        'Should return notAllow when business rule checkItemEditAllowed returns notAllow',
+        'Should return blockInPendingState error when block is in pending state',
+        () {
+      final result =
+          BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
+        checkBusy: true,
+        isBusy: false,
+        hasForm: true,
+        blockDataState: const BlockDataStatePending(), // Block in pending state
+        item: 'Test Item',
+        checkAllow: true,
+        checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
+      );
+
+      expect(result.yes, isFalse);
+      expect(
+        result.errCode,
+        equals(BlockItemEditPrecheck.blockInPendingState),
+      );
+    });
+
+    test('Should return blockInStaleState error when block is in stale state',
+        () {
+      final result =
+          BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
+        checkBusy: true,
+        isBusy: false,
+        hasForm: true,
+        blockDataState:
+            BlockDataStateLoadedStale.event(), // Block in stale state
+        item: 'Test Item',
+        checkAllow: true,
+        checkItemEditAllowed: (item) => CheckAllowResult.allowed(),
+      );
+
+      expect(result.yes, isFalse);
+      expect(result.errCode, equals(BlockItemEditPrecheck.blockInStaleState));
+    });
+
+    test(
+        'Should return notAllowed when business rule checkItemEditAllowed returns notAllowed',
         () {
       final result =
           BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
@@ -118,7 +120,6 @@ void main() {
         isBusy: false,
         hasForm: true,
         blockDataState: defaultBlockDataState,
-        formDataState: defaultFormDataState,
         item: 'Test Item',
         checkAllow: true,
         checkItemEditAllowed: (item) =>
@@ -129,6 +130,50 @@ void main() {
       expect(result.errCode, equals(BlockItemEditPrecheck.notAllowed));
     });
 
+    test(
+        'Should return checkAllowMethodError when checkItemEditAllowed returns error',
+        () {
+      final mockErrorInfo = ErrorInfo.fromError(
+        error: Exception('Edit permission check failed'),
+        stackTrace: StackTrace.current,
+      );
+
+      final result =
+          BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
+        checkBusy: true,
+        isBusy: false,
+        hasForm: true,
+        blockDataState: defaultBlockDataState,
+        item: 'Test Item',
+        checkAllow: true,
+        checkItemEditAllowed: (item) =>
+            CheckAllowResult.error(errorInfo: mockErrorInfo),
+      );
+
+      expect(result.yes, isFalse);
+      expect(
+        result.errCode,
+        equals(BlockItemEditPrecheck.checkAllowMethodError),
+      );
+      expect(result.errorInfo, equals(mockErrorInfo));
+    });
+
+    test('Should skip permission check and return yes when checkAllow is false',
+        () {
+      final result =
+          BlockItemEditPrecheckUtils.checkBeforeEditItemOnForm<String>(
+        checkBusy: true,
+        isBusy: false,
+        hasForm: true,
+        blockDataState: defaultBlockDataState,
+        item: 'Test Item',
+        checkAllow: false,
+        checkItemEditAllowed: (item) => CheckAllowResult.notAllowed(),
+      );
+
+      expect(result.yes, isTrue);
+    });
+
     test('Should return yes when all precheck conditions pass successfully',
         () {
       final result =
@@ -137,7 +182,6 @@ void main() {
         isBusy: false,
         hasForm: true,
         blockDataState: defaultBlockDataState,
-        formDataState: defaultFormDataState,
         item: 'Test Item',
         checkAllow: true,
         checkItemEditAllowed: (item) => CheckAllowResult.allowed(),

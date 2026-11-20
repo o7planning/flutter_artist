@@ -146,7 +146,7 @@ class _BlockControlBarState extends _BaseControlBarState<
           onPressed: actionable.yes
               ? () async {
                   final result =
-                      await widget.block._prepareFormToEditCurrentItem();
+                      await widget.block.prepareFormToEditCurrentItem();
                   //
                   final NavigationIntent? intent = widget
                       .config.screenNavigationContext?.editNavigationIntent;

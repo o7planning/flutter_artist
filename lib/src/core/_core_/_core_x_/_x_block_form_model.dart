@@ -27,6 +27,8 @@ class XBlockFormModel<
 
   FormModelExecutionIntent? _executionIntent;
 
+  FormModelDataLoadIntent? _lastDataLoadIntent;
+
   ///
   /// IMPORTANT: To create new XBlockFormModel, use 'formModel._createXBlockFormModel' method
   /// to have the same Generics Parameters with the formModel.
@@ -48,6 +50,15 @@ class XBlockFormModel<
 
   // ***************************************************************************
 
+  FormModelDataLoadIntent _createAndSetFormModelExecutionIntentLoad() {
+    final executionIntent = FormModelDataLoadIntent();
+    _executionIntent = executionIntent;
+    _lastDataLoadIntent = executionIntent;
+    return executionIntent;
+  }
+
+  // ***************************************************************************
+
   FormModelSaveIntent _createAndSetFormModelExecutionIntentSave() {
     final executionIntent = FormModelSaveIntent();
     _executionIntent = executionIntent;
@@ -62,14 +73,6 @@ class XBlockFormModel<
     final executionIntent = FormModelViewChangeIntent(
       formKeyInstantValuesInUI: formKeyInstantValuesInUI,
     );
-    _executionIntent = executionIntent;
-    return executionIntent;
-  }
-
-  // ***************************************************************************
-
-  FormModelDataLoadIntent _createAndSetFormModelExecutionIntentLoad() {
-    final executionIntent = FormModelDataLoadIntent();
     _executionIntent = executionIntent;
     return executionIntent;
   }

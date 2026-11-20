@@ -3283,33 +3283,6 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  @_RootMethodAnnotation()
-  @_ReturnExecutionUnitResultMethodAnnotation()
-  @_BlockSetItemAsCurrentAnnotation()
-  Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
-      refreshItemAndSetAsCurrent({
-    required ITEM item,
-    bool forceLoadForm = false,
-  }) async {
-    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
-      ownerClassInstance: this,
-      methodName: "refreshItemAndSetAsCurrent",
-      parameters: {
-        "item": item,
-        "forceLoadForm": forceLoadForm,
-      },
-      isLibMethod: true,
-    );
-    return await blockCurrentItemModel.__refreshItemAndSetAsCurrent(
-      executionTrace: executionTrace,
-      methodName: "refreshItemAndSetAsCurrent",
-      item: item,
-      errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
-      forceLoadItem: true,
-      forceLoadForm: forceLoadForm,
-    );
-  }
-
   // ***************************************************************************
   // ***************************************************************************
 
@@ -3494,83 +3467,66 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Clears all items in the block while transitioning the block state to Fresh.
+  ///
+  /// This simulates a successful query that yields zero items without hitting
+  /// the remote server or backend data source.
+  ///
+  /// Use [filterSyncDirective] to control how the associated [FilterModel]
+  /// synchronizes its draft snapshot prior to clearing the items.
+  @nonVirtual
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
-  Future<bool> queryEmptyAndPrepareToCreate({
+  Future<BlockQueryEmptyResult<ID, ITEM, ITEM_DETAIL>> queryEmpty({
     FILTER_PATCH? filterPatch,
     FilterSyncDirective filterSyncDirective = FilterSyncDirective.useCommitted,
   }) async {
-    if (filterModel != null && filterModel!.lockAddMoreQuery) {
-      return false;
-    }
-    //
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "queryEmptyAndPrepareToCreate",
+      methodName: "queryEmpty",
       parameters: {
         "filterPatch": filterPatch,
         "filterSyncDirective": filterSyncDirective,
       },
       isLibMethod: true,
     );
-    //
+
+    executionTrace.addNonControllableCall(
+      codeId: "#117000",
+      caller: this,
+      methodName: "checkBeforeQueryEmpty",
+      suffixShortDesc: "",
+      parameters: {},
+    );
+
+    final Actionable<BlockQueryEmptyPrecheck> actionable =
+        checkBeforeQueryEmpty();
+    if (!actionable.yes) {
+      _addErrorLogActionable(
+        executionTrace: executionTrace,
+        traceStepCodeId: "#117400",
+        prefixShortDesc: 'checkBeforeQueryEmpty()',
+        module: shelf,
+        actionableFalse: actionable,
+        showErrSnackBar: true,
+        tipDocument: null,
+      );
+      return BlockQueryEmptyResult<ID, ITEM, ITEM_DETAIL>._precheckFail(
+        precheck: actionable.errCode!,
+      );
+    }
+
+    // Synchronize draft snapshot into committed realm according to directive
     if (filterModel != null) {
       filterModel!._applyFilterSyncDirective(
         filterSyncDirective: filterSyncDirective,
         filterPatch: filterPatch,
       );
     }
-    //
+
     return await __queryEmpty(
       executionTrace: executionTrace,
       filterPatch: filterPatch,
-      prepareFormToCreateItem: true,
-    );
-  }
-
-  // ***************************************************************************
-  // ***************************************************************************
-
-  /// Clears all items in the block while setting the block state to Fresh.
-  ///
-  /// This simulates a successful query that yields zero items without hitting
-  /// the remote server or backend data source.
-  ///
-  /// If [syncFilterDraft] is set to `true`, the associated [FilterModel] will
-  /// commit its draft workspace snapshot to the committed realm prior to
-  /// clearing the items.
-  @_RootMethodAnnotation()
-  @_ReturnExecutionUnitResultMethodAnnotation()
-  Future<bool> queryEmpty({
-    FILTER_PATCH? filterPatch,
-    bool prepareFormToCreateItem = false,
-    FilterSyncDirective filterSyncDirective = FilterSyncDirective.useCommitted,
-  }) async {
-    if (filterModel != null && filterModel!.lockAddMoreQuery) {
-      return false;
-    }
-    //
-    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
-      ownerClassInstance: this,
-      methodName: "queryEmpty",
-      parameters: {
-        "filterPatch": filterPatch,
-        "prepareFormToCreateItem": prepareFormToCreateItem,
-      },
-      isLibMethod: true,
-    );
-    // Synchronize draft snapshot into committed realm if explicitly requested
-    if (filterModel != null) {
-      filterModel!._applyFilterSyncDirective(
-        filterSyncDirective: filterSyncDirective,
-        filterPatch: filterPatch,
-      );
-    }
-    //
-    return await __queryEmpty(
-      executionTrace: executionTrace,
-      filterPatch: filterPatch,
-      prepareFormToCreateItem: prepareFormToCreateItem,
     );
   }
 
@@ -4071,7 +4027,6 @@ abstract class Block<
   @_ReturnExecutionUnitResultMethodAnnotation()
   Future<BlockBackendActionResult> executeBackendAction({
     FILTER_PATCH? filterPatch,
-    required ActionConfirmationType actionConfirmationType,
     required BlockBackendAction<ID> action,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
@@ -4360,18 +4315,74 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Refreshes the active [currentItem] detail from the backend.
+  ///
+  /// When [withFormContext] is `true`, the form model (if configured) is also
+  /// synchronized as if a [BlockFormView] were actively visible.
+  @_RootMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
+  @_BlockRefreshCurrentItemAnnotation()
+  Future<BlockRefreshCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
+      refreshCurrentItem({
+    bool withFormContext = false,
+  }) async {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "refreshCurrentItem",
+      parameters: {
+        "withFormContext": withFormContext,
+      },
+      isLibMethod: true,
+    );
+    return await blockCurrentItemModel.__refreshCurrentItem(
+      executionTrace: executionTrace,
+      withFormContext: withFormContext,
+    );
+  }
+
+  // ***************************************************************************
+
+  @_RootMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
+  @_BlockSetItemAsCurrentAnnotation()
+  Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
+      refreshItemAndSetAsCurrent({
+    required ITEM item,
+    bool withFormContext = false,
+  }) async {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "refreshItemAndSetAsCurrent",
+      parameters: {
+        "item": item,
+        "withFormContext": withFormContext,
+      },
+      isLibMethod: true,
+    );
+    return await blockCurrentItemModel.__refreshItemAndSetAsCurrent(
+      executionTrace: executionTrace,
+      methodName: "refreshItemAndSetAsCurrent",
+      item: item,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.invalidTarget,
+      forceLoadItem: true,
+      withFormContext: withFormContext,
+    );
+  }
+
+  // ***************************************************************************
+
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockSelectFirstItemAsCurrentAnnotation()
   Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
       refreshFirstItemAndSetAsCurrent({
-    bool forceLoadForm = false,
+    bool withFormContext = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "refreshFirstItemAndSetAsCurrent",
       parameters: {
-        "forceLoadForm": forceLoadForm,
+        "withFormContext": withFormContext,
       },
       isLibMethod: true,
     );
@@ -4381,11 +4392,37 @@ abstract class Block<
       item: firstItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceLoadItem: true,
-      forceLoadForm: forceLoadForm,
+      withFormContext: withFormContext,
     );
   }
 
   // ***************************************************************************
+
+  @_RootMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
+  @_BlockSetItemAsCurrentAnnotation()
+  Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
+      refreshLastItemAndSetAsCurrent({
+    bool withFormContext = false,
+  }) async {
+    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
+      ownerClassInstance: this,
+      methodName: "refreshLastItemAndSetAsCurrent",
+      parameters: {
+        "withFormContext": withFormContext,
+      },
+      isLibMethod: true,
+    );
+    return await blockCurrentItemModel.__refreshItemAndSetAsCurrent(
+      executionTrace: executionTrace,
+      methodName: "refreshLastItemAndSetAsCurrent",
+      item: lastItem,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
+      forceLoadItem: true,
+      withFormContext: withFormContext,
+    );
+  }
+
   // ***************************************************************************
 
   @_RootMethodAnnotation()
@@ -4393,30 +4430,27 @@ abstract class Block<
   @_BlockSelectNextItemAsCurrentAnnotation()
   Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
       refreshNextItemAndSetAsCurrent({
-    bool forceLoadForm = false,
+    bool withFormContext = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "refreshNextItemAndSetAsCurrent",
       parameters: {
-        "forceLoadForm": forceLoadForm,
+        "withFormContext": withFormContext,
       },
       isLibMethod: true,
     );
-    //
-    ITEM? nextItem = nextSiblingItem;
-    //
+    final ITEM? nextItem = nextSiblingItem;
     return await blockCurrentItemModel.__refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshNextItemAndSetAsCurrent",
       item: nextItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceLoadItem: true,
-      forceLoadForm: forceLoadForm,
+      withFormContext: withFormContext,
     );
   }
 
-  // ***************************************************************************
   // ***************************************************************************
 
   @_RootMethodAnnotation()
@@ -4424,44 +4458,54 @@ abstract class Block<
   @_BlockSelectPreviousItemAsCurrentAnnotation()
   Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>>
       refreshPreviousItemAndSetAsCurrent({
-    bool forceLoadForm = false,
+    bool withFormContext = false,
   }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
       methodName: "refreshPreviousItemAndSetAsCurrent",
       parameters: {
-        "forceLoadForm": forceLoadForm,
+        "withFormContext": withFormContext,
       },
       isLibMethod: true,
     );
-    //
-    ITEM? previousItem = previousSiblingItem;
-    //
+    final ITEM? previousItem = previousSiblingItem;
     return await blockCurrentItemModel.__refreshItemAndSetAsCurrent(
       executionTrace: executionTrace,
       methodName: "refreshPreviousItemAndSetAsCurrent",
       item: previousItem,
       errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
       forceLoadItem: true,
-      forceLoadForm: forceLoadForm,
+      withFormContext: withFormContext,
     );
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Prepares the block's [formModel] to edit the active [currentItem].
   ///
-  /// Prepare to edit an item in a Form.
-  ///
-  Future<BlockSetCurrentItemResult> _prepareFormToEditCurrentItem() async {
+  /// When [forceReload] is `false` (default), reuses the already loaded-fresh
+  /// item detail and form data if available and moves focus directly to the form.
+  /// When [forceReload] is `true`, forces a fresh reload of both [currentItemDetail]
+  /// and [formModel] from the backend.
+  @_RootMethodAnnotation()
+  @_ReturnExecutionUnitResultMethodAnnotation()
+  Future<PrepareItemEditResult<ID, ITEM, ITEM_DETAIL>>
+      prepareFormToEditCurrentItem({
+    bool forceReload = false,
+  }) async {
     final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
       ownerClassInstance: this,
-      methodName: "_prepareFormToEditCurrentItem",
-      parameters: {},
+      methodName: "prepareFormToEditCurrentItem",
+      parameters: {
+        "forceReload": forceReload,
+      },
       isLibMethod: true,
     );
-    //
-    return await refreshCurrentItem(forceLoadForm: true);
+    return await blockCurrentItemModel.__prepareFormToEditCurrentItem(
+      executionTrace: executionTrace,
+      forceReload: forceReload,
+    );
   }
 
   // ***************************************************************************
@@ -4585,7 +4629,7 @@ abstract class Block<
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockDeleteCheckedItemsAnnotation()
-  Future<BlockItemsDeletionResult> deleteCheckedItems({
+  Future<BlockItemsDeletionResult<ID, ITEM, ITEM_DETAIL>> deleteCheckedItems({
     required CurrentItemInclusion currentItemInclusion,
     required bool stopIfError,
   }) async {
@@ -4699,34 +4743,6 @@ abstract class Block<
 
   // ***************************************************************************
   // ***************************************************************************
-
-  ///
-  ///
-  ///
-  @_RootMethodAnnotation()
-  @_ReturnExecutionUnitResultMethodAnnotation()
-  @_BlockRefreshCurrentItemAnnotation()
-  Future<BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL>> refreshCurrentItem({
-    bool forceLoadForm = false,
-  }) async {
-    final executionTrace = FlutterArtist.codeFlowLogger._addMethodCall(
-      ownerClassInstance: this,
-      methodName: "refreshCurrentItem",
-      parameters: {
-        "forceLoadForm": forceLoadForm,
-      },
-      isLibMethod: true,
-    );
-    //
-    return await blockCurrentItemModel.__refreshItemAndSetAsCurrent(
-      executionTrace: executionTrace,
-      methodName: 'refreshCurrentItem',
-      item: currentItem,
-      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
-      forceLoadItem: true,
-      forceLoadForm: forceLoadForm,
-    );
-  }
 
   // ***************************************************************************
   // ***************************************************************************
@@ -4957,41 +4973,42 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
-  Future<bool> __queryEmpty({
+  Future<BlockQueryEmptyResult<ID, ITEM, ITEM_DETAIL>> __queryEmpty({
     required ExecutionTrace executionTrace,
     required FILTER_PATCH? filterPatch,
-    bool prepareFormToCreateItem = false,
   }) async {
     executionTrace.addInfo(
       codeId: "#053000",
       shortDesc: "Creating <b>$_XShelfBlockQueryEmpty</b>..",
     );
-    //
+
     final XShelf xShelf = _XShelfBlockQueryEmpty(
       block: this,
       filterPatch: filterPatch,
       pageable: pageable,
       listUpdateStrategy: ListUpdateStrategy.replace,
-      afterQueryDirective: prepareFormToCreateItem
-          ? BlockAfterQueryDirective.createNewItem
-          : BlockAfterQueryDirective.setAnItemAsCurrent,
+      afterQueryDirective: BlockAfterQueryDirective.setAnItemAsCurrent,
       suggestedSelection: null,
     );
-    //
-    executionTrace.addNonControllableCall(
-      codeId: "#053100",
-      caller: this,
-      methodName: "_initQueryExecutionUnits",
-      suffixShortDesc: "",
-    );
-    //
-    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
-    await FlutterArtist.executor._executeExecutionUnitQueue();
-    //
+
     final thisXBlock =
         xShelf.findXBlockByName(name) as XBlock<ID, ITEM, ITEM_DETAIL>;
-    BlockQueryResult queryResult = thisXBlock.queryResult;
-    return queryResult.successForAll;
+    final BlockQueryIntent<ID, ITEM, ITEM_DETAIL> executionIntent =
+        thisXBlock._createAndSetBlockExecutionIntentQuery(
+      isQueryMoreFlow: false,
+    );
+
+    FlutterArtist._rootQueue._addXRootQueueItem(xRootQueueItem: xShelf);
+    await FlutterArtist.executor._executeExecutionUnitQueue();
+
+    final queryResult =
+        executionIntent.result as BlockQueryResult<ID, ITEM, ITEM_DETAIL>;
+
+    return BlockQueryEmptyResult<ID, ITEM, ITEM_DETAIL>._(
+      errorInfo: queryResult.errorInfo,
+      isFilterError:
+          queryResult._isFilterError || thisXBlock.queryResult._isFilterError,
+    );
   }
 
   // ***************************************************************************
@@ -5316,6 +5333,28 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  /// Evaluates whether [queryEmpty] is permitted on this block.
+  @_PrecheckMethod()
+  Actionable<BlockQueryEmptyPrecheck> checkBeforeQueryEmpty() {
+    return __checkBeforeQueryEmpty(checkBusy: true);
+  }
+
+  @_PrecheckPrivateMethod()
+  Actionable<BlockQueryEmptyPrecheck> __checkBeforeQueryEmpty({
+    required bool checkBusy,
+  }) {
+    final bool isBusy = FlutterArtist.executor.isBusy ||
+        (filterModel?.lockAddMoreQuery ?? false);
+
+    return BlockQueryEmptyPrecheckUtils.checkBeforeQueryEmpty(
+      checkBusy: checkBusy,
+      isBusy: isBusy,
+    );
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
   @_PrecheckMethod()
   Actionable<BlockQueryPrecheck> checkBeforeQuery({
     bool checkAllow = true,
@@ -5551,9 +5590,20 @@ abstract class Block<
   }
 
   // ***************************************************************************
+  // ***************************************************************************
 
+  /// Checks whether the active [currentItem] can be refreshed.
   @_PrecheckMethod()
-  // @seeAlso: checkBeforeRefreshCurrentItem()
+  Actionable<BlockRefreshCurrentItemPrecheck> checkBeforeRefreshCurrentItem() {
+    return blockCurrentItemModel._checkBeforeRefreshCurrentItem(
+      checkBusy: true,
+    );
+  }
+
+  // ***************************************************************************
+
+  /// Checks whether [item] can be set as the active current item.
+  @_PrecheckMethod()
   Actionable<BlockSetCurrentItemPrecheck> checkBeforeSetItemAsCurrent({
     required ITEM item,
   }) {
@@ -5566,14 +5616,53 @@ abstract class Block<
 
   // ***************************************************************************
 
-  ///
-  /// Checks whether the current item can be refreshed.
-  ///
+  /// Checks whether the first item in the list can be refreshed and set as current.
   @_PrecheckMethod()
-  // @seeAlso: checkBeforeSetItemAsCurrent()
-  Actionable<BlockSetCurrentItemPrecheck> checkBeforeRefreshCurrentItem() {
-    return blockCurrentItemModel._checkBeforeRefreshCurrentItem(
+  Actionable<BlockSetCurrentItemPrecheck>
+      checkBeforeRefreshFirstItemAndSetAsCurrent() {
+    return blockCurrentItemModel._checkBeforeSetItemAsCurrent(
       checkBusy: true,
+      item: firstItem,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
+    );
+  }
+
+  // ***************************************************************************
+
+  /// Checks whether the last item in the list can be refreshed and set as current.
+  @_PrecheckMethod()
+  Actionable<BlockSetCurrentItemPrecheck>
+      checkBeforeRefreshLastItemAndSetAsCurrent() {
+    return blockCurrentItemModel._checkBeforeSetItemAsCurrent(
+      checkBusy: true,
+      item: lastItem,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
+    );
+  }
+
+  // ***************************************************************************
+
+  /// Checks whether the next sibling item can be refreshed and set as current.
+  @_PrecheckMethod()
+  Actionable<BlockSetCurrentItemPrecheck>
+      checkBeforeRefreshNextItemAndSetAsCurrent() {
+    return blockCurrentItemModel._checkBeforeSetItemAsCurrent(
+      checkBusy: true,
+      item: nextSiblingItem,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
+    );
+  }
+
+  // ***************************************************************************
+
+  /// Checks whether the previous sibling item can be refreshed and set as current.
+  @_PrecheckMethod()
+  Actionable<BlockSetCurrentItemPrecheck>
+      checkBeforeRefreshPreviousItemAndSetAsCurrent() {
+    return blockCurrentItemModel._checkBeforeSetItemAsCurrent(
+      checkBusy: true,
+      item: previousSiblingItem,
+      errCodeIfItemIsNull: ErrCodeIfItemIsNull.noTarget,
     );
   }
 

@@ -77,7 +77,7 @@ class _BlockMnemonicHandler {
 
       case MnemonicShortcut.edit:
         () async {
-          final result = await block._prepareFormToEditCurrentItem();
+          final result = await block.prepareFormToEditCurrentItem();
           final NavigationIntent? intent =
               screenNavigationContext?.editNavigationIntent;
           if (intent != null && context.mounted) {

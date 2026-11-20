@@ -398,7 +398,8 @@ abstract class BlockFormModel<
     final thisFormDataState = dataState;
     final bool forceReloadForm = switch (thisXBlockFormModel.formLoadHint) {
       FormLoadHint.force => true,
-      FormLoadHint.forceIfNeed => (thisFormDataState.isPending ||
+      FormLoadHint.forceIfNeed => (thisFormDataState.isNone ||
+          thisFormDataState.isPending ||
           thisFormDataState.isFatalError ||
           thisFormDataState.isLoadedStale),
       FormLoadHint.auto => visibleX &&
@@ -421,6 +422,17 @@ abstract class BlockFormModel<
       activityType: FormActivityType.startCreatingOrEditing,
       formKeyInstantValuesInUI: null,
     );
+
+    if (success && thisXBlockFormModel.focusFlag) {
+      _GlobalFocusGuard.requestFocusAfterExecution(
+        ActiveFocusRegion(
+          moduleName: shelf.name,
+          unitName: block.name,
+          regionType: FocusRegionType.blockFormView,
+        ),
+      );
+    }
+
     return success;
   }
 
@@ -632,7 +644,6 @@ abstract class BlockFormModel<
     );
     //
     final bool checkBusyTrue = true;
-    final bool checkAllowTrue = true;
     final bool checkValidateTrue = true;
 
     executionTrace.addNonControllableCall(

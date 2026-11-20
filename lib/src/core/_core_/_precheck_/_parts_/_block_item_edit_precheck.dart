@@ -44,13 +44,6 @@ enum BlockItemEditPrecheck implements Precheck {
     details: ["The block data is outdated. Please refresh before editing."],
   ),
 
-  /// Operation aborted because the form model encountered a fatal error state.
-  formInFatalErrorState(
-    precheckCode: PrecheckCode.formInFatalErrorState,
-    message: "Cannot edit item",
-    details: ["The form model is in a fatal error state."],
-  ),
-
   /// Operation not allowed by application business rules.
   notAllowed(
     precheckCode: PrecheckCode.notAllowed,
