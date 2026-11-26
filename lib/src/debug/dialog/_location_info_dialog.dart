@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/icon/icon_constants.dart';
-import '../../core/widgets/_simple_copy_button.dart';
+import '../../core/widgets/__widgets.dart';
 import '_dialog_constants.dart';
 
 class LocationInfoDialog extends StatelessWidget {

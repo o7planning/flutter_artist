@@ -5,9 +5,9 @@ part of '../../core.dart';
 ///
 /// [FormModelStructure] acts as the declarative blueprint for all form fields,
 /// categorizing them into:
-/// - **Simple Properties** ([SimpleFormPropDef]): Discrete values such as text,
+/// - **Plain Properties** ([PlainFormPropDef]): Discrete values such as text,
 ///   integers, booleans, dates, or files that do not require option dataset lookups.
-/// - **Multi-Option Properties** ([MultiOptFormPropDef]): Selection-based properties
+/// - **Managed-Option Properties** ([ManagedOptFormPropDef]): Selection-based properties
 ///   backed by dynamic datasets ([XData]), supporting single-selection, multi-selection,
 ///   and hierarchical cascading dependencies between parent and child options.
 ///
@@ -18,19 +18,19 @@ part of '../../core.dart';
 /// @override
 /// FormModelStructure defineFormModelStructure() {
 ///   return FormModelStructure(
-///     simplePropDefs: [
-///       SimpleFormPropDef<int>(propName: "id"),
-///       SimpleFormPropDef<String>(propName: "name"),
-///       SimpleFormPropDef<bool>(propName: "active"),
-///       SimpleFormPropDef<String>(propName: "description"),
+///     plainPropDefs: [
+///       PlainFormPropDef<int>(propName: "id"),
+///       PlainFormPropDef<String>(propName: "name"),
+///       PlainFormPropDef<bool>(propName: "active"),
+///       PlainFormPropDef<String>(propName: "description"),
 ///     ],
-///     multiOptPropDefs: [
+///     managedOptPropDefs: [
 ///       // Single-selection dropdown/picker:
-///       MultiOptFormPropDef<ProgramTypeInfo>.singleSelection(
+///       ManagedOptFormPropDef<ProgramTypeInfo>.singleSelection(
 ///         propName: "programType",
 ///       ),
 ///       // Multi-selection list or tag picker:
-///       MultiOptFormPropDef<ContributorInfo>.multiSelection(
+///       ManagedOptFormPropDef<ContributorInfo>.multiSelection(
 ///         propName: "contributors",
 ///       ),
 ///     ],
@@ -41,20 +41,20 @@ class FormModelStructure {
   //
   // Prop Defs:
   //
-  /// List of simple property definitions registered for this form structure.
-  final List<SimpleFormPropDef> __simplePropDefs;
+  /// List of plain property definitions registered for this form structure.
+  final List<PlainFormPropDef> __plainPropDefs;
 
-  /// List of root multi-option property definitions registered for this form structure.
-  final List<MultiOptFormPropDef> __rootMultiOptPropDefs;
+  /// List of root managed-option property definitions registered for this form structure.
+  final List<ManagedOptFormPropDef> __rootManagedOptPropDefs;
 
   /// Combined map of all property definitions mapped by their unique names.
   final Map<String, FormPropDef> __allPropDefMap = {};
 
-  /// Map of simple property definitions mapped by their unique names.
-  final Map<String, SimpleFormPropDef> __simplePropDefMap = {};
+  /// Map of plain property definitions mapped by their unique names.
+  final Map<String, PlainFormPropDef> __plainPropDefMap = {};
 
-  /// Map of multi-option property definitions mapped by their unique names.
-  final Map<String, MultiOptFormPropDef> __multiOptPropDefMap = {};
+  /// Map of managed-option property definitions mapped by their unique names.
+  final Map<String, ManagedOptFormPropDef> __managedOptPropDefMap = {};
 
   //
   // FormPropModels:
@@ -62,11 +62,11 @@ class FormModelStructure {
   /// Map of all instantiated property models mapped by their unique names.
   final Map<String, FormPropModel> _allPropModelMapX = {};
 
-  /// List of root multi-option property models.
-  final List<MultiOptFormPropModel> _rootOptPropModels = [];
+  /// List of root managed-option property models.
+  final List<ManagedOptFormPropModel> _rootManagedOptPropModels = [];
 
-  /// List of simple property models.
-  final List<SimpleFormPropModel> _simplePropModels = [];
+  /// List of plain property models.
+  final List<PlainFormPropModel> _plainPropModels = [];
 
   /// List of calculated property models.
   final List<CalculatedFormPropModel> _calculatedPropModels = [];
@@ -107,37 +107,36 @@ class FormModelStructure {
   /// Checks whether the current form is in creation mode (is a new item).
   bool get isNew => _internalFormMode == InternalFormMode.creation;
 
-  /// Initializes the form model structure with given simple and multi-option property definitions.
+  /// Initializes the form model structure with given plain and managed-option property definitions.
   FormModelStructure({
-    required List<SimpleFormPropDef> simplePropDefs,
-    required List<MultiOptFormPropDef> multiOptPropDefs,
-  })
-      : __simplePropDefs = [...simplePropDefs],
-        __rootMultiOptPropDefs = [...multiOptPropDefs] {
-    // Initialize simple property definitions
-    for (SimpleFormPropDef simplePropDef in simplePropDefs) {
-      __initSimplePropDef(simplePropDef: simplePropDef);
+    required List<PlainFormPropDef> plainPropDefs,
+    required List<ManagedOptFormPropDef> managedOptPropDefs,
+  })  : __plainPropDefs = [...plainPropDefs],
+        __rootManagedOptPropDefs = [...managedOptPropDefs] {
+    // Initialize plain property definitions
+    for (PlainFormPropDef plainPropDef in plainPropDefs) {
+      __initPlainPropDef(plainPropDef: plainPropDef);
     }
     //
-    // Initialize multi-option property definitions recursively (cascade)
-    for (MultiOptFormPropDef multiOptPropDef in multiOptPropDefs) {
-      __initMultiOptPropDefCascade(
-        multiOptPropDef: multiOptPropDef,
+    // Initialize managed-option property definitions recursively (cascade)
+    for (ManagedOptFormPropDef managedOptPropDef in managedOptPropDefs) {
+      __initManagedOptPropDefCascade(
+        managedOptPropDef: managedOptPropDef,
         parent: null,
       );
     }
     //
     // Create Prop Models:
     //
-    // Instantiate models for all simple property definitions
-    for (SimpleFormPropDef propDef in __simplePropDefs) {
-      __createSimpleFormPropModel(
-        simplePropDef: propDef,
+    // Instantiate models for all plain property definitions
+    for (PlainFormPropDef propDef in __plainPropDefs) {
+      __createPlainFormPropModel(
+        plainPropDef: propDef,
       );
     }
-    // Instantiate models for all multi-option property definitions recursively
-    for (MultiOptFormPropDef rootOptDef in __rootMultiOptPropDefs) {
-      __createMultiOptFormPropModelCascade(
+    // Instantiate models for all managed-option property definitions recursively
+    for (ManagedOptFormPropDef rootOptDef in __rootManagedOptPropDefs) {
+      __createManagedOptFormPropModelCascade(
         optPropDef: rootOptDef,
         parentOptModel: null,
       );
@@ -146,40 +145,40 @@ class FormModelStructure {
 
   // ***************************************************************************
 
-  /// Initializes a single simple property definition and checks for name duplicates.
-  void __initSimplePropDef({
-    required SimpleFormPropDef simplePropDef,
+  /// Initializes a single plain property definition and checks for name duplicates.
+  void __initPlainPropDef({
+    required PlainFormPropDef plainPropDef,
   }) {
-    if (__allPropDefMap.containsKey(simplePropDef.propName)) {
+    if (__allPropDefMap.containsKey(plainPropDef.propName)) {
       throw FormPropDuplicateNameError(
-        propName: simplePropDef.propName,
+        propName: plainPropDef.propName,
       );
     }
-    __allPropDefMap[simplePropDef.propName] = simplePropDef;
-    __simplePropDefMap[simplePropDef.propName] = simplePropDef;
+    __allPropDefMap[plainPropDef.propName] = plainPropDef;
+    __plainPropDefMap[plainPropDef.propName] = plainPropDef;
   }
 
   // ***************************************************************************
 
-  /// Recursively initializes multi-option property definitions and links parent-child relationships.
-  void __initMultiOptPropDefCascade({
-    required MultiOptFormPropDef multiOptPropDef,
-    required MultiOptFormPropDef? parent,
+  /// Recursively initializes managed-option property definitions and links parent-child relationships.
+  void __initManagedOptPropDefCascade({
+    required ManagedOptFormPropDef managedOptPropDef,
+    required ManagedOptFormPropDef? parent,
   }) {
-    if (__allPropDefMap.containsKey(multiOptPropDef.propName)) {
+    if (__allPropDefMap.containsKey(managedOptPropDef.propName)) {
       throw FormPropDuplicateNameError(
-        propName: multiOptPropDef.propName,
+        propName: managedOptPropDef.propName,
       );
     }
     // Init LAZY Property.
-    multiOptPropDef.parent = parent;
-    __allPropDefMap[multiOptPropDef.propName] = multiOptPropDef;
-    __multiOptPropDefMap[multiOptPropDef.propName] = multiOptPropDef;
+    managedOptPropDef.parent = parent;
+    __allPropDefMap[managedOptPropDef.propName] = managedOptPropDef;
+    __managedOptPropDefMap[managedOptPropDef.propName] = managedOptPropDef;
     //
-    for (MultiOptFormPropDef child in multiOptPropDef._children) {
-      __initMultiOptPropDefCascade(
-        multiOptPropDef: child,
-        parent: multiOptPropDef,
+    for (ManagedOptFormPropDef child in managedOptPropDef._children) {
+      __initManagedOptPropDefCascade(
+        managedOptPropDef: child,
+        parent: managedOptPropDef,
       );
     }
   }
@@ -187,36 +186,36 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Creates and registers a simple form property model from its definition.
-  void __createSimpleFormPropModel({
-    required SimpleFormPropDef simplePropDef,
+  /// Creates and registers a plain form property model from its definition.
+  void __createPlainFormPropModel({
+    required PlainFormPropDef plainPropDef,
   }) {
-    final model = simplePropDef.createModel(
-      propName: simplePropDef.propName,
+    final model = plainPropDef.createModel(
+      propName: plainPropDef.propName,
     );
-    _simplePropModels.add(model);
-    _allPropModelMapX[simplePropDef.propName] = model;
+    _plainPropModels.add(model);
+    _allPropModelMapX[plainPropDef.propName] = model;
   }
 
   // ***************************************************************************
 
-  /// Recursively creates and registers multi-option form property models.
-  void __createMultiOptFormPropModelCascade({
-    required MultiOptFormPropDef optPropDef,
-    required MultiOptFormPropModel? parentOptModel,
+  /// Recursively creates and registers managed-option form property models.
+  void __createManagedOptFormPropModelCascade({
+    required ManagedOptFormPropDef optPropDef,
+    required ManagedOptFormPropModel? parentOptModel,
   }) {
     final model = optPropDef.createModel(
       propName: optPropDef.propName,
       parent: parentOptModel,
     );
     if (parentOptModel == null) {
-      _rootOptPropModels.add(model);
+      _rootManagedOptPropModels.add(model);
     }
     parentOptModel?._children.add(model);
     //
     _allPropModelMapX[optPropDef.propName] = model;
-    for (MultiOptFormPropDef childDef in optPropDef._children) {
-      __createMultiOptFormPropModelCascade(
+    for (ManagedOptFormPropDef childDef in optPropDef._children) {
+      __createManagedOptFormPropModelCascade(
         optPropDef: childDef,
         parentOptModel: model,
       );
@@ -262,34 +261,34 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  // SAME-AS: #0007 (filterModelStructure.allMultiOptCriteria)
-  /// Retrieves a list of all multi-option property models in the form.
-  List<MultiOptFormPropModel> get allMultiOptProps {
+  // SAME-AS: #0007 (filterModelStructure.allManagedOptCriteria)
+  /// Retrieves a list of all managed-option property models in the form.
+  List<ManagedOptFormPropModel> get allManagedOptProps {
     return _allPropModelMapX.values
-        .whereType<MultiOptFormPropModel>()
-        .cast<MultiOptFormPropModel>()
+        .whereType<ManagedOptFormPropModel>()
+        .cast<ManagedOptFormPropModel>()
         .toList();
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Marks root multi-option properties for reload if their criteria has changed.
+  /// Marks root managed-option properties for reload if their criteria has changed.
   void _triggerFilterCriteriaChanged() {
-    for (var rootMultiOptProp in _rootOptPropModels) {
-      if (rootMultiOptProp.reloadCondition ==
-          MultiOptPropReload.ifCriteriaChanged) {
-        rootMultiOptProp._markToReload = true;
+    for (var rootManagedOptProp in _rootManagedOptPropModels) {
+      if (rootManagedOptProp.reloadCondition ==
+          ManagedOptPropReload.ifCriteriaChanged) {
+        rootManagedOptProp._markToReload = true;
       }
     }
   }
 
-  /// Marks root multi-option properties for reload if the item ID has changed.
+  /// Marks root managed-option properties for reload if the item ID has changed.
   void _triggerItemIdChanged() {
-    for (var rootMultiOptProp in _rootOptPropModels) {
-      if (rootMultiOptProp.reloadCondition ==
-          MultiOptPropReload.ifItemIdChanged) {
-        rootMultiOptProp._markToReload = true;
+    for (var rootManagedOptProp in _rootManagedOptPropModels) {
+      if (rootManagedOptProp.reloadCondition ==
+          ManagedOptPropReload.ifItemIdChanged) {
+        rootManagedOptProp._markToReload = true;
       }
     }
   }
@@ -350,7 +349,7 @@ class FormModelStructure {
   ///
   /// For the first load of an Item, update "Initial Form Data".
   /// IMPORTANT:
-  /// - Other Initial [MultiOptFormPropModel] data will be update later...
+  /// - Other Initial [ManagedOptFormPropModel] data will be update later...
   ///
   void _setInitialFormDataForItemFirstLoad() {
     for (FormPropModel prop in _allPropModelMapX.values) {
@@ -398,7 +397,7 @@ class FormModelStructure {
     for (FormPropModel prop in _allPropModelMapX.values) {
       prop._currentValue = null;
       prop._initialValue = null;
-      if (prop is MultiOptFormPropModel) {
+      if (prop is ManagedOptFormPropModel) {
         if (prop._markToReload) {
           prop._initialXData = null;
           prop._currentXData = null;
@@ -452,10 +451,10 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Finds and returns a multi-option form property model by its name.
-  MultiOptFormPropModel? _getMultiOptFormProp(String multiOptPropName) {
-    FormPropModel? prop = _allPropModelMapX[multiOptPropName];
-    if (prop is MultiOptFormPropModel) {
+  /// Finds and returns a managed-option form property model by its name.
+  ManagedOptFormPropModel? _getManagedOptFormProp(String managedOptPropName) {
+    FormPropModel? prop = _allPropModelMapX[managedOptPropName];
+    if (prop is ManagedOptFormPropModel) {
       return prop;
     }
     return null;
@@ -464,10 +463,10 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Finds and returns a simple form property model by its name.
-  SimpleFormPropModel? _getSimpleFormProp(String propName) {
+  /// Finds and returns a plain form property model by its name.
+  PlainFormPropModel? _getPlainFormProp(String propName) {
     FormPropModel? prop = _allPropModelMapX[propName];
-    if (prop is SimpleFormPropModel) {
+    if (prop is PlainFormPropModel) {
       return prop;
     }
     return null;
@@ -476,9 +475,9 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Checks if a property with the given name is a multi-option form property.
-  bool _isMultiOptFormProp(String propName) {
-    return _getMultiOptFormProp(propName) != null;
+  /// Checks if a property with the given name is a managed-option form property.
+  bool _isManagedOptFormProp(String propName) {
+    return _getManagedOptFormProp(propName) != null;
   }
 
   // ***************************************************************************
@@ -498,12 +497,12 @@ class FormModelStructure {
       switch (activityType) {
         case FormActivityType.startCreatingOrEditing:
           _formInitialDataReady = false;
-          if (prop is SimpleFormPropModel) {
+          if (prop is PlainFormPropModel) {
             prop._tempCurrentValue = null;
             prop._tempCurrentXData = null;
             prop._tempInitialValue = null;
             prop._tempInitialXData = null;
-          } else if (prop is MultiOptFormPropModel) {
+          } else if (prop is ManagedOptFormPropModel) {
             if (prop._markToReload && prop.parent == null) {
               prop._tempCurrentValue = null;
               prop._tempCurrentXData = null;
@@ -531,7 +530,7 @@ class FormModelStructure {
           prop._tempInitialXData = prop._initialXData;
           //
           if (formKeyInstantValues.containsKey(prop.propName)) {
-            if (prop is SimpleFormPropModel) {
+            if (prop is PlainFormPropModel) {
               prop._tempCurrentValue = formKeyInstantValues[prop.propName];
             }
           }
@@ -574,62 +573,63 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Retrieves the temporary extra data (`XData`) of a multi-option property.
-  XData? _getTempMultiOptPropXData({required String propName}) {
+  /// Retrieves the temporary extra data (`XData`) of a managed-option property.
+  XData? _getTempManagedOptPropXData({required String propName}) {
     FormPropModel? prop = _allPropModelMapX[propName];
-    if (prop is MultiOptFormPropModel) {
+    if (prop is ManagedOptFormPropModel) {
       return prop._tempCurrentXData;
     }
     return null;
   }
 
-  /// Retrieves the current extra data (`XData`) of a multi-option property.
-  XData? _getCurrentMultiOptPropXData({required String propName}) {
+  /// Retrieves the current extra data (`XData`) of a managed-option property.
+  XData? _getCurrentManagedOptPropXData({required String propName}) {
     FormPropModel? prop = _allPropModelMapX[propName];
-    if (prop is MultiOptFormPropModel) {
+    if (prop is ManagedOptFormPropModel) {
       return prop._currentXData;
     }
     return null;
   }
 
-  /// Retrieves the raw data inside the extra data (`XData`) of a multi-option property.
-  dynamic _getCurrentMultiOptPropData({required String propName}) {
-    XData? multiOptPropXData = _getCurrentMultiOptPropXData(propName: propName);
-    return multiOptPropXData?.data;
+  /// Retrieves the raw data inside the extra data (`XData`) of a managed-option property.
+  dynamic _getCurrentManagedOptPropData({required String propName}) {
+    XData? managedOptPropXData =
+        _getCurrentManagedOptPropXData(propName: propName);
+    return managedOptPropXData?.data;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Finds and returns a multi-option form property model by its name.
-  MultiOptFormPropModel? _findMultiOptFormProp(String multiOptPropName) {
-    FormPropModel? prop = _allPropModelMapX[multiOptPropName];
-    if (prop is MultiOptFormPropModel) {
+  /// Finds and returns a managed-option form property model by its name.
+  ManagedOptFormPropModel? _findManagedOptFormProp(String managedOptPropName) {
+    FormPropModel? prop = _allPropModelMapX[managedOptPropName];
+    if (prop is ManagedOptFormPropModel) {
       return prop;
     }
     return null;
   }
 
-  /// Debug helper to get the load count of a multi-option property.
-  int _debugGetMultiOptPropLoadCount({
-    required String multiOptPropName,
+  /// Debug helper to get the load count of a managed-option property.
+  int _debugGetManagedOptPropLoadCount({
+    required String managedOptPropName,
   }) {
-    MultiOptFormPropModel? prop = _findMultiOptFormProp(multiOptPropName);
+    ManagedOptFormPropModel? prop = _findManagedOptFormProp(managedOptPropName);
     return prop?._loadCount ?? 0;
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Recursively updates children multi-option values to null.
-  void _updateChildrenMultiOptValueToNullCascade({
-    required MultiOptFormPropModel multiOptProp,
+  /// Recursively updates children managed-option values to null.
+  void _updateChildrenManagedOptValueToNullCascade({
+    required ManagedOptFormPropModel managedOptProp,
   }) {
-    for (MultiOptFormPropModel child in multiOptProp._children) {
+    for (ManagedOptFormPropModel child in managedOptProp._children) {
       child._tempCurrentValue = null;
       child._tempCurrentXData = null;
       //
-      _updateChildrenMultiOptValueToNullCascade(multiOptProp: child);
+      _updateChildrenManagedOptValueToNullCascade(managedOptProp: child);
     }
   }
 
@@ -662,12 +662,12 @@ class FormModelStructure {
       }
     }
     //
-    for (MultiOptFormPropModel rootProp in _rootOptPropModels) {
+    for (ManagedOptFormPropModel rootProp in _rootManagedOptPropModels) {
       rootProp._updateTempValueCascade(
         updateValues: candidateUpdateValues,
       );
     }
-    for (SimpleFormPropModel commonItem in _simplePropModels) {
+    for (PlainFormPropModel commonItem in _plainPropModels) {
       commonItem._updateTempValue(
         updateValues: candidateUpdateValues,
       );
@@ -690,12 +690,11 @@ class FormModelStructure {
       if (prop == null) {
         print("""\n
             ****************************************************************************************************
-            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(
-            formModel)}.
+            *** WARNING ***: You should declare prop '$propName' explicitly in ${getClassName(formModel)}.
             ****************************************************************************************************
             """);
         //
-        __createAndAddNewSimpleProp(
+        __createAndAddNewPlainProp(
           propName: propName,
           markTempDirty: false,
         );
@@ -706,32 +705,32 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Creates and adds a new simple property model dynamically.
-  void __createAndAddNewSimpleProp({
+  /// Creates and adds a new plain property model dynamically.
+  void __createAndAddNewPlainProp({
     required String propName,
     required bool markTempDirty,
   }) {
     if (_allPropModelMapX.containsKey(propName)) {
       return;
     }
-    SimpleFormPropModel newSimpleProp = SimpleFormPropModel(
+    PlainFormPropModel newPlainProp = PlainFormPropModel(
       propName: propName,
     );
-    __initSimpleProp(
-      newSimpleProp: newSimpleProp,
+    __initPlainProp(
+      newPlainProp: newPlainProp,
       markTempDirty: markTempDirty,
     );
   }
 
-  /// Initializes and registers a new simple property model.
-  void __initSimpleProp({
-    required SimpleFormPropModel newSimpleProp,
+  /// Initializes and registers a new plain property model.
+  void __initPlainProp({
+    required PlainFormPropModel newPlainProp,
     required bool markTempDirty,
   }) {
-    newSimpleProp._structure = this;
-    newSimpleProp._markTempDirty = markTempDirty;
-    _allPropModelMapX[newSimpleProp.propName] = newSimpleProp;
-    _simplePropModels.add(newSimpleProp);
+    newPlainProp._structure = this;
+    newPlainProp._markTempDirty = markTempDirty;
+    _allPropModelMapX[newPlainProp.propName] = newPlainProp;
+    _plainPropModels.add(newPlainProp);
   }
 
   // ***************************************************************************
@@ -751,21 +750,21 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Sets temporary extra data (`XData`) for a multi-option property.
-  void _setTempMultiOptPropXData({
-    required String multiOptPropName,
-    required XData? multiOptPropXData,
+  /// Sets temporary extra data (`XData`) for a managed-option property.
+  void _setTempManagedOptPropXData({
+    required String managedOptPropName,
+    required XData? managedOptPropXData,
   }) {
-    FormPropModel? prop = _allPropModelMapX[multiOptPropName];
+    FormPropModel? prop = _allPropModelMapX[managedOptPropName];
     if (prop == null) {
-      throw AppError(errorMessage: 'No Prop "$multiOptPropName"');
+      throw AppError(errorMessage: 'No Prop "$managedOptPropName"');
     }
-    if (prop is MultiOptFormPropModel) {
-      prop._tempCurrentXData = multiOptPropXData;
+    if (prop is ManagedOptFormPropModel) {
+      prop._tempCurrentXData = managedOptPropXData;
     } else {
       throw AppError(
         errorMessage:
-        'Invalid Prop "$multiOptPropName", it must be $MultiOptFormPropModel',
+            'Invalid Prop "$managedOptPropName", it must be $ManagedOptFormPropModel',
       );
     }
   }
@@ -773,8 +772,8 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Sets temporary value and optionally initial value for a simple property.
-  void _setTempSimplePropValue({
+  /// Sets temporary value and optionally initial value for a plain property.
+  void _setTempPlainPropValue({
     required String propName,
     required Object? value,
     required bool setForInitial,
@@ -785,9 +784,9 @@ class FormModelStructure {
         errorMessage: 'No propName "$propName"',
         errorDetails: null,
       );
-    } else if (prop is! SimpleFormPropModel) {
+    } else if (prop is! PlainFormPropModel) {
       throw AppError(
-        errorMessage: '"$propName" is not $SimpleFormPropModel',
+        errorMessage: '"$propName" is not $PlainFormPropModel',
         errorDetails: null,
       );
     }
@@ -800,13 +799,14 @@ class FormModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  /// Debug getter for root multi-option property models.
+  /// Debug getter for root managed-option property models.
   @DebugMethodAnnotation()
-  List<MultiOptFormPropModel> get debugRootOptProps => _rootOptPropModels;
+  List<ManagedOptFormPropModel> get debugRootManagedOptProps =>
+      _rootManagedOptPropModels;
 
-  /// Debug getter for simple property models.
+  /// Debug getter for plain property models.
   @DebugMethodAnnotation()
-  List<SimpleFormPropModel> get simpleProps => _simplePropModels;
+  List<PlainFormPropModel> get plainProps => _plainPropModels;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -817,7 +817,7 @@ class FormModelStructure {
       print(
           "\n\n--------------------------------------------------------------");
       print(" ---> $prefix");
-      for (MultiOptFormPropModel rootItem in _rootOptPropModels) {
+      for (ManagedOptFormPropModel rootItem in _rootManagedOptPropModels) {
         rootItem._printTempInfoCascade(indentFactor: 1);
       }
       print("--------------------------------------------------------------");

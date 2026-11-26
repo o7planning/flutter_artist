@@ -10,7 +10,7 @@ import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/__utils.dart';
 
-import '../../core/widgets/_custom_app_container.dart';
+import '../../core/widgets/__widgets.dart';
 import '_form_model_debug_view.dart';
 import 'widgets/_prop_view.dart';
 
@@ -30,7 +30,7 @@ class FormPropsStructureView extends StatefulWidget {
 
 class _FormPropsStructureViewState extends State<FormPropsStructureView> {
   final MultiSplitViewController _splitViewController =
-  MultiSplitViewController();
+      MultiSplitViewController();
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
   late TreeNode<dynamic> _currentNode;
@@ -45,18 +45,18 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
       parent: null,
     );
     _currentNode = formModelNode;
-    rootTreeNode = TreeNode.root()
-      ..add(formModelNode);
+    rootTreeNode = TreeNode.root()..add(formModelNode);
     //
     FormModelStructure structure = widget.formModel.formModelStructure;
 
-    List<MultiOptFormPropModel> rootMultiOptProp = structure.debugRootOptProps;
-    for (MultiOptFormPropModel multiOptProp in rootMultiOptProp) {
-      _addMultiOptPropCascade(formModelNode, multiOptProp);
+    List<ManagedOptFormPropModel> rootManagedOptProp =
+        structure.debugRootManagedOptProps;
+    for (ManagedOptFormPropModel managedOptProp in rootManagedOptProp) {
+      _addManagedOptPropCascade(formModelNode, managedOptProp);
     }
-    List<SimpleFormPropModel> simpleProps = structure.simpleProps;
-    for (SimpleFormPropModel simpleProp in simpleProps) {
-      _addSimpleProp(formModelNode, simpleProp);
+    List<PlainFormPropModel> plainProps = structure.plainProps;
+    for (PlainFormPropModel plainProp in plainProps) {
+      _addPlainProp(formModelNode, plainProp);
     }
     //
     _splitViewController.areas = [
@@ -126,9 +126,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
         expansionIndicatorBuilder: (context, node) {
           return ChevronIndicator.upDown(
             tree: node,
-            color: Theme
-                .of(context)
-                .hintColor,
+            color: Theme.of(context).hintColor,
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.fromLTRB(0, 8, 20, 8),
             icon: Icons.keyboard_arrow_down_outlined,
@@ -140,7 +138,8 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           width: 10,
         ),
         onTreeReady: (
-            TreeViewController<dynamic, TreeNode<dynamic>> controller,) {
+          TreeViewController<dynamic, TreeNode<dynamic>> controller,
+        ) {
           _treeViewController = controller;
           controller.expandAllChildren(rootTreeNode);
         },
@@ -148,7 +147,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
           dynamic data = node.data;
           String title;
           String? tooltip;
-          bool isMultiOpt = false;
+          bool isManagedOpt = false;
           bool isMultiSelection = false;
           IconData prefixIconData;
           bool isDirty = false;
@@ -160,27 +159,25 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
             title = getClassName(data);
             prefixIconData = FaIconConstants.formModelIconData;
             isError = data.dataState.isFatalError;
-          } else if (data is SimpleFormPropModel) {
+          } else if (data is PlainFormPropModel) {
             title = data.propName;
             tooltip =
-            "${getClassNameWithoutGenerics(data)}<${data.dataType
-                .toString()}> ${data.propName}";
-            prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.propName}";
+            prefixIconData = FaIconConstants.plainPropOrCriterionIconData;
             //
-            isMultiOpt = false;
+            isManagedOpt = false;
             isMultiSelection = false;
             isDirty = data.isDirty();
             isError = data.formErrorInfo != null;
-          } else if (data is MultiOptFormPropModel) {
+          } else if (data is ManagedOptFormPropModel) {
             title = data.propName;
             tooltip =
-            "${getClassNameWithoutGenerics(data)}<${data.dataType
-                .toString()}> ${data.propName}";
-            prefixIconData = FaIconConstants.optPropOrCriterionIconData;
+                "${getClassNameWithoutGenerics(data)}<${data.dataType.toString()}> ${data.propName}";
+            prefixIconData = FaIconConstants.managedPropOrCriterionIconData;
             //
-            isMultiOpt = true;
+            isManagedOpt = true;
             isMultiSelection =
-                data.selectionMode == MultiOptSelectionMode.multi;
+                data.selectionMode == ManagedOptSelectionMode.multi;
             isDirty = data.isDirty();
             isError = data.formErrorInfo != null;
           } else {
@@ -207,10 +204,7 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
                       size: 16,
                       color: isError
                           ? Colors.red
-                          : Theme
-                          .of(context)
-                          .iconTheme
-                          .color,
+                          : Theme.of(context).iconTheme.color,
                     ),
                   ),
                   SizedBox(width: 5),
@@ -229,8 +223,9 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
                       ),
                     ),
                   ),
-                  if (isMultiOpt && isMultiSelection) const SizedBox(width: 5),
-                  if (isMultiOpt && isMultiSelection)
+                  if (isManagedOpt && isMultiSelection)
+                    const SizedBox(width: 5),
+                  if (isManagedOpt && isMultiSelection)
                     const Icon(
                       FaIconConstants.multiSelectionIconData,
                       size: 16,
@@ -263,27 +258,28 @@ class _FormPropsStructureViewState extends State<FormPropsStructureView> {
     );
   }
 
-  void _addMultiOptPropCascade(TreeNode currentNode,
-      MultiOptFormPropModel multiOptProp) {
+  void _addManagedOptPropCascade(
+      TreeNode currentNode, ManagedOptFormPropModel managedOptProp) {
     TreeNode childNode = TreeNode(
-      key: "MultiOptProp-${multiOptProp.propName}",
-      data: multiOptProp,
+      key: "ManagedOptProp-${managedOptProp.propName}",
+      data: managedOptProp,
     );
-    // if (multiOptProp == widget.selectedProp) {
+    // if (managedOptProp == widget.selectedProp) {
     //   _currentNode = childNode;
     // }
     currentNode.add(childNode);
-    for (MultiOptFormPropModel childMultiOptProp in multiOptProp.children) {
-      _addMultiOptPropCascade(childNode, childMultiOptProp);
+    for (ManagedOptFormPropModel childManagedOptProp
+        in managedOptProp.children) {
+      _addManagedOptPropCascade(childNode, childManagedOptProp);
     }
   }
 
-  void _addSimpleProp(TreeNode currentNode, SimpleFormPropModel simpleProp) {
+  void _addPlainProp(TreeNode currentNode, PlainFormPropModel plainProp) {
     TreeNode childNode = TreeNode(
-      key: "SimpleProp-${simpleProp.propName}",
-      data: simpleProp,
+      key: "PlainProp-${plainProp.propName}",
+      data: plainProp,
     );
-    // if (simpleProp == widget.selectedProp) {
+    // if (plainProp == widget.selectedProp) {
     //   _currentNode = childNode;
     // }
     currentNode.add(childNode);

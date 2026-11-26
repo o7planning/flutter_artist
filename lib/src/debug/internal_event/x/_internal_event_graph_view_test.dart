@@ -77,10 +77,8 @@ class _InternalEventGraphViewTestState
 
     // graph.isTree = true;
 
-    graph.addEdge(a, b, paint: Paint()
-      ..color = Colors.red);
-    graph.addEdge(b, a, paint: Paint()
-      ..color = Colors.blue);
+    graph.addEdge(a, b, paint: Paint()..color = Colors.red);
+    graph.addEdge(b, a, paint: Paint()..color = Colors.blue);
     graph.addEdge(a, c);
     graph.addEdge(a, d);
     graph.addEdge(c, e);
@@ -88,8 +86,7 @@ class _InternalEventGraphViewTestState
     graph.addEdge(f, c);
     graph.addEdge(g, c);
     graph.addEdge(h, g);
-    graph.addEdge(g, h, paint: Paint()
-      ..color = Colors.red);
+    graph.addEdge(g, h, paint: Paint()..color = Colors.red);
 
     builder = FruchtermanReingoldAlgorithm(
       // iterations: 1000,

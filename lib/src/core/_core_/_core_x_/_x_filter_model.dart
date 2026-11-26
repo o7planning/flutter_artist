@@ -9,6 +9,7 @@ class XFilterModel {
 
   final List<XBlock> xBlocks = [];
   final List<XScalar> xScalars = [];
+  final List<XLovModel> xLovModels = [];
 
   FilterApplyPolicy _filterApplyPolicy = FilterApplyPolicy.explicit;
 

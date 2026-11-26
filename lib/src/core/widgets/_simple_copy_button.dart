@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
-
-import '../utils/__utils.dart';
+part of '__widgets.dart';
 
 class SimpleCopyButton extends StatelessWidget {
   final String? tooltip;

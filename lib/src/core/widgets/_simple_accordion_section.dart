@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of '__widgets.dart';
 
 class SimpleAccordionSection extends StatelessWidget {
   final bool initiallyExpanded;
@@ -53,11 +53,11 @@ class SimpleAccordionSection extends StatelessWidget {
         children: content == null
             ? []
             : [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-            child: content!,
-          )
-        ],
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                  child: content!,
+                )
+              ],
       ),
     );
   }

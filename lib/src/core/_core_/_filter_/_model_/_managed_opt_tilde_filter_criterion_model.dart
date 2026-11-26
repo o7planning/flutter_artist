@@ -1,0 +1,91 @@
+part of '../../core.dart';
+
+abstract class ManagedOptTildeFilterCriterionModel<V>
+    extends TildeFilterCriterionModel<V> {
+  final ManagedOptTildeFilterCriterionModel? parent;
+
+  int _loadCount = 0;
+
+  int get loadCount => _loadCount;
+
+  ///
+  /// In most cases this value is [ManagedOptSelectionMode.single].
+  /// For example a Dropdown that only allows selection of one element.
+  ///
+  /// IMPORTANT:
+  ///
+  /// Make sure you set the appropriate value for this property, otherwise an error will occur.
+  /// For example: An error occurs when the library tries to set multiple selection values for the Dropdown.
+  ///
+  final ManagedOptSelectionMode selectionMode;
+  final List<ManagedOptTildeFilterCriterionModel> _children;
+
+  List<ManagedOptTildeFilterCriterionModel> get children =>
+      List.unmodifiable(_children);
+
+  final DefaultSettingPolicy defaultSettingPolicy;
+  final String? parentMatchSuffix;
+
+  ManagedOptTildeFilterCriterionModel._({
+    required this.parent,
+    required super.tildeCriterionName,
+    required super.criterionName,
+    required super.tildeSuffix,
+    required this.defaultSettingPolicy,
+    required this.parentMatchSuffix,
+    required List<ManagedOptTildeFilterCriterionModel> children,
+    required this.selectionMode,
+  }) : _children = [...children];
+
+  void _updateTempValueCascade({
+    required Map<String, dynamic> updateValues,
+  }) {
+    if (!_valueUpdated && _markTempDirty) {
+      final dynamic oldValue = _tempCurrentValue;
+      final dynamic newValue = updateValues[tildeCriterionName];
+      //
+      _candidateUpdateValue = newValue;
+      _valueUpdated = true;
+      //
+      bool isSame;
+      if (_tempCurrentXData != null) {
+        if (selectionMode == ManagedOptSelectionMode.single) {
+          isSame = _tempCurrentXData!.isSame(
+            item1: oldValue,
+            item2: newValue,
+          );
+        } else {
+          isSame = _tempCurrentXData!.isSameItemOrItemList(
+            itemOrItemList1: oldValue,
+            itemOrItemList2: newValue,
+          );
+        }
+      } else {
+        isSame = false;
+      }
+      //
+      if (_tempCurrentXData == null || newValue == null || !isSame) {
+        for (ManagedOptTildeFilterCriterionModel childItem in children) {
+          childItem._tempCurrentXData = null;
+          updateValues[childItem.tildeCriterionName] = null;
+          childItem._markTempDirty = true;
+        }
+      }
+    }
+    //
+    for (ManagedOptTildeFilterCriterionModel childItem in children) {
+      childItem._updateTempValueCascade(
+        updateValues: updateValues,
+      );
+    }
+  }
+
+  void _printTempInfoCascade({required int indentFactor}) {
+    print(
+        "${("- - - " *
+            indentFactor)} $tildeCriterionName >>> UpdateVal: $_candidateUpdateValue >>> tempCurrentXData: $_tempCurrentXData");
+    for (var child in children) {
+      child._printTempInfoCascade(indentFactor: indentFactor + 1);
+    }
+  }
+}

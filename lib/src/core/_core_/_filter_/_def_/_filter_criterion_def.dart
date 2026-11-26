@@ -1,7 +1,7 @@
 part of '../../core.dart';
 
 ///
-/// [SimpleFilterCriterionDef], [MultiOptFilterCriterionDef]
+/// [PlainFilterCriterionDef], [ManagedOptFilterCriterionDef]
 ///
 abstract class FilterCriterionDef<V extends Object> {
   final Set<String> _tildeSuffixes = {};
@@ -71,8 +71,8 @@ abstract class FilterCriterionDef<V extends Object> {
 
   void _printDebugTildeSuffixesCascade() {
     _printDebugTildeSuffixes();
-    if (this is MultiOptFilterCriterionDef) {
-      MultiOptFilterCriterionDef _this = this as MultiOptFilterCriterionDef;
+    if (this is ManagedOptFilterCriterionDef) {
+      ManagedOptFilterCriterionDef _this = this as ManagedOptFilterCriterionDef;
       for (FilterCriterionDef childDef in _this._children) {
         childDef._printDebugTildeSuffixesCascade();
       }
@@ -82,20 +82,20 @@ abstract class FilterCriterionDef<V extends Object> {
 
 // *****************************************************************************
 
-class SimpleFilterCriterionDef<V extends Object> extends FilterCriterionDef<V> {
-  SimpleFilterCriterionDef({
+class PlainFilterCriterionDef<V extends Object> extends FilterCriterionDef<V> {
+  PlainFilterCriterionDef({
     required super.criterionBaseName,
     super.fieldName,
     super.toFieldValue,
     super.description,
   }) : super._();
 
-  SimpleTildeFilterCriterionModel<V> createTildeCriterionModel({
+  PlainTildeFilterCriterionModel<V> createTildeCriterionModel({
     required String tildeCriterionName,
     required String criterionName,
     required String tildeSuffix,
   }) {
-    return SimpleTildeFilterCriterionModel<V>(
+    return PlainTildeFilterCriterionModel<V>(
       tildeCriterionName: tildeCriterionName,
       criterionName: criterionName,
       tildeSuffix: tildeSuffix,
@@ -105,20 +105,20 @@ class SimpleFilterCriterionDef<V extends Object> extends FilterCriterionDef<V> {
 
 // *****************************************************************************
 
-class MultiOptFilterCriterionDef<V extends Object>
+class ManagedOptFilterCriterionDef<V extends Object>
     extends FilterCriterionDef<V> {
-  late final MultiOptFilterCriterionDef? parent;
+  late final ManagedOptFilterCriterionDef? parent;
 
-  final MultiOptSelectionMode selectionMode;
+  final ManagedOptSelectionMode selectionMode;
 
   final List<TildeCriterionConfig> tildeCriterionConfigs;
 
   // String tildeSuffix -> TildeCriterionConfig.
   final Map<String, TildeCriterionConfig> __tildeCriterionConfigMap = {};
 
-  final List<MultiOptFilterCriterionDef> _children;
+  final List<ManagedOptFilterCriterionDef> _children;
 
-  List<MultiOptFilterCriterionDef> get children => List.unmodifiable(_children);
+  List<ManagedOptFilterCriterionDef> get children => List.unmodifiable(_children);
 
   TildeCriterionConfig findOrCreateTildeCriterionConfig({
     required String tildeSuffix,
@@ -131,13 +131,13 @@ class MultiOptFilterCriterionDef<V extends Object>
     return def;
   }
 
-  MultiOptFilterCriterionDef._({
+  ManagedOptFilterCriterionDef._({
     required super.criterionBaseName,
     required super.fieldName,
     required super.toFieldValue,
     required super.description,
     required this.tildeCriterionConfigs,
-    required List<MultiOptFilterCriterionDef> children,
+    required List<ManagedOptFilterCriterionDef> children,
     required this.selectionMode,
   })
       : _children = children,
@@ -167,53 +167,53 @@ class MultiOptFilterCriterionDef<V extends Object>
     }
   }
 
-  factory MultiOptFilterCriterionDef.singleSelection({
+  factory ManagedOptFilterCriterionDef.singleSelection({
     required String criterionBaseName,
     String? description,
     required String? fieldName,
     required SimpleValConverter<V>? toFieldValue,
     List<TildeCriterionConfig> tildeCriterionConfigs = const [],
-    List<MultiOptFilterCriterionDef> children = const [],
+    List<ManagedOptFilterCriterionDef> children = const [],
   }) {
-    return MultiOptFilterCriterionDef._(
+    return ManagedOptFilterCriterionDef._(
       criterionBaseName: criterionBaseName,
       fieldName: fieldName,
       toFieldValue: toFieldValue,
       description: description,
       tildeCriterionConfigs: tildeCriterionConfigs,
       children: children,
-      selectionMode: MultiOptSelectionMode.single,
+      selectionMode: ManagedOptSelectionMode.single,
     );
   }
 
-  factory MultiOptFilterCriterionDef.multiSelection({
+  factory ManagedOptFilterCriterionDef.multiSelection({
     required String criterionBaseName,
     String? description,
     required String? fieldName,
     required SimpleValConverter<V>? toFieldValue,
     List<TildeCriterionConfig> tildeCriterionConfigs = const [],
   }) {
-    return MultiOptFilterCriterionDef._(
+    return ManagedOptFilterCriterionDef._(
       criterionBaseName: criterionBaseName,
       fieldName: fieldName,
       toFieldValue: toFieldValue,
       description: description,
       children: [],
-      selectionMode: MultiOptSelectionMode.multi,
+      selectionMode: ManagedOptSelectionMode.multi,
       tildeCriterionConfigs: tildeCriterionConfigs,
     );
   }
 
-  MultiOptTildeFilterCriterionModel<V> createTildeCriterionModel({
-    required MultiOptTildeFilterCriterionModel? parent,
+  ManagedOptTildeFilterCriterionModel<V> createTildeCriterionModel({
+    required ManagedOptTildeFilterCriterionModel? parent,
     required String tildeCriterionName,
     required String criterionName,
     required String tildeSuffix,
     required DefaultSettingPolicy defaultSettingPolicy,
     required String parentMatchSuffix,
   }) {
-    return selectionMode == MultiOptSelectionMode.single
-        ? MultiOptSsTildeFilterCriterionModel<V>(
+    return selectionMode == ManagedOptSelectionMode.single
+        ? ManagedOptSsTildeFilterCriterionModel<V>(
       tildeCriterionName: tildeCriterionName,
       criterionName: criterionName,
       tildeSuffix: tildeSuffix,
@@ -221,7 +221,7 @@ class MultiOptFilterCriterionDef<V extends Object>
       parentMatchSuffix: parentMatchSuffix,
       parent: parent,
     )
-        : MultiOptMsTildeFilterCriterionModel<V>(
+        : ManagedOptMsTildeFilterCriterionModel<V>(
       tildeCriterionName: tildeCriterionName,
       criterionName: criterionName,
       tildeSuffix: tildeSuffix,

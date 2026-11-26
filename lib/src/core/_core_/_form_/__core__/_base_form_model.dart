@@ -9,8 +9,7 @@ abstract class BaseFormModel<
     extends _Core implements MnemonicScope, ClassDefViewable {
   String get name;
 
-  // TODO: Hardcode.
-  bool get hasError => false;
+  bool get hasError => dataState.isFatalError;
 
   /// Configuration options for the form model.
   final FormModelConfig config;
@@ -47,15 +46,16 @@ abstract class BaseFormModel<
   InternalFormMode get _internalFormMode =>
       _formModelStructure._internalFormMode;
 
-  /// Flags tracking whether default simple and multi-option values have been initiated.
-  bool _defaultSimpleValuesInitiated = false;
-  bool _defaultMultiOptValuesInitiated = false;
+  /// Flags tracking whether default plain and managed-option values have been initiated.
+  bool _defaultPlainValuesInitiated = false;
+  bool _defaultManagedOptValuesInitiated = false;
 
-  /// Returns whether default simple values have been initiated.
-  bool get defaultSimpleValuesInitiated => _defaultSimpleValuesInitiated;
+  /// Returns whether default plain values have been initiated.
+  bool get defaultPlainValuesInitiated => _defaultPlainValuesInitiated;
 
-  /// Returns whether default multi-option values have been initiated.
-  bool get defaultMultiOptValuesInitiated => _defaultMultiOptValuesInitiated;
+  /// Returns whether default managed-option values have been initiated.
+  bool get defaultManagedOptValuesInitiated =>
+      _defaultManagedOptValuesInitiated;
 
   /// Additional data required related to form operations.
   ADDITIONAL_FORM_RELATED_DATA? _additionalFormRelatedData;
@@ -123,31 +123,31 @@ abstract class BaseFormModel<
   /// Returns the Shelf context if available (Block), otherwise null (Activity).
   FeatureModule get relatedModule;
 
-  /// Internal hook resolving baseline initial values for simple form properties.
+  /// Internal hook resolving baseline initial values for plain form properties.
   /// BlockFormModel delegates to edit/creation methods, while ActivityFormModel delegates to initData.
   @AbstractMethodAnnotation()
-  Map<String, dynamic>? _internalResolveInitialSimplePropValues({
+  Map<String, dynamic>? _internalResolveInitialPlainPropValues({
     required ExecutionTrace executionTrace,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
   });
 
-  /// Internal hook resolving baseline initial selection wrapper for a multi-option property.
+  /// Internal hook resolving baseline initial selection wrapper for a managed-option property.
   /// BlockFormModel delegates to edit/creation methods, while ActivityFormModel delegates to initData.
   @AbstractMethodAnnotation()
-  OptValueWrap? _internalResolveInitialMultiOptPropValue({
+  OptValueWrap? _internalResolveInitialManagedOptPropValue({
     required ExecutionTrace executionTrace,
-    required String multiOptPropName,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
+    required String managedOptPropName,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required XData managedOptPropXData,
+    required Object? parentManagedOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
   });
 
-  /// Loads dynamic option dataset ([XData]) for a multi-option form property.
-  Future<XData?> _internalPerformLoadMultiOptPropXData({
-    required String multiOptPropName,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required Object? parentMultiOptPropValue,
+  /// Loads dynamic option dataset ([XData]) for a managed-option form property.
+  Future<XData?> _internalPerformLoadManagedOptPropXData({
+    required String managedOptPropName,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required Object? parentManagedOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required Object? rawDomainData,
   });
@@ -246,30 +246,30 @@ abstract class BaseFormModel<
     return _formModelStructure._getCurrentPropValue(propName: propName);
   }
 
-  /// Retrieves the current XData dataset for a multi-option property.
-  XData? getMultiOptPropXData(String multiOptPropName) {
-    return _formModelStructure._getCurrentMultiOptPropXData(
-      propName: multiOptPropName,
+  /// Retrieves the current XData dataset for a managed-option property.
+  XData? getManagedOptPropXData(String managedOptPropName) {
+    return _formModelStructure._getCurrentManagedOptPropXData(
+      propName: managedOptPropName,
     );
   }
 
-  /// Retrieves the current data value for a multi-option property.
-  dynamic getMultiOptPropData(String multiOptPropName) {
-    return _formModelStructure._getCurrentMultiOptPropData(
-      propName: multiOptPropName,
+  /// Retrieves the current data value for a managed-option property.
+  dynamic getManagedOptPropData(String managedOptPropName) {
+    return _formModelStructure._getCurrentManagedOptPropData(
+      propName: managedOptPropName,
     );
   }
 
-  /// Finds and returns a multi-option form property model by its name.
-  MultiOptFormPropModel? findMultiOptFormProp(
-      {required String multiOptPropName}) {
-    return _formModelStructure._findMultiOptFormProp(multiOptPropName);
+  /// Finds and returns a managed-option form property model by its name.
+  ManagedOptFormPropModel? findManagedOptFormProp(
+      {required String managedOptPropName}) {
+    return _formModelStructure._findManagedOptFormProp(managedOptPropName);
   }
 
-  /// Returns the debug load count for a specific multi-option property.
-  int debugGetMultiOptPropLoadCount(String multiOptPropName) {
-    return _formModelStructure._debugGetMultiOptPropLoadCount(
-      multiOptPropName: multiOptPropName,
+  /// Returns the debug load count for a specific managed-option property.
+  int debugGetManagedOptPropLoadCount(String managedOptPropName) {
+    return _formModelStructure._debugGetManagedOptPropLoadCount(
+      managedOptPropName: managedOptPropName,
     );
   }
 
@@ -370,7 +370,7 @@ abstract class BaseFormModel<
         }
         additionalFormRelatedData = _additionalFormRelatedData;
         if (additionalFormRelatedData == null) {
-          // TODO: Dang loi o day.
+          // TODO: Fix Error here.
           throw DevError(
             errorMessage:
                 "Dev Error. _additionalFormRelatedData is null in updateFromFormView.",
@@ -402,8 +402,8 @@ abstract class BaseFormModel<
 
     if (activityType == FormActivityType.startCreatingOrEditing) {
       if (isNoneMode || isCreationMode) {
-        _defaultSimpleValuesInitiated = false;
-        _defaultMultiOptValuesInitiated = false;
+        _defaultPlainValuesInitiated = false;
+        _defaultManagedOptValuesInitiated = false;
       }
     }
 
@@ -416,31 +416,31 @@ abstract class BaseFormModel<
     );
 
     // =========================================================================
-    // POPULATE SIMPLE PROPERTIES
+    // POPULATE PLAIN PROPERTIES
     // =========================================================================
     if (activityType == FormActivityType.startCreatingOrEditing) {
       executionTrace.addInfo(
         codeId: "#006180",
-        shortDesc: "Populating simple form properties."
+        shortDesc: "Populating plain form properties."
             "\n - @activityType: <b>$activityType</b>."
             "\n - @domainData: ${debugObjHtml(domainData)}.",
       );
       try {
-        final Map<String, dynamic> simplePropValueMap =
-            _internalResolveInitialSimplePropValues(
+        final Map<String, dynamic> plainPropValueMap =
+            _internalResolveInitialPlainPropValues(
                   executionTrace: executionTrace,
                   additionalFormRelatedData: additionalFormRelatedData,
                 ) ??
                 {};
 
-        for (String propName in simplePropValueMap.keys) {
-          __throwErrorIfNotASimplePropName(
+        for (String propName in plainPropValueMap.keys) {
+          __throwErrorIfNotAPlainPropName(
             propName: propName,
             formErrorMethod:
-                FormErrorMethod.extractSimplePropValuesFromItemDetail,
+                FormErrorMethod.extractPlainPropValuesFromItemDetail,
           );
-          dynamic value = simplePropValueMap[propName];
-          _formModelStructure._setTempSimplePropValue(
+          dynamic value = plainPropValueMap[propName];
+          _formModelStructure._setTempPlainPropValue(
             propName: propName,
             value: value,
             setForInitial: true,
@@ -456,8 +456,7 @@ abstract class BaseFormModel<
         final formErrorInfo = FormErrorInfo(
           activityType: activityType,
           propName: null,
-          formErrorMethod:
-              FormErrorMethod.extractSimplePropValuesFromItemDetail,
+          formErrorMethod: FormErrorMethod.extractPlainPropValuesFromItemDetail,
           error: error,
           errorStackTrace: stackTrace,
         );
@@ -481,7 +480,7 @@ abstract class BaseFormModel<
         executionTrace.addInfo(
           codeId: "#006400",
           shortDesc:
-              "The ${debugObjHtml(this)}._internalResolveInitialSimplePropValues() method encountered an error!",
+              "The ${debugObjHtml(this)}._internalResolveInitialPlainPropValues() method encountered an error!",
           errorInfo: errorInfo,
         );
         return false;
@@ -493,26 +492,26 @@ abstract class BaseFormModel<
           executionTrace.addControllableCall(
             codeId: "#006620",
             caller: this,
-            methodName: "extractPatchValuesForSimpleProps",
+            methodName: "extractPatchValuesForPlainProps",
             suffixShortDesc: "",
             parameters: {
               "formPatch": formPatch,
             },
           );
-          final Map<String, SimpleValueWrap?> patchSimplePropValues =
-              extractPatchValuesForSimpleProps(
+          final Map<String, PlainValueWrap?> patchPlainPropValues =
+              extractPatchValuesForPlainProps(
                     formPatch: formPatch,
                   ) ??
                   {};
 
-          for (String propName in patchSimplePropValues.keys) {
-            __throwErrorIfNotASimplePropName(
+          for (String propName in patchPlainPropValues.keys) {
+            __throwErrorIfNotAPlainPropName(
               propName: propName,
-              formErrorMethod: FormErrorMethod.extractPatchValuesForSimpleProps,
+              formErrorMethod: FormErrorMethod.extractPatchValuesForPlainProps,
             );
-            SimpleValueWrap? valueWrap = patchSimplePropValues[propName];
+            PlainValueWrap? valueWrap = patchPlainPropValues[propName];
             if (valueWrap != null && valueWrap.use) {
-              _formModelStructure._setTempSimplePropValue(
+              _formModelStructure._setTempPlainPropValue(
                 propName: propName,
                 value: valueWrap.value,
                 setForInitial: true,
@@ -523,7 +522,7 @@ abstract class BaseFormModel<
           final formErrorInfo = FormErrorInfo(
             activityType: activityType,
             propName: null,
-            formErrorMethod: FormErrorMethod.extractPatchValuesForSimpleProps,
+            formErrorMethod: FormErrorMethod.extractPatchValuesForPlainProps,
             error: e,
             errorStackTrace: stackTrace,
           );
@@ -557,26 +556,26 @@ abstract class BaseFormModel<
           executionTrace.addControllableCall(
             codeId: "#006720",
             caller: this,
-            methodName: "extractPatchValuesForSimpleProps",
+            methodName: "extractPatchValuesForPlainProps",
             suffixShortDesc: "",
             parameters: {
               "formPatch": formPatch,
             },
           );
-          final Map<String, SimpleValueWrap?> updatedSimplePropValues =
-              extractPatchValuesForSimpleProps(
+          final Map<String, PlainValueWrap?> updatedPlainPropValues =
+              extractPatchValuesForPlainProps(
                     formPatch: formPatch,
                   ) ??
                   {};
 
-          for (String propName in updatedSimplePropValues.keys) {
-            __throwErrorIfNotASimplePropName(
+          for (String propName in updatedPlainPropValues.keys) {
+            __throwErrorIfNotAPlainPropName(
               propName: propName,
-              formErrorMethod: FormErrorMethod.extractPatchValuesForSimpleProps,
+              formErrorMethod: FormErrorMethod.extractPatchValuesForPlainProps,
             );
-            SimpleValueWrap? valueWrap = updatedSimplePropValues[propName];
+            PlainValueWrap? valueWrap = updatedPlainPropValues[propName];
             if (valueWrap != null && valueWrap.use) {
-              _formModelStructure._setTempSimplePropValue(
+              _formModelStructure._setTempPlainPropValue(
                 propName: propName,
                 value: valueWrap.value,
                 setForInitial: false,
@@ -587,7 +586,7 @@ abstract class BaseFormModel<
           final formErrorInfo = FormErrorInfo(
             activityType: activityType,
             propName: null,
-            formErrorMethod: FormErrorMethod.extractPatchValuesForSimpleProps,
+            formErrorMethod: FormErrorMethod.extractPatchValuesForPlainProps,
             error: e,
             errorStackTrace: stackTrace,
           );
@@ -616,18 +615,18 @@ abstract class BaseFormModel<
     }
 
     // =========================================================================
-    // POPULATE MULTI-OPTION PROPERTIES (CASCADE HIERARCHY)
+    // POPULATE MANAGED-OPTION PROPERTIES (CASCADE HIERARCHY)
     // =========================================================================
     try {
-      for (MultiOptFormPropModel multiOptProp
-          in _formModelStructure._rootOptPropModels) {
-        await _loadMultiOptPropDataCascade(
+      for (ManagedOptFormPropModel managedOptProp
+          in _formModelStructure._rootManagedOptPropModels) {
+        await _loadManagedOptPropDataCascade(
           executionTrace: executionTrace,
           additionalFormRelatedData: additionalFormRelatedData,
           formPatch: formPatch,
-          parentMultiOptPropValue: null,
+          parentManagedOptPropValue: null,
           parentValueIsInitialValue: true,
-          multiOptProp: multiOptProp,
+          managedOptProp: managedOptProp,
           formKeyInstantValues: formKeyInstantValues,
           activityType: activityType,
         );
@@ -697,168 +696,169 @@ abstract class BaseFormModel<
   }
 
   // ===========================================================================
-  // UNIFIED MULTI-OPT PROP DATA LOADING (CASCADE)
+  // UNIFIED MANAGED-OPTION PROP DATA LOADING (CASCADE)
   // ===========================================================================
 
-  /// Recursively loads multi-option property data down the hierarchical cascade.
-  Future<void> _loadMultiOptPropDataCascade({
+  /// Recursively loads managed-option property data down the hierarchical cascade.
+  Future<void> _loadManagedOptPropDataCascade({
     required final ExecutionTrace executionTrace,
     required final FormActivityType activityType,
     required final ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required final FORM_PATCH? formPatch,
-    required final Object? parentMultiOptPropValue,
-    required final MultiOptFormPropModel multiOptProp,
+    required final Object? parentManagedOptPropValue,
+    required final ManagedOptFormPropModel managedOptProp,
     required final bool parentValueIsInitialValue,
     required final Map<String, dynamic> formKeyInstantValues,
   }) async {
-    final String multiOptPropName = multiOptProp.propName;
-    final MultiOptSelectionMode selectionMode = multiOptProp.selectionMode;
+    final String managedOptPropName = managedOptProp.propName;
+    final ManagedOptSelectionMode selectionMode = managedOptProp.selectionMode;
 
     executionTrace.addInfo(
       codeId: "#017000",
       shortDesc:
-          "Loading Data for ${debugObjHtml(multiOptProp)} and its children..",
+          "Loading Data for ${debugObjHtml(managedOptProp)} and its children..",
     );
 
-    XData? tempMultiOptPropXData =
-        _formModelStructure._getTempMultiOptPropXData(
-      propName: multiOptPropName,
+    XData? tempManagedOptPropXData =
+        _formModelStructure._getTempManagedOptPropXData(
+      propName: managedOptPropName,
     );
 
-    final dynamic tempInitialMultiOptValue = _formModelStructure
-        ._getTempInitialPropValue(propName: multiOptPropName);
-    final dynamic tempCurrentMultiOptValue = _formModelStructure
-        ._getTempCurrentPropValue(propName: multiOptPropName);
+    final dynamic tempInitialManagedOptValue = _formModelStructure
+        ._getTempInitialPropValue(propName: managedOptPropName);
+    final dynamic tempCurrentManagedOptValue = _formModelStructure
+        ._getTempCurrentPropValue(propName: managedOptPropName);
 
     dynamic newSelectedValue = _formModelStructure._getTempCurrentPropValue(
-      propName: multiOptPropName,
+      propName: managedOptPropName,
     );
     if (activityType == FormActivityType.updateFromFormView) {
-      if (formKeyInstantValues.containsKey(multiOptPropName)) {
-        newSelectedValue = formKeyInstantValues[multiOptPropName];
+      if (formKeyInstantValues.containsKey(managedOptPropName)) {
+        newSelectedValue = formKeyInstantValues[managedOptPropName];
       }
     }
 
     final bool valueChanged;
-    if (tempMultiOptPropXData == null) {
+    if (tempManagedOptPropXData == null) {
       valueChanged = false;
     } else {
-      valueChanged = !tempMultiOptPropXData.isSameItemOrItemList(
-        itemOrItemList1: tempCurrentMultiOptValue,
+      valueChanged = !tempManagedOptPropXData.isSameItemOrItemList(
+        itemOrItemList1: tempCurrentManagedOptValue,
         itemOrItemList2: newSelectedValue,
       );
     }
 
-    final bool multiOptValueIsInitialValue;
-    if (tempMultiOptPropXData == null) {
-      multiOptValueIsInitialValue = false;
+    final bool managedOptValueIsInitialValue;
+    if (tempManagedOptPropXData == null) {
+      managedOptValueIsInitialValue = false;
     } else {
-      multiOptValueIsInitialValue = tempMultiOptPropXData.isSameItemOrItemList(
-        itemOrItemList1: tempInitialMultiOptValue,
+      managedOptValueIsInitialValue =
+          tempManagedOptPropXData.isSameItemOrItemList(
+        itemOrItemList1: tempInitialManagedOptValue,
         itemOrItemList2: newSelectedValue,
       );
     }
 
-    multiOptProp._tempCurrentValue = newSelectedValue;
+    managedOptProp._tempCurrentValue = newSelectedValue;
 
     if (valueChanged) {
-      _formModelStructure._updateChildrenMultiOptValueToNullCascade(
-        multiOptProp: multiOptProp,
+      _formModelStructure._updateChildrenManagedOptValueToNullCascade(
+        managedOptProp: managedOptProp,
       );
     }
 
-    if (tempMultiOptPropXData == null) {
-      _formModelStructure._setTempMultiOptPropXData(
-        multiOptPropName: multiOptPropName,
-        multiOptPropXData: null,
+    if (tempManagedOptPropXData == null) {
+      _formModelStructure._setTempManagedOptPropXData(
+        managedOptPropName: managedOptPropName,
+        managedOptPropXData: null,
       );
       _formModelStructure._updatePropsTempValues({
-        multiOptPropName: null,
+        managedOptPropName: null,
       });
     }
 
     bool forceReload = activityType != FormActivityType.updateFromFormView &&
-        multiOptProp.parent == null &&
-        multiOptProp._markToReload;
+        managedOptProp.parent == null &&
+        managedOptProp._markToReload;
 
-    if (tempMultiOptPropXData == null || forceReload) {
-      multiOptProp._loadCount++;
+    if (tempManagedOptPropXData == null || forceReload) {
+      managedOptProp._loadCount++;
       try {
         executionTrace.addControllableCall(
           codeId: "#017400",
           caller: this,
-          methodName: "performLoadMultiOptPropXData",
+          methodName: "performLoadManagedOptPropXData",
           suffixShortDesc: "",
           parameters: {
-            "multiOptPropName": multiOptPropName,
-            "parentMultiOptPropValue": parentMultiOptPropValue,
-            "multiOptSelectionMode": selectionMode,
+            "managedOptPropName": managedOptPropName,
+            "parentManagedOptPropValue": parentManagedOptPropValue,
+            "managedOptSelectionMode": selectionMode,
             "rawDomainData": rawDomainData,
             "formPatch": formPatch,
             "additionalFormRelatedData": additionalFormRelatedData,
           },
         );
-        tempMultiOptPropXData = await _internalPerformLoadMultiOptPropXData(
+        tempManagedOptPropXData = await _internalPerformLoadManagedOptPropXData(
           rawDomainData: rawDomainData,
           additionalFormRelatedData: additionalFormRelatedData,
-          parentMultiOptPropValue: parentMultiOptPropValue,
-          multiOptPropName: multiOptPropName,
-          multiOptSelectionMode: selectionMode,
+          parentManagedOptPropValue: parentManagedOptPropValue,
+          managedOptPropName: managedOptPropName,
+          managedOptSelectionMode: selectionMode,
         );
       } catch (e, stackTrace) {
         throw FormMethodError(
-          propName: multiOptPropName,
-          formErrorMethod: FormErrorMethod.performLoadMultiOptPropXData,
+          propName: managedOptPropName,
+          formErrorMethod: FormErrorMethod.performLoadManagedOptPropXData,
           error: e,
           stackTrace: stackTrace,
         );
       }
 
-      multiOptProp._markToReload = false;
-      multiOptProp._tempCurrentXData = tempMultiOptPropXData;
+      managedOptProp._markToReload = false;
+      managedOptProp._tempCurrentXData = tempManagedOptPropXData;
     }
 
     List? currentSelectedItems;
     List? candidateSelectedItems;
     OptValueWrap? initialValueWrap;
 
-    if (tempMultiOptPropXData != null) {
+    if (tempManagedOptPropXData != null) {
       if (activityType == FormActivityType.startCreatingOrEditing) {
-        initialValueWrap = _internalResolveInitialMultiOptPropValue(
+        initialValueWrap = _internalResolveInitialManagedOptPropValue(
           executionTrace: executionTrace,
-          multiOptPropName: multiOptPropName,
-          multiOptSelectionMode: selectionMode,
-          multiOptPropXData: tempMultiOptPropXData,
-          parentMultiOptPropValue: parentMultiOptPropValue,
+          managedOptPropName: managedOptPropName,
+          managedOptSelectionMode: selectionMode,
+          managedOptPropXData: tempManagedOptPropXData,
+          parentManagedOptPropValue: parentManagedOptPropValue,
           additionalFormRelatedData: additionalFormRelatedData,
         );
 
         if (formPatch != null && formPatch is! EmptyFormPatch) {
-          initialValueWrap = __extractPatchValueForMultiOptProp(
+          initialValueWrap = __extractPatchValueForManagedOptProp(
             executionTrace: executionTrace,
             formPatch: formPatch,
-            multiOptPropXData: tempMultiOptPropXData,
-            multiOptPropName: multiOptPropName,
-            multiOptSelectionMode: selectionMode,
-            parentMultiOptPropValue: parentMultiOptPropValue,
+            managedOptPropXData: tempManagedOptPropXData,
+            managedOptPropName: managedOptPropName,
+            managedOptSelectionMode: selectionMode,
+            parentManagedOptPropValue: parentManagedOptPropValue,
           );
         }
       } else if (activityType == FormActivityType.patchFormFields) {
         if (formPatch != null && formPatch is! EmptyFormPatch) {
-          initialValueWrap = __extractPatchValueForMultiOptProp(
+          initialValueWrap = __extractPatchValueForManagedOptProp(
             executionTrace: executionTrace,
             formPatch: formPatch,
-            multiOptPropXData: tempMultiOptPropXData,
-            multiOptPropName: multiOptPropName,
-            multiOptSelectionMode: selectionMode,
-            parentMultiOptPropValue: parentMultiOptPropValue,
+            managedOptPropXData: tempManagedOptPropXData,
+            managedOptPropName: managedOptPropName,
+            managedOptSelectionMode: selectionMode,
+            parentManagedOptPropValue: parentManagedOptPropValue,
           );
         }
       }
 
       final dynamic tempCurrentValue =
           _formModelStructure._getTempCurrentPropValue(
-        propName: multiOptPropName,
+        propName: managedOptPropName,
       );
 
       if (tempCurrentValue != null) {
@@ -870,7 +870,7 @@ abstract class BaseFormModel<
         }
       }
       if (currentSelectedItems != null) {
-        currentSelectedItems = tempMultiOptPropXData._resolveItemsFromRawData(
+        currentSelectedItems = tempManagedOptPropXData._resolveItemsFromRawData(
           dynamicValues: currentSelectedItems,
           addOrphan: true,
           clearOrphanItems: true,
@@ -886,9 +886,9 @@ abstract class BaseFormModel<
       candidateSelectedItems = null;
     }
 
-    _formModelStructure._setTempMultiOptPropXData(
-      multiOptPropName: multiOptPropName,
-      multiOptPropXData: tempMultiOptPropXData,
+    _formModelStructure._setTempManagedOptPropXData(
+      managedOptPropName: managedOptPropName,
+      managedOptPropXData: tempManagedOptPropXData,
     );
 
     final dynamic initialValue;
@@ -896,19 +896,19 @@ abstract class BaseFormModel<
       initialValue = initialValueWrap?.values;
     } else {
       initialValue = _formModelStructure._getInitialPropValue(
-        propName: multiOptPropName,
+        propName: managedOptPropName,
       );
     }
 
     if (activityType == FormActivityType.startCreatingOrEditing ||
         parentValueIsInitialValue) {
-      tempMultiOptPropXData?._addInitialValueIfOrphan(
+      tempManagedOptPropXData?._addInitialValueIfOrphan(
         initialValue: initialValue,
         removeCurrentOrphanItems: true,
       );
     }
 
-    candidateSelectedItems = tempMultiOptPropXData?._resolveItemsFromRawData(
+    candidateSelectedItems = tempManagedOptPropXData?._resolveItemsFromRawData(
           dynamicValues: candidateSelectedItems,
           addOrphan: true,
           clearOrphanItems: false,
@@ -916,36 +916,36 @@ abstract class BaseFormModel<
         [];
 
     if (candidateSelectedItems.isNotEmpty) {
-      if (multiOptProp.selectionMode == MultiOptSelectionMode.single) {
+      if (managedOptProp.selectionMode == ManagedOptSelectionMode.single) {
         Object? candidateSelectedItem = candidateSelectedItems.first;
         _formModelStructure._updatePropsTempValues({
-          multiOptPropName: candidateSelectedItem,
+          managedOptPropName: candidateSelectedItem,
         });
       } else {
         _formModelStructure._updatePropsTempValues({
-          multiOptPropName: candidateSelectedItems,
+          managedOptPropName: candidateSelectedItems,
         });
       }
     } else {
       _formModelStructure._updatePropsTempValues({
-        multiOptPropName: null,
+        managedOptPropName: null,
       });
     }
 
     Object? tempSelectedPropValue =
         _formModelStructure._getTempCurrentPropValue(
-      propName: multiOptPropName,
+      propName: managedOptPropName,
     );
 
     if (tempSelectedPropValue != null) {
-      for (MultiOptFormPropModel child in multiOptProp._children) {
-        await _loadMultiOptPropDataCascade(
+      for (ManagedOptFormPropModel child in managedOptProp._children) {
+        await _loadManagedOptPropDataCascade(
           executionTrace: executionTrace,
           additionalFormRelatedData: additionalFormRelatedData,
           formPatch: formPatch,
-          parentMultiOptPropValue: tempSelectedPropValue,
-          parentValueIsInitialValue: multiOptValueIsInitialValue,
-          multiOptProp: child,
+          parentManagedOptPropValue: tempSelectedPropValue,
+          parentValueIsInitialValue: managedOptValueIsInitialValue,
+          managedOptProp: child,
           formKeyInstantValues: formKeyInstantValues,
           activityType: activityType,
         );
@@ -1019,47 +1019,47 @@ abstract class BaseFormModel<
   // HELPERS & VALIDATION
   // ===========================================================================
 
-  /// Extracts update values for a multi-option property from form input.
+  /// Extracts update values for a managed-option property from form input.
   @_MayThrowFormTempErrorAnnotation()
-  OptValueWrap? __extractPatchValueForMultiOptProp({
+  OptValueWrap? __extractPatchValueForManagedOptProp({
     required ExecutionTrace executionTrace,
-    required String multiOptPropName,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required XData multiOptPropXData,
+    required String managedOptPropName,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required XData managedOptPropXData,
     required FORM_PATCH formPatch,
-    required Object? parentMultiOptPropValue,
+    required Object? parentManagedOptPropValue,
   }) {
     if (formPatch is EmptyFormPatch) return null;
     try {
       executionTrace.addControllableCall(
         codeId: "#018000",
         caller: this,
-        methodName: "extractPatchValueForMultiOptProp",
+        methodName: "extractPatchValueForManagedOptProp",
         suffixShortDesc: "",
         parameters: {
-          "multiOptPropName": multiOptPropName,
-          "multiOptPropXData": multiOptPropXData,
-          "multiOptSelectionMode": multiOptSelectionMode,
-          "parentMultiOptPropValue": parentMultiOptPropValue,
+          "managedOptPropName": managedOptPropName,
+          "managedOptPropXData": managedOptPropXData,
+          "managedOptSelectionMode": managedOptSelectionMode,
+          "parentManagedOptPropValue": parentManagedOptPropValue,
           "formPatch": formPatch,
         },
       );
-      OptValueWrap? valueWrap = extractPatchValueForMultiOptProp(
-        multiOptPropName: multiOptPropName,
-        multiOptPropXData: multiOptPropXData,
-        multiOptSelectionMode: multiOptSelectionMode,
-        parentMultiOptPropValue: parentMultiOptPropValue,
+      OptValueWrap? valueWrap = extractPatchValueForManagedOptProp(
+        managedOptPropName: managedOptPropName,
+        managedOptPropXData: managedOptPropXData,
+        managedOptSelectionMode: managedOptSelectionMode,
+        parentManagedOptPropValue: parentManagedOptPropValue,
         formPatch: formPatch,
       );
       if (valueWrap == null) {
         __createNullValueWrapAppError(
-          methodName: "extractPatchValueForMultiOptProp",
-          multiOptPropName: multiOptPropName,
+          methodName: "extractPatchValueForManagedOptProp",
+          managedOptPropName: managedOptPropName,
         );
       }
       List? value = valueWrap?.values ?? [];
       return OptValueWrap.multi(
-        multiOptPropXData._resolveItemsFromRawData(
+        managedOptPropXData._resolveItemsFromRawData(
           dynamicValues: value,
           addOrphan: true,
           clearOrphanItems: true,
@@ -1067,8 +1067,8 @@ abstract class BaseFormModel<
       );
     } catch (e, stackTrace) {
       throw FormMethodError(
-        propName: multiOptPropName,
-        formErrorMethod: FormErrorMethod.extractPatchValueForMultiOptProp,
+        propName: managedOptPropName,
+        formErrorMethod: FormErrorMethod.extractPatchValueForManagedOptProp,
         error: e,
         stackTrace: stackTrace,
       );
@@ -1132,37 +1132,37 @@ abstract class BaseFormModel<
     }
   }
 
-  /// Throws an error when a method returns a null value wrap for a multi-option property.
+  /// Throws an error when a method returns a null value wrap for a managed-option property.
   void __createNullValueWrapAppError({
     required String methodName,
-    required String multiOptPropName,
+    required String managedOptPropName,
   }) {
-    MultiOptFormPropModel? multiOptProp =
-        _formModelStructure._getMultiOptFormProp(multiOptPropName);
-    if (multiOptProp == null) {
-      throw "The '$multiOptPropName' is not $MultiOptFormPropModel";
+    ManagedOptFormPropModel? managedOptProp =
+        _formModelStructure._getManagedOptFormProp(managedOptPropName);
+    if (managedOptProp == null) {
+      throw "The '$managedOptPropName' is not $ManagedOptFormPropModel";
     }
     String message =
-        "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the multiOptPropName '$multiOptPropName'. ";
-    if (multiOptProp.selectionMode == MultiOptSelectionMode.single) {
+        "The ${getClassName(this)}.$methodName() method must return a non-null $OptValueWrap for the managedOptPropName '$managedOptPropName'. ";
+    if (managedOptProp.selectionMode == ManagedOptSelectionMode.single) {
       message += "$OptValueWrap.single(null) or $OptValueWrap.single(value). ";
     } else {
       message +=
           "$OptValueWrap.multi([null]) or $OptValueWrap.multi([value]). ";
     }
     message +=
-        "And return null for not $MultiOptFormPropModel. See the specification of this method for more information.";
+        "And return null for not $ManagedOptFormPropModel. See the specification of this method for more information.";
   }
 
-  /// Throws an error if the provided property name does not correspond to a simple property.
-  void __throwErrorIfNotASimplePropName({
+  /// Throws an error if the provided property name does not correspond to a plain property.
+  void __throwErrorIfNotAPlainPropName({
     required String propName,
     required FormErrorMethod formErrorMethod,
   }) {
-    if (_formModelStructure._isMultiOptFormProp(propName)) {
+    if (_formModelStructure._isManagedOptFormProp(propName)) {
       throw DevError(
         errorMessage:
-            '$propName is not a ${getTypeNameWithoutGenerics(SimpleFormPropModel)}',
+            '$propName is not a ${getTypeNameWithoutGenerics(PlainFormPropModel)}',
         errorDetails: [
           "See ${getClassNameWithoutGenerics(this)}.${getClassNameWithoutGenerics(formErrorMethod)}() method."
         ],
@@ -1215,19 +1215,19 @@ abstract class BaseFormModel<
     );
   }
 
-  /// Extracts update values for simple properties from form input.
+  /// Extracts update values for plain properties from form input.
   @AbstractMethodAnnotation()
-  Map<String, SimpleValueWrap?>? extractPatchValuesForSimpleProps({
+  Map<String, PlainValueWrap?>? extractPatchValuesForPlainProps({
     required FORM_PATCH formPatch,
   });
 
-  /// Extracts update value for a multi-option property from form input.
+  /// Extracts update value for a managed-option property from form input.
   @AbstractMethodAnnotation()
-  OptValueWrap? extractPatchValueForMultiOptProp({
-    required String multiOptPropName,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
+  OptValueWrap? extractPatchValueForManagedOptProp({
+    required String managedOptPropName,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required XData managedOptPropXData,
+    required Object? parentManagedOptPropValue,
     required FORM_PATCH formPatch,
   });
 
@@ -1238,18 +1238,18 @@ abstract class BaseFormModel<
   /// @override
   /// FormModelStructure defineFormModelStructure() {
   ///   return FormModelStructure(
-  ///     simplePropDefs: [
-  ///       SimpleFormPropDef<int>(propName: "id"),
-  ///       SimpleFormPropDef<String>(propName: "name"),
-  ///       SimpleFormPropDef<bool>(propName: "active"),
-  ///       SimpleFormPropDef<String>(propName: "description"),
+  ///     plainPropDefs: [
+  ///       PlainFormPropDef<int>(propName: "id"),
+  ///       PlainFormPropDef<String>(propName: "name"),
+  ///       PlainFormPropDef<bool>(propName: "active"),
+  ///       PlainFormPropDef<String>(propName: "description"),
   ///     ],
-  ///     multiOptPropDefs: [
-  ///       MultiOptFormPropDef<ProgramTypeInfo>.singleSelection(
+  ///     managedOptPropDefs: [
+  ///       ManagedOptFormPropDef<ProgramTypeInfo>.singleSelection(
   ///         propName: "programType",
   ///       ),
-  ///       // Multi Option Multi Selection Criterion.
-  ///       MultiOptFormPropDef<ContributorInfo>.multiSelection(
+  ///       // Managed-option multi-selection Criterion.
+  ///       ManagedOptFormPropDef<ContributorInfo>.multiSelection(
   ///         propName: "contributors",
   ///       ),
   ///     ],

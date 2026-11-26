@@ -69,14 +69,19 @@ part of '../core.dart';
 /// ```
 ///
 abstract class Block<
-    ID extends Comparable,
-    ITEM extends Identifiable<ID>,
-    ITEM_DETAIL extends Identifiable<ID>,
-    FILTER_PATCH extends FilterPatch, // EmptyFilterPatch
-    FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
-    CREATION_PRESET extends CreationPreset, // EmptyCreationPreset
-    FORM_PATCH extends FormPatch // EmptyFormPatch
-    > extends _Core implements FormHost, MnemonicScope, ClassDefViewable {
+        ID extends Comparable,
+        ITEM extends Identifiable<ID>,
+        ITEM_DETAIL extends Identifiable<ID>,
+        FILTER_PATCH extends FilterPatch, // EmptyFilterPatch
+        FILTER_CRITERIA extends FilterCriteria, // EmptyFilterCriteria
+        CREATION_PRESET extends CreationPreset, // EmptyCreationPreset
+        FORM_PATCH extends FormPatch // EmptyFormPatch
+        > extends _Core
+    implements
+        DatasetModel<ID, ITEM>,
+        FormHost,
+        MnemonicScope,
+        ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {
@@ -90,12 +95,14 @@ abstract class Block<
     };
   }
 
+  @override
   late final Shelf shelf;
 
   Shelf get module => shelf;
 
   bool __isQuerying = false;
 
+  @override
   bool get isQuerying => __isQuerying;
 
   bool __isSaving = false;
@@ -120,6 +127,7 @@ abstract class Block<
   ///
   /// Block name. It is unique in a Shelf.
   ///
+  @override
   final String name;
 
   String get _shortPathName {
@@ -130,6 +138,7 @@ abstract class Block<
     return "block > ${shelf.name} > $name";
   }
 
+  @override
   final String? description;
 
   ///
@@ -155,6 +164,7 @@ abstract class Block<
   /// Returns a FilterModel declared in the [Shelf.defineShelfStructure()] method.
   /// The return value may be null.
   ///
+  @override
   FilterModel<FILTER_PATCH, FILTER_CRITERIA>? get filterModel {
     if (_registeredOrDefaultFilterModel is _DefaultFilterModel) {
       return null;
@@ -309,6 +319,7 @@ abstract class Block<
   );
 
   /// Indicates whether the block or its underlying filter model currently has an active error.
+  @override
   bool get hasError {
     return blockErrorInfo != null || filterErrorInfo != null;
   }
@@ -345,11 +356,14 @@ abstract class Block<
   /// }
   /// ```
   ///
+  @override
   PageData<ITEM>? get lastQueryResult => _blockData._lastQueryResult;
 
+  @override
   ActionResultState? get lastQueryResultState =>
       _blockData._lastQueryResultState;
 
+  @override
   BlockDataState get dataState => _blockData._blockDataState;
 
   BlockItemDataState get blockItemDataState => blockCurrentItemModel.dataState;
@@ -382,10 +396,13 @@ abstract class Block<
 
   late final SortModel<ITEM>? _serverSideSortModel;
 
+  @override
   SortModel<ITEM>? get clientSideSortModel => _clientSideSortModel;
 
+  @override
   SortModel<ITEM>? get serverSideSortModel => _serverSideSortModel;
 
+  @override
   FILTER_CRITERIA? get filterCriteria =>
       _blockData._filterCriteriaSnapshot?.criteriaOrNull;
 
@@ -395,20 +412,26 @@ abstract class Block<
   ///
   /// return a copied list of items.
   ///
+  @override
   List<ITEM> get items {
     return [..._blockData._items];
   }
 
+  @override
   List<ID> get itemIds {
     return items.map((item) => item.id).toList();
   }
 
+  @override
   int get itemCount => _blockData._items.length;
 
+  @override
   BlockNativeQueryMode get nativeQueryMode => _blockData._nativeQueryMode;
 
+  @override
   Pageable? get pageable => _blockData._pageable;
 
+  @override
   Pageable? get nextPageable {
     if (_lastQueryType == QueryType.emptyQuery) {
       return _blockData._initialPageable;
@@ -417,6 +440,7 @@ abstract class Block<
     return p?.next();
   }
 
+  @override
   PaginationInfo? get paginationInfo {
     return PaginationInfo.copy(_blockData._paginationInfo);
   }
@@ -906,10 +930,12 @@ abstract class Block<
   // ************ TYPES ********************************************************
   // ***************************************************************************
 
+  @override
   Type getItemIdType() {
     return ID;
   }
 
+  @override
   Type getItemType() {
     return ITEM;
   }
@@ -3389,6 +3415,7 @@ abstract class Block<
   ///
   /// Query the next page and replace the current items in the list.
   ///
+  @override
   @_RootMethodAnnotation()
   @_BlockQueryNextPageAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
@@ -3431,6 +3458,7 @@ abstract class Block<
   ///
   /// Query the previous page and replace the current items in the list.
   ///
+  @override
   @_RootMethodAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
   @_BlockQueryPreviousPageAnnotation()
@@ -3473,6 +3501,7 @@ abstract class Block<
   ///
   /// Query the next page and append to the current list of items.
   ///
+  @override
   @_RootMethodAnnotation()
   @_BlockQueryMorePageAnnotation()
   @_ReturnExecutionUnitResultMethodAnnotation()
@@ -3588,6 +3617,7 @@ abstract class Block<
   ///
   /// Docs: [14739], [14811*].
   ///
+  @override
   @nonVirtual
   @_RootMethodAnnotation()
   @_BlockQueryAnnotation()
@@ -4975,6 +5005,7 @@ abstract class Block<
   ///
   /// Allows querying the block or not according to the application logic.
   ///
+  @override
   bool isQueryAllowed() {
     return true;
   }
@@ -5700,6 +5731,7 @@ abstract class Block<
     );
   }
 
+  @override
   void clientSideSort({required bool refresh}) {
     _blockData._clientSideSortItems();
     if (refresh) {
@@ -5735,8 +5767,10 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   bool get isEmpty => _blockData._items.isEmpty;
 
+  @override
   bool get isNotEmpty => _blockData._items.isNotEmpty;
 
   // ***************************************************************************
@@ -5917,6 +5951,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   ITEM? findItemByIndex(int index) {
     if (index < 0 || index >= _blockData._items.length) {
       return null;
@@ -5927,6 +5962,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   bool isSame({
     required ITEM? item1,
     required ITEM? item2,
@@ -5945,6 +5981,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   ITEM? get firstItem {
     return _blockData._items.firstOrNull;
   }
@@ -5952,6 +5989,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   ITEM? get lastItem {
     return _blockData._items.lastOrNull;
   }
@@ -6028,6 +6066,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   ITEM? findItemSameIdWith({
     required ITEM item,
   }) {
@@ -6038,6 +6077,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   ITEM? findItemById(ID itemId) {
     return FaItemsUtils.findItemInListById(
       id: itemId,
@@ -6077,6 +6117,7 @@ abstract class Block<
   // ***************************************************************************
   // ***************************************************************************
 
+  @override
   bool containsItem(ITEM item) {
     return FaItemsUtils.isListContainItem(
       targetList: _blockData._items,
@@ -6447,6 +6488,7 @@ abstract class Block<
     return registeredOrDefaultFilterModel.checkBeforeShowFilterModelInspector();
   }
 
+  @override
   @_RootMethodAnnotation()
   Future<Actionable<ShowFilterModelInspectorPrecheck>>
       showDebugFilterModelInspector({
@@ -6465,6 +6507,7 @@ abstract class Block<
         .checkBeforeShowFilterCriteriaInspector();
   }
 
+  @override
   @_RootMethodAnnotation()
   Future<Actionable<ShowFilterCriteriaInspectorPrecheck>>
       showDebugFilterCriteriaInspector({

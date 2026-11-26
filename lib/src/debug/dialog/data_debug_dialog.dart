@@ -28,11 +28,10 @@ class DataDebugDialog extends StatelessWidget {
   }) async {
     await showDialog(
       context: context,
-      builder: (context) =>
-          DataDebugDialog(
-            title: title,
-            targetObject: targetObject,
-          ),
+      builder: (context) => DataDebugDialog(
+        title: title,
+        targetObject: targetObject,
+      ),
     );
   }
 
@@ -41,7 +40,7 @@ class DataDebugDialog extends StatelessWidget {
     final String resolvedTitle = title.isEmpty ? "Data Debug Inspector" : title;
 
     final String className =
-    targetObject != null ? getClassName(targetObject!) : "Null Object";
+        targetObject != null ? getClassName(targetObject!) : "Null Object";
 
     // Safely evaluate toDebugMap() with exception handling
     Map<String, dynamic> debugMap = {};
@@ -123,7 +122,8 @@ class DataDebugDialog extends StatelessWidget {
   }
 
   /// Builds the inner body content handling exceptions, empty maps, and normal data rows.
-  Widget _buildBodyContent(BuildContext context, {
+  Widget _buildBodyContent(
+    BuildContext context, {
     required String className,
     required Map<String, dynamic> debugMap,
     required Object? exception,
@@ -134,7 +134,7 @@ class DataDebugDialog extends StatelessWidget {
         child: SingleChildScrollView(
           child: HtmlInfoView(
             infoAsHtml:
-            "Error in <b>$className.toDebugMap()</b>: <i>$exception</i>",
+                "Error in <b>$className.toDebugMap()</b>: <i>$exception</i>",
           ),
         ),
       );
@@ -154,7 +154,7 @@ class DataDebugDialog extends StatelessWidget {
           child: SingleChildScrollView(
             child: HtmlInfoView(
               infoAsHtml:
-              "<b>$className.toDebugMap()</b> returned an empty map. You need to implement it correctly.",
+                  "<b>$className.toDebugMap()</b> returned an empty map. You need to implement it correctly.",
             ),
           ),
         );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
-import '../../core/widgets/_floating_copy_button.dart';
+import '../../core/widgets/__widgets.dart';
 
 class JsonView extends StatelessWidget {
   final String json;

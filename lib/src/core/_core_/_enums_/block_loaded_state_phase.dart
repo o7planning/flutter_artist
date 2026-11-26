@@ -42,6 +42,6 @@ enum BlockLoadedStatePhase {
   /// Helper flag indicating if any background, paginated, or action-sync operation recently failed.
   bool get hasError =>
       this == refetchFailed ||
-          this == fetchMoreFailed ||
-          this == mutationFailed;
+      this == fetchMoreFailed ||
+      this == mutationFailed;
 }

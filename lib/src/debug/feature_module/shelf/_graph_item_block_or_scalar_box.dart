@@ -7,7 +7,6 @@ import '../../../core/_core_/core.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/utils/__utils.dart';
 
-
 import '../../constants/_debug_constants.dart';
 import '../../app/_block_or_scalar.dart';
 
@@ -133,12 +132,8 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
                 ),
                 TooltipUtils.buildTooltip(
                   message:
-                  "${widget.blockOrScalar.isBlock
-                      ? 'BLOCK'
-                      : 'SCALAR'}: ${widget.blockOrScalar
-                      .blockOrScalarClassName}\n"
-                      "${widget.blockOrScalar
-                      .blockOrScalarClassParametersDefinition}",
+                      "${widget.blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}: ${widget.blockOrScalar.blockOrScalarClassName}\n"
+                      "${widget.blockOrScalar.blockOrScalarClassParametersDefinition}",
                   child: IconLabelText(
                     style: _getBlockNameTextStyle(),
                     label: 'Class: ',
@@ -158,52 +153,42 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
         DebugConstants.graphBoxImageWidth +
         spacing +
         2 * padding +
-        TextSizeUtils
-            .calculateTextSize(
+        TextSizeUtils.calculateTextSize(
           text: "Name: ${_getBlockOrScalarNameText()}",
           style: _getBlockNameTextStyle(),
-        )
-            .width;
+        ).width;
     //
     double blkLine2 = extraWidth +
         DebugConstants.graphBoxImageWidth +
         spacing +
         2 * padding +
-        TextSizeUtils
-            .calculateTextSize(
+        TextSizeUtils.calculateTextSize(
           text: "Class: ${_getBlockOrScalarClassNameText()}",
           style: _getBlockNameTextStyle(),
-        )
-            .width;
+        ).width;
     //
     double blkLine3 = widget.showClassParameters
         ? extraWidth +
-        2 * padding +
-        TextSizeUtils
-            .calculateTextSize(
-          text: _line3ClassParamsDefinition(),
-          style: _getBlockClassParameterTextStyle(),
-        )
-            .width
+            2 * padding +
+            TextSizeUtils.calculateTextSize(
+              text: _line3ClassParamsDefinition(),
+              style: _getBlockClassParameterTextStyle(),
+            ).width
         : 0;
     //
     double filterLine1 = extraWidth +
         2 * padding +
-        TextSizeUtils
-            .calculateTextSize(
+        TextSizeUtils.calculateTextSize(
           text: _getFilterTextRow1(),
           style: _getFilterTextStyle(),
-        )
-            .width;
+        ).width;
     //
     double filterLine2 = extraWidth +
         2 * padding +
-        TextSizeUtils
-            .calculateTextSize(
+        TextSizeUtils.calculateTextSize(
           text: _getFilterTextRow2(),
           style: _getFilterTextStyle(),
-        )
-            .width;
+        ).width;
     //
     double lastLine = _calculateLastLineWidth();
     //
@@ -223,23 +208,18 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
         2 * padding +
         iconSize +
         lastLineBlockSpacing +
-        TextSizeUtils
-            .calculateTextSize(
+        TextSizeUtils.calculateTextSize(
           text:
-          "${widget.blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}     ${widget
-              .blockOrScalar.itemCount.toString()}",
+              "${widget.blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}     ${widget.blockOrScalar.itemCount.toString()}",
           style: _getSummaryTextStyle(),
-        )
-            .width;
+        ).width;
     if (widget.blockOrScalar.block?.formModel != null) {
       width += spacing +
           iconSize +
-          TextSizeUtils
-              .calculateTextSize(
+          TextSizeUtils.calculateTextSize(
             text: "FORM",
             style: _getSummaryTextStyle(),
-          )
-              .width;
+          ).width;
     }
     return width;
   }
@@ -321,8 +301,7 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     FilterModel? filterModel = widget.blockOrScalar.filterModel;
 
     return "${filterModel == null ? '' : getClassName(filterModel)} "
-        "${widget.showClassParameters ? widget.blockOrScalar
-        .filterClassParametersDefinition : ''}";
+        "${widget.showClassParameters ? widget.blockOrScalar.filterClassParametersDefinition : ''}";
   }
 
   Widget _buildFilterInfo() {
@@ -332,13 +311,13 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
       onEnter: filterModel == null
           ? null
           : (_) {
-        widget.refreshGraph(filterModel.name);
-      },
+              widget.refreshGraph(filterModel.name);
+            },
       onExit: filterModel == null
           ? null
           : (_) {
-        widget.refreshGraph(null);
-      },
+              widget.refreshGraph(null);
+            },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -374,23 +353,23 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
         border: Border.all(
           width: 0.5,
           color: widget.highlightFilterModelName != null &&
-              filterModel?.name == widget.highlightFilterModelName
+                  filterModel?.name == widget.highlightFilterModelName
               ? DebugConstants.graphBoxHighlighFilterColor(context)
               : Colors.grey,
         ),
         color: widget.highlightFilterModelName != null &&
-            filterModel?.name == widget.highlightFilterModelName
+                filterModel?.name == widget.highlightFilterModelName
             ? DebugConstants.graphBoxHighlighFilterColor(context)
             : Colors.transparent,
       ),
       child: filterModel == null
           ? row
           : TooltipUtils.buildCustomTooltip(
-        verticalOffset: -85,
-        message: "FILTER: ${getClassName(filterModel)} \n"
-            "${widget.blockOrScalar.filterClassParametersDefinition}",
-        child: row,
-      ),
+              verticalOffset: -85,
+              message: "FILTER: ${getClassName(filterModel)} \n"
+                  "${widget.blockOrScalar.filterClassParametersDefinition}",
+              child: row,
+            ),
     );
   }
 
@@ -410,7 +389,9 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
     );
   }
 
-  String _formTooltipMessage(BlockFormModel formModel,) {
+  String _formTooltipMessage(
+    BlockFormModel formModel,
+  ) {
     String className = getClassName(formModel);
     final FormDataState formDataState = formModel.dataState;
     final bool active = formModel.ui.hasVisibleViews();
@@ -421,8 +402,8 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
         "| Mode: ${formModel.formMode.name.toUpperCase()}";
   }
 
-  String _blockOrScalarTooltipMessage(BlockOrScalar blockOrScalar,
-      bool active) {
+  String _blockOrScalarTooltipMessage(
+      BlockOrScalar blockOrScalar, bool active) {
     String className = blockOrScalar.blockOrScalarClassName;
     return "${blockOrScalar.isBlock ? 'BLOCK' : 'SCALAR'}: $className \n"
         "Data State: ${blockOrScalar.getDataStateName().toUpperCase()} "
@@ -459,24 +440,24 @@ class GraphItemBlockOrScalarBoxState extends State<GraphItemBlockOrScalarBox> {
   Color _formDataStateBgColor(FormDataState dataState) {
     return switch (dataState) {
       FormDataStatePending() =>
-          DebugConstants.graphBoxDataStatePendingBgColor(context),
+        DebugConstants.graphBoxDataStatePendingBgColor(context),
       FormDataStateLoaded() =>
-          DebugConstants.graphBoxDataStateReadyBgColor(context),
+        DebugConstants.graphBoxDataStateReadyBgColor(context),
       FormDataStateFatalError() =>
-          DebugConstants.graphBoxDataStateErrorBgColor(context),
+        DebugConstants.graphBoxDataStateErrorBgColor(context),
       FormDataStateNone() =>
-          DebugConstants.graphBoxDataStateNoneBgColor(context),
+        DebugConstants.graphBoxDataStateNoneBgColor(context),
     };
   }
 
   Color _dataStateBgColor(ScalarDataState dataState) {
     return switch (dataState) {
       ScalarDataStatePending() =>
-          DebugConstants.graphBoxDataStatePendingBgColor(context),
+        DebugConstants.graphBoxDataStatePendingBgColor(context),
       ScalarDataStateLoaded() =>
-          DebugConstants.graphBoxDataStateReadyBgColor(context),
+        DebugConstants.graphBoxDataStateReadyBgColor(context),
       ScalarDataStateNone() =>
-          DebugConstants.graphBoxDataStateNoneBgColor(context),
+        DebugConstants.graphBoxDataStateNoneBgColor(context),
     };
   }
 

@@ -1,22 +1,22 @@
 part of '_enums.dart';
 
 enum FormErrorMethod {
-  performLoadMultiOptPropXData,
+  performLoadManagedOptPropXData,
   //
-  extractSimplePropValuesFromItemDetail,
-  extractMultiOptPropValueFromItemDetail,
+  extractPlainPropValuesFromItemDetail,
+  extractManagedOptPropValueFromItemDetail,
 
-  // OLD: getMultiOptPropValueFromFormInput
-  extractPatchValueForMultiOptProp,
+  // OLD: getManagedOptPropValueFromFormInput
+  extractPatchValueForManagedOptProp,
 
-  // OLD: getSimplePropValuesFromFormInput
-  extractPatchValuesForSimpleProps,
+  // OLD: getPlainPropValuesFromFormInput
+  extractPatchValuesForPlainProps,
 
-  // OLD: specifyDefaultSimplePropValues
-  specifyDefaultValuesForSimpleProps,
+  // OLD: specifyDefaultPlainPropValues
+  specifyDefaultValuesForPlainProps,
 
-  // OLD: specifyDefaultMultiOptPropValue
-  specifyDefaultValueForMultiOptProp,
+  // OLD: specifyDefaultManagedOptPropValue
+  specifyDefaultValueForManagedOptProp,
   //
   unknown;
 }

@@ -70,6 +70,9 @@ class _ScalarControlBarState extends _BaseControlBarState<
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   Widget? buildStandardButton(ScalarControlBarItem item) {
     final type = item.type ?? ScalarControlBarItemType.custom;
     switch (type) {

@@ -57,8 +57,7 @@ class GraphItemProzessBox extends StatelessWidget {
                         getClassName(prozess),
                         style: TextStyle(
                           fontSize: 11,
-                          color: Theme
-                              .of(context)
+                          color: Theme.of(context)
                               .colorScheme
                               .onSurface
                               .withValues(alpha: 0.6),
@@ -85,31 +84,29 @@ class GraphItemProzessBox extends StatelessWidget {
               )
             else
               ...prozess.orderedStages.map(
-                    (stage) =>
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.subdirectory_arrow_right,
-                            size: 12,
-                            color: Colors.teal,
-                          ),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              stage.name,
-                              style: TextStyle(
-                                fontSize: 11.5,
-                                color: DebugConstants.graphBoxTextColor(
-                                    context),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
+                (stage) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.subdirectory_arrow_right,
+                        size: 12,
+                        color: Colors.teal,
                       ),
-                    ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          stage.name,
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            color: DebugConstants.graphBoxTextColor(context),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
           ],
         ),

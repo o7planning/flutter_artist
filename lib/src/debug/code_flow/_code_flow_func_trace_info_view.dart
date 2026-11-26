@@ -25,8 +25,7 @@ class CodeFlowFuncTraceInfoView extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         SelectableText(
-          " - Line/Column: ${funcCallInfo.lineNumber ?? '-'}:${funcCallInfo
-              .columnNumber ?? '-'}",
+          " - Line/Column: ${funcCallInfo.lineNumber ?? '-'}:${funcCallInfo.columnNumber ?? '-'}",
           style: codeStyle(context, isBold: false),
         ),
       ],

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of '__widgets.dart';
 
 class IconedRadio<E> extends StatelessWidget {
   final Icon icon;
@@ -20,8 +20,8 @@ class IconedRadio<E> extends StatelessWidget {
       onTap: onChanged == null
           ? null
           : () {
-        onChanged!(value);
-      },
+              onChanged!(value);
+            },
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -31,8 +31,8 @@ class IconedRadio<E> extends StatelessWidget {
             onChanged: onChanged == null
                 ? null
                 : (E? newValue) {
-              onChanged!(newValue);
-            },
+                    onChanged!(newValue);
+                  },
             groupValue: groupValue,
           ),
           icon,

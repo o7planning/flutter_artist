@@ -30,6 +30,10 @@ abstract class Shelf extends FeatureModule {
   List<String> get filterNames =>
       List.unmodifiable(_shelfStruct.filterModels.keys);
 
+  final List<LovModel> _lovModels = [];
+
+  List<LovModel> get lovModels => List.unmodifiable(_lovModels);
+
   // All formModels.
   final List<BlockFormModel> _allFormModels = [];
 
@@ -149,6 +153,13 @@ abstract class Shelf extends FeatureModule {
       rootBlock.parent = null;
       _rootBlocks.add(rootBlock);
       __registerBlockCascade(rootBlock);
+    }
+    //
+    // LovModel:
+    //
+    List<LovModel> lovModels = _shelfStruct.lovModels;
+    for (LovModel lovModel in lovModels) {
+      _lovModels.add(lovModel);
     }
   }
 

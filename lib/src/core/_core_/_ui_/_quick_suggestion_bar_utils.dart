@@ -1,8 +1,8 @@
 part of '../core.dart';
 
 class QuickSuggestionBarUtils {
-  static _QuickSuggestionButton createBlockErrorButton(BuildContext context,
-      Block block) {
+  static _QuickSuggestionButton createBlockErrorButton(
+      BuildContext context, Block block) {
     return _QuickSuggestionButton.error(
       tooltip: "Error",
       onPressed: () async {
@@ -11,8 +11,8 @@ class QuickSuggestionBarUtils {
     );
   }
 
-  static _QuickSuggestionButton createBlockRequeryButton(BuildContext context,
-      Block block) {
+  static _QuickSuggestionButton createBlockRequeryButton(
+      BuildContext context, Block block) {
     return _QuickSuggestionButton.requery(
       tooltip: "Requery",
       onPressed: () async {
@@ -21,8 +21,8 @@ class QuickSuggestionBarUtils {
     );
   }
 
-  static _QuickSuggestionButton createScalarErrorButton(BuildContext context,
-      Scalar scalar) {
+  static _QuickSuggestionButton createScalarErrorButton(
+      BuildContext context, Scalar scalar) {
     return _QuickSuggestionButton.error(
       tooltip: "Error",
       onPressed: () async {
@@ -31,8 +31,8 @@ class QuickSuggestionBarUtils {
     );
   }
 
-  static _QuickSuggestionButton createScalarRequeryButton(BuildContext context,
-      Scalar scalar) {
+  static _QuickSuggestionButton createScalarRequeryButton(
+      BuildContext context, Scalar scalar) {
     return _QuickSuggestionButton.requery(
       tooltip: "Requery",
       onPressed: () async {
@@ -61,8 +61,8 @@ class QuickSuggestionBarUtils {
     );
   }
 
-  static _QuickSuggestionButton createProzessErrorButton(BuildContext context,
-      Prozess prozess) {
+  static _QuickSuggestionButton createProzessErrorButton(
+      BuildContext context, Prozess prozess) {
     return _QuickSuggestionButton.error(
       tooltip: "Error",
       onPressed: () async {
@@ -103,8 +103,8 @@ class QuickSuggestionBarUtils {
     );
   }
 
-  static _QuickSuggestionButton createStageErrorButton(BuildContext context,
-      Stage stage) {
+  static _QuickSuggestionButton createStageErrorButton(
+      BuildContext context, Stage stage) {
     return _QuickSuggestionButton.error(
       tooltip: "Error",
       onPressed: () async {
@@ -113,8 +113,8 @@ class QuickSuggestionBarUtils {
     );
   }
 
-  static _QuickSuggestionButton createTaskErrorButton(BuildContext context,
-      Task task) {
+  static _QuickSuggestionButton createTaskErrorButton(
+      BuildContext context, Task task) {
     return _QuickSuggestionButton.error(
       tooltip: "Error",
       onPressed: () async {
@@ -130,6 +130,24 @@ class QuickSuggestionBarUtils {
       onPressed: () async {
         // TODO: Show Form Error.
         // taskFormModel.showTaskErrorViewerDialog(context);
+      },
+    );
+  }
+
+  static createLovErrorButton(BuildContext context, LovModel lovModel) {
+    return _QuickSuggestionButton.error(
+      tooltip: "Error",
+      onPressed: () async {
+        /// await lovModel.showBlockErrorViewerDialog(context);
+      },
+    );
+  }
+
+  static createLovRequeryButton(BuildContext context, LovModel lovModel) {
+    return _QuickSuggestionButton.requery(
+      tooltip: "Requery",
+      onPressed: () async {
+        await lovModel.query();
       },
     );
   }

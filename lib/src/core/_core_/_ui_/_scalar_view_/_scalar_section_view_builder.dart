@@ -62,6 +62,9 @@ class _ScalarSectionViewBuilderState
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   Widget buildContent(BuildContext context) {
     return widget.build();
   }

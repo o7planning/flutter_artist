@@ -41,18 +41,17 @@ class XDataView extends StatelessWidget {
                 fontStyle: FontStyle.italic,
               ),
             )
-          else
-            ...[
-              SelectableText(
-                xData!.data.toString(),
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: 'Courier',
-                  color: theme.colorScheme.onSurfaceVariant,
-                  height: 1.4,
-                ),
+          else ...[
+            SelectableText(
+              xData!.data.toString(),
+              style: TextStyle(
+                fontSize: 12,
+                fontFamily: 'Courier',
+                color: theme.colorScheme.onSurfaceVariant,
+                height: 1.4,
               ),
-            ],
+            ),
+          ],
         ],
       ),
     );

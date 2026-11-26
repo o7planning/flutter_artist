@@ -5,12 +5,11 @@ import 'package:animated_tree_view/tree_view/widgets/indent.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
-import '../../core/_core_/core.dart';
 import '../../core/_core_/_enums_/_enums.dart';
+import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/__utils.dart';
-
-import '../../core/widgets/_custom_app_container.dart';
+import '../../core/widgets/__widgets.dart';
 import '_filter_model_debug_view.dart';
 import 'widgets/_condition_group_view.dart';
 import 'widgets/_criterion_condition_model_view.dart';
@@ -168,7 +167,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
           dynamic data = node.data;
           String title;
           String? tooltip;
-          bool isMultiOpt = false;
+          bool isManagedOpt = false;
           bool isMultiSelection = false;
           IconData prefixIconData;
 
@@ -183,31 +182,31 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
             "${getClassNameWithoutGenerics(data)} > ${data.groupName}";
             prefixIconData = FaIconConstants.filterCriteriaGroupIconData;
             //
-            isMultiOpt = false;
+            isManagedOpt = false;
             isMultiSelection = false;
           } else if (data is ConditionModelImpl) {
             TildeFilterCriterionModel criterionModel =
                 data.tildeFilterCriterionModel;
 
-            if (criterionModel is SimpleTildeFilterCriterionModel) {
+            if (criterionModel is PlainTildeFilterCriterionModel) {
               title = data.tildeCriterionName;
               tooltip =
               "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType
                   .toString()}> ${data.tildeCriterionName}";
-              prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
+              prefixIconData = FaIconConstants.plainPropOrCriterionIconData;
               //
-              isMultiOpt = false;
+              isManagedOpt = false;
               isMultiSelection = false;
-            } else if (criterionModel is MultiOptTildeFilterCriterionModel) {
+            } else if (criterionModel is ManagedOptTildeFilterCriterionModel) {
               title = data.tildeCriterionName;
               tooltip =
               "${getClassNameWithoutGenerics(data)}<${criterionModel.dataType
                   .toString()}> ${data.tildeCriterionName}";
-              prefixIconData = FaIconConstants.optPropOrCriterionIconData;
+              prefixIconData = FaIconConstants.managedPropOrCriterionIconData;
               //
-              isMultiOpt = true;
+              isManagedOpt = true;
               isMultiSelection =
-                  criterionModel.selectionMode == MultiOptSelectionMode.multi;
+                  criterionModel.selectionMode == ManagedOptSelectionMode.multi;
             } else {
               throw "Never Run";
             }
@@ -259,8 +258,9 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
                       ),
                     ),
                   ),
-                  if (isMultiOpt && isMultiSelection) const SizedBox(width: 5),
-                  if (isMultiOpt && isMultiSelection)
+                  if (isManagedOpt && isMultiSelection) const SizedBox(
+                      width: 5),
+                  if (isManagedOpt && isMultiSelection)
                     Tooltip(
                       message: "Multi Selection",
                       child: Icon(
@@ -318,7 +318,7 @@ class FilterConditionGroupsViewState extends State<FilterConditionGroupsView> {
     required ConditionModelImpl criterionConditionModel,
   }) {
     TreeNode childNode = TreeNode(
-      // key: "FilterCriterionConditionModel-${multiOptCriterionModel.tildeCriterionName}",
+      // key: "FilterCriterionConditionModel-${managedOptCriterionModel.tildeCriterionName}",
       data: criterionConditionModel,
     );
     //

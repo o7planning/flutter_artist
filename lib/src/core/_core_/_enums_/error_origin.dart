@@ -1,6 +1,5 @@
 part of '_enums.dart';
 
-
 /// Identifies the architectural layer or trigger source that caused a LOV query failure.
 enum LovErrorOrigin {
   /// Error occurred directly during `LovModel.performQuery()`.
@@ -9,7 +8,6 @@ enum LovErrorOrigin {
   /// Error originated from the LOV's own [FilterModel].
   filterModel,
 }
-
 
 /// Categorizes the root architectural source or trigger layer that caused a query failure.
 enum BlockErrorOrigin {
@@ -29,8 +27,7 @@ enum BlockErrorOrigin {
   ///   ([parentCascade]) is mapped to [parentCascade] from the child's perspective.
   /// - A shared criteria extraction error ([filterModel]) preserves its [filterModel]
   ///   origin across the entire shared-filter subtree.
-  BlockErrorOrigin toCascadedOrigin() =>
-      switch (this) {
+  BlockErrorOrigin toCascadedOrigin() => switch (this) {
         directFetch || parentCascade => parentCascade,
         filterModel => filterModel,
       };
@@ -54,8 +51,7 @@ enum ScalarErrorOrigin {
   ///   ([parentCascade]) is mapped to [parentCascade] from the child's perspective.
   /// - A shared criteria extraction error ([filterModel]) preserves its [filterModel]
   ///   origin across the entire shared-filter subtree.
-  ScalarErrorOrigin toCascadedOrigin() =>
-      switch (this) {
+  ScalarErrorOrigin toCascadedOrigin() => switch (this) {
         directFetch || parentCascade => parentCascade,
         filterModel => filterModel,
       };

@@ -77,6 +77,9 @@ class _ProzessControlBarState extends _BaseControlBarState<Prozess,
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   Widget? buildStandardButton(ProzessControlBarItem item) {
     final type = item.type ?? ProzessControlBarItemType.custom;
 

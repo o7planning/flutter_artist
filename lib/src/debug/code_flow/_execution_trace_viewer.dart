@@ -4,8 +4,7 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
 import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/_core_/core.dart';
-import '../../core/widgets/_custom_app_container.dart';
-import '../../core/widgets/_iconed_checkbox.dart';
+import '../../core/widgets/__widgets.dart';
 import '../dialog/_code_flow_settings_dialog.dart';
 import '_execution_trace_box.dart';
 import '_execution_trace_box_detail.dart';
@@ -41,7 +40,7 @@ class _ExecutionTraceViewerState extends State<ExecutionTraceViewer> {
   Widget build(BuildContext context) {
     List<ExecutionTrace> items = FlutterArtist.codeFlowLogger.executionTraces
         .where((item) =>
-    (executionTraceTypeFilterMap[item.executionTraceType] ?? false))
+            (executionTraceTypeFilterMap[item.executionTraceType] ?? false))
         .toList();
     //
     if (!items.contains(selectedExecutionTrace)) {
@@ -57,36 +56,36 @@ class _ExecutionTraceViewerState extends State<ExecutionTraceViewer> {
         Expanded(
           child: selectedExecutionTrace == null
               ? const CustomAppContainer(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.inbox_outlined, size: 48, color: Colors.grey),
+                      SizedBox(height: 8),
+                      Text(
+                        "No execution traces found.",
+                        style: TextStyle(fontSize: 13, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ))
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.inbox_outlined, size: 48, color: Colors.grey),
-                    SizedBox(height: 8),
-                    Text(
-                      "No execution traces found.",
-                      style: TextStyle(fontSize: 13, color: Colors.grey),
+                    SizedBox(
+                      width: 280,
+                      child: _buildLeftList(items),
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: ExecutionTraceDetailView(
+                        executionTrace: selectedExecutionTrace!,
+                      ),
                     ),
                   ],
                 ),
-              ))
-              : Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 280,
-                child: _buildLeftList(items),
-              ),
-              const SizedBox(width: 4),
-              Expanded(
-                child: ExecutionTraceDetailView(
-                  executionTrace: selectedExecutionTrace!,
-                ),
-              ),
-            ],
-          ),
         ),
       ],
     );
@@ -160,8 +159,7 @@ class _ExecutionTraceViewerState extends State<ExecutionTraceViewer> {
       ),
       items: ExecutionTraceType.values
           .map(
-            (executionTraceType) =>
-            BreadCrumbItem(
+            (executionTraceType) => BreadCrumbItem(
               content: Tooltip(
                 message: executionTraceType.desc,
                 child: IconedCheckbox(
@@ -174,7 +172,7 @@ class _ExecutionTraceViewerState extends State<ExecutionTraceViewer> {
                     ),
                   ),
                   value:
-                  executionTraceTypeFilterMap[executionTraceType] ?? true,
+                      executionTraceTypeFilterMap[executionTraceType] ?? true,
                   onChanged: (bool? value) {
                     setState(() {
                       executionTraceTypeFilterMap[executionTraceType] =
@@ -184,7 +182,7 @@ class _ExecutionTraceViewerState extends State<ExecutionTraceViewer> {
                 ),
               ),
             ),
-      )
+          )
           .toList(),
     );
   }
@@ -194,8 +192,7 @@ class _ExecutionTraceViewerState extends State<ExecutionTraceViewer> {
       padding: const EdgeInsets.only(right: 10),
       children: items
           .map(
-            (executionTrace) =>
-            ExecutionTraceBox(
+            (executionTrace) => ExecutionTraceBox(
               key: Key("LogItem-${executionTrace.id}"),
               executionTrace: executionTrace,
               selected: executionTrace == selectedExecutionTrace,
@@ -205,7 +202,7 @@ class _ExecutionTraceViewerState extends State<ExecutionTraceViewer> {
                 });
               },
             ),
-      )
+          )
           .toList(),
     );
   }

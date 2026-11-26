@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../../core/_core_/core.dart';
 import '../../../core/_core_/_enums_/_enums.dart';
+import '../../../core/_core_/core.dart';
 import '../options/_debug_task_options.dart';
-import 'widgets/active_info_widget.dart';
 import '_debug_box.dart';
 import 'debug_style_utils.dart';
+import 'widgets/active_info_widget.dart';
 import 'widgets/class_def_viewable_info_widget.dart';
 import 'widgets/task_data_state_info_widget.dart';
 import 'widgets/task_init_data_info_widget.dart';

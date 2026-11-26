@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../core/widgets/_html_selectable_rich_text.dart';
+import '../../core/widgets/__widgets.dart';
 
 class ExtraInfoViewerDialog extends StatelessWidget {
   final String title;

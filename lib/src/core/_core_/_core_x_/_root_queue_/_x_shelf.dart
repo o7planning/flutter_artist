@@ -17,10 +17,12 @@ abstract class XShelf extends XRootQueueItem {
   final Map<String, XBlockFormModel> xBlockFormModelMap = {};
   final Map<String, XScalar> xScalarMap = {};
   final Map<String, XBlock> xBlockMap = {};
+  final Map<String, XLovModel> xLovModelMap = {};
 
   //
   final List<XBlock> allRootXBlocks = [];
   final List<XScalar> allRootXScalars = [];
+  final List<XLovModel> allXLovModels = [];
 
   //
   final List<XBlock> allLeafXBlocks = [];
@@ -150,6 +152,27 @@ abstract class XShelf extends XRootQueueItem {
       }
     }
     //
+    for (LovModel lovModel in shelf.lovModels) {
+      final FilterModel filterModel = lovModel.ownedOrDefaultFilterModel;
+      // Register LOV's dedicated FilterModel into xFilterModelMap if not yet present
+      // (e.g., custom owned FilterModel not registered in shelf._allFilterModels).
+      final XFilterModel xFilterModel = xFilterModelMap.putIfAbsent(
+        filterModel.name,
+        () {
+          final created = filterModel._createXFilterModel(xShelf: this);
+          allXFilterModels.add(created);
+          return created;
+        },
+      );
+      // Create XLovModel via lovModel._createXLovModel to preserve <ID, ITEM> generics.
+      final xLovModel = lovModel._createXLovModel(
+        xFilterModel: xFilterModel,
+      );
+      xFilterModel.xLovModels.add(xLovModel);
+      allXLovModels.add(xLovModel);
+      xLovModelMap[lovModel.name] = xLovModel;
+    }
+    //
     _updateFromShelfForFirstTime();
   }
 
@@ -204,6 +227,15 @@ abstract class XShelf extends XRootQueueItem {
         xBlock = xBlock.parentXBlock;
       }
     }
+    //
+    for (XLovModel xLovModel in allXLovModels) {
+      if (xLovModel.lovModel.ui.hasLovContext()) {
+        if (xLovModel.lovModel.dataState.isPending ||
+            xLovModel.lovModel.dataState.isLoadedStale) {
+          xLovModel.setQueryHintToGreater(QueryHint.force);
+        }
+      }
+    }
   }
 
   // ***************************************************************************
@@ -224,6 +256,10 @@ abstract class XShelf extends XRootQueueItem {
       return next;
     }
     next = _findScalarNextExecutionUnit(debug: debug);
+    if (next != null) {
+      return next;
+    }
+    next = _findLovNextExecutionUnit(debug: debug);
     if (next != null) {
       return next;
     }
@@ -292,6 +328,17 @@ abstract class XShelf extends XRootQueueItem {
     return null;
   }
 
+  NxtExecutionUnit? _findLovNextExecutionUnit({required bool debug}) {
+    for (final xLovModel in allXLovModels) {
+      final NxtExecutionUnit next =
+          xLovModel._getNextExecutionUnit(debug: debug);
+      if (next.yes) {
+        return next;
+      }
+    }
+    return null;
+  }
+
   // ***************************************************************************
   // ***************************************************************************
   // ***************************************************************************
@@ -312,6 +359,10 @@ abstract class XShelf extends XRootQueueItem {
     return xScalarMap[name];
   }
 
+  XLovModel? findXLovModelByName(String name) {
+    return xLovModelMap[name];
+  }
+
   // ***************************************************************************
   // ***************************************************************************
 
@@ -327,6 +378,11 @@ abstract class XShelf extends XRootQueueItem {
     }
     for (XBlockFormModel xBlockFormModel in allXBlockFormModels) {
       xBlockFormModel.printInfo();
+    }
+    for (XLovModel xLovModel in allXLovModels) {
+      if (xLovModel.queryHint != QueryHint.none) {
+        xLovModel.printInfo();
+      }
     }
     print("--------------------------------------------------------------\n\n");
   }

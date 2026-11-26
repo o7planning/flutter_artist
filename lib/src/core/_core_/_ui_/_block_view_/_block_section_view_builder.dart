@@ -36,7 +36,6 @@ class _BlockSectionViewBuilderState
     return getClassName(widget.block);
   }
 
-
   @override
   FocusRegionType getRegionType() {
     return FocusRegionType.blockSectionView;
@@ -61,6 +60,10 @@ class _BlockSectionViewBuilderState
 
   @override
   TaskViewContext? get taskViewContext => null;
+
+  @override
+  LovViewContext? get lovViewContext => null;
+
 
   @override
   void addWidgetState({required bool isVisible}) {

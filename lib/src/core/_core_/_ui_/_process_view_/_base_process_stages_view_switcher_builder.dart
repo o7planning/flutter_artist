@@ -62,6 +62,9 @@ abstract class _BaseProzessStagesViewSwitcherBuilderState<
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   void addWidgetState({required bool isVisible}) {
     prozess.ui._addProzessContentViewWidgetState(
       widgetState: this,

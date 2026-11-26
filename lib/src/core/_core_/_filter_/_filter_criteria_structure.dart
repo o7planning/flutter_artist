@@ -1,20 +1,20 @@
 part of '../core.dart';
 
 class FilterCriteriaStructure {
-  final List<SimpleFilterCriterionDef> simpleCriterionDefs;
-  final List<MultiOptFilterCriterionDef> multiOptCriterionDefs;
+  final List<PlainFilterCriterionDef> plainCriterionDefs;
+  final List<ManagedOptFilterCriterionDef> managedOptCriterionDefs;
 
   const FilterCriteriaStructure({
-    required this.simpleCriterionDefs,
-    required this.multiOptCriterionDefs,
+    required this.plainCriterionDefs,
+    required this.managedOptCriterionDefs,
   });
 
   void _printDebug() {
     print("------------------------------------------------------------------");
-    for (SimpleFilterCriterionDef criterionDef in simpleCriterionDefs) {
+    for (PlainFilterCriterionDef criterionDef in plainCriterionDefs) {
       criterionDef._printDebugTildeSuffixesCascade();
     }
-    for (MultiOptFilterCriterionDef rootOptDef in multiOptCriterionDefs) {
+    for (ManagedOptFilterCriterionDef rootOptDef in managedOptCriterionDefs) {
       rootOptDef._printDebugTildeSuffixesCascade();
     }
     print("------------------------------------------------------------------");

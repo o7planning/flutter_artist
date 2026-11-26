@@ -61,6 +61,9 @@ class _TaskViewBuilderState extends _ContextProviderViewState<TaskViewBuilder> {
   TaskViewContext? get taskViewContext => widget.config.taskViewContext;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   void addWidgetState({required bool isVisible}) {
     widget.task.ui._addTaskContentWidgetState(
       widgetState: this,

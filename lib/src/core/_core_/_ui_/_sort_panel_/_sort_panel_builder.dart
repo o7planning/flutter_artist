@@ -65,6 +65,9 @@ class _SortPanelBuilderState
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   void setBuildingState({required bool isBuilding}) {
     widget.sortModel.ui._setSortPanelBuildingState(
       widgetState: this,

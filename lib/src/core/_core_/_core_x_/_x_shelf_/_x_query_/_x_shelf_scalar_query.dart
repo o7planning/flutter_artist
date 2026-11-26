@@ -16,6 +16,7 @@ class _XShelfScalarQuery extends _XShelfBaseQuery {
         scalar: scalar,
         queryType: QueryType.realQuery,
       ),
+      targetLovAndOptions: null,
       forceQueryAll: false,
       forceReloadFilter: false,
     );

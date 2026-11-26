@@ -4,8 +4,8 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
   _XShelfShelfExternalReaction({
     required super.shelf,
   }) : super(
-    xShelfType: XShelfType.shelfExternalReaction,
-  ) {
+          xShelfType: XShelfType.shelfExternalReaction,
+        ) {
     for (XBlock xBlk in allXBlocks) {
       if (xBlk.block._blockSyncSessionState == null &&
           xBlk.block.blockCurrentItemModel._blockItemSyncSessionState == null) {
@@ -144,6 +144,15 @@ class _XShelfShelfExternalReaction extends _XShelfBaseQuery {
         }
         //
         xScalar = xScalar.parentXScalar;
+      }
+    }
+    // -------------------------------------------------------------------------
+    for (XLovModel xLovModel in allXLovModels) {
+      if (xLovModel.lovModel.ui.hasLovContext()) {
+        if (xLovModel.lovModel.dataState.isPending ||
+            xLovModel.lovModel.dataState.isLoadedStale) {
+          xLovModel.setQueryHintToGreater(QueryHint.force);
+        }
       }
     }
   }

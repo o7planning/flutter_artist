@@ -1,7 +1,7 @@
 part of '../../../core.dart';
 
 ///
-/// [SimpleFormPropDef], [MultiOptFormPropDef].
+/// [PlainFormPropDef], [ManagedOptFormPropDef].
 ///
 abstract class FormPropDef<V> {
   final String propName;
@@ -20,16 +20,16 @@ abstract class FormPropDef<V> {
 
 // *****************************************************************************
 
-class SimpleFormPropDef<V> extends FormPropDef<V> {
-  SimpleFormPropDef({
+class PlainFormPropDef<V> extends FormPropDef<V> {
+  PlainFormPropDef({
     required super.propName,
     super.description,
   }) : super._();
 
-  SimpleFormPropModel<V> createModel({
+  PlainFormPropModel<V> createModel({
     required String propName,
   }) {
-    return SimpleFormPropModel<V>(
+    return PlainFormPropModel<V>(
       propName: propName,
     );
   }
@@ -37,69 +37,69 @@ class SimpleFormPropDef<V> extends FormPropDef<V> {
 
 // *****************************************************************************
 
-class MultiOptFormPropDef<V> extends FormPropDef<V> {
-  late final MultiOptFormPropDef? parent;
+class ManagedOptFormPropDef<V> extends FormPropDef<V> {
+  late final ManagedOptFormPropDef? parent;
 
-  final MultiOptPropReload reloadCondition;
+  final ManagedOptPropReload reloadCondition;
 
-  final MultiOptSelectionMode selectionMode;
+  final ManagedOptSelectionMode selectionMode;
 
-  final List<MultiOptFormPropDef> _children;
+  final List<ManagedOptFormPropDef> _children;
 
-  List<MultiOptFormPropDef> get children => List.unmodifiable(_children);
+  List<ManagedOptFormPropDef> get children => List.unmodifiable(_children);
 
-  MultiOptFormPropDef._({
+  ManagedOptFormPropDef._({
     required super.propName,
     required super.description,
-    required List<MultiOptFormPropDef> children,
+    required List<ManagedOptFormPropDef> children,
     required this.selectionMode,
     required this.reloadCondition,
   })
       : _children = [...children],
         super._();
 
-  factory MultiOptFormPropDef.singleSelection({
+  factory ManagedOptFormPropDef.singleSelection({
     required String propName,
     String? description,
-    List<MultiOptFormPropDef> children = const [],
-    MultiOptPropReload reloadCondition = MultiOptPropReload.ifCriteriaChanged,
+    List<ManagedOptFormPropDef> children = const [],
+    ManagedOptPropReload reloadCondition = ManagedOptPropReload.ifCriteriaChanged,
     String? nextPropName,
   }) {
-    return MultiOptFormPropDef._(
+    return ManagedOptFormPropDef._(
       propName: propName,
       description: description,
       children: children,
-      selectionMode: MultiOptSelectionMode.single,
+      selectionMode: ManagedOptSelectionMode.single,
       reloadCondition: reloadCondition,
     );
   }
 
-  factory MultiOptFormPropDef.multiSelection({
+  factory ManagedOptFormPropDef.multiSelection({
     required String propName,
     String? description,
-    MultiOptPropReload reloadCondition = MultiOptPropReload.ifCriteriaChanged,
+    ManagedOptPropReload reloadCondition = ManagedOptPropReload.ifCriteriaChanged,
     String? nextPropName,
   }) {
-    return MultiOptFormPropDef._(
+    return ManagedOptFormPropDef._(
       propName: propName,
       description: description,
       children: [],
-      selectionMode: MultiOptSelectionMode.multi,
+      selectionMode: ManagedOptSelectionMode.multi,
       reloadCondition: reloadCondition,
     );
   }
 
-  MultiOptFormPropModel<V> createModel({
-    required MultiOptFormPropModel? parent,
+  ManagedOptFormPropModel<V> createModel({
+    required ManagedOptFormPropModel? parent,
     required String propName,
   }) {
-    return selectionMode == MultiOptSelectionMode.single
-        ? MultiOptSsFormPropModel<V>(
+    return selectionMode == ManagedOptSelectionMode.single
+        ? ManagedOptSsFormPropModel<V>(
       propName: propName,
       parent: parent,
       reloadCondition: reloadCondition,
     )
-        : MultiOptMsFormPropModel<V>(
+        : ManagedOptMsFormPropModel<V>(
       propName: propName,
       parent: parent,
       reloadCondition: reloadCondition,

@@ -3,8 +3,7 @@ import 'package:flutter_breadcrumb/flutter_breadcrumb.dart';
 
 import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/_core_/core.dart';
-import '../../core/widgets/_iconed_checkbox.dart';
-import '../../core/widgets/_simple_copy_button.dart';
+import '../../core/widgets/__widgets.dart';
 import '../feature_module/widget/_shelf_info_view.dart';
 import '_code_flow_func_trace_info_view.dart';
 import '_code_flow_method_args_view.dart';

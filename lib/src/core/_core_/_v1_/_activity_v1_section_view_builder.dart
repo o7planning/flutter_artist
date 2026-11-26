@@ -71,6 +71,9 @@ class _ActivitySectionViewBuilderState
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   bool get provideActivityV1Context {
     return false;
   }

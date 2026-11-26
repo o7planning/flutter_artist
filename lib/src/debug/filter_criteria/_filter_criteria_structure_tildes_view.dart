@@ -5,12 +5,11 @@ import 'package:animated_tree_view/tree_view/widgets/indent.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_split_view/multi_split_view.dart';
 
-import '../../core/_core_/core.dart';
 import '../../core/_core_/_enums_/_enums.dart';
+import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/__utils.dart';
-
-import '../../core/widgets/_custom_app_container.dart';
+import '../../core/widgets/__widgets.dart';
 import '_filter_model_debug_view.dart';
 import 'widgets/_tilde_filter_criteria_view.dart';
 
@@ -72,16 +71,16 @@ class FilterCriteriaStructureTildesViewState
     //
     FilterModelStructure structure = widget.filterModel.filterModelStructure;
 
-    List<MultiOptTildeFilterCriterionModel> rootMultiOptCriterion =
-        structure.debugRootOptCriteria;
-    for (MultiOptTildeFilterCriterionModel multiOptCriterion
-    in rootMultiOptCriterion) {
-      _addMultiOptCriterionCascade(filterModelNode, multiOptCriterion);
+    List<ManagedOptTildeFilterCriterionModel> rootManagedOptCriterion =
+        structure.debugRootManagedOptCriteria;
+    for (ManagedOptTildeFilterCriterionModel managedOptCriterion
+    in rootManagedOptCriterion) {
+      _addManagedOptCriterionCascade(filterModelNode, managedOptCriterion);
     }
-    List<SimpleTildeFilterCriterionModel> simpleCriteria =
-        structure.debugSimpleCriteria;
-    for (SimpleTildeFilterCriterionModel simpleCriterion in simpleCriteria) {
-      _addSimpleCriterion(filterModelNode, simpleCriterion);
+    List<PlainTildeFilterCriterionModel> plainCriteria =
+        structure.debugPlainCriteria;
+    for (PlainTildeFilterCriterionModel plainCriterion in plainCriteria) {
+      _addPlainCriterion(filterModelNode, plainCriterion);
     }
 
     return rootTreeNode;
@@ -159,32 +158,32 @@ class FilterCriteriaStructureTildesViewState
           dynamic data = node.data;
           String title;
           String? tooltip;
-          bool isMultiOpt = false;
+          bool isManagedOpt = false;
           bool isMultiSelection = false;
           IconData prefixIconData;
 
           if (data is FilterModel) {
             title = getClassName(data);
             prefixIconData = FaIconConstants.filterModelIconData;
-          } else if (data is SimpleTildeFilterCriterionModel) {
+          } else if (data is PlainTildeFilterCriterionModel) {
             title = data.tildeCriterionName;
             tooltip =
             "${getClassNameWithoutGenerics(data)}<${data.dataType
                 .toString()}> ${data.tildeCriterionName}";
-            prefixIconData = FaIconConstants.simplePropOrCriterionIconData;
+            prefixIconData = FaIconConstants.plainPropOrCriterionIconData;
             //
-            isMultiOpt = false;
+            isManagedOpt = false;
             isMultiSelection = false;
-          } else if (data is MultiOptTildeFilterCriterionModel) {
+          } else if (data is ManagedOptTildeFilterCriterionModel) {
             title = data.tildeCriterionName;
             tooltip =
             "${getClassNameWithoutGenerics(data)}<${data.dataType
                 .toString()}> ${data.tildeCriterionName}";
-            prefixIconData = FaIconConstants.optPropOrCriterionIconData;
+            prefixIconData = FaIconConstants.managedPropOrCriterionIconData;
             //
-            isMultiOpt = true;
+            isManagedOpt = true;
             isMultiSelection =
-                data.selectionMode == MultiOptSelectionMode.multi;
+                data.selectionMode == ManagedOptSelectionMode.multi;
           } else {
             prefixIconData = FaIconConstants.unknownIconData;
             title = "UNKNOWN";
@@ -228,8 +227,9 @@ class FilterCriteriaStructureTildesViewState
                       ),
                     ),
                   ),
-                  if (isMultiOpt && isMultiSelection) const SizedBox(width: 5),
-                  if (isMultiOpt && isMultiSelection)
+                  if (isManagedOpt && isMultiSelection) const SizedBox(
+                      width: 5),
+                  if (isManagedOpt && isMultiSelection)
                     Tooltip(
                       message: "Multi Selection",
                       child: Icon(
@@ -255,27 +255,27 @@ class FilterCriteriaStructureTildesViewState
     );
   }
 
-  void _addMultiOptCriterionCascade(TreeNode currentNode,
-      MultiOptTildeFilterCriterionModel multiOptCriterion) {
+  void _addManagedOptCriterionCascade(TreeNode currentNode,
+      ManagedOptTildeFilterCriterionModel managedOptCriterion) {
     TreeNode childNode = TreeNode(
-      key: "MultiOptCriterion-${multiOptCriterion.tildeCriterionName}",
-      data: multiOptCriterion,
+      key: "ManagedOptCriterion-${managedOptCriterion.tildeCriterionName}",
+      data: managedOptCriterion,
     );
     //
     currentNode.add(childNode);
-    for (MultiOptTildeFilterCriterionModel childMultiOptCriterion
-    in multiOptCriterion.children) {
-      _addMultiOptCriterionCascade(childNode, childMultiOptCriterion);
+    for (ManagedOptTildeFilterCriterionModel childManagedOptCriterion
+    in managedOptCriterion.children) {
+      _addManagedOptCriterionCascade(childNode, childManagedOptCriterion);
     }
   }
 
-  void _addSimpleCriterion(TreeNode currentNode,
-      SimpleTildeFilterCriterionModel simpleCriterion) {
+  void _addPlainCriterion(TreeNode currentNode,
+      PlainTildeFilterCriterionModel plainCriterion) {
     TreeNode childNode = TreeNode(
-      key: "SimpleCriterion-${simpleCriterion.tildeCriterionName}",
-      data: simpleCriterion,
+      key: "PlainCriterion-${plainCriterion.tildeCriterionName}",
+      data: plainCriterion,
     );
-    // if (simpleCriterion == widget.selectedCriterion) {
+    // if (plainCriterion == widget.selectedCriterion) {
     //   _currentNode = childNode;
     // }
     currentNode.add(childNode);

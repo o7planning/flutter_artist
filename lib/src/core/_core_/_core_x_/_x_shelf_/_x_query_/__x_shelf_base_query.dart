@@ -9,13 +9,16 @@ class _XShelfBaseQuery extends XShelf {
   void _updateQueryStateFromFilterModelAndFilterPatch({
     required TargetBlockAndOptions? targetBlockAndOptions,
     required TargetScalarAndOptions? targetScalarAndOptions,
+    required TargetLovAndOptions? targetLovAndOptions,
     required FilterModel filterModel,
     required FilterPatch? filterPatch,
     required bool forceQueryAll,
     required bool forceReloadFilter,
   }) {
     assert(!forceQueryAll ||
-        (targetBlockAndOptions == null && targetScalarAndOptions == null));
+        (targetBlockAndOptions == null &&
+            targetScalarAndOptions == null &&
+            targetLovAndOptions == null));
 
     if (filterModel.isDefaultFilterModel) {
       // Do Nothing.
@@ -34,7 +37,8 @@ class _XShelfBaseQuery extends XShelf {
     // Flag indicating whether the current operation is emptyQuery mode
     final bool isTargetEmptyQuery =
         targetBlockAndOptions?.queryType == QueryType.emptyQuery ||
-            targetScalarAndOptions?.queryType == QueryType.emptyQuery;
+            targetScalarAndOptions?.queryType == QueryType.emptyQuery ||
+            targetLovAndOptions?.queryType == QueryType.emptyQuery;
 
     // -------------------------------------------------------------------------
     // 1. Explicitly configure target block and walk up its ancestry chain
@@ -90,6 +94,17 @@ class _XShelfBaseQuery extends XShelf {
         }
         parentXScalar = parentXScalar.parentXScalar;
       }
+    }
+
+    if (targetLovAndOptions != null) {
+      final LovModel targetLov = targetLovAndOptions.lovModel;
+      final XLovModel targetXLov = xLovModelMap[targetLov.name]!;
+      targetXLov.setQueryHintToGreater(QueryHint.force);
+      targetXLov.setOptions(
+        queryType: targetLovAndOptions.queryType,
+        listUpdateStrategy: targetLovAndOptions.listUpdateStrategy,
+        pageable: targetLovAndOptions.pageable,
+      );
     }
 
     // -------------------------------------------------------------------------
@@ -196,6 +211,29 @@ class _XShelfBaseQuery extends XShelf {
           parentXScalar = parentXScalar.parentXScalar;
         }
       }
+    }
+
+    // 5. Evaluate and update all LovModels bound to this FilterModel
+    // (triggered when the user clicks Search inside the LOV's FilterPanel)
+    for (XLovModel xLovModel in thisXFilterModel.xLovModels) {
+      final LovModel lovModel = xLovModel.lovModel;
+      final bool isTargetLov = targetLovAndOptions != null &&
+          targetLovAndOptions.lovModel.name == lovModel.name;
+      if (isTargetLov) {
+        continue;
+      }
+
+      QueryHint queryHint = forceQueryAll ? QueryHint.force : QueryHint.none;
+      if (lovModel.ui.hasLovContext() && !isTargetEmptyQuery) {
+        queryHint = QueryHint.force;
+      }
+
+      xLovModel.setQueryHintToGreater(queryHint);
+      xLovModel.setOptions(
+        queryType: QueryType.realQuery,
+        listUpdateStrategy: ListUpdateStrategy.replace,
+        pageable: null,
+      );
     }
   }
 }

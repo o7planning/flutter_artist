@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/_core_/core.dart';
 import '../../../../core/_core_/_enums_/_enums.dart';
+import '../../../../core/_core_/core.dart';
 import '../../../dialog/_process_stages_inspector_dialog.dart';
 import '_base_info_widget.dart';
 

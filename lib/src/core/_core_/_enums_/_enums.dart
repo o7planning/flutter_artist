@@ -5,7 +5,10 @@ import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 import '../../icon/icon_constants.dart';
 import '../core.dart';
 
+part 'lov_multi_display_mode.dart';
+
 part 'lov_selection_mode.dart';
+
 part 'form_context_availability.dart';
 
 part 'absent_item_context_policy.dart';
@@ -110,7 +113,7 @@ part 'list_update_strategy.dart';
 
 part 'loaded_status.dart';
 
-part 'multi_opt_prop_reload.dart';
+part 'managed_opt_prop_reload.dart';
 
 part 'optioned_master_prop_type.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart'
-as dialogs;
+    as dialogs;
 
 import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/_core_/core.dart';
@@ -53,7 +53,7 @@ class _DebugFormModelInspectorDialogState
   @override
   Widget build(BuildContext context) {
     final Size preferContentSize =
-    DialogSizeUtils.calculateDebugDialogSize(context);
+        DialogSizeUtils.calculateDebugDialogSize(context);
 
     // Set up the AlertDialog
     dialogs.FaDialog alert = dialogs.FaDialog(
@@ -62,8 +62,7 @@ class _DebugFormModelInspectorDialogState
           : FaIconConstants.moduleStructureIconData,
       titleText: showFormData
           ? "Debug Form Model Inspector - ${getClassName(widget.formModel)}"
-          : "Debug Shelf Structure Inspector - ${getClassName(
-          widget.formModel.module)}",
+          : "Debug Shelf Structure Inspector - ${getClassName(widget.formModel.module)}",
       contentPadding: const EdgeInsets.all(5),
       preferredContentWidth: preferContentSize.width,
       preferredContentHeight: preferContentSize.height,
@@ -106,14 +105,14 @@ class _DebugFormModelInspectorDialogState
 
     return showFormData
         ? FormModelView(
-      formModel: widget.formModel,
-      locationInfo: widget.locationInfo,
-      onPressedShelf: () {
-        setState(() {
-          showFormData = false;
-        });
-      },
-    )
+            formModel: widget.formModel,
+            locationInfo: widget.locationInfo,
+            onPressedShelf: () {
+              setState(() {
+                showFormData = false;
+              });
+            },
+          )
         : moduleView;
   }
 }

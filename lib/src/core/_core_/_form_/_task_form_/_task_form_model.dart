@@ -30,6 +30,9 @@ abstract class TaskFormModel<
   String get name => task.name;
 
   @override
+  bool get hasError => dataState.isFatalError;
+
+  @override
   Task get host => task;
 
   @override
@@ -47,8 +50,6 @@ abstract class TaskFormModel<
   // ===========================================================================
 
   TaskFormModel({super.config});
-
-  bool get hasError => dataState.isFatalError;
 
   // ===========================================================================
 

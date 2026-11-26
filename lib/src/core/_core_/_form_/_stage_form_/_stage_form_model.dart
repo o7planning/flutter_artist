@@ -29,6 +29,9 @@ abstract class StageFormModel<
   }
 
   @override
+  bool get hasError => dataState.isFatalError;
+
+  @override
   String get name => stage.name;
 
   late final Stage<

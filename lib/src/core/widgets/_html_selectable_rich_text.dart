@@ -1,5 +1,4 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+part of '__widgets.dart';
 
 /// A widget that renders HTML-styled text using Flutter's RichText widget.
 ///

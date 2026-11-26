@@ -14,6 +14,7 @@ class _XShelfFilterModelQuery extends _XShelfBaseQuery {
       filterPatch: filterPatch,
       targetBlockAndOptions: null,
       targetScalarAndOptions: null,
+      targetLovAndOptions: null,
       forceQueryAll: forceQueryAll,
       forceReloadFilter: true,
     );

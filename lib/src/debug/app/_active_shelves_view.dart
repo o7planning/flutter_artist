@@ -4,7 +4,7 @@ import 'package:flutter_left_right_container/left_right_container.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
-import '../../core/widgets/_custom_app_container.dart';
+import '../../core/widgets/__widgets.dart';
 import '_block_or_scalar.dart';
 import '_block_or_scalar_view.dart';
 import '_shelf_structure_tree_view.dart';
@@ -68,7 +68,7 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
     final colorScheme = theme.colorScheme;
     return ListView(
       children: activeShelves.map(
-            (s) {
+        (s) {
           final isSelected = selectedShelf?.name == s.name;
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
@@ -97,7 +97,7 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
                 minTileHeight: 0,
                 dense: true,
                 visualDensity:
-                const VisualDensity(vertical: -3, horizontal: -3),
+                    const VisualDensity(vertical: -3, horizontal: -3),
                 leading: Icon(
                   FaIconConstants.shelfIconData,
                   size: 14,
@@ -122,7 +122,7 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight:
-                    isSelected ? FontWeight.bold : FontWeight.normal,
+                        isSelected ? FontWeight.bold : FontWeight.normal,
                     color: isSelected
                         ? colorScheme.primary
                         : colorScheme.onSurface,
@@ -174,15 +174,15 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
       child: selectedShelf == null
           ? SizedBox()
           : ShelfStructureTreeView(
-        key: Key("Shelf-${selectedShelf?.name}"),
-        shelf: selectedShelf!,
-        selectedBlockOrScalar: selectedBlockOrScalar,
-        onSelectBlockOrScalar: (BlockOrScalar blockOrScalar) {
-          setState(() {
-            selectedBlockOrScalar = blockOrScalar;
-          });
-        },
-      ),
+              key: Key("Shelf-${selectedShelf?.name}"),
+              shelf: selectedShelf!,
+              selectedBlockOrScalar: selectedBlockOrScalar,
+              onSelectBlockOrScalar: (BlockOrScalar blockOrScalar) {
+                setState(() {
+                  selectedBlockOrScalar = blockOrScalar;
+                });
+              },
+            ),
     );
   }
 
@@ -190,8 +190,8 @@ class _ActiveShelvesViewState extends State<ActiveShelvesView> {
     return selectedBlockOrScalar == null
         ? const SizedBox()
         : BlockOrScalarView(
-      key: const PageStorageKey('PersistentTabbedView'),
-      blockOrScalar: selectedBlockOrScalar!,
-    );
+            key: const PageStorageKey('PersistentTabbedView'),
+            blockOrScalar: selectedBlockOrScalar!,
+          );
   }
 }

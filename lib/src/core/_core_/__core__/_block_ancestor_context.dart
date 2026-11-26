@@ -14,7 +14,7 @@ part of '../core.dart';
 ///     EmptyAdditionalFormRelatedData> {
 ///
 ///   @override
-///   Map<String, dynamic>? specifyCreationValuesForSimpleProps({
+///   Map<String, dynamic>? specifyCreationValuesForPlainProps({
 ///     required BlockAncestorContext ancestorContext,
 ///   }) {
 ///     // 1. Direct parent access (Immediate Parent: DepartmentBlock)

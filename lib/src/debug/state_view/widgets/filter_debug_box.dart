@@ -20,8 +20,8 @@ class FilterDebugBox extends BaseDebugBox {
   @override
   List<Widget> getChildIconLabelTexts(BuildContext context) {
     FilterModelStructure structure = filterModel.filterModelStructure;
-    List<MultiOptTildeFilterCriterionModel> optCriteria =
-        structure.allMultiOptCriteria;
+    List<ManagedOptTildeFilterCriterionModel> optCriteria =
+        structure.allManagedOptCriteria;
     //
     List<Widget> list1 = [
       if (options.showClassDefinition)
@@ -91,13 +91,12 @@ class FilterDebugBox extends BaseDebugBox {
     List<Widget> list2 = [
       if (options.showFilterCriteria && optCriteria.isNotEmpty)
         ...optCriteria.map(
-              (optCriterion) =>
-              IconLabelText(
-                label: "Load Count (${optCriterion.tildeCriterionName}): ",
-                text: optCriterion.loadCount.toString(),
-                labelStyle: DebugStyleUtils.getLabelStyle0(context),
-                textStyle: DebugStyleUtils.getTextStyle0(context),
-              ),
+          (optCriterion) => IconLabelText(
+            label: "Load Count (${optCriterion.tildeCriterionName}): ",
+            text: optCriterion.loadCount.toString(),
+            labelStyle: DebugStyleUtils.getLabelStyle0(context),
+            textStyle: DebugStyleUtils.getTextStyle0(context),
+          ),
         ),
     ];
     return [

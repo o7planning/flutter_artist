@@ -65,6 +65,9 @@ class _FilterPanelBuilderState
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   void setBuildingState({required bool isBuilding}) {
     widget.filterModel.ui._setFilterPanelBuildingState(
       widgetState: this,

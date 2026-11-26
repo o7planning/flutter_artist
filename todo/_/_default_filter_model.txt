@@ -13,8 +13,8 @@ class _DefaultFilterModel
   @override
   FilterCriteriaStructure defineFilterModelStructure() {
     return FilterCriteriaStructure(
-      simpleCriteria: [],
-      multiOptCriteria: [],
+      plainCriteria: [],
+      managedOptCriteria: [],
     );
   }
 
@@ -26,42 +26,42 @@ class _DefaultFilterModel
   }
 
   @override
-  Future<XList?> performLoadMultiOptTildeCriterionXData({
-    required String multiOptTildeCriterionName,
-    required Object? parentMultiOptTildeCriterionValue,
+  Future<XList?> performLoadManagedOptTildeCriterionXData({
+    required String managedOptTildeCriterionName,
+    required Object? parentManagedOptTildeCriterionValue,
     required EmptyFilterPatch? filterPatch,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? extractPatchValueForMultiOptTildeCriterion({
-    required String multiOptTildeCriterionName,
-    required XData multiOptTildeCriterionXData,
+  ValueWrap? extractPatchValueForManagedOptTildeCriterion({
+    required String managedOptTildeCriterionName,
+    required XData managedOptTildeCriterionXData,
     required EmptyFilterPatch filterPatch,
-    required Object? parentMultiOptTildeCriterionValue,
+    required Object? parentManagedOptTildeCriterionValue,
   }) {
     return null;
   }
 
   @override
-  Map<String, dynamic>? extractPatchValuesForSimpleTildeCriteria({
+  Map<String, dynamic>? extractPatchValuesForPlainTildeCriteria({
     required EmptyFilterPatch filterPatch,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
-    required String multiOptTildeCriterionName,
-    required XData multiOptTildeCriterionXData,
-    required Object? parentMultiOptTildeCriterionValue,
+  ValueWrap? specifyDefaultValueForManagedOptTildeCriterion({
+    required String managedOptTildeCriterionName,
+    required XData managedOptTildeCriterionXData,
+    required Object? parentManagedOptTildeCriterionValue,
   }) {
     return null;
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria()  {
+  Map<String, dynamic>? specifyDefaultValuesForPlainTildeCriteria()  {
     return null;
   }
 }
@@ -77,8 +77,8 @@ class StringIdFilterModel
   @override
   FilterCriteriaStructure defineFilterModelStructure() {
     return FilterCriteriaStructure(
-      simpleCriteria: [],
-      multiOptCriteria: [],
+      plainCriteria: [],
+      managedOptCriteria: [],
     );
   }
 
@@ -90,42 +90,42 @@ class StringIdFilterModel
   }
 
   @override
-  Future<XList?> performLoadMultiOptTildeCriterionXData({
-    required String multiOptTildeCriterionName,
-    required Object? parentMultiOptTildeCriterionValue,
+  Future<XList?> performLoadManagedOptTildeCriterionXData({
+    required String managedOptTildeCriterionName,
+    required Object? parentManagedOptTildeCriterionValue,
     required StringIdFilterPatch? filterPatch,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? extractPatchValueForMultiOptTildeCriterion({
-    required String multiOptTildeCriterionName,
-    required XData multiOptTildeCriterionXData,
+  ValueWrap? extractPatchValueForManagedOptTildeCriterion({
+    required String managedOptTildeCriterionName,
+    required XData managedOptTildeCriterionXData,
     required StringIdFilterPatch filterPatch,
-    required Object? parentMultiOptTildeCriterionValue,
+    required Object? parentManagedOptTildeCriterionValue,
   }) {
     return null;
   }
 
   @override
-  Map<String, dynamic>? extractPatchValuesForSimpleTildeCriteria({
+  Map<String, dynamic>? extractPatchValuesForPlainTildeCriteria({
     required StringIdFilterPatch filterPatch,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
-    required String multiOptTildeCriterionName,
-    required XData multiOptTildeCriterionXData,
-    required Object? parentMultiOptTildeCriterionValue,
+  ValueWrap? specifyDefaultValueForManagedOptTildeCriterion({
+    required String managedOptTildeCriterionName,
+    required XData managedOptTildeCriterionXData,
+    required Object? parentManagedOptTildeCriterionValue,
   }) {
     return null;
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria()  {
+  Map<String, dynamic>? specifyDefaultValuesForPlainTildeCriteria()  {
     return null;
   }
 }
@@ -141,8 +141,8 @@ class StringValueFilterModel
   @override
   FilterCriteriaStructure defineFilterModelStructure() {
     return FilterCriteriaStructure(
-      simpleCriteria: [],
-      multiOptCriteria: [],
+      plainCriteria: [],
+      managedOptCriteria: [],
     );
   }
 
@@ -154,42 +154,42 @@ class StringValueFilterModel
   }
 
   @override
-  Future<XList?> performLoadMultiOptTildeCriterionXData({
-    required String multiOptTildeCriterionName,
+  Future<XList?> performLoadManagedOptTildeCriterionXData({
+    required String managedOptTildeCriterionName,
     required StringValueFilterPatch? filterPatch,
-    required Object? parentMultiOptTildeCriterionValue,
+    required Object? parentManagedOptTildeCriterionValue,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? extractPatchValueForMultiOptTildeCriterion({
-    required String multiOptTildeCriterionName,
+  ValueWrap? extractPatchValueForManagedOptTildeCriterion({
+    required String managedOptTildeCriterionName,
     required StringValueFilterPatch filterPatch,
-    required Object? parentMultiOptTildeCriterionValue,
-    required XData multiOptTildeCriterionXData,
+    required Object? parentManagedOptTildeCriterionValue,
+    required XData managedOptTildeCriterionXData,
   }) {
     return null;
   }
 
   @override
-  Map<String, dynamic>? extractPatchValuesForSimpleTildeCriteria({
+  Map<String, dynamic>? extractPatchValuesForPlainTildeCriteria({
     required StringValueFilterPatch filterPatch,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
-    required String multiOptTildeCriterionName,
-    required XData multiOptTildeCriterionXData,
-    required Object? parentMultiOptTildeCriterionValue,
+  ValueWrap? specifyDefaultValueForManagedOptTildeCriterion({
+    required String managedOptTildeCriterionName,
+    required XData managedOptTildeCriterionXData,
+    required Object? parentManagedOptTildeCriterionValue,
   }) {
     return null;
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria()  {
+  Map<String, dynamic>? specifyDefaultValuesForPlainTildeCriteria()  {
     return null;
   }
 }
@@ -205,8 +205,8 @@ class SearchTextFilterModel
   @override
   FilterCriteriaStructure defineFilterModelStructure() {
     return FilterCriteriaStructure(
-      simpleCriteria: [],
-      multiOptCriteria: [],
+      plainCriteria: [],
+      managedOptCriteria: [],
     );
   }
 
@@ -218,42 +218,42 @@ class SearchTextFilterModel
   }
 
   @override
-  Future<XList?> performLoadMultiOptTildeCriterionXData({
-    required String multiOptTildeCriterionName,
+  Future<XList?> performLoadManagedOptTildeCriterionXData({
+    required String managedOptTildeCriterionName,
     required SearchTextFilterPatch? filterPatch,
-    required Object? parentMultiOptTildeCriterionValue,
+    required Object? parentManagedOptTildeCriterionValue,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? extractPatchValueForMultiOptTildeCriterion({
-    required String multiOptTildeCriterionName,
-    required XData multiOptTildeCriterionXData,
+  ValueWrap? extractPatchValueForManagedOptTildeCriterion({
+    required String managedOptTildeCriterionName,
+    required XData managedOptTildeCriterionXData,
     required SearchTextFilterPatch filterPatch,
-    required Object? parentMultiOptTildeCriterionValue,
+    required Object? parentManagedOptTildeCriterionValue,
   }) {
     return null;
   }
 
   @override
-  Map<String, dynamic>? extractPatchValuesForSimpleTildeCriteria({
+  Map<String, dynamic>? extractPatchValuesForPlainTildeCriteria({
     required SearchTextFilterPatch filterPatch,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
-    required String multiOptTildeCriterionName,
-    required XData multiOptTildeCriterionXData,
-    required Object? parentMultiOptTildeCriterionValue,
+  ValueWrap? specifyDefaultValueForManagedOptTildeCriterion({
+    required String managedOptTildeCriterionName,
+    required XData managedOptTildeCriterionXData,
+    required Object? parentManagedOptTildeCriterionValue,
   }) {
     return null;
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria()  {
+  Map<String, dynamic>? specifyDefaultValuesForPlainTildeCriteria()  {
     return null;
   }
 }
@@ -269,8 +269,8 @@ class IntIdFilterModel
   @override
   FilterCriteriaStructure defineFilterModelStructure() {
     return FilterCriteriaStructure(
-      simpleCriteria: [],
-      multiOptCriteria: [],
+      plainCriteria: [],
+      managedOptCriteria: [],
     );
   }
 
@@ -282,42 +282,42 @@ class IntIdFilterModel
   }
 
   @override
-  Future<XList?> performLoadMultiOptTildeCriterionXData({
-    required String multiOptTildeCriterionName,
-    required Object? parentMultiOptTildeCriterionValue,
+  Future<XList?> performLoadManagedOptTildeCriterionXData({
+    required String managedOptTildeCriterionName,
+    required Object? parentManagedOptTildeCriterionValue,
     required IntIdFilterPatch? filterPatch,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? extractPatchValueForMultiOptTildeCriterion({
-    required String multiOptTildeCriterionName,
-    required XData multiOptTildeCriterionXData,
+  ValueWrap? extractPatchValueForManagedOptTildeCriterion({
+    required String managedOptTildeCriterionName,
+    required XData managedOptTildeCriterionXData,
     required IntIdFilterPatch filterPatch,
-    required Object? parentMultiOptTildeCriterionValue,
+    required Object? parentManagedOptTildeCriterionValue,
   }) {
     return null;
   }
 
   @override
-  Map<String, dynamic>? extractPatchValuesForSimpleTildeCriteria({
+  Map<String, dynamic>? extractPatchValuesForPlainTildeCriteria({
     required IntIdFilterPatch filterPatch,
   }) async {
     return null;
   }
 
   @override
-  ValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
-    required String multiOptTildeCriterionName,
-    required XData multiOptTildeCriterionXData,
-    required Object? parentMultiOptTildeCriterionValue,
+  ValueWrap? specifyDefaultValueForManagedOptTildeCriterion({
+    required String managedOptTildeCriterionName,
+    required XData managedOptTildeCriterionXData,
+    required Object? parentManagedOptTildeCriterionValue,
   }) {
     return null;
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria()  {
+  Map<String, dynamic>? specifyDefaultValuesForPlainTildeCriteria()  {
     return null;
   }
 }

@@ -85,6 +85,9 @@ class _BlockControlBarState extends _BaseControlBarState<
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   Widget? buildStandardButton(BlockControlBarItem item) {
     final type = item.type ?? BlockControlBarItemType.custom;
     switch (type) {

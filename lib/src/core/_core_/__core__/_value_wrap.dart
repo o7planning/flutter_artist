@@ -21,23 +21,23 @@ class OptValueWrap<VALUE extends Object> {
   }
 }
 
-class SimpleValueWrap<VALUE extends Object> {
+class PlainValueWrap<VALUE extends Object> {
   final VALUE? value;
   final bool use;
 
-  SimpleValueWrap._(this.value, this.use);
+  PlainValueWrap._(this.value, this.use);
 
-  SimpleValueWrap.of(this.value) : use = true;
+  PlainValueWrap.of(this.value) : use = true;
 
-  factory SimpleValueWrap.useIfNotNull(VALUE? value) {
+  factory PlainValueWrap.useIfNotNull(VALUE? value) {
     if (value == null) {
-      return SimpleValueWrap._(value, false);
+      return PlainValueWrap._(value, false);
     }
-    return SimpleValueWrap._(value, true);
+    return PlainValueWrap._(value, true);
   }
 
   @override
   String toString() {
-    return "SimpleValueWrap($value)";
+    return "PlainValueWrap($value)";
   }
 }

@@ -5,8 +5,7 @@ import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../_wcfg.dart';
 import '../../core/utils/__utils.dart';
-import '../../core/widgets/_simple_copy_button.dart';
-import '../../core/widgets/_simple_open_url_button.dart';
+import '../../core/widgets/__widgets.dart';
 
 class DocLinkView extends StatelessWidget {
   final FaDoc faDoc;
@@ -73,7 +72,7 @@ class DocLinkView extends StatelessWidget {
               SimpleCopyButton(
                 iconSize: 16,
                 getText: () =>
-                faDoc.published && demoRelease ? faDoc.url : draftUrl,
+                    faDoc.published && demoRelease ? faDoc.url : draftUrl,
               ),
             ],
           ),

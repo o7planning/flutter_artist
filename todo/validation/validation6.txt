@@ -6,7 +6,7 @@ Dưới đây là gợi ý cách đồng chí có thể triển khai hệ thốn
 
 ### 1. Cơ chế Tự động hóa (Automatic Management)
 
-Chúng ta sẽ tận dụng danh sách `simplePropDefs` và `multiOptPropDefs` trong `FormModelStructure` để khởi tạo các `FocusNode`.
+Chúng ta sẽ tận dụng danh sách `plainPropDefs` và `managedOptPropDefs` trong `FormModelStructure` để khởi tạo các `FocusNode`.
 
 **Giải pháp:** Trong lớp cơ sở `FormView`, bạn tạo một `Map<String, FocusNode>`.
 
@@ -20,12 +20,12 @@ void _initializeFocusNodes() {
   final structure = formModel.defineFormModelStructure();
 
   // Tạo FocusNode cho các thuộc tính đơn giản
-  for (var def in structure.simplePropDefs) {
+  for (var def in structure.plainPropDefs) {
     _focusNodes[def.propName] = FocusNode();
   }
 
   // Tạo FocusNode cho các thuộc tính đa lựa chọn (đệ quy nếu cần)
-  for (var def in structure.multiOptPropDefs) {
+  for (var def in structure.managedOptPropDefs) {
     _focusNodes[def.propName] = FocusNode();
     // Nếu có children, tiếp tục tạo cho con...
   }

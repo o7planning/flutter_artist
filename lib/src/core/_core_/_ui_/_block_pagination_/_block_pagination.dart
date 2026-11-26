@@ -32,7 +32,6 @@ class _BlockPaginationState extends _ContextProviderViewState<BlockPagination> {
     return widget.block.shelf;
   }
 
-
   @override
   FocusRegionType getRegionType() {
     return FocusRegionType.pagination;
@@ -57,6 +56,9 @@ class _BlockPaginationState extends _ContextProviderViewState<BlockPagination> {
 
   @override
   TaskViewContext? get taskViewContext => null;
+
+  @override
+  LovViewContext? get lovViewContext => null;
 
   @override
   Widget buildContent(BuildContext context) {

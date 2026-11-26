@@ -45,8 +45,8 @@ class BlockDataStateInfoWidget extends BaseInfoWidget {
       case BlockDataStatePending(reason: BlockPendingReasonFilterChanged()):
         return null;
       case BlockDataStateLoadedStale(
-      reason: BlockLoadedStateStaleReasonFilterChanged()
-      ):
+          reason: BlockLoadedStateStaleReasonFilterChanged()
+        ):
         return null;
       case BlockDataStatePending(reason: BlockPendingReasonFailed()):
         return ButtonFunction(
@@ -66,15 +66,15 @@ class BlockDataStateInfoWidget extends BaseInfoWidget {
           },
         );
       case BlockDataStateLoadedStale(
-      reason: BlockLoadedStateStaleReasonEvent()
-      ):
+          reason: BlockLoadedStateStaleReasonEvent()
+        ):
         return null;
       case BlockDataStateLoadedStale(
-      reason: BlockLoadedStateStaleReasonFailed(
-          :final errorOrigin,
-          :final errorInfo
-      )
-      ):
+          reason: BlockLoadedStateStaleReasonFailed(
+            :final errorOrigin,
+            :final errorInfo
+          )
+        ):
         if (errorInfo != null) {
           return ButtonFunction(
             btnType: DebugBtnType.error,

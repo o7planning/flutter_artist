@@ -66,6 +66,7 @@ abstract class BlockFormModel<
 
   BlockFormModel({super.config});
 
+  @override
   bool get hasError => dataState.isFatalError;
 
   XBlockFormModel<ID, ITEM_DETAIL, FORM_PATCH> _createXBlockFormModel({
@@ -86,7 +87,7 @@ abstract class BlockFormModel<
   // ===========================================================================
 
   @override
-  Map<String, dynamic>? _internalResolveInitialSimplePropValues({
+  Map<String, dynamic>? _internalResolveInitialPlainPropValues({
     required ExecutionTrace executionTrace,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
   }) {
@@ -97,7 +98,7 @@ abstract class BlockFormModel<
       executionTrace.addControllableCall(
         codeId: "#006200",
         caller: this,
-        methodName: "extractSimplePropValuesFromItemDetail",
+        methodName: "extractPlainPropValuesFromItemDetail",
         suffixShortDesc: "",
         parameters: {
           "ancestorContext": ancestorContext,
@@ -105,7 +106,7 @@ abstract class BlockFormModel<
           "itemDetail": itemDetail,
         },
       );
-      return extractSimplePropValuesFromItemDetail(
+      return extractPlainPropValuesFromItemDetail(
         ancestorContext: ancestorContext,
         additionalFormRelatedData: additionalFormRelatedData,
         itemDetail: itemDetail,
@@ -119,7 +120,7 @@ abstract class BlockFormModel<
       executionTrace.addControllableCall(
         codeId: "#006540",
         caller: this,
-        methodName: "specifyCreationValuesForSimpleProps",
+        methodName: "specifyCreationValuesForPlainProps",
         suffixShortDesc: "",
         parameters: {
           "ancestorContext": ancestorContext,
@@ -127,7 +128,7 @@ abstract class BlockFormModel<
           "additionalFormRelatedData": additionalFormRelatedData,
         },
       );
-      return specifyCreationValuesForSimpleProps(
+      return specifyCreationValuesForPlainProps(
         ancestorContext: ancestorContext,
         creationPreset: creationPreset,
         additionalFormRelatedData: additionalFormRelatedData,
@@ -136,12 +137,12 @@ abstract class BlockFormModel<
   }
 
   @override
-  OptValueWrap? _internalResolveInitialMultiOptPropValue({
+  OptValueWrap? _internalResolveInitialManagedOptPropValue({
     required ExecutionTrace executionTrace,
-    required String multiOptPropName,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
+    required String managedOptPropName,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required XData managedOptPropXData,
+    required Object? parentManagedOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
   }) {
     final ITEM_DETAIL? itemDetail = block.currentItemDetail;
@@ -151,36 +152,36 @@ abstract class BlockFormModel<
       executionTrace.addControllableCall(
         codeId: "#032000",
         caller: this,
-        methodName: "extractMultiOptPropValueFromItemDetail",
+        methodName: "extractManagedOptPropValueFromItemDetail",
         suffixShortDesc: "",
         parameters: {
-          "multiOptPropName": multiOptPropName,
-          "parentMultiOptPropValue": parentMultiOptPropValue,
-          "multiOptSelectionMode": multiOptSelectionMode,
-          "multiOptPropXData": multiOptPropXData,
+          "managedOptPropName": managedOptPropName,
+          "parentManagedOptPropValue": parentManagedOptPropValue,
+          "managedOptSelectionMode": managedOptSelectionMode,
+          "managedOptPropXData": managedOptPropXData,
           "itemDetail": itemDetail,
           "ancestorContext": ancestorContext,
           "additionalFormRelatedData": additionalFormRelatedData,
         },
       );
-      OptValueWrap? valueWrap = extractMultiOptPropValueFromItemDetail(
-        multiOptPropName: multiOptPropName,
-        multiOptSelectionMode: multiOptSelectionMode,
-        multiOptPropXData: multiOptPropXData,
+      OptValueWrap? valueWrap = extractManagedOptPropValueFromItemDetail(
+        managedOptPropName: managedOptPropName,
+        managedOptSelectionMode: managedOptSelectionMode,
+        managedOptPropXData: managedOptPropXData,
         itemDetail: itemDetail,
-        parentMultiOptPropValue: parentMultiOptPropValue,
+        parentManagedOptPropValue: parentManagedOptPropValue,
         ancestorContext: ancestorContext,
         additionalFormRelatedData: additionalFormRelatedData,
       );
       if (valueWrap == null) {
         __createNullValueWrapAppError(
-          methodName: "extractMultiOptPropValueFromItemDetail",
-          multiOptPropName: multiOptPropName,
+          methodName: "extractManagedOptPropValueFromItemDetail",
+          managedOptPropName: managedOptPropName,
         );
       }
       return valueWrap;
     } else {
-      if (_defaultMultiOptValuesInitiated) {
+      if (_defaultManagedOptValuesInitiated) {
         return null;
       }
       final CREATION_PRESET? creationPreset =
@@ -191,37 +192,37 @@ abstract class BlockFormModel<
       executionTrace.addControllableCall(
         codeId: "#033000",
         caller: this,
-        methodName: "specifyCreationValueForMultiOptProp",
+        methodName: "specifyCreationValueForManagedOptProp",
         suffixShortDesc: "",
         parameters: {
-          "multiOptPropXData": multiOptPropXData,
-          "multiOptPropName": multiOptPropName,
-          "multiOptSelectionMode": multiOptSelectionMode,
-          "parentMultiOptPropValue": parentMultiOptPropValue,
+          "managedOptPropXData": managedOptPropXData,
+          "managedOptPropName": managedOptPropName,
+          "managedOptSelectionMode": managedOptSelectionMode,
+          "parentManagedOptPropValue": parentManagedOptPropValue,
           "ancestorContext": ancestorContext,
           "creationPreset": creationPreset,
           "additionalFormRelatedData": additionalFormRelatedData,
         },
       );
-      OptValueWrap? valueWrap = specifyCreationValueForMultiOptProp(
-        multiOptPropXData: multiOptPropXData,
-        multiOptPropName: multiOptPropName,
-        multiOptSelectionMode: multiOptSelectionMode,
-        parentMultiOptPropValue: parentMultiOptPropValue,
+      OptValueWrap? valueWrap = specifyCreationValueForManagedOptProp(
+        managedOptPropXData: managedOptPropXData,
+        managedOptPropName: managedOptPropName,
+        managedOptSelectionMode: managedOptSelectionMode,
+        parentManagedOptPropValue: parentManagedOptPropValue,
         ancestorContext: ancestorContext,
         creationPreset: creationPreset,
         additionalFormRelatedData: additionalFormRelatedData,
       );
       if (valueWrap == null) {
         __createNullValueWrapAppError(
-          methodName: "specifyCreationValueForMultiOptProp",
-          multiOptPropName: multiOptPropName,
+          methodName: "specifyCreationValueForManagedOptProp",
+          managedOptPropName: managedOptPropName,
         );
         return null;
       }
       List? value = valueWrap.values;
       return OptValueWrap.multi(
-        multiOptPropXData._resolveItemsFromRawData(
+        managedOptPropXData._resolveItemsFromRawData(
           dynamicValues: value,
           addOrphan: true,
           clearOrphanItems: true,
@@ -231,17 +232,17 @@ abstract class BlockFormModel<
   }
 
   @override
-  Future<XData?> _internalPerformLoadMultiOptPropXData({
-    required String multiOptPropName,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required Object? parentMultiOptPropValue,
+  Future<XData?> _internalPerformLoadManagedOptPropXData({
+    required String managedOptPropName,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required Object? parentManagedOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required Object? rawDomainData,
   }) {
-    return performLoadMultiOptPropXData(
-      multiOptPropName: multiOptPropName,
-      multiOptSelectionMode: multiOptSelectionMode,
-      parentMultiOptPropValue: parentMultiOptPropValue,
+    return performLoadManagedOptPropXData(
+      managedOptPropName: managedOptPropName,
+      managedOptSelectionMode: managedOptSelectionMode,
+      parentManagedOptPropValue: parentManagedOptPropValue,
       additionalFormRelatedData: additionalFormRelatedData,
       itemDetail: rawDomainData as ITEM_DETAIL?,
     );
@@ -263,45 +264,45 @@ abstract class BlockFormModel<
   // ===========================================================================
 
   @AbstractMethodAnnotation()
-  OptValueWrap? specifyCreationValueForMultiOptProp({
+  OptValueWrap? specifyCreationValueForManagedOptProp({
     required BlockAncestorContext ancestorContext,
-    required String multiOptPropName,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
+    required String managedOptPropName,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required XData managedOptPropXData,
+    required Object? parentManagedOptPropValue,
     required CREATION_PRESET creationPreset,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
   });
 
   @AbstractMethodAnnotation()
-  Map<String, dynamic>? specifyCreationValuesForSimpleProps({
+  Map<String, dynamic>? specifyCreationValuesForPlainProps({
     required BlockAncestorContext ancestorContext,
     required CREATION_PRESET creationPreset,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
   });
 
   @AbstractMethodAnnotation()
-  Future<XData?> performLoadMultiOptPropXData({
-    required String multiOptPropName,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required Object? parentMultiOptPropValue,
+  Future<XData?> performLoadManagedOptPropXData({
+    required String managedOptPropName,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required Object? parentManagedOptPropValue,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required ITEM_DETAIL? itemDetail,
   });
 
   @AbstractMethodAnnotation()
-  Map<String, dynamic>? extractSimplePropValuesFromItemDetail({
+  Map<String, dynamic>? extractPlainPropValuesFromItemDetail({
     required BlockAncestorContext ancestorContext,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required ITEM_DETAIL itemDetail,
   });
 
   @AbstractMethodAnnotation()
-  OptValueWrap? extractMultiOptPropValueFromItemDetail({
-    required String multiOptPropName,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required XData multiOptPropXData,
-    required Object? parentMultiOptPropValue,
+  OptValueWrap? extractManagedOptPropValueFromItemDetail({
+    required String managedOptPropName,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required XData managedOptPropXData,
+    required Object? parentManagedOptPropValue,
     required BlockAncestorContext ancestorContext,
     required ADDITIONAL_FORM_RELATED_DATA additionalFormRelatedData,
     required ITEM_DETAIL itemDetail,
