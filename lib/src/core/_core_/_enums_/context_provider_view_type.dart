@@ -1,6 +1,10 @@
 part of '_enums.dart';
 
 enum ContextProviderViewType {
+  lovItemsView(
+    name: "Lov",
+    iconData: FaIconConstants.lovIconData,
+  ),
   pagination(
     name: "Pagination",
     iconData: FaIconConstants.paginationIconData,

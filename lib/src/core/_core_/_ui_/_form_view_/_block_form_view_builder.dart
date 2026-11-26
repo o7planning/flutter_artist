@@ -55,6 +55,9 @@ class _BlockFormViewBuilderState
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   Future<bool> handleSaveOnPop() async {
     final BlockFormSaveResult result = await widget.formModel.saveForm();
     return result.successForAll;

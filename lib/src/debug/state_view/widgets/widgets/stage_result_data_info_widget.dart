@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/_core_/_enums_/_enums.dart';
 import '../../../../core/_core_/core.dart';
-import '../../../../core/_core_/_enums_/_enums.dart';
-import '../../../dialog/data_debug_dialog.dart';
 import '_base_info_widget.dart';
 
 class StageResultDataInfoWidget extends BaseInfoWidget {
@@ -43,8 +41,8 @@ class StageResultDataInfoWidget extends BaseInfoWidget {
       onPressed: stage.submitResultData == null
           ? null
           : (BuildContext context) {
-              stage.showDebugResultDataInspector();
-            },
+        stage.showDebugResultDataInspector();
+      },
     );
   }
 }

@@ -103,13 +103,13 @@ class DebugBlockItemSyncSessionStateDialog<ID extends Comparable>
             child: receivedEvents.isEmpty
                 ? _buildEmptyEventsBanner()
                 : ListView.separated(
-              itemCount: receivedEvents.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
-              itemBuilder: (context, index) {
-                final eventInfo = receivedEvents[index];
-                return _buildEventInfoCard(context, index, eventInfo);
-              },
-            ),
+                    itemCount: receivedEvents.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    itemBuilder: (context, index) {
+                      final eventInfo = receivedEvents[index];
+                      return _buildEventInfoCard(context, index, eventInfo);
+                    },
+                  ),
           ),
         ],
       ),
@@ -118,7 +118,8 @@ class DebugBlockItemSyncSessionStateDialog<ID extends Comparable>
   }
 
   /// Summary header cards describing current item target and session binding.
-  Widget _buildItemSummarySection(BuildContext context, {
+  Widget _buildItemSummarySection(
+    BuildContext context, {
     required ID? activeItemId,
     required ID? sessionTargetId,
     required bool isStale,
@@ -159,12 +160,13 @@ class DebugBlockItemSyncSessionStateDialog<ID extends Comparable>
   }
 
   /// Predicted Plan Card predicting if performLoadItemDetailById will execute.
-  Widget _buildItemPredictedPlanCard(BuildContext context, {
+  Widget _buildItemPredictedPlanCard(
+    BuildContext context, {
     required bool willRefresh,
     required ID? activeItemId,
   }) {
     final Color actionColor =
-    willRefresh ? Colors.amber.shade900 : Colors.grey.shade700;
+        willRefresh ? Colors.amber.shade900 : Colors.grey.shade700;
     final String actionLabel = willRefresh
         ? "RELOAD ITEM DETAIL (performLoadItemDetailById)"
         : "IDLE (Preserve In-Memory Item)";
@@ -335,7 +337,7 @@ class DebugBlockItemSyncSessionStateDialog<ID extends Comparable>
                 fontWeight: FontWeight.bold,
                 fontSize: 13,
                 color:
-                isPristine ? Colors.green.shade900 : Colors.grey.shade800,
+                    isPristine ? Colors.green.shade900 : Colors.grey.shade800,
               ),
             ),
             const SizedBox(height: 4),
@@ -352,9 +354,11 @@ class DebugBlockItemSyncSessionStateDialog<ID extends Comparable>
     );
   }
 
-  Widget _buildEventInfoCard(BuildContext context,
-      int index,
-      BlockReceivedEventInfo<ID> eventInfo,) {
+  Widget _buildEventInfoCard(
+    BuildContext context,
+    int index,
+    BlockReceivedEventInfo<ID> eventInfo,
+  ) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(

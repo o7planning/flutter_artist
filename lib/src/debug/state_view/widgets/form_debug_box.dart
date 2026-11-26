@@ -23,7 +23,7 @@ class FormDebugBox extends BaseDebugBox {
   @override
   List<Widget> getChildIconLabelTexts(BuildContext context) {
     FormModelStructure structure = formModel.formModelStructure;
-    List<MultiOptFormPropModel> optProps = structure.allMultiOptProps;
+    List<ManagedOptFormPropModel> optProps = structure.allManagedOptProps;
     Actionable<FormEnablePrecheck> actionable = formModel.checkFormEnable();
     FormEnablePrecheck? enablePrecheck = actionable.errCode;
     //
@@ -38,8 +38,7 @@ class FormDebugBox extends BaseDebugBox {
         IconLabelText(
           label: "Form UI Active?: ",
           text:
-          "${formModel.ui.hasVisibleViews()}/${formModel.debug
-              .loadTimeUiActive}*",
+              "${formModel.ui.hasVisibleViews()}/${formModel.debug.loadTimeUiActive}*",
           labelStyle: DebugStyleUtils.getLabelStyle0(context),
           textStyle: DebugStyleUtils.getTextStyle0(context),
         ),
@@ -92,13 +91,12 @@ class FormDebugBox extends BaseDebugBox {
     List<Widget> list2 = [
       if (options.showFormProps && optProps.isNotEmpty)
         ...optProps.map(
-              (optProp) =>
-              IconLabelText(
-                label: "Load Count (${optProp.propName}): ",
-                text: optProp.loadCount.toString(),
-                labelStyle: DebugStyleUtils.getLabelStyle0(context),
-                textStyle: DebugStyleUtils.getTextStyle0(context),
-              ),
+          (optProp) => IconLabelText(
+            label: "Load Count (${optProp.propName}): ",
+            text: optProp.loadCount.toString(),
+            labelStyle: DebugStyleUtils.getLabelStyle0(context),
+            textStyle: DebugStyleUtils.getTextStyle0(context),
+          ),
         ),
     ];
     return [

@@ -25,19 +25,19 @@ queryAndPrepareToEdit ==> queryThenPrepareToEdit
 queryAndPrepareToCreate ==> queryThenPrepareToCreate
 queryEmptyAndPrepareToCreate ==> queryEmptyThenPrepareToCreate
 
-getMultiOptPropValueFromFormInput ==> extractPatchValueForMultiOptProp
-getSimplePropValuesFromFormInput  ==> extractPatchValuesForSimpleProps
+getManagedOptPropValueFromFormInput ==> extractPatchValueForManagedOptProp
+getPlainPropValuesFromFormInput  ==> extractPatchValuesForPlainProps
 
-  specifyDefaultSimpleProp Values  ==> specifyDefaultValuesForSimpleProps
-  specifyDefaultMultiOptProp Value  ==> specifyDefaultValueForMultiOptProp
-
-
-getSimpleCriterionValuesFromFilterPatch ==> extractPatchValuesForSimpleTildeCriteria
-getMultiOptCriterionValueFromFilterPatch ==> extractPatchValueForMultiOptTildeCriterion
+  specifyDefaultSimpleProp Values  ==> specifyDefaultValuesForPlainProps
+  specifyDefaultManagedOptProp Value  ==> specifyDefaultValueForManagedOptProp
 
 
-  specifyDefaultSimpleCriterion Values  ==> specifyDefaultValuesForSimpleTildeCriteria
-  specifyDefaultMultiOptCriterion Value   ==> specifyDefaultValueForMultiOptTildeCriterion
+getPlainCriterionValuesFromFilterPatch ==> extractPatchValuesForPlainTildeCriteria
+getManagedOptCriterionValueFromFilterPatch ==> extractPatchValueForManagedOptTildeCriterion
+
+
+  specifyDefaultPlainCriterion Values  ==> specifyDefaultValuesForPlainTildeCriteria
+  specifyDefaultManagedOptCriterion Value   ==> specifyDefaultValueForManagedOptTildeCriterion
 
 RENAME:
  severSideAcceptNonDirection --> serverSideSkipNonDirectionWhileSelecting

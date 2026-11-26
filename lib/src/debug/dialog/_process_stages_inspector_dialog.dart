@@ -3,7 +3,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
-import '../../core/widgets/class_linked_button.dart';
+import '../../core/widgets/__widgets.dart';
 
 /// A diagnostic dialog that inspects and lists all stages of a [Prozess]
 /// across individual rows, highlighting current viewing, frontier, and execution states,
@@ -23,10 +23,9 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
   }) async {
     await showDialog(
       context: context,
-      builder: (context) =>
-          ProzessStagesInspectorDialog(
-            prozess: prozess,
-          ),
+      builder: (context) => ProzessStagesInspectorDialog(
+        prozess: prozess,
+      ),
     );
   }
 
@@ -112,9 +111,7 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
   }
 
   Widget _buildProzessNameRow(BuildContext context, Prozess prozess) {
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,9 +139,7 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
   }
 
   Widget _buildProzessStateRow(BuildContext context, Prozess prozess) {
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -175,9 +170,7 @@ class ProzessStagesInspectorDialog extends StatelessWidget {
   }
 
   Widget _buildMetadataRow(BuildContext context, String label, String value) {
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

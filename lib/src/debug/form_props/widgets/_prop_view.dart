@@ -6,9 +6,7 @@ import '../../../core/_core_/_enums_/_enums.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/utils/__utils.dart';
 
-import '../../../core/widgets/_custom_app_container.dart';
-import '../../../core/widgets/_simple_accordion.dart';
-import '../../../core/widgets/_simple_accordion_section.dart';
+import '../../../core/widgets/__widgets.dart';
 import '../../widgets/_dynamic_value_view.dart';
 import '../../widgets/_xdata_view.dart';
 import '_prop_error_view.dart';
@@ -41,21 +39,18 @@ class FormPropView extends StatelessWidget {
             minLeadingWidth: 40,
             minTileHeight: 0,
             leading: Icon(
-              prop is SimpleFormPropModel
-                  ? FaIconConstants.simplePropOrCriterionIconData
-                  : FaIconConstants.optPropOrCriterionIconData,
+              prop is PlainFormPropModel
+                  ? FaIconConstants.plainPropOrCriterionIconData
+                  : FaIconConstants.managedPropOrCriterionIconData,
               size: 20,
             ),
             title: IconLabelText(
-              label: prop is SimpleFormPropModel
+              label: prop is PlainFormPropModel
                   ? 'Prop Name: '
                   : 'Multi Opt Prop Name: ',
               text: prop.propName,
               textStyle: TextStyle(
-                color: Theme
-                    .of(context)
-                    .colorScheme
-                    .primary,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             subtitle: IconLabelText(
@@ -66,8 +61,8 @@ class FormPropView extends StatelessWidget {
             ),
           ),
           Divider(),
-          if (prop is MultiOptFormPropModel) SizedBox(height: 5),
-          if (prop is MultiOptFormPropModel)
+          if (prop is ManagedOptFormPropModel) SizedBox(height: 5),
+          if (prop is ManagedOptFormPropModel)
             LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 return Row(
@@ -77,8 +72,9 @@ class FormPropView extends StatelessWidget {
                     Tooltip(
                       message: "Single Selection",
                       child: Radio(
-                        value: (prop as MultiOptFormPropModel).selectionMode ==
-                            MultiOptSelectionMode.single,
+                        value:
+                            (prop as ManagedOptFormPropModel).selectionMode ==
+                                ManagedOptSelectionMode.single,
                         onChanged: null,
                         groupValue: true,
                       ),
@@ -95,8 +91,9 @@ class FormPropView extends StatelessWidget {
                     Tooltip(
                       message: "Multi Selection",
                       child: Radio(
-                        value: (prop as MultiOptFormPropModel).selectionMode ==
-                            MultiOptSelectionMode.multi,
+                        value:
+                            (prop as ManagedOptFormPropModel).selectionMode ==
+                                ManagedOptSelectionMode.multi,
                         onChanged: null,
                         groupValue: true,
                       ),
@@ -170,7 +167,7 @@ class FormPropView extends StatelessWidget {
               headerSubtitle: _headerSubtitle(prop.currentValue),
               content: DynamicValueView(value: prop.currentValue),
             ),
-            if (prop is MultiOptFormPropModel)
+            if (prop is ManagedOptFormPropModel)
               SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(
@@ -182,7 +179,7 @@ class FormPropView extends StatelessWidget {
                 headerSubtitle: _headerSubtitle(prop.initialXData),
                 content: XDataView(xData: prop.initialXData),
               ),
-            if (prop is MultiOptFormPropModel)
+            if (prop is ManagedOptFormPropModel)
               SimpleAccordionSection(
                 initiallyExpanded: true,
                 headerTitle: Text(
@@ -204,10 +201,10 @@ class FormPropView extends StatelessWidget {
     return value == null
         ? null
         : Text(
-      " - ${value!.runtimeType.toString()}",
-      style: TextStyle(
-        fontSize: 12,
-      ),
-    );
+            " - ${value!.runtimeType.toString()}",
+            style: TextStyle(
+              fontSize: 12,
+            ),
+          );
   }
 }

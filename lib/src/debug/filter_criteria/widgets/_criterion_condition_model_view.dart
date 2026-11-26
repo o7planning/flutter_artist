@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../../core/_core_/core.dart';
 import '../../../core/_core_/_enums_/_enums.dart';
+import '../../../core/_core_/core.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/utils/__utils.dart';
-
-import '../../../core/widgets/_custom_app_container.dart';
-import '../../../core/widgets/_simple_accordion.dart';
-import '../../../core/widgets/_simple_accordion_section.dart';
+import '../../../core/widgets/__widgets.dart';
 import '../../widgets/_dynamic_value_view.dart';
 import '../../widgets/_xdata_view.dart';
 
@@ -26,7 +23,7 @@ class FilterConditionModelView extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final TildeFilterCriterionModel criterionModel =
         conditionModel.tildeFilterCriterionModel;
-    final isSimple = criterionModel is SimpleTildeFilterCriterionModel;
+    final isPlain = criterionModel is PlainTildeFilterCriterionModel;
 
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),
@@ -40,14 +37,14 @@ class FilterConditionModelView extends StatelessWidget {
             dense: true,
             horizontalTitleGap: 8,
             leading: Icon(
-              isSimple
-                  ? FaIconConstants.simplePropOrCriterionIconData
-                  : FaIconConstants.optPropOrCriterionIconData,
+              isPlain
+                  ? FaIconConstants.plainPropOrCriterionIconData
+                  : FaIconConstants.managedPropOrCriterionIconData,
               size: 20,
               color: colorScheme.primary,
             ),
             title: IconLabelSelectableText(
-              label: isSimple ? 'Criterion: ' : 'Multi Opt Criterion: ',
+              label: isPlain ? 'Criterion: ' : 'Multi Opt Criterion: ',
               text: conditionModel.tildeCriterionName,
               textStyle: TextStyle(
                 color: colorScheme.primary,
@@ -61,7 +58,7 @@ class FilterConditionModelView extends StatelessWidget {
             ),
           ),
           const Divider(height: 20),
-          if (criterionModel is MultiOptTildeFilterCriterionModel) ...[
+          if (criterionModel is ManagedOptTildeFilterCriterionModel) ...[
             _buildSelectionTypeRow(context, criterionModel),
             const Divider(height: 20),
           ],
@@ -127,8 +124,8 @@ class FilterConditionModelView extends StatelessWidget {
   }
 
   Widget _buildSelectionTypeRow(BuildContext context,
-      MultiOptTildeFilterCriterionModel model) {
-    final isMulti = model.selectionMode == MultiOptSelectionMode.multi;
+      ManagedOptTildeFilterCriterionModel model) {
+    final isMulti = model.selectionMode == ManagedOptSelectionMode.multi;
     return Row(
       children: [
         _buildBadge(context, "SINGLE", !isMulti, Icons.radio_button_checked),
@@ -183,7 +180,7 @@ class FilterConditionModelView extends StatelessWidget {
           children: [
             _buildSection(context, "Initial Value", model.initialValue),
             _buildSection(context, "Current Value", model.currentValue),
-            if (model is MultiOptTildeFilterCriterionModel) ...[
+            if (model is ManagedOptTildeFilterCriterionModel) ...[
               _buildSection(context, "Initial XData", model.initialXData),
               _buildSection(context, "Current XData", model.currentXData),
             ],

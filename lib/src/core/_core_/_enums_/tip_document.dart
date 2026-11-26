@@ -51,10 +51,10 @@ enum TipDocument {
   //
   formModelPerformCreateItem(enabled: false),
   formModelPerformUpdateItem(enabled: false),
-  formModelGetUpdatedValuesForSimpleProps(enabled: false),
-  formModelSpecifyDefaultValuesForSimpleProps(enabled: false),
+  formModelGetUpdatedValuesForPlainProps(enabled: false),
+  formModelSpecifyDefaultValuesForPlainProps(enabled: false),
   //
-  filterModelPerformLoadMultiOptCriterionXData(enabled: false),
+  filterModelPerformLoadManagedOptCriterionXData(enabled: false),
   //
   performStorageBackendOperation(enabled: false),
   //
@@ -167,12 +167,12 @@ enum TipDocument {
         return "FormModel.performCreateItem()";
       case TipDocument.formModelPerformUpdateItem:
         return "FormModel.performUpdateItem()";
-      case TipDocument.formModelGetUpdatedValuesForSimpleProps:
-        return "FormModel.extractPatchValuesForSimpleProps()";
-      case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
-        return "FormModel.specifyDefaultValuesForSimpleProps()";
-      case TipDocument.filterModelPerformLoadMultiOptCriterionXData:
-        return "FilterModel.performLoadMultiOptTildeCriterionXData()";
+      case TipDocument.formModelGetUpdatedValuesForPlainProps:
+        return "FormModel.extractPatchValuesForPlainProps()";
+      case TipDocument.formModelSpecifyDefaultValuesForPlainProps:
+        return "FormModel.specifyDefaultValuesForPlainProps()";
+      case TipDocument.filterModelPerformLoadManagedOptCriterionXData:
+        return "FilterModel.performLoadManagedOptTildeCriterionXData()";
       case TipDocument.performStorageBackendOperation:
         return "Storage.performBackendOperation()";
       case TipDocument.backgroundActionRun:
@@ -278,12 +278,12 @@ enum TipDocument {
         return "FormModel.performCreateItem()";
       case TipDocument.formModelPerformUpdateItem:
         return "FormModel.performUpdateItem()";
-      case TipDocument.formModelGetUpdatedValuesForSimpleProps:
-        return "FormModel.extractPatchValuesForSimpleProps()";
-      case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
-        return "FormModel.specifyDefaultValuesForSimpleProps()";
-      case TipDocument.filterModelPerformLoadMultiOptCriterionXData:
-        return "FilterModel.performLoadMultiOptTildeCriterionXData()";
+      case TipDocument.formModelGetUpdatedValuesForPlainProps:
+        return "FormModel.extractPatchValuesForPlainProps()";
+      case TipDocument.formModelSpecifyDefaultValuesForPlainProps:
+        return "FormModel.specifyDefaultValuesForPlainProps()";
+      case TipDocument.filterModelPerformLoadManagedOptCriterionXData:
+        return "FilterModel.performLoadManagedOptTildeCriterionXData()";
       case TipDocument.performStorageBackendOperation:
         return "Storage.performBackendOperation()";
       case TipDocument.backgroundActionRun:
@@ -487,11 +487,11 @@ enum TipDocument {
         return [];
       case TipDocument.formModelPerformUpdateItem:
         return [];
-      case TipDocument.formModelGetUpdatedValuesForSimpleProps:
+      case TipDocument.formModelGetUpdatedValuesForPlainProps:
         return [];
-      case TipDocument.formModelSpecifyDefaultValuesForSimpleProps:
+      case TipDocument.formModelSpecifyDefaultValuesForPlainProps:
         return [];
-      case TipDocument.filterModelPerformLoadMultiOptCriterionXData:
+      case TipDocument.filterModelPerformLoadManagedOptCriterionXData:
         return [];
       case TipDocument.performStorageBackendOperation:
         return [];

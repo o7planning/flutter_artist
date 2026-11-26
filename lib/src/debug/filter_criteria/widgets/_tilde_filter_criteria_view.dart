@@ -5,9 +5,7 @@ import '../../../core/_core_/core.dart';
 import '../../../core/_core_/_enums_/_enums.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/utils/__utils.dart';
-import '../../../core/widgets/_custom_app_container.dart';
-import '../../../core/widgets/_simple_accordion.dart';
-import '../../../core/widgets/_simple_accordion_section.dart';
+import '../../../core/widgets/__widgets.dart';
 import '../../widgets/_dynamic_value_view.dart';
 import '../../widgets/_xdata_view.dart';
 
@@ -23,7 +21,7 @@ class TildeFilterCriterionView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isSimple = criterion is SimpleTildeFilterCriterionModel;
+    final isPlain = criterion is PlainTildeFilterCriterionModel;
 
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),
@@ -37,14 +35,14 @@ class TildeFilterCriterionView extends StatelessWidget {
             dense: true,
             horizontalTitleGap: 8,
             leading: Icon(
-              isSimple
-                  ? FaIconConstants.simplePropOrCriterionIconData
-                  : FaIconConstants.optPropOrCriterionIconData,
+              isPlain
+                  ? FaIconConstants.plainPropOrCriterionIconData
+                  : FaIconConstants.managedPropOrCriterionIconData,
               size: 20,
               color: colorScheme.primary,
             ),
             title: IconLabelText(
-              label: isSimple
+              label: isPlain
                   ? 'Criterion Name Tilde: '
                   : 'Multi Opt Criterion Name Tilde: ',
               text: criterion.tildeCriterionName,
@@ -61,9 +59,9 @@ class TildeFilterCriterionView extends StatelessWidget {
             ),
           ),
           const Divider(height: 20),
-          if (criterion is MultiOptTildeFilterCriterionModel) ...[
+          if (criterion is ManagedOptTildeFilterCriterionModel) ...[
             _buildSelectionTypeRow(
-                context, criterion as MultiOptTildeFilterCriterionModel),
+                context, criterion as ManagedOptTildeFilterCriterionModel),
             const Divider(height: 20),
           ],
           Expanded(
@@ -77,9 +75,7 @@ class TildeFilterCriterionView extends StatelessWidget {
   }
 
   Widget _buildSubtitle(BuildContext context) {
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -95,20 +91,20 @@ class TildeFilterCriterionView extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: colorScheme.tertiary),
         ),
-        if (criterion is MultiOptTildeFilterCriterionModel) ...[
+        if (criterion is ManagedOptTildeFilterCriterionModel) ...[
           const SizedBox(height: 4),
           _buildSubtitleItem(
               context,
               "Policy: ",
-              (criterion as MultiOptTildeFilterCriterionModel)
+              (criterion as ManagedOptTildeFilterCriterionModel)
                   .defaultSettingPolicy
                   .name),
           const SizedBox(height: 4),
           _buildSubtitleItem(
               context,
               "Suffix: ",
-              (criterion as MultiOptTildeFilterCriterionModel)
-                  .parentMatchSuffix ??
+              (criterion as ManagedOptTildeFilterCriterionModel)
+                      .parentMatchSuffix ??
                   "null"),
         ]
       ],
@@ -116,9 +112,7 @@ class TildeFilterCriterionView extends StatelessWidget {
   }
 
   Widget _buildSubtitleItem(BuildContext context, String label, String text) {
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
     return IconLabelText(
       label: label,
       text: text,
@@ -130,9 +124,9 @@ class TildeFilterCriterionView extends StatelessWidget {
     );
   }
 
-  Widget _buildSelectionTypeRow(BuildContext context,
-      MultiOptTildeFilterCriterionModel def) {
-    final isMulti = def.selectionMode == MultiOptSelectionMode.multi;
+  Widget _buildSelectionTypeRow(
+      BuildContext context, ManagedOptTildeFilterCriterionModel def) {
+    final isMulti = def.selectionMode == ManagedOptSelectionMode.multi;
     return Row(
       children: [
         _buildSelectionBadge(
@@ -144,11 +138,9 @@ class TildeFilterCriterionView extends StatelessWidget {
     );
   }
 
-  Widget _buildSelectionBadge(BuildContext context, String label, bool isActive,
-      IconData icon) {
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+  Widget _buildSelectionBadge(
+      BuildContext context, String label, bool isActive, IconData icon) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       decoration: BoxDecoration(
@@ -200,20 +192,22 @@ class TildeFilterCriterionView extends StatelessWidget {
                 "Current Value",
                 criterion.currentValue,
                 DynamicValueView(value: criterion.currentValue)),
-            if (criterion is MultiOptTildeFilterCriterionModel) ...[
+            if (criterion is ManagedOptTildeFilterCriterionModel) ...[
               _buildAccordionSection(
                   context,
                   "Initial XData",
-                  (criterion as MultiOptTildeFilterCriterionModel).initialXData,
+                  (criterion as ManagedOptTildeFilterCriterionModel)
+                      .initialXData,
                   XDataView(
-                      xData: (criterion as MultiOptTildeFilterCriterionModel)
+                      xData: (criterion as ManagedOptTildeFilterCriterionModel)
                           .initialXData)),
               _buildAccordionSection(
                   context,
                   "Current XData",
-                  (criterion as MultiOptTildeFilterCriterionModel).currentXData,
+                  (criterion as ManagedOptTildeFilterCriterionModel)
+                      .currentXData,
                   XDataView(
-                      xData: (criterion as MultiOptTildeFilterCriterionModel)
+                      xData: (criterion as ManagedOptTildeFilterCriterionModel)
                           .currentXData)),
             ],
           ],
@@ -222,11 +216,9 @@ class TildeFilterCriterionView extends StatelessWidget {
     );
   }
 
-  SimpleAccordionSection _buildAccordionSection(BuildContext context,
-      String title, dynamic value, Widget content) {
-    final colorScheme = Theme
-        .of(context)
-        .colorScheme;
+  SimpleAccordionSection _buildAccordionSection(
+      BuildContext context, String title, dynamic value, Widget content) {
+    final colorScheme = Theme.of(context).colorScheme;
     return SimpleAccordionSection(
       initiallyExpanded: true,
       headerTitle: Text(
@@ -239,12 +231,12 @@ class TildeFilterCriterionView extends StatelessWidget {
       headerSubtitle: value == null
           ? null
           : Text(
-        " - ${value.runtimeType.toString()}",
-        style: TextStyle(
-            fontSize: 10,
-            color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
-            fontStyle: FontStyle.italic),
-      ),
+              " - ${value.runtimeType.toString()}",
+              style: TextStyle(
+                  fontSize: 10,
+                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                  fontStyle: FontStyle.italic),
+            ),
       content: content,
     );
   }

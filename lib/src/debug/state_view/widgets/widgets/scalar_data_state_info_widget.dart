@@ -45,8 +45,8 @@ class ScalarDataStateInfoWidget extends BaseInfoWidget {
       case ScalarDataStatePending(reason: ScalarPendingReasonFilterChanged()):
         return null;
       case ScalarDataStateLoadedStale(
-      reason: ScalarLoadedStateStaleReasonFilterChanged()
-      ):
+          reason: ScalarLoadedStateStaleReasonFilterChanged()
+        ):
         return null;
       case ScalarDataStatePending(reason: ScalarPendingReasonFailed()):
         return ButtonFunction(
@@ -66,15 +66,15 @@ class ScalarDataStateInfoWidget extends BaseInfoWidget {
           },
         );
       case ScalarDataStateLoadedStale(
-      reason: ScalarLoadedStateStaleReasonEvent()
-      ):
+          reason: ScalarLoadedStateStaleReasonEvent()
+        ):
         return null;
       case ScalarDataStateLoadedStale(
-      reason: ScalarLoadedStateStaleReasonFailed(
-          :final errorOrigin,
-          :final errorInfo
-      )
-      ):
+          reason: ScalarLoadedStateStaleReasonFailed(
+            :final errorOrigin,
+            :final errorInfo
+          )
+        ):
         if (errorInfo != null) {
           return ButtonFunction(
             btnType: DebugBtnType.error,

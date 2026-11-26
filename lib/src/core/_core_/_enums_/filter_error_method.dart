@@ -1,19 +1,19 @@
 part of '_enums.dart';
 
 enum FilterErrorMethod {
-  // OLD: specifyDefaultSimpleCriterion Values
-  specifyDefaultValuesForSimpleTildeCriteria,
+  // OLD: specifyDefaultPlainCriterion Values
+  specifyDefaultValuesForPlainTildeCriteria,
 
-  // OLD: specifyDefaultValueForMultiOptTildeCriterion
-  specifyDefaultValueForMultiOptTildeCriterion,
+  // OLD: specifyDefaultValueForManagedOptTildeCriterion
+  specifyDefaultValueForManagedOptTildeCriterion,
 
-  // OLD: getSimpleCriterionValuesFromFilterPatch
-  extractPatchValuesForSimpleTildeCriteria,
+  // OLD: getPlainCriterionValuesFromFilterPatch
+  extractPatchValuesForPlainTildeCriteria,
 
-  // OLD: getMultiOptCriterionValueFromFilterPatch
-  extractPatchValueForMultiOptTildeCriterion,
+  // OLD: getManagedOptCriterionValueFromFilterPatch
+  extractPatchValueForManagedOptTildeCriterion,
   createNewFilterCriteria,
-  performLoadMultiOptTildeCriterionXData,
+  performLoadManagedOptTildeCriterionXData,
   //
   unknown;
 }

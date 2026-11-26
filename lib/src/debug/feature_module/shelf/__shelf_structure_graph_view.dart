@@ -4,7 +4,7 @@ import 'package:graphview/GraphView.dart';
 
 import '../../../core/_core_/core.dart';
 import '../../../core/utils/__utils.dart';
-import '../../../core/widgets/_custom_app_container.dart';
+import '../../../core/widgets/__widgets.dart';
 import '../_graph_debug_utils.dart';
 import '_graph_item_block_or_scalar_box.dart';
 import '_graph_item_shelf_box.dart';
@@ -27,10 +27,9 @@ class ShelfStructureGraphView extends StatefulWidget {
 }
 
 class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
-  final Graph graph = Graph()
-    ..isTree = false;
+  final Graph graph = Graph()..isTree = false;
   BuchheimWalkerConfiguration configuration =
-  CustomBuchheimWalkerConfiguration();
+      CustomBuchheimWalkerConfiguration();
   late Map<String, GraphItem> graphItemMap;
 
   String? _highlighFilterModelName;
@@ -84,8 +83,7 @@ class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
       graph.addEdge(
         currentNode,
         childNode,
-        paint: Paint()
-          ..color = Colors.black87,
+        paint: Paint()..color = Colors.black87,
       );
 
       if (childGraphItem.children.isNotEmpty) {
@@ -168,19 +166,19 @@ class _ShelfStructureGraphViewState extends State<ShelfStructureGraphView> {
       },
       child: item.shelf != null
           ? GraphItemShelfBox(
-        shelf: item.shelf!,
-        gotoStorage: widget.onPressedBack,
-      )
+              shelf: item.shelf!,
+              gotoStorage: widget.onPressedBack,
+            )
           : GraphItemBlockOrScalarBox(
-        key: Key("Blk-${item.blockOrScalar!.name}"),
-        blockOrScalar: item.blockOrScalar!,
-        highlightFilterModelName: _highlighFilterModelName,
-        showClassParameters: _showClassParameters,
-        refreshGraph: (String? filterName) {
-          _highlighFilterModelName = filterName;
-          setState(() {});
-        },
-      ),
+              key: Key("Blk-${item.blockOrScalar!.name}"),
+              blockOrScalar: item.blockOrScalar!,
+              highlightFilterModelName: _highlighFilterModelName,
+              showClassParameters: _showClassParameters,
+              refreshGraph: (String? filterName) {
+                _highlighFilterModelName = filterName;
+                setState(() {});
+              },
+            ),
     );
   }
 

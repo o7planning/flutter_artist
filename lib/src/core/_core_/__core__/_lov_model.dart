@@ -9,11 +9,12 @@ part of '../core.dart';
 /// - Owns its [FilterModel] directly (not shared with other Blocks or Scalars).
 /// - Does not perform CRUD mutations or broadcast domain events.
 abstract class LovModel<
-    ID extends Comparable,
-    ITEM extends Identifiable<ID>,
-    FILTER_PATCH extends FilterPatch, // EmptyFilterPatch
-    FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
-    > extends _Core implements MnemonicScope, ClassDefViewable {
+        ID extends Comparable,
+        ITEM extends Identifiable<ID>,
+        FILTER_PATCH extends FilterPatch, // EmptyFilterPatch
+        FILTER_CRITERIA extends FilterCriteria // EmptyFilterCriteria
+        > extends _Core
+    implements DatasetModel<ID, ITEM>, MnemonicScope, ClassDefViewable {
   @override
   Map<String, Type> getGenericsInfoMap() {
     return {
@@ -25,13 +26,16 @@ abstract class LovModel<
   }
 
   /// Owner Shelf (either a local feature Shelf or the hidden GlobalLovShelf).
+  @override
   late final Shelf shelf;
 
   Shelf get module => shelf;
 
   /// Unique LOV name within its owning [shelf].
+  @override
   final String name;
 
+  @override
   final String? description;
 
   String get _shortPathName => "${shelf.name} > $name";
@@ -45,6 +49,7 @@ abstract class LovModel<
 
   bool __isQuerying = false;
 
+  @override
   bool get isQuerying => __isQuerying;
 
   // ***************************************************************************
@@ -60,6 +65,7 @@ abstract class LovModel<
       _ownedOrDefaultFilterModel;
 
   /// Returns the custom [FilterModel] declared for this LOV, or `null` if none.
+  @override
   FilterModel<FILTER_PATCH, FILTER_CRITERIA>? get filterModel {
     if (_ownedOrDefaultFilterModel is _DefaultFilterModel) {
       return null;
@@ -71,8 +77,10 @@ abstract class LovModel<
 
   late final SortModel<ITEM>? _serverSideSortModel;
 
+  @override
   SortModel<ITEM>? get clientSideSortModel => _clientSideSortModel;
 
+  @override
   SortModel<ITEM>? get serverSideSortModel => _serverSideSortModel;
 
   // ***************************************************************************
@@ -96,12 +104,16 @@ abstract class LovModel<
   late Pageable? _pageable;
   PaginationInfo? _paginationInfo = PaginationInfo.empty();
 
+  @override
   LovDataState get dataState => _dataState;
 
+  @override
   PageData<ITEM>? get lastQueryResult => _lastQueryResult;
 
+  @override
   ActionResultState? get lastQueryResultState => _lastQueryResultState;
 
+  @override
   FILTER_CRITERIA? get filterCriteria =>
       _filterCriteriaSnapshot?.criteriaOrNull;
 
@@ -113,6 +125,7 @@ abstract class LovModel<
       filterModel != null &&
       filterModel!.committedFilterCriteria != filterCriteria;
 
+  @override
   bool get hasError => lovErrorInfo != null || filterErrorInfo != null;
 
   LovModelErrorInfo? get lovErrorInfo {
@@ -125,8 +138,9 @@ abstract class LovModel<
 
   ErrorInfo? get filterErrorInfo => filterModel?.errorInfo;
 
+  late final ui = _LovUiComponents(lovModel: this);
+
   // TODO: Wire dedicated _LovUiComponents and _LovDebugInfo.
-  // late final ui = _LovUiComponents(lovModel: this);
   // late final debug = _LovDebugInfo<ID>(lovModel: this);
 
   // ***************************************************************************
@@ -156,11 +170,22 @@ abstract class LovModel<
   }
 
   // ***************************************************************************
+
+  XLovModel<ID, ITEM> _createXLovModel({required XFilterModel xFilterModel}) {
+    return XLovModel<ID, ITEM>._(
+      lovModel: this,
+      xFilterModel: xFilterModel,
+    );
+  }
+
+  // ***************************************************************************
   // *** TYPES *****************************************************************
   // ***************************************************************************
 
+  @override
   Type getItemIdType() => ID;
 
+  @override
   Type getItemType() => ITEM;
 
   Type getFilterPatchType() => FILTER_PATCH;
@@ -240,6 +265,7 @@ abstract class LovModel<
   // ***************************************************************************
 
   /// Queries the LOV dataset using the active or patched filter criteria.
+  @override
   @nonVirtual
   @_RootMethodAnnotation()
   Future<void> query({
@@ -252,6 +278,7 @@ abstract class LovModel<
   }
 
   /// Queries the next page and replaces the current visible items.
+  @override
   @_RootMethodAnnotation()
   Future<void> queryNextPage() async {
     // TODO: Wire pagination next-page query.
@@ -259,6 +286,7 @@ abstract class LovModel<
   }
 
   /// Queries the previous page and replaces the current visible items.
+  @override
   @_RootMethodAnnotation()
   Future<void> queryPreviousPage() async {
     // TODO: Wire pagination previous-page query.
@@ -266,6 +294,7 @@ abstract class LovModel<
   }
 
   /// Queries the next page and appends items to the current list.
+  @override
   @_RootMethodAnnotation()
   Future<void> queryMore() async {
     // TODO: Wire pagination append query.
@@ -302,24 +331,34 @@ abstract class LovModel<
   // ***************************************************************************
 
   /// Returns a copied list of loaded items.
+  @override
   List<ITEM> get items => [..._items];
 
+  @override
   List<ID> get itemIds => _items.map((item) => item.id).toList();
 
+  @override
   int get itemCount => _items.length;
 
+  @override
   bool get isEmpty => _items.isEmpty;
 
+  @override
   bool get isNotEmpty => _items.isNotEmpty;
 
+  @override
   ITEM? get firstItem => _items.firstOrNull;
 
+  @override
   ITEM? get lastItem => _items.lastOrNull;
 
+  @override
   BlockNativeQueryMode get nativeQueryMode => config.nativeQueryMode;
 
+  @override
   Pageable? get pageable => _pageable;
 
+  @override
   Pageable? get nextPageable {
     if (_lastQueryType == QueryType.emptyQuery) {
       return _initialPageable;
@@ -327,8 +366,10 @@ abstract class LovModel<
     return _pageable?.next();
   }
 
+  @override
   PaginationInfo? get paginationInfo => PaginationInfo.copy(_paginationInfo);
 
+  @override
   ITEM? findItemByIndex(int index) {
     if (index < 0 || index >= _items.length) {
       return null;
@@ -336,6 +377,7 @@ abstract class LovModel<
     return _items[index];
   }
 
+  @override
   ITEM? findItemById(ID itemId) {
     return FaItemsUtils.findItemInListById(
       id: itemId,
@@ -344,10 +386,12 @@ abstract class LovModel<
     );
   }
 
+  @override
   ITEM? findItemSameIdWith({required ITEM item}) {
     return findItemById(_getItemIdInternal(item));
   }
 
+  @override
   bool containsItem(ITEM item) {
     return FaItemsUtils.isListContainItem(
       targetList: _items,
@@ -356,6 +400,7 @@ abstract class LovModel<
     );
   }
 
+  @override
   bool isSame({required ITEM? item1, required ITEM? item2}) {
     if (item1 == null && item2 == null) {
       return true;
@@ -496,6 +541,7 @@ abstract class LovModel<
   // *** SORTING ***************************************************************
   // ***************************************************************************
 
+  @override
   void clientSideSort({required bool refresh}) {
     if (config.clientSideSortStrategy == SortStrategy.modelBased &&
         _clientSideSortModel != null) {
@@ -511,6 +557,7 @@ abstract class LovModel<
   // ***************************************************************************
 
   /// Override to restrict querying this LOV based on application business rules.
+  @override
   bool isQueryAllowed() => true;
 
   @_IsAllowPrivateMethodAnnotation()
@@ -550,6 +597,7 @@ abstract class LovModel<
     return ownedOrDefaultFilterModel.checkBeforeShowFilterModelInspector();
   }
 
+  @override
   @_RootMethodAnnotation()
   Future<Actionable<ShowFilterModelInspectorPrecheck>>
       showDebugFilterModelInspector({
@@ -567,6 +615,7 @@ abstract class LovModel<
     return ownedOrDefaultFilterModel.checkBeforeShowFilterCriteriaInspector();
   }
 
+  @override
   @_RootMethodAnnotation()
   Future<Actionable<ShowFilterCriteriaInspectorPrecheck>>
       showDebugFilterCriteriaInspector({

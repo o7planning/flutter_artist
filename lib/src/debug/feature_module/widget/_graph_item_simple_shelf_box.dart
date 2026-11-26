@@ -66,8 +66,8 @@ class GraphItemSimpleShelfBoxState extends State<GraphItemSimpleShelfBox> {
           color: widget.isSelected
               ? DebugConstants.selectedGraphBoxBgColor(context)
               : widget.shelf == null //
-              ? DebugConstants.inactiveGraphBoxBgColor(context)
-              : DebugConstants.activeGraphBoxBgColor(context),
+                  ? DebugConstants.inactiveGraphBoxBgColor(context)
+                  : DebugConstants.activeGraphBoxBgColor(context),
           borderRadius: BorderRadius.circular(4),
           boxShadow: [
             DebugConstants.graphBoxShadow(context),

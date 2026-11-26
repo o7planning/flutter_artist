@@ -87,3 +87,11 @@ enum ProzessViewContext {
     };
   }
 }
+
+/// Defines the data context demanded by a LOV UI component.
+/// Symmetrical with [BlockViewContext] and [ScalarViewContext].
+enum LovViewContext {
+  items;
+
+  bool get provideItemsContext => true;
+}

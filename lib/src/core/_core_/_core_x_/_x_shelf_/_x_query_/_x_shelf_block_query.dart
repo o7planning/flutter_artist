@@ -24,6 +24,7 @@ class _XShelfBlockQuery extends _XShelfBaseQuery {
         pageable: pageable,
       ),
       targetScalarAndOptions: null,
+      targetLovAndOptions: null,
       forceQueryAll: false,
       forceReloadFilter: false,
     );

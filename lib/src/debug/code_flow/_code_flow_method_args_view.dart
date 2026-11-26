@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/utils/__utils.dart';
-
-import '../../core/widgets/_simple_accordion.dart';
-import '../../core/widgets/_simple_accordion_section.dart';
+import '../../core/widgets/__widgets.dart';
 import '__code_flow_const.dart';
 
 class CodeFlowMethodArgsView extends StatelessWidget {

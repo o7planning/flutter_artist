@@ -134,8 +134,8 @@ class FaIconConstants {
 
   static const IconData filterCriteriaGroupIconData = Icons.group_work_rounded;
 
-  static const IconData simplePropOrCriterionIconData = Icons.adjust_rounded;
-  static const IconData optPropOrCriterionIconData =
+  static const IconData plainPropOrCriterionIconData = Icons.adjust_rounded;
+  static const IconData managedPropOrCriterionIconData =
       Icons.scatter_plot_outlined;
   static const IconData unknownIconData = Icons.question_mark;
   static const IconData multiSelectionIconData = Icons.table_rows_outlined;
@@ -154,6 +154,8 @@ class FaIconConstants {
 
   static const IconData paginationIconData =
       cupertino.CupertinoIcons.ellipsis_circle;
+
+  static const IconData lovIconData = cupertino.CupertinoIcons.viewfinder;
 
   static const IconData shelfFragmentIconData = cupertino.CupertinoIcons.tray;
 

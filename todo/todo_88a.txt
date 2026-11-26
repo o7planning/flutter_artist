@@ -1,0 +1,66 @@
+Focus to Left and close Left --> Error:
+
+
+
+
+======== Exception caught by foundation library ====================================================
+The following assertion was thrown while dispatching notifications for Listenable:
+setState() or markNeedsBuild() called when widget tree was locked.
+
+This ValueListenableBuilder<ActiveFocusRegion?> widget cannot be marked as needing to build because the framework is locked.
+The widget on which setState() or markNeedsBuild() was called was: ValueListenableBuilder<ActiveFocusRegion?>
+  state: _ValueListenableBuilderState<ActiveFocusRegion?>#c6e62
+When the exception was thrown, this was the stack:
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 274:3                  throw_
+package:flutter/src/widgets/framework.dart 5393:9                                            <fn>
+package:flutter/src/widgets/framework.dart 5402:14                                           markNeedsBuild
+package:flutter/src/widgets/framework.dart 1223:5                                            setState
+package:flutter/src/widgets/value_listenable_builder.dart 136:5                              [_valueChanged]
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77             tear
+package:listen/src/listen.dart 443:24                                                        notifyListeners
+package:listen/src/listen.dart 560:5                                                         set value
+package:flutter_artist/src/core/_core_/__core__/__focus_tracker.dart 33:7                    notifyRegionUnfocused
+package:flutter_artist/src/core/_core_/_ui_/_view_focus_/_focusable_view_region.dart 160:19  dispose
+package:flutter/src/widgets/framework.dart 6048:5                                            unmount
+package:flutter/src/widgets/framework.dart 2124:12                                           _unmount
+package:flutter/src/widgets/framework.dart 2122:7                                            <fn>
+package:flutter/src/widgets/framework.dart 5889:7                                            visitChildren
+package:flutter/src/widgets/framework.dart 2120:12                                           _unmount
+package:flutter/src/widgets/framework.dart 2122:7                                            <fn>
+package:flutter/src/widgets/framework.dart 5889:7                                            visitChildren
+package:flutter/src/widgets/framework.dart 2120:12                                           _unmount
+package:flutter/src/widgets/framework.dart 2122:7                                            <fn>
+package:flutter/src/widgets/framework.dart 7125:7                                            visitChildren
+package:flutter/src/widgets/framework.dart 2120:12                                           _unmount
+package:flutter/src/widgets/framework.dart 2122:7                                            <fn>
+package:flutter/src/widgets/framework.dart 7125:7                                            visitChildren
+package:flutter/src/widgets/framework.dart 2120:12                                           _unmount
+package:flutter/src/widgets/framework.dart 2122:7                                            <fn>
+package:flutter/src/widgets/framework.dart 5889:7                                            visitChildren
+package:flutter/src/widgets/framework.dart 2120:12                                           _unmount
+package:flutter/src/widgets/framework.dart 2122:7                                            <fn>
+package:flutter/src/widgets/framework.dart 7125:7                                            visitChildren
+package:flutter/src/widgets/framework.dart 2120:12                                           _unmount
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77             tear
+dart-sdk/lib/internal/iterable.dart 49:7                                                     forEach
+package:flutter/src/widgets/framework.dart 2133:15                                           [_unmountAll]
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77             tear
+package:flutter/src/widgets/framework.dart 3038:7                                            lockState
+package:flutter/src/widgets/framework.dart 3362:7                                            finalizeTree
+package:flutter/src/widgets/binding.dart 1592:7                                              drawFrame
+package:flutter/src/rendering/binding.dart 558:5                                             [_handlePersistentFrameCallback]
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77             tear
+package:flutter/src/scheduler/binding.dart 1433:7                                            [_invokeFrameCallback]
+package:flutter/src/scheduler/binding.dart 1348:9                                            handleDrawFrame
+package:flutter/src/scheduler/binding.dart 1201:5                                            [_handleDrawFrame]
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/operations.dart 118:77             tear
+lib/_engine/engine/platform_dispatcher.dart 1803:5                                           invoke
+lib/_engine/engine/platform_dispatcher.dart 289:5                                            invokeOnDrawFrame
+lib/_engine/engine/frame_service.dart 209:32                                                 [_renderFrame]
+lib/_engine/engine/frame_service.dart 117:9                                                  <fn>
+dart-sdk/lib/async/zone.dart 843:24                                                          [_runUnaryZoned]
+dart-sdk/lib/async/zone.dart 572:28                                                          <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 218:27               _callDartFunctionFast1
+dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 78:15                ret
+====================================================================================================
+[FLUTTER_ARTIST] ---------> SET ORPHANED FALSE: FootballPlayer88aShelf - 2026-11-28 17:33:43.808

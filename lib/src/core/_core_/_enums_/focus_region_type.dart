@@ -25,7 +25,8 @@ enum FocusRegionType {
   pagination('pagination'),
   storageSectionView('storageSectionView'),
   executionProgress('executionProgress'),
-  loggedInUser('loggedInUser');
+  loggedInUser('loggedInUser'),
+  lovItemsView("lovItemsView");
 
   /// Human-readable short identifier suitable for status bars and diagnostic overlays.
   final String label;

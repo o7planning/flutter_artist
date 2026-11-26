@@ -8,9 +8,7 @@ import 'package:tabbed_view/tabbed_view.dart';
 import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/__utils.dart';
-
-import '../../core/widgets/_custom_app_container.dart';
-import '../../core/widgets/_simple_copy_button.dart';
+import '../../core/widgets/__widgets.dart';
 import '../form_props/_form_props_structure_view.dart';
 import '../utils/_tab_theme_utils.dart';
 import '../widgets/_html_info_view.dart';

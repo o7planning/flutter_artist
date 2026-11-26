@@ -21,6 +21,8 @@ part '_parts_/_block_item_edit_precheck.dart';
 part '_parts_/_block_items_deletion_precheck.dart';
 part '_parts_/_block_query_empty_precheck.dart';
 part '_parts_/_block_query_precheck.dart';
+part '_parts_/_lov_query_precheck.dart';
+part '_parts_/_lov_clear_items_precheck.dart';
 part '_parts_/_block_quick_item_creation_precheck.dart';
 part '_parts_/_block_quick_item_update_precheck.dart';
 part '_parts_/_block_refresh_current_item_precheck.dart';

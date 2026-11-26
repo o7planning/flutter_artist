@@ -14,12 +14,11 @@ class BlockItemDetailViewBuilder extends _ContextProviderView {
     required this.block,
     BlockItemDetailViewConfig? config,
     required this.build,
-  })
-      : config = config ?? const BlockItemDetailViewConfig(),
+  })  : config = config ?? const BlockItemDetailViewConfig(),
         assert(
-        config == null ||
-            config.blockViewContext == BlockViewContext.itemDetail ||
-            config.blockViewContext == BlockViewContext.form,
+          config == null ||
+              config.blockViewContext == BlockViewContext.itemDetail ||
+              config.blockViewContext == BlockViewContext.form,
         );
 
   @override
@@ -35,12 +34,10 @@ class _BlockItemDetailViewBuilderState
     return widget.block.shelf;
   }
 
-
   @override
   String getWidgetOwnerClassName() {
     return getClassName(widget.block);
   }
-
 
   @override
   FocusRegionType getRegionType() {
@@ -70,6 +67,9 @@ class _BlockItemDetailViewBuilderState
 
   @override
   TaskViewContext? get taskViewContext => null;
+
+  @override
+  LovViewContext? get lovViewContext => null;
 
   @override
   void addWidgetState({required bool isVisible}) {

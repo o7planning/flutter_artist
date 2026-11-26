@@ -11,10 +11,10 @@ class IntIdFilterModel
   FilterModelStructure defineFilterModelStructure() {
     return FilterModelStructure(
       criteriaStructure: FilterCriteriaStructure(
-        simpleCriterionDefs: [
-          SimpleFilterCriterionDef<int>(criterionBaseName: 'id'),
+        plainCriterionDefs: [
+          PlainFilterCriterionDef<int>(criterionBaseName: 'id'),
         ],
-        multiOptCriterionDefs: [],
+        managedOptCriterionDefs: [],
       ),
       conditionStructure: FilterConditionStructure(
         connector: FilterConnector.and,
@@ -29,49 +29,49 @@ class IntIdFilterModel
   }
 
   @override
-  Future<XData?> performLoadMultiOptTildeCriterionXData({
-    required String multiOptTildeCriterionName,
-    required String multiOptCriterionBaseName,
-    required Object? parentMultiOptTildeCriterionValue,
-    required MultiOptSelectionMode multiOptSelectionMode,
+  Future<XData?> performLoadManagedOptTildeCriterionXData({
+    required String managedOptTildeCriterionName,
+    required String managedOptCriterionBaseName,
+    required Object? parentManagedOptTildeCriterionValue,
+    required ManagedOptSelectionMode managedOptSelectionMode,
   }) async {
     return null;
   }
 
   @override
-  OptValueWrap? extractPatchValueForMultiOptTildeCriterion({
-    required String multiOptTildeCriterionName,
-    required String multiOptCriterionBaseName,
-    required Object? parentMultiOptTildeCriterionValue,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required XData multiOptTildeCriterionXData,
+  OptValueWrap? extractPatchValueForManagedOptTildeCriterion({
+    required String managedOptTildeCriterionName,
+    required String managedOptCriterionBaseName,
+    required Object? parentManagedOptTildeCriterionValue,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required XData managedOptTildeCriterionXData,
     required IntIdFilterPatch filterPatch,
   }) {
     return null;
   }
 
   @override
-  Map<String, SimpleValueWrap?>? extractPatchValuesForSimpleTildeCriteria({
+  Map<String, PlainValueWrap?>? extractPatchValuesForPlainTildeCriteria({
     required IntIdFilterPatch filterPatch,
   }) {
     return {
-      "id$tildeSymbol": SimpleValueWrap.of(filterPatch.idValue),
+      "id$tildeSymbol": PlainValueWrap.of(filterPatch.idValue),
     };
   }
 
   @override
-  OptValueWrap? specifyDefaultValueForMultiOptTildeCriterion({
-    required String multiOptTildeCriterionName,
-    required String multiOptCriterionBaseName,
-    required Object? parentMultiOptTildeCriterionValue,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required XData multiOptTildeCriterionXData,
+  OptValueWrap? specifyDefaultValueForManagedOptTildeCriterion({
+    required String managedOptTildeCriterionName,
+    required String managedOptCriterionBaseName,
+    required Object? parentManagedOptTildeCriterionValue,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required XData managedOptTildeCriterionXData,
   }) {
     return null;
   }
 
   @override
-  Map<String, dynamic>? specifyDefaultValuesForSimpleTildeCriteria() {
+  Map<String, dynamic>? specifyDefaultValuesForPlainTildeCriteria() {
     return {
       "id$tildeSymbol": _idValue,
     };

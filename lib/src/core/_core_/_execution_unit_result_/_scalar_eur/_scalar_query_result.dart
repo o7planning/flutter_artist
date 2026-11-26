@@ -1,8 +1,8 @@
 part of '../../core.dart';
 
 class ScalarQueryResult<
-        ID extends Comparable, //
-        VALUE extends Identifiable<ID>>
+ID extends Comparable, //
+VALUE extends Identifiable<ID>>
     extends ExecutionUnitResult<ScalarQueryPrecheck> {
   bool isFilterError = false;
 

@@ -6,8 +6,7 @@ import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/__utils.dart';
 
-import '../../core/widgets/_custom_app_container.dart';
-import '../../core/widgets/_small_text_button.dart';
+import '../../core/widgets/__widgets.dart';
 import '../dialog/_error_viewer_dialog.dart';
 import '../widgets/_html_info_view.dart';
 
@@ -31,8 +30,7 @@ class FormModelDebugView extends StatelessWidget {
           HtmlInfoView(
             padding: EdgeInsets.symmetric(vertical: 5),
             infoAsHtml:
-            "<b>${getClassNameWithoutGenerics(formModel)}</b><i>${formModel
-                .debugClassParametersDefinition()}</i>",
+                "<b>${getClassNameWithoutGenerics(formModel)}</b><i>${formModel.debugClassParametersDefinition()}</i>",
             style: TextStyle(fontSize: 13),
           ),
           Divider(),
@@ -54,14 +52,8 @@ class FormModelDebugView extends StatelessWidget {
                   ? FaIconConstants.formInitialDataReadyTrueIconData
                   : FaIconConstants.formInitialDataReadyFalseIconData,
               color: formModel.formInitialDataReady
-                  ? Theme
-                  .of(context)
-                  .colorScheme
-                  .primary
-                  : Theme
-                  .of(context)
-                  .colorScheme
-                  .error,
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.error,
               size: 20,
             ),
           ),

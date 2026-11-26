@@ -10,5 +10,6 @@ enum ContextKind {
   activity,
   prozessInitData,
   taskInitData,
-  stageInitData;
+  stageInitData,
+  lovItems;
 }

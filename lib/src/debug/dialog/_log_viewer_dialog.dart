@@ -7,10 +7,9 @@ import 'package:flutter_artist_styles/flutter_artist_styles.dart';
 
 import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/_core_/core.dart';
-import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/logger/_logger.dart';
-import '../../core/widgets/_custom_app_container.dart';
+import '../../core/widgets/__widgets.dart';
 import '../section/_error_info_viewer.dart';
 import '../section/_warn_info_viewer.dart';
 import '_tip_document_viewer_dialog.dart';

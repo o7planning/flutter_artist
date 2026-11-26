@@ -8,7 +8,7 @@ import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
 import '../../core/utils/__utils.dart';
 
-import '../../core/widgets/_custom_app_container.dart';
+import '../../core/widgets/__widgets.dart';
 import '../app/_block_or_scalar.dart';
 import '../filter_criteria/_filter_condition_groups_view.dart';
 import '../filter_criteria/_filter_criteria_structure_criteria_base_view.dart';
@@ -86,7 +86,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         widget.filterModel.filterModelStructure.rootConditionGroupModel;
 
     String conditionJsonX =
-    rootFilterCriteriaGroupModel.toFilterCriteriaGroupXVal().toJson();
+        rootFilterCriteriaGroupModel.toFilterCriteriaGroupXVal().toJson();
 
     String conditionJsonBase = rootFilterCriteriaGroupModel
         .toFilterCriteriaGroupVal()
@@ -104,12 +104,11 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         id: "Criteria",
         text: ' Criteria',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              Icons.shopping_bag_outlined,
-              color: TabThemeUtils.getTabIconColor(context, status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          Icons.shopping_bag_outlined,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: iconSize,
+        ),
         view: _buildTabFilterModelStructureBase(),
       ),
     );
@@ -118,12 +117,11 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         id: "Tildes",
         text: ' Tildes',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              Icons.shopping_bag_outlined,
-              color: TabThemeUtils.getTabIconColor(context, status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          Icons.shopping_bag_outlined,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: iconSize,
+        ),
         view: _buildTabFilterCriteriaStructure(),
       ),
     );
@@ -132,12 +130,11 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         id: "Conditions",
         text: ' Conditions',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              FaIconConstants.conditionGroupIconData,
-              color: TabThemeUtils.getTabIconColor(context, status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          FaIconConstants.conditionGroupIconData,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: iconSize,
+        ),
         view: _buildTabFilterModelStructureGroupsView(),
       ),
     );
@@ -146,12 +143,11 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         id: "Initial",
         text: ' Initial',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              Icons.list,
-              color: TabThemeUtils.getTabIconColor(context, status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          Icons.list,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: iconSize,
+        ),
         view: _buildTabContent(
           infoAsHtml: "Initial Filter values",
           json: initial1Json,
@@ -163,16 +159,14 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         id: "Current",
         text: ' Current',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              Icons.list,
-              color: TabThemeUtils.getTabIconColor(context, status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          Icons.list,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: iconSize,
+        ),
         view: _buildTabContent(
           infoAsHtml: "The current values of the filter (Will be passed to the "
-              "<b>${getClassName(
-              widget.filterModel)}.createNewFilterCriteria()</b> method).",
+              "<b>${getClassName(widget.filterModel)}.createNewFilterCriteria()</b> method).",
           json: currentJson,
         ),
       ),
@@ -183,15 +177,14 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         id: "Tilde-Based",
         text: ' Tilde-Based',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              Icons.data_object,
-              color: TabThemeUtils.getTabIconColor(context, status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          Icons.data_object,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: iconSize,
+        ),
         view: _buildTabContent(
           infoAsHtml:
-          "This <b>JSON</b> is a combination of the conditional structure and the current values of the <b>TildeCriterion(s)</b>.",
+              "This <b>JSON</b> is a combination of the conditional structure and the current values of the <b>TildeCriterion(s)</b>.",
           json: conditionJsonX,
         ),
       ),
@@ -201,15 +194,14 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         id: "Criteria-Based",
         text: ' Criteria-Based',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              Icons.data_object,
-              color: TabThemeUtils.getTabIconColor(context, status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          Icons.data_object,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: iconSize,
+        ),
         view: _buildTabContent(
           infoAsHtml:
-          "This <b>JSON</b> is a combination of the conditional structure and the current values of the criteria.",
+              "This <b>JSON</b> is a combination of the conditional structure and the current values of the criteria.",
           json: conditionJsonBase,
         ),
       ),
@@ -219,15 +211,14 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         id: "Field-Based",
         text: ' Field-Based',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              Icons.data_object,
-              color: TabThemeUtils.getTabIconColor(context, status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          Icons.data_object,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: iconSize,
+        ),
         view: _buildTabContent(
           infoAsHtml:
-          "This <b>JSON</b> is a combination of the conditional structure and the current values of the filter fields. "
+              "This <b>JSON</b> is a combination of the conditional structure and the current values of the filter fields. "
               "It can be sent to the server for data filtering.",
           json: conditionJsonField,
         ),
@@ -238,12 +229,11 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
         id: "--",
         text: ' ',
         closable: false,
-        leading: (context, status) =>
-            Icon(
-              FaIconConstants.usageIconData,
-              color: TabThemeUtils.getTabIconColor(context, status),
-              size: iconSize,
-            ),
+        leading: (context, status) => Icon(
+          FaIconConstants.usageIconData,
+          color: TabThemeUtils.getTabIconColor(context, status),
+          size: iconSize,
+        ),
         view: _buildFormEventListenerInfo(),
       ),
     );
@@ -252,7 +242,7 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
     TabbedView tabbedView = TabbedView(controller: _controller);
 
     TabbedViewThemeData themeData =
-    TabThemeUtils.getTabbedViewThemeData(context);
+        TabThemeUtils.getTabbedViewThemeData(context);
 
     TabbedViewTheme tabbedViewTheme = TabbedViewTheme(
       data: themeData,
@@ -317,20 +307,18 @@ class _DebugFilterModelViewState extends State<DebugFilterModelView> {
           children: [
             HtmlInfoView(
               infoAsHtml:
-              "List and status of <b>Block(s)</b> and <b>Scalar(s)</b> using this filter:",
+                  "List and status of <b>Block(s)</b> and <b>Scalar(s)</b> using this filter:",
               style: TextStyle(fontSize: 13),
             ),
             const Divider(height: 10),
             ...widget.filterModel.blocks
-                .map((block) =>
-                BlockOrScalarCriteriaView(
-                  blockOrScalar: BlockOrScalar.block(block),
-                )),
+                .map((block) => BlockOrScalarCriteriaView(
+                      blockOrScalar: BlockOrScalar.block(block),
+                    )),
             ...widget.filterModel.scalars
-                .map((scalar) =>
-                BlockOrScalarCriteriaView(
-                  blockOrScalar: BlockOrScalar.scalar(scalar),
-                )),
+                .map((scalar) => BlockOrScalarCriteriaView(
+                      blockOrScalar: BlockOrScalar.scalar(scalar),
+                    )),
           ],
         ),
       ),

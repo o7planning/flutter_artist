@@ -30,6 +30,10 @@ abstract class Shelf extends FeatureModule {
   List<String> get filterNames =>
       List.unmodifiable(_shelfStruct.filterModels.keys);
 
+  final List<LovModel> _lovModels = [];
+
+  List<LovModel> get lovModels => List.unmodifiable(_lovModels);
+
   // All formModels.
   final List<BlockFormModel> _allFormModels = [];
 
@@ -49,6 +53,7 @@ abstract class Shelf extends FeatureModule {
   }
 
   final Map<String, Block> __blockMap = {};
+  final Map<String, LovModel> __lovModelMap = {};
 
   final List<Block> _rootBlocks = [];
 
@@ -149,6 +154,27 @@ abstract class Shelf extends FeatureModule {
       rootBlock.parent = null;
       _rootBlocks.add(rootBlock);
       __registerBlockCascade(rootBlock);
+    }
+    //
+    // LovModel:
+    //
+    List<LovModel> lovModels = _shelfStruct.lovModels;
+    for (LovModel lovModel in lovModels) {
+      _lovModels.add(lovModel);
+      __registerLovModel(lovModel);
+    }
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  void __registerLovModel(LovModel lovModel) {
+    if (__lovModelMap.containsKey(lovModel.name)) {
+      throw AppFatalErrorUtils.___registerError(
+          "Duplicate lovModel '${lovModel.name}' in '${getClassName(this)}'\n"
+          "Double-check ${getClassName(this)}.defineShelfStructure() method");
+    } else {
+      __lovModelMap[lovModel.name] = lovModel;
     }
   }
 
@@ -394,6 +420,13 @@ abstract class Shelf extends FeatureModule {
 
   Block? findBlock(String blockName) {
     return __blockMap[blockName];
+  }
+
+  // ***************************************************************************
+  // ***************************************************************************
+
+  LovModel? findLovModel(String lovName) {
+    return __lovModelMap[lovName];
   }
 
   // ***************************************************************************

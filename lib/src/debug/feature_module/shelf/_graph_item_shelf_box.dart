@@ -4,7 +4,6 @@ import '../../../core/_core_/core.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/utils/__utils.dart';
 
-
 import '../../constants/_debug_constants.dart';
 
 class GraphItemShelfBox extends StatefulWidget {
@@ -122,11 +121,9 @@ class GraphItemShelfBoxState extends State<GraphItemShelfBox> {
         2 * spacing +
         2 * padding +
         iconSize +
-        TextSizeUtils
-            .calculateTextSize(
+        TextSizeUtils.calculateTextSize(
           text: _getShelfName(),
           style: _getTextStyle(),
-        )
-            .width;
+        ).width;
   }
 }

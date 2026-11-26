@@ -64,6 +64,9 @@ class _ScalarValueViewBuilderState
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   Widget buildContent(BuildContext context) {
     return widget.build();
   }

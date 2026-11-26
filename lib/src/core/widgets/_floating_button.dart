@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of '__widgets.dart';
 
 class FloatingButton extends StatelessWidget {
   final bool selected;

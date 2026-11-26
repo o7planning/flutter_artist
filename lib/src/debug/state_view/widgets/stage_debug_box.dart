@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../../core/_core_/core.dart';
 import '../../../core/_core_/_enums_/_enums.dart';
+import '../../../core/_core_/core.dart';
 import '../options/_debug_stage_options.dart';
 import '_debug_box.dart';
 import 'debug_style_utils.dart';

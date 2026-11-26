@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_artist_styles/flutter_artist_styles.dart';
-
-import '../utils/__utils.dart';
+part of '__widgets.dart';
 
 class FloatingCopyButton extends StatelessWidget {
   final String? tooltip;

@@ -11,22 +11,22 @@ Thay vì chỉ duyệt một lớp, chúng ta sẽ xây dựng một hàm đệ 
 ```dart
 void _initializeFocusNodes(FormModelStructure structure) {
   // Quét các trường đơn giản
-  for (var def in structure.simplePropDefs) {
+  for (var def in structure.plainPropDefs) {
     _focusNodes[def.propName] = FocusNode();
   }
 
   // Quét các trường đa lựa chọn (có thể lồng nhau)
-  void _scanMultiOpt(List<MultiOptFormPropDef> defs) {
+  void _scanManagedOpt(List<ManagedOptFormPropDef> defs) {
     for (var def in defs) {
       _focusNodes[def.propName] = FocusNode();
       // Đệ quy nếu có các trường con phụ thuộc
       if (def.children != null) {
-        _scanMultiOpt(def.children!);
+        _scanManagedOpt(def.children!);
       }
     }
   }
 
-  _scanMultiOpt(structure.multiOptPropDefs);
+  _scanManagedOpt(structure.managedOptPropDefs);
 }
 
 ```
@@ -51,7 +51,7 @@ Việc này giúp người dùng không phải chạm tay vào màn hình nhiề
 
 * **Giải pháp:** Sử dụng thuộc tính `canRequestFocus` của `FocusNode`.
 * Khi trường cha chưa có giá trị, hãy set `_focusNodes['department']?.canRequestFocus = false`.
-* Khi dữ liệu con được tải xong (sau khi `performLoadMultiOptPropXData` hoàn tất), hãy bật lại thành `true`.
+* Khi dữ liệu con được tải xong (sau khi `performLoadManagedOptPropXData` hoàn tất), hãy bật lại thành `true`.
 
 ---
 

@@ -66,7 +66,7 @@ import '../error/form_register/form_prop_duplicate_name_error.dart';
 import '../error/_form_error_info.dart';
 import '../error/_scalar_error_info.dart';
 import '../error/filter/filter_criterion_type_mismatch_error.dart';
-import '../error/filter/filter_multi_opt_ms_mismatch_error.dart';
+import '../error/filter/filter_managed_opt_ms_mismatch_error.dart';
 import '../error/filter_register/tilde_filter_criterion_base_criterion_not_found_error.dart';
 import '../error/filter_register/filter_condition_group_duplicate_name_error.dart';
 import '../error/filter_register/filter_criterion_duplicate_name_error.dart';
@@ -81,7 +81,7 @@ import '../error/filter_register/tilde_criterion_config_duplicate_suffix_error.d
 import '../error/filter_register/tilde_criterion_config_invalid_suffix_error.dart';
 import '../error/filter_register/tilde_filter_criterion_name_invalid_error.dart';
 import '../error/filter_register/tilde_filter_criterion_suffix_invalid_error.dart';
-import '../error/form/form_multi_opt_ms_mismatch_error.dart';
+import '../error/form/form_managed_opt_ms_mismatch_error.dart';
 import '../error/form/form_prop_type_mismatch_error.dart';
 import '../error/form_register/form_prop_invalid_name_error.dart';
 import '_enums_/_enums.dart';
@@ -130,6 +130,8 @@ part '__core__/_block.dart';
 
 part '__core__/_lov_model.dart';
 
+part '__core__/_dataset_model.dart';
+
 part '__core__/_block_current_item_model.dart';
 
 part '__core__/_block_ancestor_context.dart';
@@ -176,6 +178,8 @@ part '_ui_com_/_work_node_ui_components.dart';
 
 part '_ui_com_/_process_ui_components.dart';
 
+part '_ui_com_/_lov_ui_components.dart';
+
 part '__core__/_process_transition_result.dart';
 
 part '__core__/_process_data.dart';
@@ -198,6 +202,8 @@ part '_execution_intent_/form_model_execution_intent.dart';
 
 part '_execution_intent_/block_execution_intent.dart';
 
+part '_execution_intent_/lov_execution_intent.dart';
+
 part '_execution_intent_/block_current_item_model_execution_intent.dart';
 
 part '_execution_intent_/scalar_execution_intent.dart';
@@ -217,6 +223,8 @@ part '_execution_unit_calc_/_model_/_task_form_model_neu_model.dart';
 part '_execution_unit_calc_/_model_/_block_current_item_model_neu_model.dart';
 
 part '_execution_unit_calc_/_model_/_block_neu_model.dart';
+
+part '_execution_unit_calc_/_model_/_lov_neu_model.dart';
 
 part '_execution_unit_calc_/_model_/_scalar_neu_model.dart';
 
@@ -420,7 +428,7 @@ part '__core__/_desk.dart';
 
 part '__core__/_desk_core.dart';
 
-part '__core__/_desk_core_v1.dart';
+part '_v1_/_desk_core_v1.dart';
 
 part '_utils_/_event_helper.dart';
 
@@ -500,6 +508,8 @@ part '_core_x_/_x_process.dart';
 
 part '_core_x_/_x_filter_model.dart';
 
+part '_core_x_/_x_lov_model.dart';
+
 part '_core_x_/_x_block_form_model.dart';
 
 part '_core_x_/_x_task_form_model.dart';
@@ -523,6 +533,8 @@ part '_sync_/_block_item_sync_session_state.dart';
 part '_sync_/_debug_block_item_sync_session_state.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/__target_block_and_options.dart';
+
+part '_core_x_/_x_shelf_/_x_query_/__target_lov_and_options.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/__target_scalar_and_options.dart';
 
@@ -551,6 +563,8 @@ part '_core_x_/_x_shelf_/_x_query_/_x_shelf_shelf_external_reaction.dart';
 part '_core_x_/_x_shelf_/_x_query_/__x_shelf_base_query.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_block_query.dart';
+
+part '_core_x_/_x_shelf_/_x_query_/_x_shelf_lov_query.dart';
 
 part '_core_x_/_x_shelf_/_x_query_/_x_shelf_block_query_empty.dart';
 
@@ -624,13 +638,13 @@ part '_sort_/_sortable_value.dart';
 
 part '_sort_/_sort_model_structure.dart';
 
-part '_filter_/_model_/_multi_opt_tilde_filter_criterion_model.dart';
+part '_filter_/_model_/_managed_opt_tilde_filter_criterion_model.dart';
 
-part '_filter_/_model_/_multi_opt_ss_tilde_filter_criterion_model.dart';
+part '_filter_/_model_/_managed_opt_ss_tilde_filter_criterion_model.dart';
 
-part '_filter_/_model_/_multi_opt_ms_tilde_filter_criterion_model.dart';
+part '_filter_/_model_/_managed_opt_ms_tilde_filter_criterion_model.dart';
 
-part '_filter_/_model_/_simple_tilde_filter_criterion_model.dart';
+part '_filter_/_model_/_plain_tilde_filter_criterion_model.dart';
 
 part '_form_/__core__/_prop_model_/__form_prop_model.dart';
 
@@ -644,13 +658,13 @@ part '_debug_info_/_form_model_debug_info.dart';
 
 part '_form_/__core__/_form_model_structure.dart';
 
-part '_form_/__core__/_prop_model_/_multi_opt_form_prop_model.dart';
+part '_form_/__core__/_prop_model_/_managed_opt_form_prop_model.dart';
 
-part '_form_/__core__/_prop_model_/_multi_opt_ss_form_prop_model.dart';
+part '_form_/__core__/_prop_model_/_managed_opt_ss_form_prop_model.dart';
 
-part '_form_/__core__/_prop_model_/_multi_opt_ms_form_prop_model.dart';
+part '_form_/__core__/_prop_model_/_managed_opt_ms_form_prop_model.dart';
 
-part '_form_/__core__/_prop_model_/_simple_form_prop_model.dart';
+part '_form_/__core__/_prop_model_/_plain_form_prop_model.dart';
 
 part '__core__/_value_wrap.dart';
 
@@ -714,6 +728,10 @@ part '_execution_unit_result_/_block_eur/_block_query_empty_result.dart';
 
 part '_execution_unit_result_/_block_eur/_block_query_result.dart';
 
+part '_execution_unit_result_/_lov_eur/_lov_query_result.dart';
+
+part '_execution_unit_result_/_lov_eur/_lov_clear_items_result.dart';
+
 part '_execution_unit_result_/_block_eur/_block_backend_action_result.dart';
 
 part '_execution_unit_result_/_block_eur/_block_quick_item_creation_result.dart';
@@ -758,7 +776,9 @@ part '_execution_unit_/__shelf_member_execution_unit.dart';
 
 part '_core_x_/_root_queue_/__x_root_queue.dart';
 
-part '_execution_unit_/shelf_member/_block_clear_execution_unit.dart';
+part '_execution_unit_/shelf_member/_block_clear_items_execution_unit.dart';
+
+part '_execution_unit_/lov/_lov_clear_items_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_scalar_clear_execution_unit.dart';
 
@@ -775,6 +795,8 @@ part '_execution_unit_/shelf_member/_block_multi_item_deletion_execution_unit.da
 part '_execution_unit_/shelf_member/_block_current_item_model_prepare_form_to_create_item_execution_unit.dart';
 
 part '_execution_unit_/shelf_member/_block_query_execution_unit.dart';
+
+part '_execution_unit_/lov/_lov_query_execution_unit.dart';
 
 part '_execution_unit_/activity_member/_default_activity_v1_execution_unit.dart';
 
@@ -944,6 +966,8 @@ part '_ui_/_config_/_vew_config_/_block_item_detail_view_config.dart';
 
 part '_ui_/_config_/_vew_config_/_filter_panel_config.dart';
 
+part '_ui_/_config_/_vew_config_/_lov_view_config.dart';
+
 part '_ui_/_config_/_vew_config_/_pagination_config.dart';
 
 part '_ui_/_config_/_vew_config_/_number_pagination_config.dart';
@@ -969,6 +993,16 @@ part '_ui_/_block_view_/_block_item_detail_view.dart';
 part '_ui_/_block_view_/_block_item_detail_view_builder.dart';
 
 part '_ui_/_block_view_/_block_items_view.dart';
+
+part '_ui_/_lov_view_/_lov_items_view_builder.dart';
+
+part '_ui_/_lov_view_/_lov_items_view.dart';
+
+part '_ui_/_lov_view_/_form_builder_lov_field.dart';
+
+part '_ui_/_lov_view_/_lov_picker_dialog.dart';
+
+part '_ui_/_lov_view_/_lov_field_style.dart';
 
 part '_ui_/_block_view_/_block_items_view_builder.dart';
 

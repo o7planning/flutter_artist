@@ -5,8 +5,7 @@ import '../../../core/_core_/core.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/utils/__utils.dart';
 
-
-import '../../../core/widgets/_custom_app_container.dart';
+import '../../../core/widgets/__widgets.dart';
 import '../../constants/_debug_constants.dart';
 import '../_graph_configuration.dart';
 import '_graph_item_process_box.dart';
@@ -36,12 +35,11 @@ class ActivityStructureGraphView extends StatefulWidget {
 class _ActivityStructureGraphViewState
     extends State<ActivityStructureGraphView> {
   /// Graph data structure for nodes and edges layout.
-  final Graph _graph = Graph()
-    ..isTree = false;
+  final Graph _graph = Graph()..isTree = false;
 
   /// Tree layout configuration compatible with BuchheimWalker algorithm.
   final BuchheimWalkerConfiguration _configuration =
-  CustomBuchheimWalkerConfiguration();
+      CustomBuchheimWalkerConfiguration();
 
   static const double paddingVertical = 60;
   static const double paddingHorizontal = 640;
@@ -64,8 +62,7 @@ class _ActivityStructureGraphViewState
       _graph.addEdge(
         activityNode,
         prozessNode,
-        paint: Paint()
-          ..color = Colors.black87,
+        paint: Paint()..color = Colors.black87,
       );
     }
 
@@ -75,8 +72,7 @@ class _ActivityStructureGraphViewState
       _graph.addEdge(
         activityNode,
         taskNode,
-        paint: Paint()
-          ..color = Colors.black87,
+        paint: Paint()..color = Colors.black87,
       );
     }
   }
@@ -140,10 +136,10 @@ class _ActivityStructureGraphViewState
       child: entity is Activity
           ? _buildActivityBox(entity)
           : entity is Prozess
-          ? GraphItemProzessBox(prozess: entity)
-          : entity is Task
-          ? GraphItemTaskBox(task: entity)
-          : const SizedBox.shrink(),
+              ? GraphItemProzessBox(prozess: entity)
+              : entity is Task
+                  ? GraphItemTaskBox(task: entity)
+                  : const SizedBox.shrink(),
     );
   }
 
@@ -298,31 +294,29 @@ class _ActivityStructureGraphViewState
               )
             else
               ...prozess.orderedStages.map(
-                    (stage) =>
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.subdirectory_arrow_right,
-                            size: 12,
-                            color: Colors.teal,
-                          ),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              stage.name,
-                              style: TextStyle(
-                                fontSize: 11.5,
-                                color: DebugConstants.graphBoxTextColor(
-                                    context),
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
+                (stage) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.subdirectory_arrow_right,
+                        size: 12,
+                        color: Colors.teal,
                       ),
-                    ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          stage.name,
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            color: DebugConstants.graphBoxTextColor(context),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
           ],
         ),

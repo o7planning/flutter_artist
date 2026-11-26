@@ -4,7 +4,7 @@ import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 import '../../../core/_core_/core.dart';
 import '../../../core/_core_/_enums_/_enums.dart';
 import '../../../core/icon/icon_constants.dart';
-import '../../../core/widgets/_custom_app_container.dart';
+import '../../../core/widgets/__widgets.dart';
 
 class ConditionGroupView extends StatelessWidget {
   final ConditionGroupModelImpl conditionGroupModel;
@@ -21,7 +21,7 @@ class ConditionGroupView extends StatelessWidget {
 
     final bool isOr = conditionGroupModel.connector == FilterConnector.or;
     final Color connectorColor =
-    isOr ? colorScheme.tertiary : colorScheme.primary;
+        isOr ? colorScheme.tertiary : colorScheme.primary;
 
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),
@@ -97,8 +97,7 @@ class ConditionGroupView extends StatelessWidget {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: Theme
-                  .of(context)
+              color: Theme.of(context)
                   .colorScheme
                   .onSurface
                   .withValues(alpha: 0.6),

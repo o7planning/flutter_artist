@@ -37,7 +37,10 @@ enum ExecutionUnitType {
   task,
   stage,
   prozess,
-  activity;
+  activity,
+  //
+  lovClear,
+  lovQuery;
 
   String asDebugExecutionUnit([String? forName]) {
     if (forName == null) {

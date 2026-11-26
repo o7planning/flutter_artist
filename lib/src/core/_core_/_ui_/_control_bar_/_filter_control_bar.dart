@@ -68,6 +68,9 @@ class _FilterControlBarState extends _BaseControlBarState<
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   Widget? buildStandardButton(FilterControlBarItem item) {
     final type = item.type ?? FilterControlBarItemType.custom;
     switch (type) {

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_artist_commons_ui/flutter_artist_commons_ui.dart';
 
-import '../../../core/_core_/core.dart';
 import '../../../core/_core_/_enums_/_enums.dart';
+import '../../../core/_core_/core.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/utils/__utils.dart';
-
-import '../../../core/widgets/_custom_app_container.dart';
+import '../../../core/widgets/__widgets.dart';
 
 class FilterCriterionDefView extends StatelessWidget {
   final FilterCriterionDef criterion;
@@ -20,7 +19,7 @@ class FilterCriterionDefView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isSimple = criterion is SimpleFilterCriterionDef;
+    final isPlain = criterion is PlainFilterCriterionDef;
 
     return CustomAppContainer(
       margin: const EdgeInsets.all(5),
@@ -34,14 +33,14 @@ class FilterCriterionDefView extends StatelessWidget {
             dense: true,
             horizontalTitleGap: 8,
             leading: Icon(
-              isSimple
-                  ? FaIconConstants.simplePropOrCriterionIconData
-                  : FaIconConstants.optPropOrCriterionIconData,
+              isPlain
+                  ? FaIconConstants.plainPropOrCriterionIconData
+                  : FaIconConstants.managedPropOrCriterionIconData,
               size: 20,
               color: colorScheme.primary,
             ),
             title: IconLabelSelectableText(
-              label: isSimple
+              label: isPlain
                   ? 'Criterion Base Name: '
                   : 'Multi Opt Criterion Base Name: ',
               text: criterion.criterionBaseName,
@@ -70,9 +69,9 @@ class FilterCriterionDefView extends StatelessWidget {
             ),
           ),
           const Divider(height: 20),
-          if (criterion is MultiOptFilterCriterionDef) ...[
+          if (criterion is ManagedOptFilterCriterionDef) ...[
             _buildSelectionTypeRow(
-                context, criterion as MultiOptFilterCriterionDef),
+                context, criterion as ManagedOptFilterCriterionDef),
             const Divider(height: 20),
           ],
           Expanded(
@@ -86,11 +85,11 @@ class FilterCriterionDefView extends StatelessWidget {
   }
 
   Widget _buildSelectionTypeRow(BuildContext context,
-      MultiOptFilterCriterionDef def) {
+      ManagedOptFilterCriterionDef def) {
     final colorScheme = Theme
         .of(context)
         .colorScheme;
-    final isMulti = def.selectionMode == MultiOptSelectionMode.multi;
+    final isMulti = def.selectionMode == ManagedOptSelectionMode.multi;
 
     return Row(
       children: [

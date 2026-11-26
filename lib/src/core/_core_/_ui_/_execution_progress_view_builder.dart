@@ -83,6 +83,9 @@ class _ExecutionProgressBuilderState
   @override
   TaskViewContext? get taskViewContext => null;
 
+  @override
+  LovViewContext? get lovViewContext => null;
+
   bool isMatches(
       {required Object owner, required ExecutionUnitType executionUnitType}) {
     if (!widget.executionUnitTypes.contains(executionUnitType)) {

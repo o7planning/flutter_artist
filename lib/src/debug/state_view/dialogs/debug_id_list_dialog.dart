@@ -27,45 +27,45 @@ class DebugIdListDialog<ID extends Comparable> extends StatelessWidget {
           Expanded(
             child: idList.isEmpty
                 ? const Center(
-              child: Text(
-                "No IDs present.",
-                style: TextStyle(color: Colors.grey, fontSize: 13),
-              ),
-            )
+                    child: Text(
+                      "No IDs present.",
+                      style: TextStyle(color: Colors.grey, fontSize: 13),
+                    ),
+                  )
                 : ListView.separated(
-              itemCount: idList.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
-              itemBuilder: (context, index) {
-                final idValue = idList[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 6, horizontal: 4),
-                  child: Row(
-                    children: [
-                      Text(
-                        "#${index + 1}",
-                        style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey,
+                    itemCount: idList.length,
+                    separatorBuilder: (_, __) => const Divider(height: 1),
+                    itemBuilder: (context, index) {
+                      final idValue = idList[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 6, horizontal: 4),
+                        child: Row(
+                          children: [
+                            Text(
+                              "#${index + 1}",
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: SelectableText(
+                                idValue.toString(),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'monospace',
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: SelectableText(
-                          idValue.toString(),
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'monospace',
-                          ),
-                        ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),

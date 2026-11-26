@@ -77,9 +77,9 @@ class ShelfBlockScalarTypeWidget extends StatelessWidget {
     return description == null
         ? w
         : Tooltip(
-      message: description,
-      child: w,
-    );
+            message: description,
+            child: w,
+          );
   }
 
   Widget _buildBlockOrScalar() {

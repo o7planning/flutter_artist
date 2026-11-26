@@ -5,10 +5,10 @@ part of '../_login.dart';
 /// Developers can instantiate this class directly or subclass it to override initial
 /// default values (e.g., pre-filling a remembered username).
 abstract class SimpleLoginTaskFormModel<
-USER extends ILoggedInUser, //
-FORM_PATCH extends FormPatch,
-FORM_OUTPUT extends FormOutput // CredentialsFormOutput
-> extends TaskFormModel<
+    USER extends ILoggedInUser, //
+    FORM_PATCH extends FormPatch,
+    FORM_OUTPUT extends FormOutput // CredentialsFormOutput
+    > extends TaskFormModel<
     EmptyTaskInitData, //
     SimpleLoginTaskResultData<USER>,
     FORM_PATCH,
@@ -20,16 +20,16 @@ FORM_OUTPUT extends FormOutput // CredentialsFormOutput
   @override
   FormModelStructure defineFormModelStructure() {
     return FormModelStructure(
-      simplePropDefs: [
-        SimpleFormPropDef<String>(propName: propUserName),
-        SimpleFormPropDef<String>(propName: propPassword),
+      plainPropDefs: [
+        PlainFormPropDef<String>(propName: propUserName),
+        PlainFormPropDef<String>(propName: propPassword),
       ],
-      multiOptPropDefs: const [],
+      managedOptPropDefs: const [],
     );
   }
 
   @override
-  Map<String, dynamic>? extractSimplePropValuesFromInitData({
+  Map<String, dynamic>? extractPlainPropValuesFromInitData({
     required EmptyAdditionalFormRelatedData additionalFormRelatedData,
     required EmptyTaskInitData initData,
   }) {
@@ -37,11 +37,11 @@ FORM_OUTPUT extends FormOutput // CredentialsFormOutput
   }
 
   @override
-  OptValueWrap<Object>? extractMultiOptPropValueFromInitData({
-    required String multiOptPropName,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required XData<dynamic, dynamic, dynamic> multiOptPropXData,
-    required Object? parentMultiOptPropValue,
+  OptValueWrap<Object>? extractManagedOptPropValueFromInitData({
+    required String managedOptPropName,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required XData<dynamic, dynamic, dynamic> managedOptPropXData,
+    required Object? parentManagedOptPropValue,
     required EmptyAdditionalFormRelatedData additionalFormRelatedData,
     required EmptyTaskInitData initData,
   }) {
@@ -56,45 +56,13 @@ FORM_OUTPUT extends FormOutput // CredentialsFormOutput
   }
 
   @override
-  Future<XData<dynamic, dynamic, dynamic>?> performLoadMultiOptPropXData({
-    required String multiOptPropName,
-    required MultiOptSelectionMode multiOptSelectionMode,
-    required Object? parentMultiOptPropValue,
+  Future<XData<dynamic, dynamic, dynamic>?> performLoadManagedOptPropXData({
+    required String managedOptPropName,
+    required ManagedOptSelectionMode managedOptSelectionMode,
+    required Object? parentManagedOptPropValue,
     required EmptyAdditionalFormRelatedData additionalFormRelatedData,
     required EmptyTaskInitData? initData,
   }) async {
     return null;
   }
-
-// @override
-// Map<String, SimpleValueWrap<Object>?>? extractPatchValuesForSimpleProps({
-//   required EmptyFormPatch formPatch,
-// }) {
-//   return null;
-// }
-//
-// @override
-// OptValueWrap<Object>? extractPatchValueForMultiOptProp({
-//   required String multiOptPropName,
-//   required MultiOptSelectionMode multiOptSelectionMode,
-//   required XData<dynamic, dynamic, dynamic> multiOptPropXData,
-//   required Object? parentMultiOptPropValue,
-//   required EmptyFormPatch formPatch,
-// }) {
-//   return null;
-// }
-
-// @override
-// CredentialsFormOutput convertToFormOutput({
-//   required Map<String, dynamic> formMapData,
-// }) {
-//   final String userName =
-//       (formMapData[propUserName] as String?)?.trim() ?? "";
-//   final String password = (formMapData[propPassword] as String?) ?? "";
-//
-//   return CredentialsFormOutput(
-//     userName: userName,
-//     password: password,
-//   );
-// }
 }

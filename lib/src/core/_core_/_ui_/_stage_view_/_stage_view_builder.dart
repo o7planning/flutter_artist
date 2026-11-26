@@ -66,6 +66,9 @@ class _StageViewBuilderState
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   void addWidgetState({required bool isVisible}) {
     widget.stage.ui._addStageBaseViewWidgetState(
       widgetState: this,

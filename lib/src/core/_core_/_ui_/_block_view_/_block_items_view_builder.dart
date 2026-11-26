@@ -32,7 +32,6 @@ class _BlockItemsViewBuilderState
     return widget.block.shelf;
   }
 
-
   @override
   FocusRegionType getRegionType() {
     return FocusRegionType.blockItemsView;
@@ -62,6 +61,9 @@ class _BlockItemsViewBuilderState
 
   @override
   TaskViewContext? get taskViewContext => null;
+
+  @override
+  LovViewContext? get lovViewContext => null;
 
   @override
   void addWidgetState({required bool isVisible}) {
@@ -136,5 +138,4 @@ class _BlockItemsViewBuilderState
   void setBuildingState({required bool isBuilding}) {
     //
   }
-
 }

@@ -4,8 +4,8 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
   _XShelfShelfNaturalQuery({
     required super.shelf,
   }) : super(
-    xShelfType: XShelfType.naturalQuery,
-  ) {
+          xShelfType: XShelfType.naturalQuery,
+        ) {
     for (XScalar leafXScalar in allLeafXScalars) {
       XScalar? xScalar = leafXScalar;
       while (true) {
@@ -41,8 +41,8 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
             xBlock.setQueryHintToGreater(QueryHint.force);
           }
         }
-        XBlockFormModel? xBlockFormModel = xBlock.xBlockCurrentItemModel
-            .xBlockFormModel;
+        XBlockFormModel? xBlockFormModel =
+            xBlock.xBlockCurrentItemModel.xBlockFormModel;
         if (xBlockFormModel != null &&
             xBlockFormModel.formModel.ui.hasVisibleViews()) {
           if (xBlockFormModel.formModel.dataState.isPending ||
@@ -57,6 +57,15 @@ class _XShelfShelfNaturalQuery extends _XShelfBaseQuery {
           }
         }
         xBlock = xBlock.parentXBlock;
+      }
+    }
+    //
+    for (XLovModel xLovModel in allXLovModels) {
+      if (xLovModel.lovModel.ui.hasLovContext()) {
+        if (xLovModel.lovModel.dataState.isPending ||
+            xLovModel.lovModel.dataState.isLoadedStale) {
+          xLovModel.setQueryHintToGreater(QueryHint.force);
+        }
       }
     }
   }

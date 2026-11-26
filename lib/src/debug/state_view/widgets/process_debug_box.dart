@@ -138,9 +138,11 @@ class ProzessDebugBox extends BaseDebugBox {
     ];
   }
 
-  Widget _buildStagePill(BuildContext context,
-      Stage stage,
-      StageEnum? currentStageId,) {
+  Widget _buildStagePill(
+    BuildContext context,
+    Stage stage,
+    StageEnum? currentStageId,
+  ) {
     final bool isCurrent = stage.stageId == currentStageId;
     final Color color = _getStageColor(stage.dataState);
 
@@ -174,7 +176,7 @@ class ProzessDebugBox extends BaseDebugBox {
                   width: 5,
                   height: 5,
                   decoration:
-                  BoxDecoration(color: color, shape: BoxShape.circle),
+                      BoxDecoration(color: color, shape: BoxShape.circle),
                 ),
               ),
             Text(

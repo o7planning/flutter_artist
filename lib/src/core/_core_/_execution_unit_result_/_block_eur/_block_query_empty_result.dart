@@ -2,8 +2,10 @@ part of '../../core.dart';
 
 /// Execution unit result representing the outcome of a [Block.queryEmpty] operation.
 class BlockQueryEmptyResult<ID extends Comparable,
-        ITEM extends Identifiable<ID>, ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockExecutionUnitResult<ID, ITEM, ITEM_DETAIL,
+ITEM extends Identifiable<ID>, ITEM_DETAIL extends Identifiable<ID>>
+    extends BlockExecutionUnitResult<ID,
+        ITEM,
+        ITEM_DETAIL,
         BlockQueryEmptyPrecheck> {
   bool _isFilterError = false;
 
@@ -25,8 +27,7 @@ class BlockQueryEmptyResult<ID extends Comparable,
   /// Creates a [BlockQueryEmptyResult] mirroring the execution outcome
   /// of an internal [BlockQueryResult] produced by empty-query execution.
   factory BlockQueryEmptyResult._fromQueryResult(
-    BlockQueryResult<ID, ITEM, ITEM_DETAIL> queryResult,
-  ) {
+      BlockQueryResult<ID, ITEM, ITEM_DETAIL> queryResult,) {
     return BlockQueryEmptyResult._(
       errorInfo: queryResult.errorInfo,
       isFilterError: queryResult._isFilterError,

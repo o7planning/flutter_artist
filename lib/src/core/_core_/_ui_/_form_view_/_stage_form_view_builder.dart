@@ -54,6 +54,9 @@ class _StageFormViewBuilderState
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   Widget buildContent(BuildContext context) {
     // Guard clause: Ensure StageFormView is correctly placed inside a ProzessStageFormViewSwitcher.
     final isValid = _StageFormViewSwitcherScope.maybeOf(context) != null;

@@ -9,8 +9,9 @@ class FilterModelStructure {
   //
   final Map<String, FilterCriterionDef> __allCriterionDefMap = {};
   final Map<String, FilterCriterionDef> __allFieldDefMap = {};
-  final Map<String, SimpleFilterCriterionDef> __simpleCriterionDefMap = {};
-  final Map<String, MultiOptFilterCriterionDef> __multiOptCriterionDefMap = {};
+  final Map<String, PlainFilterCriterionDef> __plainCriterionDefMap = {};
+  final Map<String, ManagedOptFilterCriterionDef> __managedOptCriterionDefMap =
+      {};
 
   //
   // Condition Defs:
@@ -31,13 +32,12 @@ class FilterModelStructure {
 
   // String tildeCriterionName.
   final Map<String, TildeFilterCriterionModel> _allCriterionModelMapX = {};
-  final Map<String, MultiOptTildeFilterCriterionModel>
-  _allOptCriterionModelMapX = {};
 
-  final List<MultiOptTildeFilterCriterionModel> _rootOptCriterionModels = [];
-  final List<SimpleTildeFilterCriterionModel> _simpleCriterionModels = [];
+  final List<ManagedOptTildeFilterCriterionModel>
+      _rootManagedOptCriterionModels = [];
+  final List<PlainTildeFilterCriterionModel> _plainCriterionModels = [];
   final List<CalculatedTildeFilterCriterionModel> _calculatedCriterionModels =
-  [];
+      [];
 
   late final FilterModel filterModel;
   FilterDataState _draftFilterDataState = FilterDataStatePending();
@@ -48,15 +48,15 @@ class FilterModelStructure {
     required this.criteriaStructure,
     required this.conditionStructure,
   }) {
-    for (SimpleFilterCriterionDef simpleCriterionDef
-    in criteriaStructure.simpleCriterionDefs) {
-      __initSimpleCriterionDef(simpleCriterionDef: simpleCriterionDef);
+    for (PlainFilterCriterionDef plainCriterionDef
+        in criteriaStructure.plainCriterionDefs) {
+      __initPlainCriterionDef(plainCriterionDef: plainCriterionDef);
     }
     //
-    for (MultiOptFilterCriterionDef multiOptCriterionDef
-    in criteriaStructure.multiOptCriterionDefs) {
-      __initMultiOptFilterCriterionDefCascade(
-        multiOptCriterionDef: multiOptCriterionDef,
+    for (ManagedOptFilterCriterionDef managedOptCriterionDef
+        in criteriaStructure.managedOptCriterionDefs) {
+      __initManagedOptFilterCriterionDefCascade(
+        managedOptCriterionDef: managedOptCriterionDef,
         parent: null,
       );
     }
@@ -93,18 +93,18 @@ class FilterModelStructure {
     //
     // Create Criterion Models:
     //
-    for (SimpleFilterCriterionDef criterionDef
-    in criteriaStructure.simpleCriterionDefs) {
+    for (PlainFilterCriterionDef criterionDef
+        in criteriaStructure.plainCriterionDefs) {
       for (String tildeSuffix in criterionDef._tildeSuffixes) {
-        __createSimpleTildeCriterionModel(
-          simpleCriterionDef: criterionDef,
+        __createPlainTildeCriterionModel(
+          plainCriterionDef: criterionDef,
           tildeSuffix: tildeSuffix,
         );
       }
     }
-    for (MultiOptFilterCriterionDef rootOptDef
-    in criteriaStructure.multiOptCriterionDefs) {
-      __createMultiOptTildeCriterionModelCascade(
+    for (ManagedOptFilterCriterionDef rootOptDef
+        in criteriaStructure.managedOptCriterionDefs) {
+      __createManagedOptTildeCriterionModelCascade(
         optCriterionDef: rootOptDef,
         parentOptTildeCriterionModel: null,
       );
@@ -114,28 +114,28 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void __createSimpleTildeCriterionModel({
-    required SimpleFilterCriterionDef simpleCriterionDef,
+  void __createPlainTildeCriterionModel({
+    required PlainFilterCriterionDef plainCriterionDef,
     required String tildeSuffix,
   }) {
     final String tildeCriterionName = TildeObj.createNameTilde(
-      baseName: simpleCriterionDef.criterionBaseName,
+      baseName: plainCriterionDef.criterionBaseName,
       tildeSuffix: tildeSuffix,
     );
-    final model = simpleCriterionDef.createTildeCriterionModel(
+    final model = plainCriterionDef.createTildeCriterionModel(
       tildeCriterionName: tildeCriterionName,
-      criterionName: simpleCriterionDef.criterionBaseName,
+      criterionName: plainCriterionDef.criterionBaseName,
       tildeSuffix: tildeSuffix,
     );
-    _simpleCriterionModels.add(model);
+    _plainCriterionModels.add(model);
     _allCriterionModelMapX[tildeCriterionName] = model;
   }
 
   // ***************************************************************************
 
-  void __createMultiOptTildeCriterionModelCascade({
-    required MultiOptFilterCriterionDef optCriterionDef,
-    required MultiOptTildeFilterCriterionModel? parentOptTildeCriterionModel,
+  void __createManagedOptTildeCriterionModelCascade({
+    required ManagedOptFilterCriterionDef optCriterionDef,
+    required ManagedOptTildeFilterCriterionModel? parentOptTildeCriterionModel,
   }) {
     for (String tildeSuffix in optCriterionDef._tildeSuffixes) {
       final String tildeCriterionName = TildeObj.createNameTilde(
@@ -161,15 +161,15 @@ class FilterModelStructure {
       );
       //
       if (parentOptTildeCriterionModel == null) {
-        _rootOptCriterionModels.add(tildeCriterionModel);
+        _rootManagedOptCriterionModels.add(tildeCriterionModel);
       } else {
         parentOptTildeCriterionModel._children.add(tildeCriterionModel);
       }
       //
       _allCriterionModelMapX[tildeCriterionName] = tildeCriterionModel;
       //
-      for (MultiOptFilterCriterionDef childDef in optCriterionDef._children) {
-        __createMultiOptTildeCriterionModelCascade(
+      for (ManagedOptFilterCriterionDef childDef in optCriterionDef._children) {
+        __createManagedOptTildeCriterionModelCascade(
           optCriterionDef: childDef,
           parentOptTildeCriterionModel: tildeCriterionModel,
         );
@@ -179,58 +179,58 @@ class FilterModelStructure {
 
   // ***************************************************************************
 
-  void __initSimpleCriterionDef({
-    required SimpleFilterCriterionDef simpleCriterionDef,
+  void __initPlainCriterionDef({
+    required PlainFilterCriterionDef plainCriterionDef,
   }) {
-    if (__allCriterionDefMap
-        .containsKey(simpleCriterionDef.criterionBaseName)) {
+    if (__allCriterionDefMap.containsKey(plainCriterionDef.criterionBaseName)) {
       throw FilterCriterionDuplicateNameError(
-        criterionBaseName: simpleCriterionDef.criterionBaseName,
+        criterionBaseName: plainCriterionDef.criterionBaseName,
       );
     }
-    if (__allFieldDefMap.containsKey(simpleCriterionDef.fieldName)) {
+    if (__allFieldDefMap.containsKey(plainCriterionDef.fieldName)) {
       throw FilterCriterionDuplicateFieldNameError(
-        criterionBaseName: simpleCriterionDef.criterionBaseName,
-        fieldName: simpleCriterionDef.fieldName,
+        criterionBaseName: plainCriterionDef.criterionBaseName,
+        fieldName: plainCriterionDef.fieldName,
       );
     }
-    __allCriterionDefMap[simpleCriterionDef.criterionBaseName] =
-        simpleCriterionDef;
-    __allFieldDefMap[simpleCriterionDef.fieldName] = simpleCriterionDef;
-    __simpleCriterionDefMap[simpleCriterionDef.criterionBaseName] =
-        simpleCriterionDef;
+    __allCriterionDefMap[plainCriterionDef.criterionBaseName] =
+        plainCriterionDef;
+    __allFieldDefMap[plainCriterionDef.fieldName] = plainCriterionDef;
+    __plainCriterionDefMap[plainCriterionDef.criterionBaseName] =
+        plainCriterionDef;
   }
 
   // ***************************************************************************
 
-  void __initMultiOptFilterCriterionDefCascade({
-    required MultiOptFilterCriterionDef multiOptCriterionDef,
-    required MultiOptFilterCriterionDef? parent,
+  void __initManagedOptFilterCriterionDefCascade({
+    required ManagedOptFilterCriterionDef managedOptCriterionDef,
+    required ManagedOptFilterCriterionDef? parent,
   }) {
     if (__allCriterionDefMap
-        .containsKey(multiOptCriterionDef.criterionBaseName)) {
+        .containsKey(managedOptCriterionDef.criterionBaseName)) {
       throw FilterCriterionDuplicateNameError(
-        criterionBaseName: multiOptCriterionDef.criterionBaseName,
+        criterionBaseName: managedOptCriterionDef.criterionBaseName,
       );
     }
-    if (__allFieldDefMap.containsKey(multiOptCriterionDef.fieldName)) {
+    if (__allFieldDefMap.containsKey(managedOptCriterionDef.fieldName)) {
       throw FilterCriterionDuplicateFieldNameError(
-        criterionBaseName: multiOptCriterionDef.criterionBaseName,
-        fieldName: multiOptCriterionDef.fieldName,
+        criterionBaseName: managedOptCriterionDef.criterionBaseName,
+        fieldName: managedOptCriterionDef.fieldName,
       );
     }
     // Init LAZY Property.
-    multiOptCriterionDef.parent = parent;
-    __allCriterionDefMap[multiOptCriterionDef.criterionBaseName] =
-        multiOptCriterionDef;
-    __allFieldDefMap[multiOptCriterionDef.fieldName] = multiOptCriterionDef;
-    __multiOptCriterionDefMap[multiOptCriterionDef.criterionBaseName] =
-        multiOptCriterionDef;
+    managedOptCriterionDef.parent = parent;
+    __allCriterionDefMap[managedOptCriterionDef.criterionBaseName] =
+        managedOptCriterionDef;
+    __allFieldDefMap[managedOptCriterionDef.fieldName] = managedOptCriterionDef;
+    __managedOptCriterionDefMap[managedOptCriterionDef.criterionBaseName] =
+        managedOptCriterionDef;
     //
-    for (MultiOptFilterCriterionDef child in multiOptCriterionDef._children) {
-      __initMultiOptFilterCriterionDefCascade(
-        multiOptCriterionDef: child,
-        parent: multiOptCriterionDef,
+    for (ManagedOptFilterCriterionDef child
+        in managedOptCriterionDef._children) {
+      __initManagedOptFilterCriterionDefCascade(
+        managedOptCriterionDef: child,
+        parent: managedOptCriterionDef,
       );
     }
   }
@@ -256,11 +256,12 @@ class FilterModelStructure {
   }
 
   void __debugTildeCriterionNames({
-    required MultiOptFilterCriterionDef multiOptCriterionDef,
+    required ManagedOptFilterCriterionDef managedOptCriterionDef,
   }) {
-    multiOptCriterionDef.printDebugSuffixes();
-    for (MultiOptFilterCriterionDef child in multiOptCriterionDef._children) {
-      __debugTildeCriterionNames(multiOptCriterionDef: child);
+    managedOptCriterionDef.printDebugSuffixes();
+    for (ManagedOptFilterCriterionDef child
+        in managedOptCriterionDef._children) {
+      __debugTildeCriterionNames(managedOptCriterionDef: child);
     }
   }
 
@@ -277,7 +278,7 @@ class FilterModelStructure {
       conditionDef.__group = parentGroupDef;
       //
       final FilterCriterionDef? criterionDef =
-      __allCriterionDefMap[conditionDef.criterionName];
+          __allCriterionDefMap[conditionDef.criterionName];
       if (criterionDef == null) {
         throw TildeFilterCriterionBaseCriterionNotFoundError(
           criterionBaseName: conditionDef.criterionName,
@@ -288,12 +289,12 @@ class FilterModelStructure {
       conditionDef.criterionDef = criterionDef;
       criterionDef._tildeSuffixes.add(conditionDef.tildeSuffix);
       //
-      if (criterionDef is MultiOptFilterCriterionDef) {
+      if (criterionDef is ManagedOptFilterCriterionDef) {
         TildeCriterionConfig tildeCriterionConfig =
-        criterionDef.findOrCreateTildeCriterionConfig(
+            criterionDef.findOrCreateTildeCriterionConfig(
           tildeSuffix: conditionDef.tildeSuffix,
         );
-        MultiOptFilterCriterionDef? p = criterionDef;
+        ManagedOptFilterCriterionDef? p = criterionDef;
         while (true) {
           p = p?.parent;
           if (p == null) {
@@ -351,11 +352,11 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  // SAME-AS: #0007 (formModelStructure.allMultiOptProps)
-  List<MultiOptTildeFilterCriterionModel> get allMultiOptCriteria {
+  // SAME-AS: #0007 (formModelStructure.allManagedOptProps)
+  List<ManagedOptTildeFilterCriterionModel> get allManagedOptCriteria {
     return _allCriterionModelMapX.values
-        .whereType<MultiOptTildeFilterCriterionModel>()
-        .cast<MultiOptTildeFilterCriterionModel>()
+        .whereType<ManagedOptTildeFilterCriterionModel>()
+        .cast<ManagedOptTildeFilterCriterionModel>()
         .toList();
   }
 
@@ -364,7 +365,7 @@ class FilterModelStructure {
 
   dynamic _getCurrentCriterionValue({required String tildeCriterionName}) {
     TildeFilterCriterionModel? criterion =
-    _allCriterionModelMapX[tildeCriterionName];
+        _allCriterionModelMapX[tildeCriterionName];
     if (criterion != null) {
       return criterion._currentValue;
     }
@@ -399,12 +400,12 @@ class FilterModelStructure {
   // }
 
   @DebugMethodAnnotation()
-  List<MultiOptTildeFilterCriterionModel> get debugRootOptCriteria =>
-      _rootOptCriterionModels;
+  List<ManagedOptTildeFilterCriterionModel> get debugRootManagedOptCriteria =>
+      _rootManagedOptCriterionModels;
 
   @DebugMethodAnnotation()
-  List<SimpleTildeFilterCriterionModel<dynamic>> get debugSimpleCriteria =>
-      _simpleCriterionModels;
+  List<PlainTildeFilterCriterionModel<dynamic>> get debugPlainCriteria =>
+      _plainCriterionModels;
 
   // ***************************************************************************
   // ***************************************************************************
@@ -426,11 +427,11 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  MultiOptTildeFilterCriterionModel? _getMultiOptFilterCriterion(
-      String multiOptTildeCriterionName) {
+  ManagedOptTildeFilterCriterionModel? _getManagedOptFilterCriterion(
+      String managedOptTildeCriterionName) {
     TildeFilterCriterionModel? criterion =
-    _allCriterionModelMapX[multiOptTildeCriterionName];
-    if (criterion is MultiOptTildeFilterCriterionModel) {
+        _allCriterionModelMapX[managedOptTildeCriterionName];
+    if (criterion is ManagedOptTildeFilterCriterionModel) {
       return criterion;
     }
     return null;
@@ -439,11 +440,11 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  SimpleTildeFilterCriterionModel? _getSimpleFilterCriterion(
+  PlainTildeFilterCriterionModel? _getPlainFilterCriterion(
       String tildeCriterionName) {
     TildeFilterCriterionModel? criterion =
-    _allCriterionModelMapX[tildeCriterionName];
-    if (criterion is SimpleTildeFilterCriterionModel) {
+        _allCriterionModelMapX[tildeCriterionName];
+    if (criterion is PlainTildeFilterCriterionModel) {
       return criterion;
     }
     return null;
@@ -452,8 +453,8 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  bool _isMultiOptFilterCriterion(String tildeCriterionName) {
-    return _getMultiOptFilterCriterion(tildeCriterionName) != null;
+  bool _isManagedOptFilterCriterion(String tildeCriterionName) {
+    return _getManagedOptFilterCriterion(tildeCriterionName) != null;
   }
 
   // ***************************************************************************
@@ -484,9 +485,9 @@ class FilterModelStructure {
             //
             if (formKeyInstantValues
                 .containsKey(criterion.tildeCriterionName)) {
-              if (criterion is SimpleTildeFilterCriterionModel) {
+              if (criterion is PlainTildeFilterCriterionModel) {
                 criterion._tempCurrentValue =
-                formKeyInstantValues[criterion.tildeCriterionName];
+                    formKeyInstantValues[criterion.tildeCriterionName];
               }
             }
           }
@@ -497,9 +498,9 @@ class FilterModelStructure {
           criterion._tempInitialXData = criterion._initialXData;
           //
           if (formKeyInstantValues.containsKey(criterion.tildeCriterionName)) {
-            if (criterion is SimpleTildeFilterCriterionModel) {
+            if (criterion is PlainTildeFilterCriterionModel) {
               criterion._tempCurrentValue =
-              formKeyInstantValues[criterion.tildeCriterionName];
+                  formKeyInstantValues[criterion.tildeCriterionName];
             }
           }
       }
@@ -511,11 +512,11 @@ class FilterModelStructure {
 
   dynamic _getTempCurrentCriterionValue({required String tildeCriterionName}) {
     TildeFilterCriterionModel? criterion =
-    _allCriterionModelMapX[tildeCriterionName];
+        _allCriterionModelMapX[tildeCriterionName];
     if (criterion == null) {
       return null;
     }
-    if (criterion is MultiOptTildeFilterCriterionModel) {
+    if (criterion is ManagedOptTildeFilterCriterionModel) {
       return criterion._tempCurrentValue;
     }
     return null;
@@ -524,28 +525,28 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _updateChildrenMultiOptValueToNullCascade({
-    required MultiOptTildeFilterCriterionModel multiOptCriterion,
+  void _updateChildrenManagedOptValueToNullCascade({
+    required ManagedOptTildeFilterCriterionModel managedOptCriterion,
   }) {
-    for (MultiOptTildeFilterCriterionModel child
-    in multiOptCriterion.children) {
+    for (ManagedOptTildeFilterCriterionModel child
+        in managedOptCriterion.children) {
       child._tempCurrentValue = null;
       child._tempCurrentXData = null;
       //
-      _updateChildrenMultiOptValueToNullCascade(multiOptCriterion: child);
+      _updateChildrenManagedOptValueToNullCascade(managedOptCriterion: child);
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  XData? _getTempMultiOptCriterionXData(String tildeCriterionName) {
+  XData? _getTempManagedOptCriterionXData(String tildeCriterionName) {
     TildeFilterCriterionModel? criterion =
-    _allCriterionModelMapX[tildeCriterionName];
+        _allCriterionModelMapX[tildeCriterionName];
     if (criterion == null) {
       return null;
     }
-    if (criterion is MultiOptTildeFilterCriterionModel) {
+    if (criterion is ManagedOptTildeFilterCriterionModel) {
       return criterion._tempCurrentXData;
     }
     return null;
@@ -554,13 +555,13 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  XData? _getMultiOptTildeCriterionXData(String tildeCriterionName) {
+  XData? _getManagedOptTildeCriterionXData(String tildeCriterionName) {
     TildeFilterCriterionModel? criterion =
-    _allCriterionModelMapX[tildeCriterionName];
+        _allCriterionModelMapX[tildeCriterionName];
     if (criterion == null) {
       return null;
     }
-    if (criterion is MultiOptTildeFilterCriterionModel) {
+    if (criterion is ManagedOptTildeFilterCriterionModel) {
       return criterion._currentXData;
     }
     return null;
@@ -589,21 +590,21 @@ class FilterModelStructure {
     //
     for (String tildeCriterionName in candidateUpdateValues.keys) {
       TildeFilterCriterionModel? criterion =
-      _allCriterionModelMapX[tildeCriterionName];
+          _allCriterionModelMapX[tildeCriterionName];
       if (criterion != null) {
         criterion._markTempDirty = true;
       }
     }
     //
-    for (MultiOptTildeFilterCriterionModel rootCriterion
-    in _rootOptCriterionModels) {
+    for (ManagedOptTildeFilterCriterionModel rootCriterion
+        in _rootManagedOptCriterionModels) {
       rootCriterion._updateTempValueCascade(
         updateValues: candidateUpdateValues,
       );
     }
-    for (SimpleTildeFilterCriterionModel simpleCriterion
-    in _simpleCriterionModels) {
-      simpleCriterion._updateTempValue(
+    for (PlainTildeFilterCriterionModel plainCriterion
+        in _plainCriterionModels) {
+      plainCriterion._updateTempValue(
         updateValues: candidateUpdateValues,
       );
     }
@@ -621,7 +622,7 @@ class FilterModelStructure {
   void __addCriteriaIfNeed({required List<String> tildeCriterionNames}) {
     for (String tildeCriterionName in tildeCriterionNames) {
       TildeFilterCriterionModel? criterion =
-      _allCriterionModelMapX[tildeCriterionName];
+          _allCriterionModelMapX[tildeCriterionName];
       if (criterion == null) {
         // print("""\n
         //     ****************************************************************************************************
@@ -629,7 +630,7 @@ class FilterModelStructure {
         //     ****************************************************************************************************
         //     """);
         //
-        // _createAndAddNewSimpleCriterion(
+        // _createAndAddNewPlainCriterion(
         //   tildeCriterionName: tildeCriterionName,
         //   criterionName: criterionName,
         //   markTempDirty: false,
@@ -641,7 +642,7 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _createAndAddNewSimpleCriterion({
+  void _createAndAddNewPlainCriterion({
     required String tildeCriterionName,
     required String criterionName,
     required String tildeSuffix,
@@ -650,27 +651,27 @@ class FilterModelStructure {
     if (_allCriterionModelMapX.containsKey(tildeCriterionName)) {
       return;
     }
-    SimpleTildeFilterCriterionModel? newSimpleCriterion =
-    SimpleTildeFilterCriterionModel(
+    PlainTildeFilterCriterionModel? newPlainCriterion =
+        PlainTildeFilterCriterionModel(
       tildeCriterionName: tildeCriterionName,
       criterionName: criterionName,
       tildeSuffix: tildeSuffix,
     );
-    __initSimpleCriterion(
-      newSimpleCriterion: newSimpleCriterion,
+    __initPlainCriterion(
+      newPlainCriterion: newPlainCriterion,
       markTempDirty: markTempDirty,
     );
   }
 
-  void __initSimpleCriterion({
-    required SimpleTildeFilterCriterionModel newSimpleCriterion,
+  void __initPlainCriterion({
+    required PlainTildeFilterCriterionModel newPlainCriterion,
     required bool markTempDirty,
   }) {
-    newSimpleCriterion._structure = this;
-    newSimpleCriterion._markTempDirty = markTempDirty;
-    _allCriterionModelMapX[newSimpleCriterion.tildeCriterionName] =
-        newSimpleCriterion;
-    _simpleCriterionModels.add(newSimpleCriterion);
+    newPlainCriterion._structure = this;
+    newPlainCriterion._markTempDirty = markTempDirty;
+    _allCriterionModelMapX[newPlainCriterion.tildeCriterionName] =
+        newPlainCriterion;
+    _plainCriterionModels.add(newPlainCriterion);
   }
 
   // ***************************************************************************
@@ -690,43 +691,43 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setTempMultiOptCriterionXData({
-    required String multiOptTildeCriterionName,
-    required XData? multiOptXData,
+  void _setTempManagedOptCriterionXData({
+    required String managedOptTildeCriterionName,
+    required XData? managedOptXData,
   }) {
     TildeFilterCriterionModel? criterion =
-    _allCriterionModelMapX[multiOptTildeCriterionName];
+        _allCriterionModelMapX[managedOptTildeCriterionName];
     if (criterion == null) {
       throw AppError(
-          errorMessage: 'No Criterion "$multiOptTildeCriterionName"');
+          errorMessage: 'No Criterion "$managedOptTildeCriterionName"');
     }
-    if (criterion is MultiOptTildeFilterCriterionModel) {
-      criterion._tempCurrentXData = multiOptXData;
+    if (criterion is ManagedOptTildeFilterCriterionModel) {
+      criterion._tempCurrentXData = managedOptXData;
     } else {
       throw AppError(
           errorMessage:
-          'Invalid Criterion "$multiOptTildeCriterionName", it must be $MultiOptTildeFilterCriterionModel');
+              'Invalid Criterion "$managedOptTildeCriterionName", it must be $ManagedOptTildeFilterCriterionModel');
     }
   }
 
   // ***************************************************************************
   // ***************************************************************************
 
-  void _setTempSimpleCriterionValue({
+  void _setTempPlainCriterionValue({
     required String tildeCriterionName,
     required Object? value,
   }) {
     TildeFilterCriterionModel? criterion =
-    _allCriterionModelMapX[tildeCriterionName];
+        _allCriterionModelMapX[tildeCriterionName];
     if (criterion == null) {
       throw AppError(
         errorMessage: 'No tildeCriterionName "$tildeCriterionName"',
         errorDetails: null,
       );
-    } else if (criterion is! SimpleTildeFilterCriterionModel) {
+    } else if (criterion is! PlainTildeFilterCriterionModel) {
       throw AppError(
         errorMessage:
-        '"$tildeCriterionName" is not $SimpleTildeFilterCriterionModel',
+            '"$tildeCriterionName" is not $PlainTildeFilterCriterionModel',
         errorDetails: null,
       );
     }
@@ -752,8 +753,8 @@ class FilterModelStructure {
   void _printTemporaryInfo(String prefix) {
     print("\n\n--------------------------------------------------------------");
     print(" ---> $prefix");
-    for (MultiOptTildeFilterCriterionModel rootItem
-    in _rootOptCriterionModels) {
+    for (ManagedOptTildeFilterCriterionModel rootItem
+        in _rootManagedOptCriterionModels) {
       rootItem._printTempInfoCascade(indentFactor: 1);
     }
     print("--------------------------------------------------------------\n\n");
@@ -762,22 +763,23 @@ class FilterModelStructure {
   // ***************************************************************************
   // ***************************************************************************
 
-  MultiOptTildeFilterCriterionModel? _findMultiOptFilterCriterion({
-    required String multiOptTildeCriterionName,
+  ManagedOptTildeFilterCriterionModel? _findManagedOptFilterCriterion({
+    required String managedOptTildeCriterionName,
   }) {
     TildeFilterCriterionModel? criterion =
-    _allCriterionModelMapX[multiOptTildeCriterionName];
-    if (criterion is MultiOptTildeFilterCriterionModel) {
+        _allCriterionModelMapX[managedOptTildeCriterionName];
+    if (criterion is ManagedOptTildeFilterCriterionModel) {
       return criterion;
     }
     return null;
   }
 
-  int _debugGetMultiOptCriterionLoadCount({
-    required String multiOptTildeCriterionName,
+  int _debugGetManagedOptCriterionLoadCount({
+    required String managedOptTildeCriterionName,
   }) {
-    MultiOptTildeFilterCriterionModel? criterion = _findMultiOptFilterCriterion(
-      multiOptTildeCriterionName: multiOptTildeCriterionName,
+    ManagedOptTildeFilterCriterionModel? criterion =
+        _findManagedOptFilterCriterion(
+      managedOptTildeCriterionName: managedOptTildeCriterionName,
     );
     return criterion?._loadCount ?? 0;
   }

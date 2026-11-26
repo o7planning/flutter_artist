@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/_core_/core.dart';
 import '../../../../core/_core_/_enums_/_enums.dart';
-import '../../../dialog/data_debug_dialog.dart';
+import '../../../../core/_core_/core.dart';
 import '_base_info_widget.dart';
 
 class TaskResultDataInfoWidget extends BaseInfoWidget {
@@ -42,8 +41,8 @@ class TaskResultDataInfoWidget extends BaseInfoWidget {
       onPressed: task.submitResultData == null
           ? null
           : (BuildContext context) {
-              task.showDebugResultDataInspector();
-            },
+        task.showDebugResultDataInspector();
+      },
     );
   }
 }

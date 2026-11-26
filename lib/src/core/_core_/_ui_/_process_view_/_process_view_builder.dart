@@ -64,6 +64,9 @@ class _ProzessViewBuilderState
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   void addWidgetState({required bool isVisible}) {
     widget.prozess.ui._addProzessContentViewWidgetState(
       widgetState: this,

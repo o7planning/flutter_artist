@@ -69,6 +69,9 @@ class _TaskControlBarState extends _BaseControlBarState<
   TaskViewContext? get taskViewContext => widget.config.taskViewContext;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   Widget? buildStandardButton(TaskControlBarItem item) {
     final type = item.type ?? TaskControlBarItemType.custom;
 

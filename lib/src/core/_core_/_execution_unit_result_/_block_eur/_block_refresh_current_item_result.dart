@@ -3,8 +3,10 @@ part of '../../core.dart';
 /// Execution unit result representing the outcome of refreshing the active
 /// current item within a [Block].
 class BlockRefreshCurrentItemResult<ID extends Comparable,
-        ITEM extends Identifiable<ID>, ITEM_DETAIL extends Identifiable<ID>>
-    extends BlockExecutionUnitResult<ID, ITEM, ITEM_DETAIL,
+ITEM extends Identifiable<ID>, ITEM_DETAIL extends Identifiable<ID>>
+    extends BlockExecutionUnitResult<ID,
+        ITEM,
+        ITEM_DETAIL,
         BlockRefreshCurrentItemPrecheck> {
   /// The original current item targeted for refresh when the operation started.
   final ITEM? targetItem;
@@ -30,8 +32,7 @@ class BlockRefreshCurrentItemResult<ID extends Comparable,
   /// Creates a [BlockRefreshCurrentItemResult] mirroring the execution outcome
   /// and audit journal of an internal [BlockSetCurrentItemResult].
   factory BlockRefreshCurrentItemResult._fromSetCurrentItemResult(
-    BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL> source,
-  ) {
+      BlockSetCurrentItemResult<ID, ITEM, ITEM_DETAIL> source,) {
     final result = BlockRefreshCurrentItemResult<ID, ITEM, ITEM_DETAIL>(
       precheck: null,
       errorInfo: source.errorInfo,

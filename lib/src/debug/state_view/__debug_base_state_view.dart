@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/widgets/_table_container.dart';
+import '../../core/widgets/__widgets.dart';
 
 abstract class DebugBaseStateView extends StatelessWidget {
   const DebugBaseStateView({super.key});

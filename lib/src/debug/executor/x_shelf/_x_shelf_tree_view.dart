@@ -9,7 +9,7 @@ import '../../../core/_core_/core.dart';
 import '../../../core/icon/icon_constants.dart';
 import '../../../core/utils/__utils.dart';
 
-import '../../../core/widgets/_custom_app_container.dart';
+import '../../../core/widgets/__widgets.dart';
 import '_x_block_view.dart';
 import '_x_scalar_view.dart';
 import '_x_shelf_view.dart';
@@ -30,7 +30,7 @@ class XShelfTreeView extends StatefulWidget {
 
 class _XShelfTreeViewState extends State<XShelfTreeView> {
   final MultiSplitViewController _splitViewController =
-  MultiSplitViewController();
+      MultiSplitViewController();
 
   TreeViewController<dynamic, TreeNode<dynamic>>? _treeViewController;
   late TreeNode<dynamic> rootTreeNode;
@@ -71,12 +71,11 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
       parent: null,
     );
     _currentNode = xShelfNode;
-    rootTreeNode = TreeNode.root()
-      ..add(xShelfNode);
+    rootTreeNode = TreeNode.root()..add(xShelfNode);
     //
     List<XBlock> allRootXBlocks = widget.xShelf.allRootXBlocks;
-    for (XBlock multiOptCriterion in allRootXBlocks) {
-      _addXBlockCascade(xShelfNode, multiOptCriterion);
+    for (XBlock managedOptCriterion in allRootXBlocks) {
+      _addXBlockCascade(xShelfNode, managedOptCriterion);
     }
     List<XScalar> xScalars = widget.xShelf.allXScalars;
     for (XScalar xScalar in xScalars) {
@@ -142,7 +141,8 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
           thickness: 1,
         ),
         onTreeReady: (
-            TreeViewController<dynamic, TreeNode<dynamic>> controller,) {
+          TreeViewController<dynamic, TreeNode<dynamic>> controller,
+        ) {
           _treeViewController = controller;
           controller.expandAllChildren(rootTreeNode);
         },
@@ -182,7 +182,7 @@ class _XShelfTreeViewState extends State<XShelfTreeView> {
           } else if (data is XBlockFormModel) {
             title = data.name;
             tooltip = "FormModel: $title";
-            prefixIconData = FaIconConstants.optPropOrCriterionIconData;
+            prefixIconData = FaIconConstants.managedPropOrCriterionIconData;
           } else {
             prefixIconData = FaIconConstants.unknownIconData;
             title = "UKNOWN";

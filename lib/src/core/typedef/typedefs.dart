@@ -26,3 +26,7 @@ typedef AnyBlock = Block<
     FilterCriteria,
     CreationPreset,
     FormPatch>;
+
+/// Type alias representing any [DatasetModel] regardless of its concrete
+/// item and identifier types.
+typedef AnyDatasetModel = DatasetModel<Comparable, Identifiable<Comparable>>;

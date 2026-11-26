@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '_simple_accordion_section.dart';
+part of '__widgets.dart';
 
 class SimpleAccordion extends StatefulWidget {
   final List<SimpleAccordionSection> children;

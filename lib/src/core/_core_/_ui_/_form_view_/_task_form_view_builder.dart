@@ -55,6 +55,9 @@ class _TaskFormViewBuilderState
   TaskViewContext? get taskViewContext => TaskViewContext.form;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   Future<bool> handleSaveOnPop() async {
     throw UnimplementedError("TODO: handleSaveOnPop");
   }

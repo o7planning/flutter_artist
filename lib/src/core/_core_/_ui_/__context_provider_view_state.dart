@@ -51,6 +51,8 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
   @override
   ShowMode showMode = ShowMode.production;
 
+  LovViewContext? get lovViewContext;
+
   BlockViewContext? get blockViewContext;
 
   ScalarViewContext? get scalarContextType;
@@ -60,6 +62,9 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
   StageViewContext? get stageViewContext;
 
   TaskViewContext? get taskViewContext;
+
+  bool get provideLovItemsContext =>
+      lovViewContext?.provideItemsContext ?? false;
 
   bool get provideBlockItemsContext =>
       blockViewContext?.provideItemsContext ?? false;
@@ -115,6 +120,8 @@ abstract class _ContextProviderViewState<W extends _ContextProviderView>
         return provideStageInitDataContext;
       case ContextKind.prozessInitData:
         return provideProzessInitDataContext;
+      case ContextKind.lovItems:
+        return provideLovItemsContext;
     }
   }
 

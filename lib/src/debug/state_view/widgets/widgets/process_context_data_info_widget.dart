@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/_core_/_enums_/_enums.dart';
 import '../../../../core/_core_/core.dart';
-import '../../../dialog/data_debug_dialog.dart';
 import '_base_info_widget.dart';
 
 class ProzessContextDataInfoWidget extends BaseInfoWidget {
@@ -42,8 +41,8 @@ class ProzessContextDataInfoWidget extends BaseInfoWidget {
       onPressed: prozess.prozessContextData == null
           ? null
           : (BuildContext context) {
-              prozess.showDebugContextDataInspector();
-            },
+        prozess.showDebugContextDataInspector();
+      },
     );
   }
 }

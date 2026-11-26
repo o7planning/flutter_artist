@@ -33,7 +33,7 @@ class _DebugExecutionUnitViewState extends State<DebugExecutionUnitView> {
           color: Colors.black26,
         ),
         color:
-        widget.isInMainQueue ? Colors.cyan.withAlpha(20) : Colors.black12,
+            widget.isInMainQueue ? Colors.cyan.withAlpha(20) : Colors.black12,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

@@ -2,7 +2,6 @@ part of '../../core.dart';
 
 /// Utility class for building non-intrusive visual focus indicators and handling list navigation.
 class _ViewFocusUtils {
-
   /// Helper to handle Up / Down / Home / End arrow keys for any [Block] items list.
   static KeyEventResult handleBlockItemsKeyEvent({
     required Block block,
@@ -79,5 +78,13 @@ class _ViewFocusUtils {
 
     block.refreshItemAndSetAsCurrent(item: targetItem);
     return true;
+  }
+
+  static KeyEventResult handleLovItemsKeyEvent({
+    required LovModel lovModel,
+    required KeyEvent event,
+  }) {
+    print("TODO: handleLovItemsKeyEvent");
+    return KeyEventResult.ignored;
   }
 }

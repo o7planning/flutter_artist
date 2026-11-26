@@ -70,6 +70,9 @@ class _LoggedInUserBuilderState
   TaskViewContext? get taskViewContext => null;
 
   @override
+  LovViewContext? get lovViewContext => null;
+
+  @override
   Widget buildContent(BuildContext context) {
     ILoggedInUser? user = FlutterArtist.loggedInUser;
     //

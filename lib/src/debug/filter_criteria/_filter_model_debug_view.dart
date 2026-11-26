@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/_core_/core.dart';
 import '../../core/utils/__utils.dart';
-
-import '../../core/widgets/_custom_app_container.dart';
+import '../../core/widgets/__widgets.dart';
 import '../widgets/_html_info_view.dart';
 
 class FilterModelDebugView extends StatelessWidget {

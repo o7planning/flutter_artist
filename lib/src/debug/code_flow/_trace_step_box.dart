@@ -5,7 +5,7 @@ import '../../core/_core_/_enums_/_enums.dart';
 import '../../core/_core_/_sync_/_block_sync_session_snapshot.dart';
 import '../../core/_core_/core.dart';
 import '../../core/icon/icon_constants.dart';
-import '../../core/widgets/_html_selectable_rich_text.dart';
+import '../../core/widgets/__widgets.dart';
 import '../dialog/_error_viewer_dialog.dart';
 import '../dialog/_extra_info_viewer_dialog.dart';
 import '../dialog/_tip_document_viewer_dialog.dart';
@@ -54,12 +54,13 @@ class TraceStepBox extends StatelessWidget {
           children: [
             HtmlSelectableRichText(
               "${traceStep.shortDesc}${traceStep.getParametersAsHtmlString()}"
-              "${traceStep.getActionableAsHtmlString()}${traceStep.getNoteAsHtmlString()}",
+                  "${traceStep.getActionableAsHtmlString()}${traceStep
+                  .getNoteAsHtmlString()}",
               icon: Icon(
                 traceStep.traceStepType.getIconData(),
                 color: traceStep.showIconAndLabel
                     ? traceStep.traceStepType
-                        .getIconColor(context) // Đã dùng Semantic Color
+                    .getIconColor(context) // Đã dùng Semantic Color
                     : Colors.transparent,
                 size: 16,
               ),
@@ -78,7 +79,7 @@ class TraceStepBox extends StatelessWidget {
                 'code': TextStyle(
                   fontFamily: 'Courier',
                   backgroundColor:
-                      colorScheme.onSurface.withValues(alpha: 0.05),
+                  colorScheme.onSurface.withValues(alpha: 0.05),
                 ),
               },
               style: TextStyle(
@@ -127,7 +128,8 @@ class TraceStepBox extends StatelessWidget {
               ? colorScheme.primary
               : null,
           onPressed: traceStep.blockSyncDiagnosticSnapshot != null
-              ? () => _showBlockSyncSessionStateDialog(
+              ? () =>
+              _showBlockSyncSessionStateDialog(
                   context, traceStep.blockSyncDiagnosticSnapshot!)
               : null,
         ),
@@ -137,16 +139,15 @@ class TraceStepBox extends StatelessWidget {
           icon: FaIconConstants.tipDocument,
           color: traceStep.tipDocument == null ? null : colorScheme.tertiary,
           onPressed:
-              traceStep.tipDocument == null || !traceStep.tipDocument!.enabled
-                  ? null
-                  : () => _showTipDocumentDialog(context),
+          traceStep.tipDocument == null || !traceStep.tipDocument!.enabled
+              ? null
+              : () => _showTipDocumentDialog(context),
         ),
       ],
     );
   }
 
-  Widget _buildActionIcon(
-    BuildContext context, {
+  Widget _buildActionIcon(BuildContext context, {
     required String message,
     required IconData icon,
     Color? color,
@@ -163,8 +164,8 @@ class TraceStepBox extends StatelessWidget {
     );
   }
 
-  void _showBlockSyncSessionStateDialog(
-      BuildContext context, BlockSyncDiagnosticSnapshot snapshot) {
+  void _showBlockSyncSessionStateDialog(BuildContext context,
+      BlockSyncDiagnosticSnapshot snapshot) {
     DebugBlockSyncSessionStateDialog.show(
       context: context,
       title: '',
